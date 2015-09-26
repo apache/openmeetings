@@ -112,6 +112,28 @@
 
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
+				<b>Version 3.0.7 released!</b>
+				<span>Service release 7 for 3.0.0 contains following improvements and bug fixes:<br/>
+					<br/>
+					<ul>
+						<li>Clustering was tested and fixed, now it works as expected both in OM and plugins</li>
+						<li>Moderator able to restrict video in restricted room from now on</li>
+						<li>Private messages with room booking are now works as expected</li>
+						<li>Crashes in admin are fixed</li>
+						<li>LDAP: group import</li>
+					</ul><br/>
+					<br/>
+					Other fixes<br/>
+				</span>
+				<span>
+					20 issues are fixed please check 
+					<a href="https://www.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12332443">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2015-09-26)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.6 released!</b>
 				<span>Service release 6 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
