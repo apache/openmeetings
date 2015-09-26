@@ -976,8 +976,7 @@
 										<artifactId>maven-javadoc-plugin</artifactId>
 										<versionRange>[2.9.1,)</versionRange>
 										<goals>
-											<goal>javadoc</goal>
-											<goal>aggregate</goal>
+											<goal>javadoc-no-fork</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

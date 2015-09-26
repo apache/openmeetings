@@ -128,7 +128,7 @@
 				<span>
 					20 issues are fixed please check 
 					<a href="https://www.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12332443">Detailed list</a>
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12332443">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2015-09-26)</span>
