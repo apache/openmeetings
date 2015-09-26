@@ -51,8 +51,7 @@
 							<skip>${om.quick.build}</skip>
 						</configuration>
 						<goals>
-							<goal>javadoc</goal>
-							<goal>aggregate</goal>
+							<goal>javadoc-no-fork</goal>
 						</goals>
 						<phase>generate-resources</phase>
 					</execution>
