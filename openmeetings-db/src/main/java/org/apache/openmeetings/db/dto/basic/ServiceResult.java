@@ -23,6 +23,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,6 +32,7 @@ public class ServiceResult implements Serializable {
 	private long code;
 	private String message;
 	private String type;
+	@XmlType(namespace="org.apache.openmeetings.db.dto.basic.type")
 	public enum Type {
 		ERROR
 		, SUCCESS

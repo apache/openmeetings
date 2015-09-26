@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
@@ -103,6 +104,7 @@ public class RoomWebService {
 	 * @return - list of public rooms
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@GET
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam String sid, @PathParam("type") @WebParam String type) throws ServiceException {
@@ -129,6 +131,7 @@ public class RoomWebService {
 	 * @param id - the room id
 	 * @return - room with the id given
 	 */
+	@WebMethod
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam String sid, @PathParam("id") @WebParam Long id) throws ServiceException {
@@ -160,6 +163,7 @@ public class RoomWebService {
 	 * @return - id of the room or error code
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@GET
 	@Path("/{type}/{externalType}/{externalId}")
 	public RoomDTO getExternal(@WebParam @QueryParam("sid") String sid
@@ -200,6 +204,7 @@ public class RoomWebService {
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@POST
 	@Path("/")
 	public RoomDTO add(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
@@ -231,6 +236,7 @@ public class RoomWebService {
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 *//*
+	@WebMethod
 	@PUT
 	@Path("/{id}")
 	public RoomDTO update(@WebParam @QueryParam("sid") String sid, @PathParam("id") @WebParam Long id, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
@@ -263,6 +269,7 @@ public class RoomWebService {
 	 * 
 	 * @return - id of the room deleted
 	 */
+	@WebMethod
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
@@ -291,6 +298,7 @@ public class RoomWebService {
 	 * @return - 1 in case of success, -2 otherwise
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@GET
 	@Path("/close/{id}")
 	public ServiceResult close(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
@@ -336,6 +344,7 @@ public class RoomWebService {
 	 * @return - 1 in case of success, -2 otherwise
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@GET
 	@Path("/open/{id}")
 	public ServiceResult open(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
@@ -372,6 +381,7 @@ public class RoomWebService {
 	 *            
 	 * @return - true if user was kicked, false otherwise
 	 */
+	@WebMethod
 	@GET
 	@Path("/kick/{id}")
 	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
@@ -399,6 +409,7 @@ public class RoomWebService {
 	 * @return - current users for rooms ids
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@GET
 	@Path("/counters")
 	public List<RoomCountBean> counters(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("roomId") List<Long> ids) throws ServiceException {
@@ -438,6 +449,7 @@ public class RoomWebService {
 	 * @return - serviceResult object with the result
 	 * @throws ServiceException - in case of any exception
 	 */
+	@WebMethod
 	@POST
 	@Path("/hash")
 	private ServiceResult hash(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("invite") InvitationDTO invite, @WebParam @QueryParam("sendmail") boolean sendmail) throws ServiceException {

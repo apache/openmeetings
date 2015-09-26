@@ -39,7 +39,7 @@
 		<dist.om.dir>${dist.webapps}/openmeetings</dist.om.dir>
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
-		<red5-server.file.name>red5-server-1.0.6-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
+		<red5-server-file.dir>red5-server</red5-server-file.dir>
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>
@@ -123,28 +123,40 @@
 				<assembly.descriptor>unpacked</assembly.descriptor>
 			</properties>
 		</profile>
+		<profile>
+			<id>prepare-red5-server</id>
+			<activation>
+				<file>
+					<missing>red5-server/red5-server-1.0.7-SNAPSHOT-server.zip</missing> <!-- TODO should be in-sync with global property -->
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>download-red5-server</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<url>https://github.com/Red5/red5-server/releases/download</url>
+									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.zip</fromFile>
+									<toDir>${red5-server-file.dir}</toDir>
+									<skip>${red5-server.dwnd.skip}</skip>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>download-red5-server</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>download-single</goal>
-						</goals>
-						<configuration>
-							<url>https://github.com/Red5/red5-server/releases/download</url>
-							<fromFile>v${red5-server.version}/${red5-server.file.name}</fromFile>
-							<toDir>${project.build.directory}</toDir>
-							<skip>${red5-server.dwnd.skip}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>truezip-maven-plugin</artifactId>
@@ -157,7 +169,7 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<fileset>
-								<directory>${project.build.directory}/${red5-server.file.name}/red5-server-${red5-server.version}</directory>
+								<directory>${red5-server-file.dir}/red5-server-${red5-server.version}-server.zip/red5-server-${red5-server.version}</directory>
 								<outputDirectory>${server.dir}</outputDirectory>
 							</fileset>
 							<skip>${om.quick.build}</skip>

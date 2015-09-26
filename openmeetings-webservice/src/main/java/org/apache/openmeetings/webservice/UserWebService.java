@@ -96,8 +96,8 @@ public class UserWebService {
 	 *            
 	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
-	@GET
 	@WebMethod
+	@GET
 	@Path("/login")
 	public ServiceResult login(@WebParam @QueryParam("user") String login, @WebParam @QueryParam("pass") String pass) {
 		try {
@@ -136,6 +136,7 @@ public class UserWebService {
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@POST
 	@Path("/")
 	public UserDTO add(
@@ -211,6 +212,7 @@ public class UserWebService {
 	 * @return - id of the user deleted, error code otherwise
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
@@ -288,6 +290,7 @@ public class UserWebService {
 	 * @return - secure hash or error code
 	 * @throws ServiceException
 	 */
+	@WebMethod
 	@POST
 	@Path("/hash")
 	public ServiceResult getRoomHash(
@@ -344,6 +347,7 @@ public class UserWebService {
 	 *            room)
 	 * @return - <code>true</code> if user was kicked
 	 */
+	@WebMethod
 	@POST
 	@Path("/kick/{publicsid}")
 	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @PathParam("publicsid") String publicSID) throws ServiceException {
@@ -370,6 +374,7 @@ public class UserWebService {
 	 * @param roomId id of the room to get users
 	 * @return number of users as int
 	 */
+	@WebMethod
 	@GET
 	@Path("/count/{roomId}")
 	public int count(@WebParam @QueryParam("sid") String sid, @PathParam("roomid") Long roomId) {

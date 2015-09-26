@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
@@ -80,6 +81,7 @@ public class ServerWebService {
 	 *            - Maximum server count
 	 * @return The list of servers participating in cluster
 	 */
+	@WebMethod
 	@GET
 	@Path("/{start}/{max}")
 	public List<ServerDTO> getServers(@QueryParam("sid") @WebParam String sid, @PathParam("start") @WebParam int start, @PathParam("max") @WebParam int max) throws ServiceException {
@@ -102,6 +104,7 @@ public class ServerWebService {
 	 *            - session id to identify the user making request
 	 * @return total count of the servers participating in cluster
 	 */
+	@WebMethod
 	@GET
 	@Path("/count")
 	public long count(@QueryParam("sid") @WebParam String sid) throws ServiceException {
@@ -124,6 +127,7 @@ public class ServerWebService {
 	 *            - server to add/update
 	 * @return the id of saved server
 	 */
+	@WebMethod
 	@POST
 	@Path("/")
 	public ServerDTO add(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("server") ServerDTO server) throws ServiceException {
@@ -147,6 +151,7 @@ public class ServerWebService {
 	 *            - the id of the server to delete
 	 * @return true if the server was deleted, false otherwise
 	 */
+	@WebMethod
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {

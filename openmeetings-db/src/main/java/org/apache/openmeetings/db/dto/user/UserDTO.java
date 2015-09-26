@@ -21,12 +21,15 @@ package org.apache.openmeetings.db.dto.user;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 
+@XmlRootElement
 public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;

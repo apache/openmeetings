@@ -30,7 +30,7 @@
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
 	<properties>
-		<openlaszlo>${project.build.directory}/openlaszlo</openlaszlo>
+		<openlaszlo>${project.basedir}/openlaszlo</openlaszlo>
 		<laszlo46.home>${openlaszlo}/openlaszlo46</laszlo46.home>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
@@ -41,6 +41,15 @@
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
 		
 		<plugins>
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>openlaszlo/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 			<!-- plugin>
 				<groupId>net.flexmojos.oss</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
