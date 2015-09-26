@@ -293,7 +293,7 @@
 		<dependency org="org.smslib" name="smslib" rev="3.5.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20150406" conf="openmeetings->*" transitive="false">
+		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- Selenium -->
