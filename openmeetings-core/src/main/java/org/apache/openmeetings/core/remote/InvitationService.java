@@ -57,7 +57,7 @@ public class InvitationService implements IPendingServiceCallback {
 	private Date getDate(String date, String time, String tzId) {
 		LocalDateTime d = LocalDateTime.of(
 				Integer.parseInt(date.substring(6)) //year
-				, Integer.parseInt(date.substring(3, 5)) - 1 //month
+				, Integer.parseInt(date.substring(3, 5)) //month
 				, Integer.parseInt(date.substring(0, 2)) //dayOfMonth
 				, Integer.parseInt(time.substring(0, 2)) //hour
 				, Integer.parseInt(time.substring(3, 5)) //minute
