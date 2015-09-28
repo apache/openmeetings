@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -68,7 +67,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		User u = getBean(UserDao.class).get(getUserId());
 		p.setCreator(u);
 		p.setRoom(getBean(RoomDao.class).get(roomId));
-		p.setType(getBean(PollDao.class).getTypes(getLanguage()).get(0));
+		p.setType(getBean(PollDao.class).getTypes().get(0));
 		form.setModelObject(p);
 		target.add(form);
 	}
@@ -107,7 +106,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			super(id, model);
 			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes(getLanguage())
+			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes()
 					, new IChoiceRenderer<PollType>() {
 						private static final long serialVersionUID = 1L;
 

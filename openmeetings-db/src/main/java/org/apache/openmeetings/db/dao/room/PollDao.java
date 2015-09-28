@@ -54,7 +54,7 @@ public class PollDao {
 		return pt.getId();
 	}
 	
-	public List<PollType> getTypes(long langId) {
+	public List<PollType> getTypes() {
 		return em.createNamedQuery("getPollTypes", PollType.class).getResultList();
 	}
 	

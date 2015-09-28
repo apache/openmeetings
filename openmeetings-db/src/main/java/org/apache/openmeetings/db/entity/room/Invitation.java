@@ -42,12 +42,9 @@ import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i "
-					+ "WHERE i.deleted = false AND i.id = :invid"),
-	@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i "
-					+ "where i.hash LIKE :hashCode AND i.deleted = false"),
-	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i "
-					+ "WHERE i.appointment.id = :appointmentId  ")
+	@NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i WHERE i.deleted = false AND i.id = :id"),
+	@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false"),
+	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId  ")
 })
 @Table(name = "invitation")
 public class Invitation implements IDataProviderEntity {

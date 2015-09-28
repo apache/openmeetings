@@ -54,7 +54,7 @@ public class InvitationDao {
 		try {
 			
 			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
-			query.setParameter("invid", invId);
+			query.setParameter("id", invId);
 			
 			try {
 				return query.getSingleResult();
