@@ -50,6 +50,8 @@ public class UserInfoDialog extends AbstractDialog<String> {
 
 	public void open(AjaxRequestTarget target, long userId) {
 		this.userId = userId;
+		contacts.setVisible(userId != getUserId() && getBean(UserContactsDao.class).get(userId, getUserId()) == null, target);
+		message.setVisible(userId != getUserId(), target);
 		container.replace(new UserProfilePanel("body", userId));
 		target.add(container);
 		open(target);
@@ -61,13 +63,12 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	
 	@Override
 	public int getWidth() {
-		return 500;
+		return 600;
 	}
 	
 	@Override
 	protected List<DialogButton> getButtons() {
-		return userId != getUserId() && 0 == getBean(UserContactsDao.class).checkUserContacts(userId, getUserId())
-				? Arrays.asList(message, cancel) : Arrays.asList(contacts, message, cancel);
+		return Arrays.asList(contacts, message, cancel);
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {

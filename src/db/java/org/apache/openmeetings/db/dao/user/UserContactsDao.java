@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.user.UserContact;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class UserContactsDao {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(UserContactsDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserContactsDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
     @Autowired
@@ -53,7 +53,7 @@ public class UserContactsDao {
 			userContact.setPending(pending);
 			userContact.setHash(hash);
 			
-			userContact = em.merge(userContact);
+			userContact = update(userContact);
 			Long userContactId = userContact.getUserContactId();
 			
 			return userContactId;			
@@ -108,21 +108,18 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public Long checkUserContacts(Long user_id, Long ownerId) {
-		try {
-			TypedQuery<Long> query = em.createNamedQuery("checkUserContacts", Long.class); 
-			query.setParameter("user_id", user_id);
-			query.setParameter("ownerId", ownerId);
-			List<Long> ll = query.getResultList();
-			
-			log.info("checkUserContacts" + ll.get(0));
-			
-			return ll.get(0);
-			
-		} catch (Exception e) {
-			log.error("[checkUserContacts]",e);
-		}
-		return null;
+	public UserContact get(Long userId, Long ownerId) {
+		List<UserContact> ll = em.createNamedQuery("getContactByUserOwner", UserContact.class)
+				.setParameter("userId", userId)
+				.setParameter("ownerId", ownerId)
+				.getResultList();
+		log.info("number of contacts:: " + ll.size());
+		return ll != null && ll.size() == 1 ? ll.get(0) : null;
+	}
+	
+	public boolean isContact(Long userId, Long ownerId) {
+		UserContact c = get(userId, ownerId);
+		return c == null ? false : !c.isPending();
 	}
 	
 	public List<UserContact> get(long ownerId, int first, int count) {
@@ -209,58 +206,30 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public List<UserContact> getUserContacts() {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getUserContacts", UserContact.class); 
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getUserContacts]",e);
-		}
-		return null;
+	public List<UserContact> get() {
+		return em.createNamedQuery("getUserContacts", UserContact.class).getResultList();
 	}
 	
 	public Long updateContactStatus(Long userContactId, Boolean pending) {
 		try {
-			
-			UserContact userContacts = this.get(userContactId);
-			
-			if (userContacts == null) {
-				return null;
-			}
+			UserContact userContacts = get(userContactId);
 			userContacts.setPending(pending);
-			userContacts.setUpdated(new Date());
-			
-			if (userContacts.getUserContactId() == 0) {
-				em.persist(userContacts);
-		    } else {
-		    	if (!em.contains(userContacts)) {
-		    		em.merge(userContacts);
-			    }
-			}
-			
+			update(userContacts);
 			return userContactId;
-			
 		} catch (Exception e) {
 			log.error("[updateContactStatus]",e);
 		}
 		return null;
 	}
 	
-	public void updateContact(UserContact userContacts) {
-		try {
-			userContacts.setUpdated(new Date());
-			
-			if (userContacts.getUserContactId() == 0) {
-				em.persist(userContacts);
-		    } else {
-		    	if (!em.contains(userContacts)) {
-		    		em.merge(userContacts);
-			    }
-			}
-			
-		} catch (Exception e) {
-			log.error("[updateContact]",e);
+	public UserContact update(UserContact c) {
+		if (c.getUserContactId() == 0) {
+			c.setInserted(new Date());
+			em.persist(c);
+		} else {
+			c.setUpdated(new Date());
+			em.merge(c);
 		}
+		return c;
 	}
-
 }

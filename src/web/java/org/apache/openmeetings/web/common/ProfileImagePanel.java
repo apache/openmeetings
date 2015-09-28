@@ -38,7 +38,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ProfileImagePanel extends BasePanel {
-	private static final long serialVersionUID = 1119719397241677937L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(ProfileImagePanel.class, webAppRootKey);
 	protected final WebMarkupContainer profile;
 	
@@ -54,10 +54,10 @@ public class ProfileImagePanel extends BasePanel {
 			//no-op
 		}
 		if (absolute) {
-			profile.add(new Image("img", Application.getString(5L)).add(AttributeModifier.replace("src", uri)));
+			profile.add(new WebMarkupContainer("img").add(AttributeModifier.append("alt", Application.getString(5L)), AttributeModifier.append("src", uri)));
 		} else {
 			profile.add(new Image("img", new ByteArrayResource("image/jpeg") {
-				private static final long serialVersionUID = 6039580072791941591L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected ResourceResponse newResourceResponse(Attributes attributes) {
@@ -70,10 +70,18 @@ public class ProfileImagePanel extends BasePanel {
 				protected byte[] getData(Attributes attributes) {
 					String uri = getBean(UserDao.class).get(userId).getPictureuri();
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
+					InputStream is = null;
 					try {
-						return IOUtils.toByteArray(new FileInputStream(img));
+						is = new FileInputStream(img);
+						return IOUtils.toByteArray(is);
 					} catch (Exception e) {
 						log.error("failed to get bytes from image", e);
+					} finally {
+						if (is != null) {
+							try {
+								is.close();
+							} catch (IOException e) {}
+						}
 					}
 					return null;
 				}

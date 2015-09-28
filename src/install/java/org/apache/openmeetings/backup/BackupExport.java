@@ -286,7 +286,7 @@ public class BackupExport {
 			registry.bind(User.class, UserConverter.class);
 			
 			writeList(serializer, backup_dir, "userContacts.xml",
-					"usercontacts", userContactsDao.getUserContacts());
+					"usercontacts", userContactsDao.get());
 			progressHolder.setProgress(60);
 		}
 

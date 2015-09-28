@@ -433,7 +433,7 @@ public class UserService implements IUserService {
 
 				userContacts.setShareCalendar(shareCalendar);
 
-				userContactsDao.updateContact(userContacts);
+				userContactsDao.update(userContacts);
 			}
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);

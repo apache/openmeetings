@@ -151,7 +151,7 @@ public class UserSearchPanel extends UserPanel {
 						ContactsHelper.addUserToContactList(userId);
 						refresh(target);
 					}
-				}).setVisible(userId != getUserId() && 0 == contactsDao.checkUserContacts(userId, getUserId())));
+				}).setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId())));
 				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
@@ -159,7 +159,7 @@ public class UserSearchPanel extends UserPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						newMessage.reset(true).open(target, userId);
 					}
-				}));
+				})).setVisible(userId != getUserId());
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
 			}
 		};

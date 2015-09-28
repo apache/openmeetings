@@ -247,11 +247,11 @@ public class User implements Serializable, IDataProviderEntity {
 
 	@Column(name = "show_contact_data")
 	@Element(data = true, required = false)
-	private Boolean showContactData;
+	private boolean showContactData;
 
 	@Column(name = "show_contact_data_to_contacts")
 	@Element(data = true, required = false)
-	private Boolean showContactDataToContacts;
+	private boolean showContactDataToContacts;
 
 	@Column(name = "type")
 	@Element(data = true, required = false)
@@ -530,19 +530,19 @@ public class User implements Serializable, IDataProviderEntity {
 		this.userSearchs = userSearchs;
 	}
 
-	public Boolean getShowContactData() {
+	public boolean getShowContactData() {
 		return showContactData;
 	}
 
-	public void setShowContactData(Boolean showContactData) {
+	public void setShowContactData(boolean showContactData) {
 		this.showContactData = showContactData;
 	}
 
-	public Boolean getShowContactDataToContacts() {
+	public boolean getShowContactDataToContacts() {
 		return showContactDataToContacts;
 	}
 
-	public void setShowContactDataToContacts(Boolean showContactDataToContacts) {
+	public void setShowContactDataToContacts(boolean showContactDataToContacts) {
 		this.showContactDataToContacts = showContactDataToContacts;
 	}
 
