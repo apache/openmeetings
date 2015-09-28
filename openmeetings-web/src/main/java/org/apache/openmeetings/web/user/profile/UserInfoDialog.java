@@ -50,6 +50,8 @@ public class UserInfoDialog extends AbstractDialog<String> {
 
 	public void open(IPartialPageRequestHandler handler, long userId) {
 		this.userId = userId;
+		contacts.setVisible(userId != getUserId() && getBean(UserContactDao.class).get(userId, getUserId()) == null, handler);
+		message.setVisible(userId != getUserId(), handler);
 		container.replace(new UserProfilePanel("body", userId));
 		handler.add(container);
 		open(handler);
@@ -61,13 +63,12 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	
 	@Override
 	public int getWidth() {
-		return 500;
+		return 600;
 	}
 	
 	@Override
 	protected List<DialogButton> getButtons() {
-		return userId != getUserId() && 0 == getBean(UserContactDao.class).checkUserContacts(userId, getUserId())
-				? Arrays.asList(message, cancel) : Arrays.asList(contacts, message, cancel);
+		return Arrays.asList(contacts, message, cancel);
 	}
 	
 	@Override

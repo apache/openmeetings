@@ -37,9 +37,9 @@ import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
 	public static long addUserToContactList(long userIdToAdd) {
-		Long countContacts = getBean(UserContactDao.class).checkUserContacts(userIdToAdd, getUserId());
+		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 
-		if (countContacts != null && countContacts > 0) {
+		if (isContact) {
 			return -45L;
 		}
 		String hash = ManageCryptStyle.getInstanceOfCrypt()
@@ -71,7 +71,7 @@ public class ContactsHelper {
 			return -46L;
 		}
 
-		if (!contact.getPending()) {
+		if (!contact.isPending()) {
 			return -47L;
 		}
 

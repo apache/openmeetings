@@ -41,8 +41,7 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.userContactId = :userContactDeleteId"),
 	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId"),
-	@NamedQuery(name = "checkUserContacts", query = "select count(c.userContactId) from UserContact c " +
-			"where c.contact.id = :userId AND c.owner.id = :ownerId "),
+	@NamedQuery(name = "getContactByUserOwner", query = "SELECT c FROM UserContact c WHERE c.contact.id = :userId AND c.owner.id = :ownerId AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactsByHash", query = "select c from UserContact c " +
 			"where c.hash like :hash "),
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
@@ -131,7 +130,7 @@ public class UserContact implements Serializable {
 		this.owner = owner;
 	}
 	
-	public boolean getPending() {
+	public boolean isPending() {
 		return pending;
 	}
 	public void setPending(boolean pending) {

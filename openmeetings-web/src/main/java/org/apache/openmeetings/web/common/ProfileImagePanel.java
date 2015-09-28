@@ -56,7 +56,7 @@ public class ProfileImagePanel extends BasePanel {
 			//no-op
 		}
 		if (absolute) {
-			profile.add(new Image("img", Application.getString(5L)).add(AttributeModifier.replace("src", uri)));
+			profile.add(new WebMarkupContainer("img").add(AttributeModifier.append("alt", Application.getString(5L)), AttributeModifier.append("src", uri)));
 		} else {
 			profile.add(new Image("img", new ByteArrayResource("image/jpeg") {
 				private static final long serialVersionUID = 1L;

@@ -569,7 +569,7 @@ public class MessagesContactsPanel extends UserPanel {
 				UserContact uc = item.getModelObject();
 				final long contactId = uc.getUserContactId();
 				final long userId = uc.getOwner().getId();
-				if (uc.getPending()) {
+				if (uc.isPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
 				item.add(new Label("name", getName(uc)));	
@@ -581,7 +581,7 @@ public class MessagesContactsPanel extends UserPanel {
 						ContactsHelper.acceptUserContact(contactId);
 						updateContacts(target);
 					}
-				}).setVisible(uc.getPending()));
+				}).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
@@ -590,7 +590,7 @@ public class MessagesContactsPanel extends UserPanel {
 						getBean(UserContactDao.class).deleteUserContact(contactId);
 						updateContacts(target);
 					}
-				}).setVisible(uc.getPending()));
+				}).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
@@ -606,7 +606,7 @@ public class MessagesContactsPanel extends UserPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						newMessage.reset(true).open(target, userId);
 					}
-				}).setVisible(!uc.getPending()));
+				}).setVisible(!uc.isPending()));
 				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
@@ -615,7 +615,7 @@ public class MessagesContactsPanel extends UserPanel {
 						getBean(UserContactDao.class).deleteUserContact(contactId);
 						updateContacts(target);
 					}
-				}).setVisible(!uc.getPending()));
+				}).setVisible(!uc.isPending()));
 			}
 		};
 		updateContacts(null);

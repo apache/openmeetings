@@ -52,7 +52,7 @@ public class UserProfilePanel extends UserPanel {
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
 		if (getUserId() == model.getObject().getId() || model.getObject().isShowContactData() 
-				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactDao.class).checkUserContacts(model.getObject().getId(), getUserId()) > 0))
+				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactDao.class).isContact(model.getObject().getId(), getUserId())))
 		{
 			addressDenied.setVisible(false);
 			address.add(new Label("address.phone"));

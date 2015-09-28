@@ -257,7 +257,7 @@ public class UserService implements IUserService {
 
 				userContacts.setShareCalendar(shareCalendar);
 
-				userContactDao.updateContact(userContacts);
+				userContactDao.update(userContacts);
 			}
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);
