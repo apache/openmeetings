@@ -89,6 +89,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	public static final String SECURE_HASH = "secureHash";
+	public static final String INVITATION_HASH = "invitationHash";
 	private long userId = -1;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -135,7 +136,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		try {
 			IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 			StringValue secureHash = params.getParameterValue(SECURE_HASH);
-			StringValue invitationHash = params.getParameterValue("invitationHash");
+			StringValue invitationHash = params.getParameterValue(INVITATION_HASH);
 			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
 				PageParameters pp = new PageParameters();
 				for (String p : params.getParameterNames()) {

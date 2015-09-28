@@ -142,9 +142,6 @@
 			this.close();
 			//if (canvas.language == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) { TODO  canvas.language seems to be dropped
 			if (canvas.language_id == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) {
-				if (!canvas.timeZonesLoaded) {
-					canvas.thishib.loaderVar.getTimeZones.doCall();
-				}
 				canvas.thishib.loaderVar.getUserSalutations.doCall();
 			} else {
 				canvas.thishib.loaderVar.getLanguageByIdAndMax.doCall();

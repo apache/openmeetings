@@ -21,14 +21,12 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
@@ -488,11 +486,6 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[logoutUser]",err);
 		}
 		return -1L;
-	}
-
-	public String[] getTimeZones(int start, int count) {
-		String all[] = TimeZone.getAvailableIDs();
-		return Arrays.copyOfRange(all, start, Math.min(start + count, all.length));
 	}
 
 	public List<Configuration> getGeneralOptions(String SID) {

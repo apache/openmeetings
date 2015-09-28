@@ -165,7 +165,7 @@ public class SessionManager implements ISessionManager {
 			try {
 				for (Client rcl : cache.getClientsByUserId(null, userId)) {
 					
-					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					if (rcl.getIsScreenClient()) {
 						continue;
 					}
 					
@@ -247,7 +247,7 @@ public class SessionManager implements ISessionManager {
 
 				for (Client rcl : cache.getClientsByRoomId(roomId)) {
 
-					if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+					if (rcl.getIsScreenClient()) {
 						continue;
 					}
 					if (rcl.getIsAVClient()) {

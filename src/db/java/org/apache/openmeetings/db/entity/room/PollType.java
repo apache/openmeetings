@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +36,9 @@ import javax.persistence.Table;
 			"WHERE pt.pollTypesId = :pollTypesId")		
 })
 @Table(name = "poll_types")
-public class PollType {
+public class PollType implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -44,7 +48,7 @@ public class PollType {
 	private Long label;
 	
 	@Column(name = "numeric_answer")
-	private Boolean isNumericAnswer;
+	private boolean isNumericAnswer;
 	
 	/**
 	 * @return the pollTypesId
@@ -61,13 +65,13 @@ public class PollType {
 	/**
 	 * @return the isNumericAnswer
 	 */
-	public Boolean getIsNumericAnswer() {
+	public boolean getIsNumericAnswer() {
 		return isNumericAnswer;
 	}
 	/**
 	 * @param isNumericAnswer the isNumericAnswer to set
 	 */
-	public void setIsNumericAnswer(Boolean isNumericAnswer) {
+	public void setIsNumericAnswer(boolean isNumericAnswer) {
 		this.isNumericAnswer = isNumericAnswer;
 	}
 	/**

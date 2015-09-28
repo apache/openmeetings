@@ -128,7 +128,7 @@ public class Client implements IDataProviderEntity, Serializable {
 	 * @see Client#getIsMod()
 	 */
 	@Column(name = "is_mod")
-	private Boolean isMod = false;
+	private boolean isMod = false;
 	
 	/**
 	 * @see Client#getIsSuperModerator()
@@ -179,7 +179,7 @@ public class Client implements IDataProviderEntity, Serializable {
 	 * @see Client#getIsScreenClient()
 	 */
 	@Column(name = "is_screenclient")
-	private Boolean isScreenClient = false;
+	private boolean isScreenClient = false;
 	
 	/**
 	 * @see Client#getIsAVClient()
@@ -446,11 +446,11 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.connectedSince = connectedSince;
 	}
 
-	public Boolean getIsMod() {
+	public boolean getIsMod() {
 		return isMod;
 	}
 
-	public void setIsMod(Boolean isMod) {
+	public void setIsMod(boolean isMod) {
 		this.isMod = isMod;
 	}
 	
@@ -710,11 +710,11 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.isSuperModerator = isSuperModerator;
 	}
 
-	public Boolean getIsScreenClient() {
+	public boolean getIsScreenClient() {
 		return isScreenClient;
 	}
 
-	public void setIsScreenClient(Boolean isScreenClient) {
+	public void setIsScreenClient(boolean isScreenClient) {
 		this.isScreenClient = isScreenClient;
 	}
 

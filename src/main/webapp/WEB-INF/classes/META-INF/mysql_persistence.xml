@@ -55,9 +55,9 @@
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomType</class>
+		<class>org.apache.openmeetings.db.entity.room.RoomOrganisation</class>
 		<class>org.apache.openmeetings.db.entity.room.Whiteboard</class>
 		<class>org.apache.openmeetings.db.entity.room.WhiteboardItem</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomOrganisation</class>
 		<class>org.apache.openmeetings.db.entity.user.Address</class>
 		<class>org.apache.openmeetings.db.entity.user.State</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessage</class>
@@ -83,10 +83,9 @@
 					, Username=root
 					, Password=" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
-			<property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO" />
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />
-			<!-- QueryCache disabled due to changes outside of JPA doesn't take effect with caching -->
-			<property name="openjpa.QueryCache" value="false" />
+			<property name="openjpa.QueryCache" value="true" />
 			<property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 		</properties>

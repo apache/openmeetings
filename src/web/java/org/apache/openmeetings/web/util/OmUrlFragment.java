@@ -37,11 +37,11 @@ import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
-import org.apache.openmeetings.web.user.rooms.RoomPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 
 public class OmUrlFragment implements Serializable {

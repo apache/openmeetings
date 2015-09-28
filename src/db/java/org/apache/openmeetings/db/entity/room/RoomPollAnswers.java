@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -45,8 +46,9 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "room_poll_answers")
 @Root(name="roompollanswer")
-public class RoomPollAnswers {
-	
+public class RoomPollAnswers implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

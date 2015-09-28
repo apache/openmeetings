@@ -40,23 +40,21 @@ public class InvitationDao {
 	private EntityManager em;
 	
 	public Invitation update(Invitation invitation) {
-		invitation.setUpdated(new Date());
 		if (invitation.getId() == null) {
+			invitation.setInserted(new Date());
 			em.persist(invitation);
-			return invitation;
 		} else {
-			if (!em.contains(invitation)) {
-				return em.merge(invitation);
-			}
+			invitation.setUpdated(new Date());
+			invitation = em.merge(invitation);
 		}
-		return null;
+		return invitation;
 	}
 	
 	public Invitation get(Long invId) {
 		try {
 			
 			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
-			query.setParameter("invid", invId);
+			query.setParameter("id", invId);
 			
 			try {
 				return query.getSingleResult();

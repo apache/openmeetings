@@ -29,10 +29,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class KickMessageDialog extends AbstractDialog<String> {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public KickMessageDialog(String id) {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -18,10 +18,17 @@
   under the License.
   
 -->
-<library>
-    
-    <include href="createPollWin.lzx" />
-    <include href="answerPoll.lzx" />
-    <include href="resultPollWin.lzx" />
-    
-</library>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<div id="swfloading"
+		style="z-index: 666666; position: absolute; top: 50%; left: 50%;">
+		<img src="images/ajax-loader.gif" />
+	</div>
+	<noscript>Please enable JavaScript in order to use this application.</noscript>
+	<script type="text/javascript" wicket:id="init"></script>
+	<div wicket:id="invite"></div>
+	<div wicket:id="createPoll"></div>
+	<div wicket:id="vote"></div>
+	<div wicket:id="pollResults"></div>
+</wicket:panel>
+</html>

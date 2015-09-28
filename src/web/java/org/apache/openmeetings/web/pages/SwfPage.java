@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.SECURE_HASH;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
-import org.apache.openmeetings.web.user.rooms.RoomPanel;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 

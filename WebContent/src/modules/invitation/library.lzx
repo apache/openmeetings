@@ -22,6 +22,5 @@
 
     <include href="autoloaderBarOnly.lzx" />
 	<include href="invitationQuickLoader.lzx" />
-	<include href="inviteMainWindow.lzx" />
 
 </library>

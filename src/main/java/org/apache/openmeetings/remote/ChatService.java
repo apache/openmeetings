@@ -183,7 +183,7 @@ public class ChatService implements IPendingServiceCallback {
 						if (rcl.getIsAVClient()) {
 							continue;
 						}
-						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient()) {
     						continue;
     					}
 						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {

@@ -385,7 +385,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                 Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
                 if (rcl == null) {
                     // continue;
-                } else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+                } else if (rcl.getIsScreenClient()) {
                     // continue;
                 } else {
                     if (!streamid.equals(rcl.getStreamid())) {
@@ -572,7 +572,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								continue;
 							}
 							
-							boolean isScreen = rcl.getIsScreenClient() != null && rcl.getIsScreenClient();
+							boolean isScreen = rcl.getIsScreenClient();
 							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
 								//going to terminate screen sharing started by this client
 								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
@@ -662,7 +662,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						log.debug("RCL getIsAVClient newStream SEND");
 						return true;
 					}
-					if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+					if (rcl.getIsScreenClient()) {
 						log.debug("RCL getIsScreenClient newStream SEND");
 						return true;
 					}
@@ -762,7 +762,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						} else {
 							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 							if (rcl != null) {
-								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient()) {
 									// continue;
 								} else {
 									log.debug("is this users still alive? :" + rcl);
@@ -909,7 +909,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				public boolean filter(IConnection conn) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 					if (rcl == null) {
-					} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					} else if (rcl.getIsScreenClient()) {
 					} else {
 						if (rcl != currentClient) {
 							rcl.setMicMuted(true);

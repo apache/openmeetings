@@ -16,26 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.rooms;
+package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openmeetings.db.dao.room.InvitationDao;
+import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.session.SessionManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.room.poll.CreatePollDialog;
+import org.apache.openmeetings.web.room.poll.PollResultsDialog;
+import org.apache.openmeetings.web.room.poll.VoteDialog;
+import org.apache.wicket.Component;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -53,7 +66,14 @@ import org.slf4j.Logger;
 
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final String WICKET_ROOM_ID = "wicketroomid";
+	private static final String PARAM_PUBLIC_SID = "publicSid";
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
+	private final InvitationDialog invite;
+	private final CreatePollDialog createPoll;
+	private final VoteDialog vote;
+	private final PollResultsDialog pollResults;
+	private long roomId = 0;
 	
 	public RoomPanel(String id) {
 		this(id, new PageParameters());
@@ -71,7 +91,7 @@ public class RoomPanel extends BasePanel {
 	public static PageParameters addServer(long roomId, boolean addBasic) {
 		PageParameters pp = new PageParameters();
 		if (addBasic) {
-			pp.add("wicketsid", getSid()).add("wicketroomid", roomId).add("language", getLanguage());
+			pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
 		}
 		List<Server> serverList = getBean(ServerDao.class).getActiveServers();
 
@@ -119,6 +139,96 @@ public class RoomPanel extends BasePanel {
 				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
 			}
 		});
+		//OK let's find the room
+		try {
+			StringValue room = pp.get(WICKET_ROOM_ID);
+			StringValue secureHash = pp.get(WebSession.SECURE_HASH);
+			StringValue invitationHash = pp.get(WebSession.INVITATION_HASH);
+			if (!room.isEmpty()) {
+				roomId = room.toLong();
+			} else if (!secureHash.isEmpty()) {
+				roomId = getBean(SOAPLoginDao.class).get(secureHash.toString()).getRoom_id();
+			} else if (!invitationHash.isEmpty()) {
+				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getRooms_id();
+			}
+		} catch (Exception e) {
+			//no-op
+		}
+		add(invite = new InvitationDialog("invite", roomId));
+		add(createPoll = new CreatePollDialog("createPoll", roomId));
+		add(vote = new VoteDialog("vote", roomId));
+		add(pollResults = new PollResultsDialog("pollResults", roomId));
+		if (roomId > 0) {
+			add(new AbstractDefaultAjaxBehavior() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void respond(AjaxRequestTarget target) {
+					invite.updateModel(target);
+					invite.open(target);
+				}
+				
+				@Override
+				public void renderHead(Component component, IHeaderResponse response) {
+					super.renderHead(component, response);
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("openInvitation", this), "openInvitation")));
+				}
+			});
+			add(new AbstractDefaultAjaxBehavior() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void respond(AjaxRequestTarget target) {
+					String publicSid = getPublicSid();
+					Client c = getClient(publicSid);
+					if (c != null && c.getIsMod()) {
+						createPoll.updateModel(target, publicSid);
+						createPoll.open(target);
+					}
+				}
+				
+				@Override
+				public void renderHead(Component component, IHeaderResponse response) {
+					super.renderHead(component, response);
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("createPoll", this, explicit(PARAM_PUBLIC_SID)), "createPoll")));
+				}
+			});
+			add(new AbstractDefaultAjaxBehavior() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void respond(AjaxRequestTarget target) {
+					Client c = getClient(getPublicSid());
+					if (c != null) {
+						pollResults.updateModel(target, c.getIsMod());
+						pollResults.open(target);
+					}
+				}
+				
+				@Override
+				public void renderHead(Component component, IHeaderResponse response) {
+					super.renderHead(component, response);
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("pollResults", this, explicit(PARAM_PUBLIC_SID)), "pollResults")));
+				}
+			});
+			add(new AbstractDefaultAjaxBehavior() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void respond(AjaxRequestTarget target) {
+					if (getBean(PollDao.class).hasPoll(roomId) && !getBean(PollDao.class).hasVoted(roomId, getUserId()) && getClient(getPublicSid()) != null) {
+						vote.updateModel(target);
+						vote.open(target);
+					}
+				}
+				
+				@Override
+				public void renderHead(Component component, IHeaderResponse response) {
+					super.renderHead(component, response);
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("vote", this, explicit(PARAM_PUBLIC_SID)), "vote")));
+				}
+			});
+		}
 	}
 
 	private ResourceReference newResourceReference() {
@@ -132,5 +242,9 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/history.js")));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
 		response.render(new PriorityHeaderItem(CssHeaderItem.forUrl("css/history.css")));
+	}
+	
+	private String getPublicSid() {
+		return getRequest().getRequestParameters().getParameterValue(PARAM_PUBLIC_SID).toString();
 	}
 }

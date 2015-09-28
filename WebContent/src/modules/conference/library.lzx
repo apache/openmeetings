@@ -47,7 +47,6 @@
    	<include href="tabcontent/" />
    	<include href="popups/" />
    	<include href="moderation/" />
-   	<include href="polls/" />
    	
    	<include href="conference/" />
    	

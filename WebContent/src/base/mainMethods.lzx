@@ -500,15 +500,15 @@
             if($debug) Debug.write("doActionmenu: ",stringSub);
             if (canvas._conferencemenu.visibility == 'visible'){
             	 if (stringSub == "invitation") {
-				    canvas.inviteMainWindow.setAttribute('visibility', 'visible');
+            	 	flash.external.ExternalInterface.call("openInvitation");
 			    } else if (stringSub=='editWhiteboardDefault') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='createPoll') {
-                    new lz.createPollWin(canvas.main_content._content.inner);
+                    flash.external.ExternalInterface.call("createPoll", canvas.publicSID);
                 } else if (stringSub=='pollResults') {
-                    this.getVotes.doCall();
+                    flash.external.ExternalInterface.call("pollResults", canvas.publicSID);
                 } else if (stringSub=='checkPollVoted') {
-                    this.checkHasVoted.doCall();
+                    flash.external.ExternalInterface.call("vote");
                 } else if (stringSub=='importFile') {
                     new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
                             x:60,uploadmodule:canvas.uploadmoduleimg,
@@ -593,48 +593,6 @@
             }
         ]]>
     </method>
-    
-    <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
-        <handler name="ondata" args="value">
-            new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
-        </handler>   
-    </netRemoteCallHib>  
-        
-    <netRemoteCallHib name="checkHasVoted" funcname="pollservice.checkHasVoted" remotecontext="$once{ canvas.thishib }" >
-        <handler name="ondata" args="value">
-            <![CDATA[
-                      if (value==1){
-                        parent.getPoll.doCall();
-                      } else if (value==-1){
-                        new lz.messageWin(canvas.main_content._content.inner,{labeliderror:31});
-                      } else if (value==-2){
-                            new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib> 
-    
-    <netRemoteCallHib name="getPoll" funcname="pollservice.getPoll" remotecontext="$once{ canvas.thishib }" >
-        <handler name="ondata" args="value">
-            <![CDATA[
-                if (value!=null){
-                    if ($debug) Debug.write(":: getPoll: ", value);
-                     new lz.answerPoll(
-                        canvas.main_content._content.inner
-                        , {
-                            createdBy: value.createdBy.login
-                            , pollDate: value.created
-                            , pollQuestion: value.pollQuestion
-                            , pollTypeId: value.pollType.pollTypesId
-                            , roomPollAnswerList: value.roomPollAnswerList
-                            , roomPollId: value.roomPollId
-                            , roomScopeName: value.roomScopeName
-                        }
-                     );
-                }
-            ]]>
-        </handler>
-    </netRemoteCallHib> 
     
     <method name="setRoomValues" args="roomTypeId,roomId,roomObj">
     
