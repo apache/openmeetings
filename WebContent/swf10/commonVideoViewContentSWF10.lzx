@@ -87,7 +87,7 @@
 	</method>
     
 	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
-		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);
+		if($debug) Debug.info("createEditRecordStream,", syncUpdate, isInterview, interviewPodId, canvas.userobject);
 		if (canvas.inner.editRecordStream != null)
 			canvas.inner.editRecordStream.destroy();
 			new lz.editRecordStreamSWF10(canvas.inner, {
@@ -304,23 +304,17 @@
         ]]>
     </method>
 
-    <method name="disconnectclient" args="publicSID">
-        <![CDATA[
-            if ($debug) Debug.write("disconnectclient: ",publicSID);
-
-            var obj = this.getVideoObjectByPublicSID(publicSID);
-
-            //if ($debug) Debug.write("disconnecclient obj: ",obj);
-            if (obj == null) {
-            	if ($debug) Debug.warn("Could Not find this To disconnect",publicSID);
-            }
-
-            if (obj != null){
-                obj.resetValues();
-                obj.destroy();
-            }
-        ]]>
-    </method>
+	<method name="disconnectclient" args="publicSID">
+	<![CDATA[
+		if ($debug) Debug.write("disconnectclient: ", publicSID);
+		var obj = closeStreamclient(publicSID);
+		if (obj == null) {
+			if ($debug) Debug.warn("Could Not find this To disconnect",publicSID);
+		} else {
+			obj.destroy();
+		}
+	]]>
+	</method>
 
     <method name="muteSound" args="publicSID, bool">
         <![CDATA[
@@ -339,17 +333,22 @@
         return;
     </method>
 
-    <method name="closeStreamclient" args="publicSID">
-        <![CDATA[
-            if ($debug) Debug.write("closeStreamthis: ",publicSID);
-            var obj = this.getVideoObjectByPublicSID(publicSID);
-            if ($debug) Debug.write("closeStreamthis obj: ",obj);
-            if (obj != null){
-                obj.resetValues();
-            }
-            return obj;
-        ]]>
-    </method>
+	<method name="closeStreamclient" args="publicSID">
+	<![CDATA[
+		if ($debug) Debug.write("closeStreamthis: ", publicSID);
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		if ($debug) Debug.write("closeStreamthis obj: ", obj);
+		if (obj != null) {
+			obj.resetValues();
+		}
+		if (canvas.publicSID == publicSID && canvas.inner.editRecordStream != null) {
+			canvas.inner.editRecordStream.cleanVideos();
+			canvas.inner.editRecordStream.destroy();
+			canvas.inner.editRecordStream = null;
+		}
+		return obj;
+	]]>
+	</method>
 
     <method name="removeVideoByUser" args="publicSID"><![CDATA[
         var obj = this.closeStreamclient(publicSID);

@@ -255,7 +255,7 @@
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
-                if ($debug) Debug.write("Deny Screen: ",parent.parent.parent.refObj.publicSID);
+                if ($debug) Debug.write("Deny Remote: ",parent.parent.parent.refObj.publicSID);
                 if (canvas.ismoderator && this.isActive) {
                 	canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
                     canvas.thishib.setCanRemote.canRemote = false;
@@ -269,7 +269,7 @@
     <miniIcons name="_denyRemote" x="60" width="16" height="16"  opacity="0.5"
                resource="remote_allow_rsc" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
+            if ($debug) Debug.write("Allow Remote: ",parent.parent.parent.refObj.publicSID);
             if (canvas.ismoderator) {
                 canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
                 canvas.thishib.setCanRemote.canRemote = true;

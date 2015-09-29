@@ -420,202 +420,79 @@
         
         <handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
-            <![CDATA[
-                this.updateIcons();
-            ]]>
+            this.updateIcons();
         </handler>
         
-        <handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
-        	<![CDATA[
-        	
-        	   if ($debug) Debug.write(" :: onmicMutedStatusChangedItem :: ",roomClientObj.micMuted);
-        	   
-                var vList = parent._table.renderList;
-                for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
-                    if (vList[i].publicSID == roomClientObj.publicSID) {
-                        parent._table.renderList[i].micMuted = roomClientObj.micMuted;
-                        break;
-                    }
-                }
-        	   
-        	   //search for the user and update its drawStatusIcon
-                var vList = parent._table._innerlist._inn._inn.subviews;
-                for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
-                    if (vList[i].refObj.publicSID == roomClientObj.publicSID) {
-                        vList[i].refObj.micMuted = roomClientObj.micMuted;
-                        vList[i].micMuted = roomClientObj.micMuted;
-                        vList[i].updateModeratorIcons();
-                        break;
-                    }
-                }
-        	   
-                if (parent._applyAndStatusIcons != null) {
-                	parent._applyAndStatusIcons.updateIcons();
-                }
-        	]]>
-        </handler>
+		<handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
+			updateIcons(roomClientObj);
+		</handler>
         
-        <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
-            <![CDATA[
-            
-                if ($debug) Debug.write(" :: ondrawAllowStatus :: ",drawObject.canDraw);
-            
-            	var vList = parent._table.renderList;
-                for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
-                    if (vList[i].publicSID == drawObject.publicSID) {
-                        parent._table.renderList[i].canDraw = drawObject.canDraw;
-                        parent._table.renderList[i].canShare = drawObject.canShare;
-                        parent._table.renderList[i].canRemote = drawObject.canRemote;
-                        break;
-                    }
-                }
-            
-                //search for the user and update its drawStatusIcon
-                var vList = parent._table._innerlist._inn._inn.subviews;
-                for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
-                    if (vList[i].refObj.publicSID == drawObject.publicSID) {
-                        vList[i].refObj.canDraw = drawObject.canDraw;
-                        vList[i].canDraw = drawObject.canDraw;
-                        vList[i].canShare = drawObject.canShare;
-                        vList[i].canRemote = drawObject.canRemote;
-                        vList[i].updateIconByModScroll();
-                        vList[i].updateModeratorIcons();
-                        break;
-                    }
-                }
+		<handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+			updateIcons(drawObject);
+		</handler>
 
-                if (parent._applyAndStatusIcons != null) {
-                	parent._applyAndStatusIcons.updateIcons();
-                }
-            ]]>
-        </handler>
-
-        <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
-            <![CDATA[
-
-                if ($debug) Debug.write(" :: exclusiveAudioAllowStatus :: ",rclObject.canGiveAudio);
-				
-                var vList = parent._table.renderList;
-                for (var i=0;i<vList.length;i++) {
-                    if (vList[i].publicSID == rclObject.publicSID) {
-                        parent._table.renderList[i].canGiveAudio = rclObject.canGiveAudio;
-                        break;
-                    }
-                }
-				
-                //search for the user and update its exclusiveAudioStatusIcon
-                var vList = parent._table._innerlist._inn._inn.subviews;
-                for (var i=0;i<vList.length;i++) {
-                    if (vList[i].refObj.publicSID == rclObject.publicSID) {
-                        vList[i].refObj.canGiveAudio = rclObject.canGiveAudio;
-                        vList[i].canGiveAudio = rclObject.canGiveAudio;
-                        vList[i].updateIconByModScroll();
-                        vList[i].updateModeratorIcons();
-                        break;
-                    }
-                }
-
-                if (parent._applyAndStatusIcons != null) {
-                	parent._applyAndStatusIcons.updateIcons();
-                }
-            ]]>
-        </handler>
+		<handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+			updateIcons(rclObject);
+		</handler>
         
-        <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
-            <![CDATA[
-            
-               if ($debug) Debug.write(" :: onlastBroadCastingUser :: ");
-                
-                if (!userObject.isBroadcasting) {
-                    //Stop Broadcasting and close Dialog
-                    //Search, stop and remove video
-                    parent.parent.removeVideoByUser(userObject);
-                }
-                
-                var vList = parent._table.renderList;
-                for (var i=0;i<vList.length;i++) {
-                    if (vList[i].publicSID == userObject.publicSID) {
-                        parent._table.renderList[i].isBroadcasting = userObject.isBroadcasting;
-                        break;
-                    }
-                }
-                
-                //search for the user and update its drawStatusIcon
-                var vList = parent._table._innerlist._inn._inn.subviews;
-                for (var i=0;i<vList.length;i++) {
-                    if (vList[i].refObj.publicSID == userObject.publicSID) {
-                        vList[i].isBroadcasting = userObject.isBroadcasting;
-                        vList[i].updateModeratorIcons();
-                        break;
-                    }
-                }
-                
-                if (parent._applyAndStatusIcons != null) {
-                	parent._applyAndStatusIcons.updateIcons();
-                }
-            ]]>
-        </handler>
+		<handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
+		<![CDATA[
+			if ($debug) Debug.write(" :: onlastBroadCastingUser :: ");
+			if (!userObject.isBroadcasting) {
+				//Stop Broadcasting and close Dialog
+				//Search, stop and remove video
+				parent.parent.removeVideoByUser(userObject);
+			}
+			updateIcons(userObject);
+		]]>
+		</handler>
         
-        <method name="updateIcons">
-            <![CDATA[
-            
-                if ($debug) Debug.write(" :: updateIcons :: ");
-                
-                for (var i=0;i<parent._table.renderList.length;i++) {
-                
-                    for (var k=0;k<canvas.newModeratorList.length;k++) {
-                        
-                        var item = canvas.newModeratorList[k];
-                        
-                        if (parent._table.renderList[i].publicSID == item.publicSID) {
-                            
-                            if (parent._table.renderList[i].isMod == false) {
-                                if ($debug) Debug.info("updateIcons Found RR ",i,item.publicSID);
-                                parent._table.renderList[i].isMod = true;
-                                
-                                var itemView = this.getItemByPublicSID(item.publicSID);
-                                if (itemView != null) {
-                                    itemView.setAttribute("isMod",true);
-                                    itemView.updateModeratorIcons();
-                                }
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                    for (var k=0;k<canvas.removeModeratorList.length;k++) {
-                        
-                        var item = canvas.removeModeratorList[k];
-                        
-                        if (parent._table.renderList[i].publicSID == item.publicSID) {
-                            
-                            if (parent._table.renderList[i].isMod == true) {
-                               if ($debug) Debug.info("RE updateIcons Found RR ",i,item.publicSID);
-                               parent._table.renderList[i].isMod = false;
-                            
-                               var itemView = this.getItemByPublicSID(item.publicSID);
-                               if (itemView != null) {
-                                   itemView.setAttribute("isMod",false);
-                                   itemView.updateModeratorIcons();
-                               }
-                            }
-                            
-                        }
-                        
-                    }
-                
-                }
-                
-                if (parent._applyAndStatusIcons != null) {
-                	parent._applyAndStatusIcons.updateIcons();
-                }
-            ]]>
-        </method>
+		<method name="updateIcons" args="userObject">
+		<![CDATA[
+			if ($debug) Debug.write(" :: ondrawAllowStatus :: ", userObject.canDraw);
+			
+			var vList = parent._table.renderList;
+			for (var i = 0; i < vList.length; ++i) {
+				if (vList[i].publicSID == userObject.publicSID) {
+					if ($debug) Debug.write(" :: ondrawAllowStatus :: item1 found: ", vList[i]);
+					vList[i].isBroadcasting = userObject.isBroadcasting;
+					vList[i].canDraw = userObject.canDraw;
+					vList[i].canShare = userObject.canShare;
+					vList[i].canRemote = userObject.canRemote;
+					vList[i].canGiveAudio = userObject.canGiveAudio;
+					vList[i].micMuted = userObject.micMuted;
+					break;
+				}
+			}
+			
+			//search for the user and update its drawStatusIcon
+			var vList = parent._table._innerlist._inn._inn.subviews;
+			for (var i = 0; i < vList.length; ++i) {
+				if (vList[i].refObj.publicSID == userObject.publicSID) {
+					if ($debug) Debug.write(" :: ondrawAllowStatus :: item2 found: ", vList[i]);
+					vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
+					vList[i].isBroadcasting = userObject.isBroadcasting;
+					vList[i].refObj.canDraw = userObject.canDraw;
+					vList[i].canDraw = userObject.canDraw;
+					vList[i].refObj.canShare = userObject.canShare;
+					vList[i].canShare = userObject.canShare;
+					vList[i].refObj.canRemote = userObject.canRemote;
+					vList[i].canRemote = userObject.canRemote;
+					vList[i].refObj.canGiveAudio = userObject.canGiveAudio;
+					vList[i].canGiveAudio = userObject.canGiveAudio;
+					vList[i].refObj.micMuted = userObject.micMuted;
+					vList[i].micMuted = userObject.micMuted;
+					vList[i].updateIconByModScroll();
+					vList[i].updateModeratorIcons();
+					break;
+				}
+			}
+			
+			if (parent._applyAndStatusIcons != null) {
+				parent._applyAndStatusIcons.updateIcons();
+			}
+		]]>
+		</method>
         
         <method name="getItemByPublicSID" args="publicSID">
             <![CDATA[

@@ -188,31 +188,25 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 */
 	public Boolean setCanDraw(String SID, String publicSID, boolean canDraw) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				if (currentClient.getIsMod()) {
-					Client rcl = this.sessionManager
-							.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
-						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false, null);
+						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						this.scopeApplicationAdapter
-								.sendMessageWithClientWithSyncObject(newMessage, true);
-
+						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 					} else {
 						return false;
 					}
@@ -220,7 +214,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return false;
 				}
 			}
-
 		} catch (Exception err) {
 			log.error("[setCanDraw]", err);
 		}
@@ -229,31 +222,24 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 	public Boolean setCanShare(String SID, String publicSID, boolean canShare) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				if (currentClient.getIsMod()) {
-					Client rcl = this.sessionManager
-							.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
-						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false, null);
+						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						this.scopeApplicationAdapter
-								.sendMessageWithClientWithSyncObject(newMessage, true);
-
+						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 					} else {
 						return false;
 					}
@@ -261,9 +247,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return false;
 				}
 			}
-
 		} catch (Exception err) {
-			log.error("[setCanDraw]", err);
+			log.error("[setCanShare]", err);
 		}
 		return null;
 	}
