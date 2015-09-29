@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -70,18 +71,10 @@ public class ProfileImagePanel extends BasePanel {
 				protected byte[] getData(Attributes attributes) {
 					String uri = getBean(UserDao.class).get(userId).getPictureuri();
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
-					InputStream is = null;
-					try {
-						is = new FileInputStream(img);
+					try (InputStream is = new FileInputStream(img)) {
 						return IOUtils.toByteArray(is);
 					} catch (Exception e) {
 						log.error("failed to get bytes from image", e);
-					} finally {
-						if (is != null) {
-							try {
-								is.close();
-							} catch (IOException e) {}
-						}
 					}
 					return null;
 				}
