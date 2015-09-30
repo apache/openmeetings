@@ -526,7 +526,7 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("getCurrentRoomClient: ",value);
                 if (value!=null){
-                    
+                    canvas.currentClient = value;
                     canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
                     
                     //Somehow this leads to a bug in the implementation of the secure User Login

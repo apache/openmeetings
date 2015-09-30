@@ -153,9 +153,9 @@
     </view>
     
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" x="$once{ parent.width-this.width-20 }" y="2" >
-        <handler name="onismoderator" reference="canvas" args="m">
-            this.updateIcons();
-        </handler>
+		<handler name="onismoderator" reference="canvas" args="m">
+			this.updateIcons();
+		</handler>
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
             this.updateIcons();
         </handler>
@@ -418,10 +418,13 @@
           height="${ (canvas.ismoderator) ? 40 : 0 }"
           y="${ parent.height - this.height - 2 }">
         
-        <handler name="onismoderator" reference="canvas" args="m">
-            if ($debug) Debug.write("###### ismoderator ",m);
-            this.updateIcons();
-        </handler>
+		<handler name="onismoderator" reference="canvas" args="m">
+			if ($debug) Debug.write("###### ismoderator ",m);
+			if (canvas.currentClient) {
+				canvas.currentClient.isMod = m;
+			}
+			this.updateIcons(canvas.currentClient);
+		</handler>
         
 		<handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
 			updateIcons(roomClientObj);
@@ -449,12 +452,13 @@
         
 		<method name="updateIcons" args="userObject">
 		<![CDATA[
-			if ($debug) Debug.write(" :: ondrawAllowStatus :: ", userObject.canDraw);
+			if ($debug) Debug.write(" :: updateIcons :: ", userObject);
+			if (!userObject) return;
 			
 			var vList = parent._table.renderList;
 			for (var i = 0; i < vList.length; ++i) {
 				if (vList[i].publicSID == userObject.publicSID) {
-					if ($debug) Debug.write(" :: ondrawAllowStatus :: item1 found: ", vList[i]);
+					if ($debug) Debug.write(" :: updateIcons :: item1 found: ", vList[i]);
 					vList[i].isBroadcasting = userObject.isBroadcasting;
 					vList[i].canDraw = userObject.canDraw;
 					vList[i].canShare = userObject.canShare;
@@ -469,7 +473,7 @@
 			var vList = parent._table._innerlist._inn._inn.subviews;
 			for (var i = 0; i < vList.length; ++i) {
 				if (vList[i].refObj.publicSID == userObject.publicSID) {
-					if ($debug) Debug.write(" :: ondrawAllowStatus :: item2 found: ", vList[i]);
+					if ($debug) Debug.write(" :: updateIcons :: item2 found: ", vList[i]);
 					vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
 					vList[i].isBroadcasting = userObject.isBroadcasting;
 					vList[i].refObj.canDraw = userObject.canDraw;

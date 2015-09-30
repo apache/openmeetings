@@ -272,6 +272,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="official_code" value="" type="string" />
 <attribute name="picture_uri" value="" type="string" />
 <attribute name="language" value="" type="string" />
+<attribute name="currentClient" value="null" />   
 
 <!--- User porperties -->
 <attribute name="currentusercolor" value="0" type="number" />
