@@ -34,6 +34,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -126,7 +127,28 @@ public class Invitation implements IDataProviderEntity {
 	private Appointment appointment;
 
 	//variable used in Flash
+	@Transient
 	private boolean allowEntry = true;
+	
+	public Invitation() {}
+	
+	public Invitation(Invitation i) {
+		id = i.id;
+		invitedBy = i.invitedBy;
+		inserted = i.inserted;
+		updated = i.updated;
+		deleted = i.deleted;
+		room = i.room;
+		hash = i.hash;
+		invitee = i.invitee;
+		passwordProtected = i.passwordProtected;
+		password = i.password;
+		valid = i.valid;
+		validFrom = i.validFrom;
+		validTo = i.validTo;
+		used = i.used;
+		appointment = i.appointment;
+	}
 	
 	public Long getId() {
 		return id;

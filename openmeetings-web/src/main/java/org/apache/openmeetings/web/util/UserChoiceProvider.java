@@ -99,7 +99,7 @@ public class UserChoiceProvider implements ChoiceProvider<User> {
 
 	@Override
 	public Collection<User> toChoices(Collection<String> ids) {
-		Collection<User> c = new ArrayList<User>();
+		Collection<User> c = new ArrayList<>();
 		for (String id : ids) {
 			if (newContacts.containsKey(id)) {
 				c.add(newContacts.get(id));
