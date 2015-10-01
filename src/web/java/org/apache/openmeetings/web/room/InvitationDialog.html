@@ -21,10 +21,14 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<form wicket:id="form">
-		<table>
+		<table wicket:id="inviteeType">
 			<tr>
-				<td><label wicket:for="recipients"><wicket:message key="216" /></label></td>
+				<td><input type="radio" wicket:id="user"/><label wicket:for="recipients"><wicket:message key="216" /></label></td>
 				<td><input type="hidden" wicket:id="recipients" class="input invitees" style="max-height: 80px"/></td>
+			</tr>
+			<tr>
+				<td><input type="radio" wicket:id="group"/><label wicket:for="groups"><wicket:message key="126" /></label></td>
+				<td><input type="hidden" wicket:id="groups" class="input invitees" style="max-height: 80px"/></td>
 			</tr>
 			<tr>
 				<td><label wicket:for="subject"><wicket:message key="215" /></label></td>

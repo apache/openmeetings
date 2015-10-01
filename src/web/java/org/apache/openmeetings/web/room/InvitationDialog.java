@@ -36,20 +36,26 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -65,6 +71,7 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -85,9 +92,18 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final IModel<String> subject = Model.of((String)null);
 	private final IModel<String> message = Model.of((String)null);
 	private final IModel<String> tzId = Model.of((String)null);
+	private final IModel<InviteeType> inviteeType = Model.of(InviteeType.user);
 	private Long lang;
-	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 	private final TextField<String> url = new TextField<String>("url", Model.of((String)null));
+	enum InviteeType {
+		user
+		, group
+	}
+	private final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
+	private final Select2MultiChoice<Organisation> groups = new Select2MultiChoice<Organisation>("groups"
+			, new CollectionModel<Organisation>(new ArrayList<Organisation>())
+			, new ArrayList<Organisation>()
+			, new ChoiceRenderer<Organisation>("name", "organisation_id"));
 
 	public InvitationDialog(String id, long roomId) {
 		super(id, Application.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
@@ -119,10 +135,22 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		}
 		subject.setObject(null);
 		message.setObject(null);
-		modelTo.setObject(new ArrayList<User>());
+		recipients.setModelObject(new ArrayList<User>());
+		recipients.setEnabled(true);
+		if (WebSession.getRights().contains(User.Right.Admin)) {
+			groups.setChoices(getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE));
+		} else {
+			groups.setChoices(new ArrayList<Organisation>());
+			for (Organisation_Users ou : u.getOrganisation_users()) {
+				groups.getChoices().add(ou.getOrganisation());
+			}
+		}
+		groups.setModelObject(new ArrayList<Organisation>());
+		groups.setEnabled(false);
 		tzId.setObject(u.getTimeZoneId());
 		lang = u.getLanguage_id();
 		url.setModelObject(null);
+		inviteeType.setObject(InviteeType.user);
 		form.setModelObject(i);
 		send.setEnabled(false, target);
 		generate.setEnabled(false, target);
@@ -163,27 +191,39 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		if (button.equals(cancel)) {
 			super.onClick(target, button);
 		} else if (button.equals(generate)) {
-			Invitation i = create(modelTo.getObject().iterator().next());
+			Invitation i = create(recipients.getModelObject().iterator().next());
 			form.setModelObject(i);
 			url.setModelObject(getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i));
 			target.add(url);
 		} else if (button.equals(send)) {
 			if (Strings.isEmpty(url.getModelObject())) {
-				for (User u : modelTo.getObject()) {
-					Invitation i = create(u);
-					try {
-						getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
-					} catch (Exception e) {
-						log.error("error while sending invitation ", e);
+				if (inviteeType.getObject() == InviteeType.user) {
+					for (User u : recipients.getModelObject()) {
+						Invitation i = create(u);
+						try {
+							getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+						} catch (Exception e) {
+							log.error("error while sending invitation by User ", e);
+						}
+					}
+				} else {
+					for (Organisation g : groups.getModelObject()) {
+						for (Organisation_Users ou : getBean(OrganisationUserDao.class).get(g.getOrganisation_id(), 0, Integer.MAX_VALUE)) {
+							Invitation i = create(ou.getUser());
+							try {
+								getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+							} catch (Exception e) {
+								log.error("error while sending invitation by Group ", e);
+							}
+						}
 					}
 				}
 			} else {
-				//FIXME To might be changed and it would'n be reflected, might lead to misunderstandings
 				Invitation i = form.getModelObject();
 				try {
 					getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
 				} catch (Exception e) {
-					log.error("error while sending invitation ", e);
+					log.error("error while sending invitation by URL ", e);
 				}
 			}
 			super.onClick(target, button);
@@ -225,20 +265,41 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		
 		public InvitationForm(String id, IModel<Invitation> model) {
 			super(id, model);
-			add(new UserMultiChoice("recipients", modelTo).setLabel(Model.of(Application.getString(216))).setRequired(true)
-					.add(new AjaxFormComponentUpdatingBehavior("change") {
-						private static final long serialVersionUID = 1L;
-		
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							Collection<User> to = modelTo.getObject();
-							send.setEnabled(to.size() > 0, target);
-							generate.setEnabled(to.size() == 1, target);
-						}
-					}));
-			add(new TextField<String>("subject", subject));
-			add(new TextArea<String>("message", message));
-			add(new AjaxCheckBox("passwordProtected") {
+			RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", inviteeType);
+			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					boolean groupsEnabled = InviteeType.group == inviteeType.getObject();
+					updateButtons(target);
+					target.add(groups.setEnabled(groupsEnabled), recipients.setEnabled(!groupsEnabled));
+				}
+			}));
+			//TODO list should be updated on open
+			rdi.add(recipients.setLabel(Model.of(Application.getString(216))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					url.setModelObject(null);
+					updateButtons(target);
+				}
+			}).setOutputMarkupId(true));
+			rdi.add(groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					url.setModelObject(null);
+					updateButtons(target);
+				}
+			}).setOutputMarkupId(true));
+			rdi.add(new Radio<InviteeType>("user", Model.of(InviteeType.user)), new Radio<InviteeType>("group", Model.of(InviteeType.group)));
+
+			rdi.add(new TextField<String>("subject", subject));
+			rdi.add(new TextArea<String>("message", message));
+			rdi.add(new AjaxCheckBox("passwordProtected") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -248,38 +309,25 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					target.add(passwd);
 				}
 			});
-			add(new RadioGroup<Valid>("valid").add(
-					new Radio<Valid>("one", Model.of(Valid.OneTime)).add(new AjaxEventBehavior("click") {
-						private static final long serialVersionUID = 1L;
+			RadioGroup<Valid> valid = new RadioGroup<Valid>("valid");
+			valid.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+				private static final long serialVersionUID = 1L;
 
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							target.add(from.setEnabled(false), to.setEnabled(false), timeZoneId.setEnabled(false));
-						}
-					})
-					, new Radio<Valid>("period", Model.of(Valid.Period)).add(new AjaxEventBehavior("click") {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							target.add(from.setEnabled(true), to.setEnabled(true), timeZoneId.setEnabled(true));
-						}
-					})
-					, new Radio<Valid>("endless", Model.of(Valid.Endless)).add(new AjaxEventBehavior("click") {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							target.add(from.setEnabled(false), to.setEnabled(false), timeZoneId.setEnabled(false));
-						}
-					})
-					));
-			add(passwd = new PasswordTextField("password"));
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					boolean dateEnabled = InvitationForm.this.getModelObject().getValid() == Valid.Period;
+					target.add(from.setEnabled(dateEnabled), to.setEnabled(dateEnabled), timeZoneId.setEnabled(dateEnabled));
+				}
+			});
+			rdi.add(valid.add(new Radio<Valid>("one", Model.of(Valid.OneTime))
+					, new Radio<Valid>("period", Model.of(Valid.Period))
+					, new Radio<Valid>("endless", Model.of(Valid.Endless))));
+			rdi.add(passwd = new PasswordTextField("password"));
 			Invitation i = getModelObject();
 			passwd.setLabel(Model.of(Application.getString(525))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
-			add(from = new AjaxDateTimePicker("validFrom", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
-			add(to = new AjaxDateTimePicker("validTo", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
-			add(timeZoneId = new DropDownChoice<String>("timeZoneId", tzId, AVAILABLE_TIMEZONES));
+			rdi.add(from = new AjaxDateTimePicker("validFrom", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
+			rdi.add(to = new AjaxDateTimePicker("validTo", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
+			rdi.add(timeZoneId = new DropDownChoice<String>("timeZoneId", tzId, AVAILABLE_TIMEZONES));
 			from.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
 			to.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
 			timeZoneId.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true)
@@ -291,9 +339,21 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 						//no-op added to preserve selection
 					}
 				});
-			add(new LanguageDropDown("language", new PropertyModel<Long>(InvitationDialog.this, "lang")));
-			add(url.setOutputMarkupId(true));
+			rdi.add(new LanguageDropDown("language", new PropertyModel<Long>(InvitationDialog.this, "lang")));
+			rdi.add(url.setOutputMarkupId(true));
 			add(feedback);
+		}
+		
+		private void updateButtons(AjaxRequestTarget target) {
+			if (inviteeType.getObject() == InviteeType.user) {
+				Collection<User> to = recipients.getModelObject();
+				send.setEnabled(to.size() > 0, target);
+				generate.setEnabled(to.size() == 1, target);
+			} else {
+				Collection<Organisation> to = groups.getModelObject();
+				send.setEnabled(to.size() > 0, target);
+				generate.setEnabled(false, target);
+			}
 		}
 		
 		@Override
@@ -309,7 +369,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		subject.detach();
 		message.detach();
 		tzId.detach();
-		modelTo.detach();
+		inviteeType.detach();
 		super.onDetach();
 	}
 }
