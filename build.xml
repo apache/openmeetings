@@ -50,8 +50,6 @@
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
-	<property name="docs.dest" value="docs" />
-	<property name="docs.src" value="xdocs" />
 
 	<property name="red5.server.dir" value="${build.base.dir}/red5/server" />
 	<property name="red5.client.dir" value="${build.base.dir}/red5/client" />
@@ -62,6 +60,8 @@
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
 	<property name="dist.classes.dir" value="${dist.webapps.dir}/WEB-INF/classes" />
 	<property name="dist.persistence.dir" value="${dist.classes.dir}/META-INF/" />
+	<property name="docs.src" value="${basedir}/xdocs" />
+	<property name="docs.dest" value="${dist.webapps.dir}/docs" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
 	<property name="laszlo46.home" value="${build.base.dir}/openlaszlo46" />
@@ -874,50 +874,32 @@
 		</taskdef>
 
 		<xslt in="${webapp.dir}/languages/errorvalues.xml" out="${docs.src}/ErrorsTable.xml" style="${docs.src}/stylesheets/errortable.xsl" />
-		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="${docs.src}/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
 		<copy todir="${docs.dest}/images">
 			<fileset dir="${docs.src}/images">
 				<patternset refid="images" />
 			</fileset>
 		</copy>
-
 		<copy todir="${docs.dest}/css">
 			<fileset dir="${docs.src}/css">
 				<patternset refid="css" />
 			</fileset>
 		</copy>
+		<copy todir="${docs.dest}/js">
+			<fileset dir="${docs.src}/js/">
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" destdir="${basedir}/docs">
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" destdir="${docs.dest}">
 			<fileset dir="${src.base.dir}/axis/java/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
 				<exclude name="BaseWebService.java" />
 			</fileset>
 			<doclet name="org.apache.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
-
-		<copy todir="${dist.webapps.dir}/docs">
-			<fileset dir="${basedir}/docs/">
-				<include name="*.html" />
-				<include name="*.css" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.webapps.dir}/docs/images">
-			<fileset dir="${basedir}/docs/images/">
-				<patternset refid="images" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.webapps.dir}/docs/css">
-			<fileset dir="${basedir}/docs/css/">
-				<patternset refid="css" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.webapps.dir}/docs/js">
-			<fileset dir="${basedir}/docs/js/">
-				<include name="**/*.js" />
-			</fileset>
-		</copy>
 	</target>
 	
 	<!-- 
