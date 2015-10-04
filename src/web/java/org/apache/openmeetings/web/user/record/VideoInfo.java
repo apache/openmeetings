@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.converter.FlvInterviewConverter;
@@ -47,40 +48,14 @@ import org.apache.wicket.util.resource.FileResourceStream;
 
 import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<Void> form = new Form<Void>("form");
-	private final AjaxButton downloadAvi = new AjaxButton("dAVI") {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected String getIcon() {
-			return JQueryIcon.ARROWTHICKSTOP_1_S;
-		};
-		
-		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			download.setFileName(rm.getObject().getAlternateDownload());
-			download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getAlternateDownload())));
-			download.initiate(target);
-		}
-	};
-	private final AjaxButton downloadFlv = new AjaxButton("dFLV") {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected String getIcon() {
-			return JQueryIcon.ARROWTHICKSTOP_1_S;
-		};
-		
-		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			download.setFileName(rm.getObject().getFileHash());
-			download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getFileHash())));
-			download.initiate(target);
-		}
-	};
+	private final AjaxSplitButton downloadBtn = new AjaxSplitButton("downloadBtn", newDownloadMenuList());
 	private final AjaxButton reConvert = new AjaxButton("re-convert") {
 		private static final long serialVersionUID = 1L;
 
@@ -114,7 +89,7 @@ public class VideoInfo extends Panel {
 		setDefaultModel(rm);
 		
 		form.add(new Label("fileName"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
-				downloadFlv.setEnabled(false), downloadAvi.setEnabled(false), reConvert.setEnabled(false));
+				downloadBtn.setEnabled(false), reConvert.setEnabled(false));
 		add(download);
 		update(null, r);
 	}
@@ -150,8 +125,7 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		downloadAvi.setEnabled(isRecordingExists(r.getAlternateDownload()));
-		downloadFlv.setEnabled(isRecordingExists(r.getFileHash()));
+		downloadBtn.setEnabled(isRecordingExists(r.getAlternateDownload()) || isRecordingExists(r.getFileHash()));
 		if (target != null) {
 			target.add(form);
 		}
@@ -164,5 +138,45 @@ public class VideoInfo extends Panel {
 		rm.detach();
 		roomName.detach();
 		super.onDetach();
+	}
+	
+	private List<IMenuItem> newDownloadMenuList() {
+		List<IMenuItem> list = new ArrayList<>();
+
+		//avi
+		list.add(new MenuItem(getString("884"), JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				FlvRecording r = VideoInfo.this.rm.getObject();
+				return r != null && isRecordingExists(r.getAlternateDownload());
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				download.setFileName(rm.getObject().getAlternateDownload());
+				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getAlternateDownload())));
+				download.initiate(target);
+			}
+		});
+		//flv
+		list.add(new MenuItem(getString("883"), JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				FlvRecording r = VideoInfo.this.rm.getObject();
+				return r != null && isRecordingExists(r.getAlternateDownload());
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				download.setFileName(rm.getObject().getFileHash());
+				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getFileHash())));
+				download.initiate(target);
+			}
+		});
+		return list;
 	}
 }
