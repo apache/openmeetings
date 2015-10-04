@@ -40,7 +40,7 @@ public class WebServiceDoclet extends Standard {
 	private static final Logger log = Red5LoggerFactory.getLogger(WebServiceDoclet.class, webAppRootKey);
 	
 	static final String baseTemplatePath = "xdocs";
-	static final String basePath = "docs";
+	static final String basePath = "dist/red5/webapps/openmeetings/docs";
 	static final String templateName = "ApiMethodsTemplate.vm";
 	static final String templateNameIndex = "ApiClassesTemplate.vm";
 
