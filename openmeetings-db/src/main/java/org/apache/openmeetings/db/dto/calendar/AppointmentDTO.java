@@ -108,9 +108,10 @@ public class AppointmentDTO implements Serializable {
 		a.setIcalId(icalId);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for(MeetingMemberDTO mm : meetingMembers) {
-			//a.getMeetingMembers().add(mm.get());
+			MeetingMember m = mm.get(userDao);
+			m.setAppointment(a);
+			a.getMeetingMembers().add(m);
 		}
-		//MeetingMember
 		a.setLanguageId(languageId);
 		a.setPasswordProtected(passwordProtected);
 		a.setConnectedEvent(connectedEvent);

@@ -68,15 +68,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice UserService
  * 
  */
-@WebService(name = "UserService")
+@WebService(name = "UserService", targetNamespace = UserWebService.USER_NS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
-//@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//@Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
-
+	public static final String USER_NS = "http://webservice.openmeetings.apache.org/user";
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -91,7 +89,7 @@ public class UserWebService {
 	private ConferenceService conferenceService;
 
 	/**
-	 * @param login - login or email of Openmeetings user with admin or SOAP-rights
+	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
 	 * @param pass - password
 	 *            
 	 * @return - {@link ServiceResult} with error code or SID and userId
@@ -99,10 +97,10 @@ public class UserWebService {
 	@WebMethod
 	@GET
 	@Path("/login")
-	public ServiceResult login(@WebParam @QueryParam("user") String login, @WebParam @QueryParam("pass") String pass) {
+	public ServiceResult login(@WebParam(name="user") @QueryParam("user") String user, @WebParam(name="pass") @QueryParam("pass") String pass) {
 		try {
 			log.debug("Login user");
-			User u = userDao.login(login, pass);
+			User u = userDao.login(user, pass);
 			if (u == null) {
 				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}

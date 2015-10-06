@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 
@@ -41,6 +42,13 @@ public class MeetingMemberDTO implements Serializable {
 		this.user = new UserDTO(mm.getUser());
 	}
 
+	public MeetingMember get(UserDao userDao) {
+		MeetingMember mm = new MeetingMember();
+		mm.setId(id);
+		mm.setUser(user.get(userDao));
+		return mm;
+	}
+	
 	public Long getId() {
 		return id;
 	}

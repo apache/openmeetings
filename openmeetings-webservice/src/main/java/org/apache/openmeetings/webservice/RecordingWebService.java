@@ -22,9 +22,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
@@ -62,53 +68,60 @@ public class RecordingWebService {
 	/**
 	 * Deletes a flv recording
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param recordingId
+	 * @param id
 	 *            the id of the recording
 	 *            
-	 * @return - true if recording was deleted
-	 * @throws ServiceException
+	 * @throws {@link ServiceException} in case of any error
 	 */
-	public boolean delete(String SID, Long recordingId)
-			throws ServiceException {
+	@DELETE
+	@Path("/{id}")
+	public void delete(@QueryParam("sid") @WebParam String sid, @PathParam("id") @WebParam Long id) throws ServiceException {
 		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return recordingDao.delete(recordingId);
+				recordingDao.delete(id);
+			} else {
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
-
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
 			log.error("[delete] ", err);
 			throw new ServiceException(err.getMessage());
 		}
-
-		return false;
 	}
 
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param sid The SID of the User. This SID must be marked as Loggedin
 	 * @param externalId the externalUserId
 	 * @param externalType the externalUserType
 	 *            
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getByExternalId(String SID, String externalId, String externalType) throws ServiceException {
+	@WebMethod
+	@GET
+	@Path("/{externaltype}/{externalid}")
+	public List<RecordingDTO> getExternal(@WebParam @QueryParam("sid") String sid
+			, @PathParam("externaltype") @WebParam String externalType
+			, @PathParam("externalid") @WebParam String externalId) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType));
+			} else {
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
-
-			return null;
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[getByExternalId] ", err);
+			log.error("[getExternal] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -116,50 +129,28 @@ public class RecordingWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalType
-	 *            externalRoomType specified when creating the room
-	 * @param insertedBy
-	 *            the userId that created the recording
-	 * @return - list of flv recordings
-	 * @throws ServiceException
-	 */
-	public List<RecordingDTO> getByExternalTypeAndCreator(String SID, String externalType, Long insertedBy) throws ServiceException {
-		try {
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getByExternalTypeAndCreator(externalType, insertedBy));
-			}
-			return null;
-		} catch (Exception err) {
-			log.error("[getByExternalTypeAndCreator] ", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}
-
-	/**
-	 * Gets a list of flv recordings
-	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getByExternalTypeByList(String SID, String externalType) throws ServiceException {
+	@WebMethod
+	@GET
+	@Path("/{externaltype}")
+	public List<RecordingDTO> getExternalByType(@WebParam @QueryParam("sid") String sid
+			, @PathParam("externaltype") @WebParam String externalType) throws ServiceException {
 		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
-
+			} else {
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
-
-			return null;
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
 			log.error("[getByExternalTypeByList] ", err);
 			throw new ServiceException(err.getMessage());
@@ -167,81 +158,33 @@ public class RecordingWebService {
 	}
 
 	/**
-	 * Gets a list of recordings
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged-in
-	 * @param externalType
-	 *            externalType specified when creating room or user
-	 * @return - list of flv recordings
-	 * @throws AxisFault
-	 */
-	public List<RecordingDTO> getRecordingsByExternalType(String SID, String externalType) throws ServiceException {
-		try {
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
-			}
-
-			return null;
-		} catch (Exception err) {
-			log.error("[getRecordingsByExternalType] ", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}
-
-	/**
-	 * Gets a list of flv recordings
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalType
-	 *            externalRoomType specified when creating the room
-	 * @return - list of flv recordings
-	 * @throws ServiceException
-	 */
-	public List<RecordingDTO> getByExternalType(String SID, String externalType) throws ServiceException {
-		try {
-
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
-			}
-
-			return null;
-		} catch (Exception err) {
-			log.error("[getByExternalType] ", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}
-
-	/**
 	 * Get list of recordings
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId
 	 *            the room id
 	 * @return - list of recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getByRoomId(String SID, Long roomId)
-			throws ServiceException {
+	@WebMethod
+	@GET
+	@Path("/room/{id}")
+	public List<RecordingDTO> getExternalByRoom(@WebParam @QueryParam("sid") String sid
+			, @PathParam("id") @WebParam Long roomId) throws ServiceException {
 		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByRoomId(roomId));
+			} else {
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
-
-			return null;
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
 			log.error("[getByRoomId] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
-
 }

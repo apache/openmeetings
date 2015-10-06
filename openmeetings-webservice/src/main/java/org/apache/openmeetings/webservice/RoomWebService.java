@@ -165,11 +165,11 @@ public class RoomWebService {
 	 */
 	@WebMethod
 	@GET
-	@Path("/{type}/{externalType}/{externalId}")
+	@Path("/{type}/{externaltype}/{externaliId}")
 	public RoomDTO getExternal(@WebParam @QueryParam("sid") String sid
 			, @PathParam("type") @WebParam String type
-			, @PathParam("externalType") @WebParam String externalType
-			, @PathParam("externalId") @WebParam Long externalId
+			, @PathParam("externaltype") @WebParam String externalType
+			, @PathParam("externalid") @WebParam Long externalId
 			, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
