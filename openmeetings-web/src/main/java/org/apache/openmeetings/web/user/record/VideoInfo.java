@@ -55,7 +55,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<Void> form = new Form<Void>("form");
-	private final AjaxSplitButton downloadBtn = new AjaxSplitButton("downloadBtn", newDownloadMenuList());
+	private final AjaxSplitButton downloadBtn = new AjaxSplitButton("downloadBtn", new ArrayList<IMenuItem>());
 	private final AjaxButton reConvert = new AjaxButton("re-convert") {
 		private static final long serialVersionUID = 1L;
 
@@ -138,6 +138,12 @@ public class VideoInfo extends Panel {
 		rm.detach();
 		roomName.detach();
 		super.onDetach();
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		downloadBtn.setDefaultModelObject(newDownloadMenuList());
 	}
 	
 	private List<IMenuItem> newDownloadMenuList() {
