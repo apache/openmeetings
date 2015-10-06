@@ -152,8 +152,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public BaseStep(IDynamicWizardStep prev) {
 			super(prev);
+			setSummaryModel(Model.of(""));
+		}
+		
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			InstallWizard.this.setTitle(Model.of(getModelObject().appName + " - " + getString("install.wizard.install.header")));
-            setSummaryModel(Model.of(""));
 		}
 	}
 	
@@ -162,9 +167,14 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public WelcomeStep() {
 			super(null);
-			add(new Label("step", getString("install.wizard.welcome.panel")).setEscapeModelStrings(false));
 		}
 
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(new Label("step", getString("install.wizard.welcome.panel")).setEscapeModelStrings(false));
+		}
+		
 		@Override
 		public boolean isLastStep() {
 			return false;
@@ -280,8 +290,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
         			LocalEntityManagerFactoryBean emb = f.getBean(LocalEntityManagerFactoryBean.class);
         			emb.afterPropertiesSet();
         		} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this, null, null, e.getMessage()).getObject());
-					log.error("error while patching", e);
+				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this, null, null, e.getMessage()).getObject());
+				log.error("error while patching", e);
         		}
         	}
         };
@@ -345,15 +355,19 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		
 		public DbStep() {
 			super(welcomeStep);
-			//TODO localize
-			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().appName, getString("install.wizard.db.step.instructions.derby")
-				, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
-				, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
-				, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
 			add(form.setOutputMarkupId(true));
 			initForm(false, null);
 		}
 
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().appName, getString("install.wizard.db.step.instructions.derby")
+					, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
+					, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
+					, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
+		}
+		
 		@Override
 		public boolean isLastStep() {
 			return false;
@@ -371,10 +385,15 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public ParamsStep1() {
 			super(dbStep);
+			add(tzDropDown = new TzDropDown("ical_timeZone"));
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(new RequiredTextField<String>("username").setLabel(Model.of(getString("install.wizard.params.step1.username"))).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
 			add(new PasswordTextField("password").setLabel(Model.of(getString("install.wizard.params.step1.password"))).add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
 			add(new RequiredTextField<String>("email").setLabel(Model.of(getString("install.wizard.params.step1.email"))).add(RfcCompliantEmailAddressValidator.getInstance()));
-			add(tzDropDown = new TzDropDown("ical_timeZone"));
 			add(new RequiredTextField<String>("group").setLabel(Model.of(getString("install.wizard.params.step1.group"))));
 		}
 
@@ -517,10 +536,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private final class InstallStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
 		private final CongratulationsPanel congrat;
-		private WebMarkupContainer container = new WebMarkupContainer("container");
-		private AbstractAjaxTimerBehavior timer;
-		private ProgressBar progressBar;
-		private Label desc = new Label("desc", getString("install.wizard.install.desc"));
+		private final WebMarkupContainer container = new WebMarkupContainer("container");
+		private final AbstractAjaxTimerBehavior timer;
+		private final ProgressBar progressBar;
+		private final Label desc = new Label("desc", "");
 		private boolean started = false;
 		
 		public void startInstallation(AjaxRequestTarget target) {
@@ -536,7 +555,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public InstallStep() {
 			super(paramsStep4);
 			
-			add(desc.setOutputMarkupId(true));
 			// Timer //
 			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
 				private static final long serialVersionUID = 1L;
@@ -583,6 +601,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(container.setOutputMarkupId(true));
 		}
 
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			desc.setDefaultModelObject(getString("install.wizard.install.desc"));
+			add(desc.setOutputMarkupId(true));
+		}
+		
 		@Override
 		public boolean isLastStep() {
 			return true;
