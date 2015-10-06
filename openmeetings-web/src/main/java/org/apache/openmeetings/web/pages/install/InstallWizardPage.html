@@ -20,123 +20,29 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:head>
-	<script type="text/javascript" src="js/openmeetings_functions.js" >
-	</script>
+	<script type="text/javascript" src="js/openmeetings_functions.js" ></script>
 	<style type="text/css">
-		form,fieldset {
-			margin: 0;
-			padding: 0;
+		.abstractWizard .adminForm div.formelement {
+			max-width: 600px;
 		}
-		fieldset {
-			border: 1px solid #000;
+		.abstractWizard .adminForm label {
+			width: 240px;
 		}
-		legend {
-			padding: 0;
-			color: #000;
+		.abstractWizard ul.paramList {
+			list-style-type: none;
 		}
-		input:focus,textarea:focus {
-			color: #000;
-			background: #fff;
-			outline: 1px solid black;
+		.abstractWizard ul.paramList li {
+			padding-top: 5px;
 		}
-		input,textarea,select {
-			margin: 0;
-			padding: 1px;
-			position: absolute;
-			left: 700px;
-			background: #ddd;
-			font-size: 100%;
-			font-family: inherit;
-			width: 300px;
-		}
-		select {
-			padding: 0;
-		}
-		form.wicketExtensionsWizardForm {
-			width: 1024px;
-			font-size: 1.1em;
-			color: #333;
-		}
-		form.wicketExtensionsWizardForm legend {
-			padding-left: 0;
-		}
-		form.wicketExtensionsWizardForm legend,form.wicketExtensionsWizardForm label {
-			color: #333;
-		}
-		form.wicketExtensionsWizardForm fieldset {
-			border: none;
-			border-top: 1px solid #C9DCA6;
-		}
-		form.wicketExtensionsWizardForm fieldset fieldset {
-			background: none;
-		}
-		form.wicketExtensionsWizardForm fieldset li {
-			padding: 5px 10px 7px;
-		}
-		form.wicketExtensionsWizardForm fieldset {
-			margin-bottom: 10px;
-		}
-		form.wicketExtensionsWizardForm legend {
-			padding: 0 2px;
-			font-weight: bold;
-		}
-		form.wicketExtensionsWizardForm label {
+		.abstractWizard ul.paramList label {
+			width: 350px;
 			display: inline-block;
-			line-height: 1.8;
-			vertical-align: top;
 		}
-		form.wicketExtensionsWizardForm fieldset ol {
-			margin: 0;
-			padding: 0;
+		.abstractWizard input, .abstractWizard select {
+			width: 280px;
 		}
-		form.wicketExtensionsWizardForm fieldset li {
-			list-style: none;
-			margin: 0;
-		}
-		form.wicketExtensionsWizardForm fieldset fieldset {
-			border: none;
-			margin: 3px 0 0;
-		}
-		form.wicketExtensionsWizardForm fieldset fieldset legend {
-			padding: 0 0 5px;
-			font-weight: normal;
-		}
-		form.wicketExtensionsWizardForm fieldset fieldset label {
-			display: block;
+		.abstractWizard input[type=checkbox], .abstractWizard input[type=radio] {
 			width: auto;
-		}
-		form.wicketExtensionsWizardForm em {
-			font-weight: bold;
-			font-style: normal;
-			color: #f00;
-		}
-		form.wicketExtensionsWizardForm label {
-			width: 420px;
-		}
-		form.wicketExtensionsWizardForm fieldset fieldset label {
-			margin-left: 123px;
-		}
-		.wicketExtensionsWizard {
-			padding-right: 100px;
-			padding-left: 100px;
-			width: 850px;
-		}
-		.wicketExtensionsWizardHeader {
-			font-size: 2em;
-			padding: 10px;
-		}
-		.wicketExtensionsWizardViewInner {
-			padding: 5px;
-		}
-		.wicketExtensionsWizardInnerTable, .wicketExtensionsWizardOuterTable {
-			width: 100%;
-		}
-		.wicketExtensionsWizardButtonBar input {
-			position: static;
-			width: auto;
-			padding-right: 15px;
-			padding-left: 15px;
-			margin: 5px;
 		}
 	</style>
 </wicket:head>

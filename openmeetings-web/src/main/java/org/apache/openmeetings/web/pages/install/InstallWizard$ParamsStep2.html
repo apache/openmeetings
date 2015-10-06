@@ -22,7 +22,7 @@
 <wicket:panel>
 	<fieldset class="ui-widget-content" id="userConf">
 		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step2.configuration"/></legend>
-		<ul>
+		<ul class="paramList">
 			<li><label wicket:for="allowFrontendRegister"><wicket:message key="install.wizard.params.step2.allowFrontendRegister"/></label>
 				<select wicket:id="allowFrontendRegister"></select>
 			</li>
@@ -35,20 +35,20 @@
 			<li><label wicket:for="createDefaultRooms"><wicket:message key="install.wizard.params.step2.createDefaultRooms"/></label>
 				<select wicket:id="createDefaultRooms"></select>
 			</li>
-			<li><label wicket:for="cfg.mailReferer"><wicket:message key="install.wizard.params.step2.mailReferer"/></label>
-				<input wicket:id="cfg.mailReferer" wicket:message="title:install.wizard.params.step2.mailReferer.title" type="text" />
+			<li><label wicket:for="mailReferer"><wicket:message key="install.wizard.params.step2.mailReferer"/></label>
+				<input wicket:id="mailReferer" wicket:message="title:install.wizard.params.step2.mailReferer.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpServer"><wicket:message key="install.wizard.params.step2.smtpServer"/></label>
-				<input wicket:id="cfg.smtpServer" wicket:message="title:install.wizard.params.step2.smtpServer.title" type="text" />
+			<li><label wicket:for="smtpServer"><wicket:message key="install.wizard.params.step2.smtpServer"/></label>
+				<input wicket:id="smtpServer" wicket:message="title:install.wizard.params.step2.smtpServer.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpPort"><wicket:message key="install.wizard.params.step2.smtpPort"/></label>
-				<input wicket:id="cfg.smtpPort" wicket:message="title:install.wizard.params.step2.smtpPort.title" type="text" />
+			<li><label wicket:for="smtpPort"><wicket:message key="install.wizard.params.step2.smtpPort"/></label>
+				<input wicket:id="smtpPort" wicket:message="title:install.wizard.params.step2.smtpPort.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthName"><wicket:message key="install.wizard.params.step2.mailAuthName"/></label>
-				<input wicket:id="cfg.mailAuthName" wicket:message="title:install.wizard.params.step2.mailAuthName.title" type="text" />
+			<li><label wicket:for="mailAuthName"><wicket:message key="install.wizard.params.step2.mailAuthName"/></label>
+				<input wicket:id="mailAuthName" wicket:message="title:install.wizard.params.step2.mailAuthName.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthPass"><wicket:message key="install.wizard.params.step2.mailAuthPass"/></label>
-				<input wicket:id="cfg.mailAuthPass" wicket:message="title:install.wizard.params.step2.mailAuthPass.title" type="password" />
+			<li><label wicket:for="mailAuthPass"><wicket:message key="install.wizard.params.step2.mailAuthPass"/></label>
+				<input wicket:id="mailAuthPass" wicket:message="title:install.wizard.params.step2.mailAuthPass.title" type="password" />
 			</li>
 			<li><label wicket:for="mailUseTls"><wicket:message key="install.wizard.params.step2.mailUseTls"/></label>
 				<select wicket:id="mailUseTls"></select>
@@ -59,8 +59,8 @@
 			<li><label wicket:for="defaultLangId"><wicket:message key="install.wizard.params.step2.defaultLangId"/></label>
 				<select wicket:id="defaultLangId"></select>
 			</li>
-			<li><label wicket:for="cfg.defaultExportFont"><wicket:message key="install.wizard.params.step2.defaultExportFont"/></label>
-				<select wicket:id="cfg.defaultExportFont"></select>
+			<li><label wicket:for="defaultExportFont"><wicket:message key="install.wizard.params.step2.defaultExportFont"/></label>
+				<select wicket:id="defaultExportFont"></select>
 			</li>
 		</ul>
 	</fieldset>

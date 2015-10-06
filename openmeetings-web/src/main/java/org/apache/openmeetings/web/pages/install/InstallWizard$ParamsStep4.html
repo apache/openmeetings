@@ -22,9 +22,9 @@
 <wicket:panel>
 	<fieldset class="ui-widget-content" id="userConf2">
 		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step4.crypt"/></legend>
-		<ul>
-			<li><label wicket:for="cfg.cryptClassName"><wicket:message key="install.wizard.params.step4.cryptClassName"/></label>
-				<input wicket:id="cfg.cryptClassName" type="text"
+		<ul class="paramList">
+			<li><label wicket:for="cryptClassName"><wicket:message key="install.wizard.params.step4.cryptClassName"/></label>
+				<input wicket:id="cryptClassName" type="text"
 					wicket:message="title:install.wizard.params.step4.cryptClassName.title" />
 				<p>
 					<i>
@@ -37,21 +37,21 @@
 
 	<fieldset class="ui-widget-content" id="red5sip">
 		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step4.red5SIP"/></legend>
-		<ul>
+		<ul class="paramList">
 			<li><label wicket:for="red5SipEnable"><wicket:message key="install.wizard.params.step4.red5SipEnable"/></label>
 				<select wicket:id="red5SipEnable"></select>
 				<p>
 					<i><wicket:message key="install.wizard.params.step4.red5SipEnable.text"/></i>
 				</p>
 			</li>
-			<li><label wicket:for="cfg.red5SipRoomPrefix"><wicket:message key="install.wizard.params.step4.red5SipRoomPrefix"/></label>
-				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
+			<li><label wicket:for="red5SipRoomPrefix"><wicket:message key="install.wizard.params.step4.red5SipRoomPrefix"/></label>
+				<input wicket:id="red5SipRoomPrefix" type="text" />
 				<p>
 					<i><wicket:message key="install.wizard.params.step4.red5SipRoomPrefix.text"/></i>
 				</p>
 			</li>
-			<li><label wicket:for="cfg.red5SipExtenContext"><wicket:message key="install.wizard.params.step4.red5SipExtenContext"/></label>
-				<input wicket:id="cfg.red5SipExtenContext" type="text" />
+			<li><label wicket:for="red5SipExtenContext"><wicket:message key="install.wizard.params.step4.red5SipExtenContext"/></label>
+				<input wicket:id="red5SipExtenContext" type="text" />
 				<p>
 					<i><wicket:message key="install.wizard.params.step4.red5SipExtenContext.text"/></i>
 				</p>

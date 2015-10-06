@@ -103,26 +103,12 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            protected String $()
-            {
-                return this.$(Options.asString("open"));
-            }
-        });
-	}
-	
-	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-		//behavior.setOption("autoOpen", true); //TODO need to be updated as soon as API will be added
+		behavior.setOption("autoOpen", true);
 		behavior.setOption("closeOnEscape", false);
-        behavior.setOption("dialogClass", Options.asString("no-close"));
-        behavior.setOption("resizable", false);
+		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("resizable", false);
 	}
 	
 	@Override
@@ -275,7 +261,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 						Image icon = new Image("icon", new Model<String>());
 						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
 						icon.add(new AttributeModifier("src", new AbstractReadOnlyModel<String>() {
-
 							private static final long serialVersionUID = 1L;
 
 							@Override

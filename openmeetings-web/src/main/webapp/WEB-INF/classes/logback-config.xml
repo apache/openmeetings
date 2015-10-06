@@ -60,6 +60,7 @@
 	<logger name="httpclient.wire.header" level="ERROR" />
 	<logger name="org.apache.directory" level="INFO" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
+	<logger name="org.apache.wicket" level="WARN" />
 	<root level="DEBUG">
 		<appender-ref ref="FLOG2" />
 		<appender-ref ref="CONSOLE2" />
