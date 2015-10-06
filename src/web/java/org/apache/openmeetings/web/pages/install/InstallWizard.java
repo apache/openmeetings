@@ -49,14 +49,10 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.common.OmLabel;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.extensions.wizard.IWizardStep;
-import org.apache.wicket.extensions.wizard.Wizard;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
@@ -69,12 +65,10 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
@@ -83,17 +77,17 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
+import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.googlecode.wicket.kendo.ui.form.button.IndicatingAjaxButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-//TODO maybe JQ wizard should be used
-public class InstallWizard extends Wizard {
+public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
-	private InstallationConfig cfg;
-	private CompoundPropertyModel<InstallWizard> model;
 	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO, SelectOption.YES);
 	private final static List<SelectOption> yesNoTextList = Arrays.asList(SelectOption.NO_TEXT, SelectOption.YES_TEXT);
 	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
@@ -105,25 +99,21 @@ public class InstallWizard extends Wizard {
 	private final IDynamicWizardStep paramsStep4;
 	private final InstallStep installStep;
 	private Throwable th = null;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	public void initTzDropDown() {
 		paramsStep1.tzDropDown.setOption();
 	}
 	
 	//onInit, applyState
-	public InstallWizard(String id) {
-		super(id);
-		//TODO enable install after first params
-		cfg = new InstallationConfig();
-		setDefaultModel(model = new CompoundPropertyModel<InstallWizard>(this));
+	public InstallWizard(String id, String title) {
+		super(id, title, new CompoundPropertyModel<InstallationConfig>(new InstallationConfig()), true);
+		setTitle(Model.of(getModelObject().appName));
 		welcomeStep = new WelcomeStep();
 		dbStep = new DbStep();
 		paramsStep1 = new ParamsStep1();
 		paramsStep2 = new ParamsStep2();
 		paramsStep3 = new ParamsStep3();
 		paramsStep4 = new ParamsStep4();
-		//TODO add install/progress step
 		installStep = new InstallStep();
 
 		DynamicWizardModel wmodel = new DynamicWizardModel(welcomeStep);
@@ -133,33 +123,28 @@ public class InstallWizard extends Wizard {
 	}
 	
 	@Override
-	protected Component newButtonBar(String id) {
-		final Panel bBar = (Panel)super.newButtonBar(id);
-		AjaxButton finish = new AjaxButton("finish", new ResourceModel("org.apache.wicket.extensions.wizard.finish")) {
-			private static final long serialVersionUID = 1L;
-
-			public boolean isEnabled() {
-				IWizardStep activeStep = getWizardModel().getActiveStep();
-				return ((activeStep != null) && getWizardModel().isLastStep(activeStep));
-			}
-			
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				installStep.startInstallation(target);
-				target.add(bBar.setEnabled(false));
-			}
-		};
-		return bBar.replace(finish).setOutputMarkupId(true);
+	public void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+		behavior.setOption("closeOnEscape", false);
+		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("resizable", false);
 	}
 
-	protected Component newFeedbackPanel(final String id) {
-		return feedback.setEscapeModelStrings(false);
+	@Override
+	protected WebMarkupContainer newFeedbackPanel(String id) {
+		KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+		feedback.setEscapeModelStrings(false);
+		return feedback;
+	}
+
+	@Override
+	public int getWidth() {
+		return 1000;
 	}
 	
 	@Override
-	protected void onDetach() {
-		model.detach();
-		super.onDetach();
+	protected boolean closeOnFinish() {
+		return false;
 	}
 	
 	private abstract class BaseStep extends DynamicWizardStep {
@@ -167,7 +152,7 @@ public class InstallWizard extends Wizard {
 
 		public BaseStep(IDynamicWizardStep prev) {
 			super(prev);
-			setTitleModel(Model.of(cfg.appName + " - " + getString("install.wizard.install.header")));
+			InstallWizard.this.setTitle(Model.of(getModelObject().appName + " - " + getString("install.wizard.install.header")));
             setSummaryModel(Model.of(""));
 		}
 	}
@@ -177,14 +162,15 @@ public class InstallWizard extends Wizard {
 
 		public WelcomeStep() {
 			super(null);
-			//TODO localize
-            add(new Label("step", getString("install.wizard.welcome.panel")).setEscapeModelStrings(false));
+			add(new Label("step", getString("install.wizard.welcome.panel")).setEscapeModelStrings(false));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return dbStep;
 		}
@@ -221,7 +207,7 @@ public class InstallWizard extends Wizard {
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						target.add(feedback);
+						target.add(getFeedbackPanel());
 						initForm(true, target);
 					}
 				}));
@@ -230,16 +216,19 @@ public class InstallWizard extends Wizard {
         		add(new IndicatingAjaxButton("check") {
 					private static final long serialVersionUID = 1L;
 					
+					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						target.add(feedback);
+						target.add(getFeedbackPanel());
 					}
 					
+					@Override
 					protected void onError(AjaxRequestTarget target, Form<?> form) {
-						target.add(feedback);
+						target.add(getFeedbackPanel());
 					}
         		});
         	}
         	
+        	@Override
         	protected void onValidateModelObjects() {
 				ConnectionProperties props = getModelObject();
 				try {
@@ -248,12 +237,10 @@ public class InstallWizard extends Wizard {
 					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this, null, null, getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
 					return;
 				}
-				Connection conn = null;
 				boolean valid = true;
-				try {
-					ConnectionPropertiesPatcher.updateUrl(props, host.getModelObject(), "" + port.getModelObject(), dbname.getModelObject());
-					DriverManager.setLoginTimeout(3);
-					conn = DriverManager.getConnection(props.getURL(), props.getLogin(), props.getPassword());
+				ConnectionPropertiesPatcher.updateUrl(props, host.getModelObject(), "" + port.getModelObject(), dbname.getModelObject());
+				DriverManager.setLoginTimeout(3);
+				try (Connection conn = DriverManager.getConnection(props.getURL(), props.getLogin(), props.getPassword())) {
 					valid = conn.isValid(0); //no timeout
 					String sql = null;
 					switch (props.getDbType()) {
@@ -278,20 +265,13 @@ public class InstallWizard extends Wizard {
 					form.error(e.getMessage() + "<br/>" + getString("install.wizard.db.step.instructions." + props.getDbType().name()));
 					log.error("error while testing DB", e);
 					valid = false;
-				} finally {
-					if (conn != null) {
-						try {
-							conn.close();
-						}  catch (Exception e) {
-							//no-op
-						}
-					}
 				}
 				if (valid) {
 					form.success(getString("install.wizard.db.step.valid"));
 				}
         	}
         	
+        	@Override
         	protected void onSubmit() {
         		try {
         			ConnectionPropertiesPatcher.patch(getModelObject());
@@ -366,18 +346,20 @@ public class InstallWizard extends Wizard {
 		public DbStep() {
 			super(welcomeStep);
 			//TODO localize
-            add(new OmLabel("note", "install.wizard.db.step.note", cfg.appName, getString("install.wizard.db.step.instructions.derby")
-            		, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
-            		, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
-            		, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
-            add(form.setOutputMarkupId(true));
-            initForm(false, null);
+			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().appName, getString("install.wizard.db.step.instructions.derby")
+				, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
+				, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
+				, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
+			add(form.setOutputMarkupId(true));
+			initForm(false, null);
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return paramsStep1;
 		}
@@ -389,18 +371,19 @@ public class InstallWizard extends Wizard {
 
 		public ParamsStep1() {
 			super(dbStep);
-			//TODO localize
-			add(new RequiredTextField<String>("cfg.username").add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
-			add(new PasswordTextField("cfg.password").add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
-			add(new RequiredTextField<String>("cfg.email").add(RfcCompliantEmailAddressValidator.getInstance()));
+			add(new RequiredTextField<String>("username").setLabel(Model.of(getString("install.wizard.params.step1.username"))).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
+			add(new PasswordTextField("password").setLabel(Model.of(getString("install.wizard.params.step1.password"))).add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
+			add(new RequiredTextField<String>("email").setLabel(Model.of(getString("install.wizard.params.step1.email"))).add(RfcCompliantEmailAddressValidator.getInstance()));
 			add(tzDropDown = new TzDropDown("ical_timeZone"));
-			add(new RequiredTextField<String>("cfg.group"));
+			add(new RequiredTextField<String>("group").setLabel(Model.of(getString("install.wizard.params.step1.group"))));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return paramsStep2;
 		}
@@ -427,22 +410,24 @@ public class InstallWizard extends Wizard {
 			add(new YesNoDropDown("sendEmailAtRegister"));
 			add(new YesNoDropDown("sendEmailWithVerficationCode"));
 			add(new YesNoDropDown("createDefaultRooms"));
-			add(new TextField<String>("cfg.mailReferer"));
-			add(new TextField<String>("cfg.smtpServer"));
-			add(new TextField<Integer>("cfg.smtpPort").setRequired(true));
-			add(new TextField<String>("cfg.mailAuthName"));
-			add(new PasswordTextField("cfg.mailAuthPass").setRequired(false));
+			add(new TextField<String>("mailReferer"));
+			add(new TextField<String>("smtpServer"));
+			add(new TextField<Integer>("smtpPort").setRequired(true));
+			add(new TextField<String>("mailAuthName"));
+			add(new PasswordTextField("mailAuthPass").setRequired(false));
 			add(new YesNoDropDown("mailUseTls"));
 			//TODO check mail server
 			add(new YesNoDropDown("replyToOrganizer"));
 			add(new LangDropDown("defaultLangId"));
-			add(new DropDownChoice<String>("cfg.defaultExportFont", allFonts));
+			add(new DropDownChoice<String>("defaultExportFont", allFonts));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return paramsStep3;
 		}
@@ -464,20 +449,22 @@ public class InstallWizard extends Wizard {
 		public ParamsStep3() {
 			super(paramsStep2);
 			
-            add(new TextField<Integer>("cfg.swfZoom").setRequired(true).add(range(50, 600)));
-            add(new TextField<Integer>("cfg.swfJpegQuality").setRequired(true).add(range(1, 100)));
-            add(new TextField<String>("cfg.swfPath"));
-            add(new TextField<String>("cfg.imageMagicPath"));
-            add(new TextField<String>("cfg.ffmpegPath"));
-            add(new TextField<String>("cfg.soxPath"));
-            add(new TextField<String>("cfg.jodPath"));
-            add(new TextField<String>("cfg.officePath"));
+			add(new TextField<Integer>("swfZoom").setRequired(true).add(range(50, 600)));
+			add(new TextField<Integer>("swfJpegQuality").setRequired(true).add(range(1, 100)));
+			add(new TextField<String>("swfPath"));
+			add(new TextField<String>("imageMagicPath"));
+			add(new TextField<String>("ffmpegPath"));
+			add(new TextField<String>("soxPath"));
+			add(new TextField<String>("jodPath"));
+			add(new TextField<String>("officePath"));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return paramsStep4;
 		}
@@ -498,18 +485,20 @@ public class InstallWizard extends Wizard {
 
 		public ParamsStep4() {
 			super(paramsStep3);
-            add(new RequiredTextField<String>("cfg.cryptClassName")); //Validate class
+			add(new RequiredTextField<String>("cryptClassName")); //Validate class
             
-            //TODO add check for red5sip connection
-            add(new YesNoTextDropDown("red5SipEnable"));
-            add(new TextField<String>("cfg.red5SipRoomPrefix"));
-            add(new TextField<String>("cfg.red5SipExtenContext"));
+			//TODO add check for red5sip connection
+			add(new YesNoTextDropDown("red5SipEnable"));
+			add(new TextField<String>("red5SipRoomPrefix"));
+			add(new TextField<String>("red5SipExtenContext"));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return false;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return installStep;
 		}
@@ -594,10 +583,12 @@ public class InstallWizard extends Wizard {
 			add(container.setOutputMarkupId(true));
 		}
 
+		@Override
 		public boolean isLastStep() {
 			return true;
 		}
 
+		@Override
 		public IDynamicWizardStep next() {
 			return null;
 		}
@@ -613,7 +604,7 @@ public class InstallWizard extends Wizard {
 		
 		public void run() {
 			try {
-				installer.loadAll(cfg, true);
+				installer.loadAll(getModelObject(), true);
 			} catch (Exception e) {
 				th = e;
 			}
@@ -643,7 +634,7 @@ public class InstallWizard extends Wizard {
 		
 		WizardDropDown(String id) {
 			super(id);
-			propModel = InstallWizard.this.model.bind("cfg." + id);
+			propModel = ((CompoundPropertyModel<InstallationConfig>)InstallWizard.this.getModel()).bind(id);
 			setModel(new PropertyModel<T>(this, "option"));
 		}
 		
@@ -738,11 +729,19 @@ public class InstallWizard extends Wizard {
 					option = op;
 				}
 				list.add(op);
-				if (option == null && me.getKey().toString().equals(cfg.defaultLangId)) {
+				if (option == null && me.getKey().toString().equals(InstallWizard.this.getModelObject().defaultLangId)) {
 					option = op;
 				}
 			}
 			setChoices(list);
 		}
+	}
+
+	@Override
+	protected void onFinish(AjaxRequestTarget target) {
+		for (DialogButton b : getButtons()) {
+			b.setEnabled(false, target);
+		}
+		installStep.startInstallation(target);
 	}
 }

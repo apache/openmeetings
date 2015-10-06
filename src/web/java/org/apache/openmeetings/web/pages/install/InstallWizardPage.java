@@ -23,17 +23,19 @@ import org.apache.openmeetings.web.pages.BaseNotInitedPage;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
-	private InstallWizard wizard = null;
+	private final InstallWizard wizard;
 
 	public InstallWizardPage() {
 		if (Application.isInstalled()) {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
-		add(wizard = new InstallWizard("wizard"));
+		add(wizard = new InstallWizard("wizard", getString("install.wizard.install.header")));
 		// This code is required to detect time zone offset
 		add(new AjaxClientInfoBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -42,7 +44,14 @@ public class InstallWizardPage extends BaseNotInitedPage {
 			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo) {
 				super.onClientInfo(target, clientInfo);
 				wizard.initTzDropDown();
+				wizard.open(target);
 			}
 		});
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
 	}
 }

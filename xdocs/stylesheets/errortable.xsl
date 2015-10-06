@@ -16,7 +16,7 @@
 	<xsl:output method="xml"/>
 	
 	<xsl:template match="ROOT">
-<document>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
 <xsl:comment>
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
