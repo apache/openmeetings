@@ -31,13 +31,14 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
-import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -109,11 +110,11 @@ public abstract class FileTreePanel extends Panel {
 				target.add(trees); //FIXME add correct refresh
 			}
 		}));
-		trashToolbar.add(new ConfirmableAjaxLink("trash", 713) {
+		trashToolbar.add(new ConfirmableAjaxBorder("trash", getString("80"), getString("713")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				delete(selectedFile.getObject(), target);
 			}
 		});

@@ -29,24 +29,22 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.ConfirmCallListener;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -188,24 +186,18 @@ public class RoomForm extends AdminBaseForm<Room> {
 				Client client = item.getModelObject();
 				item.add(new Label("clientId", "" + client.getId()))
 					.add(new Label("clientLogin", "" + client.getUsername()))
-					.add(new WebMarkupContainer("clientDelete").add(new AjaxEventBehavior("onclick"){
+					.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
 						private static final long serialVersionUID = 1L;
-	
+
 						@Override
-						protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-							super.updateAjaxAttributes(attributes);
-							attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-						}
-						
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
+						protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 							Client c = item.getModelObject();
 							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
 									, c.getServer() == null ? 0 : c.getServer().getId());
 							
 							updateClients(target);
 						}
-					}));
+					});
 			}
 		};
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
@@ -269,21 +261,15 @@ public class RoomForm extends AdminBaseForm<Room> {
 					.add(new Label("userId", "" + moderator.getUser().getId()))
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAddress().getEmail()))
-					.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick"){
+					.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 						private static final long serialVersionUID = 1L;
-	
+
 						@Override
-						protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-							super.updateAjaxAttributes(attributes);
-							attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-						}
-						
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
+						protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 							RoomForm.this.getModelObject().getModerators().remove(item.getIndex());
 							target.add(moderatorContainer);
 						}
-					}));
+					});
 			}
 		}).setOutputMarkupId(true));
 

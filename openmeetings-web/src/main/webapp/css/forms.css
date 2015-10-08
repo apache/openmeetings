@@ -65,8 +65,9 @@ div.formRefreshButton input {
 	margin-top: 2px;
 }
 
-div.formCancelButton input {
+div.formCancelButton div {
 	background: url(images/forms/cancel_icon.png) no-repeat;
+	display: inline-block;
 	float: left;
 	cursor: pointer;
 	width: 18px;

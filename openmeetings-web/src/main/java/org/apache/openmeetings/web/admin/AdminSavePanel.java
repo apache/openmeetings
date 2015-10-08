@@ -19,10 +19,9 @@
 package org.apache.openmeetings.web.admin;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.ConfirmCallListener;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -31,9 +30,11 @@ import org.apache.wicket.model.Model;
 public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private Label newRecord;
+	private final Form<T> form;
 	
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
+		this.form = form;
 		
 		newRecord = new Label("newRecord", Model.of(Application.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
@@ -58,24 +59,14 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				onNewError(target, form);
 			}
 		});
-
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		// add a cancel button that can be used to submit the form via ajax
-		add(new AjaxButton("ajax-cancel-button", form) {
+		add(new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), form) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-				super.updateAjaxAttributes(attributes);
-				attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-			}
-			
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so that it is hidden
-				target.add(feedback);
-				hideNewRecord();
-				onDeleteSubmit(target, form);
-			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
@@ -83,6 +74,14 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				target.add(feedback);
 				hideNewRecord();
 				onDeleteError(target, form);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				hideNewRecord();
+				onDeleteSubmit(target, form);
 			}
 		});
 	}

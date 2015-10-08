@@ -39,7 +39,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
@@ -57,6 +57,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
@@ -95,11 +96,11 @@ public class MainPage extends BaseInitedPage {
 				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
-		topLinks.add(new ConfirmableAjaxLink("logout", 634L) {
+		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				getSession().invalidate();
 				setResponsePage(Application.get().getSignInPageClass());
 			}

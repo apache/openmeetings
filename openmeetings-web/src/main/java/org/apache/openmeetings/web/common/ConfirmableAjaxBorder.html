@@ -19,13 +19,8 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:extend>
-		<div class="formNewButton">
-			<input type="submit" value="" wicket:id="ajax-new-button" wicket:message="title:155" />
-		</div>
-		<div class="formCancelButton">
-			<div wicket:id="ajax-cancel-button" wicket:message="title:157"></div>
-		</div>
-		<span wicket:id="newRecord"></span>
-	</wicket:extend>
+<wicket:border>
+	<wicket:body/>
+	<form wicket:id="form" style="display: inline;"><div wicket:id="dialog"></div></form>
+</wicket:border>
 </html>

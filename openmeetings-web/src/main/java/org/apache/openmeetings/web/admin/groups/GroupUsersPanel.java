@@ -28,17 +28,15 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.ConfirmCallListener;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 
@@ -74,17 +72,11 @@ public class GroupUsersPanel extends Panel {
 					label.add(AttributeAppender.append("class", "newItem"));
 				}
 				item.add(label);
-				item.add(new WebMarkupContainer("deleteUserBtn").add(new AjaxEventBehavior("onclick"){
+				item.add(new ConfirmableAjaxBorder("deleteUserBtn", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						super.updateAjaxAttributes(attributes);
-						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-					}
-					
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						if (orgUser.getId() == null) {
 							for (int i = 0; i < users2add.size(); ++i) {
 								//FIXME ineffective
@@ -98,7 +90,7 @@ public class GroupUsersPanel extends Panel {
 						}
 						target.add(GroupUsersPanel.this);
 					}
-				}));
+				});
 			}
 		};
 		add(dataView).setOutputMarkupId(true);
