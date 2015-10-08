@@ -39,6 +39,7 @@ html, body {
 	padding-right: 5px;
 	padding-left: 5px;
 	border-right: 1px solid black;
+	white-space: nowrap;
 }
 
 #topLinks span:last-child {

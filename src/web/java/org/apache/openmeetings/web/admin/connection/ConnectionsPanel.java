@@ -37,7 +37,7 @@ import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebClient;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -45,6 +45,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
@@ -99,11 +100,11 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", c.getScope()));
 				item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
-				item.add(new ConfirmableAjaxLink("kick", 605) {
+				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void onClick(AjaxRequestTarget target) {
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						Client c = item.getModelObject();
 						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
 								, c.getServer() == null ? 0 : c.getServer().getId());
@@ -155,11 +156,11 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(new Label("login", getBean(UserService.class).getUserById(getSid(), c.getUserId()).getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", "hibernate"));
-				item.add(new ConfirmableAjaxLink("kick", 605) {
+				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void onClick(AjaxRequestTarget target) {
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						WebClient c = item.getModelObject();
 						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId()
 								, c.getSessionId());

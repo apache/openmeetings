@@ -32,7 +32,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebClient;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
@@ -46,6 +46,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
@@ -82,11 +83,11 @@ public class MainPage extends BaseInitedPage {
 				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
-		add(new ConfirmableAjaxLink("logout", 634L) {
-			private static final long serialVersionUID = -2994610981053570537L;
+		add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				getSession().invalidate();
 				setResponsePage(Application.get().getSignInPageClass());
 			}
