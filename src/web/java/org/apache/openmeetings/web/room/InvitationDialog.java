@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -41,6 +42,7 @@ import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
@@ -55,7 +57,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -71,7 +72,9 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
+import org.wicketstuff.select2.TextChoiceProvider;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -102,8 +105,48 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
 	private final Select2MultiChoice<Organisation> groups = new Select2MultiChoice<Organisation>("groups"
 			, new CollectionModel<Organisation>(new ArrayList<Organisation>())
-			, new ArrayList<Organisation>()
-			, new ChoiceRenderer<Organisation>("name", "organisation_id"));
+			, new TextChoiceProvider<Organisation>() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void query(String term, int page, Response<Organisation> response) {
+					if (WebSession.getRights().contains(User.Right.Admin)) {
+						List<Organisation> groups = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
+						for (Iterator<Organisation> i = groups.iterator(); i.hasNext();) {
+							Organisation g = i.next();
+							if (g.getName().toLowerCase().contains(term.toLowerCase())) {
+								response.add(g);
+							}
+						}
+					} else {
+						User u = getBean(UserDao.class).get(getUserId());
+						for (Organisation_Users ou : u.getOrganisation_users()) {
+							if (ou.getOrganisation().getName().toLowerCase().contains(term.toLowerCase())) {
+								response.add(ou.getOrganisation());
+							}
+						}
+					}
+				}
+
+				@Override
+				public Collection<Organisation> toChoices(Collection<String> ids) {
+					Collection<Organisation> c = new ArrayList<>();
+					for (String id : ids) {
+						c.add(getBean(OrganisationDao.class).get(Long.valueOf(id)));
+					}
+					return c;
+				}
+
+				@Override
+				protected String getDisplayText(Organisation choice) {
+					return choice.getName();
+				}
+
+				@Override
+				protected Object getId(Organisation choice) {
+					return choice.getOrganisation_id();
+				}
+			});
 
 	public InvitationDialog(String id, long roomId) {
 		super(id, Application.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
@@ -120,7 +163,8 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		Invitation i = new Invitation();
 		User u = getBean(UserDao.class).get(getUserId());
 		i.setInvitedBy(u);
-		i.setRoom(getBean(RoomDao.class).get(roomId));
+		Room r = getBean(RoomDao.class).get(roomId);
+		i.setRoom(r);
 		Calendar d = Calendar.getInstance();
 		i.setValidFrom(d.getTime());
 		d.add(Calendar.DATE, 1);
@@ -137,14 +181,6 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		message.setObject(null);
 		recipients.setModelObject(new ArrayList<User>());
 		recipients.setEnabled(true);
-		if (WebSession.getRights().contains(User.Right.Admin)) {
-			groups.setChoices(getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE));
-		} else {
-			groups.setChoices(new ArrayList<Organisation>());
-			for (Organisation_Users ou : u.getOrganisation_users()) {
-				groups.getChoices().add(ou.getOrganisation());
-			}
-		}
 		groups.setModelObject(new ArrayList<Organisation>());
 		groups.setEnabled(false);
 		tzId.setObject(u.getTimeZoneId());

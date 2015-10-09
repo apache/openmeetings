@@ -30,6 +30,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -46,7 +47,7 @@ public class GroupsPanel extends AdminPanel {
 	private GroupForm form;
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
 		super.onMenuPanelLoad(target);
 		target.appendJavaScript("groupsInit();");
 	}
@@ -68,7 +69,7 @@ public class GroupsPanel extends AdminPanel {
 				final Organisation o = item.getModelObject();
 				item.add(new Label("organisation_id", "" + o.getOrganisation_id()));
 				item.add(new Label("name", "" + o.getName()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

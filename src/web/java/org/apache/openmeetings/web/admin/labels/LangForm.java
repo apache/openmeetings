@@ -30,9 +30,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 
@@ -74,7 +74,7 @@ public class LangForm extends Form<Void> {
 		languages = new DropDownChoice<Map.Entry<Long, Locale>>("language"
 				, new PropertyModel<Map.Entry<Long, Locale>>(langPanel, "language")
 				, getLanguages()
-				, new IChoiceRenderer<Map.Entry<Long, Locale>>() {
+				, new ChoiceRenderer<Map.Entry<Long, Locale>>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -113,6 +113,6 @@ public class LangForm extends Form<Void> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 }

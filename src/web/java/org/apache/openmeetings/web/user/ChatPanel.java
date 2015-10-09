@@ -41,7 +41,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.ws.IWebSocketSettings;
+import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
@@ -115,7 +115,7 @@ public class ChatPanel extends BasePanel {
 						m.setSent(new Date());
 						m.setFromUser(getBean(UserDao.class).get(getUserId()));
 						dao.update(m);
-						IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
+						IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
 						for (IWebSocketConnection c : reg.getConnections(getApplication())) {
 							try {
 								c.sendMessage(getMessage(m).toString());

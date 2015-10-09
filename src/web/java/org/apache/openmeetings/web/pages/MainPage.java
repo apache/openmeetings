@@ -44,6 +44,7 @@ import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -151,11 +152,11 @@ public class MainPage extends BaseInitedPage {
 		});
 	}
 	
-	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler target) {
 		updateContents(f, target, true);
 	}
 	
-	public void updateContents(OmUrlFragment f, AjaxRequestTarget target, boolean updateFragment) {
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler target, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			Component prev = contents.get(CHILD_ID);

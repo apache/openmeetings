@@ -36,6 +36,7 @@ import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -147,7 +148,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 			
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 				s.open(target);
 			}
 		};

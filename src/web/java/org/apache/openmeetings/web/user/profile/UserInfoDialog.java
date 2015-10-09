@@ -28,6 +28,7 @@ import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -71,7 +72,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		return Arrays.asList(contacts, message, cancel);
 	}
 	
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 		if (message.equals(button)) {
 			newMessage.reset(false).open(target, userId);
 		} else if (contacts.equals(button)) {

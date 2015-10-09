@@ -50,7 +50,7 @@ public class OAuthPanel extends AdminPanel {
 				final OAuthServer server = item.getModelObject();
 				item.add(new Label("oauthServerId", String.valueOf(server.getId())));
 				item.add(new Label("name", server.getName()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 
 					private static final long serialVersionUID = 1L;
 

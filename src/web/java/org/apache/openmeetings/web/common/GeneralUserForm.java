@@ -43,6 +43,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -50,7 +51,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -89,7 +89,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<Salutation>("salutation"
 				, new PropertyModel<Salutation>(this, "salutation")
 				, salutDao.getUserSalutations(getLanguage())
-				, new IChoiceRenderer<Salutation>() {
+				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -102,7 +102,7 @@ public class GeneralUserForm extends Form<User> {
 						return "" + object.getSalutations_id();
 					}
 				})
-			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			.add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -126,7 +126,7 @@ public class GeneralUserForm extends Form<User> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onValueChanged(AjaxRequestTarget target) {
+			public void onValueChanged(IPartialPageRequestHandler target) {
 				User u = GeneralUserForm.this.getModelObject();
 				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
 			}

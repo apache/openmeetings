@@ -119,7 +119,7 @@ public class RecordingsPanel extends UserPanel {
 			}
 		};
 		add(trashToolbar);
-		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -127,7 +127,7 @@ public class RecordingsPanel extends UserPanel {
 				addFolder.open(target);
 			}
 		}));
-		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

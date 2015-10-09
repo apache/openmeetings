@@ -42,6 +42,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -77,7 +78,7 @@ public class LangPanel extends AdminPanel {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
 		super.onMenuPanelLoad(target);
 		target.appendJavaScript("labelsInit();");
 	}
@@ -119,7 +120,7 @@ public class LangPanel extends AdminPanel {
 				final StringLabel fv = item.getModelObject();
 				item.add(new Label("name", fv.getKey()));
 				item.add(new Label("value", fv.getValue()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
@@ -153,7 +154,7 @@ public class LangPanel extends AdminPanel {
 		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
-		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
+		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

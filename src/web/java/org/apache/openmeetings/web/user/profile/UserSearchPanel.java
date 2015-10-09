@@ -39,6 +39,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -67,7 +68,7 @@ public class UserSearchPanel extends UserPanel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
-	private void refresh(AjaxRequestTarget target) {
+	private void refresh(IPartialPageRequestHandler target) {
 		target.add(container.add(fixedHeader));
 	}
 	
@@ -95,7 +96,7 @@ public class UserSearchPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 				if (send.equals(button)) {
 					refresh(target);
 				}
@@ -135,7 +136,7 @@ public class UserSearchPanel extends UserPanel {
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -143,7 +144,7 @@ public class UserSearchPanel extends UserPanel {
 						d.open(target, userId);
 					}
 				}));
-				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -152,7 +153,7 @@ public class UserSearchPanel extends UserPanel {
 						refresh(target);
 					}
 				}).setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId())));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

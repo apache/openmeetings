@@ -56,6 +56,7 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -94,7 +95,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		return 650;
 	}
 	
-	public void open(AjaxRequestTarget target, long userId) {
+	public void open(IPartialPageRequestHandler target, long userId) {
 		getModelObject().setTo(getBean(UserDao.class).get(userId));
 		open(target);
 	}
@@ -122,7 +123,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	@Override
-	protected void onOpen(AjaxRequestTarget target) {
+	protected void onOpen(IPartialPageRequestHandler target) {
 		if (getModel().getObject().getTo() != null) {
 			modelTo.getObject().add(getModel().getObject().getTo());
 		}

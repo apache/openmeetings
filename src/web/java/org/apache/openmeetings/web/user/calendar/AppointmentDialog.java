@@ -55,11 +55,11 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -130,7 +130,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		confirmDelete = new MessageDialog("confirmDelete", Application.getString(814), Application.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 				if (button != null && button.match(AbstractDialog.OK)){
 					deleteAppointment(target);
 				}
@@ -139,7 +139,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		add(confirmDelete);
 	}
 
-	protected void deleteAppointment(AjaxRequestTarget target) {
+	protected void deleteAppointment(IPartialPageRequestHandler target) {
 		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
 		calendarPanel.refresh(target);		
 	}
@@ -160,12 +160,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	@Override
-	protected void onOpen(AjaxRequestTarget target) {
+	protected void onOpen(IPartialPageRequestHandler target) {
 		target.add(this.form);
 	}
 	
 	@Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 		if (delete.equals(button)) {
 			confirmDelete.open(target);
 		} else if (enterRoom.equals(button)) {
@@ -308,7 +308,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new DropDownChoice<AppointmentReminderTyps>(
 					"remind"
 					, remindTypes
-					, new IChoiceRenderer<AppointmentReminderTyps>() {
+					, new ChoiceRenderer<AppointmentReminderTyps>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override

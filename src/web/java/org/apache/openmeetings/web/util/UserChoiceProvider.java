@@ -36,7 +36,7 @@ import org.apache.wicket.validation.Validatable;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
-public class UserChoiceProvider extends ChoiceProvider<User> {
+public class UserChoiceProvider implements ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private final static int PAGE_SIZE = 10;
 	private Map<String, User> newContacts = new Hashtable<String, User>();
@@ -115,4 +115,8 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
     		.key("text").value(FormatHelper.formatUser(choice, true))
     		.key("contact").value(choice.getType() == Type.contact);
     };
+
+	@Override
+	public void detach() {
+	}
 }

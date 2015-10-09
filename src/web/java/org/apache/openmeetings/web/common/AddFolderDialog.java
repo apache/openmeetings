@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -73,7 +74,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onOpen(AjaxRequestTarget target) {
+	protected void onOpen(IPartialPageRequestHandler target) {
 		super.onOpen(target);
 		
 		setModelObject(name);

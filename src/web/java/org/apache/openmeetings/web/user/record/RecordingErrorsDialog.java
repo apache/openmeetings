@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingLog;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -80,7 +80,7 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 	}
 	
 	@Override
-	protected void onOpen(AjaxRequestTarget target) {
+	protected void onOpen(IPartialPageRequestHandler target) {
 		FlvRecording f = getModelObject();
 		List<FlvRecordingLog> logs = getBean(FlvRecordingLogDao.class).getByRecordingId(f.getFlvRecordingId());
 		if (f.getFileHash() == null) {
@@ -100,7 +100,8 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 		super.onOpen(target);
 	}
 	
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	@Override
+	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 	}
 	
 	@Override

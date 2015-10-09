@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.pages.auth;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -62,7 +62,7 @@ public class KickMessageDialog extends AbstractDialog<String> {
 	}
 
 	@Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 		WebSession.setKickedByAdmin(false);
 		Application.get().restartResponseAtSignInPage();
 	}

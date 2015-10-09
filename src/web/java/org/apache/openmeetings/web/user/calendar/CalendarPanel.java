@@ -39,6 +39,7 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
@@ -71,11 +72,11 @@ public class CalendarPanel extends UserPanel {
 	private Calendar calendar;
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
 	}
 
 	@Override
-	public void cleanup(AjaxRequestTarget target) {
+	public void cleanup(IPartialPageRequestHandler target) {
 		refreshTimer.stop(target);
 	}
 	
@@ -87,7 +88,7 @@ public class CalendarPanel extends UserPanel {
 		return getBean(AppointmentReminderTypDao.class);
 	}
 	
-	public void refresh(AjaxRequestTarget target) {
+	public void refresh(IPartialPageRequestHandler target) {
 		calendar.refresh(target);
 	}
 	

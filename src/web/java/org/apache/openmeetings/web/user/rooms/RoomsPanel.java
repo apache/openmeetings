@@ -67,7 +67,7 @@ public class RoomsPanel extends UserPanel {
 			protected void populateItem(ListItem<Room> item) {
 				final Room r = item.getModelObject();
 				WebMarkupContainer roomContainer;
-				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior("onclick"){
+				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior("click"){
 					private static final long serialVersionUID = 1L;
 					
 					@Override

@@ -29,10 +29,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.ui.form.button.Button;
+
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
-
-import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class StartWidgetView extends WidgetView {
 	private static final long serialVersionUID = -3886388347737468022L;
@@ -45,7 +45,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
 		add(new Label("desc", Application.getString(804L)));
 		add(new Button("start").add(new PublicRoomsEventBehavior()));
-		add(new Button("calendar").add(new AjaxEventBehavior("onclick") {
+		add(new Button("calendar").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -59,7 +59,7 @@ public class StartWidgetView extends WidgetView {
 		private static final long serialVersionUID = 1L;
 
 		public PublicRoomsEventBehavior() {
-			super("onclick");
+			super("click");
 		}
 		
 		@Override

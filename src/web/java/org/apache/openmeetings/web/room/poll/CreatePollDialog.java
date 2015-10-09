@@ -33,9 +33,9 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -108,7 +108,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			add(new RequiredTextField<String>("pollName").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("pollQuestion"));
 			add(new DropDownChoice<PollType>("pollType", getBean(PollDao.class).getPollTypes()
-					, new IChoiceRenderer<PollType>() {
+					, new ChoiceRenderer<PollType>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override

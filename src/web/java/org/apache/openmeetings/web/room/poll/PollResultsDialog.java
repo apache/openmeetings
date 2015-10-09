@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -87,7 +88,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget handler, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					Long id = dispForm.getModelObject().getRoomPollId();
@@ -105,7 +106,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget handler, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					getBean(PollDao.class).deletePoll(dispForm.getModelObject().getRoomPollId());
@@ -191,7 +192,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     }
     
     @Override
-    public void onClose(AjaxRequestTarget handler, DialogButton button) {
+    public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
     }
     
     private String[] getTicks(RoomPoll p) {
@@ -301,7 +302,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			updateModel(null);
 		}
 
-		public void updateModel(AjaxRequestTarget handler) {
+		public void updateModel(IPartialPageRequestHandler handler) {
 			List<RoomPoll> list = new ArrayList<RoomPoll>();
 			RoomPoll p = getBean(PollDao.class).getPoll(roomId);
 			if (p != null) {
@@ -341,7 +342,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			add(chartDiv.setOutputMarkupId(true));
 		}
 		
-		public void updateModel(RoomPoll poll, boolean redraw, AjaxRequestTarget handler) {
+		public void updateModel(RoomPoll poll, boolean redraw, IPartialPageRequestHandler handler) {
 			setModelObject(poll);
 			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreatedBy()));
 			count.setObject(poll == null ? 0 : poll.getRoomPollAnswerList().size());
@@ -353,7 +354,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			}
 		}
 		
-		private void redraw(AjaxRequestTarget handler) {
+		private void redraw(IPartialPageRequestHandler handler) {
 			RoomPoll poll = getModelObject();
 			Chart<?> chart = SIMPLE_CHART.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
 			handler.appendJavaScript(getScript(chart));

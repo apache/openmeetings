@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -53,6 +53,6 @@ public class AboutDialog extends AbstractDialog<String> {
 		return new ArrayList<DialogButton>();
 	}
 
-	public void onClose(AjaxRequestTarget arg0, DialogButton arg1) {
+	public void onClose(IPartialPageRequestHandler arg0, DialogButton arg1) {
 	}
 }

@@ -33,6 +33,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -48,12 +49,12 @@ public class UsersPanel extends AdminPanel {
 	private final MessageDialog warning = new MessageDialog("warning", Application.getString(797), Application.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
-		public void onClose(AjaxRequestTarget target, DialogButton button) {
+		public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 		}
 	};
 
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
 		super.onMenuPanelLoad(target);
 		target.appendJavaScript("omUserPanelInit();");
 	}
@@ -74,7 +75,7 @@ public class UsersPanel extends AdminPanel {
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
 				item.add(new Label("lastName", u.getLastname()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

@@ -60,13 +60,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -75,6 +76,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -97,7 +99,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final Label pendingContacts = new Label("pendingContacts", Model.of(0L));
 	private final Label allContacts = new Label("allContacts", Model.of(0L));
 	private final IModel<Long> selectedFolderModel = Model.of(INBOX_FOLDER_ID);
-	private final IModel<List<? extends PrivateMessageFolder>> foldersModel;
+	private final IModel<List<PrivateMessageFolder>> foldersModel = new ListModel<PrivateMessageFolder>(null);
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
@@ -119,7 +121,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<Integer>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
-		, new IChoiceRenderer<Integer>() {
+		, new ChoiceRenderer<Integer>() {
 			private static final long serialVersionUID = 1L;
 	
 			public Object getDisplayValue(Integer object) {
@@ -133,7 +135,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
 		, Arrays.asList(NOT_MOVE_FOLDER)
-		, new IChoiceRenderer<PrivateMessageFolder>() {
+		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(PrivateMessageFolder object) {
@@ -259,13 +261,13 @@ public class MessagesContactsPanel extends UserPanel {
 		super(id);
 		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
 		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
-		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
+		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
 				if (send.equals(button)) {
 					target.add(container);
 				}
@@ -571,7 +573,7 @@ public class MessagesContactsPanel extends UserPanel {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
 				item.add(new Label("name", getName(uc)));	
-				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -580,7 +582,7 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -589,7 +591,7 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -597,7 +599,7 @@ public class MessagesContactsPanel extends UserPanel {
 						d.open(target, userId);
 					}
 				}));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -605,7 +607,7 @@ public class MessagesContactsPanel extends UserPanel {
 						newMessage.reset(true).open(target, userId);
 					}
 				}).setVisible(!uc.isPending()));
-				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

@@ -61,7 +61,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -195,7 +194,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final RequiredTextField<String> dbname = new RequiredTextField<String>("dbname", Model.of(""));
 		private final Form<ConnectionProperties> form = new Form<ConnectionProperties>("form", new CompoundPropertyModel<ConnectionProperties>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
-			private final DropDownChoice<DbType> db = new DropDownChoice<DbType>("dbType", Arrays.asList(DbType.values()), new IChoiceRenderer<DbType>() {
+			private final DropDownChoice<DbType> db = new DropDownChoice<DbType>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
@@ -244,7 +243,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				try {
 					Class.forName(props.getDriver());
 				} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this, null, null, getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
+					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this).setParameters(getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
 					return;
 				}
 				boolean valid = true;
@@ -290,8 +289,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
         			LocalEntityManagerFactoryBean emb = f.getBean(LocalEntityManagerFactoryBean.class);
         			emb.afterPropertiesSet();
         		} catch (Exception e) {
-				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this, null, null, e.getMessage()).getObject());
-				log.error("error while patching", e);
+					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
+					log.error("error while patching", e);
         		}
         	}
         };
@@ -681,7 +680,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public TzDropDown(String id) {
 			super(id);
 			setChoices(AVAILABLE_TIMEZONES);
-			setChoiceRenderer(new IChoiceRenderer<String>() {
+			setChoiceRenderer(new ChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
 				
 				public Object getDisplayValue(String object) {
