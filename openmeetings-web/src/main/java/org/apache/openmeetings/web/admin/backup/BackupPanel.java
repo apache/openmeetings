@@ -171,7 +171,7 @@ public class BackupPanel extends AdminPanel {
 					download.initiate(target);
 				}
 			}).setVisible(false).setOutputMarkupPlaceholderTag(true));
-			add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "onchange") {
+			add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "change") {
 				private static final long serialVersionUID = 1L;
 
 				@Override

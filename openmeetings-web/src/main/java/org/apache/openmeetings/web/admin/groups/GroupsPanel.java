@@ -69,7 +69,7 @@ public class GroupsPanel extends AdminPanel {
 				final Group o = item.getModelObject();
 				item.add(new Label("id", "" + o.getId()));
 				item.add(new Label("name", "" + o.getName()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

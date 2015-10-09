@@ -119,7 +119,7 @@ public class LangPanel extends AdminPanel {
 				final StringLabel fv = item.getModelObject();
 				item.add(new Label("name", fv.getKey()));
 				item.add(new Label("value", fv.getValue()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
@@ -153,7 +153,7 @@ public class LangPanel extends AdminPanel {
 		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
-		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
+		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

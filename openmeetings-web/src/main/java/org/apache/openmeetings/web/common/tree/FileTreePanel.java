@@ -94,7 +94,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		};
 		add(trashToolbar);
-		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -102,7 +102,7 @@ public abstract class FileTreePanel extends Panel {
 				addFolder.open(target);
 			}
 		}));
-		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

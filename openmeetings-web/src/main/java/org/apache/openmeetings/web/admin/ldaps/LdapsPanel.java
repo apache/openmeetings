@@ -63,7 +63,7 @@ public class LdapsPanel extends AdminPanel {
 				item.add(new Label("id", "" + lc.getId()));
 				item.add(new Label("name", "" + lc.getName()));
 				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

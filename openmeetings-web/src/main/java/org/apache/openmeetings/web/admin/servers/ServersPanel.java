@@ -63,7 +63,7 @@ public class ServersPanel extends AdminPanel {
 				item.add(new Label("id", "" + server.getId()));
 				item.add(new Label("name", "" + server.getName()));
 				item.add(new Label("address", "" + server.getAddress()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

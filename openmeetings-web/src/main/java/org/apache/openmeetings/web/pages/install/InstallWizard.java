@@ -289,8 +289,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
         			LocalEntityManagerFactoryBean emb = f.getBean(LocalEntityManagerFactoryBean.class);
         			emb.afterPropertiesSet();
         		} catch (Exception e) {
-				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
-				log.error("error while patching", e);
+					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
+					log.error("error while patching", e);
         		}
         	}
         };

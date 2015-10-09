@@ -95,7 +95,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(container, details.setVisible(false));
 					}
 				}.setEnabled(!c.isScreenClient() && !c.isAvClient()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -166,7 +166,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(containerWeb, details.setVisible(false));
 					}
 				}.setEnabled(!c.getSessionId().equals(WebSession.get().getId())));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

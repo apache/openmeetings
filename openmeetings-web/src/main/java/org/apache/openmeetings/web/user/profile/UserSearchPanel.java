@@ -136,7 +136,7 @@ public class UserSearchPanel extends UserPanel {
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -144,7 +144,7 @@ public class UserSearchPanel extends UserPanel {
 						d.open(target, userId);
 					}
 				}));
-				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -153,7 +153,7 @@ public class UserSearchPanel extends UserPanel {
 						refresh(target);
 					}
 				}).setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId())));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

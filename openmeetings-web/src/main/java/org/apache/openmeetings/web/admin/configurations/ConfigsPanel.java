@@ -64,7 +64,7 @@ public class ConfigsPanel extends AdminPanel {
 				item.add(new Label("id", c.getId()));
 				item.add(new Label("key", c.getKey()));
 				item.add(new Label("value", c.getValue()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

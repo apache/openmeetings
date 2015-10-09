@@ -42,7 +42,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
 		add(new Button("start").add(new PublicRoomsEventBehavior()));
-		add(new Button("calendar").add(new AjaxEventBehavior("onclick") {
+		add(new Button("calendar").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -56,7 +56,7 @@ public class StartWidgetView extends WidgetView {
 		private static final long serialVersionUID = 1L;
 
 		public PublicRoomsEventBehavior() {
-			super("onclick");
+			super("click");
 		}
 		
 		@Override

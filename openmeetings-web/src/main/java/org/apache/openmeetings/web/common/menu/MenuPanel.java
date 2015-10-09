@@ -65,7 +65,7 @@ public class MenuPanel extends BasePanel {
 					};
 				};
 				if (null != gl.getChildren()) {
-					link.add(new AttributeAppender("onclick", "return false;"));
+					link.add(new AttributeAppender("click", "return false;"));
 				}
 				item.add(link.add(new Label("label", gl.getName()).setRenderBodyOnly(true)));
 				if (!Strings.isEmpty(gl.getCssClass())) {

@@ -64,7 +64,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 			}
 		}));
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
-		fileUploadField.add(new AjaxFormSubmitBehavior(form, "onchange") {
+		fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

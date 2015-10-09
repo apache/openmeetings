@@ -59,7 +59,7 @@ public class RoomsPanel extends AdminPanel {
 				item.add(new Label("id", "" + room.getId()));
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", "" + room.getIspublic()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {

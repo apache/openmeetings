@@ -573,7 +573,7 @@ public class MessagesContactsPanel extends UserPanel {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
 				item.add(new Label("name", getName(uc)));	
-				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -582,7 +582,7 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -591,7 +591,7 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -599,7 +599,7 @@ public class MessagesContactsPanel extends UserPanel {
 						d.open(target, userId);
 					}
 				}));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -607,7 +607,7 @@ public class MessagesContactsPanel extends UserPanel {
 						newMessage.reset(true).open(target, userId);
 					}
 				}).setVisible(!uc.isPending()));
-				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick") {
+				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

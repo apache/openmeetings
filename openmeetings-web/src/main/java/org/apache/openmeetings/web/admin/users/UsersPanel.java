@@ -76,7 +76,7 @@ public class UsersPanel extends AdminPanel {
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
 				item.add(new Label("lastName", u.getLastname()));
-				item.add(new AjaxEventBehavior("onclick") {
+				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
