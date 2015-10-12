@@ -34,6 +34,8 @@ public class RecordingDTO {
 	private boolean interview;
 	private Date start;
 	private Date end;
+	private Integer width;
+	private Integer height;
 
 	public RecordingDTO() {}
 	
@@ -47,6 +49,8 @@ public class RecordingDTO {
 		this.interview = r.getIsInterview();
 		this.start = r.getRecordStart();
 		this.end = r.getRecordEnd();
+		this.width = r.getWidth();
+		this.height = r.getHeight();
 	}
 
 	public Long getId() {
@@ -119,6 +123,22 @@ public class RecordingDTO {
 
 	public void setEnd(Date end) {
 		this.end = end;
+	}
+	
+	public Integer getWidth() {
+		return width;
+	}
+	
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+	
+	public Integer getHeight() {
+		return height;
+	}
+	
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 	
 	public static List<RecordingDTO> list(List<FlvRecording> l) {
