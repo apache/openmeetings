@@ -38,6 +38,7 @@ import org.simpleframework.xml.Root;
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	@XmlType(namespace="org.apache.openmeetings.user.asterisk")
 	public enum Type {
 		friend,
