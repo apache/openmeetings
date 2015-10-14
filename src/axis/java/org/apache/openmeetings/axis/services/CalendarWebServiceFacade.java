@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
+import org.apache.openmeetings.db.dto.calendar.AppointmentCategoryDTO;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.AppointmentReminderTypeDTO;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 
 public class CalendarWebServiceFacade extends BaseWebService {
 	
@@ -88,7 +88,7 @@ public class CalendarWebServiceFacade extends BaseWebService {
 		return getBean(CalendarWebService.class).getAppointmentByRoomId(SID, room_id);
 	}
 
-	public List<AppointmentCategory> getAppointmentCategoryList(String SID) throws AxisFault {
+	public List<AppointmentCategoryDTO> getAppointmentCategoryList(String SID) throws AxisFault {
 		return getBean(CalendarWebService.class).getAppointmentCategoryList(SID);
 	}
 

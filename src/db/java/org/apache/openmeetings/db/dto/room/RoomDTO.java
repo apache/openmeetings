@@ -129,7 +129,7 @@ public class RoomDTO {
 	}
 
 	public static List<RoomDTO> list(List<Room> l) {
-		List<RoomDTO> rList = new ArrayList<RoomDTO>();
+		List<RoomDTO> rList = new ArrayList<>();
 		if (l != null) {
 			for (Room r : l) {
 				rList.add(new RoomDTO(r));

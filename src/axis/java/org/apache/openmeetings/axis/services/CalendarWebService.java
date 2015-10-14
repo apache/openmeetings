@@ -34,10 +34,10 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.calendar.AppointmentCategoryDTO;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.AppointmentReminderTypeDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
@@ -492,25 +492,14 @@ public class CalendarWebService {
 	 * @param SID
 	 * @return - all categories of calendar events
 	 */
-	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
+	public List<AppointmentCategoryDTO> getAppointmentCategoryList(String SID) {
 		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : " + SID);
 
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<AppointmentCategory> res = appointmentCategoryDao.getAppointmentCategoryList();
-
-				if (res == null || res.size() < 1) {
-					log.debug("no AppointmentCategories found");
-				} else {
-					for (int i = 0; i < res.size(); i++) {
-						AppointmentCategory ac = res.get(i);
-						log.debug("found appCategory : " + ac.getName());
-					}
-				}
-
-				return res;
+				return AppointmentCategoryDTO.list(appointmentCategoryDao.getAppointmentCategoryList());
 			} else {
 				log.error("AppointmenetCategoryService.getAppointmentCategoryList : UserLevel Error");
 			}
