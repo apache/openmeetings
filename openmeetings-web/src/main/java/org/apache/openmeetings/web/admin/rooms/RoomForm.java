@@ -159,7 +159,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("audioOnly"));
 		add(new CheckBox("allowFontStyles"));
-		add(new CheckBox("isClosed"));
+		add(new CheckBox("closed"));
 		add(new TextField<String>("redirectURL"));
 		add(new CheckBox("waitForRecording"));
 		add(new CheckBox("allowRecording"));

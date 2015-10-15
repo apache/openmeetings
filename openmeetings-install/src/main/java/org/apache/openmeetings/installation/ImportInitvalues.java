@@ -447,7 +447,7 @@ public class ImportInitvalues {
 
 		r.setDeleted(false);
 
-		r.setIsClosed(false);
+		r.setClosed(false);
 		r.setRedirectURL(null);
 
 		r.setOwnerId(null);

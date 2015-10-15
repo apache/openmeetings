@@ -308,7 +308,7 @@ public class RoomWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room room = roomDao.get(id);
-				room.setIsClosed(true);
+				room.setClosed(true);
 
 				roomDao.update(room, userId);
 
@@ -354,7 +354,7 @@ public class RoomWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room room = roomDao.get(id);
-				room.setIsClosed(false);
+				room.setClosed(false);
 				roomDao.update(room, userId);
 				
 				return new ServiceResult(1L, "Opened", Type.SUCCESS);

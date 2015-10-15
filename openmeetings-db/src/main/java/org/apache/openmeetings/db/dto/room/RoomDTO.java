@@ -41,6 +41,7 @@ public class RoomDTO implements Serializable {
 	private String confno;
 	private boolean isPublic;
 	private boolean demo;
+	private boolean closed;
 	private Integer demoTime;
 	private Long externalId;
 	private String externalType;
@@ -70,6 +71,7 @@ public class RoomDTO implements Serializable {
 		confno = r.getConfno();
 		isPublic = r.getIspublic();
 		demo = r.getIsDemoRoom();
+		closed = r.isClosed();
 		demoTime = r.getDemoTime();
 		externalId = r.getExternalId();
 		externalType = r.getExternalType();
@@ -316,6 +318,14 @@ public class RoomDTO implements Serializable {
 
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
 	}
 
 	public static List<RoomDTO> list(List<Room> l) {

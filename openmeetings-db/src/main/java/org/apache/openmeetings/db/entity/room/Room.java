@@ -207,7 +207,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
-	private boolean isClosed;
+	private boolean closed;
 
 	@Column(name = "redirect_url")
 	@Element(data = true, required = false)
@@ -455,12 +455,12 @@ public class Room implements IDataProviderEntity {
 		this.allowFontStyles = allowFontStyles;
 	}
 
-	public boolean getIsClosed() {
-		return isClosed;
+	public boolean isClosed() {
+		return closed;
 	}
 
-	public void setIsClosed(boolean isClosed) {
-		this.isClosed = isClosed;
+	public void setClosed(boolean closed) {
+		this.closed = closed;
 	}
 
 	public String getRedirectURL() {
