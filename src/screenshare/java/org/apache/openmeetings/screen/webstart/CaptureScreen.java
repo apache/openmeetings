@@ -23,13 +23,18 @@ import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinn
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerWidth;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerX;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerY;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.impl.StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -42,7 +47,6 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
@@ -58,7 +62,8 @@ class CaptureScreen extends Thread {
 	private final static String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
 	private CoreScreenShare core;
 	private int timeBetweenFrames;
-	private volatile int timestamp = 0;
+	private volatile AtomicInteger timestamp = new AtomicInteger(0);
+	private volatile AtomicBoolean sendFrameGuard = new AtomicBoolean(false);
 	private long timeCaptureStarted = 0;
 	private volatile boolean active = true;
 	private IScreenEncoder se;
@@ -77,8 +82,11 @@ class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		SchedulerFactory sf = new StdSchedulerFactory();
+		final Properties p = new Properties();
+		p.put(PROP_SCHED_SKIP_UPDATE_CHECK, "true");
+		p.put("org.quartz.threadPool.threadCount", "10");
 		try {
+			SchedulerFactory sf = new StdSchedulerFactory(p);
 			scheduler = sf.getScheduler();
 		} catch (SchedulerException e) {
 			log.error("Unexpected error while creating scheduler", e);
@@ -95,7 +103,7 @@ class CaptureScreen extends Thread {
 			log.error("Unexpected error while shutting down scheduler", e);
 		}
 		active = false;
-		timestamp = 0;
+		timestamp = new AtomicInteger(0);
 		timeCaptureStarted = 0;
 	}
 
@@ -113,12 +121,12 @@ class CaptureScreen extends Thread {
 			encodeJob.getJobDataMap().put(EncodeJob.CAPTURE_KEY, this);
 			Trigger encodeTrigger = TriggerBuilder.newTrigger()
 					.withIdentity("EncodeTrigger", QUARTZ_GROUP_NAME)
-					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
+					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
 					.build();
 			JobDetail sendJob = JobBuilder.newJob(SendJob.class).withIdentity("SendJob", QUARTZ_GROUP_NAME).build();
 			Trigger sendTrigger = TriggerBuilder.newTrigger()
 					.withIdentity("SendTrigger", QUARTZ_GROUP_NAME)
-					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
+					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
 					.build();
 			sendJob.getJobDataMap().put(SendJob.CAPTURE_KEY, this);
 
@@ -158,7 +166,7 @@ class CaptureScreen extends Thread {
 			try {
 				robot = new Robot();
 			} catch (AWTException e) {
-				log.error("Unexpected Error while creating robot", e);
+				log.error("encode: Unexpected Error while creating robot", e);
 			}
 		}
 		
@@ -167,17 +175,20 @@ class CaptureScreen extends Thread {
 			JobDataMap data = context.getJobDetail().getJobDataMap();
 			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
 			
-			long start = System.currentTimeMillis();
+			long start = 0;
+			if (log.isTraceEnabled()) {
+				start = System.currentTimeMillis();
+			}
 			image = ScreenV1Encoder.getImage(screen, robot);
 			if (log.isTraceEnabled()) {
-				log.trace(String.format("Image was captured in %s ms", System.currentTimeMillis() - start));
+				log.trace(String.format("encode: Image was captured in %s ms, size %sk", System.currentTimeMillis() - start, 4 * image.length * image[0].length / 1024));
+				start = System.currentTimeMillis();
 			}
-			start = System.currentTimeMillis();
 			try {
 				VideoData vData = capture.se.encode(image);
 				if (log.isTraceEnabled()) {
 					long now = System.currentTimeMillis();
-					log.trace(String.format("Image was encoded in %s ms, timestamp is %s", now - start, now - capture.timeCaptureStarted));
+					log.trace(String.format("encode: Image was encoded in %s ms, timestamp is %s", now - start, now - capture.timeCaptureStarted));
 				}
 				capture.frames.offer(vData);
 				capture.se.createUnalteredFrame();
@@ -195,27 +206,34 @@ class CaptureScreen extends Thread {
 		public void execute(JobExecutionContext context) throws JobExecutionException {
 			JobDataMap data = context.getJobDetail().getJobDataMap();
 			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
+			capture.sendFrameGuard.set(true);
 			if (log.isTraceEnabled()) {
 				long real = System.currentTimeMillis() - capture.timeCaptureStarted;
-				log.trace(String.format("Enter method, timestamp: %s, real: %s, diff: %s", capture.timestamp, real, real - capture.timestamp));
+				log.trace(String.format("send: Enter method, timestamp: %s, real: %s, diff: %s", capture.timestamp, real, real - capture.timestamp.get()));
 			}
 			VideoData f = capture.frames.poll();
 			if (log.isTraceEnabled()) {
-				log.trace(String.format("Getting %s image", f == null ? "DUMMY" : "CAPTURED"));
+				log.trace(String.format("send: Getting %s image", f == null ? "DUMMY" : "CAPTURED"));
 			}
 			f = f == null ? capture.se.getUnalteredFrame() : f;
 			if (f != null) {
 				try {
-					capture.pushVideo(f, capture.timestamp);
+					capture.pushVideo(f, capture.timestamp.get());
 					if (log.isTraceEnabled()) {
 						long real = System.currentTimeMillis() - capture.timeCaptureStarted;
-						log.trace(String.format("Sending video, timestamp: %s, real: %s, diff: %s", capture.timestamp, real, real - capture.timestamp));
+						log.trace(String.format("send: Sending video %sk, timestamp: %s, real: %s, diff: %s", f.getData().capacity() / 1024, capture.timestamp, real, real - capture.timestamp.get()));
 					}
-					capture.timestamp += capture.timeBetweenFrames;
+					capture.timestamp.addAndGet(capture.timeBetweenFrames);
+					if (log.isTraceEnabled()) {
+						log.trace(String.format("send: new timestamp: %s", capture.timestamp));
+					}
 				} catch (IOException e) {
 					log.error("Error while sending: ", e);
 				}
+			} else if (log.isTraceEnabled()) {
+				log.trace(String.format("send: nothing to send"));
 			}
+			capture.sendFrameGuard.set(false);
 		}
 	}
 	
@@ -229,7 +247,9 @@ class CaptureScreen extends Thread {
 		public void execute(JobExecutionContext context) throws JobExecutionException {
 			JobDataMap data = context.getJobDetail().getJobDataMap();
 			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
-			capture.core.sendCursorStatus();
+			if (!capture.sendFrameGuard.get()) {
+				capture.core.sendCursorStatus();
+			}
 		}
 	}
 	
@@ -273,7 +293,7 @@ class CaptureScreen extends Thread {
 				JobDetail cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
 				Trigger cursorTrigger = TriggerBuilder.newTrigger()
 						.withIdentity(QUARTZ_CURSOR_TRIGGER_NAME, QUARTZ_GROUP_NAME)
-						.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(2, FPS)).repeatForever())
+						.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, FPS)).repeatForever())
 						.build();
 				cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
 				scheduler.scheduleJob(cursorJob, cursorTrigger);
