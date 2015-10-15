@@ -34,6 +34,7 @@ public class RoomDTO {
 	private String confno;
 	private boolean isPublic;
 	private boolean demo;
+	private boolean closed;
 	private Integer demoTime;
 	private boolean moderated;
 	private boolean allowUserQuestions;
@@ -46,8 +47,7 @@ public class RoomDTO {
 	private boolean screenSharingHidden;
 	private boolean whiteboardHidden;
 
-	public RoomDTO() {
-	}
+	public RoomDTO() {}
 	
 	public RoomDTO(Room r) {
 		id = r.getRooms_id();
@@ -59,6 +59,7 @@ public class RoomDTO {
 		confno = r.getConfno();
 		isPublic = Boolean.TRUE.equals(r.getIspublic());
 		demo = Boolean.TRUE.equals(r.getIsDemoRoom());
+		closed = r.getIsClosed();
 		demoTime = r.getDemoTime();
 		moderated = Boolean.TRUE.equals(r.getIsModeratedRoom());
 		allowUserQuestions = Boolean.TRUE.equals(r.getAllowUserQuestions());
@@ -126,16 +127,6 @@ public class RoomDTO {
 
 	public void setConfno(String confno) {
 		this.confno = confno;
-	}
-
-	public static List<RoomDTO> list(List<Room> l) {
-		List<RoomDTO> rList = new ArrayList<>();
-		if (l != null) {
-			for (Room r : l) {
-				rList.add(new RoomDTO(r));
-			}
-		}
-		return rList;
 	}
 
 	public boolean isDemo() {
@@ -240,5 +231,23 @@ public class RoomDTO {
 
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
+	}
+
+	public static List<RoomDTO> list(List<Room> l) {
+		List<RoomDTO> rList = new ArrayList<>();
+		if (l != null) {
+			for (Room r : l) {
+				rList.add(new RoomDTO(r));
+			}
+		}
+		return rList;
 	}
 }

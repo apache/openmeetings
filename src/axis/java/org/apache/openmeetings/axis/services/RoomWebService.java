@@ -519,7 +519,7 @@ public class RoomWebService {
 				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
-						false, true, false //isClosed
+						false, true, false //closed
 						, "", "", null, null,
 						true,  // allowRecording
 						false, // hideTopBar
@@ -590,7 +590,7 @@ public class RoomWebService {
 				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, false, true, false //isClosed
+						allowUserQuestions, false, true, false //closed
 						, "", "", null,
 						null, 
 						true,  // allowRecording
@@ -664,7 +664,7 @@ public class RoomWebService {
 				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, true, false //isClosed
+						allowUserQuestions, isAudioOnly, true, false //closed
 						, "", "",
 						null, null, 
 						true,  // allowRecording
@@ -758,7 +758,7 @@ public class RoomWebService {
 				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, true, false //isClosed
+						allowUserQuestions, isAudioOnly, true, false //closed
 						, "", "",
 						null, null,
 						true,  // allowRecording
@@ -1916,7 +1916,7 @@ public class RoomWebService {
 						isModeratedRoom, null, null, externalRoomType, false, // allowUserQuestions
 						false, // isAudioOnly
 						true,  // allowFontStyles
-						false, // isClosed
+						false, // closed
 						redirectURL, false, true, false);
 
 				if (rooms_id <= 0) {

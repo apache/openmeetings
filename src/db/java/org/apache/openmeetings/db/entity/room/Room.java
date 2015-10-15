@@ -160,7 +160,7 @@ public class Room implements Serializable, IDataProviderEntity {
 
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
-	private Boolean isClosed;
+	private boolean isClosed;
 
 	@Column(name = "redirect_url")
 	@Element(data = true, required = false)
@@ -408,11 +408,11 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.allowFontStyles = allowFontStyles;
 	}
 
-	public Boolean getIsClosed() {
+	public boolean getIsClosed() {
 		return isClosed;
 	}
 
-	public void setIsClosed(Boolean isClosed) {
+	public void setIsClosed(boolean isClosed) {
 		this.isClosed = isClosed;
 	}
 
