@@ -55,6 +55,7 @@ import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(CoreScreenShare.class);
@@ -764,5 +765,15 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public void setRemoteEnabled(boolean remoteEnabled) {
 		this.remoteEnabled = remoteEnabled;
+	}
+	
+	public void setDeadlockGuard(RTMPConnection conn) {
+		ThreadPoolTaskScheduler deadlockGuard = new ThreadPoolTaskScheduler();
+		deadlockGuard.setPoolSize(16);
+		deadlockGuard.setDaemon(false);
+		deadlockGuard.setWaitForTasksToCompleteOnShutdown(true);
+		deadlockGuard.setThreadNamePrefix("DeadlockGuardScheduler-");
+		deadlockGuard.afterPropertiesSet();
+		conn.setDeadlockGuardScheduler(deadlockGuard);
 	}
 }

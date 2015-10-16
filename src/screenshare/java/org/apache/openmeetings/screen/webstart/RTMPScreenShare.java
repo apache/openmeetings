@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public class RTMPScreenShare extends RTMPClient implements IScreenShare {
 	private static final Logger logger = LoggerFactory.getLogger(RTMPScreenShare.class);
 
-	private CoreScreenShare core = null;
+	private final CoreScreenShare core;
 
 	public RTMPScreenShare(CoreScreenShare core) {
 		this.core = core;
@@ -44,7 +44,7 @@ public class RTMPScreenShare extends RTMPClient implements IScreenShare {
 	public void connectionOpened(RTMPConnection conn) {
 		logger.debug("connection opened");
 		super.connectionOpened(conn);
-		this.conn = conn;
+		core.setDeadlockGuard(conn);
 	}
 
 	@Override
