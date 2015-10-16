@@ -30,15 +30,14 @@ import org.slf4j.LoggerFactory;
 public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 	private static final Logger logger = LoggerFactory.getLogger(RTMPSScreenShare.class);
 
-	private CoreScreenShare core = null;
+	private final CoreScreenShare core;
 
 	public RTMPSScreenShare(CoreScreenShare core) {
 		this.core = core;
 	};
 
 	@Override
-	public void connect(String server, int port, String application,
-			IPendingServiceCallback connectCallback) {
+	public void connect(String server, int port, String application, IPendingServiceCallback connectCallback) {
 		try { //FIXME need to be removed
 			super.connect(server, port, application, connectCallback);
 		} catch (NullPointerException npe) {
@@ -55,7 +54,7 @@ public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 	public void connectionOpened(RTMPConnection conn) {
 		logger.debug("connection opened");
 		super.connectionOpened(conn);
-		this.conn = conn;
+		core.setDeadlockGuard(conn);
 	}
 
 	@Override
