@@ -130,6 +130,7 @@
         var loader:Loader = new Loader();
         loader.load(request);
         this.mainComponent.sprite.addChild(loader);
+		canvas.currentRoomObject = new Object();
 
         new lz.commonVideoViewContentSWF10(this, {name:'_videoComponent'});
         new lz.hibAdapter(this);

@@ -47,8 +47,8 @@
             client.createEditRecordStream = this.createEditRecordStream;
             client.createVideoObject = this.createVideoObject;
             client.createVideo = this.createVideo;
+            client.batchCreateVideo = this.batchCreateVideo;
             client.getVideoObjectByPublicSID = this.getVideoObjectByPublicSID;
-            client.getNewVideoObject = this.getNewVideoObject;
             client.getVideoObjectFreePos = this.getVideoObjectFreePos;
             client.getVideoObjectCount = this.getVideoObjectCount;
             client.disconnectclient = this.disconnectclient;
@@ -99,6 +99,22 @@
 		return;
 	</method>
 
+	<method name="batchCreateVideo" args="selfStreamId, clients">
+	<![CDATA[
+		if ($debug) Debug.info("batchCreateVideo: ", selfStreamId, clients.length);
+		for (var i = 0; i < clients.length; ++i) {
+			var c = clients[i];
+			if (c.streamid != selfStreamId) {
+				if (c.isBroadcasting) {
+					createVideo(c.publicSID, c.firstname + ' ' + c.lastname, c.broadCastID, c.avsettings, -1, c);
+				} else {
+					createVideoObject(c.publicSID, false, -1, c);
+				}
+			}
+		}
+	]]>
+	</method>
+	
 	<!-- 
 		Method that creates the video views when another user enters a room and his 
 		item in the list of participants is created.
@@ -196,11 +212,6 @@
 
     <method name="getNewVideoObjectByPos" args="publicSID">
         <![CDATA[
-            var obj = this.getVideoObjectByPublicSID(publicSID);
-            if (obj!=null){
-                return obj;
-            }
-
             //Get a Free VideoView Slot
             var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
 
@@ -215,20 +226,14 @@
         ]]>
     </method>
 
-    <method name="getNewVideoObject" args="publicSID">
-		<![CDATA[
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			if (obj!=null){
-				this.broadCastViewRef = obj;
-			} else {
-				this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
-
-				this.broadCastViewRef._chatvideoinner.r.destroy();
-				if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);
-				this.broadCastViewRef.setAttribute('chatpartnername',canvas.userobject.firstname+' '+canvas.userobject.lastname);
-			}
-			return this.broadCastViewRef;
-		]]>
+	<method name="getNewVideoObject" args="publicSID">
+	<![CDATA[
+		this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
+		this.broadCastViewRef._chatvideoinner.r.destroy();
+		if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);
+		this.broadCastViewRef.setAttribute('chatpartnername',canvas.userobject.firstname+' '+canvas.userobject.lastname);
+		return this.broadCastViewRef;
+	]]>
 	</method>
 
     <method name="getVideoObjectByInterviewPodId" args="interviewPodId">

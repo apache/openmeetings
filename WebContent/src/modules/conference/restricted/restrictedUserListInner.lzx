@@ -48,13 +48,13 @@
 			this._table.renderList = new Array();
 		}
 		//Check for duplicates
-        var list = this._table.renderList;
-        for (var i = 0; i < list.length; ++i) {
-            if (list[i].publicSID == object.publicSID) {
-                //if ($debug) Debug.warn("Already on List, do not add twice");
-                return;
-            }
-        }
+		var list = this._table.renderList;
+		for (var i = 0; i < list.length; ++i) {
+			if (list[i].publicSID == object.publicSID) {
+				//if ($debug) Debug.warn("Already on List, do not add twice");
+				return;
+			}
+		}
 		
 		object.isSelected = false;
 		this._table.renderList.push(object);
@@ -79,28 +79,28 @@
         this._table.renderContent();
     </method>
     
-    <method name="sortUserList">
-    <![CDATA[
-    	if (!this._table.renderList) {
-    		return;
-    	}
-    	if (this.sortType == "alphabetical") {
-    		function sortByName(a,b) {
-    			if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
-    			else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
-    			else return 0;
-    		}
-    		this._table.renderList.sort(sortByName);
-    	} else {
-    		function sortByStreamId(a,b) {
-    			if(Number(a.streamid) == Number(b.streamid)) return 0;
-    			else if(Number(a.streamid) > Number(b.streamid)) return 1;
-    			else return -1;
-    		}
-    		this._table.renderList.sort(sortByStreamId);
-    	}
-    ]]>
-    </method>
+	<method name="sortUserList">
+	<![CDATA[
+		if (!this._table.renderList) {
+			return;
+		}
+		if (this.sortType == "alphabetical") {
+			function sortByName(a,b) {
+				if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+				else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+				else return 0;
+			}
+			this._table.renderList.sort(sortByName);
+		} else {
+			function sortByStreamId(a,b) {
+				if(Number(a.streamid) == Number(b.streamid)) return 0;
+				else if(Number(a.streamid) > Number(b.streamid)) return 1;
+				else return -1;
+			}
+			this._table.renderList.sort(sortByStreamId);
+		}
+	]]>
+	</method>
     
     <method name="initList">
         if ($debug) Debug.write("initList :: restrictedUserListInner");

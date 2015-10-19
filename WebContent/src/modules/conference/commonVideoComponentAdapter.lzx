@@ -92,6 +92,10 @@
         canvas.sendViaLocalConnection(canvas.vid_lc_name, "createVideoObject", [publicSID, isBroadcasting, interviewPodId,object]);
     </method>
 
+	<method name="batchCreateVideo" args="selfStreamId, clients">
+		canvas.sendViaLocalConnection(canvas.vid_lc_name, "batchCreateVideo", [selfStreamId, clients]);
+	</method>
+
     <!---
         invoked whenever a User starts to Stream Video in this Room,
         interviewPodId has only a meaning in the Room Type Interview

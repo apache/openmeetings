@@ -32,7 +32,12 @@
     
     <attribute name="allowUserQuestions" value="true" type="boolean" />
 
-    <attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
+	<attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
+	<attribute name="timeout" value="500" type="number"/>
+	<attribute name="batchSize" value="10" type="number"/>
+	<attribute name="counter" value="0" type="number"/>
+	<attribute name="batchCreateVideoDelegate" type="object" value="null"/>
+	<attribute name="initClients" type="object" />
     
     <handler name="onallowUserQuestions" args="bool">
         if (bool != null) {
@@ -178,18 +183,12 @@
                 } else {
                     value[i].selfItem = false;
                 }
-
-                //value[i].lastname = value[i].lastname + "T: " + t;
-                
-                //if ($debug) Debug.write("getClientListScope value: ",value[i]);
-                this.parent.addItemInitial(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
-                              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
-            }
-            
-            //this content must be inited _after_ setting the default values
-            canvas.thishib.getCurrentModeratorList.doCall(); 
-            //FIXME Issue-1076
-            canvas.thishib.checkLzRecording.doCall();
+				parent.addItemInitial(value[i]);
+			}
+			parent.batchCreateVideoDelegate = new LzDelegate(parent, "batchCreateVideo");
+			parent.counter = 0;
+			parent.initClients = value;
+			lz.Timer.addTimer(parent.batchCreateVideoDelegate, 0);
             
             //Render and Show User-List
             parent._participants.sortAndRenderList();
@@ -201,37 +200,47 @@
         </handler>  
     </netRemoteCallHib>
 
+	<method name="batchCreateVideo" args="none">
+	<![CDATA[
+		if ($debug) Debug.write("interval 0 :: ", counter, initClients.length);
+		if (!batchCreateVideoDelegate) {
+			return;
+		}
+		var cl = new Array();
+		for (var i = 0; i < batchSize; ++i) {
+			cl[i] = initClients[counter++];
+			if (counter == initClients.length) {
+				break;
+			}
+		}
+		if ($debug) Debug.write("interval:: ", counter, cl.length);
+		this._videoviewcontent.batchCreateVideo(canvas.streamid, cl);
+		if (counter == initClients.length) {
+			lz.Timer.removeTimer(batchCreateVideoDelegate);
+			batchCreateVideoDelegate = null;
+			
+			//this content must be inited _after_ setting the default values
+			canvas.thishib.getCurrentModeratorList.doCall();
+			//FIXME Issue-1076
+			canvas.thishib.checkLzRecording.doCall();
+		} else {
+			lz.Timer.resetTimer(batchCreateVideoDelegate, timeout);
+		}
+	]]>
+	</method>
+
     <!-- invoked if another client logs into the room 
     after choosing devices -->     
     <method name="setAVSettingsToClient" args="rcl">
         this._videoviewcontent.setAVSettingsToClient(rcl);
     </method> 
 
-    <method name="addItemInitial" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
-        <![CDATA[
-            //if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
-            
-            //Do init only in case this stream is NOT the same as we are
-            if (streamid!=canvas.streamid){
-                
-                //do add others
-                this._participants.initialAddItem(object);
-                
-                //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
-                
-                if (object.isBroadcasting) {
-                    this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
-                } else {
-                    this._videoviewcontent.createVideoObject(object.publicSID, false, -1, object);
-                }
-                
-            } else {
-                //do add self too
-                this._participants.initialAddItem(object);
-            }
-           
-        ]]>
-    </method>
+	<method name="addItemInitial" args="object">
+	<![CDATA[
+		//if ($debug) Debug.write("initializeStreams addItem: ", object);
+		this._participants.initialAddItem(object);
+	]]>
+	</method>
 
     <method name="receiveExclusiveAudioFlag" args="publicSID">
     <![CDATA[
@@ -248,27 +257,17 @@
     </method>
 
 
-    <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
-        <![CDATA[
-            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
-            
-            //Do init only in case this stream is NOT the same as we are
-            if (streamid!=canvas.streamid){
-                //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
-
-                this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
-
-                //do add others
-                this._participants.addItem(object);
-
-                //return myvideocontainer;
-            } else {
-                //do add self too
-                this._participants.addItem(object);
-            }
-           
-        ]]>
-    </method>
+	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+	<![CDATA[
+		if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+		
+		//Do init only in case this stream is NOT the same as we are
+		if (streamid != canvas.streamid) {
+			this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
+		}
+		this._participants.addItem(object);
+	]]>
+	</method>
     
     <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
         <![CDATA[

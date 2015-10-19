@@ -1018,42 +1018,9 @@
 		return downloadurl;
 	]]>
 	</method>
-		
+
 	<method name="sendViaLocalConnection" args="lc_name,methodName,tArray">
-		var so:SharedObject = SharedObject.getLocal("__getObjectSizeHelper");
-		so.data.o = tArray;
-		var size:Number = so.getSize();
-		so.clear();
-		if (size > 35000) {
-			if ($debug) Debug.warn("Too big object being sent via localConnection ", size); //,tArray
-			return;
-		}
-		//if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
-		if (tArray == null || tArray.length == 0) {
-			canvas.lc.send(lc_name,methodName);
-		} else if (tArray.length == 1) {
-			canvas.lc.send(lc_name,methodName,tArray[0]);
-		} else if (tArray.length == 2) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1]);
-		} else if (tArray.length == 3) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2]);
-		} else if (tArray.length == 4) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3]);
-		} else if (tArray.length == 5) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4]);
-		} else if (tArray.length == 6) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5]);
-		} else if (tArray.length == 7) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6]);
-		} else if (tArray.length == 8) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7]);
-		} else if (tArray.length == 9) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7],tArray[8]);
-		} else if (tArray.length == 10) {
-			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7],tArray[8],tArray[9]);
-		} else {
-			if ($debug) Debug.error("tArray in sendViaLocalConnection longer then allowed")
-		}
+		canvas.localConnectionSendQ.push({cName: lc_name, mName: methodName, tArray: tArray});
 	</method>
 	
 	<method name="getNotNullString" args="value">
