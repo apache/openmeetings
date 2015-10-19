@@ -31,8 +31,7 @@
 						version. Place those JARs into
 						$Red5/webapps/openmeetings/WEB-INF/lib
 					</li>
-					<li>If you encounter issues, you can drop the db again and delete
-						the file $red5/webapps/openmeetings/conf/install.xml and then run
+					<li>If you encounter issues, you can drop the db and then run
 						the web based installer again
 					</li>
 				</ul>

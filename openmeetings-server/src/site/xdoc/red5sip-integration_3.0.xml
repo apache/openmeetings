@@ -274,7 +274,16 @@ service asterisk restart
 
 		<section name="Setup red5sip transport">
 			<div>
-				Download red5sip from <tt>http://red5phone.googlecode.com/svn/branches/red5sip_3.0</tt>
+				Download red5sip from <tt>https://github.com/solomax/red5phone/tree/red5sip_3.0</tt>, switch to the branch red5sip_3.0
+			</div>
+			<div>
+				switch to the branch red5sip_3.0
+				<source>
+<![CDATA[
+git clone https://github.com/solomax/red5phone.git
+git checkout red5sip_3.0
+]]>
+				</source>
 			</div>
 			<div>
 				Build with Apache Ant
