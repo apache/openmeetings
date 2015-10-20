@@ -142,14 +142,14 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[getPollListBackup]", err);
 		}
 		return null;
 	}
 	
 	public List<RoomPoll> getArchivedPollList(Long room_id) {
 		try {
-			log.debug(" :: getPoll :: " + room_id);
+			log.debug(" :: getArchivedPollList :: " + room_id);
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", true);
@@ -157,7 +157,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[getArchivedPollList]", err);
 		}
 		return null;
 	}
@@ -172,7 +172,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[hasPoll]", err);
 		}
 		return false;
 	}
@@ -189,7 +189,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[hasVoted]", err);
 		}
 		return false;
 	}
