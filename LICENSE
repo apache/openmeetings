@@ -324,8 +324,9 @@ webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
 
-webapps/openmeetings/WEB-INF/lib/apache-mime4j-core-jar-0.8-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/asterisk-java-jar-1.0.0.CI-20130102.214528-1134.jar
+webapps/openmeetings/WEB-INF/lib/apache-mime4j-core-jar-0.7.2.jar
+webapps/openmeetings/WEB-INF/lib/api-all-jar-1.0.0-M31.jar
+webapps/openmeetings/WEB-INF/lib/asterisk-java-jar-1.0.0.jar
 webapps/openmeetings/WEB-INF/lib/axiom-api-bundle-1.2.15-SNAPSHOT.jar
 webapps/openmeetings/WEB-INF/lib/axiom-dom-bundle-1.2.15-SNAPSHOT.jar
 webapps/openmeetings/WEB-INF/lib/axiom-impl-bundle-1.2.15-SNAPSHOT.jar
@@ -342,8 +343,8 @@ webapps/openmeetings/WEB-INF/lib/batik-bridge-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-codec-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-css-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-dom-jar-1.7.jar
-webapps/openmeetings/WEB-INF/lib/batik-ext-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-extension-jar-1.7.jar
+webapps/openmeetings/WEB-INF/lib/batik-ext-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-gui-util-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-gvt-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-parser-jar-1.7.jar
@@ -362,11 +363,10 @@ webapps/openmeetings/WEB-INF/lib/batik-xml-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/commons-collections-jar-3.2.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-dbcp2-jar-2.1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-digester-jar-2.1.jar
-webapps/openmeetings/WEB-INF/lib/commons-exec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-httpclient-jar-3.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-lang-jar-2.6.jar
 webapps/openmeetings/WEB-INF/lib/commons-net-jar-3.3.jar
-webapps/openmeetings/WEB-INF/lib/commons-pool2-jar-2.3.jar
+webapps/openmeetings/WEB-INF/lib/commons-pool2-jar-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/commons-transaction-jar-1.2.jar
 webapps/openmeetings/WEB-INF/lib/derbyclient-jar-10.12.1.1.jar
 webapps/openmeetings/WEB-INF/lib/derby-jar-10.12.1.1.jar
@@ -376,24 +376,31 @@ webapps/openmeetings/WEB-INF/lib/geronimo-activation_1.1_spec-bundle-1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-annotation_1.0_spec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-javamail_1.4_spec-bundle-1.7.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jaxws_2.2_spec-bundle-1.0.jar
+webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-jar-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-saaj_1.3_spec-jar-1.0.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-stax-api_1.0_spec-bundle-1.0.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar
+webapps/openmeetings/WEB-INF/lib/gson-jar-2.2.4.jar
+webapps/openmeetings/WEB-INF/lib/joda-time-jar-2.7.jar
+webapps/openmeetings/WEB-INF/lib/jqplot4java-jar-1.3.0.jar
+webapps/openmeetings/WEB-INF/lib/jqplot-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/jsmpp-jar-2.1.0.jar
-webapps/openmeetings/WEB-INF/lib/neethi-bundle-3.0.3-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-bundle-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-jdbc-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-jest-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-kernel-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-lib-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jdbc-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-slice-jar-2.3.0.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-xmlstore-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/neethi-bundle-3.0.4-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-bundle-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-jdbc-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-jest-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-kernel-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-lib-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jdbc-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-slice-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-xmlstore-jar-2.4.0.jar
+webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-bundle-2.7.7_5.jar
+webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-bundle-1.6.1_5.jar
+webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-bundle-1.1.4c_6.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-jar-2.7.jar
-webapps/openmeetings/WEB-INF/lib/smslib-jar-3.5.3.jar
-webapps/openmeetings/WEB-INF/lib/stax-api-jar-1.0-2.jar
+webapps/openmeetings/WEB-INF/lib/smslib-jar-3.5.4.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-jar-3.1.1.jar
 webapps/openmeetings/WEB-INF/lib/velocity-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/velocity-tools-jar-2.0.jar
@@ -404,10 +411,10 @@ webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-7.0.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-7.0.2.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-7.0.2.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-7.0.2.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-7.0.2.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-bundle-7.0.2.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-bundle-7.0.2.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-bundle-7.0.2.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-bundle-7.0.2.jar
 webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-bundle-7.0.2.jar
 webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-culture-bundle-7.0.2.jar
 webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-bundle-7.0.2.jar
@@ -419,16 +426,18 @@ webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-util-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/woden-core-bundle-1.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-jar-4.1.4.jar
+webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-jar-4.2.0.jar
 webapps/openmeetings/WEB-INF/lib/ws-commons-util-jar-1.0.2.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-jar-1.6.2.jar
 webapps/openmeetings/WEB-INF/lib/xalan-jar-2.7.0.jar
+webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-bundle-3.17.jar
 webapps/openmeetings/WEB-INF/lib/xml-apis-ext-jar-1.3.04.jar
-webapps/openmeetings/WEB-INF/lib/xml-resolver-jar-1.2.jar
+webapps/openmeetings/WEB-INF/lib/xml-apis-jar-1.0.b2.jar
 webapps/openmeetings/WEB-INF/lib/xmlgraphics-commons-jar-1.4.jar
+webapps/openmeetings/WEB-INF/lib/xml-resolver-jar-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlrpc-client-jar-3.1.3.jar
 webapps/openmeetings/WEB-INF/lib/xmlrpc-common-jar-3.1.3.jar
-webapps/openmeetings/WEB-INF/lib/XmlSchema-bundle-1.4.8-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/xmlschema-core-bundle-2.1.1-SNAPSHOT.jar
 
 webapps/openmeetings/screensharing/commons-beanutils-1.9.2.jar
 webapps/openmeetings/screensharing/commons-codec-1.9.jar
@@ -657,7 +666,8 @@ Copyright (c) 2004-2008 QOS.ch
  This software is released to the public domain, in the spirit of the original code written by Doug Lea. 
  The code can be used for any purpose, modified, and redistributed without acknowledgment. 
  No warranty is provided, either express or implied. 
-  
+
+ 
  ======================================================================================================================
  
 plugins/websocket-1.1.jar
@@ -1477,7 +1487,7 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 
-postgresql-jar-9.4-1200-jdbc41.jar
+postgresql-jar-9.4-1203-jdbc41.jar
 	Containing Project URL: http://jdbc.postgresql.org
 	
 	The PostgreSQL JDBC driver is distributed under the BSD license, same as the server. The simplest explanation of the licensing terms is that you can do whatever you want with the product and source code as long as you don't claim you wrote it or sue us. You should give it a read though, it's only half a page.
@@ -1513,7 +1523,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 SERP License
 
-File: serp-jar-1.14.1.jar
+File: serp-jar-1.15.1.jar
 
 Copyright (c) 2002-2007, A. Abram White
 All rights reserved.

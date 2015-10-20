@@ -356,7 +356,7 @@
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
-		<dependency org="junit" name="junit" rev="4.12" conf="junit->*" transitive="false">
+		<dependency org="junit" name="junit" rev="4.12" conf="junit->*" transitive="true">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.springframework" name="spring-test" rev="4.1.7.RELEASE" conf="junit->*" transitive="false">
