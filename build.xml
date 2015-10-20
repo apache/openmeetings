@@ -1312,6 +1312,7 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="junit" />
 			<param name="ivy.lib.location" value="${junit.lib.dir}" />
+			<param name="ivy.transitive" value="true" />
 		</antcall>
 	</target>
 	<!-- Check for rat libraries -->
