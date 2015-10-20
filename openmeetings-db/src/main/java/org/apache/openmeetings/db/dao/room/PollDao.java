@@ -60,7 +60,7 @@ public class PollDao {
 	
 	public PollType getType(Long typeId) {
 		TypedQuery<PollType> q = em.createNamedQuery("getPollType", PollType.class);
-		q.setParameter("pollTypesId", typeId);
+		q.setParameter("typeId", typeId);
 		return q.getSingleResult();
 	}
 	
@@ -76,13 +76,13 @@ public class PollDao {
 
 	public boolean close(Long roomId){
 		try {
-			log.debug(" :: closePoll :: ");
+			log.debug(" :: close :: ");
 			Query q = em.createNamedQuery("closePoll");
 			q.setParameter("roomId", roomId);
 			q.setParameter("archived", true);
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
-			log.error("[closePoll]", err);
+			log.error("[close]", err);
 		}
 		return false;
 	}
@@ -94,7 +94,7 @@ public class PollDao {
 			q.setParameter("id", p.getId());
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
-			log.error("[deletePoll]", err);
+			log.error("[delete]", err);
 		}
 		return false;
 	}
@@ -126,14 +126,14 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[get]", err);
 		}
 		return null;
 	}
 	
 	public List<RoomPoll> getArchived(Long roomId) {
 		try {
-			log.debug(" :: getPoll :: " + roomId);
+			log.debug(" :: getArchived :: " + roomId);
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);
 			q.setParameter("roomId", roomId);
 			q.setParameter("archived", true);
@@ -141,7 +141,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[getArchived]", err);
 		}
 		return null;
 	}
@@ -156,7 +156,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[hasPoll]", err);
 		}
 		return false;
 	}

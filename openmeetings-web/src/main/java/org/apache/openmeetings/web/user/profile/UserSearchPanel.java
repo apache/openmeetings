@@ -81,7 +81,7 @@ public class UserSearchPanel extends UserPanel {
 				add(new TextField<String>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
 				add(new TextField<String>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
 				add(new TextField<String>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
-				add(new AjaxFormSubmitBehavior(this, "onsubmit") {
+				add(new AjaxFormSubmitBehavior(this, "submit") {
 					private static final long serialVersionUID = 1L;
 
 					@Override

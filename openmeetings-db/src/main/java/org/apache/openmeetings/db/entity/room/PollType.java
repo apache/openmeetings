@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getPollTypes", query = "SELECT pt FROM PollType pt"),
-	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt WHERE pt.id = :pollTypesId")		
+	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt WHERE pt.id = :typeId")		
 })
 @Table(name = "poll_type")
 public class PollType implements IDataProviderEntity {

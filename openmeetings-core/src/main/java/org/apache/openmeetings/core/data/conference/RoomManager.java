@@ -329,13 +329,13 @@ public class RoomManager {
 	 * get List of RoomGroup by group and roomtype
 	 * 
 	 * @param groupId
-	 * @param roomtypesId
+	 * @param typeId
 	 * @return
 	 */
-	public List<RoomGroup> getRoomGroupByGroupIdAndRoomType(long groupId, long roomtypesId) {
+	public List<RoomGroup> getRoomGroupByGroupIdAndRoomType(long groupId, long typeId) {
 		try {
 			TypedQuery<RoomGroup> q = em.createNamedQuery("getRoomGroupByGroupIdAndRoomType", RoomGroup.class);
-			q.setParameter("types", Room.Type.get(roomtypesId));
+			q.setParameter("type", Room.Type.get(typeId));
 			q.setParameter("groupId", groupId);
 			return q.getResultList();
 		} catch (Exception ex2) {
