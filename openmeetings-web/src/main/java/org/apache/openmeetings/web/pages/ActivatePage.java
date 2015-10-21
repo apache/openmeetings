@@ -29,20 +29,19 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ActivatePage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
-	private final String ACTIVATION_PARAM = "u";
+	public static final String ACTIVATION_PARAM = "u";
 	
 	public ActivatePage(PageParameters pp) {
 		String userHash = pp.get(ACTIVATION_PARAM).toString();
 		if (userHash != null) {
 			User user = Application.getBean(UserDao.class).getUserByActivationHash(userHash);
 
-			if (!AuthLevelUtil.hasLoginLevel(user.getRights())) {
+			if (user != null && !AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
 				user.getRights().add(Right.Login);
 				user.setUpdated(new Date());
 
 				Application.getBean(UserDao.class).update(user, null);
-	
 			}
 		}
 		setResponsePage(Application.get().getSignInPageClass());
