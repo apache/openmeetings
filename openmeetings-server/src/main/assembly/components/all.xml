@@ -87,12 +87,18 @@
 			<excludes>
 				<exclude>META-INF/**</exclude>
 				<exclude>WEB-INF/lib/aopalliance*</exclude>
+				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
 				<exclude>WEB-INF/lib/slf4j-*</exclude>
 				<exclude>WEB-INF/lib/tomcat-embed-*</exclude>
 				<exclude>WEB-INF/lib/spring-*</exclude>
+				<exclude>WEB-INF/lib/mina-core-*</exclude>
 				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
 				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
 				<exclude>WEB-INF/lib/commons-io*</exclude>
+				<exclude>WEB-INF/lib/commons-codec*</exclude>
+				<exclude>WEB-INF/lib/commons-collections-*</exclude>
+				<exclude>WEB-INF/lib/commons-lang3*</exclude>
+				<exclude>WEB-INF/lib/commons-pool-*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
