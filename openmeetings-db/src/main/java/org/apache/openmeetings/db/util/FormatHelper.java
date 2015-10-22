@@ -69,7 +69,11 @@ public class FormatHelper {
 		String user = "";
 		if (u != null) {
 			String email = u.getAddress() == null ? "" : u.getAddress().getEmail();
-			user = String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
+			if (u.getFirstname() == null && u.getLastname() == null) {
+				user = email;
+			} else {
+				user = String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
+			}
 			user = isHTMLEscape ? escapeHtml4(user) : user;
 		}
 		return user;

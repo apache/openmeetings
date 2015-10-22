@@ -226,11 +226,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long setUserNickName(String firstname, String lastname, String email) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamId, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
 			currentClient.setFirstname(firstname);
 			currentClient.setLastname(lastname);
@@ -241,11 +239,10 @@ public class MainService implements IPendingServiceCallback {
 					Type.nicknameEnter, currentClient.getUserId(), streamId,
 					null, currentClient.getUserip(), currentClient.getScope());
 
-			this.sessionManager.updateClientByStreamId(streamId,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+			scopeApplicationAdapter.sendMessageToCurrentScope("nickNameSet", currentClient, true);
 
 			return 1L;
-
 		} catch (Exception err) {
 			log.error("[setUserNickName] ", err);
 		}
@@ -383,11 +380,6 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[logoutUser]",err);
 		}
 		return -1L;
-	}
-
-	public String[] getTimeZones(int start, int count) {
-		String all[] = TimeZone.getAvailableIDs();
-		return Arrays.copyOfRange(all, start, Math.min(start + count, all.length));
 	}
 
 	public List<Configuration> getGeneralOptions(String SID) {
