@@ -24,17 +24,16 @@
     docking="true" resizeable="false" closable="false" 
     width="324" x="$once{ parent.width/2 - this.width/2 }" y="100" height="200">
 
-    <handler name="oninit">
-    	<![CDATA[
-    	
-    	   var tFirstname = "Guest"
-    	   var tLastname = "User "+getStringTimeWithSeconds();
-    	
-    	   this.firstName.setAttribute("text",tFirstname);
-    	   this.lastName.setAttribute("text",tLastname);
-    	
-    	]]>
-    </handler>
+	<handler name="oninit">
+	<![CDATA[
+		var tFirstname = "Guest"
+		var tLastname = "User " + getStringTimeWithSeconds();
+		
+		this.firstName.setAttribute("text", tFirstname);
+		this.lastName.setAttribute("text", tLastname);
+		this.mail.setAttribute("text", canvas.mail);
+	]]>
+	</handler>
 
     <!--
     public Long setUserNickName(String firstname, String lastname, String email)
@@ -52,7 +51,7 @@
                 if (value<0){
                     
                 } else {
-                    canvas.thishib.getCurrentRoomClient.doCall();
+                    //canvas.thishib.getCurrentRoomClient.doCall();
                     parent.close();
                 }
             ]]>
@@ -66,8 +65,7 @@
 		<customEdittext name="lastName" y="54" x="120" width="200" text="" />
 		
 	<labelText y="86" x="4" labelid="1290" />
-		<customEdittext name="mail" y="84" x="120" width="200" 
-						regexpType="email" text="" />
+		<customEdittext name="mail" y="84" x="120" width="200" regexpType="email" text="" />
 
 	<simpleLabelButton name="connect" x="$once{ parent.width-this.width-10 }" 
 					   y="$once{ parent.height-30 }" labelid="1291" width="120" >

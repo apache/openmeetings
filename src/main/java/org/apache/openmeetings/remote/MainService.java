@@ -325,11 +325,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long setUserNickName(String firstname, String lastname, String email) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamId, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
 			currentClient.setFirstname(firstname);
 			currentClient.setLastname(lastname);
@@ -344,11 +342,10 @@ public class MainService implements IPendingServiceCallback {
 					currentClient.getEmail(), currentClient.getFirstname(),
 					currentClient.getLastname());
 
-			this.sessionManager.updateClientByStreamId(streamId,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+			scopeApplicationAdapter.sendMessageToCurrentScope("nickNameSet", currentClient, true);
 
 			return 1L;
-
 		} catch (Exception err) {
 			log.error("[setUserNickName] ", err);
 		}

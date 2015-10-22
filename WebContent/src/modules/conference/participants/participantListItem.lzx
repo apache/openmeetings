@@ -53,6 +53,12 @@
         ]]>
     </handler>
     
+    <method name="update" args="obj">
+    	setAttribute('firstname', obj.firstname);
+    	setAttribute('lastname', obj.lastname);
+    	refObj = obj;
+    </method>
+     
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
         	if ($debug) Debug.write("fadeText :1: ",this.refObj);

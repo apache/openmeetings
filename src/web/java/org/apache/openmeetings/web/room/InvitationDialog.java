@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -112,8 +111,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 				public void query(String term, int page, Response<Organisation> response) {
 					if (WebSession.getRights().contains(User.Right.Admin)) {
 						List<Organisation> groups = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-						for (Iterator<Organisation> i = groups.iterator(); i.hasNext();) {
-							Organisation g = i.next();
+						for (Organisation g : groups) {
 							if (g.getName().toLowerCase().contains(term.toLowerCase())) {
 								response.add(g);
 							}

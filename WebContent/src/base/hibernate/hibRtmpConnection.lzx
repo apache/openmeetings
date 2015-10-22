@@ -519,63 +519,67 @@
         </handler>   
     </netRemoteCallHib>  
     
-    <netRemoteCallHib name="getCurrentRoomClient" funcname="xmlcrm.getCurrentRoomClient" >          
-        <netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("getCurrentRoomClient: ",value);
-                if (value!=null){
-                    canvas.currentClient = value;
-                    canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
-                    
-                    //Somehow this leads to a bug in the implementation of the secure User Login
-                    canvas.setAttribute('user_id',value.user_id);
-                    
-                    canvas.setAttribute('allowRecording',value.allowRecording);
-                    
-                    var fName = value.firstname == null ? "" : value.firstname;
-                    var lName = value.lastname == null ? "" : value.lastname;
-                    canvas.setAttribute('firstName', fName);
-                    canvas.setAttribute('lastName', lName);
-                    
-                    hib.userobject.firstname = fName;
-                    hib.userobject.lastname = lName;
-                    
-                    canvas.setAttribute('mail','');
-                    canvas.setAttribute('lastLogin','');
-                    canvas.setAttribute('official_code','');
-                    canvas.setAttribute('picture_uri',value.picture_uri);
-                    canvas.setAttribute('language','');
-                    
-                    if ($debug) Debug.write("canvas.landingZone :: ",canvas.landingZone);
-                    
-                    if (canvas.landingZone == "dashboard") {
-                        canvas.destroyExitButton = false;
-			            parent.setUsernameAndSession.doCall();
-                        parent.getRoomTypes.doCall();
-                    } else if (canvas.roomRecordingId > 0) {
-                    	if (canvas.thishib.loaderVar != null) {
-                        	canvas.thishib.loaderVar.close();
-                        }
-                        //parent.getRoomById.doCall();
-                        var obj = new Array();
-                        obj["action"] = "recordModule";
-                        loadContent(obj,null,null);
-                    } else if (canvas.wicketroomid > 0) {
-                    	canvas.initroomid = canvas.wicketroomid;
-                        parent.getRoomTypes.doCall();
-                        parent.getRoomById.doCall();
-                    } else {
-                    	if (canvas.thishib.loaderVar != null) {
-	                        canvas.thishib.loaderVar.close();
-                        }
-                        parent.getRoomById.doCall();
-                    }
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>
+	<netRemoteCallHib name="getCurrentRoomClient" funcname="xmlcrm.getCurrentRoomClient" >
+		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getCurrentRoomClient: ",value);
+			if (value != null) {
+				canvas.currentClient = value;
+				canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
+				
+				//Somehow this leads to a bug in the implementation of the secure User Login
+				canvas.setAttribute('user_id',value.user_id);
+				
+				canvas.setAttribute('allowRecording',value.allowRecording);
+				
+				var fName = value.firstname == null ? "" : value.firstname;
+				var lName = value.lastname == null ? "" : value.lastname;
+				canvas.setAttribute('firstName', fName);
+				canvas.setAttribute('lastName', lName);
+				canvas.setAttribute('mail', value.adresses.email);
+				
+				if (canvas.isRemoteUser() && fName == '' && lName == '') {
+					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.adresses.email);
+					new lz.chooseNickName(canvas);
+				}
+				hib.userobject.firstname = fName;
+				hib.userobject.lastname = lName;
+				
+				canvas.setAttribute('lastLogin','');
+				canvas.setAttribute('official_code','');
+				canvas.setAttribute('picture_uri',value.picture_uri);
+				canvas.setAttribute('language','');
+				
+				if ($debug) Debug.write("canvas.landingZone :: ",canvas.landingZone);
+				
+				if (canvas.landingZone == "dashboard") {
+					canvas.destroyExitButton = false;
+					parent.setUsernameAndSession.doCall();
+					parent.getRoomTypes.doCall();
+				} else if (canvas.roomRecordingId > 0) {
+					if (canvas.thishib.loaderVar != null) {
+						canvas.thishib.loaderVar.close();
+					}
+					//parent.getRoomById.doCall();
+					var obj = new Array();
+					obj["action"] = "recordModule";
+					loadContent(obj,null,null);
+				} else if (canvas.wicketroomid > 0) {
+					canvas.initroomid = canvas.wicketroomid;
+					parent.getRoomTypes.doCall();
+					parent.getRoomById.doCall();
+				} else {
+					if (canvas.thishib.loaderVar != null) {
+						canvas.thishib.loaderVar.close();
+					}
+					parent.getRoomById.doCall();
+				}
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib>
     
 	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >          
 		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -663,7 +667,7 @@
             if (value.organisation_users.length > 0){
                 hib.currentdomain = value.organisation_users[0].organisation.name;
                 hib.currentdomainObj = value.organisation_users[0].organisation;
-            } else {
+            } else if (!canvas.isRemoteUser()) {
                 new lz.errorPopup(canvas,{error:"Missing Organization in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
             }
             
@@ -1747,6 +1751,19 @@
         </handler>
     </netRemoteCallHib>
     
+	<netRemoteCallHib name="nickNameSet" funcname="nickNameSet" >
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("nickNameSet: ", value);
+			canvas.setAttribute('mail', value.email);
+			canvas.setAttribute('firstName', value.firstname);
+			canvas.setAttribute('lastName', value.lastname);
+			
+			var vo = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
+			if (vo != null) {
+				vo.update(value);
+			}
+		</handler>
+	</netRemoteCallHib>
     
     <!-- Whiteboard sync Events -->
     <netRemoteCallHib name="sendSyncFlag" funcname="sendSyncFlag">

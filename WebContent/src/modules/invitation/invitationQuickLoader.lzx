@@ -124,9 +124,13 @@
 			
 			canvas.setAttribute('currentuser', email);
 			canvas.setAttribute('user_id', -invitee.user_id);
+			canvas.setAttribute('mail', email);
+			if (!invitee.firstname && !invitee.lastname) {
+				if ($debug) Debug.write("!!!!!!!!!!! Nickname invitation ", email);
+				new lz.chooseNickName(canvas);
+			}
 			canvas.setAttribute('firstName', fName);
 			canvas.setAttribute('lastName', lName);
-			canvas.setAttribute('mail', email);
 			canvas.setAttribute('lastLogin', invitee.lastlogin);
 			canvas.setAttribute('official_code','');
 			canvas.setAttribute('picture_uri', invitee.pictureuri);

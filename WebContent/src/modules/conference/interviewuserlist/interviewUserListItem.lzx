@@ -56,6 +56,12 @@
         ]]>
     </handler>
     
+    <method name="update" args="obj">
+    	setAttribute('firstname', obj.firstname);
+    	setAttribute('lastname', obj.lastname);
+    	refObj = obj;
+    </method>
+     
     <method name="updateIconByMod">
     	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
     	if (this.isMod) {

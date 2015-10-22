@@ -42,6 +42,12 @@
     
     <attribute name="selfItem" value="false" type="boolean"/>
     
+    <method name="update" args="obj">
+    	setAttribute('firstname', obj.firstname);
+    	setAttribute('lastname', obj.lastname);
+    	refObj = obj;
+    </method>
+     
     <handler name="onisMod">
     	<![CDATA[
         	if (this.isMod) {
