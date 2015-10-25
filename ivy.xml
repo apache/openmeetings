@@ -302,7 +302,7 @@
 		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M31" conf="openmeetings->*" >
+		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M32" conf="openmeetings->*" >
 			<include type="jar" />
 		</dependency>
 		<!-- BEGIN openjpa -->
