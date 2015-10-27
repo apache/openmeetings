@@ -67,7 +67,7 @@ public class MainPage extends BaseInitedPage {
 	private final MenuPanel menu;
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
-	private DebugBar dev = null;
+	private final Component dev;
 	
 	public MainPage(PageParameters pp) {
 		super();
@@ -115,6 +115,7 @@ public class MainPage extends BaseInitedPage {
 		    add(dev = new DebugBar("dev"));
 		    dev.setOutputMarkupId(true);
 		} else {
+			dev = null;
 		    add(new EmptyPanel("dev").setVisible(false));
 		}		
 		add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
@@ -170,9 +171,12 @@ public class MainPage extends BaseInitedPage {
 			}
 			panel.onMenuPanelLoad(target);
 		}
+		/* FIXME commented until wicket 7.2.0 will be released
+		   TODO check if this call is necessary
 		if (dev != null){
 			target.add(dev);
 		}
+		*/
 	}
 	
 	@Override
