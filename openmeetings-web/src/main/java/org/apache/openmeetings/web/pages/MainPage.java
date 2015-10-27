@@ -124,9 +124,11 @@ public class MainPage extends BaseInitedPage {
 		});
 		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-		    add((dev = new DebugBar("dev")).setOutputMarkupId(true));
+		    add(dev = new DebugBar("dev"));
+		    dev.setOutputMarkupId(true);
 		} else {
-		    add((dev = new EmptyPanel("dev")).setOutputMarkupPlaceholderTag(true).setVisible(false));
+			dev = null;
+		    add(new EmptyPanel("dev").setVisible(false));
 		}		
 		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
@@ -207,9 +209,12 @@ public class MainPage extends BaseInitedPage {
 			}
 			panel.onMenuPanelLoad(handler);
 		}
+		/* FIXME commented until wicket 7.2.0 will be released
+		   TODO check if this call is necessary
 		if (dev != null){
-			handler.add(dev);
+			target.add(dev);
 		}
+		*/
 	}
 	
 	@Override
