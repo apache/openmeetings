@@ -28,7 +28,7 @@ import org.threeten.bp.ZonedDateTime;
 
 public class CalendarHelper {
 	public static ZoneId getZoneId(String tzId) {
-		return ZoneId.of(tzId);
+		return ZoneId.of(tzId, ZoneId.SHORT_IDS);
 	}
 	
 	public static Date getDate(LocalDate d, String tzId) {
