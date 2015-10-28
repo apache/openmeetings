@@ -31,7 +31,7 @@ function initSwf(swfurl) {
 	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
 	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
 		.attr('src', "public/" + options.url)
-		.attr('wmode', 'window').attr('allowfullscreen', true)
+		.attr('wmode', 'opaque').attr('allowfullscreen', true)
 		.attr('width', options.width).attr('height', options.height)
 		.attr('id', 'lzapp').attr('name', 'lzapp')
 		.attr('flashvars', escape($.param(general)))
