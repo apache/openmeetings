@@ -45,9 +45,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice ErrorService
  * 
  */
-@WebService(name = "ErrorService")
+@WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 @Path("/error")
 public class ErrorWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ErrorWebService.class, webAppRootKey);

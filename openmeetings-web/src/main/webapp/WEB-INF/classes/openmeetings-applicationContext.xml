@@ -287,44 +287,12 @@
 			<ref bean="userWebService"/>
 		</jaxrs:serviceBeans>
 	</jaxrs:server>
-	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService"
-		implementor="#calendarWebService" 
-		endpointName="CalendarServiceEndpoint"
-		serviceName="CalendarService"
-		/>
-	<jaxws:endpoint id="errorServiceWS" address="/ErrorService"
-		implementor="#errorWebService" 
-		endpointName="ErrorServiceEndpoint"
-		serviceName="ErrorService"
-		/>
-	<jaxws:endpoint id="groupServiceWS" address="/GroupService"
-		implementor="#groupWebService" 
-		endpointName="GroupServiceEndpoint"
-		serviceName="GroupService"
-		/>
-	<jaxws:endpoint id="fileServiceWS" address="/FileService"
-		implementor="#fileWebService" 
-		endpointName="FileServiceEndpoint"
-		serviceName="FileService"
-		/>
-	<jaxws:endpoint id="recordServiceWS" address="/RecordService"
-		implementor="#recordWebService" 
-		endpointName="RecordServiceEndpoint"
-		serviceName="RecordService"
-		/>
-	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
-		implementor="#roomWebService" 
-		endpointName="RoomServiceEndpoint"
-		serviceName="RoomService"
-		/>
-	<jaxws:endpoint id="serverServiceWS" address="/ServerService"
-		implementor="#serverWebService" 
-		endpointName="ServerServiceEndpoint"
-		serviceName="ServerService"
-		/>
-	<jaxws:endpoint id="userServiceWS" address="/UserService"
-		implementor="#userWebService" 
-		endpointName="UserServiceEndpoint"
-		serviceName="UserService"
-		/>
+	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService" implementor="#calendarWebService"/>
+	<jaxws:endpoint id="errorServiceWS" address="/ErrorService" implementor="#errorWebService" />
+	<jaxws:endpoint id="groupServiceWS" address="/GroupService" implementor="#groupWebService" />
+	<jaxws:endpoint id="fileServiceWS" address="/FileService" implementor="#fileWebService" />
+	<jaxws:endpoint id="recordServiceWS" address="/RecordService" implementor="#recordWebService" />
+	<jaxws:endpoint id="roomServiceWS" address="/RoomService" implementor="#roomWebService" />
+	<jaxws:endpoint id="serverServiceWS" address="/ServerService" implementor="#serverWebService" />
+	<jaxws:endpoint id="userServiceWS" address="/UserService" implementor="#userWebService" />
 </beans>

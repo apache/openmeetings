@@ -67,9 +67,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice RoomService
  * 
  */
-@WebService
+@WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 @Path("/room")
 public class RoomWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, webAppRootKey);

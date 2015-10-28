@@ -68,13 +68,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice UserService
  * 
  */
-@WebService(name = "UserService", targetNamespace = UserWebService.USER_NS)
+@WebService(serviceName="org.apache.openmeetings.webservice.UserWebService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
-	public static final String USER_NS = "http://webservice.openmeetings.apache.org/user";
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired

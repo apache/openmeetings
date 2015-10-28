@@ -62,9 +62,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice FileService
  * 
  */
-@WebService
+@WebService(serviceName="org.apache.openmeetings.webservice.FileWebService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 @Path("/file")
 public class FileWebService {
 
