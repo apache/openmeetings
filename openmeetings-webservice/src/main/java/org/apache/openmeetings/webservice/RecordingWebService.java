@@ -77,7 +77,7 @@ public class RecordingWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public void delete(@QueryParam("sid") @WebParam String sid, @PathParam("id") @WebParam Long id) throws ServiceException {
+	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
@@ -107,9 +107,9 @@ public class RecordingWebService {
 	@WebMethod
 	@GET
 	@Path("/{externaltype}/{externalid}")
-	public List<RecordingDTO> getExternal(@WebParam @QueryParam("sid") String sid
-			, @PathParam("externaltype") @WebParam String externalType
-			, @PathParam("externalid") @WebParam String externalId) throws ServiceException {
+	public List<RecordingDTO> getExternal(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
+			, @PathParam("externalid") @WebParam(name="externalid") String externalId) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
@@ -139,8 +139,8 @@ public class RecordingWebService {
 	@WebMethod
 	@GET
 	@Path("/{externaltype}")
-	public List<RecordingDTO> getExternalByType(@WebParam @QueryParam("sid") String sid
-			, @PathParam("externaltype") @WebParam String externalType) throws ServiceException {
+	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
@@ -170,8 +170,8 @@ public class RecordingWebService {
 	@WebMethod
 	@GET
 	@Path("/room/{id}")
-	public List<RecordingDTO> getExternalByRoom(@WebParam @QueryParam("sid") String sid
-			, @PathParam("id") @WebParam Long roomId) throws ServiceException {
+	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long roomId) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 

@@ -107,7 +107,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/public/{type}")
-	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam String sid, @PathParam("type") @WebParam String type) throws ServiceException {
+	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
@@ -134,7 +134,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/{id}")
-	public RoomDTO getRoomById(@QueryParam("sid") @WebParam String sid, @PathParam("id") @WebParam Long id) throws ServiceException {
+	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return new RoomDTO(roomDao.get(id));
@@ -166,11 +166,11 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/{type}/{externaltype}/{externaliId}")
-	public RoomDTO getExternal(@WebParam @QueryParam("sid") String sid
-			, @PathParam("type") @WebParam String type
-			, @PathParam("externaltype") @WebParam String externalType
-			, @PathParam("externalid") @WebParam Long externalId
-			, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
+	public RoomDTO getExternal(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @PathParam("type") @WebParam(name="type") String type
+			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
+			, @PathParam("externalid") @WebParam(name="externalid") Long externalId
+			, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -207,7 +207,7 @@ public class RoomWebService {
 	@WebMethod
 	@POST
 	@Path("/")
-	public RoomDTO add(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
+	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -239,7 +239,7 @@ public class RoomWebService {
 	@WebMethod
 	@PUT
 	@Path("/{id}")
-	public RoomDTO update(@WebParam @QueryParam("sid") String sid, @PathParam("id") @WebParam Long id, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
+	public RoomDTO update(@WebParam(name="sid") @QueryParam("sid") String sid, @PathParam("id") @WebParam(name="id") Long id, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -272,7 +272,7 @@ public class RoomWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			roomDao.delete(roomDao.get(id), userId);
@@ -301,7 +301,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/close/{id}")
-	public ServiceResult close(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			log.debug("close " + id);
@@ -347,7 +347,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/open/{id}")
-	public ServiceResult open(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			log.debug("open " + id);
@@ -384,7 +384,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/kick/{id}")
-	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -412,7 +412,7 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/counters")
-	public List<RoomCountBean> counters(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("roomId") List<Long> ids) throws ServiceException {
+	public List<RoomCountBean> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
 		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
 		try {
 			Long userId = sessionDao.checkSession(sid);
@@ -434,7 +434,7 @@ public class RoomWebService {
 		} catch (ServiceException err) {
 			throw err;
 		} catch (Exception err) {
-			log.error("[getRoomCounters]", err);
+			log.error("[counters]", err);
 			throw new ServiceException(err.getMessage());
 		}
 		return roomBeans;
@@ -452,7 +452,11 @@ public class RoomWebService {
 	@WebMethod
 	@POST
 	@Path("/hash")
-	private ServiceResult hash(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("invite") InvitationDTO invite, @WebParam @QueryParam("sendmail") boolean sendmail) throws ServiceException {
+	private ServiceResult hash(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="invite") @QueryParam("invite") InvitationDTO invite
+			, @WebParam(name="sendmail") @QueryParam("sendmail") boolean sendmail
+			) throws ServiceException
+	{
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -473,7 +477,7 @@ public class RoomWebService {
 		} catch (ServiceException err) {
 			throw err;
 		} catch (Exception err) {
-			log.error("[sendInvitationHash] ", err);
+			log.error("[hash] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}

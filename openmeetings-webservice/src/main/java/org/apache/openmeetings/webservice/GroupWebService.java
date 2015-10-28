@@ -92,7 +92,7 @@ public class GroupWebService {
 	 */
 	@POST
 	@Path("/")
-	public ServiceResult add(@QueryParam("sid") @WebParam String sid, @QueryParam("name") @WebParam String name) throws ServiceException {
+	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Group o = new Group();
@@ -119,9 +119,9 @@ public class GroupWebService {
 	@POST
 	@Path("/{id}/users/add/{userid}")
 	public ServiceResult addUser(
-			@QueryParam("sid") @WebParam String sid
-			, @PathParam("id") @WebParam Long id
-			, @PathParam("userid") @WebParam Long userid
+			@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long id
+			, @PathParam("userid") @WebParam(name="userid") Long userid
 			) throws ServiceException
 	{
 		try {
@@ -154,9 +154,9 @@ public class GroupWebService {
 	@POST
 	@Path("/{id}/rooms/add/{roomId}")
 	public ServiceResult addRoom(
-			@QueryParam("sid") @WebParam String sid
-			, @PathParam("id") @WebParam Long id
-			, @PathParam("roomid") @WebParam Long roomid
+			@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long id
+			, @PathParam("roomid") @WebParam(name="roomid") Long roomid
 			) throws ServiceException
 	{
 		try {
@@ -209,12 +209,12 @@ public class GroupWebService {
 	@GET
 	@Path("/users/{id}")
 	public UserSearchResult getUsers(
-			@QueryParam("sid") @WebParam String sid
-			, @PathParam("id") @WebParam long id
-			, @QueryParam("start") @WebParam int start
-			, @QueryParam("max") @WebParam int max
-			, @QueryParam("orderby") @WebParam String orderby
-			, @QueryParam("asc") @WebParam boolean asc
+			@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") long id
+			, @QueryParam("start") @WebParam(name="start") int start
+			, @QueryParam("max") @WebParam(name="max") int max
+			, @QueryParam("orderby") @WebParam(name="orderby") String orderby
+			, @QueryParam("asc") @WebParam(name="asc") boolean asc
 			) throws ServiceException
 	{
 		try {

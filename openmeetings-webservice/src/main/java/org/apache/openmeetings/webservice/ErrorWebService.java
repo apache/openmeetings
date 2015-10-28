@@ -72,7 +72,7 @@ public class ErrorWebService {
 	 */
 	@GET
 	@Path("/{id}/{lang}")
-	public ServiceResult get(@WebParam @PathParam("id") long id, @WebParam @PathParam("lang") long lang) {
+	public ServiceResult get(@WebParam(name="id") @PathParam("id") long id, @WebParam(name="lang") @PathParam("lang") long lang) {
 		try {
 			if (id < 0) {
 				ErrorValue eValues = errorDao.get(-1 * id);
@@ -89,7 +89,7 @@ public class ErrorWebService {
 				return new ServiceResult(id, "Error ... please check your input", "Error");
 			}
 		} catch (Exception err) {
-			log.error("[getErrorByCode] ", err);
+			log.error("[get] ", err);
 		}
 		return null;
 	}

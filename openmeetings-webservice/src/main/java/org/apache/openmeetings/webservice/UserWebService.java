@@ -127,7 +127,7 @@ public class UserWebService {
 	 *            The SID from getSession
 	 * @param user
 	 *            user object
-	 * @param email
+	 * @param confirm
 	 *            whatever or not to send email, leave empty for auto-send
 	 *            
 	 * @return - id of the user added or error code
@@ -137,9 +137,9 @@ public class UserWebService {
 	@POST
 	@Path("/")
 	public UserDTO add(
-			@WebParam @QueryParam("sid") String sid
-			, @WebParam @QueryParam("user") UserDTO user
-			, @WebParam @QueryParam("email") Boolean email
+			@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="user") @QueryParam("user") UserDTO user
+			, @WebParam(name="confirm") @QueryParam("confirm") Boolean confirm
 			) throws ServiceException
 	{
 		try {
@@ -167,7 +167,7 @@ public class UserWebService {
 						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getState().getId()
 						, user.getAddress().getTown(), user.getLanguageId(),
 						"", false, true, // generate SIP Data if the config is enabled
-						jName_timeZone, email);
+						jName_timeZone, confirm);
 
 				if (userId == null || userId < 0) {
 					throw new ServiceException("Unknown error");
@@ -212,7 +212,7 @@ public class UserWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 
@@ -244,11 +244,11 @@ public class UserWebService {
 	 * @throws ServiceException
 	 */
 	@DELETE
-	@Path("/{externalType}/{externalId}")
+	@Path("/{externaltype}/{externalid}")
 	public ServiceResult deleteExternal(
-			@QueryParam("sid") String sid
-			, @PathParam("externalType") String externalType
-			, @PathParam("externalId") String externalId
+			@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
+			, @WebParam(name="externalid") @PathParam("externalid") String externalId
 			) throws ServiceException
 	{
 		try {
@@ -291,9 +291,9 @@ public class UserWebService {
 	@POST
 	@Path("/hash")
 	public ServiceResult getRoomHash(
-			@WebParam @QueryParam("sid") String sid
-			, @WebParam @QueryParam("user") ExternalUserDTO user
-			, @WebParam @QueryParam("options") RoomOptionsDTO options
+			@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="user") @QueryParam("user") ExternalUserDTO user
+			, @WebParam(name="options") @QueryParam("options") RoomOptionsDTO options
 			) throws ServiceException
 	{
 		try {
@@ -347,7 +347,7 @@ public class UserWebService {
 	@WebMethod
 	@POST
 	@Path("/kick/{publicsid}")
-	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @PathParam("publicsid") String publicSID) throws ServiceException {
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -373,8 +373,8 @@ public class UserWebService {
 	 */
 	@WebMethod
 	@GET
-	@Path("/count/{roomId}")
-	public int count(@WebParam @QueryParam("sid") String sid, @PathParam("roomid") Long roomId) {
+	@Path("/count/{roomid}")
+	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		Long userId = sessionDao.checkSession(sid);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {

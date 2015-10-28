@@ -84,7 +84,11 @@ public class ServerWebService {
 	@WebMethod
 	@GET
 	@Path("/{start}/{max}")
-	public List<ServerDTO> getServers(@QueryParam("sid") @WebParam String sid, @PathParam("start") @WebParam int start, @PathParam("max") @WebParam int max) throws ServiceException {
+	public List<ServerDTO> getServers(@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("start") @WebParam(name="start") int start
+			, @PathParam("max") @WebParam(name="max") int max
+			) throws ServiceException
+	{
 		log.debug("getServers enter");
 		Long userId = sessionDao.checkSession(sid);
 
@@ -107,7 +111,7 @@ public class ServerWebService {
 	@WebMethod
 	@GET
 	@Path("/count")
-	public long count(@QueryParam("sid") @WebParam String sid) throws ServiceException {
+	public long count(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		log.debug("getServerCount enter");
 		Long userId = sessionDao.checkSession(sid);
 
@@ -130,7 +134,7 @@ public class ServerWebService {
 	@WebMethod
 	@POST
 	@Path("/")
-	public ServerDTO add(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("server") ServerDTO server) throws ServiceException {
+	public ServerDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="server") @QueryParam("server") ServerDTO server) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -154,7 +158,7 @@ public class ServerWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long userId = sessionDao.checkSession(sid);
 
