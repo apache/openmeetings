@@ -260,12 +260,6 @@
 		<dependency org="org.apache.wicket" name="wicket-native-websocket-javax" rev="7.1.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="br.com.digilabs.jqplot" name="jqplot4java" rev="1.3.0" conf="openmeetings->*" transitive="false">
-			<include type="jar" />
-		</dependency>
-		<dependency org="org.wicketstuff" name="jqplot" rev="7.0.0" conf="openmeetings->*" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="7.1.0" conf="openmeetings->*" transitive="false"/>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="7.1.0" conf="openmeetings->*" transitive="false"/>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="7.1.0" conf="openmeetings->*" transitive="false"/>
@@ -289,7 +283,15 @@
 		<dependency org="org.wicketstuff" name="wicketstuff-select2" rev="7.0.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		
+		<dependency org="org.wicketstuff" name="jqplot" rev="7.0.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="br.com.digilabs.jqplot" name="jqplot4java" rev="1.3.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.json" name="json" rev="20090211" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<dependency org="commons-net" name="commons-net" rev="3.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
