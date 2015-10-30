@@ -124,9 +124,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		
-		
-		ApplicationSettings.get().setIncludeJqueryUI(false);
-		
+		ApplicationSettings.get().setIncludeJavascriptFull(true);
 		super.init();
 		
 		// register some widgets
