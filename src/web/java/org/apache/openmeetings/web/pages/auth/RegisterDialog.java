@@ -20,8 +20,10 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.util.CalendarPatterns.getDateWithTimeByMiliSeconds;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.crypt.ManageCryptStyle.getInstanceOfCrypt;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -37,8 +39,6 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
@@ -108,8 +108,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			}
 
 			@Override
-			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
-				s.open(target);
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				s.open(handler);
 			}
 		};
 		add(confirmRegistration);
@@ -170,9 +170,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (registerBtn.equals(button)) {
-			confirmRegistration.open(target);
-		} else {
+		if (!registerBtn.equals(button)) {
 			s.open(target);
 		}
 	}
@@ -194,8 +192,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(
-				login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+		String hash = getInstanceOfCrypt().createPassPhrase(login + getDateWithTimeByMiliSeconds(new Date()));
 
 		try {
 			getBean(IUserManager.class).registerUserInit(UserDao.getDefaultRights(), login, password, lastName
@@ -210,7 +207,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
 		}
-
+		confirmRegistration.open(target);
 	}
 
 	@Override
