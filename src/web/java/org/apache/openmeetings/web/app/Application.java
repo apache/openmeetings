@@ -81,6 +81,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
+import org.wicketstuff.select2.ApplicationSettings;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -110,6 +111,7 @@ public class Application extends AuthenticatedWebApplication {
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		
+		ApplicationSettings.get().setIncludeJavascriptFull(true);
 		super.init();
 		
 		// register some widgets
