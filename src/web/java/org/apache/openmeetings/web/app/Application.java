@@ -111,7 +111,7 @@ public class Application extends AuthenticatedWebApplication {
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		
-		ApplicationSettings.get().setIncludeJavascriptFull(true);
+		ApplicationSettings.get().setIncludeJqueryUI(false);
 		super.init();
 		
 		// register some widgets
