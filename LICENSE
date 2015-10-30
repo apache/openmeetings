@@ -405,9 +405,9 @@ webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-7.1.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-7.1.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-javax-7.1.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-request-7.1.0.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-7.1.0.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-7.1.0.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-whiteboard-7.1.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-whiteboard-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-util-7.1.0.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-4.4.1.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
