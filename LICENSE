@@ -641,15 +641,6 @@ Copyright (c) 2004-2008 QOS.ch
  
  ======================================================================================================================
  
- For backport-util-concurrent-jar-3.1.jar
- 
- This software is released to the public domain, in the spirit of the original code written by Doug Lea. 
- The code can be used for any purpose, modified, and redistributed without acknowledgment. 
- No warranty is provided, either express or implied. 
-
- 
- ======================================================================================================================
- 
  For xmlpull-1.1.3.1.jar
  For xpp3_min-1.1.4c.jar
   
@@ -1544,7 +1535,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-jar-1.0.6.jar
+webapps/openmeetings/WEB-INF/lib/ical4j-2.0-beta1.jar
  
 ======================================================================================================================
 
