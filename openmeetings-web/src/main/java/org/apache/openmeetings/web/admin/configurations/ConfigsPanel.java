@@ -61,7 +61,7 @@ public class ConfigsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
 				final Configuration c = item.getModelObject();
-				item.add(new Label("configuration_id", c.getConfiguration_id()));
+				item.add(new Label("configuration_id", c.getId()));
 				item.add(new Label("conf_key", c.getConf_key()));
 				item.add(new Label("conf_value", c.getConf_value()));
 				item.add(new AjaxEventBehavior("click") {
@@ -75,7 +75,7 @@ public class ConfigsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (c.getConfiguration_id().equals(form.getModelObject().getConfiguration_id()) ? " ui-state-default" : "")));
+						+ (c.getId().equals(form.getModelObject().getId()) ? " ui-state-default" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

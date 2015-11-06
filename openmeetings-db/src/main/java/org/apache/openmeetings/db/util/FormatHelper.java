@@ -68,7 +68,7 @@ public class FormatHelper {
 	public static String formatUser(User u, boolean isHTMLEscape) {
 		String user = "";
 		if (u != null) {
-			String email = u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+			String email = u.getAddress() == null ? "" : u.getAddress().getEmail();
 			if (u.getFirstname() == null && u.getLastname() == null) {
 				user = email;
 			} else {

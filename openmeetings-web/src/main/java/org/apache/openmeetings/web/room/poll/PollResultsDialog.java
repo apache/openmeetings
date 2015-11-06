@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -212,11 +212,11 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private Integer[] getValues(RoomPoll p) {
 		Integer[] values = initValues(p != null && p.getPollType().getIsNumericAnswer() ? 10 : 2);
 		if (p != null && p.getPollType().getIsNumericAnswer()) {
-			for (RoomPollAnswers a : p.getRoomPollAnswerList()) {
+			for (RoomPollAnswer a : p.getRoomPollAnswerList()) {
 				values[a.getPointList() - 1] ++;
 			}
 		} else if (p != null) {
-			for (RoomPollAnswers a : p.getRoomPollAnswerList()) {
+			for (RoomPollAnswer a : p.getRoomPollAnswerList()) {
 				values[a.getAnswer() ? 0 : 1] ++;
 			}
 		}

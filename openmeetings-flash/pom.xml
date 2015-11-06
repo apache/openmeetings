@@ -31,7 +31,6 @@
 	<description>TODO</description>
 	<properties>
 		<openlaszlo>${project.basedir}/openlaszlo</openlaszlo>
-		<laszlo46.home>${openlaszlo}/openlaszlo46</laszlo46.home>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
@@ -81,6 +80,7 @@
 							<exportAntProperties>true</exportAntProperties>
 							<target>
 								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
+								<!-- ant antfile="${basedir}/openlaszlo.xml" target="client.debug.only"/-->
 							</target>
 							<skip>${om.quick.build}</skip>
 						</configuration>

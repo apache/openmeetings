@@ -1,0 +1,111 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+.room.container {
+	width: 100%;
+}
+.room.menu.exit {
+	padding-left: 20px;
+	background-image: url(images/exit_button.png);
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+}
+.room.menu.right {
+	position: absolute;
+	top: 0px;
+	margin-right: 5px;
+	right: 0px;
+	display: inline-block;
+}
+.room.menu.right .room {
+	float: right;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+.room.menu.right .room.name {
+	font-weight: bold;
+}
+.room.menu.right .room.recording {
+	color: red;
+}
+.room.menu.right .icon {
+	width: 30px;
+	height: 30px;
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+	float: right;
+}
+.room.menu.right .icon.share {
+	background-image: url(images/monitor_go.png);
+}
+.room.menu.right .icon.ask {
+	background-image: url(images/user_add.png);
+}
+.room.sidebar.left {
+	min-width: 200px;
+	width: 20%;
+	float: left;
+}
+.room.wb.area {
+	width: 80%;
+	float: left;
+}
+.room.sidebar.left .user.list {
+	border-right: 1px solid #dddddd;
+	height: 100%;
+	overflow-y: auto;
+}
+.room.sidebar.left .user.list .user {
+	height: 40px;
+	padding-left: 5px;
+    padding-top: 5px;
+}
+.room.sidebar.left .user.list .user .user.name {
+	line-height: 18px;
+	height: 18px;
+	padding: 0;
+}
+.room.sidebar.left .user.list .user .user.actions {
+	position: relative;
+	height: 18px;
+	padding: 0;
+}
+.private-chat.om-icon {
+	background-image: url(images/page_edit.png);
+}
+.room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
+	padding: 0;
+}
+.room.sidebar.left .user.list .user.current {
+	font-weight: bold;
+}
+.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
+	padding: 0;
+	overflow: hidden;
+}
+.input.select2-container-multi .select2-choices {
+	max-height: 100px;
+	overflow-y: auto;
+}
+.activity.item {
+	position: relative;
+}
+.activity.item .ui-dialog-titlebar-close {
+	width: 20px;
+	height: 20px;
+}

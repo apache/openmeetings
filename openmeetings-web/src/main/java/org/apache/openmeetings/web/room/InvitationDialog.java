@@ -142,7 +142,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 
 				@Override
 				protected Object getId(Organisation choice) {
-					return choice.getOrganisation_id();
+					return choice.getId();
 				}
 			});
 
@@ -182,7 +182,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		groups.setModelObject(new ArrayList<Organisation>());
 		groups.setEnabled(false);
 		tzId.setObject(u.getTimeZoneId());
-		lang = u.getLanguage_id();
+		lang = u.getLanguageId();
 		url.setModelObject(null);
 		inviteeType.setObject(InviteeType.user);
 		form.setModelObject(i);
@@ -242,7 +242,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					}
 				} else {
 					for (Organisation g : groups.getModelObject()) {
-						for (Organisation_Users ou : getBean(OrganisationUserDao.class).get(g.getOrganisation_id(), 0, Integer.MAX_VALUE)) {
+						for (Organisation_Users ou : getBean(OrganisationUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
 							Invitation i = create(ou.getUser());
 							try {
 								getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
@@ -280,7 +280,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setInvitee(u);
 		if (Type.contact == u.getType()) {
 			//TODO not sure it is right
-			u.setLanguage_id(lang);
+			u.setLanguageId(lang);
 		}
 		return getBean(InvitationDao.class).update(i);
 	}

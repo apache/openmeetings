@@ -109,7 +109,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
 		try {
-			boolean isNew = (u.getUser_id() == null);
+			boolean isNew = (u.getId() == null);
 			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
 			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
 			if (isNew && sendEmailAtRegister) {
@@ -144,8 +144,8 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		User user = getModelObject();
-		if (user.getUser_id() != null) {
-			user = getBean(UserDao.class).get(user.getUser_id());
+		if (user.getId() != null) {
+			user = getBean(UserDao.class).get(user.getId());
 		} else {
 			user = getBean(UserDao.class).getNewUserInstance(null);
 		}
@@ -227,8 +227,8 @@ public class UserForm extends AdminBaseForm<User> {
 		List<Long> ids = new ArrayList<Long>();
 		if (u.getType() == Type.ldap) {
 			for (LdapConfig c : getBean(LdapConfigDao.class).getActive()) {
-				ids.add(c.getLdapConfigId());
-				values.put(c.getLdapConfigId(), c.getName());
+				ids.add(c.getId());
+				values.put(c.getId(), c.getName());
 			}
 		}
 		if (u.getType() == Type.oauth) {
@@ -266,7 +266,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getUser_id())) {
+		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(Application.getString(105));
 		}
 	}

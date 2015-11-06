@@ -538,10 +538,10 @@
 				var lName = value.lastname == null ? "" : value.lastname;
 				canvas.setAttribute('firstName', fName);
 				canvas.setAttribute('lastName', lName);
-				canvas.setAttribute('mail', value.adresses.email);
+				canvas.setAttribute('mail', value.address.email);
 				
 				if (canvas.isRemoteUser() && fName == '' && lName == '') {
-					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.adresses.email);
+					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.address.email);
 					new lz.chooseNickName(canvas);
 				}
 				hib.userobject.firstname = fName;
@@ -596,10 +596,10 @@
 					canvas.directRoomObj = value;
 					canvas.thishib.loaderVar.close();
 				} else {
-					canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
+					canvas.setRoomValues(value.type,value.rooms_id,value);
 					var r = value;
 					r.currentusers = ''; //this might be huge list
-					canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,r]);
+					canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.type,value.rooms_id,r]);
 				}
 			} else {
 				new lz.labelerrorPopup(canvas,{errorlabelid:1286});
@@ -728,30 +728,6 @@
 			} else {
 				if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
 			}
-			parent.getUserSalutations.doCall();
-		]]>
-		</handler>
-	</netRemoteCallHib>
-    
-    <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
-        <handler name="ondata" args="value">
-            //Sessionmanagement.getInstance() 
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setCurrentUserOrganization: ",value);
-        </handler>  
-    </netRemoteCallHib> 
-     
-    
-    <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" >
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.userlang; </method></netparam> 
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getUserSalutations ",value);
-            canvas.salutationsInitValues = value;
-            //check for password reset
             if (canvas.wicketsid != null) {
             	parent.loginWicket.doCall();
             } else { 
@@ -771,8 +747,20 @@
                     }
                 }
             }
+		]]>
+		</handler>
+	</netRemoteCallHib>
+    
+    <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+        <handler name="ondata" args="value">
+            //Sessionmanagement.getInstance() 
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("setCurrentUserOrganization: ",value);
         </handler>  
-    </netRemoteCallHib>
+    </netRemoteCallHib> 
+     
     
 	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -828,6 +816,7 @@
 		</handler>
 	</netRemoteCallHib>
 	
+	<!-- //TODO FIXME roomtype -->
     <netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" >
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">
@@ -910,7 +899,7 @@
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
                     
                     if ($debug) Debug.write("room ",canvas.currentRoomObject);
-                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject.roomtype.roomtypes_id);
+                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject.type);
                     
                     if (canvas.currentRoomObject.roomtype.roomtypes_id != 3) {
                         //We do not show this warning when the roomtype is 3 (restricted)
@@ -1724,7 +1713,7 @@
         </handler>
     </netRemoteCallHib>
     
-    <netRemoteCallHib name="checkLzRecording" funcname="flvrecorderservice.checkLzRecording" >      
+    <netRemoteCallHib name="checkLzRecording" funcname="recorderservice.checkLzRecording" >      
         <handler name="ondata" args="value">
             if ($debug) Debug.write("checkLzRecording: ",value);
             if (value != null) {
@@ -1829,20 +1818,6 @@
             ]]>
         </handler>   
     </netRemoteCallHib>  
-    
-    <netRemoteCallHib name="closeRoom" funcname="xmlcrm.closeRoom">
-        <attribute name="room_id" value="0" type="number" />
-        <attribute name="isClosed" value="true" type="boolean" />
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.room_id;</method></netparam>
-        <netparam><method name="getValue">return parent.isClosed;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("closeRoom: ",value);
-            ]]>
-        </handler>   
-    </netRemoteCallHib> 
     
     <netRemoteCallHib name="clearChatContent" funcname="clearChatContent">
         <handler name="ondata" args="value">

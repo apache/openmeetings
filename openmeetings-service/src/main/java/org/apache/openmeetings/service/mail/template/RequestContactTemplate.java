@@ -26,7 +26,7 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactTemplate(User userToAdd, User user) {
-		super(userToAdd.getLanguage_id());
+		super(userToAdd.getLanguageId());
 		add(new Label("hi", getString(1192, langId)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));

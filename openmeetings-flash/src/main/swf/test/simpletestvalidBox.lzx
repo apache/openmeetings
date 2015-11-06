@@ -32,46 +32,15 @@ String.prototype.startsWith = function(prefix) {
 ]]>
 </script>
 	
-<attribute name="statesInitValues" value="null" />
-	
 <handler name="oninit">
 	<![CDATA[
 		var tChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		var tCharsSmall = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
 		
-		this.statesInitValues = new Array();
-		var m = 0;
-		while (m<20){
-			for (var i = 0;i<26;i++){
-				for (var r=0;r<3;r++){
-					var t = new Array();
-					t["state_id"] = i*r;
-					t["name"] = tChars.charAt(i)+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100));
-					this.statesInitValues.push(t);
-				}
-			}
-			m++;
-		}
-		//Debug.write(this.statesInitValues);
-		
 		this._validbox.addItem("Da","1");
 		this._validbox.selectItem("1",true);
 	]]>
 </handler>
-	
-<method name="validateCountry" args="str">
-	//Debug.write("validateCountry: ",str);
-	<![CDATA[
-		if (str.length!=0){
-			var a = new Array();
-			for (var i=0;i<canvas.statesInitValues.length;i++){
-				if (canvas.statesInitValues[i].name.startsWith(str))a.push(canvas.statesInitValues[i]);
-				//this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
-			}
-			return a;
-		}
-	]]>	
-</method>	
 	
 
     <include href="base/baseformitem.lzx" />

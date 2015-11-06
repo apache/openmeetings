@@ -25,6 +25,7 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.webservice.UserWebService;
 import org.red5.logging.Red5LoggerFactory;
@@ -201,7 +202,7 @@ public class RestClient {
 			}
 
 			UserWebService client = getUserClient();
-			ServiceResult result = client.kickUserByPublicSID(sessionId, publicSID);
+			ServiceResult result = client.kick(sessionId, publicSID);
 
 			if (result.getCode() == 0) {
 				throw new Exception("Could not delete user from slave host");

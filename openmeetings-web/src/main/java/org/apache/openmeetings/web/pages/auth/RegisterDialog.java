@@ -197,7 +197,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		try {
 			getBean(IUserManager.class).registerUserInit(UserDao.getDefaultRights(), login, password, lastName
 					, firstName, email, null /* age/birthday */, "" /* street */
-					, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id()
+					, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getId()
 					, "" /* town */, lang, true /* sendWelcomeMessage */
 					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
@@ -255,7 +255,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			langField.setRequired(true).setLabel(Model.of(Application.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(Application.getString(1143))));
 			add(stateField = new DropDownChoice<State>("state", new PropertyModel<State>(RegisterDialog.this, "state"),
-					getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "state_id")));
+					getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "state_id")));
 			stateField.setRequired(true).setLabel(Model.of(Application.getString(120)));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;

@@ -39,7 +39,6 @@
 
         client.hibAdapter_setLabelObjectByHundred = this.hibAdapter_setLabelObjectByHundred;
         client.setRoomValues = this.setRoomValues;
-        client.getRoomTypes = this.getRoomTypes;
         client.disconnect = this.disconnect;
         client.reconnectSuccess = this.reconnectSuccess;
         //Test application to record 5 seconds
@@ -81,15 +80,11 @@
         setLabelObjectByHundred(start,value);
     </method>
 
-    <method name="setRoomValues" args="roomtypes_id,rooms_id,value">
-        if($debug) Debug.write("setRoomValues",roomtypes_id,rooms_id,value);
+    <method name="setRoomValues" args="roomtype,rooms_id,value">
+        if($debug) Debug.write("setRoomValues",roomtype,rooms_id,value);
         canvas.currentRoomObject = value;
     </method>
 
-    <method name="getRoomTypes" args="value">
-        canvas.roomTypesInitValues = value;
-    </method>
-    
     <!-- 
     	Synces some of the variables from the SWF8 to the SWF10.
     	This also includes values for httphostlocal

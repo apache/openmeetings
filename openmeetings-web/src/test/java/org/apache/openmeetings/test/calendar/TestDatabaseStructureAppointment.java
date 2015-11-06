@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.calendar;
 
-
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,18 +26,16 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
-
-	private static final Logger log = Logger.getLogger(TestDatabaseStructureAppointment.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureAppointment.class, webAppRootKey);
 	@Autowired
 	private AppointmentDao appointmentDao;
 
@@ -55,7 +53,7 @@ public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 				Date date = format.parse( "2008-17-08" );
 				Date date2 = format.parse( "2008-18-08" );
 		
-				List<Appointment> listAppoints =	appointmentDao.getAppointmentsByRange(1L, date, date2);
+				List<Appointment> listAppoints =	appointmentDao.getInRange(1L, date, date2);
 			//List<Appointment> listAppoints = AppointmentDaoImpl.getInstance().searchAppointmentsByName("%");
 			//AppointmentDaoImpl.getInstance().getNextAppointmentById(1L);
 			//AppointmentDaoImpl.getInstance().addAppointment("mezo",1L, "Pforzheim", "zweiter", Calendar.getInstance().getTime() , 
@@ -73,10 +71,6 @@ public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 			for (Iterator<Appointment> iter = listAppoints.iterator();iter.hasNext();) {
 				log.debug(""+iter.next());
 			}
-			
-			//AppointmentDaoImpl.getInstance().updateAppointment(1L,"neu", "erster Test",Calendar.getInstance().getTime() , 
-					//Calendar.getInstance().getTime(), true, false, false, false, new Long(1));
-			//log.debug("AppointmentReminderTypDaoImpl: "+appointmentReminderTypDaoImpl.getAppointmentReminderTypById(1L));
 		} catch (Exception err) {
 
 			log.error("[testAddingGroup]",err);

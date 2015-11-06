@@ -71,7 +71,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDao implements IDataProviderDao<User> {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, webAppRootKey);
 
-	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email", "adresses.town"};
+	public final static String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
 
 	@PersistenceContext
 	private EntityManager em;
@@ -101,14 +101,14 @@ public class UserDao implements IDataProviderDao<User> {
 		User user = new User();
 		user.setSalutations_id(1L); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
-		user.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
+		user.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());
-		Address adresses = new Address();
-		adresses.setStates(stateDao.getStateById(1L));
-		user.setAdresses(adresses);
+		Address address = new Address();
+		address.setState(stateDao.get(1L));
+		user.setAddress(address);
 		user.setShowContactData(false);
 		user.setShowContactDataToContacts(false);
 
@@ -207,7 +207,7 @@ public class UserDao implements IDataProviderDao<User> {
 				ou.setUser(u);
 			}
 		}
-		if (u.getUser_id() == null) {
+		if (u.getId() == null) {
 			if (u.getRegdate() == null) {
 				u.setRegdate(new Date());
 			}
@@ -232,7 +232,7 @@ public class UserDao implements IDataProviderDao<User> {
 		User u = update(user, updatedBy);
 		if (password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
-			User u1 = get(u.getUser_id(), true);
+			User u1 = get(u.getId(), true);
 			u1.updatePassword(cfgDao, password);
 			update(u1, updatedBy);
 		}
@@ -240,7 +240,7 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	public void delete(User u, Long userId) {
-		deleteUserID(u.getUser_id());
+		deleteUserID(u.getId());
 	}
 
 	public User get(long user_id) {
@@ -283,19 +283,19 @@ public class UserDao implements IDataProviderDao<User> {
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				us.setSipUser(null);
-				Address adr = us.getAdresses();
+				Address adr = us.getAddress();
 				if (adr != null) {
 					adr.setDeleted(true);
 				}
 
-				if (us.getUser_id() == null) {
+				if (us.getId() == null) {
 					em.persist(us);
 				} else {
 					if (!em.contains(us)) {
 						em.merge(us);
 					}
 				}
-				return us.getUser_id();
+				return us.getId();
 			}
 		} catch (Exception ex2) {
 			log.error("[deleteUserID]", ex2);
@@ -337,7 +337,7 @@ public class UserDao implements IDataProviderDao<User> {
 	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
 		try {
 			User u = getByLogin(login, type, domainId);
-			return u == null || u.getUser_id().equals(id);
+			return u == null || u.getId().equals(id);
 		} catch (Exception e) {
 			//exception is thrown in case of non-unique result
 			return false;
@@ -357,7 +357,7 @@ public class UserDao implements IDataProviderDao<User> {
 		log.debug("checkEmail: email = {}, id = {}", email, id);
 		try {
 			User u = getByEmail(email, type, domainId);
-			return u == null || u.getUser_id().equals(id);
+			return u == null || u.getId().equals(id);
 		} catch (Exception e) {
 			//exception is thrown in case of non-unique result
 			return false;
@@ -472,21 +472,21 @@ public class UserDao implements IDataProviderDao<User> {
 		User to = null;
 		try {
 			to = em.createNamedQuery("getContactByEmailAndUser", User.class)
-					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getUser_id()).getSingleResult();
+					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId()).getSingleResult();
 		} catch (Exception e) {
 			//no-op
 		}
 		if (to == null) {
 			to = new User();
 			to.setType(Type.contact);
-			String login = owner.getUser_id() + "_" + email; //UserId prefix is used to ensure unique login
+			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
-			to.setLanguage_id(null == langId ? owner.getLanguage_id() : langId);
-			to.setOwnerId(owner.getUser_id());
-			to.setAdresses(new Address());
-			to.getAdresses().setEmail(email);
+			to.setLanguageId(null == langId ? owner.getLanguageId() : langId);
+			to.setOwnerId(owner.getId());
+			to.setAddress(new Address());
+			to.getAddress().setEmail(email);
 			to.setTimeZoneId(null == tzId ? owner.getTimeZoneId() : tzId);
 		}
 		return to;
@@ -530,8 +530,8 @@ public class UserDao implements IDataProviderDao<User> {
 			sb.append(" AND (LOWER(u.login) LIKE :search ")
 				.append("OR LOWER(u.firstname) LIKE :search ")
 				.append("OR LOWER(u.lastname) LIKE :search ")
-				.append("OR LOWER(u.adresses.email) LIKE :search ")
-				.append("OR LOWER(u.adresses.town) LIKE :search " + ") ");
+				.append("OR LOWER(u.address.email) LIKE :search ")
+				.append("OR LOWER(u.address.town) LIKE :search " + ") ");
 			params.put("search", getStringParam(text));
 		}
 		if (!count && !Strings.isEmpty(orderBy)) {
@@ -610,7 +610,7 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		User u = users.get(0);
 
-		if (!verifyPassword(u.getUser_id(), userpass)) {
+		if (!verifyPassword(u.getId(), userpass)) {
 			throw new OmException(-11L);
 		}
 		// Check if activated
@@ -623,15 +623,15 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		
 		u.setLastlogin(new Date());
-		return update(u, u.getUser_id());
+		return update(u, u.getId());
 	}
 	
-	public Address getAddress(String street, String zip, String town, long states_id, String additionalname, String fax, String phone, String email) {
+	public Address getAddress(String street, String zip, String town, long stateId, String additionalname, String fax, String phone, String email) {
 		Address a =  new Address();
 		a.setStreet(street);
 		a.setZip(zip);
 		a.setTown(town);
-		a.setStates(stateDao.getStateById(states_id));
+		a.setState(stateDao.get(stateId));
 		a.setAdditionalname(additionalname);
 		a.setComment("");
 		a.setFax(fax);
@@ -650,7 +650,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setLogin(login);
 		u.setLastname(lastname);
 		u.setAge(age);
-		u.setAdresses(adress);
+		u.setAddress(adress);
 		u.setSendSMS(sendSMS);
 		u.setRights(rights);
 		u.setLastlogin(new Date());
@@ -660,9 +660,9 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setActivatehash(hash);
 		u.setTimeZoneId(timezone.getID());
 		u.setForceTimeZoneCheck(forceTimeZoneCheck);
-		u.setExternalUserId(externalId);
-		u.setExternalUserType(externalType);
-		if (!Strings.isEmpty(u.getExternalUserType())) {
+		u.setExternalId(externalId);
+		u.setExternalType(externalType);
+		if (!Strings.isEmpty(u.getExternalType())) {
 			u.setType(Type.external);
 		}
 
@@ -672,7 +672,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setShowContactDataToContacts(showContactDataToContacts);
 
 		// this is needed cause the language is not a needed data at registering
-		u.setLanguage_id(language_id != 0 ? language_id : null);
+		u.setLanguageId(language_id != 0 ? language_id : null);
 		if (!Strings.isEmpty(userpass)) {
 			u.updatePassword(cfgDao, userpass);
 		}

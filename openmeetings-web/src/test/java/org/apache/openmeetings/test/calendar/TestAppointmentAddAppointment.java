@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
 public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAppointmentAddAppointment.class, webAppRootKey);
 
@@ -52,28 +53,28 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 
 		String appointmentName = "Test 01";
 		String appointmentDescription = "Descr";
-		Long users_id = 1L;
+		Long userId = 1L;
 		String appointmentLocation = "office";
 		Boolean isMonthly = false;
 		Boolean isDaily = false;
 		Long categoryId = 1L;
 		Boolean isWeekly = false;
-		Long remind = 3L;
+		String remind = Appointment.Reminder.ical.name();
 		Boolean isYearly = false;
 		String[] mmClient = new String[1];
 		for (int i = 0; i < 1; i++) {
 			mmClient[0] = createClientObj("firstname" + i, "lastname" + i,
 					"first" + i + ".last" + i + "@webbase-design.de", "Etc/GMT+1");
 		}
-		Long language_id = 1L;
+		Long languageId = 1L;
 		Long roomType = 1L;
 
 		Appointment a = appointmentLogic.getAppointment(appointmentName,
 				appointmentLocation, appointmentDescription,
 				start, end, isDaily, isWeekly,
 				isMonthly, isYearly, categoryId, remind, mmClient,
-				roomType, language_id, false, "", -1, users_id);
-		a = appointmentDao.update(a, users_id);
+				roomType, languageId, false, "", -1, userId);
+		a = appointmentDao.update(a, userId);
 		
 		Thread.sleep(3000);
 		

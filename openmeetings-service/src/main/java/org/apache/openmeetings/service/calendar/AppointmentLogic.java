@@ -31,21 +31,20 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.template.AppointmentReminderTemplate;
@@ -60,17 +59,11 @@ public class AppointmentLogic {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDao;
-	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDao;
-	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private LabelDao langDao;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private IInvitationManager invitationManager;
 	@Autowired
@@ -96,13 +89,13 @@ public class AppointmentLogic {
 	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
 		if (inv == null) {
 			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
-					, u.getAdresses().getEmail(), a.getTitle()));
+					, u.getAddress().getEmail(), a.getTitle()));
 			return;
 		}
 
 		TimeZone tz = timezoneUtil.getTimeZone(u.getTimeZoneId());
 
-		long langId = u.getLanguage_id();
+		long langId = u.getLanguageId();
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
 
@@ -111,7 +104,7 @@ public class AppointmentLogic {
 		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
 		invitationManager.sendInvitionLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
-		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, langId);
+		invitationManager.sendInvitationReminderSMS(u.getAddress().getPhone(), smsSubject, langId);
 		if (inv.getHash() != null) {
 			inv.setUpdated(new Date());
 			invitationDao.update(inv);
@@ -150,7 +143,7 @@ public class AppointmentLogic {
 			end.setTimeInMillis(end.getTimeInMillis() + milliseconds);
 		}
 
-		for (Appointment a : appointmentDao.getAppointmentsInRange(start, end)) {
+		for (Appointment a : appointmentDao.getInRange(start, end)) {
 			// Prevent email from being send twice, even if the cycle takes
 			// very long to send each
 			if (a.isReminderEmailSend()) {
@@ -179,7 +172,7 @@ public class AppointmentLogic {
 
 			// Iterate through all MeetingMembers
 			for (MeetingMember mm : members) {
-				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAdresses().getEmail());
+				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAddress().getEmail());
 
 				Invitation inv = mm.getInvitation();
 
@@ -198,7 +191,7 @@ public class AppointmentLogic {
 			String appointmentLocation, String appointmentDescription,
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Boolean isYearly, Long categoryId, String remind, String[] mmClient,
 			Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
 		Appointment a = new Appointment();
@@ -211,15 +204,14 @@ public class AppointmentLogic {
 		a.setIsWeekly(isWeekly);
 		a.setIsMonthly(isMonthly);
 		a.setIsYearly(isYearly);
-		a.setCategory(appointmentCategoryDao.get(categoryId));
-		a.setRemind(appointmentReminderTypDao.get(remind));
+		a.setReminder(Reminder.valueOf(remind));
 		if (roomId > 0) {
 			a.setRoom(roomDao.get(roomId));
 		} else {
 			a.setRoom(new Room());
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
-			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
+			a.getRoom().setType(Type.get(roomType));
 		}
 		a.setOwner(userDao.get(users_id));
 		a.setPasswordProtected(isPasswordProtected);

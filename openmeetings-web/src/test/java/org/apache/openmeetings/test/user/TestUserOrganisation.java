@@ -58,19 +58,19 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	@Test
 	public void getUsersByOrganisationId() {
 		User u = getValidUser();
-		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getOrganisation_id();
+		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getId();
 		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
 		assertTrue("Default Organisation should contain at least 1 user: " + ul.size(), ul.size() > 0);
 		
-		Organisation_Users ou = orgUserDao.getByOrganizationAndUser(orgId, u.getUser_id());
-		assertNotNull("Unable to found [organisation, user] pair - [" + orgId + "," + u.getUser_id() + "]", ou);
+		Organisation_Users ou = orgUserDao.getByOrganizationAndUser(orgId, u.getId());
+		assertNotNull("Unable to found [organisation, user] pair - [" + orgId + "," + u.getId() + "]", ou);
 	}
 	
 	@Test
 	public void addOrganisation() {
 		Organisation o = new Organisation();
 		o.setName(ORG_NAME);
-		Long orgId = orgDao.update(o, null).getOrganisation_id(); //inserted by not checked
+		Long orgId = orgDao.update(o, null).getId(); //inserted by not checked
 		assertNotNull("New Organisation have valid id", orgId);
 		
 		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);

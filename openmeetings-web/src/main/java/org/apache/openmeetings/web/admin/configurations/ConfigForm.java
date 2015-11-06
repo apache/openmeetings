@@ -65,7 +65,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
-				if (c != null && !c.isDeleted() && !c.getConfiguration_id().equals(ConfigForm.this.getModelObject().getConfiguration_id())) {
+				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
 					error(Application.getString(1544L));
 				}
 			}
@@ -84,8 +84,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		Configuration c = cfgDao.forceGet(getModelObject().getConf_key());
-		if (c != null && c.isDeleted() && !c.getConfiguration_id().equals(getModelObject().getConfiguration_id())) {
-			getModelObject().setConfiguration_id(c.getConfiguration_id());
+		if (c != null && c.isDeleted() && !c.getId().equals(getModelObject().getId())) {
+			getModelObject().setId(c.getId());
 		}
 		setModelObject(getBean(ConfigurationDao.class).update(getModelObject(), WebSession.getUserId()));
 		hideNewRecord();
@@ -102,8 +102,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Configuration conf = getModelObject();
-		if (conf.getConfiguration_id() != null) {
-			conf = getBean(ConfigurationDao.class).get(conf.getConfiguration_id());
+		if (conf.getId() != null) {
+			conf = getBean(ConfigurationDao.class).get(conf.getId());
 		} else {
 			conf = new Configuration();
 		}

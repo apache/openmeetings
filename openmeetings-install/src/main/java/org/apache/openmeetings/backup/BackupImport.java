@@ -57,41 +57,36 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
-import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -102,7 +97,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -137,17 +132,13 @@ public class BackupImport {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
+	private UserDao userDao;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
-	@Autowired
-	private UserDao usersDao;
-	@Autowired
-	private FlvRecordingDao flvRecordingDao;
+	private RecordingDao recordingDao;
 	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
+	private PrivateMessageDao privateMessageDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
@@ -155,7 +146,7 @@ public class BackupImport {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -168,10 +159,6 @@ public class BackupImport {
 	private ServerDao serverDao;
 	@Autowired
 	private OAuth2Dao auth2Dao;
-	@Autowired
-	private OrganisationDao organisationDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private RoomOrganisationDao roomOrganisationDao;
 
@@ -240,7 +227,7 @@ public class BackupImport {
 
 			matcher.bind(Long.class, LongTransform.class);
 			registry.bind(Date.class, DateConverter.class);
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
@@ -251,8 +238,8 @@ public class BackupImport {
 				if (cfg != null && !cfg.isDeleted()) {
 					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
 				}
-				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				if (c.getUser() != null && c.getUser().getUser_id() == null) {
+				c.setId(cfg == null ? null : cfg.getId());
+				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
 				}
 				if (CONFIG_CRYPT_KEY.equals(c.getConf_key())) {
@@ -274,10 +261,10 @@ public class BackupImport {
 		{
 			List<Organisation> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Organisation.class);
 			for (Organisation o : list) {
-				long oldId = o.getOrganisation_id();
-				o.setOrganisation_id(null);
-				o = organisationDao.update(o, null);
-				organisationsMap.put(oldId, o.getOrganisation_id());
+				long oldId = o.getId();
+				o.setId(null);
+				o = orgDao.update(o, null);
+				organisationsMap.put(oldId, o.getId());
 			}
 		}
 
@@ -293,7 +280,7 @@ public class BackupImport {
 				if (u.getLogin() == null) {
 					continue;
 				}
-				if (u.getType() == Type.contact && u.getLogin().length() < minLoginLength) {
+				if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
 					u.setLogin(UUID.randomUUID().toString());
 				}
 				//FIXME: OPENMEETINGS-750
@@ -308,16 +295,16 @@ public class BackupImport {
 				}
 				
 				u.setStarttime(new Date());
-				long userId = u.getUser_id();
-				u.setUser_id(null);
+				long userId = u.getId();
+				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
 				}
-				if (!Strings.isEmpty(u.getExternalUserType())) {
-					u.setType(Type.external);
+				if (!Strings.isEmpty(u.getExternalType())) {
+					u.setType(User.Type.external);
 				}
-				usersDao.update(u, -1L);
-				usersMap.put(userId, u.getUser_id());
+				userDao.update(u, -1L);
+				usersMap.put(userId, u.getId());
 			}
 		}
 
@@ -333,25 +320,25 @@ public class BackupImport {
 
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(RoomType.class, new RoomTypeConverter(roomTypeDao));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(Room.Type.class, new RoomTypeConverter());
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {
-				Long roomId = r.getRooms_id();
+				Long roomId = r.getId();
 
 				// We need to reset ids as openJPA reject to store them otherwise
-				r.setRooms_id(null);
+				r.setId(null);
 				if (r.getModerators() != null) {
 					for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
 						RoomModerator rm = i.next();
-						if (rm.getUser().getUser_id() == null) {
+						if (rm.getUser().getId() == null) {
 							i.remove();
 						}
 					}
 				}
 				r = roomDao.update(r, null);
-				roomsMap.put(roomId, r.getRooms_id());
+				roomsMap.put(roomId, r.getId());
 			}
 		}
 
@@ -369,9 +356,9 @@ public class BackupImport {
 			
 			List<RoomOrganisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomOrganisation.class);
 			for (RoomOrganisation ro : list) {
-				if (!ro.getDeleted() && ro.getRoom() != null && ro.getRoom().getRooms_id() != null && ro.getOrganisation() != null && ro.getOrganisation().getOrganisation_id() != null) {
+				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getOrganisation() != null && ro.getOrganisation().getId() != null) {
 					// We need to reset this as openJPA reject to store them otherwise
-					ro.setRooms_organisation_id(null);
+					ro.setId(null);
 					roomOrganisationDao.update(ro, null);
 				}
 			}
@@ -386,7 +373,7 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -405,23 +392,21 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(AppointmentReminderTyps.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(Appointment.Reminder.class, new AppointmentReminderTypeConverter());
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
-			log.debug(list.size() + " Appointments found in backup");
 			for (Appointment a : list) {
 				Long appId = a.getId();
 
 				// We need to reset this as openJPA reject to store them otherwise
 				a.setId(null);
-				if (a.getOwner() != null && a.getOwner().getUser_id() == null) {
+				if (a.getOwner() != null && a.getOwner().getId() == null) {
 					a.setOwner(null);
 				}
-				if (a.getRoom() != null && a.getRoom().getRooms_id() == null) {
+				if (a.getRoom() != null && a.getRoom().getId() == null) {
 					a.setRoom(null);
 				}
 				a = appointmentDao.update(a, null, false);
@@ -482,35 +467,26 @@ public class BackupImport {
 		 * ##################### Import Recordings
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			
-			List<FlvRecording> list = readList(serializer, f, "flvRecordings.xml", "flvrecordings", FlvRecording.class, true);
-			for (FlvRecording fr : list) {
-				fr.setFlvRecordingId(0);
-				if (fr.getRoom_id() != null) {
-					fr.setRoom_id(roomsMap.get(fr.getRoom_id()));
+			List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
+			for (Recording fr : list) {
+				fr.setId(null);
+				if (fr.getRoomId() != null) {
+					fr.setRoomId(roomsMap.get(fr.getRoomId()));
 				}
 				if (fr.getOwnerId() != null) {
 					fr.setOwnerId(usersMap.get(fr.getOwnerId()));
 				}
-				if (fr.getFlvRecordingMetaData() != null) {
-					for (FlvRecordingMetaData meta : fr.getFlvRecordingMetaData()) {
-						meta.setFlvRecordingMetaDataId(0);
-						meta.setFlvRecording(fr);
+				if (fr.getMetaData() != null) {
+					for (RecordingMetaData meta : fr.getMetaData()) {
+						meta.setId(null);
+						meta.setRecording(fr);
 					}
 				}
-				flvRecordingDao.update(fr);
+				recordingDao.update(fr);
 			}
 		}
 
-		log.info("FLVrecording import complete, starting private message folder import");
+		log.info("Recording import complete, starting private message folder import");
 		/*
 		 * ##################### Import Private Message Folders
 		 */
@@ -518,10 +494,10 @@ public class BackupImport {
 			List<PrivateMessageFolder> list = readList(simpleSerializer, f, "privateMessageFolder.xml"
 				, "privatemessagefolders", PrivateMessageFolder.class, true);
 			for (PrivateMessageFolder p : list) {
-				Long folderId = p.getPrivateMessageFolderId();
+				Long folderId = p.getId();
 				PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
 				if (storedFolder == null) {
-					p.setPrivateMessageFolderId(0);
+					p.setId(null);
 					Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
 					messageFoldersMap.put(folderId, newFolderId);
 				}
@@ -537,19 +513,19 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
 				Long ucId = uc.getUserContactId();
-				UserContact storedUC = userContactsDao.get(ucId);
+				UserContact storedUC = userContactDao.get(ucId);
 
-				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
+				if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
 					uc.setUserContactId(0);
-					if (uc.getOwner() != null && uc.getOwner().getUser_id() == null) {
+					if (uc.getOwner() != null && uc.getOwner().getId() == null) {
 						uc.setOwner(null);
 					}
-					Long newId = userContactsDao.addUserContactObj(uc);
+					Long newId = userContactDao.addUserContactObj(uc);
 					userContactsMap.put(ucId, newId);
 				}
 			}
@@ -564,7 +540,7 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -578,28 +554,28 @@ public class BackupImport {
 				
 			}
 			for (PrivateMessage p : list) {
-				p.setId(0);
+				p.setId(null);
 				p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
 				p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
-				if (p.getRoom() != null && p.getRoom().getRooms_id() == null) {
+				if (p.getRoom() != null && p.getRoom().getId() == null) {
 					p.setRoom(null);
 				}
-				if (p.getTo() != null && p.getTo().getUser_id() == null) {
+				if (p.getTo() != null && p.getTo().getId() == null) {
 					p.setTo(null);
 				}
-				if (p.getFrom() != null && p.getFrom().getUser_id() == null) {
+				if (p.getFrom() != null && p.getFrom().getId() == null) {
 					p.setFrom(null);
 				}
-				if (p.getOwner() != null && p.getOwner().getUser_id() == null) {
+				if (p.getOwner() != null && p.getOwner().getId() == null) {
 					p.setOwner(null);
 				}
-				if (oldBackup && p.getOwner() != null && p.getOwner().getUser_id() != null 
-						&& p.getFrom() != null && p.getFrom().getUser_id() != null 
-						&& p.getOwner().getUser_id() == p.getFrom().getUser_id())
+				if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null 
+						&& p.getFrom() != null && p.getFrom().getId() != null 
+						&& p.getOwner().getId() == p.getFrom().getId())
 				{
 					p.setFolderId(SENT_FOLDER_ID);
 				}
-				privateMessagesDao.update(p, null);
+				privateMessageDao.update(p, null);
 			}
 		}
 
@@ -608,29 +584,23 @@ public class BackupImport {
 		 * ##################### Import File-Explorer Items
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			
-			List<FileExplorerItem> list = readList(serializer, f, "fileExplorerItems.xml", "fileExplorerItems", FileExplorerItem.class, true);
+			List<FileExplorerItem> list = readFileExplorerItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
 			for (FileExplorerItem file : list) {
 				// We need to reset this as openJPA reject to store them otherwise
-				file.setFileExplorerItemId(0);
-				Long roomId = file.getRoom_id();
-				file.setRoom_id(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
+				file.setId(null);
+				Long roomId = file.getRoomId();
+				file.setRoomId(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
 				if (file.getOwnerId() != null) {
 					file.setOwnerId(usersMap.get(file.getOwnerId()));
+				}
+				if (file.getParentItemId() != null && file.getParentItemId() <= 0L) {
+					file.setParentItemId(null);
 				}
 				fileExplorerItemDao.addFileExplorerItem(file);
 			}
 		}
 
-		log.info("File explorer item import complete, starting file poll import");
+		log.info("File explorer item import complete, starting room poll import");
 		/*
 		 * ##################### Import Room Polls
 		 */
@@ -641,22 +611,22 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy, matcher);
 	
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(PollType.class, new PollTypeConverter(pollManager));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
-				if (rp.getRoom() == null || rp.getRoom().getRooms_id() == null) {
+				if (rp.getRoom() == null || rp.getRoom().getId() == null) {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy() == null || rp.getCreatedBy().getUser_id() == null) {
+				if (rp.getCreatedBy() == null || rp.getCreatedBy().getId() == null) {
 					rp.setCreatedBy(null);
 				}
-				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
-					if (rpa.getVotedUser() == null || rpa.getVotedUser().getUser_id() == null) {
+				for (RoomPollAnswer rpa : rp.getRoomPollAnswerList()) {
+					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
 						rpa.setVotedUser(null);
 					}
 				}
@@ -705,14 +675,138 @@ public class BackupImport {
 	}
 	
 	private Node getNode(Node doc, String name) {
-		NodeList nl = doc.getChildNodes();
-		for (int i = 0; i < nl.getLength(); ++i) {
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE && name.equals(node.getNodeName())) {
-				return node;
+		if (doc != null) {
+			NodeList nl = doc.getChildNodes();
+			for (int i = 0; i < nl.getLength(); ++i) {
+				Node node = nl.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE && name.equals(node.getNodeName())) {
+					return node;
+				}
 			}
 		}
 		return null;
+	}
+	
+	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<FileExplorerItem> list = new ArrayList<FileExplorerItem>();
+		File xml = new File(baseDir, fileName);
+		if (xml.exists()) {
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer ser = new Persister(strategy, matcher);
+
+			matcher.bind(Long.class, LongTransform.class);
+			matcher.bind(Integer.class, IntegerTransform.class);
+			registry.bind(Date.class, DateConverter.class);
+			
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+			InputNode listNode = root.getNext();
+			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				while (item != null) {
+					FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
+					
+					boolean isFolder = false, isImage = false, isVideo = false, isPresentation = false, isStoredWmlFile = false, isChart = false;
+					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+					do {
+						if ("isChart".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isChart = true;
+						}
+						if ("isImage".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isImage = true;
+						}
+						if ("isVideo".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isVideo = true;
+						}
+						if ("isRecording".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							log.warn("Recording is stored in FileExplorer Items");
+							isVideo = true;
+						}
+						if ("isPresentation".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isPresentation = true;
+						}
+						if ("isStoredWmlFile".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isStoredWmlFile = true;
+						}
+						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isFolder = true;
+						}
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
+					
+					if (f.getType() == null) {
+						if (isChart) {
+							f.setType(FileItem.Type.PollChart);
+						}
+						if (isImage) {
+							f.setType(FileItem.Type.Image);
+						}
+						if (isVideo) {
+							f.setType(FileItem.Type.Video);
+						}
+						if (isPresentation) {
+							f.setType(FileItem.Type.Presentation);
+						}
+						if (isStoredWmlFile) {
+							f.setType(FileItem.Type.WmlFile);
+						}
+						if (isFolder) {
+							f.setType(FileItem.Type.Folder);
+						}
+					}
+					list.add(f);
+					item = listNode.getNext();
+				}
+			}
+		}
+		return list;
+	}
+	
+	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<Recording> list = new ArrayList<Recording>();
+		File xml = new File(baseDir, fileName);
+		if (xml.exists()) {
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer ser = new Persister(strategy, matcher);
+	
+			matcher.bind(Long.class, LongTransform.class);
+			matcher.bind(Integer.class, IntegerTransform.class);
+			registry.bind(Date.class, DateConverter.class);
+			
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder
+			InputNode listNode = root.getNext();
+			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
+				while (item != null) {
+					Recording r = ser.read(Recording.class, item, false);
+					
+					boolean isFolder = false;
+					//HACK to handle old isFolder
+					do {
+						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isFolder = true;
+						}
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"flvrecording".equals(item1.getName()));
+					
+					if (r.getType() == null) {
+						r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
+					}
+					list.add(r);
+					item = listNode.getNext();
+				}
+			}
+		}
+		return list;
 	}
 	
 	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
@@ -734,7 +828,7 @@ public class BackupImport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 
-		registry.bind(User.class, new UserConverter(usersDao, usersMap));
+		registry.bind(User.class, new UserConverter(userDao, usersMap));
 		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
 		
 		File xml = new File(baseDir, filename);
@@ -764,20 +858,20 @@ public class BackupImport {
 				if (mm.getUser() == null) {
 					mm.setUser(new User());
 				}
-				if (mm.getUser().getUser_id() == null) {
+				if (mm.getUser().getId() == null) {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {
-						if (Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
+						if (User.Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
 							mm.getUser().setFirstname(item1.getValue());
 						}
-						if (Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
+						if (User.Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
 							mm.getUser().setLastname(item1.getValue());
 						}
 						if ("email".equals(item1.getName())) {
 							String email = item1.getValue();
 							if (mm.getAppointment() != null && mm.getAppointment().getOwner() != null) {
-								mm.setUser(usersDao.getContact(email, mm.getAppointment().getOwner()));
+								mm.setUser(userDao.getContact(email, mm.getAppointment().getOwner()));
 							}
 							contactValid = true;
 						}
@@ -803,7 +897,7 @@ public class BackupImport {
 		return list;
 	}
 	
-	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
+	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -811,41 +905,45 @@ public class BackupImport {
 
 		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 		registry.bind(State.class, new StateConverter(statemanagement));
+		registry.bind(Salutation.class, SalutationConverter.class);
 		registry.bind(Date.class, DateConverter.class);
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
-		NodeList nl = getNode(getNode(doc, "root"), listNodeName).getChildNodes();
 		userEmailMap.clear();
 		//add existence email from database
-		List<User>  users = usersDao.getAllUsers();
+		List<User>  users = userDao.getAllUsers();
 		for (User u : users){
-			if (u.getAdresses() == null || u.getAdresses().getEmail() == null || Type.user != u.getType()) {
+			if (u.getAddress() == null || u.getAddress().getEmail() == null || User.Type.user != u.getType()) {
 				continue;
 			}
-			userEmailMap.put(u.getAdresses().getEmail(), -1);
+			userEmailMap.put(u.getAddress().getEmail(), -1);
 		}
-		// one of the old OM version created 2 nodes "deleted" this code block handles this
-		for (int i = 0; i < nl.getLength(); ++i) {
-			Node user = nl.item(i);
-			NodeList nl1 = user.getChildNodes();
-			boolean deletedFound = false;
-			for (int j = 0; j < nl1.getLength(); ++j) {
-				Node node = nl1.item(j);
-				if (node.getNodeType() == Node.ELEMENT_NODE && "deleted".equals(node.getNodeName())) {
-					if (deletedFound) {
-						user.removeChild(node);
-						break;
+		Node nList = getNode(getNode(doc, "root"), listNodeName);
+		if (nList != null) {
+			NodeList nl = nList.getChildNodes();
+			// one of the old OM version created 2 nodes "deleted" this code block handles this
+			for (int i = 0; i < nl.getLength(); ++i) {
+				Node user = nl.item(i);
+				NodeList nl1 = user.getChildNodes();
+				boolean deletedFound = false;
+				for (int j = 0; j < nl1.getLength(); ++j) {
+					Node node = nl1.item(j);
+					if (node.getNodeType() == Node.ELEMENT_NODE && "deleted".equals(node.getNodeName())) {
+						if (deletedFound) {
+							user.removeChild(node);
+							break;
+						}
+						deletedFound = true;
 					}
-					deletedFound = true;
 				}
 			}
 		}
 		
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
-        xformer.transform(new DOMSource(doc), new StreamResult(sw));
-        
+		xformer.transform(new DOMSource(doc), new StreamResult(sw));
+
 		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
@@ -862,9 +960,9 @@ public class BackupImport {
 				
 				boolean needToSkip1 = true;
 				//HACK to handle Address inside user
-				if (u.getAdresses() == null) {
+				if (u.getAddress() == null) {
 					Address a = ser.read(Address.class, item1, false);
-					u.setAdresses(a);
+					u.setAddress(a);
 					needToSkip1 = false;
 				}
 				if (needToSkip1) {
@@ -872,14 +970,14 @@ public class BackupImport {
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
 					} while (item1 != null && !"user".equals(item1.getName()));
 				}
-				String level_id = null, status = null;
+				String levelId = null, status = null;
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
 						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
 					}
 					if ("level_id".equals(item2.getName())) {
-						level_id = item2.getValue();
+						levelId = item2.getValue();
 					}
 					if ("status".equals(item2.getName())) {
 						status = item2.getValue();
@@ -892,22 +990,22 @@ public class BackupImport {
 						u.getRights().add(Right.Dashboard);
 						u.getRights().add(Right.Login);
 					}
-					if ("3".equals(level_id)) {
+					if ("3".equals(levelId)) {
 						u.getRights().add(Right.Admin);
 						u.getRights().add(Right.Soap);
 					}
-					if ("4".equals(level_id)) {
+					if ("4".equals(levelId)) {
 						u.getRights().add(Right.Soap);
 					}
 				}
 				// check that email is unique
-				if (u.getAdresses() != null && u.getAdresses().getEmail() != null && Type.user == u.getType()) {
-					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
+				if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
+					if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 						log.warn("Email is duplicated for user " + u.toString());
-						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
-						u.getAdresses().setEmail(updateEmail);
+						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAddress().getEmail();
+						u.getAddress().setEmail(updateEmail);
 					}
-					userEmailMap.put(u.getAdresses().getEmail(), userEmailMap.size());
+					userEmailMap.put(u.getAddress().getEmail(), userEmailMap.size());
 				}
 				list.add(u);
 				item = listNode.getNext();

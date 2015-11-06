@@ -53,9 +53,9 @@ public class TestUserContact extends AbstractWicketTester {
 		User u = getUser(rnd);
 		u.getOrganisation_users().add(new Organisation_Users(orgDao.get(1L)));
 		u = userDao.update(u, null);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getUser_id(), "pass" + rnd));
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
 		
-		User u1 = userDao.get(u.getUser_id());
+		User u1 = userDao.get(u.getId());
 		assertNotNull("Just created user should not be null", u1);
 		assertNotNull("Just created user should have non null org-users", u1.getOrganisation_users());
 		assertFalse("Just created user should have not empty org-users", u1.getOrganisation_users().isEmpty());
@@ -65,7 +65,7 @@ public class TestUserContact extends AbstractWicketTester {
 	public void createUser() throws Exception {
 		int rnd = random.nextInt();
 		User u = createUser(rnd);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getUser_id(), "pass" + rnd));
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class TestUserContact extends AbstractWicketTester {
 		assertFalse("User list should not be empty ", users.isEmpty());
 		
 		User contact = createUserContact(random.nextInt(), getUserId());
-		String email = contact.getAdresses().getEmail();
+		String email = contact.getAddress().getEmail();
 		List<User> l = userDao.get(email, false, 0, 9999);
 		// check that contact is visible for admin
 		assertNotNull("Contact list should not be null for admin ", l);
@@ -93,13 +93,13 @@ public class TestUserContact extends AbstractWicketTester {
 
 		User u = createUser(random.nextInt());
 		User u1 = createUser(random.nextInt());
-		contact = createUserContact(random.nextInt(), u.getUser_id());
-		email = contact.getAdresses().getEmail();
+		contact = createUserContact(random.nextInt(), u.getId());
+		email = contact.getAddress().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
-		l = userDao.get(email, 0, 9999, null, true, u1.getUser_id());
+		l = userDao.get(email, 0, 9999, null, true, u1.getId());
 		assertTrue("Contact list should be empty for another user", l.isEmpty());
 		//delete contact
-		userDao.delete(contact, u.getUser_id());
+		userDao.delete(contact, u.getId());
 		l = userDao.get(email, false, 0, 9999);
 		assertTrue("Contact list should be empty after deletion", l.isEmpty());
 	}

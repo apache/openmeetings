@@ -51,7 +51,7 @@ public class RoomsTabbedPanel extends UserPanel {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new WebMarkupContainer("link")
 					.add(new Label("name", Model.of(org.getName())))
-					.add(new AttributeModifier("href", "#org" + org.getOrganisation_id())));
+					.add(new AttributeModifier("href", "#org" + org.getId())));
 			}
 		});
 		add(new ListView<Organisation_Users>("orgRooms", u.getOrganisation_users()) {
@@ -61,8 +61,8 @@ public class RoomsTabbedPanel extends UserPanel {
 			protected void populateItem(ListItem<Organisation_Users> item) {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new RoomsPanel("rooms"
-					, getBean(RoomDao.class).getOrganisationRooms(org.getOrganisation_id()))
-					.setMarkupId("org" + org.getOrganisation_id())).setRenderBodyOnly(true);
+					, getBean(RoomDao.class).getOrganisationRooms(org.getId()))
+					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);
 			}
 		});
 		add(new JQueryBehavior("#orgTabs", "tabs"));

@@ -25,9 +25,10 @@ html, body {
 	font-size: 28px;
 	line-height: 40px;
 	font-weight: bold;
-	background-image: url(../public/themes/basic-theme/general/logo.png);
+	background-image: url(images/logo.png);
 	background-repeat: no-repeat;
 	padding-left: 150px;
+	margin-bottom: 10px;
 }
 #topLinks {
 	position: absolute;
@@ -46,9 +47,13 @@ html, body {
 	border-right: none;
 }
 
-#menu {
+#menu, #roomMenu {
 	background-color: #AFCBFB;
-	margin-top: 10px;
+	max-height: 30px;
+	overflow-y: hidden;
+}
+#menu .ui-menubar.ui-widget-header.ui-helper-clearfix, #roomMenu .ui-menubar.ui-widget-header.ui-helper-clearfix {
+	border-right: 0;
 }
 .ui-menubar .ui-menu {
 	width: 250px;
@@ -68,45 +73,17 @@ html, body {
 #busy_indicator {
 	display: none;
 	float: right;
-	margin-top: 5px;
 	z-index: 1000;
 	width: 200px;
 	font-weight: bold;
 	text-align: center;
 	font-size: 1em;
 	color: #FF0000;
+	height: 30px;
+	border: 0;
 }
-
-#chatPanel {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	right: 10px;
-	width: 600px;
-}
-#chatPanel #chat {
-	height: 20px;
-}
-#chatPanel #chat #controlBlock #control {
-	text-align: center;
-}
-#chatPanel #chat #messageArea .date {
-    margin-right: 5px;
-    font-style: italic;
-    font-size: smaller;
-}
-#chatPanel #chat #messageArea .from {
-	margin-left: 5px;
-    margin-right: 5px;
-	font-weight: bold;
-}
-#messageArea {
-	height: 165px;
-	overflow-y: auto;
-}
-#chatMessage .wysiwyg-editor {
-	height: 70px;
-	max-height: 70px;
+#busy_indicator span {
+	vertical-align: sub;
 }
 .clickable {
 	cursor: pointer;
@@ -247,18 +224,18 @@ html, body {
 	display: inline-block;
 }
 .start_step1 {
-	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_1.png);
+	background-image: url(images/wizzard_button_1.png);
 }
 .start_step2 {
-	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_2.png);
+	background-image: url(images/wizzard_button_2.png);
 	margin-left: 20px;
 }
 .start_step3 {
-	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_3.png);
+	background-image: url(images/wizzard_button_3.png);
 	margin-left: 40px;
 }
 .start_step4 {
-	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_4.png);
+	background-image: url(images/wizzard_button_4.png);
 	margin-left: 60px;
 }
 .widget {
@@ -266,6 +243,8 @@ html, body {
 }
 .widget td {
 	min-width: 150px;
+}
+#contents {
 }
 #contents .dragbox-content {
 	min-height: 300px;
@@ -277,13 +256,18 @@ html, body {
 #feeds.ui-accordion .ui-accordion-header {
 	margin-bottom: 2px;
 }
-.recording {
+.file.tree.container {
+	border: 1px solid #ccc;
+}
+.file.tree {
 	width: 100%;
 	display: inline-block;
 }
-.recording .files {
-	width: 250px;
-	border: 1px solid #ccc;
+.file.tree .trees {
+	min-height: 400px;
+	max-height: 600px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 .trash-toolbar {
 	font-weight: bold;
@@ -293,16 +277,10 @@ html, body {
 .trash-toolbar-hover {
 	color: inherit;
 }
-.recording .files .trees {
-	min-height: 400px;
-	max-height: 600px;
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-.recording .files .sizes table, .recording .files .info table {
+.file.tree .files .sizes table, .file.tree .files .info table {
 	width: 100%;
 }
-.recording .files .info input {
+.file.tree .files .info input {
 	width: 100%;
 	padding-right: 5px;
 	padding-left: 5px;
@@ -378,45 +356,61 @@ html, body {
 	padding-left: 18px;
 	background-image: url(images/film_processing.png);
 }
-.my-recordings.om-icon {
+.file.om-icon {
 	padding-left: 18px;
+}
+.my.file.om-icon {
 	background-image: url(images/house_link.png);
 }
-.public-recordings.om-icon {
-	padding-left: 18px;
+.public.file.om-icon {
 	background-image: url(images/world_link.png);
+}
+.image.file.om-icon {
+	background-image: url(images/photo.png);
+}
+.chart.file.om-icon {
+	background-image: url(images/chart_pie.png);
+}
+.wml.file.om-icon {
+	background-image: url(images/map.png);
+}
+.doc.file.om-icon {
+	background-image: url(images/report.png);
+}
+.selected .file.item {
+	background-color: #0099FF;
 }
 .tree-theme-windows span.tree-content {
 	display: flex !important;
 }
-.recording.item {
+.file.item {
 	position: relative;
+	display: inline-block;
 	vertical-align: top;
 }
-.recording.item .name {
+.file.item .name {
 	color: black;
 	display: block;
 	overflow: hidden;
 	width: 230px;
 }
-.recording.item .errors {
+.file.item .errors {
 	position: absolute;
 	right: 0px;
 	background-image: url(images/script_error.png);
 	width: 16px;
 	height: 16px;
 	background-repeat: no-repeat;
-	padding-right: 20px;
 }
-.recording.dialog.errors {
+.file.tree .dialog.errors {
 	width: 600px;
 	height: 500px;
 	font-size: small;
 }
-.recording.dialog.errors .alert {
+.file.tree .dialog.errors .alert {
 	color: red;
 }
-.recording.dialog.errors .message {
+.file.tree .dialog.errors .message {
 	display: block;
 	unicode-bidi: embed;
 	font-family: monospace;
@@ -538,6 +532,9 @@ select.messages.selector {
 	width: 1px;
 	height: 1px;
 }
+#messagesTable tr.selected {
+	background-color: #d7ebf9;
+}
 #messagesTable tr.unread {
 	font-weight: bold;
 }
@@ -600,6 +597,13 @@ select.messages.selector {
 }
 .user.info.panel fieldset table, .user.info.panel fieldset table textarea {
 	width: 100%;
+}
+#topControls #wicketDebugBar {
+	right: initial;
+	top: initial;
+	z-index: 2;
+	bottom: 0;
+	position: fixed;
 }
 form .input {
 	display: block;

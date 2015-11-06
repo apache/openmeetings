@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
@@ -128,9 +128,9 @@ public class UserSearchPanel extends UserPanel {
 
 			@Override
 			protected void populateItem(Item<User> item) {
-				final UserContactsDao contactsDao = getBean(UserContactsDao.class);
+				final UserContactDao contactsDao = getBean(UserContactDao.class);
 				User u = item.getModelObject();
-				final long userId = u.getUser_id();
+				final long userId = u.getId();
 				item.add(new WebMarkupContainer("status").add(AttributeModifier.append("class", isUserOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.core.data.flvrecord.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
+import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
@@ -35,12 +35,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
+import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
+import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.io.flv.impl.FLVWriter;
@@ -54,9 +54,9 @@ public abstract class BaseConverter {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FlvRecordingMetaDataDao metaDataDao;
+	private RecordingMetaDataDao metaDataDao;
 	@Autowired
-	private FlvRecordingMetaDeltaDao metaDeltaDao;
+	private RecordingMetaDeltaDao metaDeltaDao;
 
 	private String getPath(String key, String app) {
 		String path = configurationDao.getConfValue(key, String.class, "");
@@ -83,8 +83,8 @@ public abstract class BaseConverter {
 		return "1".equals(configurationDao.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
 	
-	protected File getStreamFolder(FlvRecording flvRecording) {
-		return getStreamsSubDir(flvRecording.getRoom_id());
+	protected File getStreamFolder(Recording flvRecording) {
+		return getStreamsSubDir(flvRecording.getRoomId());
 	}
 
 	protected long diff(Date from, Date to) {
@@ -109,7 +109,7 @@ public abstract class BaseConverter {
 		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
 	}
 
-	protected void updateDuration(FlvRecording r) {
+	protected void updateDuration(Recording r) {
 		r.setDuration(formatMillis(diff(r.getRecordEnd(), r.getRecordStart())));
 	}
 	
@@ -134,11 +134,11 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 	
-	protected void stripAudioFirstPass(FlvRecording flvRecording, List<ConverterProcessResult> returnLog,
+	protected void stripAudioFirstPass(Recording flvRecording, List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder)
 	{
 		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder
-				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId()));
+				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getId()));
 	}
 	
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
@@ -156,24 +156,24 @@ public abstract class BaseConverter {
 		return argv;
 	}
 	
-	private static File getMetaFlvSer(FlvRecordingMetaData metaData) {
-		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+	private static File getMetaFlvSer(RecordingMetaData metaData) {
+		File metaDir = getStreamsSubDir(metaData.getRecording().getRoomId());
 		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
 	}
 	
-	public static void printMetaInfo(FlvRecordingMetaData metaData, String prefix) {
+	public static void printMetaInfo(RecordingMetaData metaData, String prefix) {
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getFlvRecording().getFlvRecordingId()
-					, metaData.getFlvRecordingMetaDataId(), metaData.getStreamStatus()));
-			File metaFlv = getRecordingMetaData(metaData.getFlvRecording().getRoom_id(), metaData.getStreamName());
+			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getRecording().getId()
+					, metaData.getId(), metaData.getStreamStatus()));
+			File metaFlv = getRecordingMetaData(metaData.getRecording().getRoomId(), metaData.getStreamName());
 			File metaSer = getMetaFlvSer(metaData);
 			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
 			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
 		}
 	}
 	
-	protected FlvRecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
-		FlvRecordingMetaData metaData = metaDataDao.get(metaId);
+	protected RecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
+		RecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
 			log.debug("### meta Stream not yet written to disk " + metaId);
 			long counter = 0;
@@ -188,7 +188,7 @@ public abstract class BaseConverter {
 					log.debug("### Thread continue ... " );
 					break;
 				} else {
-					File metaFlv = getRecordingMetaData(metaData.getFlvRecording().getRoom_id(), metaData.getStreamName());
+					File metaFlv = getRecordingMetaData(metaData.getRecording().getRoomId(), metaData.getStreamName());
 					if (metaFlv.exists() && maxTimestamp < metaFlv.lastModified()) {
 						maxTimestamp = metaFlv.lastModified();
 					}
@@ -226,17 +226,17 @@ public abstract class BaseConverter {
 		return metaData;
 	}
 	
-	protected void stripAudioFirstPass(FlvRecording flvRecording,
+	protected void stripAudioFirstPass(Recording flvRecording,
 			List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder,
-			List<FlvRecordingMetaData> metaDataList) {
+			List<RecordingMetaData> metaDataList) {
 		try {
 			// Init variables
 			log.debug("### meta Data Number - " + metaDataList.size());
 			log.debug("###################################################");
 	
-			for (FlvRecordingMetaData metaData : metaDataList) {
-				long metaId = metaData.getFlvRecordingMetaDataId();
+			for (RecordingMetaData metaData : metaDataList) {
+				long metaId = metaData.getId();
 				log.debug("### processing metadata: " + metaId);
 				if (metaData.getStreamStatus() == Status.NONE) {
 					log.debug("Stream has not been started, error in recording " + metaId);
@@ -270,11 +270,11 @@ public abstract class BaseConverter {
 					File outputGapFullWav = outputWav;
 	
 					// Fix Start/End in Audio
-					List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = metaDeltaDao.getFlvRecordingMetaDeltaByMetaId(metaId);
+					List<RecordingMetaDelta> flvRecordingMetaDeltas = metaDeltaDao.getByMetaId(metaId);
 	
 					int counter = 0;
 	
-					for (FlvRecordingMetaDelta metaDelta : flvRecordingMetaDeltas) {
+					for (RecordingMetaDelta metaDelta : flvRecordingMetaDeltas) {
 						File inputFile = outputGapFullWav;
 	
 						// Strip Wave to Full Length
@@ -295,9 +295,9 @@ public abstract class BaseConverter {
 						}
 	
 						if (argv_sox != null) {
-							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getFlvRecordingMetaDeltaId());
+							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getId());
 	
-							metaDeltaDao.updateFlvRecordingMetaDelta(metaDelta);
+							metaDeltaDao.update(metaDelta);
 							counter++;
 						} else {
 							outputGapFullWav = inputFile;
@@ -337,7 +337,7 @@ public abstract class BaseConverter {
 		}
 	}
 	
-	public void convertToMp4(FlvRecording r, List<ConverterProcessResult> returnLog) throws IOException {
+	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
 		if (!isRecordingExists(r.getFileHash())) {
 			return;

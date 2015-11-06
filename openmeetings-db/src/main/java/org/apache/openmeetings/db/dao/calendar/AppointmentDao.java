@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -55,38 +56,19 @@ public class AppointmentDao {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private IInvitationManager invitationManager;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private IInvitationManager invitationManager;
 
 	/*
 	 * insert, update, delete, select
 	 */
-
-	/**
-	 * @author o.becherer Retrievment of Appointment for room
-	 */
-	// -----------------------------------------------------------------------------------------------
-	public Appointment getAppointmentByRoom(Long room_id) {
-		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
-
-		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByRoomId", Appointment.class);
-		query.setParameter("room_id", room_id);
-
-		List<Appointment> appoint = query.getResultList();
-
-		if (appoint.size() > 0) {
-			return appoint.get(0);
-		}
-
-		return null;
-	}
 
 	// -----------------------------------------------------------------------------------------------
 
@@ -102,8 +84,8 @@ public class AppointmentDao {
 		return appoint;
 	}
 
-	public Appointment getAppointmentByIdBackup(Long appointmentId) {
-		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", appointmentId);
+	public Appointment getAny(Long id) {
+		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", id);
 
 		Appointment appoint = null;
 		try {
@@ -114,7 +96,7 @@ public class AppointmentDao {
 		return appoint;
 	}
 
-	public List<Appointment> getAppointments() {
+	public List<Appointment> get() {
 		return em.createNamedQuery("getAppointments", Appointment.class).getResultList();
 	}
 
@@ -124,7 +106,7 @@ public class AppointmentDao {
 	
 	public Appointment update(Appointment a, Long userId, boolean sendmails) {
 		Room r = a.getRoom();
-		if (r.getRooms_id() == null) {
+		if (r.getId() == null) {
 			r.setName(a.getTitle());
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
@@ -174,48 +156,30 @@ public class AppointmentDao {
 		return a;
 	}
 	
-	public List<Appointment> getAppointmentsByRoomId(Long roomId) {
-		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.room.rooms_id = :roomId ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
-			query.setParameter("roomId", roomId);
-			List<Appointment> ll = query.getResultList();
-
-			return ll;
-		} catch (Exception e) {
-			log.error("[getAppointmentsByRoomId]", e);
-		}
-		return null;
-	}
-
 	// ----------------------------------------------------------------------------------------------------------
 
 	public void delete(Appointment a, Long userId) {
 		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);
-		if (Boolean.TRUE.equals(a.getRoom().getAppointment())) {
+		if (a.getRoom().isAppointment()) {
 			a.getRoom().setDeleted(true);
 		}
 		update(a, userId);
 	}
 	
-	public List<Appointment> getAppointmentsByRange(Long userId, Date start, Date end) {
+	public List<Appointment> getInRange(Long userId, Date start, Date end) {
 		log.debug("Start " + start + " End " + end);
 
 		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-		query.setParameter("starttime", start);
-		query.setParameter("endtime", end);
+		query.setParameter("start", start);
+		query.setParameter("end", end);
 		query.setParameter("userId", userId);
 		
 		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
-		q1.setParameter("starttime", start);
-		q1.setParameter("endtime", end);
+		q1.setParameter("start", start);
+		q1.setParameter("end", end);
 		q1.setParameter("userId", userId);
 		for (Appointment a : q1.getResultList()) {
 			a.setConnectedEvent(true); //TODO need to be reviewed
@@ -225,34 +189,16 @@ public class AppointmentDao {
 		return listAppoints;
 	}
 
-	public List<Appointment> getAppointmentsInRange(Calendar start, Calendar end) {
+	public List<Appointment> getInRange(Calendar start, Calendar end) {
 		TypedQuery<Appointment> q = em.createNamedQuery("appointmentsInRangeRemind", Appointment.class);
-		q.setParameter("starttime", start.getTime());
-		q.setParameter("endtime", end.getTime());
+		q.setParameter("none", Reminder.none);
+		q.setParameter("start", start.getTime());
+		q.setParameter("end", end.getTime());
 		return q.getResultList();
 	}
 	
-	public List<Appointment> getAppointmentsByCat(Long categoryId) {
-		try {
-
-			String hql = "select a from Appointments a "
-					+ "WHERE a.deleted false "
-					+ "AND a.appointmentCategory.categoryId = :categoryId";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
-			query.setParameter("categoryId", categoryId);
-
-			List<Appointment> listAppoints = query.getResultList();
-			return listAppoints;
-		} catch (Exception ex2) {
-			log.error("[getAppointements]: ", ex2);
-		}
-		return null;
-	}
-
 	// next appointment to select date
-	public Appointment getNextAppointment(Long userId, Date start) {
+	public Appointment getNext(Long userId, Date start) {
 		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)
 				.setParameter("start", start).setParameter("userId", userId).getResultList();
 		return list == null || list.isEmpty() ? null : list.get(0);
@@ -268,10 +214,10 @@ public class AppointmentDao {
 	 * @param userId
 	 * @return
 	 */
-	public List<Appointment> getTodaysAppointmentsbyRangeAndMember(Long userId) {
+	public List<Appointment> getForToday(Long userId) {
 		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
 
-		TimeZone timeZone = timezoneUtil.getTimeZone(usersDao.get(userId));
+		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);
@@ -287,8 +233,8 @@ public class AppointmentDao {
 
 		query.setParameter("userId", userId);
 
-		query.setParameter("starttime", startCal.getTime());
-		query.setParameter("endtime", endCal.getTime());
+		query.setParameter("start", startCal.getTime());
+		query.setParameter("end", endCal.getTime());
 
 		List<Appointment> listAppoints = query.getResultList();
 		return listAppoints;
@@ -296,33 +242,30 @@ public class AppointmentDao {
 
 	// ---------------------------------------------------------------------------------------------
 
-	public Appointment getAppointmentByRoomId(Long user_id, Long rooms_id) {
+	public Appointment getByRoom(Long userId, Long roomId) {
 		try {
+			List<Appointment> list = em.createNamedQuery("getAppointmentByOwnerRoomId", Appointment.class)
+					.setParameter("userId", userId)
+					.setParameter("roomId", roomId)
+					.getResultList();
 
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.owner.user_id = :user_id "
-					+ "AND a.room.rooms_id = :rooms_id ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
-
-			query.setParameter("deleted", true);
-			query.setParameter("user_id", user_id);
-			query.setParameter("rooms_id", rooms_id);
-
-			List<Appointment> listAppoints = query.getResultList();
-
-			if (listAppoints.size() > 0) {
-				return listAppoints.get(0);
-			}
-
-			return null;
-
+			return list.size() > 0 ? list.get(0) : null;
 		} catch (Exception e) {
-			log.error("[getAppointmentByRoomId]", e);
+			log.error("[getByRoom]", e);
 			return null;
 		}
 	}
 
+	public Appointment getByRoom(Long roomId) {
+		List<Appointment> list = em.createNamedQuery("getAppointmentByRoomId", Appointment.class)
+				.setParameter("roomId", roomId)
+				.getResultList();
+
+		Appointment a = list.size() > 0 ? list.get(0) : null;
+		if (a != null && !a.getRoom().isAppointment()) {
+			throw new RuntimeException("Room " + a.getRoom().getName() + " isnt part of an appointed meeting");
+		}
+
+		return a;
+	}
 }

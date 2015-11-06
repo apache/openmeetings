@@ -26,6 +26,8 @@ public class Cliparts {
 	private String[] generalList;
 	private List<Cliparts> subCategories;
 
+	public Cliparts() {}
+	
 	public String[] getGeneralList() {
 		return generalList;
 	}

@@ -68,7 +68,7 @@ public class TestHashMapSession extends AbstractJUnitDefaults {
 			rcm.setSwfurl("swfUrl");
 			rcm.setIsMod(new Boolean(false));
 			rcm.setCanDraw(new Boolean(false));
-			rcm.setIsAVClient(false);
+			rcm.setAvClient(false);
 
 			if (cache.containsKey(null, streamId)) {
 				log.error("Tried to add an existing Client " + streamId);

@@ -34,6 +34,8 @@ public class WhiteboardObject {
 	private Map<String, List> roomItems = new HashMap<String, List>();
 	private Date created = new Date();
 
+	public WhiteboardObject() {}
+	
 	public Long getWhiteBoardId() {
 		return whiteBoardId;
 	}

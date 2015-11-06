@@ -43,14 +43,14 @@ public class TestUserCount extends AbstractWicketTester {
 	@Test
 	public void testCountFilteredUsres() throws Exception {
 		User u = createUser(random.nextInt());
-		User contact = createUserContact(random.nextInt(), u.getUser_id());
-		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getUser_id()) == 1);
+		User contact = createUserContact(random.nextInt(), u.getId());
+		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getId()) == 1);
 	}
 
 	@Test
 	public void testCountUnfilteredUsres() throws Exception {
 		User u = createUser(random.nextInt());
-		createUserContact(random.nextInt(), u.getUser_id());
+		createUserContact(random.nextInt(), u.getId());
 		assertTrue("Account of unfiltered should be more then one", userDao.count("firstname", false, getUserId()) > 1);
 	}
 		

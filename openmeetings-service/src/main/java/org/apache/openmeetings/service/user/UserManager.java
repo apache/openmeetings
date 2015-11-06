@@ -153,9 +153,9 @@ public class UserManager implements IUserManager {
 
 			if (sessionData != null) {
 
-				User u = userDao.get(sessionData.getUser_id());
+				User u = userDao.get(sessionData.getUserId());
 
-				sessiondataDao.updateUserWithoutSession(SID, u.getUser_id());
+				sessiondataDao.updateUserWithoutSession(SID, u.getId());
 
 				return u;
 			}
@@ -281,14 +281,14 @@ public class UserManager implements IUserManager {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param states_id
+	 * @param stateId
 	 * @param town
 	 * @param language_id
 	 * @return
 	 */
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
+			String additionalname, String fax, String zip, long stateId,
 			String town, long language_id, String phone, boolean sendSMS, boolean generateSipUserData, String jNameTimeZone) {
 		
 		String baseURL = cfgDao.getBaseUrl();
@@ -297,24 +297,24 @@ public class UserManager implements IUserManager {
 				&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, states_id, town, language_id,
+				street, additionalname, fax, zip, stateId, town, language_id,
 				phone, sendSMS, generateSipUserData, jNameTimeZone, sendConfirmation);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone, boolean sendSMS, 
+			long stateId, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone) {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, states_id, town, language_id,
+				street, additionalname, fax, zip, stateId, town, language_id,
 				phone, sendSMS, generateSipUserData, jNameTimeZone, false);
 	}
 
-	private Long registerUser(String login, String Userpass, String lastname,
+	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
+			String additionalname, String fax, String zip, long stateId,
 			String town, long language_id, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
@@ -325,7 +325,7 @@ public class UserManager implements IUserManager {
 
 				Long user_id = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
-						additionalname, fax, zip, states_id, town, language_id,
+						additionalname, fax, zip, stateId, town, language_id,
 						true, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
@@ -355,7 +355,7 @@ public class UserManager implements IUserManager {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param states_id
+	 * @param stateId
 	 * @param town
 	 * @param language_id
 	 * @param sendWelcomeMessage
@@ -376,7 +376,7 @@ public class UserManager implements IUserManager {
 	 */
 	public Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
+			String additionalname, String fax, String zip, long stateId,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
@@ -404,7 +404,7 @@ public class UserManager implements IUserManager {
 						return -19L;
 					}
 				}
-				Address adr =  userDao.getAddress(street, zip, town, states_id, additionalname, fax, phone, email);
+				Address adr =  userDao.getAddress(street, zip, town, stateId, additionalname, fax, phone, email);
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
@@ -423,7 +423,7 @@ public class UserManager implements IUserManager {
 				if (u == null) {
 					return -111L;
 				}
-				log.debug("Added user-Id " + u.getUser_id());
+				log.debug("Added user-Id " + u.getId());
 
 				/*
 				 * Long adress_emails_id =
@@ -431,8 +431,8 @@ public class UserManager implements IUserManager {
 				 * (adress_emails_id==null) { return new Long(-112); }
 				 */
 
-				if (adr.getAdresses_id() > 0 && u.getUser_id() > 0) {
-					return u.getUser_id();
+				if (adr.getId() > 0 && u.getId() > 0) {
+					return u.getId();
 				} else {
 					return -16L;
 				}
@@ -535,7 +535,7 @@ public class UserManager implements IUserManager {
 	}
 
 	public State getCountry(Locale loc) {
-		List<State> states = stateDao.getStates();
+		List<State> states = stateDao.get();
 		if (loc != null) {
 			String code = loc.getISO3Country().toUpperCase();
 			for (State s : states) {
@@ -563,7 +563,7 @@ public class UserManager implements IUserManager {
 			return null; //TODO FIXME need to be checked
 		}
 		User u = userDao.getByLogin(login, Type.oauth, serverId);
-		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getUser_id())) {
+		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getId())) {
 			log.error("Another user with the same email exists");
 			return null; //TODO FIXME need to be checked
 		}
@@ -585,7 +585,7 @@ public class UserManager implements IUserManager {
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);
 			u.setFirstname(firstname);
-			u.getAdresses().setEmail(email);
+			u.getAddress().setEmail(email);
 			String picture = params.get("picture");
 			if (picture != null) {
 				u.setPictureuri(picture);
@@ -594,8 +594,8 @@ public class UserManager implements IUserManager {
 			if (locale != null) {
 				Locale loc = Locale.forLanguageTag(locale);
 				if (loc != null) {
-					u.setLanguage_id(getLanguage(loc));
-					u.getAdresses().setStates(getCountry(loc));
+					u.setLanguageId(getLanguage(loc));
+					u.getAddress().setState(getCountry(loc));
 				}
 			}
 		}

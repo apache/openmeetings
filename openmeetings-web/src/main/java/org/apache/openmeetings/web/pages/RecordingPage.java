@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
@@ -35,11 +35,11 @@ public class RecordingPage extends BaseInitedPage {
 
 	public RecordingPage(PageParameters p) {
 		String hash = p.get("hash").toString();
-		FlvRecording r = null;
+		Recording r = null;
 		if (WebSession.get().signIn(hash)) {
 			Long recId = getRecordingId();
 			if (recId != null) {
-				r = getBean(FlvRecordingDao.class).get(recId);
+				r = getBean(RecordingDao.class).get(recId);
 			}
 		}
 		add(new VideoInfo("info", r).setVisible(r != null), new VideoPlayer("player", r).setVisible(r != null));

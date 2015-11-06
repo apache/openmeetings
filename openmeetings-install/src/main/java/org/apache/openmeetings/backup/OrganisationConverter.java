@@ -39,7 +39,7 @@ public class OrganisationConverter extends OmConverter<Organisation> {
 	}
 	
 	public Organisation read(InputNode node) throws Exception {
-		long oldId = getlongValue(node);
+		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
 		Organisation o = orgDao.get(newId);
@@ -48,6 +48,6 @@ public class OrganisationConverter extends OmConverter<Organisation> {
 
 	public void write(OutputNode node, Organisation value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getOrganisation_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

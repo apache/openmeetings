@@ -25,6 +25,8 @@ public class LibraryPresentationThumb {
 	private String lastmod = null;
 	private Long size = null;
 	
+	public LibraryPresentationThumb() {}
+	
 	public String getName() {
 		return name;
 	}

@@ -70,8 +70,8 @@ public class UsersPanel extends AdminPanel {
 			@Override
 			protected void populateItem(Item<User> item) {
 				User u = item.getModelObject();
-				final long userId = u.getUser_id();
-				item.add(new Label("userId", "" + u.getUser_id()));
+				final long userId = u.getId();
+				item.add(new Label("userId", "" + u.getId()));
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
 				item.add(new Label("lastName", u.getLastname()));
@@ -85,7 +85,7 @@ public class UsersPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " ui-state-active" : "")));
+						+ (u.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

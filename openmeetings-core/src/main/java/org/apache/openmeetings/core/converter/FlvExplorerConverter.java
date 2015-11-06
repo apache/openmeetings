@@ -28,8 +28,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
+import org.apache.openmeetings.db.dao.record.RecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -44,7 +45,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDaoImpl;
 	@Autowired
-	private FlvRecordingLogDao flvRecordingLogDaoImpl;
+	private RecordingLogDao flvRecordingLogDaoImpl;
 	
 	private class FlvDimension {
 		public FlvDimension(int width, int height) {
@@ -58,9 +59,9 @@ public class FlvExplorerConverter extends BaseConverter {
 	public List<ConverterProcessResult> startConversion(Long fileExplorerItemId, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.getFileExplorerItemsById(fileExplorerItemId);
+			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.get(fileExplorerItemId);
 
-			log.debug("fileExplorerItem " + fileExplorerItem.getFileExplorerItemId());
+			log.debug("fileExplorerItem " + fileExplorerItem.getId());
 
 			//  Convert to FLV
 			return convertToFLV(fileExplorerItem, moviePath);
@@ -79,10 +80,10 @@ public class FlvExplorerConverter extends BaseConverter {
 	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			String name = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId();
+			String name = "UPLOADFLV_" + fileExplorerItem.getId();
 			File outputFullFlv = new File(getStreamsHibernateDir(), name + ".flv");
 
-			fileExplorerItem.setIsVideo(true);
+			fileExplorerItem.setType(Type.Video);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
@@ -91,7 +92,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			// "-s", flvWidth + "x" + flvHeight, 
 
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
-					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
+					+ fileExplorerItem.getId(), argv_fullFLV);
 			
 			//Parse the width height from the FFMPEG output
 			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.getError());
@@ -104,7 +105,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId() + ".jpg";
+			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getId() + ".jpg";
 			File outPutJpeg = new File(getStreamsHibernateDir(), name + ".jpg");
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
@@ -115,13 +116,13 @@ public class FlvExplorerConverter extends BaseConverter {
 					outPutJpeg.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: "
-							+ fileExplorerItem.getFileExplorerItemId(),
+							+ fileExplorerItem.getId(),
 							argv_previewFLV));
 
-			fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
+			fileExplorerItemDaoImpl.update(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
-				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG", null, returnMap);
+				flvRecordingLogDaoImpl.add("generateFFMPEG", null, returnMap);
 			}
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);

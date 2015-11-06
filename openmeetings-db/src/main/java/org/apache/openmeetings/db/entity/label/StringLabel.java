@@ -46,4 +46,13 @@ public class StringLabel extends SimpleEntry<String, String> implements IDataPro
         Map.Entry<?,?> e = (Map.Entry<?,?>)o;
         return getKey() == null ? e.getKey() == null : getKey().equals(e.getKey());
 	}
+
+	@Override
+	public Long getId() {
+		return null;
+	}
+
+	@Override
+	public void setId(Long id) {
+	}
 }

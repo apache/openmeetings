@@ -245,7 +245,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		userDao.update(us, -1L);
 		String reset_link = appLink + "?hash=" + us.getResethash();
 
-		String email = us.getAdresses().getEmail();
+		String email = us.getAddress().getEmail();
 
 		String template = ResetPasswordTemplate.getEmail(reset_link);
 

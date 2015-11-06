@@ -84,7 +84,7 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 	}
 
 	public Organisation update(Organisation entity, Long userId) {
-		if (entity.getOrganisation_id() == null) {
+		if (entity.getId() == null) {
 			if (userId != null) {
 				entity.setInsertedby(userId);
 			}
@@ -102,7 +102,7 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 
 	public void delete(Organisation entity, Long userId) {
 		em.createNamedQuery("deleteUsersFromOrganisation")
-			.setParameter("id", entity.getOrganisation_id())
+			.setParameter("id", entity.getId())
 			.executeUpdate();
 
 		entity.setDeleted(true);

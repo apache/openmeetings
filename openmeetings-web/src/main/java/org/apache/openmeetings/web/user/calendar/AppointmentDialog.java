@@ -20,11 +20,9 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
-import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,14 +33,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
@@ -60,6 +56,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -130,18 +127,19 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		confirmDelete = new MessageDialog("confirmDelete", Application.getString(814), Application.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
-			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (button != null && button.match(AbstractDialog.OK)){
-					deleteAppointment(target);
+					deleteAppointment(handler);
 				}
 			}
 		};
 		add(confirmDelete);
 	}
 
-	protected void deleteAppointment(IPartialPageRequestHandler target) {
+	protected void deleteAppointment(IPartialPageRequestHandler handler) {
 		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
-		calendarPanel.refresh(target);		
+		calendarPanel.refresh(handler);		
 	}
 
 	@Override
@@ -160,16 +158,16 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	@Override
-	protected void onOpen(IPartialPageRequestHandler target) {
-		target.add(this.form);
+	protected void onOpen(IPartialPageRequestHandler handler) {
+		handler.add(this.form);
 	}
 	
 	@Override
-	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (delete.equals(button)) {
-			confirmDelete.open(target);
+			confirmDelete.open(handler);
 		} else if (enterRoom.equals(button)) {
-			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getRooms_id());
+			RoomEnterBehavior.roomEnter((MainPage)getPage(), handler, getModelObject().getRoom().getId());
 		}
 	}
 	
@@ -184,25 +182,25 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
         Set<Long> currentIds = new HashSet<Long>();
         for (User u : attendeesModel.getObject()) {
-        	if (u.getUser_id() != null) {
-        		currentIds.add(u.getUser_id());
+        	if (u.getId() != null) {
+        		currentIds.add(u.getId());
         	}
         }
         
         //remove users
         for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
         	MeetingMember m = i.next();
-        	if (!currentIds.contains(m.getUser().getUser_id())) {
+        	if (!currentIds.contains(m.getUser().getId())) {
         		i.remove();
         	}
         }
         Set<Long> originalIds = new HashSet<Long>();
         for (MeetingMember m : attendees) {
-        	originalIds.add(m.getUser().getUser_id());
+        	originalIds.add(m.getUser().getId());
         }
         //add users
         for (User u : attendeesModel.getObject()) {
-        	if (u.getUser_id() == null || !originalIds.contains(u.getUser_id())) {
+        	if (u.getId() == null || !originalIds.contains(u.getId())) {
         		MeetingMember mm = new MeetingMember();
         		mm.setUser(u);
         		mm.setDeleted(false);
@@ -221,7 +219,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	public static boolean isOwner(Appointment object) {
-		return object.getOwner() != null && getUserId() == object.getOwner().getUser_id();
+		return object.getOwner() != null && getUserId() == object.getOwner().getId();
 	}
 	
 	@Override
@@ -237,32 +235,30 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
-		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
+		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("room.type");
 		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
 				, getRoomList()
-				, new ChoiceRenderer<Room>("name", "rooms_id"));
+				, new ChoiceRenderer<Room>("name", "id"));
 
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
 
 			Appointment a = getModelObject();
-			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
-			if (a.getRemind() == null && !remindTypes.isEmpty()) {
-				a.setRemind(remindTypes.get(0));
+			if (a.getReminder() == null) {
+				a.setReminder(Reminder.none);
 			}
 			
-			List<RoomType> roomTypes = getRoomTypes();
 			if (a.getRoom() == null) {
 				Room r = new Room();
 				r.setAppointment(true);
 				a.setRoom(r);
 			}
-			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
-				a.getRoom().setRoomtype(roomTypes.get(0));
+			if (a.getRoom().getType() == null) {
+				a.getRoom().setType(Room.Type.conference);
 			}
-			createRoom = Boolean.TRUE.equals(a.getRoom().getAppointment());
+			createRoom = a.getRoom().isAppointment();
 			roomType.setEnabled(createRoom);
 			room.setEnabled(!createRoom);
 			if (a.getId() == null) {
@@ -304,21 +300,30 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			
-			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
-			add(new DropDownChoice<AppointmentReminderTyps>(
-					"remind"
-					, remindTypes
-					, new ChoiceRenderer<AppointmentReminderTyps>() {
+			add(new DropDownChoice<Reminder>(
+					"reminder"
+					, Arrays.asList(Reminder.values())
+					, new IChoiceRenderer<Reminder>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override
-						public Object getDisplayValue(AppointmentReminderTyps object) {
-							return getString("" + object.getFieldvalues_id());
+						public Object getDisplayValue(Reminder art) {
+							return getString("appointment.reminder." + art.name());
 						}
 
 						@Override
-						public String getIdValue(AppointmentReminderTyps object, int index) {
-							return "" + object.getTypId();
+						public String getIdValue(Reminder art, int index) {
+							return art.name();
+						}
+
+						@Override
+						public Reminder getObject(String id, IModel<? extends List<? extends Reminder>> choices) {
+							for (Reminder art : choices.getObject()) {
+								if (art.name().equals(id)) {
+									return art;
+								}
+							}
+							return null;
 						}
 					}));
 			
@@ -349,19 +354,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(owner);
 		}
 		
-		private List<AppointmentReminderTyps> getRemindTypes() {
-			return getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList(getLanguage());
-		}
-		
 		private List<Room> getRoomList() {
 			//FIXME need to be reviewed
 			List<Room> result = new ArrayList<Room>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
 			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));
+				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getId()));
 			}
-			if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review
+			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) { //FIXME review
 				result.add(getModelObject().getRoom());
 			}
 			return result;

@@ -172,11 +172,11 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		}
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		WebSession ws = WebSession.get();
-		Type type = domain.getLdapConfigId() > 0 ? Type.ldap : Type.user;
-		if (ws.signIn(login, password, type, domain.getLdapConfigId())) {
+		Type type = domain.getId() > 0 ? Type.ldap : Type.user;
+		if (ws.signIn(login, password, type, domain.getId())) {
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
-				strategy.save(login, password, type, domain.getLdapConfigId());
+				strategy.save(login, password, type, domain.getId());
 			} else {
 				strategy.remove();
 			}
@@ -185,7 +185,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			if (ws.getLoginError() != null) {
 				ErrorValue eValue = getBean(ErrorDao.class).get(-1 * ws.getLoginError());
 				if (eValue != null) {
-					error(Application.getString(eValue.getFieldvalues_id()));
+					error(Application.getString(eValue.getLabelId()));
 					target.add(feedback);
 				}
 			}

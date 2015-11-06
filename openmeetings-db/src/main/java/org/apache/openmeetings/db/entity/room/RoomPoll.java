@@ -103,7 +103,7 @@ public class RoomPoll implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "room_poll_id")
 	@ElementList(name="roompollanswers", required=false)
-	private List<RoomPollAnswers> roomPollAnswerList;
+	private List<RoomPollAnswer> roomPollAnswerList;
 
 	/**
 	 * @return the createdBy
@@ -153,9 +153,9 @@ public class RoomPoll implements Serializable {
 	/**
 	 * @return the roomPollAnswerList
 	 */
-	public List<RoomPollAnswers> getRoomPollAnswerList() {
+	public List<RoomPollAnswer> getRoomPollAnswerList() {
 		if (roomPollAnswerList == null) {
-			roomPollAnswerList = new LinkedList<RoomPollAnswers>();
+			roomPollAnswerList = new LinkedList<RoomPollAnswer>();
 		}
 		return roomPollAnswerList;
 	}
@@ -164,7 +164,7 @@ public class RoomPoll implements Serializable {
 	 * @param roomPollAnswerList
 	 *            the roomPollAnswerList to set
 	 */
-	public void setRoomPollAnswerList(List<RoomPollAnswers> roomPollAnswerList) {
+	public void setRoomPollAnswerList(List<RoomPollAnswer> roomPollAnswerList) {
 		this.roomPollAnswerList = roomPollAnswerList;
 	}
 

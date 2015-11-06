@@ -54,10 +54,10 @@ import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -344,7 +344,7 @@ public class Admin {
 						}
 						long missing = 0;
 						for (User u : udao.getAllBackupUsers()) {
-							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
+							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
 								missing++;
 							}
 						}
@@ -376,7 +376,7 @@ public class Admin {
 								} else {
 									invalid += fSize;
 								}
-							} else if (item.getDeleted()) {
+							} else if (item.isDeleted()) {
 								if (cleanup) {
 									FileHelper.removeRec(f);
 								} else {
@@ -386,7 +386,7 @@ public class Admin {
 						}
 						missing = 0;
 						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
-							if (!item.getDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
+							if (!item.isDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
 								missing++;
 							}
 						}
@@ -411,17 +411,17 @@ public class Admin {
 						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
 						long size = OmFileHelper.getSize(hibernateDir);
 						long restSize = sectionSize - size;
-						FlvRecordingDao recordDao = getApplicationContext(ctxName).getBean(FlvRecordingDao.class);
+						RecordingDao recordDao = getApplicationContext(ctxName).getBean(RecordingDao.class);
 						long[] params = {0, 0}; // [0] == deleted [1] == missing
-						for (FlvRecording rec : recordDao.getAllFlvRecordings()) {
-							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.getDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.getDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.getDeleted(), params, cleanup);
+						for (Recording rec : recordDao.get()) {
+							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.isDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.isDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.isDeleted(), params, cleanup);
 						}
 						long invalid = 0;
 						for (File f : hibernateDir.listFiles()) {
 							if (f.isFile() && f.getName().endsWith(".flv")) {
-								FlvRecording rec = recordDao.getRecordingByHash(f.getName());
+								Recording rec = recordDao.getByHash(f.getName());
 								if (rec == null) {
 									cleanUpFile(invalid, cleanup, f);
 									String name = f.getName().substring(0, f.getName().length() - 5);

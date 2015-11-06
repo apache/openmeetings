@@ -68,24 +68,10 @@
 	            } else {
             		parent.setProgress();
 		            canvas.thishib.getTimeZones.doCall();
-		            parent.getUserSalutations.doCall();
 				}
 			]]>
         </handler>  
     </netRemoteCallHib>	 
-    
-    <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" 
-		remotecontext="$once{ canvas.thishib }" >  
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue"> return hib.userlang; </method></netparam> 
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getUserSalutations ",value);
-            canvas.salutationsInitValues = value;
-            parent.setProgress();
-            parent.getRoomTypes.doCall();
-        </handler>  
-    </netRemoteCallHib>   
     
     <netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" 
 		remotecontext="$once{ canvas.thishib }" >  

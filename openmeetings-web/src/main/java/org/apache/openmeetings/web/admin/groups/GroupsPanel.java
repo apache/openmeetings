@@ -67,7 +67,7 @@ public class GroupsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(Item<Organisation> item) {
 				final Organisation o = item.getModelObject();
-				item.add(new Label("organisation_id", "" + o.getOrganisation_id()));
+				item.add(new Label("organisation_id", "" + o.getId()));
 				item.add(new Label("name", "" + o.getName()));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
@@ -81,7 +81,7 @@ public class GroupsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " ui-state-active" : "")));
+						+ (o.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 

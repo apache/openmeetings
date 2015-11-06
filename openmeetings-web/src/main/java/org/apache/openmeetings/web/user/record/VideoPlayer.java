@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,7 +47,7 @@ public class VideoPlayer extends Panel {
 		this(id, null);
 	}
 	
-	public VideoPlayer(String id, FlvRecording r) {
+	public VideoPlayer(String id, Recording r) {
 		super(id);
 		add(container.setOutputMarkupPlaceholderTag(true));
 		mp4.setDisplayType(true);
@@ -59,13 +59,13 @@ public class VideoPlayer extends Panel {
 		update(null, r);
 	}
 	
-	public VideoPlayer update(AjaxRequestTarget target, FlvRecording r) {
+	public VideoPlayer update(AjaxRequestTarget target, Recording r) {
 		boolean videoExists = r != null && getMp4Recording(r.getFileHash()).exists();
 		if (videoExists) {
-			PageParameters pp = new PageParameters().add("id", r.getFlvRecordingId());
+			PageParameters pp = new PageParameters().add("id", r.getId());
 			mp4.setPageParameters(pp);
 			ogg.setPageParameters(pp);
-			player.recId = r.getFlvRecordingId();
+			player.recId = r.getId();
 		}
 		container.setVisible(videoExists);
 		if (target != null) {

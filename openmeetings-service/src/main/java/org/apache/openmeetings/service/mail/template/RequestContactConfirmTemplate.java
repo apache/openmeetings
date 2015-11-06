@@ -25,7 +25,7 @@ public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactConfirmTemplate(UserContact contact) {
-		super(contact.getOwner().getLanguage_id());
+		super(contact.getOwner().getLanguageId());
 		add(new Label("hi", getString(1192, langId)));
 		add(new Label("firstName", contact.getOwner().getFirstname()));
 		add(new Label("lastName", contact.getOwner().getLastname()));

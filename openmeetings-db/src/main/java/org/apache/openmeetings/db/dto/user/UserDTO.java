@@ -18,40 +18,61 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 
-public class UserDTO {
+@XmlRootElement
+public class UserDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
+	private String login;
+	private String password;
 	private String firstname;
 	private String lastname;
-	private List<String> rights;
-	private String login;
-	private Long language_id;
-	private Address adresses;
+	private Set<Right> rights;
+	private Long languageId;
+	private Address address;
 	private String timeZoneId;
+	private String externalId;
+	private String externalType;
 	private Type type = Type.user;
 
 	public UserDTO() {}
 
 	public UserDTO(User u) {
-		id = u.getUser_id();
+		id = u.getId();
 		firstname = u.getFirstname();
 		lastname = u.getLastname();
-		rights = new ArrayList<>();
-		for (Right r : u.getRights()) {
-			rights.add(r.name());
-		}
+		rights = u.getRights();
 		login = u.getLogin();
-		language_id = u.getLanguage_id();
-		adresses = u.getAdresses();
+		languageId = u.getLanguageId();
+		address = u.getAddress();
 		timeZoneId = u.getTimeZoneId();
 		type = u.getType();
+		externalId = u.getExternalId();
+		externalType = u.getExternalType();
+	}
+	
+	public User get(UserDao userDao) {
+		User u = id == null ? new User() : userDao.get(id);
+		u.setFirstname(firstname);
+		u.setLastname(lastname);
+		u.setRights(rights);
+		u.setLanguageId(languageId);
+		u.setAddress(address);
+		u.setTimeZoneId(timeZoneId);
+		u.setExternalId(externalId);
+		u.setExternalType(externalType);
+		u.setType(type);
+		return u;
 	}
 	
 	public Long getId() {
@@ -78,11 +99,11 @@ public class UserDTO {
 		this.lastname = lastname;
 	}
 
-	public List<String> getRights() {
+	public Set<Right> getRights() {
 		return rights;
 	}
 
-	public void setRights(List<String> rights) {
+	public void setRights(Set<Right> rights) {
 		this.rights = rights;
 	}
 
@@ -94,20 +115,20 @@ public class UserDTO {
 		this.login = login;
 	}
 
-	public Long getLanguage_id() {
-		return language_id;
+	public Long getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setLanguageId(Long languageId) {
+		this.languageId = languageId;
 	}
 
-	public Address getAdresses() {
-		return adresses;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdresses(Address adresses) {
-		this.adresses = adresses;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public String getTimeZoneId() {
@@ -124,5 +145,29 @@ public class UserDTO {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 }

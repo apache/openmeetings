@@ -29,6 +29,8 @@ public class WhiteboardSyncLockObject {
 	private Date addtime;
 	private Date starttime;
 
+	public WhiteboardSyncLockObject() {}
+	
 	public String getPublicSID() {
 		return publicSID;
 	}

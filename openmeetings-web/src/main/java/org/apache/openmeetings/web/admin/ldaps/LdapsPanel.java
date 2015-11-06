@@ -60,7 +60,7 @@ public class LdapsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
 				final LdapConfig lc = item.getModelObject();
-				item.add(new Label("ldapConfigId", "" + lc.getLdapConfigId()));
+				item.add(new Label("ldapConfigId", "" + lc.getId()));
 				item.add(new Label("name", "" + lc.getName()));
 				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
 				item.add(new AjaxEventBehavior("click") {
@@ -74,7 +74,7 @@ public class LdapsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (lc.getLdapConfigId() == form.getModelObject().getLdapConfigId() ? " ui-state-active" : "")));
+						+ (lc.getId() == form.getModelObject().getId() ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

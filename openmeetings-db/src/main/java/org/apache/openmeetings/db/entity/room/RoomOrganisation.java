@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,6 +33,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -41,30 +41,14 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.rooms_organisation_id"),
-	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
-			+ "where c.room.roomtypes_id = :roomtypes_id "
-			+ "AND c.organisation.organisation_id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getRoomsOrganisationByOrganisationId", query = "SELECT c FROM RoomOrganisation c "
-			+ "LEFT JOIN FETCH c.room "
-			+ "WHERE c.organisation.organisation_id = :organisation_id "
-			+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted AND c.room.appointment = false "
-			+ "AND c.organisation.deleted <> :deleted "
-			+ "ORDER BY c.room.name ASC"),
-	@NamedQuery(name = "selectMaxFromRoomsByOrganisation", query = "select c from Rooms_Organisation as c "
-			+ "where c.organisation.organisation_id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomId", query = "select c from RoomOrganisation as c "
-			+ "where c.room.rooms_id = :rooms_id "
-			+ "AND c.organisation.organisation_id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from RoomOrganisation as c "
-			+ "where c.room.rooms_id = :rooms_id "
-			+ "AND c.deleted <> :deleted")
+	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomId", query = "select c from RoomOrganisation as c "
+			+ "where c.room.rooms_id = :roomId "
+			+ "AND c.organisation.organisation_id = :groupId "
+			+ "AND c.deleted = false"),
 })
 @Table(name = "rooms_organisation")
 @Root(name="room_organisation")
-public class RoomOrganisation implements Serializable {
+public class RoomOrganisation implements IDataProviderEntity {
 	private static final long serialVersionUID = 4153935045968138984L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -116,28 +100,28 @@ public class RoomOrganisation implements Serializable {
 		this.room = room;
 	}
 
-	public Long getRooms_organisation_id() {
+	public Long getId() {
 		return rooms_organisation_id;
 	}
-	public void setRooms_organisation_id(Long rooms_organisation_id) {
-		this.rooms_organisation_id = rooms_organisation_id;
+	public void setId(Long id) {
+		this.rooms_organisation_id = id;
 	}
     
-	public Date getStarttime() {
+	public Date getInserted() {
 		return starttime;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.starttime = inserted;
 	}
     
-	public Date getUpdatetime() {
+	public Date getUpdated() {
 		return updatetime;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updatetime = updated;
 	}	
 	
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,18 +25,22 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openjpa.persistence.FetchAttribute;
@@ -78,12 +81,58 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "room")
 @Root(name = "room")
-public class Room implements Serializable, IDataProviderEntity {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Room implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public static final int CONFERENCE_TYPE_ID = 1;
+	public static final int RESTRICTED_TYPE_ID = 3;
+	public static final int INTERVIEW_TYPE_ID = 4;
+	
+	public enum Type {
+		conference(CONFERENCE_TYPE_ID)
+		//, audience(2)
+		, restricted(RESTRICTED_TYPE_ID)
+		, interview(INTERVIEW_TYPE_ID);
+		//, custom(5)
+		private int id;
+		
+		Type() {} //default;
+		Type(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Type get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(int type) {
+			Type rt = Type.conference;
+			switch (type) {
+				case RESTRICTED_TYPE_ID:
+					rt = Type.restricted;
+					break;
+				case INTERVIEW_TYPE_ID:
+					rt = Type.interview;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, required=false)
+	@Element(data = true, required = false, name = "rooms_id")
 	private Long rooms_id;
 
 	@Column(name = "name")
@@ -95,16 +144,15 @@ public class Room implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roomtypes_id")
-	@ForeignKey(enabled = true)
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
 	@Element(name = "roomtypeId", data = true, required = false)
-	private RoomType roomtype;
+	private Type type = Type.conference;
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	private Date starttime;
 
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	private Date updatetime;
 
 	@Column(name = "deleted")
@@ -124,17 +172,17 @@ public class Room implements Serializable, IDataProviderEntity {
 	private boolean appointment;
 
 	// Vars to simulate external Room
-	@Column(name = "externalRoomId")
+	@Column(name = "externalId")
 	@Element(data = true, required = false)
 	private Long externalRoomId;
 
-	@Column(name = "externalRoomType")
+	@Column(name = "externalType")
 	@Element(data = true, required = false)
 	private String externalRoomType;
 
 	@Column(name = "isdemoroom")
 	@Element(data = true, required = false)
-	private Boolean isDemoRoom;
+	private boolean isDemoRoom;
 
 	@Column(name = "demo_time")
 	@Element(data = true, required = false)
@@ -148,11 +196,11 @@ public class Room implements Serializable, IDataProviderEntity {
 
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)
-	private Boolean allowUserQuestions;
+	private boolean allowUserQuestions;
 
 	@Column(name = "is_audio_only")
 	@Element(name = "isAudioOnly", data = true, required = false)
-	private Boolean isAudioOnly;
+	private boolean isAudioOnly;
 	
 	@Column(name = "allow_font_styles", nullable = false)
 	@Element(data = true, required = false)
@@ -172,7 +220,7 @@ public class Room implements Serializable, IDataProviderEntity {
 
 	@Column(name = "wait_for_recording")
 	@Element(data = true, required = false)
-	private Boolean waitForRecording; // Show warning that user has to start
+	private boolean waitForRecording; // Show warning that user has to start
 										// recording
 
 	@Column(name = "allow_recording")
@@ -183,51 +231,51 @@ public class Room implements Serializable, IDataProviderEntity {
 	 */
 	@Column(name = "hide_top_bar")
 	@Element(data = true, required = false)
-	private Boolean hideTopBar = false;
+	private boolean hideTopBar;
 
 	@Column(name = "hide_chat")
 	@Element(name = "hideChat", data = true, required = false)
-	private Boolean hideChat = false;
+	private boolean hideChat;
 
 	@Column(name = "hide_activities_and_actions")
 	@Element(name = "hideActivitiesAndActions", data = true, required = false)
-	private Boolean hideActivitiesAndActions = false;
+	private boolean hideActivitiesAndActions;
 
 	@Column(name = "hide_files_explorer")
 	@Element(data = true, required = false)
-	private Boolean hideFilesExplorer = false;
+	private boolean hideFilesExplorer;
 
 	@Column(name = "hide_actions_menu")
 	@Element(data = true, required = false)
-	private Boolean hideActionsMenu = false;
+	private boolean hideActionsMenu;
 
 	@Column(name = "hide_screen_sharing")
 	@Element(data = true, required = false)
-	private Boolean hideScreenSharing = false;
+	private boolean hideScreenSharing;
 
 	@Column(name = "hide_whiteboard")
 	@Element(data = true, required = false)
-	private Boolean hideWhiteboard = false;
+	private boolean hideWhiteboard;
 
 	@Column(name = "show_microphone_status")
 	@Element(data = true, required = false)
-	private Boolean showMicrophoneStatus = false;
+	private boolean showMicrophoneStatus;
 
 	@Column(name = "chat_moderated")
 	@Element(data = true, required = false)
-	private Boolean chatModerated = false;
+	private boolean chatModerated;
 
 	@Column(name = "chat_opened")
 	@Element(data = true, required = false)
-	private boolean chatOpened = false;
+	private boolean chatOpened;
 
 	@Column(name = "files_opened")
 	@Element(data = true, required = false)
-	private boolean filesOpened = false;
+	private boolean filesOpened;
 
 	@Column(name = "auto_video_select")
 	@Element(data = true, required = false)
-	private boolean autoVideoSelect = false;
+	private boolean autoVideoSelect;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
@@ -248,7 +296,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	private String pin;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
+	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
 	private List<RoomOrganisation> roomOrganisations = new ArrayList<RoomOrganisation>();
@@ -272,39 +320,39 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.name = name;
 	}
 
-	public Long getRooms_id() {
+	public Long getId() {
 		return rooms_id;
 	}
 
-	public void setRooms_id(Long rooms_id) {
-		this.rooms_id = rooms_id;
+	public void setId(Long id) {
+		this.rooms_id = id;
 	}
 
-	public RoomType getRoomtype() {
-		return roomtype;
+	public Type getType() {
+		return type;
 	}
 
-	public void setRoomtype(RoomType roomtype) {
-		this.roomtype = roomtype;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
-	public Date getStarttime() {
+	public Date getInserted() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.starttime = inserted;
 	}
 
-	public Date getUpdatetime() {
+	public Date getUpdated() {
 		return updatetime;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updatetime = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -312,11 +360,11 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Boolean getIspublic() {
+	public boolean getIspublic() {
 		return ispublic;
 	}
 
-	public void setIspublic(Boolean ispublic) {
+	public void setIspublic(boolean ispublic) {
 		this.ispublic = ispublic;
 	}
 
@@ -336,19 +384,19 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.numberOfPartizipants = numberOfPartizipants;
 	}
 
-	public Boolean getAppointment() {
+	public boolean isAppointment() {
 		return appointment;
 	}
 
-	public void setAppointment(Boolean appointment) {
+	public void setAppointment(boolean appointment) {
 		this.appointment = appointment;
 	}
 
-	public Boolean getIsDemoRoom() {
+	public boolean getIsDemoRoom() {
 		return isDemoRoom;
 	}
 
-	public void setIsDemoRoom(Boolean isDemoRoom) {
+	public void setIsDemoRoom(boolean isDemoRoom) {
 		this.isDemoRoom = isDemoRoom;
 	}
 
@@ -360,44 +408,44 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.demoTime = demoTime;
 	}
 
-	public Boolean getIsModeratedRoom() {
+	public boolean isModerated() {
 		return isModeratedRoom;
 	}
 
-	public void setIsModeratedRoom(Boolean isModeratedRoom) {
-		this.isModeratedRoom = isModeratedRoom;
+	public void setModerated(boolean moderated) {
+		this.isModeratedRoom = moderated;
 	}
 
-	public Long getExternalRoomId() {
+	public Long getExternalId() {
 		return externalRoomId;
 	}
 
-	public void setExternalRoomId(Long externalRoomId) {
-		this.externalRoomId = externalRoomId;
+	public void setExternalId(Long externalId) {
+		this.externalRoomId = externalId;
 	}
 
-	public String getExternalRoomType() {
+	public String getExternalType() {
 		return externalRoomType;
 	}
 
-	public void setExternalRoomType(String externalRoomType) {
-		this.externalRoomType = externalRoomType;
+	public void setExternalType(String externalType) {
+		this.externalRoomType = externalType;
 	}
 
-	public Boolean getAllowUserQuestions() {
+	public boolean getAllowUserQuestions() {
 		return allowUserQuestions;
 	}
 
-	public void setAllowUserQuestions(Boolean allowUserQuestions) {
+	public void setAllowUserQuestions(boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
 	}
 
-	public Boolean getIsAudioOnly() {
+	public boolean isAudioOnly() {
 		return isAudioOnly;
 	}
 
-	public void setIsAudioOnly(Boolean isAudioOnly) {
-		this.isAudioOnly = isAudioOnly;
+	public void setAudioOnly(boolean audioOnly) {
+		this.isAudioOnly = audioOnly;
 	}
 
 	public boolean getAllowFontStyles() {
@@ -408,12 +456,12 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.allowFontStyles = allowFontStyles;
 	}
 
-	public boolean getIsClosed() {
+	public boolean isClosed() {
 		return isClosed;
 	}
 
-	public void setIsClosed(boolean isClosed) {
-		this.isClosed = isClosed;
+	public void setClosed(boolean closed) {
+		this.isClosed = closed;
 	}
 
 	public String getRedirectURL() {
@@ -432,11 +480,11 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.ownerId = ownerId;
 	}
 
-	public Boolean getWaitForRecording() {
+	public boolean getWaitForRecording() {
 		return waitForRecording;
 	}
 
-	public void setWaitForRecording(Boolean waitForRecording) {
+	public void setWaitForRecording(boolean waitForRecording) {
 		this.waitForRecording = waitForRecording;
 	}
 
@@ -448,67 +496,67 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.allowRecording = allowRecording;
 	}
 
-	public Boolean getHideTopBar() {
+	public boolean getHideTopBar() {
 		return hideTopBar;
 	}
 
-	public void setHideTopBar(Boolean hideTopBar) {
+	public void setHideTopBar(boolean hideTopBar) {
 		this.hideTopBar = hideTopBar;
 	}
 
-	public Boolean getHideChat() {
+	public boolean isChatHidden() {
 		return hideChat;
 	}
 
-	public void setHideChat(Boolean hideChat) {
+	public void setChatHidden(boolean hideChat) {
 		this.hideChat = hideChat;
 	}
 
-	public Boolean getHideActivitiesAndActions() {
+	public boolean isActivitiesHidden() {
 		return hideActivitiesAndActions;
 	}
 
-	public void setHideActivitiesAndActions(Boolean hideActivitiesAndActions) {
-		this.hideActivitiesAndActions = hideActivitiesAndActions;
+	public void setActivitiesHidden(boolean activitiesHidden) {
+		this.hideActivitiesAndActions = activitiesHidden;
 	}
 
-	public Boolean getHideFilesExplorer() {
+	public boolean getHideFilesExplorer() {
 		return hideFilesExplorer;
 	}
 
-	public void setHideFilesExplorer(Boolean hideFilesExplorer) {
+	public void setHideFilesExplorer(boolean hideFilesExplorer) {
 		this.hideFilesExplorer = hideFilesExplorer;
 	}
 
-	public Boolean getHideActionsMenu() {
+	public boolean getHideActionsMenu() {
 		return hideActionsMenu;
 	}
 
-	public void setHideActionsMenu(Boolean hideActionsMenu) {
+	public void setHideActionsMenu(boolean hideActionsMenu) {
 		this.hideActionsMenu = hideActionsMenu;
 	}
 
-	public Boolean getHideScreenSharing() {
+	public boolean getHideScreenSharing() {
 		return hideScreenSharing;
 	}
 
-	public void setHideScreenSharing(Boolean hideScreenSharing) {
+	public void setHideScreenSharing(boolean hideScreenSharing) {
 		this.hideScreenSharing = hideScreenSharing;
 	}
 
-	public Boolean getHideWhiteboard() {
+	public boolean getHideWhiteboard() {
 		return hideWhiteboard;
 	}
 
-	public void setHideWhiteboard(Boolean hideWhiteboard) {
+	public void setHideWhiteboard(boolean hideWhiteboard) {
 		this.hideWhiteboard = hideWhiteboard;
 	}
 
-	public Boolean getShowMicrophoneStatus() {
+	public boolean getShowMicrophoneStatus() {
 		return showMicrophoneStatus;
 	}
 
-	public void setShowMicrophoneStatus(Boolean showMicrophoneStatus) {
+	public void setShowMicrophoneStatus(boolean showMicrophoneStatus) {
 		this.showMicrophoneStatus = showMicrophoneStatus;
 	}
 
@@ -522,11 +570,11 @@ public class Room implements Serializable, IDataProviderEntity {
 		}
 	}
 
-	public Boolean getChatModerated() {
+	public boolean isChatModerated() {
 		return chatModerated;
 	}
 
-	public void setChatModerated(Boolean chatModerated) {
+	public void setChatModerated(boolean chatModerated) {
 		this.chatModerated = chatModerated;
 	}
 

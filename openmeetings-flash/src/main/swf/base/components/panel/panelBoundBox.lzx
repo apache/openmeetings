@@ -63,17 +63,19 @@
     		targetObj.fill();
     		
     	]]>   
-  	</method> 	
+  	</method>
+
+	<method name="linearTween" args="t, b, c, d">
+		return c*t/d + b;
+	</method>
 
 	<method name="drawDottedLine" args="targetObj,startx,starty,endx,endy,stroke,lineWidth">
     	<![CDATA[
     		//var drawObj = new lz.drawview(targetObj,{width:this.width,height:this.height});	    
     		//if ($debug) Debug.write("drawDottedLine: ",targetObj,startx,starty,endx,endy,stroke,lineWidth);
-	    	Math.linearTween = function (t, b, c, d) {
-			    return c*t/d + b;
-			};
 
     		//if($debug)  Debug.write("drawDashLine: ",tObject);
+    		var csx, csy;
     		var tx = endx;
     		var ty = endy;
     		var sx = startx;
@@ -84,8 +86,8 @@
     		var gap = false;
     		//if($debug)  Debug.write("gap1: ",gap);
 	        for (var i = 1; i<=steps; ++i) {
-	            var ctx = Math.linearTween(i, sx, tx-sx,steps);    //equations by R.Penner!
-	            var cty = Math.linearTween(i, sy, ty-sy,steps);
+	            var ctx = linearTween(i, sx, tx-sx,steps);    //equations by R.Penner!
+	            var cty = linearTween(i, sy, ty-sy,steps);
 	            //if($debug)  Debug.write("gap2: ",gap);
 	            gap = !gap;    //abwechselnd luecke/nichtluecke
 	            if(!gap) {
@@ -97,7 +99,7 @@
 	                targetObj.lineTo(ctx,cty);
 	                targetObj.stroke();
 	            }
-	            csx =ctx;
+	            csx = ctx;
 	            csy = cty;
 	        }       		  		
     	]]>

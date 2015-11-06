@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.quartz.scheduler;
 
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -28,14 +29,26 @@ public class SessionClearJob {
 	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
+	private long timeout = 1800000L;
 
 	public void doIt() {
 		log.trace("SessionClearJob.execute");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
 		try {
 			// TODO Generate report
-			sessiondataDao.clearSessionTable();
+			sessiondataDao.clearSessionTable(timeout);
 		} catch (Exception err){
 			log.error("execute",err);
 		}
+	}
+
+	public long getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
 	}
 }

@@ -24,22 +24,22 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class StateConverter extends OmConverter<State> {
-	private StateDao statemanagement;
+	private StateDao stateDao;
 	
 	public StateConverter() {
 		//default constructor is for export
 	}
 	
-	public StateConverter(StateDao statemanagement) {
-		this.statemanagement = statemanagement;
+	public StateConverter(StateDao stateDao) {
+		this.stateDao = stateDao;
 	}
 	
 	public State read(InputNode node) throws Exception {
-		return statemanagement.getStateById(getlongValue(node));
+		return stateDao.get(getLong(node));
 	}
 
 	public void write(OutputNode node, State value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getState_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

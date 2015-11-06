@@ -34,6 +34,20 @@
         <listener-class>org.apache.openmeetings.util.OMContextListener</listener-class>
     </listener>
     
+	<servlet>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<init-param>
+			<param-name>config-location</param-name>
+			<param-value>classpath:openmeetings-applicationContext.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	
     <filter>
         <filter-name>LoggerContextFilter</filter-name>
         <filter-class>org.red5.logging.LoggerContextFilter</filter-class>
@@ -53,7 +67,7 @@
 		</init-param>
 		<init-param>
 			<param-name>configuration</param-name>
-			<param-value>@wicket.mode@</param-value>
+			<param-value>${wicket.mode}</param-value>
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
@@ -64,7 +78,7 @@
 		<filter-name>OpenmeetingsApplication</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	 
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/red5-*.xml</param-value>
@@ -93,13 +107,7 @@
     </servlet>
     <servlet>
         <servlet-name>ExportToImage</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
-    </servlet>
-    <!-- Axis2 Settings -->
-    <servlet>
-        <servlet-name>AxisServlet</servlet-name>
-        <servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-class>org.apache.openmeetings.core.servlet.outputhandler.ExportToImage</servlet-class>
     </servlet>
 	
 	<servlet-mapping>
@@ -113,11 +121,6 @@
     <servlet-mapping>
         <servlet-name>ExportToImage</servlet-name>
         <url-pattern>/ExportToImage</url-pattern>
-    </servlet-mapping>
-    <!-- Axis2 -->
-    <servlet-mapping>
-        <servlet-name>AxisServlet</servlet-name>
-        <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

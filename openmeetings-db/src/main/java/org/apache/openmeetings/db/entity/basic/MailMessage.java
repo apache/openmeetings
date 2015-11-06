@@ -43,6 +43,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 })
 @Table(name = "email_queue")
 public class MailMessage implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	public enum Status {
 		NONE
 		, SENDING

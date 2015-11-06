@@ -155,7 +155,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UserDao.class).update(user, password.getConvertedInput(), user.getUser_id());
+			getBean(UserDao.class).update(user, password.getConvertedInput(), user.getId());
 		} catch (Exception e) {
 			error(e.getMessage());
 		}

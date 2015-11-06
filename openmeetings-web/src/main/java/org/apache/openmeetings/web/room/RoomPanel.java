@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -39,7 +41,6 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
@@ -149,7 +150,7 @@ public class RoomPanel extends BasePanel {
 			} else if (!secureHash.isEmpty()) {
 				roomId = getBean(SOAPLoginDao.class).get(secureHash.toString()).getRoom_id();
 			} else if (!invitationHash.isEmpty()) {
-				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getRooms_id();
+				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getId();
 			}
 		} catch (Exception e) {
 			//no-op
@@ -231,6 +232,15 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
+	public static boolean isModerator(long userId, long roomId) {
+		for (org.apache.openmeetings.web.app.Client c : getRoomUsers(roomId)) {
+			if (c.getUserId() == userId && c.hasRight(org.apache.openmeetings.web.app.Client.Right.moderator)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(RoomPanel.class, "swf-functions.js");
 	}

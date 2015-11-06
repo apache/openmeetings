@@ -31,6 +31,8 @@ public class PresentationObject {
 	private FilesObject swfDocument;
 	LinkedList<FilesObject> thumbs;
 
+	public PresentationObject() {}
+	
 	public FilesObject getOriginalDocument() {
 		return originalDocument;
 	}

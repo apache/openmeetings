@@ -182,16 +182,21 @@
 </view>  
   
 <!-- View for Navigation-bar and App-name -->
-<view name="_mainbgcontentNavi" x="0" y="0" clip="true"
-    width="100%" height="${ canvas.naviHeight }" visibility="hidden">
+<view name="_mainbgcontentNavi" x="0" y="0" clip="true" width="100%" height="${ canvas.naviHeight }" visibility="hidden">
     <image id="mainApplogo" visible="false" />
-    <text id="mainBaseText" visible="false"
-        fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
+    <text id="mainBaseText" visible="false" fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
+	<switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.filters.DropShadowFilter;
+            </passthrough>
+        </when>
+    </switch>
         <method name="setShadow" >
             <![CDATA[
             if (this.isinited && false){
                 this.normalMC = this.getDisplayObject();
-                this.displacementMap = new flash.filters.DropShadowFilter();
+                this.displacementMap = new DropShadowFilter();
                 this.normalMC.filters = [this.displacementMap];
             }
             ]]>              

@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
@@ -59,7 +59,7 @@ public class WelcomeWidgetView extends WidgetView {
 			public void onClick(AjaxRequestTarget target) {
 				((MainPage)getPage()).updateContents(PROFILE_MESSAGES, target);
 			}
-		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class).count(getUserId(), INBOX_FOLDER_ID, null)))));
+		}.add(new Label("unread", Model.of("" + getBean(PrivateMessageDao.class).count(getUserId(), INBOX_FOLDER_ID, null)))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = -1847619557485964386L;
 

@@ -25,6 +25,8 @@ public class LibraryPresentation {
 	private LibraryPresentationFile swfDocument = null;
 	private LibraryPresenationThumbs thumbs = null;
 	
+	public LibraryPresentation() {}
+	
 	public LibraryPresentationFile getOriginalDocument() {
 		return originalDocument;
 	}

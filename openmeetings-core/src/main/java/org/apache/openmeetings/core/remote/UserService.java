@@ -18,42 +18,31 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
-import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
+import org.apache.openmeetings.core.mail.MailHandler;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
-import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -75,17 +64,13 @@ public class UserService implements IUserService {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDao;
-	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private SalutationDao salutationmanagement;
+	private PrivateMessageDao privateMessagesDao;
 	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
-	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactsDao;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -96,8 +81,6 @@ public class UserService implements IUserService {
 	private ISlaveHTTPConnectionManager slaveHTTPConnectionManager;
 	@Autowired
 	private LabelDao labelDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * get user by id, admin only
@@ -128,16 +111,6 @@ public class UserService implements IUserService {
 			log.error("[refreshSession]", err);
 		}
 		return "error";
-	}
-
-	/**
-	 * get all availible Salutations
-	 * 
-	 * @param SID
-	 * @return all availible Salutations
-	 */
-	public List<Salutation> getUserSalutations(String SID, long language_id) {
-		return salutationmanagement.getUserSalutations(language_id);
 	}
 
 	/**
@@ -230,7 +203,7 @@ public class UserService implements IUserService {
 		}
 		return null;
 	}
-
+/* TODO FIXME should replaced by wicket component
 	@Deprecated
 	public Long requestUserToContactList(String SID, Long userToAdd_id,
 			String domain, String port, String webapp) {
@@ -245,7 +218,7 @@ public class UserService implements IUserService {
 		}
 		return null;
 	}
-
+*/
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -311,6 +284,7 @@ public class UserService implements IUserService {
 
 		return cal.getTime();
 	}
+	/* TODO FIXME should replaced by wicket component
 
 	public Long composeMail(String SID, List<String> recipients,
 			String subject, String message, Boolean bookedRoom,
@@ -364,7 +338,7 @@ public class UserService implements IUserService {
 					
 					// We do not send an email to the one that has created the
 					// private message
-					if (to != null && from.getUser_id().equals(to.getUser_id())) {
+					if (to != null && from.getId().equals(to.getId())) {
 						continue;
 					}
 
@@ -379,12 +353,12 @@ public class UserService implements IUserService {
 							message, INBOX_FOLDER_ID, from, to, to,
 							bookedRoom, room, false, 0L);
 
-					if (to.getAdresses() != null) {
+					if (to.getAddress() != null) {
 						AbstractTemplatePanel.ensureApplication(from.getLanguage_id());
 						String aLinkHTML = 	"<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
 									+  labelDao.getString(1302, from.getLanguage_id()) + "</a><br/>";
 						
-						mailHandler.send(to.getAdresses().getEmail(),
+						mailHandler.send(to.getAddress().getEmail(),
 								labelDao.getString(1301, from.getLanguage_id()) + subject,
 								message.replaceAll("\\<.*?>", "") + aLinkHTML);
 					}
@@ -396,7 +370,7 @@ public class UserService implements IUserService {
 		}
 		return null;
 	}
-
+*/
 	public Boolean checkUserIsInContactList(String SID, Long user_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -405,7 +379,7 @@ public class UserService implements IUserService {
 				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
 
 				for (UserContact userContact : uList) {
-					if (userContact.getContact().getUser_id().equals(user_id)) {
+					if (userContact.getContact().getId().equals(user_id)) {
 						return true;
 					}
 				}
@@ -480,6 +454,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public Boolean kickUserBySessionId(String SID, long userId, String sessionId) {
+		/* TODO FIXME should replaced by wicket component
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// admin only
@@ -492,6 +467,7 @@ public class UserService implements IUserService {
 		} catch (Exception err) {
 			log.error("[kickUserBySessionId]", err);
 		}
+	*/
 		return null;
 	}
 }

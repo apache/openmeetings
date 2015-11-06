@@ -41,6 +41,7 @@ import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
 	private final Map<String, String> options;
+	private final HeaderPanel header;
 
 	public abstract boolean isRtl();
 	protected abstract String getLanguageCode();
@@ -58,7 +59,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	    	.add(new AttributeModifier("lang", code))
 	    	.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
-		add(new HeaderPanel("header", appName));
+		add(header = new HeaderPanel("header", appName));
 	}
 	
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
@@ -69,6 +70,10 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			}
 		}
 		return null;
+	}
+	
+	public HeaderPanel getHeader() {
+		return header;
 	}
 	
 	@Override

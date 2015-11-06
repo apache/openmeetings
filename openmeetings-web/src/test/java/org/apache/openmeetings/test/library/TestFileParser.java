@@ -18,16 +18,18 @@
  */
 package org.apache.openmeetings.test.library;
 
-import org.apache.log4j.Logger;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.core.documents.LibraryWmlLoader;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public class TestFileParser extends AbstractJUnitDefaults {
-	
-	private static final Logger log = Logger.getLogger(TestFileParser.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestFileParser.class, webAppRootKey);
+
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
 	

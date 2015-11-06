@@ -34,8 +34,8 @@ import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
@@ -143,7 +143,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 
 			public String getIdValue(PrivateMessageFolder object, int index) {
-				return "" + object.getPrivateMessageFolderId();
+				return "" + object.getId();
 			}
 		});
 	private WebMarkupContainer selectedFolder;
@@ -160,7 +160,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
-		if (folder.getModelObject().getPrivateMessageFolderId() == selectedFolderModel.getObject()) {
+		if (folder.getModelObject().getId() == selectedFolderModel.getObject()) {
 			selectFolder(folder);
 		}
 	}
@@ -174,11 +174,11 @@ public class MessagesContactsPanel extends UserPanel {
 	}
 	
 	private String getEmail(User u) {
-		return u == null || u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
 	}
 	
 	private void selectMessage(long id, AjaxRequestTarget target) {
-		PrivateMessage msg = getBean(PrivateMessagesDao.class).get(id);
+		PrivateMessage msg = getBean(PrivateMessageDao.class).get(id);
 		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
 		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
@@ -187,10 +187,10 @@ public class MessagesContactsPanel extends UserPanel {
 			Room r = msg.getRoom();
 			if (r != null) {
 				//TODO add time check
-				Appointment a = getBean(AppointmentDao.class).getAppointmentByRoom(r.getRooms_id());
+				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
 				roomContainer.addOrReplace(new Label("start", a == null ? "" : getDateFormat().format(a.getStart())));
 				roomContainer.addOrReplace(new Label("end", a == null ? "" : getDateFormat().format(a.getEnd())));
-				roomContainer.addOrReplace(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
+				roomContainer.addOrReplace(new Button("enter").add(new RoomEnterBehavior(r.getId())));
 			}
 			roomContainer.setVisible(r != null);
 		}
@@ -229,7 +229,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private void emptySelection(AjaxRequestTarget target) {
 		selectedMessages.clear();
 		selectMessage(-1, target);
-		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), selectedFolderModel.getObject(), null));
+		unread.setDefaultModelObject(getBean(PrivateMessageDao.class).count(getUserId(), selectedFolderModel.getObject(), null));
 		if (target != null) {
 			target.add(unread);
 		}
@@ -250,8 +250,8 @@ public class MessagesContactsPanel extends UserPanel {
 	}
 	
 	private void updateContacts(AjaxRequestTarget target) {
-		pendingContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
-		allContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactsByUserAndStatus(getUserId(), false).size());
+		pendingContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
+		allContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactsByUserAndStatus(getUserId(), false).size());
 		if (target != null) {
 			target.add(contacts);
 		}
@@ -259,7 +259,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	public MessagesContactsPanel(String id) {
 		super(id);
-		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
+		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
 		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
 		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
@@ -357,19 +357,19 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						selectFolder(item, item.getModelObject().getPrivateMessageFolderId(), target);
+						selectFolder(item, item.getModelObject().getId(), target);
 					}
 				});
 				setFolderClass(item);
 			}
 		}).setOutputMarkupId(true));
 		
-		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessagesDao.class) {
+		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessageDao.class) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected PrivateMessagesDao getDao() {
-				return (PrivateMessagesDao)super.getDao();
+			protected PrivateMessageDao getDao() {
+				return (PrivateMessageDao)super.getDao();
 			}
 			
 			@Override
@@ -455,7 +455,7 @@ public class MessagesContactsPanel extends UserPanel {
 			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				getBean(PrivateMessagesDao.class).moveMailsToFolder(selectedMessages, INBOX_FOLDER_ID);
+				getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, INBOX_FOLDER_ID);
 				selectFolder(selectedFolder, selectedFolderModel.getObject(), target);
 			}
 		}));
@@ -465,9 +465,9 @@ public class MessagesContactsPanel extends UserPanel {
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
 					if (TRASH_FOLDER_ID == selectedFolderModel.getObject()) {
-						getBean(PrivateMessagesDao.class).delete(selectedMessages);
+						getBean(PrivateMessageDao.class).delete(selectedMessages);
 					} else {
-						getBean(PrivateMessagesDao.class).moveMailsToFolder(selectedMessages, TRASH_FOLDER_ID);
+						getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, TRASH_FOLDER_ID);
 					}
 					emptySelection(target);
 					target.add(container);
@@ -478,7 +478,7 @@ public class MessagesContactsPanel extends UserPanel {
 				
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					getBean(PrivateMessagesDao.class).updateReadStatus(selectedMessages, true);
+					getBean(PrivateMessageDao.class).updateReadStatus(selectedMessages, true);
 					emptySelection(target);
 					target.add(container, unread);
 				}
@@ -488,7 +488,7 @@ public class MessagesContactsPanel extends UserPanel {
 				
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					getBean(PrivateMessagesDao.class).updateReadStatus(selectedMessages, false);
+					getBean(PrivateMessageDao.class).updateReadStatus(selectedMessages, false);
 					emptySelection(target);
 					target.add(container);
 				}
@@ -525,9 +525,9 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				long folderId = moveDropDown.getModelObject().getPrivateMessageFolderId();
+				long folderId = moveDropDown.getModelObject().getId();
 				if (folderId != MOVE_CHOOSE) {
-					getBean(PrivateMessagesDao.class).moveMailsToFolder(selectedMessages, folderId);
+					getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, folderId);
 				}
 				selectFolder(selectedFolder, selectedFolderModel.getObject(), target);
 			}
@@ -545,11 +545,11 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 
 			public Iterator<? extends UserContact> iterator(long first, long count) {
-				return getBean(UserContactsDao.class).get(getUserId(), (int)first, (int)count).iterator();
+				return getBean(UserContactDao.class).get(getUserId(), (int)first, (int)count).iterator();
 			}
 
 			public long size() {
-				return getBean(UserContactsDao.class).count(getUserId());
+				return getBean(UserContactDao.class).count(getUserId());
 			}
 
 			public IModel<UserContact> model(UserContact object) {
@@ -568,7 +568,7 @@ public class MessagesContactsPanel extends UserPanel {
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
 				final long contactId = uc.getUserContactId();
-				final long userId = uc.getOwner().getUser_id();
+				final long userId = uc.getOwner().getId();
 				if (uc.isPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
@@ -587,7 +587,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						getBean(UserContactsDao.class).deleteUserContact(contactId);
+						getBean(UserContactDao.class).deleteUserContact(contactId);
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
@@ -612,7 +612,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						getBean(UserContactsDao.class).deleteUserContact(contactId);
+						getBean(UserContactDao.class).deleteUserContact(contactId);
 						updateContacts(target);
 					}
 				}).setVisible(!uc.isPending()));

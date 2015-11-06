@@ -55,8 +55,8 @@ public class RoomsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Room> item) {
 				Room room = item.getModelObject();
-				final long roomId = room.getRooms_id();
-				item.add(new Label("rooms_id", "" + room.getRooms_id()));
+				final long roomId = room.getId();
+				item.add(new Label("rooms_id", "" + room.getId()));
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", "" + room.getIspublic()));
 				item.add(new AjaxEventBehavior("click") {
@@ -71,7 +71,7 @@ public class RoomsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (room.getRooms_id().equals(form.getModelObject().getRooms_id()) ? " ui-state-active" : "")));
+						+ (room.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 		

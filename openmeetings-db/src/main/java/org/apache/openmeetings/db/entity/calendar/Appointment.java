@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +26,8 @@ import java.util.TimeZone;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,13 +41,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointment")
 @NamedQueries({
     @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.id = :id")
     , @NamedQuery(name="getAppointmentByIdAny", query="SELECT a FROM Appointment a WHERE a.id = :id")
@@ -55,9 +57,9 @@ import org.simpleframework.xml.Root;
     	query="SELECT a FROM Appointment a "
 			+ "WHERE a.deleted = false "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 			+ "	AND a.owner.user_id = :userId"
     	)
@@ -67,49 +69,93 @@ import org.simpleframework.xml.Root;
 			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.user_id = :userId)"
 			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
     	)
     , @NamedQuery(name="appointmentsInRangeRemind",
 		query="SELECT a FROM Appointment a "
 			//only ReminderType simple mail is concerned!
 			+ "WHERE a.deleted = false AND a.reminderEmailSend = false"
-			+ " AND (a.remind.typId = 2 OR a.remind.typId = 3) "
+			+ " AND (a.reminder <> :none) "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
     	)
     , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.room.rooms_id = :room_id")
+    , @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
 	//TODO this query returns duplicates if the user books an appointment with
 	//his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 	    )
     , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.user_id = :userId")
     , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.user_id = :userId")
 })
 @Root(name="appointment")
-public class Appointment implements Serializable {
-	private static final long serialVersionUID = 2016808778885761525L;
+public class Appointment implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+	public static final int REMINDER_NONE_ID = 1;
+	public static final int REMINDER_EMAIL_ID = 2;
+	public static final int REMINDER_ICAL_ID = 3;
+	public enum Reminder {
+		none(REMINDER_NONE_ID)
+		, email(REMINDER_EMAIL_ID)
+		, ical(REMINDER_ICAL_ID);
+		
+		private int id;
+		
+		Reminder() {} //default;
+		Reminder(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Reminder get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Reminder get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Reminder get(int type) {
+			Reminder r = Reminder.none;
+			switch (type) {
+				case REMINDER_EMAIL_ID:
+					r = Reminder.email;
+					break;
+				case REMINDER_ICAL_ID:
+					r = Reminder.ical;
+					break;
+				default:
+					//no-op
+			}
+			return r;
+		}
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -124,11 +170,11 @@ public class Appointment implements Serializable {
 	@Element(name="appointmentLocation", data=true, required=false)
 	private String location;
 	
-	@Column(name = "appointment_starttime")
+	@Column(name = "start")
 	@Element(name="appointmentStarttime", data=true)
 	private Date start;
 	
-	@Column(name = "appointment_endtime")
+	@Column(name = "end")
 	@Element(name="appointmentEndtime", data=true)
 	private Date end;
 	
@@ -138,22 +184,16 @@ public class Appointment implements Serializable {
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "category_id", nullable = true)
-	@ForeignKey(enabled = true)
-	@Element(name="categoryId", data=true, required=false)
-	private AppointmentCategory category;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name="users_id", data=true, required=false)
 	private User owner;
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	@Element(name="inserted", data=true, required=false)
 	private Date inserted;
 	
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	@Element(name="updated", data=true, required=false)
 	private Date updated;
 	
@@ -161,11 +201,10 @@ public class Appointment implements Serializable {
 	@Element(data=true)
 	private boolean deleted;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "remind_id", nullable = true)
-	@ForeignKey(enabled = true)
+	@Column(name = "reminder")
+	@Enumerated(EnumType.STRING)
 	@Element(name="typId", data=true, required=false)
-	private AppointmentReminderTyps remind;
+	private Reminder reminder = Reminder.none;
 
 	@Column(name = "isdaily")
 	@Element(data=true, required = false)
@@ -283,20 +322,12 @@ public class Appointment implements Serializable {
 		this.description = description;
 	}
 
-	public AppointmentCategory getCategory() {
-		return category;
+	public Reminder getReminder() {
+		return reminder;
 	}
 
-	public void setCategory(AppointmentCategory category) {
-		this.category = category;
-	}
-
-	public AppointmentReminderTyps getRemind() {
-		return remind;
-	}
-
-	public void setRemind(AppointmentReminderTyps remind) {
-		this.remind = remind;
+	public void setReminder(Reminder reminder) {
+		this.reminder = reminder;
 	}
 
 	public Date getInserted() {

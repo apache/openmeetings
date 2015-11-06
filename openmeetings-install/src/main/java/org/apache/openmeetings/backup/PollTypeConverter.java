@@ -35,7 +35,7 @@ public class PollTypeConverter extends OmConverter<PollType> {
 	}
 	
 	public PollType read(InputNode node) throws Exception {
-		return pollManager.getPollType(getlongValue(node));
+		return pollManager.getPollType(getLong(node));
 	}
 
 	public void write(OutputNode node, PollType value) throws Exception {

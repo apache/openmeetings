@@ -46,35 +46,35 @@ public class StateDao {
 	private EntityManager em;
 
 	/**
-	 * adds a new State to the states table with no short name and code
+	 * adds a new State to the state table with no short name and code
 	 * 
 	 * @param name
 	 * @return the id of the new state or null if an error occurred
 	 */
-	public Long addState(String name) {
-		return addState(name, "", 0);
+	public Long add(String name) {
+		return add(name, "", 0);
 	}
 	
 	/**
-	 * adds a new State to the states table
+	 * adds a new State to the state table
 	 * 
 	 * @param name the name of the country
 	 * @param shortName the short name of the country
 	 * @param code the code of the country
 	 * @return the id of the new state or null if an error occurred
 	 */
-	public Long addState(String name, String shortName, int code) {
+	public Long add(String name, String shortName, int code) {
 		try {
 
 			State st = new State();
 			st.setName(name);
 			st.setShortName(shortName);
 			st.setCode(code);
-			st.setStarttime(new Date());
+			st.setInserted(new Date());
 			st.setDeleted(false);
 
 			st = em.merge(st);
-			Long id = st.getState_id();
+			Long id = st.getId();
 
 			log.debug("added id " + id);
 
@@ -88,15 +88,13 @@ public class StateDao {
 	/**
 	 * selects a state by its id
 	 * 
-	 * @param state_id
+	 * @param id
 	 * @return the state-object or null
 	 */
-	public State getStateById(long state_id) {
+	public State get(long id) {
 		try {
-			TypedQuery<State> query = em
-					.createNamedQuery("getStateById", State.class);
-			query.setParameter("state_id", state_id);
-			query.setParameter("deleted", true);
+			TypedQuery<State> query = em.createNamedQuery("getStateById", State.class);
+			query.setParameter("id", id);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -110,18 +108,16 @@ public class StateDao {
 	/**
 	 * selects a state by its name
 	 * 
-	 * @param state_id
+	 * @param name
 	 * @return the state-object or null
 	 */
-	public State getStateByName(String name) {
+	public State get(String name) {
 		try {
 			if (name == null) {
 				return null;
 			}
-			TypedQuery<State> query = em
-					.createNamedQuery("getStateByName", State.class);
+			TypedQuery<State> query = em.createNamedQuery("getStateByName", State.class);
 			query.setParameter("name", name.toLowerCase());
-			query.setParameter("deleted", true);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -137,11 +133,9 @@ public class StateDao {
 	 * 
 	 * @return List of State Objects or null
 	 */
-	public List<State> getStates() {
+	public List<State> get() {
 		try {
-			TypedQuery<State> query = em
-					.createNamedQuery("getStates", State.class);
-			query.setParameter("deleted", true);
+			TypedQuery<State> query = em.createNamedQuery("getStates", State.class);
 			List<State> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

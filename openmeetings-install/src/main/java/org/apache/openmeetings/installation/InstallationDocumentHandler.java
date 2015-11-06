@@ -30,31 +30,25 @@ import org.dom4j.io.XMLWriter;
 
 public class InstallationDocumentHandler {
 	public static void createDocument(Integer stepNo) throws Exception {
-		
 		Document document = DocumentHelper.createDocument();
-		
-		Element root = document.addElement( "install" );
+
+		Element root = document.addElement("install");
 		Element step = root.addElement("step");
-		
+
 		step.addElement("stepnumber").addText(stepNo.toString());
-		step.addElement("stepname").addText("Step "+stepNo);
-		
+		step.addElement("stepname").addText("Step " + stepNo);
+
 		XMLWriter writer = new XMLWriter(new FileWriter(OmFileHelper.getInstallFile()));
-        writer.write( document );
-        writer.close();
-		
+		writer.write(document);
+		writer.close();
 	}
-	
-	public static int getCurrentStepNumber() throws Exception{
-		
-	    SAXReader reader = new SAXReader();
-        Document document = reader.read(OmFileHelper.getInstallFile());
-        
-        Node node = document.selectSingleNode( "//install/step/stepnumber" );
-        
-        return Integer.valueOf(node.getText()).intValue();
-        
+
+	public static int getCurrentStepNumber() throws Exception {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(OmFileHelper.getInstallFile());
+
+		Node node = document.selectSingleNode("//install/step/stepnumber");
+
+		return Integer.valueOf(node.getText()).intValue();
 	}
-	
-	
 }

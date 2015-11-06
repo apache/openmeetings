@@ -39,7 +39,7 @@ public class RoomConverter extends OmConverter<Room> {
 	}
 	
 	public Room read(InputNode node) throws Exception {
-		long oldId = getlongValue(node);
+		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
 		Room r = roomDao.get(newId);
@@ -48,6 +48,6 @@ public class RoomConverter extends OmConverter<Room> {
 
 	public void write(OutputNode node, Room value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getRooms_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

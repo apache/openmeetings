@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
@@ -167,14 +168,14 @@ public class MainService implements IPendingServiceCallback {
 			boolean allowed = false;
 			Room r = roomDao.get(wicketroomid);
 			if (r != null) {
-				if (r.getAppointment() != null && r.getAppointment()) {
-					Appointment a = appointmentDao.getAppointmentByRoom(wicketroomid);
+				if (r.isAppointment()) {
+					Appointment a = appointmentDao.getByRoom(wicketroomid);
 					if (a != null && !a.isDeleted()) {
-						allowed = a.getOwner().getUser_id().equals(userId);
+						allowed = a.getOwner().getId().equals(userId);
 						log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
 						if (!allowed) {
 							for (MeetingMember mm : a.getMeetingMembers()) {
-								if (mm.getUser().getUser_id().equals(userId)) {
+								if (mm.getUser().getId().equals(userId)) {
 									allowed = true;
 									break;
 								}
@@ -197,7 +198,7 @@ public class MainService implements IPendingServiceCallback {
 					if (!allowed) {
 						for (RoomOrganisation ro : r.getRoomOrganisations()) {
 							for (Organisation_Users ou : u.getOrganisation_users()) {
-								if (ro.getOrganisation().getOrganisation_id().equals(ou.getOrganisation().getOrganisation_id())) {
+								if (ro.getOrganisation().getId().equals(ou.getOrganisation().getId())) {
 									allowed = true;
 									break;
 								}
@@ -216,9 +217,9 @@ public class MainService implements IPendingServiceCallback {
 				
 				if (!u.getOrganisation_users().isEmpty()) {
 					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
-					currentClient.setUser_id(u.getUser_id());
+					currentClient.setUser_id(u.getId());
 					currentClient.setRoom_id(wicketroomid);
-					SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
+					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
 				
 					currentClient.setUsername(u.getLogin());
 					currentClient.setFirstname(u.getFirstname());
@@ -335,12 +336,8 @@ public class MainService implements IPendingServiceCallback {
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
-					"nicknameEnter", currentClient.getUser_id(), streamId,
-					null, currentClient.getUserip(), currentClient.getScope(),
-					currentClient.getExternalUserId(),
-					currentClient.getExternalUserType(),
-					currentClient.getEmail(), currentClient.getFirstname(),
-					currentClient.getLastname());
+					ConferenceLog.Type.nicknameEnter, currentClient.getUser_id(), streamId,
+					null, currentClient.getUserip(), currentClient.getScope());
 
 			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 			scopeApplicationAdapter.sendMessageToCurrentScope("nickNameSet", currentClient, true);
@@ -364,10 +361,10 @@ public class MainService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
-				if (sd == null || sd.getSessionXml() == null) {
+				if (sd == null || sd.getXml() == null) {
 					return new Long(-37);
 				} else {
-					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getSessionXml());
+					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getXml());
 
 					log.debug(userObject.toString());
 
@@ -398,7 +395,7 @@ public class MainService implements IPendingServiceCallback {
 											, null, null, false, false, userObject.getExternalUserId()
 											, userObject.getExternalUserType(), null, userObject.getPictureUrl());
 
-							long userId = u.getUser_id();
+							long userId = u.getId();
 							currentClient.setUser_id(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
@@ -406,8 +403,8 @@ public class MainService implements IPendingServiceCallback {
 
 							userDao.update(user, users_id);
 
-							currentClient.setUser_id(user.getUser_id());
-							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
+							currentClient.setUser_id(user.getId());
+							SessionVariablesUtil.setUserId(current.getClient(), user.getId());
 						}
 					}
 
@@ -529,30 +526,6 @@ public class MainService implements IPendingServiceCallback {
 		} else {
 			return null;
 		}
-	}
-
-	public int closeRoom(String SID, Long room_id, Boolean status) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				roomManager.closeRoom(room_id, status);
-
-				if (status) {
-					Map<String, String> message = new HashMap<String, String>();
-					message.put("message", "roomClosed");
-					scopeApplicationAdapter.sendMessageByRoomAndDomain(room_id, message);
-				}
-
-				return 1;
-
-			}
-
-			return 1;
-		} catch (Exception err) {
-			log.error("[closeRoom]", err);
-		}
-		return -1;
 	}
 
 	public void resultReceived(IPendingServiceCall arg0) {

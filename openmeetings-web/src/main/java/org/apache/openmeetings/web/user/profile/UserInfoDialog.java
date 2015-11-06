@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,7 +51,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 
 	public void open(AjaxRequestTarget target, long userId) {
 		this.userId = userId;
-		contacts.setVisible(userId != getUserId() && getBean(UserContactsDao.class).get(userId, getUserId()) == null, target);
+		contacts.setVisible(userId != getUserId() && getBean(UserContactDao.class).get(userId, getUserId()) == null, target);
 		message.setVisible(userId != getUserId(), target);
 		container.replace(new UserProfilePanel("body", userId));
 		target.add(container);

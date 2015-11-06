@@ -300,14 +300,14 @@
 
             if (this.dataobject!=null) {
                 if ( this.dataobject instanceof LzDataset ) {
-                    //Debug.write("onResult: ",this,value,dataobject);
+                    //if ($debug) Debug.write("onResult: ",this,value,dataobject);
                     var element = LzDataElement.valueToElement(value);
                     this.dataobject.setData(element.childNodes);
                 } else if ( this.dataobject instanceof LzDataElement ) {
                     var element = LzDataElement.valueToElement(value);
                     this.dataobject.appendChild( element );
                 } else {
-                    Debug.warn("dataobject is not LzDataset or LzDataElement: ",this,this.dataobject,delegate);
+                    //if ($debug) Debug.warn("dataobject is not LzDataset or LzDataElement: ",this,this.dataobject,delegate);
                 }
             }
             this.ondata.sendEvent(value);		

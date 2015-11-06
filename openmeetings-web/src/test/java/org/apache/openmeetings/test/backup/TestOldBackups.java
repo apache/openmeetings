@@ -48,7 +48,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	@Autowired
 	private OrganisationDao organisationDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -80,10 +80,10 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				is = new FileInputStream(backup);
 				backupController.performImport(is);
 				long newOrgCount = organisationDao.count();
-				long newUserCount = usersDao.count();
+				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();
 				long newRoomOrgCount = roomOrganisationDao.get().size();
-				long newApptCount = appointmentDao.getAppointments().size();
+				long newApptCount = appointmentDao.get().size();
 				log.debug("Now DB contains '" + newApptCount + "' appointments");
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
 				assertTrue("Zero organizations were imported from " + name, newOrgCount > orgCount);

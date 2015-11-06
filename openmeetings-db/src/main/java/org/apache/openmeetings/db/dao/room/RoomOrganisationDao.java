@@ -37,14 +37,25 @@ public class RoomOrganisationDao {
 	}
 
 	public RoomOrganisation update(RoomOrganisation entity, Long userId) {
-		if (entity.getRooms_organisation_id() == null) {
-			entity.setStarttime(new Date());
+		if (entity.getId() == null) {
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		return entity;
 	}
 
+	public RoomOrganisation get(long groupId, long roomId) {
+		List<RoomOrganisation> ll = em.createNamedQuery("getRoomGroupByGroupIdAndRoomId", RoomOrganisation.class)
+				.setParameter("roomId", roomId)
+				.setParameter("groupId", groupId)
+				.getResultList();
+
+		if (ll.size() > 0) {
+			return ll.get(0);
+		}
+		return null;
+	}
 }

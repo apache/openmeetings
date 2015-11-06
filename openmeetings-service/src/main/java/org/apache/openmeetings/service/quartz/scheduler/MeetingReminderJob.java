@@ -20,6 +20,7 @@ package org.apache.openmeetings.service.quartz.scheduler;
 
 
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ public class MeetingReminderJob {
 	
 	public void doIt() {
 		log.debug("MeetingReminderJob.execute");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
 		try {
 			appointmentLogic.doScheduledMeetingReminder();
 		} catch (Exception err){

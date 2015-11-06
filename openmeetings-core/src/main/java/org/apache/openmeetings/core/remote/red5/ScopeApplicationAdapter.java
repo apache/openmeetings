@@ -35,14 +35,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
-import org.apache.openmeetings.core.remote.FLVRecorderService;
+import org.apache.openmeetings.core.remote.RecordingService;
 import org.apache.openmeetings.core.remote.WhiteBoardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -90,7 +91,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private WhiteboardManager whiteboardManagement;
 	@Autowired
-	private FLVRecorderService flvRecorderService;
+	private RecordingService flvRecorderService;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -106,7 +107,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private FlvRecordingDao recordingDao;
+	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -183,7 +184,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			//TODO add check for room rights
 			String parentSid = (String)map.get("parentSid");
 			rcm.setRoom_id(Long.parseLong(conn.getScope().getName()));
-			rcm.setIsScreenClient(true);
+			rcm.setScreenClient(true);
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
 			rcm.setUser_id(((Integer)map.get("userId")).longValue());
@@ -199,11 +200,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 
 		// Log the User
-		conferenceLogDao.addConferenceLog("ClientConnect",
+		conferenceLogDao.addConferenceLog(ConferenceLog.Type.clientConnect,
 				rcm.getUser_id(), streamId, null, rcm.getUserip(),
-				rcm.getScope(), rcm.getExternalUserId(),
-				rcm.getExternalUserType(), rcm.getEmail(),
-				rcm.getFirstname(), rcm.getLastname());
+				rcm.getScope());
 		return true;
 	}
 
@@ -385,7 +384,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                 Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
                 if (rcl == null) {
                     // continue;
-                } else if (rcl.getIsScreenClient()) {
+                } else if (rcl.isScreenClient()) {
                     // continue;
                 } else {
                     if (!streamid.equals(rcl.getStreamid())) {
@@ -508,13 +507,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Long room_id = currentClient.getRoom_id();
 
 			// Log the User
-			conferenceLogDao.addConferenceLog("roomLeave",
+			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomLeave,
 					currentClient.getUser_id(), currentClient.getStreamid(),
-					room_id, currentClient.getUserip(), "",
-					currentClient.getExternalUserId(),
-					currentClient.getExternalUserType(),
-					currentClient.getEmail(), currentClient.getFirstname(),
-					currentClient.getLastname());
+					room_id, currentClient.getUserip(), "");
 
 			// Remove User from Sync List's
 			if (room_id != null) {
@@ -568,11 +563,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							}
 							
 							//If the user was a avclient, we do not broadcast a message about that to everybody
-							if (currentClient.getIsAVClient()) {
+							if (currentClient.isAvClient()) {
 								continue;
 							}
 							
-							boolean isScreen = rcl.getIsScreenClient();
+							boolean isScreen = rcl.isScreenClient();
 							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
 								//going to terminate screen sharing started by this client
 								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
@@ -580,7 +575,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							} else if (isScreen) {
 								// screen sharing clients do not receive events
 								continue;
-							} else if (rcl.getIsAVClient()) {
+							} else if (rcl.isAvClient()) {
 								// AVClients or potential AVClients do not receive events
 								continue;
 							}
@@ -625,12 +620,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("start streamPublishStart broadcast start: " + stream.getPublishedName() + " CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
-			if (currentClient.getIsScreenClient()) {
+			if (currentClient.isScreenClient()) {
 				currentClient.setScreenPublishStarted(true);
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			//If its an audio/video client then send the session object with the full data to everybody
-			else if (currentClient.getIsAVClient()) {
+			else if (currentClient.isAvClient()) {
 				clientObjectSendToSync = sessionManager.getClientByPublicSID(currentClient.getPublicSID(), false, null);
 			}
 			
@@ -658,11 +653,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						log.debug("RCL getIsRecording newStream SEND");
 						flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
 					}
-					if (rcl.getIsAVClient()) {
+					if (rcl.isAvClient()) {
 						log.debug("RCL getIsAVClient newStream SEND");
 						return true;
 					}
-					if (rcl.getIsScreenClient()) {
+					if (rcl.isScreenClient()) {
 						log.debug("RCL getIsScreenClient newStream SEND");
 						return true;
 					}
@@ -762,7 +757,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						} else {
 							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 							if (rcl != null) {
-								if (rcl.getIsScreenClient()) {
+								if (rcl.isScreenClient()) {
 									// continue;
 								} else {
 									log.debug("is this users still alive? :" + rcl);
@@ -909,7 +904,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				public boolean filter(IConnection conn) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 					if (rcl == null) {
-					} else if (rcl.getIsScreenClient()) {
+					} else if (rcl.isScreenClient()) {
 					} else {
 						if (rcl != currentClient) {
 							rcl.setMicMuted(true);
@@ -990,7 +985,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// No moderator in this room at the moment
 				Room room = roomDao.get(currentClient.getRoom_id());
 
-				return room.getIsModeratedRoom() ? 3L : 1L;
+				return room.isModerated() ? 3L : 1L;
 			}
 
 		} catch (Exception err) {
@@ -1081,8 +1076,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Room room = roomDao.get(room_id);
 
 			// not really - default logic
-			if (room.getAppointment() == null || room.getAppointment() == false) {
-				if (room.getIsModeratedRoom()) {
+			if (!room.isAppointment()) {
+				if (room.isModerated()) {
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
 					List<Client> clientModeratorListRoom = sessionManager.getCurrentModeratorByRoom(room_id);
@@ -1133,21 +1128,21 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * current conference room<br/>
 	 * <br/>
 	 *
-	 * @param room_id - id of the room
+	 * @param roomId - id of the room
 	 * @param becomeModerator - is user will become moderator
 	 * @param isSuperModerator - is user super moderator
 	 * @param organization_id - organization id of the user
 	 * @param colorObj - some color
 	 * @return RoomStatus object
 	 */
-	public synchronized RoomStatus setRoomValues(Long room_id, Boolean becomeModerator, Boolean isSuperModerator,
+	public synchronized RoomStatus setRoomValues(Long roomId, Boolean becomeModerator, Boolean isSuperModerator,
 			Long organization_id, String colorObj) {
 		try {
 			log.debug("-----------  setRoomValues");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			currentClient.setRoom_id(room_id);
+			currentClient.setRoom_id(roomId);
 			currentClient.setRoomEnter(new Date());
 			currentClient.setOrganization_id(organization_id);
 
@@ -1158,8 +1153,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (currentClient.getUser_id() != null) {
 					User us = usersDao.get(currentClient.getUser_id());
 					if (us != null) {
-						currentClient.setExternalUserId(us.getExternalUserId());
-						currentClient.setExternalUserType(us.getExternalUserType());
+						currentClient.setExternalUserId(us.getExternalId());
+						currentClient.setExternalUserType(us.getExternalType());
 					}
 				}
 			}
@@ -1169,22 +1164,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
 
-            Room room = roomDao.get(room_id);
+            Room room = roomDao.get(roomId);
             if (room.getShowMicrophoneStatus()) {
             	currentClient.setCanGiveAudio(true);
             }
 
 			// Log the User
-			conferenceLogDao.addConferenceLog("roomEnter",
-					currentClient.getUser_id(), streamid, room_id,
-					currentClient.getUserip(), "",
-					currentClient.getExternalUserId(),
-					currentClient.getExternalUserType(),
-					currentClient.getEmail(), currentClient.getFirstname(),
-					currentClient.getLastname());
+			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomEnter,
+					currentClient.getUser_id(), streamid, roomId,
+					currentClient.getUserip(), "");
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<Client> clientListRoom = sessionManager.getClientListByRoom(room_id);
+			List<Client> clientListRoom = sessionManager.getClientListByRoom(roomId);
 
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
@@ -1195,8 +1186,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			// default logic for non regular rooms
-			if (room.getAppointment() == null || room.getAppointment() == false) {
-				if (room.getIsModeratedRoom()) {
+			if (!room.isAppointment()) {
+				if (room.isModerated()) {
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
 					// List<RoomClient> clientModeratorListRoom =
@@ -1229,7 +1220,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				} else {
 					// If this is a normal Room Moderator rules : first come, first draw ;-)
 					log.debug("setRoomValues : Room"
-							+ room_id
+							+ roomId
 							+ " not appointed! Moderator rules : first come, first draw ;-)");
 					if (clientListRoom.size() == 1) {
 						log.debug("Room is empty so set this user to be moderation role");
@@ -1265,14 +1256,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			} else {
 				// If this is an Appointment then the Moderator will be set to the Invitor
 
-				Appointment ment = appointmentDao.getAppointmentByRoom(room_id);
+				Appointment ment = appointmentDao.getByRoom(roomId);
 
 				Long userIdInRoomClient = currentClient.getUser_id();
 
 				boolean found = false;
 				boolean moderator_set = false;
 				// First check owner who is not in the members list
-				if (ment.getOwner().getUser_id().equals(userIdInRoomClient)) {
+				if (ment.getOwner().getId().equals(userIdInRoomClient)) {
 					found = true;
 					log.debug("User "
 							+ userIdInRoomClient
@@ -1299,9 +1290,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						if (member.getUser() != null) {
 							log.debug("checking user " + member.getUser().getFirstname()
 									+ " for moderator role - ID : "
-									+ member.getUser().getUser_id());
+									+ member.getUser().getId());
 	
-							if (member.getUser().getUser_id().equals(userIdInRoomClient)) {
+							if (member.getUser().getId().equals(userIdInRoomClient)) {
 								found = true;
 								log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
 								currentClient.setIsMod(false);
@@ -1399,8 +1390,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				User us = usersDao.get(userId);
 				
 				if (us != null) {
-					currentClient.setExternalUserId(us.getExternalUserId());
-					currentClient.setExternalUserType(us.getExternalUserType());
+					currentClient.setExternalUserId(us.getExternalId());
+					currentClient.setExternalUserType(us.getExternalType());
 					if (us.getPictureuri() != null) {
 						// set Picture-URI
 						currentClient.setPicture_uri(us.getPictureuri());
@@ -1444,8 +1435,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			User user = usersDao.get(userId);
 
 			if (user != null) {
-				currentClient.setExternalUserId(user.getExternalUserId());
-				currentClient.setExternalUserType(user.getExternalUserType());
+				currentClient.setExternalUserId(user.getExternalId());
+				currentClient.setExternalUserType(user.getExternalType());
 			}
 
 			// only fill this value from User-Record

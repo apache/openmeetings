@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.connection;
 
-import static java.lang.Boolean.TRUE;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 
@@ -35,7 +34,6 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebClient;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -73,21 +71,6 @@ public class ConnectionsPanel extends AdminPanel {
 				return getBean(ISessionManager.class).getClients().size();
 			}
 		};
-		
-		SearchableDataProvider<WebClient> sdpWeb = new SearchableDataProvider<WebClient>(null) {
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Iterator<? extends WebClient> iterator(long first, long count) {
-				List<WebClient> l = new ArrayList<WebClient>(Application.getClients());
-				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
-			}
-			
-			@Override
-			public long size() {
-				return Application.getClientsSize();
-			}
-		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
 		SearchableDataView<Client> dataView = new SearchableDataView<Client>("clientList", sdp) {
@@ -111,7 +94,7 @@ public class ConnectionsPanel extends AdminPanel {
 								, c.getServer() == null ? 0 : c.getServer().getId());
 						target.add(container, details.setVisible(false));
 					}
-				}.setEnabled(!TRUE.equals(c.getIsScreenClient()) && !TRUE.equals(c.getIsAVClient())));
+				}.setEnabled(!c.isScreenClient() && !c.isAvClient()));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -144,15 +127,30 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
 			}
 		};
-		add(container.add(dataView).setOutputMarkupId(true));
+		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
+		
+		SearchableDataProvider<org.apache.openmeetings.web.app.Client> sdpWeb = new SearchableDataProvider<org.apache.openmeetings.web.app.Client>(null) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Iterator<? extends org.apache.openmeetings.web.app.Client> iterator(long first, long count) {
+				List<org.apache.openmeetings.web.app.Client> l = new ArrayList<org.apache.openmeetings.web.app.Client>(Application.getClients());
+				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
+			}
+			
+			@Override
+			public long size() {
+				return Application.getClientsSize();
+			}
+		};
 		
 		final WebMarkupContainer containerWeb = new WebMarkupContainer("containerWeb");
-		SearchableDataView<WebClient> dataViewWeb = new SearchableDataView<WebClient>("clientListWeb", sdpWeb) {
+		SearchableDataView<org.apache.openmeetings.web.app.Client> dataViewWeb = new SearchableDataView<org.apache.openmeetings.web.app.Client>("clientListWeb", sdpWeb) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<WebClient> item) {
-				WebClient c = item.getModelObject();
+			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
+				org.apache.openmeetings.web.app.Client c = item.getModelObject();
 				item.add(new Label("id", c.getUserId()));
 				item.add(new Label("login", getBean(UserService.class).getUserById(getSid(), c.getUserId()).getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
@@ -162,7 +160,7 @@ public class ConnectionsPanel extends AdminPanel {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						WebClient c = item.getModelObject();
+						org.apache.openmeetings.web.app.Client c = item.getModelObject();
 						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId()
 								, c.getSessionId());
 						target.add(containerWeb, details.setVisible(false));
@@ -173,9 +171,9 @@ public class ConnectionsPanel extends AdminPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						Field[] ff = WebClient.class.getDeclaredFields();
+						Field[] ff = org.apache.openmeetings.web.app.Client.class.getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						WebClient c = item.getModelObject();
+						org.apache.openmeetings.web.app.Client c = item.getModelObject();
 						for (Field f : ff) {
 							int mod = f.getModifiers();
 							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
@@ -199,8 +197,8 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
 			}
 		};
-		add(containerWeb.add(dataViewWeb).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		
+		add(containerWeb.add(dataViewWeb).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 1L;
 
@@ -212,7 +210,7 @@ public class ConnectionsPanel extends AdminPanel {
 	}
 
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
 	}
 }

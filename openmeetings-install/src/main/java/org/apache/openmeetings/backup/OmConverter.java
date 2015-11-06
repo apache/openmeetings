@@ -22,15 +22,15 @@ import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 
 public abstract class OmConverter<T> implements Converter<T> {
-	static long getlongValue(InputNode node) throws Exception {
-		return getlongValue(node.getValue());
+	static long getLong(InputNode node) throws Exception {
+		return getLong(node.getValue());
 	}
 
-	static long getlongValue(String value) {
-		return getlongValue(value, 0);
+	static long getLong(String value) {
+		return getLong(value, 0);
 	}
 	
-	static long getlongValue(String value, long def) {
+	static long getLong(String value, long def) {
 		long result = def;
 		try {
 			result = Long.valueOf(value).longValue();
@@ -40,7 +40,11 @@ public abstract class OmConverter<T> implements Converter<T> {
 		return result;
 	}
 
-	static int getintValue(String value, int def) {
+	static int getInt(InputNode node) throws Exception {
+		return getInt(node.getValue(), 0);
+	}
+	
+	static int getInt(String value, int def) {
 		int result = def;
 		try {
 			result = Integer.valueOf(value).intValue();

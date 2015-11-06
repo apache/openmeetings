@@ -28,6 +28,8 @@ public class RoomStatus {
 	BrowserStatus browserStatus;
 	Boolean roomFull = false;
 	
+	public RoomStatus() {}
+	
 	public List<Client> getClientList() {
 		return clientList;
 	}

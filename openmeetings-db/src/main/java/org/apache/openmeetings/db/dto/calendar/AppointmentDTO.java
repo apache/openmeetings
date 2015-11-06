@@ -18,18 +18,29 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 
-public class AppointmentDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class AppointmentDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String title;
 	private String location;
@@ -40,11 +51,12 @@ public class AppointmentDTO {
 	private Date inserted;
 	private Date updated;
 	private boolean deleted;
-	private AppointmentReminderTypeDTO reminder;
+	private Reminder reminder;
 	private RoomDTO room;
 	private String icalId;
-	private List<MeetingMemberDTO> meetingMembers;
+	private List<MeetingMemberDTO> meetingMembers = new ArrayList<>();
 	private Long languageId;
+	private String password;
 	private boolean passwordProtected;
 	private boolean connectedEvent;
 	private boolean reminderEmailSend;
@@ -65,12 +77,13 @@ public class AppointmentDTO {
 		inserted = a.getInserted();
 		updated = a.getUpdated();
 		deleted = a.isDeleted();
-		reminder = new AppointmentReminderTypeDTO(a.getRemind());
+		reminder = a.getReminder();
 		room = new RoomDTO(a.getRoom());
 		icalId = a.getIcalId();
-		meetingMembers = new ArrayList<>();
-		for(MeetingMember mm: a.getMeetingMembers()) {
-			meetingMembers.add(new MeetingMemberDTO(mm));
+		if (a.getMeetingMembers() != null) {
+			for(MeetingMember mm : a.getMeetingMembers()) {
+				meetingMembers.add(new MeetingMemberDTO(mm));
+			}
 		}
 		languageId = a.getLanguageId();
 		passwordProtected = a.isPasswordProtected();
@@ -78,6 +91,34 @@ public class AppointmentDTO {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
+	public Appointment get(UserDao userDao, AppointmentDao appointmentDao) {
+		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
+		a.setId(id);
+		a.setTitle(title);
+		a.setLocation(location);
+		a.setStart(start.getTime());
+		a.setEnd(end.getTime());
+		a.setDescription(description);
+		a.setOwner(owner.get(userDao));
+		a.setInserted(inserted);
+		a.setUpdated(updated);
+		a.setDeleted(deleted);
+		a.setReminder(reminder);
+		a.setRoom(room.get());
+		a.setIcalId(icalId);
+		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		for(MeetingMemberDTO mm : meetingMembers) {
+			MeetingMember m = mm.get(userDao);
+			m.setAppointment(a);
+			a.getMeetingMembers().add(m);
+		}
+		a.setLanguageId(languageId);
+		a.setPasswordProtected(passwordProtected);
+		a.setConnectedEvent(connectedEvent);
+		a.setReminderEmailSend(reminderEmailSend);
+		return a;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -158,11 +199,11 @@ public class AppointmentDTO {
 		this.deleted = deleted;
 	}
 
-	public AppointmentReminderTypeDTO getReminder() {
+	public Reminder getReminder() {
 		return reminder;
 	}
 
-	public void setReminder(AppointmentReminderTypeDTO reminder) {
+	public void setReminder(Reminder reminder) {
 		this.reminder = reminder;
 	}
 
@@ -220,5 +261,21 @@ public class AppointmentDTO {
 
 	public void setReminderEmailSend(boolean reminderEmailSend) {
 		this.reminderEmailSend = reminderEmailSend;
+	}
+
+	public static List<AppointmentDTO> list(List<Appointment> list) {
+		List<AppointmentDTO> result = new ArrayList<>(list.size());
+		for (Appointment a : list) {
+			result.add(new AppointmentDTO(a));
+		}
+		return result;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

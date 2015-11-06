@@ -72,22 +72,22 @@ public class RoomsPanel extends UserPanel {
 					
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						roomId = r.getRooms_id();
+						roomId = r.getId();
 						updateRoomDetails(target);
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()));
+				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
-				item.add(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
+				item.add(new Button("enter").add(new RoomEnterBehavior(r.getId())));
 				roomContainer.add(new AjaxLink<Void>("refresh") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						roomId = r.getRooms_id();
-						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()));
+						roomId = r.getId();
+						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
 						updateRoomDetails(target);
 					}
 				});
@@ -149,7 +149,7 @@ public class RoomsPanel extends UserPanel {
 		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		Room room = Application.getBean(RoomDao.class).get(roomId);
-		roomID.setObject(room.getRooms_id());
+		roomID.setObject(room.getId());
 		roomName.setObject(room.getName());
 		roomComment.setObject(room.getComment());
 		target.add(clientsContainer, details);

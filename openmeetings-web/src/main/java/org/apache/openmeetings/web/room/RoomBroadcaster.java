@@ -42,7 +42,7 @@ public class RoomBroadcaster {
 		sa.new MessageSender(sa.getRoomScope("" + roomId), method, obj) {
 			public boolean filter(IConnection conn) {
 				Client rcl = sessionMgr.getClientByStreamId(conn.getClient().getId(), null);
-				return rcl.getIsScreenClient()
+				return rcl.isScreenClient()
 						|| rcl.getRoom_id() == null || !rcl.getRoom_id().equals(roomId) || userDao.get(rcl.getUser_id()) == null;
 			}
 		}.start();

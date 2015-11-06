@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -50,7 +50,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  * @author solomax
  *
  */
-public class VoteDialog extends AbstractFormDialog<RoomPollAnswers> {
+public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
 	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added 
 	private final long roomId;
@@ -63,15 +63,15 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswers> {
 	public VoteDialog(String id, long roomId) {
 		super(id, Application.getString(18));
 		this.roomId = roomId;
-		add(form = new PollAnswerForm("form", new CompoundPropertyModel<RoomPollAnswers>(new RoomPollAnswers())));
+		add(form = new PollAnswerForm("form", new CompoundPropertyModel<RoomPollAnswer>(new RoomPollAnswer())));
 	}
 	
 	static String getName(User u) {
-		return u == null ? "" : getUserId() == u.getUser_id() ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname();
+		return u == null ? "" : getUserId() == u.getId() ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname();
 	}
 	
 	public void updateModel(AjaxRequestTarget target) {
-		RoomPollAnswers a = new RoomPollAnswers();
+		RoomPollAnswer a = new RoomPollAnswer();
 		a.setRoomPoll(getBean(PollDao.class).getPoll(roomId));
 		User u = getBean(UserDao.class).get(getUserId());
 		a.setVotedUser(u);
@@ -117,7 +117,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswers> {
 	 */
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		RoomPollAnswers a = form.getModelObject();
+		RoomPollAnswer a = form.getModelObject();
 		a.setVoteDate(new Date());
 		a.getRoomPoll().getRoomPollAnswerList().add(a);
 		getBean(PollDao.class).updatePoll(a.getRoomPoll());
@@ -128,12 +128,12 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswers> {
 		user.detach();
 		super.onDetach();
 	}
-	private class PollAnswerForm extends Form<RoomPollAnswers> {
+	private class PollAnswerForm extends Form<RoomPollAnswer> {
 		private static final long serialVersionUID = 1L;
 		private final WebMarkupContainer typeBool = new WebMarkupContainer("typeBool");
 		private final WebMarkupContainer typeInt = new WebMarkupContainer("typeInt");
 
-		PollAnswerForm(String id, IModel<RoomPollAnswers> model) {
+		PollAnswerForm(String id, IModel<RoomPollAnswer> model) {
 			super(id, model);
 			add(feedback);
 			add(new Label("user", user));

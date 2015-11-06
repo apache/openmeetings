@@ -21,28 +21,25 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
-import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -71,7 +68,6 @@ import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private Salutation salutation;
 	private LocalDate age;
 	private PasswordTextField passwordField;
 	private RequiredTextField<String> email;
@@ -85,31 +81,21 @@ public class GeneralUserForm extends Form<User> {
 		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 		updateModelObject(getModelObject());
-		SalutationDao salutDao = getBean(SalutationDao.class);
 		add(new DropDownChoice<Salutation>("salutation"
-				, new PropertyModel<Salutation>(this, "salutation")
-				, salutDao.getUserSalutations(getLanguage())
+				, Arrays.asList(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public Object getDisplayValue(Salutation object) {
-						return getString("" + object.getFieldvalues_id());
+						return getString("user.salutation." + object.name());
 					}
 
 					@Override
 					public String getIdValue(Salutation object, int index) {
-						return "" + object.getSalutations_id();
+						return object.name();
 					}
-				})
-			.add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setSalutations_id(salutation.getSalutations_id());
-				}
-			}));
+				}));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 		
@@ -117,10 +103,10 @@ public class GeneralUserForm extends Form<User> {
 
 		add(new LanguageDropDown("language_id"));
 
-		add(email = new RequiredTextField<String>("adresses.email"));
+		add(email = new RequiredTextField<String>("address.email"));
 		email.setLabel(Model.of(Application.getString(137)));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
-		add(new TextField<String>("adresses.phone"));
+		add(new TextField<String>("address.phone"));
 		add(new CheckBox("sendSMS"));
 		add(new AjaxDatePicker("age", new PropertyModel<LocalDate>(this, "age"), WebSession.get().getLocale()) {
 			private static final long serialVersionUID = 1L;
@@ -131,12 +117,12 @@ public class GeneralUserForm extends Form<User> {
 				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
 			}
 		});
-		add(new TextField<String>("adresses.street"));
-		add(new TextField<String>("adresses.additionalname"));
-		add(new TextField<String>("adresses.zip"));
-		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "state_id")));
-		add(new TextArea<String>("adresses.comment"));
+		add(new TextField<String>("address.street"));
+		add(new TextField<String>("address.additionalname"));
+		add(new TextField<String>("address.zip"));
+		add(new TextField<String>("address.town"));
+		add(new DropDownChoice<State>("address.state", getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "state_id")));
+		add(new TextArea<String>("address.comment"));
 
 		final List<Organisation_Users> orgUsers;
 		if (isAdminForm) {
@@ -158,7 +144,7 @@ public class GeneralUserForm extends Form<User> {
 
 			@Override
 			protected Object getId(Organisation_Users choice) {
-				return choice.getOrganisation().getOrganisation_id();
+				return choice.getOrganisation().getId();
 			}
 
 			@Override
@@ -186,14 +172,13 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u) {
-		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
 		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
 	
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getUser_id())) {
+		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(Application.getString(1000));
 		}
 		super.onValidate();
@@ -202,12 +187,11 @@ public class GeneralUserForm extends Form<User> {
 	public PasswordTextField getPasswordField() {
 		return passwordField;
 	}
-
 	
 	public String getEmail() {
 		return email.getValue();
 	}
-	
+
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);

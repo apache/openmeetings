@@ -101,7 +101,7 @@ public class ChatService implements IPendingServiceCallback {
 		msg.add("false");// canvas.isrtl;
 		msg.add("" + client.getUser_id());
 		Room room = roomDao.get(client.getRoom_id());
-		msg.add("" + (room.getChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
+		msg.add("" + (room.isChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
 		sendMessageWithClient(msg);
 	}
 	
@@ -180,10 +180,10 @@ public class ChatService implements IPendingServiceCallback {
 						if (rcl == null) {
 							continue;
 						}
-						if (rcl.getIsAVClient()) {
+						if (rcl.isAvClient()) {
 							continue;
 						}
-						if (rcl.getIsScreenClient()) {
+						if (rcl.isScreenClient()) {
     						continue;
     					}
 						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {

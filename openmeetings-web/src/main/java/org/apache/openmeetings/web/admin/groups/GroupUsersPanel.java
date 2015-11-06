@@ -62,13 +62,13 @@ public class GroupUsersPanel extends Panel {
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						if (orgUser.getOrganisation_users_id() != null) {
+						if (orgUser.getId() != null) {
 							getBean(OrganisationUserDao.class).update(orgUser, WebSession.getUserId());
 						}
 					}
 				}));
 				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
-				if (orgUser.getOrganisation_users_id() == null) {
+				if (orgUser.getId() == null) {
 					label.add(AttributeAppender.append("class", "newItem"));
 				}
 				item.add(label);
@@ -77,10 +77,10 @@ public class GroupUsersPanel extends Panel {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						if (orgUser.getOrganisation_users_id() == null) {
+						if (orgUser.getId() == null) {
 							for (int i = 0; i < users2add.size(); ++i) {
 								//FIXME ineffective
-								if (users2add.get(i).getUser().getUser_id().equals(orgUser.getUser().getUser_id())) {
+								if (users2add.get(i).getUser().getId().equals(orgUser.getUser().getId())) {
 									users2add.remove(i);
 									break;
 								}

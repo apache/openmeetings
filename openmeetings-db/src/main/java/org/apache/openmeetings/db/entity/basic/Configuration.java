@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -55,8 +54,8 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "configuration")
 @Root(name = "config")
-public class Configuration implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -6129473946508963339L;
+public class Configuration implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -118,11 +117,11 @@ public class Configuration implements Serializable, IDataProviderEntity {
 		this.conf_value = conf_value;
 	}
 
-	public Long getConfiguration_id() {
+	public Long getId() {
 		return configuration_id;
 	}
 
-	public void setConfiguration_id(Long configuration_id) {
+	public void setId(Long configuration_id) {
 		this.configuration_id = configuration_id;
 	}
 

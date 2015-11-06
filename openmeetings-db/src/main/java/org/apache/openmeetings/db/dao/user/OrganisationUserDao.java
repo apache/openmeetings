@@ -38,7 +38,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	private EntityManager em;
 	@Autowired
 	private UserDao usersDao;
-	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.adresses.email"};
+	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
 	public Organisation_Users get(long id) {
 		TypedQuery<Organisation_Users> q = em.createNamedQuery("getOrganisationUsersById", Organisation_Users.class);
@@ -114,7 +114,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 	
 	public Organisation_Users update(Organisation_Users entity, Long userId) {
-		if (entity.getOrganisation_users_id() == null) {
+		if (entity.getId() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {
@@ -127,7 +127,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 
 	private void updateUser(Organisation_Users entity, boolean delete, Long userId) {
 		//entity has been detached need to re-fetch
-		User u = usersDao.get(entity.getUser().getUser_id());
+		User u = usersDao.get(entity.getUser().getId());
 		int idx = u.getOrganisation_users().indexOf(entity);
 		if (delete && idx > -1) {
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);
@@ -139,7 +139,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 	
 	public void delete(Organisation_Users entity, Long userId) {
-		if (entity.getOrganisation_users_id() != null) {
+		if (entity.getId() != null) {
 			updateUser(entity, true, userId);
 		}
 	}

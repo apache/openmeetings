@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
@@ -92,7 +93,7 @@ public class InvitationManager implements IInvitationManager {
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		Long langId = mm.getUser().getLanguage_id();
+		Long langId = mm.getUser().getLanguageId();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
 		AbstractAppointmentTemplate t = null;
 		switch (type) {
@@ -116,13 +117,13 @@ public class InvitationManager implements IInvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link);
-		String email = i.getInvitee().getAdresses().getEmail();
-		String replyToEmail = owner.getAdresses().getEmail();
+		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link);
+		String email = i.getInvitee().getAddress().getEmail();
+		String replyToEmail = owner.getAddress().getEmail();
 		
 		if (ical) {
 			String username = i.getInvitee().getLogin();
-			boolean isOwner = owner.getUser_id().equals(i.getInvitee().getUser_id());
+			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
 			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
@@ -283,32 +284,27 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
-		if (a.getRemind() == null) {
+		Reminder reminder = a.getReminder();
+		if (reminder == null) {
 			log.error("Appointment doesn't have reminder set!");
 			return;
 		}
-		long remindType = a.getRemind().getTypId();
-		if (remindType < 2) {
+		if (Reminder.none == reminder) {
 			log.error("MeetingMember should not have invitation!");
 			return;
 		}
 
-		log.debug(":::: processInvitation ..... " + remindType);
-
-		// appointment.getRemind().getTypId() == 1 will not receive emails
-		if (remindType > 1) {
-			log.debug("Invitation for Appointment : simple email");
-
-			try {
-				mm.setInvitation(getInvitation(mm.getInvitation()
-						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
-						, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
-				if (sendMail) {
-					sendInvitionLink(a, mm, type, remindType > 2);
-				}
-			} catch (Exception e) {
-				log.error("Unexpected error while setting invitation", e);
+		log.debug(":::: processInvitation ..... " + reminder);
+		log.debug("Invitation for Appointment : simple email");
+		try {
+			mm.setInvitation(getInvitation(mm.getInvitation()
+					, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
+					, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
+			if (sendMail) {
+				sendInvitionLink(a, mm, type, Reminder.ical == reminder);
 			}
+		} catch (Exception e) {
+			log.error("Unexpected error while setting invitation", e);
 		}
 	}
 
@@ -354,7 +350,7 @@ public class InvitationManager implements IInvitationManager {
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
 		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
-			invitation.getInvitee().setLanguage_id(language_id);
+			invitation.getInvitee().setLanguageId(language_id);
 		}
 		invitation.setRoom(room);
 		invitation.setInserted(new Date());

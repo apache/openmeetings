@@ -182,7 +182,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				}
 
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao
-						.getFileExplorerItemsById(fileExplorerItemId);
+						.get(fileExplorerItemId);
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 
@@ -217,7 +217,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							Client rcl = this.sessionManager
 									.getClientByStreamId(conn.getClient()
 											.getId(), null);
-							if ((rcl == null) || (rcl.getIsScreenClient())) {
+							if ((rcl == null) || (rcl.isScreenClient())) {
 								continue;
 							} else {
 								((IServiceCapableConnection) conn).invoke(

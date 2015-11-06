@@ -20,12 +20,8 @@ package org.apache.openmeetings.core.data.conference;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,16 +31,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -57,51 +48,18 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class RoomManager implements IRoomManager {
+public class RoomManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomManager.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private OrganisationDao orgDao;
-	@Autowired
-	private UserDao usersDao;
-	@Autowired
 	private ISessionManager sessionManager;
     @Autowired
 	private RoomDao roomDao;
     @Autowired
 	private SipDao sipDao;
-    @Autowired
-	private RoomTypeDao roomTypeDao;
-
-	/**
-	 * Get a Rooms-Object or NULL
-	 * 
-	 * @param externalRoomId
-	 * @return Rooms-Object or NULL
-	 */
-	public Room getRoomByExternalId(Long externalRoomId,
-			String externalRoomType, long roomtypes_id) {
-		log.debug("getRoombyExternalId : " + externalRoomId + " - "
-				+ externalRoomType + " - " + roomtypes_id);
-		try {
-			TypedQuery<Room> query = em.createNamedQuery("getRoomByExternalId", Room.class);
-			query.setParameter("externalRoomId", externalRoomId);
-			query.setParameter("externalRoomType", externalRoomType);
-			query.setParameter("roomtypes_id", roomtypes_id);
-			List<?> ll = query.getResultList();
-			if (ll.size() > 0) {
-				return (Room) ll.get(0);
-			} else {
-				log.error("Could not find room " + externalRoomId);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomByExternalId] ", ex2);
-		}
-		return null;
-	}
 
 	public SearchResult<Room> getRooms(int start, int max, String orderby, boolean asc, String search) {
 		try {
@@ -127,7 +85,7 @@ public class RoomManager implements IRoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			sResult.setResult(rooms);
@@ -144,7 +102,7 @@ public class RoomManager implements IRoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			return rooms;
@@ -160,7 +118,7 @@ public class RoomManager implements IRoomManager {
 					orderby, asc, externalRoomType);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			return rooms;
@@ -371,280 +329,21 @@ public class RoomManager implements IRoomManager {
     	return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
     }
 
-    private List<RoomModerator> getModerators(List<Map<String, Object>> list, Long roomId) {
-		List<RoomModerator> result = new ArrayList<RoomModerator>();
-
-		for (Map<String, Object> roomModeratorObj : list) {
-			Long roomModeratorsId = roomModeratorObj.containsKey("roomModeratorsId") ? Long.parseLong(roomModeratorObj.get("roomModeratorsId").toString()) : null;
-			Long userId = Long.parseLong(roomModeratorObj.get("userId").toString());
-			Boolean isSuperModerator = Boolean.parseBoolean(roomModeratorObj.get("isSuperModerator").toString());
-
-			RoomModerator rm = new RoomModerator();
-			rm.setRoomModeratorsId(roomModeratorsId);
-			rm.setRoomId(roomId);
-			rm.setUser(usersDao.get(userId));
-			rm.setIsSuperModerator(isSuperModerator);
-			
-			result.add(rm);
-		}
-		return result;
-    }
-
 	/**
-	 * adds a new Record to the table rooms
-	 * @param name
-	 * @param roomtypes_id
-	 * @param ispublic
-	 * @param hideActivitiesAndActions TODO
-	 * @param hideFilesExplorer TODO
-	 * @param hideActionsMenu TODO
-	 * @param hideScreenSharing TODO
-	 * @param hideWhiteboard TODO
-	 * @return id of the newly created room or NULL
-	 */
-	public Long addRoom(String name, long roomtypes_id,
-			String comment, Long numberOfPartizipants, boolean ispublic,
-			List<Integer> organisations, Boolean appointment, Boolean isDemoRoom,
-			Integer demoTime, Boolean isModeratedRoom,
-			List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
-			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, boolean allowRecording,
-			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
-			, boolean filesOpened, boolean autoVideoSelect, boolean sipEnabled) {
-
-		try {
-			Room r = new Room();
-			r.setName(name);
-			r.setComment(comment);
-			r.setStarttime(new Date());
-			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
-			r.setIspublic(ispublic);
-			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
-			r.setAllowFontStyles(allowFontStyles);
-
-			r.setAppointment(appointment);
-
-			r.setIsDemoRoom(isDemoRoom);
-			r.setDemoTime(demoTime);
-
-			r.setIsModeratedRoom(isModeratedRoom);
-			r.setHideTopBar(hideTopBar);
-
-			r.setDeleted(false);
-
-			r.setIsClosed(isClosed);
-			r.setRedirectURL(redirectURL);
-
-			r.setOwnerId(ownerId);
-
-			r.setWaitForRecording(waitForRecording);
-			r.setAllowRecording(allowRecording);
-			
-			r.setHideChat(hideChat);
-			r.setHideActivitiesAndActions(hideActivitiesAndActions);
-			r.setHideActionsMenu(hideActionsMenu);
-			r.setHideFilesExplorer(hideFilesExplorer);
-			r.setHideScreenSharing(hideScreenSharing);	
-			r.setHideWhiteboard(hideWhiteboard);
-			r.setShowMicrophoneStatus(showMicrophoneStatus);
-			r.setChatModerated(chatModerated);
-			r.setChatOpened(chatOpened);
-			r.setFilesOpened(filesOpened);
-			r.setAutoVideoSelect(autoVideoSelect);
-			r.setSipEnabled(sipEnabled);
-			r.setPin(conferencePin);
-			
-			r = roomDao.update(r, ownerId);
-
-			if (organisations != null) {
-				Long t = this.updateRoomOrganisations(organisations, r);
-				if (t == null) {
-					return null;
-				}
-			}
-
-			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-				r = roomDao.update(r, ownerId);
-			}
-
-			return r.getRooms_id();
-		} catch (Exception ex2) {
-			log.error("[addRoom] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * adds/check a new Record to the table rooms with external fields
+	 * get List of RoomGroup by group and roomtype
 	 * 
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param organisations
-	 * @param appointment
-	 * @param isDemoRoom
-	 * @param demoTime
-	 * @param isModeratedRoom
-	 * @param roomModerators
-	 * @param externalRoomId
-	 * @param externalRoomType
-	 * @param allowUserQuestions
-	 * @param isAudioOnly
-	 * @param allowFontStyles
-	 * @param isClosed
-	 * @param redirectURL
-	 * @param waitForRecording
-	 * @param allowRecording
-	 * @param hideTopBar
-	 * @return id of (the newly created) room or NULL
-	 */
-	public Long addExternalRoom(String name, long roomtypes_id, String comment,
-			Long numberOfPartizipants, boolean ispublic, List<Integer> organisations,
-			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
-			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
-			Long externalRoomId, String externalRoomType,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
-			String redirectURL, Boolean waitForRecording,
-			boolean allowRecording, Boolean hideTopBar) {
-
-		log.debug("addExternalRoom");
-
-		try {
-			Room r = new Room();
-			r.setName(name);
-			r.setComment(comment);
-			r.setStarttime(new Date());
-			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
-			r.setIspublic(ispublic);
-
-			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
-			r.setAllowFontStyles(allowFontStyles);
-
-			r.setAppointment(appointment);
-
-			r.setIsDemoRoom(isDemoRoom);
-			r.setDemoTime(demoTime);
-
-			r.setIsModeratedRoom(isModeratedRoom);
-
-			r.setDeleted(false);
-
-			r.setExternalRoomId(externalRoomId);
-			r.setExternalRoomType(externalRoomType);
-
-			r.setIsClosed(isClosed);
-			r.setRedirectURL(redirectURL);
-
-			r.setWaitForRecording(waitForRecording);
-			r.setAllowRecording(allowRecording);
-
-			r.setHideTopBar(hideTopBar);
-
-			r = em.merge(r);
-
-			long returnId = r.getRooms_id();
-
-			if (organisations != null) {
-				Long t = this.updateRoomOrganisations(organisations, r);
-				if (t == null) {
-					return null;
-				}
-			}
-
-			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-				r = roomDao.update(r, null);
-			}
-
-			return returnId;
-		} catch (Exception ex2) {
-			log.error("[addExternalRoom] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * adds a new record to the table rooms_organisation
-	 * 
-	 * @param rooms_id
-	 * @param organisation_id
-	 * @return the id of the newly created Rooms_Organisation or NULL
-	 */
-	public Long addRoomToOrganisation(long rooms_id,
-			long organisation_id) {
-		try {
-			RoomOrganisation rOrganisation = new RoomOrganisation();
-			rOrganisation.setRoom(roomDao.get(rooms_id));
-			log.debug("addRoomToOrganisation rooms '"
-					+ rOrganisation.getRoom().getName() + "'");
-			rOrganisation.setStarttime(new Date());
-			rOrganisation.setOrganisation(orgDao.get(organisation_id));
-			rOrganisation.setDeleted(false);
-
-			rOrganisation = em.merge(rOrganisation);
-			long returnId = rOrganisation.getRooms_organisation_id();
-			return returnId;
-		} catch (Exception ex2) {
-			log.error("[addRoomToOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param rooms_organisation_id
+	 * @param groupId
+	 * @param typeId
 	 * @return
 	 */
-	public RoomOrganisation getRoomsOrganisationById(
-			long rooms_organisation_id) {
+	public List<RoomOrganisation> getRoomGroupByGroupIdAndRoomType(long groupId, long typeId) {
 		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<RoomOrganisation> cq = cb
-					.createQuery(RoomOrganisation.class);
-			Root<RoomOrganisation> c = cq.from(RoomOrganisation.class);
-			Predicate condition = cb.equal(c.get("rooms_organisation_id"),
-					rooms_organisation_id);
-			cq.where(condition);
-			TypedQuery<RoomOrganisation> q = em.createQuery(cq);
-			List<RoomOrganisation> ll = q.getResultList();
-
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * get List of Rooms_Organisation by organisation and roomtype
-	 * 
-	 * @param user_level
-	 * @param organisation_id
-	 * @param roomtypes_id
-	 * @return
-	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisation_id, long roomtypes_id) {
-		try {
-			TypedQuery<RoomOrganisation> q = em.
-					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
-			q.setParameter("roomtypes_id", roomtypes_id);
-			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
+			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomGroupByGroupIdAndRoomType", RoomOrganisation.class);
+			q.setParameter("type", Room.Type.get(typeId));
+			q.setParameter("groupId", groupId);
 			return q.getResultList();
 		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
+			log.error("[getRoomGroupByGroupIdAndRoomType] ", ex2);
 		}
 		return null;
 	}
@@ -743,361 +442,4 @@ public class RoomManager implements IRoomManager {
 		}
 		return null;
 	}
-
-	public RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
-			long organisation_id, long rooms_id) {
-		try {
-			TypedQuery<RoomOrganisation> q = em.
-					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class);
-
-			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
-			List<RoomOrganisation> ll = q.getResultList();
-
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomsOrganisationByOrganisationIdAndRoomId] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param organisation_id
-	 * @return
-	 */
-	public List<RoomOrganisation> getRoomsOrganisationByRoomsId(long rooms_id) {
-		try {
-			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByRoomsId", RoomOrganisation.class);
-			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("deleted", true);
-			return q.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	public Long updateRoomInternal(long rooms_id, long roomtypes_id,
-			String name, boolean ispublic, String comment,
-			Long numberOfPartizipants, List<Integer> organisations,
-			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
-			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
-			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, boolean allowRecording,
-			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
-			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
-			, boolean autoVideoSelect, boolean sipEnabled) {
-		try {
-			log.debug("*** updateRoom numberOfPartizipants: "
-					+ numberOfPartizipants);
-			Room r = roomDao.get(rooms_id);
-			r.setComment(comment);
-
-			r.setIspublic(ispublic);
-			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setName(name);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
-			r.setUpdatetime(new Date());
-			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
-			r.setAllowFontStyles(allowFontStyles);
-
-			r.setIsDemoRoom(isDemoRoom);
-			r.setDemoTime(demoTime);
-
-			r.setAppointment(appointment);
-
-			r.setIsModeratedRoom(isModeratedRoom);
-			r.setHideTopBar(hideTopBar);
-
-			r.setIsClosed(isClosed);
-			r.setRedirectURL(redirectURL);
-			r.setOwnerId(ownerId);
-			r.setWaitForRecording(waitForRecording);
-			r.setAllowRecording(allowRecording);
-			
-			r.setHideChat(hideChat);
-			r.setHideActivitiesAndActions(hideActivitiesAndActions);
-			r.setHideActionsMenu(hideActionsMenu);
-			r.setHideFilesExplorer(hideFilesExplorer);
-			r.setHideScreenSharing(hideScreenSharing);
-			r.setHideWhiteboard(hideWhiteboard);
-			r.setShowMicrophoneStatus(showMicrophoneStatus);
-			r.setChatModerated(chatModerated);
-			r.setChatOpened(chatOpened);
-			r.setFilesOpened(filesOpened);
-			r.setAutoVideoSelect(autoVideoSelect);
-			r.setPin(conferencePin);
-			r.setSipEnabled(sipEnabled);
-			r = roomDao.update(r, ownerId);
-
-			if (organisations != null) {
-				Long t = this.updateRoomOrganisations(organisations, r);
-				if (t == null) {
-					return null;
-				}
-			}
-			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-				r = roomDao.update(r, null);
-			}
-
-			return r.getRooms_id();
-		} catch (Exception ex2) {
-			log.error("[updateRoom] ", ex2);
-		}
-		return null;
-	}
-
-	@SuppressWarnings("rawtypes")
-	private boolean checkRoomAlreadyInOrg(Long orgid, List organisations)
-			throws Exception {
-		for (Iterator it = organisations.iterator(); it.hasNext();) {
-			RoomOrganisation rOrganisation = (RoomOrganisation) it.next();
-			if (rOrganisation.getOrganisation().getOrganisation_id()
-					.equals(orgid))
-				return true;
-		}
-		return false;
-	}
-
-	private boolean checkRoomShouldByDeleted(long orgId, List<Integer> organisations) throws Exception {
-		for (Iterator<Integer> it = organisations.iterator(); it.hasNext();) {
-			Integer key = it.next();
-			Long storedOrgId = key.longValue();
-			if (storedOrgId.equals(orgId))
-				return true;
-		}
-		return false;
-	}
-
-	private Long updateRoomOrganisations(List<Integer> organisations, Room room) throws Exception {
-		List<RoomOrganisation> roomOrganisations = getOrganisationsByRoom(room.getRooms_id());
-
-		List<Long> roomsToAdd = new LinkedList<Long>();
-		List<Long> roomsToDel = new LinkedList<Long>();
-
-		for (Iterator<Integer> it = organisations.iterator(); it.hasNext();) {
-			Integer key = it.next();
-			Long orgIdToAdd = key.longValue();
-			if (!this.checkRoomAlreadyInOrg(orgIdToAdd, roomOrganisations))
-				roomsToAdd.add(orgIdToAdd);
-		}
-
-		for (Iterator<RoomOrganisation> it = roomOrganisations.iterator(); it.hasNext();) {
-			RoomOrganisation rOrganisation = it.next();
-			Long orgIdToDel = rOrganisation.getOrganisation()
-					.getOrganisation_id();
-			if (!this.checkRoomShouldByDeleted(orgIdToDel, organisations))
-				roomsToDel.add(orgIdToDel);
-		}
-
-		// log.error("updateRoomOrganisations roomsToAdd: "+roomsToAdd.size());
-		// log.error("updateRoomOrganisations roomsToDel: "+roomsToDel.size());
-
-		for (Iterator<Long> it = roomsToAdd.iterator(); it.hasNext();) {
-			Long orgIdToAdd = it.next();
-			addRoomToOrganisation(room.getRooms_id(), orgIdToAdd);
-		}
-		for (Iterator<Long> it = roomsToDel.iterator(); it.hasNext();) {
-			Long orgToDel = it.next();
-			deleteRoomFromOrganisationByRoomAndOrganisation(room.getRooms_id(), orgToDel);
-		}
-
-		return new Long(1);
-	}
-
-	/**
-	 * delete all Rooms_Organisations and Room by a given room_id
-	 * 
-	 * @param rooms_id
-	 */
-	public Long deleteRoomById(long rooms_id) {
-		try {
-			deleteAllRoomsOrganisationOfRoom(rooms_id);
-			roomDao.delete(roomDao.get(rooms_id), -1L);
-			return rooms_id;
-		} catch (Exception ex2) {
-			log.error("[deleteRoomById] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * delete all Rooms_Organisation by a rooms_id
-	 * 
-	 * @param rooms_id
-	 */
-	@SuppressWarnings("rawtypes")
-	public void deleteAllRoomsOrganisationOfRoom(long rooms_id) {
-		try {
-			List ll = this.getRoomsOrganisationByRoomsId(rooms_id);
-			for (Iterator it = ll.iterator(); it.hasNext();) {
-				RoomOrganisation rOrg = (RoomOrganisation) it.next();
-				this.deleteRoomsOrganisation(rOrg);
-			}
-		} catch (Exception ex2) {
-			log.error("[deleteAllRoomsOrganisationOfRoom] ", ex2);
-		}
-	}
-
-	/**
-	 * Delete all room of a given Organisation
-	 * 
-	 * @param organisation_id
-	 */
-	public void deleteAllRoomsOrganisationOfOrganisation(long organisation_id) {
-		try {
-			for (RoomOrganisation rOrg : getRoomsOrganisationByOrganisationId(organisation_id)) {
-				this.deleteRoomsOrganisation(rOrg);
-			}
-		} catch (Exception ex2) {
-			log.error("[deleteAllRoomsOfOrganisation] ", ex2);
-		}
-	}
-
-	/**
-	 * Delete a Rooms_Organisation by its id
-	 * 
-	 * @param rooms_organisation_id
-	 */
-	public Long deleteRoomsOrganisationByID(long rooms_organisation_id) {
-		try {
-			RoomOrganisation rOrg = this
-					.getRoomsOrganisationById(rooms_organisation_id);
-			return this.deleteRoomsOrganisation(rOrg);
-		} catch (Exception ex2) {
-			log.error("[deleteRoomsOrganisationByID] ", ex2);
-		}
-		return null;
-	}
-
-	private Long deleteRoomFromOrganisationByRoomAndOrganisation(long rooms_id,
-			long organisation_id) {
-		try {
-			RoomOrganisation rOrganisation = this
-					.getRoomsOrganisationByOrganisationIdAndRoomId(
-							organisation_id, rooms_id);
-			return this.deleteRoomsOrganisation(rOrganisation);
-		} catch (Exception ex2) {
-			log.error("[deleteRoomFromOrganisationByRoomAndOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * delete a Rooms_Organisation-Object
-	 * 
-	 * @param rOrg
-	 */
-	public Long deleteRoomsOrganisation(RoomOrganisation rOrg) {
-		try {
-			rOrg.setDeleted(true);
-			rOrg.setUpdatetime(new Date());
-			if (rOrg.getRooms_organisation_id() == null) {
-				em.persist(rOrg);
-			} else {
-				if (!em.contains(rOrg)) {
-					em.merge(rOrg);
-				}
-			}
-			return rOrg.getRooms_organisation_id();
-		} catch (Exception ex2) {
-			log.error("[deleteRoomsOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	// --------------------------------------------------------------------------------------------
-
-	public void closeRoom(Long rooms_id, Boolean status) {
-		try {
-
-			Room room = roomDao.get(rooms_id);
-
-			room.setIsClosed(status);
-
-			roomDao.update(room, -1L);
-
-		} catch (Exception e) {
-			log.error("Error updateRoomObject : ", e);
-		}
-	}
-
-	/**
-	 * Get a Rooms-Object or NULL
-	 * 
-	 * @param rooms_id
-	 * @return Rooms-Object or NULL
-	 */
-	public Room getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId, String roomName) {
-		try {
-
-			if (roomtypesId == null || roomtypesId == 0) {
-				return null;
-			}
-			log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + roomtypesId);
-			Room room = null;
-			TypedQuery<Room> query = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class);
-			query.setParameter("ownerId", ownerId);
-			query.setParameter("roomtypesId", roomtypesId);
-			List<Room> ll = query.getResultList();
-			if (ll.size() > 0) {
-				room = ll.get(0);
-			}
-
-			if (room != null) {
-				return room;
-			} else {
-				log.debug("Could not find room " + ownerId + " || " + roomtypesId);
-				
-				Long rooms_id = addRoom(roomName, roomtypesId,
-						"My Rooms of ownerId " + ownerId,
-						(roomtypesId == 1) ? 25L : 150L, // numberOfPartizipants
-						false, // ispublic
-						null, // organisations
-						false, // appointment
-						false, // isDemoRoom
-						null, // demoTime
-						false, // isModeratedRoom
-						null, // roomModerators
-						true, // allowUserQuestions
-						false, // isAudioOnly
-						true, // allowFontStyle
-						false, // isClosed
-						"", // redirectURL
-						"", // conferencePin
-						ownerId, null,
-						true,  // allowRecording 
-						false, // hideTopBar
-						false, // hideChat
-						false, // hideActivitiesAndActions
-						false, // hideFilesExplorer
-						false, // hideActionsMenu
-						false, // hideScreenSharing 
-						false, // hideWhiteboard
-						false, //showMicrophoneStatus
-						false, // chatModerated
-						false, //chatOpened
-						false, //filesOpened
-						false, //autoVideoSelect
-						false //sipEnabled
-						);
-
-				if (rooms_id != null) {
-					return roomDao.get(rooms_id);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomByOwnerAndTypeId] ", ex2);
-		}
-		return null;
-	}
-
 }

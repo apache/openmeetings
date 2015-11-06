@@ -25,8 +25,8 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import java.util.Date;
 
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
@@ -38,7 +38,7 @@ import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
 	public static long addUserToContactList(long userIdToAdd) {
-		boolean isContact = getBean(UserContactsDao.class).isContact(userIdToAdd, getUserId());
+		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 
 		if (isContact) {
 			return -45L;
@@ -46,7 +46,7 @@ public class ContactsHelper {
 		String hash = ManageCryptStyle.getInstanceOfCrypt()
 			.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
-		Long userContactId = getBean(UserContactsDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);
+		Long userContactId = getBean(UserContactDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);
 
 		User user = getBean(UserDao.class).get(getUserId());
 		User userToAdd = getBean(UserDao.class).get(userIdToAdd);
@@ -54,18 +54,18 @@ public class ContactsHelper {
 		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString(1193);
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
-		getBean(PrivateMessagesDao.class).addPrivateMessage(
+		getBean(PrivateMessageDao.class).addPrivateMessage(
 			subj, message, 0L, user, userToAdd, userToAdd, false, null, true, userContactId);
 
-		if (userToAdd.getAdresses() != null) {
-			getBean(MailHandler.class).send(userToAdd.getAdresses().getEmail(), subj, message);
+		if (userToAdd.getAddress() != null) {
+			getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
 		}
 
 		return userContactId;
 	}
 
 	public static Long acceptUserContact(long userContactId) {
-		UserContactsDao dao = getBean(UserContactsDao.class);
+		UserContactDao dao = getBean(UserContactDao.class);
 		UserContact contact = dao.get(userContactId);
 
 		if (contact == null) {
@@ -81,18 +81,18 @@ public class ContactsHelper {
 		contact = dao.get(userContactId);
 		User user = contact.getOwner();
 
-		dao.addUserContact(user.getUser_id(), getUserId(), false, "");
+		dao.addUserContact(user.getId(), getUserId(), false, "");
 
-		if (user.getAdresses() != null) {
+		if (user.getAddress() != null) {
 			String message = RequestContactConfirmTemplate.getEmail(contact);
 
 			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString(1198);
 
-			getBean(PrivateMessagesDao.class).addPrivateMessage(
+			getBean(PrivateMessageDao.class).addPrivateMessage(
 					subj, message,
 					0L, contact.getContact(), user, user, false, null, false, 0L);
 
-			getBean(MailHandler.class).send(user.getAdresses().getEmail(), subj, message);
+			getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
 		}
 		return userContactId;
 	}

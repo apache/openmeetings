@@ -31,6 +31,9 @@ public class FilesObject {
 	private String lastModified;
 	private String fileBytes;
 	private String isimage;
+	
+	public FilesObject() {}
+	
 	public String getFileName() {
 		return fileName;
 	}

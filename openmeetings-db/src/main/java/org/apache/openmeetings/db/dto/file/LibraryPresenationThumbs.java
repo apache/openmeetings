@@ -22,6 +22,9 @@ public class LibraryPresenationThumbs {
 
 	private String name = "";
 	private LibraryPresentationThumb[] thumbs = null;
+	
+	public LibraryPresenationThumbs() {}
+	
 	public String getName() {
 		return name;
 	}

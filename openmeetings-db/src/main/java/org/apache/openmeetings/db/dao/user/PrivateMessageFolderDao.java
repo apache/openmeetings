@@ -48,7 +48,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 			privateMessageFolder.setInserted(new Date());
 			
 			privateMessageFolder = em.merge(privateMessageFolder);
-			Long privateMessageFolderId = privateMessageFolder.getPrivateMessageFolderId();
+			Long privateMessageFolderId = privateMessageFolder.getId();
 			
 			return privateMessageFolderId;	
 		} catch (Exception e) {
@@ -57,39 +57,28 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		return null;
 	}
 	
-	public Long addPrivateMessageFolderObj(PrivateMessageFolder privateMessageFolder) {
-		try {
-			privateMessageFolder.setInserted(new Date());
-			
-			privateMessageFolder = em.merge(privateMessageFolder);
-			Long privateMessageFolderId = privateMessageFolder.getPrivateMessageFolderId();
-			
-			return privateMessageFolderId;	
-		} catch (Exception e) {
-			log.error("[addPrivateMessageFolder]",e);
-		}
-		return null;
+	public Long addPrivateMessageFolderObj(PrivateMessageFolder folder) {
+		folder.setInserted(new Date());
+		
+		folder = em.merge(folder);
+		Long privateMessageFolderId = folder.getId();
+		
+		return privateMessageFolderId;	
 	}
 	
-	public PrivateMessageFolder get(long privateMessageFolderId) {
-		try {
-			String hql = "select c from PrivateMessageFolder c " +
-						"where c.privateMessageFolderId = :privateMessageFolderId ";
+	public PrivateMessageFolder get(long id) {
+		String hql = "select c from PrivateMessageFolder c where c.privateMessageFolderId = :id ";
 
-			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			
-			PrivateMessageFolder privateMessageFolder = null;
-			try {
-				privateMessageFolder = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
-			
-			return privateMessageFolder;
-		} catch (Exception e) {
-			log.error("[getPrivateMessageFolderById]",e);
+		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
+		query.setParameter("id", id);
+		
+		PrivateMessageFolder folder = null;
+		try {
+			folder = query.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+		
+		return folder;
 	}
 
 	public List<PrivateMessageFolder> get(int start, int count) {
@@ -98,37 +87,34 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 				.getResultList();
 	}
 
-	public PrivateMessageFolder update(PrivateMessageFolder privateMessageFolder, Long userId) {
-		if (privateMessageFolder.getPrivateMessageFolderId() == 0) {
-			em.persist(privateMessageFolder);
-	    } else {
-	    	if (!em.contains(privateMessageFolder)) {
-	    		privateMessageFolder = em.merge(privateMessageFolder);
-		    }
+	public PrivateMessageFolder update(PrivateMessageFolder folder, Long userId) {
+		if (folder.getId() == 0) {
+			em.persist(folder);
+		} else {
+			if (!em.contains(folder)) {
+				folder = em.merge(folder);
+			}
 		}
-		return privateMessageFolder;
+		return folder;
 	}
 	
 	public List<PrivateMessageFolder> getPrivateMessageFolderByUserId(Long userId) {
 		try {
-			String hql = "select c from PrivateMessageFolder c " +
-						"where c.userId = :userId ";
+			String hql = "select c from PrivateMessageFolder c where c.userId = :userId ";
 
 			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
 			query.setParameter("userId", userId);
 			
-			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();
-			
-			return privateMessageFolders;
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getPrivateMessageFolderByUserId]",e);
 		}
 		return null;
 	}
 
-	public void delete(PrivateMessageFolder privateMessageFolder, Long userId) {
-		privateMessageFolder = em.find(PrivateMessageFolder.class, privateMessageFolder.getPrivateMessageFolderId());
-		em.remove(privateMessageFolder);
+	public void delete(PrivateMessageFolder folder, Long userId) {
+		folder = em.find(PrivateMessageFolder.class, folder.getId());
+		em.remove(folder);
 	}
 
 	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {

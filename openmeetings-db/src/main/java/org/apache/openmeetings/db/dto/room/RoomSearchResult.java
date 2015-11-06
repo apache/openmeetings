@@ -30,14 +30,18 @@ public class RoomSearchResult {
 	private List<RoomDTO> result;
 	private Long errorId;
 
+	public RoomSearchResult() {}
+	
 	public RoomSearchResult(SearchResult<Room> copy) {
-		this.objectName = copy.getObjectName();
-		this.records = copy.getRecords();
-		this.result = new ArrayList<RoomDTO>(copy.getResult().size());
-		for (Room r : copy.getResult()) {
-			result.add(new RoomDTO(r));
+		if (copy != null) {
+			this.objectName = copy.getObjectName();
+			this.records = copy.getRecords();
+			this.result = new ArrayList<RoomDTO>(copy.getResult().size());
+			for (Room r : copy.getResult()) {
+				result.add(new RoomDTO(r));
+			}
+			this.errorId = copy.getErrorId();
 		}
-		this.errorId = copy.getErrorId();
 	}
 
 	public String getObjectName() {

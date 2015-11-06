@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 
 public class RecordingDTO {
 	private Long id;
@@ -39,12 +39,12 @@ public class RecordingDTO {
 
 	public RecordingDTO() {}
 	
-	public RecordingDTO(FlvRecording r) {
-		this.id = r.getFlvRecordingId();
+	public RecordingDTO(Recording r) {
+		this.id = r.getId();
 		this.name = r.getFileName();
 		this.flvName = r.getFileHash();
 		this.aviName = r.getAlternateDownload();
-		this.roomId = r.getRoom_id();
+		this.roomId = r.getRoomId();
 		this.status = r.getStatus().name();
 		this.interview = r.getIsInterview();
 		this.start = r.getRecordStart();
@@ -141,10 +141,10 @@ public class RecordingDTO {
 		this.height = height;
 	}
 	
-	public static List<RecordingDTO> list(List<FlvRecording> l) {
+	public static List<RecordingDTO> list(List<Recording> l) {
 		List<RecordingDTO> rList = new ArrayList<RecordingDTO>();
 		if (l != null) {
-			for (FlvRecording r : l) {
+			for (Recording r : l) {
 				rList.add(new RecordingDTO(r));
 			}
 		}

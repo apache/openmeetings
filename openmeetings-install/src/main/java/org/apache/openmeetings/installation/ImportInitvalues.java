@@ -21,6 +21,7 @@ package org.apache.openmeetings.installation;
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
@@ -55,18 +56,16 @@ import java.util.Iterator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
@@ -94,13 +93,7 @@ public class ImportInitvalues {
 	@Autowired
 	private NavigationDao navimanagement;
 	@Autowired
-	private ErrorDao errorManagement;
-	@Autowired
-	private SalutationDao salutationmanagement;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private ErrorDao errorDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -108,9 +101,7 @@ public class ImportInitvalues {
 	@Autowired
 	private OAuth2Dao oauthDao;
 	@Autowired
-	private RoomTypeDao roomTypeDao;
-	@Autowired
-	private OrganisationDao organisationDao;
+	private OrganisationDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
 	
@@ -226,12 +217,6 @@ public class ImportInitvalues {
 		log.debug("MainMenu ADDED");
 	}
 	
-	public void loadErrorTypes() {
-		errorManagement.addErrorType(new Long(1), new Long(322));
-		errorManagement.addErrorType(new Long(2), new Long(323));
-		log.debug("Error types ADDED");
-	}
-
 	public void loadErrorMappingsFromXML() throws Exception {
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
@@ -243,9 +228,9 @@ public class ImportInitvalues {
 
 			Element row = it.next();
 
-			Long errorvalues_id = null;
-			Long fieldvalues_id = null;
-			Long errortype_id = null;
+			Long errorvalueId = null;
+			Long labelId = null;
+			ErrorValue.Type type = null;
 
 			for (@SuppressWarnings("unchecked")
 			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
@@ -255,28 +240,19 @@ public class ImportInitvalues {
 				String text = field.getText();
 				// System.out.println("NAME | TEXT "+name+" | "+text);
 				if (name.equals("errorvalues_id")) {
-					errorvalues_id = Long.valueOf(text);
+					errorvalueId = Long.valueOf(text);
 				}
 				if (name.equals("fieldvalues_id")) {
-					fieldvalues_id = Long.valueOf(text);
+					labelId = Long.valueOf(text);
 				}
-				if (name.equals("errortype_id")) {
-					errortype_id = Long.valueOf(text);
+				if (name.equals("type")) {
+					type = ErrorValue.Type.valueOf(text);
 				}
 			}
 
-			errorManagement.addErrorValues(errorvalues_id, errortype_id, fieldvalues_id);
+			errorDao.addErrorValues(errorvalueId, type, labelId);
 		}
 		log.debug("ErrorMappings ADDED");
-	}
-
-	public void loadSalutations() {
-		salutationmanagement.addUserSalutation("Mr", 261);
-		salutationmanagement.addUserSalutation("Ms", 262);
-		salutationmanagement.addUserSalutation("Mrs", 841);
-		salutationmanagement.addUserSalutation("Dr", 842);
-		salutationmanagement.addUserSalutation("Prof", 1464);
-		log.debug("Salutations ADDED");
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
@@ -312,7 +288,7 @@ public class ImportInitvalues {
 		cfgDao.add("mail.smtp.timeout", "30000", null,
 				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
-		cfgDao.add("application.name", DEFAULT_APP_NAME, null, "Name of the Browser Title window");
+		cfgDao.add(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
 		// "1" == "EN"
 		cfgDao.add(CONFIG_DEFAULT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
@@ -443,37 +419,16 @@ public class ImportInitvalues {
 		log.debug("Configurations ADDED");
 	}
 
-	public void loadRoomTypes() {
-		long conference_Id = roomTypeDao.addRoomType(
-				"conference", 1541, false);
-		log.debug("conference_Id: " + conference_Id);
-
-		// Audience room type is not in use anymore
-		roomTypeDao.addRoomType("audience", -1, true);
-
-		long restricted_Id = roomTypeDao.addRoomType(
-				"restricted", 1542, false);
-		log.debug("restricted_Id: " + restricted_Id);
-
-		long interview_Id = roomTypeDao.addRoomType(
-				"interview", 1543, false);
-		log.debug("interview_Id: " + interview_Id);
-
-		// Custom room type is not in use anymore
-		roomTypeDao.addRoomType("custom", -2, true);
-		log.debug("RoomTypes ADDED");
-	}
-
-	private Room createRoom(String name, long typeId, long capacity, boolean isPublic, Long orgId) {
+	private Room createRoom(String name, Room.Type type, long capacity, boolean isPublic, Long groupId) {
 		Room r = new Room();
 		r.setName(name);
 		r.setComment("");
-		r.setStarttime(new Date());
+		r.setInserted(new Date());
 		r.setNumberOfPartizipants(capacity);
-		r.setRoomtype(roomTypeDao.get(typeId));
+		r.setType(type);
 		r.setIspublic(isPublic);
 		r.setAllowUserQuestions(true);
-		r.setIsAudioOnly(false);
+		r.setAudioOnly(false);
 		r.setAllowFontStyles(true);
 
 		r.setAppointment(false);
@@ -481,12 +436,12 @@ public class ImportInitvalues {
 		r.setIsDemoRoom(false);
 		r.setDemoTime(null);
 
-		r.setIsModeratedRoom(false);
+		r.setModerated(false);
 		r.setHideTopBar(false);
 
 		r.setDeleted(false);
 
-		r.setIsClosed(false);
+		r.setClosed(false);
 		r.setRedirectURL(null);
 
 		r.setOwnerId(null);
@@ -494,44 +449,40 @@ public class ImportInitvalues {
 		r.setWaitForRecording(false);
 		r.setAllowRecording(true);
 		
-		r.setHideChat(false);
-		r.setHideActivitiesAndActions(false);
+		r.setChatHidden(false);
+		r.setActivitiesHidden(false);
 		r.setHideActionsMenu(false);
 		r.setHideFilesExplorer(false);
 		r.setHideScreenSharing(false);	
 		r.setHideWhiteboard(false);
-		if (orgId != null) {
+		if (groupId != null) {
 			RoomOrganisation ro = new RoomOrganisation();
 			ro.setRoom(r);
-			ro.setOrganisation(organisationDao.get(orgId));
-			ro.setStarttime(new Date());
+			ro.setOrganisation(groupDao.get(groupId));
+			ro.setInserted(new Date());
 		}
 		r = roomDao.update(r, null);
 		return r;
 	}
+	
 	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
-			// hardcoded IDs (they are not intended to be changed)
-			long conference_Id = 1;
-			long restricted_Id = 3;
-			long interview_Id = 4;
-
-			createRoom("public Interview Room", interview_Id, 16L, true, null);
-			createRoom("public Conference Room", conference_Id, 32L, true, null);
-			Room r = createRoom("public Video Only Room", conference_Id, 32L, true, null);
+			createRoom("public Interview Room", Type.interview, 16L, true, null);
+			createRoom("public Conference Room", Type.conference, 32L, true, null);
+			Room r = createRoom("public Video Only Room", Type.conference, 32L, true, null);
 			r.setHideWhiteboard(true);
 			roomDao.update(r, null);
-			createRoom("public Video And Whiteboard Room", conference_Id, 32L, true, null);
-			createRoom("public Restricted Room", restricted_Id, 100L, true, null);
-			r = createRoom("restricted room with micro option set", restricted_Id, 100L, true, null);
+			createRoom("public Video And Whiteboard Room", Type.conference, 32L, true, null);
+			createRoom("public Restricted Room", Type.restricted, 100L, true, null);
+			r = createRoom("restricted room with micro option set", Type.restricted, 100L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			r = createRoom("conference room with micro option set", conference_Id, 32L, true, null);
+			r = createRoom("conference room with micro option set", Type.conference, 32L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			createRoom("private Conference Room", conference_Id, 32L, false, 1L);
+			createRoom("private Conference Room", Type.conference, 32L, false, 1L);
 		}
 	}
 
@@ -542,7 +493,7 @@ public class ImportInitvalues {
 		org.setInsertedby(1L);
 		org.setDeleted(false);
 		org.setStarttime(new Date());
-		org = organisationDao.update(org, null);
+		org = groupDao.update(org, null);
 
 		User u = userDao.getNewUserInstance(null);
 		u.setType(User.Type.user);
@@ -551,14 +502,14 @@ public class ImportInitvalues {
 		u.setLogin(cfg.username);
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
-		u.getAdresses().setEmail(cfg.email);
+		u.getAddress().setEmail(cfg.email);
 		u.getOrganisation_users().add(new Organisation_Users(org));
 
 		u = userDao.update(u, cfg.password, -1);
 
-		log.debug("Installation - User Added user-Id " + u.getUser_id());
+		log.debug("Installation - User Added user-Id " + u.getId());
 
-		if (u.getUser_id() == null) {
+		if (u.getId() == null) {
 			throw new Exception("Unable to add user");
 		}
 	}
@@ -581,36 +532,14 @@ public class ImportInitvalues {
 		Iterator it = root.elementIterator("country"); it.hasNext();) {
 			Element item = (Element) it.next();
 
-			statemanagement.addState(item.attributeValue("name"),
+			statemanagement.add(item.attributeValue("name"),
 					item.attributeValue("short"),
 					Integer.parseInt(item.attributeValue("code")));
 		}
 		log.debug("Countries ADDED");
 	}
 
-	/**
-	 * @author o.becherer initial fillment of Appointmentcategories
-	 */
 	// ------------------------------------------------------------------------------
-	public void loadInitAppointmentCategories() {
-		log.debug("ImportInitValues.loadInitAppointmentCategories");
-
-		appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1), "default", "default");
-	}
-
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * @author o.becherer initial fillment of AppointMentReminderTypes
-	 */
-	// ------------------------------------------------------------------------------
-	public void loadInitAppointmentReminderTypes() {
-		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
-
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "do not send notification", 1568);
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "simple email", 1569);
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "iCal email", 1570);
-	}
 
 	public void loadInitialOAuthServers() throws Exception {
 		// Yandex
@@ -688,33 +617,21 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 8;
+		progress = 14;
 		loadMainMenu();
-		progress = 16;
-		loadErrorTypes();
-		progress = 24;
+		progress = 28;
 		loadErrorMappingsFromXML();
-		progress = 32;
+		progress = 42;
 		loadCountriesFiles();
-		progress = 40;
-		loadSalutations();
-		progress = 48;
-		// AppointMent Categories
-		loadInitAppointmentCategories();
 		progress = 56;
-		// Appointment Reminder types
-		loadInitAppointmentReminderTypes();
-		progress = 64;
 		// Appointment poll types
 		loadPollTypes();
-		progress = 72;
-		loadRoomTypes();
-		progress = 80;
+		progress = 70;
 
 		loadConfiguration(cfg);
-		progress = 88;
+		progress = 84;
 		loadInitialOAuthServers();
-		progress = 96;
+		progress = 99;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {

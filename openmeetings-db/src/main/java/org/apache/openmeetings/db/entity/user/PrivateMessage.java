@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -54,7 +53,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "private_message")
 @Root(name = "privatemessage")
-public class PrivateMessage implements Serializable, IDataProviderEntity {
+public class PrivateMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public final static long INBOX_FOLDER_ID = 0;
 	public final static long SENT_FOLDER_ID = -1;
@@ -64,7 +63,7 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, name = "privateMessageId")
-	private long id;
+	private Long id;
 
 	@Column(name = "subject")
 	@Element(data = true, required = false)
@@ -148,11 +147,11 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 		userContactId = copy.userContactId;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -22,8 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dto.basic.ErrorResult;
-import org.apache.openmeetings.db.entity.basic.ErrorType;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -51,22 +50,19 @@ public class ErrorService {
 	 * @param errorid
 	 * @return - ErrorResult object with the id given
 	 */
-	public ErrorResult getErrorByCode(String SID, Long errorid, Long langId) {
+	public ServiceResult getErrorByCode(String SID, Long errorid, Long langId) {
 		if (errorid < 0) {
 			log.debug("errorid, language_id: " + errorid + "|" + langId);
 			ErrorValue eValues = errorDao.get(-1 * errorid);
 			if (eValues != null) {
-				ErrorType eType = errorDao.getErrorType(eValues.getErrortype_id());
-				log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
-				log.debug("eValues.getErrorType() = " + eType);
-				String eValue = labelDao.getString(eValues.getFieldvalues_id(), langId);
-				String tValue = labelDao.getString(eType.getFieldvalues_id(), langId);
+				log.debug("eValues.getFieldvalues_id() = " + eValues.getLabelId());
+				String eValue = labelDao.getString(eValues.getLabelId(), langId);
 				if (eValue != null) {
-					return new ErrorResult(errorid, eValue, tValue);
+					return new ServiceResult(errorid, eValue, eValues.getType().name());
 				}
 			}
 		} else {
-			return new ErrorResult(errorid, "Error ... please check your input", "Error");
+			return new ServiceResult(errorid, "Error ... please check your input", "Error");
 		}
 		return null;
 	}

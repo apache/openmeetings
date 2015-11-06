@@ -23,10 +23,12 @@ import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
@@ -46,7 +48,7 @@ public class FileUtils {
 			long fileSize = 0;
 
 			File base = OmFileHelper.getUploadFilesDir();
-			if (fileExplorerItem.getIsImage()) {
+			if (Type.Image == fileExplorerItem.getType()) {
 
 				File tFile = new File(base, fileExplorerItem.getFileHash());
 				if (tFile.exists()) {
@@ -60,7 +62,7 @@ public class FileUtils {
 
 			}
 
-			if (fileExplorerItem.getIsPresentation()) {
+			if (Type.Presentation == fileExplorerItem.getType()) {
 
 				File tFolder = new File(base, fileExplorerItem.getFileHash());
 
@@ -71,11 +73,9 @@ public class FileUtils {
 			}
 
 			log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
+			fileExplorerItemDao.update(fileExplorerItem);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem
-							.getFileExplorerItemId());
+			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(fileExplorerItem.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 
@@ -92,23 +92,21 @@ public class FileUtils {
 	}
 
 	public void setFileToOwnerOrRoomByParent(FileExplorerItem fileExplorerItem,
-			Long users_id, Long room_id) {
+			Long users_id, Long roomId) {
 		try {
 
 			fileExplorerItem.setOwnerId(users_id);
-			fileExplorerItem.setRoom_id(room_id);
+			fileExplorerItem.setRoomId(roomId);
 
 			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
+			fileExplorerItemDao.update(fileExplorerItem);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem
-							.getFileExplorerItemId());
+			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(fileExplorerItem.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 
 				this.setFileToOwnerOrRoomByParent(childExplorerItem, users_id,
-						room_id);
+						roomId);
 
 			}
 

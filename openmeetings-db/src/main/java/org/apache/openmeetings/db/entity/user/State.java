@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,30 +29,30 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getStateById", query = "select c from State as c " +
-			"where c.state_id = :state_id AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted <> :deleted"),
-	@NamedQuery(name = "getStateByName", query = "select c from State as c " +
-			"where lower(c.name) LIKE :name AND c.deleted <> :deleted")
+	@NamedQuery(name = "getStateById", query = "select c from State as c where c.id = :id AND c.deleted = false"),
+	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted = false"),
+	@NamedQuery(name = "getStateByName", query = "select c from State as c where lower(c.name) LIKE :name AND c.deleted = false")
 })
 @Table(name = "state")
-public class State implements Serializable {
+public class State implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long state_id;
+	private Long id;
 	
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
@@ -72,31 +71,31 @@ public class State implements Serializable {
 		this.name = name;
 	}
 
-	public Long getState_id() {
-		return state_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setState_id(Long state_id) {
-		this.state_id = state_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -122,7 +121,7 @@ public class State implements Serializable {
 
 	@Override
 	public String toString() {
-		return "State [id=" + state_id + ", name=" + name + ", deleted="
+		return "State [id=" + id + ", name=" + name + ", deleted="
 				+ deleted + ", shortName=" + shortName + ", code=" + code + "]";
 	}
 }

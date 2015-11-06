@@ -33,7 +33,6 @@
     
     <include href="scrollbars/" />
     <include href="text/" />
-    <include href="omcharts/" />
     <include href="button/" />
     <include href="explorer/" />    
     <include href="panel/" />  

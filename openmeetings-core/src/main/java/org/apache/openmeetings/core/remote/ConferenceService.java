@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -27,11 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
+import org.apache.openmeetings.db.dao.room.RoomModeratorDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -39,10 +36,9 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.room.RoomType;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -67,53 +63,11 @@ public class ConferenceService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private RoomTypeDao roomTypeDao;
-	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
+	private RoomModeratorDao roomModeratorsDao;
 	@Autowired
 	private ISessionManager sessionManager = null;
-	@Autowired
-	private ConfigurationDao cfgDao;
 
-	/**
-	 * ( get a List of all available Rooms of this organization
-	 * (non-appointments)
-	 * 
-	 * @param SID
-	 * @param organisation_id
-	 * @return - all available Rooms of this organization
-	 */
-	public List<RoomOrganisation> getRoomsByOrganisationAndType(String SID,
-			long organisation_id, long roomtypes_id) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				log.debug("getRoomsByOrganisationAndType");
-				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationIdAndRoomType(organisation_id, roomtypes_id);
-	
-				List<RoomOrganisation> filtered = new ArrayList<RoomOrganisation>();
-	
-				for (Iterator<RoomOrganisation> iter = roomOrgsList.iterator(); iter
-						.hasNext();) {
-					RoomOrganisation orgRoom = iter.next();
-	
-					if (!orgRoom.getRoom().getAppointment()) {
-						orgRoom.getRoom().setCurrentusers(
-								this.getRoomClientsListByRoomId(orgRoom.getRoom()
-										.getRooms_id()));
-						filtered.add(orgRoom);
-					}
-				}
-				return filtered;
-			}
-		} catch (Exception err) {
-			log.error("[getRoomsByOrganisationAndType]", err);
-		}
-		return null;
-	}
-
-	public List<RoomOrganisation> getRoomsByOrganisationWithoutType(
-			String SID, long organisation_id) {
+	public List<RoomOrganisation> getRoomsByOrganisationWithoutType(String SID, long organisation_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
@@ -121,7 +75,7 @@ public class ConferenceService {
 				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationId(organisation_id);
 				
 				for (RoomOrganisation roomOrg : roomOrgsList) {
-					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getRooms_id()));
+					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getId()));
 				}
 	
 				return roomOrgsList;
@@ -160,14 +114,14 @@ public class ConferenceService {
 	 * @param roomtypes_id
 	 * @return - public rooms with given type, null in case of the error
 	 */
-	public List<Room> getRoomsPublic(String SID, Long roomtypes_id) {
+	public List<Room> getRoomsPublic(String SID, String roomtype) {
 		try {
 			log.debug("getRoomsPublic");
 
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 	
-				List<Room> roomList = roomDao.getPublicRooms(roomtypes_id);
+				List<Room> roomList = roomDao.getPublicRooms(Type.valueOf(roomtype));
 	
 				// Filter : no appointed meetings
 				List<Room> filtered = new ArrayList<Room>();
@@ -175,9 +129,9 @@ public class ConferenceService {
 				for (Iterator<Room> iter = roomList.iterator(); iter.hasNext();) {
 					Room rooms = iter.next();
 	
-					if (!rooms.getAppointment()) {
+					if (!rooms.isAppointment()) {
 						rooms.setCurrentusers(this.getRoomClientsListByRoomId(rooms
-								.getRooms_id()));
+								.getId()));
 						filtered.add(rooms);
 					}
 				}
@@ -199,7 +153,7 @@ public class ConferenceService {
 				List<Room> roomList = roomDao.getPublicRooms();
 				
 				for (Room room : roomList) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 				}
 	
 				return roomList;
@@ -229,65 +183,23 @@ public class ConferenceService {
 	 * 
 	 * retrieving Appointment for Room
 	 * 
-	 * @param room_id
+	 * @param roomId
 	 * @return - Appointment in case the room is appointment, null otherwise
 	 */
-	public Appointment getAppointMentDataForRoom(Long room_id) {
+	public Appointment getAppointMentDataForRoom(Long roomId) {
 		log.debug("getAppointMentDataForRoom");
 
-		Room room = roomDao.get(room_id);
+		Room room = roomDao.get(roomId);
 
-		if (room.getAppointment() == false)
+		if (room.isAppointment() == false)
 			return null;
 
 		try {
-			Appointment ment = appointmentDao.getAppointmentByRoom(room_id);
+			Appointment ment = appointmentDao.getByRoom(roomId);
 
 			return ment;
 		} catch (Exception e) {
 			log.error("getAppointMentDataForRoom " + e.getMessage());
-			return null;
-		}
-
-	}
-
-	// --------------------------------------------------------------------------------------------
-
-	/**
-	 * 
-	 */
-	// --------------------------------------------------------------------------------------------
-	public List<Room> getAppointedMeetings(String SID, Long room_types_id) {
-		log.debug("ConferenceService.getAppointedMeetings");
-
-		Long users_id = sessiondataDao.checkSession(SID);
-
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-			List<Appointment> points = appointmentDao.getTodaysAppointmentsbyRangeAndMember(users_id);
-			List<Room> result = new ArrayList<Room>();
-
-			if (points != null) {
-				for (int i = 0; i < points.size(); i++) {
-					Appointment ment = points.get(i);
-
-					Long rooms_id = ment.getRoom().getRooms_id();
-					Room rooom = roomDao.get(rooms_id);
-
-					if (!rooom.getRoomtype().getRoomtypes_id()
-							.equals(room_types_id))
-						continue;
-
-					rooom.setCurrentusers(getRoomClientsListByRoomId(rooom
-							.getRooms_id()));
-					result.add(rooom);
-				}
-			}
-
-			log.debug("Found " + result.size() + " rooms");
-			return result;
-
-		} else {
 			return null;
 		}
 
@@ -301,18 +213,18 @@ public class ConferenceService {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<Appointment> appointments = appointmentDao.getTodaysAppointmentsbyRangeAndMember(users_id);
+				List<Appointment> appointments = appointmentDao.getForToday(users_id);
 				List<Room> result = new ArrayList<Room>();
 
 				if (appointments != null) {
 					for (int i = 0; i < appointments.size(); i++) {
 						Appointment ment = appointments.get(i);
 
-						Long rooms_id = ment.getRoom().getRooms_id();
+						Long rooms_id = ment.getRoom().getId();
 						Room rooom = roomDao.get(rooms_id);
 
 						rooom.setCurrentusers(this
-								.getRoomClientsListByRoomId(rooom.getRooms_id()));
+								.getRoomClientsListByRoomId(rooom.getId()));
 						result.add(rooom);
 					}
 				}
@@ -322,21 +234,6 @@ public class ConferenceService {
 			}
 		} catch (Exception err) {
 			log.error("[getAppointedMeetingRoomsWithoutType]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param SID
-	 * @return - all room types available
-	 */
-	public List<RoomType> getRoomTypes(String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			User user = userDao.get(users_id);
-			return roomTypeDao.getAll(user == null
-					? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
 		}
 		return null;
 	}
@@ -360,7 +257,7 @@ public class ConferenceService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			room = roomDao.get(rooms_id);
-			room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+			room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 		}
 		return room;
 	}
@@ -376,7 +273,8 @@ public class ConferenceService {
 	public Room getRoomByExternalId(String SID, Long externalUserId, String externalUserType, long roomtypes_id) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			return roomManager.getRoomByExternalId(externalUserId, externalUserType, roomtypes_id);
+			//TODO FIXME roomtype
+			return roomDao.getExternal(Room.Type.get(roomtypes_id), externalUserType, externalUserId);
 		}
 		return null;
 	}
@@ -434,20 +332,6 @@ public class ConferenceService {
 	}
 
 	/**
-	 * 
-	 * @param SID
-	 * @param rooms_id
-	 * @return - id of the room being deleted
-	 */
-	public Long deleteRoom(String SID, long rooms_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-			return roomManager.deleteRoomById(rooms_id);
-		}
-		return null;
-	}
-	
-	/**
 	 * return all participants of a room
 	 * 
 	 * @param room_id
@@ -499,11 +383,11 @@ public class ConferenceService {
 		return null;
 	}
 
-	public Room getRoomByOwnerAndType(String SID, Long roomtypesId, String roomName) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			return roomManager.getRoomByOwnerAndTypeId(users_id,
-					roomtypesId, roomName);
+	public Room getRoomByOwnerAndType(String SID, Long roomTypeId, String roomName) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			//TODO FIXME roomtype
+			return roomDao.getUserRoom(userId, Room.Type.get(roomTypeId), roomName);
 		}
 		return null;
 	}

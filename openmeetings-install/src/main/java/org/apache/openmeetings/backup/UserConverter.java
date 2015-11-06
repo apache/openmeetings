@@ -39,7 +39,7 @@ public class UserConverter extends OmConverter<User> {
 	}
 	
 	public User read(InputNode node) throws Exception {
-		long oldId = getlongValue(node);
+		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
 		User u = userDao.get(newId);
@@ -48,6 +48,6 @@ public class UserConverter extends OmConverter<User> {
 
 	public void write(OutputNode node, User value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getUser_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

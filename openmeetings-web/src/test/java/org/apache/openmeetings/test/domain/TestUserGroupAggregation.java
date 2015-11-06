@@ -18,19 +18,21 @@
  */
 package org.apache.openmeetings.test.domain;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserGroupAggregation extends AbstractJUnitDefaults {
-	private static final Logger log = Logger.getLogger(TestUserGroupAggregation.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestUserGroupAggregation.class, webAppRootKey);
 
 	@Autowired
 	private UserDao userDao;
@@ -43,7 +45,7 @@ public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 		assertTrue("Default user must belong to at least one organisation", u.getOrganisation_users().size() > 0);
 
 		for (Organisation_Users orgUserObj : u.getOrganisation_users()) {
-			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation().getOrganisation_id() + "'; name: '" + orgUserObj.getOrganisation().getName() + "'");
+			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation().getId() + "'; name: '" + orgUserObj.getOrganisation().getName() + "'");
 		}
 	}
 }

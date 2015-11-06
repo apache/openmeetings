@@ -34,9 +34,16 @@ import org.apache.openmeetings.db.entity.user.Userdata;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
+	
+	Long registerUser(String login, String Userpass, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, String phone, boolean sendSMS,
+			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
+	
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
+			String additionalname, String fax, String zip, long stateId,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
@@ -46,7 +53,7 @@ public interface IUserManager {
 	Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone, boolean sendSMS, 
+			long stateId, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone);
 	
 	Long getLanguage(Locale loc);

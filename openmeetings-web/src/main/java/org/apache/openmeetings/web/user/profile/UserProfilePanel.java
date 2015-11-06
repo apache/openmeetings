@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
@@ -44,24 +44,24 @@ public class UserProfilePanel extends UserPanel {
 	public UserProfilePanel(String id, CompoundPropertyModel<User> model) {
 		super(id, model);
 
-		add(new ProfileImagePanel("img", model.getObject().getUser_id()));
+		add(new ProfileImagePanel("img", model.getObject().getId()));
 		add(new Label("firstname"));
 		add(new Label("lastname"));
 		add(new Label("timeZoneId"));
 		add(new Label("regdate"));
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
-		if (getUserId() == model.getObject().getUser_id() || model.getObject().getShowContactData()
-				|| (model.getObject().getShowContactDataToContacts() && getBean(UserContactsDao.class).isContact(model.getObject().getUser_id(), getUserId())))
+		if (getUserId() == model.getObject().getId() || model.getObject().getShowContactData()
+				|| (model.getObject().getShowContactDataToContacts() && getBean(UserContactDao.class).isContact(model.getObject().getId(), getUserId())))
 		{
 			addressDenied.setVisible(false);
-			address.add(new Label("adresses.phone"));
-			address.add(new Label("adresses.street"));
-			address.add(new Label("adresses.additionalname"));
-			address.add(new Label("adresses.zip"));
-			address.add(new Label("adresses.town"));
-			address.add(new Label("adresses.states.name"));
-			address.add(new Label("adresses.comment"));
+			address.add(new Label("address.phone"));
+			address.add(new Label("address.street"));
+			address.add(new Label("address.additionalname"));
+			address.add(new Label("address.zip"));
+			address.add(new Label("address.town"));
+			address.add(new Label("address.states.name"));
+			address.add(new Label("address.comment"));
 		} else {
 			address.setVisible(false);
 			addressDenied.setDefaultModelObject(Application.getString(Boolean.TRUE.equals(model.getObject().getShowContactDataToContacts()) ? 1269 : 1268));

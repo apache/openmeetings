@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,9 +80,9 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
-	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
+	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "
@@ -99,12 +98,17 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id"), 
 	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
-	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.adresses.email = :userOrEmail)")
+	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 })
 @Table(name = "om_user")
 @Root(name = "user")
-public class User implements Serializable, IDataProviderEntity {
+public class User implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public static final int SALUTATION_MR_ID = 1;
+	public static final int SALUTATION_MS_ID = 2;
+	public static final int SALUTATION_MRS_ID = 3;
+	public static final int SALUTATION_DR_ID = 4;
+	public static final int SALUTATION_PROF_ID = 5;
 	
 	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
@@ -122,6 +126,52 @@ public class User implements Serializable, IDataProviderEntity {
 		, oauth
 		, external
 		, contact
+	}
+	public enum Salutation {
+		mr(SALUTATION_MR_ID)
+		, ms(SALUTATION_MS_ID)
+		, mrs(SALUTATION_MRS_ID)
+		, dr(SALUTATION_DR_ID)
+		, prof(SALUTATION_PROF_ID);
+		private int id;
+		
+		Salutation() {} //default;
+		Salutation(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Salutation get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Salutation get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Salutation get(int type) {
+			Salutation rt = Salutation.mr;
+			switch (type) {
+				case SALUTATION_MS_ID:
+					rt = Salutation.ms;
+					break;
+				case SALUTATION_MRS_ID:
+					rt = Salutation.mrs;
+					break;
+				case SALUTATION_DR_ID:
+					rt = Salutation.dr;
+					break;
+				case SALUTATION_PROF_ID:
+					rt = Salutation.prof;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
 	}
 
 	@Id
@@ -194,10 +244,10 @@ public class User implements Serializable, IDataProviderEntity {
 	private String activatehash;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
+	@JoinColumn(name = "address_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
-	private Address adresses;
+	private Address address;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
@@ -273,20 +323,20 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
 	
-	public Long getUser_id() {
+	public Long getId() {
 		return user_id;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setId(Long id) {
+		this.user_id = id;
 	}
 
-	public Address getAdresses() {
-		return adresses;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdresses(Address adresses) {
-		this.adresses = adresses;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public Date getAge() {
@@ -422,12 +472,12 @@ public class User implements Serializable, IDataProviderEntity {
 		this.pictureuri = pictureuri;
 	}
 
-	public Long getLanguage_id() {
+	public Long getLanguageId() {
 		return language_id;
 	}
 
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setLanguageId(Long languageId) {
+		this.language_id = languageId;
 	}
 
 	public List<Organisation_Users> getOrganisation_users() {
@@ -459,20 +509,20 @@ public class User implements Serializable, IDataProviderEntity {
 		this.activatehash = activatehash;
 	}
 
-	public String getExternalUserId() {
+	public String getExternalId() {
 		return externalUserId;
 	}
 
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
+	public void setExternalId(String externalId) {
+		this.externalUserId = externalId;
 	}
 
-	public String getExternalUserType() {
+	public String getExternalType() {
 		return externalUserType;
 	}
 
-	public void setExternalUserType(String externalUserType) {
-		this.externalUserType = externalUserType;
+	public void setExternalType(String externalType) {
+		this.externalUserType = externalType;
 	}
 
 	public Sessiondata getSessionData() {
@@ -547,7 +597,7 @@ public class User implements Serializable, IDataProviderEntity {
 	}
 
 	public String getPhoneForSMS() {
-		return getSendSMS() ? getAdresses().getPhone() : "";
+		return getSendSMS() ? getAddress().getPhone() : "";
 	}
 
 	public Type getType() {
@@ -587,7 +637,7 @@ public class User implements Serializable, IDataProviderEntity {
 		return "User [id=" + user_id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
-				+ ", language_id=" + language_id + ", adresses=" + adresses
+				+ ", language_id=" + language_id + ", address=" + address
 				+ ", externalId=" + externalUserId + ", externalType=" + externalUserType
 				+ ", type=" + type + "]";
 	}

@@ -27,14 +27,14 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.core.converter.FlvInterviewConverter;
-import org.apache.openmeetings.core.converter.FlvRecorderConverter;
+import org.apache.openmeetings.core.converter.InterviewConverter;
+import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.converter.IRecordingConverter;
-import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.Recording.Status;
+import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -66,16 +66,16 @@ public class VideoInfo extends Panel {
 		
 		@Override
 		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			final IRecordingConverter converter = getBean(isInterview ? FlvInterviewConverter.class : FlvRecorderConverter.class);
+			final IRecordingConverter converter = getBean(isInterview ? InterviewConverter.class : RecordingConverter.class);
 			new Thread() {
 				public void run() {
-					converter.startConversion(rm.getObject().getFlvRecordingId());
+					converter.startConversion(rm.getObject().getId());
 				}
 			}.start();
 		}
 	};
 	private final AjaxDownload download = new AjaxDownload();
-	private final IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
+	private final IModel<Recording> rm = new CompoundPropertyModel<Recording>(new Recording());
 	private final IModel<String> roomName = Model.of((String)null);
 	private boolean isInterview = false;
 
@@ -83,7 +83,7 @@ public class VideoInfo extends Panel {
 		this(id, null);
 	}
 	
-	public VideoInfo(String id, FlvRecording r) {
+	public VideoInfo(String id, Recording r) {
 		super(id);
 		add(form.setOutputMarkupId(true));
 		setDefaultModel(rm);
@@ -94,16 +94,16 @@ public class VideoInfo extends Panel {
 		update(null, r);
 	}
 	
-	public VideoInfo update(AjaxRequestTarget target, FlvRecording _r) {
-		FlvRecording r = _r == null ? new FlvRecording() : _r;
+	public VideoInfo update(AjaxRequestTarget target, Recording _r) {
+		Recording r = _r == null ? new Recording() : _r;
 		rm.setObject(r);
 		try {
 			String name = null;
-			if (r.getRoom_id() != null) {
-				Room room = getBean(RoomDao.class).get(r.getRoom_id());
+			if (r.getRoomId() != null) {
+				Room room = getBean(RoomDao.class).get(r.getRoomId());
 				if (room != null) {
 					name = room.getName();
-					isInterview = room.getRoomtype().getRoomtypes_id() == 4;
+					isInterview = Room.Type.interview == room.getType();
 				}
 			}
 			roomName.setObject(name);
@@ -113,11 +113,11 @@ public class VideoInfo extends Panel {
 		
 		boolean reConvEnabled = false;
 		if (r.getOwnerId() != null && getUserId() == r.getOwnerId() && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
-			List<FlvRecordingMetaData> metas = getBean(FlvRecordingMetaDataDao.class).getByRecording(r.getFlvRecordingId());
+			List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
 			reconvLabel:
 			if (!metas.isEmpty()) {
-				for (FlvRecordingMetaData meta : metas) {
-					if (r.getRoom_id() == null || !getRecordingMetaData(r.getRoom_id(), meta.getStreamName()).exists()) {
+				for (RecordingMetaData meta : metas) {
+					if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
 						break reconvLabel;
 					}
 				}
@@ -155,7 +155,7 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public boolean isEnabled() {
-				FlvRecording r = VideoInfo.this.rm.getObject();
+				Recording r = VideoInfo.this.rm.getObject();
 				return r != null && isRecordingExists(r.getAlternateDownload());
 			}
 			
@@ -172,7 +172,7 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public boolean isEnabled() {
-				FlvRecording r = VideoInfo.this.rm.getObject();
+				Recording r = VideoInfo.this.rm.getObject();
 				return r != null && isRecordingExists(r.getAlternateDownload());
 			}
 			

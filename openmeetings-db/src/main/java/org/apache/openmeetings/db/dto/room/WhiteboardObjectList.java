@@ -26,6 +26,8 @@ public class WhiteboardObjectList {
 	private Long room_id;
 	private Map<Long,WhiteboardObject> whiteboardObjects = new HashMap<Long,WhiteboardObject>();
 	
+	public WhiteboardObjectList() {}
+	
 	public Long getRoom_id() {
 		return room_id;
 	}

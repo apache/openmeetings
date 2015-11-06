@@ -33,9 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -44,13 +45,12 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
@@ -79,8 +79,6 @@ public class MobileService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private IRoomManager roomManager;
-	@Autowired
 	private LabelDao labelDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
@@ -99,8 +97,8 @@ public class MobileService {
 	
 	public Map<Long, String> getStates() {
 		Map<Long, String> result = new Hashtable<>();
-		for (State s : stateDao.getStates()) {
-			result.put(s.getState_id(), s.getName());
+		for (State s : stateDao.get()) {
+			result.put(s.getId(), s.getName());
 		}
 		return result;
 	}
@@ -197,7 +195,7 @@ public class MobileService {
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
 			Sessiondata sd = sessionDao.startsession();
-			boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getUser_id(), false, u.getLanguage_id());
+			boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
 			if (!bool) {
 				// invalid Session-Object
 				result.put("status", -35);
@@ -211,21 +209,21 @@ public class MobileService {
 				}
 				
 				SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
-				c.setUser_id(u.getUser_id());
+				c.setUser_id(u.getId());
 				c.setFirstname(u.getFirstname());
 				c.setLastname(u.getLastname());
 				c.setMobile(true);
 				sessionManager.updateClientByStreamId(streamId, c, false, null);
 
-				add(result, "sid", sd.getSession_id());
+				add(result, "sid", sd.getSessionId());
 				add(result, "publicSid", c.getPublicSID());
 				add(result, "status", 0);
-				add(result, "userId", u.getUser_id());
+				add(result, "userId", u.getId());
 				add(result, "firstname", u.getFirstname());
 				add(result, "lastname", u.getLastname());
 				add(result, "login", u.getLogin());
-				add(result, "email", u.getAdresses() == null ? "" : u.getAdresses().getEmail());
-				add(result, "language", u.getLanguage_id()); //TODO rights
+				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
+				add(result, "language", u.getLanguageId()); //TODO rights
 			}
 		}
 		return result;
@@ -238,7 +236,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if ((c.isMobile() || c.getIsAVClient()) && !Strings.isEmpty(c.getAvsettings()) && !Boolean.TRUE.equals(c.getIsScreenClient())) {
+				if ((c.isMobile() || c.isAvClient()) && !Strings.isEmpty(c.getAvsettings()) && !Boolean.TRUE.equals(c.isScreenClient())) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
@@ -261,17 +259,17 @@ public class MobileService {
 
 	private void addRoom(String type, String org, boolean first, List<Map<String, Object>> result, Room r) {
 		Map<String, Object> room = new Hashtable<String, Object>();
-		room.put("id", r.getRooms_id());
+		room.put("id", r.getId());
 		room.put("name", r.getName());
 		room.put("type", type);
-		room.put("roomTypeId", r.getRoomtype().getRoomtypes_id());
+		room.put("roomType", r.getType());
 		if (org != null) {
 			room.put("org", org);
 		}
 		room.put("first", first);
-		room.put("users", sessionManager.getClientListByRoom(r.getRooms_id()).size());
+		room.put("users", sessionManager.getClientListByRoom(r.getId()).size());
 		room.put("total", r.getNumberOfPartizipants());
-		room.put("audioOnly", Boolean.TRUE.equals(r.getIsAudioOnly()));
+		room.put("audioOnly", Boolean.TRUE.equals(r.isAudioOnly()));
 		result.add(room);
 	}
 	
@@ -283,9 +281,9 @@ public class MobileService {
 		User u = userDao.get(c.getUser_id());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getUser_id(), 1L, labelDao.getString(1306L, u.getLanguage_id())));
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getUser_id(), 3L, labelDao.getString(1307L, u.getLanguage_id())));
-		myl.addAll(roomDao.getAppointedRoomsByUser(u.getUser_id()));
+		myl.add(roomDao.getUserRoom(u.getId(), Type.conference, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Type.conference, labelDao.getString(1306L, u.getLanguageId())));
+		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);
 		}
@@ -294,7 +292,7 @@ public class MobileService {
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			Organisation org = ou.getOrganisation();
 			boolean first = true;
-			for (Room r : roomDao.getOrganisationRooms(org.getOrganisation_id())) {
+			for (Room r : roomDao.getOrganisationRooms(org.getId())) {
 				addRoom("private", org.getName(), first, result, r);
 				first = false;
 			}

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,6 +31,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -62,13 +64,15 @@ import org.apache.openmeetings.util.CalendarPatterns;
 	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
 })
 @Table(name = "client")
-public class Client implements IDataProviderEntity, Serializable {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private Long id;
 	
 	/**
 	 * @see Client#getUsername()
@@ -176,13 +180,13 @@ public class Client implements IDataProviderEntity, Serializable {
 	private String formatedDate;
 	
 	/**
-	 * @see Client#getIsScreenClient()
+	 * @see Client#isScreenClient()
 	 */
 	@Column(name = "is_screenclient")
 	private boolean isScreenClient = false;
 	
 	/**
-	 * @see Client#getIsAVClient()
+	 * @see Client#isAvClient()
 	 */
 	@Column(name = "is_avclient")
 	private boolean isAVClient = false;
@@ -402,7 +406,7 @@ public class Client implements IDataProviderEntity, Serializable {
 	public Client() {}
     
 	public Client(String streamid, String publicSID, Long room_id,
-			Long user_id, String firstname, String lastname, boolean isAVClient,
+			Long user_id, String firstname, String lastname, boolean avClient,
 			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
@@ -411,7 +415,7 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.user_id = user_id;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.isAVClient = isAVClient;
+		this.isAVClient = avClient;
 		this.username = username;
 		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
 		this.scope = scope;
@@ -430,11 +434,11 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.lastname = lastname;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -710,12 +714,12 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.isSuperModerator = isSuperModerator;
 	}
 
-	public boolean getIsScreenClient() {
+	public boolean isScreenClient() {
 		return isScreenClient;
 	}
 
-	public void setIsScreenClient(boolean isScreenClient) {
-		this.isScreenClient = isScreenClient;
+	public void setScreenClient(boolean screenClient) {
+		this.isScreenClient = screenClient;
 	}
 
 	public int getVWidth() {
@@ -846,12 +850,12 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.allowRecording = allowRecording;
 	}
 
-	public boolean getIsAVClient() {
+	public boolean isAvClient() {
 		return isAVClient;
 	}
 
-	public void setIsAVClient(boolean isAVClient) {
-		this.isAVClient = isAVClient;
+	public void setAvClient(boolean avClient) {
+		this.isAVClient = avClient;
 	}
 
 	public boolean isStreamPublishStarted() {

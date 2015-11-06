@@ -21,10 +21,10 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
-import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,10 +32,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -45,13 +47,10 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
-import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -95,9 +94,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		return 650;
 	}
 	
-	public void open(IPartialPageRequestHandler target, long userId) {
+	public void open(IPartialPageRequestHandler handler, long userId) {
 		getModelObject().setTo(getBean(UserDao.class).get(userId));
-		open(target);
+		open(handler);
 	}
 	
 	public MessageDialog reset(boolean isPrivate) {
@@ -113,7 +112,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		p.setFolderId(INBOX_FOLDER_ID);
 		Room r = new Room();
 		r.setAppointment(true);
-		r.setRoomtype(getRoomTypes().get(0));
+		r.setType(Room.Type.conference);
 		p.setRoom(r);
 		setModelObject(p);
 		roomParams.setVisible(getModelObject().isBookedRoom());
@@ -123,12 +122,12 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	@Override
-	protected void onOpen(IPartialPageRequestHandler target) {
+	protected void onOpen(IPartialPageRequestHandler handler) {
 		if (getModel().getObject().getTo() != null) {
 			modelTo.getObject().add(getModel().getObject().getTo());
 		}
-		target.add(form);
-		super.onOpen(target);
+		handler.add(form);
+		super.onOpen(handler);
 	}
 	
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
@@ -155,7 +154,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			}
 		}));
 		roomParamsBlock.add(roomParams);
-		roomParams.add(new RoomTypeDropDown("room.roomtype"));
+		roomParams.add(new RoomTypeDropDown("room.type"));
 		roomParams.add(start);
 		roomParams.add(end);
 		add(form.setOutputMarkupId(true));
@@ -219,9 +218,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		} else {
 			p.setRoom(null);
 		}
-		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
+		PrivateMessageDao msgDao = getBean(PrivateMessageDao.class);
 		for (User to : modelTo.getObject()) {
-			if (to.getUser_id() == null) {
+			if (to.getId() == null) {
 				userDao.update(to, getUserId());
 			}
 			//to send
@@ -234,13 +233,13 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			p.setOwner(to);
 			p.setFolderId(INBOX_FOLDER_ID);
 			msgDao.update(p, getUserId());
-			if (to.getAdresses() != null) {
-				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-							+ Application.getString(1302, to.getLanguage_id()) + "</a><br/>" : "";
+			if (to.getAddress() != null) {
+				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
+							+ Application.getString(1302, to.getLanguageId()) + "</a><br/>" : "";
 				String invitation_link = "";
 				if (p.isBookedRoom()) {
-					Invitation i = getBean(InvitationManager.class).getInvitation(to, p.getRoom(),
-							false, null, Valid.Period, owner, to.getLanguage_id()
+					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
+							false, null, Valid.Period, owner, to.getLanguageId()
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 					
@@ -250,15 +249,15 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 						invitation_link = "";
 					} else {
 						invitation_link = "<br/>" //
-								+ Application.getString(503, to.getLanguage_id())
+								+ Application.getString(503, to.getLanguageId())
 								+ "<br/><a href='" + invitation_link
 								+ "'>"
-								+ Application.getString(504, to.getLanguage_id()) + "</a><br/>";
+								+ Application.getString(504, to.getLanguageId()) + "</a><br/>";
 					}
 				}
 				
-				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
-						Application.getString(1301, to.getLanguage_id()) + p.getSubject(),
+				getBean(MailHandler.class).send(to.getAddress().getEmail(),
+						Application.getString(1301, to.getLanguageId()) + p.getSubject(),
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}

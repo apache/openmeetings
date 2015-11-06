@@ -120,7 +120,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			List<Configuration> list = get(key);
 
 			if (list == null || list.isEmpty() || list.get(0) == null) {
-				log.warn("Could not find key in configuration CONF_KEY: " + key);
+				log.warn("Could not find key in configurations: " + key);
 			} else {
 				String val = list.get(0).getConf_value();
 				// Use the custom value as default value
@@ -141,7 +141,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			return c.newInstance(defaultValue);
 
 		} catch (Exception err) {
-			log.error("cannot be cast to return type, you have misconfigured your configuration CONF_KEY: " + key, err);
+			log.error("cannot be cast to return type, you have misconfigured your configurations: " + key, err);
 			return null;
 		}
 	}
@@ -183,7 +183,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Long addConfig(Configuration conf) {
 		try {
 			conf = em.merge(conf);
-			Long configuration_id = conf.getConfiguration_id();
+			Long configuration_id = conf.getId();
 			return configuration_id;
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: ", ex2);
@@ -198,9 +198,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 */
 	public Long updateConfig(Configuration conf) {
 		try {
-			if (conf.getConfiguration_id() == null
-					|| conf.getConfiguration_id() == 0
-					|| conf.getConfiguration_id() == 0L) {
+			if (conf.getId() == null
+					|| conf.getId() == 0
+					|| conf.getId() == 0L) {
 				em.persist(conf);
 			} else {
 				if (!em.contains(conf)) {
@@ -212,7 +212,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
 				whiteboardDrawStatus = "1".equals(conf.getConf_value());
 			}
-			return conf.getConfiguration_id();
+			return conf.getId();
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: ", ex2);
 		}
@@ -270,7 +270,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getConf_key();
 		String value = entity.getConf_value();
-		if (entity.getConfiguration_id() == null || entity.getConfiguration_id() <= 0) {
+		if (entity.getId() == null || entity.getId() <= 0) {
 			entity.setStarttime(new Date());
 			entity.setDeleted(deleted);
 			em.persist(entity);

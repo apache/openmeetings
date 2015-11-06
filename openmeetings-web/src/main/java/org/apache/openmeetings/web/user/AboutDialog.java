@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user;
 import static org.apache.openmeetings.util.Version.getBuildDate;
 import static org.apache.openmeetings.util.Version.getRevision;
 import static org.apache.openmeetings.util.Version.getVersion;
+import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +35,12 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AboutDialog extends AbstractDialog<String> {
-	private static final long serialVersionUID = 1400355222295594321L;
+	private static final long serialVersionUID = 1L;
 	
 	public AboutDialog(String id) {
 		super(id, Application.getString(1549));
 		
-		add(new Label("name", Application.getBean(ConfigurationDao.class).getConfValue(
-				"application.name"
-				, String.class
-				, ConfigurationDao.DEFAULT_APP_NAME)));
+		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
 		add(new Label("buildDate", getBuildDate()));
@@ -53,6 +51,7 @@ public class AboutDialog extends AbstractDialog<String> {
 		return new ArrayList<DialogButton>();
 	}
 
-	public void onClose(IPartialPageRequestHandler arg0, DialogButton arg1) {
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton arg1) {
 	}
 }

@@ -140,7 +140,7 @@ public class InvitationService implements IPendingServiceCallback {
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
-			inv.getInvitee().setLanguage_id(language_id);
+			inv.getInvitee().setLanguageId(language_id);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 		} else {
 			return "Need User Privileges to perfom the Action";

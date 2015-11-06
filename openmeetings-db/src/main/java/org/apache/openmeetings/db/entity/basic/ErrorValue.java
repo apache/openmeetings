@@ -18,68 +18,77 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getErrorValueById", query = "SELECT e FROM ErrorValue e WHERE e.errorvalues_id = :id AND e.deleted = false")
+	@NamedQuery(name = "getErrorValueById", query = "SELECT e FROM ErrorValue e WHERE e.id = :id AND e.deleted = false")
 })
 @Table(name = "errorvalue")
-public class ErrorValue implements Serializable {
-	private static final long serialVersionUID = -1892810463706968018L;
-
+public class ErrorValue implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+	
+	public enum Type {
+		error
+		, info
+	}
+	
 	@Id
 	@Column(name = "id")
-	private Long errorvalues_id;
+	private Long id;
+
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
+	private Type type;
 	
-	@Column(name = "errortype_id")
-	private Long errortype_id;
+	@Column(name = "label_id")
+	private Long labelId;
 	
-	@Column(name = "fieldvalues_id")
-	private Long fieldvalues_id;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "starttime")
-	private Date starttime;
-	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	public Long getErrorvalues_id() {
-		return errorvalues_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setErrorvalues_id(Long errorvalues_id) {
-		this.errorvalues_id = errorvalues_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -87,20 +96,19 @@ public class ErrorValue implements Serializable {
 		this.deleted = deleted;
 	}
 	
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
 
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 
-	public Long getErrortype_id() {
-		//return errorType.getErrortype_id();
-		return errortype_id;
+	public Type getType() {
+		return type;
 	}
 
-	public void setErrortype_id(Long errortype_id) {
-		this.errortype_id = errortype_id;
+	public void setType(Type type) {
+		this.type = type;
 	}
 }

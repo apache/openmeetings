@@ -78,7 +78,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("addLdapConfig :2: " + insertedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -99,7 +99,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setInserted(new Date());
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -139,7 +139,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("updateLdapConfig :2: " + updatedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			ldapConfigId = ldapConfig.getLdapConfigId();
+			ldapConfigId = ldapConfig.getId();
 
 			return ldapConfigId;
 
@@ -190,7 +190,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		LdapConfig ldapConfig = new LdapConfig();
 		
 		ldapConfig.setName("local DB [internal]");
-		ldapConfig.setLdapConfigId(-1);
+		ldapConfig.setId(-1L);
 
 		List<LdapConfig> result = new ArrayList<LdapConfig>();
 		result.add(ldapConfig);
@@ -234,7 +234,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
-			if (entity.getLdapConfigId() <= 0) {
+			if (entity.getId() <= 0) {
 				entity.setInserted(new Date());
 				if (userId != null) {
 					entity.setInsertedby(usersDao.get(userId));
@@ -256,7 +256,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	public void delete(LdapConfig entity, Long userId) {
-		if (entity.getLdapConfigId() >= 0) {
+		if (entity.getId() >= 0) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
 				entity.setUpdatedby(usersDao.get(userId));

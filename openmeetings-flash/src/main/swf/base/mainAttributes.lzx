@@ -241,8 +241,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 
 <attribute name="isConference" value="false" type="boolean" />
 
-<attribute name="statesInitValues" value="null" />
-<attribute name="salutationsInitValues" value="null" />
 <attribute name="roomTypesInitValues" value="null" />
 
 <attribute name="stdTimeOffset" value="0" type="number" />

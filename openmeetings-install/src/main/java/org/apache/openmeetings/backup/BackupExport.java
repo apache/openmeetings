@@ -43,7 +43,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
@@ -53,26 +53,24 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -109,19 +107,19 @@ public class BackupExport {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private FlvRecordingDao flvRecordingDao;
+	private RecordingDao recordingDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
+	private PrivateMessageDao privateMessageDao;
 	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -155,7 +153,7 @@ public class BackupExport {
 		/*
 		 * ##################### Backup Users
 		 */
-		exportUsers(backup_dir, usersDao.getAllBackupUsers());
+		exportUsers(backup_dir, userDao.getAllBackupUsers());
 		progressHolder.setProgress(10);
 
 		/*
@@ -167,7 +165,7 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(User.class, UserConverter.class);
-			registry.bind(RoomType.class, RoomTypeConverter.class);
+			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms.xml", "rooms", roomDao.get());
 			progressHolder.setProgress(15);
@@ -184,8 +182,7 @@ public class BackupExport {
 			registry.bind(Organisation.class, OrganisationConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			
-			writeList(serializer, backup_dir, "rooms_organisation.xml",
-					"room_organisations", roomOrganisationDao.get());
+			writeList(serializer, backup_dir, "rooms_organisation.xml", "room_organisations", roomOrganisationDao.get());
 			progressHolder.setProgress(20);
 		}
 
@@ -193,14 +190,13 @@ public class BackupExport {
 		 * ##################### Backup Appointments
 		 */
 		{
-			List<Appointment> list = appointmentDao.getAppointments();
+			List<Appointment> list = appointmentDao.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(AppointmentCategory.class, AppointmentCategoryConverter.class);
 			registry.bind(User.class, UserConverter.class);
-			registry.bind(AppointmentReminderTyps.class, AppointmentReminderTypeConverter.class);
+			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);
@@ -252,7 +248,7 @@ public class BackupExport {
 		 * ##################### Private Messages
 		 */
 		{
-			List<PrivateMessage> list = privateMessagesDao.get(0, Integer.MAX_VALUE);
+			List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -286,7 +282,7 @@ public class BackupExport {
 			registry.bind(User.class, UserConverter.class);
 			
 			writeList(serializer, backup_dir, "userContacts.xml",
-					"usercontacts", userContactsDao.get());
+					"usercontacts", userContactDao.get());
 			progressHolder.setProgress(60);
 		}
 
@@ -312,7 +308,7 @@ public class BackupExport {
 		 * ##################### Recordings
 		 */
 		{
-			List<FlvRecording> list = flvRecordingDao.getAllFlvRecordings();
+			List<Recording> list = recordingDao.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -462,6 +458,7 @@ public class BackupExport {
 
 		registry.bind(Organisation.class, OrganisationConverter.class);
 		registry.bind(State.class, StateConverter.class);
+		registry.bind(Salutation.class, SalutationConverter.class);
 		if (list != null && list.size() > 0) {
 			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getStarttime().getClass();
 			registry.bind(dateClass, DateConverter.class);
@@ -483,11 +480,11 @@ public class BackupExport {
 		}
 		log.debug("sid: " + sid);
 
-		Long users_id = sessiondataDao.checkSession(sid);
-		Set<Right> rights = usersDao.get(users_id).getRights();
+		Long userId = sessiondataDao.checkSession(sid);
+		Set<Right> rights = userDao.get(userId).getRights();
 
-		log.debug("users_id: " + users_id);
-		log.debug("user_level: " + rights);
+		log.debug("userId: " + userId);
+		log.debug("user level: " + rights);
 
 		if (AuthLevelUtil.hasAdminLevel(rights)) {
 			// if (true) {

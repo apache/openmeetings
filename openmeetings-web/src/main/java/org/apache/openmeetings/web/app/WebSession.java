@@ -199,8 +199,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (soapLogin != null && !soapLogin.getUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
-			if (sd != null && sd.getSessionXml() != null) {
-				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getSessionXml());
+			if (sd != null && sd.getXml() != null) {
+				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
 					UserDao userDao = getBean(UserDao.class);
 					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
@@ -209,10 +209,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
 						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
-						user.setExternalUserId(remoteUser.getExternalUserId());
-						user.setExternalUserType(remoteUser.getExternalUserType());
+						user.setExternalId(remoteUser.getExternalUserId());
+						user.setExternalType(remoteUser.getExternalUserType());
 						user.getRights().add(Right.Room);
-						user.getAdresses().setEmail(remoteUser.getEmail());
+						user.getAddress().setEmail(remoteUser.getEmail());
 						user.setPictureuri(remoteUser.getPictureUrl());
 					} else {
 						user.setFirstname(remoteUser.getFirstname());
@@ -226,7 +226,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 					//soapLogin.setClientURL(clientURL); //FIXME
 					soapDao.update(soapLogin);
 
-					sessionDao.updateUser(SID, user.getUser_id());
+					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
 					recordingId = soapLogin.getRoomRecordingId();
 					return true;
@@ -237,10 +237,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	private void setUser(User u) {
-		userId = u.getUser_id();
+		userId = u.getId();
 		rights = Collections.unmodifiableSet(u.getRights());
-		languageId = u.getLanguage_id();
-		externalType = u.getExternalUserType();
+		languageId = u.getLanguageId();
+		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
 		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId)); //FIXME hack
@@ -282,7 +282,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	public boolean signIn(User u) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
-		SID = sessData.getSession_id();
+		SID = sessData.getSessionId();
 		if (u == null) {
 			return false;
 		}
@@ -307,7 +307,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		WebSession session = get();
 		if (session.languageId < 0) {
 			if (session.isSignedIn()) {
-				session.languageId = getBean(UserDao.class).get(session.userId).getLanguage_id();
+				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
 			} else {
 				session.languageId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
 			}
@@ -323,11 +323,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			if (sessionData == null) {
 				sessionData = sessionDao.startsession();
 			}
-			if (!sessionDao.updateUser(sessionData.getSession_id(), userId, false, languageId)) {
+			if (!sessionDao.updateUser(sessionData.getSessionId(), userId, false, languageId)) {
 				//something bad, force user to re-login
 				invalidate();
 			} else {
-				SID = sessionData.getSession_id();
+				SID = sessionData.getSessionId();
 			}
 		}
 		return SID;

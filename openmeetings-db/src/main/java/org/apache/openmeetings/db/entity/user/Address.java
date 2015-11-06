@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,18 +31,20 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "address")
 @Root(name="address")
-public class Address implements Serializable {
+public class Address implements IDataProviderEntity {
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long adresses_id;
+	private Long id;
 	
 	@Column(name = "additionalname")
 	@Element(data=true, required=false)
@@ -58,14 +59,14 @@ public class Address implements Serializable {
 	@Element(data=true, required=false)
 	private String fax;
 	
-	@Column(name = "starttime")
-	@Element(data=true, required=false)
-	private Date starttime;
+	@Column(name = "inserted")
+	@Element(name = "starttime",data=true, required=false)
+	private Date inserted;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
 	@Element(name="state_id", data=true, required=false)
-	private State states;
+	private State state;
 	
 	@Column(name = "street")
 	@Element(data=true, required=false)
@@ -75,8 +76,8 @@ public class Address implements Serializable {
 	@Element(data=true, required=false)
 	private String town;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "zip")
 	@Element(data=true, required=false)
@@ -101,12 +102,12 @@ public class Address implements Serializable {
 		this.additionalname = additionalname;
 	}
 
-	public Long getAdresses_id() {
-		return adresses_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAdresses_id(Long adresses_id) {
-		this.adresses_id = adresses_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getComment() {
@@ -125,20 +126,20 @@ public class Address implements Serializable {
 		this.fax = fax;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public State getStates() {
-		return states;
+	public State getState() {
+		return state;
 	}
 
-	public void setStates(State states) {
-		this.states = states;
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public String getStreet() {
@@ -157,12 +158,12 @@ public class Address implements Serializable {
 		this.town = town;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public String getZip() {
@@ -173,7 +174,7 @@ public class Address implements Serializable {
 		this.zip = zip;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -199,7 +200,7 @@ public class Address implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + adresses_id + ", states=" + states
+		return "Address [id=" + id + ", state=" + state
 				+ ", street=" + street + ", town=" + town + ", zip=" + zip
 				+ ", deleted=" + deleted + ", email=" + email + ", phone="
 				+ phone + "]";

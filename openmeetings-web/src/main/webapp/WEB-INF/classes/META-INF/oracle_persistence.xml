@@ -25,7 +25,6 @@
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.apache.openmeetings.db.entity.basic.Configuration</class>
-		<class>org.apache.openmeetings.db.entity.basic.ErrorType</class>
 		<class>org.apache.openmeetings.db.entity.basic.ErrorValue</class>
 		<class>org.apache.openmeetings.db.entity.server.LdapConfig</class>
 		<class>org.apache.openmeetings.db.entity.basic.MailMessage</class>
@@ -35,26 +34,22 @@
 		<class>org.apache.openmeetings.db.entity.server.SOAPLogin</class>
 		<class>org.apache.openmeetings.db.entity.server.Server</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>
-		<class>org.apache.openmeetings.db.entity.calendar.AppointmentCategory</class>
-		<class>org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps</class>
 		<class>org.apache.openmeetings.db.entity.calendar.MeetingMember</class>
 		<class>org.apache.openmeetings.db.entity.basic.ChatMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.Organisation</class>
 		<class>org.apache.openmeetings.db.entity.user.Organisation_Users</class>
-		<class>org.apache.openmeetings.db.entity.record.FlvRecording</class>
-		<class>org.apache.openmeetings.db.entity.record.FlvRecordingLog</class>
-		<class>org.apache.openmeetings.db.entity.record.FlvRecordingMetaData</class>
-		<class>org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta</class>
+		<class>org.apache.openmeetings.db.entity.record.Recording</class>
+		<class>org.apache.openmeetings.db.entity.record.RecordingLog</class>
+		<class>org.apache.openmeetings.db.entity.record.RecordingMetaData</class>
+		<class>org.apache.openmeetings.db.entity.record.RecordingMetaDelta</class>
 		<class>org.apache.openmeetings.db.entity.room.Invitation</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
-		<class>org.apache.openmeetings.db.entity.log.ConferenceLogType</class>
 		<class>org.apache.openmeetings.db.entity.room.PollType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswers</class>
+		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
 		<class>org.apache.openmeetings.db.entity.room.Client</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomOrganisation</class>
 		<class>org.apache.openmeetings.db.entity.room.Whiteboard</class>
 		<class>org.apache.openmeetings.db.entity.room.WhiteboardItem</class>
@@ -62,10 +57,10 @@
 		<class>org.apache.openmeetings.db.entity.user.State</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessageFolder</class>
-		<class>org.apache.openmeetings.db.entity.user.Salutation</class>
 		<class>org.apache.openmeetings.db.entity.user.UserContact</class>
 		<class>org.apache.openmeetings.db.entity.user.Userdata</class>
 		<class>org.apache.openmeetings.db.entity.user.User</class>
+		<class>org.apache.openmeetings.db.entity.file.FileItem</class>
 		<class>org.apache.openmeetings.db.entity.file.FileExplorerItem</class>
 		<class>org.apache.openmeetings.db.entity.user.AsteriskSipUser</class>
 		<class>org.apache.openmeetings.db.entity.server.OAuthServer</class>

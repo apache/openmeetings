@@ -29,7 +29,7 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebClient;
+import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -62,7 +62,7 @@ import org.wicketstuff.urlfragment.UrlFragment;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
-	private static final long serialVersionUID = 6421960759218157999L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;
 	private final MarkupContainer contents;
@@ -127,13 +127,13 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				addOnlineUser(new WebClient(WebSession.get().getId(), message.getKey(), getUserId()));
+				addOnlineUser(new Client(WebSession.get().getId(), message.getKey(), getUserId()));
 				log.debug("WebSocketBehavior::onConnect");
 			}
 			
 			@Override
 			protected void onClose(ClosedMessage message) {
-				WebClient client = getClientByKeys(getUserId(), WebSession.get().getId());
+				Client client = getClientByKeys(getUserId(), WebSession.get().getId());
 				removeOnlineUser(client);
 				super.onClose(message);
 				log.debug("WebSocketBehavior::onClose");

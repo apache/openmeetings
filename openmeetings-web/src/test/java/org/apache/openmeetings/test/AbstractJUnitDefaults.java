@@ -18,20 +18,16 @@
  */
 package org.apache.openmeetings.test;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -43,8 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
 	
-	protected static final String username = "swagner";
-	protected static final String userpass = "qweqwe";
+	protected static final String username = "admin";
+	protected static final String userpass = "12345";
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
 	private static final String useremail = "junit@openmeetings.apache.org";
@@ -52,32 +48,26 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private AppointmentReminderTypDao reminderTypeDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	
-	private List<AppointmentReminderTyps> remindTypes;
-	private List<RoomType> roomTypes;
 
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		configurationDao.getCryptKey();
-        if (userDao.count() < 1) {
-            makeDefaultScheme();
-            log.info("Default scheme created successfully");
-        } else {
-            log.info("Default scheme already created");
-        }
-        remindTypes = reminderTypeDao.getAppointmentReminderTypList(1L);
-        roomTypes = roomTypeDao.getAll(1L);
-    }
+		if (userDao.count() < 1) {
+			makeDefaultScheme();
+			log.info("Default scheme created successfully");
+		} else {
+			log.info("Default scheme already created");
+		}
+		if (configKeyCryptClassName == null) {
+			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
+		}
+	}
 
 	public Appointment createAppointment() {
 		Date appointmentstart = new Date();
@@ -109,14 +99,12 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		ap.setOwner(userDao.get(1L));
 		ap.setConnectedEvent(false);
 
-		if (ap.getRemind() == null && !remindTypes.isEmpty()) {
-			ap.setRemind(remindTypes.get(0));
+		if (ap.getReminder() == null) {
+			ap.setReminder(Appointment.Reminder.none);
 		}
 		
 		Room r = new Room();
-		if (!roomTypes.isEmpty()) {
-			r.setRoomtype(roomTypes.get(0));
-		}
+		r.setType(Room.Type.conference);
 		r.setAppointment(true);
 		ap.setRoom(r);
 		return ap;
@@ -156,7 +144,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setLastname("lastname" + rnd);
 		u.setLogin("login" + rnd);
 		u.updatePassword(configurationDao, "pass" + rnd);
-		u.setLanguage_id(1L);
+		u.setLanguageId(1L);
 		return u;
 	}
 
@@ -180,7 +168,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public User createUserContact(int rnd, Long ownerId) {
 		User user = userDao.getContact("email" + rnd, "firstname" + rnd, "lastname" + rnd, ownerId);
 		user = userDao.update(user, ownerId);
-		assertNotNull("Can't add user contact", user);
+		assertNotNull("Cann't add user", user);
 		return user;
 	}
 

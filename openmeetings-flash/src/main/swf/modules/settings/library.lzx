@@ -65,7 +65,6 @@
               src="resources/arrow_undo.png" />   
    
     <include href="privatemessages/" />
-    <include href="usercontacts/" />
     
     <include href="viewUserProfile.lzx" />
 
