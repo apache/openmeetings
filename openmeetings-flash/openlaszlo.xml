@@ -33,24 +33,15 @@
 		<fileset dir="${laszlo46.home}/WEB-INF/lib" includes="*.jar" />
 	</path>
 
-	<target name="client.only" depends="compile.laszlo.networktesting" unless="client-already-built">
+	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main,compile.laszlo.networktesting" unless="client-already-built">
 		<property name="client-already-built" value="true"/>
 	</target>
 
-	<target name="client.debug.only" depends="compile.laszlo.main.debug,compile.laszlo.networktesting.debug" />
+	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug,compile.laszlo.networktesting.debug" >
+		<property name="client-already-built" value="true"/>
+	</target>
 
 	<target name="-compile.flash" description="compile flash application">
-		<!-- commented for now
-		<echo message="flash.src.dir == '${flash.src.dir}'" />
-		<echo message="classpathref == '${flash.classpath.ref}'" />
-		<echo message="laszlo.home == '${flash.lps.home}'" />
-		<echo message="flash.debug == '${flash.debug}'" />
-		<echo message="laszlo.proxied == '${laszlo.proxied}'" />
-		<echo message="flash.runtime == '${flash.runtime}'" />
-		<echo message="out.dir.swf == '${out.dir.swf}'" />
-		<echo message="flash.main.file == '${flash.main.file}'" />
-		<echo message="flash.out.file == '${flash.out.file}'" />
-		-->
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="${flash.classpath.ref}">
 			<jvmarg value="-DLPS_HOME=${flash.lps.home}" />
 			<jvmarg value="-Dlzdebug=false" />
@@ -61,15 +52,15 @@
 		</java>
 	</target>
 
-	<target name="compile.laszlo.networktesting" depends="compile.laszlo.networktesting.debug">
+	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo46">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
-			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
+			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf10" />
-			<param name="flash.main.file" value="networktesting.lzx" />
-			<param name="flash.out.file" value="networktesting.swf10.swf" />
-			<param name="flash.debug" value="" />
+			<param name="flash.runtime" value="swf11" />
+			<param name="flash.main.file" value="main.as3.lzx" />
+			<param name="flash.out.file" value="maindebug.as3.swf11.swf" />
+			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
 
@@ -87,42 +78,37 @@
 
 	<target name="compile.laszlo.main" depends="compile.laszlo.main.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="laszlo.lib" />
-			<param name="flash.src.dir" value="${laszlo.src.dir}" />
-			<param name="flash.lps.home" value="${laszlo.home}" />
-			<param name="flash.runtime" value="swf8" />
+			<param name="flash.classpath.ref" value="laszlo46.lib" />
+			<param name="flash.src.dir" value="${laszlo.as2.src.dir}" />
+			<param name="flash.lps.home" value="${laszlo46.home}" />
+			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="main.lzx" />
-			<param name="flash.out.file" value="main.swf8.swf" />
+			<param name="flash.out.file" value="main.swf11.swf" />
 			<param name="flash.debug" value="" />
 		</antcall>
 	</target>
 
-	<!--target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo"-->
 	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo46">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
-			<!--param name="flash.classpath.ref" value="laszlo.lib" /-->
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
-			<!--param name="flash.src.dir" value="${laszlo.src.dir}" /-->
 			<param name="flash.src.dir" value="${laszlo.as2.src.dir}" />
-			<!--param name="flash.lps.home" value="${laszlo.home}" /-->
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<!--param name="flash.runtime" value="swf8" /-->
 			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="main.lzx" />
-			<param name="flash.out.file" value="maindebug.swf8.swf" />
+			<param name="flash.out.file" value="maindebug.swf11.swf" />
 			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
 
-	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo46">
+	<target name="compile.laszlo.networktesting" depends="compile.laszlo.networktesting.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
-			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
+			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf11" />
-			<param name="flash.main.file" value="main.as3.lzx" />
-			<param name="flash.out.file" value="maindebug.as3.swf11.swf" />
-			<param name="flash.debug" value="--debug" />
+			<param name="flash.runtime" value="swf10" />
+			<param name="flash.main.file" value="networktesting.lzx" />
+			<param name="flash.out.file" value="networktesting.swf10.swf" />
+			<param name="flash.debug" value="" />
 		</antcall>
 	</target>
 

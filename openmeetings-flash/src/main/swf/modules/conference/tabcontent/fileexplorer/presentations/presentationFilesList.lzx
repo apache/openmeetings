@@ -51,7 +51,7 @@
     </method>
     
     <method name="addListpresentationFilePDF" args="pdfname,swfName,fileExplorerItemId">
-    	if ($debug) Debug.write("addListpresentationFilePDF ",originalName,pdfname,swfName,fileExplorerItemId);
+    	if ($debug) Debug.write("addListpresentationFilePDF ",pdfname,swfName,fileExplorerItemId);
         new lz.listPresentationFilePDFExplorer(this._table._listcontent,{
 	        				isExplorer:true,
 	        				isoriginal:true,

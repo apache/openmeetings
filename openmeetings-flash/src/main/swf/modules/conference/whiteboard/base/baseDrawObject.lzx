@@ -571,7 +571,7 @@
         		this.boundingref._innerDrag.onmouseup.sendEvent();
         	}
         }
-        this.setCurrentDocument();
+        this.setCurrentDocument(null);
     </method>
     
     <method name="setCurrentDocument" args="itemRefName">

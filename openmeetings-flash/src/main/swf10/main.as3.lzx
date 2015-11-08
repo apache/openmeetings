@@ -122,7 +122,7 @@
             }
         }
         
-        var tSWFURL = canvas.getLocalBaseUrl() + "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        var tSWFURL = canvas.getLocalBaseUrl() + "main" + ($debug ? "debug" : "") + ".swf11.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
         
         if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
         

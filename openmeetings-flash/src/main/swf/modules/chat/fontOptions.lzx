@@ -116,9 +116,7 @@
 				this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
 	        		x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
 	        		y:(this.getAttributeRelative('y',canvas)-154+this.height)});
-	        	var myColor = new Color();
-        		myColor.setRGB(0);
-	        	this.colorPickRef.doDefaultColor(myColor);
+	        	this.colorPickRef.doDefaultColor(0);
 	        	this.colorBeforeOpen = colorPickRef.selectedColor;
 	        	lz.ModeManager.makeModal(this.colorPickRef);
 			]]>

@@ -19,15 +19,22 @@
   
 -->
 <library>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
 
 <script>
 <![CDATA[
 
 
-	flash.external.ExternalInterface.addCallback("redirectToUrlCallback", null, redirectToUrlCallback);
-	flash.external.ExternalInterface.addCallback("getTimeZoneOffsetCallback", null, getTimeZoneOffsetCallback);
-    flash.external.ExternalInterface.addCallback("getBrowserInfoCallback", null, getBrowserInfoCallback);
-    flash.external.ExternalInterface.addCallback("getBrowserLangCallback", null, getBrowserLangCallback);
+	ExternalInterface.addCallback("redirectToUrlCallback", redirectToUrlCallback);
+	ExternalInterface.addCallback("getTimeZoneOffsetCallback", getTimeZoneOffsetCallback);
+    ExternalInterface.addCallback("getBrowserInfoCallback", getBrowserInfoCallback);
+    ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
 
 	
 	var redirectToUrlReturnObject = null;
@@ -40,7 +47,7 @@
 		
 		redirectToUrlReturnObject = returnObject;
 		
-		flash.external.ExternalInterface.call("redirectToUrl", url);
+		ExternalInterface.call("redirectToUrl", url);
 		
 		//lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
 	}
@@ -57,7 +64,7 @@
 		
 		timeZoneOffsetReturnObject = returnObject;
 		
-		flash.external.ExternalInterface.call("getTimeZoneOffset");
+		ExternalInterface.call("getTimeZoneOffset");
 		
 		//lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
 	}
@@ -74,7 +81,7 @@
         
         browserInfoReturnObject = returnObject;
         
-        flash.external.ExternalInterface.call("getBrowserInfo");
+        ExternalInterface.call("getBrowserInfo");
         
         //lz.Browser.callJS("getBrowserInfo",callback);
     }
@@ -91,7 +98,7 @@
         
         browserLangReturnObject = returnObject;
         
-        flash.external.ExternalInterface.call("getBrowserLang");
+        ExternalInterface.call("getBrowserLang");
         
         //lz.Browser.callJS("getBrowserLang",callback);
     }

@@ -20,8 +20,7 @@
 -->
 <library>
 
-<class name="tableListItem" extends="view"
-    bgcolor="${ ( this.isaltered ) ? red : white }" height="22">
+<class name="tableListItem" extends="view" bgcolor="${ ( this.isaltered ) ? 'red' : 'white' }" height="22">
     
     <handler name="oninit">
         this.changeholder = new Array();

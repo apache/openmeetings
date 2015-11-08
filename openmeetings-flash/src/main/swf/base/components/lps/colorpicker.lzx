@@ -38,17 +38,13 @@
     </handler>
 </class>    
 
-<class name="colorPot" width="13" height="13" 
-    onmouseout="">
-    <handler name="onmouseover">
-        var t = _root.createEmptyMovieClip('hans2',20);
-        var myColorTZ = new Color(t);
-        myColorTZ.setRGB(this.mycolor);        
-        this.setAttribute('mycolorString',this.parent.parent.parent.numberToRGB(myColorTZ));
-    </handler>
+<class name="colorPot" width="13" height="13" onmouseout="">
     <attribute name="mycolor" type="color" value="0x000000"/>
     <attribute name="mycolorString" type="string" value="0x000000"/>
     <attribute name="listener" type="expression"/>
+    <handler name="onmouseover">
+        this.setAttribute('mycolorString',this.parent.parent.parent.numberToRGB(this.mycolor));
+    </handler>
     <handler name="onclick">
         listener.changeColor(this.mycolor);
         listener.close();
@@ -102,9 +98,8 @@
        ]]> 
     </method>  
     
-    <method name="doDefaultColor" args="thisC">
+    <method name="doDefaultColor" args="c">
         <![CDATA[            
-            var c = thisC.getRGB();
             var r = (c >> 16) & 0xff;
             var g = (c >> 8) &  0xff;
             var b = c & 0xff;
@@ -157,9 +152,9 @@
             var b = c & 0xff;
             ////Debug.write("r g b: ",r,g,b);
             
-            HEX_R = r.toString(16).toUpperCase();
-            HEX_G = g.toString(16).toUpperCase();
-            HEX_B = b.toString(16).toUpperCase();
+            var HEX_R = r.toString(16).toUpperCase();
+            var HEX_G = g.toString(16).toUpperCase();
+            var HEX_B = b.toString(16).toUpperCase();
             
             if (HEX_R.length < 2) {
                 HEX_R = "0"+HEX_R;

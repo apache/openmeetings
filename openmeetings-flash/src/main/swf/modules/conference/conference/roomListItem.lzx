@@ -70,7 +70,7 @@
 			if (obj != null) {
     			canvas.isConference = !this.isaudience;
     			if (this.isaudience)
-    				connectedIsAudience = '_' + 'audi';
+    				var connectedIsAudience = '_' + 'audi';
     			if (this.ispublic) {
     				hib.conferencedomain = "public";
     				hib.currentroomid = this.obj.rooms_id;
@@ -125,7 +125,7 @@
 			
 			canvas.isConference = !this.isaudience;
 			if (this.isaudience)
-				connectedIsAudience = '_' + 'audi';
+				var connectedIsAudience = '_' + 'audi';
 			if (this.ispublic) {
 				var roomObj = this.obj;
 				hib.conferencedomain = "public";

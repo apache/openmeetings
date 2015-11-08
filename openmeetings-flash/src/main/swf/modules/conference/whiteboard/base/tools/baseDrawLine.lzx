@@ -101,10 +101,10 @@
 
 			if (this.isSnapToGrid) {
 
-				xgrid = Math.round((minx - 1 - (this.currentlinelineWidth / 2))
+				var xgrid = Math.round((minx - 1 - (this.currentlinelineWidth / 2))
 						/ this.gridWidth)
 						* this.gridWidth;
-				ygrid = Math.round((miny - 1 - (this.currentlinelineWidth / 2))
+				var ygrid = Math.round((miny - 1 - (this.currentlinelineWidth / 2))
 						/ this.gridWidth)
 						* this.gridWidth;
 

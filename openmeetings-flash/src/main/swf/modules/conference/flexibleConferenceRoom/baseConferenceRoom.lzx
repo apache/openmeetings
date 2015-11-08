@@ -23,7 +23,7 @@
 <class name="dtmfButton" extends="button" width="20" height="20" >
     <attribute name="dtmf" value="" type="string"/>
     <handler name="onclick">
-        callDTMFButton(this,this.text);
+        //callDTMFButton(this,this.text);
     </handler>
     <method name="doNextSipNumber">
         if ($debug) Debug.write("doNextSipNumber ",this.text);
@@ -122,6 +122,8 @@
 		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
 	]]>
 	</handler>
+    
+    <method name="createMenu"/>
     
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[

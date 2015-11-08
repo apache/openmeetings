@@ -130,7 +130,7 @@ function measureLine(){
                 
         textObject[currentLine] = new Array();
         textObject[currentLine]["text"] = testTxt2;
-        metrics2 = myTextFormat.getTextExtent(textObject[currentLine]["text"], 100000);
+        var metrics2 = myTextFormat.getTextExtent(textObject[currentLine]["text"], 100000);
         textObject[currentLine]["lineWidth"] = metrics2.width;
         currentLine += 1;
         //if ($debug) Debug.write("new line: ", textObject[currentLine]["text"]);

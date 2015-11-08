@@ -21,7 +21,13 @@
 <library>
 
 <class name="customInputtext" extends="inputtext">
-	  
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.system.Capabilities;
+            </passthrough>
+        </when>
+    </switch>
 	 <!-- lost selection workaroud -->
 	 <attribute name="selPosition" type="integer"/>
 	 <attribute name="selSize" type="integer"/>
@@ -49,14 +55,14 @@
 	  
 	 <handler name="ontext" args="txt">
         <![CDATA[
-            
+             /* FIXME TODO as2->3 migration
             //
            
-            if (System.capabilities.os.indexOf('Linux')==-1) { 
+            if (Capabilities.os.indexOf('Linux')==-1) { 
                 return; 
             }
             
-            //if ($debug) Debug.write("System.capabilities.os -- START ",System.capabilities.os,txt);
+            //if ($debug) Debug.write("Capabilities.os -- START ", Capabilities.os,txt);
             
             if (txt == null || txt.length == 0) {
                 return;
@@ -146,7 +152,7 @@
             }
             
             //if ($debug) Debug.write("-- END ",this.text);
-            
+            */
         ]]>
     </handler>
   	

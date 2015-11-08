@@ -21,6 +21,14 @@
 <library>
 
 <class name="baseDrawSave" extends="baseDrawImage" >
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.display.BitmapData;
+				import flash.geom.Matrix;
+			</passthrough>
+		</when>
+	</switch>
 	
 	<!-- saveing a file to a wml Object -->
 	<attribute name="savefileName" value="savefileName1" type="string" />
@@ -94,10 +102,10 @@
         <![CDATA[
         this.MCRef = this.getDisplayObject();
         //Debug.write("this.MCRef: ",this.MCRef);
-        this.snap = new flash.display.BitmapData(this.width, this.height, false, 0 );
+        this.snap = new BitmapData(this.width, this.height, false, 0 );
         
         //Matrix to scale the new image
-        this.MatrixValue = new flash.geom.Matrix();
+        this.MatrixValue = new Matrix();
         this.MatrixValue.scale(1, 1);
         //Copy video image
         this.snap.draw(this.MCRef,  this.MatrixValue); 
@@ -149,6 +157,7 @@
     <method name="sendPHPData" args="pix,pixH,pixW">
         //Debug.write("### sendPHPData: ",pix,pixH,pixW);
         <![CDATA[
+        	/* FIXME TODO as2->3 migration
 	        //Create the LoadVars object and pass data to PHP script
 	        var output = new LoadVars();
 	        output.img = pix.toString();
@@ -156,6 +165,7 @@
 	        output.width = pixW;
 	        //The page (and this movie itself) should be in a server to work
 	        output.send(this.sendURL, "output", "POST");
+	        */
         ]]> 
     </method>
 	

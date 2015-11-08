@@ -21,7 +21,16 @@
 
 
 <class name="rtmpConnection" extends="node">
-    	
+
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.net.NetConnection;
+                    import flash.events.NetStatusEvent;
+                </passthrough>
+            </when>
+        </switch>
+
     	<attribute name="debug" value="false" type="boolean" />
     	
     	<event name="onconnect"/>
@@ -33,12 +42,12 @@
         <attribute name="lastCalled" value="null" />
     	
     	<attribute name="src" value="" type="string"/>
-    	
+
 		<method name="connect">
             this._nc = new NetConnection();
 
             // local reference to rtmpconnection
-            this._nc.t = this;     
+            //this._nc.t = this;
             
             this._nc.proxyType = canvas.proxyType;
             
@@ -47,36 +56,47 @@
             	if($debug) Debug.write("*** debug ***");
             }
             
-            //canvas.currentNC is the reference to the NetConnection that is used in the NetStream
-            canvas.currentNC = this._nc;
-            
-            this._nc.onStatus = function(info){
-                this.t._onStatus(info);
-            }
+            this._nc.addEventListener(NetStatusEvent.NET_STATUS, _onStatus);
             
     		if($debug) Debug.write("devRtmpConnection/registerMethods()");
+    		var clientObj = {};
+    		clientObj.setId = this.setId;
+    		
+    		this._nc.client = clientObj;
+    		
 			//Register Methods
-			this.registerMethods();    	            
+			//this.registerMethods();
 		</method>
 		
-        <method name="_onStatus" args="info"><![CDATA[
-            if (this.debug) {
-                Debug.write("devrtmpconnection", this, "_onStatus", info.code);
+        <method name="_onStatus" args="stats"><![CDATA[
+            if ($debug) {
+                Debug.write("devrtmpconnection", this, "_onStatus", stats.info.code);
             }
 
             var msg = "";
+            var s;
 
-            switch (info.code) {
+            switch (stats.info.code) {
 
                 case "NetConnection.Connect.Success": {
                     // The connection attempt succeeded.
-                    msg = info.code;
+                    //canvas.currentNC is the reference to the NetConnection that is used in the NetStream
+                    msg = stats.info.code;
+                    canvas.currentNC = this._nc;
                     s = 2;
+                    break;
+                }
+                
+                case "NetConnection.Connect.Closed": {
+                    msg = stats.info.code;
+                    this._nc = null;
+                    canvas.currentNC = null;
+                    s = 0;
                     break;
                 }
 
                 default: {
-                    msg = info.code;
+                    msg = stats.info.code;
                     s = 0;
                     break;
                 }
@@ -95,9 +115,10 @@
         </method>	
         
         <method name="disconnect">
-            this.ondisconnect.sendEvent();
-        	canvas.currentNC = null;
-            this._nc.close();
+        	if ($debug) Debug.write(" DISCONNECT ");
+        	if (this._nc != null) {
+                this._nc.close();
+            }
         </method>
     <!--- 
         With this function all methods are registered to the NetConnection
@@ -162,9 +183,6 @@
     <method name="callRPC" args="func, obj, params">
     	if (this.debug) Debug.write("*** call: func, obj, params",func,obj, typeof (params) ,params.length);
     	if (params.length != 0){
-	    	//does this really work?
-	    	ASSetPropFlags(_global, null, 8, 1);
-	    	//Debug.write("does it work?",arguments);
 	    	<!--
 	    	this._nc.call.apply(this._nc,arguments);
 	    	 -->
@@ -223,6 +241,13 @@
     -->
     <class name="netremotecall" extends="node">
 
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.net.Responder;
+                </passthrough>
+            </when>
+        </switch>
 
         <!--- Name of the remote function. -->
         <attribute name="funcname" value="$once{null}" type="string" />
@@ -231,8 +256,7 @@
     
         <attribute name="dataobject" value="null" />
 		
-        <!--- Data handling event. args="value" 
-        @keywords private  -->
+        <!--- Data handling event. args="value"  -->
         <event name="ondata" />
 
         <!--- Error handling event. -->
@@ -289,7 +313,6 @@
 
           ]]>
         </method>
-
 
         <!--- Handle the result returned from the remote method. -->
         <method name="onResult" args="value"><![CDATA[

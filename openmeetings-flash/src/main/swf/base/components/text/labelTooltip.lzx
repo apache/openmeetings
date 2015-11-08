@@ -92,8 +92,14 @@
     <attribute name="text" value="" type="string" />
 </class>
 
-<class name="xmlCrmTooltip" extends="view" bgcolor="0x000000" 
-    width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+<class name="xmlCrmTooltip" extends="view" bgcolor="0x000000" width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.filters.DropShadowFilter;
+			</passthrough>
+		</when>
+	</switch>
     <attribute name="text" value="" type="string" />
     <attribute name="holder" value="null" />
     <text x="1" y="1" text="${ parent.text }" resize="true" 
@@ -108,15 +114,21 @@
         <![CDATA[
         if (this.isinited){
             this.normalMC = this.getDisplayObject();
-           	this.displacementMap = new flash.filters.DropShadowFilter();
+           	this.displacementMap = new DropShadowFilter();
             this.normalMC.filters = [this.displacementMap];
         }
         ]]>              
     </method> 
 </class>
 
-<class name="xmlCrmTooltipMulti" extends="view" bgcolor="0x000000" 
-    width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+<class name="xmlCrmTooltipMulti" extends="view" bgcolor="0x000000" width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.filters.DropShadowFilter;
+			</passthrough>
+		</when>
+	</switch>
     <attribute name="text" value="" type="string" />
     <attribute name="holder" value="null" />
     <text x="1" y="1" text="${ parent.text }" resize="true" 
@@ -128,7 +140,7 @@
         <![CDATA[
         if (this.isinited){
             this.normalMC = this.getDisplayObject();
-           	this.displacementMap = new flash.filters.DropShadowFilter();
+           	this.displacementMap = new DropShadowFilter();
             this.normalMC.filters = [this.displacementMap];
         }
         ]]>              

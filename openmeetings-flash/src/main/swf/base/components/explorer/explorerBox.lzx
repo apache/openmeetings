@@ -24,6 +24,14 @@
     height="400" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" 
 	onmousedown="this._startDragState(this)" onmouseup="this._removeDragState(this)" >
 
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.filters.DropShadowFilter;
+			</passthrough>
+		</when>
+	</switch>
+
 	<attribute name="showWindowEffect" value="false" type="boolean" />
 	
 	<attribute name="annimationStartStyle" value="center" type="string" />
@@ -74,7 +82,7 @@
     	//if($debug) Debug.write("sendAnniComplete");
     	this.setAttribute('visibility','visible');
     	this.animationInited.sendEvent(null);
-    	this.setShadow(); 	
+    	this.setShadow(true); 	
     </method>
 
     <method name="setShadow" args="bool">
@@ -85,7 +93,7 @@
             //Debug.write(this.normalMC);
             ////Debug.write("this.normalMC: ",this.normalMC);
             ////Debug.write("this: ",this);
-           	this.displacementMap = new flash.filters.DropShadowFilter();
+           	this.displacementMap = new DropShadowFilter();
             this.normalMC.filters = [this.displacementMap];
         }
         ]]>              

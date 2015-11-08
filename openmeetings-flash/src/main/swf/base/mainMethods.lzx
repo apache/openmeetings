@@ -22,6 +22,14 @@
 <!-- methods for main.lzx -->
 
 <library>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+				import flash.net.LocalConnection;
+			</passthrough>
+		</when>
+	</switch>
 
 	<class name="baseconfmenucommand" extends="command" >
     	<attribute name="enabled" value="true" type="boolean" />
@@ -275,8 +283,6 @@
         	return;
         }
         
-        
-
         this.setAttribute('lc_SID', lc_SID);
         this.setAttribute('vid_lc_name', this.lc_SID + "__videoLC");
         this.setAttribute('rtmp_lc_name', this.lc_SID + "__rtmpLC");
@@ -307,6 +313,8 @@
         }
     
         mainBaseText.setAttribute('text',canvas.currentappname);
+        var _url = this.getDisplayObject().loaderInfo.url;
+        if($debug) Debug.write("_url: ",_url);
         var cleanUrl = _url;
         
         var hasParams = _url.indexOf("?");
@@ -489,7 +497,7 @@
 		canvas.thishib.counterror = 100;
 		canvas.thishib.disconnect();
 		canvas.thishib._nc.close();
-		flash.external.ExternalInterface.call("roomExit");
+		ExternalInterface.call("roomExit");
 	</method>
 	
 	<!---
@@ -500,15 +508,15 @@
             if($debug) Debug.write("doActionmenu: ",stringSub);
             if (canvas._conferencemenu.visibility == 'visible'){
             	 if (stringSub == "invitation") {
-            	 	flash.external.ExternalInterface.call("openInvitation");
+            	 	ExternalInterface.call("openInvitation");
 			    } else if (stringSub=='editWhiteboardDefault') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='createPoll') {
-                    flash.external.ExternalInterface.call("createPoll", canvas.publicSID);
+                    ExternalInterface.call("createPoll", canvas.publicSID);
                 } else if (stringSub=='pollResults') {
-                    flash.external.ExternalInterface.call("pollResults", canvas.publicSID);
+                    ExternalInterface.call("pollResults", canvas.publicSID);
                 } else if (stringSub=='checkPollVoted') {
-                    flash.external.ExternalInterface.call("vote");
+                    ExternalInterface.call("vote");
                 } else if (stringSub=='importFile') {
                     new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
                             x:60,uploadmodule:canvas.uploadmoduleimg,
@@ -665,14 +673,6 @@
 	    ]]>
 	</method>
 	
-	<method name="addBrowserTabHistory" args="value">
-	    <![CDATA[
-	    //Debug.write("addBrowserTabHistory: ",value);
-	    _browserhistory.addItem(value);
-	    this.browserTabHistory.push(value);
-	    ]]>
-	</method>
-	  
 	<!---
 	@doc The function does compare the new moderator list with the old and prepares the list 
 		the removeModeratorList is used in the performance optimized user list of the restricted 

@@ -69,7 +69,7 @@
 		<handler name="onclick">
 			canvas.isConference = !this.isaudience;
 			if (this.isaudience)
-				connectedIsAudience = '_' + 'audi';
+				var connectedIsAudience = '_' + 'audi';
 			if (this.ispublic) {
 				hib.conferencedomain = "public";
 				hib.currentroomid = this.obj.rooms_id;

@@ -42,9 +42,15 @@
     </method>
 </class>
 
-<class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
-    src="$once{ this.getUrl() }" >
-
+<class name="hibRtmpConnection" extends="rtmpConnection" debug="false" src="$once{ this.getUrl() }" >
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.system.Capabilities;
+				import flash.external.ExternalInterface;
+            </passthrough>
+        </when>
+    </switch>
     <attribute name="counterror" type="number" value="0" />
     
     <attribute name="loaderVar" value="null" />
@@ -336,9 +342,9 @@
 	        } else if (userlang == -1) {
 	            var lang_id = canvas.default_lang_id;
 	            
-	            var browserLang = flash.external.ExternalInterface.call("function(){return window.navigator.systemLanguage || window.navigator.userLanguage || window.navigator.language;}");
+	            var browserLang = ExternalInterface.call("function(){return window.navigator.systemLanguage || window.navigator.userLanguage || window.navigator.language;}");
 	            if (browserLang == null) {
-	                browserLang = "" + System.capabilities.language;
+	                browserLang = "" + Capabilities.language;
 	            }
 	            if (browserLang != null && browserLang.length > 1) {
 	                var lngCode = browserLang.substring(0, 2);
@@ -1665,12 +1671,19 @@
         </netRemoteCallHib>      
                
 		<netRemoteCallHib name="newPoll" funcname="newPoll">
+		    <switch>
+		        <when property="$as3">
+		            <passthrough>
+						import flash.external.ExternalInterface;
+		            </passthrough>
+		        </when>
+		    </switch>
 			<handler name="ondata" args="value">
 			<![CDATA[
 				//The onResult-Handler will be called by the rtmpconnection
 				if ($debug) Debug.write("newPoll : ", value);
 				if (canvas.user_id != value.createdBy.user_id) {
-					flash.external.ExternalInterface.call("vote", canvas.publicSID);
+					ExternalInterface.call("vote", canvas.publicSID);
 				}
 			]]>
 			</handler>
@@ -1685,11 +1698,6 @@
                     if (!canvas.htmlframeisloaded){         
                         canvas.ifrm.createIFrame();
                         canvas.setAttribute('htmlframeisloaded',true);
-                    }
-                } else if (value[0]=='sharewhiteside'){
-                    if (canvas.htmlframeisloaded){      
-                        _htmlside.setAttribute('text',value[2]);
-                        canvas.ifrm.setAttribute('isrc','http://'+value[2]);
                     }
                 }
                 ]]>

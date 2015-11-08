@@ -79,7 +79,7 @@
         <method name="getPosFromValue" args="val">
             var perc = (val-this.parent.minvalue) / (this.parent.maxvalue-this.parent.minvalue);
             //Debug.write(perc);
-            valY = (this.parent.switchaxis) ? ( (1-perc) * (this.parent.height-this.height)) : (perc * (this.parent.height-this.height));
+            var valY = (this.parent.switchaxis) ? ( (1-perc) * (this.parent.height-this.height)) : (perc * (this.parent.height-this.height));
             //Debug.write("valY: ",Math.round(valY));
             return Math.round(valY);
         </method>

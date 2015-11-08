@@ -21,6 +21,13 @@
 <library>
 
 <class name="baseDraw" extends="view" >
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.printing.PrintJob;
+            </passthrough>
+        </when>
+    </switch>
 
 	<attribute name="currentlayer" value="null" />
 	<attribute name="layers" value="null" />
@@ -92,14 +99,11 @@
 	 -->
 	<attribute name="drawmodus" value="hand" type="string" />
 	
-	<!-- This List holds all ActionObject
-		currently paintings
-				  letters -->
+	<!-- This List holds all ActionObject currently paintings letters -->
 	<attribute name="baseactionobjectList" value="null" />
 	<attribute name="baseredoactionobjectList" value="null" />
 	
-	<!-- This List hold a reference to all 
-		Array of Drawing Action, it is needed for coping the view and undo/redo -->
+	<!-- This List hold a reference to all Array of Drawing Action, it is needed for coping the view and undo/redo -->
 	<attribute name="basetempactionobjectList" value="null" />
 	
 	<attribute name="basdrawredoView" value="null" />
@@ -339,7 +343,7 @@
                 	
                     //myResult = my_pj.addPage(mc, null, {printAsBitmap:true}, 1);
                     //my_pj.send();
-                    delete my_pj;
+                    my_pj = null;
                 }
     		}
     		

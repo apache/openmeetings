@@ -27,7 +27,7 @@
     <switch>
 	  <when property="$as3">
 		<passthrough>
-		  import flash.filters.DropShadowFilter;
+			import flash.filters.DropShadowFilter;
 		</passthrough>
 	  </when>
 	</switch>
@@ -345,38 +345,6 @@
 				this.parent.parent.close();
 			</handler>									
 		</view>
-		<!-- 
-		<view visible="${ !this.parent.parent.isopen }" x="2" y="3" resource="explorer_button_min_rsc">
-			<handler name="onmouseover">
-				this.setAttribute('frame',2);
-			</handler>
-			<handler name="onmouseout">
-				this.setAttribute('frame',1);
-			</handler>
-			<handler name="onmousedown">
-				this.setAttribute('frame',3);
-			</handler>	
-			<handler name="onmouseup">
-				this.setAttribute('frame',1);
-				this.parent.parent.toggleopen();
-			</handler>									
-		</view>
-		<view visible="${ this.parent.parent.isopen }" x="2" y="3" resource="explorer_button_max_rsc">
-			<handler name="onmouseover">
-				this.setAttribute('frame',2);
-			</handler>
-			<handler name="onmouseout">
-				this.setAttribute('frame',1);
-			</handler>
-			<handler name="onmousedown">
-				this.setAttribute('frame',3);
-			</handler>	
-			<handler name="onmouseup">
-				this.setAttribute('frame',1);
-				this.parent.parent.toggleopen();
-			</handler>									
-		</view>
-		 -->
 	</view>
     <handler name="onaddsubview" args="v">
 		////Debug.write("onaddsubview",v);

@@ -183,9 +183,9 @@
 
 			if (this.isSnapToGrid) {
 
-				xgrid = Math.round((minx - 1) / this.gridWidth)
+				var xgrid = Math.round((minx - 1) / this.gridWidth)
 						* this.gridWidth;
-				ygrid = Math.round((miny - 1) / this.gridWidth)
+				var ygrid = Math.round((miny - 1) / this.gridWidth)
 						* this.gridWidth;
 
 				this.currentlayer = new lz.drawViewNew(this, {

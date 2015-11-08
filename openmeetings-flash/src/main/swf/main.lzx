@@ -19,6 +19,16 @@
   
 -->
 <canvas width="100%" height="100%" title="OpenMeetings">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+				import flash.events.StatusEvent;
+				import flash.net.SharedObject;
+				import flash.net.LocalConnection;
+			</passthrough>
+		</when>
+	</switch>
 <switch>
 	<when property="$debug">
 		<method name="doDebugInit">
@@ -52,7 +62,7 @@
 
 	<!-- main colors: 264269 -->
 	<handler name="oninit">
-		flash.external.ExternalInterface.call("loadingComplete");
+		ExternalInterface.call("loadingComplete");
 		doDebugInit();
 		var cmenu = new LzContextMenu();
 		canvas.setDefaultContextMenu(cmenu);
@@ -63,7 +73,7 @@
 		if($debug) Debug.write("canvas.lc: ", canvas.lc);
 		localConnectionQProcessorDelegate = new LzDelegate(parent, "processLocalQ");
 		lz.Timer.addTimer(localConnectionQProcessorDelegate, 0);
-		canvas.lc.onStatus = function(obj:flash.events.StatusEvent) {
+		canvas.lc.onStatus = function(obj) {
 			if (obj.level == 'error') {
 				if($debug) Debug.warn("LocalConnection:: error while sending ", obj);
 			} else {
@@ -93,7 +103,8 @@
 
 	<method name="realSendViaLocalConnection" args="lc_name,methodName,tArray">
 	<![CDATA[
-		var so:SharedObject = SharedObject.getLocal("__getObjectSizeHelper");
+		/* FIXME TODO as2->3 migration
+		var so = SharedObject.getLocal("__getObjectSizeHelper");
 		so.data.o = tArray;
 		var size:Number = so.getSize();
 		so.clear();
@@ -104,6 +115,7 @@
 			return;
 		}
 		if ($debug) Debug.info("sendViaLocalConnection ", lc_name, methodName, size); //,tArray
+		*/
 		try{
 			if (tArray == null || tArray.length == 0) {
 				canvas.lc.send(lc_name,methodName);

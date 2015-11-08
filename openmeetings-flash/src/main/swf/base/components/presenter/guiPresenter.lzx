@@ -23,6 +23,13 @@
 <class name="guiPresenter" extends="view" width="250" height="400" 
     clickable="$once{ this.isdragable }"
 	onmousedown="this._startDragState(this)" onmouseup="this._removeDragState(this)" >
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.filters.DropShadowFilter;
+			</passthrough>
+		</when>
+	</switch>
     
     <handler name="oninit">
         this.setShadow();
@@ -32,7 +39,7 @@
         <![CDATA[
         if (this.isinited && this.hasshadow){
             this.normalMC = this.getDisplayObject();
-            this.displacementMap = new flash.filters.DropShadowFilter();
+            this.displacementMap = new DropShadowFilter();
             this.normalMC.filters = [this.displacementMap];
         }
         ]]>              

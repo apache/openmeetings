@@ -340,7 +340,7 @@
 		              this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
 		              this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 		              this.syncImageRefObj.room,this.syncImageRefObj.domain,
-		              this.getSWFDocumentStatus(),
+		              false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
                       this.getZIndex());		
     </method>
 	

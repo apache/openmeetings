@@ -22,6 +22,14 @@
 
 <class name="sharedObject" extends="node">
 
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.net.SharedObject;
+            </passthrough>
+        </when>
+    </switch>
+
 	<attribute name="so" value="null" />
 	<attribute name="onStatus" value="null" />
 	
@@ -29,7 +37,7 @@
 	<method name="connect" args="so_Name,nc,persistant">
 
 		//Debug.write("connect SharedObject: ",nc.uri);
-		this.so = SharedObject.getRemote(so_Name,nc.uri,persistant); 
+		this.so = this.getRemote(so_Name,nc.uri,persistant);
 		
 		var t = this;
 		this.so.onSync = function (evtObj){
@@ -45,7 +53,7 @@
     <method name="getRemote" args="so_Name,nc,persistant">
 
         //Debug.write("connect SharedObject: ",nc.uri);
-        this.so = SharedObject.getRemote(so_Name,nc.uri,persistant); 
+        this.so = this.getRemote(so_Name,nc.uri,persistant);
 
         var t = this;
         this.so.onSync = function (evtObj){
@@ -57,7 +65,7 @@
     <!--- create Object if not existing  -->
     <method name="getLocal" args="name">
 
-        this.so = SharedObject.getLocal(name); 
+        this.so = this.getLocal(name);
 
         var t = this;
         this.so.onSync = function (evtObj){

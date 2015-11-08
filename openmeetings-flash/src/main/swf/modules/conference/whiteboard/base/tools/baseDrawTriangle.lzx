@@ -193,6 +193,7 @@
             name:'_innerTriangle',x:0,y:0,width:objRef.width,height:objRef.height});
         this.drawtriangleHistory(this.currentlayer,0,0,
             objRef.width,objRef.height,
+            0, 0, 0, 0, 0, 0, //tx1,ty1,tx2,ty2,tx3,ty3
             this.currenttrianglestroke,this.currenttriangleineWidth,
             this.currenttrianglestrokeFill,this.currenttrianglestrokeDis,
             this.currenttrianglestrokeFillDis);

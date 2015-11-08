@@ -18,7 +18,13 @@
   
 -->
 <canvas debug="true" >
-  
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
 
       <script when="immediate" >        
         class LzRegExp extends Instance{
@@ -49,7 +55,7 @@
           
           function test( s ){
               if( this.__isready ){
-                return flash.external.ExternalInterface.call.apply( flash.external.ExternalInterface, ["window.__testRegExp", this.regexp_id, s] );
+                return ExternalInterface.call.apply(ExternalInterface, ["window.__testRegExp", this.regexp_id, s] );
               } else {
                 Debug.format( "called %w too early", arguments.callee.name );
               }
@@ -57,7 +63,7 @@
           
           function exec( s ){
               if( this.__isready ){
-                return flash.external.ExternalInterface.call.apply( flash.external.ExternalInterface, ["window.__execRegExp", this.regexp_id, s] );
+                return ExternalInterface.call.apply(ExternalInterface, ["window.__execRegExp", this.regexp_id, s] );
               } else {
                 Debug.format( "called %w too early", arguments.callee.name );
               }

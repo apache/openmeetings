@@ -84,9 +84,6 @@
     </method>    
     
     <method name="toggle">
-        var t = _root.createEmptyMovieClip('hans',10);
-        var myColor = new Color(t);
-        myColor.setRGB(selectedColor);
         if (this.boxPosition=="up"){
 	        this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
 	        	x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
@@ -97,18 +94,15 @@
 	        	y:(this.getAttributeRelative('y',canvas))});
         }
 
-        this.colorPickRef.doDefaultColor(myColor);
+        this.colorPickRef.doDefaultColor(selectedColor);
         lz.ModeManager.makeModal( this.colorPickRef );
     </method>
     
     <method name="setTransformedStringColor">
         ////Debug.write("setTransformedStringColor: ",this,this.selectedColor);
-        var t = _root.createEmptyMovieClip('hans2',20);
-        var myColor = new Color(t);
-        myColor.setRGB(this.selectedColor);
         //var a = myColor.getTransform();
         ////Debug.write("a: ",a);
-        var col = this.numberToRGB(myColor);
+        var col = this.numberToRGB(this.selectedColor);
         ////Debug.write("col: ",col);
         this.setAttribute('selectedColorTransformedString',col);
     </method>
@@ -121,9 +115,9 @@
             var b = c & 0xff;
             ////Debug.write("r g b: ",r,g,b);
             
-            HEX_R = r.toString(16).toUpperCase();
-            HEX_G = g.toString(16).toUpperCase();
-            HEX_B = b.toString(16).toUpperCase();
+            var HEX_R = r.toString(16).toUpperCase();
+            var HEX_G = g.toString(16).toUpperCase();
+            var HEX_B = b.toString(16).toUpperCase();
             
             if (HEX_R.length < 2) {
                 HEX_R = "0"+HEX_R;

@@ -41,7 +41,6 @@
     <include href="calendar/" />
     <include href="simplevaluelist/" />
     <include href="upload/" /> 
-    <include href="validbox/" />
     <include href="presenter/" />
     <include href="lps/" />
     <include href="conferencebox/" />

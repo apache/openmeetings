@@ -23,14 +23,14 @@
 
 <class name="commonVideoViewContentSWF10" extends="view">
 
-    <switch>
-        <when property="$as3">
-            <passthrough>
-                import flash.net.LocalConnection;
-                import flash.external.ExternalInterface;
-            </passthrough>
-        </when>
-    </switch>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.net.LocalConnection;
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
 
     <attribute name="offsetLength" type="number" value="40"/>
     <attribute name="videoWidth" type="number" value="132"/>

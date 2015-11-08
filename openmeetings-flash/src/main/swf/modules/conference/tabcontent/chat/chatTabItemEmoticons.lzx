@@ -144,15 +144,15 @@
 	<text multiline="true" x="180" width="$once{ parent.width - 306 }" fontsize="11" selectable="true" name="multi" >
 		<handler name="oninit">
 			<![CDATA[
-				
+				/* FIXME TODO as2->3 migration
 				if(canvas.isrtl!='true'){
 					this.sprite.__LZtextclip.wordWrap = false;
 					if($debug) Debug.write("New Text");
 					//Debug.write(this.sprite.getTextFormat());
-					tFormat = this.sprite.__LZtextclip.getTextFormat();
+					var tFormat = getTextFormat();
 					//Debug.write(this.sprite.__LZtextclip.getTextFormat());
 					tFormat.leading = 4;
-					this.sprite.__LZtextclip.setTextFormat(tFormat);
+					setTextFormat(tFormat);
 					var items = parent.messageObj;
 					var t = "";
 					//items[0] = ["text","hello your are the hero lets check accomodation today i need some input"];
@@ -193,13 +193,13 @@
 					
 					//if ($debug) Debug.write("text: ",this.getText());
 					
-					//Debug.write(this.sprite.__LZtextclip.getTextFormat());
+					//Debug.write(this.getTextFormat());
 					tFormat.leading = parent.leading;
-					this.sprite.__LZtextclip.setTextFormat(tFormat);
-					//Debug.write(this.sprite.__LZtextclip.textHeight);
+					setTextFormat(tFormat);
+					//Debug.write(this.textHeight);
 					//Debug.write(getLineHeight());
-					//Debug.write(this.sprite.__LZtextclip.textHeight+12);
-					this.setAttribute('height',this.sprite.__LZtextclip.textHeight+12);
+					//Debug.write(this.textHeight+12);
+					this.setAttribute('height',this.textHeight+12);
 				}
 				else{
 					var t = "";
@@ -213,7 +213,7 @@
 					
 					this.setAttribute('text',this.getText()+ t);
 				}
-				
+				*/
 				parent.setAttribute('height',this.height);
 				parent.header_user.setAttribute('height',this.height);
 				parent.bg.setAttribute('height',this.height-1);

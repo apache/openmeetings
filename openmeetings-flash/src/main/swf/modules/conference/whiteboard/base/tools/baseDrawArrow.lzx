@@ -21,7 +21,13 @@
 <library>
     
 <class name="baseDrawArrow" extends="baseDrawULine" >
-    
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.geom.Point;
+            </passthrough>
+        </when>
+    </switch>
     <!-- for drawing drawarrow -->
     <attribute name="currentdrawarrowlinestroke" value="0x000000" />
     <attribute name="currentdrawarrowlinestrokeDis" value="1" type="number" />
@@ -46,8 +52,8 @@
 		            name:oid_name,width:this.width,height:this.height,
 		            opacity:this.currentdrawarrowOpacity});
             
-            var pArrowStart = new flash.geom.Point(this.startx,this.starty);
-            var pArrowEnd = new flash.geom.Point(this.endx,this.endy);
+            var pArrowStart = new Point(this.startx,this.starty);
+            var pArrowEnd = new Point(this.endx,this.endy);
             
             //if ($debug) Debug.write("start,end,line",pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth);
             this.drawArrow(this.currentlayer,pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth,
@@ -119,8 +125,8 @@
 	            name:tempName,x:minx,y:miny,width:width,height:height,
 	            opacity:this.currentdrawarrowOpacity});
 	            
-	        var pArrowStart = new flash.geom.Point(x1,y1);
-            var pArrowEnd = new flash.geom.Point(x2,y2);
+	        var pArrowStart = new Point(x1,y1);
+            var pArrowEnd = new Point(x2,y2);
             
             //if ($debug) Debug.write("start,end,line",pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth);
             this.drawArrow(this.currentlayer,pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth,
@@ -177,8 +183,8 @@
                 height:lastActionObject[lastActionObject.length-2],
                 opacity:lastActionObject[6]});
             
-            var pArrowStart = new flash.geom.Point(lastActionObject[7],lastActionObject[8]);
-            var pArrowEnd = new flash.geom.Point(lastActionObject[9],lastActionObject[10]);
+            var pArrowStart = new Point(lastActionObject[7],lastActionObject[8]);
+            var pArrowEnd = new Point(lastActionObject[9],lastActionObject[10]);
             
             //if ($debug) Debug.write("start,end,line",pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth);
             this.drawArrow(tmpCurrentlayer,pArrowStart,pArrowEnd,lastActionObject[2],
@@ -215,7 +221,7 @@
             var halfWidth:Number = (arrowStyle.headWidth != -1) ? arrowStyle.headWidth/2 : arrowStyle.headLength/2; 
             
             //Figure out the line start/end points
-            var startNorm = new flash.geom.Point(fullVect.y,-fullVect.x);
+            var startNorm = new Point(fullVect.y,-fullVect.x);
             startNorm.normalize(arrowStyle.shaftThickness/2);
             var start1 = start.add(startNorm);
             var start2 = start.subtract(startNorm);
@@ -251,7 +257,7 @@
             //if ($debug) Debug.write("edge2: ",edge2.toString());
             
             //Figure out where the arrow connects the the shaft, then calc the intersections
-            var shaftCenter = flash.geom.Point.interpolate(end,headPnt,arrowStyle.shaftPosition);
+            var shaftCenter = Point.interpolate(end,headPnt,arrowStyle.shaftPosition);
             //if ($debug) Debug.write("end: ",end.toString());
             //if ($debug) Debug.write("headPnt",headPnt.toString());
             //if ($debug) Debug.write("arrowStyle.shaftPosition: ",arrowStyle.shaftPosition);
@@ -263,7 +269,7 @@
             //if ($debug) Debug.write("inter2: ",inter2.toString());
             
             //Figure out the control points
-            var edgeCenter = flash.geom.Point.interpolate(end,headPnt,arrowStyle.edgeControlPosition);
+            var edgeCenter = Point.interpolate(end,headPnt,arrowStyle.edgeControlPosition);
             var edgeNorm = startNorm.clone();
             edgeNorm.normalize(halfWidth*arrowStyle.edgeControlSize);
             //if ($debug) Debug.write("halfWidth*arrowStyle.edgeControlSize: "+(halfWidth*arrowStyle.edgeControlSize));
@@ -358,7 +364,7 @@
                 
             }
             
-            return new flash.geom.Point(x,y);
+            return new Point(x,y);
         ]]>
     </method>    
     
