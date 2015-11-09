@@ -46,7 +46,7 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
+import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -135,7 +135,7 @@ public class BackupExport {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private RoomOrganisationDao roomOrganisationDao;
+	private RoomGroupDao roomOrganisationDao;
 
 	public void performExport(File filePath, File backup_dir, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
 		if (!backup_dir.exists()) {

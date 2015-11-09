@@ -228,7 +228,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
-					recordingId = soapLogin.getRoomRecordingId();
+					recordingId = soapLogin.getRecordingId();
 					return true;
 				}
 			}

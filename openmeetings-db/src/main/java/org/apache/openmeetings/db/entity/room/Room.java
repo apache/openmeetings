@@ -54,28 +54,27 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @FetchGroups({
-	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators"), @FetchAttribute(name = "roomOrganisations") })
+	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators"), @FetchAttribute(name = "roomGroups") })
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.roomtypes_id = :typeId"),
-	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
-					+ "where c.ownerId = :ownerId "
-					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
-					+ "AND c.deleted = false"),	
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.type = :type"),
+	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c where c.ownerId = :ownerId "
+					+ "AND c.type = :type AND c.deleted = false"),	
 										
 	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.rooms_id) from Room c "
 			+ "where c.deleted = false AND c.name LIKE :search "),
-	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
-			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
-			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted = false"),
+	@NamedQuery(name = "getRoomByExternalId", query = "select r from Room as r "
+			+ "where r.externalRoomId = :externalId AND c.externalRoomType = :externalType "
+			+ "AND r.type = :type AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.rooms_id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
-	, @NamedQuery(name = "getOrganisationRooms", query = "SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
+	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT c.room FROM RoomGroup c LEFT JOIN FETCH c.room "
 				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 				+ "AND c.organisation.deleted = false ORDER BY c.room.name ASC")
 })
@@ -299,7 +298,7 @@ public class Room implements IDataProviderEntity {
 	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
-	private List<RoomOrganisation> roomOrganisations = new ArrayList<RoomOrganisation>();
+	private List<RoomGroup> roomGroups = new ArrayList<RoomGroup>();
 
 	@Transient
 	private List<Client> currentusers;
@@ -578,12 +577,12 @@ public class Room implements IDataProviderEntity {
 		this.chatModerated = chatModerated;
 	}
 
-	public List<RoomOrganisation> getRoomOrganisations() {
-		return roomOrganisations;
+	public List<RoomGroup> getRoomGroups() {
+		return roomGroups;
 	}
 
-	public void setRoomOrganisations(List<RoomOrganisation> roomOrganisations) {
-		this.roomOrganisations = roomOrganisations;
+	public void setRoomGroups(List<RoomGroup> roomGroups) {
+		this.roomGroups = roomGroups;
 	}
 
 	public boolean isChatOpened() {

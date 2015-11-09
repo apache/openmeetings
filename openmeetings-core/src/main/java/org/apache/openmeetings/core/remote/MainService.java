@@ -46,7 +46,7 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -196,7 +196,7 @@ public class MainService implements IPendingServiceCallback {
 					allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(userId));
 					log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 					if (!allowed) {
-						for (RoomOrganisation ro : r.getRoomOrganisations()) {
+						for (RoomGroup ro : r.getRoomGroups()) {
 							for (Organisation_Users ou : u.getOrganisation_users()) {
 								if (ro.getOrganisation().getId().equals(ou.getOrganisation().getId())) {
 									allowed = true;
@@ -298,10 +298,10 @@ public class MainService implements IPendingServiceCallback {
 
 				SOAPLogin returnSoapLogin = new SOAPLogin();
 
-				returnSoapLogin.setRoom_id(soapLogin.getRoom_id());
+				returnSoapLogin.setRoomId(soapLogin.getRoomId());
 				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
-				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
+				returnSoapLogin.setRecordingId(soapLogin.getRecordingId());
 				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
 				returnSoapLogin.setLandingZone(soapLogin.getLandingZone());
 

@@ -24,19 +24,19 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomOrganisationDao {
+public class RoomGroupDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<RoomOrganisation> get() {
-		return em.createNamedQuery("getAllRoomsOrganisations", RoomOrganisation.class).getResultList();
+	public List<RoomGroup> get() {
+		return em.createNamedQuery("getAllRoomGroups", RoomGroup.class).getResultList();
 	}
 
-	public RoomOrganisation update(RoomOrganisation entity, Long userId) {
+	public RoomGroup update(RoomGroup entity, Long userId) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
 			em.persist(entity);
@@ -47,8 +47,8 @@ public class RoomOrganisationDao {
 		return entity;
 	}
 
-	public RoomOrganisation get(long groupId, long roomId) {
-		List<RoomOrganisation> ll = em.createNamedQuery("getRoomGroupByGroupIdAndRoomId", RoomOrganisation.class)
+	public RoomGroup get(long groupId, long roomId) {
+		List<RoomGroup> ll = em.createNamedQuery("getRoomGroupByGroupIdAndRoomId", RoomGroup.class)
 				.setParameter("roomId", roomId)
 				.setParameter("groupId", groupId)
 				.getResultList();

@@ -31,7 +31,7 @@ import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
+import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
@@ -56,7 +56,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private RoomOrganisationDao roomOrganisationDao;
+	private RoomGroupDao roomOrganisationDao;
 
 	@Test
 	public void importOldVersions() {

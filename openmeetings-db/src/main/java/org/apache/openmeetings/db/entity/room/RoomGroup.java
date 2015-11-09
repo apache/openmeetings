@@ -40,50 +40,65 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.rooms_organisation_id"),
-	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomId", query = "select c from RoomOrganisation as c "
+	@NamedQuery(name = "getAllRoomGroups", query = "select ro from RoomGroup ro ORDER BY ro.id"),
+	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomType", query = "select c from RoomGroup as c "
+			+ "where c.room.type = :type AND c.organisation.organisation_id = :groupId "
+			+ "AND c.deleted = false"),
+	@NamedQuery(name = "getRoomGroupByGroupId", query = "SELECT c FROM RoomGroup c "
+			+ "LEFT JOIN FETCH c.room "
+			+ "WHERE c.organisation.organisation_id = :groupId "
+			+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+			+ "AND c.group.deleted = false "
+			+ "ORDER BY c.room.name ASC"),
+	@NamedQuery(name = "selectMaxFromRoomsByGroup", query = "select c from RoomGroup as c "
+			+ "where c.organisation.organisation_id = :groupId "
+			+ "AND c.deleted = false"),
+	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomId", query = "select c from RoomGroup as c "
 			+ "where c.room.rooms_id = :roomId "
 			+ "AND c.organisation.organisation_id = :groupId "
 			+ "AND c.deleted = false"),
+	@NamedQuery(name = "getRoomGroupByRoomsId", query = "select c from RoomGroup as c "
+			+ "where c.room.rooms_id = :roomId "
+			+ "AND c.deleted = false")
 })
-@Table(name = "rooms_organisation")
+@Table(name = "room_group")
 @Root(name="room_organisation")
-public class RoomOrganisation implements IDataProviderEntity {
-	private static final long serialVersionUID = 4153935045968138984L;
+public class RoomGroup implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true)
-	private Long rooms_organisation_id;
+	@Column(name = "id")
+	@Element(data = true, name = "rooms_organisation_id")
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="rooms_id", nullable=true)
+	@JoinColumn(name="room_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="rooms_id", data=true, required=false)
 	private Room room;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="organisation_id", nullable=true)
+	@JoinColumn(name="group_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", data=true, required=false)
 	private Organisation organisation;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	@Element(data=true)
 	private boolean deleted;
 
-	public RoomOrganisation(Organisation org, Room room) {
+	public RoomGroup(Organisation org, Room room) {
 		this.organisation = org;
 		this.room = room;
 	}
 
-	public RoomOrganisation() {
+	public RoomGroup() {
 	}
 
 	public Organisation getOrganisation() {
@@ -101,24 +116,24 @@ public class RoomOrganisation implements IDataProviderEntity {
 	}
 
 	public Long getId() {
-		return rooms_organisation_id;
+		return id;
 	}
 	public void setId(Long id) {
-		this.rooms_organisation_id = id;
+		this.id = id;
 	}
     
 	public Date getInserted() {
-		return starttime;
+		return inserted;
 	}
 	public void setInserted(Date inserted) {
-		this.starttime = inserted;
+		this.inserted = inserted;
 	}
     
 	public Date getUpdated() {
-		return updatetime;
+		return updated;
 	}
 	public void setUpdated(Date updated) {
-		this.updatetime = updated;
+		this.updated = updated;
 	}	
 	
 	public boolean isDeleted() {

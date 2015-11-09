@@ -67,7 +67,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setConfigFileName(configFileName);
 			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
-			ldapConfig.setIsActive(isActive);
+			ldapConfig.setActive(isActive);
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
@@ -128,7 +128,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setConfigFileName(configFileName);
 			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
-			ldapConfig.setIsActive(isActive);
+			ldapConfig.setActive(isActive);
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {

@@ -66,7 +66,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.db.entity.user.Organisation;
@@ -456,7 +456,7 @@ public class ImportInitvalues {
 		r.setHideScreenSharing(false);	
 		r.setHideWhiteboard(false);
 		if (groupId != null) {
-			RoomOrganisation ro = new RoomOrganisation();
+			RoomGroup ro = new RoomGroup();
 			ro.setRoom(r);
 			ro.setOrganisation(groupDao.get(groupId));
 			ro.setInserted(new Date());

@@ -56,6 +56,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "config")
 public class Configuration implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

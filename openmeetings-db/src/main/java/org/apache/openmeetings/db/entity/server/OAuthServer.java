@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,14 +34,14 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "oauth_servers")
+@Table(name = "oauth_server")
 @NamedQueries({
 		@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
 		@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
 		@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
 		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
 @Root
-public class OAuthServer implements Serializable, IDataProviderEntity {
+public class OAuthServer implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -39,7 +39,7 @@ public class SwfPage extends BaseNotInitedPage {
 		StringValue shash = pp.get(SECURE_HASH);
 		if (!shash.isEmpty()) {
 			SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(shash.toString());
-			Long roomId = soapLogin.getRoom_id();
+			Long roomId = soapLogin.getRoomId();
 			if (roomId != null) {
 				pp = pp.mergeWith(RoomPanel.addServer(roomId, false));
 			}

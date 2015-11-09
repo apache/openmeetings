@@ -53,10 +53,10 @@ public class SOAPLoginDao {
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
 			soapLogin.setUsed(false);
-			soapLogin.setRoom_id(room_id);
+			soapLogin.setRoomId(room_id);
 			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
 			soapLogin.setHash(hash);
-			soapLogin.setRoomRecordingId(recording_id);
+			soapLogin.setRecordingId(recording_id);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);

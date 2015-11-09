@@ -43,7 +43,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
@@ -164,17 +164,17 @@ public class GroupWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room r = roomDao.get(roomid);
 				if (r != null) {
-					if (r.getRoomOrganisations() == null) {
-						r.setRoomOrganisations(new ArrayList<RoomOrganisation>());
+					if (r.getRoomGroups() == null) {
+						r.setRoomGroups(new ArrayList<RoomGroup>());
 					}
 					boolean found = false;
-					for (RoomOrganisation ro : r.getRoomOrganisations()) {
+					for (RoomGroup ro : r.getRoomGroups()) {
 						if (ro.getOrganisation().getId().equals(id)) {
 							found = true;
 						}
 					}
 					if (!found) {
-						r.getRoomOrganisations().add(new RoomOrganisation(groupDao.get(id), r));
+						r.getRoomGroups().add(new RoomGroup(groupDao.get(id), r));
 						roomDao.update(r, userId);
 						return new ServiceResult(1L, "Success", Type.SUCCESS);
 					}

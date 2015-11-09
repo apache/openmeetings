@@ -63,7 +63,7 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
+import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -84,7 +84,7 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -160,7 +160,7 @@ public class BackupImport {
 	@Autowired
 	private OAuth2Dao auth2Dao;
 	@Autowired
-	private RoomOrganisationDao roomOrganisationDao;
+	private RoomGroupDao roomOrganisationDao;
 
 	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -354,8 +354,8 @@ public class BackupImport {
 			registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			
-			List<RoomOrganisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomOrganisation.class);
-			for (RoomOrganisation ro : list) {
+			List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
+			for (RoomGroup ro : list) {
 				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getOrganisation() != null && ro.getOrganisation().getId() != null) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setId(null);

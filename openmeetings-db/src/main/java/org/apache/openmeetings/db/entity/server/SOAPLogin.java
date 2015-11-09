@@ -70,7 +70,7 @@ public class SOAPLogin implements Serializable {
 	@Column(name="client_url")
 	private String clientURL;
 	
-	@Column(name="room_recording_id")
+	@Column(name="recording_id")
 	private Long roomRecordingId;
 	
 	@Column(name="landing_zone")
@@ -93,11 +93,11 @@ public class SOAPLogin implements Serializable {
 		this.hash = hash;
 	}
 	
-	public Long getRoom_id() {
+	public Long getRoomId() {
 		return room_id;
 	}
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
+	public void setRoomId(Long roomId) {
+		this.room_id = roomId;
 	}
 	
 	public String getSessionHash() {
@@ -163,11 +163,11 @@ public class SOAPLogin implements Serializable {
 		this.clientURL = clientURL;
 	}
 	
-	public Long getRoomRecordingId() {
+	public Long getRecordingId() {
 		return roomRecordingId;
 	}
-	public void setRoomRecordingId(Long roomRecordingId) {
-		this.roomRecordingId = roomRecordingId;
+	public void setRecordingId(Long recordingId) {
+		this.roomRecordingId = recordingId;
 	}
 	
 	public String getLandingZone() {

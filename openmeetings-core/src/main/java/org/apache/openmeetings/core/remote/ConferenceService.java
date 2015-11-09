@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -67,14 +67,14 @@ public class ConferenceService {
 	@Autowired
 	private ISessionManager sessionManager = null;
 
-	public List<RoomOrganisation> getRoomsByOrganisationWithoutType(String SID, long organisation_id) {
+	public List<RoomGroup> getRoomsByOrganisationWithoutType(String SID, long organisation_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				log.debug("getRoomsByOrganisationAndType");
-				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationId(organisation_id);
+				List<RoomGroup> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationId(organisation_id);
 				
-				for (RoomOrganisation roomOrg : roomOrgsList) {
+				for (RoomGroup roomOrg : roomOrgsList) {
 					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getId()));
 				}
 	
@@ -94,7 +94,7 @@ public class ConferenceService {
 	 * @param organisation_id
 	 * @return - all rooms of an organization
 	 */
-	public SearchResult<RoomOrganisation> getRoomsByOrganisation(String SID,
+	public SearchResult<RoomGroup> getRoomsByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 

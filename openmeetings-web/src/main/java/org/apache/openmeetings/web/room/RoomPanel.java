@@ -148,7 +148,7 @@ public class RoomPanel extends BasePanel {
 			if (!room.isEmpty()) {
 				roomId = room.toLong();
 			} else if (!secureHash.isEmpty()) {
-				roomId = getBean(SOAPLoginDao.class).get(secureHash.toString()).getRoom_id();
+				roomId = getBean(SOAPLoginDao.class).get(secureHash.toString()).getRoomId();
 			} else if (!invitationHash.isEmpty()) {
 				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getId();
 			}
