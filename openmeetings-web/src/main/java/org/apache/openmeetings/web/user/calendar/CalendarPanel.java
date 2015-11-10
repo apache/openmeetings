@@ -72,20 +72,21 @@ public class CalendarPanel extends UserPanel {
 	private Calendar calendar;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
 	}
 
 	@Override
-	public void cleanup(IPartialPageRequestHandler target) {
-		refreshTimer.stop(target);
+	public void cleanup(IPartialPageRequestHandler handler) {
+		refreshTimer.stop(handler);
 	}
 	
 	private AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);
 	}
 	
-	public void refresh(IPartialPageRequestHandler target) {
-		calendar.refresh(target);
+	public void refresh(IPartialPageRequestHandler handler) {
+		calendar.refresh(handler);
 	}
 	
 	Calendar getCalendar() {
@@ -261,7 +262,7 @@ public class CalendarPanel extends UserPanel {
 	
 	private Appointment getDefault() {
 		Appointment a = new Appointment();
-		a.setReminder(Reminder.email); //TODO: Make configurable
+		a.setReminder(Reminder.ical); //TODO: Make configurable
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
 		a.setTitle(Application.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);

@@ -103,7 +103,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("roomtype").setRequired(true).setLabel(Model.of(Application.getString(194))));
+		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString(194))));
 
 		add(new TextArea<String>("comment"));
 
@@ -115,7 +115,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		for (Organisation org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<RoomGroup>("roomOrganisations", null, new TextChoiceProvider<RoomGroup>() {
+		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new TextChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

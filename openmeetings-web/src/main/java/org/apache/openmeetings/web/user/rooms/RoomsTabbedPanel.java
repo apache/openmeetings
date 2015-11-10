@@ -61,7 +61,7 @@ public class RoomsTabbedPanel extends UserPanel {
 			protected void populateItem(ListItem<Organisation_Users> item) {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new RoomsPanel("rooms"
-					, getBean(RoomDao.class).getOrganisationRooms(org.getId()))
+					, getBean(RoomDao.class).getGroupRooms(org.getId()))
 					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);
 			}
 		});

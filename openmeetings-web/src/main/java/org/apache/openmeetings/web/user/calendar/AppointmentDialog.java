@@ -360,7 +360,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
 			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getId()));
+				result.addAll(dao.getGroupRooms(ou.getOrganisation().getId()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) { //FIXME review
 				result.add(getModelObject().getRoom());

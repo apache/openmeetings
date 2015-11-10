@@ -292,7 +292,7 @@ public class MobileService {
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			Organisation org = ou.getOrganisation();
 			boolean first = true;
-			for (Room r : roomDao.getOrganisationRooms(org.getId())) {
+			for (Room r : roomDao.getGroupRooms(org.getId())) {
 				addRoom("private", org.getName(), first, result, r);
 				first = false;
 			}
