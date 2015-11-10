@@ -183,13 +183,13 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#isScreenClient()
 	 */
 	@Column(name = "is_screenclient")
-	private boolean isScreenClient = false;
+	private boolean isScreenClient;
 	
 	/**
 	 * @see Client#isAvClient()
 	 */
 	@Column(name = "is_avclient")
-	private boolean isAVClient = false;
+	private boolean isAVClient;
 	
 	/**
 	 * @see Client#getUsercolor()
@@ -216,7 +216,7 @@ public class Client implements IDataProviderEntity {
 	private int userport;
 	
 	/**
-	 * @see Client#getRoom_id()
+	 * @see Client#getRoomId()
 	 */
 	@Column(name = "room_id")
 	private Long room_id;
@@ -234,7 +234,7 @@ public class Client implements IDataProviderEntity {
 	private long broadCastID = -2;
 	
 	/**
-	 * @see Client#getUser_id()
+	 * @see Client#getUserId()
 	 */
 	@Column(name = "user_id")
 	private Long user_id = null;
@@ -307,15 +307,15 @@ public class Client implements IDataProviderEntity {
 	private String roomRecordingName;
 	
 	/**
-	 * @see Client#getFlvRecordingId()
+	 * @see Client#getRecordingId()
 	 */
-	@Column(name = "flvrecording_id")
+	@Column(name = "recording_id")
 	private Long flvRecordingId;
 	
 	/**
-	 * @see Client#getFlvRecordingMetaDataId()
+	 * @see Client#getRecordingMetaDataId()
 	 */
-	@Column(name = "flvrecordingmetadata_id")
+	@Column(name = "recording_metadata_id")
 	private Long flvRecordingMetaDataId;
 	
 	/**
@@ -405,14 +405,14 @@ public class Client implements IDataProviderEntity {
     
 	public Client() {}
     
-	public Client(String streamid, String publicSID, Long room_id,
-			Long user_id, String firstname, String lastname, boolean avClient,
+	public Client(String streamid, String publicSID, Long roomId,
+			Long userId, String firstname, String lastname, boolean avClient,
 			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
 		this.publicSID = publicSID;
-		this.room_id = room_id;
-		this.user_id = user_id;
+		this.room_id = roomId;
+		this.user_id = userId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.isAVClient = avClient;
@@ -421,8 +421,8 @@ public class Client implements IDataProviderEntity {
 		this.scope = scope;
 	}
 
-	public void setUserObject(Long user_id, String username, String firstname, String lastname) {
-		this.user_id = user_id;
+	public void setUserObject(Long userId, String username, String firstname, String lastname) {
+		this.user_id = userId;
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -586,20 +586,20 @@ public class Client implements IDataProviderEntity {
 		this.picture_uri = picture_uri;
 	}
 
-	public Long getUser_id() {
+	public Long getUserId() {
 		return user_id;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setUserId(Long userId) {
+		this.user_id = userId;
 	}
 
-	public Long getRoom_id() {
+	public Long getRoomId() {
 		return room_id;
 	}
 
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
+	public void setRoomId(Long roomId) {
+		this.room_id = roomId;
 	}
 
 	public Date getRoomEnter() {
@@ -762,20 +762,20 @@ public class Client implements IDataProviderEntity {
 		this.streamPublishName = streamPublishName;
 	}
 
-	public Long getFlvRecordingId() {
+	public Long getRecordingId() {
 		return flvRecordingId;
 	}
 
-	public void setFlvRecordingId(Long flvRecordingId) {
-		this.flvRecordingId = flvRecordingId;
+	public void setRecordingId(Long recordingId) {
+		this.flvRecordingId = recordingId;
 	}
 
-	public Long getFlvRecordingMetaDataId() {
+	public Long getRecordingMetaDataId() {
 		return flvRecordingMetaDataId;
 	}
 
-	public void setFlvRecordingMetaDataId(Long flvRecordingMetaDataId) {
-		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
+	public void setRecordingMetaDataId(Long recordingMetaDataId) {
+		this.flvRecordingMetaDataId = recordingMetaDataId;
 	}
 
 	public boolean isScreenPublishStarted() {
@@ -893,9 +893,9 @@ public class Client implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + isScreenClient
-				+ ", isAVClient=" + isAVClient + ", isMobile = " + mobile + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
-				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
-				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
+				+ ", avClient=" + isAVClient + ", isMobile = " + mobile + ", roomId=" + room_id + ", broadCastID=" + broadCastID + ", userId="
+				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
+				+ flvRecordingId + ", recordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
 	}
 }

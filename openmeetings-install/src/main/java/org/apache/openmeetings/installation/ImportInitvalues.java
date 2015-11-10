@@ -56,7 +56,6 @@ import java.util.Iterator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
-import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
@@ -94,8 +93,6 @@ public class ImportInitvalues {
 	private NavigationDao navimanagement;
 	@Autowired
 	private ErrorDao errorDao;
-	@Autowired
-	private PollDao pollManager;
 	@Autowired
 	private SipDao sipDao;
 	@Autowired
@@ -600,36 +597,22 @@ public class ImportInitvalues {
 	
 	// ------------------------------------------------------------------------------
 
-	/**
-	 * Create poll types
-	 */
-	// ------------------------------------------------------------------------------
-	public void loadPollTypes() {
-		pollManager.addPollType(26L, false);
-		pollManager.addPollType(27L, true);
-	}
-
-	// ------------------------------------------------------------------------------
-
 	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
 		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 14;
+		progress = 16;
 		loadMainMenu();
-		progress = 28;
+		progress = 32;
 		loadErrorMappingsFromXML();
-		progress = 42;
+		progress = 48;
 		loadCountriesFiles();
-		progress = 56;
-		// Appointment poll types
-		loadPollTypes();
-		progress = 70;
+		progress = 64;
 
 		loadConfiguration(cfg);
-		progress = 84;
+		progress = 80;
 		loadInitialOAuthServers();
 		progress = 99;
 	}

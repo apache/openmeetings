@@ -334,7 +334,7 @@ public class Admin {
 								} else {
 									invalid += pSize;
 								}
-							} else if (u.getDeleted()) {
+							} else if (u.isDeleted()) {
 								if (cleanup) {
 									FileHelper.removeRec(profile);
 								} else {
@@ -344,7 +344,7 @@ public class Admin {
 						}
 						long missing = 0;
 						for (User u : udao.getAllBackupUsers()) {
-							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
+							if (!u.isDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
 								missing++;
 							}
 						}

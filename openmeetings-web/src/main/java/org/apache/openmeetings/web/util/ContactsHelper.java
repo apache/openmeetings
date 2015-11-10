@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
 import java.util.Date;
 
@@ -95,9 +94,5 @@ public class ContactsHelper {
 			getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
 		}
 		return userContactId;
-	}
-	
-	public static String getLink() {
-		return PROFILE_MESSAGES.getLink();		
 	}
 }

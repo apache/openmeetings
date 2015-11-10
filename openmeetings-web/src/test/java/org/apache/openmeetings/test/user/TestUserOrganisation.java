@@ -47,7 +47,7 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	
 	private User getValidUser() {
 		for (User u : usersDao.getAllBackupUsers()) {
-			if (!u.getDeleted() && u.getOrganisation_users().size() > 0) {
+			if (!u.isDeleted() && u.getOrganisation_users().size() > 0) {
 				return u;
 			}
 		}

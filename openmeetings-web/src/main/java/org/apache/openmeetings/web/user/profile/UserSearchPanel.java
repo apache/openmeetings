@@ -68,8 +68,8 @@ public class UserSearchPanel extends UserPanel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
-	private void refresh(IPartialPageRequestHandler target) {
-		target.add(container.add(fixedHeader));
+	private void refresh(IPartialPageRequestHandler handler) {
+		handler.add(container.add(fixedHeader));
 	}
 	
 	public UserSearchPanel(String id) {
@@ -96,9 +96,9 @@ public class UserSearchPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (send.equals(button)) {
-					refresh(target);
+					refresh(handler);
 				}
 			}
 		});

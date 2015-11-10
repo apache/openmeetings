@@ -36,7 +36,7 @@ import org.apache.wicket.model.IModel;
  * @param <T>
  */
 public class SearchableDataProvider<T extends IDataProviderEntity> extends SortableDataProvider<T, String> {
-	private static final long serialVersionUID = 4325721185888905204L;
+	private static final long serialVersionUID = 1L;
 	protected Class<? extends IDataProviderDao<T>> clazz;
 	protected String search = null;
 	

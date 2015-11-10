@@ -23,7 +23,8 @@
 	<div class="video" wicket:id="container">
 		<div wicket:id="wait"></div>
 		<video wicket:id="player">
-			Your browser does not support HTML5 video. <!-- FIXME hardcoded -->
+			<source wicket:id="mp4" />
+			<source wicket:id="ogg" />
 		</video>
 	</div>
 </wicket:panel>

@@ -209,7 +209,7 @@ public class MobileService {
 				}
 				
 				SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
-				c.setUser_id(u.getId());
+				c.setUserId(u.getId());
 				c.setFirstname(u.getFirstname());
 				c.setLastname(u.getLastname());
 				c.setMobile(true);
@@ -240,7 +240,7 @@ public class MobileService {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
-					add(map, "userId", c.getUser_id());
+					add(map, "userId", c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
 					add(map, "publicSid", c.getPublicSID());
@@ -278,7 +278,7 @@ public class MobileService {
 		// FIXME duplicated code
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		User u = userDao.get(c.getUser_id());
+		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
 		myl.add(roomDao.getUserRoom(u.getId(), Type.conference, labelDao.getString(1306L, u.getLanguageId())));
@@ -312,7 +312,7 @@ public class MobileService {
 		 //TODO check if we need anything here
 		long broadcastId = scopeAdapter.getBroadCastId();
 		c.setSipTransport(true);
-		c.setRoom_id(Long.parseLong(c.getScope()));
+		c.setRoomId(Long.parseLong(c.getScope()));
 		c.setRoomEnter(new Date());
 		c.setBroadCastID(broadcastId);
 		c.setMobile(true);

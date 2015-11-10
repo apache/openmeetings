@@ -26,6 +26,8 @@ import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TA
 import java.io.Serializable;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
@@ -45,7 +47,7 @@ import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 
 public class OmUrlFragment implements Serializable {
-	private static final long serialVersionUID = 7382435810352033914L;
+	private static final long serialVersionUID = 1L;
 	private AreaKeys area = AreaKeys.user;
 	private String type = "";
 	public static final String CHILD_ID = "child";
@@ -256,10 +258,16 @@ public class OmUrlFragment implements Serializable {
 				try {
 					Long roomId = Long.parseLong(type);
 					if (roomId != null) {
-						basePanel = new RoomPanel(CHILD_ID, roomId);
+						Room r = getBean(RoomDao.class).get(roomId);
+						if (r != null) {
+							basePanel = new RoomPanel(CHILD_ID, roomId);
+						}
 					}
 				} catch(NumberFormatException ne) {
-					//skipit, bad roomid passed
+					//skip it, bad roomid passed
+				}
+				if (basePanel == null) {
+					basePanel = new OmDashboardPanel(CHILD_ID);
 				}
 				break;
 			case rooms:
@@ -287,10 +295,6 @@ public class OmUrlFragment implements Serializable {
 	}
 	
 	public String getLink() {
-		return getLink(getBean(ConfigurationDao.class).getBaseUrl());
-	}
-
-	public String getLink(String baseUrl) {
-		return baseUrl + "#" + getArea().name() + "/" + getType();
+		return getBean(ConfigurationDao.class).getBaseUrl() + "#" + getArea().name() + "/" + getType();
 	}
 }

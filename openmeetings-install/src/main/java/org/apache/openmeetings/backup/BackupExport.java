@@ -61,7 +61,6 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -135,7 +134,7 @@ public class BackupExport {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private RoomGroupDao roomOrganisationDao;
+	private RoomGroupDao roomGroupDao;
 
 	public void performExport(File filePath, File backup_dir, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
 		if (!backup_dir.exists()) {
@@ -145,7 +144,7 @@ public class BackupExport {
 		
 		progressHolder.setProgress(0);
 		/*
-		 * ##################### Backup Organizations
+		 * ##################### Backup Groups
 		 */
 		writeList(simpleSerializer, backup_dir, "organizations.xml",
 				"organisations", organisationDao.get(0, Integer.MAX_VALUE));
@@ -172,7 +171,7 @@ public class BackupExport {
 		}
 
 		/*
-		 * ##################### Backup Room Organizations
+		 * ##################### Backup Room Groups
 		 */
 		{
 			Registry registry = new Registry();
@@ -182,7 +181,7 @@ public class BackupExport {
 			registry.bind(Organisation.class, OrganisationConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			
-			writeList(serializer, backup_dir, "rooms_organisation.xml", "room_organisations", roomOrganisationDao.get());
+			writeList(serializer, backup_dir, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
 			progressHolder.setProgress(20);
 		}
 
@@ -317,8 +316,7 @@ public class BackupExport {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
-			writeList(serializer, backup_dir, "flvRecordings.xml",
-					"flvrecordings", list);
+			writeList(serializer, backup_dir, "flvRecordings.xml", "flvrecordings", list);
 			progressHolder.setProgress(70);
 		}
 
@@ -326,14 +324,14 @@ public class BackupExport {
 		 * ##################### Polls
 		 */
 		{
-			List<RoomPoll> list = pollManager.getPollListBackup();
+			List<RoomPoll> list = pollManager.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
-			registry.bind(PollType.class, PollTypeConverter.class);
+			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
 			}
@@ -460,7 +458,7 @@ public class BackupExport {
 		registry.bind(State.class, StateConverter.class);
 		registry.bind(Salutation.class, SalutationConverter.class);
 		if (list != null && list.size() > 0) {
-			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getStarttime().getClass();
+			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
 			registry.bind(dateClass, DateConverter.class);
 		}
 		

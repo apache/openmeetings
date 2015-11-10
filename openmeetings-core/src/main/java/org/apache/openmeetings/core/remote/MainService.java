@@ -22,13 +22,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLO
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -86,8 +83,6 @@ public class MainService implements IPendingServiceCallback {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private IUserManager userManager;
-	@Autowired
-	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -217,8 +212,8 @@ public class MainService implements IPendingServiceCallback {
 				
 				if (!u.getOrganisation_users().isEmpty()) {
 					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
-					currentClient.setUser_id(u.getId());
-					currentClient.setRoom_id(wicketroomid);
+					currentClient.setUserId(u.getId());
+					currentClient.setRoomId(wicketroomid);
 					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
 				
 					currentClient.setUsername(u.getLogin());
@@ -268,8 +263,8 @@ public class MainService implements IPendingServiceCallback {
 			String streamId = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
-			if (currentClient.getUser_id() != null) {
-				sessiondataDao.updateUser(SID, currentClient.getUser_id());
+			if (currentClient.getUserId() != null) {
+				sessiondataDao.updateUser(SID, currentClient.getUserId());
 			}
 
 			currentClient.setAllowRecording(soapLogin.isAllowRecording());
@@ -336,7 +331,7 @@ public class MainService implements IPendingServiceCallback {
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
-					ConferenceLog.Type.nicknameEnter, currentClient.getUser_id(), streamId,
+					ConferenceLog.Type.nicknameEnter, currentClient.getUserId(), streamId,
 					null, currentClient.getUserip(), currentClient.getScope());
 
 			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
@@ -396,19 +391,19 @@ public class MainService implements IPendingServiceCallback {
 											, userObject.getExternalUserType(), null, userObject.getPictureUrl());
 
 							long userId = u.getId();
-							currentClient.setUser_id(userId);
+							currentClient.setUserId(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
 							user.setPictureuri(userObject.getPictureUrl());
 
 							userDao.update(user, users_id);
 
-							currentClient.setUser_id(user.getId());
+							currentClient.setUserId(user.getId());
 							SessionVariablesUtil.setUserId(current.getClient(), user.getId());
 						}
 					}
 
-					log.debug("userObject.getExternalUserId() -2- " + currentClient.getUser_id());
+					log.debug("userObject.getExternalUserId() -2- " + currentClient.getUserId());
 
 					currentClient.setUserObject(userObject.getUsername(), userObject.getFirstname(), userObject.getLastname());
 					currentClient.setPicture_uri(userObject.getPictureUrl());
@@ -416,8 +411,8 @@ public class MainService implements IPendingServiceCallback {
 
 					log.debug("UPDATE USER BY STREAMID " + streamId);
 
-					if (currentClient.getUser_id() != null) {
-						sessiondataDao.updateUser(SID, currentClient.getUser_id());
+					if (currentClient.getUserId() != null) {
+						sessiondataDao.updateUser(SID, currentClient.getUserId());
 					}
 
 					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);

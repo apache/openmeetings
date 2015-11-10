@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -52,7 +53,9 @@ public abstract class BasePanel extends Panel {
 	 * 
 	 * @param target
 	 */
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
+				, getMainPage().getTopLinks().setVisible(true));
 	}
 
 	/**
@@ -60,6 +63,6 @@ public abstract class BasePanel extends Panel {
 	 * 
 	 * @param target
 	 */
-	public void cleanup(IPartialPageRequestHandler target) {
+	public void cleanup(IPartialPageRequestHandler handler) {
 	}
 }

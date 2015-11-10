@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.db.util.UserHelper;
@@ -99,7 +100,7 @@ public class UserDao implements IDataProviderDao<User> {
 	 */
 	public User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutations_id(1L); // TODO: Fix default selection to be configurable
+		user.setSalutation(Salutation.mr); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
 		user.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
@@ -211,10 +212,10 @@ public class UserDao implements IDataProviderDao<User> {
 			if (u.getRegdate() == null) {
 				u.setRegdate(new Date());
 			}
-			u.setStarttime(new Date());
+			u.setInserted(new Date());
 			em.persist(u);
 		} else {
-			u.setUpdatetime(new Date());
+			u.setUpdated(new Date());
 			u =	em.merge(u);
 		}
 		//this is necessary due to organisation details are lost on update
@@ -281,7 +282,7 @@ public class UserDao implements IDataProviderDao<User> {
 				}
 				us.setOrganisation_users(null);
 				us.setDeleted(true);
-				us.setUpdatetime(new Date());
+				us.setUpdated(new Date());
 				us.setSipUser(null);
 				Address adr = us.getAddress();
 				if (adr != null) {
@@ -655,8 +656,8 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setRights(rights);
 		u.setLastlogin(new Date());
 		u.setLasttrans(new Long(0));
-		u.setSalutations_id(1L);
-		u.setStarttime(new Date());
+		u.setSalutation(Salutation.mr);
+		u.setInserted(new Date());
 		u.setActivatehash(hash);
 		u.setTimeZoneId(timezone.getID());
 		u.setForceTimeZoneCheck(forceTimeZoneCheck);

@@ -45,8 +45,6 @@
   <entry key="23">Each connected user receives a message with the new poll</entry>
   <entry key="24">Create a poll</entry>
   <entry key="25">Cancel</entry>
-  <entry key="26">Yes/No</entry>
-  <entry key="27">Numeric 1-10</entry>
   <entry key="28">Poll</entry>
   <entry key="29">You must be a moderator to create a question</entry>
   <entry key="30">Your vote has been registered</entry>
@@ -339,8 +337,6 @@
   <entry key="319">Please enter either an email address or a user name</entry>
   <entry key="320">There is no user connected to this username</entry>
   <entry key="321">The email containing a special link has been sent to your email address</entry>
-  <entry key="322">Error</entry>
-  <entry key="323">Message</entry>
   <entry key="324">No user found</entry>
   <entry key="325">Reset your password</entry>
   <entry key="326">Login</entry>
@@ -1555,9 +1551,6 @@
   <entry key="1538">Enable SIP transport in the room</entry>
   <entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
   <entry key="1540">Please specify your timezone</entry>
-  <entry key="1541">conference (1-25 users)</entry>
-  <entry key="1542">restricted (1-150 users)</entry>
-  <entry key="1543">interview (1:1 meeting with recording)</entry>
   <entry key="1544">Configuration with given key already exists, please specify another key or edit existent configuration</entry>
   <entry key="1545">Content is Saving, Please wait.</entry>
   <entry key="1546">Welcome</entry>
@@ -1582,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1871,9 +1861,19 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conference (1-25 users)</entry>
+  <entry key="room.type.restricted">restricted (1-150 users)</entry>
+  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
   <entry key="user.salutation.mr">Mr</entry>
   <entry key="user.salutation.ms">Ms</entry>
   <entry key="user.salutation.mrs">Mrs</entry>
   <entry key="user.salutation.dr">Dr</entry>
   <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Error</entry>
+  <entry key="error.type.info">Message</entry>
+  <entry key="poll.type.yesNo">Yes/No</entry>
+  <entry key="poll.type.numeric">Numeric 1-10</entry>
 </properties>

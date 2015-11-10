@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
@@ -66,9 +65,9 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		this.publicSid = publicSid;
 		RoomPoll p = new RoomPoll();
 		User u = getBean(UserDao.class).get(getUserId());
-		p.setCreatedBy(u);
+		p.setCreator(u);
 		p.setRoom(getBean(RoomDao.class).get(roomId));
-		p.setPollType(getBean(PollDao.class).getPollTypes().get(0));
+		p.setType(RoomPoll.Type.yesNo);
 		form.setModelObject(p);
 		target.add(form);
 	}
@@ -95,8 +94,8 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(PollDao.class).closePoll(roomId);
-		RoomPoll p = getBean(PollDao.class).updatePoll(form.getModelObject());
+		getBean(PollDao.class).close(roomId);
+		RoomPoll p = getBean(PollDao.class).update(form.getModelObject());
 		broadcast(publicSid, "newPoll", p);
 	}
 
@@ -105,20 +104,20 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
-			add(new RequiredTextField<String>("pollName").setLabel(Model.of(Application.getString(1410))));
-			add(new TextArea<String>("pollQuestion"));
-			add(new DropDownChoice<PollType>("pollType", getBean(PollDao.class).getPollTypes()
-					, new ChoiceRenderer<PollType>() {
+			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
+			add(new TextArea<String>("question"));
+			add(new DropDownChoice<RoomPoll.Type>("type", Arrays.asList(RoomPoll.Type.values())
+					, new ChoiceRenderer<RoomPoll.Type>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override
-						public Object getDisplayValue(PollType pt) {
-							return getString("" + pt.getLabel());
+						public Object getDisplayValue(RoomPoll.Type pt) {
+							return getString("poll.type." + pt.name());
 						}
 
 						@Override
-						public String getIdValue(PollType pt, int index) {
-							return "" + pt.getPollTypesId();
+						public String getIdValue(RoomPoll.Type pt, int index) {
+							return pt.name();
 						}
 					})
 					.setRequired(true).setLabel(Model.of(Application.getString(21))));

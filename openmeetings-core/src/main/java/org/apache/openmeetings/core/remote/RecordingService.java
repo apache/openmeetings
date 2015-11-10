@@ -93,7 +93,7 @@ public class RecordingService implements IPendingServiceCallback {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
-			Long room_id = client.getRoom_id();
+			Long room_id = client.getRoomId();
 
 			Date now = new Date();
 
@@ -101,7 +101,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 			recording.setFileHash("");
 			recording.setFileName(roomRecordingName);
-			Long ownerId = client.getUser_id();
+			Long ownerId = client.getUserId();
 			if (ownerId != null && ownerId < 0) {
 				User c = userDao.get(-ownerId);
 				if (c != null) {
@@ -128,7 +128,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// Update Client and set Flag
 			client.setIsRecording(true);
-			client.setFlvRecordingId(recordingId);
+			client.setRecordingId(recordingId);
 			sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
 
 			// get all stream and start recording them
@@ -144,7 +144,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 						// If its the recording client we need another type of Meta Data
 						if (rcl.isScreenClient()) {
-							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
+							if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
 								String streamName_Screen = generateFileName(recordingId, rcl.getStreamPublishName().toString());
 
 								Long metaDataId = metaDataDao.add(
@@ -155,7 +155,7 @@ public class RecordingService implements IPendingServiceCallback {
 								recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true, isInterview);
 
 								// Add Meta Data
-								rcl.setFlvRecordingMetaDataId(metaDataId);
+								rcl.setRecordingMetaDataId(metaDataId);
 
 								sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 							}
@@ -181,7 +181,7 @@ public class RecordingService implements IPendingServiceCallback {
 									rcl.getFirstname() + " " + rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName,
 									rcl.getInterviewPodId());
 
-							rcl.setFlvRecordingMetaDataId(metaId);
+							rcl.setRecordingMetaDataId(metaId);
 
 							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
@@ -322,26 +322,26 @@ public class RecordingService implements IPendingServiceCallback {
 						log.debug("is this users still alive? stop it :" + rcl);
 
 						if (rcl.isScreenClient()) {
-							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
+							if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
 								// Stop FLV Recording
-								stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getFlvRecordingMetaDataId());
+								stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
 
 								// Update Meta Data
-								metaDataDao.updateEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+								metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
 							}
 						} else if ((rcl.isMobile() || rcl.isAvClient())
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 
-							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getFlvRecordingMetaDataId());
+							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getRecordingMetaDataId());
 
 							// Update Meta Data
-							metaDataDao.updateEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+							metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
 						}
 					}
 				}
 			}
 			// Store to database
-			Long recordingId = currentClient.getFlvRecordingId();
+			Long recordingId = currentClient.getRecordingId();
 
 			// In the Case of an Interview the stopping client does not mean
 			// that its actually the recording client
@@ -353,7 +353,7 @@ public class RecordingService implements IPendingServiceCallback {
 				recordingDao.updateEndTime(recordingId, new Date());
 
 				// Reset values
-				currentClient.setFlvRecordingId(null);
+				currentClient.setRecordingId(null);
 				currentClient.setIsRecording(false);
 
 				sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
@@ -381,9 +381,9 @@ public class RecordingService implements IPendingServiceCallback {
 
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoom_id());
+			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoomId());
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -406,16 +406,16 @@ public class RecordingService implements IPendingServiceCallback {
 
 			if (rcl.isScreenClient()) {
 
-				if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
+				if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
 
 					// Stop FLV Recording
 					// FIXME: Is there really a need to stop it manually if the
 					// user just
 					// stops the stream?
-					stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getFlvRecordingMetaDataId());
+					stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
 
 					// Update Meta Data
-					metaDataDao.updateEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+					metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
 				}
 
 			} else if (rcl.isAvClient()
@@ -423,10 +423,10 @@ public class RecordingService implements IPendingServiceCallback {
 
 				// FIXME: Is there really a need to stop it manually if the user
 				// just stops the stream?
-				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()), rcl.getFlvRecordingMetaDataId());
+				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()), rcl.getRecordingMetaDataId());
 
 				// Update Meta Data
-				metaDataDao.updateEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+				metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
 			}
 
 		} catch (Exception err) {
@@ -442,7 +442,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// If its the recording client we need another type of Meta Data
 			if (rcl.isScreenClient()) {
-				if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
+				if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
 					String streamName_Screen = generateFileName(recordingId, rcl.getStreamPublishName().toString());
 
 					log.debug("##############  ADD SCREEN OF SHARER :: " + rcl.getStreamPublishName());
@@ -455,7 +455,7 @@ public class RecordingService implements IPendingServiceCallback {
 							recording.getIsInterview());
 
 					// Add Meta Data
-					rcl.setFlvRecordingMetaDataId(metaDataId);
+					rcl.setRecordingMetaDataId(metaDataId);
 
 					sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 				}
@@ -483,7 +483,7 @@ public class RecordingService implements IPendingServiceCallback {
 				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaDataId, false,
 						recording.getIsInterview());
 
-				rcl.setFlvRecordingMetaDataId(metaDataId);
+				rcl.setRecordingMetaDataId(metaDataId);
 
 				sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 

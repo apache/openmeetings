@@ -27,10 +27,12 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -70,14 +72,14 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		return u == null ? "" : getUserId() == u.getId() ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname();
 	}
 	
-	public void updateModel(AjaxRequestTarget target) {
+	public void updateModel(IPartialPageRequestHandler target) {
 		RoomPollAnswer a = new RoomPollAnswer();
-		a.setRoomPoll(getBean(PollDao.class).getPoll(roomId));
+		a.setRoomPoll(getBean(PollDao.class).getByRoom(roomId));
 		User u = getBean(UserDao.class).get(getUserId());
 		a.setVotedUser(u);
-		user.setObject(getName(a.getRoomPoll().getCreatedBy()));
+		user.setObject(getName(a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
-		boolean typeNum = a.getRoomPoll() != null && a.getRoomPoll().getPollType() != null && a.getRoomPoll().getPollType().getIsNumericAnswer();
+		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.numeric == a.getRoomPoll().getType();
 		form.typeBool.setVisible(!typeNum);
 		form.typeInt.setVisible(typeNum);
 		target.add(form);
@@ -119,8 +121,8 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		RoomPollAnswer a = form.getModelObject();
 		a.setVoteDate(new Date());
-		a.getRoomPoll().getRoomPollAnswerList().add(a);
-		getBean(PollDao.class).updatePoll(a.getRoomPoll());
+		a.getRoomPoll().getAnswers().add(a);
+		getBean(PollDao.class).update(a.getRoomPoll());
 	}
 	
 	@Override
@@ -137,7 +139,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 			super(id, model);
 			add(feedback);
 			add(new Label("user", user));
-			add(new Label("roomPoll.pollQuestion"));
+			add(new Label("roomPoll.question"));
 			add(typeBool.add(new RadioGroup<Boolean>("answer").setRequired(true)
 						.add(new Radio<Boolean>("true", Model.of(Boolean.TRUE))).add(new Radio<Boolean>("false", Model.of(Boolean.FALSE)))
 				).setOutputMarkupPlaceholderTag(true).setVisible(false));

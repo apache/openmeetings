@@ -32,37 +32,38 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_data")
 public class Userdata implements Serializable {
-	private static final long serialVersionUID = 8365799229794940172L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-    private Long data_id;
-	
-	@Column(name="user_id")
-    private Long user_id;
-	
-	@Column(name="data_key")
-    private String data_key;
-	
-	@Column(name="data")
-    private String data;
-	
-	@Column(name = "starttime")
+	@Column(name = "id")
+	private Long data_id;
+
+	@Column(name = "user_id")
+	private Long user_id;
+
+	@Column(name = "data_key")
+	private String data_key;
+
+	@Column(name = "data")
+	private String data;
+
+	@Column(name = "inserted")
 	private Date starttime;
-	
-	@Column(name = "updatetime")
+
+	@Column(name = "updated")
 	private Date updatetime;
-	
+
 	@Lob
-	@Column(name = "comment_field")
-    private String comment;
-	
+	@Column(name = "comment")
+	private String comment;
+
 	@Column(name = "deleted")
-    private boolean deleted;
+	private boolean deleted;
 
 	public String getComment() {
 		return comment;
 	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -70,53 +71,56 @@ public class Userdata implements Serializable {
 	public String getData() {
 		return data;
 	}
+
 	public void setData(String data) {
 		this.data = data;
 	}
 
-	public String getData_key() {
+	public String getKey() {
 		return data_key;
 	}
-	public void setData_key(String data_key) {
-		this.data_key = data_key;
-	}
-    
-	public Long getData_id() {
-		return data_id;
-	}
-	public void setData_id(Long data_id) {
-		this.data_id = data_id;
+
+	public void setKey(String key) {
+		this.data_key = key;
 	}
 
-    
-	public Date getStarttime() {
+	public Long getId() {
+		return data_id;
+	}
+
+	public void setId(Long id) {
+		this.data_id = id;
+	}
+
+	public Date getInserted() {
 		return starttime;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+
+	public void setInserted(Date inserted) {
+		this.starttime = inserted;
 	}
-    
-	public Date getUpdatetime() {
+
+	public Date getUpdated() {
 		return updatetime;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+
+	public void setUpdated(Date updated) {
+		this.updatetime = updated;
 	}
-	
-	public boolean getDeleted() {
+
+	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 
-	public Long getUser_id() {
+	public Long getUserId() {
 		return user_id;
 	}
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+
+	public void setUserId(Long userId) {
+		this.user_id = userId;
 	}
-
-
-
 }

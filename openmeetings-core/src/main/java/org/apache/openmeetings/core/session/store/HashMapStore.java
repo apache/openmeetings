@@ -109,7 +109,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		List<Client> clientList = new ArrayList<Client>();
 		for (Client cl : clientsByStreamId.values()) {
-			if (cl.getUser_id().equals(userId)) {
+			if (cl.getUserId().equals(userId)) {
 				clientList.add(cl);
 			}
 		}
@@ -119,7 +119,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public  List<Client> getClientsByRoomId(Long roomId) {
 		List<Client> clientList = new ArrayList<Client>();
 		for (Client cl : clientsByStreamId.values()) {
-			if (cl.getRoom_id() != null && cl.getRoom_id().equals(roomId)) {
+			if (cl.getRoomId() != null && cl.getRoomId().equals(roomId)) {
 				clientList.add(cl);
 			}
 		}
@@ -177,7 +177,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public List<Long> getRoomsIdsByServer(Server server) {
 		HashSet<Long> rooms = new HashSet<Long>();
 		for (Client cl : clientsByStreamId.values()) {
-			Long roomId = cl.getRoom_id();
+			Long roomId = cl.getRoomId();
 			if (roomId != null && roomId > 0 && !rooms.contains(roomId)) {
 				rooms.add(roomId);
 			}

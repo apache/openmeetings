@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,19 +33,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswers rpa "
-				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id " +
-				"AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived")
+	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.rooms_id = :roomId "
+				+ "AND rpa.votedUser.user_id = :userId AND rpa.roomPoll.archived = false")
 })
 @Table(name = "room_poll_answer")
 @Root(name="roompollanswer")
-public class RoomPollAnswer implements Serializable {
+public class RoomPollAnswer implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id

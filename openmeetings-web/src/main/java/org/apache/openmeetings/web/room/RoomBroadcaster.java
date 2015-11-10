@@ -35,7 +35,7 @@ public class RoomBroadcaster {
 	
 	public static void broadcast(String publicSid, String method, Object obj) {
 		Client rc = getClient(publicSid);
-		final Long roomId = rc.getRoom_id();
+		final Long roomId = rc.getRoomId();
 		final SessionManager sessionMgr = getBean(SessionManager.class);
 		final UserDao userDao = getBean(UserDao.class);
 		ScopeApplicationAdapter sa = getBean(ScopeApplicationAdapter.class);
@@ -43,7 +43,7 @@ public class RoomBroadcaster {
 			public boolean filter(IConnection conn) {
 				Client rcl = sessionMgr.getClientByStreamId(conn.getClient().getId(), null);
 				return rcl.isScreenClient()
-						|| rcl.getRoom_id() == null || !rcl.getRoom_id().equals(roomId) || userDao.get(rcl.getUser_id()) == null;
+						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
 			}
 		}.start();
 	}

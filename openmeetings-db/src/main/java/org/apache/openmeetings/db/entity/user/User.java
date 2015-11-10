@@ -89,10 +89,7 @@ import org.simpleframework.xml.Root;
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
 	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.user_id"),
-	@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from User c "
-			+ "where c.deleted = false " //
-			+ "AND c.user_id = :userId " //
-			+ "AND c.password LIKE :password"), //
+	@NamedQuery(name = "checkPassword", query = "SELECT COUNT(u) from User u WHERE u.deleted = false AND u.user_id = :userId AND u.password LIKE :password"), //
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.user_id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
@@ -213,14 +210,15 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date regdate;
 
-	@Column(name = "salutations_id")
+	@Column(name = "salutation")
+	@Enumerated(EnumType.STRING)
 	@Element(name = "title_id", data = true, required = false)
-	private Long salutations_id;
+	private Salutation salutations_id;
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	private Date starttime;
 
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	private Date updatetime;
 
 	@Column(name = "pictureuri")
@@ -261,12 +259,12 @@ public class User implements IDataProviderEntity {
 	private AsteriskSipUser sipUser;
 
 	// Vars to simulate external Users
-	@Column(name = "externalUserId")
-	@Element(data = true, required = false)
+	@Column(name = "external_id")
+	@Element(name = "externalUserId", data = true, required = false)
 	private String externalUserId;
 
-	@Column(name = "externalUserType")
-	@Element(data = true, required = false)
+	@Column(name = "external_type")
+	@Element(name = "externalUserType", data = true, required = false)
 	private String externalUserType;
 
 	/**
@@ -295,11 +293,11 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String userSearchs;
 
-	@Column(name = "show_contact_data")
+	@Column(name = "show_contact_data", nullable = false)
 	@Element(data = true, required = false)
 	private boolean showContactData;
 
-	@Column(name = "show_contact_data_to_contacts")
+	@Column(name = "show_contact_data_to_contacts", nullable = false)
 	@Element(data = true, required = false)
 	private boolean showContactDataToContacts;
 
@@ -432,31 +430,31 @@ public class User implements IDataProviderEntity {
 		this.regdate = regdate;
 	}
 
-	public Long getSalutations_id() {
+	public Salutation getSalutation() {
 		return salutations_id;
 	}
 
-	public void setSalutations_id(Long salutations_id) {
-		this.salutations_id = salutations_id;
+	public void setSalutation(Salutation salutation) {
+		this.salutations_id = salutation;
 	}
 
-	public Date getStarttime() {
+	public Date getInserted() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.starttime = inserted;
 	}
 
-	public Date getUpdatetime() {
+	public Date getUpdated() {
 		return updatetime;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updatetime = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -580,7 +578,7 @@ public class User implements IDataProviderEntity {
 		this.userSearchs = userSearchs;
 	}
 
-	public boolean getShowContactData() {
+	public boolean isShowContactData() {
 		return showContactData;
 	}
 
@@ -588,7 +586,7 @@ public class User implements IDataProviderEntity {
 		this.showContactData = showContactData;
 	}
 
-	public boolean getShowContactDataToContacts() {
+	public boolean isShowContactDataToContacts() {
 		return showContactDataToContacts;
 	}
 
@@ -637,7 +635,7 @@ public class User implements IDataProviderEntity {
 		return "User [id=" + user_id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
-				+ ", language_id=" + language_id + ", address=" + address
+				+ ", languageId=" + language_id + ", address=" + address
 				+ ", externalId=" + externalUserId + ", externalType=" + externalUserType
 				+ ", type=" + type + "]";
 	}

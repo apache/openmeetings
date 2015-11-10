@@ -45,8 +45,6 @@
   <entry key="23">Infó: Minden bejelentkezett felhasználó értesül az új szavazásról.</entry>
   <entry key="24">Szavazás létrehozása</entry>
   <entry key="25">Mégse</entry>
-  <entry key="26">Igen/Nem</entry>
-  <entry key="27">Szám 1-10</entry>
   <entry key="28">Szavazás</entry>
   <entry key="29">Előadónak kell lenned, hogy feltehess kérdést</entry>
   <entry key="30">A szavazatot elfogadtuk.</entry>
@@ -280,8 +278,6 @@
   <entry key="258">Ugrás az utolsó oldalra</entry>
   <entry key="259">Kicsinyít --</entry>
   <entry key="260">Nagyít ++</entry>
-  <entry key="261">Úr</entry>
-  <entry key="262">Hölgy</entry>
   <entry key="263">Beállítás</entry>
   <entry key="264">ID</entry>
   <entry key="265">Kulcs</entry>
@@ -341,8 +337,6 @@
   <entry key="319">Kérlek add meg az e-mail címet vagy felhasználói nevet.</entry>
   <entry key="320">Nincs felhasználó ehhez a névhez.</entry>
   <entry key="321">A levél, amit küldtünk neked, tartalmaz egy speciális linket, ellenőrizd a postafiókodat. Ha még nem kaptad meg a levelet, állítsd be a spamszűrődet és küldd újra a megerősítő e-mail-t.</entry>
-  <entry key="322">Hiba</entry>
-  <entry key="323">Üzenet</entry>
   <entry key="324">Rossz Hash. A felhasználható nem található.</entry>
   <entry key="325">Jelszó törlése</entry>
   <entry key="326">Bejelentkező név</entry>
@@ -860,8 +854,6 @@
   <entry key="838">Ez a felhazsnáló Super-Moderator. Nem veheti el a Super-Moderator jogot!</entry>
   <entry key="839">Biztosan törli ezt a filet/könyvtárat?</entry>
   <entry key="840">File/Könyvtár törlése?</entry>
-  <entry key="841">Mrs.</entry>
-  <entry key="842">Dr.</entry>
   <entry key="843">Tulajdonságok</entry>
   <entry key="844">Mutasd az egér pozíciót a nézőknek</entry>
   <entry key="845">Audio megosztása SIP alkalmazáson</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">Rendszer biztonsági mentés Export/Import</entry>
   <entry key="1462">Moderátornak kell lenned, hogy létrehozhass, feltölthess, módosíthass, táblához adhass filet/könyvtárat.</entry>
   <entry key="1463">Szöveg szerkezstése</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publikáció</entry>
   <entry key="1466">Publikálás indítása</entry>
   <entry key="1467">Publikáció befejezése</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">SIP átvitel engedélyezése a szobában</entry>
   <entry key="1539">Egyéni hangkapcsolatot kezdeményez ezzel a felhasználóval?</entry>
   <entry key="1540">Adjameg az időzónáját</entry>
-  <entry key="1541">csoportmunka (n:n) konferencia (1-25 látogatóval)</entry>
-  <entry key="1542">moderált (1:n) konferencia (1-150 látogatóval)</entry>
-  <entry key="1543">interjú (1:1 megbeszélés felvétellel)</entry>
   <entry key="1544">Konfigurációs beállító kulcs már létezik, válasszon másikat, vagy szerkessze a meglévőt</entry>
   <entry key="1545">Tartalom mentése, kérem várjon...</entry>
   <entry key="1546">Üdvözöljük</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">ne küldjön értesítést</entry>
-  <entry key="1569">egyszerű e-mail</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1857,4 +1842,19 @@
 	<entry key="install.wizard.congrats.config">változtassa meg a kliens szükséges konfigurációit</entry>
 	<entry key="install.wizard.congrats.mail">Levelező lista</entry>
 	<entry key="install.wizard.congrats.commercial">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">csoportmunka (n:n) konferencia (1-25 látogatóval)</entry>
+  <entry key="room.type.restricted">moderált (1:n) konferencia (1-150 látogatóval)</entry>
+  <entry key="room.type.interview">interjú (1:1 megbeszélés felvétellel)</entry>
+  <entry key="appointment.reminder.none">ne küldjön értesítést</entry>
+  <entry key="appointment.reminder.email">egyszerű e-mail</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">Úr</entry>
+  <entry key="user.salutation.ms">Hölgy</entry>
+  <entry key="user.salutation.mrs">Mrs.</entry>
+  <entry key="user.salutation.dr">Dr.</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Hiba</entry>
+  <entry key="error.type.info">Üzenet</entry>
+  <entry key="poll.type.yesNo">Igen/Nem</entry>
+  <entry key="poll.type.numeric">Szám 1-10</entry>
 </properties>

@@ -104,7 +104,7 @@ public class GenerateImage extends BaseConverter {
 
 		String pictureuri = destinationFile.getName();
 		User us = usersDao.get(users_id);
-		us.setUpdatetime(new java.util.Date());
+		us.setUpdated(new java.util.Date());
 		us.setPictureuri(pictureuri);
 		usersDao.update(us, users_id);
 

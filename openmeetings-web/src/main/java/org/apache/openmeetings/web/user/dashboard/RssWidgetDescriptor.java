@@ -23,7 +23,7 @@ import org.apache.openmeetings.web.app.Application;
 import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 
 public class RssWidgetDescriptor implements WidgetDescriptor {
-	private static final long serialVersionUID = -9113376703084624276L;
+	private static final long serialVersionUID = 1L;
 
 	public String getName() {
 		return Application.getString(277L);

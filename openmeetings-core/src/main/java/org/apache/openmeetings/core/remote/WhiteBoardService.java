@@ -80,7 +80,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			Long whiteBoardId = this.whiteBoardObjectListManagerById
 					.getNewWhiteboardId(room_id);
@@ -99,7 +99,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById
 					.getWhiteBoardObjectListByRoomId(room_id);
@@ -141,7 +141,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			log.debug("getRoomItems: " + room_id);
 			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById
@@ -340,7 +340,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
 			wSyncLockObject.setAddtime(new Date());
@@ -375,7 +375,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			Map<String, WhiteboardSyncLockObject> syncListRoom = this.whiteBoardObjectListManager
 					.getWhiteBoardSyncListByRoomid(room_id);
@@ -439,7 +439,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
 			wSyncLockObject.setAddtime(new Date());
@@ -474,7 +474,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			Map<String, WhiteboardSyncLockObject> syncListImage = this.whiteBoardObjectListManager
 					.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id,
@@ -527,7 +527,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Client currentClient) {
 		try {
 
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			// TODO: Maybe we should also check all rooms, independent from the
 			// current room_id if there is any user registered

@@ -61,8 +61,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private String sendLbl = Application.getString(317);
-	private DialogButton send = new DialogButton("send", sendLbl);
+	private DialogButton send = new DialogButton("send", Application.getString(317));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString(122));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private RequiredTextField<String> nameField;
@@ -148,8 +147,9 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 			
-			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
-				s.open(target);
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				s.open(handler);
 			}
 		};
 		add(confirmDialog);
@@ -214,7 +214,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 			// check if Mail given
 			if (email.length() > 0) {
-				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
 				User us = userDao.getByEmail(email);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);

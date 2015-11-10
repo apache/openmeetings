@@ -42,7 +42,6 @@ public class Client implements IDataProviderEntity {
 	private String uid;
 	private Set<Right> rights = new HashSet<Right>();
 	private Date connectedSince;
-	private int serverId = 0;
 
 	public Client() {
 		this.connectedSince = new Date();

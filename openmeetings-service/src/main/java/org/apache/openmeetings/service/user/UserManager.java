@@ -246,12 +246,12 @@ public class UserManager implements IUserManager {
 			String Comment) {
 		String ret = "Fehler beim speichern der Userdata";
 		Userdata userdata = new Userdata();
-		userdata.setData_key(DATA_KEY);
+		userdata.setKey(DATA_KEY);
 		userdata.setData(DATA);
-		userdata.setStarttime(new Date());
-		userdata.setUpdatetime(null);
+		userdata.setInserted(new Date());
+		userdata.setUpdated(null);
 		userdata.setComment(Comment);
-		userdata.setUser_id(USER_ID);
+		userdata.setUserId(USER_ID);
 		userdata.setDeleted(false);
 		try {
 			em.merge(userdata);
@@ -466,8 +466,8 @@ public class UserManager implements IUserManager {
 						return true;
 					}
 					String scopeName = "hibernate";
-					if (rcl.getRoom_id() != null) {
-						scopeName = rcl.getRoom_id().toString();
+					if (rcl.getRoomId() != null) {
+						scopeName = rcl.getRoomId().toString();
 					}
 					IScope currentScope = scopeApplicationAdapter
 							.getRoomScope(scopeName);
@@ -502,8 +502,8 @@ public class UserManager implements IUserManager {
 				}
 
 				String scopeName = "hibernate";
-				if (rcl.getRoom_id() != null) {
-					scopeName = rcl.getRoom_id().toString();
+				if (rcl.getRoomId() != null) {
+					scopeName = rcl.getRoomId().toString();
 				}
 				IScope currentScope = scopeApplicationAdapter
 						.getRoomScope(scopeName);

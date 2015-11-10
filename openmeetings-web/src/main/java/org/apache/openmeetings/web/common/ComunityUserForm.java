@@ -39,9 +39,9 @@ public class ComunityUserForm extends Form<User> {
 
 			public Long getObject() {
 				User u = ComunityUserForm.this.getModelObject();
-				if (u.getShowContactData()) {
+				if (u.isShowContactData()) {
 					return 1L;
-				} else if (u.getShowContactDataToContacts()) {
+				} else if (u.isShowContactDataToContacts()) {
 					return 2L;
 				}
 				return 3L;

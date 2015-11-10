@@ -40,7 +40,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
@@ -161,8 +160,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		Invitation i = new Invitation();
 		User u = getBean(UserDao.class).get(getUserId());
 		i.setInvitedBy(u);
-		Room r = getBean(RoomDao.class).get(roomId);
-		i.setRoom(r);
+		i.setRoom(getBean(RoomDao.class).get(roomId));
 		Calendar d = Calendar.getInstance();
 		i.setValidFrom(d.getTime());
 		d.add(Calendar.DATE, 1);

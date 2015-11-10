@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -38,6 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 
@@ -47,9 +47,9 @@ import org.apache.openmeetings.db.entity.user.User;
 	@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i where i.hash LIKE :hashCode AND i.deleted = false"),
 	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId  ")
 })
-@Table(name = "invitations")
-public class Invitation implements Serializable {
-	private static final long serialVersionUID = 1153321347974705506L;
+@Table(name = "invitation")
+public class Invitation implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 
 	public enum MessageType {
 		Create
@@ -190,7 +190,7 @@ public class Invitation implements Serializable {
 		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

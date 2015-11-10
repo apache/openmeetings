@@ -99,7 +99,7 @@ public class UserChoiceProvider implements ChoiceProvider<User> {
 
 	@Override
 	public Collection<User> toChoices(Collection<String> ids) {
-		Collection<User> c = new ArrayList<User>();
+		Collection<User> c = new ArrayList<>();
 		for (String id : ids) {
 			if (newContacts.containsKey(id)) {
 				c.add(newContacts.get(id));
@@ -110,12 +110,13 @@ public class UserChoiceProvider implements ChoiceProvider<User> {
 		return c;
 	}
 
-    public void toJson(User choice, JSONWriter writer) throws JSONException {
-    	writer
-    		.key("id").value(getId(choice))
-    		.key("text").value(FormatHelper.formatUser(choice, true))
-    		.key("contact").value(choice.getType() == Type.contact);
-    };
+	@Override
+	public void toJson(User choice, JSONWriter writer) throws JSONException {
+		writer
+			.key("id").value(getId(choice))
+			.key("text").value(FormatHelper.formatUser(choice, true))
+			.key("contact").value(choice.getType() == Type.contact);
+	}
 
 	@Override
 	public void detach() {

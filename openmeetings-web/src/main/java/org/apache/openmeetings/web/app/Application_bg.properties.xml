@@ -45,8 +45,6 @@
   <entry key="23">Инфо: Всеки свързан потребител получава съобщение за новата анкета.</entry>
   <entry key="24">Създаване на анкета</entry>
   <entry key="25">Отказ</entry>
-  <entry key="26">Да/Не</entry>
-  <entry key="27">Числов 1-10</entry>
   <entry key="28">Анкета</entry>
   <entry key="29">Трябва да сте модератор, за да добавите нов въпрос</entry>
   <entry key="30">Гласът Ви е отчетен.</entry>
@@ -280,8 +278,6 @@
   <entry key="258">Към последна страница</entry>
   <entry key="259">Мащаб --</entry>
   <entry key="260">Мащаб ++</entry>
-  <entry key="261">Г-н</entry>
-  <entry key="262">Г-жа</entry>
   <entry key="263">Конфигурация</entry>
   <entry key="264">ID</entry>
   <entry key="265">Ключ</entry>
@@ -341,8 +337,6 @@
   <entry key="319">Моля, въведете E-mail или потребителско име.</entry>
   <entry key="320">Не е намерено такова потребителско име.</entry>
   <entry key="321">Изпратен е e-mail, съдържащ линк за нова парола.</entry>
-  <entry key="322">Грешка</entry>
-  <entry key="323">Съобщение</entry>
   <entry key="324">Не е намерен такъв потребител.</entry>
   <entry key="325">Нова парола</entry>
   <entry key="326">Потребителско име</entry>
@@ -860,8 +854,6 @@
   <entry key="838">Потребителят е Супер Модератор и никой не може да премахне тези негови права!</entry>
   <entry key="839">Наистина ли искате да изтриете този файл/папка?</entry>
   <entry key="840">Изтриване на файл/папка?</entry>
-  <entry key="841">Г-жа</entry>
-  <entry key="842">Д-р</entry>
   <entry key="843">Свойства</entry>
   <entry key="844">Показване позицията на мишката на гледащите</entry>
   <entry key="845">Share Audio with SIP Applet</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">Export/Import System Backups</entry>
   <entry key="1462">You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</entry>
   <entry key="1463">Edit text</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publish</entry>
   <entry key="1466">Start Publish</entry>
   <entry key="1467">Stop Publish</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">Enable SIP transport in the room</entry>
   <entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
   <entry key="1540">Please specify your timezone</entry>
-  <entry key="1541">conference (1-25 users)</entry>
-  <entry key="1542">restricted (1-150 users)</entry>
-  <entry key="1543">interview (1:1 meeting with recording)</entry>
   <entry key="1544">Configuration with given key already exists, please specify another key or edit existent configuration</entry>
   <entry key="1545">Content is Saving, Please wait.</entry>
   <entry key="1546">Welcome</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1869,4 +1854,19 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conference (1-25 users)</entry>
+  <entry key="room.type.restricted">restricted (1-150 users)</entry>
+  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">Г-н</entry>
+  <entry key="user.salutation.ms">Г-жа</entry>
+  <entry key="user.salutation.mrs">Г-жа</entry>
+  <entry key="user.salutation.dr">Д-р</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Грешка</entry>
+  <entry key="error.type.info">Съобщение</entry>
+  <entry key="poll.type.yesNo">Да/Не</entry>
+  <entry key="poll.type.numeric">Числов 1-10</entry>
 </properties>

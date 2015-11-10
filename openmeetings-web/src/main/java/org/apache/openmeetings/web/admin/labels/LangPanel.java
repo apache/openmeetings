@@ -60,8 +60,7 @@ import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 /**
- * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
- * add/delete {@link FieldLanguage} contains several Forms and one list
+ * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
  * 
  * @author solomax, swagner
  * 
@@ -78,9 +77,9 @@ public class LangPanel extends AdminPanel {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("labelsInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("labelsInit();");
 	}
 
 	public LangPanel(String id) {

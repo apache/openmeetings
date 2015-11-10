@@ -81,10 +81,9 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -148,7 +147,7 @@ public class BackupImport {
 	@Autowired
 	private UserContactDao userContactDao;
 	@Autowired
-	private PollDao pollManager;
+	private PollDao pollDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -160,7 +159,7 @@ public class BackupImport {
 	@Autowired
 	private OAuth2Dao auth2Dao;
 	@Autowired
-	private RoomGroupDao roomOrganisationDao;
+	private RoomGroupDao roomGroupDao;
 
 	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -253,9 +252,9 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Configs import complete, starting organization import");
+		log.info("Configs import complete, starting group import");
 		/*
-		 * ##################### Import Organizations
+		 * ##################### Import Groups
 		 */
 		Serializer simpleSerializer = new Persister();
 		{
@@ -268,7 +267,7 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Organizations import complete, starting user import");
+		log.info("Groups import complete, starting user import");
 		/*
 		 * ##################### Import Users
 		 */
@@ -294,7 +293,7 @@ public class BackupImport {
 					u.setForceTimeZoneCheck(false);
 				}
 				
-				u.setStarttime(new Date());
+				u.setInserted(new Date());
 				long userId = u.getId();
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
@@ -321,7 +320,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.Type.class, new RoomTypeConverter());
+			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {
@@ -342,9 +341,9 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Room import complete, starting room organizations import");
+		log.info("Room import complete, starting room groups import");
 		/*
-		 * ##################### Import Room Organisations
+		 * ##################### Import Room Groups
 		 */
 		{
 			Registry registry = new Registry();
@@ -359,12 +358,12 @@ public class BackupImport {
 				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getOrganisation() != null && ro.getOrganisation().getId() != null) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setId(null);
-					roomOrganisationDao.update(ro, null);
+					roomGroupDao.update(ro, null);
 				}
 			}
 		}
 
-		log.info("Room organizations import complete, starting chat messages import");
+		log.info("Room groups import complete, starting chat messages import");
 		/*
 		 * ##################### Import Chat messages
 		 */
@@ -393,7 +392,7 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Appointment.Reminder.class, new AppointmentReminderTypeConverter());
+			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -613,24 +612,25 @@ public class BackupImport {
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
-			registry.bind(PollType.class, new PollTypeConverter(pollManager));
+			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
+				rp.setId(null);
 				if (rp.getRoom() == null || rp.getRoom().getId() == null) {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy() == null || rp.getCreatedBy().getId() == null) {
-					rp.setCreatedBy(null);
+				if (rp.getCreator() == null || rp.getCreator().getId() == null) {
+					rp.setCreator(null);
 				}
-				for (RoomPollAnswer rpa : rp.getRoomPollAnswerList()) {
+				for (RoomPollAnswer rpa : rp.getAnswers()) {
 					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
 						rpa.setVotedUser(null);
 					}
 				}
-				pollManager.savePollBackup(rp);
+				pollDao.update(rp);
 			}
 		}
 		

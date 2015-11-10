@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -160,7 +160,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
-		if (folder.getModelObject().getId() == selectedFolderModel.getObject()) {
+		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}
 	}
@@ -267,9 +267,9 @@ public class MessagesContactsPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (send.equals(button)) {
-					target.add(container);
+					handler.add(container);
 				}
 			}
 		});

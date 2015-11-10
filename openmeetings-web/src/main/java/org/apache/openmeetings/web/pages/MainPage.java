@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -28,19 +29,27 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.entity.basic.Naviglobal;
+import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
-import org.apache.openmeetings.web.common.MenuPanel;
+import org.apache.openmeetings.web.common.menu.MainMenuItem;
+import org.apache.openmeetings.web.common.menu.MenuItem;
+import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
-import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -65,26 +74,28 @@ public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;
+	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
 	private final Component dev;
+	private final ChatPanel chat;
 	
 	public MainPage(PageParameters pp) {
 		super();
-		add(new AjaxClientInfoBehavior());
+		getHeader().setVisible(false);
+		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
-		menu = new MenuPanel("menu");
-		add(menu);
-		add(new AjaxLink<Void>("messages") {
-			private static final long serialVersionUID = 4065339709905366840L;
+		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
+		topLinks.add(new AjaxLink<Void>("messages") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
-		add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -93,8 +104,8 @@ public class MainPage extends BaseInitedPage {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
-		add(new AjaxLink<Void>("profile") {
-			private static final long serialVersionUID = 4065339709905366840L;
+		topLinks.add(new AjaxLink<Void>("profile") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -102,8 +113,8 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
-		add(new AjaxLink<Void>("about") {
-			private static final long serialVersionUID = 4065339709905366840L;
+		topLinks.add(new AjaxLink<Void>("about") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -118,17 +129,17 @@ public class MainPage extends BaseInitedPage {
 			dev = null;
 		    add(new EmptyPanel("dev").setVisible(false));
 		}		
-		add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
+		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
-		add(new ChatPanel("chatPanel"));
+		add(chat = new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
-			private static final long serialVersionUID = -3311970325911992958L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				addOnlineUser(new Client(WebSession.get().getId(), message.getKey(), getUserId()));
-				log.debug("WebSocketBehavior::onConnect");
+				addOnlineUser(new Client(message.getSessionId(), message.getKey(), getUserId()));
+				log.debug(String.format("WebSocketBehavior::onConnect [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 			}
 			
 			@Override
@@ -141,7 +152,7 @@ public class MainPage extends BaseInitedPage {
 		});
 		//load preselected content
 		add(areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
-			private static final long serialVersionUID = -1551197896975384329L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
@@ -153,23 +164,44 @@ public class MainPage extends BaseInitedPage {
 		});
 	}
 	
-	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler target) {
-		updateContents(f, target, true);
+	private List<MenuItem> getMainMenu() {
+		List<MenuItem> menu = new ArrayList<MenuItem>();
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()))) {
+			MenuItem g = new MenuItem(Application.getString(gl.getLabelId())) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(MainPage page, AjaxRequestTarget terget) {}
+			};
+			List<MenuItem> l = new ArrayList<MenuItem>();
+			for (Navimain nm : gl.getMainnavi()) {
+				l.add(new MainMenuItem(nm)); 
+			}
+			if (!l.isEmpty()) {
+				g.setChildren(l);
+			}
+			menu.add(g);
+		}
+		return menu;
 	}
 	
-	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler target, boolean updateFragment) {
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
+		updateContents(f, handler, true);
+	}
+	
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			Component prev = contents.get(CHILD_ID);
 			if (prev != null && prev instanceof BasePanel) {
-				((BasePanel)prev).cleanup(target);
+				((BasePanel)prev).cleanup(handler);
 			}
-			target.add(contents.replace(panel));
+			handler.add(contents.replace(panel));
 			if (updateFragment) {
-				UrlFragment uf = new UrlFragment(target);
+				UrlFragment uf = new UrlFragment(handler);
 				uf.set(f.getArea().name(), f.getType());
 			}
-			panel.onMenuPanelLoad(target);
+			panel.onMenuPanelLoad(handler);
 		}
 		/* FIXME commented until wicket 7.2.0 will be released
 		   TODO check if this call is necessary
@@ -186,5 +218,17 @@ public class MainPage extends BaseInitedPage {
 			areaBehavior.stop(target);
 			updateContents(uf, target, false);
 		}
+	}
+	
+	public MenuPanel getMenu() {
+		return menu;
+	}
+
+	public WebMarkupContainer getTopLinks() {
+		return topLinks;
+	}
+
+	public ChatPanel getChat() {
+		return chat;
 	}
 }

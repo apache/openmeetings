@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import org.apache.openmeetings.web.common.UserPanel;
 
 public class ProfilePanel extends UserPanel {
-	private static final long serialVersionUID = -5837090230776586182L;
+	private static final long serialVersionUID = 1L;
 
 	public ProfilePanel(String id) {
 		super(id);

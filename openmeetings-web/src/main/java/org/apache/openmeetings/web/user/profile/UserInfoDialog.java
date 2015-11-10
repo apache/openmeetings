@@ -27,7 +27,6 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
@@ -35,7 +34,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class UserInfoDialog extends AbstractDialog<String> {
-	private static final long serialVersionUID = 6393565468567393270L;
+	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
 	private DialogButton cancel = new DialogButton("cancel", Application.getString(61));
 	private DialogButton message = new DialogButton("message", Application.getString(1253));
@@ -49,13 +48,13 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		this.newMessage = newMessage;
 	}
 
-	public void open(AjaxRequestTarget target, long userId) {
+	public void open(IPartialPageRequestHandler handler, long userId) {
 		this.userId = userId;
-		contacts.setVisible(userId != getUserId() && getBean(UserContactDao.class).get(userId, getUserId()) == null, target);
-		message.setVisible(userId != getUserId(), target);
+		contacts.setVisible(userId != getUserId() && getBean(UserContactDao.class).get(userId, getUserId()) == null, handler);
+		message.setVisible(userId != getUserId(), handler);
 		container.replace(new UserProfilePanel("body", userId));
-		target.add(container);
-		open(target);
+		handler.add(container);
+		open(handler);
 	}
 	
 	public WebMarkupContainer getContainer() {
@@ -72,9 +71,10 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		return Arrays.asList(contacts, message, cancel);
 	}
 	
-	public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (message.equals(button)) {
-			newMessage.reset(false).open(target, userId);
+			newMessage.reset(false).open(handler, userId);
 		} else if (contacts.equals(button)) {
 			ContactsHelper.addUserToContactList(userId);
 		}

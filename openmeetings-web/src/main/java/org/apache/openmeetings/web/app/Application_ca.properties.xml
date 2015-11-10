@@ -45,8 +45,6 @@
   <entry key="23">Informació: descripció d'enquesta.</entry>
   <entry key="24">Crear enquesta</entry>
   <entry key="25">Cancel·lar</entry>
-  <entry key="26">Sí/No</entry>
-  <entry key="27">Valor numèric [1-10]</entry>
   <entry key="28">Enquesta</entry>
   <entry key="29">És necessita ser moderador per crear una enquesta.</entry>
   <entry key="30">El seu vot ha sigut registrat</entry>
@@ -280,8 +278,6 @@
   <entry key="258">Anar a l'última pàgina</entry>
   <entry key="259">Disminuir Zoom</entry>
   <entry key="260">Aumentar Zoom</entry>
-  <entry key="261">Sr.</entry>
-  <entry key="262">Sra.</entry>
   <entry key="263">Configuració</entry>
   <entry key="264">ID</entry>
   <entry key="265">Clau</entry>
@@ -341,8 +337,6 @@
   <entry key="319">Enquestes</entry>
   <entry key="320">No hi ha ningú connectat amb aquest nom d'usuari</entry>
   <entry key="321">El email conté un enllaç especial que ha estat enviat al seu correu. Si no apareix aquest correu revisi la configuració de filtres de spam del seu servidor i reenvée aquest correu novament.</entry>
-  <entry key="322">Error</entry>
-  <entry key="323">Missatge</entry>
   <entry key="324">No es va trobar a l'usuari (mètode de generació de claus incorrecte).</entry>
   <entry key="325">Generar contrasenya</entry>
   <entry key="326">Entrar</entry>
@@ -860,8 +854,6 @@
   <entry key="838">Aquest usuari té el rol de supermoderador. No pot llevar-li la marca de moderació a un supermoderador.</entry>
   <entry key="839">¿Realment desitja esborrar aquest Fitxer/Directori?</entry>
   <entry key="840">¿Esborrar Fitxer/Directori ?</entry>
-  <entry key="841">Sra.</entry>
-  <entry key="842">D.</entry>
   <entry key="843">Propietats</entry>
   <entry key="844">Mostrar la posició del ratolí als participants</entry>
   <entry key="845">Compartir Àudio amb el applet SIP</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">Export/Import System Backups</entry>
   <entry key="1462">You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</entry>
   <entry key="1463">Edit text</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publish</entry>
   <entry key="1466">Start Publish</entry>
   <entry key="1467">Stop Publish</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">Enable SIP transport in the room</entry>
   <entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
   <entry key="1540">Please specify your timezone</entry>
-  <entry key="1541">conference (1-25 users)</entry>
-  <entry key="1542">restricted (1-150 users)</entry>
-  <entry key="1543">interview (1:1 meeting with recording)</entry>
   <entry key="1544">Configuration with given key already exists, please specify another key or edit existent configuration</entry>
   <entry key="1545">Content is Saving, Please wait.</entry>
   <entry key="1546">Welcome</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1869,4 +1854,19 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conference (1-25 users)</entry>
+  <entry key="room.type.restricted">restricted (1-150 users)</entry>
+  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">Sr.</entry>
+  <entry key="user.salutation.ms">Sra.</entry>
+  <entry key="user.salutation.mrs">Sra.</entry>
+  <entry key="user.salutation.dr">D.</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Error</entry>
+  <entry key="error.type.info">Missatge</entry>
+  <entry key="poll.type.yesNo">Sí/No</entry>
+  <entry key="poll.type.numeric">Valor numèric [1-10]</entry>
 </properties>

@@ -45,8 +45,6 @@
   <entry key="23">Info : Chaque utilisateur reçoit le nouveau sondage.</entry>
   <entry key="24">Créer un sondage</entry>
   <entry key="25">Annuler</entry>
-  <entry key="26">Oui/Non</entry>
-  <entry key="27">Numérique 1-10</entry>
   <entry key="28">Sondage</entry>
   <entry key="29">Vous devez être modérateur pour créer un sondage.</entry>
   <entry key="30">Votre vote est enregistré.</entry>
@@ -280,8 +278,6 @@
   <entry key="258">Aller à la dernière page</entry>
   <entry key="259">Zoom --</entry>
   <entry key="260">Zoom ++</entry>
-  <entry key="261">M.</entry>
-  <entry key="262">Mme.</entry>
   <entry key="263">Configuration</entry>
   <entry key="264">ID</entry>
   <entry key="265">Clé</entry>
@@ -341,8 +337,6 @@
   <entry key="319">Entrez votre e-mail ou nom d'utilisateur</entry>
   <entry key="320">Il n'y a pas d'utilisateur avec ce nom</entry>
   <entry key="321">Un e-mail contenant un lien vous a été envoyé. Si vous n'avez pas reçu d'e-mail, vérifiez votre antispam et redemandez une confirmation.</entry>
-  <entry key="322">Quitter</entry>
-  <entry key="323">Message</entry>
   <entry key="324">Hachage non valide. Pas d'utilisateur trouvé.</entry>
   <entry key="325">Changez votre mot de passe</entry>
   <entry key="326">Login</entry>
@@ -860,8 +854,6 @@
   <entry key="838">Cet utilisateur est un super-modérateur. Vous ne pouvez pas enlever la modération à un super-modérateur !</entry>
   <entry key="839">Voulez-vous réellement supprimer ce fichier/dossier ?</entry>
   <entry key="840">Supprimer Fichier/Dossier ?</entry>
-  <entry key="841">Mlle.</entry>
-  <entry key="842">Dr.</entry>
   <entry key="843">Propriétés</entry>
   <entry key="844">Montrer la souris sur l'écran</entry>
   <entry key="845">Partager l'audio avec l'applet SIP</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">Exporter/Importer les sauvegardes système</entry>
   <entry key="1462">Vous devez être modérateur ou avoir le droit d'accéder au tableau blanc pour pouvoir déposer ou télécharger des fichiers ou pour ajouter ou supprimer des dossiers.</entry>
   <entry key="1463">Editer texte</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publier</entry>
   <entry key="1466">Commencer la diffusion</entry>
   <entry key="1467">Arrêter la diffusion</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">Activer le transport SIP dans la salle</entry>
   <entry key="1539">Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</entry>
   <entry key="1540">Veuillez spécifier votre fuseau horaire</entry>
-  <entry key="1541">conférence (1-25 utilisateurs)</entry>
-  <entry key="1542">restreint (1-150 utilisateurs)</entry>
-  <entry key="1543">interview (1:1 réunion avec enregistrement)</entry>
   <entry key="1544">Une configuration avec cette clé existe déjà, veuillez spécifier une autre clé ou éditer la configuration existante</entry>
   <entry key="1545">Sauvegarde, veuillez patienter.</entry>
   <entry key="1546">Bienvenue</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1835,4 +1820,19 @@
 	<entry key="install.wizard.congrats.mail">Liste de diffusion</entry>
 	<entry key="install.wizard.congrats.commercial">Il existe des sociétés
 		qui offrent un support commercial pour Apache OpenMeetings :</entry>
+  <entry key="room.type.conference">conférence (1-25 utilisateurs)</entry>
+  <entry key="room.type.restricted">restreint (1-150 utilisateurs)</entry>
+  <entry key="room.type.interview">interview (1:1 réunion avec enregistrement)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">M.</entry>
+  <entry key="user.salutation.ms">Mme.</entry>
+  <entry key="user.salutation.mrs">Mlle.</entry>
+  <entry key="user.salutation.dr">Dr.</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Quitter</entry>
+  <entry key="error.type.info">Message</entry>
+  <entry key="poll.type.yesNo">Oui/Non</entry>
+  <entry key="poll.type.numeric">Numérique 1-10</entry>
 </properties>

@@ -18,28 +18,19 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.db.dao.room.PollDao;
-import org.apache.openmeetings.db.entity.room.PollType;
+import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class PollTypeConverter extends OmConverter<PollType> {
-	private PollDao pollManager;
+public class PollTypeConverter extends OmConverter<RoomPoll.Type> {
+	public PollTypeConverter() {}
 	
-	public PollTypeConverter() {
-		//default constructor is for export
-	}
-	
-	public PollTypeConverter(PollDao pollManagement) {
-		this.pollManager = pollManagement;
-	}
-	
-	public PollType read(InputNode node) throws Exception {
-		return pollManager.getPollType(getLong(node));
+	public RoomPoll.Type read(InputNode node) throws Exception {
+		return RoomPoll.Type.get(getLong(node));
 	}
 
-	public void write(OutputNode node, PollType value) throws Exception {
+	public void write(OutputNode node, RoomPoll.Type value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getPollTypesId());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

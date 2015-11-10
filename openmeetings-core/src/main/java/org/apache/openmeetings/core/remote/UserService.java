@@ -20,21 +20,15 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -62,25 +56,17 @@ public class UserService implements IUserService {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AppointmentDao appointmentDao;
-	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private PrivateMessageDao privateMessagesDao;
-	@Autowired
 	private UserContactDao userContactsDao;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
 	private ISlaveHTTPConnectionManager slaveHTTPConnectionManager;
-	@Autowired
-	private LabelDao labelDao;
 
 	/**
 	 * get user by id, admin only
@@ -153,8 +139,8 @@ public class UserService implements IUserService {
 						return true;
 					}
 					String scopeName = "hibernate";
-					if (rcl.getRoom_id() != null) {
-						scopeName = rcl.getRoom_id().toString();
+					if (rcl.getRoomId() != null) {
+						scopeName = rcl.getRoomId().toString();
 					}
 					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
@@ -192,7 +178,7 @@ public class UserService implements IUserService {
 
 				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
-				us.setUpdatetime(new Date());
+				us.setUpdated(new Date());
 
 				userDao.update(us, users_id);
 				
@@ -268,22 +254,6 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	private Date createCalendarDate(TimeZone timezone, String dateOnly,
-			String time) {
-		Integer hour = Integer.valueOf(time.substring(0, 2)).intValue();
-		Integer minute = Integer.valueOf(time.substring(3, 5)).intValue();
-
-		log.info("createCalendar Hour: " + hour);
-		log.info("createCalendar Minute: " + minute);
-
-		Calendar cal = TimezoneUtil.getCalendarInTimezone(dateOnly, timezone);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		cal.set(Calendar.MINUTE, minute);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-
-		return cal.getTime();
-	}
 	/* TODO FIXME should replaced by wicket component
 
 	public Long composeMail(String SID, List<String> recipients,
@@ -432,8 +402,8 @@ public class UserService implements IUserService {
 					return true;
 				}
 				String scopeName = "hibernate";
-				if (rcl.getRoom_id() != null) {
-					scopeName = rcl.getRoom_id().toString();
+				if (rcl.getRoomId() != null) {
+					scopeName = rcl.getRoomId().toString();
 				}
 				IScope currentScope = this.scopeApplicationAdapter
 						.getRoomScope(scopeName);

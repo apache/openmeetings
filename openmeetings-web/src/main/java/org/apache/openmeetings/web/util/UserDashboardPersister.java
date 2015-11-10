@@ -48,7 +48,7 @@ public class UserDashboardPersister implements DashboardPersister {
 		new XStreamDashboardPersister().save(dashboard);
 	}
 
-	public class XStreamDashboardPersister implements DashboardPersister {
+	public static class XStreamDashboardPersister implements DashboardPersister {
 		private File file;
 		private XStream xstream;
 		

@@ -327,7 +327,7 @@ public class UploadController extends AbstractUploadController {
 
 				String pictureuri = completeName.getName();
 				User us = usersDao.get(userId);
-				us.setUpdatetime(new java.util.Date());
+				us.setUpdated(new java.util.Date());
 				us.setPictureuri(pictureuri);
 				usersDao.update(us, userId);
 

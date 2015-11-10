@@ -46,12 +46,6 @@ import org.wicketstuff.jqplot.behavior.JqPlotBehavior;
 import org.wicketstuff.jqplot.behavior.JqPlotCssResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotJavascriptResourceReference;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-
 import br.com.digilabs.jqplot.Chart;
 import br.com.digilabs.jqplot.ChartConfiguration;
 import br.com.digilabs.jqplot.JqPlotResources;
@@ -61,6 +55,12 @@ import br.com.digilabs.jqplot.chart.PieChart;
 import br.com.digilabs.jqplot.elements.Highlighter;
 import br.com.digilabs.jqplot.elements.Location;
 import br.com.digilabs.jqplot.elements.RendererOptions;
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * @author solomax
@@ -91,11 +91,11 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
-					Long id = dispForm.getModelObject().getRoomPollId();
-					getBean(PollDao.class).closePoll(roomId);
+					Long id = dispForm.getModelObject().getId();
+					getBean(PollDao.class).close(roomId);
 					selForm.updateModel(handler);
 
-					RoomPoll p = getBean(PollDao.class).getPoll(id);
+					RoomPoll p = getBean(PollDao.class).get(id);
 					selForm.select.setModelObject(p);
 					dispForm.updateModel(p, false, handler);
 					//TODO result dialogs of other users should also be updated
@@ -109,7 +109,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
-					getBean(PollDao.class).deletePoll(dispForm.getModelObject().getRoomPollId());
+					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(handler);
 					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
 					//TODO result dialogs of other users should also be updated
@@ -196,7 +196,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     }
     
     private String[] getTicks(RoomPoll p) {
-		return p != null && p.getPollType().getIsNumericAnswer()
+		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 				: new String[] {Application.getString(34), Application.getString(35)};
     }
@@ -210,13 +210,13 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	}
 	
 	private Integer[] getValues(RoomPoll p) {
-		Integer[] values = initValues(p != null && p.getPollType().getIsNumericAnswer() ? 10 : 2);
-		if (p != null && p.getPollType().getIsNumericAnswer()) {
-			for (RoomPollAnswer a : p.getRoomPollAnswerList()) {
+		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
+		if (p != null && RoomPoll.Type.numeric == p.getType()) {
+			for (RoomPollAnswer a : p.getAnswers()) {
 				values[a.getPointList() - 1] ++;
 			}
 		} else if (p != null) {
-			for (RoomPollAnswer a : p.getRoomPollAnswerList()) {
+			for (RoomPollAnswer a : p.getAnswers()) {
 				values[a.getAnswer() ? 0 : 1] ++;
 			}
 		}
@@ -284,12 +284,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 				@Override
 				public Object getDisplayValue(RoomPoll object) {
-					return object == null ? "" : String.format("%s%s", object.getPollName(), object.isArchived() ? "" : String.format(" (%s)", Application.getString(1413)));
+					return object == null ? "" : String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", Application.getString(1413)));
 				}
 
 				@Override
 				public String getIdValue(RoomPoll object, int index) {
-					return object == null ? "" : "" + object.getRoomPollId();
+					return object == null ? "" : "" + object.getId();
 				}
 			})).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
@@ -304,11 +304,11 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 		public void updateModel(IPartialPageRequestHandler handler) {
 			List<RoomPoll> list = new ArrayList<RoomPoll>();
-			RoomPoll p = getBean(PollDao.class).getPoll(roomId);
+			RoomPoll p = getBean(PollDao.class).getByRoom(roomId);
 			if (p != null) {
 				list.add(p);
 			}
-			list.addAll(getBean(PollDao.class).getArchivedPollList(roomId));
+			list.addAll(getBean(PollDao.class).getArchived(roomId));
 			select.setChoices(list);
 			select.setModelObject(list.isEmpty() ? null : list.get(0));
 			if (handler != null) {
@@ -344,8 +344,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		
 		public void updateModel(RoomPoll poll, boolean redraw, IPartialPageRequestHandler handler) {
 			setModelObject(poll);
-			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreatedBy()));
-			count.setObject(poll == null ? 0 : poll.getRoomPollAnswerList().size());
+			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreator()));
+			count.setObject(poll == null ? 0 : poll.getAnswers().size());
 			handler.add(this);
 			close.setVisible(moderator && (poll != null && !poll.isArchived()), handler);
 			delete.setVisible(moderator, handler);

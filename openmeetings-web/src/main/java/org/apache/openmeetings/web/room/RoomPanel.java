@@ -51,6 +51,7 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -239,6 +240,13 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getMenu().setVisible(false)
+				, getMainPage().getTopLinks().setVisible(false));
+		//handler.appendJavaScript("roomLoad();");
 	}
 	
 	private ResourceReference newResourceReference() {

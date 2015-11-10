@@ -99,8 +99,8 @@ public class ChatService implements IPendingServiceCallback {
 		msg.add(client.getUsercolor());
 		msg.add(client.getPublicSID()); //om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
 		msg.add("false");// canvas.isrtl;
-		msg.add("" + client.getUser_id());
-		Room room = roomDao.get(client.getRoom_id());
+		msg.add("" + client.getUserId());
+		Room room = roomDao.get(client.getRoomId());
 		msg.add("" + (room.isChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
 		sendMessageWithClient(msg);
 	}
@@ -118,7 +118,7 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();			
+			Long room_id = currentClient.getRoomId();			
 			log.debug("room_id: " + room_id);
 			
 			if (room_id == null) {
@@ -206,7 +206,7 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 			Room room = roomDao.get(room_id);
 			log.debug("room_id: " + room_id);
 
@@ -261,7 +261,7 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 			
 			Long chatroom = room_id;
 			log.debug("### GET CHATROOM: "+chatroom);
@@ -287,7 +287,7 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 			
 			log.debug("GET CHATROOM: " + room_id);
 			

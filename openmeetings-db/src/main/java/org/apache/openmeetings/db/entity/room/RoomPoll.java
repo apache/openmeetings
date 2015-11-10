@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +25,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,8 +37,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -45,79 +48,117 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived " +
-			"WHERE rp.room.rooms_id = :rooms_id"),
-	@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.roomPollId = :roomPollId"),
-	@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp " +
-			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived"),
-	@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.roomPollId"),
-	@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp " +
-			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived"),
-	@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp " +
-			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived")
+	@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
+			+ "WHERE rp.room.rooms_id = :roomId"),
+	@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id"),
+	@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id"),
+	@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
+			+ "WHERE rp.room.rooms_id = :roomId AND rp.archived = false"),
+	@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
+	@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
+			+ "WHERE rp.room.rooms_id = :roomId AND rp.archived = true ORDER BY rp.created DESC"),
+	@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
+			+ "WHERE rp.room.rooms_id = :roomId AND rp.archived = :archived")
 })
-@Table(name = "room_polls")
-@Root(name="roompoll")
-public class RoomPoll implements Serializable {
+@Table(name = "room_poll")
+@Root(name = "roompoll")
+public class RoomPoll implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-
+	public static final int YES_NO_TYPE_ID = 1;
+	public static final int NUMERIC_TYPE_ID = 2;
+	
+	@XmlType(namespace="org.apache.openmeetings.room.poll.type")
+	public enum Type {
+		yesNo
+		, numeric;
+		private int id;
+		
+		Type() {} //default;
+		Type(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Type get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(int type) {
+			Type rt = Type.yesNo;
+			switch (type) {
+				case NUMERIC_TYPE_ID:
+					rt = Type.numeric;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long roomPollId;
+	private Long id;
 	
-	@Column(name = "poll_name")
-	@Element(name="pollname", data=true, required=false)
-	private String pollName;
+	@Column(name = "name")
+	@Element(name = "pollname", data = true, required = false)
+	private String name;
 	
-	@Column(name = "poll_question")
-	@Element(name="pollquestion", data=true, required=false)
-	private String pollQuestion;
-	
+	@Column(name = "question")
+	@Element(name = "pollquestion", data = true, required = false)
+	private String question;
+
 	@Column(name = "created")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Date created;
-	
+
 	@Column(name = "archived")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private boolean archived;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "poll_type_id")
-	@ForeignKey(enabled = true)
-	@Element(name="polltypeid", data=true, required=false)
-	private PollType pollType;
+	@Column(name = "type")
+	@Element(name = "polltypeid", data = true, required = false)
+	@Enumerated(EnumType.STRING)
+	private Type type;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "users_id")
+	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name="createdbyuserid", data=true, required=false)
-	private User createdBy;
-	
+	@Element(name = "createdbyuserid", data = true, required = false)
+	private User creator;
+
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "rooms_id")
+	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
-	@Element(name="roomid", data=true, required=false)
+	@Element(name = "roomid", data = true, required = false)
 	private Room room;
-	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name = "room_poll_id")
-	@ElementList(name="roompollanswers", required=false)
-	private List<RoomPollAnswer> roomPollAnswerList;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "poll_id")
+	@ElementList(name = "roompollanswers", required = false)
+	private List<RoomPollAnswer> answers;
 
 	/**
-	 * @return the createdBy
+	 * @return the creator
 	 */
-	public User getCreatedBy() {
-		return createdBy;
+	public User getCreator() {
+		return creator;
 	}
 
 	/**
-	 * @param createdBy
-	 *            the createdBy to set
+	 * @param creator
+	 *            the creator to set
 	 */
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 
 	/**
@@ -136,62 +177,62 @@ public class RoomPoll implements Serializable {
 	}
 
 	/**
-	 * @return the pollQuestion
+	 * @return the question
 	 */
-	public String getPollQuestion() {
-		return pollQuestion;
+	public String getQuestion() {
+		return question;
 	}
 
 	/**
-	 * @param pollQuestion
-	 *            the pollQuestion to set
+	 * @param question
+	 *            the question to set
 	 */
-	public void setPollQuestion(String pollQuestion) {
-		this.pollQuestion = pollQuestion;
+	public void setQuestion(String question) {
+		this.question = question;
 	}
 
 	/**
-	 * @return the roomPollAnswerList
+	 * @return the answers
 	 */
-	public List<RoomPollAnswer> getRoomPollAnswerList() {
-		if (roomPollAnswerList == null) {
-			roomPollAnswerList = new LinkedList<RoomPollAnswer>();
+	public List<RoomPollAnswer> getAnswers() {
+		if (answers == null) {
+			answers = new LinkedList<RoomPollAnswer>();
 		}
-		return roomPollAnswerList;
+		return answers;
 	}
 
 	/**
-	 * @param roomPollAnswerList
-	 *            the roomPollAnswerList to set
+	 * @param answers
+	 *            the answers to set
 	 */
-	public void setRoomPollAnswerList(List<RoomPollAnswer> roomPollAnswerList) {
-		this.roomPollAnswerList = roomPollAnswerList;
+	public void setAnswers(List<RoomPollAnswer> answers) {
+		this.answers = answers;
 	}
 
 	/**
-	 * @return the roomPollId
+	 * @return the id
 	 */
-	public Long getRoomPollId() {
-		return roomPollId;
+	public Long getId() {
+		return id;
 	}
 
 	/**
-	 * @param roomPollId
-	 *            the roomPollId to set
+	 * @param id
+	 *            the id to set
 	 */
-	public void setRoomPollId(Long roomPollId) {
-		this.roomPollId = roomPollId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**
-	 * @return the pollTypeId
+	 * @return the type
 	 */
-	public PollType getPollType() {
-		return pollType;
+	public Type getType() {
+		return type;
 	}
 
-	public void setPollType(PollType pollType) {
-		this.pollType = pollType;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Room getRoom() {
@@ -217,17 +258,17 @@ public class RoomPoll implements Serializable {
 	}
 
 	/**
-	 * @return the pollName
+	 * @return the name
 	 */
-	public String getPollName() {
-		return pollName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param pollName the pollName to set
+	 * @param name the name to set
 	 */
-	public void setPollName(String pollName) {
-		this.pollName = pollName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

@@ -45,8 +45,6 @@
   <entry key="23">Información: cada usuario conectado recibe un mensaje con la nueva encuesta.</entry>
   <entry key="24">Crear encuesta</entry>
   <entry key="25">Cancelar</entry>
-  <entry key="26">Sí/No</entry>
-  <entry key="27">Valor numérico [1-10]</entry>
   <entry key="28">Encuesta</entry>
   <entry key="29">Se necesita ser moderador para crear una encuesta.</entry>
   <entry key="30">Su voto ha sido registrado</entry>
@@ -280,8 +278,6 @@
   <entry key="258">Ir a la última página</entry>
   <entry key="259">Disminuir Zoom</entry>
   <entry key="260">Aumentar Zoom</entry>
-  <entry key="261">Sr.</entry>
-  <entry key="262">Sra.</entry>
   <entry key="263">Configuración</entry>
   <entry key="264">ID</entry>
   <entry key="265">Clave</entry>
@@ -341,8 +337,6 @@
   <entry key="319">Escriba o su correo o su nombre de usuario</entry>
   <entry key="320">No hay ningún usuario con ese nombre</entry>
   <entry key="321">Se le ha enviado un correo con un enlace especial. Si no aparece este correo revise la configuración de filtros de spam de su servidor y reenvée este correo nuevamente.</entry>
-  <entry key="322">Error</entry>
-  <entry key="323">Mensaje</entry>
   <entry key="324">No se encontró al usuario (método de generación de claves incorrecto).</entry>
   <entry key="325">Generar contraseña</entry>
   <entry key="326">Inicio</entry>
@@ -860,8 +854,6 @@
   <entry key="838">Este usuario tiene el rol de supermoderador. No puede quitarle la marca de moderación a un supermoderador.</entry>
   <entry key="839">¿Realmente desea borrar este Archivo/Directorio?</entry>
   <entry key="840">¿Borrar archivo/directorio?</entry>
-  <entry key="841">Dña.</entry>
-  <entry key="842">D.</entry>
   <entry key="843">Propiedades</entry>
   <entry key="844">Mostrar la posición del ratón a los participantes</entry>
   <entry key="845">Compartir audio con el applet SIP</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">Exportar/Importar Backups del Sistema</entry>
   <entry key="1462">Usted necesita la moderación o el derecho para dibujar en la pizarra, subir, añadir, suprimir o cargar archivos y carpetas.</entry>
   <entry key="1463">Editar texto</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publicar</entry>
   <entry key="1466">Comenzar Publicación</entry>
   <entry key="1467">Finalizar Publicación</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">Permitir transporte SIP en la sala</entry>
   <entry key="1539">Realmente quiere proveer a este usuario de audio exclusivo?</entry>
   <entry key="1540">Por favor, especifique su Zona Horaria</entry>
-  <entry key="1541">conferencia (1-25 usuarios)</entry>
-  <entry key="1542">restringida (1-150 usuarios)</entry>
-  <entry key="1543">interview (1:1 reunión con grabación)</entry>
   <entry key="1544">Ya existe la configuración con esa clave, por favor especifique otra clave o edite la configuración existente</entry>
   <entry key="1545">El contenido se está guardando, Por favor espere.</entry>
   <entry key="1546">BienVenidos</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dic</entry>
-  <entry key="1568">no envíe notificación</entry>
-  <entry key="1569">correo simple</entry>
-  <entry key="1570">iCal correo</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Administrar configuraciones de OAuth2</entry>
   <entry key="1573">Nombre</entry>
@@ -1865,4 +1850,19 @@
 	<entry key="install.wizard.congrats.mail">Listas de correo</entry>
 	<entry key="install.wizard.congrats.commercial">Hay algunas compañias
 		que tambien ofrecen soporte comercial para Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conferencia (1-25 usuarios)</entry>
+  <entry key="room.type.restricted">restringida (1-150 usuarios)</entry>
+  <entry key="room.type.interview">interview (1:1 reunión con grabación)</entry>
+  <entry key="appointment.reminder.none">no envíe notificación</entry>
+  <entry key="appointment.reminder.email">correo simple</entry>
+  <entry key="appointment.reminder.ical">iCal correo</entry>
+  <entry key="user.salutation.mr">Sr.</entry>
+  <entry key="user.salutation.ms">Sra.</entry>
+  <entry key="user.salutation.mrs">Dña.</entry>
+  <entry key="user.salutation.dr">D.</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">Error</entry>
+  <entry key="error.type.info">Mensaje</entry>
+  <entry key="poll.type.yesNo">Sí/No</entry>
+  <entry key="poll.type.numeric">Valor numérico [1-10]</entry>
 </properties>

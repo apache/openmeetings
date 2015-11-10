@@ -45,8 +45,6 @@
   <entry key="23">提示:每个连接用户将收到一个新投票的消息提示.</entry>
   <entry key="24">创建投票</entry>
   <entry key="25">取消</entry>
-  <entry key="26">是/否</entry>
-  <entry key="27">数字 1-10</entry>
   <entry key="28">投票</entry>
   <entry key="29">主持人才能提问</entry>
   <entry key="30">已您的投票.</entry>
@@ -280,8 +278,6 @@
   <entry key="258">转到最后一页</entry>
   <entry key="259">缩小</entry>
   <entry key="260">放大</entry>
-  <entry key="261">先生.</entry>
-  <entry key="262">女士.</entry>
   <entry key="263">配置信息</entry>
   <entry key="264">序号</entry>
   <entry key="265">关键字</entry>
@@ -341,8 +337,6 @@
   <entry key="319">投票</entry>
   <entry key="320">没有此用户名</entry>
   <entry key="321">一封包含特殊链接的邮件已发送至你的信箱,请查收.如果没有收到,请检查和调整你的邮箱垃圾邮件设置,重新发送认证邮件.</entry>
-  <entry key="322">错误</entry>
-  <entry key="323">消息</entry>
   <entry key="324">无效的哈希值,没有该用户.</entry>
   <entry key="325">重置你的密码</entry>
   <entry key="326">登录</entry>
@@ -860,8 +854,6 @@
   <entry key="838">这个是超级主持人！你不能取消一个超级主持人的权限！</entry>
   <entry key="839">你真的要删除这个文件/文件夹？</entry>
   <entry key="840">删除文件/文件夹?</entry>
-  <entry key="841">女士</entry>
-  <entry key="842">先生</entry>
   <entry key="843">属性</entry>
   <entry key="844">在共享器中显示鼠标位置</entry>
   <entry key="845">使用SIP小应用程序共享音频</entry>
@@ -1483,7 +1475,6 @@
   <entry key="1461">输出／输入系统备份</entry>
   <entry key="1462">需要主持人或被赋予权利以在白板上绘图，上传，添加，删除或加载文件及文件夹。</entry>
   <entry key="1463">编辑内容</entry>
-  <entry key="1464">教授</entry>
   <entry key="1465">Publish</entry>
   <entry key="1466">Start Publish</entry>
   <entry key="1467">Stop Publish</entry>
@@ -1560,9 +1551,6 @@
   <entry key="1538">Enable SIP transport in the room</entry>
   <entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
   <entry key="1540">Please specify your timezone</entry>
-  <entry key="1541">conference (1-25 users)</entry>
-  <entry key="1542">restricted (1-150 users)</entry>
-  <entry key="1543">interview (1:1 meeting with recording)</entry>
   <entry key="1544">Configuration with given key already exists, please specify another key or edit existent configuration</entry>
   <entry key="1545">Content is Saving, Please wait.</entry>
   <entry key="1546">Welcome</entry>
@@ -1587,9 +1575,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1869,4 +1854,19 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conference (1-25 users)</entry>
+  <entry key="room.type.restricted">restricted (1-150 users)</entry>
+  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">先生.</entry>
+  <entry key="user.salutation.ms">女士.</entry>
+  <entry key="user.salutation.mrs">女士</entry>
+  <entry key="user.salutation.dr">先生</entry>
+  <entry key="user.salutation.prof">教授</entry>
+  <entry key="error.type.error">错误</entry>
+  <entry key="error.type.info">消息</entry>
+  <entry key="poll.type.yesNo">是/否</entry>
+  <entry key="poll.type.numeric">数字 1-10</entry>
 </properties>

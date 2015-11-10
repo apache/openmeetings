@@ -46,9 +46,9 @@ public class LdapsPanel extends AdminPanel {
 	private LdapForm form;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("omLdapPanelInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("omLdapPanelInit();");
 	}
 
 	public LdapsPanel(String id) {
@@ -60,7 +60,7 @@ public class LdapsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
 				final LdapConfig lc = item.getModelObject();
-				item.add(new Label("ldapConfigId", "" + lc.getId()));
+				item.add(new Label("id", "" + lc.getId()));
 				item.add(new Label("name", "" + lc.getName()));
 				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
 				item.add(new AjaxEventBehavior("click") {
@@ -74,12 +74,12 @@ public class LdapsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (lc.getId() == form.getModelObject().getId() ? " ui-state-active" : "")));
+						+ (lc.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = -1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -87,7 +87,7 @@ public class LdapsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container))
+		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "id", container))
 			.addLink(new OmOrderByBorder<LdapConfig>("orderByName", "name", container))
 			.addLink(new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
 		add(container.getLinks());

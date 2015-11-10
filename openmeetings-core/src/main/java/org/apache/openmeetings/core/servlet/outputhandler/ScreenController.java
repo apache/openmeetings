@@ -153,7 +153,7 @@ public class ScreenController {
 			if (rc == null) {
 				throw new Exception("Port is empty");
 			}
-			Long roomId = rc.getRoom_id();
+			Long roomId = rc.getRoomId();
 			if (roomId == null) {
 				throw new Exception("Client has no room " + rc);
 			}

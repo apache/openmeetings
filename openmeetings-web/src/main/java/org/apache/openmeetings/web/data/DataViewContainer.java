@@ -28,7 +28,7 @@ import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
-	private static final long serialVersionUID = -1027478954223527890L;
+	private static final long serialVersionUID = 1L;
 	public WebMarkupContainer container;
 	public SearchableDataView<T> view;
 	public PagedEntityListPanel navigator;

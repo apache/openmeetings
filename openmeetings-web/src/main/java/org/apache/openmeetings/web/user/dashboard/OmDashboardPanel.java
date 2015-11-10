@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.model.Model;
@@ -26,11 +27,12 @@ import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.web.DashboardPanel;
 
 public class OmDashboardPanel extends UserPanel {
-	private static final long serialVersionUID = 7815949875883825949L;
+	private static final long serialVersionUID = 1L;
 
 	public OmDashboardPanel(String id) {
 		super(id);
 
-		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())).setRtlModel(Model.of(isRtl())));
+		boolean isRtl = FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
+		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())).setRtlModel(Model.of(isRtl)));
 	}
 }

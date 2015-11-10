@@ -183,15 +183,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
 			String parentSid = (String)map.get("parentSid");
-			rcm.setRoom_id(Long.parseLong(conn.getScope().getName()));
+			rcm.setRoomId(Long.parseLong(conn.getScope().getName()));
 			rcm.setScreenClient(true);
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
-			rcm.setUser_id(((Integer)map.get("userId")).longValue());
-			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUser_id());
+			rcm.setUserId(((Integer)map.get("userId")).longValue());
+			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUserId());
 
 			rcm.setStreamPublishName(parentSid);
-			User u = usersDao.get(rcm.getUser_id() < 0 ? -rcm.getUser_id() : rcm.getUser_id());
+			User u = usersDao.get(rcm.getUserId() < 0 ? -rcm.getUserId() : rcm.getUserId());
 			rcm.setUsername(u.getLogin());
 			rcm.setFirstname(u.getFirstname());
 			rcm.setLastname(u.getLastname());
@@ -201,7 +201,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 		// Log the User
 		conferenceLogDao.addConferenceLog(ConferenceLog.Type.clientConnect,
-				rcm.getUser_id(), streamId, null, rcm.getUserip(),
+				rcm.getUserId(), streamId, null, rcm.getUserip(),
 				rcm.getScope());
 		return true;
 	}
@@ -273,7 +273,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
 				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
@@ -304,7 +304,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (client != null) {
 				boolean startRecording = Boolean.valueOf("" + map.get("startRecording"));
 				boolean startStreaming = Boolean.valueOf("" + map.get("startStreaming"));
-				boolean startPublishing = Boolean.valueOf("" + map.get("startPublishing")) && (0 == sessionManager.getPublishingCount(client.getRoom_id()));
+				boolean startPublishing = Boolean.valueOf("" + map.get("startPublishing")) && (0 == sessionManager.getPublishingCount(client.getRoomId()));
 
 				boolean alreadyStreaming = client.isStartStreaming();
 				if (startStreaming) {
@@ -504,11 +504,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public void roomLeaveByScope(Client currentClient, IScope currentScope, boolean removeUserFromSessionList) {
 		try {
 			log.debug("currentClient " + currentClient);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomLeave,
-					currentClient.getUser_id(), currentClient.getStreamid(),
+					currentClient.getUserId(), currentClient.getStreamid(),
 					room_id, currentClient.getUserip(), "");
 
 			// Remove User from Sync List's
@@ -651,7 +651,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 					if (rcl.getIsRecording()) {
 						log.debug("RCL getIsRecording newStream SEND");
-						flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+						flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRecordingId());
 					}
 					if (rcl.isAvClient()) {
 						log.debug("RCL getIsAVClient newStream SEND");
@@ -799,7 +799,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (currentClient == null) {
 				return -1L;
 			}
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			currentClient.setIsMod(true);
 			// Put the mod-flag to true for this client
@@ -841,7 +841,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (currentClient == null) {
 				return -1L;
 			}
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			currentClient.setIsMod(false);
 			// Put the mod-flag to true for this client
@@ -977,13 +977,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
-			List<Client> currentModList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+			List<Client> currentModList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 
 			if (currentModList.size() > 0) {
 				return 2L;
 			} else {
 				// No moderator in this room at the moment
-				Room room = roomDao.get(currentClient.getRoom_id());
+				Room room = roomDao.get(currentClient.getRoomId());
 
 				return room.isModerated() ? 3L : 1L;
 			}
@@ -1042,12 +1042,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client parentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			currentClient.setAvsettings(avsettings);
-			currentClient.setRoom_id(room_id);
+			currentClient.setRoomId(room_id);
 			currentClient.setPublicSID(publicSID);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
 			currentClient.setInterviewPodId(interviewPodId);
-			currentClient.setUser_id(parentClient.getUser_id());
+			currentClient.setUserId(parentClient.getUserId());
 			currentClient.setLastname(parentClient.getLastname());
 			currentClient.setFirstname(parentClient.getFirstname());
 			currentClient.setPicture_uri(parentClient.getPicture_uri());
@@ -1142,7 +1142,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			currentClient.setRoom_id(roomId);
+			currentClient.setRoomId(roomId);
 			currentClient.setRoomEnter(new Date());
 			currentClient.setOrganization_id(organization_id);
 
@@ -1150,8 +1150,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Inject externalUserId if nothing is set yet
 			if (currentClient.getExternalUserId() == null) {
-				if (currentClient.getUser_id() != null) {
-					User us = usersDao.get(currentClient.getUser_id());
+				if (currentClient.getUserId() != null) {
+					User us = usersDao.get(currentClient.getUserId());
 					if (us != null) {
 						currentClient.setExternalUserId(us.getExternalId());
 						currentClient.setExternalUserType(us.getExternalType());
@@ -1171,7 +1171,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomEnter,
-					currentClient.getUser_id(), streamid, roomId,
+					currentClient.getUserId(), streamid, roomId,
 					currentClient.getUserip(), "");
 			
 			// Check for Moderation LogicalRoom ENTER
@@ -1207,7 +1207,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						// Update the Client List
 						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 						
 						//Sync message to everybody
 						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
@@ -1234,7 +1234,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// Update the Client List
 							sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-							List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+							List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 
 							// There is a need to send an extra Event here,
 							// cause at this moment there could be
@@ -1258,7 +1258,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				Appointment ment = appointmentDao.getByRoom(roomId);
 
-				Long userIdInRoomClient = currentClient.getUser_id();
+				Long userIdInRoomClient = currentClient.getUserId();
 
 				boolean found = false;
 				boolean moderator_set = false;
@@ -1274,7 +1274,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					// Update the Client List
 					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-					List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+					List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 
 					// There is a need to send an extra Event here, cause at this moment 
 					// there could be already somebody in the Room waiting
@@ -1319,7 +1319,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						// Update the Client List
 						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 
 						// There is a need to send an extra Event here, cause at
 						// this moment there could be
@@ -1424,7 +1424,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			currentClient.setUsername(username);
-			currentClient.setUser_id(userId);
+			currentClient.setUserId(userId);
 			SessionVariablesUtil.setUserId(current.getClient(), userId);
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
@@ -1492,7 +1492,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 			return sessionManager.getCurrentModeratorByRoom(room_id);
 		} catch (Exception err) {
 			log.error("[getCurrentModerator]", err);
@@ -1529,7 +1529,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return;
 			}
 
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = currentClient.getRoomId();
 
 			// log.debug("***** sendVars: " + whiteboardObj);
 
@@ -1949,8 +1949,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			// default Scope Name
 			String scopeName = "hibernate";
-			if (currentClient.getRoom_id() != null) {
-				scopeName = currentClient.getRoom_id().toString();
+			if (currentClient.getRoomId() != null) {
+				scopeName = currentClient.getRoomId().toString();
 			}
 
 			IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
@@ -2001,8 +2001,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			} else {
 				// default Scope Name
 				String scopeName = "hibernate";
-				if (currentClient.getRoom_id() != null) {
-					scopeName = currentClient.getRoom_id().toString();
+				if (currentClient.getRoomId() != null) {
+					scopeName = currentClient.getRoomId().toString();
 				}
 
 				IScope globalScope = getContext().getGlobalScope();
@@ -2142,8 +2142,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 			if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
 				rcl.setIsRecording(false);
-				flvRecordingId = rcl.getFlvRecordingId();
-				rcl.setFlvRecordingId(null);
+				flvRecordingId = rcl.getRecordingId();
+				rcl.setRecordingId(null);
 
 				// Reset the Recording Flag to Record all
 				// Participants that enter later
@@ -2172,7 +2172,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	private Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
 		try {
 			log.debug("-----------  stopInterviewRecording");
-			Long flvRecordingId = currentClient.getFlvRecordingId();
+			Long flvRecordingId = currentClient.getRecordingId();
 
 			for (IConnection conn : currentScope.getClientConnections()) {
 				Long recordingId = checkRecordingClient(conn);
@@ -2211,7 +2211,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-			return sessionManager.getClientListByRoom(currentClient.getRoom_id());
+			return sessionManager.getClientListByRoom(currentClient.getRoomId());
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
 		}
@@ -2285,7 +2285,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         Client client = sessionManager.getClientByStreamId(streamid, null);
-        Long roomId = client.getRoom_id();
+        Long roomId = client.getRoomId();
         Integer count = roomManager.getSipConferenceMembersNumber(roomId); 
         String newNumber = getSipTransportLastname(roomId, count);
         log.debug("getSipConferenceMembersNumber: " + newNumber);
@@ -2293,7 +2293,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
             client.setLastname(newNumber);
             sessionManager.updateClientByStreamId(streamid, client, false, null);
             log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[]{client.getPublicSID(),
-                    client.getRoom_id(), client.getFirstname(), client.getLastname(), client.getAvsettings()});
+                    client.getRoomId(), client.getFirstname(), client.getLastname(), client.getAvsettings()});
             sendMessageWithClient(new String[]{"personal",client.getFirstname(),client.getLastname()});
         }
         return count != null && count > 0 ? count - 1 : 0; 
@@ -2308,7 +2308,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String streamid = current.getClient().getId();
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
-			String sipNumber = getSipNumber(currentClient.getRoom_id());
+			String sipNumber = getSipNumber(currentClient.getRoomId());
 			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
 			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
 		} catch (IOException e) {
@@ -2333,7 +2333,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		// Notify all clients of the same scope (room)
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		currentClient.setSipTransport(true);
-		currentClient.setRoom_id(room_id);
+		currentClient.setRoomId(room_id);
 		currentClient.setRoomEnter(new Date());
 		currentClient.setFirstname("SIP Transport");
 		currentClient.setLastname(getSipTransportLastname(room_id));
