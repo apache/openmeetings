@@ -117,7 +117,6 @@ public abstract class RecordingResourceReference extends ResourceReference {
 							}
 						}
 					}
-						
 				} else {
 					rr.setError(HttpServletResponse.SC_NOT_FOUND);
 				}

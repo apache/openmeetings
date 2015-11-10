@@ -29,7 +29,6 @@ public abstract class BaseNotInitedPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 	private static final InstallationConfig installCfg = new InstallationConfig(); 
 
-
 	@Override
 	protected String getApplicationName() {
 		return installCfg.appName;

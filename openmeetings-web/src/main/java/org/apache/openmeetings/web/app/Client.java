@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.app;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +30,7 @@ import org.apache.wicket.protocol.ws.api.registry.IKey;
  * @author solomax
  *
  */
-public class Client implements IDataProviderEntity, Serializable {
+public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Right {
@@ -140,13 +139,10 @@ public class Client implements IDataProviderEntity, Serializable {
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
-		
 	}
 }

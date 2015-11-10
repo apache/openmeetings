@@ -45,8 +45,6 @@
   <entry key="23">Инфо: Всеки свързан потребител получава съобщение за новата анкета.</entry>
   <entry key="24">Създаване на анкета</entry>
   <entry key="25">Отказ</entry>
-  <entry key="26">Да/Не</entry>
-  <entry key="27">Числов 1-10</entry>
   <entry key="28">Анкета</entry>
   <entry key="29">Трябва да сте модератор, за да добавите нов въпрос</entry>
   <entry key="30">Гласът Ви е отчетен.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Грешка</entry>
   <entry key="error.type.info">Съобщение</entry>
+  <entry key="poll.type.yesNo">Да/Не</entry>
+  <entry key="poll.type.numeric">Числов 1-10</entry>
 </properties>

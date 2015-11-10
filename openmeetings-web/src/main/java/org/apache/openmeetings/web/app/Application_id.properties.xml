@@ -45,8 +45,6 @@
   <entry key="23">Catatan: Setiap user terkoneksi akan menerima pesan dangan poling baru.</entry>
   <entry key="24">Buat Poling</entry>
   <entry key="25">Batal</entry>
-  <entry key="26">Ya/Tidak</entry>
-  <entry key="27">Angka dari 1-10</entry>
   <entry key="28">Poling</entry>
   <entry key="29">Hanya moderator yang bisa membuat pertanyaan</entry>
   <entry key="30">Pilihan anda udah tercatat.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Salah</entry>
   <entry key="error.type.info">Pesan</entry>
+  <entry key="poll.type.yesNo">Ya/Tidak</entry>
+  <entry key="poll.type.numeric">Angka dari 1-10</entry>
 </properties>

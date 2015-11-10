@@ -60,7 +60,7 @@ public class ChatMessage implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(name = "id", data = true)
-	private long id;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "from_user_id")

@@ -190,7 +190,7 @@ public class AppointmentLogic {
 			String appointmentLocation, String appointmentDescription,
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Boolean isYearly, Long categoryId, String remind, String[] mmClient,
 			Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId, Long userId) {
 		Appointment a = new Appointment();
@@ -203,7 +203,7 @@ public class AppointmentLogic {
 		a.setIsWeekly(isWeekly);
 		a.setIsMonthly(isMonthly);
 		a.setIsYearly(isYearly);
-		a.setReminder(Reminder.get(remind));
+		a.setReminder(Reminder.valueOf(remind));
 		if (roomId > 0) {
 			a.setRoom(roomDao.get(roomId));
 		} else {

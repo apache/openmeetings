@@ -61,7 +61,6 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -331,7 +330,7 @@ public class BackupExport {
 	
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
-			registry.bind(PollType.class, PollTypeConverter.class);
+			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
 			}

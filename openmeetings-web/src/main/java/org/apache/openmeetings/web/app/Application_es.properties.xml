@@ -45,8 +45,6 @@
   <entry key="23">Información: cada usuario conectado recibe un mensaje con la nueva encuesta.</entry>
   <entry key="24">Crear encuesta</entry>
   <entry key="25">Cancelar</entry>
-  <entry key="26">Sí/No</entry>
-  <entry key="27">Valor numérico [1-10]</entry>
   <entry key="28">Encuesta</entry>
   <entry key="29">Se necesita ser moderador para crear una encuesta.</entry>
   <entry key="30">Su voto ha sido registrado</entry>
@@ -1865,4 +1863,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Error</entry>
   <entry key="error.type.info">Mensaje</entry>
+  <entry key="poll.type.yesNo">Sí/No</entry>
+  <entry key="poll.type.numeric">Valor numérico [1-10]</entry>
 </properties>

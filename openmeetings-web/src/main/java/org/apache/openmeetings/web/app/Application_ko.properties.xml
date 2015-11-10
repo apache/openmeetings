@@ -45,8 +45,6 @@
   <entry key="23">Info: Each connected user receives a message with the new poll.</entry>
   <entry key="24">선거를 만드셨습니다.</entry>
   <entry key="25">무효</entry>
-  <entry key="26">네/아니오</entry>
-  <entry key="27">숫자 1-10</entry>
   <entry key="28">투표</entry>
   <entry key="29">질문을 만들기 위해서 의장이 되어야합니다.</entry>
   <entry key="30">당신의 투표가 등록 되었습니다.</entry>
@@ -280,6 +278,8 @@
   <entry key="258">Go to last Page</entry>
   <entry key="259">Zoom --</entry>
   <entry key="260">Zoom ++</entry>
+  <entry key="261">Mr.</entry>
+  <entry key="262">Ms.</entry>
   <entry key="263">Configuration</entry>
   <entry key="264">ID</entry>
   <entry key="265">Key</entry>
@@ -1869,4 +1869,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Error</entry>
   <entry key="error.type.info">Message</entry>
+  <entry key="poll.type.yesNo">네/아니오</entry>
+  <entry key="poll.type.numeric">숫자 1-10</entry>
 </properties>

@@ -191,6 +191,7 @@ public class GeneralUserForm extends Form<User> {
 	public String getEmail() {
 		return email.getValue();
 	}
+
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);

@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
@@ -75,12 +76,12 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	
 	public void updateModel(IPartialPageRequestHandler target) {
 		RoomPollAnswer a = new RoomPollAnswer();
-		a.setRoomPoll(getBean(PollDao.class).getPoll(roomId));
+		a.setRoomPoll(getBean(PollDao.class).getByRoom(roomId));
 		User u = getBean(UserDao.class).get(getUserId());
 		a.setVotedUser(u);
 		user.setObject(getName(a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
-		boolean typeNum = a.getRoomPoll() != null && a.getRoomPoll().getType() != null && a.getRoomPoll().getType().isNumeric();
+		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.numeric == a.getRoomPoll().getType();
 		form.typeBool.setVisible(!typeNum);
 		form.typeInt.setVisible(typeNum);
 		target.add(form);

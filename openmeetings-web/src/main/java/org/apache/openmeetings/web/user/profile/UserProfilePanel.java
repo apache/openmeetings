@@ -51,7 +51,7 @@ public class UserProfilePanel extends UserPanel {
 		add(new Label("regdate"));
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
-		if (getUserId() == model.getObject().getId() || model.getObject().isShowContactData() 
+		if (getUserId() == model.getObject().getId() || model.getObject().isShowContactData()
 				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactDao.class).isContact(model.getObject().getId(), getUserId())))
 		{
 			addressDenied.setVisible(false);

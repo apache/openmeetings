@@ -132,7 +132,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsMod()
 	 */
 	@Column(name = "is_mod")
-	private Boolean isMod = false;
+	private boolean isMod = false;
 	
 	/**
 	 * @see Client#getIsSuperModerator()
@@ -163,9 +163,10 @@ public class Client implements IDataProviderEntity {
 	 */
 	@Column(name = "can_giveaudio")
 	private Boolean canGiveAudio = false;
-	
+
 	@Column(name = "can_video")
 	private boolean canVideo = false;
+
 	/**
 	 * @see Client#getConnectedSince()
 	 */
@@ -182,13 +183,13 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsScreenClient()
 	 */
 	@Column(name = "is_screenclient")
-	private boolean screenClient = false;
+	private boolean screenClient;
 	
 	/**
 	 * @see Client#getIsAVClient()
 	 */
 	@Column(name = "is_avclient")
-	private boolean avClient = false;
+	private boolean avClient;
 	
 	/**
 	 * @see Client#getUsercolor()
@@ -399,7 +400,7 @@ public class Client implements IDataProviderEntity {
 	public Client() {}
     
 	public Client(String streamid, String publicSID, Long roomId,
-			Long userId, String firstname, String lastname, boolean isAVClient,
+			Long userId, String firstname, String lastname, boolean avClient,
 			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
@@ -408,7 +409,7 @@ public class Client implements IDataProviderEntity {
 		this.userId = userId;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.avClient = isAVClient;
+		this.avClient = avClient;
 		this.username = username;
 		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
 		this.scope = scope;
@@ -443,11 +444,11 @@ public class Client implements IDataProviderEntity {
 		this.connectedSince = connectedSince;
 	}
 
-	public Boolean getIsMod() {
+	public boolean getIsMod() {
 		return isMod;
 	}
 
-	public void setIsMod(Boolean isMod) {
+	public void setIsMod(boolean isMod) {
 		this.isMod = isMod;
 	}
 	
@@ -826,6 +827,7 @@ public class Client implements IDataProviderEntity {
 	public void setCanVideo(boolean canVideo) {
 		this.canVideo = canVideo;
 	}
+
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}

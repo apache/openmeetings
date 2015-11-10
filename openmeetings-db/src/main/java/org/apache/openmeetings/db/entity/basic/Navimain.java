@@ -66,7 +66,7 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "inserted")
 	private Date inserted;
 
-	@Column(name = "comment_field")
+	@Column(name = "comment")
 	private String comment;
 
 	@Column(name = "naviorder")

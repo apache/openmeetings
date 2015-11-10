@@ -96,8 +96,8 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
 			em.persist(entity);
-	    } else {
-    		entity = em.merge(entity);
+		} else {
+			entity = em.merge(entity);
 		}
 		return entity;
 	}

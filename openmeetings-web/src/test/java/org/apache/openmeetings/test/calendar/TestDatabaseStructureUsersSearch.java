@@ -19,7 +19,6 @@
 package org.apache.openmeetings.test.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -34,7 +33,7 @@ public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureUsersSearch.class, webAppRootKey);
 
 	@Autowired
-    private UserDao userDao;
+	private UserDao userDao;
 
 	@Test
 	public void testAddingGroup(){
@@ -47,3 +46,4 @@ public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
 		}
 	}
 }
+

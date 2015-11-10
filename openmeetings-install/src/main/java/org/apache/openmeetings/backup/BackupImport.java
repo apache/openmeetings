@@ -68,8 +68,8 @@ import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -79,13 +79,11 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -147,7 +145,7 @@ public class BackupImport {
 	@Autowired
 	private UserContactDao userContactDao;
 	@Autowired
-	private PollDao pollManager;
+	private PollDao pollDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -322,7 +320,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.Type.class, new RoomTypeConverter());
+			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {
@@ -394,7 +392,7 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Appointment.Reminder.class, new AppointmentReminderTypeConverter());
+			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -614,11 +612,12 @@ public class BackupImport {
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
-			registry.bind(PollType.class, new PollTypeConverter(pollManager));
+			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
+				rp.setId(null);
 				if (rp.getRoom() == null || rp.getRoom().getId() == null) {
 					//room was deleted
 					continue;
@@ -631,7 +630,7 @@ public class BackupImport {
 						rpa.setVotedUser(null);
 					}
 				}
-				pollManager.update(rp);
+				pollDao.update(rp);
 			}
 		}
 		
@@ -741,22 +740,22 @@ public class BackupImport {
 					
 					if (f.getType() == null) {
 						if (isChart) {
-							f.setType(Type.PollChart);
+							f.setType(FileItem.Type.PollChart);
 						}
 						if (isImage) {
-							f.setType(Type.Image);
+							f.setType(FileItem.Type.Image);
 						}
 						if (isVideo) {
-							f.setType(Type.Video);
+							f.setType(FileItem.Type.Video);
 						}
 						if (isPresentation) {
-							f.setType(Type.Presentation);
+							f.setType(FileItem.Type.Presentation);
 						}
 						if (isStoredWmlFile) {
-							f.setType(Type.WmlFile);
+							f.setType(FileItem.Type.WmlFile);
 						}
 						if (isFolder) {
-							f.setType(Type.Folder);
+							f.setType(FileItem.Type.Folder);
 						}
 					}
 					list.add(f);
@@ -944,7 +943,7 @@ public class BackupImport {
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
 		xformer.transform(new DOMSource(doc), new StreamResult(sw));
-        
+
 		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user

@@ -46,7 +46,7 @@ public class StateDao {
 	private EntityManager em;
 
 	/**
-	 * adds a new State to the states table with no short name and code
+	 * adds a new State to the state table with no short name and code
 	 * 
 	 * @param name
 	 * @return the id of the new state or null if an error occurred
@@ -56,7 +56,7 @@ public class StateDao {
 	}
 	
 	/**
-	 * adds a new State to the states table
+	 * adds a new State to the state table
 	 * 
 	 * @param name the name of the country
 	 * @param shortName the short name of the country

@@ -27,16 +27,15 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -67,7 +66,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		User u = getBean(UserDao.class).get(getUserId());
 		p.setCreator(u);
 		p.setRoom(getBean(RoomDao.class).get(roomId));
-		p.setType(getBean(PollDao.class).getTypes().get(0));
+		p.setType(RoomPoll.Type.yesNo);
 		form.setModelObject(p);
 		target.add(form);
 	}
@@ -106,28 +105,18 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			super(id, model);
 			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes()
-					, new IChoiceRenderer<PollType>() {
+			add(new DropDownChoice<RoomPoll.Type>("type", Arrays.asList(RoomPoll.Type.values())
+					, new ChoiceRenderer<RoomPoll.Type>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override
-						public Object getDisplayValue(PollType pt) {
-							return getString("" + pt.getLabelId());
+						public Object getDisplayValue(RoomPoll.Type pt) {
+							return getString("poll.type." + pt.name());
 						}
 
 						@Override
-						public String getIdValue(PollType pt, int index) {
-							return "" + pt.getId();
-						}
-
-						@Override
-						public PollType getObject(String id, IModel<? extends List<? extends PollType>> choices) {
-							for (PollType pt : choices.getObject()) {
-								if (getIdValue(pt, -1).equals(id)) {
-									return pt;
-								}
-							}
-							return null;
+						public String getIdValue(RoomPoll.Type pt, int index) {
+							return pt.name();
 						}
 					})
 					.setRequired(true).setLabel(Model.of(Application.getString(21))));

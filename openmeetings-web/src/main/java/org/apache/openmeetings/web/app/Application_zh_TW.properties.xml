@@ -45,8 +45,6 @@
   <entry key="23">信息:每個接入用戶收到新的民意信息</entry>
   <entry key="24">創造一個新的民調</entry>
   <entry key="25">取诮</entry>
-  <entry key="26">是/否</entry>
-  <entry key="27">數字的 1-10</entry>
   <entry key="28">民調</entry>
   <entry key="29">必須是主持人能提出問題</entry>
   <entry key="30">你的投票己登記</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">錯误</entry>
   <entry key="error.type.info">訊息</entry>
+  <entry key="poll.type.yesNo">是/否</entry>
+  <entry key="poll.type.numeric">數字的 1-10</entry>
 </properties>

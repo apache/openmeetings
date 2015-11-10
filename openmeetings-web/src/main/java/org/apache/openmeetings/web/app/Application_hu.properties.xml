@@ -45,8 +45,6 @@
   <entry key="23">Infó: Minden bejelentkezett felhasználó értesül az új szavazásról.</entry>
   <entry key="24">Szavazás létrehozása</entry>
   <entry key="25">Mégse</entry>
-  <entry key="26">Igen/Nem</entry>
-  <entry key="27">Szám 1-10</entry>
   <entry key="28">Szavazás</entry>
   <entry key="29">Előadónak kell lenned, hogy feltehess kérdést</entry>
   <entry key="30">A szavazatot elfogadtuk.</entry>
@@ -1857,4 +1855,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Hiba</entry>
   <entry key="error.type.info">Üzenet</entry>
+  <entry key="poll.type.yesNo">Igen/Nem</entry>
+  <entry key="poll.type.numeric">Szám 1-10</entry>
 </properties>

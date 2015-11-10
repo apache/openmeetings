@@ -62,7 +62,7 @@ public class KickMessageDialog extends AbstractDialog<String> {
 	}
 
 	@Override
-	public void onClose(IPartialPageRequestHandler arg0, DialogButton arg1) {
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		WebSession.setKickedByAdmin(false);
 		Application.get().restartResponseAtSignInPage();
 	}

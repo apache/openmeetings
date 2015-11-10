@@ -47,18 +47,18 @@ public class FileExplorerItemDao {
 	private EntityManager em;
 
     public Long add(String fileName, String fileHash,
-            Long parentFileExplorerItemId, Long ownerId, Long roomId,
+            Long parentItemId, Long ownerId, Long roomId,
             Long insertedBy, Boolean isFolder, Boolean isImage,
             Boolean isPresentation, String wmlFilePath,
             Boolean isStoredWmlFile, Boolean isChart,
-            Long externalFileId, String externalType) {
+            Long externalId, String externalType) {
         log.debug(".add(): adding file " + fileName+ " roomID: "+roomId);
         try {
             FileExplorerItem fileItem = new FileExplorerItem();
             fileItem.setFileName(fileName);
             fileItem.setFileHash(fileHash);
             fileItem.setDeleted(false);
-            fileItem.setParentItemId(parentFileExplorerItemId);
+            fileItem.setParentItemId(parentItemId);
             fileItem.setOwnerId(ownerId);
             fileItem.setRoomId(roomId);
             fileItem.setInserted(new Date());
@@ -82,7 +82,7 @@ public class FileExplorerItemDao {
             fileItem.setType(t);
             fileItem.setUpdated(new Date());
             fileItem.setWmlFilePath(wmlFilePath);
-            fileItem.setExternalFileId(externalFileId);
+            fileItem.setExternalId(externalId);
             fileItem.setExternalType(externalType);
 
 			fileItem = em.merge(fileItem);

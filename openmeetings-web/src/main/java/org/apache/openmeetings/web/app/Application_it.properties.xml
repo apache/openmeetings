@@ -45,8 +45,6 @@
   <entry key="23">Informazione: Ogni utente connesso riceve un messaggio con il nuovo sondaggio.</entry>
   <entry key="24">Crea un sondaggio</entry>
   <entry key="25">Cancella</entry>
-  <entry key="26">Si/No</entry>
-  <entry key="27">Numerico 1-10</entry>
   <entry key="28">Sondaggio</entry>
   <entry key="29">Devi essere moderatore per creare una domanda</entry>
   <entry key="30">Il tuo voto è stato registrato.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Errore</entry>
   <entry key="error.type.info">Messaggio</entry>
+  <entry key="poll.type.yesNo">Si/No</entry>
+  <entry key="poll.type.numeric">Numerico 1-10</entry>
 </properties>

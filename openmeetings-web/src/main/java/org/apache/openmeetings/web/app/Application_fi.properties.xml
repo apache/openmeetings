@@ -45,8 +45,6 @@
   <entry key="23">Tiedoksi: Jokainen paikalla oleva käyttäjä vastaanottaa viestin kyselystä.</entry>
   <entry key="24">Luo kysely</entry>
   <entry key="25">Peruuta</entry>
-  <entry key="26">Kyllä/Ei</entry>
-  <entry key="27">Numeerinen 1-10</entry>
   <entry key="28">Kysely</entry>
   <entry key="29">Sinun täytyy olla moderaattori luodaksesi kysymyksen.</entry>
   <entry key="30">Äänesi on rekisteröity.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="prof">Prof</entry>
   <entry key="error.type.error">Virhe</entry>
   <entry key="error.type.info">Viesti</entry>
+  <entry key="poll.type.yesNo">Kyllä/Ei</entry>
+  <entry key="poll.type.numeric">Numeerinen 1-10</entry>
 </properties>

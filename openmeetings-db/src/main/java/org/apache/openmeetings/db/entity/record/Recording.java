@@ -88,7 +88,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM Recording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.inserted")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentItemId = :parentId "
-			+ "ORDER BY f.type ASC, f.inserted") 
+			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM Recording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
 			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")

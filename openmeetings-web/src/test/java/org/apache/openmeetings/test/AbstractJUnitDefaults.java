@@ -58,16 +58,16 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public void setUp() throws Exception {
 		super.setUp();
 		configurationDao.getCryptKey();
-        if (userDao.count() < 1) {
-            makeDefaultScheme();
-            log.info("Default scheme created successfully");
-        } else {
-            log.info("Default scheme already created");
-        }
+		if (userDao.count() < 1) {
+			makeDefaultScheme();
+			log.info("Default scheme created successfully");
+		} else {
+			log.info("Default scheme already created");
+		}
 		if (configKeyCryptClassName == null) {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
 		}
-    }
+	}
 
 	public Appointment createAppointment() {
 		Date appointmentstart = new Date();

@@ -58,7 +58,7 @@ public class RoomDTO implements Serializable {
 	private boolean actionsMenuHidden;
 	private boolean screenSharingHidden;
 	private boolean whiteboardHidden;
-	
+
 	public RoomDTO() {}
 	
 	public RoomDTO(Room r) {

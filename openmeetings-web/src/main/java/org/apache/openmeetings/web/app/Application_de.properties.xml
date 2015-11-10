@@ -45,8 +45,6 @@
   <entry key="23">Info: Jeder verbundene Benutzer erhält eine Nachricht mit der neuen Umfrage.</entry>
   <entry key="24">Umfrage anlegen</entry>
   <entry key="25">Abbrechen</entry>
-  <entry key="26">Ja/Nein</entry>
-  <entry key="27">Numerisch 1-10</entry>
   <entry key="28">Umfrage</entry>
   <entry key="29">Sie müssen Moderator/Lehrer in diesem Raum sein, um eine Umfrage anzulegen.</entry>
   <entry key="30">Ihr Stimme wurde abgegeben.</entry>
@@ -1879,4 +1877,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Fehler!</entry>
   <entry key="error.type.info">Nachricht</entry>
+  <entry key="poll.type.yesNo">Ja/Nein</entry>
+  <entry key="poll.type.numeric">Numerisch 1-10</entry>
 </properties>

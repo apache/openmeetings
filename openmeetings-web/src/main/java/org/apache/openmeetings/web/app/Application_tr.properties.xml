@@ -45,8 +45,6 @@
   <entry key="23">Bilgi: Bağlı her kullanıcı yeni anketle ilgili bir mesaj alır.</entry>
   <entry key="24">Bir anket yarat</entry>
   <entry key="25">İptal</entry>
-  <entry key="26">Evet/Hayır</entry>
-  <entry key="27">Sayısal 1-10</entry>
   <entry key="28">Anket</entry>
   <entry key="29">Soru oluşturabilmek için Düzenleyici olmanız gerekmekte</entry>
   <entry key="30">Oyunuz kaydedildi.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Hata</entry>
   <entry key="error.type.info">Mesaj</entry>
+  <entry key="poll.type.yesNo">Evet/Hayır</entry>
+  <entry key="poll.type.numeric">Sayısal 1-10</entry>
 </properties>

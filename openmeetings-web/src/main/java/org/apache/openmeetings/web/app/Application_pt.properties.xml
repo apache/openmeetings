@@ -45,8 +45,6 @@
   <entry key="23">Info: Cada usuário conectado recebe uma menssagem com a nova enquete.</entry>
   <entry key="24">Criar uma enquete</entry>
   <entry key="25">Cancelar</entry>
-  <entry key="26">Sim/Não</entry>
-  <entry key="27">Numérico 1-10</entry>
   <entry key="28">Enquete</entry>
   <entry key="29">Eles podem ser moderadores/professores nessa área de enquetes</entry>
   <entry key="30">Seu voto foi registrado.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Erro</entry>
   <entry key="error.type.info">Mensagem</entry>
+  <entry key="poll.type.yesNo">Sim/Não</entry>
+  <entry key="poll.type.numeric">Numérico 1-10</entry>
 </properties>

@@ -75,8 +75,8 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		PrivateMessageFolder folder = null;
 		try {
 			folder = query.getSingleResult();
-	    } catch (NoResultException ex) {
-	    }
+		} catch (NoResultException ex) {
+		}
 		
 		return folder;
 	}
@@ -90,10 +90,10 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	public PrivateMessageFolder update(PrivateMessageFolder folder, Long userId) {
 		if (folder.getId() == 0) {
 			em.persist(folder);
-	    } else {
-	    	if (!em.contains(folder)) {
-	    		folder = em.merge(folder);
-		    }
+		} else {
+			if (!em.contains(folder)) {
+				folder = em.merge(folder);
+			}
 		}
 		return folder;
 	}

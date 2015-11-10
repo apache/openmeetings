@@ -45,8 +45,6 @@
   <entry key="23">ข้อมูล: ผู้ใช้ที่เชื่อมต่ออยู่แต่ละรายได้รับข้อความพร้อมด้วยโพลล์ใหม่</entry>
   <entry key="24">จัดทำโพลล์</entry>
   <entry key="25">ยกเลิก</entry>
-  <entry key="26">ใช่/ไม่</entry>
-  <entry key="27">เลข 1-10</entry>
   <entry key="28">โพลล์</entry>
   <entry key="29">ต้องเป็นผู้ดำเนินรายการจึงจะตั้งคำถามได้</entry>
   <entry key="30">การโหวตของคุณได้รับการลงทะเบียนแล้ว</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">ขัดข้อง</entry>
   <entry key="error.type.info">ข้อความ</entry>
+  <entry key="poll.type.yesNo">ใช่/ไม่</entry>
+  <entry key="poll.type.numeric">เลข 1-10</entry>
 </properties>

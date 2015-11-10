@@ -44,7 +44,6 @@
 		<class>org.apache.openmeetings.db.entity.record.RecordingMetaDelta</class>
 		<class>org.apache.openmeetings.db.entity.room.Invitation</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
-		<class>org.apache.openmeetings.db.entity.room.PollType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
 		<class>org.apache.openmeetings.db.entity.room.Client</class>

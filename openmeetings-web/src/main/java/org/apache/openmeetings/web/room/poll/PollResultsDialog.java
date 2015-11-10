@@ -201,7 +201,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     }
     
     private String[] getTicks(RoomPoll p) {
-		return p != null && p.getType().isNumeric()
+		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 				: new String[] {Application.getString(34), Application.getString(35)};
     }
@@ -215,8 +215,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	}
 	
 	private Integer[] getValues(RoomPoll p) {
-		Integer[] values = initValues(p != null && p.getType().isNumeric() ? 10 : 2);
-		if (p != null && p.getType().isNumeric()) {
+		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
+		if (p != null && RoomPoll.Type.numeric == p.getType()) {
 			for (RoomPollAnswer a : p.getAnswers()) {
 				values[a.getPointList() - 1] ++;
 			}
@@ -309,7 +309,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 		public void updateModel(IPartialPageRequestHandler handler) {
 			List<RoomPoll> list = new ArrayList<RoomPoll>();
-			RoomPoll p = getBean(PollDao.class).getPoll(roomId);
+			RoomPoll p = getBean(PollDao.class).getByRoom(roomId);
 			if (p != null) {
 				list.add(p);
 			}

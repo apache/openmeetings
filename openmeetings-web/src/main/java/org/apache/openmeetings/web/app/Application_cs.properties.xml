@@ -45,8 +45,6 @@
   <entry key="23">Info: Všichni připojení uživatelé obdrželi zprávu o nové anketě.</entry>
   <entry key="24">Vytvoř anketu</entry>
   <entry key="25">Zrušit</entry>
-  <entry key="26">Ano/Ne</entry>
-  <entry key="27">Čísla 1-10</entry>
   <entry key="28">Anketa</entry>
   <entry key="29">Pro vytvoření otázky musíte být moderátor</entry>
   <entry key="30">Vaše hlasování bylo uloženo.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Chyba</entry>
   <entry key="error.type.info">Zpráva</entry>
+  <entry key="poll.type.yesNo">Ano/Ne</entry>
+  <entry key="poll.type.numeric">Čísla 1-10</entry>
 </properties>

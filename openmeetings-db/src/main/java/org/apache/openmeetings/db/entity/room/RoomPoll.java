@@ -25,6 +25,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,6 +37,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -45,32 +48,70 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
-				+ "WHERE rp.room.id = :roomId"),
-		@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id"),
-		@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id"),
-		@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived"),
-		@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
-		@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived ORDER BY rp.created DESC"),
-		@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived") })
+	@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
+			+ "WHERE rp.room.id = :roomId"),
+	@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id"),
+	@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id"),
+	@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
+			+ "WHERE rp.room.id = :roomId AND rp.archived = false"),
+	@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
+	@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
+			+ "WHERE rp.room.id = :roomId AND rp.archived = true ORDER BY rp.created DESC"),
+	@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
+			+ "WHERE rp.room.id = :roomId AND rp.archived = :archived") })
 @Table(name = "room_poll")
 @Root(name = "roompoll")
 public class RoomPoll implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-
+	public static final int YES_NO_TYPE_ID = 1;
+	public static final int NUMERIC_TYPE_ID = 2;
+	
+	@XmlType(namespace="org.apache.openmeetings.room.poll.type")
+	public enum Type {
+		yesNo
+		, numeric;
+		private int id;
+		
+		Type() {} //default;
+		Type(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Type get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(int type) {
+			Type rt = Type.yesNo;
+			switch (type) {
+				case NUMERIC_TYPE_ID:
+					rt = Type.numeric;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
-	@Column(name = "poll_name")
+	
+	@Column(name = "name")
 	@Element(name = "pollname", data = true, required = false)
 	private String name;
-
-	@Column(name = "poll_question")
+	
+	@Column(name = "question")
 	@Element(name = "pollquestion", data = true, required = false)
 	private String question;
 
@@ -81,15 +122,14 @@ public class RoomPoll implements IDataProviderEntity {
 	@Column(name = "archived")
 	@Element(data = true, required = false)
 	private boolean archived;
-
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "poll_type_id")
-	@ForeignKey(enabled = true)
+	
+	@Column(name = "type")
 	@Element(name = "polltypeid", data = true, required = false)
-	private PollType type;
-
+	@Enumerated(EnumType.STRING)
+	private Type type;
+	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "users_id")
+	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
 	@Element(name = "createdbyuserid", data = true, required = false)
 	private User creator;
@@ -101,7 +141,7 @@ public class RoomPoll implements IDataProviderEntity {
 	private Room room;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "room_poll_id")
+	@JoinColumn(name = "poll_id")
 	@ElementList(name = "roompollanswers", required = false)
 	private List<RoomPollAnswer> answers;
 
@@ -186,11 +226,11 @@ public class RoomPoll implements IDataProviderEntity {
 	/**
 	 * @return the type
 	 */
-	public PollType getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(PollType type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -210,23 +250,21 @@ public class RoomPoll implements IDataProviderEntity {
 	}
 
 	/**
-	 * @param archived
-	 *            the archived to set
+	 * @param archived the archived to set
 	 */
 	public void setArchived(boolean archived) {
 		this.archived = archived;
 	}
 
 	/**
-	 * @return the pollName
+	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;

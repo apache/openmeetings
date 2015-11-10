@@ -45,8 +45,6 @@
   <entry key="23">Info: Varje ansluten användare får ett meddelande med den nya röstningen.</entry>
   <entry key="24">Skapa en omröstning</entry>
   <entry key="25">Avbryt</entry>
-  <entry key="26">Ja/Nej</entry>
-  <entry key="27">Numerisk 1-10</entry>
   <entry key="28">Röst</entry>
   <entry key="29">Du måste vara Moderator för att skapa en omröstning</entry>
   <entry key="30">Din röst är accepterad</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Bearbetar</entry>
   <entry key="error.type.info">Meddelande</entry>
+  <entry key="poll.type.yesNo">Ja/Nej</entry>
+  <entry key="poll.type.numeric">Numerisk 1-10</entry>
 </properties>

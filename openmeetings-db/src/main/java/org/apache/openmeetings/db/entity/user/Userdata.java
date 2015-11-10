@@ -35,34 +35,35 @@ public class Userdata implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-    private Long id;
-	
-	@Column(name="user_id")
-    private Long userId;
-	
-	@Column(name="data_key")
-    private String key;
-	
-	@Column(name="data")
-    private String data;
-	
+	@Column(name = "id")
+	private Long id;
+
+	@Column(name = "user_id")
+	private Long userId;
+
+	@Column(name = "data_key")
+	private String key;
+
+	@Column(name = "data")
+	private String data;
+
 	@Column(name = "inserted")
 	private Date inserted;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Lob
-	@Column(name = "comment_field")
-    private String comment;
-	
+	@Column(name = "comment")
+	private String comment;
+
 	@Column(name = "deleted")
-    private boolean deleted;
+	private boolean deleted;
 
 	public String getComment() {
 		return comment;
 	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -70,6 +71,7 @@ public class Userdata implements Serializable {
 	public String getData() {
 		return data;
 	}
+
 	public void setData(String data) {
 		this.data = data;
 	}
@@ -77,35 +79,39 @@ public class Userdata implements Serializable {
 	public String getKey() {
 		return key;
 	}
+
 	public void setKey(String key) {
 		this.key = key;
 	}
-    
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-    
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-    
+
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
@@ -113,10 +119,8 @@ public class Userdata implements Serializable {
 	public Long getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-
-
 }

@@ -226,15 +226,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static boolean isUserOnline(Long userId) {
-        MapIterator it = ONLINE_USERS.mapIterator();
-        boolean isUserOnline = false;
-        while (it.hasNext()) {
-            MultiKey multi = (MultiKey) it.next();
-            if (multi.size() > 0 && userId.equals(multi.getKey(0))){
-            	isUserOnline = true;
-            	break;
-            }
-        } 
+		MapIterator it = ONLINE_USERS.mapIterator();
+		boolean isUserOnline = false;
+		while (it.hasNext()) {
+			MultiKey multi = (MultiKey) it.next();
+			if (multi.size() > 0 && userId.equals(multi.getKey(0))) {
+				isUserOnline = true;
+				break;
+			}
+		} 
 		return isUserOnline;
 	}
 
@@ -245,15 +245,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static List<org.apache.openmeetings.web.app.Client> getClients(Long userId) {
 		List<org.apache.openmeetings.web.app.Client> result =  new ArrayList<org.apache.openmeetings.web.app.Client>();
-        MapIterator it = ONLINE_USERS.mapIterator();
-        while (it.hasNext()) {
-            MultiKey multi = (MultiKey) it.next();
-            if (multi.size() > 1 && userId.equals(multi.getKey(0))){
-            	result.add(getClientByKeys(userId, (String)(multi.getKey(1))));
-            	break;
-            }
-        }
-        return result;
+		MapIterator it = ONLINE_USERS.mapIterator();
+		while (it.hasNext()) {
+			MultiKey multi = (MultiKey) it.next();
+			if (multi.size() > 1 && userId.equals(multi.getKey(0))) {
+				result.add(getClientByKeys(userId, (String)(multi.getKey(1))));
+				break;
+			}
+		}
+		return result;
 	}
 	
 	public static int getClientsSize() {

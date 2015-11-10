@@ -65,10 +65,10 @@ public class RecordingMetaDeltaDao {
 		try { 
 			if (metaDelta.getMetaDataId() == 0) {
 				em.persist(metaDelta);
-		    } else {
-		    	if (!em.contains(metaDelta)) {
-		    		em.merge(metaDelta);
-			    }
+			} else {
+				if (!em.contains(metaDelta)) {
+					em.merge(metaDelta);
+				}
 			}
 			
 			return metaDelta.getMetaDataId();

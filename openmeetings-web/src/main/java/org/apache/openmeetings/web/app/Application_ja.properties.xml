@@ -45,8 +45,6 @@
   <entry key="23">ヒント: 接続中の全参加者に対して、投票を促すメッセージを送信します</entry>
   <entry key="24">投票の作成</entry>
   <entry key="25">キャンセル</entry>
-  <entry key="26">はい/いいえ</entry>
-  <entry key="27">1～10の数字</entry>
   <entry key="28">投票</entry>
   <entry key="29">質問を作成するには司会者になる必要があります</entry>
   <entry key="30">投票が登録されました</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">教授</entry>
   <entry key="error.type.error">エラー</entry>
   <entry key="error.type.info">メッセージ</entry>
+  <entry key="poll.type.yesNo">はい/いいえ</entry>
+  <entry key="poll.type.numeric">1～10の数字</entry>
 </properties>

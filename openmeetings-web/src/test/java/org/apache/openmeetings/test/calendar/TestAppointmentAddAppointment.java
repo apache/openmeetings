@@ -59,7 +59,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		Boolean isDaily = false;
 		Long categoryId = 1L;
 		Boolean isWeekly = false;
-		Long remind = 3L;
+		String remind = Appointment.Reminder.ical.name();
 		Boolean isYearly = false;
 		String[] mmClient = new String[1];
 		for (int i = 0; i < 1; i++) {

@@ -45,8 +45,6 @@
   <entry key="23">提示:每个连接用户将收到一个新投票的消息提示.</entry>
   <entry key="24">创建投票</entry>
   <entry key="25">取消</entry>
-  <entry key="26">是/否</entry>
-  <entry key="27">数字 1-10</entry>
   <entry key="28">投票</entry>
   <entry key="29">主持人才能提问</entry>
   <entry key="30">已您的投票.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">教授</entry>
   <entry key="error.type.error">错误</entry>
   <entry key="error.type.info">消息</entry>
+  <entry key="poll.type.yesNo">是/否</entry>
+  <entry key="poll.type.numeric">数字 1-10</entry>
 </properties>

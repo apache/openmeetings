@@ -324,7 +324,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 								}
 							}
 							return null;
-						} //new ChoiceRenderer<AppointmentReminderType>("label.value", "id")
+						}
 					}));
 			
 			add(roomType.setEnabled(createRoom).setOutputMarkupId(true));

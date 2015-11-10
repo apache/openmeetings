@@ -45,8 +45,6 @@
   <entry key="23">اطلاعات پيام</entry>
   <entry key="24">سنجي نظر يك ايجاد</entry>
   <entry key="25">انصراف</entry>
-  <entry key="26">خير/بله</entry>
-  <entry key="27">1-10 اعداد</entry>
   <entry key="28">سنجي نظر</entry>
   <entry key="29">اعتدال</entry>
   <entry key="30">راي</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">خطا</entry>
   <entry key="error.type.info">پيام</entry>
+  <entry key="poll.type.yesNo">خير/بله</entry>
+  <entry key="poll.type.numeric">1-10 اعداد</entry>
 </properties>

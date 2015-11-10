@@ -43,7 +43,6 @@
 		<class>org.apache.openmeetings.db.entity.record.RecordingMetaDelta</class>
 		<class>org.apache.openmeetings.db.entity.room.Invitation</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
-		<class>org.apache.openmeetings.db.entity.room.PollType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
 		<class>org.apache.openmeetings.db.entity.room.Client</class>
@@ -75,8 +74,7 @@
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO" />
 			<property name="openjpa.DataCache" value="true" />
-			<!-- QueryCache disabled due to changes outside of JPA doesn't take effect with caching -->
-			<property name="openjpa.QueryCache" value="false" />
+			<property name="openjpa.QueryCache" value="true" />
 			<property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 		</properties>

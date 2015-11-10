@@ -45,8 +45,6 @@
   <entry key="23">Všetci pripojení používatelia prijímajú správu s novým hlasovaním</entry>
   <entry key="24">Vytvoriť hlasovanie</entry>
   <entry key="25">Zrušiť</entry>
-  <entry key="26">Áno/Nie</entry>
-  <entry key="27">Čísla 1-10</entry>
   <entry key="28">Hlasovanie</entry>
   <entry key="29">Musíte byť moderátor pre vytvorenie otázky</entry>
   <entry key="30">Váš hlas bol zaznamenaný</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Chyba</entry>
   <entry key="error.type.info">Správa</entry>
+  <entry key="poll.type.yesNo">Áno/Nie</entry>
+  <entry key="poll.type.numeric">Čísla 1-10</entry>
 </properties>

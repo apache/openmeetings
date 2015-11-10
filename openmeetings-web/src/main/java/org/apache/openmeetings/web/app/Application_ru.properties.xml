@@ -45,8 +45,6 @@
   <entry key="23">Информация: каждый подключённый участник получает сообщение с новым опросом.</entry>
   <entry key="24">Создать опрос</entry>
   <entry key="25">Отменить</entry>
-  <entry key="26">Да/Нет</entry>
-  <entry key="27">Число 1 - 10</entry>
   <entry key="28">Опрос</entry>
   <entry key="29">Для создания опроса Вы должны быть модератором/лектором в этой комнате.</entry>
   <entry key="30">Вы проголосовали.</entry>
@@ -1882,4 +1880,6 @@
   <entry key="user.salutation.prof">Проф-р</entry>
   <entry key="error.type.error">Ошибка</entry>
   <entry key="error.type.info">Сообщение</entry>
+  <entry key="poll.type.yesNo">Да/Нет</entry>
+  <entry key="poll.type.numeric">Число 1 - 10</entry>
 </properties>

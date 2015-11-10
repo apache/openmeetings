@@ -45,8 +45,6 @@
   <entry key="23">Uwaga: Każdy połączony użytkownik otrzyma wiadomość z nowym głosowaniem.</entry>
   <entry key="24">Utwórz głosowanie.</entry>
   <entry key="25">Anuluj</entry>
-  <entry key="26">Tak/Nie</entry>
-  <entry key="27">Liczba 1-10</entry>
   <entry key="28">Głosowanie</entry>
   <entry key="29">Musisz być moderatorem aby utworzyć pytanie</entry>
   <entry key="30">Twój głos został zarejestrowany.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Informacja</entry>
   <entry key="error.type.info">Błąd</entry>
+  <entry key="poll.type.yesNo">Tak/Nie</entry>
+  <entry key="poll.type.numeric">Liczba 1-10</entry>
 </properties>

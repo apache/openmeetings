@@ -45,8 +45,6 @@
   <entry key="23">Ενημέρωση: Κάθε συνδεδεμένος Χρήστης λαμβάνει ένα μήνυμα με τη νέα Ψηφοφορία.</entry>
   <entry key="24">Δημιουργία Ψηφοφορίας</entry>
   <entry key="25">Ακύρωση</entry>
-  <entry key="26">Ναι/Όχι</entry>
-  <entry key="27">Αριθμός 1-10</entry>
   <entry key="28">Ψηφοφορία</entry>
   <entry key="29">Μόνο ο Συντονιστής μπορεί να δημιουργεί Ερωτήσεις!</entry>
   <entry key="30">Η Ψήφος σας καταχωρήθηκε.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Μήνυμα</entry>
   <entry key="error.type.info">Μήνυμα</entry>
+  <entry key="poll.type.yesNo">Ναι/Όχι</entry>
+  <entry key="poll.type.numeric">Αριθμός 1-10</entry>
 </properties>

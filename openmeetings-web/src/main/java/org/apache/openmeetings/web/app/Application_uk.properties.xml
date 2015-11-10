@@ -45,8 +45,6 @@
   <entry key="23">Інформація: кожен пов'язани користувач отримує повідомлення з новим опитуванням</entry>
   <entry key="24">Створити опитування</entry>
   <entry key="25">Відмінити</entry>
-  <entry key="26">Так/Ні</entry>
-  <entry key="27">В числовому порядку 1-10</entry>
   <entry key="28">Опитування</entry>
   <entry key="29">Для створення опитування Ви повинні бути модератором/інструктором даної кімнати.</entry>
   <entry key="30">Ви проголосували.</entry>
@@ -1869,4 +1867,6 @@
   <entry key="user.salutation.prof">Prof</entry>
   <entry key="error.type.error">Помилка</entry>
   <entry key="error.type.info">Повідомлення</entry>
+  <entry key="poll.type.yesNo">Так/Ні</entry>
+  <entry key="poll.type.numeric">В числовому порядку 1-10</entry>
 </properties>

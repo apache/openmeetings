@@ -29,7 +29,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,27 +42,6 @@ public class PollDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addPollType(Long labelId, Boolean isNumeric) {
-		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
-		PollType pt = new PollType();
-		pt.setLabelId(labelId);
-		pt.setNumeric(isNumeric);
-
-		em.persist(pt);
-		
-		return pt.getId();
-	}
-	
-	public List<PollType> getTypes() {
-		return em.createNamedQuery("getPollTypes", PollType.class).getResultList();
-	}
-	
-	public PollType getType(Long typeId) {
-		TypedQuery<PollType> q = em.createNamedQuery("getPollType", PollType.class);
-		q.setParameter("typeId", typeId);
-		return q.getSingleResult();
-	}
-	
 	public RoomPoll update(RoomPoll p) {
 		if (p.getId() == null) {
 			p.setCreated(new Date());
@@ -74,7 +52,7 @@ public class PollDao {
 		return p;
 	}
 
-	public boolean close(Long roomId){
+	public boolean close(Long roomId) {
 		try {
 			log.debug(" :: close :: ");
 			Query q = em.createNamedQuery("closePoll");
@@ -87,7 +65,7 @@ public class PollDao {
 		return false;
 	}
 
-	public boolean delete(RoomPoll p){
+	public boolean delete(RoomPoll p) {
 		try {
 			log.debug(" :: delete :: ");
 			Query q = em.createNamedQuery("deletePoll");
@@ -104,12 +82,11 @@ public class PollDao {
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
-	public RoomPoll getPoll(Long roomId) {
+	public RoomPoll getByRoom(Long roomId) {
 		try {
 			log.debug(" :: getPoll :: " + roomId);
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getPoll", RoomPoll.class);
 			q.setParameter("roomId", roomId);
-			q.setParameter("archived", false);
 			return q.getSingleResult();
 		} catch (NoResultException nre) {
 			//expected
@@ -136,7 +113,6 @@ public class PollDao {
 			log.debug(" :: getArchived :: " + roomId);
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);
 			q.setParameter("roomId", roomId);
-			q.setParameter("archived", true);
 			return q.getResultList();
 		} catch (NoResultException nre) {
 			//expected
