@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
+
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;

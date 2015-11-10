@@ -78,7 +78,7 @@ public class CalendarPanel extends UserPanel {
 
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
-		refreshTimer.stop((AjaxRequestTarget)handler);
+		refreshTimer.stop(handler);
 	}
 	
 	private AppointmentDao getDao() {
