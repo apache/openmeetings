@@ -24,12 +24,12 @@ import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
@@ -45,7 +45,6 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -165,14 +164,8 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setValidFrom(d.getTime());
 		d.add(Calendar.DATE, 1);
 		i.setValidTo(d.getTime());
-		i.setPassword("ASDDF");
-		String hashRaw = "HASH" + (System.currentTimeMillis());
-		try {
-			i.setHash(MD5.do_checksum(hashRaw));
-		} catch (NoSuchAlgorithmException e) {
-			log.error("Unexpected error while creating invitation", e);
-			throw new RuntimeException(e);
-		}
+		i.setPassword(null);
+		i.setHash(null);
 		subject.setObject(null);
 		message.setObject(null);
 		recipients.setModelObject(new ArrayList<User>());
@@ -279,6 +272,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		if (Type.contact == u.getType()) {
 			//TODO not sure it is right
 			u.setLanguageId(lang);
+			i.setHash(UUID.randomUUID().toString());
 		}
 		return getBean(InvitationDao.class).update(i);
 	}
