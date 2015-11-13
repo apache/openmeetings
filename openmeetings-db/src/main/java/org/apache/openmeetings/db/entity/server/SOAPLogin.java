@@ -35,7 +35,7 @@ public class SOAPLogin implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long soapLoginId;
+	private Long id;
 	
 	@Column(name="hash")
 	private String hash;
@@ -79,11 +79,11 @@ public class SOAPLogin implements Serializable {
 	@Column(name="allow_recording")
 	private boolean allowRecording;
 	
-	public long getSoapLoginId() {
-		return soapLoginId;
+	public Long getId() {
+		return id;
 	}
-	public void setSoapLoginId(long soapLoginId) {
-		this.soapLoginId = soapLoginId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getHash() {
@@ -114,7 +114,7 @@ public class SOAPLogin implements Serializable {
 		this.created = created;
 	}
 	
-	public boolean getUsed() {
+	public boolean isUsed() {
 		return used;
 	}
 	public void setUsed(boolean used) {
@@ -128,7 +128,7 @@ public class SOAPLogin implements Serializable {
 		this.useDate = useDate;
 	}
 	
-	public boolean getBecomemoderator() {
+	public boolean isBecomemoderator() {
 		return becomemoderator;
 	}
 	public void setBecomemoderator(boolean becomemoderator) {

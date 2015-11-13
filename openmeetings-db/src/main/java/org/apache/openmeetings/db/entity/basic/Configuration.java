@@ -79,7 +79,7 @@ public class Configuration implements IDataProviderEntity {
 	private Date updated;
 
 	@Lob
-	@Column(name = "comment_field", length = 2048)
+	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
 	private String comment;
 

@@ -180,13 +180,13 @@ public class Client implements IDataProviderEntity {
 	private String formatedDate;
 	
 	/**
-	 * @see Client#getIsScreenClient()
+	 * @see Client#isScreenClient()
 	 */
 	@Column(name = "is_screenclient")
 	private boolean screenClient;
 	
 	/**
-	 * @see Client#getIsAVClient()
+	 * @see Client#isAvClient()
 	 */
 	@Column(name = "is_avclient")
 	private boolean avClient;
@@ -879,7 +879,7 @@ public class Client implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
-				+ ", isAVClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
+				+ ", avClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
 				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
 				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";

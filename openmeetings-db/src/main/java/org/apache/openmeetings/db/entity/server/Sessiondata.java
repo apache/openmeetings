@@ -34,10 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getSessionById", query = "select c from Sessiondata as c "
-					+ "where c.sessionId LIKE :sessionId"),
-	@NamedQuery(name = "getSessionToDelete", query = "Select c from Sessiondata c "
-					+ "WHERE c.refreshed < :refreshed AND c.permanent = false")
+		@NamedQuery(name = "getSessionById", query = "select c from Sessiondata as c "
+				+ "where c.sessionId LIKE :sessionId"),
+		@NamedQuery(name = "getSessionToDelete", query = "Select c from Sessiondata c "
+				+ "WHERE c.refreshed < :refreshed AND c.permanent = false") 
 })
 @Table(name = "sessiondata")
 @XmlRootElement
@@ -45,75 +45,81 @@ public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
-	
-	@Column(name="user_id")
+
+	@Column(name = "user_id")
 	private Long userId;
-	
-	@Column(name="session_id")
+
+	@Column(name = "session_id")
 	private String sessionId;
-	
-	@Column(name="created")
+
+	@Column(name = "created")
 	private Date created;
-	
-	@Column(name="refreshed")
+
+	@Column(name = "refreshed")
 	private Date refreshed;
-	
+
 	@Lob
-	@Column(name="xml")
+	@Column(name = "xml")
 	private String xml;
-	
-	@Column(name="permanent")
+
+	@Column(name = "permanent")
 	private boolean permanent;
-	
-	@Column(name="language_id")
+
+	@Column(name = "language_id")
 	private Long languageId;
-	
-	@Column(name="group_id")
+
+	@Column(name = "group_id")
 	private Long groupId;
-	
+
 	public Sessiondata() {
 	}
-    
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public Date getRefreshed() {
-        return refreshed;
-    }
-    public void setRefreshed(Date refreshed) {
-        this.refreshed = refreshed;
-    }
-    
-    public String getSessionId() {
-        return sessionId;
-    }
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-    
-    public Date getCreated() {
-        return created;
-    }
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-    
-    public Long getUserId() {
-        return userId;
-    }
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Date getRefreshed() {
+		return refreshed;
+	}
+
+	public void setRefreshed(Date refreshed) {
+		this.refreshed = refreshed;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public String getXml() {
 		return xml;
 	}
+
 	public void setXml(String xml) {
 		this.xml = xml;
 	}
@@ -121,6 +127,7 @@ public class Sessiondata implements Serializable {
 	public boolean isPermanent() {
 		return permanent;
 	}
+
 	public void setPermanent(boolean permanent) {
 		this.permanent = permanent;
 	}
@@ -128,6 +135,7 @@ public class Sessiondata implements Serializable {
 	public Long getLanguageId() {
 		return languageId;
 	}
+
 	public void setLanguageId(Long languageId) {
 		this.languageId = languageId;
 	}
@@ -135,8 +143,9 @@ public class Sessiondata implements Serializable {
 	public Long getGroupId() {
 		return groupId;
 	}
+
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
-	
+
 }

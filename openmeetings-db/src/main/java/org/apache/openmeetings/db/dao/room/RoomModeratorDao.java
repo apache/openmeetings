@@ -35,7 +35,7 @@ public class RoomModeratorDao {
 
 	public RoomModerator get(long id) {
 		List<RoomModerator> list = em.createNamedQuery("getRoomModeratorById", RoomModerator.class)
-				.setParameter("roomModeratorsId", id).getResultList();
+				.setParameter("id", id).getResultList();
 		if (!list.isEmpty()) {
 			return list.get(0);
 		}

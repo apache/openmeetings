@@ -93,7 +93,7 @@ public class Server implements IDataProviderEntity {
 	public User updatedby;
 
 	@Lob
-	@Column(name = "comment_field", length = 2048)
+	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
 	private String comment;
 

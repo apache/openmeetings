@@ -33,9 +33,9 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

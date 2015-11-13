@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;

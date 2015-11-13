@@ -44,8 +44,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.IWebSession;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -60,6 +58,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.IWebSession;
+import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
@@ -90,6 +90,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	public static final String SECURE_HASH = "secureHash";
+	public static final String INVITATION_HASH = "invitationHash";
 	private long userId = -1;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -136,7 +137,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		try {
 			IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
 			StringValue secureHash = params.getParameterValue(SECURE_HASH);
-			StringValue invitationHash = params.getParameterValue("invitationHash");
+			StringValue invitationHash = params.getParameterValue(INVITATION_HASH);
 			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
 				PageParameters pp = new PageParameters();
 				for (String p : params.getParameterNames()) {
@@ -196,7 +197,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		//FIXME code is duplicated from MainService, need to be unified
 		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
-		if (soapLogin != null && !soapLogin.getUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
+		if (soapLogin != null && !soapLogin.isUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
 			if (sd != null && sd.getXml() != null) {

@@ -87,7 +87,8 @@ public class RoomsPanel extends UserPanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						roomId = r.getId();
-						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));						updateRoomDetails(target);
+						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
+						updateRoomDetails(target);
 					}
 				});
 			}

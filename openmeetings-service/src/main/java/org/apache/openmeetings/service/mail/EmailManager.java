@@ -48,7 +48,7 @@ public class EmailManager {
 	public static String getString(long id) {
 		return ((IApplication)Application.get(wicketApplicationName)).getOmString(id);
 	}
-	
+
 	/**
 	 * sends a mail address to the user with his account data
 	 * 

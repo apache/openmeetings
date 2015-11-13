@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dto.file;
 
+import java.util.List;
+
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 
 /**
@@ -26,23 +28,23 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
  */
 public class FileExplorerObject {
 
-	private FileExplorerItem[] userHome;
-	private FileExplorerItem[] roomHome;
+	private List<FileExplorerItem> userHome;
+	private List<FileExplorerItem> roomHome;
 	private Long userHomeSize;
 	private Long roomHomeSize;
 	
 	public FileExplorerObject() {}
 	
-	public FileExplorerItem[] getUserHome() {
+	public List<FileExplorerItem> getUserHome() {
 		return userHome;
 	}
-	public void setUserHome(FileExplorerItem[] userHome) {
+	public void setUserHome(List<FileExplorerItem> userHome) {
 		this.userHome = userHome;
 	}
-	public FileExplorerItem[] getRoomHome() {
+	public List<FileExplorerItem> getRoomHome() {
 		return roomHome;
 	}
-	public void setRoomHome(FileExplorerItem[] roomHome) {
+	public void setRoomHome(List<FileExplorerItem> roomHome) {
 		this.roomHome = roomHome;
 	}
 	public Long getUserHomeSize() {

@@ -46,7 +46,7 @@ public class AuthLevelUtil {
 		if (!result && groupId != null) {
 			for (GroupUser ou : u.getGroupUsers()) {
 				if (groupId.equals(ou.getGroup().getId())) {
-					if (Boolean.TRUE.equals(ou.getIsModerator())) {
+					if (ou.isModerator()) {
 						result = true;
 					}
 					break;

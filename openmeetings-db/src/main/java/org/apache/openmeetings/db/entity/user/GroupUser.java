@@ -77,7 +77,7 @@ public class GroupUser implements IDataProviderEntity {
 	
 	@Column(name = "is_moderator")
 	@Element(data = true, required = false)
-	private Boolean isModerator;
+	private boolean moderator;
 	
 	public GroupUser(Group group) {
 		this.group = group;
@@ -123,12 +123,12 @@ public class GroupUser implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Boolean getIsModerator() {
-		return isModerator;
+	public boolean isModerator() {
+		return moderator;
 	}
 
-	public void setIsModerator(Boolean isModerator) {
-		this.isModerator = isModerator;
+	public void setModerator(boolean moderator) {
+		this.moderator = moderator;
 	}
 
 	public User getUser() {

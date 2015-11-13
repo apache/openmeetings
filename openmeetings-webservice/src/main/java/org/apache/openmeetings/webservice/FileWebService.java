@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.jws.WebService;
 import javax.ws.rs.Path;
@@ -581,8 +582,7 @@ public class FileWebService {
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(ownerId)
-						.toArray(new FileExplorerItem[0]);
+				List<FileExplorerItem> fList = fileExplorerItemDao.getByOwner(ownerId);
 
 				long homeFileSize = 0;
 
@@ -595,7 +595,7 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
+				List<FileExplorerItem> rList = fileExplorerItemDao.getByRoom(roomId);
 
 				long roomFileSize = 0;
 
@@ -644,8 +644,7 @@ public class FileWebService {
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(userId)
-						.toArray(new FileExplorerItem[0]);
+				List<FileExplorerItem> fList = fileExplorerItemDao.getByOwner(userId);
 
 				long homeFileSize = 0;
 
@@ -658,7 +657,7 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
+				List<FileExplorerItem> rList = fileExplorerItemDao.getByRoom(roomId);
 
 				long roomFileSize = 0;
 

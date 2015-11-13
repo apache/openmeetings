@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
@@ -145,7 +145,7 @@ public class MainService implements IPendingServiceCallback {
 
 			SOAPLogin soapLogin = soapLoginDao.get(secureHash);
 
-			if (soapLogin.getUsed()) {
+			if (soapLogin.isUsed()) {
 
 				if (soapLogin.getAllowSameURLMultipleTimes()) {
 
@@ -197,7 +197,7 @@ public class MainService implements IPendingServiceCallback {
 				SOAPLogin returnSoapLogin = new SOAPLogin();
 
 				returnSoapLogin.setRoomId(soapLogin.getRoomId());
-				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
+				returnSoapLogin.setBecomemoderator(soapLogin.isBecomemoderator());
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
 				returnSoapLogin.setRecordingId(soapLogin.getRecordingId());
 				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
@@ -234,7 +234,7 @@ public class MainService implements IPendingServiceCallback {
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
-					Type.nicknameEnter, currentClient.getUserId(), streamId,
+					ConferenceLog.Type.nicknameEnter, currentClient.getUserId(), streamId,
 					null, currentClient.getUserip(), currentClient.getScope());
 
 			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);

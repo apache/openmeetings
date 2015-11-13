@@ -118,7 +118,7 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private String alternateDownload;
 
-	@Column(name = "comment_field")
+	@Column(name = "comment")
 	@Element(data = true, required = false)
 	private String comment;
 
@@ -152,7 +152,7 @@ public class Recording extends FileItem {
 
 	@Column(name = "is_interview")
 	@Element(data = true, required = false)
-	private Boolean isInterview;
+	private boolean interview;
 
 	@Column(name = "progress_post_processing")
 	@Element(data = true, required = false)
@@ -290,12 +290,12 @@ public class Recording extends FileItem {
 		this.log = log;
 	}
 
-	public Boolean getIsInterview() {
-		return isInterview;
+	public boolean isInterview() {
+		return interview;
 	}
 
-	public void setIsInterview(Boolean isInterview) {
-		this.isInterview = isInterview;
+	public void setInterview(boolean interview) {
+		this.interview = interview;
 	}
 
 	public Integer getProgressPostProcessing() {

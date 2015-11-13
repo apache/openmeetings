@@ -139,7 +139,7 @@ public class Room implements IDataProviderEntity {
 	private String name;
 
 	@Lob
-	@Column(name = "comment_field")
+	@Column(name = "comment")
 	@Element(data = true, required = false)
 	private String comment;
 

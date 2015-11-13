@@ -51,7 +51,7 @@ import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -191,7 +191,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 
 		// Log the User
-		conferenceLogDao.addConferenceLog(Type.clientConnect,
+		conferenceLogDao.addConferenceLog(ConferenceLog.Type.clientConnect,
 				rcm.getUserId(), streamId, null, rcm.getUserip(),
 				rcm.getScope());
 		return true;
@@ -498,7 +498,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Long roomId = currentClient.getRoomId();
 
 			// Log the User
-			conferenceLogDao.addConferenceLog(Type.roomLeave,
+			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomLeave,
 					currentClient.getUserId(), currentClient.getStreamid(),
 					roomId, currentClient.getUserip(), "");
 
@@ -1156,7 +1156,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
             }
 
 			// Log the User
-			conferenceLogDao.addConferenceLog(Type.roomEnter,
+			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomEnter,
 					currentClient.getUserId(), streamid, roomId,
 					currentClient.getUserip(), "");
 			

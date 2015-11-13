@@ -27,9 +27,9 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 
 	private InvitationTemplate(Long langId, String invitorName, String message, String link) {
 		super(langId);
-		
-		add(new Label("titleLbl", getString(500,  langId)));
-		add(new Label("userLbl", getString(501,  langId)));
+
+		add(new Label("titleLbl", getString(500, langId)));
+		add(new Label("userLbl", getString(501, langId)));
 		add(new Label("user", invitorName));
 		add(new Label("messageLbl", getString(502, langId)));
 		add(new Label("message", message).setEscapeModelStrings(false));

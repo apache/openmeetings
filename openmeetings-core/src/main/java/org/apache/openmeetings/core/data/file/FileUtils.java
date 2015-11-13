@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -69,7 +70,7 @@ public class FileUtils {
 			log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
 			fileExplorerItemDao.update(file);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao.getByParent(file.getId()).toArray(new FileExplorerItem[0]);
+			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(file.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 				fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
@@ -90,7 +91,7 @@ public class FileUtils {
 			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
 			fileExplorerItemDao.update(file);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao.getByParent(file.getId()).toArray(new FileExplorerItem[0]);
+			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(file.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 				setFileToOwnerOrRoomByParent(childExplorerItem, userId, roomId);

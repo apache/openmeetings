@@ -54,7 +54,7 @@ public class RecordingDTO implements Serializable {
 		this.aviName = r.getAlternateDownload();
 		this.roomId = r.getRoomId();
 		this.status = r.getStatus().name();
-		this.interview = r.getIsInterview();
+		this.interview = r.isInterview();
 		this.start = r.getRecordStart();
 		this.end = r.getRecordEnd();
 		this.width = r.getWidth();

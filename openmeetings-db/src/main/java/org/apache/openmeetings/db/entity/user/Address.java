@@ -51,7 +51,7 @@ public class Address implements IDataProviderEntity {
 	private String additionalname;
 	
 	@Lob
-	@Column(name = "comment_field", length=2048)
+	@Column(name = "comment", length=2048)
 	@Element(data=true, required=false)
 	private String comment;
 	

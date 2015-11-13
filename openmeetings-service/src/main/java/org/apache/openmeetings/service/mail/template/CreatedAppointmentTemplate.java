@@ -31,7 +31,7 @@ public class CreatedAppointmentTemplate extends AbstractAppointmentTemplate {
 
 	private CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		super(langId, a, tz);
-		
+
 		add(new Label("titleLbl", getString(1151L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")

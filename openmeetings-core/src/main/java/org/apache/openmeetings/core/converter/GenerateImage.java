@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
 import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;

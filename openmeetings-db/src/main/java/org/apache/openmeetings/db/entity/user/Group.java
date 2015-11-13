@@ -103,14 +103,14 @@ public class Group implements IDataProviderEntity {
 		this.updatedby = updatedby;
 	}	
 	
-    
+
 	public Date getInserted() {
 		return inserted;
 	}
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-    
+
 	public Date getUpdated() {
 		return updated;
 	}

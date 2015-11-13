@@ -65,7 +65,7 @@ public class SOAPLoginDao {
 			soapLogin.setAllowRecording(allowRecording);
 
 			soapLogin = em.merge(soapLogin);
-			Long soapLoginId = soapLogin.getSoapLoginId();
+			Long soapLoginId = soapLogin.getId();
 
 			if (soapLoginId > 0) {
 				return hash;
@@ -102,7 +102,7 @@ public class SOAPLoginDao {
 
 	public void update(SOAPLogin soapLogin) {
 		try {
-			if (soapLogin.getSoapLoginId() == 0) {
+			if (soapLogin.getId() == null) {
 				em.persist(soapLogin);
 			} else {
 				if (!em.contains(soapLogin)) {

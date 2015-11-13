@@ -89,7 +89,7 @@ import org.simpleframework.xml.Root;
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
 	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id"),
-	@NamedQuery(name = "checkPassword", query = "select count(c.id) from User c where c.deleted = false AND c.id = :userId " //
+	@NamedQuery(name = "checkPassword", query = "select count(c) from User c where c.deleted = false AND c.id = :userId " //
 			+ "AND c.password LIKE :password"), //
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
@@ -252,7 +252,7 @@ public class User implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
-	private List<GroupUser> groupUsers = new ArrayList<GroupUser>();
+	private List<GroupUser> groupUsers = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
@@ -481,7 +481,7 @@ public class User implements IDataProviderEntity {
 
 	public List<GroupUser> getGroupUsers() {
 		if (groupUsers == null) {
-			groupUsers = new ArrayList<GroupUser>();
+			groupUsers = new ArrayList<>();
 		}
 		return groupUsers;
 	}
