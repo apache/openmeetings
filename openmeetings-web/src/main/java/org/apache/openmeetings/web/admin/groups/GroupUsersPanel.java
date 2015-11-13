@@ -23,8 +23,8 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
@@ -42,20 +42,20 @@ import org.apache.wicket.markup.repeater.Item;
 
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private long organisationId;
-	private List<Organisation_Users> users2add = new ArrayList<Organisation_Users>();
+	private long groupId;
+	private List<GroupUser> users2add = new ArrayList<GroupUser>();
 	
-	public GroupUsersPanel(String id, long orgId) {
+	public GroupUsersPanel(String id, long groupId) {
 		super(id);
-		this.organisationId = orgId;
+		this.groupId = groupId;
 		setOutputMarkupId(true);
 		
-		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new OrgUserDataProvider()) {
+		SearchableDataView<GroupUser> dataView = new SearchableDataView<GroupUser>("userList", new GroupUserDataProvider()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<Organisation_Users> item) {
-				final Organisation_Users orgUser = item.getModelObject();
+			protected void populateItem(Item<GroupUser> item) {
+				final GroupUser orgUser = item.getModelObject();
 				User u = orgUser.getUser();
 				item.add(new CheckBox("isModerator").add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
@@ -63,7 +63,7 @@ public class GroupUsersPanel extends Panel {
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						if (orgUser.getId() != null) {
-							getBean(OrganisationUserDao.class).update(orgUser, WebSession.getUserId());
+							getBean(GroupUserDao.class).update(orgUser, WebSession.getUserId());
 						}
 					}
 				}));
@@ -86,7 +86,7 @@ public class GroupUsersPanel extends Panel {
 								}
 							}
 						} else {
-							getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
+							getBean(GroupUserDao.class).delete(orgUser, WebSession.getUserId());
 						}
 						target.add(GroupUsersPanel.this);
 					}
@@ -104,36 +104,36 @@ public class GroupUsersPanel extends Panel {
 		});
 	}
 	
-	void update(long orgId) {
-		organisationId = orgId;
+	void update(long groupId) {
+		this.groupId = groupId;
 		users2add.clear();
 	}
 	
-	List<Organisation_Users> getUsers2add() {
+	List<GroupUser> getUsers2add() {
 		return users2add;
 	}
 	
-	private class OrgUserDataProvider extends SearchableDataProvider<Organisation_Users> {
+	private class GroupUserDataProvider extends SearchableDataProvider<GroupUser> {
 		private static final long serialVersionUID = 1L;
 
-		OrgUserDataProvider() {
-			super(OrganisationUserDao.class);
+		GroupUserDataProvider() {
+			super(GroupUserDao.class);
 		}
 		
-		protected OrganisationUserDao getDao() {
-			return (OrganisationUserDao)super.getDao();
+		protected GroupUserDao getDao() {
+			return (GroupUserDao)super.getDao();
 		}
 		
 		public long size() {
-			return users2add.size() + (search == null ? getDao().count(organisationId) : getDao().count(organisationId, search));
+			return users2add.size() + (search == null ? getDao().count(groupId) : getDao().count(groupId, search));
 		}
 		
-		public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
-			List<Organisation_Users> list = new ArrayList<Organisation_Users>();
+		public java.util.Iterator<? extends GroupUser> iterator(long first, long count) {
+			List<GroupUser> list = new ArrayList<GroupUser>();
 			list.addAll(users2add);
 			list.addAll(search == null && getSort() == null
-					? getDao().get(organisationId, (int)first, (int)count)
-					: getDao().get(organisationId, search, (int)first, (int)count, getSortStr()));
+					? getDao().get(groupId, (int)first, (int)count)
+					: getDao().get(groupId, search, (int)first, (int)count, getSortStr()));
 			
 			return list.iterator();
 		}

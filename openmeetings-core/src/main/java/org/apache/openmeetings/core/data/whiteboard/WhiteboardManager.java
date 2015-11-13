@@ -22,24 +22,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.openmeetings.db.dto.room.WhiteboardObject;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class WhiteboardManager {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			WhiteboardManager.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardManager.class, webAppRootKey);
 	
 	@Autowired
-	private WhiteBoardObjectListManagerById whiteBoardObjectListManagerById;
+	private WhiteBoardObjectListManagerById wbListManagerById;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addWhiteBoardObjectById(Long room_id, Map whiteboardObj,
-			Long whiteBoardId) {
+	public void addWhiteBoardObjectById(Long roomId, Map whiteboardObj, Long whiteBoardId) {
 		try {
 			log.debug("addWhiteBoardObjectById: ", whiteboardObj);
 
@@ -59,21 +59,19 @@ public class WhiteboardManager {
 			List actionObject = (List) whiteboardObj.get(3);
 
 			if (action.equals("moveMap")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
-				whiteboardObject.setX(Integer.valueOf(
-						actionObject.get(1).toString()).intValue());
-				whiteboardObject.setY(Integer.valueOf(
-						actionObject.get(2).toString()).intValue());
+				whiteboardObject.setX(Integer.valueOf(actionObject.get(1).toString()));
+				whiteboardObject.setY(Integer.valueOf(actionObject.get(2).toString()));
 
-				whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("draw") || action.equals("redo")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				// log.debug(actionObject);
@@ -86,21 +84,21 @@ public class WhiteboardManager {
 					log.debug("objectOID: " + objectOID);
 					whiteboardObject.getRoomItems()
 							.put(objectOID, actionObject);
-					whiteBoardObjectListManagerById
+					wbListManagerById
 							.setWhiteBoardObjectListRoomObjAndWhiteboardId(
-									room_id, whiteboardObject, whiteBoardId);
+									roomId, whiteboardObject, whiteBoardId);
 				}
 			} else if (action.equals("clear")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 				whiteboardObject.setRoomItems(new HashMap<String, List>());
-				whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("delete") || action.equals("undo")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 				String objectOID = actionObject.get(actionObject.size() - 1)
 						.toString();
@@ -132,9 +130,7 @@ public class WhiteboardManager {
 						|| objectType.equals("mindmapnode")
 						|| objectType.equals("flv")) {
 
-					Integer zIndex = Integer.valueOf(
-							actionObject.get(actionObject.size() - 8)
-									.toString()).intValue();
+					Integer zIndex = Integer.valueOf(actionObject.get(actionObject.size() - 8).toString());
 
 					log.debug("1|zIndex " + zIndex);
 					log.debug("2|zIndex "
@@ -156,10 +152,7 @@ public class WhiteboardManager {
 						List actionObjectStored = whiteboardObject
 								.getRoomItems().get(whiteboardObjKey);
 
-						Integer zIndexStored = Integer.valueOf(
-								actionObjectStored.get(
-										actionObjectStored.size() - 8)
-										.toString()).intValue();
+						Integer zIndexStored = Integer.valueOf(actionObjectStored.get(actionObjectStored.size() - 8).toString());
 
 						log.debug("zIndexStored|zIndex " + zIndexStored + "|"
 								+ zIndex);
@@ -168,19 +161,17 @@ public class WhiteboardManager {
 							zIndexStored -= 1;
 							log.debug("new-zIndex " + zIndexStored);
 						}
-						actionObjectStored.set(actionObjectStored.size() - 8,
-								zIndexStored);
+						actionObjectStored.set(actionObjectStored.size() - 8, zIndexStored);
 
-						whiteboardObject.getRoomItems().put(whiteboardObjKey,
-								actionObjectStored);
+						whiteboardObject.getRoomItems().put(whiteboardObjKey, actionObjectStored);
 					}
 
 				}
 
 				whiteboardObject.getRoomItems().remove(objectOID);
 
-				whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("size") || action.equals("editProp")
 					|| action.equals("editTextMindMapNode")
@@ -188,20 +179,18 @@ public class WhiteboardManager {
 					|| action.equals("flv")
 					|| action.equals("editTextMindMapColor")
 					|| action.equals("editTextMindMapFontColor")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
-				String objectOID = actionObject.get(actionObject.size() - 1)
-						.toString();
+				String objectOID = actionObject.get(actionObject.size() - 1).toString();
 				// List roomItem = roomList.get(objectOID);
-				List currentObject = whiteboardObject.getRoomItems().get(
-						objectOID);
+				List currentObject = whiteboardObject.getRoomItems().get(objectOID);
 				if (actionObject.get(0).equals("paint")) {
 					actionObject.set(1, currentObject.get(1));
 				}
 				whiteboardObject.getRoomItems().put(objectOID, actionObject);
 
-				Map roomList = whiteboardObject.getRoomItems();
+				Map<String, List> roomList = whiteboardObject.getRoomItems();
 
 				if (action.equals("swf")) {
 
@@ -211,72 +200,32 @@ public class WhiteboardManager {
 
 						if (actionObject.get(8) != currentObject.get(8)) {
 
-							String baseObjectName = actionObject.get(
-									actionObject.size() - 1).toString();
-							Integer slidesNumber = Integer.valueOf(
-									actionObject.get(8).toString()).intValue();
+							String baseObjectName = actionObject.get(actionObject.size() - 1).toString();
+							Integer slidesNumber = Integer.valueOf(actionObject.get(8).toString());
 
-							log.debug("updateObjectsToSlideNumber :: "
-									+ baseObjectName + "," + slidesNumber);
+							log.debug("updateObjectsToSlideNumber :: " + baseObjectName + "," + slidesNumber);
 
-							for (Iterator<String> iter = roomList.keySet()
-									.iterator(); iter.hasNext();) {
-								String whiteboardObjKey = iter.next();
-								List actionObjectStored = (List) roomList
-										.get(whiteboardObjKey);
+							for (Entry<String, List> me : roomList.entrySet()) {
+								List actionObjectStored = me.getValue();
 
 								if (actionObjectStored.get(0).equals("ellipse")
-										|| actionObjectStored.get(0).equals(
-												"drawarrow")
-										|| actionObjectStored.get(0).equals(
-												"line")
-										|| actionObjectStored.get(0).equals(
-												"clipart")
-										|| actionObjectStored.get(0).equals(
-												"paint")
-										|| actionObjectStored.get(0).equals(
-												"rectangle")
-										|| actionObjectStored.get(0).equals(
-												"uline")
-										|| actionObjectStored.get(0).equals(
-												"image")
-										|| actionObjectStored.get(0).equals(
-												"letter")) {
+										|| actionObjectStored.get(0).equals("drawarrow")
+										|| actionObjectStored.get(0).equals("line")
+										|| actionObjectStored.get(0).equals("clipart")
+										|| actionObjectStored.get(0).equals("paint")
+										|| actionObjectStored.get(0).equals("rectangle")
+										|| actionObjectStored.get(0).equals("uline")
+										|| actionObjectStored.get(0).equals("image")
+										|| actionObjectStored.get(0).equals("letter")) {
 
-									Map swfObj = (Map) actionObjectStored
-											.get(actionObjectStored.size() - 7);
+									Map swfObj = (Map) actionObjectStored.get(actionObjectStored.size() - 7);
 									log.debug("swfObj :1: " + swfObj);
 
 									if (swfObj != null) {
-
-										if (swfObj.get("name").equals(
-												baseObjectName)) {
-
-											if (Integer.valueOf(
-													swfObj.get("slide")
-															.toString())
-													.intValue() == slidesNumber) {
-
-												swfObj.put("isVisible", true);
-
-												actionObjectStored.set(
-														actionObjectStored
-																.size() - 7,
-														swfObj);
-
-											} else {
-
-												swfObj.put("isVisible", false);
-
-												actionObjectStored.set(
-														actionObjectStored
-																.size() - 7,
-														swfObj);
-
-											}
-
+										if (swfObj.get("name").equals(baseObjectName)) {
+											swfObj.put("isVisible", Integer.valueOf(swfObj.get("slide").toString()).intValue() == slidesNumber);
+											actionObjectStored.set(actionObjectStored.size() - 7, swfObj);
 										}
-
 									}
 
 									log.debug("swfObj :1: " + swfObj);
@@ -290,13 +239,13 @@ public class WhiteboardManager {
 					}
 				}
 
-				whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("clearSlide")) {
 
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				Map roomList = whiteboardObject.getRoomItems();
@@ -307,19 +256,19 @@ public class WhiteboardManager {
 
 				}
 
-				whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("whiteboardObj")) {
-				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+				WhiteboardObject whiteboardObject = wbListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				whiteboardObject.setFullFit((Boolean) actionObject.get(1));
 				whiteboardObject.setZoom((Integer) actionObject.get(2));
 
-				whiteBoardObjectListManagerById
-				.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				wbListManagerById
+				.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 						whiteboardObject, whiteBoardId);
 			} else {
 				log.warn("Unkown Type: " + action + " actionObject: "

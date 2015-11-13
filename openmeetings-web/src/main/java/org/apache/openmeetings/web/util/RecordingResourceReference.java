@@ -33,7 +33,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -158,7 +158,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
-		if (r.getOrganization_id() == null || getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganization_id(), getUserId())) {
+		if (r.getGroupId() == null || getBean(GroupUserDao.class).isUserInGroup(r.getGroupId(), getUserId())) {
 			return r;
 		}
 		//TODO external group check was added for plugin recording download

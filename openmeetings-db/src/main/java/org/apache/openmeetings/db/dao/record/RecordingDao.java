@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,10 +149,10 @@ public class RecordingDao {
 		return query.getResultList();
 	}
 
-	public List<Recording> getRootByPublic(Long orgId) {
-		TypedQuery<Recording> q = em.createNamedQuery(orgId == null ? "getRecordingsPublic" : "getRecordingsByOrganization", Recording.class);
-		if (orgId != null) {
-			q.setParameter("organization_id", orgId);
+	public List<Recording> getRootByPublic(Long groupId) {
+		TypedQuery<Recording> q = em.createNamedQuery(groupId == null ? "getRecordingsPublic" : "getRecordingsByGroup", Recording.class);
+		if (groupId != null) {
+			q.setParameter("groupId", groupId);
 		}
 		return q.getResultList();
 	}
@@ -260,9 +260,9 @@ public class RecordingDao {
 			// Public Recordings
 			long publicFileSize = 0;
 			
-			//get all organizations the user can view
-			for (Organisation_Users ou : userDao.get(userId).getOrganisation_users()) {
-				List<Recording> publicRecordings = getRootByPublic(ou.getOrganisation().getId());
+			//get all groups the user can view
+			for (GroupUser ou : userDao.get(userId).getGroupUsers()) {
+				List<Recording> publicRecordings = getRootByPublic(ou.getGroup().getId());
 				//get sizes
 				for (Recording r : publicRecordings) {
 					publicFileSize += getSize(r);

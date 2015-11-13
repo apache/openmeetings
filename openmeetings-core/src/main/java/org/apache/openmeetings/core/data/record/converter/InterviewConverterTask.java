@@ -32,15 +32,15 @@ public class InterviewConverterTask {
 	@Autowired
 	private TaskExecutor taskExecutor;
 	@Autowired
-	private InterviewConverter flvInterviewConverter;
+	private InterviewConverter interviewConverter;
 
-	public void startConversionThread(final Long flvRecordingId) {
+	public void startConversionThread(final Long recordingId) {
 		try {
 			log.debug("[-1-]" + taskExecutor);
 
 			taskExecutor.execute(new Runnable() {
 				public void run() {
-					flvInterviewConverter.startConversion(flvRecordingId);
+					interviewConverter.startConversion(recordingId);
 				}
 			});
 		} catch (Exception err) {

@@ -61,12 +61,12 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
-			+ "	AND a.owner.user_id = :userId"
+			+ "	AND a.owner.id = :userId"
     	)
     , @NamedQuery(name="joinedAppointmentsInRange",
 		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a "
-			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
-			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.user_id = :userId)"
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
+			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.id = :userId)"
 			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :start AND :end) "
@@ -85,13 +85,12 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
     	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.room.rooms_id = :room_id")
+    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
     , @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
-	//TODO this query returns duplicates if the user books an appointment with
-	//his own user as second meeting-member, swagner 19.02.2012
+	//TODO this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :start AND :end) "
 			+ "		OR (a.end BETWEEN :start AND :end) "
@@ -100,15 +99,15 @@ import org.simpleframework.xml.Root;
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :start AND :end) "
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 	    )
-    , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.user_id = :userId")
-    , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.user_id = :userId")
+    , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
+    , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
 })
 @Root(name="appointment")
 public class Appointment implements IDataProviderEntity {

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,6 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.DaoHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +46,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class ServerDao implements IDataProviderDao<Server> {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ServerDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerDao.class, webAppRootKey);
 	public final static String[] searchFields = { "name", "address", "comment" };
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	
 	/**
 	 * Get a list of all available servers
@@ -163,13 +163,13 @@ public class ServerDao implements IDataProviderDao<Server> {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			em.merge(entity);
 		} else {
 			entity.setInserted(new Date());
 			if (userId != null) {
-				entity.setInsertedby(usersDao.get(userId));
+				entity.setInsertedby(userDao.get(userId));
 			}
 			em.persist(entity);
 		}
@@ -187,7 +187,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			entity.setDeleted(true);
 			em.merge(entity);

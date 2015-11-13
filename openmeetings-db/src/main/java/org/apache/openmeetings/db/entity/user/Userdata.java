@@ -36,22 +36,22 @@ public class Userdata implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long data_id;
+	private Long id;
 
 	@Column(name = "user_id")
-	private Long user_id;
+	private Long userId;
 
 	@Column(name = "data_key")
-	private String data_key;
+	private String key;
 
 	@Column(name = "data")
 	private String data;
 
 	@Column(name = "inserted")
-	private Date starttime;
+	private Date inserted;
 
 	@Column(name = "updated")
-	private Date updatetime;
+	private Date updated;
 
 	@Lob
 	@Column(name = "comment")
@@ -77,35 +77,35 @@ public class Userdata implements Serializable {
 	}
 
 	public String getKey() {
-		return data_key;
+		return key;
 	}
 
 	public void setKey(String key) {
-		this.data_key = key;
+		this.key = key;
 	}
 
 	public Long getId() {
-		return data_id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.data_id = id;
+		this.id = id;
 	}
 
 	public Date getInserted() {
-		return starttime;
+		return inserted;
 	}
 
 	public void setInserted(Date inserted) {
-		this.starttime = inserted;
+		this.inserted = inserted;
 	}
 
 	public Date getUpdated() {
-		return updatetime;
+		return updated;
 	}
 
 	public void setUpdated(Date updated) {
-		this.updatetime = updated;
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -117,10 +117,10 @@ public class Userdata implements Serializable {
 	}
 
 	public Long getUserId() {
-		return user_id;
+		return userId;
 	}
 
 	public void setUserId(Long userId) {
-		this.user_id = userId;
+		this.userId = userId;
 	}
 }

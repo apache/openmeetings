@@ -105,7 +105,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	private String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
 		StringBuilder hql = new StringBuilder("SELECT ");
 		hql.append(isCount ? "COUNT(" : "").append("m").append(isCount ? ")" : "")
-			.append(" FROM PrivateMessage m WHERE m.owner.user_id = :ownerId ")
+			.append(" FROM PrivateMessage m WHERE m.owner.id = :ownerId ")
 			.append(" AND m.folderId = :folderId ");
 		
 		if (!StringUtils.isEmpty(search)) {

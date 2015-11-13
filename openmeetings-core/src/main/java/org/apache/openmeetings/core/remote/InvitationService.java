@@ -74,7 +74,7 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param message
 	 * @param email
 	 * @param subject
-	 * @param room_id
+	 * @param roomId
 	 * @param conferencedomain
 	 * @param isPasswordProtected
 	 * @param invitationpass
@@ -83,35 +83,35 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param validFromTime
 	 * @param validToDate
 	 * @param validToTime
-	 * @param language_id
+	 * @param languageId
      * @param iCalTz
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
 	public Object sendInvitationHash(String SID, String firstname, String lastname,
 			String message, String email, String subject,
-			Long room_id, String conferencedomain, Boolean isPasswordProtected,
+			Long roomId, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
-			Long language_id, String iCalTz, boolean sendMail) {
+			Long languageId, String iCalTz, boolean sendMail) {
 
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("sendInvitationHash: ");
 	
 				Date from = getDate(validFromDate, validFromTime, iCalTz);
 				Date to = getDate(validToDate, validToTime, iCalTz);
 	
 				User owner = null;
-				if (users_id < 0) {
-					owner = userDao.get(-users_id);
+				if (userId < 0) {
+					owner = userDao.get(-userId);
 				}
-				users_id = owner == null ? users_id : owner.getOwnerId();
-				User invitee = userDao.getContact(email, firstname, lastname, users_id);
-				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+				userId = owner == null ? userId : owner.getOwnerId();
+				User invitee = userDao.getContact(email, firstname, lastname, userId);
+				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(roomId),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), language_id,
+								, userDao.get(userId), languageId,
 								from, to, null);
 
 				if (invitation != null) {
@@ -135,12 +135,12 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject
-			, Long language_id) throws Exception {
-		Long users_id = sessiondataDao.checkSession(SID);
+			, Long languageId) throws Exception {
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
-			inv.getInvitee().setLanguageId(language_id);
+			inv.getInvitee().setLanguageId(languageId);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 		} else {
 			return "Need User Privileges to perfom the Action";

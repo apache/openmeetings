@@ -58,6 +58,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
@@ -85,7 +86,7 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
-public class WebSession extends AbstractAuthenticatedWebSession {
+public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	public static final String SECURE_HASH = "secureHash";
@@ -196,7 +197,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		//FIXME code is duplicated from MainService, need to be unified
 		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
-		if (soapLogin != null && !soapLogin.getUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
+		if (soapLogin != null && !soapLogin.isUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
 			if (sd != null && sd.getXml() != null) {
@@ -496,6 +497,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (save) {
 			dashboardContext.getDashboardPersister().save(dashboard);
 		}
+	}
+
+	public long getOmLanguage() {
+		return getLanguage();
 	}
 	
 	private static void checkIsInvalid() {

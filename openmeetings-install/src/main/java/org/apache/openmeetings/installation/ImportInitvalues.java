@@ -59,7 +59,7 @@ import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
@@ -68,8 +68,8 @@ import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -98,7 +98,7 @@ public class ImportInitvalues {
 	@Autowired
 	private OAuth2Dao oauthDao;
 	@Autowired
-	private OrganisationDao groupDao;
+	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
 	
@@ -187,7 +187,7 @@ public class ImportInitvalues {
 				1455L);
 
 		navimanagement.addMainStructure("adminModuleOrg", null, 16, 127, true,
-				false, 3, "Administration of Organizations", 6, false, 1456L);
+				false, 3, "Administration of Groups", 6, false, 1456L);
 
 		navimanagement.addMainStructure("adminModuleRoom", null, 17, 186, true,
 				false, 3, "Administration of Rooms", 6, false, 1457L);
@@ -262,7 +262,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_FRONTEND_REGISTER_KEY, cfg.allowFrontendRegister, null, "Is user register available on login screen");
 		cfgDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
 		cfgDao.add(CONFIG_OAUTH_REGISTER_KEY, "1", null, "Is user register available via OAuth");
-		// this group_id is the Organisation of users who register through the frontend or SOAP
+		// this group_id is the Group of users who register through the frontend or SOAP
 		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", null, "");
 
 		cfgDao.add("smtp_server", cfg.smtpServer, null,
@@ -455,7 +455,7 @@ public class ImportInitvalues {
 		if (groupId != null) {
 			RoomGroup ro = new RoomGroup();
 			ro.setRoom(r);
-			ro.setOrganisation(groupDao.get(groupId));
+			ro.setGroup(groupDao.get(groupId));
 			ro.setInserted(new Date());
 		}
 		r = roomDao.update(r, null);
@@ -483,13 +483,13 @@ public class ImportInitvalues {
 		}
 	}
 
-	public void loadInitUserAndOrganisation(InstallationConfig cfg) throws Exception {
+	public void loadInitUserAndGroup(InstallationConfig cfg) throws Exception {
 		// Add default group
-		Organisation org = new Organisation();
+		Group org = new Group();
 		org.setName(cfg.group);
 		org.setInsertedby(1L);
 		org.setDeleted(false);
-		org.setStarttime(new Date());
+		org.setInserted(new Date());
 		org = groupDao.update(org, null);
 
 		User u = userDao.getNewUserInstance(null);
@@ -500,7 +500,7 @@ public class ImportInitvalues {
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
 		u.getAddress().setEmail(cfg.email);
-		u.getOrganisation_users().add(new Organisation_Users(org));
+		u.getGroupUsers().add(new GroupUser(org));
 
 		u = userDao.update(u, cfg.password, -1);
 
@@ -624,7 +624,7 @@ public class ImportInitvalues {
 			return;
 		}
 		loadSystem(cfg, force);
-		loadInitUserAndOrganisation(cfg);
+		loadInitUserAndGroup(cfg);
 		progress = 94;
 
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms));

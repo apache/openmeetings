@@ -129,15 +129,15 @@ public class UserForm extends AdminBaseForm<User> {
 		target.add(this);
 		target.add(listContainer);
 		target.appendJavaScript("omUserPanelInit();");
-		if (u.getOrganisation_users().isEmpty()) {
+		if (u.getGroupUsers().isEmpty()) {
 			warning.open(target);
 		}
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		UserDao usersDaoImpl = getBean(UserDao.class);
-		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
+		UserDao userDao = getBean(UserDao.class);
+		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
 		update(target);
 	}
 
@@ -155,9 +155,9 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		UserDao usersDaoImpl = getBean(UserDao.class);
-		usersDaoImpl.delete(getModelObject(), getUserId());
-		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
+		UserDao userDao = getBean(UserDao.class);
+		userDao.delete(getModelObject(), getUserId());
+		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
 		update(target);
 	}
 
@@ -182,8 +182,8 @@ public class UserForm extends AdminBaseForm<User> {
 		update(null);
 		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(new Label("ownerId"));
-		add(forDatePattern("starttime", WEB_DATE_PATTERN));
-		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
+		add(forDatePattern("inserted", WEB_DATE_PATTERN));
+		add(forDatePattern("updated", WEB_DATE_PATTERN));
 
 		add(new CheckBox("forceTimeZoneCheck"));
 

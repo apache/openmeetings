@@ -74,27 +74,28 @@ import org.simpleframework.xml.Root;
 @Entity
 @FetchGroups({
 	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
-	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisation_users")})
+	, @FetchGroup(name = "groupUsers", attributes = { @FetchAttribute(name = "groupUsers")})
 })
 @NamedQueries({
-	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
-	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
+	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
+	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids"),
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
-	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
+	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
-	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.user_id"),
-	@NamedQuery(name = "checkPassword", query = "SELECT COUNT(u) from User u WHERE u.deleted = false AND u.user_id = :userId AND u.password LIKE :password"), //
-	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.user_id = :userId"), //
+	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id"),
+	@NamedQuery(name = "checkPassword", query = "select count(c) from User c where c.deleted = false AND c.id = :userId " //
+			+ "AND c.password LIKE :password"), //
+	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id"), 
-	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
+	@NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId"), 
+	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType"),
 	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 })
 @Table(name = "om_user")
@@ -175,7 +176,7 @@ public class User implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, name = "user_id")
-	private Long user_id;
+	private Long id;
 
 	@Column(name = "age")
 	@Element(data = true, required = false)
@@ -213,13 +214,13 @@ public class User implements IDataProviderEntity {
 	@Column(name = "salutation")
 	@Enumerated(EnumType.STRING)
 	@Element(name = "title_id", data = true, required = false)
-	private Salutation salutations_id;
+	private Salutation salutation;
 
 	@Column(name = "inserted")
-	private Date starttime;
+	private Date inserted;
 
 	@Column(name = "updated")
-	private Date updatetime;
+	private Date updated;
 
 	@Column(name = "pictureuri")
 	@Element(data = true, required = false)
@@ -231,7 +232,7 @@ public class User implements IDataProviderEntity {
 
 	@Column(name = "language_id")
 	@Element(name = "language_id", data = true, required = false)
-	private Long language_id;
+	private Long languageId;
 
 	@Column(name = "resethash")
 	@Element(data = true, required = false)
@@ -251,7 +252,7 @@ public class User implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
-	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
+	private List<GroupUser> groupUsers = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
@@ -261,11 +262,11 @@ public class User implements IDataProviderEntity {
 	// Vars to simulate external Users
 	@Column(name = "external_id")
 	@Element(name = "externalUserId", data = true, required = false)
-	private String externalUserId;
+	private String externalId;
 
 	@Column(name = "external_type")
 	@Element(name = "externalUserType", data = true, required = false)
-	private String externalUserType;
+	private String externalType;
 
 	/**
 	 * java.util.TimeZone Id
@@ -322,11 +323,11 @@ public class User implements IDataProviderEntity {
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
 	
 	public Long getId() {
-		return user_id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.user_id = id;
+		this.id = id;
 	}
 
 	public Address getAddress() {
@@ -431,27 +432,27 @@ public class User implements IDataProviderEntity {
 	}
 
 	public Salutation getSalutation() {
-		return salutations_id;
+		return salutation;
 	}
 
 	public void setSalutation(Salutation salutation) {
-		this.salutations_id = salutation;
+		this.salutation = salutation;
 	}
 
 	public Date getInserted() {
-		return starttime;
+		return inserted;
 	}
 
 	public void setInserted(Date inserted) {
-		this.starttime = inserted;
+		this.inserted = inserted;
 	}
 
 	public Date getUpdated() {
-		return updatetime;
+		return updated;
 	}
 
 	public void setUpdated(Date updated) {
-		this.updatetime = updated;
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -471,23 +472,23 @@ public class User implements IDataProviderEntity {
 	}
 
 	public Long getLanguageId() {
-		return language_id;
+		return languageId;
 	}
 
 	public void setLanguageId(Long languageId) {
-		this.language_id = languageId;
+		this.languageId = languageId;
 	}
 
-	public List<Organisation_Users> getOrganisation_users() {
-		if (organisation_users == null) {
-			organisation_users = new ArrayList<Organisation_Users>();
+	public List<GroupUser> getGroupUsers() {
+		if (groupUsers == null) {
+			groupUsers = new ArrayList<>();
 		}
-		return organisation_users;
+		return groupUsers;
 	}
 
-	public void setOrganisation_users(List<Organisation_Users> organisation_users) {
-		if (organisation_users != null) {
-			this.organisation_users = organisation_users;
+	public void setGroupUsers(List<GroupUser> groupUsers) {
+		if (groupUsers != null) {
+			this.groupUsers = groupUsers;
 		}
 	}
 
@@ -508,19 +509,19 @@ public class User implements IDataProviderEntity {
 	}
 
 	public String getExternalId() {
-		return externalUserId;
+		return externalId;
 	}
 
 	public void setExternalId(String externalId) {
-		this.externalUserId = externalId;
+		this.externalId = externalId;
 	}
 
 	public String getExternalType() {
-		return externalUserType;
+		return externalType;
 	}
 
 	public void setExternalType(String externalType) {
-		this.externalUserType = externalType;
+		this.externalType = externalType;
 	}
 
 	public Sessiondata getSessionData() {
@@ -632,11 +633,11 @@ public class User implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "User [id=" + user_id + ", firstname=" + firstname
+		return "User [id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
-				+ ", languageId=" + language_id + ", address=" + address
-				+ ", externalId=" + externalUserId + ", externalType=" + externalUserType
+				+ ", languageId=" + languageId + ", address=" + address
+				+ ", externalId=" + externalId + ", externalType=" + externalType
 				+ ", type=" + type + "]";
 	}
 }

@@ -49,7 +49,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c SET c.folderId = :folderId " +
 			"WHERE c.id IN (:ids) "),
 	@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c WHERE c.id IN (:ids) "),
-	@NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.rooms_id = :roomId ")
+	@NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.id = :roomId ")
 })
 @Table(name = "private_message")
 @Root(name = "privatemessage")
@@ -101,7 +101,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	private boolean bookedRoom;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "rooms_id")
+	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
 	@Element(data = true, required = false)
 	private Room room;

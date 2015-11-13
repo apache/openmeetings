@@ -25,29 +25,29 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.test.selenium.HeavyTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestUserOrganisation extends AbstractJUnitDefaults {
+public class TestUserGroup extends AbstractJUnitDefaults {
 	@Autowired
-	private OrganisationUserDao orgUserDao;
+	private GroupUserDao groupUserDao;
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	@Autowired
-	private UserDao usersDao;
-	public static final String ORG_NAME = "Test Org";
+	private UserDao userDao;
+	public static final String GROUP_NAME = "Test Group";
 	
 	private User getValidUser() {
-		for (User u : usersDao.getAllBackupUsers()) {
-			if (!u.isDeleted() && u.getOrganisation_users().size() > 0) {
+		for (User u : userDao.getAllBackupUsers()) {
+			if (!u.isDeleted() && u.getGroupUsers().size() > 0) {
 				return u;
 			}
 		}
@@ -56,44 +56,44 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	}
 	
 	@Test
-	public void getUsersByOrganisationId() {
+	public void getUsersByGroupId() {
 		User u = getValidUser();
-		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getId();
-		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
-		assertTrue("Default Organisation should contain at least 1 user: " + ul.size(), ul.size() > 0);
+		Long groupId = u.getGroupUsers().get(0).getGroup().getId();
+		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
+		assertTrue("Default Group should contain at least 1 user: " + ul.size(), ul.size() > 0);
 		
-		Organisation_Users ou = orgUserDao.getByOrganizationAndUser(orgId, u.getId());
-		assertNotNull("Unable to found [organisation, user] pair - [" + orgId + "," + u.getId() + "]", ou);
+		GroupUser ou = groupUserDao.getByGroupAndUser(groupId, u.getId());
+		assertNotNull("Unable to found [group, user] pair - [" + groupId + "," + u.getId() + "]", ou);
 	}
 	
 	@Test
-	public void addOrganisation() {
-		Organisation o = new Organisation();
-		o.setName(ORG_NAME);
-		Long orgId = orgDao.update(o, null).getId(); //inserted by not checked
-		assertNotNull("New Organisation have valid id", orgId);
+	public void addGroup() {
+		Group o = new Group();
+		o.setName(GROUP_NAME);
+		Long groupId = groupDao.update(o, null).getId(); //inserted by not checked
+		assertNotNull("New Group have valid id", groupId);
 		
-		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
-		assertTrue("New Organisation should contain NO users: " + ul.size(), ul.size() == 0);
+		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
+		assertTrue("New Group should contain NO users: " + ul.size(), ul.size() == 0);
 	}
 
 	@Test
 	@HeavyTests
 	public void add10kUsers() throws Exception {
-		List<Organisation> groups = orgDao.get(ORG_NAME, 0, 1, null);
-		Organisation o = null;
+		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
+		Group o = null;
 		if (groups == null || groups.isEmpty()) {
-			o = new Organisation();
-			o.setName(ORG_NAME);
-			o = orgDao.update(o, null);
+			o = new Group();
+			o.setName(GROUP_NAME);
+			o = groupDao.update(o, null);
 		} else {
 			o = groups.get(0);
 		}
 		Random rnd = new Random();
 		for (int i = 0; i < 10000; ++i) {
 			User u = createUser(rnd.nextInt());
-			u.getOrganisation_users().add(new Organisation_Users(o));
-			usersDao.update(u, null);
+			u.getGroupUsers().add(new GroupUser(o));
+			userDao.update(u, null);
 		}
 	}
 }

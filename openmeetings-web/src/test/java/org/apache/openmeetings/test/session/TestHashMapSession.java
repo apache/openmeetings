@@ -25,9 +25,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.core.session.store.HashMapStore;
 import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;

@@ -45,10 +45,9 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -236,7 +235,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if ((c.isMobile() || c.isAvClient()) && !Strings.isEmpty(c.getAvsettings()) && !Boolean.TRUE.equals(c.isScreenClient())) {
+				if ((c.isMobile() || c.isAvClient()) && !Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
@@ -262,14 +261,14 @@ public class MobileService {
 		room.put("id", r.getId());
 		room.put("name", r.getName());
 		room.put("type", type);
-		room.put("roomType", r.getType());
+		room.put("roomTypeId", r.getType().getId());
 		if (org != null) {
 			room.put("org", org);
 		}
 		room.put("first", first);
 		room.put("users", sessionManager.getClientListByRoom(r.getId()).size());
 		room.put("total", r.getNumberOfPartizipants());
-		room.put("audioOnly", Boolean.TRUE.equals(r.isAudioOnly()));
+		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
 	}
 	
@@ -281,16 +280,16 @@ public class MobileService {
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
-		myl.add(roomDao.getUserRoom(u.getId(), Type.conference, labelDao.getString(1306L, u.getLanguageId())));
-		myl.add(roomDao.getUserRoom(u.getId(), Type.conference, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, labelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);
 		}
 		
 		//private rooms
-		for (Organisation_Users ou : u.getOrganisation_users()) {
-			Organisation org = ou.getOrganisation();
+		for (GroupUser ou : u.getGroupUsers()) {
+			Group org = ou.getGroup();
 			boolean first = true;
 			for (Room r : roomDao.getGroupRooms(org.getId())) {
 				addRoom("private", org.getName(), first, result, r);

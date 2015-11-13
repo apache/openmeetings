@@ -66,9 +66,9 @@ public class SMSHandler {
 		return gateway.queryBalance() >= 1; 
 	}
 	
-	public boolean sendSMS(String phone, String subj, long language_id) {
+	public boolean sendSMS(String phone, String subj, long languageId) {
 		try {
-			taskExecutor.execute(new SMSSenderTask(phone, subj, language_id));
+			taskExecutor.execute(new SMSSenderTask(phone, subj, languageId));
 			return true;
 		} catch (Exception ex) {
 			log.error("sendSMS", ex);
@@ -79,12 +79,12 @@ public class SMSHandler {
 	protected class SMSSenderTask implements Runnable {
 		private final String phone;
 		private final String subject;
-		private long language_id;
+		private long languageId;
 
-		public SMSSenderTask(String phone, String subject, long language_id) {
+		public SMSSenderTask(String phone, String subject, long languageId) {
 			this.phone = phone;
 			this.subject = subject;
-			this.language_id = language_id;
+			this.languageId = languageId;
 		}
 
 		public void run() {
@@ -100,7 +100,7 @@ public class SMSHandler {
 				log.debug("SMS sending to: " + phone + ", subject is: " + subject);
 				if (checkBalance()) {
 					OutboundMessage msg = new OutboundMessage(phone, subject);
-					if (language_id != 1) {
+					if (languageId != 1) {
 						msg.setEncoding(MessageEncodings.ENCUCS2);
 					}
 					return Service.getInstance().sendMessage(msg);

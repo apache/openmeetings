@@ -35,8 +35,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -44,8 +44,8 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -70,9 +70,9 @@ public class GroupWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(GroupWebService.class, webAppRootKey);
 
 	@Autowired
-	private OrganisationDao groupDao;
+	private GroupDao groupDao;
 	@Autowired
-	private OrganisationUserDao groupUserDao;
+	private GroupUserDao groupUserDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -95,7 +95,7 @@ public class GroupWebService {
 	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-			Organisation o = new Organisation();
+			Group o = new Group();
 			o.setName(name);
 			return new ServiceResult(groupDao.update(o, userId).getId(), "Success", Type.SUCCESS);
 		} else {
@@ -127,9 +127,9 @@ public class GroupWebService {
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				if (!groupUserDao.isUserInOrganization(id, userid)) {
+				if (!groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
-					u.getOrganisation_users().add(new Organisation_Users(groupDao.get(id)));
+					u.getGroupUsers().add(new GroupUser(groupDao.get(id)));
 					userDao.update(u, authUserId);
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
@@ -169,7 +169,7 @@ public class GroupWebService {
 					}
 					boolean found = false;
 					for (RoomGroup ro : r.getRoomGroups()) {
-						if (ro.getOrganisation().getId().equals(id)) {
+						if (ro.getGroup().getId().equals(id)) {
 							found = true;
 						}
 					}
@@ -224,7 +224,7 @@ public class GroupWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				result.setRecords(groupUserDao.count(id));
 				result.setResult(new ArrayList<User>());
-				for (Organisation_Users ou : groupUserDao.get(id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
+				for (GroupUser ou : groupUserDao.get(id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
 					result.getResult().add(ou.getUser());
 				}
 			} else {

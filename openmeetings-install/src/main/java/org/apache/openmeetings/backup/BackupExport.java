@@ -51,7 +51,7 @@ import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
@@ -64,7 +64,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
@@ -130,7 +130,7 @@ public class BackupExport {
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
-	private OrganisationDao organisationDao;
+	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -146,8 +146,7 @@ public class BackupExport {
 		/*
 		 * ##################### Backup Groups
 		 */
-		writeList(simpleSerializer, backup_dir, "organizations.xml",
-				"organisations", organisationDao.get(0, Integer.MAX_VALUE));
+		writeList(simpleSerializer, backup_dir, "organizations.xml", "organisations", groupDao.get(0, Integer.MAX_VALUE));
 		progressHolder.setProgress(5);
 		/*
 		 * ##################### Backup Users
@@ -178,7 +177,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Organisation.class, OrganisationConverter.class);
+			registry.bind(Group.class, GroupConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
@@ -344,7 +343,7 @@ public class BackupExport {
 		 * ##################### Config
 		 */
 		{
-			List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.configuration_id", true);
+			List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.id", true);
 			Registry registry = new Registry();
 			registry.bind(State.class, StateConverter.class);
 			registry.bind(User.class, UserConverter.class);
@@ -352,7 +351,7 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			if (list != null && list.size() > 0) {
-				registry.bind(list.get(0).getStarttime().getClass(), DateConverter.class);
+				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
 			writeList(serializer, backup_dir, "configs.xml", "configs", list);
@@ -454,7 +453,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
-		registry.bind(Organisation.class, OrganisationConverter.class);
+		registry.bind(Group.class, GroupConverter.class);
 		registry.bind(State.class, StateConverter.class);
 		registry.bind(Salutation.class, SalutationConverter.class);
 		if (list != null && list.size() > 0) {

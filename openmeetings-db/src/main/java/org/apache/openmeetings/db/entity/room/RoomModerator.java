@@ -40,30 +40,28 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.roomModeratorsId = :roomModeratorsId"),
-	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.roomModeratorsId IN :ids"),
+	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.id = :id"),
+	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.id IN :ids"),
 	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId "
-			+ "AND c.deleted <> :deleted "
-			+ "AND c.user.user_id = :user_id")
+			+ "where c.roomId = :roomId AND c.deleted = false AND c.user.id = :userId")
 })
-@Table(name = "rooms_moderator")
+@Table(name = "room_moderator")
 @Root(name = "room_moderator")
 public class RoomModerator implements Serializable {
-	private static final long serialVersionUID = 5407758673591515018L;
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long roomModeratorsId;
+	private Long id;
 	
 	@Column(name = "roomId")
 	private Long roomId;
 	
 	@Column(name="is_supermoderator")
 	@Element(name="is_supermoderator", data = true)
-	private Boolean isSuperModerator;
+	private boolean superModerator;
 	
 	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn (name="user_id")
@@ -71,27 +69,27 @@ public class RoomModerator implements Serializable {
 	@Element(name="user_id", data = true, required=false)
 	private User user;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
 	
-	public long getRoomModeratorsId() {
-		return roomModeratorsId;
+	public Long getId() {
+		return id;
 	}
-	public void setRoomModeratorsId(long roomModeratorsId) {
-		this.roomModeratorsId = roomModeratorsId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
-	public Boolean getIsSuperModerator() {
-		return isSuperModerator;
+	public boolean isSuperModerator() {
+		return superModerator;
 	}
-	public void setIsSuperModerator(Boolean isSuperModerator) {
-		this.isSuperModerator = isSuperModerator;
+	public void setSuperModerator(boolean superModerator) {
+		this.superModerator = superModerator;
 	}
 	
 	
@@ -102,21 +100,21 @@ public class RoomModerator implements Serializable {
 		this.user = user;
 	}
 	
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
-	}
-	
-	public Date getUpdatetime() {
-		return updatetime;
-	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 	
-	public boolean getDeleted() {
+	public Date getUpdated() {
+		return updated;
+	}
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+	
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {

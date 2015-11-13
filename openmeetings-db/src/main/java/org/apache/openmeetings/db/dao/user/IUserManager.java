@@ -44,18 +44,12 @@ public interface IUserManager {
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long stateId,
-			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
+			String town, long languageId, boolean sendWelcomeMessage,
+			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
 
-	Long registerUserNoEmail(String login, String Userpass,
-			String lastname, String firstname, String email, Date age,
-			String street, String additionalname, String fax, String zip,
-			long stateId, String town, long language_id, String phone, boolean sendSMS, 
-			boolean generateSipUserData, String jNameTimeZone);
-	
 	Long getLanguage(Locale loc);
 	State getCountry(Locale loc);
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;

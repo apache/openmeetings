@@ -62,21 +62,21 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c where c.ownerId = :ownerId "
 					+ "AND c.type = :type AND c.deleted = false"),	
 										
-	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.rooms_id) from Room c "
+	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
 			+ "where c.deleted = false AND c.name LIKE :search "),
 	@NamedQuery(name = "getRoomByExternalId", query = "select r from Room as r "
-			+ "where r.externalRoomId = :externalId AND c.externalRoomType = :externalType "
+			+ "where r.externalId = :externalId AND c.externalType = :externalType "
 			+ "AND r.type = :type AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
-	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
-	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids"),
-	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
+	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids"),
+	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.rooms_id"),
-	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
+	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
 	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT c.room FROM RoomGroup c LEFT JOIN FETCH c.room "
-				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
-				+ "AND c.organisation.deleted = false ORDER BY c.room.name ASC")
+				+ "WHERE c.group.id = :groupId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+				+ "AND c.group.deleted = false ORDER BY c.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")
@@ -132,14 +132,14 @@ public class Room implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, required = false, name = "rooms_id")
-	private Long rooms_id;
+	private Long id;
 
 	@Column(name = "name")
 	@Element(data = true, required=false)
 	private String name;
 
 	@Lob
-	@Column(name = "comment_field")
+	@Column(name = "comment")
 	@Element(data = true, required = false)
 	private String comment;
 
@@ -149,10 +149,10 @@ public class Room implements IDataProviderEntity {
 	private Type type = Type.conference;
 
 	@Column(name = "inserted")
-	private Date starttime;
+	private Date inserted;
 
 	@Column(name = "updated")
-	private Date updatetime;
+	private Date updated;
 
 	@Column(name = "deleted")
 	@Element(data = true)
@@ -173,11 +173,11 @@ public class Room implements IDataProviderEntity {
 	// Vars to simulate external Room
 	@Column(name = "externalId")
 	@Element(data = true, required = false)
-	private Long externalRoomId;
+	private Long externalId;
 
 	@Column(name = "externalType")
 	@Element(data = true, required = false)
-	private String externalRoomType;
+	private String externalType;
 
 	@Column(name = "isdemoroom")
 	@Element(data = true, required = false)
@@ -191,7 +191,7 @@ public class Room implements IDataProviderEntity {
 	// moderator to come into the room
 	@Column(name = "ismoderatedroom")
 	@Element(name="isModeratedRoom", data = true, required = false)
-	private boolean isModeratedRoom;
+	private boolean moderated;
 
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)
@@ -199,7 +199,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "is_audio_only")
 	@Element(name = "isAudioOnly", data = true, required = false)
-	private boolean isAudioOnly;
+	private boolean audioOnly;
 	
 	@Column(name = "allow_font_styles", nullable = false)
 	@Element(data = true, required = false)
@@ -207,7 +207,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
-	private boolean isClosed;
+	private boolean closed;
 
 	@Column(name = "redirect_url")
 	@Element(data = true, required = false)
@@ -234,11 +234,11 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "hide_chat")
 	@Element(name = "hideChat", data = true, required = false)
-	private boolean hideChat;
+	private boolean chatHidden;
 
 	@Column(name = "hide_activities_and_actions")
 	@Element(name = "hideActivitiesAndActions", data = true, required = false)
-	private boolean hideActivitiesAndActions;
+	private boolean activitiesHidden;
 
 	@Column(name = "hide_files_explorer")
 	@Element(data = true, required = false)
@@ -320,11 +320,11 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public Long getId() {
-		return rooms_id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.rooms_id = id;
+		this.id = id;
 	}
 
 	public Type getType() {
@@ -336,19 +336,19 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public Date getInserted() {
-		return starttime;
+		return inserted;
 	}
 
 	public void setInserted(Date inserted) {
-		this.starttime = inserted;
+		this.inserted = inserted;
 	}
 
 	public Date getUpdated() {
-		return updatetime;
+		return updated;
 	}
 
 	public void setUpdated(Date updated) {
-		this.updatetime = updated;
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -408,27 +408,27 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public boolean isModerated() {
-		return isModeratedRoom;
+		return moderated;
 	}
 
 	public void setModerated(boolean moderated) {
-		this.isModeratedRoom = moderated;
+		this.moderated = moderated;
 	}
 
 	public Long getExternalId() {
-		return externalRoomId;
+		return externalId;
 	}
 
 	public void setExternalId(Long externalId) {
-		this.externalRoomId = externalId;
+		this.externalId = externalId;
 	}
 
 	public String getExternalType() {
-		return externalRoomType;
+		return externalType;
 	}
 
 	public void setExternalType(String externalType) {
-		this.externalRoomType = externalType;
+		this.externalType = externalType;
 	}
 
 	public boolean getAllowUserQuestions() {
@@ -440,11 +440,11 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public boolean isAudioOnly() {
-		return isAudioOnly;
+		return audioOnly;
 	}
 
 	public void setAudioOnly(boolean audioOnly) {
-		this.isAudioOnly = audioOnly;
+		this.audioOnly = audioOnly;
 	}
 
 	public boolean getAllowFontStyles() {
@@ -456,11 +456,11 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public boolean isClosed() {
-		return isClosed;
+		return closed;
 	}
 
 	public void setClosed(boolean closed) {
-		this.isClosed = closed;
+		this.closed = closed;
 	}
 
 	public String getRedirectURL() {
@@ -504,19 +504,19 @@ public class Room implements IDataProviderEntity {
 	}
 
 	public boolean isChatHidden() {
-		return hideChat;
+		return chatHidden;
 	}
 
-	public void setChatHidden(boolean hideChat) {
-		this.hideChat = hideChat;
+	public void setChatHidden(boolean chatHidden) {
+		this.chatHidden = chatHidden;
 	}
 
 	public boolean isActivitiesHidden() {
-		return hideActivitiesAndActions;
+		return activitiesHidden;
 	}
 
 	public void setActivitiesHidden(boolean activitiesHidden) {
-		this.hideActivitiesAndActions = activitiesHidden;
+		this.activitiesHidden = activitiesHidden;
 	}
 
 	public boolean getHideFilesExplorer() {

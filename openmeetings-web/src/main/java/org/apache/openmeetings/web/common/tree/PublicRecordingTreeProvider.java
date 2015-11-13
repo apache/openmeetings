@@ -41,7 +41,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 	public Iterator<? extends Recording> getRoots() {
 		Recording r = new Recording();
 		r.setId(groupId == null ? -1 : -groupId);
-		r.setOrganization_id(groupId);
+		r.setGroupId(groupId);
 		r.setOwnerId(null);
 		r.setType(Type.Folder);
 		String pub = Application.getString(861);

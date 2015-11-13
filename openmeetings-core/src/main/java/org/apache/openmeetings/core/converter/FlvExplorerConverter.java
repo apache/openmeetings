@@ -45,9 +45,9 @@ public class FlvExplorerConverter extends BaseConverter {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDaoImpl;
 	@Autowired
-	private RecordingLogDao flvRecordingLogDaoImpl;
+	private RecordingLogDao recordingLogDao;
 	
-	private class FlvDimension {
+	private static class FlvDimension {
 		public FlvDimension(int width, int height) {
 			this.width = width;
 			this.height = height;
@@ -115,14 +115,12 @@ public class FlvExplorerConverter extends BaseConverter {
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
 
-			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: "
-							+ fileExplorerItem.getId(),
-							argv_previewFLV));
+			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + fileExplorerItem.getId(), argv_previewFLV));
 
 			fileExplorerItemDaoImpl.update(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
-				flvRecordingLogDaoImpl.add("generateFFMPEG", null, returnMap);
+				recordingLogDao.add("generateFFMPEG", null, returnMap);
 			}
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
@@ -133,7 +131,6 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 	
 	private FlvDimension getFlvDimension(String txt) throws Exception {
-		
 		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 		
 		Matcher matcher = p.matcher(txt);
@@ -144,7 +141,6 @@ public class FlvExplorerConverter extends BaseConverter {
 			String[] resultions = foundResolution.split("x");
 			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
-			
 	    }
 		
 		return null;

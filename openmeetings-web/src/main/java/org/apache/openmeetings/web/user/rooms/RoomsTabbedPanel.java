@@ -23,8 +23,8 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.AttributeModifier;
@@ -43,23 +43,23 @@ public class RoomsTabbedPanel extends UserPanel {
 		super(id);
 		
 		User u = getBean(UserDao.class).get(getUserId());
-		add(new ListView<Organisation_Users>("orgTabs", u.getOrganisation_users()) {
-			private static final long serialVersionUID = -145637079945252731L;
+		add(new ListView<GroupUser>("orgTabs", u.getGroupUsers()) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Organisation_Users> item) {
-				Organisation org = item.getModelObject().getOrganisation();
+			protected void populateItem(ListItem<GroupUser> item) {
+				Group org = item.getModelObject().getGroup();
 				item.add(new WebMarkupContainer("link")
 					.add(new Label("name", Model.of(org.getName())))
 					.add(new AttributeModifier("href", "#org" + org.getId())));
 			}
 		});
-		add(new ListView<Organisation_Users>("orgRooms", u.getOrganisation_users()) {
-			private static final long serialVersionUID = 9039932126334250798L;
+		add(new ListView<GroupUser>("orgRooms", u.getGroupUsers()) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Organisation_Users> item) {
-				Organisation org = item.getModelObject().getOrganisation();
+			protected void populateItem(ListItem<GroupUser> item) {
+				Group org = item.getModelObject().getGroup();
 				item.add(new RoomsPanel("rooms"
 					, getBean(RoomDao.class).getGroupRooms(org.getId()))
 					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);

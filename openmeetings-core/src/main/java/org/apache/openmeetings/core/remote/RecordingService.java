@@ -111,7 +111,7 @@ public class RecordingService implements IPendingServiceCallback {
 			recording.setInsertedBy(ownerId);
 			recording.setType(Type.Recording);
 			recording.setComment(comment);
-			recording.setIsInterview(isInterview);
+			recording.setInterview(isInterview);
 
 			recording.setRoomId(room_id);
 			recording.setRecordStart(now);
@@ -360,7 +360,7 @@ public class RecordingService implements IPendingServiceCallback {
 				log.debug("recordingConverterTask ", recordingConverterTask);
 
 				Recording recording = recordingDao.get(recordingId);
-				if (recording.getIsInterview() == null || !recording.getIsInterview()) {
+				if (!recording.isInterview()) {
 					recordingConverterTask.startConversionThread(recordingId);
 				} else {
 					interviewConverterTask.startConversionThread(recordingId);
@@ -452,7 +452,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 					// Start FLV Recording
 					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true,
-							recording.getIsInterview());
+							recording.isInterview());
 
 					// Add Meta Data
 					rcl.setRecordingMetaDataId(metaDataId);
@@ -481,7 +481,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 				// Start FLV recording
 				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaDataId, false,
-						recording.getIsInterview());
+						recording.isInterview());
 
 				rcl.setRecordingMetaDataId(metaDataId);
 

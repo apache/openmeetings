@@ -35,29 +35,24 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :id AND c.deleted = false")
-	, @NamedQuery(name="getOrganisationByName",
-		query="SELECT o FROM Organisation AS o WHERE o.name = :name AND o.deleted = false")
-	, @NamedQuery(name="getAnyOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
-	, @NamedQuery(name="getOrganisationsByIds",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id IN :ids")
-	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
-	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.organisation_id")
-	, @NamedQuery(name="countOrganisations", query="SELECT COUNT(c) FROM Organisation AS c WHERE c.deleted = false")
+	@NamedQuery(name="getGroupById", query="SELECT c FROM Group AS c WHERE c.id = :id AND c.deleted = false")
+	, @NamedQuery(name="getGroupByName", query="SELECT o FROM Group AS o WHERE o.name = :name AND o.deleted = false")
+	, @NamedQuery(name="getAnyGroupById", query="SELECT c FROM Group AS c WHERE c.id = :groupId")
+	, @NamedQuery(name="getGroupByIds", query="SELECT c FROM Group AS c WHERE c.id IN :ids")
+	, @NamedQuery(name="getGroupsByUserId", query="SELECT ou.group FROM User u, IN(u.groupUsers) ou WHERE u.deleted = false AND u.id = :userId")
+	, @NamedQuery(name="getNondeletedGroups", query="SELECT o FROM Group o WHERE o.deleted = false ORDER BY o.id")
+	, @NamedQuery(name="countGroups", query="SELECT COUNT(c) FROM Group AS c WHERE c.deleted = false")
 })
-@Table(name = "organisation")
+@Table(name = "om_group")
 @Root(name="organisation")
-public class Organisation implements IDataProviderEntity {
+public class Group implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true)
-	private Long organisation_id;
+	@Column(name = "id")
+	@Element(data = true, name = "organisation_id")
+	private Long id;
 	
 	@Column(name="name")
 	@Element(data = true, required = false)
@@ -69,11 +64,11 @@ public class Organisation implements IDataProviderEntity {
 	@Column(name="updatedby")
 	private Long updatedby;
 	
-	@Column(name="starttime")
-	private Date starttime;
+	@Column(name="inserted")
+	private Date inserted;
 	
-	@Column(name="updatetime")
-	private Date updatetime;
+	@Column(name="updated")
+	private Date updated;
 	
 	@Column(name="deleted")
 	@Element(data = true, required = false)
@@ -95,10 +90,10 @@ public class Organisation implements IDataProviderEntity {
 	}
 
 	public Long getId() {
-		return organisation_id;
+		return id;
 	}
 	public void setId(Long id) {
-		this.organisation_id = id;
+		this.id = id;
 	}
 
 	public Long getUpdatedby() {
@@ -108,21 +103,22 @@ public class Organisation implements IDataProviderEntity {
 		this.updatedby = updatedby;
 	}	
 	
-	public Date getStarttime() {
-		return starttime;
+
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
-    
-	public Date getUpdatetime() {
-		return updatetime;
+
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
@@ -130,7 +126,6 @@ public class Organisation implements IDataProviderEntity {
 	}
 	@Override
 	public String toString() {
-		return "Organisation [id=" + organisation_id + ", name="
-				+ name + ", deleted=" + deleted + "]";
+		return "Group [id=" + id + ", name=" + name + ", deleted=" + deleted + "]";
 	}	
 }

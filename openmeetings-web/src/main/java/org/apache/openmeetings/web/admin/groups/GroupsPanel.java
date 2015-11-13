@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -36,8 +36,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
 /**
- * Modify/ CRUD operations for {@link Organisation} and
- * {@link Organisation_Users}
+ * Modify/ CRUD operations for {@link Group} and
+ * {@link GroupUser}
  * 
  * @author swagner
  * 
@@ -47,9 +47,9 @@ public class GroupsPanel extends AdminPanel {
 	private GroupForm form;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("groupsInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("groupsInit();");
 	}
 
 	public GroupsPanel(String id) {
@@ -57,17 +57,17 @@ public class GroupsPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         
 		//Adding the Group Form
-		form = new GroupForm("form", listContainer, new Organisation());
+		form = new GroupForm("form", listContainer, new Group());
         add(form);
 
         //List view
-        SearchableDataView<Organisation> dataView = new SearchableDataView<Organisation>("groupList", new SearchableDataProvider<Organisation>(OrganisationDao.class)) {
+        SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableDataProvider<Group>(GroupDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<Organisation> item) {
-				final Organisation o = item.getModelObject();
-				item.add(new Label("organisation_id", "" + o.getId()));
+			protected void populateItem(Item<Group> item) {
+				final Group o = item.getModelObject();
+				item.add(new Label("id", "" + o.getId()));
 				item.add(new Label("name", "" + o.getName()));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
@@ -95,9 +95,9 @@ public class GroupsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container))
-			.addLink(new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		DataViewContainer<Group> container = new DataViewContainer<Group>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<Group>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<Group>("orderByName", "name", container));
 		add(container.getLinks());
 		add(navigator);
 	}

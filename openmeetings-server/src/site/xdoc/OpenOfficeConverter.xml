@@ -12,8 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
-
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>OpenOffice converter for OpenMeetings</title>
 		<author email="sebawagner@apache.org">
@@ -42,7 +43,7 @@
 			<p>
 				Installation of JODConverter means: You donwload the ZIP binary from
 				their
-				<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
+				<a href="http://code.google.com/p/jodconverter/" target="_blank"
 					rel="nofollow">website</a>
 				and then configure in Apache OpenMeetings Administration >
 				Configuration (or during installation) the config key

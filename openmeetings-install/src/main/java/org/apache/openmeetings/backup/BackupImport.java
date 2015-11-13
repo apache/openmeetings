@@ -67,7 +67,7 @@ import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
@@ -90,7 +90,7 @@ import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
@@ -127,8 +127,6 @@ public class BackupImport {
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
-	private OrganisationDao orgDao;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private UserDao userDao;
@@ -159,10 +157,12 @@ public class BackupImport {
 	@Autowired
 	private OAuth2Dao auth2Dao;
 	@Autowired
+	private GroupDao groupDao;
+	@Autowired
 	private RoomGroupDao roomGroupDao;
 
 	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> organisationsMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> groupMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> appointmentsMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> roomsMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> messageFoldersMap = new HashMap<Long, Long>();
@@ -179,7 +179,7 @@ public class BackupImport {
 			working_dir.mkdir();
 		}
 		usersMap.clear();
-		organisationsMap.clear();
+		groupMap.clear();
 		appointmentsMap.clear();
 		roomsMap.clear();
 		messageFoldersMap.clear();
@@ -230,22 +230,22 @@ public class BackupImport {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				if (c.getConf_key() == null || c.isDeleted()) {
+				if (c.getKey() == null || c.isDeleted()) {
 					continue;
 				}
-				Configuration cfg = configurationDao.forceGet(c.getConf_key());
+				Configuration cfg = configurationDao.forceGet(c.getKey());
 				if (cfg != null && !cfg.isDeleted()) {
-					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
+					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
 				}
 				c.setId(cfg == null ? null : cfg.getId());
 				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
 				}
-				if (CONFIG_CRYPT_KEY.equals(c.getConf_key())) {
+				if (CONFIG_CRYPT_KEY.equals(c.getKey())) {
 					try {
-						Class.forName(c.getConf_value());
+						Class.forName(c.getValue());
 					} catch (ClassNotFoundException e) {
-						c.setConf_value(MD5Implementation.class.getCanonicalName());
+						c.setValue(MD5Implementation.class.getCanonicalName());
 					}
 				}
 				configurationDao.update(c, null);
@@ -258,12 +258,12 @@ public class BackupImport {
 		 */
 		Serializer simpleSerializer = new Persister();
 		{
-			List<Organisation> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Organisation.class);
-			for (Organisation o : list) {
+			List<Group> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Group.class);
+			for (Group o : list) {
 				long oldId = o.getId();
 				o.setId(null);
-				o = orgDao.update(o, null);
-				organisationsMap.put(oldId, o.getId());
+				o = groupDao.update(o, null);
+				groupMap.put(oldId, o.getId());
 			}
 		}
 
@@ -350,12 +350,12 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
+			registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			
 			List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
 			for (RoomGroup ro : list) {
-				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getOrganisation() != null && ro.getOrganisation().getId() != null) {
+				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setId(null);
 					roomGroupDao.update(ro, null);
@@ -903,7 +903,7 @@ public class BackupImport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 
-		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
+		registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
 		registry.bind(State.class, new StateConverter(statemanagement));
 		registry.bind(Salutation.class, SalutationConverter.class);
 		registry.bind(Date.class, DateConverter.class);
@@ -1087,8 +1087,8 @@ public class BackupImport {
 				}
 				break;
 			case ORGANISATIONS:
-				if (organisationsMap.containsKey(oldId)) {
-					newId = organisationsMap.get(oldId);
+				if (groupMap.containsKey(oldId)) {
+					newId = groupMap.get(oldId);
 				}
 				break;
 			case APPOINTMENTS:

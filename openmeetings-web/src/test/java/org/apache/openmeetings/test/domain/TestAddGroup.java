@@ -21,10 +21,10 @@ package org.apache.openmeetings.test.domain;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertNotNull;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -36,23 +36,23 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAddGroup.class, webAppRootKey);
 
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 
 	@Test
 	public void testAddingGroup() {
-		Organisation o = new Organisation();
+		Group o = new Group();
 		o.setName("default");
-		o = orgDao.update(o, null);
-		assertNotNull("Id of organisation created should not be null", o.getId());
+		o = groupDao.update(o, null);
+		assertNotNull("Id of group created should not be null", o.getId());
 
-		User us = usersDao.get(1L);
+		User us = userDao.get(1L);
 		assertNotNull("User should exist", us);
 		
-		assertNotNull("Organisation User list should exist", us.getOrganisation_users());
-		us.getOrganisation_users().add(new Organisation_Users(o));
-		us = usersDao.update(us, null);
+		assertNotNull("Group User list should exist", us.getGroupUsers());
+		us.getGroupUsers().add(new GroupUser(o));
+		us = userDao.update(us, null);
 
 		log.error(us.getLastname());
 		log.error(us.getAddress().getTown());

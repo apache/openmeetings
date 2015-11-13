@@ -35,13 +35,13 @@ public class SOAPLogin implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long soapLoginId;
+	private Long id;
 	
 	@Column(name="hash")
 	private String hash;
 	
 	@Column(name="room_id")
-	private Long room_id;
+	private Long roomId;
 	
 	@Column(name="session_hash")
 	private String sessionHash;
@@ -71,7 +71,7 @@ public class SOAPLogin implements Serializable {
 	private String clientURL;
 	
 	@Column(name="recording_id")
-	private Long roomRecordingId;
+	private Long recordingId;
 	
 	@Column(name="landing_zone")
 	private String landingZone;
@@ -79,11 +79,11 @@ public class SOAPLogin implements Serializable {
 	@Column(name="allow_recording")
 	private boolean allowRecording;
 	
-	public long getSoapLoginId() {
-		return soapLoginId;
+	public Long getId() {
+		return id;
 	}
-	public void setSoapLoginId(long soapLoginId) {
-		this.soapLoginId = soapLoginId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getHash() {
@@ -94,10 +94,10 @@ public class SOAPLogin implements Serializable {
 	}
 	
 	public Long getRoomId() {
-		return room_id;
+		return roomId;
 	}
 	public void setRoomId(Long roomId) {
-		this.room_id = roomId;
+		this.roomId = roomId;
 	}
 	
 	public String getSessionHash() {
@@ -114,7 +114,7 @@ public class SOAPLogin implements Serializable {
 		this.created = created;
 	}
 	
-	public boolean getUsed() {
+	public boolean isUsed() {
 		return used;
 	}
 	public void setUsed(boolean used) {
@@ -128,7 +128,7 @@ public class SOAPLogin implements Serializable {
 		this.useDate = useDate;
 	}
 	
-	public boolean getBecomemoderator() {
+	public boolean isBecomemoderator() {
 		return becomemoderator;
 	}
 	public void setBecomemoderator(boolean becomemoderator) {
@@ -164,10 +164,10 @@ public class SOAPLogin implements Serializable {
 	}
 	
 	public Long getRecordingId() {
-		return roomRecordingId;
+		return recordingId;
 	}
 	public void setRecordingId(Long recordingId) {
-		this.roomRecordingId = recordingId;
+		this.recordingId = recordingId;
 	}
 	
 	public String getLandingZone() {

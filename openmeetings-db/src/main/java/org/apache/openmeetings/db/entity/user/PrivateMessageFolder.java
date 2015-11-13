@@ -32,15 +32,15 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "private_messages_folder")
+@Table(name = "private_message_folder")
 @Root(name="privatemessagefolder")
 public class PrivateMessageFolder implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true, name = "privateMessageFolderId")
-	private Long privateMessageFolderId;
+	@Column(name = "id")
+	@Element(data = true, name = "privateMessageFolderId")
+	private Long id;
 	
 	@Column(name="folder_name")
 	@Element(data=true)
@@ -57,10 +57,10 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	private Date updated;
 	
 	public Long getId() {
-		return privateMessageFolderId;
+		return id;
 	}
 	public void setId(Long id) {
-		this.privateMessageFolderId = id;
+		this.id = id;
 	}
 	
 	public String getFolderName() {

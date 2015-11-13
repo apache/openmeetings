@@ -113,7 +113,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i);
+		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
@@ -162,11 +162,11 @@ public class InvitationManager implements IInvitationManager {
 	 * @param subject 
 	 * @return
 	 */
-	public boolean sendInvitationReminderSMS(String phone, String subject, long language_id) {
+	public boolean sendInvitationReminderSMS(String phone, String subject, long languageId) {
 		if (!Strings.isEmpty(phone)) {
 			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
 			try {
-				return smsHandler.sendSMS(phone, subject, language_id);
+				return smsHandler.sendSMS(phone, subject, languageId);
 			} catch (Exception e) {
 				log.error("sendInvitationReminderSMS", e);
 			}
@@ -310,7 +310,7 @@ public class InvitationManager implements IInvitationManager {
 
 	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment) {
 		
 		Invitation invitation = _invitation;
@@ -349,8 +349,8 @@ public class InvitationManager implements IInvitationManager {
 
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
-		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
-			invitation.getInvitee().setLanguageId(language_id);
+		if (languageId != null && Type.contact == invitation.getInvitee().getType()) {
+			invitation.getInvitee().setLanguageId(languageId);
 		}
 		invitation.setRoom(room);
 		invitation.setInserted(new Date());
@@ -359,31 +359,11 @@ public class InvitationManager implements IInvitationManager {
 		return invitation;
 	}
 
-	/**
-	 * Sending invitation within plain mail
-	 * 
-	 * @param user_level
-	 * @param username
-	 * @param message
-	 * @param email
-	 * @param subject
-	 * @param rooms_id
-	 * @param conferencedomain
-	 * @param isPasswordProtected
-	 * @param invitationpass
-	 * @param valid
-	 * @param validFrom
-	 * @param validTo
-	 * @param createdBy
-	 * @return
-	 */
-	public Invitation getInvitation(User inveetee, Room room
-			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
-			, Appointment appointment)
+	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{
-		Invitation i = getInvitation(null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
-				, language_id, gmtTimeStart, gmtTimeEnd, appointment);
+		Invitation i = getInvitation((Invitation)null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
+				, languageId, gmtTimeStart, gmtTimeEnd, appointment);
 		i = invitationDao.update(i);
 		return i;
 	}

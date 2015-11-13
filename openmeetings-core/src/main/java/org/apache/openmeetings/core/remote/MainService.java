@@ -48,7 +48,7 @@ import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
@@ -144,12 +144,12 @@ public class MainService implements IPendingServiceCallback {
 		return sessiondataDao.startsession();
 	}
 
-	public Long setCurrentUserOrganization(String SID, Long organization_id) {
+	public Long setCurrentUserGroup(String SID, Long groupId) {
 		try {
-			sessiondataDao.updateUserOrg(SID, organization_id);
+			sessiondataDao.updateUserGroup(SID, groupId);
 			return 1L;
 		} catch (Exception err) {
-			log.error("[setCurrentUserOrganization]", err);
+			log.error("[setCurrentUserGroup]", err);
 		}
 		return -1L;
 	}
@@ -192,8 +192,8 @@ public class MainService implements IPendingServiceCallback {
 					log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 					if (!allowed) {
 						for (RoomGroup ro : r.getRoomGroups()) {
-							for (Organisation_Users ou : u.getOrganisation_users()) {
-								if (ro.getOrganisation().getId().equals(ou.getOrganisation().getId())) {
+							for (GroupUser ou : u.getGroupUsers()) {
+								if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
 									allowed = true;
 									break;
 								}
@@ -210,7 +210,7 @@ public class MainService implements IPendingServiceCallback {
 				String streamId = current.getClient().getId();
 				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 				
-				if (!u.getOrganisation_users().isEmpty()) {
+				if (!u.getGroupUsers().isEmpty()) {
 					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
 					currentClient.setUserId(u.getId());
 					currentClient.setRoomId(wicketroomid);
@@ -242,7 +242,7 @@ public class MainService implements IPendingServiceCallback {
 
 			SOAPLogin soapLogin = soapLoginDao.get(secureHash);
 
-			if (soapLogin.getUsed()) {
+			if (soapLogin.isUsed()) {
 
 				if (soapLogin.getAllowSameURLMultipleTimes()) {
 
@@ -294,7 +294,7 @@ public class MainService implements IPendingServiceCallback {
 				SOAPLogin returnSoapLogin = new SOAPLogin();
 
 				returnSoapLogin.setRoomId(soapLogin.getRoomId());
-				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
+				returnSoapLogin.setBecomemoderator(soapLogin.isBecomemoderator());
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
 				returnSoapLogin.setRecordingId(soapLogin.getRecordingId());
 				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
@@ -427,8 +427,8 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * this function returns a user object with organization objects set only
-	 * the organization is not available for users that are using a HASH mechanism
+	 * this function returns a user object with group objects set only
+	 * the group is not available for users that are using a HASH mechanism
 	 * cause the SOAP/REST API does not guarantee that the user connected to the HASH
 	 * has a valid user object set
 	 * 
@@ -443,7 +443,7 @@ public class MainService implements IPendingServiceCallback {
 			User defaultRpcUser = userDao.get(defaultRpcUserid);
 			
 			User user = new User();
-			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
+			user.setGroupUsers(defaultRpcUser.getGroupUsers());
 			
 			return user;
 			

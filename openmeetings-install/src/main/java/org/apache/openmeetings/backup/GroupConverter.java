@@ -20,33 +20,33 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class OrganisationConverter extends OmConverter<Organisation> {
-	private OrganisationDao orgDao;
+public class GroupConverter extends OmConverter<Group> {
+	private GroupDao groupDao;
 	private Map<Long, Long> idMap;
 	
-	public OrganisationConverter() {
+	public GroupConverter() {
 		//default constructor is for export
 	}
 	
-	public OrganisationConverter(OrganisationDao orgDao, Map<Long, Long> idMap) {
-		this.orgDao = orgDao;
+	public GroupConverter(GroupDao groupDao, Map<Long, Long> idMap) {
+		this.groupDao = groupDao;
 		this.idMap = idMap;
 	}
 	
-	public Organisation read(InputNode node) throws Exception {
+	public Group read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		Organisation o = orgDao.get(newId);
-		return o == null ? new Organisation() : o;
+		Group o = groupDao.get(newId);
+		return o == null ? new Group() : o;
 	}
 
-	public void write(OutputNode node, Organisation value) throws Exception {
+	public void write(OutputNode node, Group value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}

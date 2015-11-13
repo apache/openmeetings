@@ -28,20 +28,20 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.DaoHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class OrganisationDao implements IDataProviderDao<Organisation> {
+public class GroupDao implements IDataProviderDao<Group> {
 	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 
-	public Organisation get(long id) {
-		TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
+	public Group get(long id) {
+		TypedQuery<Group> query = em.createNamedQuery("getGroupById", Group.class);
 		query.setParameter("id", id);
-		Organisation o = null;
+		Group o = null;
 		try {
 			o = query.getSingleResult();
 		} catch (NoResultException e) {
@@ -50,58 +50,58 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 		return o;
 	}
 
-	public Organisation get(String name) {
-		List<Organisation> orgs = em.createNamedQuery("getOrganisationByName", Organisation.class).setParameter("name", name).getResultList();
-		return orgs == null || orgs.isEmpty() ? null : orgs.get(0);
+	public Group get(String name) {
+		List<Group> groups = em.createNamedQuery("getGroupByName", Group.class).setParameter("name", name).getResultList();
+		return groups == null || groups.isEmpty() ? null : groups.get(0);
 	}
 
-	public List<Organisation> get(int start, int count) {
-		TypedQuery<Organisation> q = em.createNamedQuery("getNondeletedOrganisations", Organisation.class);
+	public List<Group> get(int start, int count) {
+		TypedQuery<Group> q = em.createNamedQuery("getNondeletedGroups", Group.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
-	public List<Organisation> get(String search, int start, int count, String sort) {
-		TypedQuery<Organisation> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, false, sort, searchFields), Organisation.class);
+	public List<Group> get(String search, int start, int count, String sort) {
+		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, false, sort, searchFields), Group.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 	
 	public long count() {
-		TypedQuery<Long> q = em.createNamedQuery("countOrganisations", Long.class);
+		TypedQuery<Long> q = em.createNamedQuery("countGroups", Long.class);
 		return q.getSingleResult();
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, true, null, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
-	public List<Organisation> get(Collection<Long> ids) {
-		return em.createNamedQuery("getOrganisationsByIds", Organisation.class).setParameter("ids", ids).getResultList();
+	public List<Group> get(Collection<Long> ids) {
+		return em.createNamedQuery("getGroupsByIds", Group.class).setParameter("ids", ids).getResultList();
 	}
 
-	public Organisation update(Organisation entity, Long userId) {
+	public Group update(Group entity, Long userId) {
 		if (entity.getId() == null) {
 			if (userId != null) {
 				entity.setInsertedby(userId);
 			}
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
 			if (userId != null) {
 				entity.setUpdatedby(userId);
 			}
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			em.merge(entity);
 		}
 		return entity;
 	}
 
-	public void delete(Organisation entity, Long userId) {
-		em.createNamedQuery("deleteUsersFromOrganisation")
+	public void delete(Group entity, Long userId) {
+		em.createNamedQuery("deleteUsersFromGroup")
 			.setParameter("id", entity.getId())
 			.executeUpdate();
 

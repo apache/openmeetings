@@ -67,7 +67,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 	
 	public PrivateMessageFolder get(long id) {
-		String hql = "select c from PrivateMessageFolder c where c.privateMessageFolderId = :id ";
+		String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 
 		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
 		query.setParameter("id", id);
@@ -82,7 +82,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 
 	public List<PrivateMessageFolder> get(int start, int count) {
-		return em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.privateMessageFolderId", PrivateMessageFolder.class)
+		return em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id", PrivateMessageFolder.class)
 				.setFirstResult(start).setMaxResults(count)
 				.getResultList();
 	}

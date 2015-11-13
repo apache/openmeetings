@@ -44,7 +44,6 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.template.AppointmentReminderTemplate;
@@ -193,7 +192,7 @@ public class AppointmentLogic {
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, String remind, String[] mmClient,
 			Long roomType, Long languageId,
-			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
+			Boolean isPasswordProtected, String password, long roomId, Long userId) {
 		Appointment a = new Appointment();
 		a.setTitle(appointmentName);
 		a.setLocation(appointmentLocation);
@@ -211,9 +210,9 @@ public class AppointmentLogic {
 			a.setRoom(new Room());
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
-			a.getRoom().setType(Type.get(roomType));
+			a.getRoom().setType(Room.Type.get(roomType));
 		}
-		a.setOwner(userDao.get(users_id));
+		a.setOwner(userDao.get(userId));
 		a.setPasswordProtected(isPasswordProtected);
 		a.setPassword(password);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
@@ -221,7 +220,7 @@ public class AppointmentLogic {
 			if (Strings.isEmpty(singleClient)) {
 				continue;
 			}
-			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+			MeetingMember mm = getMeetingMember(userId, languageId, singleClient);
 			mm.setAppointment(a);
 			a.getMeetingMembers().add(mm);
 		}

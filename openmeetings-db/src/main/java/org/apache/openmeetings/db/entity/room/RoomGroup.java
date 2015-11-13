@@ -34,7 +34,7 @@ import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -42,23 +42,23 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomGroups", query = "select ro from RoomGroup ro ORDER BY ro.id"),
 	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomType", query = "select c from RoomGroup as c "
-			+ "where c.room.type = :type AND c.organisation.organisation_id = :groupId "
+			+ "where c.room.type = :type AND c.group.id = :groupId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomGroupByGroupId", query = "SELECT c FROM RoomGroup c "
 			+ "LEFT JOIN FETCH c.room "
-			+ "WHERE c.organisation.organisation_id = :groupId "
+			+ "WHERE c.group.id = :groupId "
 			+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 			+ "AND c.group.deleted = false "
 			+ "ORDER BY c.room.name ASC"),
 	@NamedQuery(name = "selectMaxFromRoomsByGroup", query = "select c from RoomGroup as c "
-			+ "where c.organisation.organisation_id = :groupId "
+			+ "where c.group.id = :groupId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomId", query = "select c from RoomGroup as c "
-			+ "where c.room.rooms_id = :roomId "
-			+ "AND c.organisation.organisation_id = :groupId "
+			+ "where c.room.id = :roomId "
+			+ "AND c.group.id = :groupId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomGroupByRoomsId", query = "select c from RoomGroup as c "
-			+ "where c.room.rooms_id = :roomId "
+			+ "where c.room.id = :roomId "
 			+ "AND c.deleted = false")
 })
 @Table(name = "room_group")
@@ -81,7 +81,7 @@ public class RoomGroup implements IDataProviderEntity {
 	@JoinColumn(name="group_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", data=true, required=false)
-	private Organisation organisation;
+	private Group group;
 	
 	@Column(name = "inserted")
 	private Date inserted;
@@ -93,19 +93,19 @@ public class RoomGroup implements IDataProviderEntity {
 	@Element(data=true)
 	private boolean deleted;
 
-	public RoomGroup(Organisation org, Room room) {
-		this.organisation = org;
+	public RoomGroup(Group org, Room room) {
+		this.group = org;
 		this.room = room;
 	}
 
 	public RoomGroup() {
 	}
 
-	public Organisation getOrganisation() {
-		return organisation;
+	public Group getGroup() {
+		return group;
 	}
-	public void setOrganisation(Organisation organisation) {
-		this.organisation = organisation;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 	
 	public Room getRoom() {

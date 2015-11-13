@@ -36,14 +36,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	
 	@Autowired
-	private LabelDao fieldLanguagesValuesDao;
+	private LabelDao labelDao;
 
 	public WebDriver driver = null;
 	
 	private String BASE_URL = "http://localhost:5080/openmeetings";
 	private String username = "swagner";
 	private String userpass = "qweqwe";
-	private String orgname = "seleniumtest";
+	private String groupName = "seleniumtest";
 	private String email = "selenium@openmeetings.apache.org";
 	private String locale = "en-us";
 
@@ -60,8 +60,8 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 		return userpass;
 	}
 
-	public String getOrgname() {
-		return orgname;
+	public String getGroupName() {
+		return groupName;
 	}
 
 	public String getEmail() {
@@ -82,7 +82,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public boolean doTearDownAfterTest = false;
 	
 	public String getString(long id) {
-		return fieldLanguagesValuesDao.getString(id, getLanguageId());
+		return labelDao.getString(id, getLanguageId());
 	}
 
 	/**
@@ -165,7 +165,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 		SeleniumUtils.inputText(driver, "view:cfg.username", getUsername());
 		SeleniumUtils.inputText(driver, "view:cfg.password", getUserpass());
 		SeleniumUtils.inputText(driver, "view:cfg.email", getEmail());
-		SeleniumUtils.inputText(driver, "view:cfg.group", getOrgname());
+		SeleniumUtils.inputText(driver, "view:cfg.group", getGroupName());
 
 		buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
 

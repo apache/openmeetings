@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.selenium;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,8 +32,11 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class SeleniumUtils {
+	private static final Logger log = Red5LoggerFactory.getLogger(SeleniumUtils.class, webAppRootKey);
 	// we need to retry some actions because our web site is dynamic
 	static int numberOfRetries = 10;
 
@@ -217,7 +222,7 @@ public class SeleniumUtils {
 			FileUtils.moveFile(screenShotFile, new File(path
 					+ File.separatorChar + fileName));
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 
 	}

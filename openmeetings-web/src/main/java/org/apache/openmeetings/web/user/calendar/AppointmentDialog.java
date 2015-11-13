@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.Application;
@@ -359,8 +359,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			List<Room> result = new ArrayList<Room>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
-			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-				result.addAll(dao.getGroupRooms(ou.getOrganisation().getId()));
+			for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+				result.addAll(dao.getGroupRooms(ou.getGroup().getId()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) { //FIXME review
 				result.add(getModelObject().getRoom());

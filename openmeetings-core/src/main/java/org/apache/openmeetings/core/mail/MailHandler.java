@@ -229,7 +229,6 @@ public class MailHandler {
 						m.setErrorCount(m.getErrorCount() + 1);
 						StringWriter sw = new StringWriter();
 						PrintWriter pw = new PrintWriter(sw);
-						e.printStackTrace(pw);
 						pw.close();
 						m.setLastError(sw.getBuffer().toString());
 						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);

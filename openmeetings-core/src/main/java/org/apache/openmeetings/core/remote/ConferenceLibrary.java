@@ -26,6 +26,10 @@ import java.util.Map;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
+import org.apache.openmeetings.core.documents.LibraryChartLoader;
+import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
+import org.apache.openmeetings.core.documents.LibraryWmlLoader;
+import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -33,10 +37,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.core.documents.LibraryChartLoader;
-import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
-import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -181,8 +181,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao
-						.get(fileExplorerItemId);
+				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileExplorerItemId);
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 
@@ -217,7 +216,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							Client rcl = this.sessionManager
 									.getClientByStreamId(conn.getClient()
 											.getId(), null);
-							if ((rcl == null) || (rcl.isScreenClient())) {
+							if ((rcl == null) || rcl.isScreenClient()) {
 								continue;
 							} else {
 								((IServiceCapableConnection) conn).invoke(

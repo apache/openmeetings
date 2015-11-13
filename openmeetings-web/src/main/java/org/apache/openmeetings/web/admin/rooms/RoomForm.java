@@ -29,15 +29,15 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
@@ -110,9 +110,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("appointment"));
 		add(new CheckBox("ispublic"));
 
-		List<Organisation> orgList = Application.getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
+		List<Group> orgList = Application.getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 		final List<RoomGroup> orgRooms = new ArrayList<RoomGroup>(orgList.size());
-		for (Organisation org : orgList) {
+		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
 		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new TextChoiceProvider<RoomGroup>() {
@@ -120,19 +120,19 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			protected String getDisplayText(RoomGroup choice) {
-				String name = choice.getOrganisation().getName();
+				String name = choice.getGroup().getName();
 				return name == null ? "" : name;
 			}
 
 			@Override
 			protected Object getId(RoomGroup choice) {
-				return choice.getOrganisation().getId();
+				return choice.getGroup().getId();
 			}
 
 			@Override
 			public void query(String term, int page, Response<RoomGroup> response) {
 				for (RoomGroup or : orgRooms) {
-					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getOrganisation().getName().contains(term))) {
+					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getGroup().getName().contains(term))) {
 						response.add(or);
 					}
 				}
@@ -145,7 +145,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					ids.add(Long.parseLong(id));
 				}
 				List<RoomGroup> list = new ArrayList<RoomGroup>();
-				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
+				for (Group o : getBean(GroupDao.class).get(ids)) {
 					list.add(new RoomGroup(o, RoomForm.this.getModelObject()));
 				}
 				return list;
@@ -157,16 +157,16 @@ public class RoomForm extends AdminBaseForm<Room> {
 		demoTime.setLabel(new Model<String>(Application.getString(637)));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
-		add(new CheckBox("isAudioOnly"));
+		add(new CheckBox("audioOnly"));
 		add(new CheckBox("allowFontStyles"));
-		add(new CheckBox("isClosed"));
+		add(new CheckBox("closed"));
 		add(new TextField<String>("redirectURL"));
 		add(new CheckBox("waitForRecording"));
 		add(new CheckBox("allowRecording"));
 
 		add(new CheckBox("hideTopBar"));
-		add(new CheckBox("hideChat"));
-		add(new CheckBox("hideActivitiesAndActions"));
+		add(new CheckBox("chatHidden"));
+		add(new CheckBox("activitiesHidden"));
 		add(new CheckBox("hideFilesExplorer"));
 		add(new CheckBox("hideActionsMenu"));
 		add(new CheckBox("hideScreenSharing"));
@@ -254,10 +254,10 @@ public class RoomForm extends AdminBaseForm<Room> {
 			protected void populateItem(final ListItem<RoomModerator> item) {
 				RoomModerator moderator = item.getModelObject();
 				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
-				if (moderator.getRoomModeratorsId() == 0) {
+				if (moderator.getId() == 0) {
 					name.add(AttributeAppender.append("class", "newItem"));
 				}
-				item.add(new CheckBox("isSuperModerator", new PropertyModel<Boolean>(moderator, "isSuperModerator")))
+				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getId()))
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAddress().getEmail()))
@@ -273,7 +273,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 		}).setOutputMarkupId(true));
 
-        add(new CheckBox("isModeratedRoom"));
+        add(new CheckBox("moderated"));
 
 		add(new TextField<String>("confno").setEnabled(false));
 		add(pin = new TextField<String>("pin"));

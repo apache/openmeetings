@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,6 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.util.DaoHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +48,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			LdapConfigDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigDao.class, webAppRootKey);
 	public final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,
@@ -71,8 +71,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
-				log.debug("addLdapConfig :1: " + usersDao.get(insertedby));
-				ldapConfig.setInsertedby(usersDao.get(insertedby));
+				log.debug("addLdapConfig :1: " + userDao.get(insertedby));
+				ldapConfig.setInsertedby(userDao.get(insertedby));
 			}
 
 			log.debug("addLdapConfig :2: " + insertedby);
@@ -80,7 +80,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig = em.merge(ldapConfig);
 			Long id = ldapConfig.getId();
 
-			if (id > 0) {
+			if (id != null) {
 				return id;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
@@ -101,7 +101,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig = em.merge(ldapConfig);
 			Long id = ldapConfig.getId();
 
-			if (id > 0) {
+			if (id != null) {
 				return id;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
@@ -118,7 +118,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			Long updatedby, Boolean isActive) {
 		try {
 
-			LdapConfig ldapConfig = this.get(id);
+			LdapConfig ldapConfig = get(id);
 
 			if (ldapConfig == null) {
 				return -1L;
@@ -132,8 +132,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {
-				log.debug("updateLdapConfig :1: " + usersDao.get(updatedby));
-				ldapConfig.setUpdatedby(usersDao.get(updatedby));
+				log.debug("updateLdapConfig :1: " + userDao.get(updatedby));
+				ldapConfig.setUpdatedby(userDao.get(updatedby));
 			}
 
 			log.debug("updateLdapConfig :2: " + updatedby);
@@ -152,14 +152,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public LdapConfig get(long id) {
 		try {
 
-			String hql = "select c from LdapConfig c "
-					+ "WHERE c.id = :id "
-					+ "AND c.deleted = :deleted";
-
-			TypedQuery<LdapConfig> query = em
-					.createQuery(hql, LdapConfig.class);
+			TypedQuery<LdapConfig> query = em.createNamedQuery("getLdapConfigById", LdapConfig.class);
 			query.setParameter("id", id);
-			query.setParameter("deleted", false);
 
 			LdapConfig ldapConfig = null;
 			try {
@@ -214,10 +208,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public long count() {
 		try {
-			TypedQuery<Long> query = em
-					.createQuery(
-							"select count(c) from LdapConfig c where c.deleted = false",
-							Long.class);
+			TypedQuery<Long> query = em.createNamedQuery("countNondeletedLdapConfigs", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig" + ll.get(0));
 			return ll.get(0);
@@ -234,17 +225,17 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
-			if (entity.getId() <= 0) {
+			if (entity.getId() == null) {
 				entity.setInserted(new Date());
 				if (userId != null) {
-					entity.setInsertedby(usersDao.get(userId));
+					entity.setInsertedby(userDao.get(userId));
 				}
 				entity.setDeleted(false);
 				em.persist(entity);
 			} else {
 				entity.setUpdated(new Date());
 				if (userId != null) {
-					entity.setUpdatedby(usersDao.get(userId));
+					entity.setUpdatedby(userDao.get(userId));
 				}
 				entity.setDeleted(false);
 				em.merge(entity);
@@ -256,10 +247,10 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	public void delete(LdapConfig entity, Long userId) {
-		if (entity.getId() >= 0) {
+		if (entity.getId() != null) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			entity.setDeleted(true);
 			em.merge(entity);

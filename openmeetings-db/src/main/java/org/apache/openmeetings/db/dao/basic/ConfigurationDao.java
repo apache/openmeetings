@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
@@ -61,7 +62,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, webAppRootKey);
 	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
-	public final static String[] searchFields = {"conf_key", "conf_value"};
+	public final static String[] searchFields = {"key", "value"};
 
 	@PersistenceContext
 	private EntityManager em;
@@ -70,8 +71,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private UserDao userDao;
 
 	/**
-	 * @deprecated Dao's are not the place to store session variables, also
-	 *             updates to the key won't update this variable
+	 * @deprecated Dao's are not the place to store session variables
 	 */
 	@Deprecated
 	private String appName = null;
@@ -85,7 +85,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration forceGet(String confKey) {
 		try {
 			List<Configuration> list = em.createNamedQuery("forceGetConfigurationByKey", Configuration.class)
-					.setParameter("conf_key", confKey).getResultList();
+					.setParameter("key", confKey).getResultList();
 			return list.isEmpty() ? null : list.get(0);
 		} catch (Exception e) {
 			log.error("[forceGet]: ", e);
@@ -97,7 +97,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		List<Configuration> result = new ArrayList<Configuration>();
 		for (String key : keys) { //iteration is necessary to fill list with all values 
 			List<Configuration> r = em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
-					.setParameter("conf_keys", Arrays.asList(key))
+					.setParameter("keys", Arrays.asList(key))
 					.getResultList();
 			result.add(r.isEmpty() ? null : r.get(0));
 		}
@@ -122,7 +122,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			if (list == null || list.isEmpty() || list.get(0) == null) {
 				log.warn("Could not find key in configurations: " + key);
 			} else {
-				String val = list.get(0).getConf_value();
+				String val = list.get(0).getValue();
 				// Use the custom value as default value
 				if (val != null) {
 					defaultValue = val;
@@ -171,57 +171,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 */
 	public Configuration add(String key, String value, Long userId, String comment) {
 		Configuration c = new Configuration();
-		c.setConf_key(key);
-		c.setConf_value(value);
+		c.setKey(key);
+		c.setValue(value);
 		c.setComment(comment);
 		return update(c, userId);
 	}
 
-	/**
-	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
-	 */
-	public Long addConfig(Configuration conf) {
-		try {
-			conf = em.merge(conf);
-			Long configuration_id = conf.getId();
-			return configuration_id;
-		} catch (Exception ex2) {
-			log.error("[updateConfByUID]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
-	/**
-	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
-	 * @param conf
-	 * @return
-	 */
-	public Long updateConfig(Configuration conf) {
-		try {
-			if (conf.getId() == null
-					|| conf.getId() == 0
-					|| conf.getId() == 0L) {
-				em.persist(conf);
-			} else {
-				if (!em.contains(conf)) {
-					conf = em.merge(conf);
-				}
-			}
-			if (CONFIG_CRYPT_KEY.equals(conf.getConf_key())) {
-				configKeyCryptClassName = conf.getConf_value();
-			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
-				whiteboardDrawStatus = "1".equals(conf.getConf_value());
-			}
-			return conf.getId();
-		} catch (Exception ex2) {
-			log.error("[updateConfByUID]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
 	public String getAppName() {
 		if (appName == null) {
-			appName = getConfValue("application.name", String.class, DEFAULT_APP_NAME);
+			appName = getConfValue(CONFIG_APPLICATION_NAME, String.class, DEFAULT_APP_NAME);
 		}
 		return appName;
 	}
@@ -239,7 +197,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			return null;
 		}
 		return em.createNamedQuery("getConfigurationById", Configuration.class)
-				.setParameter("configuration_id", id).getSingleResult();
+				.setParameter("id", id).getSingleResult();
 	}
 
 	public List<Configuration> get(int start, int count) {
@@ -268,10 +226,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 	
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
-		String key = entity.getConf_key();
-		String value = entity.getConf_value();
+		String key = entity.getKey();
+		String value = entity.getValue();
 		if (entity.getId() == null || entity.getId() <= 0) {
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			entity.setDeleted(deleted);
 			em.persist(entity);
 		} else {
@@ -279,14 +237,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				entity.setUser(userDao.get(userId));
 			}
 			entity.setDeleted(deleted);
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		if (CONFIG_CRYPT_KEY.equals(key)) {
 			configKeyCryptClassName = value;
 		} else if ("show.whiteboard.draw.status".equals(key)) {
 			whiteboardDrawStatus = "1".equals(value);
-		} else if ("application.name".equals(key)) {
+		} else if (CONFIG_APPLICATION_NAME.equals(key)) {
 			appName = value;
 		}
 		//TODO ensure entity returned is updated
@@ -294,7 +252,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public void delete(Configuration entity, Long userId) {
-		entity.setUpdatetime(new Date());
+		entity.setUpdated(new Date());
 		this.update(entity, userId, true);
 	}
 

@@ -155,12 +155,12 @@ public interface ISessionManager {
 	 * needed cause it is invoked internally AFTER the current user has been
 	 * already removed from the ClientList to see if the Room is empty again and
 	 * the PollList can be removed
-	 * @param room_id 
+	 * @param roomId 
 	 * @return
 	 */
-	public abstract List<Client> getClientListByRoom(Long room_id);
+	public abstract List<Client> getClientListByRoom(Long roomId);
 	
-	public abstract Collection<Client> getClientListByRoomAll(Long room_id);
+	public abstract Collection<Client> getClientListByRoomAll(Long roomId);
 
 	/**
 	 * get the current Moderator in this room
@@ -168,7 +168,7 @@ public interface ISessionManager {
 	 * @param roomname
 	 * @return
 	 */
-	public abstract List<Client> getCurrentModeratorByRoom(Long room_id);
+	public abstract List<Client> getCurrentModeratorByRoom(Long roomId);
 
 	/**
 	 * Get list of current client sessions

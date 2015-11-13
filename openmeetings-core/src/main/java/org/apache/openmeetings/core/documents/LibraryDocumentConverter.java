@@ -67,13 +67,13 @@ public class LibraryDocumentConverter {
 			log.debug("Write to "+filePathComplete);
 			
 			PrintWriter pw = new PrintWriter(new FileWriter(filePathComplete));
-		    pw.println(xmlString);
-		    pw.flush();
-		    pw.close();
+			pw.println(xmlString);
+			pw.flush();
+			pw.close();
 	    
 		    //return new Long(1);
 		    
-		    return filePathComplete.getCanonicalPath();
+			return filePathComplete.getCanonicalPath();
 		} catch (Exception err){
 			log.error("writeToLocalFolder",err);
 		}

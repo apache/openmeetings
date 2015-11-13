@@ -18,13 +18,21 @@
  */
 package org.apache.openmeetings.db.dto.record;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.openmeetings.db.entity.record.Recording;
 
-public class RecordingDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class RecordingDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
 	private String flvName;
@@ -46,7 +54,7 @@ public class RecordingDTO {
 		this.aviName = r.getAlternateDownload();
 		this.roomId = r.getRoomId();
 		this.status = r.getStatus().name();
-		this.interview = r.getIsInterview();
+		this.interview = r.isInterview();
 		this.start = r.getRecordStart();
 		this.end = r.getRecordEnd();
 		this.width = r.getWidth();
@@ -149,6 +157,5 @@ public class RecordingDTO {
 			}
 		}
 		return rList;
-
 	}
 }

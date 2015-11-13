@@ -12,7 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
 	<properties>
 		<title>Mailing Lists</title>
@@ -31,7 +33,10 @@
 				This is a list of servers that you can use for testing OpenMeetings.
 			</p>
 			<p>
-				<a href="http://demo.dataved.ru/openmeetings" target="_BLANK" rel="nofollow">http://demo.dataved.ru/openmeetings</a>
+				<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a>
+			</p>
+			<p>
+				<a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a>
 			</p>
 
 		</section>

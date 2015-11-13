@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.documents;
 
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,37 +32,40 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.XMLWriter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class CreateLibraryPresentation {
+	private static final Logger log = Red5LoggerFactory.getLogger(CreateLibraryPresentation.class, webAppRootKey);
+	
 	public static ConverterProcessResult generateXMLDocument(File targetDirectory, String originalDocument, 
 			String pdfDocument, String swfDocument){
 		ConverterProcessResult returnMap = new ConverterProcessResult();
 		returnMap.setProcess("generateXMLDocument");		
 		try {
+			Document document = DocumentHelper.createDocument();
+			Element root = document.addElement("presentation");
 			
-	        Document document = DocumentHelper.createDocument();
-	        Element root = document.addElement( "presentation" );
-
-	        File file = new File(targetDirectory, originalDocument);
-	        root.addElement( "originalDocument" )
+			File file = new File(targetDirectory, originalDocument);
+			root.addElement("originalDocument")
 				.addAttribute("lastmod", (new Long(file.lastModified())).toString())
 				.addAttribute("size", (new Long(file.length())).toString())	        
-	            .addText( originalDocument );
+				.addText(originalDocument);
 	        
 	        if (pdfDocument!=null){
 	        	File pdfDocumentFile = new File(targetDirectory, pdfDocument);
-		        root.addElement( "pdfDocument" )
+		        root.addElement("pdfDocument")
 					.addAttribute("lastmod", (new Long(pdfDocumentFile.lastModified())).toString())
 					.addAttribute("size", (new Long(pdfDocumentFile.length())).toString())	   		        
-		            .addText( pdfDocument );
+					.addText(pdfDocument);
 	        }
 	        
 	        if (swfDocument!=null){
 	        	File swfDocumentFile = new File(targetDirectory, originalDocument);
-		        root.addElement( "swfDocument" )
+		        root.addElement("swfDocument")
 					.addAttribute("lastmod", (new Long(swfDocumentFile.lastModified())).toString())
-					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())	  		        
-	            	.addText( swfDocument );	  
+					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())
+					.addText(swfDocument);
 	        }
 	        
 	        Element thumbs = root.addElement( "thumbs" );
@@ -83,23 +87,21 @@ public class CreateLibraryPresentation {
 						thumbs.addElement( "thumb" )
 							.addAttribute("lastmod", (new Long(thumbfile.lastModified())).toString())
 							.addAttribute("size", (new Long(thumbfile.length())).toString())
-			            	.addText( allfiles[i] );
+							.addText(allfiles[i]);
 					}
 				}
 			}
-	        
-	        // lets write to a file
-	        XMLWriter writer = new XMLWriter(
-	            new FileOutputStream(new File(targetDirectory, OmFileHelper.libraryFileName))
-	        );
-	        writer.write( document );
-	        writer.close();
 			
-	        returnMap.setExitValue("0");
-	        
+			// lets write to a file
+			XMLWriter writer = new XMLWriter(new FileOutputStream(new File(targetDirectory, OmFileHelper.libraryFileName)));
+			writer.write(document);
+			writer.close();
+			
+			returnMap.setExitValue("0");
+			
 			return returnMap;
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error while generateXMLDocument", err);
 			returnMap.setError(err.getMessage());
 			returnMap.setExitValue("-1");
 			return returnMap;

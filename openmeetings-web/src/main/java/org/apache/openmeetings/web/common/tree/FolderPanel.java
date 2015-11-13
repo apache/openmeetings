@@ -76,7 +76,7 @@ public class FolderPanel extends Panel {
 					f.setRoomId(p.getRoomId());
 					if (f instanceof Recording) {
 						Recording r = (Recording)f;
-						r.setOrganization_id(((Recording)p).getOrganization_id());
+						r.setGroupId(((Recording)p).getGroupId());
 						getBean(RecordingDao.class).update(r);
 					} else {
 						getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);

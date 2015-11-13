@@ -49,14 +49,15 @@ public class UsersPanel extends AdminPanel {
 	private final MessageDialog warning = new MessageDialog("warning", Application.getString(797), Application.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
-		public void onClose(IPartialPageRequestHandler target, DialogButton button) {
+		@Override
+		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		}
 	};
 
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("omUserPanelInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("omUserPanelInit();");
 	}
 
 	private UserForm form;
@@ -98,15 +99,15 @@ public class UsersPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<User>("orderById", "user_id", container))
+		container.addLink(new OmOrderByBorder<User>("orderById", "id", container))
 			.addLink(new OmOrderByBorder<User>("orderByLogin", "login", container))
 			.addLink(new OmOrderByBorder<User>("orderByFirstName", "firstname", container))
 			.addLink(new OmOrderByBorder<User>("orderByLastName", "lastname", container));
 		add(container.getLinks());
 		add(navigator);
 
-		UserDao usersDaoImpl = getBean(UserDao.class);
-		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())), warning);
+		UserDao userDao = getBean(UserDao.class);
+		form = new UserForm("form", listContainer, userDao.getNewUserInstance(userDao.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);
 	}

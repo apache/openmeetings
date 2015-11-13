@@ -22,14 +22,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.core.remote.InvitationService;
-import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.webservice.UserWebService;
-import org.apache.openmeetings.webservice.error.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,21 +34,17 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	@Autowired
 	private InvitationService invitationService;
 	@Autowired
-	private MainService mService;
-	@Autowired
 	private UserWebService userWebService;
 	@Autowired
 	private UserDao userDao;
 	
 	@Test
-	public void testSendInvitationLink() throws ServiceException {
-		Sessiondata sessionData = mService.getsessiondata();
-		
-		ServiceResult sr = userWebService.login(username, userpass);
-		User us = userDao.get(sr.getCode());
+	public void testSendInvitationLink() {
+		ServiceResult result = userWebService.login(username, userpass);
+		User us = userDao.get(result.getCode());
 		
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
-		invitationService.sendInvitationHash(sessionData.getSessionId(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
+		invitationService.sendInvitationHash(result.getMessage(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
 				"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
 	}
 }

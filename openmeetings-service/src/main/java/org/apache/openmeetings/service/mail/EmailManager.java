@@ -28,6 +28,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.service.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.service.mail.template.RegisterUserTemplate;
 import org.apache.wicket.Application;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,22 +50,25 @@ public class EmailManager {
 	}
 
 	/**
-	 * sends a mail adress to the user with his account data
+	 * sends a mail address to the user with his account data
 	 * 
 	 * @param username
 	 * @param userpass
 	 * @param email
+	 * @param hash
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String userpass, String email, String link, Boolean sendEmailWithVerficationCode, Long langId) {
+	public String sendMail(String username, String userpass, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
+		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
+		
 		if (sendEmailAtRegister == 1) {
 			RegisterUserTemplate.ensureApplication(langId != null ? langId :
 					configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
-			mailHandler.send(email, getString(512)  
+			mailHandler.send(email, getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
@@ -73,10 +77,5 @@ public class EmailManager {
 	//FIXME, seems to be not used
 	public void sendFeedback(String username, String email, String message) {
 		mailHandler.send("user@openmeetings.apache.org", getString(499), FeedbackTemplate.getEmail(username, email, message));
-	}
-	
-	public String addEmailCon(String EMail, int CONTACT_ID) {
-		String succ = "invalid email";
-		return succ;
 	}
 }

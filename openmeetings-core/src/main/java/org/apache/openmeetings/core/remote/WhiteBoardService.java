@@ -351,7 +351,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getWhiteBoardSyncListByRoomid(room_id);
 
 			wSyncLockObject.setCurrentLoadingItem(true);
-			wSyncLockObject.setStarttime(new Date());
+			wSyncLockObject.setInserted(new Date());
 
 			syncListRoom.put(currentClient.getPublicSID(), wSyncLockObject);
 			this.whiteBoardObjectListManager.setWhiteBoardSyncListByRoomid(
@@ -444,7 +444,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
 			wSyncLockObject.setAddtime(new Date());
 			wSyncLockObject.setPublicSID(currentClient.getPublicSID());
-			wSyncLockObject.setStarttime(new Date());
+			wSyncLockObject.setInserted(new Date());
 
 			Map<String, WhiteboardSyncLockObject> syncListImage = this.whiteBoardObjectListManager
 					.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id,

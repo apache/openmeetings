@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -41,11 +41,11 @@ public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 	public void testitNow() {
 		User u = userDao.get(1L);
 
-		assertNotNull("Organisation list for default user must not be null", u.getOrganisation_users());
-		assertTrue("Default user must belong to at least one organisation", u.getOrganisation_users().size() > 0);
+		assertNotNull("Group list for default user must not be null", u.getGroupUsers());
+		assertTrue("Default user must belong to at least one group", u.getGroupUsers().size() > 0);
 
-		for (Organisation_Users orgUserObj : u.getOrganisation_users()) {
-			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation().getId() + "'; name: '" + orgUserObj.getOrganisation().getName() + "'");
+		for (GroupUser orgUserObj : u.getGroupUsers()) {
+			log.error("testitNow: group Id: '" + orgUserObj.getGroup().getId() + "'; name: '" + orgUserObj.getGroup().getName() + "'");
 		}
 	}
 }

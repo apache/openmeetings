@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,6 +33,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -54,7 +56,9 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "server")
 @Root
-public class Server implements Serializable, IDataProviderEntity {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Server implements IDataProviderEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -89,7 +93,7 @@ public class Server implements Serializable, IDataProviderEntity {
 	public User updatedby;
 
 	@Lob
-	@Column(name = "comment_field", length = 2048)
+	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
 	private String comment;
 

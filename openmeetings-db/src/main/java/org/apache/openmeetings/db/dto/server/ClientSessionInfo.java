@@ -26,6 +26,8 @@ public class ClientSessionInfo {
 	private Client rcl;
 	public Long serverId;
 	
+	public ClientSessionInfo() {}
+	
 	public ClientSessionInfo(Client rcl, Long serverId) {
 		super();
 		this.rcl = rcl;

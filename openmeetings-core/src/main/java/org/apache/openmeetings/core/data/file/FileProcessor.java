@@ -29,10 +29,10 @@ import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
 import org.apache.openmeetings.core.converter.GenerateImage;
 import org.apache.openmeetings.core.converter.GenerateThumbs;
+import org.apache.openmeetings.core.documents.GeneratePDF;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.core.documents.GeneratePDF;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
@@ -59,7 +59,7 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
-	public ConverterProcessResultList processFile(Long userId, Long room_id, 
+	public ConverterProcessResultList processFile(Long userId, Long roomId, 
 			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
 			Long externalFileId, String externalType) throws Exception {
 		
@@ -136,7 +136,7 @@ public class FileProcessor {
 
         Long fileExplorerItemId = fileExplorerItemDao.add(
                 fileSystemName, fileHashName, // The Hashname of the file
-                parentFolderId, ownerId, room_id, userId, false, // isFolder
+                parentFolderId, ownerId, roomId, userId, false, // isFolder
                 isImage, isPresentation, "", false, isChart, 
                 externalFileId, externalType);
         log.debug("fileExplorerItemId: " + fileExplorerItemId);

@@ -12,8 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
-
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>IBM DB2 Configuration</title>
 		<author email="sebawagner@apache.org">
@@ -40,13 +41,9 @@
 						Create database for OpenMeetings using a pagesize bigger or equal
 						8K, sample query:
 						<br />
-						<div class="xmlcode">
-							CREATE DATABASE openmeet AUTOMATIC STORAGE YES ON 'C:' DBPATH ON 'C:'
-							USING CODESET UTF-8 TERRITORY DE COLLATE USING System PAGESIZE 16
-							K
-						</div>
+						<source><![CDATA[CREATE DATABASE openmeet AUTOMATIC STORAGE YES ON 'C:' DBPATH ON 'C:' USING CODESET UTF-8 TERRITORY DE COLLATE USING System PAGESIZE 16 K]]></source>
 					</li>
-					<li>If you encounter issues, you can drop the db  and then run
+					<li>If you encounter issues, you can drop the db and then run
 						the web based installer again </li>
 				</ul>
 			</subsection>

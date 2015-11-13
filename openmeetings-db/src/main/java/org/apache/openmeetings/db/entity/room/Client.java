@@ -59,9 +59,9 @@ import org.apache.openmeetings.util.CalendarPatterns;
 	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
 	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
 	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
-	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.user_id = :user_id"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
+	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.userId = :userId"),
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.roomId = :roomId"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM Client c WHERE c.server = :server GROUP BY c.roomId")
 })
 @Table(name = "client")
 @XmlRootElement
@@ -183,13 +183,13 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#isScreenClient()
 	 */
 	@Column(name = "is_screenclient")
-	private boolean isScreenClient;
+	private boolean screenClient;
 	
 	/**
 	 * @see Client#isAvClient()
 	 */
 	@Column(name = "is_avclient")
-	private boolean isAVClient;
+	private boolean avClient;
 	
 	/**
 	 * @see Client#getUsercolor()
@@ -219,7 +219,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getRoomId()
 	 */
 	@Column(name = "room_id")
-	private Long room_id;
+	private Long roomId;
 	
 	/**
 	 * @see Client#getRoomEnter()
@@ -237,7 +237,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getUserId()
 	 */
 	@Column(name = "user_id")
-	private Long user_id = null;
+	private Long userId = null;
 	
 	/**
 	 * @see Client#getFirstname()
@@ -310,19 +310,19 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getRecordingId()
 	 */
 	@Column(name = "recording_id")
-	private Long flvRecordingId;
+	private Long recordingId;
 	
 	/**
 	 * @see Client#getRecordingMetaDataId()
 	 */
 	@Column(name = "recording_metadata_id")
-	private Long flvRecordingMetaDataId;
+	private Long recordingMetaDataId;
 	
 	/**
-	 * @see Client#getOrganization_id()
+	 * @see Client#getGroupId()
 	 */
-	@Column(name = "organization_id")
-	private Long organization_id;
+	@Column(name = "group_id")
+	private Long groupId;
 	
 	/**
 	 * @see Client#isStartRecording()
@@ -411,18 +411,18 @@ public class Client implements IDataProviderEntity {
 		super();
 		this.streamid = streamid;
 		this.publicSID = publicSID;
-		this.room_id = roomId;
-		this.user_id = userId;
+		this.roomId = roomId;
+		this.userId = userId;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.isAVClient = avClient;
+		this.avClient = avClient;
 		this.username = username;
 		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
 		this.scope = scope;
 	}
 
 	public void setUserObject(Long userId, String username, String firstname, String lastname) {
-		this.user_id = userId;
+		this.userId = userId;
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -587,19 +587,19 @@ public class Client implements IDataProviderEntity {
 	}
 
 	public Long getUserId() {
-		return user_id;
+		return userId;
 	}
 
 	public void setUserId(Long userId) {
-		this.user_id = userId;
+		this.userId = userId;
 	}
 
 	public Long getRoomId() {
-		return room_id;
+		return roomId;
 	}
 
 	public void setRoomId(Long roomId) {
-		this.room_id = roomId;
+		this.roomId = roomId;
 	}
 
 	public Date getRoomEnter() {
@@ -715,11 +715,11 @@ public class Client implements IDataProviderEntity {
 	}
 
 	public boolean isScreenClient() {
-		return isScreenClient;
+		return screenClient;
 	}
 
 	public void setScreenClient(boolean screenClient) {
-		this.isScreenClient = screenClient;
+		this.screenClient = screenClient;
 	}
 
 	public int getVWidth() {
@@ -763,19 +763,19 @@ public class Client implements IDataProviderEntity {
 	}
 
 	public Long getRecordingId() {
-		return flvRecordingId;
+		return recordingId;
 	}
 
 	public void setRecordingId(Long recordingId) {
-		this.flvRecordingId = recordingId;
+		this.recordingId = recordingId;
 	}
 
 	public Long getRecordingMetaDataId() {
-		return flvRecordingMetaDataId;
+		return recordingMetaDataId;
 	}
 
 	public void setRecordingMetaDataId(Long recordingMetaDataId) {
-		this.flvRecordingMetaDataId = recordingMetaDataId;
+		this.recordingMetaDataId = recordingMetaDataId;
 	}
 
 	public boolean isScreenPublishStarted() {
@@ -786,12 +786,12 @@ public class Client implements IDataProviderEntity {
 		this.screenPublishStarted = screenPublishStarted;
 	}
 
-	public Long getOrganization_id() {
-		return organization_id;
+	public Long getGroupId() {
+		return groupId;
 	}
 
-	public void setOrganization_id(Long organization_id) {
-		this.organization_id = organization_id;
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 	public boolean isStartRecording() {
@@ -851,11 +851,11 @@ public class Client implements IDataProviderEntity {
 	}
 
 	public boolean isAvClient() {
-		return isAVClient;
+		return avClient;
 	}
 
 	public void setAvClient(boolean avClient) {
-		this.isAVClient = avClient;
+		this.avClient = avClient;
 	}
 
 	public boolean isStreamPublishStarted() {
@@ -892,10 +892,10 @@ public class Client implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + isScreenClient
-				+ ", avClient=" + isAVClient + ", isMobile = " + mobile + ", roomId=" + room_id + ", broadCastID=" + broadCastID + ", userId="
-				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
-				+ flvRecordingId + ", recordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
+		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
+				+ ", avClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
+				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
+				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
 	}
 }

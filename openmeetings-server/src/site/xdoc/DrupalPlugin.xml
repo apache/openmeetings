@@ -12,7 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
 	<properties>
 		<title>Drupal Plugin</title>
@@ -26,10 +28,7 @@
 		<section name="Drupal Plugin for OpenMeetings">
 			<p>
 				Plugin for Drupal currently is not open source. 
-				Please contact <a href="commercial-support.html" target="_BLANK" rel="nofollow">Commercial Support</a> to get it. 
-				<br/>
-				A demo version+video of the Drupal plugin is available at
-				<a href="http://drupal.openmeetings.de/" target="_BLANK" rel="nofollow">drupal.openmeetings.de</a>.
+				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
 			</p>
 		</section>
 		
@@ -38,7 +37,7 @@
 				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
 				<br/>
 				For a detailed description on how to install plugins in Drupal please review their 
-				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" rel="nofollow">handbook</a>.
+				<a href="http://drupal.org/documentation/install/modules-themes" target="_blank" rel="nofollow">handbook</a>.
 				<br />
 				Then you visit the module interface of Drupal, where you will find the new module.
 				You should switch it to "enabled" to get the "Configure" and "Permissions" buttons.
@@ -69,6 +68,11 @@
 			</a>
 		</section>
 		
+		<section name="Demo video">
+			<p>The demo video of Drupal plugin show you the plugin in action </p>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/LmMIKFCLRV4" frameborder="0" allowfullscreen=""></iframe>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/k5PF3vdVUn0" frameborder="0" allowfullscreen=""></iframe>
+		</section>
 	</body>
 
 </document>

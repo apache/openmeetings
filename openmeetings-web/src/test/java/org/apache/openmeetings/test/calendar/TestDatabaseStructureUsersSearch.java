@@ -19,7 +19,6 @@
 package org.apache.openmeetings.test.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;

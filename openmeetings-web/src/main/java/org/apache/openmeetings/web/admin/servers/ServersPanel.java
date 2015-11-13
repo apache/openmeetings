@@ -46,9 +46,9 @@ public class ServersPanel extends AdminPanel {
 	private ServerForm form;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("omServerPanelInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("omServerPanelInit();");
 	}
 
 	public ServersPanel(String id) {

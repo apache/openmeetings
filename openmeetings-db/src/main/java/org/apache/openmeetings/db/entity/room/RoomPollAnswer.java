@@ -40,8 +40,8 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.rooms_id = :roomId "
-				+ "AND rpa.votedUser.user_id = :userId AND rpa.roomPoll.archived = false")
+	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :roomId "
+				+ "AND rpa.votedUser.id = :userId AND rpa.roomPoll.archived = false")
 })
 @Table(name = "room_poll_answer")
 @Root(name="roompollanswer")

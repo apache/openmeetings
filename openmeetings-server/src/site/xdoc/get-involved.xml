@@ -12,7 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
 	<properties>
 		<title>Get Involved</title>
@@ -43,7 +45,7 @@
 				<li>
 					Information on access to the project source code is
 					available
-					<a href="svn.html">here</a>
+					<a href="source-repository.html">here</a>
 					.
 				</li>
 				<li>
@@ -65,20 +67,17 @@
 
 		</section>
 
-		<section name="Which taks could I potentially work on?">
+		<section name="Which tasks could I potentially work on?">
 
 			<p>
-				No matter if you want to share your experiences, improve
-				documentation, localization, code Java, ActionScript or PHP, there
-				are dozens of areas where you can find task to work on and share
-				with others.
+				No matter if you want to share your experiences, improve documentation, localization, code Java
+				, ActionScript or PHP, there are dozens of areas where you can find task to work on and share
+				with others.<br />
 				<br />
-				<br />
-				We tried to collect a list of ideas in our wiki:
-				<br />
+				We tried to collect a list of ideas in our wiki:<br />
 				<a
 					href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list"
-					target="_BLANK">https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list
+					target="_blank">https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list
 				</a>
 			</p>
 

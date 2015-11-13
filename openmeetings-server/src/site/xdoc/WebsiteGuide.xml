@@ -12,24 +12,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
-
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
-		<title>Release Guide</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<title>Website Guide</title>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
 	</properties>
 
 	<body>
 
 		<section name="How to update Apache OpenMeetings website">
-
 			<subsection name="Required tools">
 				<div>
 					<ul>
-						<li>Sun JDK6</li>
-						<li>Apache ANT (1.8 or later)</li>
+						<li>Sun JDK7</li>
+						<li>Apache Maven (3.2.1 or later)</li>
 					</ul>
 				</div>
 			</subsection>
@@ -38,8 +36,8 @@
 				<div>
 					<p>
 						The Apache OpenMeetings HTML websites are generated from XML files. 
-						You edit the XML files, run the ANT command "ant anakia" that generates the HTML files 
-						and then you checkin to SVN both: XML and HTML files.
+						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -Dunpacked=true]]></source> that generates the HTML files 
+						and then you copy generated HTML files into appropriate place and commit to SVN both: XML and HTML files.
 					</p>
 					<p>
 						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
@@ -50,34 +48,21 @@
 			<subsection name="Editing the website">
 				<div>
 					<p>
-						OpenMeetings website (
-						<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>
-						) is a copy from the SVN repository.
-						<br />
+						OpenMeetings website (<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>) is a copy from the SVN repository.<br />
 						The file in the SVN to be synced are at:
 						<br />
-						<a
-							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/
-						</a>
-						<br/>and<br/>
-						<a
-							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/
-						</a>
+						<a href="http://svn.apache.org/repos/asf/openmeetings/trunk/site/">http://svn.apache.org/repos/asf/openmeetings/trunk/site/</a><br/>
 					</p>
 					
 					<div>
-						To update the website you checkout trunk:
-						<br />
-						<a
-							href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
-						</a> <br/>
-						edit the files in the folder <tt>xdocs</tt><br/>
+						To update the website you need to checkout trunk:<br />
+						<a href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/</a> <br/>
+						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>
 						then you run the command:
-						<div class="xmlcode">
-							ant anakia
-						</div>
-						control the output locally in the folder <tt>docs</tt><br/>
-						And then checkin into the SVN <i>both</i> the edited xml and generated html files.
+						<source><![CDATA[mvn install -Dunpacked=true]]></source>
+						control the output locally in the folder <tt>openmeetings-server/target/server/webapps/openmeetings/docs/</tt><br/>
+						copy site contents into target folder: <source><![CDATA[cp -r openmeetings-server/target/server/webapps/openmeetings/docs/* ../site/]]></source>
+						And then commit your changes into the SVN <i>both</i> the edited xml(s) and generated html files.
 					</div>
 					
 					<p>
@@ -94,21 +79,8 @@
 				<div>
 					To add a new menu entry in the left side panel you need to modify the file: 
 					<br/>
-					<tt>xdocs/stylesheets/project.xml</tt>
+					<tt>openmeetings-server/src/site/site.xml</tt>
 				</div>
-			</subsection>
-			
-			<subsection name="Writing a new macro">
-				<div>
-					<p>
-						You can write macros in a template language to parse from the XML files certain aspects.
-					</p>
-					<p>
-						To add a new macro see the file:<br/>
-						<tt>xdocs/stylesheets/site.vsl</tt>
-					</p>
-				</div>
-				
 			</subsection>
 
 		</section>

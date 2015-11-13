@@ -145,13 +145,13 @@ public class ClientDao {
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByUserId", Client.class);
 		q.setParameter("server", server);
-		q.setParameter("user_id", userId);	
+		q.setParameter("userId", userId);	
 		return q.getResultList();
 	}
 
 	public List<Client> getClientsByRoomId(Long roomId) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByRoomId", Client.class);
-		q.setParameter("room_id", roomId);	
+		q.setParameter("roomId", roomId);	
 		return q.getResultList();
 	}
 

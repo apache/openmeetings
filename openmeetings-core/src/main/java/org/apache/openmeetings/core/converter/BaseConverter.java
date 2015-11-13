@@ -83,8 +83,8 @@ public abstract class BaseConverter {
 		return "1".equals(configurationDao.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
 	
-	protected File getStreamFolder(Recording flvRecording) {
-		return getStreamsSubDir(flvRecording.getRoomId());
+	protected File getStreamFolder(Recording recording) {
+		return getStreamsSubDir(recording.getRoomId());
 	}
 
 	protected long diff(Date from, Date to) {
@@ -134,11 +134,11 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 	
-	protected void stripAudioFirstPass(Recording flvRecording, List<ConverterProcessResult> returnLog,
+	protected void stripAudioFirstPass(Recording recording, List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder)
 	{
-		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder
-				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getId()));
+		stripAudioFirstPass(recording, returnLog, listOfFullWaveFiles, streamFolder
+				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
 	}
 	
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
@@ -226,7 +226,7 @@ public abstract class BaseConverter {
 		return metaData;
 	}
 	
-	protected void stripAudioFirstPass(Recording flvRecording,
+	protected void stripAudioFirstPass(Recording recording,
 			List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder,
 			List<RecordingMetaData> metaDataList) {
@@ -270,11 +270,11 @@ public abstract class BaseConverter {
 					File outputGapFullWav = outputWav;
 	
 					// Fix Start/End in Audio
-					List<RecordingMetaDelta> flvRecordingMetaDeltas = metaDeltaDao.getByMetaId(metaId);
+					List<RecordingMetaDelta> metaDeltas = metaDeltaDao.getByMetaId(metaId);
 	
 					int counter = 0;
 	
-					for (RecordingMetaDelta metaDelta : flvRecordingMetaDeltas) {
+					for (RecordingMetaDelta metaDelta : metaDeltas) {
 						File inputFile = outputGapFullWav;
 	
 						// Strip Wave to Full Length
@@ -309,10 +309,10 @@ public abstract class BaseConverter {
 					File outputFullWav = new File(streamFolder, hashFileFullName);
 	
 					// Calculate delta at beginning
-					double startPad = diffSeconds(metaData.getRecordStart(), flvRecording.getRecordStart());
+					double startPad = diffSeconds(metaData.getRecordStart(), recording.getRecordStart());
 	
 					// Calculate delta at ending
-					double endPad = diffSeconds(flvRecording.getRecordEnd(), metaData.getRecordEnd());
+					double endPad = diffSeconds(recording.getRecordEnd(), metaData.getRecordEnd());
 	
 					addSoxPad(returnLog, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
 	

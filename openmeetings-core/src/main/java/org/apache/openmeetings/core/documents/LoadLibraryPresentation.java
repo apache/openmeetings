@@ -98,7 +98,7 @@ public class LoadLibraryPresentation {
 			libraryPresentationFile.setName(fileElement.getName());
 			libraryPresentationFile.setFilename(fileElement.getText());
 			libraryPresentationFile.setLastmod(fileElement.attribute("lastmod").getText());
-			libraryPresentationFile.setSize(Long.valueOf(fileElement.attribute("size").getText()).longValue());
+			libraryPresentationFile.setSize(Long.valueOf(fileElement.attribute("size").getText()));
 			
 			return libraryPresentationFile;
 			
@@ -132,7 +132,7 @@ public class LoadLibraryPresentation {
 				singleThumb.setName(thumbElement.getName());
 				singleThumb.setFilename(thumbElement.getText());
 				singleThumb.setLastmod(thumbElement.attribute("lastmod").getText());
-				singleThumb.setSize(Long.valueOf(thumbElement.attribute("size").getText()).longValue());
+				singleThumb.setSize(Long.valueOf(thumbElement.attribute("size").getText()));
 				thumbMap.getThumbs()[k] = singleThumb;
 				k++;
 			}

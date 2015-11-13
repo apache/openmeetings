@@ -19,11 +19,13 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -37,6 +39,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -60,7 +63,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private UserContactDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
@@ -72,13 +75,13 @@ public class UserService implements IUserService {
 	 * get user by id, admin only
 	 * 
 	 * @param SID
-	 * @param user_id
+	 * @param userId
 	 * @return User with the id given
 	 */
-	public User getUserById(String SID, long user_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			return userDao.get(user_id);
+	public User getUserById(String SID, long userId) {
+		Long authUserId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
+			return userDao.get(userId);
 		}
 		return null;
 	}
@@ -109,8 +112,8 @@ public class UserService implements IUserService {
 	 * @return whole user-list
 	 */
 	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
 		return null;
@@ -129,9 +132,9 @@ public class UserService implements IUserService {
 	 */
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// admins only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 				if (serverId == 0) {
 					Client rcl = sessionManager.getClientByStreamId(streamid, null);
 
@@ -171,16 +174,16 @@ public class UserService implements IUserService {
 
 	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				User us = userDao.get(users_id);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				User us = userDao.get(userId);
 
 				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
 				us.setUpdated(new Date());
 
-				userDao.update(us, users_id);
+				userDao.update(us, userId);
 				
 				return us;
 			}
@@ -189,28 +192,13 @@ public class UserService implements IUserService {
 		}
 		return null;
 	}
-/* TODO FIXME should replaced by wicket component
-	@Deprecated
-	public Long requestUserToContactList(String SID, Long userToAdd_id,
-			String domain, String port, String webapp) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				return ContactsHelper.addUserToContactList(userToAdd_id);
-			}
-		} catch (Exception err) {
-			log.error("[requestuserToContactList]", err);
-		}
-		return null;
-	}
-*/
+
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactRequestsByUserAndStatus(users_id, true);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				List<UserContact> uList = userContactDao.getContactRequestsByUserAndStatus(userId, true);
 
 				return uList;
 			}
@@ -222,10 +210,10 @@ public class UserService implements IUserService {
 
 	public List<UserContact> getUserContacts(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(userId, false);
 
 				return uList;
 			}
@@ -237,16 +225,16 @@ public class UserService implements IUserService {
 
 	public Integer removeContactUser(String SID, Long userContactId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				UserContact userContacts = userContactsDao.get(userContactId);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				UserContact userContacts = userContactDao.get(userContactId);
 
 				if (userContacts == null) {
 					return -49;
 				}
 
-				return userContactsDao.deleteUserContact(userContactId);
+				return userContactDao.deleteUserContact(userContactId);
 			}
 		} catch (Exception err) {
 			log.error("[removeContactUser]", err);
@@ -254,102 +242,15 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	/* TODO FIXME should replaced by wicket component
-
-	public Long composeMail(String SID, List<String> recipients,
-			String subject, String message, Boolean bookedRoom,
-			String validFromDate, String validFromTime, String validToDate,
-			String validToTime, Long parentMessageId, Long roomtype_id,
-			String domain, String port, String webapp) {
+	public Boolean checkUserIsInContactList(String SID, Long userId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				User from = userDao.get(users_id);
-
-				Appointment a = new Appointment();
-				if (a.getMeetingMembers() == null) {
-					a.setMeetingMembers(new ArrayList<MeetingMember>());
-				}
-				for (String email : recipients) {
-					MeetingMember mm = new MeetingMember();
-					mm.setAppointment(a);
-					mm.setUser(userDao.getContact(email, users_id));
-					a.getMeetingMembers().add(mm);
-				}
-				if (bookedRoom) {
-					TimeZone timezone = timezoneUtil.getTimeZone(from);
-					Date start = createCalendarDate(timezone, validFromDate, validFromTime);
-					Date end = createCalendarDate(timezone, validToDate, validToTime);
-
-					log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(start));
-					log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(end));
-
-					a.setTitle(subject);
-					a.setDescription(message);
-					a.setStart(start);
-					a.setEnd(end);
-					a.setCategory(appointmentCategoryDao.get(1L));
-					a.setOwner(from);
-					
-					a.setRoom(new Room());
-					a.getRoom().setAppointment(true);
-					a.getRoom().setName(subject);
-					a.getRoom().setRoomtype(roomTypeDao.get(roomtype_id));
-					a.getRoom().setNumberOfPartizipants(100L);
-					a.getRoom().setAllowUserQuestions(true);
-					a.getRoom().setAllowFontStyles(true);
-
-					a = appointmentDao.update(a, users_id);
-				}
-				for (MeetingMember mm : a.getMeetingMembers()) {
-					User to = mm.getUser();
-					Room room = a.getRoom();
-					
-					// We do not send an email to the one that has created the
-					// private message
-					if (to != null && from.getId().equals(to.getId())) {
-						continue;
-					}
-
-					//TODO should be reviewed
-					// One message to the Send
-					privateMessagesDao.addPrivateMessage(subject,
-							message, SENT_FOLDER_ID, from, to, from,
-							bookedRoom, room, false, 0L);
-
-					// One message to the Inbox
-					privateMessagesDao.addPrivateMessage(subject,
-							message, INBOX_FOLDER_ID, from, to, to,
-							bookedRoom, room, false, 0L);
-
-					if (to.getAddress() != null) {
-						AbstractTemplatePanel.ensureApplication(from.getLanguage_id());
-						String aLinkHTML = 	"<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-									+  labelDao.getString(1302, from.getLanguage_id()) + "</a><br/>";
-						
-						mailHandler.send(to.getAddress().getEmail(),
-								labelDao.getString(1301, from.getLanguage_id()) + subject,
-								message.replaceAll("\\<.*?>", "") + aLinkHTML);
-					}
-				}
-			}
-
-		} catch (Exception err) {
-			log.error("[composeMail]", err);
-		}
-		return null;
-	}
-*/
-	public Boolean checkUserIsInContactList(String SID, Long user_id) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
+				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(authUserId, false);
 
 				for (UserContact userContact : uList) {
-					if (userContact.getContact().getId().equals(user_id)) {
+					if (userContact.getContact().getId().equals(userId)) {
 						return true;
 					}
 				}
@@ -362,17 +263,17 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	public void shareCalendarUserContact(String SID, Long userContactId, Boolean shareCalendar) {
+	public void shareCalendarUserContact(String SID, Long contactId, Boolean shareCalendar) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				UserContact userContacts = userContactsDao.get(userContactId);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				UserContact userContacts = userContactDao.get(contactId);
 
 				userContacts.setShareCalendar(shareCalendar);
 
-				userContactsDao.update(userContacts);
+				userContactDao.update(userContacts);
 			}
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);
@@ -393,9 +294,9 @@ public class UserService implements IUserService {
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
@@ -424,20 +325,15 @@ public class UserService implements IUserService {
 
 	@Override
 	public Boolean kickUserBySessionId(String SID, long userId, String sessionId) {
-		/* TODO FIXME should replaced by wicket component
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// admin only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
-				WebClient client = Application.getClientByKeys(userId, sessionId);
-				if (client != null) {
-					Application.invalidateClient(client);
-				}
+				((IApplication)Application.get(wicketApplicationName)).invalidateClient(userId, sessionId);
 			}
 		} catch (Exception err) {
 			log.error("[kickUserBySessionId]", err);
 		}
-	*/
 		return null;
 	}
 }

@@ -68,13 +68,13 @@ public class WhiteboardMapToSVG extends BatikMethods {
         		
         		List pointsList = (List) graphObject.get(1);
         		
-        		Integer lineWidth = Integer.valueOf(graphObject.get(3).toString()).intValue();
-        		Integer col = Integer.valueOf(graphObject.get(4).toString()).intValue();
+        		Integer lineWidth = Integer.valueOf(graphObject.get(3).toString());
+        		Integer col = Integer.valueOf(graphObject.get(4).toString());
         		
-        		Float alpha = Float.valueOf(graphObject.get(5).toString()).floatValue();
+        		Float alpha = Float.valueOf(graphObject.get(5).toString());
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
         		
         		//log.debug("x,y,width,height: "+x+","+y+","+width+","+height);
         		
@@ -95,60 +95,60 @@ public class WhiteboardMapToSVG extends BatikMethods {
 		        actionObject[5] = fillDis;
 		        actionObject[6] = this.currentrectangleOpacity;*/
         		
-        		Integer lineWidth = Integer.valueOf(graphObject.get(2).toString()).intValue();
+        		Integer lineWidth = Integer.valueOf(graphObject.get(2).toString());
         		
-        		Integer stroke = Integer.valueOf(graphObject.get(1).toString()).intValue();
-        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString()).intValue();
+        		Integer stroke = Integer.valueOf(graphObject.get(1).toString());
+        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString());
         		
         		Color strokeColor = null;
         		if (strokeDis != -1) {
         			strokeColor = new Color(stroke);
         		}
         		
-        		Integer fill = Integer.valueOf(graphObject.get(3).toString()).intValue();
-        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString()).intValue();
+        		Integer fill = Integer.valueOf(graphObject.get(3).toString());
+        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString());
         		
         		Color fillColor = null;
         		if (fillDis != -1) {
         			fillColor = new Color(fill);
         		}
         		
-        		Float alpha = Float.valueOf(graphObject.get(6).toString()).floatValue();
+        		Float alpha = Float.valueOf(graphObject.get(6).toString());
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
-        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
-        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
+        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString());
+        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString());
         	
         		SVGGraphics2D svgGenerator_temp = new SVGGraphics2D(svgGenerator);
         		this.paintRect2D(svgGenerator_temp, x, y, width, height, strokeColor, lineWidth, fillColor, alpha);
         		
         	} else if (graphType.equals("ellipse")) {
         		
-        		Integer lineWidth = Integer.valueOf(graphObject.get(2).toString()).intValue();
+        		Integer lineWidth = Integer.valueOf(graphObject.get(2).toString());
         		
-        		Integer stroke = Integer.valueOf(graphObject.get(1).toString()).intValue();
-        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString()).intValue();
+        		Integer stroke = Integer.valueOf(graphObject.get(1).toString());
+        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString());
         		
         		Color strokeColor = null;
         		if (strokeDis != -1) {
         			strokeColor = new Color(stroke);
         		}
         		
-        		Integer fill = Integer.valueOf(graphObject.get(3).toString()).intValue();
-        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString()).intValue();
+        		Integer fill = Integer.valueOf(graphObject.get(3).toString());
+        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString());
         		
         		Color fillColor = null;
         		if (fillDis != -1) {
         			fillColor = new Color(fill);
         		}
         		
-        		Float alpha = Float.valueOf(graphObject.get(6).toString()).floatValue();
+        		Float alpha = Float.valueOf(graphObject.get(6).toString());
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
-        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
-        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
+        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString());
+        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString());
         	
         		SVGGraphics2D svgGenerator_temp = new SVGGraphics2D(svgGenerator);
         		this.paintEllipse2D(svgGenerator_temp, x, y, width, height, strokeColor, lineWidth, fillColor, alpha);
@@ -156,8 +156,8 @@ public class WhiteboardMapToSVG extends BatikMethods {
         	} else if (graphType.equals("letter")) {
         		
         		String text = graphObject.get(1).toString();
-        		Color fontColor = new Color (Integer.valueOf(graphObject.get(2).toString()).intValue());
-        		Integer fontSize = Integer.valueOf(graphObject.get(3).toString()).intValue();
+        		Color fontColor = new Color (Integer.valueOf(graphObject.get(2).toString()));
+        		Integer fontSize = Integer.valueOf(graphObject.get(3).toString());
         		
         		String fontStyle = graphObject.get(4).toString();
         		Integer style = null;
@@ -173,46 +173,46 @@ public class WhiteboardMapToSVG extends BatikMethods {
         		
         		log.debug("fontStyle,style "+style+" fs: "+fontStyle);
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
-        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
-        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
+        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString());
+        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString());
         		
         		SVGGraphics2D svgGenerator_temp = new SVGGraphics2D(svgGenerator);
-        		this.paintTextByWidthHeight(svgGenerator_temp, (int) Math.round(x), (int) Math.round(y), (int) Math.round(width), 
+        		paintTextByWidthHeight(svgGenerator_temp, (int) Math.round(x), (int) Math.round(y), (int) Math.round(width), 
         					(int) Math.round(height), text, style, fontSize, fontColor);
         		
         	} else if (graphType.equals("drawarrow")) {
         		
-        		Integer thickness = Integer.valueOf(graphObject.get(2).toString()).intValue();
+        		Integer thickness = Integer.valueOf(graphObject.get(2).toString());
         		
-        		Integer stroke = Integer.valueOf(graphObject.get(1).toString()).intValue();
-        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString()).intValue();
+        		Integer stroke = Integer.valueOf(graphObject.get(1).toString());
+        		Integer strokeDis= Integer.valueOf(graphObject.get(4).toString());
         		
         		Color strokeColor = null;
         		if (strokeDis != -1) {
         			strokeColor = new Color(stroke);
         		}
         		
-        		Integer fill = Integer.valueOf(graphObject.get(3).toString()).intValue();
-        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString()).intValue();
+        		Integer fill = Integer.valueOf(graphObject.get(3).toString());
+        		Integer fillDis= Integer.valueOf(graphObject.get(5).toString());
         		
         		Color fillColor = null;
         		if (fillDis != -1) {
         			fillColor = new Color(fill);
         		}
         		
-        		Float alpha = Float.valueOf(graphObject.get(6).toString()).floatValue();
+        		Float alpha = Float.valueOf(graphObject.get(6).toString());
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
         		//Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
         		//Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
         		
-        		Double x1 = Double.valueOf(graphObject.get(7).toString()).doubleValue();
-        		Double y1 = Double.valueOf(graphObject.get(8).toString()).doubleValue();
-        		Double x2 = Double.valueOf(graphObject.get(9).toString()).doubleValue();
-        		Double y2 = Double.valueOf(graphObject.get(10).toString()).doubleValue();
+        		Double x1 = Double.valueOf(graphObject.get(7).toString());
+        		Double y1 = Double.valueOf(graphObject.get(8).toString());
+        		Double x2 = Double.valueOf(graphObject.get(9).toString());
+        		Double y2 = Double.valueOf(graphObject.get(10).toString());
         		
         		GeomPoint start = new GeomPoint();
     	        start.setLocation(x+x1,y+y1);
@@ -244,10 +244,10 @@ public class WhiteboardMapToSVG extends BatikMethods {
         			
         			Image myImage = ImageIO.read(myFile);
         			
-        			int x = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue());
-        			int y = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue());
-        			int width = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue());
-        			int height = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue());
+        			int x = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-5).toString()));
+        			int y = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-4).toString()));
+        			int width = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-3).toString()));
+        			int height = (int) Math.round(Double.valueOf(graphObject.get(graphObject.size()-2).toString()));
 	        		
 	        		SVGGraphics2D svgGenerator_temp = new SVGGraphics2D(svgGenerator);
 	        		svgGenerator_temp.drawImage(myImage, x, y, width, height, null);
@@ -273,22 +273,22 @@ public class WhiteboardMapToSVG extends BatikMethods {
 //                actionObject[12] = height;  
 //                actionObject[13] = newName;
         		
-    			Integer lineWidth = Integer.valueOf(graphObject.get(2).toString()).intValue();
+    			Integer lineWidth = Integer.valueOf(graphObject.get(2).toString());
         		
-        		Integer stroke = Integer.valueOf(graphObject.get(1).toString()).intValue();
+        		Integer stroke = Integer.valueOf(graphObject.get(1).toString());
         		Color strokeColor = new Color(stroke);
         		
-        		Float alpha = Float.valueOf(graphObject.get(3).toString()).floatValue();
+        		Float alpha = Float.valueOf(graphObject.get(3).toString());
         		
-        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
-        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
+        		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString());
+        		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString());
         		//Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
         		//Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
 
-        		Double x1 = Double.valueOf(graphObject.get(4).toString()).doubleValue();
-        		Double y1 = Double.valueOf(graphObject.get(5).toString()).doubleValue();
-        		Double x2 = Double.valueOf(graphObject.get(6).toString()).doubleValue();
-        		Double y2 = Double.valueOf(graphObject.get(7).toString()).doubleValue();
+        		Double x1 = Double.valueOf(graphObject.get(4).toString());
+        		Double y1 = Double.valueOf(graphObject.get(5).toString());
+        		Double x2 = Double.valueOf(graphObject.get(6).toString());
+        		Double y2 = Double.valueOf(graphObject.get(7).toString());
         		
         		SVGGraphics2D svgGenerator_temp = new SVGGraphics2D(svgGenerator);
         		this.drawLine(svgGenerator_temp, x1, y1, x2, y2, strokeColor, lineWidth, x, y, alpha);

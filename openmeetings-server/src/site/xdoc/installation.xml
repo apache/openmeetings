@@ -12,8 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
-
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Home</title>
 		<author email="sebawagner@apache.org">
@@ -28,18 +29,18 @@
 			<p>
 				To update from past versions or migrate see <a href="Upgrade.html">Upgrade</a>.<br/>
 				If you are looking for commercial help have a look at
-				<a href="commercial-support.html" target="_BLANK" rel="nofollow">commercial support</a>.
+				<a href="commercial-support.html" target="_blank" rel="nofollow">commercial support</a>.
 			</p>
 			<div>
 				<a href="downloads.html" rel="nofollow">
 					<img src="images/installation_instructions.png" alt="Installation in 3 simple steps" />
 				</a>
 				<p>
-					<i>Note: OpenMeetings requires SUN/Oracle JRE 6, not openJDK!</i><br />
+					<i>Note: Openmeetings requires JRE 7/8, JRE 6 is NOT compatible!</i><br />
 					<i>
 						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked 
 						archive and type ./admin.sh or admin.bat, please see
-						<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin</a>
+						<a href="CommandLineAdmin.html" target="_blank" rel="nofollow">Command Line Admin</a>
 						for more options
 					</i>
 				</p>
@@ -67,13 +68,13 @@
 						Install
 						<b>ImageMagick</b>
 						on the server, you can get more information on
-						<a href="http://www.imagemagick.org" rel="nofollow" target="_BLANK">http://www.imagemagick.org
+						<a href="http://www.imagemagick.org" rel="nofollow" target="_blank">http://www.imagemagick.org
 						</a>
 						regarding installation. The instructions
 						for installation can be
 						found there
 						<a href="http://www.imagemagick.org/script/binary-releases.php"
-							target="_BLANK" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
+							target="_blank" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
 						</a>
 						,
 						however on
@@ -91,7 +92,7 @@
 								<b>GhostScript</b>
 								on the server, you can get more
 								information on
-								<a href="http://www.ghostscript.com/download/gsdnld.html" target="_BLANK"
+								<a href="http://www.ghostscript.com/download/gsdnld.html" target="_blank"
 									rel="nofollow">
 									http://www.ghostscript.com/download/gsdnld.html
 								</a>
@@ -107,13 +108,13 @@
 								<b>SWFTools</b>
 								on the server, you can get more information
 								on
-								<a href="http://www.swftools.org/" target="_BLANK" rel="nofollow">http://www.swftools.org/
+								<a href="http://www.swftools.org/" target="_blank" rel="nofollow">http://www.swftools.org/
 								</a>
 								regarding installation. Some of the
 								Linux distributions already
 								have it in there package manager (see
 								<a href="http://packages.debian.org/unstable/utils/swftools"
-									target="_BLANK" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
+									target="_blank" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
 								</a>
 								), the
 								recommended version of SWFTools is 0.9 as prior version
@@ -131,7 +132,7 @@
 					<div style="margin-top: 10px; margin-bottom:10px">
 						<ul>
 							<li>
-								<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
+								<a href="http://code.google.com/p/jodconverter/" target="_blank"
 									rel="nofollow">JODConverter</a>
 								installed (needed since v2.x)
 							</li>
@@ -155,7 +156,7 @@
 								. You should get FFMPEG in an up to date copy! OpenMeetings is
 								tested with FFMPEG Version 10.3 and latest build from GIT
 								For Windows you can download a Build for example from
-								<a href="http://ffmpeg.zeranoe.com/builds/" target="_BLANK"
+								<a href="http://ffmpeg.zeranoe.com/builds/" target="_blank"
 									rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
 								Linux or OSx Users should be able to use one of the various
 								Installation Instructions on the Web. You need to enable
@@ -164,7 +165,7 @@
 							<li>
 								Install
 								<b>SoX</b>
-								<a href="http://sox.sourceforge.net/" target="_BLANK" rel="nofollow">http://sox.sourceforge.net/
+								<a href="http://sox.sourceforge.net/" target="_blank" rel="nofollow">http://sox.sourceforge.net/
 								</a>
 								. You should install SoX in a up
 								to date copy! SoX 12.xx will NOT
@@ -183,22 +184,6 @@
 				See
 				<a href="PortSettings.html">PortSettings</a>
 			</p>
-		</section>
-
-		<section name="VMWare">
-			<ul>
-				<li>
-					See
-					<a href="http://nightly.openmeetings.de/openmeetings/builds/vmware/"
-						rel="nofollow">http://nightly.openmeetings.de/openmeetings/builds/vmware/</a>
-				</li>
-				<li>
-					VMWare 1.6.1
-					<a
-						href="http://openstudio.no-ip.info/2011/01/openmeetings-1-6-rc1-vmware-appliance-using-ubuntu-server-10-04-lts/"
-						rel="nofollow">blog-entry</a>
-				</li>
-			</ul>
 		</section>
 
 		<section name="Hardware Requirements">
@@ -261,11 +246,6 @@
 				</li>
 				<li>
 					<a
-						href="http://aitinet.com/blog/wp-content/uploads/2009/08/TUTORIAL-PARA-INSTALACAO-DO-RED5-E-OPENMEETINGS-NO-LINUX-DEBIAN-LENNY-51.pdf"
-						rel="nofollow">Portuguese Version for Debian Installation of 0.9 RC1</a>
-				</li>
-				<li>
-					<a
 						href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
 						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
@@ -282,40 +262,30 @@
 		<section name="Tips and Tricks">
 			<ul>
 				<li>
-					Use the Debug-Application: Enter in your browser
-					<a
-						href="http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf"
-						rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
-					for example
-					<a href="http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf"
-						rel="nofollow">http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
+					Use the Debug-Application: open <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
+					<source><![CDATA[
+<init-param>
+	<param-name>configuration</param-name>
+	<param-value>DEPLOYMENT</param-value>
+</init-param>
+					]]></source> to be
+					<source><![CDATA[
+<init-param>
+	<param-name>configuration</param-name>
+	<param-value>DEVELOPMENT</param-value>
+</init-param>
+					]]></source> 
+					then access your OM installation
 				</li>
-				<li>If you have Problems with conversion-jobs check your Red5-Log
-					output. There will be error Messages which help you. You must
+				<li>If you have Problems with conversion-jobs check your openmeetings log
+					output (available at <tt>$RED5_HOME/log/openmeetings.log</tt>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
 					all conversion-Jobs correctly.
-				</li>
-				<li>if you have problems in converting Files check the Batch-Scripts
-					in $OPENMEETINGS_HOME/jod
-				</li>
-				<li>
-					If you want to use red5 as a service (without red5.bat), you need
-					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
-					some path in conf\wrapper.conf (like ..\lib\foo.jar to
-					lib\foo.jar). And finally change the register key in
-					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Red5\ImagePath
-					to point to the new wrapper.
 				</li>
 				<li>
 					you can query a Mysql Database to get the schema_collection by
 					using this query:
-					<div class="xmlcode">
-						SELECT Table_name, TABLE_COLLATION FROM
-						information_schema.tables WHERE table_schema = 'openmeetings'
-						ORDER BY table_name DESC
-					</div>
+					<source><![CDATA[SELECT Table_name, TABLE_COLLATION FROM information_schema.tables WHERE table_schema = 'openmeetings' ORDER BY table_name DESC ]]></source>
 				</li>
 			</ul>
 		</section>

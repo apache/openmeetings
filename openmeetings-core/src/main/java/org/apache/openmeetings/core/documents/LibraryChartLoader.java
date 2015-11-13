@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.documents;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.openmeetings.util.Logger;
@@ -48,6 +49,7 @@ public class LibraryChartLoader {
 
     @SuppressWarnings("rawtypes")
 	public ArrayList loadChart(File dir, String fileName) {
+    	BufferedReader reader = null;
         try {
             File file = new File(dir, fileName + fileExt);
 
@@ -56,22 +58,21 @@ public class LibraryChartLoader {
             XStream xStream = new XStream(new XppDriver());
             xStream.setMode(XStream.NO_REFERENCES);
 
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String xmlString = "";
-            while (reader.ready()) {
-                xmlString += reader.readLine();
-            }
-            reader.close();
-            // lMap = (LinkedHashMap) xStream.fromXML(xmlString);
-            ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
+            reader = new BufferedReader(new FileReader(file));
+            ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
 
             return lMapList;
         } catch (Exception err) {
             log.error(err);
+        } finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {}
+			}
         }
 
         return null;
-
     }
 
 }

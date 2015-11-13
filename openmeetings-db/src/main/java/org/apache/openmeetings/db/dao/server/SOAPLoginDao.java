@@ -40,9 +40,9 @@ public class SOAPLoginDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public String addSOAPLogin(String sessionHash, Long room_id,
+	public String addSOAPLogin(String sessionHash, Long roomId,
 			boolean becomemoderator, boolean showAudioVideoTest,
-			boolean allowSameURLMultipleTimes, Long recording_id,
+			boolean allowSameURLMultipleTimes, Long recordingId,
 			boolean showNickNameDialog, String landingZone,
 			boolean allowRecording) {
 		try {
@@ -53,10 +53,10 @@ public class SOAPLoginDao {
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
 			soapLogin.setUsed(false);
-			soapLogin.setRoomId(room_id);
+			soapLogin.setRoomId(roomId);
 			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
 			soapLogin.setHash(hash);
-			soapLogin.setRecordingId(recording_id);
+			soapLogin.setRecordingId(recordingId);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);
@@ -65,7 +65,7 @@ public class SOAPLoginDao {
 			soapLogin.setAllowRecording(allowRecording);
 
 			soapLogin = em.merge(soapLogin);
-			Long soapLoginId = soapLogin.getSoapLoginId();
+			Long soapLoginId = soapLogin.getId();
 
 			if (soapLoginId > 0) {
 				return hash;
@@ -102,7 +102,7 @@ public class SOAPLoginDao {
 
 	public void update(SOAPLogin soapLogin) {
 		try {
-			if (soapLogin.getSoapLoginId() == 0) {
+			if (soapLogin.getId() == null) {
 				em.persist(soapLogin);
 			} else {
 				if (!em.contains(soapLogin)) {

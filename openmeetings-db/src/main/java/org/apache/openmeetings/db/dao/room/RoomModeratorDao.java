@@ -35,7 +35,7 @@ public class RoomModeratorDao {
 
 	public RoomModerator get(long id) {
 		List<RoomModerator> list = em.createNamedQuery("getRoomModeratorById", RoomModerator.class)
-				.setParameter("roomModeratorsId", id).getResultList();
+				.setParameter("id", id).getResultList();
 		if (!list.isEmpty()) {
 			return list.get(0);
 		}
@@ -51,11 +51,11 @@ public class RoomModeratorDao {
 	}
 
 	public RoomModerator update(RoomModerator rm, Long userId) {
-		if (rm.getRoomModeratorsId() == 0) {
-			rm.setStarttime(new Date());
+		if (rm.getId() == 0) {
+			rm.setInserted(new Date());
 			em.persist(rm);
 		} else {
-			rm.setUpdatetime(new Date());
+			rm.setUpdated(new Date());
 			rm = em.merge(rm);
 		}
 		return rm;

@@ -26,54 +26,54 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.DaoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class OrganisationUserDao implements IDataProviderDao<Organisation_Users> {
+public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
-	public Organisation_Users get(long id) {
-		TypedQuery<Organisation_Users> q = em.createNamedQuery("getOrganisationUsersById", Organisation_Users.class);
+	public GroupUser get(long id) {
+		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
 		q.setParameter("id", id);
 		return q.getSingleResult();
 	}
 
-	public List<Organisation_Users> get(int start, int count) {
+	public List<GroupUser> get(int start, int count) {
 		throw new RuntimeException("Should not be used");
 	}
 
-	public List<Organisation_Users> get(String search, int start, int count, String sort) {
+	public List<GroupUser> get(String search, int start, int count, String sort) {
 		throw new RuntimeException("Should not be used");
 	}
 	
-	public List<Organisation_Users> get(long orgId, String search, int start, int count, String sort) {
-		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", null, search, false, false, "ou.organisation.organisation_id = :orgId", sort, searchFields), Organisation_Users.class);
-		q.setParameter("orgId", orgId);
+	public List<GroupUser> get(long groupId, String search, int start, int count, String sort) {
+		TypedQuery<GroupUser> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class);
+		q.setParameter("groupId", groupId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 	
-	public List<Organisation_Users> get(long orgId, int start, int count) {
-		TypedQuery<Organisation_Users> q = em.createNamedQuery("getOrganisationUsersByOrgId", Organisation_Users.class);
-		q.setParameter("id", orgId);
+	public List<GroupUser> get(long groupId, int start, int count) {
+		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersByGroupId", GroupUser.class);
+		q.setParameter("id", groupId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
-	public Organisation_Users getByOrganizationAndUser(long orgId, long userId) {
+	public GroupUser getByGroupAndUser(long groupId, long userId) {
 		try {
-			List<Organisation_Users> list = em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
-					.setParameter("orgId", orgId).setParameter("userId", userId).getResultList();
+			List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
+					.setParameter("groupId", groupId).setParameter("userId", userId).getResultList();
 			if (list != null && !list.isEmpty()) {
 				return list.get(0);
 			}
@@ -83,9 +83,9 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		return null;
 	}
 	
-	public boolean isUserInOrganization(long orgId, long userId) {
-		return em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
-				.setParameter("orgId", orgId).setParameter("userId", userId).getResultList().size() > 0;
+	public boolean isUserInGroup(long groupId, long userId) {
+		return em.createNamedQuery("isUserInGroup", GroupUser.class)
+				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().size() > 0;
 	}
 	
 	public long count() {
@@ -96,49 +96,49 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		throw new RuntimeException("Should not be used");
 	}
 	
-	public long count(long orgId, String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, true, null, searchFields), Long.class);
+	public long count(long groupId, String search) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
-	public long count(long orgId) {
-		TypedQuery<Long> q = em.createNamedQuery("countOrganisationUsers", Long.class);
-		q.setParameter("id", orgId);
+	public long count(long groupId) {
+		TypedQuery<Long> q = em.createNamedQuery("countGroupUsers", Long.class);
+		q.setParameter("id", groupId);
 		return q.getSingleResult();
 	}
 
-	public void update(List<Organisation_Users> list, Long userId) {
-		for (Organisation_Users ou : list) {
+	public void update(List<GroupUser> list, Long userId) {
+		for (GroupUser ou : list) {
 			update(ou, userId);
 		}
 	}
 	
-	public Organisation_Users update(Organisation_Users entity, Long userId) {
+	public GroupUser update(GroupUser entity, Long userId) {
 		if (entity.getId() == null) {
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		updateUser(entity, false, userId);
 		return entity;
 	}
 
-	private void updateUser(Organisation_Users entity, boolean delete, Long userId) {
+	private void updateUser(GroupUser entity, boolean delete, Long userId) {
 		//entity has been detached need to re-fetch
-		User u = usersDao.get(entity.getUser().getId());
-		int idx = u.getOrganisation_users().indexOf(entity);
+		User u = userDao.get(entity.getUser().getId());
+		int idx = u.getGroupUsers().indexOf(entity);
 		if (delete && idx > -1) {
-			Organisation_Users ou = u.getOrganisation_users().remove(idx);
+			GroupUser ou = u.getGroupUsers().remove(idx);
 			em.remove(ou);
 		} else if (!delete && idx < 0) {
-			u.getOrganisation_users().add(entity);
+			u.getGroupUsers().add(entity);
 		}
-		usersDao.update(u, userId);
+		userDao.update(u, userId);
 	}
 	
-	public void delete(Organisation_Users entity, Long userId) {
+	public void delete(GroupUser entity, Long userId) {
 		if (entity.getId() != null) {
 			updateUser(entity, true, userId);
 		}

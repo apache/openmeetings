@@ -34,14 +34,14 @@ import java.util.UUID;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
@@ -100,46 +100,46 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		, group
 	}
 	private final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
-	private final Select2MultiChoice<Organisation> groups = new Select2MultiChoice<Organisation>("groups"
-			, new CollectionModel<Organisation>(new ArrayList<Organisation>())
-			, new TextChoiceProvider<Organisation>() {
+	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<Group>("groups"
+			, new CollectionModel<Group>(new ArrayList<Group>())
+			, new TextChoiceProvider<Group>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void query(String term, int page, Response<Organisation> response) {
+				public void query(String term, int page, Response<Group> response) {
 					if (WebSession.getRights().contains(User.Right.Admin)) {
-						List<Organisation> groups = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-						for (Organisation g : groups) {
+						List<Group> groups = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+						for (Group g : groups) {
 							if (g.getName().toLowerCase().contains(term.toLowerCase())) {
 								response.add(g);
 							}
 						}
 					} else {
 						User u = getBean(UserDao.class).get(getUserId());
-						for (Organisation_Users ou : u.getOrganisation_users()) {
-							if (ou.getOrganisation().getName().toLowerCase().contains(term.toLowerCase())) {
-								response.add(ou.getOrganisation());
+						for (GroupUser ou : u.getGroupUsers()) {
+							if (ou.getGroup().getName().toLowerCase().contains(term.toLowerCase())) {
+								response.add(ou.getGroup());
 							}
 						}
 					}
 				}
 
 				@Override
-				public Collection<Organisation> toChoices(Collection<String> ids) {
-					Collection<Organisation> c = new ArrayList<>();
+				public Collection<Group> toChoices(Collection<String> ids) {
+					Collection<Group> c = new ArrayList<>();
 					for (String id : ids) {
-						c.add(getBean(OrganisationDao.class).get(Long.valueOf(id)));
+						c.add(getBean(GroupDao.class).get(Long.valueOf(id)));
 					}
 					return c;
 				}
 
 				@Override
-				protected String getDisplayText(Organisation choice) {
+				protected String getDisplayText(Group choice) {
 					return choice.getName();
 				}
 
 				@Override
-				protected Object getId(Organisation choice) {
+				protected Object getId(Group choice) {
 					return choice.getId();
 				}
 			});
@@ -170,7 +170,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		message.setObject(null);
 		recipients.setModelObject(new ArrayList<User>());
 		recipients.setEnabled(true);
-		groups.setModelObject(new ArrayList<Organisation>());
+		groups.setModelObject(new ArrayList<Group>());
 		groups.setEnabled(false);
 		tzId.setObject(u.getTimeZoneId());
 		lang = u.getLanguageId();
@@ -232,8 +232,8 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 						}
 					}
 				} else {
-					for (Organisation g : groups.getModelObject()) {
-						for (Organisation_Users ou : getBean(OrganisationUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
+					for (Group g : groups.getModelObject()) {
+						for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
 							Invitation i = create(ou.getUser());
 							try {
 								getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
@@ -376,7 +376,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 				send.setEnabled(to.size() > 0, target);
 				generate.setEnabled(to.size() == 1, target);
 			} else {
-				Collection<Organisation> to = groups.getModelObject();
+				Collection<Group> to = groups.getModelObject();
 				send.setEnabled(to.size() > 0, target);
 				generate.setEnabled(false, target);
 			}

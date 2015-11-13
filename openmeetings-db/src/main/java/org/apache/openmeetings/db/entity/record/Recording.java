@@ -68,13 +68,13 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM Recording f WHERE f.id = :id") 
 	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.fileHash = :fileHash") 
 	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
-			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
+			+ "WHERE c.insertedBy = u.id AND u.externalId = :externalId  AND u.externalType = :externalType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND f.groupId IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
-	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id = :organization_id AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+	, @NamedQuery(name = "getRecordingsByGroup", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.groupId = :groupId AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
@@ -90,8 +90,8 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentItemId = :parentId "
 			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM Recording rec, Room r, User u "
-			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
-			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
+			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
+			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
 })
 @Table(name = "recording")
 @Root(name = "flvrecording")
@@ -118,7 +118,7 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private String alternateDownload;
 
-	@Column(name = "comment_field")
+	@Column(name = "comment")
 	@Element(data = true, required = false)
 	private String comment;
 
@@ -148,11 +148,11 @@ public class Recording extends FileItem {
 
 	@Column(name = "group_id")
 	@Element(data = true, required = false)
-	private Long organization_id;
+	private Long groupId;
 
 	@Column(name = "is_interview")
 	@Element(data = true, required = false)
-	private Boolean isInterview;
+	private boolean interview;
 
 	@Column(name = "progress_post_processing")
 	@Element(data = true, required = false)
@@ -226,12 +226,12 @@ public class Recording extends FileItem {
 		this.recorderStreamId = recorderStreamId;
 	}
 
-	public Long getOrganization_id() {
-		return organization_id;
+	public Long getGroupId() {
+		return groupId;
 	}
 
-	public void setOrganization_id(Long organization_id) {
-		this.organization_id = organization_id;
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 	public List<RecordingMetaData> getMetaData() {
@@ -290,12 +290,12 @@ public class Recording extends FileItem {
 		this.log = log;
 	}
 
-	public Boolean getIsInterview() {
-		return isInterview;
+	public boolean isInterview() {
+		return interview;
 	}
 
-	public void setIsInterview(Boolean isInterview) {
-		this.isInterview = isInterview;
+	public void setInterview(boolean interview) {
+		this.interview = interview;
 	}
 
 	public Integer getProgressPostProcessing() {

@@ -119,9 +119,9 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 
-	public List<Room> getGroupRooms(long orgId) {
+	public List<Room> getGroupRooms(long groupId) {
 		TypedQuery<Room> q = em.createNamedQuery("getGroupRooms", Room.class);
-		q.setParameter("orgId", orgId);
+		q.setParameter("groupId", groupId);
 		return q.getResultList();
 	}
 
