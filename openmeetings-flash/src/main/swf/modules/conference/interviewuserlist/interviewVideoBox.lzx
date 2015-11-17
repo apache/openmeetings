@@ -71,7 +71,7 @@
         if ($debug) Debug.write("startInterView :: ");
         var tx = this.getAttributeRelative("x",canvas);
         var ty = this.getAttributeRelative("y",canvas);
-        canvas._videocontainer._videoviewcontent.showDevicePopUpInterview(false,this.interviewPodId,tx,ty,this.width,this.height);
+        canvas.commonVideoViewContent.createEditRecordStream(false, true, this.interviewPodId);
     </method>
 
 	<method name="sendConfirmation" args="publicSID">

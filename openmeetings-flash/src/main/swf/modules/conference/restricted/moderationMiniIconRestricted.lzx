@@ -324,7 +324,7 @@
     				opacity="0.5" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
-            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, true);
+            canvas.commonVideoViewContent.muteSound(parent.parent.parent.refObj.publicSID, true);
         </handler>
         <labelTooltip labelid="1384" />
     </miniIcons>
@@ -333,7 +333,7 @@
     		   showhandcursor="true" visibility="hidden">
         <handler name="onclick">
             if ($debug) Debug.write("unmute: ",parent.parent.parent.refObj.publicSID);
-            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, false);
+            canvas.commonVideoViewContent.muteSound(parent.parent.parent.refObj.publicSID, false);
         </handler>
         <labelTooltip labelid="1385" />
     </miniIcons>

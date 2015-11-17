@@ -20,13 +20,10 @@
 -->
 <library>
 
-
 <class name="commonVideoViewContentSWF10" extends="view">
-
 	<switch>
 		<when property="$as3">
 			<passthrough>
-				import flash.net.LocalConnection;
 				import flash.external.ExternalInterface;
 			</passthrough>
 		</when>
@@ -36,50 +33,8 @@
     <attribute name="videoWidth" type="number" value="132"/>
     <attribute name="videoHeight" type="number" value="132"/>
     <attribute name="SIDEPANEL_WIDTH" type="number" value="270" />
-    
-    <handler name="oninit">
-        <![CDATA[
-
-            var client = {};
-            client.t = this;
-
-            client.toggleVideo = this.toggleVideo;
-            client.createEditRecordStream = this.createEditRecordStream;
-            client.createVideoObject = this.createVideoObject;
-            client.createVideo = this.createVideo;
-            client.batchCreateVideo = this.batchCreateVideo;
-            client.getVideoObjectByPublicSID = this.getVideoObjectByPublicSID;
-            client.getVideoObjectFreePos = this.getVideoObjectFreePos;
-            client.getVideoObjectCount = this.getVideoObjectCount;
-            client.disconnectclient = this.disconnectclient;
-            client.resetAllValues = this.resetAllValues;
-            client.closeStreamClient = this.closeStreamClient;
-            client.setSpeakingByPos = this.setSpeakingByPos;
-            client.setAVSettingsToClient = this.setAVSettingsToClient;
-            client.startStream = this.startStream;
-            client.removeVideoByUser = this.removeVideoByUser;
-            client.muteSound = this.muteSound;
-            client.updateMuteStatusVideoView = this.updateMuteStatusVideoView;
-            client.ismoderatorChanged = this.ismoderatorChanged;
-            // update rights to SWF10 client
-            client.updateModerationFlag = this.updateModerationFlag;
-            client.changeDevice = this.changeDevice;
-            client.setDrawAllowStatus = this.setDrawAllowStatus;
-            client.setExclusiveAudioAllowStatus = this.setExclusiveAudioAllowStatus;
-            client.exitRoom = this.exitRoom;
-            client.immediateExitRoom = this.immediateExitRoom;
-            client.closeWhiteboard = this.closeWhiteboard;
-            client.arrangeWindows = this.arrangeWindows;
-            client.updateFirstLastName = this.updateFirstLastName;
-            client.setSessionId = this.setSessionId;
-
-            var lc:LocalConnection = new LocalConnection();
-            lc.connect(canvas.vid_lc_name);
-            lc.client = client;
-            canvas.setAttribute("lc", lc);
-
-        ]]>
-    </handler>
+    <attribute name="testingApplication" value="null" />
+    <attribute name="baseVideoStream" value="null" />
     
 	<method name="toggleVideo" args="value">
 		if($debug) Debug.info("toggleVideo ", value);
@@ -372,12 +327,6 @@
 	]]>
 	</method>
 
-    <method name="ismoderatorChanged" args="m">
-        canvas.setAttribute("ismoderator", m);
-        return;
-    </method>
-
-
 	<method name="setSpeakingByPos" args="publicSID,bool">
 	<![CDATA[
 		//if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
@@ -610,10 +559,6 @@
 	]]>
 	</method>
 
-	<method name="setSessionId" args="session_id">
-		canvas.setAttribute("sessionId", session_id);
-	</method>
-	
     <!-- @keyword private -->
     <method name="sortFunction" args="el1, el2">
         <![CDATA[
@@ -626,6 +571,307 @@
         ]]>
     </method>
 
+    <!-- 
+    	Synces some of the variables from the SWF8 to the SWF10.
+    	This also includes values for httphostlocal
+    	in case its a cluster'ed OpenMeetings installation the connection_url
+    	might point to the slave while the httphostlocal points to the master
+     -->
+    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview,httphostlocal,httpport">
+        if($debug) Debug.write("reconnectSuccess",connection_url,publicSID,userobject);
+        canvas.httphostlocal = httphostlocal;
+        canvas.red5httpport = httpport;
+        canvas.publicSID = publicSID;
+        canvas.userobject = userobject;
+        canvas.isInterview = isInterview;
+        canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
+    </method>
+    
+    <method name="disconnect" args="arg">
+        if($debug) Debug.write("Do disconnect");
+        canvas.thishib.disconnect();
+    </method>
+    
+    <!---
+        Starts the 5 second audio/video testing application and connect to RTMP
+     -->
+    <method name="doInitTestingApplication" args="x,y,connection_url">
+        if($debug) Debug.write("doInitTestingApplication ",x,y);
+        canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
+        this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
+    </method>
+    
+    <!---
+        Stops and destroys the view with the audio/video testing application
+        and send confirmation back via LocalConnection
+     -->
+    <method name="closeInitTestingApplication">
+    	canvas.thishib.disconnect();
+        if($debug) Debug.write("closeInitTestingApplication ");
+        if (this.testingApplication != null) {
+            this.testingApplication.storeSettings();
+            this.testingApplication.destroy();
+            this.testingApplication = null;
+        }
+        if ($debug) Debug.write("Send confirmation of close back to: ",canvas.videoComp_lc_name);
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeInitTestingApplicationConfirm');
+    </method>
+    
+    <!---
+        Initializes video playback component
+        and connect to RTMP
+     -->
+    <method name="connectRecordingPlayer" args="connection_url,x,y,width,height">
+    	if($debug) Debug.write("connectRecordingPlayer ", connection_url,x,y,width,height);
+    	canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
+        this.baseVideoStream = new lz.playBackVideoStream(canvas,{
+            x:x,
+            y:y,
+            width:width,
+            height:height
+        });
+    </method> 
+    
+    <!---
+        plays a recorded stream
+     -->
+    <method name="playRecordingStream" args="streamName,delay,x,y,width,height">
+    	if($debug) Debug.write("playRecordingStream ",streamName,x,y,width,height);
+    	if (this.baseVideoStream == null) {
+    		if ($debug) Debug.warn("baseVideoStream is NULL");
+    		return;
+    	}
+    	this.baseVideoStream.setAttribute("x",x);
+    	this.baseVideoStream.setAttribute("y",y);
+    	this.baseVideoStream.setAttribute("width",width);
+    	this.baseVideoStream.setAttribute("height",height);
+    	this.baseVideoStream.setAttribute("visibility","visible");
+    	this.baseVideoStream.playRecordingStream(streamName,delay);
+    </method>
+    
+    <!---
+        Updates the width/height property of the recording playback video 
+     -->    
+    <method name="updateRecordingVideoPosition" args="width,height">
+    	if (this.baseVideoStream == null) {
+    		if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.setAttribute("width",width);
+        this.baseVideoStream.setAttribute("height",height);
+    </method>
+    
+    <!---
+        stops and hides the recording playback video
+     -->
+    <method name="stopRecordingStream">
+    	if($debug) Debug.write("stopRecordingStream ");
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        if($debug) Debug.write(" stopRecording ");
+        this.baseVideoStream.stopRecording();
+        this.baseVideoStream.setAttribute("visibility","hidden");
+    </method>
+    
+    <!--- 
+        pauses the current video or continue at the same position
+     -->
+    <method name="pauseRecordingPlayback" args="pauseBool">
+    	if($debug) Debug.write("pauseRecordingPlayback ");
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.pause(pauseBool);
+    </method>
+    
+    <method name="seekRecordingPlayback" args="flvTime">
+    	if($debug) Debug.write("seekRecordingPlayback ",flvTime);
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.seekStream(flvTime);
+    </method>
+    
+    <method name="stopAndCloseRecordingConnection">
+    	if($debug) Debug.write("stopAndCloseRecordingConnection ");
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.stopRecording();
+        this.baseVideoStream.destroy();
+        this.baseVideoStream = null;
+        canvas.thishib.disconnect();
+        // send back confirmation to leave the module
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'recordingStoppedAndDisconnected');
+    </method>
+    
+    <!---
+        Start playback of whiteboard video
+     -->
+    <method name="playbackWhiteboardVideo" args="tName,recordingName,seek,tx,ty,twidth,theight">
+    	<![CDATA[
+    	   if($debug) Debug.write("playbackWhiteboardVideo ",tName,recordingName,seek,tx,ty,twidth,theight);
+    	   if (this[tName]) {
+    	   	 if ($debug) Debug.warn("playbackWhiteboardVideo there was already a video with the same name");
+    	   	 this[tName]._stop();
+    	   	 this[tName].destroy();
+    	   }
+    	   
+    	   new lz.playBackWhiteboardVideo(this.whiteboardVideos,{
+                	       name:tName,
+                	       x:tx,
+                	       y:ty,
+                	   	   width:twidth,
+                	   	   height:theight
+                	   });
+    	   
+    	   this.whiteboardVideos[tName].playVideoStream(recordingName,0);
+    	]]>
+    </method>
+    
+    <method name="stopWhiteboardVideo" args="tName">
+    	<![CDATA[
+    	   if($debug) Debug.write("stopWhiteboardVideo ",tName);
+           if (this.whiteboardVideos[tName]) {
+             this.whiteboardVideos[tName].stopVideo();
+             this.whiteboardVideos[tName].destroy();
+           } else {
+           	 if ($debug) Debug.warn("stopWhiteboardVideo could not find video to stop");
+           }
+    	]]>
+    </method>
+    
+    <!---
+       #################################
+       Methods to handle screen sharing video playback and cursor
+     -->
+     
+    <!---
+        Adds a new screen sharing playback video
+     -->
+    <method name="newScreenSharing" args="value, h">
+    	<![CDATA[
+     		canvas.chatHeight = h;
+    	   if (value.streamPublishName != canvas.publicSID) {
+                if (canvas.screenSharingDialogContainer == null) {
+                    canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+                }
+                new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
+                            initObject:value 
+                        }); 
+            } else {
+                if ($debug) Debug.warn("Self Screen Sharing");
+            }
+    	]]>
+    </method> 
+    
+    <!---
+        Add a list of screen sharing playback videos 
+        (initially when entering the room invoked)
+     -->
+    <method name="newScreenSharings" args="value, h">
+     	<![CDATA[
+     		canvas.chatHeight = h;
+     	    for (var eg in value) {
+                this.newScreenSharing(value[eg], h);
+            }
+     	]]>
+    </method>
+   
+    <!---
+        Close a single screen sharing playback video
+     --> 
+	<method name="closeScreenSharing" args="value">
+		<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+				var obj = canvas.screenSharingDialogContainer
+						.searchForSession(value.streamPublishName);
+				if (obj) {
+					obj.doClose();
+				}
+			}
+		]]>
+	</method>
+	    
+	<!---
+	   Closes all screen sharing playback videos, whiteboard videos, user videos 
+	   and closes the rtmp connection
+	 -->
+	<method name="closeAllScreenSharings">
+        <![CDATA[
+            if ($debug) Debug.write("RECEIVE closeAllScreenSharings ");
+            if (canvas.screenSharingDialogContainer != null) {
+                canvas.screenSharingDialogContainer.closeAll();
+                canvas.screenSharingDialogContainer.destroy();
+                canvas.screenSharingDialogContainer = null;
+            }
+            this.whiteboardVideos.clearAll();
+            parent._videoComponent.clearAll();
+            canvas.thishib.disconnect();
+        ]]>
+    </method>
+    
+    <!---
+        change Screen Sharing farme height 
+     -->
+    <method name="hideChatContent" args="hide">
+     	<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+		        if ($debug) Debug.write("hideChatContent::hide " + hide);
+				canvas.screenSharingDialogContainer.hideChatContent(hide);
+			}
+     	]]>
+    </method>
+    
+    <!---
+        Update the position of the cursor from the sharing screen
+     -->
+	<method name="updateCursorScreenSharing" args="value">
+		<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+				var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+				obj.updateCursor(value.cursor_x, value.cursor_y);
+			}
+		]]>
+	</method>
+	
+	<!---
+		Make regExpTest 
+	 -->
+	<method name="regExpTest" args="fieldValue,regExStr,regExpCheckId">
+		<![CDATA[
+			var re = new RegExp(regExStr);
+			
+			var testResult = re.test( fieldValue );
+			
+			if ($debug) Debug.write(fieldValue, testResult);
+			
+			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'regExpResult', regExpCheckId, testResult);
+			
+		]]>
+	</method>
+	
+    <!--
+        Container to hold all whiteboard videos
+     -->	
+	<view name="whiteboardVideos">
+		<method name="clearAll">
+    		<![CDATA[
+    			for (var eg in this.subviews) {
+    				this.subviews[eg].stopVideo();
+    				this.subviews[eg].destroy();
+    			}
+    		]]>
+		</method>
+	</view>
 </class>
 
 </library>

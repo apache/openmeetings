@@ -35,12 +35,10 @@
 
 		<attribute name="maxUsers" value="4" type="number" />
 		
-		<attribute name="roomType" value="0" type="number" />
-
 		<attribute name="checkForMaxUsers" value="false" type="boolean" />
 		
 		<attribute name="publicSID" value="" type="string" />
-		<attribute name="user_id" value="0" type="number" />
+		<attribute name="userId" value="0" type="number" />
 
 		<handler name="oninit">
 		<![CDATA[
@@ -72,11 +70,11 @@
 				var connectedIsAudience = '_' + 'audi';
 			if (this.ispublic) {
 				hib.conferencedomain = "public";
-				hib.currentroomid = this.obj.rooms_id;
+				hib.currentroomid = this.obj.id;
 				//Debug.write("ispublic");
 			} else {
-				hib.conferencedomain = this.obj.organisation.organisation_id;
-				hib.currentroomid = this.obj.room.rooms_id;
+				hib.conferencedomain = this.obj.group.id;
+				hib.currentroomid = this.obj.room.id;
 				//Debug.write("non ispublic");
 			}
 			if ($debug) Debug.write("onclick", this);
@@ -102,10 +100,10 @@
 			var roomid = 0;
 			
 			if (this.ispublic) {
-				roomid = this.obj.rooms_id;
+				roomid = this.obj.id;
 				//Debug.write("ispublic");
 			} else {
-				roomid = this.obj.room.rooms_id;
+				roomid = this.obj.room.id;
 				//Debug.write("non ispublic");
 			}
 			
@@ -153,7 +151,7 @@
 				new lz.chatParticipantsInviteMessage(canvas,{
     				    refObj:parent,
     				    publicSID:parent.publicSID,
-    				    user_id:parent.user_id,
+    				    userId:parent.userId,
     				    conferenceRoomName:parent.roomname,
     				    roomId:parent.roomid
     				});

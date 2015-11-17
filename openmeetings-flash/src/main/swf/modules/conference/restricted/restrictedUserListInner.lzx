@@ -290,7 +290,7 @@
                             list.subviews[i].hideModeratorIcons();
                         }
                         
-                        list.subviews[i].setAttribute("user_id",records[i].user_id);
+                        list.subviews[i].setAttribute("userId",records[i].userId);
                         list.subviews[i].setAttribute("firstname",records[i].firstname);
                         list.subviews[i].setAttribute("isSuperModerator",records[i].isSuperModerator);
                         list.subviews[i].setAttribute("lastname",records[i].lastname);
@@ -317,7 +317,7 @@
                         list.subviews[i].onmouseout.sendEvent();
                         list.subviews[i].hideModeratorIcons();
                         
-                        list.subviews[i].setAttribute("user_id","");
+                        list.subviews[i].setAttribute("userId","");
                         list.subviews[i].setAttribute("firstname","");
                         list.subviews[i].setAttribute("isSuperModerator","");
                         list.subviews[i].setAttribute("lastname","");
@@ -359,7 +359,7 @@
                     
                     if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
                     
-                    item.setAttribute("user_id",this.renderList[item.itemId].user_id);
+                    item.setAttribute("userId",this.renderList[item.itemId].userId);
                     item.setAttribute("firstname",this.renderList[item.itemId].firstname);
                     item.setAttribute("isSuperModerator",this.renderList[item.itemId].isSuperModerator);
                     item.setAttribute("lastname",this.renderList[item.itemId].lastname);
@@ -387,7 +387,7 @@
                     
                     item.refObj = null;
                     
-                    item.setAttribute("user_id","");
+                    item.setAttribute("userId","");
                     item.setAttribute("firstname","");
                     item.setAttribute("isSuperModerator","");
                     item.setAttribute("lastname","");

@@ -23,7 +23,7 @@
 <class name="userRoomTabItem" extends="view" 
 	   width="$once{ parent.width }" >
 
-	<attribute name="user_id" value="0" type="number" />
+	<attribute name="userId" value="0" type="number" />
 	<attribute name="username" value="" type="string" />
 	<attribute name="usertime" value="" type="string" />
 	<attribute name="cbtext" value="" type="string" />
@@ -32,7 +32,7 @@
 		<![CDATA[
 	        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
 	        		+'&moduleName=chat&parentPath=&room_id='
-	        		+'&remoteUserid='+this.user_id
+	        		+'&remoteUserid='+this.userId
 	        		+'&sid='+canvas.sessionId;
 	        		
 	        if ($debug) Debug.write("downloadurl "+downloadurl);
@@ -76,7 +76,7 @@
 					var username = this.currentusers[i].firstname + " "
 							+ this.currentusers[i].lastname
 							+ " (" + this.currentusers[i].username + ") ";
-					 new lz.userRoomTabItem(this._users._users._cbtext,{user_id:this.currentusers[i].user_id,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
+					 new lz.userRoomTabItem(this._users._users._cbtext,{userId:this.currentusers[i].userId,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
 				}
 			}
 			this.bdatum.setAttribute("visibility", "hidden");

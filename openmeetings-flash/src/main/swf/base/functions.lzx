@@ -78,8 +78,7 @@ function disableCurrentMouseWheelObject() {
     currentMouseWheelObject=null;
 }  
 
-function setLabelObjectByHundred(no,obj){
-    canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "hibAdapter_setLabelObjectByHundred", [no, obj]); 
+function setLabelObjectByHundred(no, obj){
    	for (var i = 0; i < obj.length; ++i) {
 	    labels["id" + obj[i].id] = obj[i].value;
    	}

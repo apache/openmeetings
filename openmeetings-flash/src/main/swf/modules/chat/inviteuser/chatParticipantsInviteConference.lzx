@@ -24,7 +24,7 @@
     width="490" height="430" y="240" x="240" closable="true" labelid="1131" >
 	
 	<attribute name="publicSID" value="" type="string" />
-	<attribute name="user_id" value="0" type="number" />
+	<attribute name="userId" value="0" type="number" />
 	
     <view resource="messagebox_info_rsc" x="10" y="24" />
     
@@ -55,15 +55,14 @@
                                     
                             new lz.roomListInviteUserItem(parent.inn.inn.inn,
                                     {
-                                        roomType:value[eg].roomtype.roomtypes_id,
                                         currentusers : value[eg].currentusers,
                                         obj : value[eg],
                                         ispublic : true,
-                                        roomid : value[eg].rooms_id,
+                                        roomid : value[eg].id,
                                         starttime : time,
                                         roomname : value[eg].name,
                                         publicSID:parent.parent.publicSID,
-                                        user_id:parent.parent.user_id
+                                        userId:parent.parent.userId
                                     });
                         }
                     }
@@ -90,18 +89,17 @@
 
         <netRemoteCallHib name="getRoomsByOrganisationWithoutType" funcname="conferenceservice.getRoomsByOrganisationWithoutType" remotecontext="$once{ canvas.thishib }" >   
             <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
-            <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+            <netparam><method name="getValue">return hib.currentdomainObj.id;</method></netparam>  
             <handler name="ondata" args="value">    
             <![CDATA[
                 if ($debug) Debug.write("getRoomsByOrganisationWithoutType ",value);
                 if (value != null) {
                     for (var eg = 0; eg < value.length; eg++) {
                         new lz.roomListInviteUserItem(parent.inn.inn.inn,{
-                                    roomType:value[eg].room.roomtype.roomtypes_id,
                                     currentusers : value[eg].room.currentusers,
                                     obj : value[eg],
                                     ispublic : false,
-                                    roomid : value[eg].room.rooms_id,
+                                    roomid : value[eg].room.id,
                                     starttime : parseDateToStringTime(value[eg].room.starttime),
                                     roomname : value[eg].room.name,
                                     publicSID:parent.parent.publicSID

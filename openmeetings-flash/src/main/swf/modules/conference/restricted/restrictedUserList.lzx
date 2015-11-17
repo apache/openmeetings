@@ -34,10 +34,6 @@
 
 	<attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
 	<attribute name="timeout" value="500" type="number"/>
-	<attribute name="batchSize" value="10" type="number"/>
-	<attribute name="counter" value="0" type="number"/>
-	<attribute name="batchCreateVideoDelegate" type="object" value="null"/>
-	<attribute name="initClients" type="object" />
     
     <handler name="onallowUserQuestions" args="bool">
         if (bool != null) {
@@ -68,22 +64,13 @@
 	            canvas.thishib.reconnectObjRef = this;
 	            canvas.thishib.disconnect();
             } else {
-            	this.reconnectSuccess();
+				canvas.commonVideoViewContent.reconnectSuccess(canvas.thishib.src, canvas.publicSID, canvas.thishib.userobject, false, canvas.getHttpHost(), canvas.red5httpport);
             }
         } else {
             //The user is already in the correct Scope
-            this.reconnectSuccess();
+			canvas.commonVideoViewContent.reconnectSuccess(canvas.thishib.src, canvas.publicSID, canvas.thishib.userobject, false, canvas.getHttpHost(), canvas.red5httpport);
         }
     </handler>
-
-    <commonVideoComponentAdapter name="_videoviewcontent"/>
-
-    <method name="reconnectSuccess">
-        if ($debug) Debug.write("User Reloged In");
-        //Send to SWF10 video-container to connect on the conference room url
-        //and wait for the as3ConnectionSuccess-Event
-        this._videoviewcontent.reconnectSuccess(false);
-    </method>
 
     <!---
         We need to wait till the video-container / as3 app has the connection established
@@ -115,7 +102,7 @@
                 if (!canvas.becomeSuperModerator) {
                     for (var i=0;i<value.length;i++) {
                         
-                        if (value[i].user.user_id == canvas.user_id) {
+                        if (value[i].user.userId == canvas.userId) {
                             parent.setRoomValues.applyDefaultModeration = true;
                             canvas.becomeSuperModerator = value[i].isSuperModerator;
                             if ($debug) Debug.info("Make this User to an Moderator");
@@ -130,16 +117,16 @@
                 
                 canvas.currentusercolor = canvas.getColorForUser();
                 
-                var organisation_id = 1;
+                var groupId = 1;
             
                 if ($debug) Debug.write(hib.userobject); 
                 if ($debug) Debug.write(hib.currentdomainObj); 
                 
                 if (hib.currentdomainObj != null) {
-                    organisation_id = hib.currentdomainObj.organisation_id
+                    groupId = hib.currentdomainObj.id
                 }
                 
-                this.parent.setRoomValues.organisation_id = organisation_id;
+                this.parent.setRoomValues.groupId = groupId;
                 this.parent.setRoomValues.doCall();
             
             ]]>
@@ -148,11 +135,11 @@
 
     <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
         <attribute name="applyDefaultModeration" value="false" type="boolean" />
-        <attribute name="organisation_id" value="0" type="number" />
+        <attribute name="groupId" value="0" type="number" />
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
-        <netparam><method name="getValue">return parent.organisation_id;</method></netparam>
+        <netparam><method name="getValue">return parent.groupId;</method></netparam>
         <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
         <handler name="ondata" args="roomStatus">
             <![CDATA[
@@ -185,10 +172,7 @@
                 }
 				parent.addItemInitial(value[i]);
 			}
-			parent.batchCreateVideoDelegate = new LzDelegate(parent, "batchCreateVideo");
-			parent.counter = 0;
-			parent.initClients = value;
-			lz.Timer.addTimer(parent.batchCreateVideoDelegate, 0);
+			parent.batchCreateVideo(value);
             
             //Render and Show User-List
             parent._participants.sortAndRenderList();
@@ -200,39 +184,22 @@
         </handler>  
     </netRemoteCallHib>
 
-	<method name="batchCreateVideo" args="none">
+	<method name="batchCreateVideo" args="clients">
 	<![CDATA[
-		if ($debug) Debug.write("interval 0 :: ", counter, initClients.length);
-		if (!batchCreateVideoDelegate) {
-			return;
-		}
-		var cl = new Array();
-		for (var i = 0; i < batchSize; ++i) {
-			cl[i] = initClients[counter++];
-			if (counter == initClients.length) {
-				break;
-			}
-		}
-		if ($debug) Debug.write("interval:: ", counter, cl.length);
-		this._videoviewcontent.batchCreateVideo(canvas.streamid, cl);
-		if (counter == initClients.length) {
-			lz.Timer.removeTimer(batchCreateVideoDelegate);
-			batchCreateVideoDelegate = null;
+		if ($debug) Debug.write("interval 0 :: ", clients.length);
+		canvas.commonVideoViewContent.batchCreateVideo(canvas.streamid, clients);
 			
-			//this content must be inited _after_ setting the default values
-			canvas.thishib.getCurrentModeratorList.doCall();
-			//FIXME Issue-1076
-			canvas.thishib.checkLzRecording.doCall();
-		} else {
-			lz.Timer.resetTimer(batchCreateVideoDelegate, timeout);
-		}
+		//this content must be inited _after_ setting the default values
+		canvas.thishib.getCurrentModeratorList.doCall();
+		//FIXME Issue-1076
+		canvas.thishib.checkLzRecording.doCall();
 	]]>
 	</method>
 
     <!-- invoked if another client logs into the room 
     after choosing devices -->     
     <method name="setAVSettingsToClient" args="rcl">
-        this._videoviewcontent.setAVSettingsToClient(rcl);
+        canvas.commonVideoViewContent.setAVSettingsToClient(rcl);
     </method> 
 
 	<method name="addItemInitial" args="object">
@@ -263,7 +230,7 @@
 		
 		//Do init only in case this stream is NOT the same as we are
 		if (streamid != canvas.streamid) {
-			this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
+			canvas.commonVideoViewContent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
 		}
 		this._participants.addItem(object);
 	]]>
@@ -274,7 +241,7 @@
         if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
 
         if (canvas.publicSID != object.publicSID){
-            this._videoviewcontent.createVideoObject(object.publicSID, false, -1, object);
+            canvas.commonVideoViewContent.createVideoObject(object.publicSID, false, -1, object);
         }
 
         //Do Add it anyway
@@ -287,23 +254,23 @@
         interviewPodId has only a meaning in the Room Type Interview
      -->        
     <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight">
-        this._videoviewcontent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
+        canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
     </method>
 
     <method name="setSpeakingByPos" args="publicSID,bool">
-        this._videoviewcontent.setSpeakingByPos(publicSID, bool);
+        canvas.commonVideoViewContent.setSpeakingByPos(publicSID, bool);
     </method>
 
     <method name="closeStreamClient" args="publicSID">
-        this._videoviewcontent.closeStreamClient(publicSID);
+        canvas.commonVideoViewContent.closeStreamClient(publicSID);
     </method>
 
     <method name="resetAllValues">
-        this._videoviewcontent.resetAllValues();
+        canvas.commonVideoViewContent.resetAllValues();
     </method>
     
     <method name="removeVideoByUser" args="userObject">
-        this._videoviewcontent.removeVideoByUser(userObject.publicSID);
+        canvas.commonVideoViewContent.removeVideoByUser(userObject.publicSID);
     </method>
     
     <!--- 
@@ -311,12 +278,12 @@
         @param int broadcastId broadcastId
      -->
     <method name="disconnectclient" args="publicSID">
-        this._videoviewcontent.disconnectclient(publicSID);
+        canvas.commonVideoViewContent.disconnectclient(publicSID);
         this._participants.disconnectclient(publicSID);
     </method>
 
     <method name="updateMuteStatusVideoView" args="roomClient">
-        this._videoviewcontent.updateMuteStatusVideoView(roomClient);
+        canvas.commonVideoViewContent.updateMuteStatusVideoView(roomClient);
     </method>
     
     <restrictedUserListInner name="_participants" />

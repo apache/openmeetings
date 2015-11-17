@@ -107,7 +107,7 @@
             new lz.chatTabItemEmoticons(this._cbtext,{
             			rawMessage: value,
 		                messageObj:messageObj,
-	                    user_id:value[8],
+	                    userId:value[8],
 	                    publicSID:value[6],
 	                    message:value[4],
 	                    picture_uri:client.picture_uri,

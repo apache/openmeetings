@@ -1,3 +1,4 @@
+<library>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -17,7 +18,6 @@
   under the License.
   
 -->
-<library>
 
 
 <class name="rtmpConnection" extends="node">
@@ -66,6 +66,11 @@
     		
 			//Register Methods
 			//this.registerMethods();
+		</method>
+		
+		<method name="setId" args="tId">
+			if ($debug) Debug.write("################ setId: ", tId);
+			canvas.setAttribute('streamid', tId);   
 		</method>
 		
         <method name="_onStatus" args="stats"><![CDATA[
@@ -181,7 +186,7 @@
     </method>		
     
     <method name="callRPC" args="func, obj, params">
-    	if (this.debug) Debug.write("*** call: func, obj, params",func,obj, typeof (params) ,params.length);
+    	//if ($debug) Debug.write("*** call: func, obj, params",func,obj, typeof (params) ,params.length);
     	if (params.length != 0){
 	    	<!--
 	    	this._nc.call.apply(this._nc,arguments);
@@ -255,6 +260,8 @@
         <attribute name="remotecontext" value="null" />
     
         <attribute name="dataobject" value="null" />
+
+        <attribute name="responder" value="null" />
 		
         <!--- Data handling event. args="value"  -->
         <event name="ondata" />
@@ -271,7 +278,7 @@
             }
 
             if (params == null) {
-                params = [];
+                params = new Array();
 
                 var subnodes = this.subnodes;
                 if (subnodes != null) {
@@ -281,12 +288,14 @@
                         // If getValue method is declared in param, call that
                         // instead to get value.
                         var tsi = subnodes[i];
-                        if ((tsi["getValue"] != null) && 
-                            (tsi.getValue["prototype"] != null)) {
-                            params[i] = tsi.getValue();
-                        } else {
-                            params[i] = tsi.value;
-                        }
+                        //TODO: fixme
+                        //if ((tsi["getValue"] != null) && (tsi.getValue["prototype"] != null)) {
+                        //    params[i] = tsi.getValue();
+                        //    Debug.write("tsi.getValue():", tsi.getValue());
+                        //} else {
+                        //    params[i] = tsi.value;
+                        //}
+                        params[i] = tsi.getValue();
                     }
                 }
 
@@ -309,7 +318,10 @@
         	//Debug.write('call', this.remotecontext);
             if (rtmpObject.debug) Debug.write('call', this, rtmpObject, rtmpObject.status);
             rtmpObject.lastCalled = this;
-            rtmpObject.callRPC(this.funcname, this, params);
+
+            this.responder = new Responder(onResult);
+
+            rtmpObject.callRPC(this.funcname, this.responder, params);
 
           ]]>
         </method>

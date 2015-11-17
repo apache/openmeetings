@@ -126,12 +126,12 @@
             tWhiteboardBtn.onmouseout.sendEvent(null);
         </method>
         
-        <handler name="onisopen" args="o">
-			if ($debug) Debug.write("onisopen",o);
+        <handler name="onisopen" args="o"><![CDATA[
+			if ($debug) Debug.write("onisopen", o, canvas._chatcontent);
 			canvas.chatHeight = o ? 200 : 222;  
-			canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "hideChatContent", [!o]);
+			canvas.commonVideoViewContent.hideChatContent(!o);
 			if (o) {
-				if ('doInitByOpen' in canvas._chatcontent) {
+				if (canvas._chatcontent != null && 'doInitByOpen' in canvas._chatcontent) {
 					canvas._chatcontent.doInitByOpen();
 				}
 				if (canvas.currentRoomObject != null) {
@@ -144,7 +144,7 @@
 			} else {
 				this.content.setAttribute("visibility","hidden");
 			}
-		</handler>
+		]]></handler>
 
 		<method name="startBlink">
 			if ($debug) Debug.write("startBlink",this.opacity);

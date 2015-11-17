@@ -61,8 +61,10 @@
     
     <attribute name="meetingTimer" value="null" />
     
-	<handler name="oninit">
-	<![CDATA[
+	<method name="construct" args="p,args"><![CDATA[
+		super.construct(p, args);
+		this.roomobj = args.roomobj;
+    	if ($debug) Debug.write("baseConferenceRoom:: construct", p, args);
 		_mainScrollBar.setAttribute("visibility","hidden");
 		
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
@@ -70,7 +72,6 @@
 		canvas.currentRoomObject = this.roomobj;
 		var r = this.roomobj;
 		r.currentusers = ''; //this might be huge list
-		canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,r]);
 		
 		if (this.roomobj.isClosed) {
 			canvas.roomClosed();
@@ -91,8 +92,9 @@
 			}
 		}
 		
+		canvas.currentBaseConferenceRoom = this;
 		if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
-			createMenu();
+			canvas.currentBaseConferenceRoom.createMenu();
 			canvas._conferencemenu.setAttribute('visibility','visible');
 		} else {
 			canvas.setAttribute('naviHeight',0);
@@ -118,19 +120,19 @@
 			this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
 		}
 		
-		canvas.currentBaseConferenceRoom = this;
 		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
+	]]></method>
+	<handler name="oninit">
+	<![CDATA[
 	]]>
 	</handler>
-    
-    <method name="createMenu"/>
     
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[
 		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);
 		// common keys are processed firstly
 		if (canvas.ARRANGE_WINDOWS_KEY == keyCode) {
-			canvas.sendViaLocalConnection(canvas.vid_lc_name, "arrangeWindows", null);
+			canvas.commonVideoViewContent.arrangeWindows();
 			return;
 		}
 		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
@@ -142,14 +144,12 @@
 			return;
 		}
 		if (canvas.MUTE_AUDIO_KEY == keyCode) {
-			canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, !canvas.micMuted);
+			canvas.commonVideoViewContent.muteSound(canvas.publicSID, !canvas.micMuted);
 			return;
 		}
 	]]>
 	</handler>
 
-    <screenSharingAdapter name="_screenSharingAdapter" />
-    
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"
        height="200" x="${ parent._sidePanel.width }"  
        y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0 : 28) }" 
@@ -159,7 +159,7 @@
 	<handler name="ontabcontentleave">
 		if ($debug) Debug.write("################# ontabcontentleave:",this);
 		
-		this._screenSharingAdapter.closeAllScreenSharings();
+		canvas.commonVideoViewContent.closeAllScreenSharings();
 		
 		canvas.currentBaseConferenceRoom = null;
 		
@@ -172,10 +172,7 @@
 		//reset rights
 		canvas.isAllowedToGiveExclusiveAudio = false;
 		
-		if (canvas._videocontainer!=null) {
-			canvas._videocontainer.resetAllValues();
-			canvas._videocontainer = null;
-		}
+		canvas.commonVideoViewContent.resetAllValues();
 		if (canvas._chatcontent!=null) {
 			canvas._chatcontent = null;
 		}

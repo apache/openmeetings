@@ -32,7 +32,6 @@
 
 
 	ExternalInterface.addCallback("redirectToUrlCallback", redirectToUrlCallback);
-	ExternalInterface.addCallback("getTimeZoneOffsetCallback", getTimeZoneOffsetCallback);
     ExternalInterface.addCallback("getBrowserInfoCallback", getBrowserInfoCallback);
     ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
 
@@ -59,23 +58,6 @@
 		}
 	}
 
-	
-	function getTimeZoneOffset(returnObject) {
-		
-		timeZoneOffsetReturnObject = returnObject;
-		
-		ExternalInterface.call("getTimeZoneOffset");
-		
-		//lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
-	}
-	
-	function getTimeZoneOffsetCallback(returnValue) {
-		if ($debug) Debug.write("getTimeZoneOffsetCallback ",returnValue);
-		if (timeZoneOffsetReturnObject != null) {
-			timeZoneOffsetReturnObject.callback(returnValue);
-		}
-	}
-	
 	
 	function getBrowserInfo(returnObject) {
         

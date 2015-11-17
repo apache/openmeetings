@@ -21,6 +21,9 @@
 <library>
 
 <class name="restrictedConferenceRoom" extends="baseConferenceRoom">
+    <handler name="oninit">
+    	if ($debug) Debug.write("restrictedConferenceRoom::oninit ");
+    </handler>
 	<method name="createMenu">
 		new lz.restrictedConferenceMenubar(canvas._conferencemenu);
 	</method>
@@ -42,12 +45,6 @@
         y="0" x="${ parent._sidePanel.width }" 
         width="${ canvas.width - parent._sidePanel.width }"
         height="${ canvas.height - (parent._chatPanelStrict.height) - ((parent._chatPanelStrict.visibility == 'hidden') ? 0:28) }" />
-        
-    <!--
-        ###############################
-        This is the container for all Videos
-     -->
-    <commonVideoViewContent name="_videoviewcontent" />
     
 </class>
 

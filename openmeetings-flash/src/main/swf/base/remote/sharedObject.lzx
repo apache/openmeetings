@@ -92,7 +92,7 @@
         }
     </method>
 	
-    <method name="setData" args="key,val">
+    <method name="setSharedData" args="key,val">
     	//Debug.write("this...... so: ",this.so);
         this.so.data["key"] = val;
     </method>

@@ -73,10 +73,10 @@
     				var connectedIsAudience = '_' + 'audi';
     			if (this.ispublic) {
     				hib.conferencedomain = "public";
-    				hib.currentroomid = this.obj.rooms_id;
+    				hib.currentroomid = this.obj.id;
     			} else {
-    				hib.conferencedomain = this.obj.organisation.organisation_id;
-    				hib.currentroomid = this.obj.room.rooms_id;
+    				hib.conferencedomain = this.obj.group.id;
+    				hib.currentroomid = this.obj.room.id;
     			}
 			}
 			parent.parent.parent.parent.parent._roomlistdetails.doinit(
@@ -129,12 +129,12 @@
 			if (this.ispublic) {
 				var roomObj = this.obj;
 				hib.conferencedomain = "public";
-				hib.currentroomid = this.obj.rooms_id;
+				hib.currentroomid = this.obj.id;
 				//Debug.write("ispublic");
 			} else {
 				var roomObj = this.obj.room;
-				hib.conferencedomain = this.obj.organisation.organisation_id;
-				hib.currentroomid = this.obj.room.rooms_id;
+				hib.conferencedomain = this.obj.group.id;
+				hib.currentroomid = this.obj.room.id;
 				//Debug.write("non ispublic");
 			}
 			

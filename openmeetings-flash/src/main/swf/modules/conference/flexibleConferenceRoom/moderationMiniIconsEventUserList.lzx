@@ -285,7 +285,7 @@
     <miniIconsNew name="_muteDevice" x="120" width="16" height="16" 
     		   innerResource="mute_btn_rsc" showhandcursor="true">
     	<handler name="onclick">
-            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, true);
+            canvas.commonVideoViewContent.muteSound(canvas.publicSID, true);
     	</handler>
         <labelTooltip name="_tip" labelid="1403" />
     </miniIconsNew>
@@ -293,7 +293,7 @@
     <miniIconsNew name="_unMuteDevice" x="120" width="16" height="16" innerResource="unmute_btn_rsc" 
                showhandcursor="true" >
     	<handler name="onclick">
-            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, false);
+            canvas.commonVideoViewContent.muteSound(canvas.publicSID, false);
         </handler>
         <labelTooltip name="_tip" labelid="1404" />
     </miniIconsNew>

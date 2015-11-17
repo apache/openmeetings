@@ -27,7 +27,7 @@
 	<attribute name="refObj" value="null" />
 	
 	<attribute name="publicSID" value="" type="string" />
-	<attribute name="user_id" value="0" type="number" />
+	<attribute name="userId" value="0" type="number" />
 	<attribute name="conferenceRoomName" value="" type="string" />
 	<attribute name="roomId" value="0" type="number" />
 	
@@ -53,7 +53,7 @@
 		this.sendMessageWithClientByPublicSIDOrUser.messageObject["publicSID"] = canvas.publicSID;
 		
 		if ($debug) Debug.write("Send to _ ",this.publicSID);
-		if ($debug) Debug.write("Send to _ ",this.user_id);
+		if ($debug) Debug.write("Send to _ ",this.userId);
 		
 		this.sendMessageWithClientByPublicSIDOrUser.doCall();
 		
@@ -64,7 +64,7 @@
         <attribute name="messageObject" value="null" />
         <netparam><method name="getValue">return parent.messageObject;</method></netparam>
         <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.user_id;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.userId;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("+sendMessageWithClientByPublicSIDOrUser : ",value);

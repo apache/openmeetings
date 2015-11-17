@@ -34,7 +34,7 @@
     <attribute name="formatedDate" value="" type="string" />
     <attribute name="firstname" value="" type="string" />
     <attribute name="lastname" value="" type="string" />
-    <attribute name="user_id" value="0" type="number" />
+    <attribute name="userId" value="0" type="number" />
     <attribute name="isSuperModerator" value="false" type="boolean"/>
     <attribute name="refObj" value="null" />
     
@@ -63,7 +63,7 @@
         <![CDATA[
         	if ($debug) Debug.write("fadeText :1: ",this.refObj);
         	if ($debug) Debug.write("fadeText :2: ",this.refObj.picture_uri);
-            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat&remoteUserid='+this.user_id)); 
+            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat&remoteUserid='+this.userId)); 
         ]]>          
     </method>
     
@@ -401,7 +401,7 @@
 	    <miniIcons name="_mute" x="82" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >
             <handler name="onclick">
                 <![CDATA[
-                    canvas._videocontainer._videoviewcontent.muteSound(parent.parent.refObj.publicSID, !parent.parent.refObj.micMuted);
+                    canvas.commonVideoViewContent.muteSound(parent.parent.refObj.publicSID, !parent.parent.refObj.micMuted);
                 ]]>
             </handler>
             <labelTooltip name="_text" text="" labelid="1407" />
@@ -607,7 +607,7 @@
             <handler name="onclick">
                 //TODO: local connection call
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
-                canvas._videocontainer._videoviewcontent.showDevicePopUp(true);
+                canvas.commonVideoViewContent.createEditRecordStream(true, false, -1);
             </handler>
             <labelTooltip labelid="610" />
         </miniIcons>

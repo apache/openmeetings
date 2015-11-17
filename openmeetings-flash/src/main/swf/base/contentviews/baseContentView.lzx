@@ -31,9 +31,11 @@
     
     <event name="ontabcontentleave" />
     
-    <handler name="oninit">
+	<method name="construct" args="p,args"><![CDATA[
+		super.construct(p, args);
+    	if ($debug) Debug.write("baseContentView:: construct");
     	canvas.currentContentView = this;
-    </handler>
+	]]></method>
     
     <!--
         This Event is for sending additional Init Events, for example after the reconnect

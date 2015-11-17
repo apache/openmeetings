@@ -83,7 +83,7 @@
             }
             
             new lz.participantListItem(this._table.innerList,{
-                    user_id:object.user_id,
+                    userId:object.userId,
                     isSuperModerator:object.isSuperModerator,
                     firstname:object.firstname,
                     lastname:lastname,

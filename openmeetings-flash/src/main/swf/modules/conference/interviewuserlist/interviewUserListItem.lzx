@@ -31,7 +31,7 @@
     <attribute name="formatedDate" value="" type="string" />
     <attribute name="firstname" value="" type="string" />
     <attribute name="lastname" value="" type="string" />
-    <attribute name="user_id" value="0" type="number" />
+    <attribute name="userId" value="0" type="number" />
     <attribute name="refObj" value="null" />
     
     <attribute name="isSuperModerator" value="false" type="boolean"/>
@@ -79,7 +79,7 @@
     
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
-            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat&remoteUserid='+this.user_id)); 
+            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat&remoteUserid='+this.userId)); 
         ]]>          
     </method>
      

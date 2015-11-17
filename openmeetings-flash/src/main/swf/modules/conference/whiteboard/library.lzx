@@ -51,6 +51,6 @@
     <include href="fixedFileExplorerWhiteboardPanel.lzx" />
     <include href="whiteboardMiniButton.lzx" />
     <include href="whiteboardBarMenu.lzx" />
-
+    <include href="playBackWhiteboardVideo.lzx" />
 
 </library>

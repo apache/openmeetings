@@ -104,7 +104,7 @@
             ]]>
 		</handler>
 		<handler name="onclick">
-            canvas._videocontainer._videoviewcontent.exitRoom();
+            canvas.commonVideoViewContent.exitRoom();
 		</handler>
 	    
 	    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
@@ -234,7 +234,7 @@
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="37" command="cmd_pollResults" enabled="true" />
 			<horizontalDropDownSpacer />
-			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" enabled="${ canvas.user_id != -1 }" />
+			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" enabled="${ canvas.userId != -1 }" />
 			<horizontalDropDownSpacer
 						 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }" />
             <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 

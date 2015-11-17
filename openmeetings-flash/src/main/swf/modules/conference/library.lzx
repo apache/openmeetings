@@ -37,9 +37,6 @@
     <!-- APL author sebawagner -->
     <resource name="lz_recorder_play" src="resources/webstart_play.png" />
 	
-    <include href="commonVideoViewContent.lzx"/>
-    <include href="commonVideoComponentAdapter.lzx"/>
-    <include href="screenSharingAdapter.lzx" />
     <include href="typing.lzx" />
 
 	<include href="whiteboard/" /> 
@@ -50,14 +47,10 @@
    	
    	<include href="conference/" />
    	
-    <!-- throws an Exception
-	<include href="browser/"/>  
-     -->
     <include href="participants/" /> 
     <include href="interviewuserlist/" /> 
     
     <include href="restricted/" />
-    <include href="browser/" />
     <include href="testsetup/" />
     <include href="sip/" />
     

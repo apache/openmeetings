@@ -89,6 +89,7 @@
     
     	<handler name="oninit">
 		<![CDATA[
+			if ($debug) Debug.write("restrictedRoomSidebar::_head::oninit ");
     		for (var eg in this.subviews) {
             	this.subviews[eg].deselect();
             }

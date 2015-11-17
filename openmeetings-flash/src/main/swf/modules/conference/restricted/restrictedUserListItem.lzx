@@ -32,7 +32,7 @@
     <attribute name="formatedDate" value="" type="string" />
     <attribute name="firstname" value="" type="string" />
     <attribute name="lastname" value="" type="string" />
-    <attribute name="user_id" value="0" type="number" />
+    <attribute name="userId" value="0" type="number" />
     <attribute name="refObj" value="null" />
     
     <attribute name="isSuperModerator" value="false" type="boolean"/>
@@ -130,7 +130,7 @@
 				visible="${ parent.parent.clickable &amp;&amp; parent.parent.selfItem &amp;&amp; canvas.isBroadCasting }">
 			<handler name="onclick">
 				if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
-				canvas._videocontainer._videoviewcontent.showDevicePopUp(true);
+				canvas.commonVideoViewContent.createEditRecordStream(true, false, -1);
 			</handler>
 			<labelTooltip labelid="610" />
 		</miniIcons>

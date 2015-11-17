@@ -26,21 +26,7 @@
 ##########################################################
 these properties will be overwritten by public/config.xml -->  
 
-<attribute name="vid_lc_name" value="" type="string"/>
-
-<attribute name="lc_SID" value="" type="string"/>
-
-<attribute name="lc"/>
-
-<attribute name="rtmp_lc_name" value="" type="string"/>
-
-<attribute name="rtmp_lc"/>
-
-<attribute name="videoComp_lc_name" value="" type="string"/>
-
-<attribute name="videoComp_lc_callback_name" value="" type="string"/>
-
-<attribute name="videoComp_lc"/>
+<attribute name="commonVideoViewContent"/>
 
 <!--- URL/IP to use for the Server 192.168.178.28
     inno02.fh-pforzheim.de macbook 192.168.2.103
@@ -241,8 +227,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 
 <attribute name="isConference" value="false" type="boolean" />
 
-<attribute name="roomTypesInitValues" value="null" />
-
 <attribute name="stdTimeOffset" value="0" type="number" />
 
 <!--- Audio-Video Quality Settings
@@ -260,7 +244,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 
 <!--- Username of current user -->
 <attribute name="currentusename" value="defaultname" type="string" />
-<attribute name="user_id" value="0" type="number" />
+<attribute name="userId" value="0" type="number" />
 <attribute name="firstName" value="" type="string" />
 <attribute name="timeZoneId" value="0" type="number" />
 <attribute name="jNameTimeZone" value="" type="string" />
@@ -289,7 +273,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <!--- attributes for direct room access -->
 <attribute name="initroomid" value="0" type="number" />
 <attribute name="initroomStr" value="" type="string" />
-<attribute name="initroomtype" value="" type="string" />
 <attribute name="initdomainid" value="" type="string" />
 <attribute name="initlangid" value="1" type="number" />
 <attribute name="isinitRoomDirect" value="false" type="boolean" />
@@ -422,15 +405,6 @@ and some more references to temp-objects
  -->
 <attribute name="showNickNameDialog" value="false" type="boolean" />
 
-<!--
-    Used in SOAP API to indicate if the user logs directly into a room or into the dashboard
- -->
-<attribute name="landingZone" value="" type="string"/>
-
-<!--
-    if the users logs in via SOAP he does not see the exit button by default
-    only if the landingZone == dashboard
- -->
 <attribute name="destroyExitButton" value="true" type="boolean" />
 
 <attribute name="currentFileExplorer" value="null"/>

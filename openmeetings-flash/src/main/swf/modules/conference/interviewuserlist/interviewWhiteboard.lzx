@@ -61,7 +61,7 @@
 	
 	<method name="checkPods" args="ignore=null">
 		//if ($debug) Debug.write(":: Pods :: check :: ");
-		canvas.sendViaLocalConnection(canvas.vid_lc_name, "getVideoObjectCount", [null]);
+		canvas.commonVideoViewContent.getVideoObjectCount();
 		lz.Timer.resetTimer(checkPodsDelegate, 1000);
 	</method>
 	
@@ -88,12 +88,16 @@
     
     <simplelayout axis="y" spacing="2" />
     
+    <!-- TODO add new pods
     <commonVideoViewContent name="_videoviewcontent" x="40" >
+    
         <simplelayout axis="x" spacing="2" />
-        
+    -->    
         <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" />
         <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" />
+    <!-- TODO add new pods
     </commonVideoViewContent>
+    -->    
     
     <view name="_interview" align="center" visible="${ canvas.ismoderator }">
         <!--

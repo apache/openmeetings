@@ -43,12 +43,6 @@
         height="${ canvas.height - (parent._chatPanelStrict.height) - 
         ((parent._chatPanelStrict.visible) ? 28 : 6) + ((canvas.currentRoomObj.hideTopBar) ? 28:0)}" />
     
-    <!--
-        ###############################
-        This is the container for all Videos
-     -->
-    <commonVideoViewContent name="_videoviewcontent" />
-    
 </class>
 
 </library>

@@ -144,7 +144,8 @@
             <handler name="onclick">
 	            <![CDATA[
 	                this.setAttribute('frame',2);
-	                canvas._videocontainer._videoviewcontent.closeWhiteboard();
+	                canvas.commonVideoViewContent.closeWhiteboard();
+	                /* FIXME TODO
 	                var t = this;
                     canvas.videoComp_lc.closeWhiteboard = function(confirm) {
                         if ($debug) Debug.write("confirm closeWhiteboard:", confirm);
@@ -152,6 +153,7 @@
                             t.parent.parent.removeObject(t.parent);
                         }
                     }
+                    */
                 ]]>
             </handler>
             <labelTooltip labelid="1364" />

@@ -61,11 +61,11 @@
 		
 		<netRemoteCallHib name="isRoomFull" funcname="conferenceservice.isRoomFull" 
 							remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
-        	<netparam name="pass"><method name="getValue">return canvas.thishib.currentInvitation.room.rooms_id;</method></netparam>
+        	<netparam name="pass"><method name="getValue">return canvas.thishib.currentInvitation.room.id;</method></netparam>
         	<handler name="ondata" args="value">
         		<![CDATA[
             		//The onResult-Handler will be called be the rtmpconnection
-            		if ($debug) Debug.write(canvas.thishib.currentInvitation.room.rooms_id);
+            		if ($debug) Debug.write(canvas.thishib.currentInvitation.room.id);
 					if ($debug) Debug.write("isRoomFull: ",value);
 					
 					if (value) {
@@ -96,13 +96,13 @@
     	</netRemoteCallHib>  	
 	    
 		<method name="setRoomValues">
-			if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==1){
+			if (canvas.thishib.currentInvitation.room.type == 'conference'){
 	    		canvas.isConference = true;
 	    	} else {
 	    		canvas.isConference = false;
 		    }
 	    	var roomObj = canvas.thishib.currentInvitation.room;
-        	hib.currentroomid = roomObj.rooms_id;
+        	hib.currentroomid = roomObj.id;
         	
 		</method>
 		

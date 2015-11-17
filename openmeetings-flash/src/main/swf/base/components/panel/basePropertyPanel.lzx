@@ -55,7 +55,16 @@
 		}
 	</method>
 	
+	<method name="construct" args="p,args"><![CDATA[
+		super.construct(p, args);
+    	if ($debug) Debug.write("basePropertyPanel:: construct");
+	]]></method>
+	<method name="init"><![CDATA[
+        super.init();
+    	if ($debug) Debug.write("basePropertyPanel:: init");
+    ]]></method>
     <handler name="oninit">
+    	if ($debug) Debug.write("basePropertyPanel:: oninit");
     	this.initheight=this.height;
     </handler>
 	
