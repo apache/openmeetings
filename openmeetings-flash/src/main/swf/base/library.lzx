@@ -19,7 +19,6 @@
   
 -->
 <library>
-
     <include href="remote/" />
     <include href="components/" /> 
     <include href="hibernate/" />
@@ -33,11 +32,4 @@
 	<include href="mainDatasets.lzx" /> 
 	<include href="mainMethods.lzx" /> 
 	<include href="logoutConfirm.lzx" />
-	
-	<!-- 
-	   Defines the Core Classes that gets loaded in the Main Navigation
-	 -->
-	<include href="moduleConfiguration.lzx" />
-
-
 </library>

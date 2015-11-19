@@ -38,27 +38,6 @@
         ]]>
 	</handler>
 	
-	<!--
-    public Long requestUserToContactList(String SID, Long userToAdd_id, 
-                String domain, String port, String webapp)
-     -->
-    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
-                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
-        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
-        <netparam><method name="getValue"> return parent.parent.userId; </method></netparam>
-        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
-        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
-        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                if ($debug) Debug.write("requestUserToContactList: ",value);
-                if (value > 0) {
-                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
-                }
-            ]]>
-        </handler>
-    </netRemoteCallHib> 
-    
     <view width="$once{ parent.width }" height="$once{ parent.height-1 }" 
     	bgcolor="0xFFFFFF" opacity="0.2" />
 	
@@ -81,12 +60,7 @@
 	<miniIconsImage name="add" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="16" height="16" 
                    y="20" x="$once{ parent.width - 80 }" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            if (hib.userobject.id == parent.userId) {
-                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
-                return;
-            }
-            parent.requestUserToContactList.doCall();
+            if ($debug) Debug.write("Add to contacts");
         </handler>
         <labelTooltip labelid="1186" />
     </miniIconsImage>
@@ -94,18 +68,7 @@
     <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
                    y="20" x="$once{ parent.width - 60 }" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            new lz.newPrivateMessage(canvas,{
-                                x:200,y:120,
-                                refObj:null,
-                                minimizable:true,
-                                maximizable:true,
-                                userObject:null,
-                                isdragable:true,
-                                userId:parent.userId,
-                                width:canvas.width-300,
-                                height:canvas.height-130
-                            });
+            if ($debug) Debug.write("Private message");
         </handler>
         <labelTooltip labelid="1253" />
     </miniIcons>
@@ -113,10 +76,7 @@
 	<miniIcons resource="user_profile_rsc" width="16" height="16" 
                y="20" x="$once{ parent.width - 40 }" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            new lz.viewUserProfileWindow(canvas,{
-                                userId:parent.userId
-                            });
+            if ($debug) Debug.write("User Profile");
         </handler>
         <labelTooltip labelid="1236" />
     </miniIcons>    
@@ -125,9 +85,6 @@
 			   y="20" x="$once{ parent.width - 20 }" showhandcursor="true">
 		<handler name="onclick">
 			if ($debug) Debug.write("Start Conference");
-			new lz.chatParticipantsInviteConference(canvas,{
-            			    publicSID:parent.publicSID
-            			});
 		</handler>
 		<labelTooltip labelid="1131" />
 	</miniIcons>	 

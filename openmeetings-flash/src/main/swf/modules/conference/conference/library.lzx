@@ -20,8 +20,6 @@
 -->
 <library>
 	
-	<include href="roomListItem.lzx" />
-	<include href="roomListDetails.lzx" />
     <include href="conferenceMenubar.lzx" />
 
 </library>

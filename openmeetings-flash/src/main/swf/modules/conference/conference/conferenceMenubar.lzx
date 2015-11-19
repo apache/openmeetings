@@ -236,10 +236,10 @@
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" enabled="${ canvas.userId != -1 }" />
 			<horizontalDropDownSpacer
-						 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }" />
+						 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObj.sipEnabled }" />
             <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 
-            			 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"
-            			 enabled="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"/>
+            			 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObj.sipEnabled }"
+            			 enabled="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObj.sipEnabled }"/>
             <horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" enabled="true"/>
 			<!-- Save Whiteboard as Image menues are commented for now

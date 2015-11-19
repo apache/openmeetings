@@ -51,7 +51,6 @@
     <include href="interviewuserlist/" /> 
     
     <include href="restricted/" />
-    <include href="testsetup/" />
     <include href="sip/" />
     
     <include href="flexibleConferenceRoom/" />

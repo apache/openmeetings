@@ -33,6 +33,7 @@
 		<attribute name="doBlink" value="false" type="boolean" />
 
 		<handler name="oninit">
+			if ($debug) Debug.write("baseTabChatPanel:: oninit");
 			canvas._currentChatPanel = this;
 			this.fadeDelegate = new LzDelegate( this, "showText" );
 		</handler>
@@ -174,7 +175,7 @@
 
         <view name="content" visibility="hidden" y="22"
               height="${ parent.height-22 }" width="${ parent.width }">
-            <chatBarMenu name="chatbar">
+            <!-- chatBarMenu name="chatbar">
                 <attribute name="refObj" value="null" />
                 <attribute name="objMessage" value="null" />
                 <attribute name="publicSID" value="" type="string" />
@@ -220,7 +221,7 @@
                 
             </chatBarMenu>
             
-            <chatTab name="_content1" />
+            <chatTab name="_content1" /-->
             
         </view>
 			

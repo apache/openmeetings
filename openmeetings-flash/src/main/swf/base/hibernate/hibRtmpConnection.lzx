@@ -581,9 +581,7 @@
 					canvas.directRoomObj = value;
 					canvas.thishib.loaderVar.close();
 				} else {
-					canvas.setRoomValues(value.type,value.id,value);
-					var r = value;
-					r.currentusers = ''; //this might be huge list
+					canvas.setRoomValues(value);
 				}
 			} else {
 				new lz.labelerrorPopup(canvas,{errorlabelid:1286});
@@ -853,17 +851,17 @@
 					if (this.parent.modus == "conference") {
 						if ($debug) Debug.write("############## start broadcasting ");
 						parent.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-						parent.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.isAudioOnly;
+						parent.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.audioOnly;
 						parent.setBroadCastingFlag.isAllowedToBroadCastAV = true;
 						parent.setBroadCastingFlag.doCall();
 					}
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
                     
-                    if ($debug) Debug.write("room ",canvas.currentRoomObject);
-                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject.type);
+                    if ($debug) Debug.write("room ",canvas.currentRoomObj);
+                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObj.type);
                     
-                    if (canvas.currentRoomObject.type != 'restricted') {
-                        if (canvas.currentRoomObj.isModeratedRoom) {
+                    if (canvas.currentRoomObj.type != 'restricted') {
+                        if (canvas.currentRoomObj.moderated) {
                             if (value.length == 0 && !messageAlreadyThrown){
                                 new lz.labelerrorPopup(canvas,{errorlabelid:641});
                             }
@@ -1597,11 +1595,6 @@
                         canvas.roomClosed();
                     } else if (value.message=='inviteToRoom'){
                         if ($debug) Debug.write("Incoming Room Invitation ",value);
-                        new lz.chatParticipantsInviteNotification(canvas,{
-                                    publicSID:value.publicSID,
-                                    usermessage:value.usermessage,
-                                    roomId:value.roomId
-                                });
                     } else if (value.message=='inviteToRoomAnswer'){
                         if ($debug) Debug.write("Incoming Room inviteToRoomAnswer ",value);
                         new lz.errorPopup(canvas,{

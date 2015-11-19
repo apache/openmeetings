@@ -85,11 +85,11 @@
             parent.close();
             
 			if (canvas.thishib.currentInvitation.room.type == 'conference'){
-				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+            	new lz.flexibleConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
 			} else if (canvas.thishib.currentInvitation.room.type == 'restricted'){
-				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+            	new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
 			} else if (canvas.thishib.currentInvitation.room.type == 'interview'){
-                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+            	new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
             }                 
         </handler>  
     </netRemoteCallHib>     

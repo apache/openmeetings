@@ -31,11 +31,6 @@
     
     <event name="ontabcontentleave" />
     
-	<method name="construct" args="p,args"><![CDATA[
-		super.construct(p, args);
-    	if ($debug) Debug.write("baseContentView:: construct");
-	]]></method>
-    
 	<handler name="oninit"><![CDATA[
     	if ($debug) Debug.write("baseContentView:: oninit");
     	canvas.currentContentView = this;

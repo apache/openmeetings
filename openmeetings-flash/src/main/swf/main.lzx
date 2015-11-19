@@ -138,9 +138,9 @@
 	</text>
 	<handler name="oninit">
 		var cmenu = new LzContextMenu();
-		if($debug) Debug.write("cmenu: ", cmenu, this);
-		this.setContextMenu(cmenu);
-		//cmenu.hideBuiltInItems();
+		//if($debug) Debug.write("cmenu: ", cmenu, this);
+		this.contextmenu = cmenu;
+		cmenu.hideBuiltInItems();
 	</handler>     
 </view>
 

@@ -21,11 +21,6 @@
 <library>
 
 <class name="restrictedConferenceRoom" extends="baseConferenceRoom">
-	<method name="construct" args="p,args"><![CDATA[
-		super.construct(p, args);
-    	if ($debug) Debug.write("restrictedConferenceRoom:: construct", p, args);
-	]]></method>
-	
     <handler name="oninit">
     	if ($debug) Debug.write("restrictedConferenceRoom::oninit ");
     </handler>

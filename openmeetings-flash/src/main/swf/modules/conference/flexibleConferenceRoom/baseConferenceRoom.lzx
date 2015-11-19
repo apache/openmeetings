@@ -61,11 +61,6 @@
     
     <attribute name="meetingTimer" value="null" />
     
-	<method name="construct" args="p,args"><![CDATA[
-		super.construct(p, args);
-    	if ($debug) Debug.write("baseConferenceRoom:: construct", p, args);
-	]]></method>
-	
 	<handler name="oninit">
 	<![CDATA[
     	if ($debug) Debug.write("baseConferenceRoom:: oninit");
@@ -73,7 +68,6 @@
 		
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
 		
-		canvas.currentRoomObject = this.roomobj;
 		var r = this.roomobj;
 		r.currentusers = ''; //this might be huge list
 		

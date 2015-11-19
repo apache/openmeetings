@@ -29,6 +29,7 @@
 	<attribute name="onCloseFunc" type="object" value="null"/>
 		
 	<handler name="oninit">
+		if ($debug) Debug.write("errorPopup::oninit ");
 	   if (this.makeModal) {
 	       lz.ModeManager.makeModal(this);
 	   }

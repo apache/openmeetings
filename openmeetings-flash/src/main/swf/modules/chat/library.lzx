@@ -26,7 +26,6 @@
 	
 	<include href="chatMiniButton.lzx" />
 	<include href="chatBarMenu.lzx" />
-	<include href="inviteuser/" />
 	
 	<include href="chatParticipants.lzx" />
 	<include href="fontOptions.lzx" />

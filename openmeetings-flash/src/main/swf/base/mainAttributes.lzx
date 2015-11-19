@@ -366,8 +366,6 @@ and some more references to temp-objects
 <!-- item to focus on after rpcErrorDialog has been shown-->
 <attribute name="focusOnItem" value="null"/>
 
-<attribute name="currentRoomObject" value="null"/>
-
 <attribute name="appointmentNotificationPopUp" value="null"/>
 
 <attribute name="conferenceBrowserIsinited" value="false" type="boolean" />
