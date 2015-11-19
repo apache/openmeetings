@@ -136,8 +136,7 @@
 		}
 		
 		this._start_private_chat_rsc.setAttribute('visible'
-			, (canvas.currentRoomObj.hideChat == null || !canvas.currentRoomObj.hideChat)
-				&& (refObj != null && refObj.publicSID != canvas.publicSID));
+			, (!canvas.currentRoomObj.chatHidden) && (refObj != null && refObj.publicSID != canvas.publicSID));
 	]]>
 	</handler>
         

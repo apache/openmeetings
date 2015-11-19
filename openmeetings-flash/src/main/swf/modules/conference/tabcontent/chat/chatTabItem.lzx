@@ -24,7 +24,7 @@
 <class name="chatTabItem" extends="view" 
 	   width="240" >
 
-	<attribute name="user_id" value="0" type="number" />
+	<attribute name="userId" value="0" type="number" />
 	<attribute name="username" value="" type="string" />
 	<attribute name="usertime" value="" type="string" />
 	<attribute name="usercolor" value="0" type="string" />
@@ -36,7 +36,7 @@
 			if($debug) Debug.write("chatTab Item on init");
 	        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
 	        		+'&moduleName=chat&parentPath=&room_id='
-	        		+'&remoteUserid='+this.user_id
+	        		+'&remoteUserid='+this.userId
 	        		+'&sid='+canvas.sessionId;
 	        //Debug.write("downloadurl "+downloadurl);
 	        this._userpic.setAttribute('src',downloadurl);	

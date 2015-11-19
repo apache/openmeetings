@@ -100,15 +100,10 @@ function quicklinkAct(action) {
 function loadContent(obj,parentobj,preparentobj){
     if($debug) Debug.write("FUNC/loadContent: ", obj);
     
-	if (obj.action!="logout") {
-	    tempActionForNavi = {action: obj.action, params: obj.params};
-		if (!clearStageContent()) {
-			loadContentByTempActionForNavi();
-		}
-	} else {
-		new lz.logoutConfirm(canvas,{objectsToClean: obj});
+    tempActionForNavi = {action: obj.action, params: obj.params};
+	if (!clearStageContent()) {
+		loadContentByTempActionForNavi();
 	}
-    
 }
     
 function loadContentByTempActionForNavi(){

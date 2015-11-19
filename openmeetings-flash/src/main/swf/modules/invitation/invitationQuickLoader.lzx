@@ -123,7 +123,7 @@
 			//if ($debug) Debug.write("!!!!!!!!!!! invitee :: ", invitee);
 			
 			canvas.setAttribute('currentuser', email);
-			canvas.setAttribute('user_id', -invitee.user_id);
+			canvas.setAttribute('userId', -invitee.id);
 			canvas.setAttribute('mail', email);
 			if (!invitee.firstname && !invitee.lastname) {
 				if ($debug) Debug.write("!!!!!!!!!!! Nickname invitation ", email);

@@ -63,7 +63,7 @@ This is used in the conference.
 			
 			this.sendMessageWithClientByPublicSID.doCall();
 			
-			if (canvas.currentRoomObject != null) {
+			if (canvas.currentRoomObj != null) {
 				_chattabbottom.updatefontbuttonvisible();
 			}
 		]]>

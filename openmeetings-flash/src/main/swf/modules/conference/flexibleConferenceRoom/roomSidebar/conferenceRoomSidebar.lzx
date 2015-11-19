@@ -102,7 +102,7 @@
     
     <participants name="_videocontainer" y="36" 
                   width="$once{ parent.width-10 }" 
-               height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
+               height="${ parent.height-(canvas.currentRoomObj.activitiesHidden ? 36:236) }" />
                
     <activityList name="_activityList" />
     

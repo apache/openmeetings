@@ -156,7 +156,7 @@
 		var save = g["savecamdata"];
 		if ($debug) Debug.write("save: ",save,g["cam"],g["mic"],this.isSyncUpdate);
 		//In case its an Audio-Only Room this box should not close automatically
-		if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
+		if ($debug) Debug.write("canvas.currentRoomObj: ", canvas.currentRoomObj);
 		
 		//In case the user presses the Sync Button this box should
         //not close automatically and do the user-prefered values
@@ -192,7 +192,7 @@
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
                 if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.cam_default_width);
                 if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.cam_default_height);
-                if ($debug) Debug.write("parent.setUserAVSettings -5a- ",canvas.currentRoomObject.rooms_id);
+                if ($debug) Debug.write("parent.setUserAVSettings -5a- ",canvas.currentRoomObj.id);
                 if ($debug) Debug.write("parent.setUserAVSettings -6- ",canvas.publicSID);
                 
                 parent.setUserAVSettings.doCall();
@@ -205,7 +205,7 @@
         <netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_width;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
-        <netparam><method name="getValue">return canvas.currentRoomObject.rooms_id;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentRoomObj.id;</method></netparam>
         <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
         <netparam><method name="getValue">return parent.parent.interviewPodId;</method></netparam>
         <handler name="ondata" args="value">
@@ -522,7 +522,7 @@
 		selectListItem(availableMics, foundStoredMic, mics.length > 0);
 
 		// settings
-		var addCams = canvas.userobject.canVideo && !canvas.currentRoomObject.isAudioOnly && cameras.length > 0;
+		var addCams = canvas.userobject.canVideo && !canvas.currentRoomObj.audioOnly && cameras.length > 0;
 		var addMics = mics.length > 0;
 		if (addCams && addMics) {
 			availableSettings.addItem(canvas.getLabelName(448), "av");

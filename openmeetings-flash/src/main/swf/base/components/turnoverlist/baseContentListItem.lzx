@@ -21,8 +21,7 @@
 <library>
 
 <!--- base class for the item list views-->
-<class name="baseContentListItem" extends="view" 
-	   layout="axis:x;spacing:0" bgcolor="0xFFFFFF" >
+<class name="baseContentListItem" extends="view" layout="axis:x;spacing:0" bgcolor="0xFFFFFF" >
 	
 	<attribute name="isselected" value="false" type="boolean"/>
 	

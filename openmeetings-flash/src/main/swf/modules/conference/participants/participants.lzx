@@ -253,9 +253,9 @@
         canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
     </method>
     
-	<method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+	<method name="addClientItem" args="connectedSince,isMod,streamid,username,roomId,formatedDate,position,color,object">
 	<![CDATA[
-		if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+		if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,roomId,formatedDate);
 		
 		if (canvas.publicSID != object.publicSID){
 		if ($debug) Debug.write("### initializeStreams createVideoObject: ", object);

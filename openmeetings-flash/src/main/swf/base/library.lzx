@@ -31,5 +31,4 @@
 	<include href="mainAttributes.lzx" /> 
 	<include href="mainDatasets.lzx" /> 
 	<include href="mainMethods.lzx" /> 
-	<include href="logoutConfirm.lzx" />
 </library>

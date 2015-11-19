@@ -37,7 +37,7 @@
 			this.initRatio = w / h;
 			this.setAttribute("width",w+this.videoInsetX);
 
-			if (canvas.currentRoomObject.showMicrophoneStatus) {
+			if (canvas.currentRoomObj.showMicrophoneStatus) {
 				this.setAttribute("bottomBarHeight",this._innertop.height + 1);
 			}
 

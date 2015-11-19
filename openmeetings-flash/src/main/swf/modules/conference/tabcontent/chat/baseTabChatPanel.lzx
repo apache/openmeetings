@@ -135,7 +135,7 @@
 				if (canvas._chatcontent != null && 'doInitByOpen' in canvas._chatcontent) {
 					canvas._chatcontent.doInitByOpen();
 				}
-				if (canvas.currentRoomObject != null) {
+				if (canvas.currentRoomObj != null) {
 					content._content1._chattabbottom.updatefontbuttonvisible();
 				}
 				this.doBlink = false;

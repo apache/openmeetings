@@ -69,7 +69,7 @@
 						om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
 						om[7] = canvas.isrtl;
 						om[8] = hib.userobject.userId;
-						om[9] = canvas.currentRoomObject.chatModerated && !canvas.ismoderator;
+						om[9] = canvas.currentRoomObj.chatModerated && !canvas.ismoderator;
 						if ($debug) Debug.write("send: ", parent.parent.parent);
 						if (parent.parent.isPrivate) {
 							parent.sendMessageWithClientByPublicSID.doCall();
@@ -119,8 +119,8 @@
 		</labelCheckbox>
 
 		<method name="updatefontbuttonvisible">
-			if ($debug) Debug.write("chatTabBottom updatefontbuttonvisible allowFontStyles", canvas.currentRoomObject.allowFontStyles);
-			_button.fontbutton.setAttribute('visible', canvas.currentRoomObject.allowFontStyles);
+			if ($debug) Debug.write("chatTabBottom updatefontbuttonvisible allowFontStyles", canvas.currentRoomObj.allowFontStyles);
+			_button.fontbutton.setAttribute('visible', canvas.currentRoomObj.allowFontStyles);
 		</method>
 
 		<view name="_button" width="140" y="22" align="right">

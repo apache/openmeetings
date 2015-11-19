@@ -51,7 +51,7 @@
             
             this._nc.proxyType = canvas.proxyType;
             
-            var ok = this._nc.connect(src == "null" ? null : src, false); //isAVClient = false
+            var ok = this._nc.connect(src == "null" ? null : src, false); //avClient = false
             if (this.debug) {
             	if($debug) Debug.write("*** debug ***");
             }

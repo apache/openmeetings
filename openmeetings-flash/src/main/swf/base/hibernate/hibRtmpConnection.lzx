@@ -381,36 +381,6 @@
 	    ]]>
     </method>
     
-    <netRemoteCallHib name="logoutUser" funcname="xmlcrm.logoutUser"
-        remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" 
-        isCallBackHandler="true">
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <handler name="sendCallBack">
-        <![CDATA[
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("sendCallBack logoutUser: ");    
-            parent.initlanguageLoaded = false;
-            
-            var g = canvas.getUserData();
-            g["username"] = '';
-            g["userpass"] = '';
-            g["userquality"] = null;
-            g["usercolor"] = null;
-            g["userlang"] = null;
-            g["saveuserdata"]=false;
-            g["storedSession"] = "";
-            canvas.setUserData(g);
-            canvas.setColorStyle(canvas.baseColorScheme);
-            
-            parent.userlang = -1;
-            parent.setDefaultUserLanguage();
-
-            parent.getLanguageByIdAndMax.start = 0;
-            parent.getLanguageByIdAndMax.doCall();
-        ]]>
-        </handler>          
-    </netRemoteCallHib>     
-    
     <netRemoteCallHib name="setUsernameReconnect" funcname="setUsernameReconnect" remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return canvas.userId;</method></netparam>
@@ -482,7 +452,7 @@
 				canvas.showNickNameDialog = value.showNickNameDialog;
 				if ($debug) Debug.write("markSessionAsLogedIn9 ",canvas.showNickNameDialog);
 				
-				canvas.initroomid = value.room_id;
+				canvas.initroomid = value.roomId;
 				canvas.becomemoderator = value.becomemoderator;
 				canvas.showAudioVideoTest = value.showAudioVideoTest;
 				
@@ -825,9 +795,9 @@
 				//The onResult-Handler will be called be the rtmpconnection
 				if ($debug) Debug.write("addNewUser: ",value);
 				if(value.sipTransport) {
-					canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value);
+					canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.roomId,'',value.formatedDate,value.userpos,value.usercolor,value);
 				} else {
-					canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value);
+					canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.roomId,'',value.formatedDate,value.userpos,value.usercolor,value);
 				}
 				canvas.setAttribute('numberofpartners',canvas.numberofpartners+1);
 			</handler>
@@ -879,7 +849,7 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("newStream: ",value);
-                if (value == null || value.isScreenClient) {
+                if (value == null || value.screenClient) {
                     return;
                 }
                 canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight); 
@@ -893,7 +863,7 @@
                 if (value == null) {
                 	return;
                 }
-                if (value.isScreenClient) {
+                if (value.screenClient) {
                     if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
                     canvas.commonVideoViewContent.closeScreenSharing(value);
                 } else {
@@ -943,7 +913,7 @@
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("roomDisconnect: ",value);
-                if (value == null || value.isScreenClient) {
+                if (value == null || value.screenClient) {
                     return;
                 }
                 if (canvas.currentBaseConferenceRoom != null && canvas.currentBaseConferenceRoom._chatPanelStrict != null) {

@@ -27,7 +27,7 @@
 	<handler name="oninit">
 	<![CDATA[
 		var extra = value.sipTransport ? "&parentPath=../default&moduleName=videoconf1"
-			: '&parentPath=&moduleName=remoteuserprofile&remoteUserid='+this.value.user_id;
+			: '&parentPath=&moduleName=remoteuserprofile&remoteUserid='+this.value.userId;
 
 		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri, extra));
 	]]>

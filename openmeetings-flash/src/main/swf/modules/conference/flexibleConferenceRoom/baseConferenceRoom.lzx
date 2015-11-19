@@ -71,7 +71,7 @@
 		var r = this.roomobj;
 		r.currentusers = ''; //this might be huge list
 		
-		if (this.roomobj.isClosed) {
+		if (this.roomobj.closed) {
 			canvas.roomClosed();
 		}
 		
@@ -83,9 +83,9 @@
 		canvas.setAttribute('naviHeightDelta',28);
 		
 		if (this._chatPanelStrict) {
-			var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
-			this._chatPanelStrict.setAttribute('visible', !hideChat);
-			if (hideChat) {
+			var chatHidden = this.roomobj.chatHidden;
+			this._chatPanelStrict.setAttribute('visible', !chatHidden);
+			if (chatHidden) {
 				this._chatPanelStrict.setAttribute('height', 28);
 			}
 		}

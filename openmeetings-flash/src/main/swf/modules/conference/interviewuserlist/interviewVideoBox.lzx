@@ -79,7 +79,7 @@
 		
 		canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
 		canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-		canvas.thishib.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.isAudioOnly;
+		canvas.thishib.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.audioOnly;
 		canvas.thishib.setBroadCastingFlag.interviewPodId = this.interviewPodId;
 		canvas.thishib.setBroadCastingFlag.doCall();
 		

@@ -104,7 +104,7 @@
             }
             this._giveExclusiveAudioView.bringToFront();
             
-            this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
+            this.isMicrophonesRoom = canvas.currentRoomObj.showMicrophoneStatus;
             if (isMicrophonesRoom) {
                 this._innertop.setAttribute("bgcolor", "0xFF6600");
                 this._innerbottom.setAttribute("bgcolor", "0xFF6600");
@@ -116,7 +116,7 @@
 
 		<handler name="ony">
 		<![CDATA[
-		    if (this.isInterview || this.custom || canvas.currentRoomObject.hideWhiteboard) {
+		    if (this.isInterview || this.custom || canvas.currentRoomObj.hideWhiteboard) {
                 return;
             }
             var bounds = this.getBounds();
