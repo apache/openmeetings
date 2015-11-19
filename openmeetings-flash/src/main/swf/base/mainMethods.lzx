@@ -500,26 +500,22 @@
         ]]>
     </method> 
     
-    <method name="setRoomValues" args="roomTypeId,roomId,roomObj">
-    
-        if ($debug) Debug.warn("setRoomValues ",roomTypeId,roomId,roomObj);
-        if (roomTypeId=='conference'){
-                canvas.isConference = true;
-            } else {
-                canvas.isConference = false;
-        }
+	<method name="setRoomValues" args="roomTypeId,roomId,roomObj">
+		if ($debug) Debug.warn("setRoomValues ",roomTypeId,roomId,roomObj);
+		canvas.isConference = roomTypeId == 'conference';
         
         //this is needed cause in the rpc-method *getCurrentModeratorList* we check if its room.type == 'restricted'
         //if so we will not show any *There is no Moderator* Warning Dialog
         canvas.currentRoomObject = roomObj;
 
         hib.currentroomid = roomId;
-        if (roomObj!=null){
-            if (roomTypeId=='conference'){
+        if (roomObj != null) {
+            if (roomTypeId == 'conference') {
                 new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:roomObj});
-            } else if (roomTypeId=='restricted'){
-                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:roomObj});
-            } else if (roomTypeId=='interview'){
+            } else if (roomTypeId == 'restricted') {
+            	new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
+                //new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:roomObj});
+            } else if (roomTypeId == 'interview') {
                 new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:roomObj});
             } 
         }

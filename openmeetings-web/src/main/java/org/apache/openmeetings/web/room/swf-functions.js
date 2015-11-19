@@ -16,9 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function getAppletStatus() {
-	return false;
-}
 
 function initSwf(swfurl) {
 	var general = {

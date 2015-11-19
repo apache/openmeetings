@@ -668,7 +668,7 @@
   <entry key="652">M</entry>
   <entry key="653">Do you want to change this user to be a moderator of that organisation?</entry>
   <entry key="654">Please choose an organisation before you try to add a user to it</entry>
-  <entry key="655">Organisation - moderator</entry>
+  <entry key="655">Group - moderator</entry>
   <entry key="656">Do you really want to delete this user from the organisation?</entry>
   <entry key="657">This user is a moderator</entry>
   <entry key="658">This user is not a moderator</entry>
@@ -1769,9 +1769,9 @@
 	<entry key="install.wizard.params.step1.email">EMail</entry>
 	<entry key="install.wizard.params.step1.email.title">Enter a EMail</entry>
 	<entry key="install.wizard.params.step1.tz">User Time Zone</entry>
-	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
+	<entry key="install.wizard.params.step1.groupdata">Group(Domains)</entry>
 	<entry key="install.wizard.params.step1.group">Name</entry>
-	<entry key="install.wizard.params.step1.group.title">Enter a default Organisation</entry>
+	<entry key="install.wizard.params.step1.group.title">Enter a default Group</entry>
 
 	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister">Allow self-registering (allow_frontend_register)</entry>

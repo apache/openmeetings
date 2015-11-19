@@ -34,9 +34,13 @@
 	<method name="construct" args="p,args"><![CDATA[
 		super.construct(p, args);
     	if ($debug) Debug.write("baseContentView:: construct");
-    	canvas.currentContentView = this;
 	]]></method>
     
+	<handler name="oninit"><![CDATA[
+    	if ($debug) Debug.write("baseContentView:: oninit");
+    	canvas.currentContentView = this;
+	]]></handler>
+	
     <!--
         This Event is for sending additional Init Events, for example after the reconnect
         the File-List has to be refreshed for the File-Browser Plugin 

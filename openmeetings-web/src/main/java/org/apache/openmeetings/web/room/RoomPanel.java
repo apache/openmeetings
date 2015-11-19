@@ -83,7 +83,7 @@ public class RoomPanel extends BasePanel {
 	
 	private String getFlashFile() {
 		return RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType()
-				? "maindebug.as3.swf11.swf" : "main.as3.swf11.swf";
+				? "maindebug.swf11.swf" : "main.swf11.swf";
 	}
 	
 	private static PageParameters addServer(PageParameters pp, Server s) {

@@ -646,7 +646,6 @@ Copyright (c) 2004-2008 QOS.ch
  
  The XmlPull API is in public domain in hope that it will be embraced by Java developers
 
- 
  ======================================================================================================================
  
 plugins/websocket-1.1.jar
@@ -1500,6 +1499,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 asm-5.0.4.jar
 	URL: http://asm.objectweb.org/asm/
+	
 ======================================================================================================================
 
 SERP License
@@ -1793,6 +1793,8 @@ Copyright (c) 2002 JSON.org
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
+
+
 ======================================================================================================================
 
 For javax.annotation-api-1.2.jar:

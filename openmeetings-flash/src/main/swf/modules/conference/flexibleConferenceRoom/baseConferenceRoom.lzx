@@ -63,8 +63,12 @@
     
 	<method name="construct" args="p,args"><![CDATA[
 		super.construct(p, args);
-		this.roomobj = args.roomobj;
     	if ($debug) Debug.write("baseConferenceRoom:: construct", p, args);
+	]]></method>
+	
+	<handler name="oninit">
+	<![CDATA[
+    	if ($debug) Debug.write("baseConferenceRoom:: oninit");
 		_mainScrollBar.setAttribute("visibility","hidden");
 		
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
@@ -115,15 +119,13 @@
 			if ($debug) Debug.write("no appointed meeting");
 		}
 		
-		if (this.roomobj.isDemoRoom && this.roomobj.demoTime != null) {
+		if (this.roomobj.demoRoom && this.roomobj.demoTime != null) {
 			if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
-			this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+			this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this, roomobj:this.roomobj});
 		}
 		
+		if ($debug) Debug.write("canvas._videocontainer ", canvas._videocontainer);
 		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
-	]]></method>
-	<handler name="oninit">
-	<![CDATA[
 	]]>
 	</handler>
     

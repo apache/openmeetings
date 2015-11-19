@@ -99,8 +99,8 @@ public class ConferenceService {
 
 		log.debug("getRoomsByGroup");
 
-		Long user_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasModLevel(userDao.get(user_id), groupId)) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasModLevel(userDao.get(userId), groupId)) {
 			return roomManager.getRoomGroupByGroupId(groupId, start, max, orderby, asc);
 		}
 		return null;
@@ -352,6 +352,14 @@ public class ConferenceService {
 		Long userId = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return roomDao.getUserRoom(userId, Room.Type.get(typeId), roomName);
+		}
+		return null;
+	}
+
+	public Room getRoomById(String SID, Long roomId) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			return roomDao.get(roomId);
 		}
 		return null;
 	}

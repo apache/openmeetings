@@ -127,7 +127,7 @@ public class DownloadHandler extends BaseHttpServlet {
 				
 				
 
-				// make a complete name out of domain(organisation) + roomname
+				// make a complete name out of domain(group) + roomname
 				String roomName = room_id;
 				// trim whitespaces cause it is a directory name
 				roomName = StringUtils.deleteWhitespace(roomName);
