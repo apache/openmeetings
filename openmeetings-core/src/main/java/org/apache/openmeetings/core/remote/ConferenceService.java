@@ -99,8 +99,8 @@ public class ConferenceService {
 
 		log.debug("getRoomsByGroup");
 
-		Long user_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasModLevel(userDao.get(user_id), groupId)) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasModLevel(userDao.get(userId), groupId)) {
 			return roomManager.getRoomGroupByGroupId(groupId, start, max, orderby, asc);
 		}
 		return null;

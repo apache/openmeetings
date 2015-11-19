@@ -171,17 +171,17 @@ public class Room implements IDataProviderEntity {
 	private boolean appointment;
 
 	// Vars to simulate external Room
-	@Column(name = "externalId")
+	@Column(name = "external_id")
 	@Element(data = true, required = false)
 	private Long externalId;
 
-	@Column(name = "externalType")
+	@Column(name = "external_type")
 	@Element(data = true, required = false)
 	private String externalType;
 
-	@Column(name = "isdemoroom")
-	@Element(data = true, required = false)
-	private boolean isDemoRoom;
+	@Column(name = "demo_room")
+	@Element(name = "isDemoRoom", data = true, required = false)
+	private boolean demoRoom;
 
 	@Column(name = "demo_time")
 	@Element(data = true, required = false)
@@ -391,12 +391,12 @@ public class Room implements IDataProviderEntity {
 		this.appointment = appointment;
 	}
 
-	public boolean getIsDemoRoom() {
-		return isDemoRoom;
+	public boolean isDemoRoom() {
+		return demoRoom;
 	}
 
-	public void setIsDemoRoom(boolean isDemoRoom) {
-		this.isDemoRoom = isDemoRoom;
+	public void setDemoRoom(boolean demoRoom) {
+		this.demoRoom = demoRoom;
 	}
 
 	public Integer getDemoTime() {

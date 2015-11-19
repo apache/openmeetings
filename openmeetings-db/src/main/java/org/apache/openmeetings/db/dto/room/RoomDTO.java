@@ -70,7 +70,7 @@ public class RoomDTO implements Serializable {
 		appointment = r.isAppointment();
 		confno = r.getConfno();
 		isPublic = r.getIspublic();
-		demo = r.getIsDemoRoom();
+		demo = r.isDemoRoom();
 		closed = r.isClosed();
 		demoTime = r.getDemoTime();
 		externalId = r.getExternalId();
@@ -100,7 +100,7 @@ public class RoomDTO implements Serializable {
 		r.setAppointment(appointment);
 		r.setConfno(confno);
 		r.setIspublic(isPublic);
-		r.setIsDemoRoom(demo);
+		r.setDemoRoom(demo);
 		r.setDemoTime(demoTime);
 		r.setExternalId(externalId);
 		r.setExternalType(externalType);

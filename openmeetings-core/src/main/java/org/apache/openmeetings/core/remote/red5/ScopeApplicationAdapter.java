@@ -191,7 +191,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 
 		// Log the User
-		conferenceLogDao.addConferenceLog(ConferenceLog.Type.clientConnect,
+		conferenceLogDao.add(ConferenceLog.Type.clientConnect,
 				rcm.getUserId(), streamId, null, rcm.getUserip(),
 				rcm.getScope());
 		return true;
@@ -498,7 +498,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Long roomId = currentClient.getRoomId();
 
 			// Log the User
-			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomLeave,
+			conferenceLogDao.add(ConferenceLog.Type.roomLeave,
 					currentClient.getUserId(), currentClient.getStreamid(),
 					roomId, currentClient.getUserip(), "");
 
@@ -1156,7 +1156,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
             }
 
 			// Log the User
-			conferenceLogDao.addConferenceLog(ConferenceLog.Type.roomEnter,
+			conferenceLogDao.add(ConferenceLog.Type.roomEnter,
 					currentClient.getUserId(), streamid, roomId,
 					currentClient.getUserip(), "");
 			

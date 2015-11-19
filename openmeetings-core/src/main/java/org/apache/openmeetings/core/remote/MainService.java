@@ -233,7 +233,7 @@ public class MainService implements IPendingServiceCallback {
 			currentClient.setEmail(email);
 
 			// Log the User
-			conferenceLogDao.addConferenceLog(
+			conferenceLogDao.add(
 					ConferenceLog.Type.nicknameEnter, currentClient.getUserId(), streamId,
 					null, currentClient.getUserip(), currentClient.getScope());
 

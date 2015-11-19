@@ -436,7 +436,7 @@ public class ImportInitvalues {
 
 		r.setAppointment(false);
 
-		r.setIsDemoRoom(false);
+		r.setDemoRoom(false);
 		r.setDemoTime(null);
 
 		r.setModerated(false);
