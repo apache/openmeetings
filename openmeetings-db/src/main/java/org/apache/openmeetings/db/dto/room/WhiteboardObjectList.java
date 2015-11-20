@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WhiteboardObjectList {
-
 	private Long roomId;
 	private Map<Long,WhiteboardObject> whiteboardObjects = new HashMap<Long,WhiteboardObject>();
 	
@@ -31,14 +30,16 @@ public class WhiteboardObjectList {
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
+
 	public Map<Long, WhiteboardObject> getWhiteboardObjects() {
 		return whiteboardObjects;
 	}
+
 	public void setWhiteboardObjects(Map<Long, WhiteboardObject> whiteboardObjects) {
 		this.whiteboardObjects = whiteboardObjects;
 	}
-	
 }
