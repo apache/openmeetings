@@ -406,18 +406,6 @@
     </method>
     
     <!---
-    	Update the ismoderator flag, there is no need to check here which user
-    	this happened already before sending it to the SWF10 app
-     -->
-    <method name="updateModerationFlag" args="moderator">
-    	<![CDATA[
-    		if ($debug) Debug.write("updateModerationFlag :: ",moderator);
-    		this.setAttribute('ismoderator',moderator);
-    		return;
-    	]]>
-    </method>
-    
-    <!---
     	Update the canDraw,canShare,canRemote flag, there is no need to check here which user
     	this happened already before sending it to the SWF10 app
      -->
@@ -473,17 +461,6 @@
 		if (canvas.wicketsid != null && bool) {
 			if($debug) Debug.write("1");
 			clearAll();
-			if($debug) Debug.write("2");
-			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
-			if($debug) Debug.write("3");
-			if($debug) Debug.write("Do disconnect 10:: ", canvas.thishib);
-			if (canvas.thishib._nc) {
-				canvas.thishib._nc.close();
-			}
-			if($debug) Debug.write("4");
-			canvas.thishib.disconnect();
-			if($debug) Debug.write("5");
-			canvas.thishib.src = null;
 		}
 	]]>
 	</method>
@@ -571,28 +548,6 @@
         ]]>
     </method>
 
-    <!-- 
-    	Synces some of the variables from the SWF8 to the SWF10.
-    	This also includes values for httphostlocal
-    	in case its a cluster'ed OpenMeetings installation the connection_url
-    	might point to the slave while the httphostlocal points to the master
-     -->
-    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview,httphostlocal,httpport">
-        if($debug) Debug.write("reconnectSuccess",connection_url,publicSID,userobject);
-        canvas.httphostlocal = httphostlocal;
-        canvas.red5httpport = httpport;
-        canvas.publicSID = publicSID;
-        canvas.userobject = userobject;
-        canvas.isInterview = isInterview;
-        canvas.thishib.setAttribute('src',connection_url);
-        canvas.thishib.connect();
-    </method>
-    
-    <method name="disconnect" args="arg">
-        if($debug) Debug.write("Do disconnect");
-        canvas.thishib.disconnect();
-    </method>
-    
     <!---
         Starts the 5 second audio/video testing application and connect to RTMP
      -->
@@ -608,15 +563,12 @@
         and send confirmation back via LocalConnection
      -->
     <method name="closeInitTestingApplication">
-    	canvas.thishib.disconnect();
         if($debug) Debug.write("closeInitTestingApplication ");
         if (this.testingApplication != null) {
             this.testingApplication.storeSettings();
             this.testingApplication.destroy();
             this.testingApplication = null;
         }
-        if ($debug) Debug.write("Send confirmation of close back to: ",canvas.videoComp_lc_name);
-        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeInitTestingApplicationConfirm');
     </method>
     
     <!---
@@ -708,9 +660,6 @@
         this.baseVideoStream.stopRecording();
         this.baseVideoStream.destroy();
         this.baseVideoStream = null;
-        canvas.thishib.disconnect();
-        // send back confirmation to leave the module
-        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'recordingStoppedAndDisconnected');
     </method>
     
     <!---
@@ -815,7 +764,6 @@
             }
             this.whiteboardVideos.clearAll();
             parent._videoComponent.clearAll();
-            canvas.thishib.disconnect();
         ]]>
     </method>
     

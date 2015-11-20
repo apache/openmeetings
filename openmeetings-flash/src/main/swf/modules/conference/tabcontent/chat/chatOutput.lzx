@@ -82,7 +82,7 @@
     
     <method name="addChatHistory" args="value,client">
         <![CDATA[
-            //if($debug) Debug.write("chatOutput/addChatHistory: ",value,client);
+            if($debug) Debug.write("chatOutput/addChatHistory: ",value,client);
             canvas.currentBaseConferenceRoom._chatPanelStrict.startBlink();
             var username = (client.firstname == null ? "" : client.firstname) + " " + (client.lastname == null ? "" : client.lastname);
             var messageObj = value[value.length - 1];

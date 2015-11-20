@@ -19,7 +19,6 @@
   
 -->
 <library>
-
 	<!--- View of the buttom area of chat. It contains buttons of message,emoticons,clear. -->
 	<class name="chatTabBottom" extends="view" height="42">
 		<attribute name="isPrivate" value="false" type="boolean" />
@@ -136,7 +135,7 @@
 					lz.ModeManager.makeModal(pick);   
         		</handler>
         		<handler name="onmouseover">
-        			<!-- lost selection workaround -->
+        			// lost selection workaround
         			parent.parent.message._ctext.saveselection();
         		</handler>
         		<labelTooltip labelid="1530" />
@@ -193,9 +192,6 @@
                 ]]>
 				</handler>
 			</netRemoteCallHib>
-
 		</view>
-
 	</class>
-
 </library>

@@ -228,6 +228,7 @@
 			canvas._loadingAll.hideContentOnly();
 			return;
 		} else if (this.reconnectionAction){
+			if ($debug) Debug.write("this.reconnectionAction: ", this.lastCalled);
 			this.connect();
 		} else if (this.reconnectAfterRoomleft) {
 			if ($debug) Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
@@ -249,12 +250,12 @@
 			var src = getUrl();
 			this.setAttribute('src',src);
 			//Debug.write("new src ",this.src);
-			if (this.counterror<3){
+			if (this.counterror < 3) {
 				this.counterror++;
-				//Debug.write("try ",this.counterror,"one");
 				if (canvas.thishib.loaderVar != null) {
 					canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
 				}
+				if ($debug) Debug.write("Reconnecting: ", this.counterror);
 				this.connect();
 			} else {
 				//Debug.write("connection failed");
@@ -827,8 +828,8 @@
 					}
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
                     
-                    if ($debug) Debug.write("room ",canvas.currentRoomObj);
-                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObj.type);
+                    if ($debug) Debug.write("room ", canvas.currentRoomObj);
+                    if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
                     
                     if (canvas.currentRoomObj.type != 'restricted') {
                         if (canvas.currentRoomObj.moderated) {
@@ -1630,7 +1631,7 @@
         </handler>
     </netRemoteCallHib>
     
-    <netRemoteCallHib name="checkLzRecording" funcname="recorderservice.checkLzRecording" >      
+    <netRemoteCallHib name="checkLzRecording" funcname="recordingservice.checkLzRecording" >      
         <handler name="ondata" args="value">
             if ($debug) Debug.write("checkLzRecording: ",value);
             if (value != null) {

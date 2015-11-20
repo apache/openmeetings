@@ -48,7 +48,7 @@
 		        	|| this.name.indexOf('uline')>=0 
 		        	|| this.name.indexOf('drawarrow')>=0
 		        	|| this.name.indexOf('paint')>=0) {
-		        	this.getDisplayObject()._xscale = (this.width/this.initwidth)*100;
+		        	this.getDisplayObject().scaleX = this.width / this.initwidth;
 		        } else if (this.name.indexOf('rectangle')>=0) {
 	        		parent.redrawRectItemByScaling(this);
 	        	} else if  (this.name.indexOf('ellipse')>=0) {
@@ -65,7 +65,7 @@
 		        	|| this.name.indexOf('uline')>=0 
 		        	|| this.name.indexOf('drawarrow')>=0
 		        	|| this.name.indexOf('paint')>=0) {
-		        	this.getDisplayObject()._yscale = (this.height/this.initheight)*100;  
+		        	this.getDisplayObject().scaleY = this.height / this.initheight;  
 		        } else if (this.name.indexOf('rectangle')>=0) {
 	        		parent.redrawRectItemByScaling(this);
 	        	} else if  (this.name.indexOf('ellipse')>=0) {

@@ -26,6 +26,7 @@
 		<when property="$as3">
 			<passthrough>
 				import flash.external.ExternalInterface;
+				import flash.net.*;
 			</passthrough>
 		</when>
 	</switch>
@@ -138,14 +139,20 @@
     	]]>
     </method>
     
-    <method name="remoteLogWrite" args="message">
-    	if ($debug) Debug.write(message);
-    	var remoteLog = new lz.dataset();
-    	remoteLog.setQueryType("POST");
-    	remoteLog.setAttribute("src", canvas.getUrl() + "remotelog.upload");
-    	remoteLog.setQueryParam("message", message);
-    	remoteLog.setQueryParam("sid", canvas.sessionId);
-    	remoteLog.doRequest();
+	<method name="remoteLogWrite" args="message">
+		if ($debug) Debug.warn("remoteLogWrite:: ", message);
+		var request:URLRequest = new URLRequest(canvas.getUrl() + "remotelog.upload");
+		var requestVars:URLVariables = new URLVariables();
+    	requestVars.message = message;
+    	requestVars.sid = canvas.sessionId;
+    	request.data = requestVars;
+		request.method = URLRequestMethod.POST;
+		
+		try {
+			new URLLoader().load(request);
+		} catch (e:Error) {
+			if ($debug) Debug.error(e);
+		}
     </method>
     
     <method name="getHttpHost">
@@ -618,11 +625,6 @@
 	            }
 	        }
 	        
-	        //Only send this event if the current user moderators status changes
-	        if (isCurrentModerator != this.ismoderator) {
-		        canvas.commonVideoViewContent.updateModerationFlag(isCurrentModerator);
-	        }
-	        
 	        // do always spread this event, we need to broadcast the "onismoderator" event
 	        // so that we can update the status of other users in the user list
 	        this.setAttribute('ismoderator',isCurrentModerator);
@@ -774,18 +776,10 @@
 	    }
 	</method>  
 	
-	<method name="initSharedObject">
-	    if (canvas.sharedObject == null) {
-	        if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
-	        canvas.sharedObject = new lz.sharedObject();
-	        canvas.sharedObject.getLocal('userdata');
-	    }
-	</method>
-	
 	<method name="getUserData">
-	    canvas.initSharedObject();
-	    var g = canvas.sharedObject.getData('userdata');
-	    if (g==null) {
+	    var so:SharedObject = SharedObject.getLocal('userdata');
+	    var g = so.data;
+	    if (g == null) {
 	        if($debug) Debug.write("sharedObject.getData IS null");
 	        g = new Array();
 	    }
@@ -793,9 +787,12 @@
 	</method>
 	
 	<method name="setUserData" args="g">
-	    canvas.initSharedObject();
-	    canvas.sharedObject.setData('userdata', g);
-	    canvas.sharedObject.flush();
+	    var so:SharedObject = SharedObject.getLocal('userdata');
+		for (var i in g) {
+			if($debug) Debug.write("g[" + i + "] = ", g[i]);
+			so.data[i] = g[i];
+		}
+	    so.flush();
 	</method>
 	
 	<attribute name="regExpCounter" value="0" type="number" />

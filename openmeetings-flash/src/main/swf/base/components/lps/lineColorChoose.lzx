@@ -107,13 +107,12 @@
         this.setAttribute('selectedColorTransformedString',col);
     </method>
     
-    <method name="numberToRGB" args="thisC">
+    <method name="numberToRGB" args="c">
         <![CDATA[            
-            var c = thisC.getRGB();
             var r = (c >> 16) & 0xff;
             var g = (c >> 8) &  0xff;
             var b = c & 0xff;
-            ////Debug.write("r g b: ",r,g,b);
+            if ($debug) Debug.write("r g b: ",r,g,b);
             
             var HEX_R = r.toString(16).toUpperCase();
             var HEX_G = g.toString(16).toUpperCase();

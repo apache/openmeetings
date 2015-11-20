@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
@@ -57,9 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class WhiteBoardService implements IPendingServiceCallback {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			WhiteBoardService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, webAppRootKey);
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -139,37 +139,22 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
-			log.debug("getRoomItems: " + room_id);
-			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById
-					.getWhiteBoardObjectListByRoomId(room_id);
+			log.debug("getRoomItems: " + roomId);
+			WhiteboardObjectList whiteboardObjectList = whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 
 			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
+				Long whiteBoardId = whiteBoardObjectListManagerById.getNewWhiteboardId(roomId);
 
-				Long whiteBoardId = this.whiteBoardObjectListManagerById
-						.getNewWhiteboardId(room_id);
-
-				this.whiteBoardObjectListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
-								new WhiteboardObject(), whiteBoardId);
+				whiteBoardObjectListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), whiteBoardId);
 
 				log.debug("Init New Room List");
 
-				whiteboardObjectList = this.whiteBoardObjectListManagerById
-						.getWhiteBoardObjectListByRoomId(room_id);
-
-				return whiteboardObjectList;
-
-			} else {
-
-				return whiteboardObjectList;
-
+				whiteboardObjectList = whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 			}
-
-			// return completeList;
+			return whiteboardObjectList;
 		} catch (Exception err) {
 			log.error("[getRoomItemsBy]", err);
 		}

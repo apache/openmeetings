@@ -199,47 +199,47 @@
     		
     		<attribute name="sendUpdate" value="true" type="boolean"/>
     		
-    		<handler name="onx" args="x">
+    		<handler name="onx" args="x"><![CDATA[
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# x",x);
-					if ('scrollContainer' in parent.parent) {
+					if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
 	                    parent.parent.scrollContainer.calcScrollContent();
 					}
                 }
-            </handler>
+            ]]></handler>
             
-            <handler name="ony" args="y">
+            <handler name="ony" args="y"><![CDATA[
                 if (this.sendUpdate) {
-                    if ($debug) Debug.write("# y",y);
-					if ('scrollContainer' in parent.parent) {
+                    if ($debug) Debug.write("# y", y);
+					if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
                     	parent.parent.scrollContainer.calcScrollContent();
 					}
                 }
-            </handler>
+            ]]></handler>
             
-            <handler name="onheight" args="h">
+            <handler name="onheight" args="h"><![CDATA[
                 if ($debug) Debug.write("# height",h);
                 //this.dragger.drag_min_x = parent.width - w;
-				if ('scrollContainer' in parent.parent) {
+				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
                 parent.parent.zoombox.sendUpdate(null);
-            </handler>
+            ]]></handler>
             
-            <handler name="onwidth" args="w">
+            <handler name="onwidth" args="w"><![CDATA[
                 if ($debug) Debug.write("# width",w);
                 //this.dragger.drag_min_y = parent.height - h;
-				if ('scrollContainer' in parent.parent) {
+				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
-            </handler>
+            ]]></handler>
             
-            <handler name="onupdateScale" args="tRef">
-                if ($debug) Debug.write("# updateScale",this.getDisplayObject()._xscale);
-				if ('scrollContainer' in parent.parent) {
+            <handler name="onupdateScale" args="tRef"><![CDATA[
+                if ($debug) Debug.write("# updateScale",this.getDisplayObject().scaleX);
+				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
-            </handler>
+            ]]></handler>
     		
             <attribute name="initH"/>
             <attribute name="initW"/>
@@ -349,13 +349,14 @@
         <attribute name="sendUpdate" value="true" type="boolean"/>
         
         <method name="calcScrollContent">
-            var rHeight = Math.round(parent._drawareaMask._drawarea.height * (parent._drawareaMask._drawarea.getDisplayObject()._xscale / 100));
-            var rWidth = Math.round(parent._drawareaMask._drawarea.width * (parent._drawareaMask._drawarea.getDisplayObject()._yscale / 100));
+            var rHeight = Math.round(parent._drawareaMask._drawarea.height * parent._drawareaMask._drawarea.getDisplayObject().scaleX);
+            var rWidth = Math.round(parent._drawareaMask._drawarea.width * parent._drawareaMask._drawarea.getDisplayObject().scaleY);
+            if ($debug) Debug.write("# calcScrollContent:: ", rHeight, rWidth);
             this.sendUpdate = false;
-            this.scrollview.setAttribute("x",parent._drawareaMask._drawarea.x);
-            this.scrollview.setAttribute("y",parent._drawareaMask._drawarea.y);
-            this.scrollview.setAttribute("height", Math.max(rHeight, parent._drawareaMask._drawarea.getDisplayObject()._height));
-            this.scrollview.setAttribute("width", Math.max(rWidth, parent._drawareaMask._drawarea.getDisplayObject()._width));
+            this.scrollview.setAttribute("x", parent._drawareaMask._drawarea.x);
+            this.scrollview.setAttribute("y", parent._drawareaMask._drawarea.y);
+            this.scrollview.setAttribute("height", Math.max(rHeight, parent._drawareaMask._drawarea.getDisplayObject().height));
+            this.scrollview.setAttribute("width", Math.max(rWidth, parent._drawareaMask._drawarea.getDisplayObject().width));
             this.sendUpdate = true;
         </method>
         
@@ -551,16 +552,16 @@
         
         <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" bgcolor="0xFFFFFF"
         		visible="${ ((canvas.becomemoderator) ? true : false ) }">
-            <handler name="onvalue" args="v">
+            <handler name="onvalue" args="v"><![CDATA[
                 if (parent.ignoreUpdates) {
                     return;
                 }
                 if ($debug) Debug.warn("onvalue Full Fit ",v);
                 
-				if ('_zoom' in parent) {
+				if ('_zoom' in parent && parent._zoom) {
                 	parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
 				}
-            </handler>
+            ]]></handler>
             <labelTooltip labelid="1212" multiline="true" />
         </labelCheckbox>
         

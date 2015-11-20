@@ -56,8 +56,8 @@
     	
     		var tScale = Math.round(scaleFactor*100);
     		
-    		this.getDisplayObject()._xscale = tScale;
-    		this.getDisplayObject()._yscale = tScale;
+    		this.getDisplayObject().scaleX = scaleFactor;
+    		this.getDisplayObject().scaleY = scaleFactor;
     		
     		this.setAttribute("x",0);
     		this.setAttribute("y",0);
@@ -83,9 +83,9 @@
 	    		
 	    		this.doFullFit(fullFit);
 	    		
-	    		actionObject.push(this.getDisplayObject()._xscale);
+	    		actionObject.push(this.getDisplayObject().scaleX * 100);
 	    		
-	    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject()._xscale);
+	    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject().scaleX);
 	    		this.onsharedMessage('whiteboardObj',actionObject);
     		}	
     	
@@ -97,8 +97,8 @@
     	
     		if ($debug) Debug.write("doUpdateZoom ",this.fullFit,zoom);
     		
-    		this.getDisplayObject()._xscale = zoom;
-    		this.getDisplayObject()._yscale = zoom;
+    		this.getDisplayObject().scaleX = zoom / 100;
+    		this.getDisplayObject().scaleY = zoom / 100;
     		
     		if ($debug) Debug.write("doUpdateZoom is moderator ", canvas.ismoderator);
             if (canvas.ismoderator) {
@@ -122,8 +122,8 @@
     		this.doFullFit(actionObject[1]);
     		
     		if (!actionObject[1]) {
-	    		this.getDisplayObject()._xscale = actionObject[2];
-	    		this.getDisplayObject()._yscale = actionObject[2];
+	    		this.getDisplayObject().scaleX = actionObject[2] / 100;
+	    		this.getDisplayObject().scaleY = actionObject[2] / 100;
 	    		this.onupdateScale.sendEvent(null);
     		}
     	

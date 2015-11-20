@@ -27,9 +27,9 @@
 	<attribute name="objMessage" value="null" />
 	
     <handler name="onsharedMessage" args="obj">
-        //Debug.write("send: ",obj);
         this.objWhiteboard = obj;
         if (this.sendVarsByWhiteboardId != null){
+	        if ($debug) Debug.write("send: ", obj, whiteboardId);
         	this.sendVarsByWhiteboardId.doCall();
         }
     </handler>
@@ -200,14 +200,10 @@
     <method name="removeWindow" args="obj">
     	if ($debug) Debug.write("removeWindow :: ",obj);
     	for (var eg in this._bar.subviews) {
-    		
     		if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
-    			
     			this._bar.removeObjectSynced(this._bar.subviews[eg]);
     			return;
-    			
     		}
-    		
     	}
     </method>
     
@@ -245,14 +241,10 @@
     <method name="activateWhiteboard" args="obj">
     	if ($debug) Debug.write("activateWhiteboard :: ",obj);
     	for (var eg in this._bar.subviews) {
-    		
     		if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
-    			
     			this._bar.subviews[eg].activateSynced();
     			return;
-    			
     		}
-    		
     	}
     </method>
     

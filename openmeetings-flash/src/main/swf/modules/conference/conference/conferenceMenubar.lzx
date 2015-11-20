@@ -31,6 +31,11 @@
 						
 	    <attribute name="selected" value="null" />
     
+		<method name="construct" args="parent, args">
+			super.construct(parent, args);
+			canvas._menubar = this;
+		</method>
+		
 	    <method name="sendOpenMenu" args="menuref">
 	    	if (this.selected != null) {
 	    		this.selected.setAttribute("selected",false);
@@ -47,7 +52,7 @@
 			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(245) }" 
 						text_y_inset="4" text_fontsize="14" down_y_inset="8"
 						textToolTip="" height="28"
-						visible="${ (classroot.viewType=='interview') ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+						visible="${ (canvas._menubar.viewType=='interview') ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
 						>
 				<handler name="onclick">
 			    	new lz.conferenceMenuFiles(canvas,{
@@ -63,7 +68,7 @@
 			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(635) }" 
 						text_y_inset="4" text_fontsize="14" down_y_inset="8"
 						textToolTip="" height="28"
-						visible="${ canvas.currentRoomObj.hideActionsMenu ? false : ((classroot.viewType=='conference') ? true : (canvas.ismoderator ? true : (canvas.isAllowedToDraw ? true : false ))) }"
+						visible="${ canvas.currentRoomObj.hideActionsMenu ? false : ((canvas._menubar.viewType=='conference') ? true : (canvas.ismoderator ? true : (canvas.isAllowedToDraw ? true : false ))) }"
 						>
 				<handler name="onclick">
 			    	new lz.conferenceMenuActions(canvas,{
@@ -93,16 +98,14 @@
             this.bgc.setAttribute('visibility','hidden');
 	    </handler>
 	    
-	    <handler name="oninit">
-			<![CDATA[
-				if (canvas.isRemoteUser()) {
-	            	if ($debug) Debug.write("this mbarcontent ",this);
-	            	if (canvas.destroyExitButton) {
-	                    this.destroy();
-	            	}
-	            }
-            ]]>
-		</handler>
+		<handler name="oninit"><![CDATA[
+			if (canvas.isRemoteUser()) {
+				if ($debug) Debug.write("this mbarcontent ",this);
+				if (canvas.destroyExitButton) {
+					this.destroy();
+				}
+			}
+		]]></handler>
 		<handler name="onclick">
             canvas.commonVideoViewContent.exitRoom();
 		</handler>
@@ -175,11 +178,11 @@
         </handler>
         
         <handler name="onmouseover">
-	        this._bg.setAttribute("visibility","visible");
+	        this._bg.setAttribute("visible", true);
 	    </handler>
 	    
 	    <handler name="onmouseout">
-	        this._bg.setAttribute("visibility","hidden");
+	        this._bg.setAttribute("visible", false);
 	    </handler>
 	
 	    <view name="_bg" visibility="hidden" width="${ parent.width-2 }" y="0" x="1"
@@ -220,7 +223,7 @@
 						enabled="${ canvas.ismoderator }" />
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
-						enabled="${ classroot.btnRef.classroot.viewType != 'interview' &amp;&amp; canvas.ismoderator }" />
+						enabled="${ canvas._menubar.viewType != 'interview' &amp;&amp; canvas.ismoderator }" />
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="784" command="cmd_applyforMod" enabled="${ !canvas.ismoderator }" />
 			<horizontalDropDownSpacer />

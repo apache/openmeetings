@@ -416,6 +416,7 @@ and some more references to temp-objects
 <attribute name="currentCamName" value="" type="string"/>
 
 <attribute name="currentBaseConferenceRoom" value="null" />
+<attribute name="_menubar" value="null" />
 
 <attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> <!-- F12 --> 
 <attribute name="ARRANGE_WINDOWS_KEY" value="119"/> <!-- F8 --> 

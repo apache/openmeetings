@@ -139,12 +139,10 @@
 					content._content1._chattabbottom.updatefontbuttonvisible();
 				}
 				this.doBlink = false;
-				this._newMessage.setAttribute("visibility","hidden");
-				this._newMessage.setAttribute( "opacity", 0 );
-				this.content.setAttribute("visibility","visible");
-			} else {
-				this.content.setAttribute("visibility","hidden");
+				this._newMessage.setAttribute("visible", false);
+				this._newMessage.setAttribute("opacity", 0);
 			}
+			this.content.setAttribute("visible", !!o);
 		]]></handler>
 
 		<method name="startBlink">
@@ -175,7 +173,7 @@
 
         <view name="content" visibility="hidden" y="22"
               height="${ parent.height-22 }" width="${ parent.width }">
-            <!-- chatBarMenu name="chatbar">
+            <chatBarMenu name="chatbar">
                 <attribute name="refObj" value="null" />
                 <attribute name="objMessage" value="null" />
                 <attribute name="publicSID" value="" type="string" />
@@ -221,7 +219,7 @@
                 
             </chatBarMenu>
             
-            <chatTab name="_content1" /-->
+            <chatTab name="_content1" />
             
         </view>
 			

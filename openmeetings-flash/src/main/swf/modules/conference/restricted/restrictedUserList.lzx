@@ -64,11 +64,10 @@
 	            canvas.thishib.reconnectObjRef = this;
 	            canvas.thishib.disconnect();
             } else {
-				canvas.commonVideoViewContent.reconnectSuccess(canvas.thishib.src, canvas.publicSID, canvas.thishib.userobject, false, canvas.getHttpHost(), canvas.red5httpport);
+				loadModerators();
             }
         } else {
-            //The user is already in the correct Scope
-			canvas.commonVideoViewContent.reconnectSuccess(canvas.thishib.src, canvas.publicSID, canvas.thishib.userobject, false, canvas.getHttpHost(), canvas.red5httpport);
+			loadModerators();
         }
     </handler>
 
@@ -77,8 +76,8 @@
         otherwise it can happen that the video tries to start playing before the rtmp-connection
         was established
      -->
-    <method name="as3ConnectionSuccess">
-    	if ($debug) Debug.write("as3ConnectionSuccess continue loading");
+    <method name="loadModerators">
+    	if ($debug) Debug.write("continue loading");
     	//set default values and get already availible streams
     	//it can happen that if you click to exit the room the views are not
     	//not cleaned up yet and you receive this event from the LocalConnection
@@ -144,7 +143,7 @@
         <handler name="ondata" args="roomStatus">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            //if ($debug) Debug.write("setRoomValues1: ",value);
+            if ($debug) Debug.write("setRoomValues1: ",value);
             //if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
             
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);

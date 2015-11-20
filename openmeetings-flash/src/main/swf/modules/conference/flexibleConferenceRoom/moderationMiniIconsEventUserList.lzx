@@ -252,7 +252,7 @@
     <miniIconsNew name="_allowDevice" x="100" width="16" height="16" 
             visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
+            if ($debug) Debug.write("NOTHING: ", canvas.publicSID, canvas.ismoderator);
             if (canvas.ismoderator) {
                 //Do directly send confirmation to share Audio/Video to SELF! so that all users get
                 //the notification and the broadcasting Bit is set for this User

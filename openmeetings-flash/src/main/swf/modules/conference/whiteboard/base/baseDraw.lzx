@@ -255,11 +255,11 @@
                 this.basdrawredoView.subviews[0].destroy();
             }   
             
-            this.setAttribute("x",0);
-            this.setAttribute("y",0);
+            this.setAttribute("x", 0);
+            this.setAttribute("y", 0);
             
-            this.getDisplayObject()._xscale = 100;
-            this.getDisplayObject()._yscale = 100;
+            this.getDisplayObject().scaleX = 1;
+            this.getDisplayObject().scaleY = 1;
             
             this.onupdateScale.sendEvent(null);
             
