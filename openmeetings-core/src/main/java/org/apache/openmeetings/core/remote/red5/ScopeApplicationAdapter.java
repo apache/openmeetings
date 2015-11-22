@@ -507,7 +507,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				whiteBoardService.removeUserFromAllLists(currentScope, currentClient);
 			}
 
-			log.debug("removing USername " + currentClient.getUsername() + " "
+			log.debug("removing Username " + currentClient.getUsername() + " "
 					+ currentClient.getConnectedSince() + " streamid: "
 					+ currentClient.getStreamid());
 
