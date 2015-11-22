@@ -38,21 +38,24 @@ var lineHeight = 0;
 
 function calcLineWidthByTextField(maxsizeText,textForCalcing,fontsize, fontname){
 	//check test/testLineWidth.lzx in test-directory for a detailed example calculation 
-	//Debug.write("calcLineWidthByTextField: ",textForCalcing);
+	//if ($debug) Debug.write("calcLineWidthByTextField: ",textForCalcing);
 	
 	maxsize = maxsizeText;
 	startIndex = 0;
 	currentLine = 0;
 	textObject = new Array();
 	
+	if ($debug) Debug.write("textObject", textObject);
 	textFieldtext = textForCalcing;
 	myTextFormat = new TextFormat();
 	myTextFormat.size = fontsize;
 	myTextFormat.font = fontname;
+	if ($debug) Debug.write("myTextFormat", myTextFormat);
 	
 	var metrics = myTextFormat.getTextExtent(textFieldtext, 100000);
+	if ($debug) Debug.write("metrics", metrics);
 	lineHeight = metrics.ascent+metrics.descent;
-	//Debug.write(lineHeight);
+	//if ($debug) Debug.write(lineHeight);
 	
 	measureLine();
 	

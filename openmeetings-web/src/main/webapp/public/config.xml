@@ -271,38 +271,4 @@ To disable AEC please specify 0.
     <resolution type="nHD 16:9" width="640" height="360" isDefault="false" />
     <resolution type="16:9" width="1024" height="600" isDefault="false" />
 </availableCameraResolutions>
-    
- 
-<!-- Module Configuration -->
-<!-- #############################################
-    Moderator Modules
- -->
-
-<moderatorModuleUser>userModerate</moderatorModuleUser>
-
-<moderatorModuleRoom>roomModerate</moderatorModuleRoom>
-
-
-<!-- #############################################
-    Conference Room
-    
-    Room Layout's: flexibleConferenceRoom,conferenceView
- -->
-
-<conferenceRoomModule>flexibleConferenceRoom</conferenceRoomModule>
-
-<!-- #############################################
-    Event Room
-    
-    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
- -->
-<restrictedRoomModule>restrictedConferenceRoom</restrictedRoomModule>
-
-<!-- #############################################
-    Interview Room
-    
-    Room Layouts: interviewConferenceRoom
- -->
-<interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
-        
 </config>

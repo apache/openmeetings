@@ -32,6 +32,7 @@
         </switch>
 
     	<attribute name="debug" value="false" type="boolean" />
+    	<attribute name="client" value="null" />
     	
     	<event name="onconnect"/>
     	<event name="onerror"/>
@@ -59,10 +60,10 @@
             this._nc.addEventListener(NetStatusEvent.NET_STATUS, _onStatus);
             
     		if($debug) Debug.write("devRtmpConnection/registerMethods()");
-    		var clientObj = {};
-    		clientObj.setId = this.setId;
+    		client = {};
+    		client.setId = this.setId;
     		
-    		this._nc.client = clientObj;
+    		this._nc.client = client;
     		
 			//Register Methods
 			//this.registerMethods();

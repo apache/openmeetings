@@ -114,87 +114,84 @@
 		opacity="0.3" bgcolor="0xFFFFFF">
 	</view>
 	
-	<text multiline="true" x="180" width="$once{ parent.width - 306 }" fontsize="11" selectable="true" name="multi" >
+	<text multiline="true" x="180" width="$once{ parent.width - 306 }" fontsize="11" selectable="true" name="multi" direction="$once{ canvas.isrtl ? 'rtl' : 'ltr' }">
+		<switch>
+			<when property="$as3">
+				<passthrough>
+					import flash.text.*;
+				</passthrough>
+			</when>
+		</switch>
 		<handler name="oninit">
-			<![CDATA[
-				/* FIXME TODO as2->3 migration
-				if(canvas.isrtl!='true'){
-					this.sprite.__LZtextclip.wordWrap = false;
-					if($debug) Debug.write("New Text");
-					//Debug.write(this.sprite.getTextFormat());
-					var tFormat = getTextFormat();
-					//Debug.write(this.sprite.__LZtextclip.getTextFormat());
-					tFormat.leading = 4;
-					setTextFormat(tFormat);
-					var items = parent.messageObj;
-					var t = "";
-					//items[0] = ["text","hello your are the hero lets check accomodation today i need some input"];
-					for (var i=0;i<items.length;i++) {
-						
-						//if ($debug) Debug.write("Item :0: ",items[i][0]);
-						
-						if (items[i][0]=="text"){
-							//if ($debug) Debug.write("Text :1: ",items[i][1]);
-							
-							t += items[i][1];
+		<![CDATA[
+			var tf:TextField = this.sprite['textfield'];
+			if ($debug) Debug.write("New Text ", this, tf, tf.wordWrap, tf.getTextFormat());
+			if (!canvas.isrtl) {
+				tf.wordWrap = false;
+				var tFormat:TextFormat = tf.getTextFormat();
+				//if ($debug) Debug.write(tFormat);
+				tFormat.leading = 4;
+				tf.setTextFormat(tFormat);
+				var items = parent.messageObj;
+				var t = "";
+				//items[0] = ["text","hello your are the hero lets check accomodation today i need some input"];
+				for (var i = 0; i < items.length; ++i) {
+					//if ($debug) Debug.write("Item :0: ",items[i][0]);
+					if (items[i][0] == "text") {
+						//if ($debug) Debug.write("Text :1: ",items[i][1]);
+						t += items[i][1];
+					} else {
+						if (t.length != 0) {
+							var tempString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
+							var x = tempString[tempString.length-1]["lineWidth"];
+							var y = (tempString.length-1)*(getLineHeight()+parent.leading-1);
 						} else {
-							if (t.length!=0){
-								var tempString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
-								var x = tempString[tempString.length-1]["lineWidth"];
-								var y = (tempString.length-1)*(getLineHeight()+parent.leading-1);
-							}else {
-								var x = 0;
-								var y = 0;
-							}
-							t += items[i][2];
-							
-							var swfurl = canvas.getUrl() + 'public/emoticons/'+items[i][1];
-							var m = new lz.chatInnerSmily(parent,{x:x+this.x,y:y+this.y,iconlabel:items[i][3]});
-							
-							//if ($debug) Debug.write("Smily :2: ",swfurl);
-							
-							m.setSource(swfurl);
+							var x = 0;
+							var y = 0;
 						}
+						t += items[i][2];
+						
+						var swfurl = canvas.getUrl() + 'public/emoticons/'+items[i][1];
+						var m = new lz.chatInnerSmily(parent,{x:x+this.x,y:y+this.y,iconlabel:items[i][3]});
+						
+						//if ($debug) Debug.write("Smily :2: ",swfurl);
+						
+						m.setSource(swfurl);
 					}
-					//Debug.write("TTTT: ",t);"Verdana"
-					var tString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
-					
-					for (var k = 0;k<tString.length;k++){
-						this.setAttribute('text',this.getText()+textObject[k]["text"]+"\r");
-						//if ($debug) Debug.write("text: ",k,textObject[k]["lineWidth"],textObject[k]["text"]);
-					}	
-					
-					//if ($debug) Debug.write("text: ",this.getText());
-					
-					//Debug.write(this.getTextFormat());
-					tFormat.leading = parent.leading;
-					setTextFormat(tFormat);
-					//Debug.write(this.textHeight);
-					//Debug.write(getLineHeight());
-					//Debug.write(this.textHeight+12);
-					this.setAttribute('height',this.textHeight+12);
 				}
-				else{
-					var t = "";
-					var items = parent.messageObj;
-					
-					for (var i=0;i<items.length;i++) {
-						if (items[i][0]=="text"){
-							t += items[i][1];
-						} 
-					}
-					
-					this.setAttribute('text',this.getText()+ t);
-				}
-				*/
-				parent.setAttribute('height',this.height);
-				parent.header_user.setAttribute('height',this.height);
-				parent.bg.setAttribute('height',this.height-1);
-				parent.bg_main.setAttribute('height',this.height-1);
+				//Debug.write("TTTT: ",t);"Verdana"
+				var tString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
 				
-			]]>
-		</handler>	
-		
+				for (var k = 0; k < tString.length; ++k) {
+					this.setAttribute('text',this.getText()+textObject[k]["text"]+"\r");
+					//if ($debug) Debug.write("text: ",k,textObject[k]["lineWidth"],textObject[k]["text"]);
+				}
+				
+				//if ($debug) Debug.write("text: ",this.getText());
+				//Debug.write(tFormat);
+				tFormat.leading = parent.leading;
+				tf.setTextFormat(tFormat);
+				//Debug.write(this.textHeight);
+				//Debug.write(getLineHeight());
+				//Debug.write(this.textHeight+12);
+				this.setAttribute('height',this.textHeight+12);
+			} else {
+				var t = "";
+				var items = parent.messageObj;
+				
+				for (var i = 0; i < items.length; ++i) {
+					if (items[i][0] == "text") {
+						t += items[i][1];
+					}
+				}
+				this.setAttribute('text',this.getText()+ t);
+			}
+			parent.setAttribute('height',this.height);
+			parent.header_user.setAttribute('height',this.height);
+			parent.bg.setAttribute('height',this.height-1);
+			parent.bg_main.setAttribute('height',this.height-1);
+		]]>
+		</handler>
 	</text>
 	
 	<state applied="$once{ !parent.isDirectLink }">

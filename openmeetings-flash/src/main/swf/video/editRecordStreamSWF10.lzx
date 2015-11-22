@@ -117,8 +117,6 @@
 			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
 			if ($debug) Debug.write("editrecordstream ###################### ");
 
-			canvas.videoComp_lc.client = {clb_getBroadCastId: this.clb_getBroadCastId, clb_setUserAVSettings: this.clb_setUserAVSettings};
-
 	        var sharedData = this.checkDeviceSettingsRememberStatus();
             if(sharedData != null) {
                 this.chosenCam = sharedData["cam"];
@@ -186,7 +184,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-                parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, parent.interviewPodId, canvas.userobject);
+                parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, parent.interviewPodId, canvas.currentClient);
 
                 if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
@@ -317,9 +315,7 @@
 			case "av":
 				videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
 				this.myvideocontainer.setAttribute("visible", true);
-				if(canvas.isInterview) {
-					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
-				} else {
+				if(!canvas.isInterview) {
 					if (this.myvideocontainer.minimized) {
 						this.myvideocontainer.reminimize();
 					}
@@ -328,9 +324,7 @@
 			case "a":
 				videoview.broadcast(this.currentClient.broadCastID,null,_micro);
 				this.myvideocontainer.setAttribute("visible", canvas.isInterview || !this.myvideocontainer.hidebyAudioOnly);
-				if(canvas.isInterview) {
-					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
-				} else {
+				if(!canvas.isInterview) {
 					if (!this.myvideocontainer.hidebyAudioOnly) {
 						if (!this.myvideocontainer.minimized) {
 							this.myvideocontainer.minimize();
@@ -341,9 +335,7 @@
 			case "v":
 				videoview.broadcast(this.currentClient.broadCastID,_camera,null);
 				this.myvideocontainer.setAttribute("visible", true);
-				if(canvas.isInterview) {
-					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
-				} else {
+				if(!canvas.isInterview) {
 					if (this.myvideocontainer.minimized) {
 						this.myvideocontainer.reminimize();
 					}
@@ -522,7 +514,7 @@
 		selectListItem(availableMics, foundStoredMic, mics.length > 0);
 
 		// settings
-		var addCams = canvas.userobject.canVideo && !canvas.currentRoomObj.audioOnly && cameras.length > 0;
+		var addCams = canvas.currentClient.canVideo && !canvas.currentRoomObj.audioOnly && cameras.length > 0;
 		var addMics = mics.length > 0;
 		if (addCams && addMics) {
 			availableSettings.addItem(canvas.getLabelName(448), "av");

@@ -22,6 +22,7 @@
 
 <class name="flexibleConferenceRoom" extends="baseConferenceRoom">
 	<method name="createMenu">
+		if ($debug) Debug.write("flexibleConferenceRoom:: createMenu");
 		new lz.conferenceMenubar(canvas._conferencemenu);
 	</method>
 

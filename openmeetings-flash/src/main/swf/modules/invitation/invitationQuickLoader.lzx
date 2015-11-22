@@ -96,11 +96,7 @@
     	</netRemoteCallHib>  	
 	    
 		<method name="setRoomValues">
-			if (canvas.thishib.currentInvitation.room.type == 'conference'){
-	    		canvas.isConference = true;
-	    	} else {
-	    		canvas.isConference = false;
-		    }
+			canvas.isConference = canvas.thishib.currentInvitation.room.type == 'conference';
 	    	var roomObj = canvas.thishib.currentInvitation.room;
         	hib.currentroomid = roomObj.id;
         	

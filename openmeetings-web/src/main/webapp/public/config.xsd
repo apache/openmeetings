@@ -51,11 +51,6 @@
         <xs:element ref="defaultWhiteboardWidth"/>
         <xs:element ref="defaultWhiteboardHeight"/>
         <xs:element ref="availableCameraResolutions"/>
-        <xs:element ref="moderatorModuleUser"/>
-        <xs:element ref="moderatorModuleRoom"/>
-        <xs:element ref="conferenceRoomModule"/>
-        <xs:element ref="restrictedRoomModule"/>
-        <xs:element ref="interviewRoomModule"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -143,9 +138,4 @@
       <xs:attribute name="width" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="moderatorModuleUser" type="xs:NCName"/>
-  <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
-  <xs:element name="conferenceRoomModule" type="xs:NCName"/>
-  <xs:element name="restrictedRoomModule" type="xs:NCName"/>
-  <xs:element name="interviewRoomModule" type="xs:NCName"/>
 </xs:schema>

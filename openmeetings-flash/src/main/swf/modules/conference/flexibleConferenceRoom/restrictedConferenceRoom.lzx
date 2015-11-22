@@ -21,9 +21,6 @@
 <library>
 
 <class name="restrictedConferenceRoom" extends="baseConferenceRoom">
-    <handler name="oninit">
-    	if ($debug) Debug.write("restrictedConferenceRoom::oninit ");
-    </handler>
 	<method name="createMenu">
 		new lz.restrictedConferenceMenubar(canvas._conferencemenu);
 	</method>

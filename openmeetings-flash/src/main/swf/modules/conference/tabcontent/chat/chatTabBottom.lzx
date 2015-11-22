@@ -67,7 +67,7 @@
 						om[5] = canvas.currentusercolor;
 						om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
 						om[7] = canvas.isrtl;
-						om[8] = hib.userobject.userId;
+						om[8] = hib.userobject.id;
 						om[9] = canvas.currentRoomObj.chatModerated && !canvas.ismoderator;
 						if ($debug) Debug.write("send: ", parent.parent.parent);
 						if (parent.parent.isPrivate) {

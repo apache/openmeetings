@@ -118,13 +118,13 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoomId();			
-			log.debug("room_id: " + room_id);
+			Long roomId = currentClient.getRoomId();			
+			log.debug("roomId: " + roomId);
 			
-			if (room_id == null) {
+			if (roomId == null) {
 				return 1; //TODO weird
 			}
-			Room room = roomDao.get(room_id);
+			Room room = roomDao.get(roomId);
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
@@ -137,7 +137,7 @@ public class ChatService implements IPendingServiceCallback {
 			newMessage = messageMap;			
 
 			boolean needModeration = Boolean.valueOf("" + messageMap.get(9));
-			List<HashMap<String, Object>> myChatList = myChats.get(room_id);
+			List<HashMap<String, Object>> myChatList = myChats.get(roomId);
 			if (myChatList == null) myChatList = new LinkedList<HashMap<String, Object>>();
 			
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
@@ -167,8 +167,8 @@ public class ChatService implements IPendingServiceCallback {
 
 			if (myChatList.size() == chatRoomHistory) myChatList.remove(0);
 			myChatList.add(hsm);
-			myChats.put(room_id, myChatList);
-			log.debug("SET CHATROOM: " + room_id);
+			myChats.put(roomId, myChatList);
+			log.debug("SET CHATROOM: " + roomId);
 
 			//broadcast to everybody in the room/domain
 			for (IConnection conn : current.getScope().getClientConnections()) {
@@ -287,14 +287,14 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoomId();
+			Long roomId = currentClient.getRoomId();
 			
-			log.debug("GET CHATROOM: " + room_id);
+			log.debug("GET CHATROOM: " + roomId);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(room_id);
+			List<HashMap<String,Object>> myChatList = myChats.get(roomId);
 			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
 			
-			if (Boolean.TRUE != currentClient.getIsMod() && Boolean.TRUE != currentClient.getIsSuperModerator()) {
+			if (!currentClient.getIsMod() && !currentClient.getIsSuperModerator()) {
 				//current user is not moderator, chat history need to be filtered
 				List<HashMap<String,Object>> tmpChatList = new LinkedList<HashMap<String,Object>>(myChatList);
 				for (int i = tmpChatList.size() - 1; i > -1; --i) {

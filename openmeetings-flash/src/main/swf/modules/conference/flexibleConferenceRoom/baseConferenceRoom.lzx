@@ -91,14 +91,14 @@
 		}
 		
 		canvas.currentBaseConferenceRoom = this;
-		if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
+		if (!this.roomobj.hideTopBar) {
 			canvas.currentBaseConferenceRoom.createMenu();
-			canvas._conferencemenu.setAttribute('visibility','visible');
 		} else {
-			canvas.setAttribute('naviHeight',0);
-			canvas._conferencemenu.setAttribute('visibility','hidden');
-			canvas._mainbgcontentNavi.setAttribute('visibility','hidden');
+			canvas.setAttribute('naviHeight', 0);
+			canvas.setAttribute('naviHeightDelta', 0);
+			canvas._mainbgcontentNavi.setAttribute('visible', false);
 		}
+		canvas._conferencemenu.setAttribute('visible', !this.roomobj.hideTopBar);
 		
 		if ($debug) Debug.write("this.roomobj ",this.roomobj);
 

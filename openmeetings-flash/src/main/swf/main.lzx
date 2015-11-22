@@ -145,7 +145,7 @@
 </view>
 
 <!-- View for Conference menu bar at the top side. Visible on conference -->
-<view name="_conferencemenu" y="0" x="0" width="100%" height="20" visibility="hidden" > 
+<view name="_conferencemenu" y="0" x="0" width="100%" height="20" visible="false" > 
     <method name="removeAll">
         <![CDATA[
             if($debug) Debug.write("main.lzx/_coferencemenu.removeAll(): ");
@@ -189,5 +189,7 @@
     		from="0" to="0.7" started="false" duration="250" />
     <text name="_text" align="right" y="56" fontsize="14" fgcolor="red">Loading...</text>
 </view>
+
+<view name="inner"></view>
 
 </canvas>

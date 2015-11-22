@@ -37,12 +37,12 @@
     <attribute name="baseVideoStream" value="null" />
     
 	<method name="toggleVideo" args="value">
-		if($debug) Debug.info("toggleVideo ", value);
-		canvas.userobject.canVideo = value;
+		if($debug) Debug.info("toggleVideo ", canvas.currentClient, value);
+		canvas.currentClient.canVideo = value;
 	</method>
     
 	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
-		if($debug) Debug.info("createEditRecordStream,", syncUpdate, isInterview, interviewPodId, canvas.userobject);
+		if($debug) Debug.info("createEditRecordStream,", syncUpdate, isInterview, interviewPodId, canvas.currentClient);
 		if (canvas.inner.editRecordStream != null)
 			canvas.inner.editRecordStream.destroy();
 			new lz.editRecordStreamSWF10(canvas.inner, {
@@ -185,8 +185,8 @@
 	<![CDATA[
 		this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
 		this.broadCastViewRef._chatvideoinner.r.destroy();
-		if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);
-		this.broadCastViewRef.setAttribute('chatpartnername',canvas.userobject.firstname+' '+canvas.userobject.lastname);
+		if ($debug) Debug.write("getNewVideoObject canvas.currentClient ",publicSID, canvas.currentClient);
+		this.broadCastViewRef.setAttribute('chatpartnername', canvas.currentClient.firstname + ' ' + canvas.currentClient.lastname);
 		return this.broadCastViewRef;
 	]]>
 	</method>
