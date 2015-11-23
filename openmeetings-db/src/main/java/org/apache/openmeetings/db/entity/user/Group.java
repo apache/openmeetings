@@ -38,7 +38,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name="getGroupById", query="SELECT c FROM Group AS c WHERE c.id = :id AND c.deleted = false")
 	, @NamedQuery(name="getGroupByName", query="SELECT o FROM Group AS o WHERE o.name = :name AND o.deleted = false")
 	, @NamedQuery(name="getAnyGroupById", query="SELECT c FROM Group AS c WHERE c.id = :groupId")
-	, @NamedQuery(name="getGroupByIds", query="SELECT c FROM Group AS c WHERE c.id IN :ids")
+	, @NamedQuery(name="getGroupsByIds", query="SELECT c FROM Group AS c WHERE c.id IN :ids")
 	, @NamedQuery(name="getGroupsByUserId", query="SELECT ou.group FROM User u, IN(u.groupUsers) ou WHERE u.deleted = false AND u.id = :userId")
 	, @NamedQuery(name="getNondeletedGroups", query="SELECT o FROM Group o WHERE o.deleted = false ORDER BY o.id")
 	, @NamedQuery(name="countGroups", query="SELECT COUNT(c) FROM Group AS c WHERE c.deleted = false")
