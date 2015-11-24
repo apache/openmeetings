@@ -389,13 +389,15 @@
     </method>
 
 	<!---
-		Clear all views, probably this is caleld whenever a user leaves the room for example
+		Clear all views, probably this is called whenever a user leaves the room for example
 	 -->
     <method name="clearAll">
         <![CDATA[
             if ($debug) Debug.write("clearAll", this.subviews);
             while(this.subviews.length > 0) {
-                this.subviews[0]._chatvideoinner._videostream._stop();
+            	if (this.subviews[0]._chatvideoinner != null) {
+                	this.subviews[0]._chatvideoinner._videostream._stop();
+                }
                 this.subviews[0].destroy();
             }
             if (canvas.inner.editRecordStream != null) {
@@ -445,7 +447,7 @@
     -->
     <method name="exitRoom">
         if ($debug) Debug.write("exitRoom");
-        new lz.confirmationSingleSWF10(canvas,{
+        new lz.confirmationSingle(canvas,{
                 refObj:this,
                 labelid:791,
                 labeliderror:790,
@@ -478,7 +480,7 @@
     <method name="closeWhiteboard">
         if ($debug) Debug.write("closeWhiteboard");
         if (canvas.ismoderator || canvas.isAllowedToDraw) {
-            canvas.closeWhiteboardDialog = new lz.confirmationSingleSWF10(canvas,{
+            canvas.closeWhiteboardDialog = new lz.confirmationSingle(canvas,{
                 refObj:this,
                 labeliderror:1313,
                 refReturnMethod:'closeWhiteboardConfirmMethod',

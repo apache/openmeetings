@@ -551,7 +551,7 @@
 			if (dontShowExclusiveAudioConfirmation == true) {
 				exclusiveAudioListener.sendConfirmation(true, true);
 			} else {
-				new lz.confirmationSingleSWF10(canvas,{
+				new lz.confirmationSingle(canvas,{
 					labelid:1428,
 					labeliderror:1539,
 					refObj:exclusiveAudioListener,

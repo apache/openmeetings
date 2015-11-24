@@ -30,8 +30,14 @@
     <attribute name="holder" value="null" />
     
     <event name="setContent" />
-        
+
     <handler name="onmouseover" reference="this.parent">
+    	<![CDATA[
+            this.doonmouseover();
+        ]]>        
+    </handler>
+        
+    <method name="doonmouseover">
     	<![CDATA[
             this.setContent.sendEvent();
 	    	if (this.ismenubuttonlabel){
@@ -67,7 +73,7 @@
             }
             canvas.registerToolTip(this);
         ]]>        
-    </handler>
+    </method>
     <handler name="onmouseout" reference="this.parent">
         this.cleanHolder();
     </handler>
