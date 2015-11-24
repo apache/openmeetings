@@ -464,6 +464,7 @@
 			if($debug) Debug.write("1");
 			clearAll();
 		}
+		canvas.quit();
 	]]>
 	</method>
 
@@ -796,17 +797,13 @@
 	<!---
 		Make regExpTest 
 	 -->
-	<method name="regExpTest" args="fieldValue,regExStr,regExpCheckId">
-		<![CDATA[
-			var re = new RegExp(regExStr);
-			
-			var testResult = re.test( fieldValue );
-			
-			if ($debug) Debug.write(fieldValue, testResult);
-			
-			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'regExpResult', regExpCheckId, testResult);
-			
-		]]>
+	<method name="regExpTest" args="fieldValue,regExStr">
+	<![CDATA[
+		var re = new RegExp(regExStr);
+		var testResult = re.test( fieldValue );
+		if ($debug) Debug.write(fieldValue, testResult);
+		return testResult;
+	]]>
 	</method>
 	
     <!--
