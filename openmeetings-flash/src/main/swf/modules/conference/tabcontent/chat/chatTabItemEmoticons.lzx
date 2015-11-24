@@ -68,7 +68,7 @@
 				//if ($debug) Debug.write("Text :1: ",items[i][1]);
 				t += items[i][1];
 			} else {
-				t += "<img src='" + canvas.getUrl() + "public/emoticons/" + items[i][1] + "' alt='" + items[i][3] + "' width='16' height='16' />";
+				t += "<center><img src='" + canvas.getUrl() + "public/emoticons/" + items[i][1] + "' alt='" + items[i][3] + "' width='16' height='16'/></center>";
 			}
 		}
 		
