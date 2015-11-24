@@ -312,7 +312,6 @@
 			if (canvas.thishib.loaderVar != null) {
             	canvas.thishib.loaderVar.setProgress();
             }
-			//FIXME TODO parent.getLanguages.doCall();
 			parent.getDefaultLanguage.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -324,19 +323,6 @@
             if ($debug) Debug.write("overwritePublicSID: ",value);
         </handler>  
     </netRemoteCallHib>    
-    
-    <!-- FIXME TODO 
-	<netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" dataobject="languagesSet" >
-		<handler name="ondata" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			//if ($debug) Debug.write("getLanguages: ",value, languagesSet);
-			if (canvas.thishib.loaderVar != null) {
-				canvas.thishib.loaderVar.setProgress();
-			}
-			parent.getDefaultLanguage.doCall();
-		</handler>
-	</netRemoteCallHib>
-	-->    
     
     <method name="setDefaultUserLanguage">
 	    <![CDATA[

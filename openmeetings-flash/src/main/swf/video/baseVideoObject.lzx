@@ -378,7 +378,7 @@
 					if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
 						parent.parent.confirmExclusiveAudio();
 					} else {
-						new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});
+						new lz.labelerrorPopup(canvas,{errorlabelid:1478});
 					}
 				]]>
 				</handler>
@@ -503,7 +503,7 @@
 	      		this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
 	          	this.confirmExclusiveAudio();
 	        } else {
-				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});        
+				new lz.labelerrorPopup(canvas,{errorlabelid:1478});        
 	        }
 		]]>
 		</handler>
@@ -587,7 +587,7 @@
 			} else {
 				//disable this action for now
 				if (!canvas.ismoderator) {
-					new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1409});
+					new lz.labelerrorPopup(canvas,{errorlabelid:1409});
 					return;
 				}
 				//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
@@ -595,7 +595,7 @@
 				if (this.isMutedByModerator && !canvas.ismoderator) {
 					//FIXME: That is not true, you could restart audio/video ...
 					var errorlabelid = this.publicSID == canvas.publicSID ? 1387 : 1402;
-					new lz.labelerrorPopupSWF10(canvas,{errorlabelid:errorlabelid});
+					new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
 					return;
 				}
 				if (canvas.ismoderator) {

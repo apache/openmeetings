@@ -459,12 +459,18 @@
 
 	<method name="immediateExitRoom" args="bool,ctx">
 	<![CDATA[
-		if($debug) Debug.write("0");
-		if (canvas.wicketsid != null && bool) {
-			if($debug) Debug.write("1");
-			clearAll();
+		if($debug) Debug.write("0", bool,ctx);
+		if (bool) {
+			if (canvas.wicketsid != null) {
+				if($debug) Debug.write("1");
+				clearAll();
+			}
+			if (canvas.thishib.connected) {
+				canvas.logicalRoomLeave.doCall();
+			} else {
+				canvas.doActionmenu('quit');
+			}
 		}
-		canvas.quit();
 	]]>
 	</method>
 
@@ -475,28 +481,6 @@
 		}
 	</method>
 	
-    <!---
-        Shows the close whiteboard dialog
-    -->
-    <method name="closeWhiteboard">
-        if ($debug) Debug.write("closeWhiteboard");
-        if (canvas.ismoderator || canvas.isAllowedToDraw) {
-            canvas.closeWhiteboardDialog = new lz.confirmationSingle(canvas,{
-                refObj:this,
-                labeliderror:1313,
-                refReturnMethod:'closeWhiteboardConfirmMethod',
-                showCheckBox:false
-            });
-        } else {
-            new lz.labelerrorPopupSWF10(canvas,{labelid:1366, errorlabelid:1365});
-        }
-        return;
-    </method>
-    
-    <method name="closeWhiteboardConfirmMethod" args="bool,sharedObjectData">
-    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeWhiteboard', bool);
-    </method>
-        
 	<!-- arranges video pods -->
 	<method name="arrangeWindows">
 	<![CDATA[

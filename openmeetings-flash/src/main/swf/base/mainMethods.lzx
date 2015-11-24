@@ -266,24 +266,6 @@
 		//set user color
 		canvas.currentusercolor = canvas.getColorForUser();
 
-        /*FIXME TODO
-        
-        var t = this;
-        canvas.videoComp_lc.remoteLogWrite = function(message) {
-        	canvas.remoteLogWrite(message);
-        }
-        canvas.videoComp_lc.exitRoom = function(confirm) {
-            if ($debug) Debug.write("confirm exitRoom:", confirm);
-            if (confirm) {
-	            if ($debug) Debug.write("logicalRoomLeave: ", canvas.thishib.connected);
-	            if (canvas.thishib.connected) {
-            		logicalRoomLeave.doCall();
-            	} else {
-            		canvas.doActionmenu('quit');
-            	}
-            }
-        }*/
-    
         mainBaseText.setAttribute('text',canvas.currentappname);
         var _url = this.getDisplayObject().loaderInfo.url;
         if($debug) Debug.write("_url: ",_url);
