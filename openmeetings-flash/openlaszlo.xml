@@ -104,9 +104,9 @@
 	</target>
 	<target name="-retrieve-openlaszlo46" unless="laszlo46.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<mkdir dir="${openlaszlo}"/>
-		<get src="https://dl.bintray.com/openmeetings/maven/org/openlaszlo/openlaszlo/4.9.5/openlaszlo-4.9.5.tgz"
+		<get src="https://dl.bintray.com/openmeetings/maven/org/openlaszlo/openlaszlo/4.9.6/openlaszlo-4.9.6.tgz"
 			dest="${openlaszlo}" usetimestamp="true"/>
-		<untar src="${openlaszlo}/openlaszlo-4.9.5.tgz" dest="${openlaszlo}" compression="gzip" />
+		<untar src="${openlaszlo}/openlaszlo-4.9.6.tgz" dest="${openlaszlo}" compression="gzip" />
 		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="755" includes="**/mxmlc*" />
 		<delete>
 			<fileset dir="${openlaszlo}" includes="openlaszlo*.tgz"/>

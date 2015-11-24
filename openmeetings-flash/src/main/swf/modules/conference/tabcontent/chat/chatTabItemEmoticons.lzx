@@ -22,6 +22,14 @@
 
 
 <class name="chatTabItemEmoticons" extends="view" width="$once{ parent.width }" bgcolor="$once{ this.usercolor }">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.text.*;
+				import fl.text.*;
+			</passthrough>
+		</when>
+	</switch>
 
 	<attribute name="userId" value="0" type="number" />
 	<attribute name="username" value="" type="string" />
@@ -35,22 +43,51 @@
 	<attribute name="rawMessage" value="null" />
 	
 	<handler name="oninit">
-		<![CDATA[
-		    if ($debug) Debug.write("this.picture_uri :: ",this.picture_uri);
-            this._userpic.setAttribute('src', canvas.getPictureUrl(this.picture_uri, '&moduleName=chat&remoteUserid='+this.userId)); 
-	        
-	        if(canvas.isrtl == 'true'){
-	         	if($debug) Debug.write("chatTabItemEmoticons RTL is set");
-	       
-	        	this.header_user.setAttribute('textalign', 'right');
-	        	this.header_time.setAttribute('align', 'left');
-	        	this.header_time.setAttribute('x', '40');
-	        	this.multi.setAttribute('textalign', 'right');
-	        	this.multi.setAttribute('align', 'right');
-	        }
-	        
-	        //Debug.write("TIME: "+this.usertime);
-        ]]>
+	<![CDATA[
+		if ($debug) Debug.write("this.picture_uri :: ",this.picture_uri);
+		this._userpic.setAttribute('src', canvas.getPictureUrl(this.picture_uri, '&moduleName=chat&remoteUserid='+this.userId));
+		
+		if (canvas.isrtl == 'true') {
+			if($debug) Debug.write("chatTabItemEmoticons RTL is set");
+			
+			this.header_user.setAttribute('textalign', 'right');
+			this.header_time.setAttribute('align', 'left');
+			this.header_time.setAttribute('x', '40');
+		}
+		this.multi = new TLFTextField();
+		if ($debug) Debug.write("New Text ", this, this.multi);
+
+		var tFormat:TextFormat = new TextFormat();
+		tFormat.leading = 4;
+		tFormat.size = 11;
+		var items = messageObj;
+		if ($debug) Debug.write("items :: ", items, this.leading);
+		var t = "";
+		for (var i = 0; i < items.length; ++i) {
+			if (items[i][0] == "text") {
+				//if ($debug) Debug.write("Text :1: ",items[i][1]);
+				t += items[i][1];
+			} else {
+				t += "<img src='" + canvas.getUrl() + "public/emoticons/" + items[i][1] + "' alt='" + items[i][3] + "' width='16' height='16' />";
+			}
+		}
+		
+		this.multi.wordWrap = true;
+		this.multi.multiline = true;
+		this.multi.selectable = true;
+		this.multi.defaultTextFormat = tFormat;
+		this.multi.x = 180;
+		this.multi.width = this.width - 306;
+		this.multi.direction = canvas.isrtl ? 'rtl' : 'ltr';
+		this.multi.htmlText = t;
+		this.multi.height = this.multi.textHeight + 12;
+		
+		this.header_user.setAttribute('height', this.multi.height);
+		this.bg.setAttribute('height', this.multi.height - 1);
+		this.bg_main.setAttribute('height', this.multi.height - 1);
+		if ($debug) Debug.write("chatTabItemEmoticons::oninit 4", this.multi.width, this.multi.textHeight);
+		this.sprite.addChild(this.multi);
+	]]>
 	</handler>
 	
 	<view name="bg" width="179" height="$once{ parent.height-1 }" bgcolor="0xFFFFFF" 
@@ -113,57 +150,6 @@
 	<view name="bg_main" x="180" width="$once{ parent.width - 180 }" height="$once{ parent.height-1 }"  
 		opacity="0.3" bgcolor="0xFFFFFF">
 	</view>
-	
-	<text multiline="true" x="180" width="$once{ parent.width - 306 }" fontsize="11" selectable="true" name="multi" direction="$once{ canvas.isrtl ? 'rtl' : 'ltr' }">
-		<switch>
-			<when property="$as3">
-				<passthrough>
-					import flash.text.*;
-				</passthrough>
-			</when>
-		</switch>
-		<handler name="oninit">
-		<![CDATA[
-			var tf:TextField = this.sprite['textfield'];
-			if ($debug) Debug.write("New Text ", this, tf, tf.wordWrap, tf.getTextFormat());
-			if (!canvas.isrtl) {
-				tf.wordWrap = false;
-				var tFormat:TextFormat = tf.getTextFormat();
-				tFormat.leading = 4;
-				tf.setTextFormat(tFormat);
-				var items = parent.messageObj;
-				if ($debug) Debug.write("items :: ", items, parent.leading);
-				var t = "";
-				for (var i = 0; i < items.length; ++i) {
-					if (items[i][0] == "text") {
-						//if ($debug) Debug.write("Text :1: ",items[i][1]);
-						t += items[i][1];
-					} else {
-						t += "<img src='" + canvas.getUrl() + 'public/emoticons/'+items[i][1] + "' alt='" + items[i][3] + "'/>"; //items[i][2];
-					}
-				}
-				
-				tFormat.leading = parent.leading;
-				tf.setTextFormat(tFormat);
-			if ($debug) Debug.write("text::oninit 0");
-			} else {
-				var t = "";
-				var items = parent.messageObj;
-				
-				for (var i = 0; i < items.length; ++i) {
-					if (items[i][0] == "text") {
-						t += items[i][1];
-					}
-				}
-			}
-			this.setAttribute('text', t);
-			parent.header_user.setAttribute('height', this.height);
-			parent.bg.setAttribute('height', this.height - 1);
-			parent.bg_main.setAttribute('height', this.height - 1);
-			if ($debug) Debug.write("text::oninit 4", t, this, parent);
-		]]>
-		</handler>
-	</text>
 	
 	<state applied="$once{ !parent.isDirectLink }">
 	

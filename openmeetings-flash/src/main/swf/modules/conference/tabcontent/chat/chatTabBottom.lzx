@@ -26,7 +26,7 @@
 		<view x="0" y="0" height="20" width="${ parent.width-2 }" name="message"
 			bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
 			<method name="getText">
-				return this._ctext.getText();
+				return this._ctext.text;
 			</method>
 			<method name="setText" args="txt">
 				this._ctext.setAttribute('text',txt);
@@ -35,8 +35,6 @@
 				height="$once{ parent.height-2 }" x="1" y="1" bgcolor="white">
 				<handler name="onkeyup" args="key">
 	                <![CDATA[
-	                var reverse = canvas.reverseAll(parent.getText());
-	                
 	                // parent.setText(reverse);
 	                // 13 is return
 	                if ((key==27) || (key==13)) {
