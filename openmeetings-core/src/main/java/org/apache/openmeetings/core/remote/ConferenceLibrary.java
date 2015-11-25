@@ -145,7 +145,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 						false, // isPresentation
 						localFileName, // WML localFileName
 						true, // isStoredWML file
-						true, 0L, "");
+						true, "", "");
 
 				return fileExplorerId;
 			}

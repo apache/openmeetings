@@ -49,8 +49,8 @@ public class RecordingDTO implements Serializable {
 	
 	public RecordingDTO(Recording r) {
 		this.id = r.getId();
-		this.name = r.getFileName();
-		this.flvName = r.getFileHash();
+		this.name = r.getName();
+		this.flvName = r.getHash();
 		this.aviName = r.getAlternateDownload();
 		this.roomId = r.getRoomId();
 		this.status = r.getStatus().name();
@@ -150,12 +150,12 @@ public class RecordingDTO implements Serializable {
 	}
 	
 	public static List<RecordingDTO> list(List<Recording> l) {
-		List<RecordingDTO> rList = new ArrayList<RecordingDTO>();
+		List<RecordingDTO> list = new ArrayList<>();
 		if (l != null) {
 			for (Recording r : l) {
-				rList.add(new RecordingDTO(r));
+				list.add(new RecordingDTO(r));
 			}
 		}
-		return rList;
+		return list;
 	}
 }

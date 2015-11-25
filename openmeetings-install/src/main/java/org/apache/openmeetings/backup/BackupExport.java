@@ -288,7 +288,7 @@ public class BackupExport {
 		 * ##################### File-Explorer
 		 */
 		{
-			List<FileExplorerItem> list = fileExplorerItemDao.getFileExplorerItems();
+			List<FileExplorerItem> list = fileExplorerItemDao.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);

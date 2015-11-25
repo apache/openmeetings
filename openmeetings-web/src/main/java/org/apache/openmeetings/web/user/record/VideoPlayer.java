@@ -60,7 +60,7 @@ public class VideoPlayer extends Panel {
 	}
 	
 	public VideoPlayer update(AjaxRequestTarget target, Recording r) {
-		boolean videoExists = r != null && getMp4Recording(r.getFileHash()).exists();
+		boolean videoExists = r != null && getMp4Recording(r.getHash()).exists();
 		if (videoExists) {
 			PageParameters pp = new PageParameters().add("id", r.getId());
 			mp4.setPageParameters(pp);

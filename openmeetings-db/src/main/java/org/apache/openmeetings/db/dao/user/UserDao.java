@@ -240,17 +240,13 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
-	public void delete(User u, Long userId) {
-		deleteUserID(u.getId());
-	}
-
 	public User get(long id) {
 		return get(id, false);
 	}
 	
-	private User get(long id, boolean force) {
+	private User get(Long id, boolean force) {
 		User u = null;
-		if (id > 0) {
+		if (id != null && id > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
@@ -273,35 +269,22 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 
-	public Long deleteUserID(long userId) {
-		try {
-			if (userId != 0) {
-				User us = get(userId);
-				for (GroupUser ou : us.getGroupUsers()){
-					em.remove(ou);
-				}
-				us.setGroupUsers(null);
-				us.setDeleted(true);
-				us.setUpdated(new Date());
-				us.setSipUser(null);
-				Address adr = us.getAddress();
-				if (adr != null) {
-					adr.setDeleted(true);
-				}
-
-				if (us.getId() == null) {
-					em.persist(us);
-				} else {
-					if (!em.contains(us)) {
-						em.merge(us);
-					}
-				}
-				return us.getId();
+	public void delete(User u, Long userId) {
+		if (u != null && u.getId() != null) {
+			for (GroupUser ou : u.getGroupUsers()){
+				em.remove(ou);
 			}
-		} catch (Exception ex2) {
-			log.error("[deleteUserID]", ex2);
+			u.setGroupUsers(null);
+			u.setDeleted(true);
+			u.setUpdated(new Date());
+			u.setSipUser(null);
+			Address adr = u.getAddress();
+			if (adr != null) {
+				adr.setDeleted(true);
+			}
+
+			update(u, userId);
 		}
-		return null;
 	}
 
 	public List<User> get(Collection<Long> ids) {

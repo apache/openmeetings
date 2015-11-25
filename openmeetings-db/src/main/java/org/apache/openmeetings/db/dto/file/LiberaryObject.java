@@ -29,17 +29,17 @@ public class LiberaryObject {
 	//These Objects here should only be initialized if needed, 
 	//an empty LinkedList thorws a ServiceInvokationTarget-Exception (makes no sense to me but it
 	//is the way in Axis2 1.3
-	private LinkedList<FilesObject> filesList;
+	private LinkedList<FileExplorerItemDTO> filesList;
 	private LinkedList<FoldersObject> foldersList;
 	private PresentationObject presentationObject;
 	private String error;
 	
 	public LiberaryObject() {}
 	
-	public LinkedList<FilesObject> getFilesList() {
+	public LinkedList<FileExplorerItemDTO> getFilesList() {
 		return filesList;
 	}
-	public void setFilesList(LinkedList<FilesObject> filesList) {
+	public void setFilesList(LinkedList<FileExplorerItemDTO> filesList) {
 		this.filesList = filesList;
 	}
 	public LinkedList<FoldersObject> getFoldersList() {

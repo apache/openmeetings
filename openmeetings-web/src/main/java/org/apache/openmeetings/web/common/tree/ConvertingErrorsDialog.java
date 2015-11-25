@@ -83,10 +83,10 @@ public class ConvertingErrorsDialog extends AbstractDialog<Recording> {
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		Recording f = getModelObject();
 		List<RecordingLog> logs = getBean(RecordingLogDao.class).getByRecordingId(f.getId());
-		if (f.getFileHash() == null) {
+		if (f.getHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(888));
-		} else if (!isRecordingExists(f.getFileHash() + MP4_EXTENSION)) {
+		} else if (!isRecordingExists(f.getHash() + MP4_EXTENSION)) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(1595));
 		} else {

@@ -144,7 +144,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
 
-			recording.setFileHash(outputFullFlv.getName());
+			recording.setHash(outputFullFlv.getName());
 
 			// Extract first Image for preview purpose
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s

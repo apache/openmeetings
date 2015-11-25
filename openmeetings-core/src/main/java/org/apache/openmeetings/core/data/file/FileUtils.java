@@ -48,19 +48,19 @@ public class FileUtils {
 			File base = OmFileHelper.getUploadFilesDir();
 			if (Type.Image == file.getType()) {
 
-				File tFile = new File(base, file.getFileHash());
+				File tFile = new File(base, file.getHash());
 				if (tFile.exists()) {
 					fileSize += tFile.length();
 				}
 
-				File thumbFile = new File(base, thumbImagePrefix + file.getFileHash());
+				File thumbFile = new File(base, thumbImagePrefix + file.getHash());
 				if (thumbFile.exists()) {
 					fileSize += thumbFile.length();
 				}
 			}
 
 			if (Type.Presentation == file.getType()) {
-				File tFolder = new File(base, file.getFileHash());
+				File tFolder = new File(base, file.getHash());
 
 				if (tFolder.exists()) {
 					fileSize += OmFileHelper.getSize(tFolder);

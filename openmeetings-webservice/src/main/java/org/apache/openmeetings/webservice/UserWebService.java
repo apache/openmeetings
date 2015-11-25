@@ -197,6 +197,8 @@ public class UserWebService {
 		}
 	}
 
+	//FIXME no update
+	
 	/**
 	 * 
 	 * Delete a certain user by its id
@@ -217,7 +219,7 @@ public class UserWebService {
 			Long authUserId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-				userDao.deleteUserID(id);
+				userDao.delete(userDao.get(id), authUserId);
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
@@ -255,14 +257,12 @@ public class UserWebService {
 			Long authUserId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-				User userExternal = userDao.getExternalUser(externalId, externalType);
-
-				Long userId = userExternal.getId();
+				User user = userDao.getExternalUser(externalId, externalType);
 
 				// Setting user deleted
-				userDao.deleteUserID(userId);
+				userDao.delete(user, authUserId);
 
-				return new ServiceResult(userId, "Deleted", Type.SUCCESS);
+				return new ServiceResult(user.getId(), "Deleted", Type.SUCCESS);
 			} else {
 				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}

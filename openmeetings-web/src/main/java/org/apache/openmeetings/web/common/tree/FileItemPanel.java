@@ -40,7 +40,7 @@ public class FileItemPanel extends FolderPanel {
 		if (model.getObject() instanceof Recording) {
 			Recording r = (Recording)model.getObject();
 			long errorCount = getBean(RecordingLogDao.class).countErrors(r.getId());
-			boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
+			boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !isRecordingExists(r.getHash() + MP4_EXTENSION));
 			errors.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 	

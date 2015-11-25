@@ -38,11 +38,11 @@ public class FlvRecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	String getFileName(Recording r) {
-		return r.getFileHash();
+		return r.getHash();
 	}
 	
 	@Override
 	File getFile(Recording r) {
-		return getRecording(r.getFileHash());
+		return getRecording(r.getHash());
 	}
 }

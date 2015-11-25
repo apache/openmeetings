@@ -45,7 +45,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 		r.setOwnerId(null);
 		r.setType(Type.Folder);
 		String pub = Application.getString(861);
-		r.setFileName(groupId == null ? pub : String.format("%s (%s)", pub, name));
+		r.setName(groupId == null ? pub : String.format("%s (%s)", pub, name));
 		return Arrays.asList(r).iterator();
 	}
 	

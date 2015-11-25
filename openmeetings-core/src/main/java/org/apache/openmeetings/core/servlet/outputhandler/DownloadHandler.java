@@ -257,7 +257,7 @@ public class DownloadHandler extends BaseHttpServlet {
 							FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileExplorerItemId);
 							if (fileExplorerItem != null) {
 								
-								fileNameResult = fileExplorerItem.getFileName().substring(0, fileExplorerItem.getFileName().length()-4)
+								fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)
 													+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
 								
 							}

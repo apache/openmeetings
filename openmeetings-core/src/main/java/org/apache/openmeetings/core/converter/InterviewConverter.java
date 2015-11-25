@@ -260,7 +260,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			recording.setFlvWidth(2 * flvWidth);
 			recording.setFlvHeight(flvHeight);
 
-			recording.setFileHash(hashFileFullNameFlv);
+			recording.setHash(hashFileFullNameFlv);
 
 			// Extract first Image for preview purpose
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s

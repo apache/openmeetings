@@ -146,14 +146,14 @@ public abstract class FileTreePanel extends Panel {
 	
 	public void createRecordingFolder(String name) {
 		Recording f = new Recording();
-		f.setFileName(name);
+		f.setName(name);
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
 		f.setType(Type.Folder);;
 		Recording p = (Recording)selectedFile.getObject();
 		long parentId = p.getId();
 		if (Type.Folder == p.getType()) {
-			f.setParentItemId(parentId);
+			f.setParentId(parentId);
 		}
 		f.setOwnerId(p.getOwnerId());
 		f.setGroupId(p.getGroupId());

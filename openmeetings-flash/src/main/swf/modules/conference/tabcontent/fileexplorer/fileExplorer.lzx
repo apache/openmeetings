@@ -25,16 +25,14 @@
     Class fileExplorer
  -->
 <class name="fileExplorer" extends="view" >
-	<dataset name="getFileExplorerByRoomSelf" type="http" >
-		<handler name="ondata" args="d">
-		<![CDATA[
-			if ($debug) Debug.write("ondata 1 ",this.src);
-			if ($debug) Debug.write("ondata 2 ",d);
-			parent.parseRootItems(parent.parseRootToRoomObject(d));
-		]]>
-		</handler>
-	</dataset>
-    
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.events.*;
+				import flash.net.*;
+			</passthrough>
+		</when>
+	</switch>
     <attribute name="parentFolderId" value="-2" type="number" />
     
     <attribute name="_selected" value="null" />
@@ -169,7 +167,26 @@
     
 	<method name="loadFiles">
 	<![CDATA[
-		if ($debug) Debug.write("loadFiles ", this, this.getFileExplorerByRoomSelf);
+		if ($debug) Debug.write("loadFiles ");
+		
+		var requestor:URLLoader = new URLLoader();
+		var request:URLRequest = new URLRequest( "http://service.example.com/" );
+		request.method = URLRequestMethod.GET;
+		
+		//Add the URL variables
+		var variables:URLVariables = new URLVariables();
+		variables.method = "test.echo";
+		variables.api_key = "123456ABC";
+		variables.message = "Able was I, ere I saw Elba.";
+		request.data = variables;
+		
+		//Initiate the transaction
+		requestor = new URLLoader();
+		requestor.addEventListener(Event.COMPLETE, httpRequestComplete);
+		requestor.addEventListener(IOErrorEvent.IOERROR, httpRequestError);
+		requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, httpRequestError);
+		requestor.load( request );
+		 
 		/* FIXME TODO
 		//this.getFileExplorerByRoom.doCall();
 		var downloadurl = canvas.getUrl()+'services/FileService/getFileExplorerByRoomSelfInternal?'
@@ -183,7 +200,13 @@
 		*/
 	]]>
 	</method>
+	
+	<method name="httpRequestComplete" args="event">
+	</method>
     
+	<method name="httpRequestError" args="event">
+	</method>
+	
     <method name="parseParentToRoomObject" args="dObj">
         <![CDATA[
             

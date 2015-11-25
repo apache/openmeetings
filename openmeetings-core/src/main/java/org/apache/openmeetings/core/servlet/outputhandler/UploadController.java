@@ -99,8 +99,7 @@ public class UploadController extends AbstractUploadController {
 				isOwner = true;
 			}
 	
-			String parentFolderIdAsString = request
-					.getParameter("parentFolderId");
+			String parentFolderIdAsString = request.getParameter("parentFolderId");
 			if (parentFolderIdAsString == null) {
 				throw new ServletException("Missing parentFolderId ID");
 			}
@@ -112,7 +111,7 @@ public class UploadController extends AbstractUploadController {
 	
 			ConverterProcessResultList returnError = fileProcessor
 					.processFile(info.userId, room_id_to_Store, isOwner, is,
-							parentFolderId, info.filename, 0L, ""); // externalFilesId, externalType
+							parentFolderId, info.filename, "", ""); // externalFilesId, externalType
 	
 			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage();
 	    	uploadCompleteMessage.setUserId(info.userId);
@@ -153,8 +152,8 @@ public class UploadController extends AbstractUploadController {
 		if (Type.Presentation == fileExplorerItem.getType()) {
 			msg.setIsPresentation(true);
 		}
-		msg.setFileSystemName(fileExplorerItem.getFileName());
-		msg.setFileHash(fileExplorerItem.getFileHash());
+		msg.setFileSystemName(fileExplorerItem.getName());
+		msg.setFileHash(fileExplorerItem.getHash());
 	}
     
     @RequestMapping(value = "/remotelog.upload", method = RequestMethod.POST)

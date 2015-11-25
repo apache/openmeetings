@@ -339,10 +339,10 @@ public abstract class BaseConverter {
 	
 	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		if (!isRecordingExists(r.getFileHash())) {
+		if (!isRecordingExists(r.getHash())) {
 			return;
 		}
-		File file = getRecording(r.getFileHash());
+		File file = getRecording(r.getHash());
 		String path = file.getCanonicalPath();
 		String mp4path = path + MP4_EXTENSION;
 		String[] argv = new String[] {

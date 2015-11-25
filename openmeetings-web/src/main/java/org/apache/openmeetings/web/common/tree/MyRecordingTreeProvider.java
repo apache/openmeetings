@@ -36,7 +36,7 @@ public class MyRecordingTreeProvider extends RecordingTreeProvider {
 		Recording r = new Recording();
 		r.setId(0L);
 		r.setType(Type.Folder);
-		r.setFileName(Application.getString(860));
+		r.setName(Application.getString(860));
 		r.setOwnerId(getUserId());
 		return Arrays.asList(r).iterator();
 	}

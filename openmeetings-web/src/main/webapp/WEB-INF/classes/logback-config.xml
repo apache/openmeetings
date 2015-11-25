@@ -61,6 +61,7 @@
 	<logger name="org.apache.directory" level="INFO" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
 	<logger name="org.apache.wicket" level="WARN" />
+	<logger name="org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter" level="TRACE" />
 	<root level="DEBUG">
 		<appender-ref ref="FLOG2" />
 		<appender-ref ref="CONSOLE2" />

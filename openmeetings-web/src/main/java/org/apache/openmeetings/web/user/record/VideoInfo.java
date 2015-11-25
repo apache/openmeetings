@@ -88,7 +88,7 @@ public class VideoInfo extends Panel {
 		add(form.setOutputMarkupId(true));
 		setDefaultModel(rm);
 		
-		form.add(new Label("fileName"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
+		form.add(new Label("name"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
 				downloadBtn.setEnabled(false), reConvert.setEnabled(false));
 		add(download);
 		update(null, r);
@@ -125,7 +125,7 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		downloadBtn.setEnabled(isRecordingExists(r.getAlternateDownload()) || isRecordingExists(r.getFileHash()));
+		downloadBtn.setEnabled(isRecordingExists(r.getAlternateDownload()) || isRecordingExists(r.getHash()));
 		if (target != null) {
 			target.add(form);
 		}
@@ -178,8 +178,8 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				download.setFileName(rm.getObject().getFileHash());
-				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getFileHash())));
+				download.setFileName(rm.getObject().getHash());
+				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getHash())));
 				download.initiate(target);
 			}
 		});
