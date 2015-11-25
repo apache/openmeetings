@@ -170,7 +170,7 @@
 		if ($debug) Debug.write("loadFiles ");
 		
 		var requestor:URLLoader = new URLLoader();
-		var request:URLRequest = new URLRequest( "http://service.example.com/" );
+		var request:URLRequest = new URLRequest("http://service.example.com/");
 		request.method = URLRequestMethod.GET;
 		
 		//Add the URL variables
@@ -183,7 +183,7 @@
 		//Initiate the transaction
 		requestor = new URLLoader();
 		requestor.addEventListener(Event.COMPLETE, httpRequestComplete);
-		requestor.addEventListener(IOErrorEvent.IOERROR, httpRequestError);
+		requestor.addEventListener("ioError", httpRequestError);//IOErrorEvent.IOERROR
 		requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, httpRequestError);
 		requestor.load( request );
 		 
