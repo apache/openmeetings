@@ -167,17 +167,16 @@
     
 	<method name="loadFiles">
 	<![CDATA[
-		if ($debug) Debug.write("loadFiles ");
+		var url = canvas.getUrl() + 'services/file/room/' + hib.currentroomid;
+		if ($debug) Debug.write("loadFiles ", url);
 		
 		var requestor:URLLoader = new URLLoader();
-		var request:URLRequest = new URLRequest("http://service.example.com/");
+		var request:URLRequest = new URLRequest(url);
 		request.method = URLRequestMethod.GET;
 		
 		//Add the URL variables
 		var variables:URLVariables = new URLVariables();
-		variables.method = "test.echo";
-		variables.api_key = "123456ABC";
-		variables.message = "Able was I, ere I saw Elba.";
+		variables.sid = canvas.sessionId;
 		request.data = variables;
 		
 		//Initiate the transaction
@@ -185,26 +184,20 @@
 		requestor.addEventListener(Event.COMPLETE, httpRequestComplete);
 		requestor.addEventListener("ioError", httpRequestError);//IOErrorEvent.IOERROR
 		requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, httpRequestError);
-		requestor.load( request );
-		 
-		/* FIXME TODO
-		//this.getFileExplorerByRoom.doCall();
-		var downloadurl = canvas.getUrl()+'services/FileService/getFileExplorerByRoomSelfInternal?'
-			+'SID='+canvas.sessionId
-			+'&roomId='+hib.currentroomid;
-		
-		if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
-		this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
-		if ($debug) Debug.write("loadFiles ", this);
-		this.getFileExplorerByRoomSelf.doRequest();
-		*/
+		requestor.load(request);
 	]]>
 	</method>
 	
 	<method name="httpRequestComplete" args="event">
+		if ($debug) Debug.info("httpRequestComplete ", event);
+		if ($debug) Debug.info("httpRequestComplete ", event.target.data);
+		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("httpRequestComplete ", o);
+		parent.createRootItems(o.fileExplorerObject);
 	</method>
     
 	<method name="httpRequestError" args="event">
+		if ($debug) Debug.error("httpRequestError ", event);
 	</method>
 	
     <method name="parseParentToRoomObject" args="dObj">
@@ -223,42 +216,6 @@
             }
         
             return filesObject;
-        ]]>
-    </method>
-    
-    <method name="parseRootToRoomObject" args="dObj">
-        <![CDATA[
-            
-            var roomObject = new Object();
-            
-            roomObject.userHome = new Array();
-            roomObject.roomHome = new Array();
-            roomObject.userHomeSize = 0;
-            roomObject.roomHomeSize = 0;
-            
-            var tFiles = dObj.childNodes[0].childNodes[0].childNodes;
-            
-            //if ($debug) Debug.write("tFiles ",tFiles);
-            
-            for (var i=0;i<tFiles.length;i++) {
-                
-                //if ($debug) Debug.write("nodeName",tFiles[i].nodeName);
-                
-                if (tFiles[i].nodeName == "userHomeSize") {
-                    if ($debug) Debug.write("roomHomeSize",tFiles[i].childNodes[0].data);
-                    roomObject.userHomeSize = Number(tFiles[i].childNodes[0].data);
-                } else if (tFiles[i].nodeName == "roomHomeSize") {
-                    if ($debug) Debug.write("roomHomeSize",tFiles[i].childNodes[0].data);
-                    roomObject.roomHomeSize = Number(tFiles[i].childNodes[0].data);
-                } else if (tFiles[i].nodeName == "roomHome") {
-                    roomObject.roomHome.push(this.parseToFileObj(tFiles[i].childNodes));
-                } else if (tFiles[i].nodeName == "userHome") {
-                    roomObject.userHome.push(this.parseToFileObj(tFiles[i].childNodes));
-                }
-                
-            }
-        
-            return roomObject;
         ]]>
     </method>
     
@@ -353,7 +310,7 @@
     <!--
         Parse Items and generate Output
      --> 
-    <method name="parseRootItems" args="roomObject">
+    <method name="createRootItems" args="roomObject">
         <![CDATA[
             this.clearContent();
             

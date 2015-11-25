@@ -59,7 +59,6 @@
 	<method name="addFolder">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/addFolderSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.parentFileExplorerItemId
@@ -105,7 +104,6 @@
     <method name="updateFileOrFolderName">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/updateFileOrFolderNameSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId

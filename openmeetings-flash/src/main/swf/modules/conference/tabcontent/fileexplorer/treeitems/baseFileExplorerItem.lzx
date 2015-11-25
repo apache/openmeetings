@@ -156,7 +156,6 @@
 	    	}
 	    	
             if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId;
@@ -403,7 +402,6 @@
     
     <method name="loadFiles">
     	<![CDATA[
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/getFileExplorerByParentSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.fileExplorerItemId
@@ -424,25 +422,6 @@
             ]]>
         </handler>
     </dataset>
-    
-    <!--
-        parent.parseRootItems(canvas.currentFileExplorer.parseToRoomObject(d));
-	 -->
-	<!--
-	   public List<FileExplorerItem> getFileExplorerByParent(String SID, Long parentFileExplorerItemId, 
-	               Long room_id, Boolean isOwner) {
-	<netRemoteCallHib name="getFileExplorerByParent" funcname="fileservice.getFileExplorerByParent" 
-        remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam>  
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>  
-        <netparam><method name="getValue">return parent.parent.isOwner;</method></netparam>         
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFileExplorerByParent: ",value);
-            parent.renderFilesAndFolders(value);
-        </handler>
-    </netRemoteCallHib> 
-     --> 
     
     <method name="renderFilesAndFolders" args="roomHome">
         <![CDATA[

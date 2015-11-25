@@ -151,7 +151,6 @@
     <method name="deleteFileOrFolder">
         <![CDATA[
             if ($debug) Debug.write("deleteFileOrFolder HTTP 2: ");
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId;
@@ -195,7 +194,6 @@
     <method name="moveFile">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
-            //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.getUrl()+'services/FileService/moveFileSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId
