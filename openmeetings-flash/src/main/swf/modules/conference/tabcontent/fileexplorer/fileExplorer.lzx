@@ -44,19 +44,15 @@
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
     </handler>
     
-    <handler name="onvisible">
-    	if ($debug) Debug.write("fileExplorer::onvisible this._selected ",this._selected);
-        //This is thrown whenever an uploaded Document has completed
-        if (this._selected == null) {
-            this.loadFiles();
-        } else {
-        	if (this._selected.isFolder) {
-            	this._selected.refresh();
-        	} else {
-        		this.loadFiles();
-        	}
-        }
-    </handler>
+	<handler name="onvisible">
+		if ($debug) Debug.write("fileExplorer::onvisible this._selected ", this._selected);
+		//This is thrown whenever an uploaded Document has completed
+		if (this._selected == null || !this._selected.isFolder) {
+			this.loadFiles();
+		} else {
+			this._selected.refresh();
+		}
+	</handler>
     
     <method name="selectItem" args="itemRef">
         if (this._selected != null) {
@@ -189,11 +185,9 @@
 	</method>
 	
 	<method name="httpRequestComplete" args="event">
-		if ($debug) Debug.info("httpRequestComplete ", event);
-		if ($debug) Debug.info("httpRequestComplete ", event.target.data);
 		var o = JSON.parse(event.target.data);
 		if ($debug) Debug.info("httpRequestComplete ", o);
-		parent.createRootItems(o.fileExplorerObject);
+		createRootItems(o.fileExplorerObject);
 	</method>
     
 	<method name="httpRequestError" args="event">
@@ -306,190 +300,140 @@
             
         ]]>
     </method>
-    
-    <!--
-        Parse Items and generate Output
-     --> 
-    <method name="createRootItems" args="roomObject">
-        <![CDATA[
-            this.clearContent();
-            
-            var homeSizeInMBytes = Math.round( (roomObject.userHomeSize / 1024 / 1024) * 100) / 100;
-            
-            this._userSpace._userHomeSize.setAttribute("text","" + homeSizeInMBytes + " MBytes");
-            
-            var roomHomeSizeInMBytes = Math.round( (roomObject.roomHomeSize / 1024 / 1024) * 100) / 100;
-            
-            this._userSpace._roomHomeSize.setAttribute("text","" + roomHomeSizeInMBytes + " MBytes");
-            
-            var homeIcon = new lz.rootFileExplorerItem(this._filearea._contentarea,{
-                                        open:true,
-                                        fileName:canvas.getLabelName(706),
-                                        name:'_home',
-                                        isRoot:true,
-                                        fileIcon:'file_explorer_folder_home_rsc',
-                                        isOwner:true,
-                                        refObjListRoot:this
-                                    });
-                                    
-            homeIcon.content.setAttribute("visibility","visible");
-            homeIcon.icon_folder_pre.setAttribute("frame",2);
-            homeIcon._folderIcon.setAttribute("frame",2);
-            
-            //Home area
-            for (var i=0; i<roomObject.userHome.length; i++) {
-                var fileExplorerItem = roomObject.userHome[i];
-                //if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
-                if (fileExplorerItem.isFolder) {
-                    new lz.folderFileExplorerItem(homeIcon.content,{
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'icon_folder_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isImage) {
-                    new lz.imageFileExplorerItem(homeIcon.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_image_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isPresentation) {
-                    new lz.documentFileExplorerItem(homeIcon.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isPresentation:true,
-                                            fileIcon:'file_explorer_document_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isVideo) {
-                    new lz.videoFileExplorerItem(homeIcon.content,{
-                                            isFolder:false,
-                                            isVideo:true,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_video_rsc',
-                                            flvHeight:fileExplorerItem.flvHeight,
-                                            flvWidth:fileExplorerItem.flvWidth,
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isStoredWmlFile) { 
-                	new lz.wmlFileExplorerItem(homeIcon.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_wml_rsc',
-                                            isWmlFile: true,
-                                            refObjListRoot:this                	
-            							});
-                } else if (fileExplorerItem.isChart) { 
-                  new lz.wmlFileExplorerItem(homeIcon.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_chart_rsc',
-                                            isChart:true,
-                                            refObjListRoot:this                 
-                          });
 
-            	}
-            }
-            //Public - Room Area
-            var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
-                                        open:true,
-                                        fileName:canvas.getLabelName(707),
-                                        name:'_roomHome',
-                                        isRoot:true,
-                                        fileIcon:'file_explorer_folder_network_rsc',
-                                        refObjListRoot:this
-                                    });
-                                    
-            roomHome.content.setAttribute("visibility","visible");
-            roomHome.icon_folder_pre.setAttribute("frame",2);
-            roomHome._folderIcon.setAttribute("frame",2);
-            
-            //Public area
-            for (var i=0; i<roomObject.roomHome.length; i++) {
-                var fileExplorerItem = roomObject.roomHome[i];
-                //if ($debug) Debug.write("fileExplorerItem.fileExplorerItemId, ",fileExplorerItem.fileExplorerItemId);
-                //if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
-                if (fileExplorerItem.isFolder) {
-                    new lz.folderFileExplorerItem(roomHome.content,{
-                                            fileName:fileExplorerItem.fileName,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileIcon:'icon_folder_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isImage) {
-                    new lz.imageFileExplorerItem(roomHome.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_image_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isPresentation) {
-                    new lz.documentFileExplorerItem(roomHome.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isPresentation:true,
-                                            fileIcon:'file_explorer_document_rsc',
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isVideo) {
-                    new lz.videoFileExplorerItem(roomHome.content,{
-                                            isFolder:false,
-                                            isVideo:true,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_video_rsc',
-                                            flvHeight:fileExplorerItem.flvHeight,
-                                            flvWidth:fileExplorerItem.flvWidth,
-                                            refObjListRoot:this
-                                        });
-                } else if (fileExplorerItem.isStoredWmlFile) { 
-                	new lz.wmlFileExplorerItem(roomHome.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_wml_rsc',
-                                            isWmlFile: true,
-                                            refObjListRoot:this                	
-            							});
-                } else if (fileExplorerItem.isChart) { 
-                  new lz.wmlFileExplorerItem(roomHome.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_chart_rsc',
-                                            isChart:true,
-                                            refObjListRoot:this                 
-                          });
-           		}
-            }
-        ]]>
-    </method>
-    
-    <method name="clearContent">
-        <![CDATA[
-            for (var eg in this._filearea._contentarea.subviews) {
-                this._filearea._contentarea.subviews[eg].destroy();
-            }
-        ]]>
-    </method>
+	<method name="setSize" args="size, el">
+		var sizem = Math.round((size / 1024 / 1024) * 100) / 100;
+		el.setAttribute("text","" + sizem + " MBytes");
+	</method>
+	    
+	<method name="setNodes" args="list, root">
+	<![CDATA[
+		if (!list) {
+			return;
+		}
+		for (var i = 0; i < list.length; ++i) {
+			var f = list[i];
+			//if ($debug) Debug.write("fileItem, ", f);
+			switch (f.type) {
+				case 'Folder':
+					new lz.folderFileExplorerItem(root.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'icon_folder_rsc'
+							, refObjListRoot:this
+							});
+					break;
+				case 'Image':
+					new lz.imageFileExplorerItem(root.content,{
+							isFolder: false
+							, fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, isImage: true
+							, fileIcon: 'file_explorer_image_rsc'
+							, refObjListRoot: this
+							});
+					break;
+				case 'Presentation':
+					new lz.documentFileExplorerItem(root.content,{
+							isFolder: false
+							, fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, isPresentation: true
+							, fileIcon: 'file_explorer_document_rsc'
+							, refObjListRoot: this
+							});
+					break;
+				case 'Video':
+					new lz.videoFileExplorerItem(root.content,{
+							isFolder: false
+							, isVideo: true
+							, fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, isImage: true
+							, fileIcon: 'file_explorer_video_rsc'
+							, flvHeight: f.flvHeight
+							, flvWidth: f.flvWidth
+							, refObjListRoot: this
+							});
+					break;
+				case 'WmlFile':
+					new lz.wmlFileExplorerItem(root.content,{
+							isFolder: false
+							, fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'file_explorer_wml_rsc'
+							, isWmlFile: true
+							, refObjListRoot: this
+							});
+					break;
+				case 'PollChart':
+					new lz.wmlFileExplorerItem(root.content,{
+							isFolder: false
+							, fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'file_explorer_chart_rsc'
+							, isChart: true
+							, refObjListRoot: this
+							});
+					break;
+			}
+		}
+	]]>
+	</method>
+	
+	<method name="createRootItems" args="roomObject">
+	<![CDATA[
+		this.clearContent();
+		if ($debug) Debug.info("createRootItems ", roomObject);
+		
+		setSize(roomObject.userHomeSize, this._userSpace._userHomeSize);
+		setSize(roomObject.roomHomeSize, this._userSpace._roomHomeSize);
+		
+		var userHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+				open:true
+				, fileId: -1
+				, fileName:canvas.getLabelName(706)
+				, name: '_userHome'
+				, isRoot:true
+				, fileIcon:'file_explorer_folder_home_rsc'
+				, isOwner:true
+				, refObjListRoot:this
+				});
+		userHome.content.setAttribute("visibility", "visible");
+		userHome.icon_folder_pre.setAttribute("frame", 2);
+		userHome._folderIcon.setAttribute("frame", 2);
+		
+		setNodes(roomObject.userHome, userHome);
+		
+		var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+				open: true
+				, fileId: -2
+				, fileName: canvas.getLabelName(707)
+				, name: '_roomHome'
+				, isRoot: true
+				, fileIcon: 'file_explorer_folder_network_rsc'
+				, refObjListRoot: this
+				});
+		roomHome.content.setAttribute("visibility", "visible");
+		roomHome.icon_folder_pre.setAttribute("frame", 2);
+		roomHome._folderIcon.setAttribute("frame", 2);
+		
+		setNodes(roomObject.roomHome, roomHome);
+	]]>
+	</method>
+	
+	<method name="clearContent">
+	<![CDATA[
+		var area = this._filearea._contentarea;
+		//if ($debug) Debug.info("clearContent:: ", area);
+		while (area.subviews.length > 0) {
+			area.subviews[0].destroy();
+		}
+	]]>
+	</method>
     
     <!--
         Borders

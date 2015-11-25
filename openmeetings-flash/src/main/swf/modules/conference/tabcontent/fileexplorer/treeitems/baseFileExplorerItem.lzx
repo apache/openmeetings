@@ -30,7 +30,7 @@
 	
 	<attribute name="open" value="false" type="boolean" />
 	
-	<attribute name="fileExplorerItemId" value="0" type="number" />
+	<attribute name="fileId" value="0" type="number" />
 	<attribute name="isOwner" value="false" type="boolean" />
 	
 	<attribute name="isFolder" value="true" type="boolean" />

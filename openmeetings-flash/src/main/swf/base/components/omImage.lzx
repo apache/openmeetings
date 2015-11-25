@@ -32,7 +32,7 @@
 
 	<handler name="onsrc" method="loadOmSrc" />
 	<handler name="oninit" method="loadOmImage" />
-    
+
 	<method name="loadOmImage" args="ignore">
 	<![CDATA[
 		if (this.src != '' && this.src != null) {
@@ -57,16 +57,16 @@
 		}
 	]]>
 	</method>
-    
-    <method name="loadOmSrc" args="src">
-    <![CDATA[ 
-        //if ($debug) Debug.write("omImage::loadOmSrc src  ", src);
-        if (src != null) {
-            this.setSource( src );
-            loadOmImage(null);
-        }
-    ]]>
-    </method>
+
+	<method name="loadOmSrc" args="src">
+	<![CDATA[
+		//if ($debug) Debug.write("omImage::loadOmSrc src  ", src);
+		if (src != null) {
+			this.setSource( src );
+			loadOmImage(null);
+		}
+	]]>
+	</method>
 </class>
 
 </library>
