@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -224,11 +226,8 @@ public class FileWebService {
 				}
 
 				return LoadLibraryPresentation.parseLibraryFileToObject(file);
-
 			} else {
-
 				throw new ServiceException("not Authenticated");
-
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -238,222 +237,114 @@ public class FileWebService {
 		}
 	}
 
-	/**
-	 * Get a File Explorer Object by a given Room and owner id
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param roomId
-	 *            Room id
-	 * @param ownerId
-	 *            Owner id
-	 * @return - File Explorer Object by a given Room and owner id
-	 * @throws ServiceException
-	 */
-	public FileExplorerObject getFileExplorerByRoom(String SID, Long roomId, Long ownerId) throws ServiceException {
-
-		try {
-
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				log.debug("roomId " + roomId);
-
-				FileExplorerObject fileExplorerObject = new FileExplorerObject();
-
-				// Home File List
-				List<FileExplorerItem> fList = fileDao.getByOwner(ownerId);
-
-				long homeFileSize = 0;
-
-				for (FileExplorerItem homeChildExplorerItem : fList) {
-					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getName());
-					homeFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
-				}
-
-				fileExplorerObject.setUserHome(fList);
-				fileExplorerObject.setUserHomeSize(homeFileSize);
-
-				// Public File List
-				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
-
-				long roomFileSize = 0;
-
-				for (FileExplorerItem homeChildExplorerItem : rList) {
-					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getName());
-					roomFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
-				}
-
-				fileExplorerObject.setRoomHome(rList);
-				fileExplorerObject.setRoomHomeSize(roomFileSize);
-
-				return fileExplorerObject;
-
-			} else {
-
-				throw new Exception("not Authenticated");
-
-			}
-
-		} catch (Exception e) {
-			log.error("[getFileExplorerByRoom]", e);
-			return null;
+	private long getSize(List<FileExplorerItem> list) {
+		long size = 0;
+		for (FileExplorerItem f : list) {
+			log.debug("FileExplorerItem fList " + f.getName());
+			size += fileUtils.getSizeOfDirectoryAndSubs(f);
 		}
+		return size;
 	}
-
+	
 	/**
 	 * Get a File Explorer Object by a given Room
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param roomId
+	 * @param id
 	 *            Room Id
 	 * @return - File Explorer Object by a given Room
 	 * @throws ServiceException
 	 */
-	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long roomId) throws ServiceException {
-
+	@WebMethod
+	@GET
+	@Path("/room/{id}")
+	public FileExplorerObject getRoom(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long roomId
+			) throws ServiceException
+	{
 		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-
 				log.debug("roomId " + roomId);
 
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
 				List<FileExplorerItem> fList = fileDao.getByOwner(userId);
-
-				long homeFileSize = 0;
-
-				for (FileExplorerItem homeChildExplorerItem : fList) {
-					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getName());
-					homeFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
-				}
-
-				fileExplorerObject.setUserHome(fList);
-				fileExplorerObject.setUserHomeSize(homeFileSize);
+				fileExplorerObject.setUser(fList, getSize(fList));
 
 				// Public File List
 				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
-
-				long roomFileSize = 0;
-
-				for (FileExplorerItem homeChildExplorerItem : rList) {
-					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getName());
-					roomFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
-				}
-
-				fileExplorerObject.setRoomHome(rList);
-				fileExplorerObject.setRoomHomeSize(roomFileSize);
+				fileExplorerObject.setRoom(rList, getSize(rList));
 
 				return fileExplorerObject;
-
 			} else {
-
-				throw new Exception("not Authenticated");
-
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-
+		} catch (ServiceException e) {
+			throw e;
 		} catch (Exception e) {
-			log.error("[getFileExplorerByRoomSelf]", e);
-			return null;
+			log.error("[getRoom]", e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
 	/**
-	 * Get FileExplorerItem list by parent folder
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param parentId
-	 *            the parent folder id
-	 * @param roomId
-	 *            the room id
-	 * @param isOwner
-	 *            true if its a private drive
-	 * @param ownerId
-	 *            the owner id
-	 * @return - FileExplorerItem list by parent folder
-	 * @throws ServiceException
-	 */
-	public FileExplorerItem[] getFileExplorerByParent(String SID, Long parentId, Long roomId, Boolean isOwner,
-			Long ownerId) throws ServiceException {
-
-		try {
-
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				log.debug("parentFileExplorerItemId " + parentId);
-
-				if (parentId == 0) {
-					if (isOwner) {
-						return fileDao.getByOwner(ownerId).toArray(new FileExplorerItem[0]);
-					} else {
-						return fileDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
-					}
-				} else {
-					return fileDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
-				}
-
-			}
-		} catch (Exception err) {
-			log.error("[getFileExplorerByParent] ", err);
-		}
-		return null;
-	}
-
-	/**
+	 * Get list of {@link FileExplorerItemDTO} by parent
 	 * 
-	 * Get FileExplorerItem[] by parent and owner id
-	 * 
-	 * @param SID
+	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param parentId
 	 *            the parent folder id
 	 * @param roomId
 	 *            the room id
-	 * @param isOwner
-	 *            true to request private drive
 	 * @return - list of file explorer items
 	 * @throws ServiceException
 	 */
-	public FileExplorerItem[] getFileExplorerByParentSelf(String SID, Long parentId, Long roomId, Boolean isOwner)
-			throws ServiceException {
-
+	@WebMethod
+	@GET
+	@Path("/room/{id}/{parent}")
+	public List<FileExplorerItemDTO> getRoomByParent(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long roomId
+			, @WebParam(name="parent") @PathParam("parent") long parentId
+			) throws ServiceException
+	{
 		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				log.debug("getRoomByParent " + parentId);
 
-				log.debug("parentFileExplorerItemId " + parentId);
-
-				if (parentId == 0) {
-					if (isOwner) {
-						return fileDao.getByOwner(userId).toArray(new FileExplorerItem[0]);
+				List<FileExplorerItem> list = new ArrayList<>();
+				if (parentId < 0) {
+					if (parentId == -1) {
+						list = fileDao.getByOwner(userId);
 					} else {
-						return fileDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
+						list = fileDao.getByRoom(roomId);
 					}
 				} else {
-					return fileDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
+					list = fileDao.getByParent(parentId);
 				}
+				return FileExplorerItemDTO.list(list);
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-		} catch (Exception err) {
-			log.error("[getFileExplorerByParentSelf] ", err);
+		} catch (ServiceException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("[getRoom]", e);
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
+	 * 
 	 * update a file or folder name
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param fileId
 	 *            file or folder id
@@ -462,43 +353,11 @@ public class FileWebService {
 	 * @return - null
 	 * @throws ServiceException
 	 */
-	public Long updateFileOrFolderName(String SID, Long fileId, String fileName) throws ServiceException {
+	public Long rename(String sid, Long fileId, String fileName) throws ServiceException {
 
 		try {
 
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				log.debug("updateFileOrFolderName " + fileId);
-
-				fileDao.updateFileOrFolderName(fileId, fileName);
-
-			}
-		} catch (Exception err) {
-			log.error("[updateFileOrFolderName] ", err);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * update a file or folder name
-	 * 
-	 * @param SID
-	 *            SID The SID of the User. This SID must be marked as logged in
-	 * @param fileId
-	 *            file or folder id
-	 * @param fileName
-	 *            new file or folder name
-	 * @return - null
-	 * @throws ServiceException
-	 */
-	public Long updateFileOrFolderNameSelf(String SID, Long fileId, String fileName) throws ServiceException {
-
-		try {
-
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
@@ -524,59 +383,7 @@ public class FileWebService {
 	/**
 	 * move a file or folder
 	 * 
-	 * @param SID
-	 *            SID The SID of the User. This SID must be marked as logged in
-	 * @param fileId
-	 *            current file or folder id to be moved
-	 * @param newParentId
-	 *            new parent folder id
-	 * @param roomId
-	 *            room id
-	 * @param isOwner
-	 *            if true owner id will be set
-	 * @param moveToHome
-	 *            if true move to private drive
-	 * @param ownerId
-	 *            owner id
-	 * @return - null
-	 * @throws ServiceException
-	 */
-	public Long moveFile(String SID, Long fileId, Long newParentId, Long roomId, Boolean isOwner, Boolean moveToHome,
-			Long ownerId) throws ServiceException {
-
-		try {
-
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				log.debug("moveFile " + fileId);
-
-				fileDao.moveFile(fileId, newParentId, roomId, isOwner, ownerId);
-
-				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
-
-				if (moveToHome) {
-					// set this file and all subfiles and folders the ownerId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, ownerId, null);
-
-				} else {
-					// set this file and all subfiles and folders the roomId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, roomId);
-
-				}
-
-			}
-		} catch (Exception err) {
-			log.error("[moveFile] ", err);
-		}
-		return null;
-	}
-
-	/**
-	 * move a file or folder
-	 * 
-	 * @param SID
+	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param fileId
 	 *            current file or folder id to be moved
@@ -591,12 +398,12 @@ public class FileWebService {
 	 * @return - null
 	 * @throws ServiceException
 	 */
-	public Long moveFileSelf(String SID, Long fileId, Long newParentId, Long roomId, Boolean isOwner,
+	public Long move(String sid, Long fileId, Long newParentId, Long roomId, Boolean isOwner,
 			Boolean moveToHome) throws ServiceException {
 
 		try {
 
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
