@@ -94,7 +94,7 @@
 		opacity="0.1">
 	</view>
 	
-	<image name="_userpic" stretches="both" x="1" y="1">
+	<omImage name="_userpic" stretches="both" x="1" y="1">
 		<handler name="onload">
             <![CDATA[
                 if (this.height > 38) {
@@ -110,7 +110,7 @@
                 }
             ]]>
         </handler>
-	</image>
+	</omImage>
 	
 	<text text="$once{ parent.username }" x="40" resize="false" fontsize="11" multiline="true"
 		  width="140" height="$once{ parent.height }"

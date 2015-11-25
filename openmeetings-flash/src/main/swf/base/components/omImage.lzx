@@ -29,10 +29,13 @@
 			</passthrough>
 		</when>
 	</switch>
-    <handler name="oninit">
+
+	<handler name="onsrc" method="loadOmSrc" />
+	<handler name="oninit" method="loadOmImage" />
+    
+	<method name="loadOmImage" args="ignore">
 	<![CDATA[
-        if (this.src != '' && this.src != null) {
-            //if ($debug) Debug.write("omImage::oninit src  ", this.src);
+		if (this.src != '' && this.src != null) {
 			this.sprite.resource = this.src;
 			if (! this.sprite.imgLoader) {
 				if (this.sprite.resourceContainer) {
@@ -51,9 +54,19 @@
 			}
 			
 			this.sprite.imgLoader.load(new URLRequest(this.src), LzSprite.loaderContext);
+		}
+	]]>
+	</method>
+    
+    <method name="loadOmSrc" args="src">
+    <![CDATA[ 
+        //if ($debug) Debug.write("omImage::loadOmSrc src  ", src);
+        if (src != null) {
+            this.setSource( src );
+            loadOmImage(null);
         }
     ]]>
-    </handler>
+    </method>
 </class>
 
 </library>
