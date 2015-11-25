@@ -107,7 +107,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 						case Recording:
 						{
 							Recording r = (Recording)f;
-							if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
+							if (isRecordingExists(r.getHash() + MP4_EXTENSION)) {
 								style = "recording om-icon";
 							} else if (Status.RECORDING == r.getStatus() || Status.CONVERTING == r.getStatus()) {
 								style = "processing-recording om-icon";
@@ -150,7 +150,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			
 			@Override
 			protected IModel<String> newLabelModel(IModel<T> model) {
-				return Model.of(model.getObject().getFileName());
+				return Model.of(model.getObject().getName());
 			}
 		};
 	}

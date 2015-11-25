@@ -99,8 +99,8 @@ public class RecordingService implements IPendingServiceCallback {
 
 			Recording recording = new Recording();
 
-			recording.setFileHash("");
-			recording.setFileName(roomRecordingName);
+			recording.setHash("");
+			recording.setName(roomRecordingName);
 			Long ownerId = client.getUserId();
 			if (ownerId != null && ownerId < 0) {
 				User c = userDao.get(-ownerId);

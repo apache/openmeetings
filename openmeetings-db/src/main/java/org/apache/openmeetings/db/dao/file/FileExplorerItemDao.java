@@ -42,293 +42,249 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FileExplorerItemDao {
 
-    private static final Logger log = Red5LoggerFactory.getLogger(FileExplorerItemDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileExplorerItemDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 
-    public Long add(String fileName, String fileHash,
-            Long parentItemId, Long ownerId, Long roomId,
-            Long insertedBy, Boolean isFolder, Boolean isImage,
-            Boolean isPresentation, String wmlFilePath,
-            Boolean isStoredWmlFile, Boolean isChart,
-            Long externalId, String externalType) {
-        log.debug(".add(): adding file " + fileName+ " roomID: "+roomId);
-        try {
-            FileExplorerItem fileItem = new FileExplorerItem();
-            fileItem.setFileName(fileName);
-            fileItem.setFileHash(fileHash);
-            fileItem.setDeleted(false);
-            fileItem.setParentItemId(parentItemId);
-            fileItem.setOwnerId(ownerId);
-            fileItem.setRoomId(roomId);
-            fileItem.setInserted(new Date());
-            fileItem.setInsertedBy(insertedBy);
-            Type t = null;
-            if (isStoredWmlFile) {
-            	t = Type.WmlFile;
-            }
-            if (isChart) {
-            	t = Type.PollChart;
-            }
-            if (isImage) {
-            	t = Type.Image;
-            }
-            if (isPresentation) {
-            	t = Type.Presentation;
-            }
-            if (isFolder) {
-            	t = Type.Folder;
-            }
-            fileItem.setType(t);
-            fileItem.setUpdated(new Date());
-            fileItem.setWmlFilePath(wmlFilePath);
-            fileItem.setExternalId(externalId);
-            fileItem.setExternalType(externalType);
+	public Long add(String fileName, String fileHash, Long parentId, Long ownerId, Long roomId, Long insertedBy,
+			Boolean isFolder, Boolean isImage, Boolean isPresentation, String wmlFilePath, Boolean isStoredWmlFile,
+			Boolean isChart, String externalId, String externalType) {
+		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
+		try {
+			FileExplorerItem fileItem = new FileExplorerItem();
+			fileItem.setName(fileName);
+			fileItem.setHash(fileHash);
+			fileItem.setDeleted(false);
+			fileItem.setParentId(parentId);
+			fileItem.setOwnerId(ownerId);
+			fileItem.setRoomId(roomId);
+			fileItem.setInserted(new Date());
+			fileItem.setInsertedBy(insertedBy);
+			Type t = null;
+			if (isStoredWmlFile) {
+				t = Type.WmlFile;
+			}
+			if (isChart) {
+				t = Type.PollChart;
+			}
+			if (isImage) {
+				t = Type.Image;
+			}
+			if (isPresentation) {
+				t = Type.Presentation;
+			}
+			if (isFolder) {
+				t = Type.Folder;
+			}
+			fileItem.setType(t);
+			fileItem.setUpdated(new Date());
+			fileItem.setWmlFilePath(wmlFilePath);
+			fileItem.setExternalId(externalId);
+			fileItem.setExternalType(externalType);
 
 			fileItem = em.merge(fileItem);
 			Long fileItemId = fileItem.getId();
 
-            log.debug(".add(): file " + fileName + " added as " + fileItemId);
-            return fileItemId;
-        } catch (Exception ex2) {
-            log.error(".add(): ", ex2);
-        }
-        return null;
-    }
-    
-    public Long addFileExplorerItem(FileExplorerItem fileItem) {
-        try {
+			log.debug(".add(): file " + fileName + " added as " + fileItemId);
+			return fileItemId;
+		} catch (Exception ex2) {
+			log.error(".add(): ", ex2);
+		}
+		return null;
+	}
+
+	public Long addFileExplorerItem(FileExplorerItem fileItem) {
+		try {
 
 			fileItem = em.merge(fileItem);
 			Long fileItemId = fileItem.getId();
 
-            return fileItemId;
-        } catch (Exception ex2) {
-            log.error("[addFileExplorerItem]", ex2);
-        }
-        return null;
-    }
+			return fileItemId;
+		} catch (Exception ex2) {
+			log.error("[addFileExplorerItem]", ex2);
+		}
+		return null;
+	}
 
 	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(Long roomId, Long ownerId) {
-        log.debug(".getFileExplorerItemsByRoomAndOwner() started");
-        try {
+		log.debug(".getFileExplorerItemsByRoomAndOwner() started");
+		try {
 			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoomAndOwner", FileExplorerItem.class);
-			query.setParameter("roomId",roomId);
-			query.setParameter("ownerId",ownerId);
-			
+			query.setParameter("roomId", roomId);
+			query.setParameter("ownerId", ownerId);
+
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
 
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerItemsByRoomAndOwner]: ", ex2);
-        }
-        return null;
-    }
+			return fileExplorerList;
+		} catch (Exception ex2) {
+			log.error("[getFileExplorerItemsByRoomAndOwner]: ", ex2);
+		}
+		return null;
+	}
 
-    public List<FileExplorerItem> getByRoom(Long roomId) {
-        log.debug("getFileExplorerItemsByRoom roomId :: "+roomId);
+	public List<FileExplorerItem> getByRoom(Long roomId) {
+		log.debug("getFileExplorerItemsByRoom roomId :: " + roomId);
 		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
-		query.setParameter("roomId",roomId);
-		
+		query.setParameter("roomId", roomId);
+
 		return query.getResultList();
-    }
+	}
 
-    public List<FileExplorerItem> getByOwner(Long ownerId) {
-        log.debug(".getFileExplorerItemsByOwner() started");
+	public List<FileExplorerItem> getByOwner(Long ownerId) {
+		log.debug("getByOwner() started");
 		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByOwner", FileExplorerItem.class);
-		query.setParameter("ownerId",ownerId);
-		
-        return query.getResultList();
-    }
+		query.setParameter("ownerId", ownerId);
 
-    public List<FileExplorerItem> getByParent(Long parentId) {
-        log.debug(".getFileExplorerItemsByParent() started");
+		return query.getResultList();
+	}
+
+	public List<FileExplorerItem> getByParent(Long parentId) {
+		log.debug("getByParent() started");
 		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByParent", FileExplorerItem.class);
-		query.setParameter("parentItemId", parentId);
-		
-        return query.getResultList();
-    }
+		query.setParameter("parentId", parentId);
 
-    public FileExplorerItem getFileExplorerItemsByHash(String hash) {
-        try {
+		return query.getResultList();
+	}
 
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileByHash", FileExplorerItem.class);
-			query.setParameter("fileHash", hash);
-			
-			FileExplorerItem fileExplorerList = null;
+	public FileExplorerItem getByHash(String hash) {
+		log.debug("getByHash() started");
+		FileExplorerItem f = null;
+		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileByHash", FileExplorerItem.class);
+		query.setParameter("hash", hash);
+
+		try {
+			f = query.getSingleResult();
+		} catch (NoResultException ex) {
+			//no-op
+		}
+		return f;
+	}
+
+	public FileExplorerItem get(Long id) {
+		FileExplorerItem f = null;
+		if (id != null && id > 0) {
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileById", FileExplorerItem.class)
+					.setParameter("id", id);
+
 			try {
-				fileExplorerList = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
+				f = query.getSingleResult();
+			} catch (NoResultException ex) {
+			}
+		} else {
+			log.info("[get] " + "Info: No id given");
+		}
+		return f;
+	}
 
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerItemsById]: ", ex2);
-        }
-        return null;
-    }
-    
-    public FileExplorerItem get(Long fileId) {
-        try {
+	public FileExplorerItem get(String externalId, String externalType) {
+		FileExplorerItem f = null;
+		log.debug("get started");
 
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileById", FileExplorerItem.class);
-			query.setParameter("id", fileId);
-			
-			FileExplorerItem fileExplorerList = null;
+		try {
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileExternal", FileExplorerItem.class)
+					.setParameter("externalFileId", externalId).setParameter("externalType", externalType);
+
 			try {
-				fileExplorerList = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
+				f = query.getSingleResult();
+			} catch (NoResultException ex) {
+			}
 
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerItemsById]: ", ex2);
-        }
-        return null;
-    }
-    
-    public FileExplorerItem getFileExplorerItemsByExternalIdAndType(Long externalFileId, String externalType) {
-        log.debug(".getFileExplorerItemsByExternalIdAndType() started");
+		} catch (Exception ex2) {
+			log.error("[get]: ", ex2);
+		}
+		return f;
+	}
 
-        try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileExternal", FileExplorerItem.class);
-			query.setParameter("externalFileId", externalFileId);
-			query.setParameter("externalType", externalType);
-			
-			FileExplorerItem fileExplorerList = null;
-			try {
-				fileExplorerList = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
+	public List<FileExplorerItem> get() {
+		log.debug("get started");
 
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerItemsByExternalIdAndType]: ", ex2);
-        }
-        return null;
-    }
+		return em.createNamedQuery("getAllFiles", FileExplorerItem.class).getResultList();
+	}
 
-    public List<FileExplorerItem> getFileExplorerItems() {
-        log.debug(".getFileExplorerItems() started");
+	public void delete(FileExplorerItem f) {
+		f.setDeleted(true);
+		f.setUpdated(new Date());
 
-        try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getAllFiles", FileExplorerItem.class);
+		update(f);
+	}
 
-            List<FileExplorerItem> fileExplorerList = query.getResultList();
+	public void delete(String externalId, String externalType) {
+		log.debug("delete started");
 
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerItems]: ", ex2);
-        }
-        return null;
-    }    
+		delete(get(externalId, externalType));
+	}
 
-    /**
-     * @param fileId
-     */
-    public void delete(Long fileId) {
-        log.debug(".delete() started");
-        delete(get(fileId));
-    }
-    
-    public void delete(FileExplorerItem f) {
-        f.setDeleted(true);
-        f.setUpdated(new Date());
+	/**
+	 * @param id
+	 * @param name
+	 */
+	public void updateFileOrFolderName(Long id, String name) {
+		log.debug(".updateFileOrFolderName() started");
 
-        update(f);
-    }
-    
-    public void deleteFileExplorerItemByExternalIdAndType(Long externalFilesid, String externalType) {
-        log.debug(".deleteFileExplorerItemByExternalIdAndType() started");
+		try {
 
-        try {
+			FileExplorerItem fId = get(id);
 
-            FileExplorerItem fId = getFileExplorerItemsByExternalIdAndType(externalFilesid, externalType);
+			fId.setName(name);
+			fId.setUpdated(new Date());
 
-            if (fId == null) {
-            	throw new Exception("externalFilesid: "+externalFilesid+" and externalType: "+externalType+" Not found");
-            }
-            
-            fId.setDeleted(true);
-            fId.setUpdated(new Date());
+			update(fId);
+		} catch (Exception ex2) {
+			log.error("[updateFileOrFolderName]: ", ex2);
+		}
+	}
 
-            update(fId);
-        } catch (Exception ex2) {
-            log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
-        }
-    }
-
-    /**
-     * @param fileId
-     * @param fileName
-     */
-    public void updateFileOrFolderName(Long fileId, String fileName) {
-        log.debug(".updateFileOrFolderName() started");
-
-        try {
-
-            FileExplorerItem fId = get(fileId);
-
-            fId.setFileName(fileName);
-            fId.setUpdated(new Date());
-
-            update(fId);
-        } catch (Exception ex2) {
-            log.error("[updateFileOrFolderName]: ", ex2);
-        }
-    }
-
-    public FileExplorerItem update(FileExplorerItem f) {
-        // fId.setUpdated(new Date());
+	public FileExplorerItem update(FileExplorerItem f) {
+		// fId.setUpdated(new Date());
 
 		if (f.getId() == null) {
 			em.persist(f);
-	    } else {
-	    	if (!em.contains(f)) {
-	    		f = em.merge(f);
-		    }
+		} else {
+			if (!em.contains(f)) {
+				f = em.merge(f);
+			}
 		}
 		return f;
-    }
+	}
 
-    /**
-     * @param fileId
-     * @param newParentFileExplorerItemId
-     * @param isOwner
-     */
-    public void moveFile(Long fileId, Long parentId, Long roomId, Boolean isOwner, Long ownerId) {
-        log.debug(".moveFile() started");
-        try {
+	/**
+	 * @param fileId
+	 * @param newParentFileExplorerItemId
+	 * @param isOwner
+	 */
+	public void moveFile(Long fileId, Long parentId, Long roomId, Boolean isOwner, Long ownerId) {
+		log.debug(".moveFile() started");
+		try {
 
-            FileExplorerItem fId = get(fileId);
+			FileExplorerItem fId = get(fileId);
 
-            fId.setParentItemId(parentId);
+			fId.setParentId(parentId);
 
-            if (parentId == 0) {
-                if (isOwner) {
-                    // move to personal Folder
-                    fId.setOwnerId(ownerId);
-                } else {
-                    // move to public room folder
-                    fId.setOwnerId(null);
-                    fId.setRoomId(roomId);
-                }
-            } else {
-                fId.setOwnerId(null);
-            }
+			if (parentId == 0) {
+				if (isOwner) {
+					// move to personal Folder
+					fId.setOwnerId(ownerId);
+				} else {
+					// move to public room folder
+					fId.setOwnerId(null);
+					fId.setRoomId(roomId);
+				}
+			} else {
+				fId.setOwnerId(null);
+			}
 
-            fId.setUpdated(new Date());
+			fId.setUpdated(new Date());
 
 			if (fId.getId() == null) {
 				em.persist(fId);
-		    } else {
-		    	if (!em.contains(fId)) {
-		    		em.merge(fId);
-			    }
+			} else {
+				if (!em.contains(fId)) {
+					em.merge(fId);
+				}
 			}
-        } catch (Exception ex2) {
-            log.error("[updateFileOrFolderName]: ", ex2);
-        }
-    }
+		} catch (Exception ex2) {
+			log.error("[updateFileOrFolderName]: ", ex2);
+		}
+	}
 
 }

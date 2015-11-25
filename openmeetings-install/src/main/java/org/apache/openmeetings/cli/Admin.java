@@ -369,7 +369,7 @@ public class Admin {
 						deleted = 0;
 						for (File f : files.listFiles()) {
 							long fSize = OmFileHelper.getSize(f);
-							FileExplorerItem item = fileDao.getFileExplorerItemsByHash(f.getName());
+							FileExplorerItem item = fileDao.getByHash(f.getName());
 							if (item == null) {
 								if (cleanup) {
 									FileHelper.removeRec(f);
@@ -385,8 +385,8 @@ public class Admin {
 							}
 						}
 						missing = 0;
-						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
-							if (!item.isDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
+						for (FileExplorerItem item : fileDao.get()) {
+							if (!item.isDeleted() && item.getHash() != null && !new File(files, item.getHash()).exists()) {
 								missing++;
 							}
 						}
@@ -414,7 +414,7 @@ public class Admin {
 						RecordingDao recordDao = getApplicationContext(ctxName).getBean(RecordingDao.class);
 						long[] params = {0, 0}; // [0] == deleted [1] == missing
 						for (Recording rec : recordDao.get()) {
-							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.isDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getHash(), rec.isDeleted(), params, cleanup);
 							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.isDeleted(), params, cleanup);
 							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.isDeleted(), params, cleanup);
 						}

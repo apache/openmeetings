@@ -39,11 +39,11 @@ public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	String getFileName(Recording r) {
-		return r.getFileHash() + MP4_EXTENSION;
+		return r.getHash() + MP4_EXTENSION;
 	}
 	
 	@Override
 	File getFile(Recording r) {
-		return getMp4Recording(r.getFileHash());
+		return getMp4Recording(r.getHash());
 	}
 }

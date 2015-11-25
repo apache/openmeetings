@@ -77,7 +77,7 @@ public class RecordingDao {
 	public Recording getByHash(String hash) {
 		try {
 			TypedQuery<Recording> query = em.createNamedQuery("getRecordingByHash", Recording.class);
-			query.setParameter("fileHash", hash);
+			query.setParameter("hash", hash);
 
 			try {
 				return query.getSingleResult();
@@ -85,7 +85,7 @@ public class RecordingDao {
 				// noop
 			}
 		} catch (Exception ex2) {
-			log.error("[getRecordingByHash]: ", ex2);
+			log.error("[getByHash]: ", ex2);
 		}
 		return null;
 	}
@@ -280,8 +280,8 @@ public class RecordingDao {
 	private long getSize(Recording r) {
 		long size = 0;
 
-		if (isRecordingExists(r.getFileHash())) {
-			size += getRecording(r.getFileHash()).length();
+		if (isRecordingExists(r.getHash())) {
+			size += getRecording(r.getHash()).length();
 		}
 		if (isRecordingExists(r.getAlternateDownload())) {
 			size += getRecording(r.getAlternateDownload()).length();
@@ -289,11 +289,11 @@ public class RecordingDao {
 		if (isRecordingExists(r.getPreviewImage())) {
 			size += getRecording(r.getPreviewImage()).length();
 		}
-		if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
-			size += getMp4Recording(r.getFileHash()).length();
+		if (isRecordingExists(r.getHash() + MP4_EXTENSION)) {
+			size += getMp4Recording(r.getHash()).length();
 		}
-		if (isRecordingExists(r.getFileHash() + OGG_EXTENSION)) {
-			size += getOggRecording(r.getFileHash()).length();
+		if (isRecordingExists(r.getHash() + OGG_EXTENSION)) {
+			size += getOggRecording(r.getHash()).length();
 		}
 		for (Recording rec : getByParent(r.getId())) {
 			size += getSize(rec);

@@ -39,17 +39,17 @@ public abstract class FileItem implements IDataProviderEntity {
 		Folder, Image, PollChart, Presentation, Recording, Video, WmlFile
 	}
 
-	@Column(name = "filename")
-	@Element(data = true, required = false)
-	private String fileName;
+	@Column(name = "name")
+	@Element(name = "fileName", data = true, required = false)
+	private String name;
 
-	@Column(name = "filehash")
-	@Element(data = true, required = false)
-	private String fileHash;
+	@Column(name = "hash")
+	@Element(name = "fileHash", data = true, required = false)
+	private String hash;
 
-	@Column(name = "parent_fileexploreritem_id")
+	@Column(name = "parent_item_id")
 	@Element(data = true, name = "parentFileExplorerItemId", required = false)
-	private Long parentItemId;
+	private Long parentId;
 
 	@Column(name = "room_id")
 	@Element(data = true, required = false, name = "room_id")
@@ -94,28 +94,28 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Enumerated(EnumType.STRING)
 	private Type type;
 
-	public String getFileName() {
-		return fileName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getFileHash() {
-		return fileHash;
+	public String getHash() {
+		return hash;
 	}
 
-	public void setFileHash(String fileHash) {
-		this.fileHash = fileHash;
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
-	public Long getParentItemId() {
-		return parentItemId;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setParentItemId(Long parentItemId) {
-		this.parentItemId = parentItemId;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public Long getRoomId() {

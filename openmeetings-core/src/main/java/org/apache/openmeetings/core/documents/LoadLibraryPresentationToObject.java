@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.documents;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.openmeetings.db.dto.file.FilesObject;
+import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.dto.file.PresentationObject;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Document;
@@ -83,14 +83,14 @@ public class LoadLibraryPresentationToObject {
 		}
 	}
 	
-	public FilesObject createListObjectLibraryByFileDocument(Element fileElement){
+	public FileExplorerItemDTO createListObjectLibraryByFileDocument(Element fileElement){
 		try {
 			
 			log.info("createListObjectLibraryByFileDocument"+fileElement);
-			FilesObject fileObject = new FilesObject();
-			fileObject.setFileName(fileElement.getText());
-			fileObject.setLastModified(fileElement.attribute("lastmod").getText());
-			fileObject.setFileBytes(fileElement.attribute("size").getText());
+			FileExplorerItemDTO fileObject = new FileExplorerItemDTO();
+			fileObject.setName(fileElement.getText());
+			//FIXME TODO fileObject.setLastModified(fileElement.attribute("lastmod").getText());
+			//FIXME TODO fileObject.setSize(fileElement.attribute("size").getText());
 			return fileObject;
 		} catch (Exception err) {
 			log.error("createListObjectLibraryByFileDocument",err);
@@ -98,20 +98,20 @@ public class LoadLibraryPresentationToObject {
 		return null;
 	}		
 	
-	public LinkedList<FilesObject> createListObjectLibraryByFileDocumentThumbs(Element fileElement){
+	public LinkedList<FileExplorerItemDTO> createListObjectLibraryByFileDocumentThumbs(Element fileElement){
 		try {
 
-			LinkedList<FilesObject> thumbMap = new LinkedList<FilesObject>();
+			LinkedList<FileExplorerItemDTO> thumbMap = new LinkedList<FileExplorerItemDTO>();
 			
 			for (@SuppressWarnings("unchecked")
 			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
-				FilesObject singleThumb = new FilesObject();
-				singleThumb.setFileName(thumbElement.getName());
-				singleThumb.setFileNamePure(thumbElement.getText());
-				singleThumb.setLastModified(thumbElement.attribute("lastmod").getText());
-				singleThumb.setFileBytes(thumbElement.attribute("size").getText());
+				FileExplorerItemDTO singleThumb = new FileExplorerItemDTO();
+				singleThumb.setName(thumbElement.getName());
+				//FIXME TODO singleThumb.setFileNamePure(thumbElement.getText());
+				//FIXME TODO singleThumb.setLastModified(thumbElement.attribute("lastmod").getText());
+				//FIXME TODO singleThumb.setSize(thumbElement.attribute("size").getText());
 				thumbMap.add(singleThumb);
 			}
 			

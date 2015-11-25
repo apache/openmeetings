@@ -71,7 +71,7 @@ public class FolderPanel extends Panel {
 					if (pid == f.getId()) {
 						return;
 					}
-					f.setParentItemId(pid > 0 ? pid : null);
+					f.setParentId(pid > 0 ? pid : null);
 					f.setOwnerId(p.getOwnerId());
 					f.setRoomId(p.getRoomId());
 					if (f instanceof Recording) {
@@ -102,7 +102,7 @@ public class FolderPanel extends Panel {
 			d.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 			drag = d;
 		}
-		drag.add(r.getId() < 1 ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		drag.add(r.getId() < 1 ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -114,7 +114,7 @@ public class FolderPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				FileItem fi = model.getObject();
-				fi.setFileName(getEditor().getModelObject());
+				fi.setName(getEditor().getModelObject());
 				if (fi instanceof Recording) {
 					getBean(RecordingDao.class).update((Recording)fi);
 				} else {

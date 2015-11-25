@@ -34,17 +34,16 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getAllFiles", query = "SELECT c FROM FileExplorerItem c ORDER BY c.id")
 	, @NamedQuery(name = "getFileById", query = "SELECT c FROM FileExplorerItem c WHERE c.id = :id")
-	, @NamedQuery(name = "getFileByHash", query = "SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
+	, @NamedQuery(name = "getFileByHash", query = "SELECT c FROM FileExplorerItem c WHERE c.hash = :hash")
 	, @NamedQuery(name = "getFilesByRoomAndOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
-			+ " AND c.roomId = :roomId AND c.ownerId = :ownerId ORDER BY c.type ASC, c.fileName ")
+			+ " AND c.roomId = :roomId AND c.ownerId = :ownerId ORDER BY c.type ASC, c.name ")
 	, @NamedQuery(name = "getFilesByRoom", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.roomId = :roomId " +
-			"AND c.ownerId IS NULL AND c.parentItemId IS NULL ORDER BY c.type ASC, c.fileName ")
+			"AND c.ownerId IS NULL AND c.parentId IS NULL ORDER BY c.type ASC, c.name ")
 	, @NamedQuery(name = "getFilesByOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.ownerId = :ownerId "
-			+ "AND c.parentItemId IS NULL ORDER BY c.type ASC, c.fileName ")
+			+ "AND c.parentId IS NULL ORDER BY c.type ASC, c.name ")
 	, @NamedQuery(name = "getFilesByParent", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
-			+ "AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
-	, @NamedQuery(name = "getFileExternal", query = "SELECT c FROM FileExplorerItem c WHERE c.externalFileId = :externalFileId "
-			+ "AND c.externalType LIKE :externalType")
+			+ "AND c.parentId = :parentId ORDER BY c.type ASC, c.name ")
+	, @NamedQuery(name = "getFileExternal", query = "SELECT c FROM FileExplorerItem c WHERE c.externalId = :externalId AND c.externalType LIKE :externalType")
 })
 @Table(name = "fileexploreritem")
 @Root
@@ -58,14 +57,14 @@ public class FileExplorerItem extends FileItem {
 
 	@Column(name = "filesize")
 	@Element(data = true, required = false)
-	private Long fileSize;
+	private Long size;
 
 	@Column(name = "wml_file_path")
 	@Element(data = true, required = false)
 	private String wmlFilePath;
 
-	@Column(name = "external_file_id")
-	private Long externalId;
+	@Column(name = "external_id")
+	private String externalId;
 
 	@Column(name = "external_type")
 	private String externalType;
@@ -78,12 +77,12 @@ public class FileExplorerItem extends FileItem {
 		this.id = id;
 	}
 
-	public Long getFileSize() {
-		return fileSize;
+	public Long getSize() {
+		return size;
 	}
 
-	public void setFileSize(Long fileSize) {
-		this.fileSize = fileSize;
+	public void setSize(Long fileSize) {
+		this.size = fileSize;
 	}
 
 	public String getWmlFilePath() {
@@ -94,11 +93,11 @@ public class FileExplorerItem extends FileItem {
 		this.wmlFilePath = wmlFilePath;
 	}
 
-	public Long getExternalId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(Long externalId) {
+	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
 

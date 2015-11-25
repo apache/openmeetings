@@ -39,11 +39,11 @@ public class OggRecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	String getFileName(Recording r) {
-		return r.getFileHash() + OGG_EXTENSION;
+		return r.getHash() + OGG_EXTENSION;
 	}
 	
 	@Override
 	File getFile(Recording r) {
-		return getOggRecording(r.getFileHash());
+		return getOggRecording(r.getHash());
 	}
 }

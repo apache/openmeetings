@@ -217,11 +217,11 @@ public class RoomWebService {
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("add", err);
-			throw new ServiceException(err.getMessage());
+		} catch (ServiceException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("add", e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 	

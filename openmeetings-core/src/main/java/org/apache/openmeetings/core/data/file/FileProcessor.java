@@ -61,7 +61,7 @@ public class FileProcessor {
 
 	public ConverterProcessResultList processFile(Long userId, Long roomId, 
 			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
-			Long externalFileId, String externalType) throws Exception {
+			String externalFileId, String externalType) throws Exception {
 		
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
 		

@@ -23,10 +23,10 @@ import java.util.Map;
 
 public class WhiteboardObjectList {
 	private Long roomId;
-	private Map<Long,WhiteboardObject> whiteboardObjects = new HashMap<Long,WhiteboardObject>();
-	
+	private Map<Long, WhiteboardObject> whiteboardObjects = new HashMap<Long, WhiteboardObject>();
+
 	public WhiteboardObjectList() {}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}

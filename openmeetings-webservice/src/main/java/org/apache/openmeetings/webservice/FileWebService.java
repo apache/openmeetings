@@ -20,35 +20,38 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.data.file.FileProcessor;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileUtils;
 import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
-import org.apache.openmeetings.util.process.FileImportError;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -68,160 +71,82 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/file")
 public class FileWebService {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
+
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
-	@Autowired
-	private FileProcessor fileProcessor;
+	private FileExplorerItemDao fileDao;
 	@Autowired
 	private FileUtils fileUtils;
 
 	/**
+	 * deletes files or folders based on it id
 	 * 
-	 * Import file from external source
-	 * 
-	 * to upload a file to a room-drive you specify: externalUserId, user if of openmeetings user for which we upload
-	 * the file roomId = openmeetings room id isOwner = 0 parentFolderId = 0
-	 * 
-	 * to upload a file to a private-drive you specify: externalUserId, user if of openmeetings user for which we upload
-	 * the file roomId = openmeetings room id isOwner = 1 parentFolderId = -2
-	 * 
-	 * @param SID
-	 *            The logged in session id with minimum webservice level
-	 * @param externalUserId
-	 *            the external user id =&gt; If the file should goto a private section of any user, this number needs to
-	 *            be set
-	 * @param externalFileId
-	 *            the external file-type to identify the file later
-	 * @param externalType
-	 *            the name of the external system
-	 * @param roomId
-	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
-	 * @param isOwner
-	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
-	 * @param path
-	 *            http-path where we can grab the file from, the file has to be accessible from the OpenMeetings server
-	 * @param parentFolderId
-	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
-	 * @param fileSystemName
-	 *            the filename =&gt; Important WITH file extension!
-	 * 
-	 * @return - array of file import errors
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as logged in
+	 * @param id
+	 *            the id of the file or folder
+	 * @return - id of the file deleted, error code otherwise
 	 * @throws ServiceException
 	 */
-	public FileImportError[] importFile(String SID, String externalUserId, Long externalFileId, String externalType,
-			Long roomId, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
-			throws ServiceException {
+	@DELETE
+	@Path("/{id}")
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
+			Long userId = sessionDao.checkSession(sid);
 
-			Long userId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				URL url = new URL(path);
-				URLConnection uc = url.openConnection();
-				InputStream inputstream = new BufferedInputStream(uc.getInputStream());
-
-				User externalUser = userDao.getExternalUser(externalUserId, externalType);
-
-				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-				hs.put("user", externalUser);
-
-				ConverterProcessResultList returnError = fileProcessor.processFile(externalUser.getId(), roomId,
-						isOwner, inputstream, parentFolderId, fileSystemName, externalFileId, externalType);
-
-				// Flash cannot read the response of an upload
-				// httpServletResponse.getWriter().print(returnError);
-				hs.put("message", "library");
-				hs.put("action", "newFile");
-				hs.put("fileExplorerItem", fileExplorerItemDao.get(returnError.getFileExplorerItemId()));
-				hs.put("error", returnError.getLogMessage());
-				hs.put("fileName", returnError.getCompleteName());
-
-				// FIXME: Send event to UI that there is a new file
-
-				return returnError.convertToFileImportErrors();
-
+			FileExplorerItem f = fileDao.get(id);
+			if (f == null) {
+				return new ServiceResult(-1L, "Bad id", Type.ERROR);
 			}
-		} catch (Exception err) {
-			log.error("[importFile]", err);
+			Set<Right> rights = userDao.getRights(userId);
+			if (AuthLevelUtil.hasWebServiceLevel(rights)
+				|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))
+			{
+				fileDao.delete(f);
+				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+			} else {
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+			}
+		} catch (Exception e) {
+			log.error("[delete] ", e);
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
-	 * Import file from external source
 	 * 
-	 * to upload a file to a room-drive you specify: internalUserId, user if of openmeetings user for which we upload
-	 * the file roomId = openmeetings room id isOwner = 0 parentFolderId = 0
+	 * deletes a file by its external Id and type
 	 * 
-	 * to upload a file to a private-drive you specify: internalUserId, user if of openmeetings user for which we upload
-	 * the file roomId = openmeetings room id isOwner = 1 parentFolderId = -2
-	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param internalUserId
-	 *            the openmeetings user id =&gt; If the file should goto a private section of any user, this number
-	 *            needs to be se
-	 * @param externalFileId
-	 *            the external file-type to identify the file later
+	 * @param externalId
+	 *            the od of the file or folder
 	 * @param externalType
-	 *            the name of the external system
-	 * @param roomId
-	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
-	 * @param isOwner
-	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
-	 * @param path
-	 *            http-path where we can grab the file from, the file has to be accessible from the OpenMeetings server
-	 * @param parentFolderId
-	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
-	 * @param fileSystemName
-	 *            the filename =&gt; Important WITH file extension!
-	 * 
-	 * @return - array of file import errors
-	 * @throws ServiceException
+	 *            the externalType
+	 * @return - null
 	 */
-	public FileImportError[] importFileByInternalUserId(String SID, Long internalUserId, Long externalFileId,
-			String externalType, Long roomId, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
-			throws ServiceException {
+	@DELETE
+	@Path("/{externaltype}/{externalid}")
+	public ServiceResult deleteExternal(
+			@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
+			, @WebParam(name="externalid") @PathParam("externalid") String externalId
+			) throws ServiceException
+	{
 		try {
-
-			Long userId = sessiondataDao.checkSession(SID);
-
+			Long userId = sessionDao.checkSession(sid);
+			
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				URL url = new URL(path);
-				URLConnection uc = url.openConnection();
-				InputStream inputstream = new BufferedInputStream(uc.getInputStream());
-
-				User internalUser = userDao.get(internalUserId);
-
-				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-				hs.put("user", internalUser);
-
-				ConverterProcessResultList returnError = fileProcessor.processFile(internalUser.getId(), roomId,
-						isOwner, inputstream, parentFolderId, fileSystemName, externalFileId, externalType);
-
-				// Flash cannot read the response of an upload
-				// httpServletResponse.getWriter().print(returnError);
-				hs.put("message", "library");
-				hs.put("action", "newFile");
-				hs.put("fileExplorerItem", fileExplorerItemDao.get(returnError.getFileExplorerItemId()));
-				hs.put("error", returnError);
-				hs.put("fileName", returnError.getCompleteName());
-
-				// FIXME: Notificate UI of clients of new file
-
-				return returnError.convertToFileImportErrors();
-
+				FileExplorerItem f = fileDao.get(externalId, externalType);
+				fileDao.delete(f);
+				return new ServiceResult(f.getId(), "Deleted", Type.SUCCESS);
 			}
 		} catch (Exception err) {
-			log.error("[importFileByInternalUserId]", err);
+			log.error("[deleteFileOrFolderByExternalIdAndType]", err);
 		}
 		return null;
 	}
@@ -230,289 +155,45 @@ public class FileWebService {
 	 * to add a folder to the private drive, set parentFileExplorerItemId = 0 and isOwner to 1/true and
 	 * externalUserId/externalUserType to a valid user
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param externalUserId
-	 *            the external file-type to identify the file later
-	 * @param parentId
-	 * @param folderName
-	 *            the name of the folder
-	 * @param roomId
-	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
-	 * @param isOwner
-	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
-	 * @param externalFilesid
-	 *            the external file-type to identify the file later
-	 * @param externalType
-	 *            the name of the external system
-	 * 
-	 * @return - id of folder added
+	 * @param file
+	 *            the The file to be added
+	 * @return - Object created
 	 * @throws ServiceException
 	 */
-	public Long addFolderByExternalUserIdAndType(String SID, String externalUserId, Long parentId, String folderName,
-			Long roomId, Boolean isOwner, Long externalFilesid, String externalType) throws ServiceException {
+	@WebMethod
+	@POST
+	@Path("/")
+	public FileExplorerItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @Multipart(value = "file") @WebParam(name="file") FileExplorerItemDTO file
+			, @Multipart(value = "attach", type = "application/octet-stream", required = false) @WebParam(name="attach") InputStream attach //TODO check this
+			) throws ServiceException
+	{
 		try {
+			Long userId = sessionDao.checkSession(sid);
 
-			Long authUserId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-
-				User userExternal = userDao.getExternalUser(externalUserId, externalType);
-
-				Long userId = userExternal.getId();
-
-				log.debug("addFolder " + parentId);
-
-				if (parentId == -2 && isOwner) {
-					// userId (OwnerID) => only set if its directly root in
-					// Owner Directory,
-					// other Folders and Files maybe are also in a Home
-					// directory
-					// but just because their parent is
-					return fileExplorerItemDao.add(folderName, "", 0L, userId, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Path
-							false, // isStoredWML file
-							false, // isXmlFile
-							externalFilesid, externalType);
-				} else {
-					return fileExplorerItemDao.add(folderName, "", parentId, null, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Path
-							false, // isStoredWML file
-							false, // isXmlFile
-							externalFilesid, externalType);
-				}
+			FileExplorerItem f = file == null ? null : file.get();
+			if (f == null || f.getId() != null) {
+				throw new ServiceException("Bad id");//TODO err code -1 ????
 			}
-
-		} catch (Exception err) {
-			log.error("[addFolderByExternalUserIdAndType]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * to add a folder to the private drive, set parentFileExplorerItemId = 0 and isOwner to 1/true and userId to a
-	 * valid user
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param userId
-	 *            the openmeetings user id
-	 * @param parentId
-	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
-	 * @param folderName
-	 *            the name of the folder
-	 * @param roomId
-	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
-	 * @param isOwner
-	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
-	 * @param externalFilesid
-	 *            the external file-type to identify the file later
-	 * @param externalType
-	 *            the name of the external system
-	 * 
-	 * @return - id of the folder
-	 * @throws ServiceException
-	 */
-	public Long addFolderByUserId(String SID, Long userId, Long parentId, String folderName, Long roomId,
-			Boolean isOwner, Long externalFilesid, String externalType) throws ServiceException {
-		try {
-
-			Long authUserId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-
-				log.debug("addFolder " + parentId);
-
-				if (parentId == -2 && isOwner) {
-					// users_id (OwnerID) => only set if its directly root in
-					// Owner Directory,
-					// other Folders and Files maybe are also in a Home
-					// directory
-					// but just because their parent is
-					return fileExplorerItemDao.add(folderName, "", 0L, userId, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Path
-							false, // isStoredWML file
-							false, // isXmlFile
-							externalFilesid, externalType);
-				} else {
-					return fileExplorerItemDao.add(folderName, "", parentId, null, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Path
-							false, // isStoredWML file
-							false, // isXmlFile
-							externalFilesid, externalType);
-				}
+			Set<Right> rights = userDao.getRights(userId);
+			if (AuthLevelUtil.hasWebServiceLevel(rights)
+					|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))
+			{
+				//TODO permissions
+				//TODO attachment
+				fileDao.update(f);
+				return new FileExplorerItemDTO(f);
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-
-		} catch (Exception err) {
-			log.error("[addFolderByUserId]", err);
+		} catch (ServiceException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("[add]", e);
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * Add a folder by the current user - similar to RTMP Call
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param parentId
-	 *            parent folder id
-	 * @param fileName
-	 *            the file name
-	 * @param roomId
-	 *            the room id
-	 * @param isOwner
-	 * @return - id of the folder
-	 */
-	public Long addFolderSelf(String SID, Long parentId, String fileName, Long roomId, Boolean isOwner)
-			throws ServiceException {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-
-				log.debug("addFolder " + parentId);
-
-				if (parentId == 0 && isOwner) {
-					// users_id (OwnerID) => only set if its directly root in
-					// Owner Directory,
-					// other Folders and Files maybe are also in a Home
-					// directory
-					// but just because their parent is
-					return fileExplorerItemDao.add(fileName, "", parentId, userId, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Path
-							false, // isStoredWML file
-							false // isXmlFile
-							, 0L, "");
-				} else {
-					return fileExplorerItemDao.add(fileName, "", parentId, null, roomId, userId, true, // isFolder
-							false, // isImage
-							false, // isPresentation
-							"", // WML Paht
-							false, // isStoredWML file
-							false // isXmlFile
-							, 0L, "");
-				}
-			}
-		} catch (Exception err) {
-			log.error("[getFileExplorerByParent] ", err);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * deletes a file by its external Id and type
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param externalFilesid
-	 *            the od of the file or folder
-	 * @param externalType
-	 *            the externalType
-	 * @return - null
-	 */
-	public Long deleteFileOrFolderByExternalIdAndType(String SID, Long externalFilesid, String externalType)
-			throws ServiceException {
-
-		try {
-
-			Long userId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				fileExplorerItemDao.deleteFileExplorerItemByExternalIdAndType(externalFilesid, externalType);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[deleteFileOrFolderByExternalIdAndType]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * deletes files or folders based on it id
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param fileId
-	 *            the id of the file or folder
-	 * @return - null
-	 */
-	public Long deleteFileOrFolder(String SID, Long fileId) throws ServiceException {
-
-		try {
-
-			Long userId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				fileExplorerItemDao.delete(fileId);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[deleteFileOrFolder]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * deletes files or folders based on it id
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param fileId
-	 *            the id of the file or folder
-	 * @return - null
-	 */
-	public Long deleteFileOrFolderSelf(String SID, Long fileId) throws ServiceException {
-
-		try {
-
-			Long userId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-
-				// TODO: Check if user has access or not to the file
-
-				fileExplorerItemDao.delete(fileId);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[deleteFileOrFolder]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * Get available import File Extension allowed during import
-	 * 
-	 * @return the array of the import file extensions
-	 * @throws ServiceException
-	 */
-	public String[] getImportFileExtensions() throws ServiceException {
-		try {
-
-			return StoredFile.getExtensions();
-
-		} catch (Exception err) {
-			log.error("[getImportFileExtensions]", err);
-		}
-		return null;
 	}
 
 	/**
@@ -529,7 +210,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
@@ -539,22 +220,22 @@ public class FileWebService {
 				File file = new File(working_dir, OmFileHelper.libraryFileName);
 
 				if (!file.exists()) {
-					throw new Exception(file.getCanonicalPath() + ": does not exist ");
+					throw new ServiceException(file.getCanonicalPath() + ": does not exist ");
 				}
 
 				return LoadLibraryPresentation.parseLibraryFileToObject(file);
 
 			} else {
 
-				throw new Exception("not Authenticated");
+				throw new ServiceException("not Authenticated");
 
 			}
-
+		} catch (ServiceException e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("[getListOfFilesByAbsolutePath]", e);
 			return null;
 		}
-
 	}
 
 	/**
@@ -573,7 +254,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
@@ -582,12 +263,12 @@ public class FileWebService {
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				List<FileExplorerItem> fList = fileExplorerItemDao.getByOwner(ownerId);
+				List<FileExplorerItem> fList = fileDao.getByOwner(ownerId);
 
 				long homeFileSize = 0;
 
 				for (FileExplorerItem homeChildExplorerItem : fList) {
-					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getFileName());
+					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getName());
 					homeFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
 				}
 
@@ -595,12 +276,12 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				List<FileExplorerItem> rList = fileExplorerItemDao.getByRoom(roomId);
+				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
 
 				long roomFileSize = 0;
 
 				for (FileExplorerItem homeChildExplorerItem : rList) {
-					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getFileName());
+					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getName());
 					roomFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
 				}
 
@@ -635,7 +316,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
@@ -644,12 +325,12 @@ public class FileWebService {
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				List<FileExplorerItem> fList = fileExplorerItemDao.getByOwner(userId);
+				List<FileExplorerItem> fList = fileDao.getByOwner(userId);
 
 				long homeFileSize = 0;
 
 				for (FileExplorerItem homeChildExplorerItem : fList) {
-					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getFileName());
+					log.debug("FileExplorerItem fList " + homeChildExplorerItem.getName());
 					homeFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
 				}
 
@@ -657,12 +338,12 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				List<FileExplorerItem> rList = fileExplorerItemDao.getByRoom(roomId);
+				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
 
 				long roomFileSize = 0;
 
 				for (FileExplorerItem homeChildExplorerItem : rList) {
-					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getFileName());
+					log.debug("FileExplorerItem rList " + homeChildExplorerItem.getName());
 					roomFileSize += fileUtils.getSizeOfDirectoryAndSubs(homeChildExplorerItem);
 				}
 
@@ -704,7 +385,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
@@ -712,12 +393,12 @@ public class FileWebService {
 
 				if (parentId == 0) {
 					if (isOwner) {
-						return fileExplorerItemDao.getByOwner(ownerId).toArray(new FileExplorerItem[0]);
+						return fileDao.getByOwner(ownerId).toArray(new FileExplorerItem[0]);
 					} else {
-						return fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
+						return fileDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 					}
 				} else {
-					return fileExplorerItemDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
+					return fileDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
 				}
 
 			}
@@ -747,7 +428,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
@@ -755,12 +436,12 @@ public class FileWebService {
 
 				if (parentId == 0) {
 					if (isOwner) {
-						return fileExplorerItemDao.getByOwner(userId).toArray(new FileExplorerItem[0]);
+						return fileDao.getByOwner(userId).toArray(new FileExplorerItem[0]);
 					} else {
-						return fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
+						return fileDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 					}
 				} else {
-					return fileExplorerItemDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
+					return fileDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
 				}
 			}
 		} catch (Exception err) {
@@ -785,13 +466,13 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
-				log.debug("deleteFileOrFolder " + fileId);
+				log.debug("updateFileOrFolderName " + fileId);
 
-				fileExplorerItemDao.updateFileOrFolderName(fileId, fileName);
+				fileDao.updateFileOrFolderName(fileId, fileName);
 
 			}
 		} catch (Exception err) {
@@ -817,7 +498,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
@@ -829,9 +510,9 @@ public class FileWebService {
 				 * Exception( "This user is not the owner of the file and not allowed to edit its name" ); }
 				 */
 
-				log.debug("deleteFileOrFolder " + fileId);
+				log.debug("updateFileOrFolderSelf " + fileId);
 
-				fileExplorerItemDao.updateFileOrFolderName(fileId, fileName);
+				fileDao.updateFileOrFolderName(fileId, fileName);
 
 			}
 		} catch (Exception err) {
@@ -865,15 +546,15 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
-				log.debug("deleteFileOrFolder " + fileId);
+				log.debug("moveFile " + fileId);
 
-				fileExplorerItemDao.moveFile(fileId, newParentId, roomId, isOwner, ownerId);
+				fileDao.moveFile(fileId, newParentId, roomId, isOwner, ownerId);
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
+				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId
@@ -915,7 +596,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
@@ -923,9 +604,9 @@ public class FileWebService {
 
 				log.debug("moveFileSelf " + fileId);
 
-				fileExplorerItemDao.moveFile(fileId, newParentId, roomId, isOwner, userId);
+				fileDao.moveFile(fileId, newParentId, roomId, isOwner, userId);
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
+				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId

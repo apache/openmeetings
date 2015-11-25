@@ -66,18 +66,18 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({ 
 	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM Recording f WHERE f.id = :id") 
-	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.fileHash = :fileHash") 
+	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.hash = :hash") 
 	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
 			+ "WHERE c.insertedBy = u.id AND u.externalId = :externalId  AND u.externalType = :externalType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.groupId IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND f.groupId IS NULL AND (f.parentId IS NULL OR f.parentId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByGroup", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.groupId = :groupId AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND f.groupId = :groupId AND (f.parentId IS NULL OR f.parentId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId = :ownerId "
-			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND (f.parentId IS NULL OR f.parentId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.metaData ORDER BY c.id")
@@ -87,7 +87,7 @@ import org.simpleframework.xml.Root;
 			+ "AND r.externalType LIKE :externalType AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM Recording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.inserted")
-	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentItemId = :parentId "
+	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentId = :parentId "
 			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM Recording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "

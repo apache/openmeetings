@@ -331,13 +331,13 @@ public class RoomPanel extends BasePanel {
 					createRecordingFolder(name);
 				} else {
 					FileExplorerItem f = new FileExplorerItem();
-					f.setFileName(name);
+					f.setName(name);
 					f.setInsertedBy(getUserId());
 					f.setInserted(new Date());
 					f.setType(Type.Folder);;
 					FileItem p = selectedFile.getObject();
 					long parentId = p.getId();
-					f.setParentItemId(Type.Folder == p.getType() && parentId > 0 ? parentId : null);
+					f.setParentId(Type.Folder == p.getType() && parentId > 0 ? parentId : null);
 					f.setOwnerId(p.getOwnerId());
 					f.setRoomId(p.getRoomId());
 					getBean(FileExplorerItemDao.class).update(f);
@@ -659,10 +659,10 @@ public class RoomPanel extends BasePanel {
 			if (roomId == null) {
 				f.setId(0L);
 				f.setOwnerId(getUserId());
-				f.setFileName(Application.getString(706));
+				f.setName(Application.getString(706));
 			} else {
 				f.setId(-roomId);
-				f.setFileName(Application.getString(707));
+				f.setName(Application.getString(707));
 			}
 			return Arrays.asList(f).iterator();
 		}
