@@ -42,7 +42,7 @@
     </handler>
 </class>
 
-<class name="miniIconsImage" extends="image" stretches="both">
+<class name="miniIconsImage" extends="omImage" stretches="both">
 	<attribute name="showhandcursor" value="true" type="boolean" />
     <handler name="onmouseover">
     	if (this.showhandcursor) {

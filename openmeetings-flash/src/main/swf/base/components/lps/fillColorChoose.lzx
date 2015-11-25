@@ -142,7 +142,7 @@
     </view>
     
     <button name="rgt" x="32" y="1" onclick="parent.toggle()" width="24" height="23" >
-    	<image x="4" y="3" src="$once{ canvas.getThemeImage('colorfillchoose_rsc') }"
+    	<omImage x="4" y="3" src="$once{ canvas.getThemeImage('colorfillchoose_rsc') }"
     			width="16" height="16" stretches="both" />
         <labelTooltip labelid="427" />
     </button>
@@ -171,9 +171,9 @@
 	    		this._lock_open.setAttribute("visibility","hidden");
     		}
     	</handler>
-    	<image x="4" y="3" name="_lock" src="$once{ canvas.getThemeImage('color_lock_rsc') }"
+    	<omImage x="4" y="3" name="_lock" src="$once{ canvas.getThemeImage('color_lock_rsc') }"
     			width="16" height="16" stretches="both" />
- 	    <image x="4" y="3" name="_lock_open" src="$once{ canvas.getThemeImage('color_lock_open_rsc') }"
+ 	    <omImage x="4" y="3" name="_lock_open" src="$once{ canvas.getThemeImage('color_lock_open_rsc') }"
     			width="16" height="16" stretches="both" visibility="hidden" />
         <labelTooltip labelid="428" />
     </button>

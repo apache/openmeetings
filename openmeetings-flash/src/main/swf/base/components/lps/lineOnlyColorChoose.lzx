@@ -92,7 +92,7 @@
     </view>
     
     <button name="rgt" x="32" y="1" onclick="parent.toggle()" width="24" height="23" >
-    	<image x="4" y="3" src="$once{ canvas.getThemeImage('colorlinechoose_rsc') }"
+    	<omImage x="4" y="3" src="$once{ canvas.getThemeImage('colorlinechoose_rsc') }"
     			width="16" height="16" stretches="both" />
         <labelTooltip labelid="424" />
     </button>

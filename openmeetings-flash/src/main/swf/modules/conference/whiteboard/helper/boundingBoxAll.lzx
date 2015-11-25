@@ -454,7 +454,7 @@
 		
 	</view>
 	
-	<image src="$once{ canvas.getThemeImage('bounding_box_textedit_item_rsc') }" y="2"  width="16" height="16" stretches="both"
+	<omImage src="$once{ canvas.getThemeImage('bounding_box_textedit_item_rsc') }" y="2"  width="16" height="16" stretches="both"
 				name="_editText" visibility="hidden" x="${ parent.width-this.width-parent.innerInsetScrollbars-18 }" >
 		<handler name="onclick">
 			this.parent.whiteboardRef
@@ -476,9 +476,9 @@
 	    </handler>
     
 		<labelTooltip labelid="1463" />
-	</image>	
+	</omImage>	
 	
-	<image src="$once{ canvas.getThemeImage('bounding_box_delete_item_rsc') }" y="2"  width="16" height="16"
+	<omImage src="$once{ canvas.getThemeImage('bounding_box_delete_item_rsc') }" y="2"  width="16" height="16"
 					x="${ parent.width-this.width-parent.innerInsetScrollbars-2 }" stretches="both">
 		<handler name="onclick">
 			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
@@ -495,7 +495,7 @@
 	    </handler>
     
 		<labelTooltip labelid="80" />
-	</image>	    
+	</omImage>	    
     
     <view resource="_boundingBoxPointerTL" x="0" y="0" />
     <view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />

@@ -33,7 +33,7 @@
             this.parent.parent.parent.parent.parent.itemToDelete=this;
 			this.parent.parent.parent.parent.parent.deleteItem.sendEvent(parent);
 		</method>
-		<image stretches="both" width="16" height="16" 
+		<omImage stretches="both" width="16" height="16" 
 			 src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
 			 align="center" y="4" />
 		<labelTooltip labelid="274" />

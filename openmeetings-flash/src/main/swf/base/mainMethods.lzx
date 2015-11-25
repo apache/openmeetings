@@ -778,6 +778,8 @@
 		//if ($debug) Debug.write("tPath "+tPath);
 		if (tPath == null) {
 			if ($debug) Debug.warn("getThemeImage - No Image found for config: ",tName);
+		} else {
+			tPath = canvas.getUrl() + 'public/' + tPath; 
 		}
 		return tPath;
 	</method>

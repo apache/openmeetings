@@ -45,7 +45,7 @@
 	          bgcolor="white" opacity="1" x="1" y="1"
 	          width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" />
 		
-	    <image name="_rscIcon" stretches="both" 
+	    <omImage name="_rscIcon" stretches="both" 
 	    	  opacity="${ ( parent.enabled ) ? 1 : 0.4 }"
 		  	  x="$once{ parent.x_insetResource }" 
 	    	  y="$once{ parent.y_insetResource }" 
@@ -53,7 +53,6 @@
 	          height="$once{ parent.height_insetResource }" 
 	          src="$once{ canvas.getThemeImage(parent.resourceItem) }" />
 	          
-	    
 	     
 		<handler name="onmouseover">
 			this._rscIcon.setAttribute("x",this._rscIcon.x-1);

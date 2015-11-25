@@ -30,6 +30,7 @@
     <include href="tableListItem.lzx" />
     <include href="labelRadioButton.lzx" />
     <include href="labeltabelement.lzx" />
+    <include href="omImage.lzx" />
     
     <include href="scrollbars/" />
     <include href="text/" />

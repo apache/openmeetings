@@ -105,7 +105,7 @@
           height="$once{ parent.height-4 }" opacity="1" visibility="hidden"/>
     
     <state applied="$once{ parent.showIcon }" >
-	    <image x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
+	    <omImage x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
     				width="20" height="20" stretches="both" />
     </state>
                 

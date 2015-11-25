@@ -160,9 +160,9 @@
         parent.parent.parent.updateOrder(this);
     </handler>
     
-    <image name="_sortUp" visibility="hidden" stretches="both" width="8" height="8" y="6"
+    <omImage name="_sortUp" visibility="hidden" stretches="both" width="8" height="8" y="6"
         x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_up_rsc') }" />
-    <image name="_sortDown" visibility="hidden" stretches="both" width="8" height="8" y="6"
+    <omImage name="_sortDown" visibility="hidden" stretches="both" width="8" height="8" y="6"
         x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_down_rsc') }" />
 
 </class>
