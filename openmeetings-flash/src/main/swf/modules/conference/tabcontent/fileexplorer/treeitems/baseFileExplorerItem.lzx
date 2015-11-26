@@ -115,14 +115,14 @@
     	Check if the user tries to move a file in its own tree,
     	see moveFile
      -->
-    <method name="checkForIsChild" args="compareFileExplorerItemId">
+    <method name="checkForIsChild" args="compFileId">
     	if (this.isRoot) {
     		return false;
     	} else {
-    		if (this.fileExplorerItemId == compareFileExplorerItemId) {
+    		if (this.fileId == compFileId) {
     			return true;
     		} else {
-    			return parent.parent.checkForIsChild(compareFileExplorerItemId);
+    			return parent.parent.checkForIsChild(compFileId);
     		}
     	}
     </method>
@@ -158,7 +158,7 @@
             if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
-                            +'&fileExplorerItemId='+this.fileExplorerItemId;
+                            +'&fileId='+this.fileId;
             
             this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
             if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
@@ -184,7 +184,7 @@
 		if (this.isRoot) {
             return;
         }
-		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+		this.addOrUpdateFolderName(this.fileId,false);
 	</method>
 	
 	<method name="doResetSingleClick" args="itmeObj">
@@ -204,8 +204,8 @@
 	    	}
 	
 			if (this.isFolder) {
-				if ($debug) Debug.write("NEW this.fileExplorerItemId INTO ",this);
-				if ($debug) Debug.write("NEW this.fileExplorerItemId ",this.fileExplorerItemId);
+				if ($debug) Debug.write("NEW this.fileId INTO ",this);
+				if ($debug) Debug.write("NEW this.fileId ",this.fileId);
 				if (this["icon_folder_pre"]) {
 	    			this.icon_folder_pre.setAttribute("frame",2);
 	                this.content.setAttribute("visibility","visible");
@@ -217,7 +217,7 @@
 	                                refObjListRoot:this.refObjListRoot,
 	                    		    fileName:canvas.getLabelName(712)
 	                    		});
-	                t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+	                t.addOrUpdateFolderName(this.fileId,true);
 				}
 			}
 		]]>
@@ -243,7 +243,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+		this.addOrUpdateFolderName(this.fileId,false);
 	]]>
 	</method>
 	
@@ -277,14 +277,14 @@
 	]]>
 	</method>
 	
-	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
+	<method name="addOrUpdateFolderName" args="fileId,isNew">
 		<![CDATA[
 			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
 	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
 	    		return;
 	    	}
 		
-    		if ($debug) Debug.write("addOrUpdateFolderName ",fileExplorerItemId);
+    		if ($debug) Debug.write("addOrUpdateFolderName ",fileId);
     		var tWidth = this._fileName.width;
     		if (tWidth < 160) {
     			tWidth = 160;
@@ -297,8 +297,8 @@
     		}
     		
     		var t = new lz.dynamicFileName(canvas,{
-    			        parentFileExplorerItemId:fileExplorerItemId,
-    			        fileExplorerItemId:this.fileExplorerItemId, //Only used at update Name
+    			        parentId:fileId,
+    			        fileId:this.fileId, //Only used at update Name
     			        isOwner:this.isOwner,
     			        text:this.fileName,
     			        isNew:isNew, //false means its a renaming
@@ -404,7 +404,7 @@
     	<![CDATA[
             var downloadurl = canvas.getUrl()+'services/FileService/getFileExplorerByParentSelfInternal?'
                             +'SID='+canvas.sessionId
-                            +'&parentFileExplorerItemId='+this.fileExplorerItemId
+                            +'&parentFileExplorerItemId='+this.fileId
                             +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner;
             
@@ -418,85 +418,13 @@
         <handler name="ondata" args="d">
             <![CDATA[
                 //if ($debug) Debug.write("ondata ",d);
+                //FIXME TODO 
                 parent.renderFilesAndFolders(canvas.currentFileExplorer.parseParentToRoomObject(d));
             ]]>
         </handler>
     </dataset>
     
-    <method name="renderFilesAndFolders" args="roomHome">
-        <![CDATA[
-            this.clearContent();
-            
-            // Folder area
-            for (var i=0; i<roomHome.length; i++) {
-                var fileExplorerItem = roomHome[i];
-                if (fileExplorerItem.isFolder) {
-                    new lz.folderFileExplorerItem(this.content,{
-                                            fileName:fileExplorerItem.fileName,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileIcon:'icon_folder_rsc',
-                                            refObjListRoot:this.refObjListRoot
-                                        });
-                } else if (fileExplorerItem.isImage) {
-                    new lz.imageFileExplorerItem(this.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_image_rsc',
-                                            refObjListRoot:this.refObjListRoot
-                                        });
-                } else if (fileExplorerItem.isPresentation) {
-                    new lz.documentFileExplorerItem(this.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isPresentation:true,
-                                            fileIcon:'file_explorer_document_rsc',
-                                            refObjListRoot:this.refObjListRoot
-                                        });
-                } else if (fileExplorerItem.isVideo) {
-                    new lz.videoFileExplorerItem(this.content,{
-                                            isFolder:false,
-                                            isVideo:true,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileHash:fileExplorerItem.fileHash,
-                                            isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_video_rsc',
-                                            flvHeight:fileExplorerItem.flvHeight,
-                                            flvWidth:fileExplorerItem.flvWidth,
-                                            refObjListRoot:this.refObjListRoot
-                                        });
-                } else if (fileExplorerItem.isStoredWmlFile) { 
-                	new lz.wmlFileExplorerItem(this.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_wml_rsc',
-                                            isWmlFile: true,
-                                            refObjListRoot:this.refObjListRoot                	
-            							});
-                } else if (fileExplorerItem.isChart) { 
-                	new lz.chartFileExplorerItem(this.content,{
-                                            isFolder:false,
-                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
-                                            fileName:fileExplorerItem.fileName,
-                                            fileIcon:'file_explorer_chart_rsc',
-                                            refObjListRoot:this.refObjListRoot                	
-            							});
-
-            	}
-            }
-        ]]>
-    </method>
-    
-	
-	<view name="icon_folder_pre" 
-		  visibility="$once{ (parent.isFolder) ? 'visible' : 'hidden' }"
-		  resource="icon_folder_pre_rsc" frame="1" >
+	<view name="icon_folder_pre" visibility="$once{ (parent.isFolder) ? 'visible' : 'hidden' }" resource="icon_folder_pre_rsc" frame="1" >
 		<handler name="onclick">
 			parent.toggleOpen(false);
 		</handler>
@@ -528,7 +456,7 @@
 			'&parentPath=/' + parentPath +
 			'&room_id=files'+
 			'&sid=' + canvas.sessionId +
-			"&fileExplorerItemId=" + this.fileExplorerItemId;
+			"&fileId=" + this.fileId;
 		if ($debug) Debug.write("formatURL: ", this, downloadurl);
 		return downloadurl;
 	]]>

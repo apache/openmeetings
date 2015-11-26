@@ -63,14 +63,14 @@
         this._selected.selectItem();
         
         //Set parent folder id for next Folder or uploaded file
-        if (this._selected.fileExplorerItemId == 0) {
+        if (this._selected.fileId == 0) {
             if (this._selected.isOwner) {
                 this.parentFolderId = -2;
             } else {
                 this.parentFolderId = 0;
             }
         } else {
-            this.parentFolderId = this._selected.fileExplorerItemId;
+            this.parentFolderId = this._selected.fileId;
         }
         
     </method>
@@ -158,7 +158,7 @@
     
     <method name="playVideo" args="itemObj">
     	this.selectItem(itemObj);
-    	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName,itemObj.flvWidth,itemObj.flvHeight);
+    	canvas._drawarea.playVideoSynced(itemObj.fileId,itemObj.fileName,itemObj.flvWidth,itemObj.flvHeight);
     </method>
     
 	<method name="loadFiles">
@@ -194,113 +194,6 @@
 		if ($debug) Debug.error("httpRequestError ", event);
 	</method>
 	
-    <method name="parseParentToRoomObject" args="dObj">
-        <![CDATA[
-            
-            var filesObject = new Array();
-            
-            var tFiles = dObj.childNodes[0].childNodes;
-            
-            if ($debug) Debug.write("parseParentToRoomObject tFiles ",tFiles);
-            
-            for (var i=0;i<tFiles.length;i++) {
-                
-                filesObject.push(this.parseToFileObj(tFiles[i].childNodes));
-                
-            }
-        
-            return filesObject;
-        ]]>
-    </method>
-    
-    <method name="parseToFileObj" args="dObj">
-        <![CDATA[
-        
-            var tFileObj = new Object();
-        
-            var type = "string";
-            
-            for (var i=0;i<dObj.length;i++) {
-                
-                type = "string";
-            
-                switch (dObj[i].nodeName){
-                    case "externalFileId":
-                        type = "int";
-                        break;
-                    case "fileExplorerItemId":
-                        type = "int";
-                        break;
-                    case "fileSize":
-                        type = "int";
-                        break;
-                    case "flvHeight":
-                        type = "int";
-                        break;
-                    case "flvWidth":
-                        type = "int";
-                        break;
-                    case "insertedBy":
-                        type = "int";
-                        break;
-                    case "isChart":
-                        type = "boolean";
-                        break;
-                    case "isFolder":
-                        type = "boolean";
-                        break;
-                    case "isImage":
-                        type = "boolean";
-                        break;
-                    case "isPresentation":
-                        type = "boolean";
-                        break;
-                    case "isStoredWmlFile":
-                        type = "boolean";
-                        break;
-                    case "isVideo":
-                        type = "boolean";
-                        break;
-                    case "ownerId":
-                        type = "int";
-                        break;
-                    case "parentFileExplorerItemId":
-                        type = "int";
-                        break;
-                    case "room_id":
-                        type = "int";
-                        break;
-                    default:
-                        break;
-                }
-                
-                //if ($debug) Debug.write("Obj attr ",dObj[i].nodeName,type);
-                
-                if (dObj[i].childNodes.length > 0) {
-                    switch (type) {
-                        case "int":
-                            tFileObj[dObj[i].nodeName] = Number(dObj[i].childNodes[0].data);
-                            break;
-                        case "boolean":
-                            tFileObj[dObj[i].nodeName] = (dObj[i].childNodes[0].data == "true") ? true : false;
-                            break;
-                        default:
-                            tFileObj[dObj[i].nodeName] = dObj[i].childNodes[0].data;
-                            break;
-                    }
-                } else {
-                    tFileObj[dObj[i].nodeName] = null;
-                }
-                
-                //if ($debug) Debug.write("Obj attr ",dObj[i].nodeName,tFileObj[dObj[i].nodeName]);
-                
-            }
-        
-            return tFileObj;
-            
-        ]]>
-    </method>
-
 	<method name="setSize" args="size, el">
 		var sizem = Math.round((size / 1024 / 1024) * 100) / 100;
 		el.setAttribute("text","" + sizem + " MBytes");

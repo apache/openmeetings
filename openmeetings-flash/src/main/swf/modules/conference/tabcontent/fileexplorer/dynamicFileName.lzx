@@ -26,16 +26,16 @@
 	<attribute name="isNew" value="false" type="boolean" />
 	
 	<!-- Only used in case its an update -->
-	<attribute name="fileExplorerItemId" value="0" type="number" />
+	<attribute name="fileId" value="0" type="number" />
 	
-	<attribute name="parentFileExplorerItemId" value="0" type="number" />
+	<attribute name="parentId" value="0" type="number" />
 	<attribute name="isOwner" value="false" type="boolean" />
 	
 	<attribute name="refObj" value="null" />
 	
 	<handler name="onblur">
 		lz.ModeManager.release(this);
-		if ($debug) Debug.write("Store and Destroy ",this.parentFileExplorerItemId);
+		if ($debug) Debug.write("Store and Destroy ",this.parentId);
 		if (this.isNew) {
 		    this.addFolder();
 		} else {
@@ -51,17 +51,12 @@
 		]]>
 	</handler>
 	
-	<!--
-	public Long addFolderSelf(String SID, Long parentFileExplorerItemId,
-            String fileName, Long room_id, Boolean isOwner)
-     -->
-	
 	<method name="addFolder">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/addFolderSelfInternal?'
                             +'SID='+canvas.sessionId
-                            +'&parentFileExplorerItemId='+this.parentFileExplorerItemId
+                            +'&parentId='+this.parentId
                             +'&fileName='+this.text
                             +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner;
@@ -82,31 +77,12 @@
         </handler>
     </dataset>
 	
-	<!--
-	<netRemoteCallHib name="addFolder" funcname="fileservice.addFolder" 
-        remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.parentFileExplorerItemId;</method></netparam> 
-        <netparam><method name="getValue">return parent.parent.text;</method></netparam>   
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>  
-        <netparam><method name="getValue">return parent.parent.isOwner;</method></netparam>         
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("addFolder: ",value);
-            parent.completed(value);
-        </handler>
-    </netRemoteCallHib>  
-     -->
-	
-	<!--
-    public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
-            String fileName)
-     -->
     <method name="updateFileOrFolderName">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/updateFileOrFolderNameSelf?'
                             +'SID='+canvas.sessionId
-                            +'&fileExplorerItemId='+this.fileExplorerItemId
+                            +'&fileId='+this.fileId
                             +'&fileName='+this.text;
             
             this.updateFileOrFolderNameSelf.setAttribute("src",downloadurl);
@@ -125,21 +101,7 @@
         </handler>
     </dataset>
     
-	<!--
-	<netRemoteCallHib name="updateFileOrFolderName" funcname="fileservice.updateFileOrFolderName" 
-        remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam> 
-        <netparam><method name="getValue">return parent.parent.text;</method></netparam>   
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("updateFileOrFolderName: ",parent.fileExplorerItemId);
-            parent.completedRename();
-        </handler>
-    </netRemoteCallHib>
-     -->
-    
 	<method name="completed">
-		//this.refObj.fileExplorerItemId = fileExplorerItemId;
 		this.refObj.setAttribute("fileName",this.getText());
 		this.refObj.parent.parent.doOpen();
 		this.destroy();

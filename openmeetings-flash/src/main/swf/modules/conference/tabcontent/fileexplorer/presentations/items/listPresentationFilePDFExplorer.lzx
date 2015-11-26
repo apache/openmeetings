@@ -21,16 +21,14 @@
 <library>
 
 <class name="listPresentationFilePDFExplorer" extends="baseListPresentationItemExplorer" selectable="false">
-    
-    
     <attribute name="pdfname" value="null" />
     <attribute name="swfName" value="null" />
     
-    <attribute name="fileExplorerItemId" value="-1" type="number" />
+    <attribute name="fileId" value="-1" type="number" />
     
     <method name="loadFileByName" args="filename">
     	<![CDATA[
-    		var lzURLToLoad = this.formatURL(filename)+"&fileExplorerItemId="+this.fileExplorerItemId;
+    		var lzURLToLoad = this.formatURL(filename)+"&fileId="+this.fileId;
     		if ($debug) Debug.write("lzURLToLoad ",lzURLToLoad);
         	lz.Browser.loadURL(lzURLToLoad,'_parent');
         ]]>

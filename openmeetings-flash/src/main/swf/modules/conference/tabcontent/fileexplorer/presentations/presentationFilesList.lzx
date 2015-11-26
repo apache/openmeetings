@@ -37,8 +37,8 @@
         					uploadmodul:this.uploadmodul,thumbname:thumbName,no:no});
     </method>
     
-    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName,fileExplorerItemId">
-    	if ($debug) Debug.write("addListpresentationFileOrig ",originalName,pdfname,swfName,fileExplorerItemId);
+    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName,fileId">
+    	if ($debug) Debug.write("addListpresentationFileOrig ",originalName,pdfname,swfName,fileId);
         new lz.listPresentationFileOrigExplorer(this._table._listcontent,{
 	        				isExplorer:true,
 	        				isoriginal:true,
@@ -46,19 +46,19 @@
 	        				originalName:originalName,
 	        				pdfname:pdfname,
 	        				swfName:swfName,
-	        				fileExplorerItemId:fileExplorerItemId
+	        				fileId:fileId
         				});
     </method>
     
-    <method name="addListpresentationFilePDF" args="pdfname,swfName,fileExplorerItemId">
-    	if ($debug) Debug.write("addListpresentationFilePDF ",pdfname,swfName,fileExplorerItemId);
+    <method name="addListpresentationFilePDF" args="pdfname,swfName,fileId">
+    	if ($debug) Debug.write("addListpresentationFilePDF ",pdfname,swfName,fileId);
         new lz.listPresentationFilePDFExplorer(this._table._listcontent,{
 	        				isExplorer:true,
 	        				isoriginal:true,
 	        				uploadmodul:this.uploadmodul,
 	        				pdfname:pdfname,
 	        				swfName:swfName,
-	        				fileExplorerItemId:fileExplorerItemId
+	        				fileId:fileId
         				});
     </method>
 	    

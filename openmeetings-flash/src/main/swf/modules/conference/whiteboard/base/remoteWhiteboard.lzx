@@ -128,7 +128,7 @@
     <method name="prepareLoadWMLFile" args="itemObj">
         if ($debug) Debug.write("loadWMLFile: ",itemObj);
         
-        this.loadWMLFile.setAttribute('fileExplorerItemId', itemObj.fileExplorerItemId);
+        this.loadWMLFile.setAttribute('fileEId', itemObj.fileId);
                   
         if ($debug) Debug.write("prepareLoadWMLFile 1: ",parent.parent.whiteboardId);
         
@@ -138,10 +138,10 @@
     
     <netRemoteCallHib name="loadWMLFile" funcname="fileservice.loadWmlObject"
         remotecontext="$once{ canvas.thishib }" >
-        <attribute name="fileExplorerItemId" type="number" value="0"/>
+        <attribute name="fileId" type="number" value="0"/>
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam> 
-        <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam> 
+        <netparam><method name="getValue">return parent.fileId;</method></netparam> 
         <netparam><method name="getValue">return parent.parent.parent.parent.whiteboardId;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[

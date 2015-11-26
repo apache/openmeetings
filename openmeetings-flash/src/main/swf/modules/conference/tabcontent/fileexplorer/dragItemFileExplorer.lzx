@@ -30,7 +30,7 @@
 	
 	<attribute name="alreadySent" value="false" type="boolean" />
 	
-	<attribute name="fileExplorerItemId" value="0" type="number" />
+	<attribute name="fileId" value="0" type="number" />
 	<attribute name="newParentFileExplorerItemId" value="0" type="number" />
     <attribute name="isOwner" value="false" type="boolean" />
     <attribute name="moveToHome" value="false" type="boolean" />
@@ -89,7 +89,7 @@
     		
     		if (this.overItem["isTrashCan"] && this.overItem.isTrashCan) {
     			if ($debug) Debug.write("SEND TO GARBAGE");
-    			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
+    			this.fileId = this.refObj.fileId;
     			new lz.confirmationSingle(canvas,{
             			   refObj:this,
             			   labelid:710,
@@ -98,11 +98,11 @@
                            refReturnMethod:"sendConfirmation"
             			});
     		} else if (this.overItem["isFolder"] && this.overItem.isFolder){
-    			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileExplorerItemId);
-    			if ($debug) Debug.write("MOVE TO PARENT",this.overItem.fileExplorerItemId);
-    			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
-    			this.newParentFileExplorerItemId = this.overItem.fileExplorerItemId;
-    			if (this.overItem.fileExplorerItemId == 0) {
+    			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileId);
+    			if ($debug) Debug.write("MOVE TO PARENT",this.overItem.fileId);
+    			this.fileId = this.refObj.fileId;
+    			this.newParentFileExplorerItemId = this.overItem.fileId;
+    			if (this.overItem.fileId == 0) {
     			    this.isOwner = this.overItem.isOwner;
     			}
     			
@@ -112,7 +112,7 @@
     			this.moveToHome = checkForOwer;
     			
     			//check that the file is not moved inside itself
-    			if (this.overItem.checkForIsChild(this.refObj.fileExplorerItemId)) {
+    			if (this.overItem.checkForIsChild(this.refObj.fileId)) {
     				new lz.labelerrorPopup(canvas,{errorlabelid:922});
     				this.destroy();
     				return;
@@ -153,7 +153,7 @@
             if ($debug) Debug.write("deleteFileOrFolder HTTP 2: ");
             var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
-                            +'&fileExplorerItemId='+this.fileExplorerItemId;
+                            +'&fileId='+this.fileId;
             
             this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
             if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
@@ -172,31 +172,12 @@
         </handler>
     </dataset>
     
-    <!--
-    <netRemoteCallHib name="deleteFileOrFolder" funcname="fileservice.deleteFileOrFolder" 
-        remotecontext="$once{ canvas.thishib }" > 
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam>
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("deleteFileOrFolder: ",value);
-            parent.refObj.parent.parent.doOpen();
-            parent.destroy();
-        </handler>
-    </netRemoteCallHib> 
-     -->
-    
-    <!--
-    public Long moveFileSelf(String SID, Long fileExplorerItemId,
-            Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
-            Boolean moveToHome)
-     -->
-     
     <method name="moveFile">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/moveFileSelfInternal?'
                             +'SID='+canvas.sessionId
-                            +'&fileExplorerItemId='+this.fileExplorerItemId
+                            +'&fileId='+this.fileId
                             +'&newParentFileExplorerItemId='+this.newParentFileExplorerItemId
                             +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner
@@ -220,29 +201,6 @@
         </handler>
     </dataset>
     
-    <!--
-    <netRemoteCallHib name="moveFile" funcname="fileservice.moveFile" 
-        remotecontext="$once{ canvas.thishib }" > 
-        
-        <attribute name="fileExplorerItemId" value="0" type="number" />
-        
-        
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam>
-        <netparam><method name="getValue">return parent.newParentFileExplorerItemId;</method></netparam>  
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>         
-        <netparam><method name="getValue">return parent.isOwner;</method></netparam>
-        <netparam><method name="getValue">return parent.moveToHome;</method></netparam>
-          
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("moveFile: ",value);
-            parent.overItem.doOpen();
-            parent.refObj.parent.parent.doOpen();
-            parent.destroy();
-        </handler>
-    </netRemoteCallHib>   
-     -->  
-   
 	<view name="_dragFileSymbol" x="10" y="10"
 		resource="$once{ parent.dragItemResource }" />
 	

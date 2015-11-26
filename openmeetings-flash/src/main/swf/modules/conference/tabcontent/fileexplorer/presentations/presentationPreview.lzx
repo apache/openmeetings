@@ -39,7 +39,7 @@
 	<method name="addFolderSequence">
         <![CDATA[
         if ($debug) Debug.write("foldername 1 ",this.documentObj.fileHash);
-        if ($debug) Debug.write("foldername 2 ",this.documentObj.fileExplorerItemId);
+        if ($debug) Debug.write("foldername 2 ",this.documentObj.fileId);
         canvas.uploadmoduleimgfolder = '/'+this.documentObj.fileHash;
         this.getPresentationPreviewFileExplorer.doCall();
         ]]>
@@ -66,11 +66,11 @@
             if (presentationObject.pdfDocument==null){
                 //Is PDF only
                 //Debug.write("Is PDF only");
-                this._imageslistdraw.addListpresentationFilePDF(presentationObject.originalDocument,presentationObject.swfDocument,this.documentObj.fileExplorerItemId);
+                this._imageslistdraw.addListpresentationFilePDF(presentationObject.originalDocument,presentationObject.swfDocument,this.documentObj.fileId);
             } else {
                 //Is original Document + PDF-Document
                 //Debug.write("Is original Document + PDF-Document");
-                this._imageslistdraw.addListpresentationFileOrig(presentationObject.originalDocument,presentationObject.pdfDocument,presentationObject.swfDocument,this.documentObj.fileExplorerItemId);
+                this._imageslistdraw.addListpresentationFileOrig(presentationObject.originalDocument,presentationObject.pdfDocument,presentationObject.swfDocument,this.documentObj.fileId);
             }
         
             for (var eg=0;eg<presentationObject.thumbs.thumbs.length;eg++){
