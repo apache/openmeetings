@@ -47,8 +47,8 @@
 		<![CDATA[
     		if (this.refObj != itemRef) {
     			
-    			if (this.refObj.isFolder) {
-    				if (!itemRef.isTrashCan && !itemRef.isFolder) {
+    			if (this.refObj.type == 'Folder') {
+    				if (!itemRef.isTrashCan && itemRef.type != 'Folder') {
     					//No Folders to the whiteboard please
     					return;
     				}
@@ -97,7 +97,7 @@
             			   showCheckBox:false,
                            refReturnMethod:"sendConfirmation"
             			});
-    		} else if (this.overItem["isFolder"] && this.overItem.isFolder){
+    		} else if (this.overItem["type"] && this.overItem.type == 'Folder'){
     			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileId);
     			if ($debug) Debug.write("MOVE TO PARENT",this.overItem.fileId);
     			this.fileId = this.refObj.fileId;
@@ -121,17 +121,22 @@
     			this.moveFile();
     		} else {
     			if ($debug) Debug.warn("Drag to whiteboard !!! ");
-    			if (this.refObj.isVideo) {
-    				this.refObj.playVideo();
-    			} else if (this.refObj.isPresentation) {
-    			    this.refObj.loadDocumentToWhiteboard();
-    			} else if (this.refObj.isImage) {
-    				this.refObj.loadImageToWhiteboard();
-    			} else if (this.refObj.isWmlFile) {
-    				this.refObj.loadWmlFile();
-    			} else {
-    				if ($debug) Debug.warn("Should never happen dragItemFileExplorer unhandled case");
-    			}
+	            switch (this.refObj.type) {
+	            	case 'Video':
+	            		this.refObj.playVideo();
+	            		break;
+	            	case 'WmlFile':
+	            		this.refObj.loadWmlFile();
+	            		break;
+					case 'Presentation':
+						this.refObj.loadDocumentToWhiteboard();
+	            		break;
+					case 'Image':
+						this.refObj.loadImageToWhiteboard();
+	            		break;
+	            	default:
+	            		if ($debug) Debug.warn("Should never happen dragItemFileExplorer unhandled case");
+	            }
     			this.destroy();
     		}
     	} else {

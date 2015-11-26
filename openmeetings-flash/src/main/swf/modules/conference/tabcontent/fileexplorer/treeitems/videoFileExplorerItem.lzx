@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="videoFileExplorerItem" extends="baseFileExplorerItem" isFolder="true" isVideo="true">
+<class name="videoFileExplorerItem" extends="baseFileExplorerItem" type="Video">
 	
     <method name="generateFileLink">
         <![CDATA[

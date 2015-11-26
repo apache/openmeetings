@@ -28,12 +28,10 @@
 	<switch>
 		<when property="$as3">
 			<passthrough>
-				import flash.events.*;
 				import flash.net.*;
 			</passthrough>
 		</when>
 	</switch>
-	<attribute name="parentFolderId" value="-2" type="number" />
 	<attribute name="_selected" value="null" />
 	<attribute name="rootFileLoader" />
     
@@ -47,7 +45,7 @@
 	<handler name="onvisible">
 		if ($debug) Debug.write("fileExplorer::onvisible this._selected ", this._selected);
 		//This is thrown whenever an uploaded Document has completed
-		if (this._selected == null || !this._selected.isFolder) {
+		if (this._selected == null || this._selected.type == 'Folder') {
 			this.loadFiles();
 		} else {
 			this._selected.refresh();
@@ -65,9 +63,6 @@
         //Set parent folder id for next Folder or uploaded file
         if (this._selected.fileId == 0) {
             if (this._selected.isOwner) {
-                this.parentFolderId = -2;
-            } else {
-                this.parentFolderId = 0;
             }
         } else {
             this.parentFolderId = this._selected.fileId;
@@ -77,7 +72,7 @@
     
     <method name="addFile">
     	<![CDATA[
-	    	if ($debug) Debug.write("addFile :: ",this._selected,this.parentFolderId);
+	    	if ($debug) Debug.write("addFile :: ",this._selected);
 	    	
 	    	if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
 	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
@@ -122,11 +117,11 @@
 	        	if ($debug) Debug.write("addFolder ::1 ",this._selected);
 	            this._filearea._contentarea.subviews[0].addFolder();
 	        } else {
-	            if (this._selected.isFolder) {
-	            	if ($debug) Debug.write("-1 this._selected.isFolder ",this._selected);
+	            if (this._selected.type == 'Folder') {
+	            	if ($debug) Debug.write("-1 this._selected->Folder ", this._selected);
 	                this._selected.addFolder();
 	            } else {
-	            	if ($debug) Debug.write("-2 !this._selected.isFolder ",this._selected);
+	            	if ($debug) Debug.write("-2 this._selected->!Folder ", this._selected);
 	                this._selected.parent.parent.addFolder();
 	            }
 	        }
@@ -164,23 +159,20 @@
 	<method name="loadFiles">
 	<![CDATA[
 		if (!rootFileLoader) {
-			rootFileLoader = new lz.restCall(this, {
-				restUrl: canvas.getUrl() + 'services/file/room/' + hib.currentroomid
-				, restMethod: URLRequestMethod.GET
+			rootFileLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/room/' + hib.currentroomid
+				, method: URLRequestMethod.GET
 				, errorCallback: httpRequestError
-				, successCallback: httpRequestComplete
+				, successCallback: loadFilesComplete
 				});
 		}
-		var variables:URLVariables = new URLVariables();
-		variables.sid = canvas.sessionId;
-		rootFileLoader.load(variables);
+		rootFileLoader.load('');
 	]]>
 	</method>
 	
-	<method name="httpRequestComplete" args="event">
+	<method name="loadFilesComplete" args="event">
 		var o = JSON.parse(event.target.data);
-		if ($debug) Debug.info("httpRequestComplete ", this);
-		if ($debug) Debug.info("httpRequestComplete ", o);
+		if ($debug) Debug.info("loadFilesComplete ", o);
 		createRootItems(o.fileExplorerObject);
 	</method>
     
@@ -195,51 +187,60 @@
 	    
 	<method name="setNodes" args="list, root">
 	<![CDATA[
+		//if ($debug) Debug.info("setNodes:: ", list.length, list);
 		if (!list) {
 			return;
 		}
+		if (!list.length) {
+			list = [list];
+		}
 		for (var i = 0; i < list.length; ++i) {
 			var f = list[i];
-			//if ($debug) Debug.write("fileItem, ", f);
+			//if ($debug) Debug.write("fileItem, ", f, root);
 			switch (f.type) {
 				case 'Folder':
 					new lz.folderFileExplorerItem(root.content,{
 							fileId: f.id
 							, fileName: f.name
 							, fileIcon: 'icon_folder_rsc'
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, refObjListRoot:this
 							});
 					break;
 				case 'Image':
 					new lz.imageFileExplorerItem(root.content,{
-							isFolder: false
-							, fileId: f.id
+							fileId: f.id
 							, fileName: f.name
 							, fileHash: f.hash
-							, isImage: true
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, fileIcon: 'file_explorer_image_rsc'
 							, refObjListRoot: this
 							});
 					break;
 				case 'Presentation':
 					new lz.documentFileExplorerItem(root.content,{
-							isFolder: false
-							, fileId: f.id
+							fileId: f.id
 							, fileName: f.name
 							, fileHash: f.hash
-							, isPresentation: true
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, fileIcon: 'file_explorer_document_rsc'
 							, refObjListRoot: this
 							});
 					break;
 				case 'Video':
 					new lz.videoFileExplorerItem(root.content,{
-							isFolder: false
-							, isVideo: true
-							, fileId: f.id
+							fileId: f.id
 							, fileName: f.name
 							, fileHash: f.hash
-							, isImage: true
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, fileIcon: 'file_explorer_video_rsc'
 							, flvHeight: f.flvHeight
 							, flvWidth: f.flvWidth
@@ -248,21 +249,24 @@
 					break;
 				case 'WmlFile':
 					new lz.wmlFileExplorerItem(root.content,{
-							isFolder: false
-							, fileId: f.id
+							fileId: f.id
 							, fileName: f.name
 							, fileIcon: 'file_explorer_wml_rsc'
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, isWmlFile: true
 							, refObjListRoot: this
 							});
 					break;
 				case 'PollChart':
 					new lz.wmlFileExplorerItem(root.content,{
-							isFolder: false
-							, fileId: f.id
+							fileId: f.id
 							, fileName: f.name
 							, fileIcon: 'file_explorer_chart_rsc'
-							, isChart: true
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
 							, refObjListRoot: this
 							});
 					break;
@@ -284,20 +288,21 @@
 				, fileId: -1
 				, fileName:canvas.getLabelName(706)
 				, name: '_userHome'
-				, isRoot:true
-				, fileIcon:'file_explorer_folder_home_rsc'
-				, isOwner:true
-				, refObjListRoot:this
+				, isRoot: true
+				, ownerId: canvas.userId
+				, fileIcon: 'file_explorer_folder_home_rsc'
+				, refObjListRoot: this
 				});
 		userHome.content.setAttribute("visibility", "visible");
 		userHome.icon_folder_pre.setAttribute("frame", 2);
 		userHome._folderIcon.setAttribute("frame", 2);
-		
+		if ($debug) Debug.info("createUserRootItems ");
 		setNodes(roomObject.userHome, userHome);
 		
 		var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
 				open: true
 				, fileId: -2
+				, roomId: hib.currentroomid
 				, fileName: canvas.getLabelName(707)
 				, name: '_roomHome'
 				, isRoot: true
@@ -307,7 +312,7 @@
 		roomHome.content.setAttribute("visibility", "visible");
 		roomHome.icon_folder_pre.setAttribute("frame", 2);
 		roomHome._folderIcon.setAttribute("frame", 2);
-		
+		if ($debug) Debug.info("createRoomRootItems ");
 		setNodes(roomObject.roomHome, roomHome);
 	]]>
 	</method>

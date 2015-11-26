@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="rootFileExplorerItem" extends="baseFileExplorerItem" isFolder="true" isRoot="true">
+<class name="rootFileExplorerItem" extends="baseFileExplorerItem" type="Folder" isRoot="true">
 	
 	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
 		<contextmenu>

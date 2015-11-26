@@ -20,64 +20,79 @@
 -->
 <library>
 
-<class name="dynamicFileName" extends="customInputtext" 
-	   fontsize="10" bgcolor="0xFFFFFF">
-	
-	<attribute name="isNew" value="false" type="boolean" />
-	
-	<!-- Only used in case its an update -->
-	<attribute name="fileId" value="0" type="number" />
-	
-	<attribute name="parentId" value="0" type="number" />
-	<attribute name="isOwner" value="false" type="boolean" />
+<class name="dynamicFileName" extends="customInputtext" fontsize="10" bgcolor="0xFFFFFF">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.net.*;
+			</passthrough>
+		</when>
+	</switch>
 	
 	<attribute name="refObj" value="null" />
+	<attribute name="addFolderLoader"/>
 	
 	<handler name="onblur">
 		lz.ModeManager.release(this);
-		if ($debug) Debug.write("Store and Destroy ",this.parentId);
-		if (this.isNew) {
-		    this.addFolder();
+		if ($debug) Debug.write("Store and Destroy ", this.refObj.parentId);
+		if (this.refObj.fileId == 0) {
+		    this.add();
 		} else {
-			this.updateFileOrFolderName();
+			this.rename();
 		}
 	</handler>
 	
 	<handler name="onkeydown" args="k">
-		<![CDATA[
-    		if (k == 13 || k == 27) {
-    			this.onblur.sendEvent();
-    		}
-		]]>
+	<![CDATA[
+		if (k == 13 || k == 27) {
+			this.onblur.sendEvent();
+		}
+	]]>
 	</handler>
 	
-	<method name="addFolder">
+	<method name="add">
         <![CDATA[
-            if ($debug) Debug.write("addFolder HTTP 1: ");
-            var downloadurl = canvas.getUrl()+'services/FileService/addFolderSelfInternal?'
-                            +'SID='+canvas.sessionId
-                            +'&parentId='+this.parentId
-                            +'&fileName='+this.text
-                            +'&roomId='+hib.currentroomid
-                            +'&isOwner='+this.isOwner;
-            
-            this.addFolderSelf.setAttribute("src", downloadurl);
-            if ($debug) Debug.write("addFolderSelf doRequest ", downloadurl);
-            this.addFolderSelf.doRequest();
+            if ($debug) Debug.write("addFolder:: ", this);
+			if (!addFolderLoader) {
+				addFolderLoader = new RestCall({
+					url: canvas.getUrl() + 'services/file/'
+					, method: URLRequestMethod.POST
+					, dataFormat: URLLoaderDataFormat.BINARY
+					, contentType: "multipart/form-data; boundary=" + UploadPostHelper.getBoundary()
+					, errorCallback: httpRequestError
+					, successCallback: addFolderComplete
+					});
+			}
+			var vars = UploadPostHelper.getPostData(null, null, [
+				{
+					name: 'file'
+					, type: 'application/json'
+					, value: JSON.stringify({fileExplorerItemDTO: {
+						name: this.text
+						, parentId: this.refObj.parentId > 0 ? this.refObj.parentId : null
+						, roomId: this.refObj.roomId > 0 ? this.refObj.roomId : null
+						, ownerId: this.refObj.ownerId > 0 ? this.refObj.ownerId : null
+						, type: this.refObj.type
+						}})
+					}
+				]);
+            if ($debug) Debug.write("addFolder:: ", vars);
+			addFolderLoader.load(vars);
+			//FIXME TODO revert changes on error
         ]]>
     </method>
     
-    <dataset name="addFolderSelf" type="http" >
-        <handler name="ondata" args="d">
-            <![CDATA[
-                //if ($debug) Debug.write("ondata ",d);
-                if ($debug) Debug.write("addFolderSelf: ",d);
-                parent.completed();
-            ]]>
-        </handler>
-    </dataset>
+	<method name="addFolderComplete" args="event">
+		if ($debug) Debug.info("addFolderComplete ", event);
+		completed();
+	</method>
+
+	<method name="httpRequestError" args="event">
+		if ($debug) Debug.error("httpRequestError ", event);
+		completed();
+	</method>
 	
-    <method name="updateFileOrFolderName">
+    <method name="rename">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/updateFileOrFolderNameSelf?'
@@ -102,13 +117,13 @@
     </dataset>
     
 	<method name="completed">
-		this.refObj.setAttribute("fileName",this.getText());
+		this.refObj.setAttribute("fileName", this.text);
 		this.refObj.parent.parent.doOpen();
 		this.destroy();
 	</method>
 	
 	<method name="completedRename">
-		this.refObj.setAttribute("fileName",this.getText());
+		this.refObj.setAttribute("fileName",this.text);
 		this.destroy();
 	</method>
 	

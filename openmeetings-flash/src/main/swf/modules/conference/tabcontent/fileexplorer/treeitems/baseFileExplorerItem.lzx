@@ -21,52 +21,37 @@
 <library>
 
 <class name="baseFileExplorerItem" extends="view">
-	
 	<attribute name="refObjListRoot" value="null"/>
-	
 	<attribute name="isRoot" value="false" type="boolean" />
-	
 	<attribute name="fileIcon" type="string" value="string" />
-	
 	<attribute name="open" value="false" type="boolean" />
-	
 	<attribute name="fileId" value="0" type="number" />
-	<attribute name="isOwner" value="false" type="boolean" />
-	
-	<attribute name="isFolder" value="true" type="boolean" />
-	<attribute name="isImage" value="false" type="boolean" />
-	<attribute name="isPresentation" value="false" type="boolean" />
-	<attribute name="isVideo" value="false" type="boolean" />
-	
+	<attribute name="ownerId" value="0" type="number" />
+	<attribute name="roomId" value="0" type="number" />
+	<attribute name="type" type="string" />
 	<attribute name="fileName" value="" type="string" />
 	<attribute name="fileHash" value="" type="string" />
-	
 	<attribute name="selected" value="false" type="boolean"/>
-	
 	<attribute name="singleClickDelegate" value="null" />
 	<attribute name="singleClickStarted" value="false" type="boolean" />
-	
 	<attribute name="isMouseDownDragAction" value="false" type="boolean"/>
-	
-	<!-- If this is true, then this item has been drag-n-droped and it makes no 
-	       sense to handle any single or double click event -->
+	<!-- If this is true, then this item has been drag-n-droped and it makes no sense to handle any single or double click event -->
 	<attribute name="mouseDownClickUsed" value="false" type="boolean" />
 	<attribute name="mouseDownClickDelegate" value="null" />
-	
 	<attribute name="isTrashCan" value="false" type="boolean" />
 	
 	<handler name="oninit">
 		this.singleClickDelegate = new LzDelegate( this, "doSingleClick" );
 		this.resetClickDelegate = new LzDelegate( this, "doResetSingleClick" );
 		this.mouseDownClickDelegate = new LzDelegate( this, "doMouseDownClick" );
-		if (this.isFolder) {
+		if (this.type = 'Folder') {
 		    lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
 		}
 	</handler>
 	
 	<method name="doOpen">
 		this.open = true;
-		if (this.isFolder) {
+		if (this.type = 'Folder') {
     		this.icon_folder_pre.setAttribute("frame",2);
     		this.content.setAttribute("visibility","visible");
 			this._folderIcon.setAttribute("frame",2);
@@ -76,7 +61,7 @@
 	
 	<method name="doClose">
 		this.open = false;
-		if (this.isFolder) {
+		if (this.type = 'Folder') {
             this.icon_folder_pre.setAttribute("frame",1);
             this.content.setAttribute("visibility","hidden");
             this._folderIcon.setAttribute("frame",1);
@@ -173,7 +158,6 @@
                 if ($debug) Debug.write("deleteFileOrFolder: ",d);
                 parent.parent.parent.doOpen();
                 parent.refObjListRoot._selected = null;
-                parent.refObjListRoot.parentFolderId = -2;
             ]]>
         </handler>
     </dataset>
@@ -184,7 +168,7 @@
 		if (this.isRoot) {
             return;
         }
-		this.addOrUpdateFolderName(this.fileId,false);
+		this.addOrUpdateFolderName();
 	</method>
 	
 	<method name="doResetSingleClick" args="itmeObj">
@@ -197,30 +181,31 @@
 	</method>
 	
 	<method name="addFolder">
-		<![CDATA[
-			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-	    		return;
-	    	}
-	
-			if (this.isFolder) {
-				if ($debug) Debug.write("NEW this.fileId INTO ",this);
-				if ($debug) Debug.write("NEW this.fileId ",this.fileId);
-				if (this["icon_folder_pre"]) {
-	    			this.icon_folder_pre.setAttribute("frame",2);
-	                this.content.setAttribute("visibility","visible");
-	                this._folderIcon.setAttribute("frame",2);
-	        		var t = new lz.folderFileExplorerItem(this.content,{
-	        			            isOwner:this.isOwner,
-	        			            isFolder:true,
-	                    		    fileIcon:'icon_folder_rsc',
-	                                refObjListRoot:this.refObjListRoot,
-	                    		    fileName:canvas.getLabelName(712)
-	                    		});
-	                t.addOrUpdateFolderName(this.fileId,true);
-				}
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
+		if (this.type == 'Folder') {
+			if ($debug) Debug.write("NEW this.fileId INTO ", this);
+			if ($debug) Debug.write("NEW this.fileId ", this.fileId);
+			if (this["icon_folder_pre"]) {
+				this.icon_folder_pre.setAttribute("frame", 2);
+				this.content.setAttribute("visibile", true);
+				this._folderIcon.setAttribute("frame", 2);
+				var t = new lz.folderFileExplorerItem(this.content, {
+						parentId: this.fileId
+						, ownerId: this.ownerId
+						, roomId: this.roomId
+						, type: 'Folder'
+						, fileIcon: 'icon_folder_rsc'
+						, refObjListRoot: this.refObjListRoot
+						, fileName: canvas.getLabelName(712)
+						});
+				t.addOrUpdateFolderName();
 			}
-		]]>
+		}
+	]]>
 	</method>
 	
 	<method name="refresh">
@@ -243,7 +228,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.addOrUpdateFolderName(this.fileId,false);
+		this.addOrUpdateFolderName();
 	]]>
 	</method>
 	
@@ -277,40 +262,36 @@
 	]]>
 	</method>
 	
-	<method name="addOrUpdateFolderName" args="fileId,isNew">
-		<![CDATA[
-			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-	    		return;
-	    	}
+	<method name="addOrUpdateFolderName">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		
-    		if ($debug) Debug.write("addOrUpdateFolderName ",fileId);
-    		var tWidth = this._fileName.width;
-    		if (tWidth < 160) {
-    			tWidth = 160;
-    		}
-    		var _y = this._fileName.getAttributeRelative("y",canvas);
-    		var _x = this._fileName.getAttributeRelative("x",canvas);
-    		if (isNew) {
-    			_y = 65; 
-    			_x += 10;
-    		}
-    		
-    		var t = new lz.dynamicFileName(canvas,{
-    			        parentId:fileId,
-    			        fileId:this.fileId, //Only used at update Name
-    			        isOwner:this.isOwner,
-    			        text:this.fileName,
-    			        isNew:isNew, //false means its a renaming
-    			        refObj:this,width:tWidth+10,
-            		    x:_x,
-            		    y:_y
-            		});
-            		
-            lz.Focus.setFocus(t,true);
-            lz.ModeManager.makeModal(t);
-            
-        ]]>
+		if ($debug) Debug.write("addOrUpdateFolderName ", this.parentId);
+		var tWidth = this._fileName.width;
+		if (tWidth < 160) {
+			tWidth = 160;
+		}
+		var _y = this._fileName.getAttributeRelative("y", canvas);
+		var _x = this._fileName.getAttributeRelative("x", canvas);
+		if (this.fileId == 0) {
+			_y = 65;
+			_x += 10;
+		}
+		
+		var t = new lz.dynamicFileName(canvas, {
+				text: this.fileName
+				, refObj: this
+				, width: tWidth + 10
+				, x: _x
+				, y: _y
+				});
+
+		lz.Focus.setFocus(t,true);
+		lz.ModeManager.makeModal(t);
+	]]>
 	</method>
 	
 	<method name="toggleOpen" args="setSelection">
@@ -331,18 +312,22 @@
 		    		return;
 		    	}
 	            
-	            if (this.isVideo) {
-	            	this.playVideo();
-	            } else if (this.isWmlFile){
-					this.loadWmlFile();
-				} else if (this.isFolder) {
-	                this.doSingleClick(null);
-	            } else if (this.isPresentation) {
-	                this.loadDocument();
+	            switch (this.type) {
+	            	case 'Video':
+	            		this.playVideo();
+	            		break;
+	            	case 'WmlFile':
+	            		this.loadWmlFile();
+	            		break;
+					case 'Folder':
+						this.doSingleClick(null);
+	            		break;
+					case 'Presentation':
+						this.loadDocument();
+	            		break;
 	            }
 	        } else {
-	        	
-	        	if (this.isFolder){
+	        	if (this.type == 'Folder'){
 	        		if (!this.open) {
 	        			this.doOpen();
 	        		} else {
@@ -350,11 +335,11 @@
 	            			if (this.selected) {
 	            				if ($debug) Debug.write("Is this selected => Do Edit !!!");
 	            				this.singleClickStarted = true;
-	            			    lz.Timer.addTimer( this.singleClickDelegate, 300 );
+	            			    lz.Timer.addTimer(this.singleClickDelegate, 300);
 	            			} else {
 	            				
 	            				this.singleClickStarted = true;
-	            				lz.Timer.addTimer( this.resetClickDelegate, 300 );
+	            				lz.Timer.addTimer(this.resetClickDelegate, 300);
 	            			}
 	        			} else {
 	        				this.doClose();
@@ -365,10 +350,10 @@
 	                    if (this.selected) {
 	                        if ($debug) Debug.write("Is this selected => Do Edit !!!");
 	                        this.singleClickStarted = true;
-	                        lz.Timer.addTimer( this.singleClickDelegate, 300 );
+	                        lz.Timer.addTimer(this.singleClickDelegate, 300);
 	                    } else {
 	                        this.singleClickStarted = true;
-	                        lz.Timer.addTimer( this.resetClickDelegate, 300 );
+	                        lz.Timer.addTimer(this.resetClickDelegate, 300);
 	                    }
 	                }
 	        	}
@@ -424,7 +409,7 @@
         </handler>
     </dataset>
     
-	<view name="icon_folder_pre" visibility="$once{ (parent.isFolder) ? 'visible' : 'hidden' }" resource="icon_folder_pre_rsc" frame="1" >
+	<view name="icon_folder_pre" visible="$once{ parent.type == 'Folder' }" resource="icon_folder_pre_rsc" frame="1" >
 		<handler name="onclick">
 			parent.toggleOpen(false);
 		</handler>

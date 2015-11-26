@@ -44,6 +44,7 @@ public class FileExplorerItemDTO implements Serializable {
 	private String hash;
 	private Long parentId;
 	private Long roomId;
+	private Long ownerId;
 	private Long size;
 	private String externalId;
 	private String externalType;
@@ -59,6 +60,7 @@ public class FileExplorerItemDTO implements Serializable {
 		hash = f.getHash();
 		parentId = f.getParentId();
 		roomId = f.getRoomId();
+		ownerId = f.getOwnerId();
 		size = f.getSize();
 		externalId = f.getExternalId();
 		externalType = f.getExternalType();
@@ -74,6 +76,7 @@ public class FileExplorerItemDTO implements Serializable {
 		f.setHash(hash);
 		f.setParentId(parentId);
 		f.setRoomId(roomId);
+		f.setOwnerId(ownerId);
 		f.setSize(size);
 		f.setExternalId(externalId);
 		f.setExternalType(externalType);
@@ -90,7 +93,7 @@ public class FileExplorerItemDTO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -121,6 +124,14 @@ public class FileExplorerItemDTO implements Serializable {
 
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
+	}
+
+	public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public Long getSize() {

@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="imageFileExplorerItem" extends="baseFileExplorerItem" isFolder="true">
+<class name="imageFileExplorerItem" extends="baseFileExplorerItem" type="Image">
 	
     <method name="generateFileLink">
         <![CDATA[

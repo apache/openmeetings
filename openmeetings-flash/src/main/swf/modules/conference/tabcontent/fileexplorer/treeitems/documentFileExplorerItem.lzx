@@ -21,7 +21,7 @@
 <library>
 
  
-<class name="documentFileExplorerItem" extends="baseFileExplorerItem" isFolder="true">
+<class name="documentFileExplorerItem" extends="baseFileExplorerItem" type="Presentation">
 	
 	<method name="formatURL" args="filename">
         <![CDATA[

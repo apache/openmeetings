@@ -20,9 +20,7 @@
 -->
 <library>
 
-<class name="wmlFileExplorerItem" extends="baseFileExplorerItem" isFolder="true">
-	
-	<attribute name="isWmlFile" type="boolean" value="true"/>
+<class name="wmlFileExplorerItem" extends="baseFileExplorerItem" type="WmlFile">
 	
 	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
 		<contextmenu>

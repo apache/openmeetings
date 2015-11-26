@@ -595,7 +595,7 @@ public class BackupImport {
 				if (file.getParentId() != null && file.getParentId() <= 0L) {
 					file.setParentId(null);
 				}
-				fileExplorerItemDao.addFileExplorerItem(file);
+				fileExplorerItemDao.update(file);
 			}
 		}
 
