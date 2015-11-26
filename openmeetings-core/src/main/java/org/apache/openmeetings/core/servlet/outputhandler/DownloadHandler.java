@@ -119,10 +119,10 @@ public class DownloadHandler extends BaseHttpServlet {
 					requestedFile = "";
 				}
 				
-				String fileExplorerItemIdParam = request.getParameter("fileExplorerItemId");
-				Long fileExplorerItemId = null;
-				if (fileExplorerItemIdParam != null) {
-					fileExplorerItemId = Long.parseLong(fileExplorerItemIdParam);
+				String fileIdParam = request.getParameter("fileId");
+				Long fileId = null;
+				if (fileIdParam != null) {
+					fileId = Long.parseLong(fileIdParam);
 				}
 				
 				
@@ -253,8 +253,8 @@ public class DownloadHandler extends BaseHttpServlet {
 						response.setContentType("APPLICATION/OCTET-STREAM");
 						
 						String fileNameResult = requestedFile;
-						if (fileExplorerItemId != null && fileExplorerItemId > 0) {
-							FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileExplorerItemId);
+						if (fileId != null && fileId > 0) {
+							FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileId);
 							if (fileExplorerItem != null) {
 								
 								fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)

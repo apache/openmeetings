@@ -56,10 +56,10 @@ public class FlvExplorerConverter extends BaseConverter {
 		public int height = 0;
 	}
 
-	public List<ConverterProcessResult> startConversion(Long fileExplorerItemId, String moviePath) {
+	public List<ConverterProcessResult> startConversion(Long fileId, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.get(fileExplorerItemId);
+			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.get(fileId);
 
 			log.debug("fileExplorerItem " + fileExplorerItem.getId());
 

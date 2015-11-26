@@ -162,12 +162,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * 
 	 * @param SID
 	 * @param room_id
-	 * @param fileExplorerItemId
+	 * @param fileId
 	 * @param whiteboardId
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void loadWmlObject(String SID, Long room_id,
-			Long fileExplorerItemId, Long whiteboardId) {
+	public void loadWmlObject(String SID, Long room_id, Long fileId, Long whiteboardId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
@@ -181,7 +180,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileExplorerItemId);
+				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 

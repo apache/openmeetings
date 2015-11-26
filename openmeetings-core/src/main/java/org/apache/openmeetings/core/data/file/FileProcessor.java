@@ -134,12 +134,12 @@ public class FileProcessor {
             }
         }
 
-        Long fileExplorerItemId = fileExplorerItemDao.add(
+        Long fileId = fileExplorerItemDao.add(
                 fileSystemName, fileHashName, // The Hashname of the file
                 parentFolderId, ownerId, roomId, userId, false, // isFolder
                 isImage, isPresentation, "", false, isChart, 
                 externalFileId, externalType);
-        log.debug("fileExplorerItemId: " + fileExplorerItemId);
+        log.debug("fileId: " + fileId);
         
         
         
@@ -161,7 +161,7 @@ public class FileProcessor {
         	ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
             returnError.addItem("processThumb", processThumb);
         } else if (isVideo) {
-        	List<ConverterProcessResult> returnList = flvExplorerConverter.startConversion(fileExplorerItemId, completeName.getCanonicalPath());
+        	List<ConverterProcessResult> returnList = flvExplorerConverter.startConversion(fileId, completeName.getCanonicalPath());
         	
         	int i=0;
         	for (ConverterProcessResult returnMap : returnList) {
@@ -173,7 +173,7 @@ public class FileProcessor {
         // has to happen at the end, otherwise it will be overwritten
         //cause the variable is new initialized
         returnError.setCompleteName(completeName.getName());
-        returnError.setFileExplorerItemId(fileExplorerItemId);
+        returnError.setFileExplorerItemId(fileId);
         
 		return returnError;
 		
