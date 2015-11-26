@@ -405,7 +405,7 @@
     		//if ($debug) Debug.write("setTint");
     		//TODO: Fix this, does not work at the moment
     		//http://code.google.com/p/openmeetings/issues/detail?id=470
-    		this.setColor(canvas.getThemeColor('baseMousecolorizer'));
+    		this.setAttribute("color", canvas.getThemeColor('baseMousecolorizer'));
     	</handler>  	
     </view>
     <resizestate name="rs"/>
