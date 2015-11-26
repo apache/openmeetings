@@ -82,7 +82,7 @@ public class RecordingWebService {
 			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				recordingDao.delete(id);
+				recordingDao.delete(recordingDao.get(id));
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}

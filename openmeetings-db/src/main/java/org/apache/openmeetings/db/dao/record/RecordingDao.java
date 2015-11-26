@@ -193,21 +193,6 @@ public class RecordingDao {
 		}
 	}
 
-	/**
-	 * @param fileExplorerItemId
-	 */
-	public boolean delete(Long id) {
-		try {
-
-			Recording f = get(id);
-			return delete(f);
-		} catch (Exception ex2) {
-			log.error("[delete]: ", ex2);
-		}
-
-		return false;
-	}
-
 	public boolean delete(Recording f) {
 		if (f == null || f.getId() == null) {
 			return false;
