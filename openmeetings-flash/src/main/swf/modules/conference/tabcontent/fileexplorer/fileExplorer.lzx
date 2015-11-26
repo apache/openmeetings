@@ -33,9 +33,9 @@
 			</passthrough>
 		</when>
 	</switch>
-    <attribute name="parentFolderId" value="-2" type="number" />
-    
-    <attribute name="_selected" value="null" />
+	<attribute name="parentFolderId" value="-2" type="number" />
+	<attribute name="_selected" value="null" />
+	<attribute name="rootFileLoader" />
     
     <event name="onClose"/>
     
@@ -163,29 +163,23 @@
     
 	<method name="loadFiles">
 	<![CDATA[
-		var url = canvas.getUrl() + 'services/file/room/' + hib.currentroomid;
-		if ($debug) Debug.write("loadFiles ", url);
-		
-		var requestor:URLLoader = new URLLoader();
-		var request:URLRequest = new URLRequest(url);
-		request.method = URLRequestMethod.GET;
-		
-		//Add the URL variables
+		if (!rootFileLoader) {
+			rootFileLoader = new lz.restCall(this, {
+				restUrl: canvas.getUrl() + 'services/file/room/' + hib.currentroomid
+				, restMethod: URLRequestMethod.GET
+				, errorCallback: httpRequestError
+				, successCallback: httpRequestComplete
+				});
+		}
 		var variables:URLVariables = new URLVariables();
 		variables.sid = canvas.sessionId;
-		request.data = variables;
-		
-		//Initiate the transaction
-		requestor = new URLLoader();
-		requestor.addEventListener(Event.COMPLETE, httpRequestComplete);
-		requestor.addEventListener("ioError", httpRequestError);//IOErrorEvent.IOERROR
-		requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, httpRequestError);
-		requestor.load(request);
+		rootFileLoader.load(variables);
 	]]>
 	</method>
 	
 	<method name="httpRequestComplete" args="event">
 		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("httpRequestComplete ", this);
 		if ($debug) Debug.info("httpRequestComplete ", o);
 		createRootItems(o.fileExplorerObject);
 	</method>

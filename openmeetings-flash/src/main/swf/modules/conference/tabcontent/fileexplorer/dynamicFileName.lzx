@@ -53,7 +53,7 @@
 	
 	<method name="addFolder">
         <![CDATA[
-            if ($debug) Debug.write("moveFile HTTP 1: ");
+            if ($debug) Debug.write("addFolder HTTP 1: ");
             var downloadurl = canvas.getUrl()+'services/FileService/addFolderSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentId='+this.parentId
@@ -61,8 +61,8 @@
                             +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner;
             
-            this.addFolderSelf.setAttribute("src",downloadurl);
-            if ($debug) Debug.write("addFolderSelf doRequest ",downloadurl);
+            this.addFolderSelf.setAttribute("src", downloadurl);
+            if ($debug) Debug.write("addFolderSelf doRequest ", downloadurl);
             this.addFolderSelf.doRequest();
         ]]>
     </method>
