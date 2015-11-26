@@ -352,7 +352,7 @@
         this.setAttribute('bgcolor',0xDADADA);
     </handler>
     
-    <image name="_userpic" stretches="both" x="1">
+    <omImage name="_userpic" stretches="both" x="1">
         <handler name="onload">
             <![CDATA[
                 if (this.height > 38) {
@@ -369,7 +369,7 @@
                 }
             ]]>
         </handler>
-    </image>
+    </omImage>
     
     <labelText name="_firstName" fontsize="10" x="40" text="${ parent.firstname == null ? '' : parent.firstname }" />
     <labelText name="_lastName" fontsize="10" x="40" y="20" text="${ parent.lastname == null ? '' : parent.lastname }" />

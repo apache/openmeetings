@@ -32,7 +32,7 @@
 		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri, extra));
 	]]>
 	</handler>	
-	<image name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />
+	<omImage name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />
 </class>
 
 </library>

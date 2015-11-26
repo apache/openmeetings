@@ -107,7 +107,7 @@
     	}
     </method>
      
-    <image name="_userpic" stretches="both" x="1" y="1">
+    <omImage name="_userpic" stretches="both" x="1" y="1">
         <handler name="onload">
             <![CDATA[
                 if (this.height > 38) {
@@ -118,7 +118,7 @@
                 }
             ]]>
         </handler>
-    </image>
+    </omImage>
     
 	<method name="userTyping" args="v">
 	</method>
