@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -161,15 +162,18 @@ public class FileWebService {
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param file
 	 *            the The file to be added
+	 * @param stream
+	 *            the The file to be added
 	 * @return - Object created
 	 * @throws ServiceException
 	 */
 	@WebMethod
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/")
 	public FileExplorerItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @Multipart(value = "file") @WebParam(name="file") FileExplorerItemDTO file
-			, @Multipart(value = "attach", type = "application/octet-stream", required = false) @WebParam(name="attach") InputStream attach //TODO check this
+			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileExplorerItemDTO file
+			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream attach //TODO check this
 			) throws ServiceException
 	{
 		try {
@@ -180,11 +184,14 @@ public class FileWebService {
 				throw new ServiceException("Bad id");//TODO err code -1 ????
 			}
 			Set<Right> rights = userDao.getRights(userId);
+			/* FIXME TODO permissions
 			if (AuthLevelUtil.hasWebServiceLevel(rights)
-					|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))
+					|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))*/
+			if (AuthLevelUtil.hasUserLevel(rights))
 			{
 				//TODO permissions
 				//TODO attachment
+				f.setInsertedBy(userId);
 				fileDao.update(f);
 				return new FileExplorerItemDTO(f);
 			} else {

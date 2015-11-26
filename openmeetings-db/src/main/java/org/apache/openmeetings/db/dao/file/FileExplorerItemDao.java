@@ -93,19 +93,6 @@ public class FileExplorerItemDao {
 		return null;
 	}
 
-	public Long addFileExplorerItem(FileExplorerItem fileItem) {
-		try {
-
-			fileItem = em.merge(fileItem);
-			Long fileItemId = fileItem.getId();
-
-			return fileItemId;
-		} catch (Exception ex2) {
-			log.error("[addFileExplorerItem]", ex2);
-		}
-		return null;
-	}
-
 	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(Long roomId, Long ownerId) {
 		log.debug(".getFileExplorerItemsByRoomAndOwner() started");
 		try {
@@ -238,11 +225,11 @@ public class FileExplorerItemDao {
 		// fId.setUpdated(new Date());
 
 		if (f.getId() == null) {
+			f.setInserted(new Date());
 			em.persist(f);
 		} else {
-			if (!em.contains(f)) {
-				f = em.merge(f);
-			}
+			f.setUpdated(new Date());
+			f = em.merge(f);
 		}
 		return f;
 	}
