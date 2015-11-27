@@ -353,38 +353,38 @@ public class FileWebService {
 	 * 
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
-	 * @param fileId
+	 * @param id
 	 *            file or folder id
-	 * @param fileName
+	 * @param name
 	 *            new file or folder name
 	 * @return - null
 	 * @throws ServiceException
 	 */
-	public Long rename(String sid, Long fileId, String fileName) throws ServiceException {
-
+	@WebMethod
+	@POST
+	@Path("/rename/{id}/{name}")
+	public FileExplorerItemDTO rename(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			, @WebParam(name="name") @PathParam("name") String name) throws ServiceException
+	{
 		try {
-
 			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				// FIXME TODO: check if this user is allowed to change this file
 
-				// TODO: check if this user is allowed to change this file
-				/*
-				 * FileExplorerItem fileExItem = fileExplorerItemDao.getFileExplorerItemsById (fileExplorerItemId);
-				 * 
-				 * if (fileExItem.getOwnerId() != null && !fileExItem.getOwnerId().equals(users_id)) { throw new
-				 * Exception( "This user is not the owner of the file and not allowed to edit its name" ); }
-				 */
+				log.debug("rename " + id);
 
-				log.debug("updateFileOrFolderSelf " + fileId);
-
-				fileDao.updateFileOrFolderName(fileId, fileName);
-
+				return new FileExplorerItemDTO(fileDao.rename(id, name));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-		} catch (Exception err) {
-			log.error("[updateFileOrFolderNameSelf] ", err);
+		} catch (ServiceException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("[rename] ", e);
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**

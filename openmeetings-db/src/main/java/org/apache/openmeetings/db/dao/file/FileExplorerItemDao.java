@@ -205,25 +205,17 @@ public class FileExplorerItemDao {
 	 * @param id
 	 * @param name
 	 */
-	public void updateFileOrFolderName(Long id, String name) {
-		log.debug(".updateFileOrFolderName() started");
+	public FileExplorerItem rename(Long id, String name) {
+		log.debug("rename started");
 
-		try {
+		FileExplorerItem f = get(id);
 
-			FileExplorerItem fId = get(id);
+		f.setName(name);
 
-			fId.setName(name);
-			fId.setUpdated(new Date());
-
-			update(fId);
-		} catch (Exception ex2) {
-			log.error("[updateFileOrFolderName]: ", ex2);
-		}
+		return update(f);
 	}
 
 	public FileExplorerItem update(FileExplorerItem f) {
-		// fId.setUpdated(new Date());
-
 		if (f.getId() == null) {
 			f.setInserted(new Date());
 			em.persist(f);
