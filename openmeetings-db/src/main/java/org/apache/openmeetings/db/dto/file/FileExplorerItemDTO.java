@@ -74,9 +74,9 @@ public class FileExplorerItemDTO implements Serializable {
 		f.setId(id);
 		f.setName(name);
 		f.setHash(hash);
-		f.setParentId(parentId);
-		f.setRoomId(roomId);
-		f.setOwnerId(ownerId);
+		f.setParentId(parentId != null && parentId > 0 ? parentId : null);
+		f.setRoomId(roomId != null && roomId > 0 ? roomId : null);
+		f.setOwnerId(ownerId != null && ownerId > 0 ? ownerId : null);
 		f.setSize(size);
 		f.setExternalId(externalId);
 		f.setExternalType(externalType);

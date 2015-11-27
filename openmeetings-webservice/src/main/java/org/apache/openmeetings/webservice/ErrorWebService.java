@@ -20,17 +20,21 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.red5.logging.Red5LoggerFactory;
@@ -56,6 +60,8 @@ public class ErrorWebService {
 	private ErrorDao errorDao;
 	@Autowired
 	private LabelDao labelDao;
+	@Autowired
+	private SessiondataDao sessionDao;
 
 	/**
 	 * loads an Error-Object. If a Method returns a negative Result, its an
@@ -70,6 +76,7 @@ public class ErrorWebService {
 	 *            
 	 * @return - error with the code given
 	 */
+	@WebMethod
 	@GET
 	@Path("/{id}/{lang}")
 	public ServiceResult get(@WebParam(name="id") @PathParam("id") long id, @WebParam(name="lang") @PathParam("lang") long lang) {
@@ -92,5 +99,17 @@ public class ErrorWebService {
 			log.error("[get] ", err);
 		}
 		return null;
+	}
+	
+	@WebMethod
+	@POST
+	@Path("/report/")
+	public void report(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="message") @QueryParam("message") String message) {
+    	if (sid != null && message != null) {
+	    	Long userId = sessionDao.checkSession(sid);
+	    	if (userId != null && userId != 0) {
+	    		log.debug("[CLIENT MESSAGE] " + message);
+	    	}
+    	}
 	}
 }

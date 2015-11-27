@@ -130,6 +130,7 @@
      -->
     
     <attribute name="colorArray" value="null" />
+    <attribute name="errorLoader" />
     
     <method name="getColorForUser">
     	<![CDATA[
@@ -141,18 +142,15 @@
     
 	<method name="remoteLogWrite" args="message">
 		if ($debug) Debug.warn("remoteLogWrite:: ", message);
-		var request:URLRequest = new URLRequest(canvas.getUrl() + "remotelog.upload");
-		var requestVars:URLVariables = new URLVariables();
-    	requestVars.message = message;
-    	requestVars.sid = canvas.sessionId;
-    	request.data = requestVars;
-		request.method = URLRequestMethod.POST;
-		
-		try {
-			new URLLoader().load(request);
-		} catch (e:Error) {
-			if ($debug) Debug.error(e);
+		if (!errorLoader) {
+			errorLoader = new RestCall({
+				url: canvas.getUrl() + 'services/error/report/'
+				, method: URLRequestMethod.POST
+			});
 		}
+		var vars:URLVariables = new URLVariables();
+    	vars.message = message;
+    	errorLoader.load(vars);
     </method>
     
     <method name="getHttpHost">
@@ -166,8 +164,7 @@
         
 	<method name="getUrl">
 	<![CDATA[
-		return canvas.protocol + '://' + getHttpHost()
-			+ ':' + canvas.red5httpport + canvas.httpRootKey;
+		return canvas.protocol + '://' + getHttpHost() + ':' + canvas.red5httpport + canvas.httpRootKey;
 	]]>
 	</method>
         

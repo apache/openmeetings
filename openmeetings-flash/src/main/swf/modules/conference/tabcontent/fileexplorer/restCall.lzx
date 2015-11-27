@@ -194,7 +194,7 @@
 				import flash.net.*;
 			}#
 			private var url:String = null;
-			private var method:String = null;
+			private var method:String = URLRequestMethod.GET;
 			private var contentType:String = null;
 			private var dataFormat:String = "text";
 			private var errorCallback:Function;
@@ -245,7 +245,11 @@
 				//Add the URL vars
 				request.data = vars;
 				
-				requestor.load(request);
+				try {
+					requestor.load(request);
+				} catch (e:Error) {
+					if ($debug) Debug.error(e);
+				}
 			}
 		}
 	]]>

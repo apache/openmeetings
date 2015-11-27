@@ -185,96 +185,6 @@
 		el.setAttribute("text","" + sizem + " MBytes");
 	</method>
 	    
-	<method name="setNodes" args="list, root">
-	<![CDATA[
-		//if ($debug) Debug.info("setNodes:: ", list.length, list);
-		if (!list) {
-			return;
-		}
-		if (!list.length) {
-			list = [list];
-		}
-		for (var i = 0; i < list.length; ++i) {
-			var f = list[i];
-			//if ($debug) Debug.write("fileItem, ", f, root);
-			switch (f.type) {
-				case 'Folder':
-					new lz.folderFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileIcon: 'icon_folder_rsc'
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, refObjListRoot:this
-							});
-					break;
-				case 'Image':
-					new lz.imageFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileHash: f.hash
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, fileIcon: 'file_explorer_image_rsc'
-							, refObjListRoot: this
-							});
-					break;
-				case 'Presentation':
-					new lz.documentFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileHash: f.hash
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, fileIcon: 'file_explorer_document_rsc'
-							, refObjListRoot: this
-							});
-					break;
-				case 'Video':
-					new lz.videoFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileHash: f.hash
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, fileIcon: 'file_explorer_video_rsc'
-							, flvHeight: f.flvHeight
-							, flvWidth: f.flvWidth
-							, refObjListRoot: this
-							});
-					break;
-				case 'WmlFile':
-					new lz.wmlFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileIcon: 'file_explorer_wml_rsc'
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, isWmlFile: true
-							, refObjListRoot: this
-							});
-					break;
-				case 'PollChart':
-					new lz.wmlFileExplorerItem(root.content,{
-							fileId: f.id
-							, fileName: f.name
-							, fileIcon: 'file_explorer_chart_rsc'
-							, type: f.type
-							, ownerId: f.ownerId
-							, roomId: f.roomId
-							, refObjListRoot: this
-							});
-					break;
-			}
-		}
-	]]>
-	</method>
-	
 	<method name="createRootItems" args="roomObject">
 	<![CDATA[
 		this.clearContent();
@@ -296,8 +206,7 @@
 		userHome.content.setAttribute("visibility", "visible");
 		userHome.icon_folder_pre.setAttribute("frame", 2);
 		userHome._folderIcon.setAttribute("frame", 2);
-		if ($debug) Debug.info("createUserRootItems ");
-		setNodes(roomObject.userHome, userHome);
+		userHome.setNodes(roomObject.userHome);
 		
 		var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
 				open: true
@@ -312,8 +221,7 @@
 		roomHome.content.setAttribute("visibility", "visible");
 		roomHome.icon_folder_pre.setAttribute("frame", 2);
 		roomHome._folderIcon.setAttribute("frame", 2);
-		if ($debug) Debug.info("createRoomRootItems ");
-		setNodes(roomObject.roomHome, roomHome);
+		roomHome.setNodes(roomObject.roomHome);
 	]]>
 	</method>
 	

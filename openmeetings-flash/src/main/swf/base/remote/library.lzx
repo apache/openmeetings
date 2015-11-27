@@ -22,6 +22,5 @@
 	<include href="baseVideoView.lzx" />
 	<include href="baseVideoStream.lzx" />
 	<include href="baseVideoStreamDevice.lzx" />
-	<include href="datasetHelper.lzx" />
 	<include href="rtmpConnection.lzx" />
 </library>
