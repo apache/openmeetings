@@ -103,38 +103,9 @@
 </class>	
 
 <!--- private class of emotIconsSelector.class. resource view of chat smily icons. it shows icons and label tooltips.-->
-<class name="_chatInnerSmilyIcon" extends="view" onmouseover="" onmouseout="" width="16" height="16">
-	<switch>
-		<when property="$as3">
-			<passthrough>
-				import flash.net.*;
-				import flash.display.*;
-			</passthrough>
-		</when>
-	</switch>
+<class name="_chatInnerSmilyIcon" extends="omMiniIcon" onmouseover="" onmouseout="" width="16" height="16">
 	<attribute name="iconlabel" value="" type="string" />
 	<attribute name="iconvalue" value="" type="string" />
-	<attribute name="imgUrl" value="" type="string" />
-	<handler name="oninit">
-		this.sprite.resource = imgUrl;
-		if (! this.sprite.imgLoader) {
-			if (this.sprite.resourceContainer) {
-				// unload previous internal image-resource
-				this.sprite.unload();
-			}
-			this.sprite.imgLoader = new Loader();
-			this.sprite.imgLoader.mouseEnabled = false;// @devnote: see LPP-7022
-			this.sprite.imgLoader.mouseChildren = false;
-			this.sprite.resourceContainer = this.sprite.imgLoader;
-			this.sprite.addChild(this.sprite.imgLoader);
-		}
-		var res:Loader = this.sprite.imgLoader;
-		if (res) {
-			res.scaleX = res.scaleY = 1.0;
-		}
-		
-		this.sprite.imgLoader.load(new URLRequest(imgUrl), LzSprite.loaderContext);
-	</handler>
 	
 	<handler name="onclick">
 		var messageBox = parent.parent.parent.btnRef.message;

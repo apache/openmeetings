@@ -20,7 +20,7 @@
 -->
 <library>
 	
-<class name="miniIconSmybolExtraIcons" extends="view" width="22" height="22">
+<class name="miniIconSmybolExtraIcons" extends="omMiniIcon" width="22" height="22">
 	
 	<attribute name="modi" value="" type="string"/>
 	
@@ -262,7 +262,7 @@
     	
         if ($debug) Debug.write("this.refToolbar :: ",this.refToolbar);        
                                         
-    	this.refToolbar._rscIcon.setSource(imageurl);
+    	this.refToolbar._rscIcon.setAttribute("src", imageurl);
     	
     	this.refToolbar.parent.parent.parent.setSelection(this.refToolbar);
     	
@@ -332,7 +332,7 @@
                           
                             new lz.miniIconSmybolExtraIcons(this,{
                                           modi:list[i],
-                                          resource:iconresourceName,
+                                          imgUrl:iconresourceName,
                                           stretches:'both'
                                       });
                                   

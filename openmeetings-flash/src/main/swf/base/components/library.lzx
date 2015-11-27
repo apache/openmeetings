@@ -31,6 +31,7 @@
     <include href="labelRadioButton.lzx" />
     <include href="labeltabelement.lzx" />
     <include href="omImage.lzx" />
+    <include href="omMiniIcon.lzx" />
     
     <include href="scrollbars/" />
     <include href="text/" />
