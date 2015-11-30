@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +30,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -226,44 +225,46 @@ public class FileExplorerItemDao {
 		return f;
 	}
 
+	private void updateChilds(FileExplorerItem f) {
+		for (FileExplorerItem child : getByParent(f.getId())) {
+			child.setOwnerId(f.getOwnerId());
+			child.setRoomId(f.getRoomId());
+			update(child);
+			if (Type.Folder == f.getType()) {
+				updateChilds(child);
+			}
+		}
+	}
+
 	/**
-	 * @param fileId
+	 * @param id
 	 * @param newParentFileExplorerItemId
 	 * @param isOwner
 	 */
-	public void moveFile(Long fileId, Long parentId, Long roomId, Boolean isOwner, Long ownerId) {
-		log.debug(".moveFile() started");
-		try {
+	public FileExplorerItem move(long id, long parentId, long ownerId, long roomId) {
+		log.debug(".move() started");
 
-			FileExplorerItem fId = get(fileId);
+		FileExplorerItem f = get(id);
 
-			fId.setParentId(parentId);
-
-			if (parentId == 0) {
-				if (isOwner) {
-					// move to personal Folder
-					fId.setOwnerId(ownerId);
-				} else {
-					// move to public room folder
-					fId.setOwnerId(null);
-					fId.setRoomId(roomId);
-				}
+		if (parentId < 0) {
+			if (parentId == -1) {
+				// move to personal Folder
+				f.setOwnerId(ownerId);
+				f.setRoomId(null);
 			} else {
-				fId.setOwnerId(null);
+				// move to public room folder
+				f.setOwnerId(null);
+				f.setRoomId(roomId);
 			}
-
-			fId.setUpdated(new Date());
-
-			if (fId.getId() == null) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[updateFileOrFolderName]: ", ex2);
+			f.setParentId(null);
+		} else {
+			f.setParentId(parentId);
+			f.setOwnerId(null);
 		}
+		if (Type.Folder == f.getType()) {
+			updateChilds(f);
+		}
+		return update(f);
 	}
 
 }
