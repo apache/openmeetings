@@ -54,10 +54,6 @@ public class LoadLibraryPresentation {
 	            
 	            String nodeVal = item.getName();
 	            
-	            //LinkedHashMap<String,Object> subMap = new LinkedHashMap<String,Object>();
-	            
-	            //subMap.put("name", nodeVal);
-
 				if (nodeVal.equals("originalDocument")){
 					
 					lPresentation.setOriginalDocument(createListObjectLibraryByFileDocument(item));

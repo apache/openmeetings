@@ -58,7 +58,6 @@
 	</method>
 
     <handler name="onwidth" args="w">
-    	//if ($debug) Debug.info("onwidth ",this.width,this.height);
         this.applySizeToVid();
     </handler>
 

@@ -19,18 +19,17 @@
 package org.apache.openmeetings.core.data.file;
 
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class FileUtils {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, webAppRootKey);
 
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
+	private FileExplorerItemDao fileDao;
 
 	public long getSizeOfDirectoryAndSubs(FileExplorerItem file) {
 		try {
@@ -67,13 +66,10 @@ public class FileUtils {
 				}
 			}
 
-			log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.update(file);
-
-			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(file.getId());
-
-			for (FileExplorerItem childExplorerItem : childElements) {
-				fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
+			log.debug("calling [1] fileDao.update()");
+			fileDao.update(file);
+			for (FileExplorerItem child : fileDao.getByParent(file.getId())) {
+				fileSize += getSizeOfDirectoryAndSubs(child);
 			}
 
 			return fileSize;

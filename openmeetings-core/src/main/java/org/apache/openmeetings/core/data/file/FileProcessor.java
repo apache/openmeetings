@@ -51,7 +51,7 @@ public class FileProcessor {
 	@Autowired
 	private FlvExplorerConverter flvExplorerConverter;
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
+	private FileExplorerItemDao fileDao;
 	@Autowired
 	private GenerateImage generateImage;
 	@Autowired
@@ -113,7 +113,7 @@ public class FileProcessor {
 		}
 		f.setHash(hash);
 
-		f = fileExplorerItemDao.update(f);
+		f = fileDao.update(f);
 		log.debug("fileId: " + f.getId());
 		
 		log.debug("canBeConverted: " + canBeConverted);

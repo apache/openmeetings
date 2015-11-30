@@ -174,9 +174,11 @@
 			standardFileName:standardFileName,
 			innerwidth:innerwidth,innerheight:innerheight,
 			innerx:innerx,innery:innery,
-			uniqueObjectSyncName:uniqueObjectSyncName});
+			uniqueObjectSyncName:uniqueObjectSyncName
+			, swfUrl: downloadurl
+			});
 
-		this.currentlayer._swfView.setSource(downloadurl);
+		//this.currentlayer._swfView.setSource(downloadurl);
 		
 		this.addItemToDocumentToolBar();
 		this.doUpdateDocumentToolBar();

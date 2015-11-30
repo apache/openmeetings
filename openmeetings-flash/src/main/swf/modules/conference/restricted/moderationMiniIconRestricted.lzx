@@ -385,7 +385,7 @@
             
         </handler>
         
-        <method name="sendConfirmation" args="yesno" >
+        <method name="sendConfirmation" args="yesno, none" >
             this.kickUserByPublicSID.publicSID = parent.parent.parent.refObj.publicSID;
             this.kickUserByPublicSID.doCall();
         </method>

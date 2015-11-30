@@ -478,6 +478,7 @@
         if (roomObj != null) {
 	        hib.currentroomid = roomObj.id;
 			canvas.isConference = roomObj.type == 'conference';
+			canvas.isInterview = roomObj.type == 'interview';
         
             if (roomObj.type == 'conference') {
             	new lz.flexibleConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});

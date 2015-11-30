@@ -538,7 +538,7 @@
 			var userData = so.data;
 			var dontShowExclusiveAudioConfirmation = userData["dontShowExclusiveAudioConfirmation"];
 			var exclusiveAudioListener = new Object();
-			exclusiveAudioListener.sendNoConfirmation = function() {};
+			exclusiveAudioListener.sendNoConfirmation = function(none) {};
 			exclusiveAudioListener.sendConfirmation = function(answer, remember) {
 					if (answer) {
 						giveExclusiveAudio();

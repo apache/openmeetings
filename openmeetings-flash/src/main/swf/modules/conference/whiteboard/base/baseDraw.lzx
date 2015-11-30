@@ -380,7 +380,7 @@
 		]]>
 	</method>
 	
-	<method name="sendConfirmation" args="yesno" >
+	<method name="sendConfirmation" args="yesno, none" >
 		if (this.doClearSlide) {
 			this.clearSlideOnly();
 		} else if (this.doClearAll) {

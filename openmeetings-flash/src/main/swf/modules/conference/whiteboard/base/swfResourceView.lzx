@@ -59,8 +59,9 @@
 	
 	<!-- holds the reference_id to the SyncProcess -->
 	<attribute name="uniqueObjectSyncName" value="" type="string" />	
+	<attribute name="swfUrl" value="" type="string" />	
 	
-	<view name="_swfView" play="false">
+	<omMiniIcon name="_swfView" play="false" imgUrl="${ parent.swfUrl }">
 		 <!-- Do not send update events in case 
 			this is sync event broadcasted by another user -->
 		<attribute name="doSendChangeValue" value="false" type="boolean" />
@@ -78,134 +79,137 @@
 		</handler>
 		
 		<method name="initialLoadFullFit">
-			<![CDATA[
-			
-				if ($debug) Debug.write(" -- fullFit -- ",parent.parent.fullFit);
-			
-				if (parent.parent.fullFit) {
-					
-					if ($debug) Debug.write(" -- fullFit -2- ",this.width,this.height);
-					if ($debug) Debug.write(" -- fullFit -3- ",parent.parent.width,parent.parent.height);
-					
-					//Scale to container width/height
-					var xScale = (parent.parent.parent.width-16)/this.width;
-					var yScale = (parent.parent.parent.height-16)/this.height;
-					
-					if ($debug) Debug.write(" -- fullFit -4- ",xScale,yScale);
-					
-					if (xScale < yScale) {
-						parent.parent.setCurrentScaleByFullFit(xScale);
-					} else {
-						parent.parent.setCurrentScaleByFullFit(yScale);
-					}
-					
+		<![CDATA[
+			if ($debug) Debug.write(" -- fullFit -- ",parent.parent.fullFit);
+		
+			if (parent.parent.fullFit) {
+				if ($debug) Debug.write(" -- fullFit -2- ",this.width,this.height);
+				if ($debug) Debug.write(" -- fullFit -3- ",parent.parent.width,parent.parent.height);
+				
+				//Scale to container width/height
+				var xScale = (parent.parent.parent.width-16)/this.width;
+				var yScale = (parent.parent.parent.height-16)/this.height;
+				
+				if ($debug) Debug.write(" -- fullFit -4- ",xScale,yScale);
+				
+				if (xScale < yScale) {
+					parent.parent.setCurrentScaleByFullFit(xScale);
+				} else {
+					parent.parent.setCurrentScaleByFullFit(yScale);
 				}
-			
-			]]>
+			}
+		]]>
+		</method>
+		
+		<method name="completeCallback" args="event">
+			//if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.width, this,height);
+			//designed to be empty to override default behavior
 		</method>
 		
 		<handler name="onload">
-			<![CDATA[
-				if ($debug) Debug.info("onload: ",this.width,this,height);
+		<![CDATA[
+			if ($debug) Debug.info("swfResourceView::_swfView::onload: ", this.width, this,height);
+			
+			this.stop();
+			this.setAttribute('play',false);			 
+			
+			this.parent.initwidth = this.width;
+			this.parent.initheight = this.height;
+			
+			this.setAttribute('frame',parent.slideNumber);
+			
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this iamge has been loaded
+			if (this.parent.recorderModus) {
+				this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
+			} else if (this.parent.alterModus){
 				
-				this.stop();
-				this.setAttribute('play',false);			 
+				//this code is invoked when the Moderator loads the Document
 				
-				this.parent.initwidth = this.width;
-				this.parent.initheight = this.height;
+				this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
+				if ($debug) Debug.write("==> doShowObjectBounds MOD ");
 				
-				this.setAttribute('frame',parent.slideNumber);
+				this.initialLoadFullFit();
 				
-				//only send syncCommand if alterModus is true (meaning that this is the Moderator)
-				//otherwise just send a notification to moderator that this iamge has been loaded
-				if (this.parent.recorderModus) {
-					this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
-				} else if (this.parent.alterModus){
-					
-					//this code is invoked when the Moderator loads the Document
-					
-					this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
-					if ($debug) Debug.write("==> doShowObjectBounds MOD ");
-					
-					this.initialLoadFullFit();
-					
-					this.parent.refObj.doShowObjectBounds(this.parent.name);
-					this.parent.refObj.doUpdateDocumentToolBar();
-				} else {
-					
-					//this code is invoked when any participants syncronizes and loads the document
-					//because a Moderator has loaded it
-					
-					if ($debug) Debug.write("==> doShowObjectBounds Participant ");
-					
-					this.initialLoadFullFit();
-					
-					this.parent.refObj.sendLoadNotificationSWF(this.parent);
-					
-					this.parent.refObj.doUpdateDocumentToolBarByParticipant(this.parent.name);
-					
+				this.parent.refObj.doShowObjectBounds(this.parent.name);
+				this.parent.refObj.doUpdateDocumentToolBar();
+			} else {
+				
+				//this code is invoked when any participants syncronizes and loads the document
+				//because a Moderator has loaded it
+				
+				if ($debug) Debug.write("==> doShowObjectBounds Participant ");
+				
+				this.initialLoadFullFit();
+				
+				this.parent.refObj.sendLoadNotificationSWF(this.parent);
+				
+				this.parent.refObj.doUpdateDocumentToolBarByParticipant(this.parent.name);
+				
+			}
+			
+			if ($debug) Debug.write("swf loaded -2- ",this.parent.refObj.isWmlLoaderImage);
+			if (this.parent.refObj.isWmlLoaderImage){
+				if ($debug) Debug.write("swf loaded ",this.parent.innerwidth,this.parent.innerheight);
+				if (this.parent.innerwidth != 0 && this.parent.innerheight != 0) {
+					this.setAttribute('width',this.parent.innerwidth);
+					this.setAttribute('height',this.parent.innerheight);
+					this.setAttribute('x',this.parent.innerx);
+					this.setAttribute('y',this.parent.innery);
 				}
-				
-				if ($debug) Debug.write("swf loaded -2- ",this.parent.refObj.isWmlLoaderImage);
-				if (this.parent.refObj.isWmlLoaderImage){
-					if ($debug) Debug.write("swf loaded ",this.parent.innerwidth,this.parent.innerheight);
-					if (this.parent.innerwidth != 0 && this.parent.innerheight != 0) {
-						this.setAttribute('width',this.parent.innerwidth);
-						this.setAttribute('height',this.parent.innerheight);
-						this.setAttribute('x',this.parent.innerx);
-						this.setAttribute('y',this.parent.innery);
-					}
-					this.parent.currentzoomFactor = this.parent.currentzoom;
-				}
+				this.parent.currentzoomFactor = this.parent.currentzoom;
+			}
 
-				this.parent.refObj.layers.push(this.parent);			
-				
-				this.doSendChangeValue = true;
-				
-				this.oninit.sendEvent();
-			]]>
+			this.parent.refObj.layers.push(this.parent);			
+			
+			this.doSendChangeValue = true;
+			
+			this.oninit.sendEvent();
+		]]>
 		</handler>
+		
 		<handler name="onerror" args="error">
-			<![CDATA[
-				new lz.errorPopup(canvas,{error:"onerror SWF!! "+error});
-				
-				this.parent.initwidth = this.width;
-				this.parent.initheight = this.height;
-								
-				//only send syncCommand if alterModus is true (meaning that this is the Moderator)
-				//otherwise just send a notification to moderator that this iamge has been loaded
-				if (this.parent.recorderModus) {
-					this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
-				} else if (this.parent.alterModus){
-					this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
-				} else {
-					this.parent.refObj.sendLoadNotificationSWF(this.parent);
-				}
-				this.parent.refObj.layers.push(this.parent);			
-				
-				this.oninit.sendEvent();
-			]]>
+		<![CDATA[
+			new lz.errorPopup(canvas,{error:"onerror SWF!! "+error});
+			
+			this.parent.initwidth = this.width;
+			this.parent.initheight = this.height;
+							
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this iamge has been loaded
+			if (this.parent.recorderModus) {
+				this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
+			} else if (this.parent.alterModus){
+				this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
+			} else {
+				this.parent.refObj.sendLoadNotificationSWF(this.parent);
+			}
+			this.parent.refObj.layers.push(this.parent);			
+			
+			this.oninit.sendEvent();
+		]]>
 		</handler>
+		
 		<handler name="ontimeout" args="error">
-			<![CDATA[
-				new lz.errorPopup(canvas,{error:"ontimeout SWF!! "+error});
-				
-				this.parent.initwidth = this.width;
-				this.parent.initheight = this.height;
-								
-				//only send syncCommand if alterModus is true (meaning that this is the Moderator)
-				//otherwise just send a notification to moderator that this iamge has been loaded
-				if (this.parent.recorderModus) {
-					this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
-				} else if (this.parent.alterModus){
-					this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
-				} else {
-					this.parent.refObj.sendLoadNotificationSWF(this.parent);
-				}
-				this.parent.refObj.layers.push(this.parent);			
-				
-				this.oninit.sendEvent();
-			]]>
+		<![CDATA[
+			new lz.errorPopup(canvas,{error:"ontimeout SWF!! "+error});
+			
+			this.parent.initwidth = this.width;
+			this.parent.initheight = this.height;
+							
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this iamge has been loaded
+			if (this.parent.recorderModus) {
+				this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
+			} else if (this.parent.alterModus){
+				this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
+			} else {
+				this.parent.refObj.sendLoadNotificationSWF(this.parent);
+			}
+			this.parent.refObj.layers.push(this.parent);			
+			
+			this.oninit.sendEvent();
+		]]>
 		</handler> 
 		
 		<handler name="onwidth" args="w">
@@ -216,7 +220,7 @@
 			if ($debug) Debug.write("onheight ",h);
 		</handler>
 		
-	</view>
+	</omMiniIcon>
 </class>
 
 </library>

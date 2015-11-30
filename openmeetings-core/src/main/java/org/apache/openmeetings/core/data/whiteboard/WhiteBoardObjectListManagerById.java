@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.core.data.whiteboard;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
@@ -30,8 +31,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
  *
  */
 public class WhiteBoardObjectListManagerById {
-	
-	private HashMap<Long,WhiteboardObjectList> whiteBoardObjectList = new HashMap<Long,WhiteboardObjectList>();
+	private Map<Long,WhiteboardObjectList> whiteBoardObjectList = new ConcurrentHashMap<Long, WhiteboardObjectList>();
 	
 	private Long whiteboardId = 0L;
 	

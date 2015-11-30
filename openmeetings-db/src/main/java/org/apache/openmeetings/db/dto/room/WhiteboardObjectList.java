@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WhiteboardObjectList {
 	private Long roomId;
-	private Map<Long, WhiteboardObject> whiteboardObjects = new HashMap<Long, WhiteboardObject>();
+	private Map<Long, WhiteboardObject> whiteboardObjects = new ConcurrentHashMap<Long, WhiteboardObject>();
 
 	public WhiteboardObjectList() {}
 

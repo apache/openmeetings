@@ -67,7 +67,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
+	private FileExplorerItemDao fileDao;
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
 	@Autowired
@@ -139,7 +139,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				// String wmlPath = current_dir + File.separatorChar+fileName
 				// +".xml";
 				// OwnerID == null
-				Long fileExplorerId = fileExplorerItemDao.add(fileName, "", 0L,
+				Long fileExplorerId = fileDao.add(fileName, "", 0L,
 						null, room_id, users_id, false, // isFolder
 						false, // isImage
 						false, // isPresentation
@@ -180,7 +180,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
+				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 
@@ -218,9 +218,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							if ((rcl == null) || rcl.isScreenClient()) {
 								continue;
 							} else {
-								((IServiceCapableConnection) conn).invoke(
-										"loadWmlToWhiteboardById",
-										new Object[] { sendObject }, this);
+								((IServiceCapableConnection) conn).invoke("loadWmlToWhiteboardById", new Object[] { sendObject }, this);
 							}
 						}
 					}

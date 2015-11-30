@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.remote;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.openmeetings.core.batik.beans.PrintBean;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -33,11 +34,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PrintService {
-
-
 	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, OpenmeetingsVariables.webAppRootKey);	
 	
-	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
+	private static Map<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	@Autowired
 	private SessiondataDao sessiondataDao;
     @Autowired

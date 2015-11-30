@@ -28,7 +28,7 @@
 	</handler>
 	
 	<method name="completeCallback" args="event">
-		//if($debug) Debug.write("[width, height] ", imgUrl, this.sprite.imgLoader.width, this.sprite.imgLoader.height, this.width, this.height);
+		//if ($debug) Debug.info("omMiniIcon::completeCallback: ", imgUrl, this.sprite.imgLoader.width, this.sprite.imgLoader.height, this.width, this.height);
 		this.sprite.imgLoader.width = this.width;
 		this.sprite.imgLoader.height = this.height;
 	</method>

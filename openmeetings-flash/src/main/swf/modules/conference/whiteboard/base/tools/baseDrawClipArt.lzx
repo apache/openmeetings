@@ -22,31 +22,11 @@
 	
 
 <class name="drawClipArtWhiteBoard" >
-    
     <attribute name="clipArtEndx" value="0" type="number" />
     <attribute name="clipArtEndy" value="0" type="number" />
-    
-    <!-- Not needed anymore, use LzView.setColor instead
-    <method name="setTint" args="color, brightness">
-        <![CDATA[
-        if (color != "" && color != null){
-            if (brightness == null) { brightness = 0; }
-            var rgb = color;
-            var red=(rgb >> 16) & 0xFF;
-            var green=(rgb >> 8) & 0xFF;
-            var blue=rgb & 0xFF;
-
-            this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                        rb : 0, gb : 0, bb : 100 } );
-        }
-        ]]>
-    </method>
-     -->
-     
 </class>	
     
 <class name="baseDrawClipArt" extends="baseDrawArrow" >
-	
 	<attribute name="minClipArtx" value="0" type="number" />
 	<attribute name="maxClipArtx" value="0" type="number" />
 	<attribute name="minClipArty" value="0" type="number" />

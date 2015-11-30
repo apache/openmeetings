@@ -48,7 +48,7 @@
         canvas.thishib.modus = "audience";
         
         //set reference, this reference will be cleared at *ontabcontenctleave* event
-        canvas._videocontainer=this;
+        canvas._videocontainer = this;
         
         // Reconnect User to its Room Id
         canvas.thishib.userScope = canvas.thishib.currentroomid;

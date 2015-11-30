@@ -241,11 +241,8 @@ public class ChatService implements IPendingServiceCallback {
 						}
 
 						if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)
-								|| SessionVariablesUtil.getPublicSID(client).equals(
-										currentClient.getPublicSID())) {
-							((IServiceCapableConnection) conn).invoke(
-								"sendVarsToMessageWithClient",
-									new Object[] { hsm }, this);
+								|| SessionVariablesUtil.getPublicSID(client).equals(currentClient.getPublicSID())) {
+							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 						}
 					}
 				}

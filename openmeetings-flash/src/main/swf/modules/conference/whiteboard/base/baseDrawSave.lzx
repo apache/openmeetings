@@ -35,23 +35,6 @@
 	<attribute name="fileData" value="null" />
 	<attribute name="savefileDataWinRef" value="null" />
 	
-	<!-- loading a file from a wml Object
-	<attribute name="loadfileData" value="null" />
-	<attribute name="loadfileDataIndex" value="0" type="number" />
-	<attribute name="loadfileDataWinRef" value="null" />
-	<attribute name="loadObjectTimer" value="null" />
-	<attribute name="loadmessageId" value="206" type="number" />
-	<attribute name="syncmessageId" value="207" type="number" />
-	<attribute name="_loadmessageTxt" value="" type="string" />
-	<attribute name="_loadingUsers" value="null" />
-	<attribute name="wmlfileName" value="" type="string" />
-	<attribute name="wmlroom" value="" type="string" />
-	<attribute name="wmldomain" value="" type="string" />
-	<attribute name="wmlspreadNews" value="false" type="boolean" />
-	<attribute name="wmlLoadingCompleteMessage" value="null" />
-	<attribute name="synccheckTime" value="1000" type="number" />
-	 -->
-	
 	<!-- loading all stage objects on init -->
 	<attribute name="isInitLoader" value="false" type="boolean" />
     
