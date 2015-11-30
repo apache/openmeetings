@@ -41,6 +41,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.core.data.file.FileUtils;
 import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -55,6 +56,7 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -84,6 +86,8 @@ public class FileWebService {
 	private FileExplorerItemDao fileDao;
 	@Autowired
 	private FileUtils fileUtils;
+	@Autowired
+	private FileProcessor fileProcessor;
 
 	/**
 	 * deletes files or folders based on it id
@@ -173,7 +177,7 @@ public class FileWebService {
 	@Path("/")
 	public FileExplorerItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileExplorerItemDTO file
-			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream attach //TODO check this
+			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
 			) throws ServiceException
 	{
 		try {
@@ -189,10 +193,17 @@ public class FileWebService {
 					|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))*/
 			if (AuthLevelUtil.hasUserLevel(rights))
 			{
-				//TODO permissions
-				//TODO attachment
 				f.setInsertedBy(userId);
-				fileDao.update(f);
+				//TODO permissions
+				if (stream != null) {
+					//TODO attachment
+					ConverterProcessResultList result = fileProcessor.processFile(userId, f, stream);
+					if (result.hasError()) {
+						throw new ServiceException(result.getLogMessage());
+					}
+				} else {
+					f = fileDao.update(f);
+				}
 				return new FileExplorerItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
