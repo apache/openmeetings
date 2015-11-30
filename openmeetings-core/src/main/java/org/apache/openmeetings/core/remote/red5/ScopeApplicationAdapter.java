@@ -1493,22 +1493,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
-		//
 		try {
-
 			Map whiteboardObj = new HashMap();
 			int i = 0;
-			for (Iterator iter = whiteboardObjParam.iterator(); iter.hasNext();) {
-				Object obj = iter.next();
-				// log.debug("obj"+obj);
-				whiteboardObj.put(i, obj);
-				i++;
+			for (Object obj : whiteboardObjParam) {
+				whiteboardObj.put(i++, obj);
 			}
 
 			// Check if this User is the Mod:
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			if (currentClient == null) {
 				return;
@@ -1522,7 +1516,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			String action = whiteboardObj.get(2).toString();
 
 			if (action.equals("deleteMindMapNodes")) {
-
 				// Simulate Single Delete Events for z-Index
 				List actionObject = (List) whiteboardObj.get(3);
 
@@ -1532,7 +1525,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				whiteboardTempObj.put(2, "delete");
 
 				for (List itemObject : itemObjects) {
-
 					List<Object> tempActionObject = new LinkedList<Object>();
 					tempActionObject.add("mindmapnode");
 					tempActionObject.add(itemObject.get(0)); // z-Index -8
@@ -1546,16 +1538,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					whiteboardTempObj.put(3, tempActionObject);
 
-					whiteboardManagement.addWhiteBoardObjectById(
-							roomId, whiteboardTempObj, whiteboardId);
-
+					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, whiteboardId);
 				}
-
 			} else {
-
-				whiteboardManagement.addWhiteBoardObjectById(
-						roomId, whiteboardObj, whiteboardId);
-
+				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, whiteboardId);
 			}
 
 			Map<String, Object> sendObject = new HashMap<String, Object>();
@@ -1575,15 +1561,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						} else if (SessionVariablesUtil.isAVClient(client)) {
 							// AVClients or potential AVClients do not receive events
 							continue;
-						} if (client.getId().equals(
-								current.getClient().getId())) {
+						} if (client.getId().equals(current.getClient().getId())) {
 							// don't send back to same user
 							continue;
 						}
-						((IServiceCapableConnection) conn).invoke(
-							"sendVarsToWhiteboardById",
-								new Object[] { showDrawStatus ? currentClient : null, sendObject }, 
-									this);
+						((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById",
+								new Object[] { showDrawStatus ? currentClient : null, sendObject }, this);
 					}
 				}
 			}
@@ -1619,9 +1602,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	public int sendMessage(Object newMessage) {
 		try {
-			
 			sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
-			
 		} catch (Exception err) {
 			log.error("[sendMessage]", err);
 		}
@@ -1630,9 +1611,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 	public int sendMessageAll(Object newMessage) {
 		try {
-			
 			sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
-			
 		} catch (Exception err) {
 			log.error("[sendMessage]", err);
 		}

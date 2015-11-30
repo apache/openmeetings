@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -63,30 +62,26 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private final ScopeApplicationAdapter scopeApplicationAdapter = null;
+	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private final ISessionManager sessionManager = null;
+	private ISessionManager sessionManager;
 	@Autowired
-	private final WhiteBoardObjectSyncManager whiteBoardObjectListManager = null;
+	private WhiteBoardObjectSyncManager wbListManager;
 	@Autowired
-	private final WhiteBoardObjectListManagerById whiteBoardObjectListManagerById = null;
+	private WhiteBoardObjectListManagerById wbListManagerById;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 
 	public Long getNewWhiteboardId() {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
-			Long whiteBoardId = this.whiteBoardObjectListManagerById
-					.getNewWhiteboardId(room_id);
+			Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId);
 
 			return whiteBoardId;
-
 		} catch (Exception err) {
 			log.error("[deleteWhiteboard]", err);
 		}
@@ -97,38 +92,21 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
-			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById
-					.getWhiteBoardObjectListByRoomId(room_id);
-
-			for (Iterator<Long> iter = whiteboardObjectList
-					.getWhiteboardObjects().keySet().iterator(); iter.hasNext();) {
-				Long storedWhiteboardId = iter.next();
-
-				log.debug(" :: storedWhiteboardId :: " + storedWhiteboardId);
-
-				if (storedWhiteboardId.equals(whiteBoardId)) {
-					log.debug("Found Whiteboard to Remove");
-				}
-			}
-			Object returnValue = whiteboardObjectList.getWhiteboardObjects()
-					.remove(whiteBoardId);
+			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+			Object returnValue = whiteboardObjectList.getWhiteboardObjects().remove(whiteBoardId);
 
 			log.debug(" :: whiteBoardId :: " + whiteBoardId);
 
-			this.whiteBoardObjectListManagerById
-					.setWhiteBoardObjectListRoomObj(room_id,
-							whiteboardObjectList);
+			wbListManagerById.setWhiteBoardObjectListRoomObj(roomId, whiteboardObjectList);
 
 			if (returnValue != null) {
 				return true;
 			} else {
 				return false;
 			}
-
 		} catch (Exception err) {
 			log.error("[deleteWhiteboard]", err);
 		}
@@ -143,16 +121,16 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long roomId = currentClient.getRoomId();
 
 			log.debug("getRoomItems: " + roomId);
-			WhiteboardObjectList whiteboardObjectList = whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 
 			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
-				Long whiteBoardId = whiteBoardObjectListManagerById.getNewWhiteboardId(roomId);
+				Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId);
 
-				whiteBoardObjectListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), whiteBoardId);
+				wbListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), whiteBoardId);
 
 				log.debug("Init New Room List");
 
-				whiteboardObjectList = whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+				whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 			}
 			return whiteboardObjectList;
 		} catch (Exception err) {
@@ -240,31 +218,24 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 	public Boolean setCanRemote(String SID, String publicSID, boolean canRemote) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = this.sessionManager
-							.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
-						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false, null);
+						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						this.scopeApplicationAdapter
-								.sendMessageWithClientWithSyncObject(newMessage, true);
-
+						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 					} else {
 						return false;
 					}
@@ -272,7 +243,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return false;
 				}
 			}
-
 		} catch (Exception err) {
 			log.error("[setCanDraw]", err);
 		}
@@ -284,26 +254,22 @@ public class WhiteBoardService implements IPendingServiceCallback {
             log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = this.sessionManager
-							.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
-				        this.sessionManager.updateClientByStreamId(
-				                rcl.getStreamid(), rcl, false, null);
+				        sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 				        newMessage.put(0, "updateGiveAudioStatus");
 				        newMessage.put(1, rcl);
-				        this.scopeApplicationAdapter
-				                .sendMessageWithClientWithSyncObject(newMessage, true);
+				        scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 					} else {
 						return false;
 					}
@@ -311,7 +277,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return false;
 				}
 			}
-
 		} catch (Exception err) {
 			log.error("[setCanGiveAudio]", err);
 		}
@@ -320,33 +285,28 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 	public WhiteboardSyncLockObject startNewSyncprocess() {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
 			wSyncLockObject.setAddtime(new Date());
 			wSyncLockObject.setPublicSID(currentClient.getPublicSID());
 			wSyncLockObject.setInitialLoaded(true);
 
-			Map<String, WhiteboardSyncLockObject> syncListRoom = this.whiteBoardObjectListManager
-					.getWhiteBoardSyncListByRoomid(room_id);
+			Map<String, WhiteboardSyncLockObject> syncListRoom = wbListManager.getWhiteBoardSyncListByRoomid(roomId);
 
 			wSyncLockObject.setCurrentLoadingItem(true);
 			wSyncLockObject.setInserted(new Date());
 
 			syncListRoom.put(currentClient.getPublicSID(), wSyncLockObject);
-			this.whiteBoardObjectListManager.setWhiteBoardSyncListByRoomid(
-					room_id, syncListRoom);
+			wbListManager.setWhiteBoardSyncListByRoomid(roomId, syncListRoom);
 			
 			//Sync to clients
-			this.scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
+			scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
 
 			return wSyncLockObject;
-
 		} catch (Exception err) {
 			log.error("[startNewSyncprocess]", err);
 		}
@@ -355,34 +315,27 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 	public void sendCompletedSyncEvent() {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
-			Map<String, WhiteboardSyncLockObject> syncListRoom = this.whiteBoardObjectListManager
-					.getWhiteBoardSyncListByRoomid(room_id);
+			Map<String, WhiteboardSyncLockObject> syncListRoom = wbListManager.getWhiteBoardSyncListByRoomid(roomId);
 
-			WhiteboardSyncLockObject wSyncLockObject = syncListRoom
-					.get(currentClient.getPublicSID());
+			WhiteboardSyncLockObject wSyncLockObject = syncListRoom.get(currentClient.getPublicSID());
 
 			if (wSyncLockObject == null) {
 				log.error("WhiteboardSyncLockObject not found for this Client "
 						+ syncListRoom);
 				return;
 			} else if (!wSyncLockObject.isCurrentLoadingItem()) {
-				log.warn("WhiteboardSyncLockObject was not started yet "
-						+ syncListRoom);
+				log.warn("WhiteboardSyncLockObject was not started yet " + syncListRoom);
 				return;
 			} else {
 				syncListRoom.remove(currentClient.getPublicSID());
-				this.whiteBoardObjectListManager.setWhiteBoardSyncListByRoomid(
-						room_id, syncListRoom);
+				wbListManager.setWhiteBoardSyncListByRoomid(roomId, syncListRoom);
 
-				int numberOfInitial = this
-						.getNumberOfInitialLoaders(syncListRoom);
+				int numberOfInitial = getNumberOfInitialLoaders(syncListRoom);
 
 				if (numberOfInitial == 0) {
 					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, true);
@@ -390,21 +343,16 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return;
 				}
 			}
-
 		} catch (Exception err) {
 			log.error("[sendCompletedSyncEvent]", err);
 		}
 		return;
 	}
 
-	private int getNumberOfInitialLoaders(
-			Map<String, WhiteboardSyncLockObject> syncListRoom)
-			throws Exception {
+	private int getNumberOfInitialLoaders(Map<String, WhiteboardSyncLockObject> syncListRoom) throws Exception {
 		int number = 0;
-		for (Iterator<String> iter = syncListRoom.keySet().iterator(); iter
-				.hasNext();) {
-			WhiteboardSyncLockObject lockObject = syncListRoom.get(iter.next());
-			if (lockObject.isInitialLoaded()) {
+		for (Map.Entry<String, WhiteboardSyncLockObject> e : syncListRoom.entrySet()) {
+			if (e.getValue().isInitialLoaded()) {
 				number++;
 			}
 		}
@@ -415,24 +363,23 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * Image Sync Sequence
 	 */
 
-	public void startNewObjectSyncProcess(String object_id, boolean isStarting) {
+	public void startNewObjectSyncProcess(String objectId, boolean isStarting) {
 		try {
-
-			log.debug("startNewObjectSyncprocess: " + object_id);
+			log.debug("startNewObjectSyncprocess: " + objectId);
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Long roomId = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
 			wSyncLockObject.setAddtime(new Date());
 			wSyncLockObject.setPublicSID(currentClient.getPublicSID());
 			wSyncLockObject.setInserted(new Date());
 
-			Map<String, WhiteboardSyncLockObject> syncListImage = whiteBoardObjectListManager.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id, object_id);
+			Map<String, WhiteboardSyncLockObject> syncListImage = wbListManager.getWhiteBoardObjectSyncListByRoomAndObjectId(roomId, objectId);
 			syncListImage.put(currentClient.getPublicSID(), wSyncLockObject);
-			whiteBoardObjectListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(room_id, object_id, syncListImage);
+			wbListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(roomId, objectId, syncListImage);
 
 			// Do only send the Token to show the Loading Splash for the
 			// initial-Request that starts the loading
@@ -444,49 +391,34 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		}
 	}
 
-	public int sendCompletedObjectSyncEvent(String object_id) {
+	public int sendCompletedObjectSyncEvent(String objectId) {
 		try {
-
-			log.debug("sendCompletedObjectSyncEvent: " + object_id);
+			log.debug("sendCompletedObjectSyncEvent: " + objectId);
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			Long room_id = currentClient.getRoomId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
 
-			Map<String, WhiteboardSyncLockObject> syncListImage = this.whiteBoardObjectListManager
-					.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id,
-							object_id);
+			Map<String, WhiteboardSyncLockObject> syncListImage = wbListManager.getWhiteBoardObjectSyncListByRoomAndObjectId(roomId, objectId);
 
-			log.debug("sendCompletedObjectSyncEvent syncListImage: "
-					+ syncListImage);
+			log.debug("sendCompletedObjectSyncEvent syncListImage: " + syncListImage);
 
-			WhiteboardSyncLockObject wSyncLockObject = syncListImage
-					.get(currentClient.getPublicSID());
+			WhiteboardSyncLockObject wSyncLockObject = syncListImage.get(currentClient.getPublicSID());
 
 			if (wSyncLockObject == null) {
-				log.error("WhiteboardSyncLockObject not found for this Client "
-						+ currentClient.getPublicSID());
-				log.error("WhiteboardSyncLockObject not found for this syncListImage "
-						+ syncListImage);
+				log.error("WhiteboardSyncLockObject not found for this Client " + currentClient.getPublicSID());
+				log.error("WhiteboardSyncLockObject not found for this syncListImage " + syncListImage);
 				return -2;
-
 			} else {
-
-				log.debug("sendCompletedImagesSyncEvent remove: "
-						+ currentClient.getPublicSID());
+				log.debug("sendCompletedImagesSyncEvent remove: " + currentClient.getPublicSID());
 
 				syncListImage.remove(currentClient.getPublicSID());
-				this.whiteBoardObjectListManager
-						.setWhiteBoardImagesSyncListByRoomAndObjectId(room_id,
-								object_id, syncListImage);
+				wbListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(roomId, objectId, syncListImage);
 
-				int numberOfInitial = this.whiteBoardObjectListManager
-						.getWhiteBoardObjectSyncListByRoomid(room_id).size();
+				int numberOfInitial = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId).size();
 
-				log.debug("sendCompletedImagesSyncEvent numberOfInitial: "
-						+ numberOfInitial);
+				log.debug("sendCompletedImagesSyncEvent numberOfInitial: " + numberOfInitial);
 
 				if (numberOfInitial == 0) {
 					scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
@@ -495,79 +427,57 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					return -4;
 				}
 			}
-
 		} catch (Exception err) {
 			log.error("[sendCompletedObjectSyncEvent]", err);
 		}
 		return -1;
 	}
 
-	public synchronized void removeUserFromAllLists(IScope scope,
-			Client currentClient) {
+	public synchronized void removeUserFromAllLists(IScope scope, Client currentClient) {
 		try {
-
-			Long room_id = currentClient.getRoomId();
+			Long roomId = currentClient.getRoomId();
 
 			// TODO: Maybe we should also check all rooms, independent from the
-			// current room_id if there is any user registered
-			if (room_id != null) {
-
-				log.debug("removeUserFromAllLists this.whiteBoardObjectListManager: "
-						+ this.whiteBoardObjectListManager);
-				log.debug("removeUserFromAllLists room_id: " + room_id);
+			// current roomId if there is any user registered
+			if (roomId != null) {
+				log.debug("removeUserFromAllLists this.whiteBoardObjectListManager: " + wbListManager);
+				log.debug("removeUserFromAllLists roomId: " + roomId);
 
 				// Check Initial Loaders
-				Map<String, WhiteboardSyncLockObject> syncListRoom = this.whiteBoardObjectListManager
-						.getWhiteBoardSyncListByRoomid(room_id);
+				Map<String, WhiteboardSyncLockObject> syncListRoom = wbListManager.getWhiteBoardSyncListByRoomid(roomId);
 
-				WhiteboardSyncLockObject wSyncLockObject = syncListRoom
-						.get(currentClient.getPublicSID());
+				WhiteboardSyncLockObject wSyncLockObject = syncListRoom.get(currentClient.getPublicSID());
 
 				if (wSyncLockObject != null) {
 					syncListRoom.remove(currentClient.getPublicSID());
 				}
-				this.whiteBoardObjectListManager.setWhiteBoardSyncListByRoomid(
-						room_id, syncListRoom);
+				wbListManager.setWhiteBoardSyncListByRoomid(roomId, syncListRoom);
 
-				int numberOfInitial = this
-						.getNumberOfInitialLoaders(syncListRoom);
+				int numberOfInitial = getNumberOfInitialLoaders(syncListRoom);
 
 				log.debug("scope " + scope);
 
 				if (numberOfInitial == 0 && scope != null) {
-					
 					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
-					
 				}
 
 				// Check Image Loaders
-				Map<String, Map<String, WhiteboardSyncLockObject>> syncListRoomImages = this.whiteBoardObjectListManager
-						.getWhiteBoardObjectSyncListByRoomid(room_id);
+				Map<String, Map<String, WhiteboardSyncLockObject>> syncListRoomImages = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId);
 
-				for (Iterator<String> iter = syncListRoomImages.keySet()
-						.iterator(); iter.hasNext();) {
-					String object_id = iter.next();
-					Map<String, WhiteboardSyncLockObject> syncListImages = syncListRoomImages
-							.get(object_id);
-					WhiteboardSyncLockObject wImagesSyncLockObject = syncListImages
-							.get(currentClient.getPublicSID());
+				for (Map.Entry<String, Map<String, WhiteboardSyncLockObject>> e : syncListRoomImages.entrySet()) {
+					WhiteboardSyncLockObject wImagesSyncLockObject = e.getValue().get(currentClient.getPublicSID());
 					if (wImagesSyncLockObject != null) {
-						syncListImages.remove(currentClient.getPublicSID());
+						e.getValue().remove(currentClient.getPublicSID());
 					}
-					this.whiteBoardObjectListManager
-							.setWhiteBoardImagesSyncListByRoomAndObjectId(
-									room_id, object_id, syncListImages);
+					wbListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(roomId, e.getKey(), e.getValue());
 				}
 
-				int numberOfImageLoaders = this.whiteBoardObjectListManager
-						.getWhiteBoardObjectSyncListByRoomid(room_id).size();
+				int numberOfImageLoaders = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId).size();
 
 				if (numberOfImageLoaders == 0 && scope != null) {
 					scopeApplicationAdapter.sendMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
 				}
-
 			}
-
 		} catch (Exception err) {
 			log.error("[removeUserFromAllLists]", err);
 		}

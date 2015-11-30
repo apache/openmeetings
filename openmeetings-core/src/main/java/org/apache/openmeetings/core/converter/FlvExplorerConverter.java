@@ -38,12 +38,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
 
 	// Spring loaded Beans
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDaoImpl;
+	private FileExplorerItemDao fileDao;
 	@Autowired
 	private RecordingLogDao recordingLogDao;
 	
@@ -59,7 +58,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	public List<ConverterProcessResult> startConversion(Long fileId, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.get(fileId);
+			FileExplorerItem fileExplorerItem = fileDao.get(fileId);
 
 			log.debug("fileExplorerItem " + fileExplorerItem.getId());
 
@@ -117,7 +116,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + fileExplorerItem.getId(), argv_previewFLV));
 
-			fileExplorerItemDaoImpl.update(fileExplorerItem);
+			fileDao.update(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
 				recordingLogDao.add("generateFFMPEG", null, returnMap);
