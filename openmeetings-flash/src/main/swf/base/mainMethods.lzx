@@ -25,10 +25,10 @@
 	<switch>
 		<when property="$as3">
 			<passthrough>
+				import flash.display.*;
+				import flash.events.*;
 				import flash.external.ExternalInterface;
 				import flash.net.*;
-				import flash.net.*;
-				import flash.display.*;
 			</passthrough>
 		</when>
 	</switch>
@@ -819,7 +819,7 @@
 		return canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.directUserLogin || canvas.secureRemoteUserLogin;
 	</method>
 	
-	<method name="loadImgBySrc" args="cmp, imgUrl">
+	<method name="loadImgBySrc" args="cmp, imgUrl, completeCallback">
 		cmp.sprite.resource = this.src;
 		if (!cmp.sprite.imgLoader) {
 			if (cmp.sprite.resourceContainer) {
@@ -836,7 +836,9 @@
 		if (res) {
 			res.scaleX = res.scaleY = 1.0;
 		}
-		
+		if (completeCallback) {
+			cmp.sprite.imgLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeCallback);
+		}
 		cmp.sprite.imgLoader.load(new URLRequest(imgUrl), LzSprite.loaderContext);
 	</method>
 </library>

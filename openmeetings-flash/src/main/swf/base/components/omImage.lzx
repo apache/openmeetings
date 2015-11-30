@@ -27,11 +27,17 @@
 	<method name="loadOmImage" args="ignore">
 	<![CDATA[
 		if (this.src != '' && this.src != null) {
-			canvas.loadImgBySrc(this, this.src);
+			canvas.loadImgBySrc(this, this.src, completeCallback);
 		}
 	]]>
 	</method>
 
+	<method name="completeCallback" args="event">
+		//if($debug) Debug.write("[width, height] ", this.src, this.sprite.imgLoader.width, this.sprite.imgLoader.height, this.width, this.height);
+		this.sprite.imgLoader.width = this.width;
+		this.sprite.imgLoader.height = this.height;
+	</method>
+	
 	<method name="loadOmSrc" args="src">
 	<![CDATA[
 		//if ($debug) Debug.write("omImage::loadOmSrc src  ", src);
