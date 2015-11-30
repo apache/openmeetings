@@ -422,8 +422,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
@@ -431,20 +430,15 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			wSyncLockObject.setPublicSID(currentClient.getPublicSID());
 			wSyncLockObject.setInserted(new Date());
 
-			Map<String, WhiteboardSyncLockObject> syncListImage = this.whiteBoardObjectListManager
-					.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id,
-							object_id);
+			Map<String, WhiteboardSyncLockObject> syncListImage = whiteBoardObjectListManager.getWhiteBoardObjectSyncListByRoomAndObjectId(room_id, object_id);
 			syncListImage.put(currentClient.getPublicSID(), wSyncLockObject);
-			this.whiteBoardObjectListManager
-					.setWhiteBoardImagesSyncListByRoomAndObjectId(room_id,
-							object_id, syncListImage);
+			whiteBoardObjectListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(room_id, object_id, syncListImage);
 
 			// Do only send the Token to show the Loading Splash for the
 			// initial-Request that starts the loading
 			if (isStarting) {
 				scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncFlag", wSyncLockObject, true);
 			}
-
 		} catch (Exception err) {
 			log.error("[startNewObjectSyncProcess]", err);
 		}

@@ -923,18 +923,6 @@
                     canBeDragged:boundingDoUpdateOnInit,canBeResized:boundingDoUpdateOnInit,
                     ex:x,ey:y,ewidth:width,eheight:height,boundingDoUpdateOnInit:boundingDoUpdateOnInit});
 	    	this.setAttribute('boundingIsActive',true);
-        
-            //if (!boundingDoUpdateOnInit) {
-            //    this.boundingref._inner._inner.setAttribute('width',this.ObjectByName._swfView.width);
-            //    this.boundingref._inner._inner.setAttribute('height',this.ObjectByName._swfView.height);
-            //    if ($debug) Debug.write("NEW WIDTH AND HEIGHT OF SWF ",this.ObjectByName._swfView.width,this.ObjectByName._swfView.height);
-            //    this.boundingref._inner.setAttribute('visible',true);
-            //    parent.parent.changeMenu(2,true);
-            //    this.doUpdateDocumentToolBar();
-            //} else {
-            //    parent.parent.changeMenu(1,true);
-            //}
-             
     	}
     ]]>
     </method>   
@@ -964,18 +952,6 @@
                                 boundingDoUpdateOnInit:false
                             });
             this.setAttribute('boundingIsActive',true);
-        
-            //if (!boundingDoUpdateOnInit) {
-            //    this.boundingref._inner._inner.setAttribute('width',this.ObjectByName._swfView.width);
-            //    this.boundingref._inner._inner.setAttribute('height',this.ObjectByName._swfView.height);
-            //    if ($debug) Debug.write("NEW WIDTH AND HEIGHT OF SWF ",this.ObjectByName._swfView.width,this.ObjectByName._swfView.height);
-            //    this.boundingref._inner.setAttribute('visible',true);
-            //    parent.parent.changeMenu(2,true);
-            //    this.doUpdateDocumentToolBar();
-            //} else {
-            //    parent.parent.changeMenu(1,true);
-            //}
-             
         }
     ]]>
     </method>   
@@ -994,14 +970,6 @@
 		if ($debug) Debug.write("getObjectInBounds this.baseactionobjectList1: ",x,y,this.baseactionobjectList);
 		
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
-			
-			
-			//if ($debug) Debug.write("c1 ",this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5],"<",x);
-            //if ($debug) Debug.write("c2 ",(this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]),">",x);
-            //if ($debug) Debug.write("c3 ",this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4],"<",y);
-            //if ($debug) Debug.write("c4 ",( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] ),">",y);
-        
-			
 			if ( ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]<=x 
 				&& ( (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]) >=x ) ) 
 				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<=y 

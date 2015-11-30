@@ -65,16 +65,7 @@
 	 -->
   	<method name="addImageToLayer" args="obj,nameing,urlname,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,uniqueObjectSyncName,isLocalSync">
         <![CDATA[
-			//only show if it is not part of wml-file-object
-			//do not show at all as this is handled via the remote Object
-			//if (!this.isWmlLoaderImage) {
-			//	this.loadimageDataWinRef = new lz.loadWhiteboardWindow(canvas.main_content._content.inner,{refObj:this});
-			//	this.loadimageDataWinRef.setMessage(canvas.getLabelName(this.imageLoadMessageId));
-			//}
-			
             if ($debug) Debug.write("addImageToLayer ",urlname);
-        	//if ($debug) Debug.write("addImageToLayer ",obj,nameing,urlname,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain);
-			//if ($debug) Debug.write("addImageToLayer posx ",posx);
         	
 	  		if ($debug) Debug.write("addImageToLayer urlname : ", canvas.getUrl() + 'DownloadHandler');
 			var src = canvas.getUrl() + 'DownloadHandler' + '?fileName=' + encodeURIComponent(fileName) + 
@@ -84,7 +75,6 @@
 				'&sid=' + canvas.sessionId;
 	
 	        if ($debug) Debug.write("addImageToLayer -src- ",src);
-		      
 			if ($debug) Debug.write("alterModus: ",alterModus);
 			
 	  		this.currentlayer = new lz.imageForDrawView(obj,{
@@ -95,9 +85,6 @@
 	  			parentPath:parentPath,room:room,domain:domain,
 	  			uniqueObjectSyncName:uniqueObjectSyncName,
 	  			isLocalSync:isLocalSync});	
-			
-			//this.parent.parent.isloadingImage.sendEvent(this.currentlayer);
-			//this.parent._loading.setAttribute('visible',true);
 			
 			//Add Layer to global Layer  	
 		    return this.currentlayer;
