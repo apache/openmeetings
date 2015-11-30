@@ -1472,23 +1472,9 @@
 	                } else if (value.message=='desktop'){
                         canvas._drawarea.incomingScreenSharing(value);
                     } else if (value.message=='library'){
-                        
                         if (value.action == 'import') {
-                            canvas.currentUploadWindow.onCompleteByRemote(value);
+                            canvas.currentUploadWindow.remoteComplete(value);
                             return;
-                        }
-                        
-                        var error = false;
-                        for (var eg in value.error){
-                            if (value.error[eg].exitValue!=0){
-	                            if ($debug) Debug.write("eg ",eg," value ",value.error[eg]);
-	                            if ($debug) Debug.write("eg ",eg," value ",value.error[eg].exitValue);
-                                error = true;
-                            }
-                        }
-                        canvas.currentUploadWindow.onCompleteByRemote(value);
-                        if (value.hasError) {
-                            new lz.converterPopup(canvas.main_content._content.inner,{error:value.error});
                         }
                     } else if (value.message=='startStreaming'){
                         canvas._drawarea.startStreaming(value);

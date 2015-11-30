@@ -81,16 +81,13 @@
 			public static function getPostData(fileName:String, byteArray:ByteArray, parameters:Array = null):ByteArray {
 				var i:int;
 				var bytes:String;
-	
+
 				var postData:ByteArray = new ByteArray();
 				postData.endian = Endian.BIG_ENDIAN;
 	
 				//add Filename to parameters
 				if(parameters == null) {
 					parameters = [];
-				}
-				if (fileName) {
-					parameters[parameters.length] = {name: 'Filename', value: fileName};
 				}
 	
 				//add parameters to postData
@@ -115,7 +112,7 @@
 					//add Filedata to postData
 					postData = BOUNDARY(postData);
 					postData = LINEBREAK(postData);
-					bytes = 'Content-Disposition: form-data; name="Filedata"; filename="';
+					bytes = 'Content-Disposition: form-data; name="stream"; filename="';
 					for (i = 0; i < bytes.length; ++i) {
 						postData.writeByte( bytes.charCodeAt(i) );
 					}
@@ -125,23 +122,7 @@
 					addContentType(postData, "application/octet-stream");
 					postData.writeBytes(byteArray, 0, byteArray.length);
 					postData = LINEBREAK(postData);
-		
-					//add upload filed to postData
-					postData = LINEBREAK(postData);
-					postData = BOUNDARY(postData);
-					postData = LINEBREAK(postData);
-					bytes = 'Content-Disposition: form-data; name="Upload"';
-					for (i = 0; i < bytes.length; ++i) {
-						postData.writeByte(bytes.charCodeAt(i));
-					}
-					postData = LINEBREAK(postData);
-					postData = LINEBREAK(postData);
-					bytes = 'Submit Query';
-					for (i = 0; i < bytes.length; ++i) {
-						postData.writeByte(bytes.charCodeAt(i));
-					}
-					postData = LINEBREAK(postData);
-		
+					
 					//closing boundary
 					postData = BOUNDARY(postData);
 					postData = DOUBLEDASH(postData);

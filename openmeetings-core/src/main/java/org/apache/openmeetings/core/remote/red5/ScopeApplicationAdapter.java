@@ -62,7 +62,6 @@ import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
-import org.apache.openmeetings.util.process.UploadCompleteMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -1909,24 +1908,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return 1;
 	}
 	
-	public synchronized void sendUploadCompletMessageByPublicSID(UploadCompleteMessage message, String publicSID) {
-		try {
-			//if the upload is locally, just proceed to the normal function
-			//Search for RoomClient on current server (serverId == null means it will look on the master for the RoomClient)
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
-			
-			if (currentClient != null) {
-				sendMessageWithClientByPublicSID(message, publicSID);
-			} else {
-				throw new Exception("Could not Find RoomClient on List publicSID: "+ publicSID);
-			}
-			
-		} catch (Exception err) {
-			log.error("[sendUploadCompletMessageByPublicSID] ", err);
-		}
-	}
-	
-
 	public synchronized void sendMessageWithClientByPublicSID(Object message, String publicSID) {
 		try {
 			// ApplicationContext appCtx = getContext().getApplicationContext();

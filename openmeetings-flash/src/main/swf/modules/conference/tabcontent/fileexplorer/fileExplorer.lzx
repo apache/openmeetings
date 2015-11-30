@@ -220,7 +220,7 @@
 				, successCallback: createFileComplete
 				});
 		}
-		var vars = UploadPostHelper.getPostData(bytes ? fileName : null, bytes, [
+		var vars = UploadPostHelper.getPostData(bytes == null ? null : fileName, bytes, [
 			{
 				name: 'file'
 				, type: 'application/json'

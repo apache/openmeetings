@@ -155,7 +155,7 @@ public class OmFileHelper {
 	}
 	
 	public static File getUploadTempDir() {
-		return new File(OmFileHelper.OM_HOME, UPLOAD_TEMP_DIR);
+		return getDir(OmFileHelper.OM_HOME, UPLOAD_TEMP_DIR);
 	}
 	
 	public static File getUploadTempFilesDir() {

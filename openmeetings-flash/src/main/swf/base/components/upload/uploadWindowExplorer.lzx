@@ -50,34 +50,14 @@
 		</handler>
 		
 		<method name="remoteComplete" args="tArrayValueObj">
+			if ($debug) Debug.write("remoteComplete ", tArrayValueObj);
+			this.progressBar.setValue(100);
+			this.upload.setAttribute('enabled', false);
+			this.upload.setAttribute("visible", false);
+			this.browse.setAttribute("visible", false);
+			this.txtFile.setAttribute("visible", false);
 			
-			if ($debug) Debug.write("onCompleteByRemote ",tArrayValueObj);
-			this.parent.progressBar.setValue(100);
-			this.parent.upload.setAttribute('enabled', false);
-			this.parent.upload.setAttribute("visible",false);
-			this.parent.browse.setAttribute("visible",false);
-			this.parent.txtFile.setAttribute("visible",false);
-			
-			if (this.isOnlyZip) {
-				this.parent.close();
-				return;
-			}
-			
-			if (this.isOnlyXml) {
-				parent.returnObj.sendRefresh();
-				this.parent.close();
-				return;
-			}
-			
-			if (this.isOnlyProfile) {
-				parent.returnObj.sendRefresh();
-				this.parent.close();
-				return;
-			}
-			
-			if (parent._loadToWhiteboard.getValue()) {
-				
-				if ($debug) Debug.write(tArrayValueObj);
+			if (this._loadToWhiteboard.getValue()) {
 				if (tArrayValueObj.isPresentation) {
 					var url = this.formatURL(tArrayValueObj.fileHash);
 					
@@ -90,13 +70,12 @@
 							  tArrayValueObj.fileSystemName);
 				} else if (tArrayValueObj.isImage) {
 					canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(tArrayValueObj.fileHash),0,0,
-					  canvas.getUrl() +'DownloadHandler',
-					  tArrayValueObj.fileHash,"videoconf1","/","files",hib.conferencedomain);
+							canvas.getUrl() +'DownloadHandler',
+							tArrayValueObj.fileHash,"videoconf1","/","files",hib.conferencedomain);
 				}
 			}
 			
 			if (parent.isdefaultreturn) {
-				
 				var tempSendArray = new Array ();
 				tempSendArray[0] = 'fileslist';
 				var nowTime = new Date();
@@ -117,7 +96,7 @@
 				parent.fileExplorerRef.onClose.sendEvent();
 			}
 			
-			parent.close();
+			close();
 		</method>
 
 		<method name="cancelHandler" args="evt">
@@ -149,17 +128,17 @@
 		</method>
 	
 		<method name="errorHandler" args="evt">
-			<![CDATA[
-				if ($debug) Debug.write('errorHandler invoked: ', evt);
-				new lz.errorPopup(canvas, {error: 'HTTP-ERROR: ' + evt});
-				this.close();
-		  		var now = new Date();
-		  		var datumsString = now.getHours() + ':' + now.getMinutes();
-		  		var msg = ['fileslist', now.getHours() + ':' + now.getMinutes(), 'newfile', canvas.currentuser];
-		  		//if ($debug) Debug.write("send: ", msg);
-		  		canvas.objMessage = msg;
-		  		canvas.thishib.sendMessage.doCall();
-			]]>
+		<![CDATA[
+			if ($debug) Debug.write('errorHandler invoked: ', evt);
+			new lz.errorPopup(canvas, {error: 'HTTP-ERROR: ' + evt});
+			this.close();
+	  		var now = new Date();
+	  		var datumsString = now.getHours() + ':' + now.getMinutes();
+	  		var msg = ['fileslist', now.getHours() + ':' + now.getMinutes(), 'newfile', canvas.currentuser];
+	  		//if ($debug) Debug.write("send: ", msg);
+	  		canvas.objMessage = msg;
+	  		canvas.thishib.sendMessage.doCall();
+		]]>
 		</method>
 	
 		<method name="selectHandler" args="evt">
@@ -204,12 +183,93 @@
 		<simpleLabelButton name="upload" x="10" y="120" labelid="593" width="250" enabled="false" height="20">
 			<handler name="onclick">
 			<![CDATA[
-				//canvas.currentFileExplorer.createFile(parent.fileReference.name, parent.fileReference.data, this, /*FIXME TODO fileObj*/);
-				//FIXME TODO canvas.currentFileExplorer
-				if ($debug) Debug.write("bytes???: ", parent.fileReference.data, canvas.currentFileExplorer.getSelectedFolder(), canvas.currentFileExplorer);
+				if ($debug) Debug.write("Upload of new file", parent.fileReference.name);
+				parent.progressBar.setAttribute('visible', false);
+				parent.upload.setAttribute('enabled', false);
+				parent.browse.setAttribute('enabled', false);
+				parent.progress2.startShowing();
+				var fold = canvas.currentFileExplorer.getSelectedFolder();
+				canvas.currentFileExplorer.createFile(
+						parent.fileReference.name
+						, parent.fileReference.data
+						, parent
+						, {
+							parentId: fold.fileId
+							, name: parent.fileReference.name
+							, roomId: fold.roomId
+							, ownerId: fold.ownerId
+							, type: 'Image' //dummy, will be rewritten
+						}
+					);
+				//if ($debug) Debug.write("bytes???: ", parent.fileReference.data, canvas.currentFileExplorer.getSelectedFolder(), canvas.currentFileExplorer);
 			]]>
 			</handler>
 		</simpleLabelButton>
+		
+		<method name="createFileComplete" args="event">
+			if ($debug) Debug.write("createFileComplete::File has been created!!!!");
+			//FIXME TODO remove remoteComplete!!!!!
+			
+			if ($debug) Debug.write("createFileComplete::0");
+			this.upload.setAttribute("visible", false);
+			this.browse.setAttribute("visible", false);
+			this.txtFile.setAttribute("visible", false);
+			
+			if ($debug) Debug.write("createFileComplete::1");
+			var o = JSON.parse(event.target.data);
+			var f = o.fileExplorerItemDTO;
+			if ($debug) Debug.write("createFileComplete::2", f);
+			if (this._loadToWhiteboard.getValue()) {
+				if ($debug) Debug.write("createFileComplete::3");
+				if (f.type == 'Presentation') {
+					var url = this.formatURL(f.hash);
+					
+					var uploadmoduleimgfolderVar = '/' + f.hash;
+					
+					if ($debug) Debug.write(url);
+					
+					if ($debug) Debug.write("createFileComplete::4");
+					canvas._drawarea.loadSWFPresentationSynced(url, f.hash + ".swf",
+							  "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
+							  f.name);
+				} else if (f.type == 'Image') {
+					if ($debug) Debug.write("createFileComplete::5");
+					canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(f.hash),0,0,
+							canvas.getUrl() +'DownloadHandler',
+							f.hash,"videoconf1","/","files",hib.conferencedomain);
+				}
+			}
+			
+			if ($debug) Debug.write("createFileComplete::6");
+			/*
+				FIXME TODO investigate this
+			if (parent.isdefaultreturn) {
+				var tempSendArray = new Array ();
+				tempSendArray[0] = 'fileslist';
+				var nowTime = new Date();
+				var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+				tempSendArray[1] = datumsString;
+				//if ($debug) Debug.write("Setting Message");
+				tempSendArray[2] = 'newfile';
+				tempSendArray[3] = canvas.currentusename;
+				//if ($debug) Debug.write("send: ",tempSendArray);
+				canvas.objMessage = tempSendArray;
+				canvas.thishib.sendMessageAll.doCall();
+			} else {
+				//FIXME TODO refresh !!! parent.returnObj.sendRefresh();
+			}
+			*/
+			
+			if ($debug) Debug.write("createFileComplete::7");
+			this.close();
+			if ($debug) Debug.write("createFileComplete::8");
+		</method>
+	
+		<method name="createFileError" args="event">
+			if ($debug) Debug.error("Error while creating the file!!!!");
+			//FIXME TODO check this
+			new lz.converterPopup(canvas.main_content._content.inner, {error: event});
+		</method>
 		
 		<view name="progress2" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
 			<attribute name="isStarted" value="false" type="boolean" />
@@ -217,7 +277,7 @@
 				if (!this.isStarted) {
 					this.isStarted = true;
 					this.status._hide.setAttribute('started', true);
-					this.setAttribute("visibility","visible");
+					this.setAttribute("visibility", "visible");
 				} else {
 					return;
 				}
