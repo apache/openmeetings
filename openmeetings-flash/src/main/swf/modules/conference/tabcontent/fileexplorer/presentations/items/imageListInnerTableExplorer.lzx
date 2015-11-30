@@ -27,32 +27,6 @@
     <view name="_listcontent" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width }" >
         <simplelayout name="_layout" axis="y" spacing="2" inset="1" />
         
-        <!--
-	  	<netRemoteCallHib name="deleteFile" funcname="fileservice.deleteFile" remotecontext="$once{ canvas.thishib }" >   
-			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
-	  		<netparam><method name="getValue">return parent.String1;</method></netparam>
-        	<netparam><method name="getValue">return canvas.uploadmoduleimg;</method></netparam>
-			<netparam><method name="getValue">return parent.String2;</method></netparam>
-			<netparam><method name="getValue">return hib.currentroomid;</method></netparam>        	
-	        <handler name="ondata" args="value">	
-	        	//Debug.write("  deleteFile: ",value);  
-				//Debug.write("  deleteFile: ",this.String1);    
-				//Debug.write("  deleteFile: ",this.String2);   
-		  		var tempSendArray = new Array ();
-		  		tempSendArray[0] = 'fileslist';
-		  		var nowTime = new Date();
-		  		var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
-		  		tempSendArray[1] = datumsString;
-	  			//Debug.write("Setting Message");
-	  			tempSendArray[2] = 'newfile';
-	  			tempSendArray[3] = canvas.currentusename;
-		  		//Debug.write("send: ",tempSendArray);
-		  		canvas.objMessage = tempSendArray;
-		  		hib.sendMessage.doCall();         	          				
-	        </handler>	
-	  	</netRemoteCallHib> 
-	  	 -->	
-		
 		<method name="getconfirmationscode">
 			var g = canvas.getUserData();
 			 if (g["wmlfile"]==null) {

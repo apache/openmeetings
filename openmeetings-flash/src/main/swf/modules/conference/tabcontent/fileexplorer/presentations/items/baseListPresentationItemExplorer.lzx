@@ -57,7 +57,7 @@
     </handler>  
        
     <handler name="onfocus">
-        this.selectItem();
+        this.selectItem(null);
     </handler>
     <handler name="onblur">
         this.disselectItem();
@@ -67,13 +67,10 @@
         //Debug.write("key " + k + " up");
     </handler>
     
-    <method name="selectItem">
-        //this.parent.selectItem(this);
+    <method name="selectItem" args="none">
     </method>
     <method name="disselectItem">
-        //this.parent.selectItem(this);
     </method>
-    
 </class>
 
 </library>

@@ -1474,7 +1474,7 @@
                     } else if (value.message=='library'){
                         
                         if (value.action == 'import') {
-                            canvas.currentUploadWindow.myFileUpload.onCompleteByRemote(value);
+                            canvas.currentUploadWindow.onCompleteByRemote(value);
                             return;
                         }
                         
@@ -1486,7 +1486,7 @@
                                 error = true;
                             }
                         }
-                        canvas.currentUploadWindow.myFileUpload.onCompleteByRemote(value);
+                        canvas.currentUploadWindow.onCompleteByRemote(value);
                         if (value.hasError) {
                             new lz.converterPopup(canvas.main_content._content.inner,{error:value.error});
                         }

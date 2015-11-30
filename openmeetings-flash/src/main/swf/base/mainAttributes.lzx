@@ -243,7 +243,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="_drawarea" value="null" /> 
 
 <!--- Username of current user -->
-<attribute name="currentusename" value="defaultname" type="string" />
 <attribute name="userId" value="0" type="number" />
 <attribute name="firstName" value="" type="string" />
 <attribute name="timeZoneId" value="0" type="number" />

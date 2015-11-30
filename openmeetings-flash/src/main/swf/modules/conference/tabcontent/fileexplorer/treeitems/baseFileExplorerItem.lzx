@@ -47,11 +47,12 @@
 	<attribute name="mouseDownClickDelegate" value="null" />
 	<attribute name="isTrashCan" value="false" type="boolean" />
 	<attribute name="folderLoader" />
+	<attribute name="deleteLoader" />
 		
 	<handler name="oninit">
-		this.singleClickDelegate = new LzDelegate( this, "doSingleClick" );
-		this.resetClickDelegate = new LzDelegate( this, "doResetSingleClick" );
-		this.mouseDownClickDelegate = new LzDelegate( this, "doMouseDownClick" );
+		this.singleClickDelegate = new LzDelegate(this, "doSingleClick");
+		this.resetClickDelegate = new LzDelegate(this, "doResetSingleClick");
+		this.mouseDownClickDelegate = new LzDelegate(this, "doMouseDownClick");
 		if (this.type == 'Folder') {
 		    lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
 		}
@@ -76,22 +77,22 @@
 		}
 	</method>
 	
-    <method name="doMouseDownClick" args="itemObj">
-    	<![CDATA[
-			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-	    		return;
-	    	}
-	    	this.mouseDownClickUsed = true;
-	    	if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
-	    	new lz.dragItemFileExplorer(canvas,{
-	    		        dragItemResource:this.fileIcon,
-	            	    refObj:this,
-	                    x:canvas.getMouse('x'),
-	                    y:canvas.getMouse('y')
-	            	});
-        ]]>
-    </method>
+	<method name="doMouseDownClick" args="itemObj">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
+			return;
+		}
+		this.mouseDownClickUsed = true;
+		if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
+		new lz.dragItemFileExplorer(canvas,{
+				dragItemResource:this.fileIcon,
+				refObj:this,
+				x:canvas.getMouse('x'),
+				y:canvas.getMouse('y')
+			});
+	]]>
+	</method>
     
     <!--
     	Check if this is the Owner
@@ -141,35 +142,39 @@
         }
     </method>
     
-    <method name="deleteFileOrFolder">
-        <![CDATA[
-			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-	    		return;
-	    	}
-	    	
-            if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
-            var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
-                            +'SID='+canvas.sessionId
-                            +'&fileId='+this.fileId;
-            
-            this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
-            if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
-            this.deleteFileOrFolderSelf.doRequest();
-        ]]>
-    </method>
+	<method name="deleteFileOrFolder">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
+			return;
+		}
+		
+		if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
+		if (!deleteLoader) {
+			deleteLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/' + this.fileId
+				, method: URLRequestMethod.POST
+				, hdrs: [new URLRequestHeader("X-HTTP-Method-Override", "DELETE")]
+				, errorCallback: deleteError
+				, successCallback: deleteComplete
+				});
+		}
+		deleteLoader.load('--dummy--');
+	]]>
+	</method>
     
-    <dataset name="deleteFileOrFolderSelf" type="http" >
-        <handler name="ondata" args="d">
-            <![CDATA[
-                //if ($debug) Debug.write("ondata ",d);
-                if ($debug) Debug.write("deleteFileOrFolder: ",d);
-                parent.parent.parent.doOpen();
-                parent.refObjListRoot._selected = null;
-            ]]>
-        </handler>
-    </dataset>
+	<method name="deleteComplete" args="event">
+		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("base::deleteComplete ", o);
+		//TODO check return code
+		this.parent.parent.doOpen();
+		this.refObjListRoot._selected = null;
+	</method>
     
+	<method name="deleteError" args="event">
+		if ($debug) Debug.error("base::deleteError ", event);
+	</method>
+	
 	<method name="doSingleClick" args="itemObj">
 		this.singleClickStarted = false;
 		//Cannot change name for Root Icons
@@ -302,76 +307,71 @@
 	]]>
 	</method>
 	
+	<method name="doSetSelection">
+		this.singleClickStarted = true;
+		if (this.selected) {
+			if ($debug) Debug.write("Is this selected => Do Edit !!!");
+			lz.Timer.addTimer(this.singleClickDelegate, 300);
+		} else {
+			selectItem(null);
+			lz.Timer.addTimer(this.resetClickDelegate, 300);
+		}
+	</method>
+	
 	<method name="toggleOpen" args="setSelection">
-		<![CDATA[
-			if (this.mouseDownClickUsed) {
-				if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
-				this.mouseDownClickUsed = false;
+	<![CDATA[
+		if (this.mouseDownClickUsed) {
+			if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
+			this.mouseDownClickUsed = false;
+			return;
+		}
+		if (this.singleClickStarted) {
+			if ($debug) Debug.write("Is this selected => Double Click !!!");
+			this.singleClickStarted = false;
+			lz.Timer.removeTimer(this.singleClickDelegate);
+			
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+				new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
 				return;
 			}
 			
-			if (this.singleClickStarted) {
-	            if ($debug) Debug.write("Is this selected => Double Click !!!");
-	            this.singleClickStarted = false;
-	            lz.Timer.removeTimer( this.singleClickDelegate );
-	            
-	            if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-		    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-		    		return;
-		    	}
-	            
-	            switch (this.type) {
-	            	case 'Video':
-	            		this.playVideo();
-	            		break;
-	            	case 'WmlFile':
-	            		this.loadWmlFile();
-	            		break;
-					case 'Folder':
-						this.doSingleClick(null);
-	            		break;
-					case 'Presentation':
-						this.loadDocument();
-	            		break;
-	            }
-	        } else {
-	        	if (this.type == 'Folder'){
-	        		if (!this.open) {
-	        			this.doOpen();
-	        		} else {
-	        			if (setSelection) {
-	            			if (this.selected) {
-	            				if ($debug) Debug.write("Is this selected => Do Edit !!!");
-	            				this.singleClickStarted = true;
-	            			    lz.Timer.addTimer(this.singleClickDelegate, 300);
-	            			} else {
-	            				
-	            				this.singleClickStarted = true;
-	            				lz.Timer.addTimer(this.resetClickDelegate, 300);
-	            			}
-	        			} else {
-	        				this.doClose();
-	        			}
-	        		}
-	        	} else {
-	        		if (setSelection) {
-	                    if (this.selected) {
-	                        if ($debug) Debug.write("Is this selected => Do Edit !!!");
-	                        this.singleClickStarted = true;
-	                        lz.Timer.addTimer(this.singleClickDelegate, 300);
-	                    } else {
-	                        this.singleClickStarted = true;
-	                        lz.Timer.addTimer(this.resetClickDelegate, 300);
-	                    }
-	                }
-	        	}
+			switch (this.type) {
+				case 'Video':
+					this.playVideo();
+					break;
+				case 'WmlFile':
+					this.loadWmlFile();
+					break;
+				case 'Folder':
+					this.doSingleClick(null);
+					break;
+				case 'Presentation':
+					this.loadDocument();
+					break;
+				}
+		} else {
+			if ($debug) Debug.write("toggleOpen:: ", setSelection);
+			if (this.type == 'Folder'){
+				if (this.open) {
+					if (setSelection) {
+						doSetSelection()
+					} else {
+						this.doClose();
+					}
+				} else {
+					this.doOpen();
+				}
+			} else {
+				if (setSelection) {
+					doSetSelection()
+				}
 			}
-			
-			if (setSelection) this.refObjListRoot.selectItem(this);
-		]]>
+		}
+		if (setSelection) canvas.currentFileExplorer.selectItem(this);
+	]]>
 	</method>
 	
-	<method name="selectItem">
+	<method name="selectItem" args="none">
 		this.selected = true;
 		this._fileName.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
 	</method>

@@ -83,24 +83,6 @@ public class FileUtils {
 		return 0;
 	}
 
-	public void setFileToOwnerOrRoomByParent(FileExplorerItem file, Long userId, Long roomId) {
-		try {
-			file.setOwnerId(userId);
-			file.setRoomId(roomId);
-
-			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.update(file);
-
-			List<FileExplorerItem> childElements = fileExplorerItemDao.getByParent(file.getId());
-
-			for (FileExplorerItem childExplorerItem : childElements) {
-				setFileToOwnerOrRoomByParent(childExplorerItem, userId, roomId);
-			}
-		} catch (Exception err) {
-			log.error("[setFileToOwnerOrRoomByParent] ", err);
-		}
-	}
-
 	public String formatDate(Date date) {
 		SimpleDateFormat formatter;
 		String pattern = "dd/MM/yy H:mm:ss";

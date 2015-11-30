@@ -21,36 +21,10 @@
 <library>
 
 <class name="omMiniIcon" extends="view" width="22" height="22">
-	<switch>
-		<when property="$as3">
-			<passthrough>
-				import flash.net.*;
-				import flash.display.*;
-			</passthrough>
-		</when>
-	</switch>
-
 	<attribute name="imgUrl" value="" type="string" />
 	
 	<handler name="oninit">
-		this.sprite.resource = imgUrl;
-		if (! this.sprite.imgLoader) {
-			if (this.sprite.resourceContainer) {
-				// unload previous internal image-resource
-				this.sprite.unload();
-			}
-			this.sprite.imgLoader = new Loader();
-			this.sprite.imgLoader.mouseEnabled = false;// @devnote: see LPP-7022
-			this.sprite.imgLoader.mouseChildren = false;
-			this.sprite.resourceContainer = this.sprite.imgLoader;
-			this.sprite.addChild(this.sprite.imgLoader);
-		}
-		var res:Loader = this.sprite.imgLoader;
-		if (res) {
-			//res.scaleX = res.scaleY = 1.0;
-		}
-		
-		this.sprite.imgLoader.load(new URLRequest(imgUrl), LzSprite.loaderContext);
+		canvas.loadImgBySrc(this, imgUrl);
 	</handler>
 </class>
 

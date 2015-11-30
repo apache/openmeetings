@@ -21,15 +21,17 @@
 <library>
 
 <class name="dragItemFileExplorer" extends="view">
-	
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.net.*;
+			</passthrough>
+		</when>
+	</switch>
 	<attribute name="refObj" value="null"/>
-	
 	<attribute name="dragItemResource" value="" type="string"/>
-	
 	<attribute name="overItem" value="null"/>
-	
 	<attribute name="alreadySent" value="false" type="boolean" />
-	
 	<attribute name="fileId" value="0" type="number" />
 	<attribute name="newParentFileExplorerItemId" value="0" type="number" />
     <attribute name="isOwner" value="false" type="boolean" />
@@ -153,30 +155,32 @@
     	}
     </method>
     
-    <method name="deleteFileOrFolder">
-        <![CDATA[
-            if ($debug) Debug.write("deleteFileOrFolder HTTP 2: ");
-            var downloadurl = canvas.getUrl()+'services/FileService/deleteFileOrFolderSelf?'
-                            +'SID='+canvas.sessionId
-                            +'&fileId='+this.fileId;
-            
-            this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
-            if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
-            this.deleteFileOrFolderSelf.doRequest();
-        ]]>
-    </method>
+	<method name="deleteFileOrFolder">
+	<![CDATA[
+		var deleteLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/' + this.fileId
+				, method: URLRequestMethod.POST
+				, hdrs: [new URLRequestHeader("X-HTTP-Method-Override", "DELETE")]
+				, errorCallback: deleteError
+				, successCallback: deleteComplete
+				});
+		deleteLoader.load('--dummy--');
+	]]>
+	</method>
+	
+	<method name="deleteComplete" args="event">
+		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("drag::deleteComplete ", o);
+		//TODO check return code
+		this.refObj.parent.parent.doOpen();
+		this.destroy();
+	</method>
     
-    <dataset name="deleteFileOrFolderSelf" type="http" >
-        <handler name="ondata" args="d">
-            <![CDATA[
-                //if ($debug) Debug.write("ondata ",d);
-                if ($debug) Debug.write("deleteFileOrFolder: ",d);
-                parent.refObj.parent.parent.doOpen();
-                parent.destroy();
-            ]]>
-        </handler>
-    </dataset>
-    
+	<method name="deleteError" args="event">
+		if ($debug) Debug.error("drag::deleteError ", event);
+		this.destroy();
+	</method>
+	
     <method name="moveFile">
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");

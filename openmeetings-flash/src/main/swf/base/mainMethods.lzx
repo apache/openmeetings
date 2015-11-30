@@ -27,6 +27,8 @@
 			<passthrough>
 				import flash.external.ExternalInterface;
 				import flash.net.*;
+				import flash.net.*;
+				import flash.display.*;
 			</passthrough>
 		</when>
 	</switch>
@@ -451,14 +453,7 @@
                 } else if (stringSub=='checkPollVoted') {
                     ExternalInterface.call("vote");
                 } else if (stringSub=='importFile') {
-                    new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
-                            x:60,uploadmodule:canvas.uploadmoduleimg,
-                            parentFolderId:0,
-                            isOwner:false,
-                            fileExplorerRef:null,
-                            isOnlyImage:true,
-                            servletName:'file.upload'
-                        });
+                    new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x:60});
                 } else if (stringSub=='applyForMod') {
                     if ($debug) Debug.info("Apply For Mod through doActionmenu");
                     //new lz.applyForModeration(canvas.main_content._content.inner);
@@ -822,5 +817,26 @@
 	
 	<method name="isRemoteUser" args="">
 		return canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.directUserLogin || canvas.secureRemoteUserLogin;
+	</method>
+	
+	<method name="loadImgBySrc" args="cmp, imgUrl">
+		cmp.sprite.resource = this.src;
+		if (!cmp.sprite.imgLoader) {
+			if (cmp.sprite.resourceContainer) {
+				// unload previous internal image-resource
+				cmp.sprite.unload();
+			}
+			cmp.sprite.imgLoader = new Loader();
+			cmp.sprite.imgLoader.mouseEnabled = false;// @devnote: see LPP-7022
+			cmp.sprite.imgLoader.mouseChildren = false;
+			cmp.sprite.resourceContainer = cmp.sprite.imgLoader;
+			cmp.sprite.addChild(cmp.sprite.imgLoader);
+		}
+		var res:Loader = cmp.sprite.imgLoader;
+		if (res) {
+			res.scaleX = res.scaleY = 1.0;
+		}
+		
+		cmp.sprite.imgLoader.load(new URLRequest(imgUrl), LzSprite.loaderContext);
 	</method>
 </library>

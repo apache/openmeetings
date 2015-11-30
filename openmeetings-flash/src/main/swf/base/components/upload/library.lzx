@@ -19,8 +19,5 @@
   
 -->
 <library>
-
-	<include href="fileUpload.lzx" />
 	<include href="uploadWindowExplorer.lzx" />
-	
 </library>

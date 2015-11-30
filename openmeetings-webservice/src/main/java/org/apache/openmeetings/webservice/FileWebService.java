@@ -357,7 +357,7 @@ public class FileWebService {
 	 *            file or folder id
 	 * @param name
 	 *            new file or folder name
-	 * @return - null
+	 * @return - resulting file object
 	 * @throws ServiceException
 	 */
 	@WebMethod
@@ -392,51 +392,36 @@ public class FileWebService {
 	 * 
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
-	 * @param fileId
+	 * @param id
 	 *            current file or folder id to be moved
-	 * @param newParentId
+	 * @param parentId
 	 *            new parent folder id
-	 * @param roomId
-	 *            room id
-	 * @param isOwner
-	 *            if true owner id will be set
-	 * @param moveToHome
-	 *            move to private drive
-	 * @return - null
+	 * @return - resulting file object
 	 * @throws ServiceException
 	 */
-	public Long move(String sid, Long fileId, Long newParentId, Long roomId, Boolean isOwner,
-			Boolean moveToHome) throws ServiceException {
-
+	@WebMethod
+	@POST
+	@Path("/move/{roomid}/{id}/{parentid}")
+	public FileExplorerItemDTO move(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			, @WebParam(name="roomid") @PathParam("roomid") long roomId
+			, @WebParam(name="parentid") @PathParam("parentid") long parentId) throws ServiceException
+	{
 		try {
-
 			Long userId = sessionDao.checkSession(sid);
-
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-
-				// A test is required that checks if the user is allowed to move the file
-
-				log.debug("moveFileSelf " + fileId);
-
-				fileDao.moveFile(fileId, newParentId, roomId, isOwner, userId);
-
-				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
-
-				if (moveToHome) {
-					// set this file and all subfiles and folders the ownerId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, userId, null);
-
-				} else {
-					// set this file and all subfiles and folders the roomId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, roomId);
-
-				}
-
+				// FIXME TODO A test is required that checks if the user is allowed to move the file
+				log.debug("move " + id);
+				return new FileExplorerItemDTO(fileDao.move(id, parentId, userId, roomId));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-		} catch (Exception err) {
-			log.error("[moveFile] ", err);
+		} catch (ServiceException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("[move] ", e);
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 }

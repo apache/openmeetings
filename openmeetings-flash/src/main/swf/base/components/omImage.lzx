@@ -21,39 +21,13 @@
 <library>
 
 <class name="omImage" extends="image">
-	<switch>
-		<when property="$as3">
-			<passthrough>
-				import flash.net.*;
-				import flash.display.*;
-			</passthrough>
-		</when>
-	</switch>
-
 	<handler name="onsrc" method="loadOmSrc" />
 	<handler name="oninit" method="loadOmImage" />
 
 	<method name="loadOmImage" args="ignore">
 	<![CDATA[
 		if (this.src != '' && this.src != null) {
-			this.sprite.resource = this.src;
-			if (! this.sprite.imgLoader) {
-				if (this.sprite.resourceContainer) {
-					// unload previous internal image-resource
-					this.sprite.unload();
-				}
-				this.sprite.imgLoader = new Loader();
-				this.sprite.imgLoader.mouseEnabled = false;// @devnote: see LPP-7022
-				this.sprite.imgLoader.mouseChildren = false;
-				this.sprite.resourceContainer = this.sprite.imgLoader;
-				this.sprite.addChild(this.sprite.imgLoader);
-			}
-			var res:Loader = this.sprite.imgLoader;
-			if (res) {
-				res.scaleX = res.scaleY = 1.0;
-			}
-			
-			this.sprite.imgLoader.load(new URLRequest(this.src), LzSprite.loaderContext);
+			canvas.loadImgBySrc(this, this.src);
 		}
 	]]>
 	</method>
@@ -62,7 +36,7 @@
 	<![CDATA[
 		//if ($debug) Debug.write("omImage::loadOmSrc src  ", src);
 		if (src != null) {
-			this.setSource( src );
+			this.setSource(src);
 			loadOmImage(null);
 		}
 	]]>

@@ -30,13 +30,12 @@
 	</switch>
 	
 	<attribute name="refObj" value="null" />
-	<attribute name="addFolderLoader"/>
 	
 	<handler name="onblur">
 		lz.ModeManager.release(this);
 		if ($debug) Debug.write("Store and Destroy ", this.refObj.parentId);
 		if (this.refObj.fileId == 0) {
-		    this.add();
+		    canvas.currentFileExplorer.createFile(this.text, null, this, this.refObj);
 		} else {
 			this.rename();
 		}
@@ -50,38 +49,19 @@
 	]]>
 	</handler>
 	
-	<method name="add">
+	<method name="rename">
 	<![CDATA[
-		if ($debug) Debug.write("addFolder:: ", this);
-		if (!addFolderLoader) {
-			addFolderLoader = new RestCall({
-				url: canvas.getUrl() + 'services/file/'
+		var moveLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/rename/' + this.refObj.fileId + '/' + this.text
 				, method: URLRequestMethod.POST
-				, dataFormat: URLLoaderDataFormat.BINARY
-				, contentType: "multipart/form-data; charset=utf-8; boundary=" + UploadPostHelper.getBoundary()
-				, errorCallback: addFolderError
-				, successCallback: addFolderComplete
+				, errorCallback: renameError
+				, successCallback: renameComplete
 				});
-		}
-		var vars = UploadPostHelper.getPostData(null, null, [
-			{
-				name: 'file'
-				, type: 'application/json'
-				, value: JSON.stringify({fileExplorerItemDTO: {
-					name: this.text
-					, parentId: this.refObj.parentId
-					, roomId: this.refObj.roomId
-					, ownerId: this.refObj.ownerId
-					, type: this.refObj.type
-					}})
-				}
-			]);
-		//if ($debug) Debug.write("addFolder:: ", vars);
-		addFolderLoader.load(vars);
+		moveLoader.load('--dummy--');
 	]]>
 	</method>
 
-	<method name="addFolderComplete" args="event">
+	<method name="createFileComplete" args="event">
 		var o = JSON.parse(event.target.data);
 		var f = o.fileExplorerItemDTO;
 		if ($debug) Debug.info("addFolderComplete ", event, o);
@@ -91,24 +71,12 @@
 		this.destroy();
 	</method>
 
-	<method name="addFolderError" args="event">
+	<method name="createFileError" args="event">
 		if ($debug) Debug.error("addFolderError ", event);
 		this.refObj.destroy();
 		this.destroy();
 	</method>
 	
-	<method name="rename">
-	<![CDATA[
-		var moveLoader = new RestCall({
-				url: canvas.getUrl() + 'services/file/rename/' + this.refObj.fileId + '/' + this.text
-				, method: URLRequestMethod.POST
-				, errorCallback: renameError
-				, successCallback: renameComplete
-				});
-		moveLoader.load(' ');
-	]]>
-	</method>
-
 	<method name="renameComplete" args="event">
 		this.refObj.setAttribute("fileName", this.text);
 		this.destroy();
