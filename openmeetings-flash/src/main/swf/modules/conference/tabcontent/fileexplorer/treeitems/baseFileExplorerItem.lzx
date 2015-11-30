@@ -28,7 +28,6 @@
 			</passthrough>
 		</when>
 	</switch>
-	<attribute name="refObjListRoot" value="null"/>
 	<attribute name="isRoot" value="false" type="boolean" />
 	<attribute name="fileIcon" type="string" value="string" />
 	<attribute name="open" value="false" type="boolean" />
@@ -168,7 +167,7 @@
 		if ($debug) Debug.info("base::deleteComplete ", o);
 		//TODO check return code
 		this.parent.parent.doOpen();
-		this.refObjListRoot._selected = null;
+		canvas.currentFileExplorer._selected = null;
 	</method>
     
 	<method name="deleteError" args="event">
@@ -189,8 +188,8 @@
 	</method>
 	
 	<method name="addFile">
-		this.refObjListRoot.selectItem(this);
-		this.refObjListRoot.addFile();
+		canvas.currentFileExplorer.selectItem(this);
+		canvas.currentFileExplorer.addFile();
 	</method>
 	
 	<method name="addFolder">
@@ -212,7 +211,6 @@
 						, roomId: this.roomId
 						, type: 'Folder'
 						, fileIcon: 'icon_folder_rsc'
-						, refObjListRoot: this.refObjListRoot
 						, fileName: canvas.getLabelName(712)
 						});
 				t.addOrUpdateFolderName();
@@ -231,7 +229,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.refObjListRoot.playVideo(this);
+		canvas.currentFileExplorer.playVideo(this);
 	]]>
 	</method>
 	
@@ -251,7 +249,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.refObjListRoot.loadDocument(this);
+		canvas.currentFileExplorer.loadDocument(this);
 	]]>
 	</method>
 	
@@ -261,7 +259,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.refObjListRoot.loadWmlFile(this);
+		canvas.currentFileExplorer.loadWmlFile(this);
 	]]>
 	</method>
 
@@ -271,7 +269,7 @@
     		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
     		return;
     	}
-		this.refObjListRoot.loadChart(this);
+		canvas.currentFileExplorer.loadChart(this);
 	]]>
 	</method>
 	
@@ -496,7 +494,6 @@
 							, type: f.type
 							, ownerId: f.ownerId
 							, roomId: f.roomId
-							, refObjListRoot:this
 							});
 					break;
 				case 'Image':
@@ -508,7 +505,6 @@
 							, ownerId: f.ownerId
 							, roomId: f.roomId
 							, fileIcon: 'file_explorer_image_rsc'
-							, refObjListRoot: this
 							});
 					break;
 				case 'Presentation':
@@ -520,7 +516,6 @@
 							, ownerId: f.ownerId
 							, roomId: f.roomId
 							, fileIcon: 'file_explorer_document_rsc'
-							, refObjListRoot: this
 							});
 					break;
 				case 'Video':
@@ -534,7 +529,6 @@
 							, fileIcon: 'file_explorer_video_rsc'
 							, flvHeight: f.flvHeight
 							, flvWidth: f.flvWidth
-							, refObjListRoot: this
 							});
 					break;
 				case 'WmlFile':
@@ -546,7 +540,6 @@
 							, ownerId: f.ownerId
 							, roomId: f.roomId
 							, isWmlFile: true
-							, refObjListRoot: this
 							});
 					break;
 				case 'PollChart':
@@ -557,7 +550,6 @@
 							, type: f.type
 							, ownerId: f.ownerId
 							, roomId: f.roomId
-							, refObjListRoot: this
 							});
 					break;
 			}

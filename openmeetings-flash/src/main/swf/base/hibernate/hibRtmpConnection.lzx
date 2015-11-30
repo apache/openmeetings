@@ -210,7 +210,7 @@
 			new lz.labelerrorPopup(canvas,
 				{
 					errorlabelid: 99
-					, onCloseFunc: function() {
+					, closeFunc: function() {
 				       if (this.makeModal) {
 				           lz.ModeManager.releaseAll();
 				       }
@@ -223,7 +223,7 @@
 		} else if (this.showKickMessage) {
 			new lz.labelerrorPopup(canvas,{
 				errorlabelid:606
-				, onCloseFunc: function() {
+				, closeFunc: function() {
 					canvas.quit();
 				}
 			});

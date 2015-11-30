@@ -172,7 +172,6 @@
 				, isRoot: true
 				, ownerId: canvas.userId
 				, fileIcon: 'file_explorer_folder_home_rsc'
-				, refObjListRoot: this
 				});
 		userHome.content.setAttribute("visibility", "visible");
 		userHome.icon_folder_pre.setAttribute("frame", 2);
@@ -187,7 +186,6 @@
 				, name: '_roomHome'
 				, isRoot: true
 				, fileIcon: 'file_explorer_folder_network_rsc'
-				, refObjListRoot: this
 				});
 		roomHome.content.setAttribute("visibility", "visible");
 		roomHome.icon_folder_pre.setAttribute("frame", 2);

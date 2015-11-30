@@ -206,6 +206,20 @@
 			</handler>
 		</simpleLabelButton>
 		
+		<method name="formatURL" args="fileHash">
+		<![CDATA[
+			var uploadmoduleimgfolderVar = '/' + fileHash;
+			var downloadurl = canvas.getUrl() + 'DownloadHandler?'
+					+ 'fileName=' + encodeURIComponent(fileHash + ".swf")
+					+ '&moduleName=' + 'videoconf1'
+					+ '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/')
+					+ '&room_id=files'
+					+ '&sid=' + canvas.sessionId;
+			//if ($debug) Debug.write("downloadurl: ",downloadurl);
+			return downloadurl;
+		]]>
+		</method>
+		 
 		<method name="createFileComplete" args="event">
 			if ($debug) Debug.write("createFileComplete::File has been created!!!!");
 			//FIXME TODO remove remoteComplete!!!!!
