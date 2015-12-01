@@ -78,6 +78,7 @@ public class GenerateSWF {
 				getPathToSwfTools() + "pdf2swf" + execExt, "-s",
 				"insertstop", // insert Stop command into every frame
 				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
+				"--flashversion=9", //option to generate as3 compatible files
 				"-i", // change draw order to reduce pdf complexity
 				"-j", "" + getSwfJpegQuality(), // JPEG Quality 
 				"-s", "zoom=" + getSwfZoom(), // set zoom dpi 
