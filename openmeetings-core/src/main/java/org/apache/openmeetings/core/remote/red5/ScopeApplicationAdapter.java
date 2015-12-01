@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.core.data.conference.RoomManager;
@@ -1560,26 +1559,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			boolean showDrawStatus = getWhiteboardDrawStatus();
 
-			// Notify all Clients of that Scope (Room)
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						IClient client = conn.getClient();
-						if (SessionVariablesUtil.isScreenClient(client)) {
-							// screen sharing clients do not receive events
-							continue;
-						} else if (SessionVariablesUtil.isAVClient(client)) {
-							// AVClients or potential AVClients do not receive events
-							continue;
-						} if (client.getId().equals(current.getClient().getId())) {
-							// don't send back to same user
-							continue;
-						}
-						((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById",
-								new Object[] { showDrawStatus ? currentClient : null, sendObject }, this);
-					}
-				}
-			}
+			sendMessageToCurrentScope("sendVarsToWhiteboardById", new Object[]{showDrawStatus ? currentClient : null, sendObject}, false);
 		} catch (Exception err) {
 			log.error("[sendVarsByWhiteboardId]", err);
 		}
@@ -1611,20 +1591,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	public int sendMessage(Object newMessage) {
-		try {
-			sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
-		} catch (Exception err) {
-			log.error("[sendMessage]", err);
-		}
+		sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 		return 1;
 	}
 	
 	public int sendMessageAll(Object newMessage) {
-		try {
-			sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
-		} catch (Exception err) {
-			log.error("[sendMessage]", err);
-		}
+		sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
 		return 1;
 	}
 
@@ -1731,7 +1703,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						|| (!sendSelf && client.getId().equals(current.getClient().getId()));
 			}
 		}.start();
-
 	}
 
 	public abstract class MessageSender extends Thread {
@@ -1767,17 +1738,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (scope == null) {
 					log.debug(String.format("[MessageSender] -> 'Unable to send message to NULL scope' %s, %s", remoteMethodName, newMessage));
 				} else {
-					log.trace(String.format("[MessageSender] -> 'sending message' %s, %s", remoteMethodName, newMessage));
+					if (log.isTraceEnabled()) {
+						log.trace(String.format("[MessageSender] -> 'sending message' %s, %s", remoteMethodName, newMessage));
+					}
 					// Send to all Clients of that Scope(Room)
+					int count = 0;
 					for (IConnection conn : scope.getClientConnections()) {
 						if (conn != null && conn instanceof IServiceCapableConnection) {
 							if (filter(conn)) {
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[]{newMessage}, ScopeApplicationAdapter.this);
+							count++;
 						}
 					}
-					log.trace(String.format("[MessageSender] -> 'sending message DONE' %s", remoteMethodName));
+					if (log.isTraceEnabled()) {
+						log.trace(String.format("[MessageSender] -> 'sending message to %s clients, DONE' %s", count, remoteMethodName));
+					}
 				}
 			} catch (Exception err) {
 				log.error(String.format("[MessageSender -> %s, %s]", remoteMethodName, newMessage), err);
@@ -1933,67 +1910,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// Scope not yet started
 			}
 		} catch (Exception err) {
-			log.error("[sendMessageWithClient] ", err);
-		}
-	}
-
-	public synchronized void sendMessageWithClientByPublicSIDOrUser(Object message, String publicSID, Long userId) {
-		try {
-			// Get Room Id to send it to the correct Scope
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
-
-			if (currentClient == null) {
-				currentClient = sessionManager.getClientByUserId(userId);
-			}
-
-			Set<IConnection> conset = null;
-
-			if (currentClient == null) {
-				// Must be from a previous session, search for user in current scope
-				IConnection current = Red5.getConnectionLocal();
-				// Notify all Clients of that Scope (Room)
-				conset = current.getScope().getClientConnections();
-			} else {
-				// default Scope Name
-				String scopeName = "hibernate";
-				if (currentClient.getRoomId() != null) {
-					scopeName = currentClient.getRoomId().toString();
-				}
-
-				IScope globalScope = getContext().getGlobalScope();
-				IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
-				IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
-
-				if (scopeHibernate != null) {
-					conset = scopeHibernate.getClientConnections();
-				}
-			}
-
-			// Notify the clients of the same scope (room) with userId
-			for (IConnection conn : conset) {
-				if (conn != null) {
-					
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					} else if (SessionVariablesUtil.isAVClient(client)) {
-						// AVClients or potential AVClients do not receive events
-						continue;
-					}
-					
-					if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
-						// log.debug("IS EQUAL ");
-						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
-						log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain" + message);
-					} else if (userId != 0 && SessionVariablesUtil.getUserId(client).equals(userId)) {
-						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
-						log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain" + message);
-					}
-				}
-			}
-		} catch (Exception err) {
-			log.error("[sendMessageWithClient] ", err);
+			log.error("[sendMessageWithClientByPublicSID] ", err);
 		}
 	}
 

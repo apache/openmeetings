@@ -21,7 +21,7 @@
 <library>
 	
 
-<class name="drawClipArtWhiteBoard" >
+<class name="drawClipArtWhiteBoard" extends="omMiniIcon">
     <attribute name="clipArtEndx" value="0" type="number" />
     <attribute name="clipArtEndy" value="0" type="number" />
 </class>	
@@ -60,7 +60,7 @@
         	                width:100,height:100,stretches:'both',
                             x:this.startx,y:this.starty,
                             //bgcolor:0xFF3300,
-                            resource:imageurl,name:'clipart'});
+                            imgUrl: imageurl, name: 'clipart'});
 
         this.minClipArtx = this.startx;
         this.minClipArty = this.starty;
@@ -82,13 +82,6 @@
      
     <method name="trackDrawClipArt">   
         <![CDATA[
-        //Add Resource
-        //var t = new lz.drawClipArtWhiteBoard(this.currentlayer,{
-        //                    resource:imageurl,x:this.startx,y:this.starty});
-        
-        //Color
-        //t.setTint(this.currentdrawarrowlinestroke,60);
-        //t.setColor(this.currentdrawarrowlinestroke);
         var tEndX = this.currentlayer.getMouse('x');
         var tEndY = this.currentlayer.getMouse('y');
         
@@ -99,16 +92,6 @@
         
     <method name="trackDrawClipArtDraw" args="tEndX,tEndY,t">   
         <![CDATA[
-        //Add Resource
-        //var t = new lz.drawClipArtWhiteBoard(this.currentlayer,{
-        //                    resource:imageurl,x:this.startx,y:this.starty});
-        
-        //Color
-        //t.setTint(this.currentdrawarrowlinestroke,60);
-        //t.setColor(this.currentdrawarrowlinestroke);
-        
-        //if ($debug) Debug.write("trackDrawClipArtDraw ",tEndX,tEndY,t);
-        
         this.clipArtEndx = tEndX;
         this.clipArtEndy = tEndY;
         
@@ -123,10 +106,6 @@
         var alpha = palpha/(Math.PI/180);
         
         var tLength = Math.sqrt(2)/2*hypothenuse;
-        
-        //if ($debug) Debug.write("tx,ty,alpha,sinAlpha,tLength "+tx+" "+ty+" "+alpha+" "+sinAlpha+" "+tLength);
-        
-        //if ($debug) Debug.write("CALC tx,ty",tx,ty);
         
         if (Math.abs(tx) < 2 && Math.abs(ty) < 2) {
         	
@@ -191,15 +170,6 @@
             	this.deltaClipArtx = 0;
             	this.deltaClipArty = Math.abs(gegenkathete_2);
             }
-            
-            
-            //if ($debug) Debug.write("_1  ",gegenkathete_4,gegenkathete_2);
-            
-            //if ($debug) Debug.write("_1  ",this.startx,this.starty,tx4,ty4);
-            
-            //if ($debug) Debug.write("_2 ",pRotate2,tRotate2,Math.sin(pRotate2),gegenkathete_4);
-            //if ($debug) Debug.write("_1  ",this.starty,ty4,ankathete_4,"tRotate2,tLength",tRotate2,tLength);
-            
         } else if (tx<0 && ty>=0){
             t.setAttribute('rotation',(90+45)-(alpha));
             
@@ -364,18 +334,6 @@
             }
             
         }
-        
-        //if (tx)
-        
-        //Scaling
-        //var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
-        //t.getDisplayObject().scaleX = hypothenuse / basicLength;
-        //t.getDisplayObject().scaleY = hypothenuse / basicLength;
-        
-        //if ($debug) Debug.write("hypothenuse "+hypothenuse);
-        
-        
-        
         t.setAttribute("width",tLength);
         t.setAttribute("height",tLength);
 
@@ -405,7 +363,7 @@
                                     x:lastActionObject[5],
                                     y:lastActionObject[6],
                                     rotation:lastActionObject[3],
-                                    resource:lastActionObject[2],
+                                    imgUrl:lastActionObject[2],
                                     clipArtEndx:lastActionObject[9],
                                     clipArtEndy:lastActionObject[10],
                                     name:'clipart'
@@ -424,7 +382,7 @@
         <![CDATA[
         
             var oid_name = cLayer.name;
-            var tSource = cLayer.clipart.resource;
+            var tSource = cLayer.clipart.imgUrl;
             var tRotation = cLayer.clipart.rotation;
             var tX = cLayer.clipart.x;
             var tY = cLayer.clipart.y;
@@ -454,7 +412,7 @@
                                     x:this.deltaClipArtx,
                                     y:this.deltaClipArty,
                                     rotation:tRotation,
-                                    resource:tSource,
+                                    imgUrl:tSource,
                                     clipArtEndx:this.clipArtEndx-this.minClipArtx,
                                     clipArtEndy:this.clipArtEndy-this.minClipArty,
                                     name:'clipart'
@@ -463,21 +421,6 @@
         
             for (var eg=0;eg<this.baseactionobjectList.length;eg++){
                 if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==oid_name) {
-                    
-                    //if ($debug) Debug.write("Found Object 1: ",this.baseactionobjectList[eg]);
-                    
-                	//actionObject[3] = tRotation;
-        //actionObject[5] = deltaClipArtx;
-        //actionObject[6] = deltaClipArty;
-        //actionObject[7] = deltaClipWidth;
-        //actionObject[8] = deltaClipHeight;
-        //actionObject[9] = deltaClipEndx;
-        //actionObject[10] = deltaClipEndy;
-        //actionObject[14] = x;//-5
-        //actionObject[15] = y;//-4
-        //actionObject[16] = width;//-3
-        //actionObject[17] = height;//-2
-        
             	    this.baseactionobjectList[eg][3] = tRotation;
                 	this.baseactionobjectList[eg][5] = this.deltaClipArtx;
                 	this.baseactionobjectList[eg][6] = this.deltaClipArty;
@@ -510,7 +453,7 @@
     	<![CDATA[
     	
             var oid_name = this.currentlayer.name;
-    	    var tSource = this.currentlayer.clipart.resource;
+    	    var tSource = this.currentlayer.clipart.imgUrl;
     	    var tRotation = this.currentlayer.clipart.rotation;
     	    var tX = this.currentlayer.clipart.x;
     	    var tY = this.currentlayer.clipart.y;
@@ -526,9 +469,6 @@
 	     	if(this.isSnapToGrid){        		
 	    		if ($debug) Debug.write("####  this.minClipArtx y ",this.minClipArtx,this.minClipArty);
 	    	
-		    	//this.minClipArtx = Math.round(this.minClipArtx/this.gridWidth)*this.gridWidth;
-		    	//this.minClipArty = Math.round(this.minClipArty/this.gridWidth)*this.gridWidth;
-		    	
 		    	tX = Math.round(tX/this.gridWidth)*this.gridWidth;
 		    	tY = Math.round(tY/this.gridWidth)*this.gridWidth;
 		    	
@@ -560,7 +500,7 @@
                                     x:this.deltaClipArtx,
                                     y:this.deltaClipArty,
                                     rotation:tRotation,
-                                    resource:tSource,
+                                    imgUrl:tSource,
                                     clipArtEndx:this.clipArtEndx-this.minClipArtx,
                                     clipArtEndy:this.clipArtEndy-this.minClipArty,
                                     name:'clipart'

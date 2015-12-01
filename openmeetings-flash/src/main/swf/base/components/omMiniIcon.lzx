@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="omMiniIcon" extends="view" width="22" height="22">
+<class name="omMiniIcon">
 	<attribute name="imgUrl" value="" type="string" />
 	
 	<handler name="oninit">

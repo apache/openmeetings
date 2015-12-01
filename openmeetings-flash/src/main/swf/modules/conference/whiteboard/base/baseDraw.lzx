@@ -626,7 +626,7 @@
 				this.starty = currentlayer.getMouse('y'); 				
 	            mousetracker_del.register(lz.Idle,'onidle');
 	        } else if (this.drawmodus == 'letter') {
-                this.startLetter();
+                this.startLetter(null);
                 this.startx = currentlayer.getMouse('x');
                 this.starty = currentlayer.getMouse('y');               
                 mousetracker_del.register(lz.Idle,'onidle');
@@ -1015,8 +1015,8 @@
 		object cause the file loading will make a seperate notification
 	 -->
 	<method name="sendWatchObject" args="action,actionObject,isWmlLoader">
+	<![CDATA[
 		if ($debug) Debug.write("sendWatchObject: ",action,actionObject);
-		<![CDATA[
 		if (action=='draw' || action=='redo'){
 			var lastactionObject = actionObject;
 			
@@ -1223,7 +1223,7 @@
 		} else if (action=="swf"){
 			this.remoteObjectUpdate(actionObject);	
 		}
-		]]>
+	]]>
 	</method>
 	
 	

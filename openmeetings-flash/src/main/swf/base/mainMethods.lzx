@@ -821,7 +821,7 @@
 	</method>
 	
 	<method name="loadImgBySrc" args="cmp, imgUrl, completeCallback">
-		cmp.sprite.resource = this.src;
+		cmp.sprite.resource = imgUrl;
 		if (!cmp.sprite.imgLoader) {
 			if (cmp.sprite.resourceContainer) {
 				// unload previous internal image-resource

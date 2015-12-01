@@ -200,10 +200,6 @@
     
     <method name="drawArrow" args="graphics,start,end,thickness,strokeDis,stroke,fill,fillDis">
         <![CDATA[
-    //(graphics:Graphics,
-    //            start:Point,end:Point,
-    //            style:Object=null):void {
-            
             if (start.equals(end)) return;
             
             

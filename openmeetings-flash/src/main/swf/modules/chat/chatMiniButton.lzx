@@ -156,7 +156,7 @@
                     this.parent.parent.removeObject(this.parent);
                 }
             </method>
-            <method name="sendNoConfirmation" angs="none">
+            <method name="sendNoConfirmation" args="none">
             </method>
             <labelTooltip text="close" />
         </view>     

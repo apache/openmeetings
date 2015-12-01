@@ -194,21 +194,24 @@
         client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
         client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
         client.interviewStatus = this.interviewStatus;
+        client.newStream = this.newStream;
+        //TODO FIXME method is absent :( client.stopStream = this.stopStream;
+        client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
     </handler>
     
     <handler name="ondisconnect">
         connected = false;
     </handler>
     
-    <method name="reconnectComplete">
-         if (this.reconnectionAction){
-            this.reconnectionAction = false;
-            this.reconnectObjRef.reconnectSuccess();
-        } else if (this.reconnectAfterRoomleft) {
-            loadContentByTempActionForNavi();
-        }
-        canvas.currentContentView.sendInit.sendEvent(this);
-    </method>
+	<method name="reconnectComplete">
+		if (this.reconnectionAction){
+			this.reconnectionAction = false;
+			this.reconnectObjRef.reconnectSuccess();
+		} else if (this.reconnectAfterRoomleft) {
+			loadContentByTempActionForNavi();
+		}
+		canvas.currentContentView.sendInit.sendEvent(this);
+	</method>
     
 	<handler name="onerror" >
 	<![CDATA[
@@ -802,16 +805,14 @@
             </handler>
         </netRemoteCallHib>
         
-        <netRemoteCallHib name="newStream" funcname="newStream">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("newStream: ",value);
-                if (value == null || value.screenClient) {
-                    return;
-                }
-                canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight); 
-            </handler>   
-        </netRemoteCallHib> 
+		<method name="newStream" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("newStream: ",value);
+			if (value == null || value.screenClient) {
+				return;
+			}
+			canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight);
+		</method> 
            
         <netRemoteCallHib name="closeStream" funcname="closeStream">
             <handler name="ondata" args="value">
@@ -945,8 +946,6 @@
                     case 'drawarrow':
                         usPoint = {x: aObj[aObj.length - 5] + aObj[9], y: aObj[aObj.length - 4] + aObj[10]};
                         break;
-                    case 'clipart':
-                        break;
                 }
                 if (usPoint) {
                     var us = new lz.userStatus(ctx, {
@@ -961,21 +960,10 @@
             ]]>
         </method>
 
-        <netRemoteCallHib name="sendVarsToWhiteboard" funcname="sendVarsToWhiteboard">
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("sendVarsToWhiteboard : ",value);
-            parent.setUserStatus(canvas._drawarea, value[0], value[1]);
-            canvas._drawarea.sendWatchObject(canvas._drawarea,value[1][2],value[1][3],false);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>  
-        
 		<method name="sendVarsToWhiteboardById" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
+			if ($debug) Debug.write("sendVarsToWhiteboardById : ", value);
 			this.setUserStatus(canvas._drawarea, value[0], value[1]);
 			canvas._drawarea.parent.parent.parent.sendWatchObjectByWhiteboard(value[1]);
 		]]>
@@ -984,7 +972,7 @@
 		<method name="loadWmlToWhiteboardById" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
+			if ($debug) Debug.write("loadWmlToWhiteboardById : ",value);
 			canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
 		]]>
 		</method>
@@ -1067,15 +1055,12 @@
             </method>
         </netRemoteCallHib>
 
-        <netRemoteCallHib name="receiveExclusiveAudioFlag" funcname="receiveExclusiveAudioFlag">
-            <netparam><method name="getValue">return null;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    canvas._videocontainer.receiveExclusiveAudioFlag(value.publicSID)
-                ]]>
-            </handler>
-        </netRemoteCallHib>
+		<method name="receiveExclusiveAudioFlag" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			canvas._videocontainer.receiveExclusiveAudioFlag(value.publicSID)
+		]]>
+		</method>
 
         <netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
             <attribute name="publicSID" value="" type="string" />
@@ -1516,7 +1501,7 @@
 		<method name="sendVarsToModeratorGeneral" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			//Debug.write("sendVarsToWhiteboard : ",value);
+			//Debug.write("sendVarsToModeratorGeneral : ",value);
 			if (value[0]=='sharewhiteinit'){
 				if (!canvas.htmlframeisloaded){
 					canvas.ifrm.createIFrame();
