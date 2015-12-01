@@ -465,8 +465,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				Map<String, Map<String, WhiteboardSyncLockObject>> syncListRoomImages = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId);
 
 				for (Map.Entry<String, Map<String, WhiteboardSyncLockObject>> e : syncListRoomImages.entrySet()) {
-					WhiteboardSyncLockObject wImagesSyncLockObject = e.getValue().get(currentClient.getPublicSID());
-					if (wImagesSyncLockObject != null) {
+					if (e.getValue().containsKey(currentClient.getPublicSID())) {
 						e.getValue().remove(currentClient.getPublicSID());
 					}
 					wbListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(roomId, e.getKey(), e.getValue());
