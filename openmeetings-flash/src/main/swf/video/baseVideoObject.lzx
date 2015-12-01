@@ -530,7 +530,8 @@
 		</handler>
 
 		<method name="giveExclusiveAudio">
-			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
+			canvas.thishib.giveExclusiveAudio.publicSID = this.publicSID;
+			canvas.thishib.giveExclusiveAudio.doCall();
 		</method>
 
 		<method name="confirmExclusiveAudio">
@@ -580,7 +581,9 @@
 			if ($debug) Debug.write("############ silenceMicrophone ", this.publicSID);
 			if (this.publicSID == canvas.publicSID) {
 				//self sound turned off
-				canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, mute);
+				canvas.thishib.switchMicMuted.publicSID = this.publicSID;
+				canvas.thishib.switchMicMuted.mute = mute; 
+				canvas.thishib.switchMicMuted.doCall();
 				if (!mute) {
 					this._chatvideoinner._videostream.muteMicro(false);
 				}
@@ -599,7 +602,9 @@
 					return;
 				}
 				if (canvas.ismoderator) {
-					canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, mute);
+					canvas.thishib.switchMicMuted.publicSID = this.publicSID;
+					canvas.thishib.switchMicMuted.mute = true; 
+					canvas.thishib.switchMicMuted.doCall();
 				} else {
 					this._chatvideoinner._videostream.setSoundVolume(mute ? 0 : 100);
 				}
@@ -633,7 +638,9 @@
 				stream.micro.gain = v;
 				if (0 == v) {
 					this.setMicMuted(true);
-					canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
+					canvas.thishib.switchMicMuted.publicSID = this.publicSID;
+					canvas.thishib.switchMicMuted.mute = true; 
+					canvas.thishib.switchMicMuted.doCall();
 				} else if (micMuted) {
 					this.silenceMicrophone(false);
 				}
