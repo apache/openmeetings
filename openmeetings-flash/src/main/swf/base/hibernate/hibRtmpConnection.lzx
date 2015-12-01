@@ -186,8 +186,10 @@
         client.sendVarsToMessage = this.sendVarsToMessage;
         client.sendVarsToMessageWithClient = this.sendVarsToMessageWithClient;
         client.sendVarsToWhiteboardById = this.sendVarsToWhiteboardById;
-        client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
         client.sendVarsToModeratorGeneral = this.sendVarsToModeratorGeneral;
+        client.sendObjectSyncFlag = this.sendObjectSyncFlag;
+        client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
+        client.sendObjectSyncCompleteFlag = this.sendObjectSyncCompleteFlag;
         client.startedRecording = this.startedRecording;
         client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
         client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
@@ -1604,31 +1606,26 @@
 	</method>  
     
     <!-- Whiteboard Object Sync Process -->
-    <netRemoteCallHib name="sendObjectSyncFlag" funcname="sendObjectSyncFlag">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("sendObjectSyncFlag: ",value);
-                if (canvas.syncImageWindow == null) {
-                    canvas.syncImageWindow = new lz.syncWin(canvas.main_content._content.inner,{labeliderror:591});
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>     
+	<method name="sendObjectSyncFlag" args="value">
+	<![CDATA[
+		//The onResult-Handler will be called be the rtmpconnection
+		if ($debug) Debug.write("sendObjectSyncFlag: ",value);
+		if (canvas.syncImageWindow == null) {
+			canvas.syncImageWindow = new lz.syncWin(canvas.main_content._content.inner, {labeliderror: 591});
+		}
+	]]>
+	</method>     
     
-    <netRemoteCallHib name="sendObjectSyncCompleteFlag" funcname="sendObjectSyncCompleteFlag">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("sendObjectSyncCompleteFlag: ",value);
-                if (canvas.syncImageWindow != null) {
-                    canvas.syncImageWindow.close();
-                    canvas.syncImageWindow = null;
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>  
-    
+	<method name="sendObjectSyncCompleteFlag" args="value">
+	<![CDATA[
+		//The onResult-Handler will be called be the rtmpconnection
+		if ($debug) Debug.write("sendObjectSyncCompleteFlag: ",value);
+		if (canvas.syncImageWindow != null) {
+			canvas.syncImageWindow.close();
+			canvas.syncImageWindow = null;
+		}
+	]]>
+	</method>  
     
     <!-- Recording of Meetings -->
 	<method name="interviewStatus" args="value">

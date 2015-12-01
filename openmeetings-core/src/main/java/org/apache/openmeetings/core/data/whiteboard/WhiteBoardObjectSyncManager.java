@@ -85,8 +85,7 @@ public class WhiteBoardObjectSyncManager {
 	}
 
 	public synchronized Map<String, WhiteboardSyncLockObject> getWhiteBoardObjectSyncListByRoomAndObjectId(Long roomId, String objectId) {
-		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomId: "
-				+ roomId);
+		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomId: " + roomId);
 		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = whiteBoardObjectSyncList.get(roomId);
 		if (roomList == null) {
 			roomList = new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
