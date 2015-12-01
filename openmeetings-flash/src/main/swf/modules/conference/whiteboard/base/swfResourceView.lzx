@@ -78,7 +78,9 @@
 		
 		<handler name="onframe" args="i">
 			if ($debug) Debug.write("onframe",i);
-			mc.gotoAndStop(i);
+			if (mc) {
+				mc.gotoAndStop(i);
+			}
 		</handler>
 		
 		<handler name="onplay" args="i">

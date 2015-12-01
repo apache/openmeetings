@@ -441,70 +441,61 @@
     </method>
     
 	<method name="deleteItemByNameSync" args="objName">
-    	<![CDATA[
-    	    if ($debug) Debug.write("deleteItemByNameSync :: ",objName);
-    	    this[objName].prepareForDelete.sendEvent();
-    	    this[objName].destroy();
-            if (this.boundingref!=null) this.boundingref.removeIt();
-    		
-    		var pos = -1;
-    		for (var eg=0;eg<this.layers.length;eg++){
-    			if (this.layers[eg]['name']==objName) {
-    				pos = eg;
-    				//Debug.write("Found Object in Layer: ",eg);
-    				this.layers[eg].prepareForDelete.sendEvent();
-    				this.layers[eg].destroy();
-    			}
-    		}	
-    		if (pos!=-1) this.layers.splice(pos, 1);
-    		//get Item Position
-    		pos = -1;
-    		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
-    			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
-    				pos = eg;
-    				//Debug.write("Found Object: ",eg);
-    				break;
-    			}
-    		}
-    		
-    		if ($debug) Debug.write("deleteItemByNameSync Found Object: ",eg);
-    		
-    		var newA = this.baseactionobjectList[pos];
-    		
-    		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
-    			if (this.baseactionobjectList[eg][0]!="pointerWhiteBoard") {
-		    		if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-8]>newA[newA.length-8]) {
-		    				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-8]-=1;
+	<![CDATA[
+		if ($debug) Debug.write("deleteItemByNameSync :: ", objName);
+		this[objName].prepareForDelete.sendEvent();
+		this[objName].destroy();
+		if (this.boundingref!=null) this.boundingref.removeIt();
+		
+		var pos = -1;
+		for (var eg = 0; eg < this.layers.length; ++eg) {
+			if (this.layers[eg]['name'] == objName) {
+				pos = eg;
+				//Debug.write("Found Object in Layer: ",eg);
+				this.layers[eg].prepareForDelete.sendEvent();
+				this.layers[eg].destroy();
+			}
+		}
+		if (pos != -1) this.layers.splice(pos, 1);
+		//get Item Position
+		pos = -1;
+		for (var eg = 0; eg < this.baseactionobjectList.length; ++eg) {
+			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length - 1] == objName) {
+				pos = eg;
+				//Debug.write("Found Object: ", eg);
+				break;
+			}
+		}
+		var newA = null;
+		if (pos != -1) {
+			newA = this.baseactionobjectList[pos];
+			
+			for (var eg = 0; eg < this.baseactionobjectList.length; ++eg) {
+				if (this.baseactionobjectList[eg][0] != "pointerWhiteBoard") {
+					if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length - 8] > newA[newA.length - 8]) {
+						this.baseactionobjectList[eg][this.baseactionobjectList[eg].length - 8] -= 1;
 					}
-    			}
-    		}
-    		
-    		if (pos!=-1) this.baseactionobjectList.splice(pos, 1);
-    		
-    		//if ($debug) Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
-    		//if ($debug) Debug.write("this.layers.length: ",this.layers.length);
-    		
-    		if ($debug) Debug.warn("deleteItemByName :: ",objName);
-    		
-    		this.checkStepLayers();
-    		
-    		if (newA[0] == "swf") {
-                this.doDeleteFromDocumentsBar(objName);
-    		}
-    		
-    		return newA;
-    	]]>
+				}
+			}
+			
+			this.baseactionobjectList.splice(pos, 1);
+			
+			if ($debug) Debug.warn("deleteItemByName :: ", objName);
+			
+			this.checkStepLayers();
+			
+			if (newA[0] == "swf") {
+				this.doDeleteFromDocumentsBar(objName);
+			}
+		}
+		if ($debug) Debug.write("deleteItemByNameSync Found Object: ", pos, newA);
+		return newA;
+	]]>
 	</method>
 	
 	<method name="UpdateByObject" args="objRef">
 		<![CDATA[
-		//Debug.write("UpdateByObject : ",objRef,objRef.name);
 		var objName = objRef.name;
-		//for (var eg=0;eg<this.layers.length;eg++){
-		//	if (this.layers[eg]['name']==objName) {
-		//		//Debug.write("Found Object in Layer: ",this.layers[eg]);
-		//	}
-		//}
 		
 		var tx = objRef.x;
         var ty = objRef.y;

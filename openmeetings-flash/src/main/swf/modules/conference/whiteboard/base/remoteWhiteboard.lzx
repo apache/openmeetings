@@ -152,6 +152,7 @@
 			if ($debug) Debug.write("startNewSyncprocess: ",value);
 			if (value.publicSID == canvas.publicSID){
 				if ($debug) Debug.write("currentLoadingItem IS mine");
+				parent.startInitialLoadingProcess();
 			}
 		]]>
 		</handler>   
@@ -163,6 +164,7 @@
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("startNewSyncprocess: ",value);
 			if ($debug) Debug.write("currentLoadingItem IS mine");
+			parent.startInitialLoadingProcess();
 		]]>
 		</handler>   
 	</netRemoteCallHib> 
@@ -176,10 +178,10 @@
 		</handler>   
 	</netRemoteCallHib>	 	
 	
-	<method name="startInitialLoadinProcess">
-		this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+	<method name="startInitialLoadingProcess">
+		this.loadObjectDelegate = new LzDelegate(this, "loadRemoteObject");
 		if (this.loadingObjectList.length != 0){
-			lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+			lz.Timer.addTimer(this.loadObjectDelegate, 250);
 		}
 	</method>
 	
@@ -187,8 +189,8 @@
 	<![CDATA[
 		this.sendRemoteWatchObject(this.loadingObjectList[this.loadingObjectListId]);
 		this.loadingObjectListId++;
-		if (this.loadingObjectListId < this.loadingObjectList.length){
-			lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+		if (this.loadingObjectListId < this.loadingObjectList.length) {
+			lz.Timer.addTimer(this.loadObjectDelegate, 250);
 		} else {
 			this.sendCompletedSyncEvent.doCall();
 			this.updateAllObjectsToSlideNumber();

@@ -187,8 +187,9 @@
         client.sendVarsToMessageWithClient = this.sendVarsToMessageWithClient;
         client.sendVarsToWhiteboardById = this.sendVarsToWhiteboardById;
         client.sendVarsToModeratorGeneral = this.sendVarsToModeratorGeneral;
-        client.sendObjectSyncFlag = this.sendObjectSyncFlag;
+        client.sendSyncFlag = this.sendSyncFlag;
         client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
+        client.sendObjectSyncFlag = this.sendObjectSyncFlag;
         client.sendObjectSyncCompleteFlag = this.sendObjectSyncCompleteFlag;
         client.startedRecording = this.startedRecording;
         client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
@@ -1566,18 +1567,15 @@
 	</netRemoteCallHib>
     
     <!-- Whiteboard sync Events -->
-    <netRemoteCallHib name="sendSyncFlag" funcname="sendSyncFlag">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("sendSyncFlag: ",value);
-                if (canvas.syncWindow == null) {
-                    canvas.syncWindow = new lz.syncWin(canvas.main_content._content.inner,{
-                            labelid:558,labeliderror:559});
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>     
+	<method name="sendSyncFlag" args="value">
+	<![CDATA[
+		//The onResult-Handler will be called be the rtmpconnection
+		if ($debug) Debug.write("sendSyncFlag: ",value);
+		if (canvas.syncWindow == null) {
+			canvas.syncWindow = new lz.syncWin(canvas.main_content._content.inner, {labelid: 558, labeliderror: 559});
+		}
+	]]>
+	</method>     
     
 	<method name="sendSyncCompleteFlag" args="value">
 	<![CDATA[
