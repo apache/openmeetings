@@ -72,9 +72,13 @@
 		 <!-- Do not send update events in case 
 			this is sync event broadcasted by another user -->
 		<attribute name="doSendChangeValue" value="false" type="boolean" />
+		<attribute name="mc"/>
+		<attribute name="frame" type="number" value="1" />
+		<attribute name="totalframes" type="number" value="1" />
 		
 		<handler name="onframe" args="i">
-			////Debug.write("onframe",i);
+			if ($debug) Debug.write("onframe",i);
+			mc.gotoAndStop(i);
 		</handler>
 		
 		<handler name="onplay" args="i">
@@ -83,6 +87,16 @@
 		
 		<handler name="onstop" args="i">
 			////Debug.write("onstop",i);
+		</handler>
+		
+		<handler name="onwidth" args="w">
+			if ($debug) Debug.write("onwidth ",w);
+			mc.width = w;
+		</handler>
+		
+		<handler name="onheight" args="h">
+			if ($debug) Debug.write("onheight ",h);
+			mc.height = h;
 		</handler>
 		
 		<method name="initialLoadFullFit">
@@ -110,22 +124,24 @@
 		
 		<method name="completeCallback" args="event">
 		<![CDATA[
-			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.width, this.height, this.sprite.imgLoader.width, this.sprite.imgLoader.height);
-			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.sprite.imgLoader.content);
-			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.sprite.imgLoader.content['frame'], this.sprite.imgLoader.content['totalframes']);
-			var mc = MovieClip(this.sprite.imgLoader.content);
-			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", mc);
-			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", mc.frame, mc.totalframes);
-			this.width = this.sprite.imgLoader.width;
-			this.height = this.sprite.imgLoader.height;
+			try {
+				mc = MovieClip(this.sprite.imgLoader.content);
+			} catch (e:Error) {
+				if ($debug) Debug.error("Error getting MovieClip, old swf, FIXME TODO DISPLAY ERROR DIALOG", e);
+			}
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.width, this.height, mc.width, mc.height);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", mc.currentFrame, mc.totalFrames);
+			this.width = mc.width;
+			this.height = mc.height;
+			this.frame = mc.currentFrame;
+			this.totalframes = mc.totalFrames;
 			
-			this.stop();
-			this.setAttribute('play',false);			 
+			mc.stop();
 			
 			this.parent.initwidth = this.width;
 			this.parent.initheight = this.height;
 			
-			this.setAttribute('frame',parent.slideNumber);
+			mc.gotoAndStop(parent.slideNumber);
 			
 			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
 			//otherwise just send a notification to moderator that this iamge has been loaded
@@ -218,15 +234,6 @@
 			this.oninit.sendEvent();
 		]]>
 		</handler> 
-		
-		<handler name="onwidth" args="w">
-			if ($debug) Debug.write("onwidth ",w);
-		</handler>
-		
-		<handler name="onheight" args="h">
-			if ($debug) Debug.write("onheight ",h);
-		</handler>
-		
 	</omMiniIcon>
 </class>
 

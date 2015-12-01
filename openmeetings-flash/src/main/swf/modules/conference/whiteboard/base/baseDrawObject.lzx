@@ -503,8 +503,6 @@
 		obj._swfView.setAttribute('y',lastactionObject[10]);
 		obj._swfView.setAttribute('width',lastactionObject[11]);
 		obj._swfView.setAttribute('height',lastactionObject[12]);
-		//obj.zoomlevel = lastactionObject[13];
-		//obj.currentzoomFactor = lastactionObject[16];
 		obj.fullFit = lastactionObject[19];
 		
 		if ($debug) Debug.write("DO initialLoadFullFit ?? ",obj.fullFit);
