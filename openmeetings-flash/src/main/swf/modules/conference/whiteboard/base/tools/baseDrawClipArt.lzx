@@ -24,6 +24,18 @@
 <class name="drawClipArtWhiteBoard" extends="omMiniIcon">
     <attribute name="clipArtEndx" value="0" type="number" />
     <attribute name="clipArtEndy" value="0" type="number" />
+    
+    <handler name="onwidth">
+    	if (this.sprite.imgLoader) {
+			this.sprite.imgLoader.width = this.width;
+		}
+    </handler>
+    
+    <handler name="onheight">
+    	if (this.sprite.imgLoader) {
+			this.sprite.imgLoader.height = this.height;
+		}
+    </handler>
 </class>	
     
 <class name="baseDrawClipArt" extends="baseDrawArrow" >

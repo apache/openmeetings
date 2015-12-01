@@ -136,9 +136,6 @@
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("loadWMLFile: ",value);
-			//canvas._drawarea.clearAll();
-			//parent.loadSavedObjectList(value);
-			
 		]]>
 		</handler>   
 	</netRemoteCallHib> 
@@ -155,10 +152,6 @@
 			if ($debug) Debug.write("startNewSyncprocess: ",value);
 			if (value.publicSID == canvas.publicSID){
 				if ($debug) Debug.write("currentLoadingItem IS mine");
-				//TODO: Check usage of currentLoadingItem
-				//if (value.currentLoadingItem){
-					parent.startInitialLoadinProcess();
-				//}
 			}
 		]]>
 		</handler>   
@@ -169,13 +162,7 @@
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("startNewSyncprocess: ",value);
-			//if (value.publicSID == canvas.publicSID){
-				if ($debug) Debug.write("currentLoadingItem IS mine");
-				//TODO: Check usage of currentLoadingItem
-				//if (value.currentLoadingItem){
-					parent.startInitialLoadinProcess();
-				//}
-			//}
+			if ($debug) Debug.write("currentLoadingItem IS mine");
 		]]>
 		</handler>   
 	</netRemoteCallHib> 

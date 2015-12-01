@@ -387,8 +387,7 @@
 	</method>
 	
 	<method name="addItemToDocumentToolBar">
-		var docToolbar = this.getDocumentToolBar();
-		docToolbar.addCurrentObject(this.currentlayer);
+		this.getDocumentToolBar().addCurrentObject(this.currentlayer);
 	</method>
 	
 	<method name="setCurrentDocumentByToolBar" args="itemRefName">
@@ -441,13 +440,9 @@
 			
 			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
 			docToolbar._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
-			//docToolbar._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
-			//docToolbar.parent._fullFit.setValue(this.ObjectByName.fullFit);
 		} else {
 			docToolbar._currentSlideNo.setAttribute('text',"0");
 			docToolbar._totalSlideNo.setAttribute('text',"0");
-			//docToolbar._zoom.setAttribute('text',"100");
-			//docToolbar.parent._fullFit.setValue(false);
 		}
 		
 		docToolbar.parent.parent.ignoreUpdates = false;
@@ -455,13 +450,11 @@
 	</method>
 	
 	<method name="doDeleteFromDocumentsBar" args="itemRefName">
-		var docToolbar = this.getDocumentToolBar();
-		docToolbar.removeDocument(itemRefName);
+		this.getDocumentToolBar().removeDocument(itemRefName);
 	</method>
 	
 	<method name="clearDocumentsBar">
-		var docToolbar = this.getDocumentToolBar();
-		docToolbar.clearDocumentsBar();
+		this.getDocumentToolBar().clearDocumentsBar();
 	</method>
 	
 	<method name="sendCurrentSWFObject" args="objRef">

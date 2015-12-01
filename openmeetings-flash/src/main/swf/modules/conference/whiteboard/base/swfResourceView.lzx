@@ -62,6 +62,13 @@
 	<attribute name="swfUrl" value="" type="string" />	
 	
 	<omMiniIcon name="_swfView" play="false" imgUrl="${ parent.swfUrl }">
+	    <switch>
+	        <when property="$as3">
+	            <passthrough>
+	                import flash.display.*;
+	            </passthrough>
+	        </when>
+	    </switch>
 		 <!-- Do not send update events in case 
 			this is sync event broadcasted by another user -->
 		<attribute name="doSendChangeValue" value="false" type="boolean" />
@@ -80,11 +87,11 @@
 		
 		<method name="initialLoadFullFit">
 		<![CDATA[
-			if ($debug) Debug.write(" -- fullFit -- ",parent.parent.fullFit);
+			if ($debug) Debug.write(" -- fullFit -- ", parent.parent.fullFit);
 		
 			if (parent.parent.fullFit) {
-				if ($debug) Debug.write(" -- fullFit -2- ",this.width,this.height);
-				if ($debug) Debug.write(" -- fullFit -3- ",parent.parent.width,parent.parent.height);
+				if ($debug) Debug.write(" -- fullFit -2- ", this.width, this.height);
+				if ($debug) Debug.write(" -- fullFit -3- ", parent.parent.width, parent.parent.height);
 				
 				//Scale to container width/height
 				var xScale = (parent.parent.parent.width-16)/this.width;
@@ -102,13 +109,15 @@
 		</method>
 		
 		<method name="completeCallback" args="event">
-			//if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.width, this,height);
-			//designed to be empty to override default behavior
-		</method>
-		
-		<handler name="onload">
 		<![CDATA[
-			if ($debug) Debug.info("swfResourceView::_swfView::onload: ", this.width, this,height);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.width, this.height, this.sprite.imgLoader.width, this.sprite.imgLoader.height);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.sprite.imgLoader.content);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", this.sprite.imgLoader.content['frame'], this.sprite.imgLoader.content['totalframes']);
+			var mc = MovieClip(this.sprite.imgLoader.content);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", mc);
+			if ($debug) Debug.info("OVERRIDEN swfResourceView::_swfView::completeCallback: ", mc.frame, mc.totalframes);
+			this.width = this.sprite.imgLoader.width;
+			this.height = this.sprite.imgLoader.height;
 			
 			this.stop();
 			this.setAttribute('play',false);			 
@@ -163,10 +172,8 @@
 			this.parent.refObj.layers.push(this.parent);			
 			
 			this.doSendChangeValue = true;
-			
-			this.oninit.sendEvent();
 		]]>
-		</handler>
+		</method>
 		
 		<handler name="onerror" args="error">
 		<![CDATA[

@@ -92,8 +92,6 @@
 			this.refObj.sendLoadNotificationImage(this);
 		}
 		this.refObj.layers.push(this);			
-		
-		//this.oninit.sendEvent();
 	]]>
 	</handler>
 	
