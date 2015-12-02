@@ -305,7 +305,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 	
 	@Override
-	public StringLabel get(long id) {
+	public StringLabel get(Long id) {
 		return null;
 	}
 

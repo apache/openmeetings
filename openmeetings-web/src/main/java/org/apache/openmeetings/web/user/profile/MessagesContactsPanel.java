@@ -73,7 +73,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
@@ -81,7 +80,6 @@ import org.apache.wicket.model.util.ListModel;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
@@ -107,7 +105,6 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer roomContainer = new WebMarkupContainer("roomContainer");
 	private final WebMarkupContainer buttons = new WebMarkupContainer("buttons");
 	private final WebMarkupContainer contacts = new WebMarkupContainer("contacts");
-	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
 	private final Set<Long> allMessages = new HashSet<Long>();
@@ -263,16 +260,6 @@ public class MessagesContactsPanel extends UserPanel {
 		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
 		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
-		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				if (send.equals(button)) {
-					handler.add(container);
-				}
-			}
-		});
 		
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
 			private static final long serialVersionUID = 1L;
@@ -288,14 +275,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		add(addFolder);
-		add(new WebMarkupContainer("new").add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				newMessage.reset(true).open(target);
-			}
-		}).add(new JQueryBehavior(".email.new", "button")));
+		add(new JQueryBehavior(".email.new", "button"));
 		folders.add(inbox.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
@@ -556,7 +536,6 @@ public class MessagesContactsPanel extends UserPanel {
 				return Model.of(object);
 			}
 		};
-		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
 		final DataView<UserContact> dw = new DataView<UserContact>("users", dp) {
 			private static final long serialVersionUID = 1L;
 
@@ -591,22 +570,8 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						d.open(target, userId);
-					}
-				}));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						newMessage.reset(true).open(target, userId);
-					}
-				}).setVisible(!uc.isPending()));
+				item.add(new WebMarkupContainer("view").add(AttributeAppender.append("onclick", String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("message").add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
 				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -619,7 +584,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		updateContacts(null);
-		add(d, contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));//TODO update
+		add(contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));//TODO update
 		
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {
@@ -639,6 +604,11 @@ public class MessagesContactsPanel extends UserPanel {
 		});
 	}
 
+	@Override
+	public void onNewMessageClose(IPartialPageRequestHandler handler) {
+		handler.add(container);
+	}
+	
 	@Override
 	protected void onDetach() {
 		foldersModel.detach();

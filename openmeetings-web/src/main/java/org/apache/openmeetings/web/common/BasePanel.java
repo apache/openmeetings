@@ -61,8 +61,16 @@ public abstract class BasePanel extends Panel {
 	/**
 	 * This method should be overridden to perform necessary cleanup: remove timers etc.
 	 * 
-	 * @param target
+	 * @param handler
 	 */
 	public void cleanup(IPartialPageRequestHandler handler) {
+	}
+	
+	/**
+	 * This method should be overridden to perform after "new message" dialog was closed.
+	 * 
+	 * @param handler
+	 */
+	public void onNewMessageClose(IPartialPageRequestHandler handler) {
 	}
 }

@@ -34,24 +34,29 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 	@PersistenceContext
 	private EntityManager em;
 	
-	public MailMessage get(long id) {
+	@Override
+	public MailMessage get(Long id) {
 		return em.createNamedQuery("getMailMessageById", MailMessage.class).setParameter("id", id).getSingleResult();
 	}
 
+	@Override
 	public List<MailMessage> get(int start, int count) {
 		return em.createNamedQuery("getMailMessages", MailMessage.class).setParameter("status", Status.NONE)
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 
+	@Override
 	public List<MailMessage> get(String search, int start, int count, String order) {
 		return get(start, count);
 	}
 
+	@Override
 	public long count() {
 		return em.createNamedQuery("countMailMessages", Long.class).setParameter("status", Status.NONE)
 				.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		return count();
 	}
@@ -65,6 +70,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 			.executeUpdate();
 	}
 	
+	@Override
 	public MailMessage update(MailMessage m, Long userId) {
 		if (m.getId() == null) {
 			m.setInserted(Calendar.getInstance());
@@ -76,6 +82,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 		return m;
 	}
 
+	@Override
 	public void delete(MailMessage m, Long userId) {
 		em.remove(m);
 	}

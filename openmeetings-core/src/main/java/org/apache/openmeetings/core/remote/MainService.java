@@ -104,15 +104,15 @@ public class MainService implements IPendingServiceCallback {
 	 * gets a user by its SID
 	 * 
 	 * @param SID
-	 * @param USER_ID
+	 * @param userId
 	 * @return - user with SID given
 	 */
-	public User getUser(String SID, int USER_ID) {
+	public User getUser(String SID, long userId) {
 		User users = new User();
 		Long users_id = sessiondataDao.checkSession(SID);
 		Set<Right> rights = userDao.getRights(users_id);
 		if (AuthLevelUtil.hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights)) {
-			users = userDao.get(USER_ID);
+			users = userDao.get(userId);
 		} else {
 			users.setFirstname("No rights to do this");
 		}

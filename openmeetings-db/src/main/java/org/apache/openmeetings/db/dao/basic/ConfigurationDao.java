@@ -192,7 +192,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return val;
 	}
 
-	public Configuration get(long id) {
+	@Override
+	public Configuration get(Long id) {
 		if (id <= 0) {
 			return null;
 		}
@@ -200,11 +201,13 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				.setParameter("id", id).getSingleResult();
 	}
 
+	@Override
 	public List<Configuration> get(int start, int count) {
 		return em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 
+	@Override
 	public List<Configuration> get(String search, int start, int count, String sort) {
 		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class);
 		q.setFirstResult(start);
@@ -212,15 +215,18 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return q.getResultList();
 	}
 	
+	@Override
 	public long count() {
 		return em.createNamedQuery("countConfigurations", Long.class).getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
+	@Override
 	public Configuration update(Configuration entity, Long userId) {
 		return update(entity, userId, false);
 	}
@@ -251,6 +257,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return entity;
 	}
 
+	@Override
 	public void delete(Configuration entity, Long userId) {
 		entity.setUpdated(new Date());
 		this.update(entity, userId, true);

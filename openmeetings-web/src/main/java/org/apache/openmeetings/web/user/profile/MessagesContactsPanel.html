@@ -24,7 +24,7 @@
 	<table class="messages">
 		<tr>
 			<td class="side left">
-				<div class="email new clickable" wicket:id="new" wicket:message="title:1208"><wicket:message key="1207"/></div>
+				<div class="email new clickable" onclick="privateMessage();" wicket:message="title:1208"><wicket:message key="1207"/></div>
 				<div wicket:id="folders">
 					<div wicket:id="inbox"><wicket:message key="1222"/></div>
 					<div wicket:id="sent"><wicket:message key="1223"/></div>
@@ -120,7 +120,5 @@
 		</tr>
 	</table>
 	<div wicket:id="addFolder"></div>
-	<div wicket:id="newMessage"></div>
-	<div wicket:id="infoDialog"></div>
 </wicket:panel>
 </html>

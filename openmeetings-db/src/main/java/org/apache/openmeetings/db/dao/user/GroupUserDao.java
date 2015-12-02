@@ -40,16 +40,19 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	private UserDao userDao;
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
-	public GroupUser get(long id) {
+	@Override
+	public GroupUser get(Long id) {
 		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
 		q.setParameter("id", id);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public List<GroupUser> get(int start, int count) {
 		throw new RuntimeException("Should not be used");
 	}
 
+	@Override
 	public List<GroupUser> get(String search, int start, int count, String sort) {
 		throw new RuntimeException("Should not be used");
 	}
@@ -88,10 +91,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().size() > 0;
 	}
 	
+	@Override
 	public long count() {
 		throw new RuntimeException("Should not be used");
 	}
 
+	@Override
 	public long count(String search) {
 		throw new RuntimeException("Should not be used");
 	}
@@ -113,6 +118,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		}
 	}
 	
+	@Override
 	public GroupUser update(GroupUser entity, Long userId) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
@@ -138,6 +144,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		userDao.update(u, userId);
 	}
 	
+	@Override
 	public void delete(GroupUser entity, Long userId) {
 		if (entity.getId() != null) {
 			updateUser(entity, true, userId);

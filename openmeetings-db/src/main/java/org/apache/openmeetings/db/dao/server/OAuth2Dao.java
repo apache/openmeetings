@@ -42,7 +42,8 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		return query.getResultList();
 	}
 	
-	public OAuthServer get(long id) {
+	@Override
+	public OAuthServer get(Long id) {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getOAuthServerById", OAuthServer.class);
 		query.setParameter("id", id);
 		OAuthServer result = null;
@@ -52,6 +53,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		return result;
 	}
 
+	@Override
 	public List<OAuthServer> get(int start, int count) {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getAllOAuthServers", OAuthServer.class);
 		query.setFirstResult(start);
@@ -59,6 +61,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		return query.getResultList();
 	}
 
+	@Override
 	public List<OAuthServer> get(String search, int start, int count, String order) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, false, null, searchFields), Long.class);
 		q.setFirstResult(start);
@@ -66,16 +69,19 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		return null;
 	}
 
+	@Override
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countOAuthServers", Long.class);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public OAuthServer update(OAuthServer server, Long userId) {
 		if (server.getId() == null) {
 			em.persist(server);
@@ -85,6 +91,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		return server;
 	}
 
+	@Override
 	public void delete(OAuthServer server, Long userId) {
 		server.setDeleted(true);
 		update(server, userId);

@@ -16,11 +16,12 @@
  */
 package org.apache.openmeetings.web.util;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
+import org.apache.wicket.util.string.StringValue;
 
 public class CallbackFunctionHelper {
-	
 	public static StringBuilder getNamedFunction(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("function ").append(name).append("(");
@@ -40,5 +41,9 @@ public class CallbackFunctionHelper {
 		sb.append(b.getCallbackFunctionBody(extraParameters));
 		sb.append("}\n");
 		return sb;
+	}
+
+	public static StringValue getParam(Component cmp, String name) {
+		return cmp.getRequest().getRequestParameters().getParameterValue(name);
 	}
 }

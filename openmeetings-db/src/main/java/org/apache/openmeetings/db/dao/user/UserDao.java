@@ -116,6 +116,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return user;
 	}
 
+	@Override
 	public List<User> get(int first, int count) {
 		TypedQuery<User> q = em.createNamedQuery("getNondeletedUsers", User.class);
 		q.setFirstResult(first);
@@ -161,12 +162,14 @@ public class UserDao implements IDataProviderDao<User> {
 		return q.getResultList();
 	}
 	
+	@Override
 	public long count() {
 		// get all users
 		TypedQuery<Long> q = em.createNamedQuery("countNondeletedUsers", Long.class);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		return count(search, false, -1);
 	}
@@ -202,6 +205,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return q.getResultList();
 	}
 
+	@Override
 	public User update(User u, Long userId) {
 		if (u.getGroupUsers() != null) {
 			for (GroupUser ou : u.getGroupUsers()) {
@@ -240,7 +244,8 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
-	public User get(long id) {
+	@Override
+	public User get(Long id) {
 		return get(id, false);
 	}
 	
@@ -269,6 +274,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 
+	@Override
 	public void delete(User u, Long userId) {
 		if (u != null && u.getId() != null) {
 			for (GroupUser ou : u.getGroupUsers()){
