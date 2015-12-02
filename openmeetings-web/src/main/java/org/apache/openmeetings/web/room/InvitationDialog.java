@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
@@ -54,6 +56,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -288,9 +291,11 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		private final DateTimePicker from;
 		private final DateTimePicker to;
 		private final DropDownChoice<String> timeZoneId;
+		private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 		
 		public InvitationForm(String id, IModel<Invitation> model) {
 			super(id, model);
+			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 			RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", inviteeType);
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 				private static final long serialVersionUID = 1L;
@@ -312,16 +317,20 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					updateButtons(target);
 				}
 			}).setOutputMarkupId(true));
-			rdi.add(groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
+			groupContainer.add(
+				groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+					private static final long serialVersionUID = 1L;
 				
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					url.setModelObject(null);
-					updateButtons(target);
-				}
-			}).setOutputMarkupId(true));
-			rdi.add(new Radio<InviteeType>("user", Model.of(InviteeType.user)), new Radio<InviteeType>("group", Model.of(InviteeType.group)));
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						url.setModelObject(null);
+						updateButtons(target);
+					}
+				}).setOutputMarkupId(true)
+				, new Radio<InviteeType>("group", Model.of(InviteeType.group))
+			);
+			rdi.add(groupContainer.setVisible(showGroups));
+			rdi.add(new Radio<InviteeType>("user", Model.of(InviteeType.user)));
 
 			rdi.add(new TextField<String>("subject", subject));
 			rdi.add(new TextArea<String>("message", message));
