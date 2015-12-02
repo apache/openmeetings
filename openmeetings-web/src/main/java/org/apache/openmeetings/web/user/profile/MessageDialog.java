@@ -80,7 +80,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	DialogButton send = new DialogButton("send", Application.getString(218));
+	protected DialogButton send = new DialogButton("send", Application.getString(218));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
@@ -94,7 +94,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		return 650;
 	}
 	
-	public void open(IPartialPageRequestHandler handler, long userId) {
+	public void open(IPartialPageRequestHandler handler, Long userId) {
 		getModelObject().setTo(getBean(UserDao.class).get(userId));
 		open(handler);
 	}

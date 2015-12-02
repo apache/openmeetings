@@ -29,6 +29,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,10 +87,6 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		getComponent().add(download);
 	}
 	
-	private String getParam(String name) {
-		return getComponent().getRequest().getRequestParameters().getParameterValue(name).toString();
-	}
-	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
 		//TODO deny download in case other screen sharing is in progress
@@ -101,14 +98,14 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			URL url = new URL(baseUrl);
 			Room room = getBean(RoomDao.class).get(roomId);
 			SessionManager sessionManager = getBean(SessionManager.class);
-			Client rc = sessionManager.getClientByPublicSID(getParam(PARAM_PUBLIC_SID), null);//TODO not necessary
+			Client rc = sessionManager.getClientByPublicSID(getParam(getComponent(), PARAM_PUBLIC_SID).toString(), null);//TODO not necessary
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1);
-			String port = getParam(PARAM_PORT);
+			String port = getParam(getComponent(), PARAM_PORT).toString();
 			if (Strings.isEmpty(port)) {
 				cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, "");
 			}
-			String _protocol = getParam(PARAM_PROTOCOL);
+			String _protocol = getParam(getComponent(), PARAM_PROTOCOL).toString();
 			if (Strings.isEmpty(_protocol)) {
 				_protocol = cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, "");
 			}

@@ -72,6 +72,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * 
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
+	@Override
 	public List<Server> get(int start, int max) {
 		TypedQuery<Server> q = em.createNamedQuery("getAllServers", Server.class);
 		q.setFirstResult(start);
@@ -79,6 +80,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		return q.getResultList();
 	}
 
+	@Override
 	public List<Server> get(String search, int start, int count, String order) {
 		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery(
 				"Server", "s", search, true, false, order, searchFields),
@@ -104,6 +106,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * 
 	 * @see org.apache.openmeetings.data.OmDAO#count()
 	 */
+	@Override
 	public long count() {
 		log.debug("getServerCount enter");
 		TypedQuery<Long> q = em.createNamedQuery("getServerCount", Long.class);
@@ -111,6 +114,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		return q.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server",
 				"s", search, true, true, null, searchFields), Long.class);
@@ -122,7 +126,8 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * 
 	 * @see org.apache.openmeetings.data.OmDAO#get(long)
 	 */
-	public Server get(long id) {
+	@Override
+	public Server get(Long id) {
 		Server result = null;
 		log.debug("getServer enter, id = " + id);
 		TypedQuery<Server> q = em.createNamedQuery("getServerById",
@@ -158,6 +163,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
+	@Override
 	public Server update(Server entity, Long userId) {
 		entity.setDeleted(false);
 		if (entity.getId() > 0) {
@@ -183,6 +189,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
+	@Override
 	public void delete(Server entity, Long userId) {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());

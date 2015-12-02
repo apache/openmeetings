@@ -38,7 +38,8 @@ public class GroupDao implements IDataProviderDao<Group> {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Group get(long id) {
+	@Override
+	public Group get(Long id) {
 		TypedQuery<Group> query = em.createNamedQuery("getGroupById", Group.class);
 		query.setParameter("id", id);
 		Group o = null;
@@ -55,6 +56,7 @@ public class GroupDao implements IDataProviderDao<Group> {
 		return groups == null || groups.isEmpty() ? null : groups.get(0);
 	}
 
+	@Override
 	public List<Group> get(int start, int count) {
 		TypedQuery<Group> q = em.createNamedQuery("getNondeletedGroups", Group.class);
 		q.setFirstResult(start);
@@ -62,6 +64,7 @@ public class GroupDao implements IDataProviderDao<Group> {
 		return q.getResultList();
 	}
 
+	@Override
 	public List<Group> get(String search, int start, int count, String sort) {
 		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, false, sort, searchFields), Group.class);
 		q.setFirstResult(start);
@@ -69,11 +72,13 @@ public class GroupDao implements IDataProviderDao<Group> {
 		return q.getResultList();
 	}
 	
+	@Override
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countGroups", Long.class);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
@@ -83,6 +88,7 @@ public class GroupDao implements IDataProviderDao<Group> {
 		return em.createNamedQuery("getGroupsByIds", Group.class).setParameter("ids", ids).getResultList();
 	}
 
+	@Override
 	public Group update(Group entity, Long userId) {
 		if (entity.getId() == null) {
 			if (userId != null) {
@@ -100,6 +106,7 @@ public class GroupDao implements IDataProviderDao<Group> {
 		return entity;
 	}
 
+	@Override
 	public void delete(Group entity, Long userId) {
 		em.createNamedQuery("deleteUsersFromGroup")
 			.setParameter("id", entity.getId())

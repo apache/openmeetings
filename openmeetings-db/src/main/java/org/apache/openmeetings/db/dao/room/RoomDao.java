@@ -59,7 +59,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
-	public Room get(long id) {
+	@Override
+	public Room get(Long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
 		q.setParameter("id", id);
 		@SuppressWarnings("unchecked")
@@ -81,6 +82,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return em.createNamedQuery("getRoomsByIds", Room.class).setParameter("ids", ids).getResultList();
 	}
 
+	@Override
 	public List<Room> get(int start, int count) {
 		TypedQuery<Room> q = em.createNamedQuery("getNondeletedRooms", Room.class);
 		q.setFirstResult(start);
@@ -88,6 +90,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 
+	@Override
 	public List<Room> get(String search, int start, int count, String sort) {
 		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, false, sort, searchFields), Room.class);
 		q.setFirstResult(start);
@@ -95,11 +98,13 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 
+	@Override
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countRooms", Long.class);
 		return q.getSingleResult();
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
@@ -164,6 +169,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return null;
 	}
 	
+	@Override
 	public Room update(Room entity, Long userId) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
@@ -186,6 +192,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return entity;
 	}
 
+	@Override
 	public void delete(Room entity, Long userId) {
 		entity.setDeleted(true);
 		entity.setSipEnabled(false);

@@ -66,7 +66,8 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		return privateMessageFolderId;	
 	}
 	
-	public PrivateMessageFolder get(long id) {
+	@Override
+	public PrivateMessageFolder get(Long id) {
 		String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 
 		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
@@ -81,12 +82,14 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		return folder;
 	}
 
+	@Override
 	public List<PrivateMessageFolder> get(int start, int count) {
 		return em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.id", PrivateMessageFolder.class)
 				.setFirstResult(start).setMaxResults(count)
 				.getResultList();
 	}
 
+	@Override
 	public PrivateMessageFolder update(PrivateMessageFolder folder, Long userId) {
 		if (folder.getId() == 0) {
 			em.persist(folder);
@@ -112,21 +115,25 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		return null;
 	}
 
+	@Override
 	public void delete(PrivateMessageFolder folder, Long userId) {
 		folder = em.find(PrivateMessageFolder.class, folder.getId());
 		em.remove(folder);
 	}
 
+	@Override
 	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public long count() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public long count(String search) {
 		// TODO Auto-generated method stub
 		return 0;

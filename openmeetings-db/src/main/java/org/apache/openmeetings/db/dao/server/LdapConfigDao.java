@@ -149,7 +149,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return -1L;
 	}
 
-	public LdapConfig get(long id) {
+	@Override
+	public LdapConfig get(Long id) {
 		try {
 
 			TypedQuery<LdapConfig> query = em.createNamedQuery("getLdapConfigById", LdapConfig.class);
@@ -192,6 +193,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return result;
 	}
 
+	@Override
 	public List<LdapConfig> get(int start, int count) {
 		TypedQuery<LdapConfig> q = em.createNamedQuery("getNondeletedLdapConfigs", LdapConfig.class);
 		q.setFirstResult(start);
@@ -199,6 +201,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return q.getResultList();
 	}
 
+	@Override
 	public List<LdapConfig> get(String search, int start, int count, String sort) {
 		TypedQuery<LdapConfig> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, sort, searchFields), LdapConfig.class);
 		q.setFirstResult(start);
@@ -206,6 +209,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return q.getResultList();
 	}
 	
+	@Override
 	public long count() {
 		try {
 			TypedQuery<Long> query = em.createNamedQuery("countNondeletedLdapConfigs", Long.class);
@@ -218,11 +222,13 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return 0L;
 	}
 
+	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
+	@Override
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
 			if (entity.getId() == null) {
@@ -246,6 +252,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return entity;
 	}
 
+	@Override
 	public void delete(LdapConfig entity, Long userId) {
 		if (entity.getId() != null) {
 			entity.setUpdated(new Date());

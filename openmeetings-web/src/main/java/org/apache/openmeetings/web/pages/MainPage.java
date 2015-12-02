@@ -23,10 +23,13 @@ import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
@@ -47,19 +51,27 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
+import org.apache.openmeetings.web.user.profile.MessageDialog;
+import org.apache.openmeetings.web.user.profile.UserInfoDialog;
+import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
@@ -70,16 +82,21 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
+	private final static String PARAM_USER_ID = "userId";
 	private final MenuPanel menu;
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
 	private final Component dev;
 	private final ChatPanel chat;
+	private final MessageDialog newMessage;
+	private final UserInfoDialog userInfo;
 	
 	public MainPage(PageParameters pp) {
 		super();
@@ -133,6 +150,66 @@ public class MainPage extends BaseInitedPage {
 		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
 		add(chat = new ChatPanel("chatPanel"));
+		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onOpen(IPartialPageRequestHandler handler) {
+				super.onOpen(handler);
+				setDefaultModelObject(new CompoundPropertyModel<PrivateMessage>(new PrivateMessage()));
+			}
+			
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				BasePanel bp = getCurrentPanel();
+				if (send.equals(button) && bp != null) {
+					bp.onNewMessageClose(handler);
+				}
+			}
+		});
+		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				userInfo.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("showUserInfo", this, explicit(PARAM_USER_ID)), "showUserInfo")));
+			}
+		});
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				ContactsHelper.addUserToContactList(getParam(getComponent(), PARAM_USER_ID).toLong());
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("addContact", this, explicit(PARAM_USER_ID)), "addContact")));
+			}
+		});
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				newMessage.reset(true).open(target, getParam(getComponent(), PARAM_USER_ID).toOptionalLong());
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID)), "privateMessage")));
+			}
+		});
 		add(new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -195,12 +272,20 @@ public class MainPage extends BaseInitedPage {
 		updateContents(f, handler, true);
 	}
 	
+	private BasePanel getCurrentPanel() {
+		Component prev = contents.get(CHILD_ID);
+		if (prev != null && prev instanceof BasePanel) {
+			return (BasePanel)prev;
+		}
+		return null;
+	}
+	
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
-			Component prev = contents.get(CHILD_ID);
-			if (prev != null && prev instanceof BasePanel) {
-				((BasePanel)prev).cleanup(handler);
+			BasePanel prev = getCurrentPanel();
+			if (prev != null) {
+				prev.cleanup(handler);
 			}
 			handler.add(contents.replace(panel));
 			if (updateFragment) {

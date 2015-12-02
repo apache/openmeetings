@@ -37,7 +37,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 * @param id - id of instance to retrieve
 	 * @return instance with the id gived
 	 */
-	T get(long id);
+	T get(Long id);
 
 	/**
 	 * Get a list of instances of {@link T}

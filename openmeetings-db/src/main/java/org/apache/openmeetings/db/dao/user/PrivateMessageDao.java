@@ -75,13 +75,15 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return null;
 	}
 	
+	@Override
 	public List<PrivateMessage> get(int first, int count) {
 		return em.createNamedQuery("getPrivateMessages", PrivateMessage.class)
 				.setFirstResult(first).setMaxResults(count)
 				.getResultList();
 	}
 	
-	public PrivateMessage get(long id) {
+	@Override
+	public PrivateMessage get(Long id) {
 		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class); 
 		query.setParameter("id", id);
 		PrivateMessage privateMessage = null;
@@ -92,6 +94,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return privateMessage;
 	}
 	
+	@Override
 	public PrivateMessage update(PrivateMessage entity, Long userId) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
@@ -172,23 +175,26 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 				.setParameter("roomId", roomId).getResultList();
 	}
 
+	@Override
 	public List<PrivateMessage> get(String search, int start, int count, String order) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public long count() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public long count(String search) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public void delete(PrivateMessage entity, Long userId) {
 		// TODO Auto-generated method stub
-		
 	}
 }

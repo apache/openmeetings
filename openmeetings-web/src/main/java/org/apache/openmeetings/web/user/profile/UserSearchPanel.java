@@ -29,16 +29,13 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -52,8 +49,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class UserSearchPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -64,7 +61,6 @@ public class UserSearchPanel extends UserPanel {
 	private String orderBy = "u.firstname";
 	private boolean asc = true;
 	private boolean searched = false;
-	private final MessageDialog newMessage;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
@@ -81,25 +77,15 @@ public class UserSearchPanel extends UserPanel {
 				add(new TextField<String>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
 				add(new TextField<String>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
 				add(new TextField<String>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
-				add(new AjaxFormSubmitBehavior(this, "submit") {
+				add(new AjaxButton("submit") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						searched = true;
 						refresh(target);
 					}
 				});
-			}
-		});
-		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				if (send.equals(button)) {
-					refresh(handler);
-				}
 			}
 		});
 		IDataProvider<User> dp = new IDataProvider<User>() {
@@ -122,8 +108,7 @@ public class UserSearchPanel extends UserPanel {
 			}
 			
 		};
-		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
-		final DataView<User> dv = new DataView<User>("users", dp) {
+		final DataView<User> dw = new DataView<User>("users", dp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -136,36 +121,15 @@ public class UserSearchPanel extends UserPanel {
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						d.open(target, userId);
-					}
-				}));
-				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						ContactsHelper.addUserToContactList(userId);
-						refresh(target);
-					}
-				}).setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId())));
-				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						newMessage.reset(true).open(target, userId);
-					}
-				})).setVisible(userId != getUserId());
+				item.add(new WebMarkupContainer("view").add(AttributeAppender.append("onclick", String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId()))
+						.add(AttributeAppender.append("onclick", String.format("addContact(%s);", userId))));
+				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
 			}
 		};
 
-		add(d, container.add(dv, new PagingNavigatorPanel("navigator", dv, itemsPerPage, 100) {
+		add(container.add(dw, new PagingNavigatorPanel("navigator", dw, itemsPerPage, 100) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -178,5 +142,9 @@ public class UserSearchPanel extends UserPanel {
 	private String getName(User u) {
 		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]"; //FIXME salutation
 	}
-
+	
+	@Override
+	public void onNewMessageClose(IPartialPageRequestHandler handler) {
+		refresh(handler);
+	}
 }
