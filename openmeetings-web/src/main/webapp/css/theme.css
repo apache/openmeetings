@@ -626,3 +626,6 @@ form .input {
 	max-height: 80px;
 	overflow-y: auto;
 }
+#contents .btn-file>input {
+	transform: translate(-3000px, 0) scale(1);
+}
