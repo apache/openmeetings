@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -49,9 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class SessionManager implements ISessionManager {
-	
-	protected static final Logger log = Red5LoggerFactory.getLogger(
-			SessionManager.class, OpenmeetingsVariables.webAppRootKey);
+	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, webAppRootKey);
 	
 	@Autowired
 	private ServerUtil serverUtil;
@@ -75,7 +73,7 @@ public class SessionManager implements ISessionManager {
 		
 		public synchronized Client addClientListItem(String streamId,
 				String scopeName, Integer remotePort, String remoteAddress,
-				String swfUrl, boolean isAVClient, Server server) {
+				String swfUrl, Server server) {
 			try {
 
 				// Store the Connection into a bean and add it to the HashMap
@@ -94,7 +92,6 @@ public class SessionManager implements ISessionManager {
 				rcm.setSwfurl(swfUrl);
 				rcm.setIsMod(new Boolean(false));
 				rcm.setCanDraw(new Boolean(false));
-				rcm.setAvClient(isAVClient);
 
 				if (cache.containsKey(null, streamId)) {
 					log.error("Tried to add an existing Client " + streamId);
@@ -131,27 +128,20 @@ public class SessionManager implements ISessionManager {
 			return null;
 		}
 
-		public Client getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
+		public Client getClientByPublicSID(String publicSID, Server server) {
 			try {
-				for (Client rcl : cache.getClientsByPublicSID(server, publicSID)) {
-					if (rcl.isAvClient() != isAVClient) {
-						continue;
-					}
-					return rcl;
-				}
+				List<Client> list = cache.getClientsByPublicSID(server, publicSID);
+				return list == null || list.isEmpty() ? null : list.get(0);
 			} catch (Exception err) {
 				log.error("[getClientByPublicSID]", err);
 			}
 			return null;
 		}
 		
-		public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient) {
+		public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID) {
 			try {
 				for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
 					for (Client rcl : entry.getValue()) {
-						if (rcl.isAvClient() != isAVClient) {
-							continue;
-						}
 						return new ClientSessionInfo(rcl, entry.getKey());
 					}
 				}
@@ -169,10 +159,6 @@ public class SessionManager implements ISessionManager {
 						continue;
 					}
 					
-					if (rcl.isAvClient()) {
-						continue;
-					}
-					
 					return rcl;
 				}
 			} catch (Exception err) {
@@ -184,7 +170,7 @@ public class SessionManager implements ISessionManager {
 		public synchronized Boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
 			try {
 				// get the corresponding user session object and update the settings
-				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(), false, server);
+				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
 				if (rclUsual != null) {
 					rclUsual.setBroadCastID(rcm.getBroadCastID());
 					rclUsual.setAvsettings(rcm.getAvsettings());
@@ -248,9 +234,6 @@ public class SessionManager implements ISessionManager {
 				for (Client rcl : cache.getClientsByRoomId(roomId)) {
 
 					if (rcl.isScreenClient()) {
-						continue;
-					}
-					if (rcl.isAvClient()) {
 						continue;
 					}
 
@@ -335,13 +318,11 @@ public class SessionManager implements ISessionManager {
 	};
 	
 	public Client addClientListItem(String streamId, String scopeName,
-			Integer remotePort, String remoteAddress, String swfUrl,
-			boolean isAVClient, Server server) {
+			Integer remotePort, String remoteAddress, String swfUrl, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
-		return sessionManager.addClientListItem(streamId, scopeName,
-				remotePort, remoteAddress, swfUrl, isAVClient, server);
+		return sessionManager.addClientListItem(streamId, scopeName, remotePort, remoteAddress, swfUrl, server);
 	}
 
 	public Collection<Client> getClients() {
@@ -359,19 +340,15 @@ public class SessionManager implements ISessionManager {
 		return sessionManager.getClientByStreamId(streamId, server);
 	}
 
-	public Client getClientByPublicSID(String publicSID, boolean isAVClient,
-			Server server) {
+	public Client getClientByPublicSID(String publicSID, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
-		return sessionManager.getClientByPublicSID(publicSID, isAVClient,
-				server);
+		return sessionManager.getClientByPublicSID(publicSID, server);
 	}
 
-	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID,
-			boolean isAVClient) {
-		return sessionManager.getClientByPublicSIDAnyServer(publicSID,
-				isAVClient);
+	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID) {
+		return sessionManager.getClientByPublicSIDAnyServer(publicSID);
 	}
 
 	public Client getClientByUserId(Long userId) {

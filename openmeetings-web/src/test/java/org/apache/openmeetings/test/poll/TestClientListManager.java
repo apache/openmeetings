@@ -37,7 +37,7 @@ public class TestClientListManager extends AbstractJUnitDefaults {
 		assertNotNull("RoomClientId created is null",
 				sessionManager.addClientListItem(rnd.nextLong() + "ABCDE"
 						+ rnd.nextLong(), "scopeName", 66666, "remoteAddress",
-						"swfUrl", false, null));
+						"swfUrl", null));
 	}
 
 }

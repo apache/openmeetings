@@ -355,4 +355,12 @@ public class ConferenceService {
 		}
 		return null;
 	}
+
+	public Room getRoomById(String SID, Long roomId) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			return roomDao.get(roomId);
+		}
+		return null;
+	}
 }

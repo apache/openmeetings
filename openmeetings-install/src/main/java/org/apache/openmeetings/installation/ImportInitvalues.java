@@ -413,9 +413,7 @@ public class ImportInitvalues {
 
 		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
-		
 		cfgDao.add(CONFIG_FLASH_PROTOCOL, "rtmp", null, "Protocol for flash connections, can be rtmp, rtmpt, rtmpe, rtmps");
-		
 		cfgDao.add(CONFIG_FLASH_PORT, "1935", null, "Port for flash connections");
 		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		

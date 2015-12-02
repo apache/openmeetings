@@ -94,7 +94,7 @@ public class ConnectionsPanel extends AdminPanel {
 								, c.getServer() == null ? 0 : c.getServer().getId());
 						target.add(container, details.setVisible(false));
 					}
-				}.setEnabled(!c.isScreenClient() && !c.isAvClient()));
+				}.setEnabled(!c.isScreenClient()));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 

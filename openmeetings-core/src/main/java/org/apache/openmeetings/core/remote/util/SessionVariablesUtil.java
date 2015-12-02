@@ -28,27 +28,13 @@ public class SessionVariablesUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(SessionVariablesUtil.class, webAppRootKey);
 
 	private enum SESSION_VARIABLES {
-		isAVClient, // if the client connection is a audio-video only connection
 		isScreenClient, // if the client connection is from a Java Web-Start application
 		PUBLIC_SID, // the public SID of the client
 		USER_ID, // the userId of the user that is using this connection (if there is any)
 	}
 
-	public static void initClient(IClient client, boolean isAVClient, String publicSID) {
-		client.setAttribute(SESSION_VARIABLES.isAVClient.toString(), isAVClient);
+	public static void initClient(IClient client, String publicSID) {
 		client.setAttribute(SESSION_VARIABLES.PUBLIC_SID.toString(), publicSID);
-	}
-
-	public static boolean isAVClient(IClient client) {
-		try {
-			if (client.getAttribute(SESSION_VARIABLES.isAVClient.toString()) == null) {
-				throw new Exception("Connection has no publicSID client: " + client);
-			}
-			return (Boolean) client.getAttribute(SESSION_VARIABLES.isAVClient.toString());
-		} catch (Exception err) {
-			log.error("[isAVClient]", err);
-		}
-		return false;
 	}
 
 	public static String getPublicSID(IClient client) {

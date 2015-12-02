@@ -20,9 +20,9 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PROTOCOL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -30,25 +30,43 @@ import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
+import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingEventBehavior.class, webAppRootKey);
+	public static final String PARAM_PUBLIC_SID = "publicSid";
+	public static final String PARAM_PROTOCOL = "protocol";
+	public static final String PARAM_PORT = "port";
 	private final AjaxDownload download;
 	private final long roomId;
+	private enum Protocol {
+		rtmp
+		, rtmpe
+		, rtmps
+		, rtmpt
+	}
 
 	public StartSharingEventBehavior(long _roomId) {
 		this.roomId = _roomId;
@@ -68,22 +86,37 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		getComponent().add(download);
 	}
 	
+	private String getParam(String name) {
+		return getComponent().getRequest().getRequestParameters().getParameterValue(name).toString();
+	}
+	
 	@Override
 	protected void respond(AjaxRequestTarget target) {
+		//TODO deny download in case other screen sharing is in progress
 		String app = "";
-		InputStream jnlp = null;
-		try {
+		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp");
 			app = IOUtils.toString(jnlp, "UTF-8");
 			String baseUrl = cfgDao.getBaseUrl();
 			URL url = new URL(baseUrl);
+			Room room = getBean(RoomDao.class).get(roomId);
+			SessionManager sessionManager = getBean(SessionManager.class);
+			Client rc = sessionManager.getClientByPublicSID(getParam(PARAM_PUBLIC_SID), null);//TODO not necessary
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1);
-			app = app.replace("$codebase", baseUrl + "screenshare")
+			String port = getParam(PARAM_PORT);
+			if (Strings.isEmpty(port)) {
+				cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, "");
+			}
+			String _protocol = getParam(PARAM_PROTOCOL);
+			if (Strings.isEmpty(_protocol)) {
+				_protocol = cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, "");
+			}
+			Protocol protocol = Protocol.valueOf(_protocol);
+			app = addKeystore(app).replace("$codebase", baseUrl + "screenshare")
 					.replace("$applicationName", cfgDao.getAppName())
-					.replace("$protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
-					.replace("$port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
+					.replace("$protocol", protocol.name())
+					.replace("$port", port)
 					.replace("$host", url.getHost())
 					.replace("$app", path + roomId)
 					.replace("$userId", "" + getUserId())
@@ -100,19 +133,11 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
 					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
-					.replace("$allowRecording", "true") //FIXME add/remove Room.allowRecording + Client.allowRecording
-					.replace("$allowPublishing", "true") //FIXME add/remove
-					.replace("$keystore", "--dummy--") //FIXME add/remove
-					.replace("$password", "--dummy--") //FIXME add/remove
+					.replace("$allowRecording", "" + (room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
+					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);
-		} finally {
-			if (jnlp != null) {
-				try {
-					jnlp.close();
-				} catch (IOException e) {}
-			}
 		}
 		download.setResourceStream(new StringResourceStream(app, "application/x-java-jnlp-file"));
 		download.initiate(target);
@@ -130,5 +155,44 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			delim = true;
 		}
 		return result.toString();
+	}
+	
+	private String addKeystore(String app) {
+		log.debug("RTMP Sharer Keystore :: start");
+		String keystore = "--dummy--", password = "--dummy--";
+		File conf = new File(OmFileHelper.getRootDir(), "conf");
+		File keyStore = new File(conf, "keystore.screen");
+		if (keyStore.exists()) {
+			try (FileInputStream fis = new FileInputStream(keyStore); FileInputStream ris = new FileInputStream(new File(conf, "red5.properties"))) {
+				Properties red5Props = new Properties();
+				red5Props.load(ris);
+				
+				byte keyBytes[] = new byte[(int)keyStore.length()];
+				fis.read(keyBytes);
+				
+				keystore = Hex.encodeHexString(keyBytes);
+				password = red5Props.getProperty("rtmps.screen.keystorepass");
+				
+				/*
+				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
+				ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
+				ByteArrayInputStream bin = new ByteArrayInputStream()
+				
+				byte fileContent[] = new byte[(int)file.length()];
+				sb = addArgument(sb, Object arg)
+				ctx.put("$KEYSTORE", users_id);
+				/*
+				KeyStore ksOut = KeyStore.getInstance(KeyStore.getDefaultType());
+				for (Certificate cert : ksIn.getCertificateChain("red5")) {
+					PublicKey pub = cert.getPublicKey();
+					TrustedCertificateEntry tce = new TrustedCertificateEntry(cert);
+					tce.
+				}
+				*/
+			} catch (Exception e) {
+			//no op
+			}
+		}
+		return app.replace("$keystore", keystore).replace("$password", password);
 	}
 }

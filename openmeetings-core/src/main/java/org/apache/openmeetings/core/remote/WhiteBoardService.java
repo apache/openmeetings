@@ -160,7 +160,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
@@ -193,7 +193,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
@@ -226,7 +226,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
@@ -260,7 +260,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
