@@ -186,12 +186,6 @@ public class Client implements IDataProviderEntity {
 	private boolean screenClient;
 	
 	/**
-	 * @see Client#isAvClient()
-	 */
-	@Column(name = "is_avclient")
-	private boolean avClient;
-	
-	/**
 	 * @see Client#getUsercolor()
 	 */
 	@Column(name = "usercolor")
@@ -319,12 +313,6 @@ public class Client implements IDataProviderEntity {
 	private Long recordingMetaDataId;
 	
 	/**
-	 * @see Client#getGroupId()
-	 */
-	@Column(name = "group_id")
-	private Long groupId;
-	
-	/**
 	 * @see Client#isStartRecording()
 	 */
 	@Column(name = "start_recording")
@@ -406,7 +394,7 @@ public class Client implements IDataProviderEntity {
 	public Client() {}
     
 	public Client(String streamid, String publicSID, Long roomId,
-			Long userId, String firstname, String lastname, boolean avClient,
+			Long userId, String firstname, String lastname,
 			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
@@ -415,7 +403,6 @@ public class Client implements IDataProviderEntity {
 		this.userId = userId;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.avClient = avClient;
 		this.username = username;
 		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
 		this.scope = scope;
@@ -786,14 +773,6 @@ public class Client implements IDataProviderEntity {
 		this.screenPublishStarted = screenPublishStarted;
 	}
 
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
 	public boolean isStartRecording() {
 		return startRecording;
 	}
@@ -850,14 +829,6 @@ public class Client implements IDataProviderEntity {
 		this.allowRecording = allowRecording;
 	}
 
-	public boolean isAvClient() {
-		return avClient;
-	}
-
-	public void setAvClient(boolean avClient) {
-		this.avClient = avClient;
-	}
-
 	public boolean isStreamPublishStarted() {
 		return streamPublishStarted;
 	}
@@ -893,7 +864,7 @@ public class Client implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
-				+ ", avClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
+				+ ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
 				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
 				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";

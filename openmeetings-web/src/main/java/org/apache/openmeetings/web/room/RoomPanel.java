@@ -69,12 +69,15 @@ import org.slf4j.Logger;
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String WICKET_ROOM_ID = "wicketroomid";
-	private static final String PARAM_PUBLIC_SID = "publicSid";
+	public static final String PARAM_PUBLIC_SID = "publicSid";
+	public static final String PARAM_PROTOCOL = "protocol";
+	public static final String PARAM_PORT = "port";
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
+	private final StartSharingEventBehavior startSharing;
 	private long roomId = 0;
 	
 	public RoomPanel(String id) {
@@ -160,6 +163,7 @@ public class RoomPanel extends BasePanel {
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
 		add(vote = new VoteDialog("vote", roomId));
 		add(pollResults = new PollResultsDialog("pollResults", roomId));
+		add(startSharing = new StartSharingEventBehavior(roomId));
 		if (roomId > 0) {
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
@@ -228,6 +232,20 @@ public class RoomPanel extends BasePanel {
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
 					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("vote", this, explicit(PARAM_PUBLIC_SID)), "vote")));
+				}
+			});
+			add(new AbstractDefaultAjaxBehavior() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void respond(AjaxRequestTarget target) {
+					startSharing.respond(target);
+				}
+				
+				@Override
+				public void renderHead(Component component, IHeaderResponse response) {
+					super.renderHead(component, response);
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("startSharing", this, explicit(PARAM_PUBLIC_SID), explicit(PARAM_PROTOCOL), explicit(PARAM_PORT)), "startSharing")));
 				}
 			});
 		}

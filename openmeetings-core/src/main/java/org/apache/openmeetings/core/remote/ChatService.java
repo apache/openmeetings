@@ -144,7 +144,7 @@ public class ChatService implements IPendingServiceCallback {
 			hsm.put("message", newMessage);
 			String publicSID = "" + messageMap.get(6);
 			if (!publicSID.equals(currentClient.getPublicSID())) {
-				hsm.put("client", sessionManager.getClientByPublicSID("" + messageMap.get(6), false, null));
+				hsm.put("client", sessionManager.getClientByPublicSID("" + messageMap.get(6), null));
 				//need to remove unconfirmed chat message if any
 				for (int i = myChatList.size() - 1; i > -1; --i) {
 					Client msgClient = (Client)myChatList.get(i).get("client");
@@ -178,9 +178,6 @@ public class ChatService implements IPendingServiceCallback {
 						Client rcl = this.sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 						
 						if (rcl == null) {
-							continue;
-						}
-						if (rcl.isAvClient()) {
 							continue;
 						}
 						if (rcl.isScreenClient()) {
@@ -234,9 +231,6 @@ public class ChatService implements IPendingServiceCallback {
 						IClient client = conn.getClient();
 						if (SessionVariablesUtil.isScreenClient(client)) {
 							// screen sharing clients do not receive events
-							continue;
-						} else if (SessionVariablesUtil.isAVClient(client)) {
-							// AVClients or potential AVClients do not receive events
 							continue;
 						}
 

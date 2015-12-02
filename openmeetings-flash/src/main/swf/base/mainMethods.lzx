@@ -188,29 +188,6 @@
 	]]>
 	</method>
 
-	<method name="getScreenSharingUrl">
-	<![CDATA[
-		var groupId = (hib.currentdomainObj != null && hib.currentdomainObj.id != null)
-			? hib.currentdomainObj.id : 1;
-		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
-		
-		var appBase = canvas.getUrl();
-		if ($debug) Debug.write("appBase=" + appBase);
-		var downloadurl = appBase + 'screen.upload?'
-			+'rtmphostlocal=' + canvas.getHttpHost()
-			+'&baseurl=' + escape(appBase)
-			+'&domain=' + hib.conferencedomain
-			+'&groupId=' + groupId
-			+'&sid=' + canvas.sessionId
-			+'&connectionType=' + canvas.thishib.getProtocol()
-			+'&port=' + canvas.thishib.getPort()
-			+'&publicSID=' + canvas.publicSID
-			+'&languageAsString=' + hib.userlang;
-		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", downloadurl); 
-		return downloadurl;
-	]]>
-	</method>
-	
     <method name="myinit">
         <![CDATA[
         canvas.mediaerrortimeout = 30000;
@@ -438,36 +415,47 @@
 	<!---
 		Actions connected to the shortcuts
 	 -->
-    <method name="doActionmenu" args="stringSub">
-        <![CDATA[
-            if($debug) Debug.write("doActionmenu: ",stringSub);
-            if (canvas._conferencemenu.visibility == 'visible'){
-            	 if (stringSub == "invitation") {
-            	 	ExternalInterface.call("openInvitation");
-			    } else if (stringSub=='editWhiteboardDefault') {
-                    new lz.editWhiteboardDefault(canvas.main_content._content.inner);
-                } else if (stringSub=='createPoll') {
-                    ExternalInterface.call("createPoll", canvas.publicSID);
-                } else if (stringSub=='pollResults') {
-                    ExternalInterface.call("pollResults", canvas.publicSID);
-                } else if (stringSub=='checkPollVoted') {
-                    ExternalInterface.call("vote");
-                } else if (stringSub=='importFile') {
-                    new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x:60});
-                } else if (stringSub=='applyForMod') {
-                    if ($debug) Debug.info("Apply For Mod through doActionmenu");
-                    //new lz.applyForModeration(canvas.main_content._content.inner);
-                    canvas.thishib.applyForModeration.doCall();
-                } else if (stringSub=='editCamMicSettings') {
-                    canvas.commonVideoViewContent.changeDevice();
-                } else if (stringSub=='showSipDialer') {
-                    new lz.sipDialer(canvas.main_content._content.inner);
-                } else if (stringSub=='quit') {
+	<method name="doActionmenu" args="stringSub">
+	<![CDATA[
+		if($debug) Debug.write("doActionmenu: ",stringSub);
+		if (canvas._conferencemenu.visible) {
+			switch (stringSub) {
+				case "invitation":
+					ExternalInterface.call("openInvitation");
+					break;
+				case 'editWhiteboardDefault':
+					new lz.editWhiteboardDefault(canvas.main_content._content.inner);
+					break;
+				case 'createPoll':
+					ExternalInterface.call("createPoll", canvas.publicSID);
+					break;
+				case 'pollResults':
+					ExternalInterface.call("pollResults", canvas.publicSID);
+					break;
+				case 'checkPollVoted':
+					ExternalInterface.call("vote");
+					break;
+				case 'importFile':
+					new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x: 60});
+					break;
+				case 'applyForMod':
+					if ($debug) Debug.info("Apply For Mod through doActionmenu");
+					//new lz.applyForModeration(canvas.main_content._content.inner);
+					canvas.thishib.applyForModeration.doCall();
+					break;
+				case 'editCamMicSettings':
+					canvas.commonVideoViewContent.changeDevice();
+					break;
+				case 'showSipDialer':
+					new lz.sipDialer(canvas.main_content._content.inner);
+					break;
+				case 'quit':
 					canvas.quit();
-            }
-          }
-        ]]>
-    </method> 
+					break;
+			}
+		}
+	]]>
+	</method> 
     
 	<method name="setRoomValues" args="roomObj">
 		if ($debug) Debug.warn("setRoomValues ",roomObj);

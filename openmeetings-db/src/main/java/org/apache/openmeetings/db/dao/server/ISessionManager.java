@@ -49,13 +49,12 @@ public interface ISessionManager {
 	 * @param remotePort
 	 * @param remoteAddress
 	 * @param swfUrl
-	 * @param isAVClient
 	 * @param server
 	 * @return
 	 */
 	public abstract Client addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
-			String swfUrl, boolean isAVClient, Server server);
+			String swfUrl, Server server);
 
 	public abstract Collection<Client> getClients();
 	
@@ -78,17 +77,12 @@ public interface ISessionManager {
 
 	/**
 	 * get a client by its publicSID and the server, 
-	 * isAVClient is normally false, as you want the data connection.
-	 * If you set isAVClient to true, you would obtain the RTMP 
-	 * connection that is used for Audio/Video streaming
 	 * 
 	 * @param publicSID
-	 * @param isAVClient
 	 * @param server
 	 * @return
 	 */
-	public abstract Client getClientByPublicSID(String publicSID,
-			boolean isAVClient, Server server);
+	public abstract Client getClientByPublicSID(String publicSID, Server server);
 	
 	/**
 	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores 
@@ -99,10 +93,9 @@ public interface ISessionManager {
 	 * you should use {@link #getClientByPublicSID(String, boolean, Server)}!
 	 * 
 	 * @param publicSID
-	 * @param isAVClient
 	 * @return
 	 */
-	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient);
+	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
 
 	/**
 	 * 
@@ -123,14 +116,13 @@ public interface ISessionManager {
 	 * @param rcm
 	 * @return
 	 */
-	public abstract Boolean updateAVClientByStreamId(String streamId,
-			Client rcm, Server server);
+	public abstract Boolean updateAVClientByStreamId(String streamId, Client rcm, Server server);
 
 	/**
 	 * Update the session object
 	 * 
 	 * updateRoomCount is only <i>one</i> time true, in
-	 * ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, Long, String)
+	 * ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, String)
 	 * .
 	 * 
 	 * @param streamId

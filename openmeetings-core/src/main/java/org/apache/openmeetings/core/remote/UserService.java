@@ -297,7 +297,7 @@ public class UserService implements IUserService {
 			Long userId = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {
 					return true;

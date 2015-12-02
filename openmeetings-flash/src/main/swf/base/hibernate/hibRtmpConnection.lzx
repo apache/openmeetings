@@ -85,10 +85,6 @@
      -->
      <attribute name="currentroomid" value="0" type="number" />
      
-     <!-- This is the current domain the user has logged-in -->
-     <attribute name="currentdomain" value="domain1" type="string" />
-     <attribute name="currentdomainObj" value="domain1" type="string" />
-     
      <!--- the current Invitation-Object -->
      <attribute name="currentInvitation" value="null" />
     
@@ -198,6 +194,7 @@
         client.newStream = this.newStream;
         //TODO FIXME method is absent :( client.stopStream = this.stopStream;
         client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
+        client.setNewModeratorByList = this.setNewModeratorByList;
     </handler>
     
     <handler name="ondisconnect">
@@ -565,6 +562,7 @@
     <netRemoteCallHib name="markSessionAsLogedIn" funcname="xmlcrm.markSessionAsLogedIn" >
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">
+        <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
                         
             if (value == null) {
@@ -577,10 +575,7 @@
              
             canvas.userId = hib.userobject.id;
             
-            if (value.groupUsers.length > 0){
-                hib.currentdomain = value.groupUsers[0].group.name;
-                hib.currentdomainObj = value.groupUsers[0].group;
-            } else if (!canvas.isRemoteUser()) {
+            if (value.groupUsers.length == 0 && !canvas.isRemoteUser()) {
                 new lz.errorPopup(canvas,{error:"Missing Group in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
             }
             
@@ -607,6 +602,7 @@
                 canvas.initroomid = Number(canvas.directRoomId);
                 parent.getRoomById.doCall();
             }
+        ]]>
         </handler>  
     </netRemoteCallHib> 
     
@@ -664,17 +660,6 @@
 		</handler>
 	</netRemoteCallHib>
     
-    <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return hib.currentdomainObj.id;</method></netparam>  
-        <handler name="ondata" args="value">
-            //Sessionmanagement.getInstance() 
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setCurrentUserOrganization: ",value);
-        </handler>  
-    </netRemoteCallHib> 
-     
-    
 	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam><method name="getValue">return canvas.wicketsid;</method></netparam>
@@ -708,20 +693,6 @@
 					return;
 				}
 				hib.userobject = value;
-				var found = false;
-				for (var i = 0; i < value.groupUsers.length; ++i) {
-					if (value.groupUsers[i].group.id == value.sessionData.groupId) {
-						found = true;
-						hib.currentdomain = value.groupUsers[i].group.name;
-						hib.currentdomainObj = value.groupUsers[i].group;
-						break;
-					}
-				}
-				if ($debug) Debug.write("hibRtmpConnection::loginWicket 1");
-				if (!found && value.groupUsers.length > 0) {
-					hib.currentdomain = value.groupUsers[0].group.name;
-					hib.currentdomainObj = value.groupUsers[0].group;
-				}
 				parent.getCurrentRoomClient.doCall();
 			} else {
 				new lz.labelerrorPopup(canvas, {errorlabelid: 1599});
@@ -1196,20 +1167,17 @@
             </handler>   
         </netRemoteCallHib>
         
-        <netRemoteCallHib name="setNewModeratorByList" funcname="setNewModeratorByList">
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    if ($debug) Debug.write("setNewModeratorByList ",value);
-                    
-                    canvas.analyzeModerationList(value);
-                    
-                    //The onResult-Handler will be called be the rtmpconnection
-                    canvas.currentModeratorList = value;
-                    //Update Moderation Flag
-                    canvas.updateModerationFlag();
-                ]]>
-            </handler>   
-        </netRemoteCallHib> 
+		<method name="setNewModeratorByList" args="value">
+		<![CDATA[
+			if ($debug) Debug.write("setNewModeratorByList ",value);
+			canvas.analyzeModerationList(value);
+			
+			//The onResult-Handler will be called be the rtmpconnection
+			canvas.currentModeratorList = value;
+			//Update Moderation Flag
+			canvas.updateModerationFlag();
+		]]>
+		</method> 
         
         <netRemoteCallHib name="sendMessage" funcname="sendMessage">
             <netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>

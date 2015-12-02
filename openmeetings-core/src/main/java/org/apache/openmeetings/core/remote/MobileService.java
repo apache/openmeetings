@@ -204,10 +204,10 @@ public class MobileService {
 				Client c = sessionManager.getClientByStreamId(streamId, null);
 				if (c == null) {
 					c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
-						conn.getRemoteAddress(), "", false, null);
+						conn.getRemoteAddress(), "", null);
 				}
 				
-				SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
+				SessionVariablesUtil.initClient(conn.getClient(), c.getPublicSID());
 				c.setUserId(u.getId());
 				c.setFirstname(u.getFirstname());
 				c.setLastname(u.getLastname());
@@ -235,7 +235,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if ((c.isMobile() || c.isAvClient()) && !Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
+				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());

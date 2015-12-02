@@ -47,7 +47,13 @@
 </class>
 
 <class name="moderationPanel" extends="view" layout="axis:x;spacing:2">
-    
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
     <attribute name="recordingsName" value="" type="string" />
     <attribute name="initial" value="true" type="boolean" />
     <attribute name="recordingUser" value="null" />
@@ -90,7 +96,8 @@
     </method>   
     
 	<method name="checkForApplyScreen" args="record">
-		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
+		//TODO check if host is required for rtmps
+		ExternalInterface.call("startSharing", canvas.publicSID, canvas.thishib.getProtocol(), canvas.thishib.getPort());
 	</method>  
     
     <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 

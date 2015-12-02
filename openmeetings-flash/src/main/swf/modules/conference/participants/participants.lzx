@@ -111,16 +111,7 @@
                 
                 canvas.currentusercolor = canvas.getColorForUser();
                 
-                var groupId = 1;
-            
                 if ($debug) Debug.write(hib.userobject); 
-                if ($debug) Debug.write(hib.currentdomainObj); 
-                
-                if (hib.currentdomainObj != null) {
-                    groupId = hib.currentdomainObj.id
-                }
-                
-                this.parent.setRoomValues.groupId = groupId;
                 
                 if ($debug) Debug.write("setRoomValues CALL: ");
                 this.parent.setRoomValues.doCall();
@@ -138,7 +129,6 @@
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
-        <netparam><method name="getValue">return parent.groupId;</method></netparam>
         <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
         <handler name="ondata" args="roomStatus">
             <![CDATA[

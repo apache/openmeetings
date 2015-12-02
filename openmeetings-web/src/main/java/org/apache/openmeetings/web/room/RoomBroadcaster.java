@@ -29,7 +29,7 @@ import org.red5.server.api.IConnection;
 
 public class RoomBroadcaster {
 	public static Client getClient(String publicSid) {
-		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid, false);
+		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid);
 		return csi == null ? null : csi.getRcl();
 	}
 	

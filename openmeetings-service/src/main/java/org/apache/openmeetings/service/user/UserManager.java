@@ -463,7 +463,7 @@ public class UserManager implements IUserManager {
 
 			// admins only
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
+				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {
 					return true;

@@ -136,15 +136,8 @@
     <event name="isloadingImage" />
     <event name="isloadedImage" />
     
+    <text fontsize="11" x="10" y="2" name="_sharingClientName" fontstyle="bold" />    
     
-    <text fontsize="11" x="10" y="2" 
-        name="_sharingClientName" fontstyle="bold" />    
-    
-    
-	<method name="checkForApplyScreen">
-		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
-	</method> 
-	
     <!-- 
         The Content Area    
      -->
