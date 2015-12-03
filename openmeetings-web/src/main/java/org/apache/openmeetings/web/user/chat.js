@@ -100,8 +100,10 @@ function addChatMessage(m) {
 			var date = msg.children('.date');
 			date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
 			date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
-			date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
-			date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
+			if ("full" == cm.actions) {
+				date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
+				date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
+			}
 			if (cm.needModeration) {
 				msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
 			}

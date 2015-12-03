@@ -143,6 +143,7 @@ public class ChatPanel extends BasePanel {
 						.put("img", getUrl(getRequestCycle(), m.getFromUser().getId()))
 
 					)
+				.put("actions", curUserId == m.getFromUser().getId() ? "short" : "full")
 				.put("sent", getDateFormat().format(m.getSent())));
 		}
 		return new JSONObject()
