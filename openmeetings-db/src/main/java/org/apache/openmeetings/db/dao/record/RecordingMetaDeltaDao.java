@@ -61,21 +61,15 @@ public class RecordingMetaDeltaDao {
 		return null;
 	}
 	
-	public Long update(RecordingMetaDelta metaDelta) {
-		try { 
-			if (metaDelta.getMetaDataId() == 0) {
-				em.persist(metaDelta);
-			} else {
-				if (!em.contains(metaDelta)) {
-					em.merge(metaDelta);
-				}
-			}
-			
-			return metaDelta.getMetaDataId();
-		} catch (Exception ex2) {
-			log.error("[update]: ",ex2);
+	public RecordingMetaDelta update(RecordingMetaDelta metaDelta) {
+		log.debug("[update]: ");
+		if (metaDelta.getMetaDataId() == null) {
+			em.persist(metaDelta);
+		} else {
+			metaDelta = em.merge(metaDelta);
 		}
-		return null;
+			
+		return metaDelta;
 	}	
 	
 }

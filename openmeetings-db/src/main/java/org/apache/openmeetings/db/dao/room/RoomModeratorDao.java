@@ -51,7 +51,7 @@ public class RoomModeratorDao {
 	}
 
 	public RoomModerator update(RoomModerator rm, Long userId) {
-		if (rm.getId() == 0) {
+		if (rm.getId() == null) {
 			rm.setInserted(new Date());
 			em.persist(rm);
 		} else {

@@ -81,7 +81,7 @@ public class ChatDao {
 
 	public ChatMessage update(ChatMessage entity) {
 		entity.setSent(new Date());
-		if (entity.getId() == 0) {
+		if (entity.getId() == null) {
 			em.persist(entity);
 		}
 		return entity;

@@ -546,7 +546,7 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
-				final long contactId = uc.getUserContactId();
+				final long contactId = uc.getId();
 				final long userId = uc.getOwner().getId();
 				if (uc.isPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
@@ -566,7 +566,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						getBean(UserContactDao.class).deleteUserContact(contactId);
+						getBean(UserContactDao.class).delete(contactId);
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
@@ -577,7 +577,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						getBean(UserContactDao.class).deleteUserContact(contactId);
+						getBean(UserContactDao.class).delete(contactId);
 						updateContacts(target);
 					}
 				}).setVisible(!uc.isPending()));

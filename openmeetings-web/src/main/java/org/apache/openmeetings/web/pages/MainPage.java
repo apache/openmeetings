@@ -153,12 +153,6 @@ public class MainPage extends BaseInitedPage {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onOpen(IPartialPageRequestHandler handler) {
-				super.onOpen(handler);
-				setDefaultModelObject(new CompoundPropertyModel<PrivateMessage>(new PrivateMessage()));
-			}
-			
-			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				BasePanel bp = getCurrentPanel();
 				if (send.equals(button) && bp != null) {

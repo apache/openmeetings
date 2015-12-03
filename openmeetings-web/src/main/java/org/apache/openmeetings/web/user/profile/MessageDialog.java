@@ -182,13 +182,13 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		PrivateMessage p = getModelObject();
-		p.setInserted(new Date());
+		PrivateMessage m = getModelObject();
+		m.setInserted(new Date());
 		UserDao userDao = getBean(UserDao.class); 
 		User owner = userDao.get(getUserId());
-		if (p.isBookedRoom()) {
-			Room r = p.getRoom();
-			r.setName(p.getSubject());
+		if (m.isBookedRoom()) {
+			Room r = m.getRoom();
+			r.setName(m.getSubject());
 			r.setComment("");
 			r.setNumberOfPartizipants(100L);
 			r.setAppointment(true);
@@ -196,8 +196,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			r.setAllowFontStyles(true);
 			r = getBean(RoomDao.class).update(r, getUserId());
 			Appointment a = new Appointment();
-			a.setTitle(p.getSubject());
-			a.setDescription(p.getMessage());
+			a.setTitle(m.getSubject());
+			a.setDescription(m.getMessage());
 			a.setRoom(r);
 			a.setStart(CalendarWebHelper.getDate(start.getModelObject()));
 			a.setEnd(CalendarWebHelper.getDate(end.getModelObject()));
@@ -214,9 +214,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			a.setOwner(owner);
 			a.setMeetingMembers(attendees);
 	        getBean(AppointmentDao.class).update(a, getUserId(), false);
-			p.setRoom(r);
+			m.setRoom(r);
 		} else {
-			p.setRoom(null);
+			m.setRoom(null);
 		}
 		PrivateMessageDao msgDao = getBean(PrivateMessageDao.class);
 		for (User to : modelTo.getObject()) {
@@ -224,12 +224,12 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				userDao.update(to, getUserId());
 			}
 			//to send
-			p = new PrivateMessage(p);
+			PrivateMessage p = new PrivateMessage(m);
 			p.setTo(to);
 			p.setFolderId(SENT_FOLDER_ID);
 			msgDao.update(p, getUserId());
 			//to inbox
-			p = new PrivateMessage(p);
+			p = new PrivateMessage(m);
 			p.setOwner(to);
 			p.setFolderId(INBOX_FOLDER_ID);
 			msgDao.update(p, getUserId());

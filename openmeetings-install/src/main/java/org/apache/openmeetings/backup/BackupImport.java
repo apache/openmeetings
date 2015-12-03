@@ -516,16 +516,16 @@ public class BackupImport {
 			
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
-				Long ucId = uc.getUserContactId();
+				Long ucId = uc.getId();
 				UserContact storedUC = userContactDao.get(ucId);
 
 				if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
-					uc.setUserContactId(0);
+					uc.setId(null);
 					if (uc.getOwner() != null && uc.getOwner().getId() == null) {
 						uc.setOwner(null);
 					}
-					Long newId = userContactDao.addUserContactObj(uc);
-					userContactsMap.put(ucId, newId);
+					uc = userContactDao.update(uc);
+					userContactsMap.put(ucId, uc.getId());
 				}
 			}
 		}
