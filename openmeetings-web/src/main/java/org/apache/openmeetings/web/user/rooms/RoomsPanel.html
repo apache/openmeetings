@@ -23,19 +23,7 @@
 	<table>
 		<tr>
 			<td style="vertical-align: top">
-				<table class="room-list">
-					<tr wicket:id="list" class="room-row">
-						<td>
-							<div wicket:id="roomContainer">		
-								<span wicket:id="roomName">[room name]</span><br/>
-								<wicket:message key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
-								wicket:id="totalUsers"></span>&nbsp;&nbsp;<span wicket:id="refresh" 
-								class="ui-icon ui-icon-arrowrefresh-1-n" style="display: inline-block"></span>
-							</div>
-						</td>
-						<td><button wicket:id="enter"><wicket:message key="131"/></button></td>
-					</tr>
-				</table>
+				<div wicket:id="list"></div>
 			</td>
 			<td style="vertical-align: top">
 				<!-- Users in this Room -->

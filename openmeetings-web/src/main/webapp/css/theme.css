@@ -377,6 +377,9 @@ html, body {
 .doc.file.om-icon {
 	background-image: url(images/report.png);
 }
+.invite.om-icon {
+	background-image: url(images/connect.png);
+}
 .selected .file.item {
 	background-color: #0099FF;
 }
@@ -628,4 +631,10 @@ form .input {
 }
 #contents .btn-file>input {
 	transform: translate(-3000px, 0) scale(1);
+}
+.room.list.container {
+	height: 150px;
+	max-height: 150px;
+	overflow-y: auto;
+	border: 1px solid #cccccc;
 }

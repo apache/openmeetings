@@ -18,68 +18,24 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URI;
-
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.util.io.IOUtils;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 
 public class ProfileImagePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ProfileImagePanel.class, webAppRootKey);
 	protected final WebMarkupContainer profile;
 	
 	public ProfileImagePanel(String id, final long userId) {
 		super(id);
 		
 		profile = new TransparentWebMarkupContainer("profile");
-		String uri = getBean(UserDao.class).get(userId).getPictureuri();
-		boolean absolute = false;
-		try {
-			absolute = URI.create(uri).isAbsolute();
-		} catch (Exception e) {
-			//no-op
-		}
-		if (absolute) {
-			profile.add(new WebMarkupContainer("img").add(AttributeModifier.append("alt", Application.getString(5L)), AttributeModifier.append("src", uri)));
-		} else {
-			profile.add(new Image("img", new ByteArrayResource("image/jpeg") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected ResourceResponse newResourceResponse(Attributes attributes) {
-					ResourceResponse rr = super.newResourceResponse(attributes);
-					rr.disableCaching();
-					return rr;
-				}
-				
-				@Override
-				protected byte[] getData(Attributes attributes) {
-					String uri = getBean(UserDao.class).get(userId).getPictureuri();
-					File img = OmFileHelper.getUserProfilePicture(userId, uri);
-					try (InputStream is = new FileInputStream(img)) {
-						return IOUtils.toByteArray(is);
-					} catch (Exception e) {
-						log.error("failed to get bytes from image", e);
-					}
-					return null;
-				}
-			}));
-		}
+		profile.add(new WebMarkupContainer("img").add(
+				AttributeModifier.append("alt", Application.getString(5L))
+				, AttributeModifier.append("src", getUrl(getRequestCycle(), userId))));
 		add(profile.setOutputMarkupId(true));
 	}
 }

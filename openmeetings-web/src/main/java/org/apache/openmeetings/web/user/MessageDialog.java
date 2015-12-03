@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.profile;
+package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;

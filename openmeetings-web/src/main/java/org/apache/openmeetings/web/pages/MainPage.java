@@ -51,8 +51,9 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
-import org.apache.openmeetings.web.user.profile.MessageDialog;
-import org.apache.openmeetings.web.user.profile.UserInfoDialog;
+import org.apache.openmeetings.web.user.InviteUserToRoomDialog;
+import org.apache.openmeetings.web.user.MessageDialog;
+import org.apache.openmeetings.web.user.UserInfoDialog;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
@@ -97,6 +98,7 @@ public class MainPage extends BaseInitedPage {
 	private final ChatPanel chat;
 	private final MessageDialog newMessage;
 	private final UserInfoDialog userInfo;
+	private final InviteUserToRoomDialog inviteUser;
 	
 	public MainPage(PageParameters pp) {
 		super();
@@ -162,6 +164,7 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
+		add(inviteUser = new InviteUserToRoomDialog("inviteUserDialog"));
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -225,6 +228,20 @@ public class MainPage extends BaseInitedPage {
 					Application.removeUserFromRoom(roomId, _c);
 					RoomPanel.broadcast(new RoomMessage(roomId, _c.getUserId(), RoomMessage.Type.roomExit));
 				}
+			}
+		});
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID)), "inviteUser")));
 			}
 		});
 		//load preselected content

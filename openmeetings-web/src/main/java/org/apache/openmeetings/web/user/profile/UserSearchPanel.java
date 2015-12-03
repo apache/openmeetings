@@ -125,6 +125,7 @@ public class UserSearchPanel extends UserPanel {
 				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId()))
 						.add(AttributeAppender.append("onclick", String.format("addContact(%s);", userId))));
 				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))));
+				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("inviteUser(%s);", userId))));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
 			}
 		};

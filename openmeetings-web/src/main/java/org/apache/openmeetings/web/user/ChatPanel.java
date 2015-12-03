@@ -28,6 +28,7 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
@@ -124,11 +125,11 @@ public class ChatPanel extends BasePanel {
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
 	
-	public static JSONObject getMessage(List<ChatMessage> list) throws JSONException {
+	public JSONObject getMessage(List<ChatMessage> list) throws JSONException {
 		return getMessage(getUserId(), list);
 	}
 	
-	private static JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
+	private JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
 		JSONArray arr = new JSONArray();
 		for (ChatMessage m : list) {
 			String smsg = m.getMessage();
@@ -136,7 +137,12 @@ public class ChatPanel extends BasePanel {
 			arr.put(setScope(new JSONObject(), m, curUserId)
 				.put("id", m.getId())
 				.put("message", smsg)
-				.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
+				.put("from", new JSONObject()
+						.put("id", m.getFromUser().getId())
+						.put("name", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
+						.put("img", getUrl(getRequestCycle(), m.getFromUser().getId()))
+
+					)
 				.put("sent", getDateFormat().format(m.getSent())));
 		}
 		return new JSONObject()
