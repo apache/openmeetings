@@ -21,7 +21,6 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,14 +30,11 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -62,10 +58,6 @@ public class UserService implements IUserService {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private UserContactDao userContactDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
@@ -154,114 +146,6 @@ public class UserService implements IUserService {
 			log.error("[kickUserByStreamId]", err);
 		}
 		return false;
-	}
-
-	public User updateUserSelfTimeZone(String SID, String jname) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				User us = userDao.get(userId);
-
-				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
-				us.setForceTimeZoneCheck(false);
-				us.setUpdated(new Date());
-
-				userDao.update(us, userId);
-				
-				return us;
-			}
-		} catch (Exception err) {
-			log.error("[updateUserTimeZone]", err);
-		}
-		return null;
-	}
-
-	public List<UserContact> getPendingUserContacts(String SID) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<UserContact> uList = userContactDao.getContactRequestsByUserAndStatus(userId, true);
-
-				return uList;
-			}
-		} catch (Exception err) {
-			log.error("[getPendingUserContact]", err);
-		}
-		return null;
-	}
-
-	public List<UserContact> getUserContacts(String SID) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(userId, false);
-
-				return uList;
-			}
-		} catch (Exception err) {
-			log.error("[getPendingUserContact]", err);
-		}
-		return null;
-	}
-
-	public Integer removeContactUser(String SID, Long userContactId) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				UserContact userContacts = userContactDao.get(userContactId);
-
-				if (userContacts == null) {
-					return -49;
-				}
-
-				return userContactDao.deleteUserContact(userContactId);
-			}
-		} catch (Exception err) {
-			log.error("[removeContactUser]", err);
-		}
-		return null;
-	}
-
-	public Boolean checkUserIsInContactList(String SID, Long userId) {
-		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
-				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(authUserId, false);
-
-				for (UserContact userContact : uList) {
-					if (userContact.getContact().getId().equals(userId)) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-		} catch (Exception err) {
-			log.error("[checkUserIsInContactList]", err);
-		}
-		return null;
-	}
-
-	public void shareCalendarUserContact(String SID, Long contactId, Boolean shareCalendar) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-
-			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				UserContact userContacts = userContactDao.get(contactId);
-
-				userContacts.setShareCalendar(shareCalendar);
-
-				userContactDao.update(userContacts);
-			}
-		} catch (Exception err) {
-			log.error("[shareCalendarUserContact]", err);
-		}
 	}
 
 	/**

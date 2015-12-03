@@ -145,18 +145,13 @@ public class RecordingMetaDataDao {
 		return null;
 	}
 
-	public Long update(RecordingMetaData metaData) {
-		try {
-			if (metaData.getId() == 0) {
-				em.persist(metaData);
-			} else {
-				if (!em.contains(metaData)) {
-					em.merge(metaData);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[update]: ", ex2);
+	public RecordingMetaData update(RecordingMetaData metaData) {
+		log.debug("[update]: ");
+		if (metaData.getId() == null) {
+			em.persist(metaData);
+		} else {
+			metaData = em.merge(metaData);
 		}
-		return null;
+		return metaData;
 	}
 }

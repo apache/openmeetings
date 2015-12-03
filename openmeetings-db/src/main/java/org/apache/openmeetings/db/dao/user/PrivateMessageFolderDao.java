@@ -91,12 +91,10 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 
 	@Override
 	public PrivateMessageFolder update(PrivateMessageFolder folder, Long userId) {
-		if (folder.getId() == 0) {
+		if (folder.getId() == null) {
 			em.persist(folder);
 		} else {
-			if (!em.contains(folder)) {
-				folder = em.merge(folder);
-			}
+			folder = em.merge(folder);
 		}
 		return folder;
 	}

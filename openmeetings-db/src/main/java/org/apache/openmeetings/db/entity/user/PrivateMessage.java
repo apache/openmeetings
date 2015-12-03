@@ -44,10 +44,8 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getPrivateMessages", query = "SELECT c FROM PrivateMessage c ORDER BY c.id"),
 	@NamedQuery(name = "getPrivateMessageById", query = "SELECT c FROM PrivateMessage c WHERE c.id = :id "),
-	@NamedQuery(name = "updatePrivateMessagesReadStatus", query = "UPDATE PrivateMessage c SET c.isRead = :isRead " +
-			"WHERE c.id IN (:ids) "),
-	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c SET c.folderId = :folderId " +
-			"WHERE c.id IN (:ids) "),
+	@NamedQuery(name = "updatePrivateMessagesReadStatus", query = "UPDATE PrivateMessage c SET c.isRead = :isRead WHERE c.id IN (:ids) "),
+	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c SET c.folderId = :folderId WHERE c.id IN (:ids) "),
 	@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c WHERE c.id IN (:ids) "),
 	@NamedQuery(name = "getPrivateMessagesByRoom", query = "SELECT c FROM PrivateMessage c WHERE c.room.id = :roomId ")
 })

@@ -26,7 +26,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.user.UserContact;
@@ -40,12 +39,11 @@ public class UserContactDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserContactDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-    @Autowired
-    private UserDao userDao;
+	@Autowired
+	private UserDao userDao;
 
 	public Long addUserContact(Long userId, Long ownerId, Boolean pending, String hash) {
 		try {
-			
 			UserContact userContact = new UserContact();
 			userContact.setInserted(new Date());
 			userContact.setOwner(userDao.get(ownerId));
@@ -54,24 +52,8 @@ public class UserContactDao {
 			userContact.setHash(hash);
 			
 			userContact = update(userContact);
-			Long userContactId = userContact.getUserContactId();
 			
-			return userContactId;			
-		} catch (Exception e) {
-			log.error("[addUserContact]",e);
-		}
-		return null;
-	}
-	
-	public Long addUserContactObj(UserContact userContact) {
-		try {
-			
-			userContact.setInserted(new Date());
-			
-			userContact = em.merge(userContact);
-			Long userContactId = userContact.getUserContactId();
-			
-			return userContactId;			
+			return userContact.getId();
 		} catch (Exception e) {
 			log.error("[addUserContact]",e);
 		}
@@ -79,18 +61,10 @@ public class UserContactDao {
 	}
 	
 	/**
-	 * @param userContactDeleteId
-	 * @return rowcount of update
+	 * @param id
 	 */
-	public Integer deleteUserContact(Long userContactDeleteId) {
-		try {
-			Query query = em.createNamedQuery("deleteUserContact");
-			query.setParameter("userContactDeleteId", userContactDeleteId);
-	        return query.executeUpdate();
-		} catch (Exception e) {
-			log.error("[deleteUserContact]",e);
-		}
-		return null;
+	public void delete(Long id) {
+		em.createNamedQuery("deleteUserContact").setParameter("id", id).executeUpdate();
 	}
 	
 	/**
@@ -98,14 +72,7 @@ public class UserContactDao {
 	 * @return rowcount of update
 	 */
 	public Integer deleteAllUserContacts(Long ownerId) {
-		try {
-			Query query = em.createNamedQuery("deleteAllUserContacts");
-	        query.setParameter("ownerId",ownerId);
-	        return query.executeUpdate();
-		} catch (Exception e) {
-			log.error("[deleteAllUserContacts]",e);
-		}
-		return null;
+		return em.createNamedQuery("deleteAllUserContacts").setParameter("ownerId",ownerId).executeUpdate();
 	}
 	
 	public UserContact get(Long userId, Long ownerId) {
@@ -193,12 +160,12 @@ public class UserContactDao {
 	public UserContact get(Long id) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class); 
-			query.setParameter("userContactId", id);
+			query.setParameter("id", id);
 			UserContact userContacts = null;
 			try {
 				userContacts = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
+		} catch (NoResultException ex) {
+		}
 			return userContacts;
 		} catch (Exception e) {
 			log.error("[getUserContacts]",e);
@@ -210,12 +177,12 @@ public class UserContactDao {
 		return em.createNamedQuery("getUserContacts", UserContact.class).getResultList();
 	}
 	
-	public Long updateContactStatus(Long userContactId, Boolean pending) {
+	public Long updateContactStatus(Long id, Boolean pending) {
 		try {
-			UserContact userContacts = get(userContactId);
-			userContacts.setPending(pending);
-			update(userContacts);
-			return userContactId;
+			UserContact uc = get(id);
+			uc.setPending(pending);
+			update(uc);
+			return id;
 		} catch (Exception e) {
 			log.error("[updateContactStatus]",e);
 		}
@@ -223,7 +190,7 @@ public class UserContactDao {
 	}
 	
 	public UserContact update(UserContact c) {
-		if (c.getUserContactId() == 0) {
+		if (c.getId() == 0) {
 			c.setInserted(new Date());
 			em.persist(c);
 		} else {
