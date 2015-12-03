@@ -32,9 +32,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -44,8 +42,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.util.io.IOUtils;
-
-import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class RoomsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -60,37 +56,20 @@ public class RoomsPanel extends UserPanel {
 
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
-		add(new ListView<Room>("list", rooms) {
+		add(new RoomListPanel("list", rooms, Application.getString(131)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<Room> item) {
-				final Room r = item.getModelObject();
-				WebMarkupContainer roomContainer;
-				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior("click"){
-					private static final long serialVersionUID = 1L;
-					
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						roomId = r.getId();
-						updateRoomDetails(target);
-					}
-				}));
-				roomContainer.add(new Label("roomName", r.getName()));
-				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
-				roomContainer.add(curUsers.setOutputMarkupId(true));
-				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
-				item.add(new Button("enter").add(new RoomEnterBehavior(r.getId())));
-				roomContainer.add(new AjaxLink<Void>("refresh") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						roomId = r.getId();
-						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
-						updateRoomDetails(target);
-					}
-				});
+			public void onContainerClick(AjaxRequestTarget target, Room r) {
+				roomId = r.getId();
+				updateRoomDetails(target);
+			}
+			
+			@Override
+			public void onRefreshClick(AjaxRequestTarget target, Room r) {
+				super.onRefreshClick(target, r);
+				roomId = r.getId();
+				updateRoomDetails(target);
 			}
 		});
 		

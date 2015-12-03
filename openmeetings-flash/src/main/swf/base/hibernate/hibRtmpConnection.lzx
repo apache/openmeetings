@@ -1437,11 +1437,6 @@
 				canvas._drawarea.stopStreaming(value);
 			} else if (value.message=='roomClosed'){
 				canvas.roomClosed();
-			} else if (value.message=='inviteToRoom'){
-				if ($debug) Debug.write("Incoming Room Invitation ",value);
-			} else if (value.message=='inviteToRoomAnswer'){
-				if ($debug) Debug.write("Incoming Room inviteToRoomAnswer ",value);
-				new lz.errorPopup(canvas, {error: value.usermessage});
 			} else {
 				if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
 			}

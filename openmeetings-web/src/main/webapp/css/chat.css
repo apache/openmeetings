@@ -60,6 +60,11 @@
     font-style: italic;
     font-size: smaller;
 }
+#chatPanel #chat .messageArea img.profile {
+	vertical-align: middle;
+    max-height: 38px;
+    max-width: 38px;
+}
 #chatPanel #chat .messageArea .from {
 	margin-left: 5px;
     margin-right: 5px;
@@ -73,4 +78,5 @@
 #chatMessage .wysiwyg-editor {
 	height: 70px;
 	max-height: 70px;
+	max-width: 500px;
 }

@@ -49,7 +49,6 @@ import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Time;
 import org.slf4j.Logger;
 
@@ -138,16 +137,6 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	abstract String getFileName(Recording r);
 	abstract File getFile(Recording r);
 	
-	private Long getLong(StringValue id) {
-		Long result = null;
-		try {
-			result = id.toLongObject();
-		} catch(Exception e) {
-			//no-op
-		}
-		return result;
-	}
-	
 	private Recording getRecording(Long id) {
 		Recording r = getBean(RecordingDao.class).get(id);
 		// TODO should we process public?
@@ -171,14 +160,13 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	
 	private Recording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
-		StringValue idStr = params.get("id");
-		Long id = getLong(idStr);
+		Long id = params.get("id").toOptionalLong();
 		WebSession ws = WebSession.get();
 		if (id != null && ws.isSignedIn()) {
 			return getRecording(id);
 		} else {
 			ws.invalidate();
-			if (ws.signIn(idStr.toString())) {
+			if (ws.signIn(params.get("id").toString())) {
 				return getRecording(getRecordingId());
 			}
 		}

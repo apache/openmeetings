@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.profile;
+package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.user.profile.UserProfilePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;

@@ -17,8 +17,13 @@
  * under the License.
  */
 var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
-	, msgTemplate = "<div id='chat-msg-id-#{id}'><span class='from'>#{from}</span><span class='date'>#{sent}</span>#{msg}</div>"
-	, acceptTemplate = "<span class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);acceptMessage(e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></span>"
+	, msgTemplate = "<div id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
+	, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);acceptMessage(e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
+	, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
+	, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);addContact(e.data(\"userId\"));'></div>"
+	, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);privateMessage(e.data(\"userId\"));'></div>"
+	, inviteTemplate = "<div class='invite om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);inviteUser(e.data(\"userId\"));'></div>"
+	, clearBlock = "<div class='clear'></div>"
 	, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 	, closedHeight = "20px", openedHeight = "345px";
 $(function() {
@@ -86,8 +91,17 @@ function addChatMessage(m) {
 		var msg;
 		for (var i = 0; i < m.msg.length; ++i) {
 			var cm = m.msg[i];
-			//needModeration
-			msg = $(msgTemplate.replace(/#\{id\}/g, cm.id).replace(/#\{from\}/g, cm.from).replace(/#\{sent\}/g, cm.sent).replace(/#\{msg\}/g, cm.message));
+			msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
+					.replace(/#\{userId\}/g, cm.from.id)
+					.replace(/#\{imgSrc\}/g, cm.from.img)
+					.replace(/#\{from\}/g, cm.from.name)
+					.replace(/#\{sent\}/g, cm.sent)
+					.replace(/#\{msg\}/g, cm.message));
+			var date = msg.children('.date');
+			date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
+			date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
+			date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
+			date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
 			if (cm.needModeration) {
 				msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
 			}
@@ -97,6 +111,7 @@ function addChatMessage(m) {
 			if (m.mode == "accept") {
 				$('#chat-msg-id-' + cm.id).remove();
 			}
+			msg.append(clearBlock);
 			$('#' + cm.scope).append(msg);
 		}
 		if (msg[0]) {
