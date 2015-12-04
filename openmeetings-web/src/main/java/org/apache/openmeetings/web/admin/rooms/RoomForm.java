@@ -254,7 +254,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			protected void populateItem(final ListItem<RoomModerator> item) {
 				RoomModerator moderator = item.getModelObject();
 				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
-				if (moderator.getId() == 0) {
+				if (moderator.getId() == null) {
 					name.add(AttributeAppender.append("class", "newItem"));
 				}
 				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))

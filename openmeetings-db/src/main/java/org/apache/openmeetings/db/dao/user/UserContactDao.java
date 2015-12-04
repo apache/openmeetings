@@ -190,7 +190,7 @@ public class UserContactDao {
 	}
 	
 	public UserContact update(UserContact c) {
-		if (c.getId() == 0) {
+		if (c.getId() == null) {
 			c.setInserted(new Date());
 			em.persist(c);
 		} else {
