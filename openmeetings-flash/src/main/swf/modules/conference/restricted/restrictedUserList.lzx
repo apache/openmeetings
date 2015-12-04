@@ -154,10 +154,7 @@
             
             for (var i = 0; i < value.length; ++i){
                 if ( value[i].streamid == canvas.streamid ) {
-                    value[i].selfItem = true;
                     canvas.isAllowedToDraw = value[i].canDraw;
-                } else {
-                    value[i].selfItem = false;
                 }
 				parent.addItemInitial(value[i]);
 			}

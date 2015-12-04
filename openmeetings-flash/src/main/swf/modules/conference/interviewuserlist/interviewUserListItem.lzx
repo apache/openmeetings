@@ -56,7 +56,7 @@
         ]]>
     </handler>
     
-    <method name="update" args="obj">
+    <method name="update" args="obj, full=true">
     	setAttribute('firstname', obj.firstname);
     	setAttribute('lastname', obj.lastname);
     	refObj = obj;

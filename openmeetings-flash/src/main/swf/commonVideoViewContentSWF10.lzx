@@ -407,20 +407,6 @@
         ]]>
     </method>
     
-    <!---
-    	Update the canDraw,canShare,canRemote flag, there is no need to check here which user
-    	this happened already before sending it to the SWF10 app
-     -->
-    <method name="setDrawAllowStatus" args="canDraw,canShare,canRemote">
-    	<![CDATA[
-    		if ($debug) Debug.write("setDrawAllowStatus :: ",canDraw,canShare,canRemote);
-    		canvas.setAttribute("isAllowedToDraw",canDraw);
-            canvas.setAttribute("isAllowedToScreenShare",canShare);
-            canvas.setAttribute("isAllowedToRemoteControl",canRemote);
-            return;
-    	]]>
-    </method>
-    
     <method name="setExclusiveAudioAllowStatus" args="canGiveAudio">
     	<![CDATA[
     		if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);

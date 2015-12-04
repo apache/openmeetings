@@ -826,9 +826,9 @@
 
 		<method name="roomDisconnectUser" args="value,id">
 			canvas._videocontainer.disconnectclient(id);
-			if (canvas.commonVideoViewContent!=null) {
+			if (canvas.commonVideoViewContent != null) {
 				canvas.commonVideoViewContent.disconnectclient(id);
-				if (canvas.currentModApply!=null) canvas.currentModApply.rejectUser(value);
+				if (canvas.currentModApply != null) canvas.currentModApply.rejectUser(value);
 				if (value.isRecording) {
 					canvas._mymod.recordingUser = null;
 				}
@@ -998,8 +998,9 @@
 		<method name="setNewBroadCastingFlag" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ",value);
-			canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID).setAttribute("refObj", value);
+			if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ", value);
+			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
+			u.update(value);
 			if (canvas.publicSID == value.publicSID) {
 				canvas.commonVideoViewContent.toggleVideo(value.canVideo);
 				canvas.setAttribute("isBroadCasting", value.isBroadcasting);

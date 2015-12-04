@@ -182,7 +182,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
  -->
 <attribute name="currentModeratorList" value="null" />
 
-<attribute name="newModeratorList" value="null" />
 <attribute name="removeModeratorList" value="null" />
 
 <attribute name="ismoderator" value="false" type="boolean" />
