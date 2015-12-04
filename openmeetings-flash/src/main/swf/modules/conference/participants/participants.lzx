@@ -183,7 +183,7 @@
     	if ($debug) Debug.write("receiveExclusiveAudioFlag: ",publicSID);
         var obj = this._participants.getUserListItemByPublicSID(publicSID);
 
-        for (var i=0; i<obj.parent.subviews.length; i++) {
+        for (var i = 0; i < obj.parent.subviews.length; ++i) {
             var item = obj.parent.subviews[i];
             var rcl = new Object();
 

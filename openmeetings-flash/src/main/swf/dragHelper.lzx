@@ -31,8 +31,10 @@
     </method>
 
     <method name="remove">
-        this.dragHelper.destroy();
-        this.dragHelper = null;
+    	if (this.dragHelper) {
+	        this.dragHelper.destroy();
+	        this.dragHelper = null;
+        }
     </method>
 
 </class>

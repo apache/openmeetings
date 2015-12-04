@@ -127,7 +127,7 @@
         
     
     <method name="initList">
-        new lz.interviewListTable(this,{name:'_table'});
+        new lz.interviewListTable(this, {name:'_table'});
         this.moderationPanel.bringToFront();
     </method>
     
@@ -211,9 +211,6 @@
     <moderationMiniIconsInterviewUserList name="_applyAndStatusIcons" 
                           x="$once{ parent.width-this.width-4 }" y="2" />
     
-    <!--
-    <eventUserListTable name="_table" /> 
-     -->
     <view name="moderationPanel" height="0" clip="true" 
           y="${ parent.height - this.height - 2 }">
         

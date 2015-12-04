@@ -69,7 +69,9 @@
 		canvas.setDefaultContextMenu(cmenu);
 		cmenu.hideBuiltInItems();
 		if($debug) Debug.write("main.lzx/oninit:",this);
-        canvas.commonVideoViewContent = new lz.commonVideoViewContentSWF10(this, {name:'_videoComponent'});
+		canvas.commonVideoViewContent = new lz.commonVideoViewContentSWF10(this, {name:'_videoComponent'});
+		canvas.currentModeratorList = [];
+		canvas.removeModeratorList = [];
 	]]></handler>
 	
 <handler name="onerror" args="errmsg">
@@ -192,4 +194,14 @@
 
 <view name="inner"></view>
 
+	<view name="whiteboardVideos">
+		<method name="clearAll">
+		<![CDATA[
+			while(this.subviews.length > 0) {
+				this.subviews[0].stopVideo();
+				this.subviews[0].destroy();
+			}
+		]]>
+		</method>
+	</view>
 </canvas>

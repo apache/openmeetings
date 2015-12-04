@@ -25,6 +25,7 @@
 	        
 	<handler name="oninit">
 	<![CDATA[
+	if ($debug) Debug.write(":: interviewWhiteboard :: oninit :: ", canvas.commonVideoViewContent);
 		canvas._drawarea = this;
 		if (checkPodsDelegate == null && !_recStarted.visible) {
 			checkPodsDelegate = new LzDelegate(this, "checkPods");
@@ -55,13 +56,10 @@
 		}
 	</method>
 
-	<method name="onInterviewPodCount" args="count">
-		_interview._start.setAttribute("enabled", count > 0);
-	</method>
-	
 	<method name="checkPods" args="ignore=null">
-		//if ($debug) Debug.write(":: Pods :: check :: ");
-		canvas.commonVideoViewContent.getVideoObjectCount();
+		var count = canvas.commonVideoViewContent.getVideoObjectCount();
+		//if ($debug) Debug.write(":: Pods :: check :: ", count);
+		_interview._start.setAttribute("enabled", count > 0);
 		lz.Timer.resetTimer(checkPodsDelegate, 1000);
 	</method>
 	
@@ -88,16 +86,11 @@
     
     <simplelayout axis="y" spacing="2" />
     
-    <!-- TODO add new pods
-    <commonVideoViewContent name="_videoviewcontent" x="40" >
-    
+    <view name="_videoviewcontent" x="40" >
         <simplelayout axis="x" spacing="2" />
-    -->    
         <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" />
         <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" />
-    <!-- TODO add new pods
-    </commonVideoViewContent>
-    -->    
+    </view>
     
     <view name="_interview" align="center" visible="${ canvas.ismoderator }">
         <!--
@@ -107,7 +100,9 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     if ($debug) Debug.write("startInterviewRecording: ",value);
-                    if (!value) {
+                    if (value) {
+                    	parent._stop.setAttribute('enabled', true);
+                    } else {
                         new lz.labelerrorPopup(canvas,{errorlabelid:915});
                     }
                 ]]>
@@ -118,7 +113,9 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     if ($debug) Debug.write("stopInterviewRecording: ",value);
-                    if (!value) {
+                     if (value) {
+                    	parent._stop.setAttribute('enabled', false);
+                    } else {
                         new lz.labelerrorPopup(canvas,{errorlabelid:916});
                     }
                 ]]>
@@ -127,7 +124,7 @@
         
         <simplelayout axis="x" spacing="2" />
         
-        <simpleLabelButton name="_start" labelid="913" height="30" width="200">
+        <simpleLabelButton name="_start" labelid="913" height="30" width="200" enabled="false">
             <handler name="onclick">
                 if ($debug) Debug.write("Start Recording");
                 parent.startInterviewRecording.doCall();
@@ -135,7 +132,7 @@
             <view x="2" y="4" resource="interview_record_start" />
         </simpleLabelButton>
         
-        <simpleLabelButton name="_stop" labelid="914" height="30" width="200">
+        <simpleLabelButton name="_stop" labelid="914" height="30" width="200" enabled="false">
             <handler name="onclick">
                 if ($debug) Debug.write("Stop Recording");
                 parent.stopInterviewRecording.doCall();

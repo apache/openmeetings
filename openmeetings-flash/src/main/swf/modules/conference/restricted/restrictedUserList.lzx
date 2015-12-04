@@ -198,7 +198,7 @@
     <method name="receiveExclusiveAudioFlag" args="publicSID">
     <![CDATA[
         var vList = this._participants._table.renderList;
-        for (var i=0;i<vList.length;i++) {
+        for (var i = 0;i < vList.length; ++i) {
             var item = vList[i];
             var rcl = new Object();
 

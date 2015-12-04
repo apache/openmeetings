@@ -205,6 +205,22 @@
         canvas.commonVideoViewContent.setSpeakingByPos(publicSID, bool);
     </method>  
     
+    <method name="receiveExclusiveAudioFlag" args="publicSID">
+    <![CDATA[
+    	if ($debug) Debug.write("receiveExclusiveAudioFlag: ",publicSID);
+        var obj = this._participants.getUserListItemByPublicSID(publicSID);
+
+        for (var i = 0; i < obj.parent.subviews.length; ++i) {
+            var item = obj.parent.subviews[i];
+            var rcl = new Object();
+
+            rcl.publicSID = item.refObj.publicSID;
+            rcl.micMuted = !(publicSID == item.refObj.publicSID);
+            canvas.setMuteStatus(rcl);
+        }
+    ]]>
+    </method>
+    
     <!--- 
         stops the streaming but does not destroy the view
         @param int broadcastId broadcastId

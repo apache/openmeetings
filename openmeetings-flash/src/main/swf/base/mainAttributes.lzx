@@ -185,6 +185,12 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="removeModeratorList" value="null" />
 
 <attribute name="ismoderator" value="false" type="boolean" />
+<attribute name="isInterview" value="false" type="boolean" />
+<!-- Those values are fixed values of the video positions of the videos from the interview room type -->
+<attribute name="interviewPod1_x" value="320" type="number" />
+<attribute name="interviewPod1_y" value="28" type="number" />
+<attribute name="interviewPod2_x" value="644" type="number" />
+<attribute name="interviewPod2_y" value="28" type="number" />
 
 <attribute name="loadingmessage" value="" type="string" />
 <!--- 
@@ -237,7 +243,10 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="bandwidthNeededBest" value="32768" type="number" />
 <attribute name="camQualityNormal" value="75" type="number" />
 <attribute name="camQualityBest" value="75" type="number" />
-        
+<attribute name="microphoneRateBest" value="22" type="number" />
+<attribute name="echoPath" value="128" type="number" />
+<attribute name="echoSuppression" value="true" type="string" />
+
 <!--- Reference to the current active drawarea -->
 <attribute name="_drawarea" value="null" /> 
 
