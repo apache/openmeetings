@@ -99,8 +99,8 @@ function addChatMessage(m) {
 					.replace(/#\{msg\}/g, cm.message));
 			var date = msg.children('.date');
 			date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
-			date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
 			if ("full" == cm.actions) {
+				date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
 				date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
 				date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
 			}

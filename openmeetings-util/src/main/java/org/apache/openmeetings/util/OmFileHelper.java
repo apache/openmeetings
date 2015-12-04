@@ -63,7 +63,6 @@ public class OmFileHelper {
 	public static final String profilesPrefix = "profile_";
 	public static final String nameOfLanguageFile = "languages.xml";
 	public static final String nameOfCountriesFile = "countries.xml";
-	public static final String nameOfTimeZoneFile = "timezones.xml";
 	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile_pic.jpg";

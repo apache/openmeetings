@@ -18,53 +18,21 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OmFileHelper.getLanguagesDir;
-import static org.apache.openmeetings.util.OmFileHelper.nameOfTimeZoneFile;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TimezoneUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
-	private static final Map<String, String> ICAL_TZ_MAP = new Hashtable<String, String>();
-
-	private static void initTimeZones() {
-		SAXReader reader = new SAXReader();
-		Document document;
-		try {
-			ICAL_TZ_MAP.clear();
-			document = reader.read(new File(getLanguagesDir(), nameOfTimeZoneFile));
-
-			Element root = document.getRootElement();
-
-			for (@SuppressWarnings("rawtypes")
-			Iterator it = root.elementIterator("timezone"); it.hasNext();) {
-				Element item = (Element) it.next();
-				String timeZoneName = item.attributeValue("name");
-				String iCal = item.attributeValue("iCal");
-				ICAL_TZ_MAP.put(timeZoneName, iCal);
-			}
-		} catch (DocumentException e) {
-			log.error("Unexpected error while reading old time zone list", e);
-		}
-	}
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -131,33 +99,6 @@ public class TimezoneUtil {
 
 		}
 
-		// if user has not time zone get one from the server configuration
-		return getDefaultTimeZone();
-	}
-
-	/**
-	 * Return the timezone based on our internal jName
-	 * 
-	 * @param jName
-	 * @return
-	 */
-	public TimeZone getTimezoneByInternalJName(String jName) {
-		if (ICAL_TZ_MAP.isEmpty()) {
-			initTimeZones();
-		}
-		String omTimeZone = ICAL_TZ_MAP.get(jName);
-
-		if (omTimeZone == null) {
-			String err = String.format("There is not omTimeZone for this jName: '%s'", jName);
-			log.error(err);
-			throw new RuntimeException(err);
-		}
-		
-		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);
-
-		if (timeZone != null) {
-			return timeZone;
-		}
 		// if user has not time zone get one from the server configuration
 		return getDefaultTimeZone();
 	}

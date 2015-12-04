@@ -974,7 +974,7 @@ public class BackupImport {
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
-						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
+						u.setTimeZoneId(jName == null ? null : tzUtil.getTimeZone(jName).getID());
 					}
 					if ("level_id".equals(item2.getName())) {
 						levelId = item2.getValue();
