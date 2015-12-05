@@ -635,42 +635,6 @@
     </method>
     
     <!---
-        Start playback of whiteboard video
-     -->
-    <method name="playbackWhiteboardVideo" args="tName,recordingName,seek,tx,ty,twidth,theight">
-    	<![CDATA[
-    	   if($debug) Debug.write("playbackWhiteboardVideo ",tName,recordingName,seek,tx,ty,twidth,theight);
-    	   if (this[tName]) {
-    	   	 if ($debug) Debug.warn("playbackWhiteboardVideo there was already a video with the same name");
-    	   	 this[tName]._stop();
-    	   	 this[tName].destroy();
-    	   }
-    	   
-    	   new lz.playBackWhiteboardVideo(canvas.whiteboardVideos, {
-                	       name:tName,
-                	       x:tx,
-                	       y:ty,
-                	   	   width:twidth,
-                	   	   height:theight
-                	   });
-    	   
-    	   canvas.whiteboardVideos[tName].playVideoStream(recordingName,0);
-    	]]>
-    </method>
-    
-	<method name="stopWhiteboardVideo" args="tName">
-	<![CDATA[
-		if($debug) Debug.write("stopWhiteboardVideo ",tName);
-		if (canvas.whiteboardVideos[tName]) {
-			canvas.whiteboardVideos[tName].stopVideo();
-			canvas.whiteboardVideos[tName].destroy();
-		} else {
-			if ($debug) Debug.warn("stopWhiteboardVideo could not find video to stop");
-		}
-	]]>
-    </method>
-    
-    <!---
        #################################
        Methods to handle screen sharing video playback and cursor
      -->
@@ -734,7 +698,6 @@
                 canvas.screenSharingDialogContainer.destroy();
                 canvas.screenSharingDialogContainer = null;
             }
-            canvas.whiteboardVideos.clearAll();
             parent._videoComponent.clearAll();
         ]]>
     </method>

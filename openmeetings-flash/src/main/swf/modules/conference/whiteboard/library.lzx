@@ -19,7 +19,6 @@
   
 -->
 <library>
-	
 	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerTR" src="resources/boundingBoxTR.png" />
 	<!-- APL author sebawagner -->
@@ -51,6 +50,4 @@
     <include href="fixedFileExplorerWhiteboardPanel.lzx" />
     <include href="whiteboardMiniButton.lzx" />
     <include href="whiteboardBarMenu.lzx" />
-    <include href="playBackWhiteboardVideo.lzx" />
-
 </library>
