@@ -8,8 +8,8 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-      http://www.apache.org/licenses/LICENSE-2.0
-          
+	  http://www.apache.org/licenses/LICENSE-2.0
+		  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -19,188 +19,192 @@
   
 -->
 <library>
-    
+	
 <class name="userStatus" extends="view" width="250" height="30">
-    <attribute name="statusText" type="string" />
-    <attribute name="statusColor" type="number" value="0" />
+	<attribute name="statusText" type="string" />
+	<attribute name="statusColor" type="number" value="0" />
 
-    <text name="status" width="240" height="20" x="5" y="5" fontstyle="bold" fgcolor="0" text="defaulttext" fontsize="10"/>
+	<text name="status" width="240" height="20" x="5" y="5" fontstyle="bold" fgcolor="0" text="defaulttext" fontsize="10"/>
 
-    <handler name="oninit">
-        this.status.setAttribute("text", this.statusText);
-        this.status.setAttribute("fgcolor", this.statusColor);
-        this.setAttribute("visibility", "visible");
-        lz.Timer.addTimer( new LzDelegate( this, "selfDestroy" ), 3000 );
-    </handler>
+	<handler name="oninit">
+		this.status.setAttribute("text", this.statusText);
+		this.status.setAttribute("fgcolor", this.statusColor);
+		this.setAttribute("visibility", "visible");
+		lz.Timer.addTimer( new LzDelegate( this, "selfDestroy" ), 3000 );
+	</handler>
 
-    <method name="selfDestroy" args="ignore=null">
-        this.destroy();
-    </method>
+	<method name="selfDestroy" args="ignore=null">
+		this.destroy();
+	</method>
 </class>
 
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false" src="$once{ this.getUrl() }" >
-    <switch>
-        <when property="$as3">
-            <passthrough>
-                import flash.system.Capabilities;
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.system.Capabilities;
 				import flash.external.ExternalInterface;
-            </passthrough>
-        </when>
-    </switch>
-    <attribute name="counterror" type="number" value="0" />
-    
-    <attribute name="loaderVar" value="null" />
-    
-    <attribute name="userScope" value="hibernate" type="string" />
-    
-    <!-- refreshing the session regulary -->
-    <attribute name="refreshDelegate" value="null" />
-    
-    <!-- UserId-->
-    <attribute name="UserID" value="1" type="number" />
-    <!-- reconnect after each conferenceView -->
-    <attribute name="reconnectAfterRoomleft" type="boolean" value="false" />
-    <attribute name="reconnectedRoomInstance" value="null" />
-    
-    <attribute name="reconnectionAction" value="false" type="boolean" />
-    <attribute name="reconnectObjRef" value="null" />
-         
-     <attribute name="userobject" value="null" />
-     
-     <!-- default will be loaded on startup -->
-     <attribute name="userlang" value="1" type="number" />
-     
-     <!-- The default Language will be loaded on init  -->
-     <attribute name="initlanguageLoaded" value="false" type="boolean" />
-     
-     <!-- This domain is the orgdomain used in the video-conference -->
-     <attribute name="conferencedomain" value="public" type="string" />
-     
-     <!-- if this connection is used for testing the app
-     see test-setup.lzx -->
-     <attribute name="testAppLoading" value="false" type="boolean" />
-     
-     <!-- 
-        the real ROOM_ID
-     -->
-     <attribute name="currentroomid" value="0" type="number" />
-     
-     <!--- the current Invitation-Object -->
-     <attribute name="currentInvitation" value="null" />
-    
-    <!-- shows what kind of conferenceView it is at the moment
-        wether its conferenceView or audienceView -->
-    <attribute name="modus" value="" type="string" />
-    
-    <attribute name="showKickMessage" value="false" type="boolean"/>
-    <attribute name="showFullMessage" value="false" type="boolean"/>
-         
-    <attribute name="useRTMPT" value="false" type="boolean" />
-    <attribute name="connected" value="false" type="boolean" />
-    
-    <method name="getProtocol">
-    	if (canvas.useSSL) {
-    		return "rtmps";
-    	}
-    	if (this.useRTMPT) {
-    		return "rtmpt";
-    	}
-    	return "rtmp";
-    </method>
-    
-    <method name="getPort">
-    	if (canvas.useSSL) {
-            return canvas.rtmpsslport;
-        }
-    	if (this.useRTMPT) {
-    		return canvas.red5httpport;
-    	}
-    	return canvas.rtmpport;
-    </method>
-    
-    <method name="getHost">
-    	return canvas.rtmphostlocal;
-    </method>
-    
-    <method name="getWebappRootKey">
-    	return canvas.webAppRootKey;
-    </method>
-         
-    <!-- 
-    	canvas.getUrl() can not be reused since it has different protocol and port 
-    	and potentially in cluster another host, the only thing that stays the same
-    	no matter if hosted on slave or on master, is the scope, so
-    	userScope always stays the same
-     -->
-    <method name="getUrl">
-        return this.getProtocol() + '://' + this.getHost() + ':' + this.getPort() 
-        			+ '/' + this.getWebappRootKey() + '/' + this.userScope;
-    </method>
-             
-     <!--
-        The onconnect Method is triggered several times:
-             - When you enter a room the NetConnection will close and reconnect to the Scope of the Room
-             - When you leave the room again it will be re-connected to the default scope again
-      -->
-     <handler name="onconnect">
-        if($debug) Debug.write("hibRtmpConnection/onconnect");
-        if (this.reconnectionAction){
-        	if (canvas.wicketsid == null) {
-            	this.overwritePublicSID.doCall();
-	            this.setUsernameReconnect.doCall();
-            } else {
-	            canvas.sessionId = canvas.wicketsid;
-	            this.getPublicSID.doCall();
-            }
-        } else if (this.reconnectAfterRoomleft) {
-            //Return to content after reconnect
-            canvas.thishib.reconnectedRoomInstance.destroy();
-            this.overwritePublicSID.doCall();
-            this.setUsernameReconnect.doCall();
-        } else if (canvas.wicketsid != null) {
-            canvas.sessionId = canvas.wicketsid;
+			</passthrough>
+		</when>
+	</switch>
+	<attribute name="counterror" type="number" value="0" />
+	
+	<attribute name="loaderVar" value="null" />
+	
+	<attribute name="userScope" value="hibernate" type="string" />
+	
+	<!-- refreshing the session regulary -->
+	<attribute name="refreshDelegate" value="null" />
+	
+	<!-- UserId-->
+	<attribute name="UserID" value="1" type="number" />
+	<!-- reconnect after each conferenceView -->
+	<attribute name="reconnectAfterRoomleft" type="boolean" value="false" />
+	<attribute name="reconnectedRoomInstance" value="null" />
+	
+	<attribute name="reconnectionAction" value="false" type="boolean" />
+	<attribute name="reconnectObjRef" value="null" />
+		 
+	 <attribute name="userobject" value="null" />
+	 
+	 <!-- default will be loaded on startup -->
+	 <attribute name="userlang" value="1" type="number" />
+	 
+	 <!-- The default Language will be loaded on init  -->
+	 <attribute name="initlanguageLoaded" value="false" type="boolean" />
+	 
+	 <!-- This domain is the orgdomain used in the video-conference -->
+	 <attribute name="conferencedomain" value="public" type="string" />
+	 
+	 <!-- if this connection is used for testing the app
+	 see test-setup.lzx -->
+	 <attribute name="testAppLoading" value="false" type="boolean" />
+	 
+	 <!-- 
+		the real ROOM_ID
+	 -->
+	 <attribute name="currentroomid" value="0" type="number" />
+	 
+	 <!--- the current Invitation-Object -->
+	 <attribute name="currentInvitation" value="null" />
+	
+	<!-- shows what kind of conferenceView it is at the moment
+		wether its conferenceView or audienceView -->
+	<attribute name="modus" value="" type="string" />
+	
+	<attribute name="showKickMessage" value="false" type="boolean"/>
+	<attribute name="showFullMessage" value="false" type="boolean"/>
+		 
+	<attribute name="useRTMPT" value="false" type="boolean" />
+	<attribute name="connected" value="false" type="boolean" />
+	
+	<method name="getProtocol">
+		if (canvas.useSSL) {
+			return "rtmps";
+		}
+		if (this.useRTMPT) {
+			return "rtmpt";
+		}
+		return "rtmp";
+	</method>
+	
+	<method name="getPort">
+		if (canvas.useSSL) {
+			return canvas.rtmpsslport;
+		}
+		if (this.useRTMPT) {
+			return canvas.red5httpport;
+		}
+		return canvas.rtmpport;
+	</method>
+	
+	<method name="getHost">
+		return canvas.rtmphostlocal;
+	</method>
+	
+	<method name="getWebappRootKey">
+		return canvas.webAppRootKey;
+	</method>
+		 
+	<!-- 
+		canvas.getUrl() can not be reused since it has different protocol and port 
+		and potentially in cluster another host, the only thing that stays the same
+		no matter if hosted on slave or on master, is the scope, so
+		userScope always stays the same
+	 -->
+	<method name="getUrl">
+		return this.getProtocol() + '://' + this.getHost() + ':' + this.getPort() 
+					+ '/' + this.getWebappRootKey() + '/' + this.userScope;
+	</method>
+			 
+	 <!--
+		The onconnect Method is triggered several times:
+			 - When you enter a room the NetConnection will close and reconnect to the Scope of the Room
+			 - When you leave the room again it will be re-connected to the default scope again
+	  -->
+	 <handler name="onconnect">
+		if($debug) Debug.write("hibRtmpConnection/onconnect");
+		if (this.reconnectionAction){
+			if (canvas.wicketsid == null) {
+				this.overwritePublicSID.doCall();
+				this.setUsernameReconnect.doCall();
+			} else {
+				canvas.sessionId = canvas.wicketsid;
+				this.getPublicSID.doCall();
+			}
+		} else if (this.reconnectAfterRoomleft) {
+			//Return to content after reconnect
+			canvas.thishib.reconnectedRoomInstance.destroy();
+			this.overwritePublicSID.doCall();
+			this.setUsernameReconnect.doCall();
+		} else if (canvas.wicketsid != null) {
+			canvas.sessionId = canvas.wicketsid;
 			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-            this.getPublicSID.doCall();
-        } else {
-            this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
-            //lz.Timer.addTimer( this.refreshDelegate, 60000 );
-            lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
-            if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-            
-            //Load Session Data
-            this.getsessiondata.callRPC();    
-        }
-        connected = true;
-        client.setNewBroadCastingFlag = this.setNewBroadCastingFlag;
-        client.roomConnect = this.roomConnect;
-        client.roomDisconnect = this.roomDisconnect;
-        client.addNewUser = this.addNewUser;
-        client.sendVarsToMessage = this.sendVarsToMessage;
-        client.sendVarsToMessageWithClient = this.sendVarsToMessageWithClient;
-        client.sendVarsToWhiteboardById = this.sendVarsToWhiteboardById;
-        client.sendVarsToModeratorGeneral = this.sendVarsToModeratorGeneral;
-        client.sendSyncFlag = this.sendSyncFlag;
-        client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
-        client.sendObjectSyncFlag = this.sendObjectSyncFlag;
-        client.sendObjectSyncCompleteFlag = this.sendObjectSyncCompleteFlag;
-        client.startedRecording = this.startedRecording;
-        client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
-        client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
-        client.interviewStatus = this.interviewStatus;
-        client.newStream = this.newStream;
-        //TODO FIXME method is absent :( client.stopStream = this.stopStream;
-        client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
-        client.setNewModeratorByList = this.setNewModeratorByList;
-    </handler>
-    
-    <handler name="ondisconnect">
-        connected = false;
-    </handler>
-    
+				canvas.thishib.loaderVar.setProgress();
+			}
+			this.getPublicSID.doCall();
+		} else {
+			this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
+			//lz.Timer.addTimer( this.refreshDelegate, 60000 );
+			lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
+			
+			//Load Session Data
+			this.getsessiondata.callRPC();	
+		}
+		connected = true;
+		client.setNewBroadCastingFlag = this.setNewBroadCastingFlag;
+		client.roomConnect = this.roomConnect;
+		client.roomDisconnect = this.roomDisconnect;
+		client.addNewUser = this.addNewUser;
+		client.sendVarsToMessage = this.sendVarsToMessage;
+		client.sendVarsToMessageWithClient = this.sendVarsToMessageWithClient;
+		client.sendVarsToWhiteboardById = this.sendVarsToWhiteboardById;
+		client.sendVarsToModeratorGeneral = this.sendVarsToModeratorGeneral;
+		client.sendSyncFlag = this.sendSyncFlag;
+		client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
+		client.sendObjectSyncFlag = this.sendObjectSyncFlag;
+		client.sendObjectSyncCompleteFlag = this.sendObjectSyncCompleteFlag;
+		client.startedRecording = this.startedRecording;
+		client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
+		client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
+		client.interviewStatus = this.interviewStatus;
+		client.newStream = this.newStream;
+		//TODO FIXME method is absent :( client.stopStream = this.stopStream;
+		//TODO FIXME method is absent :( sendImagesSyncCompleteFlag
+		client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
+		client.setNewModeratorByList = this.setNewModeratorByList;
+		client.newScreenSharing = this.newScreenSharing;
+		client.stopScreenSharingMessage = this.stopScreenSharingMessage;
+		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
+	</handler>
+	
+	<handler name="ondisconnect">
+		connected = false;
+	</handler>
+	
 	<method name="reconnectComplete">
 		if (this.reconnectionAction){
 			this.reconnectionAction = false;
@@ -210,7 +214,7 @@
 		}
 		canvas.currentContentView.sendInit.sendEvent(this);
 	</method>
-    
+	
 	<handler name="onerror" >
 	<![CDATA[
 		canvas.remoteLogWrite("error status='" + this.status + "'; src='" + this.src + "'; lastCalled='" + this.lastCalled
@@ -221,11 +225,11 @@
 				{
 					errorlabelid: 99
 					, closeFunc: function() {
-				       if (this.makeModal) {
-				           lz.ModeManager.releaseAll();
-				       }
-				       if ($debug) Debug.write("Error dialog is being closed, calling QUIT");
-				       canvas.commonVideoViewContent.immediateExitRoom(true,null);
+					   if (this.makeModal) {
+						   lz.ModeManager.releaseAll();
+					   }
+					   if ($debug) Debug.write("Error dialog is being closed, calling QUIT");
+					   canvas.commonVideoViewContent.immediateExitRoom(true,null);
 					}
 				});
 			this.showFullMessage = false;
@@ -282,92 +286,92 @@
 			}
 		}
 	]]>
-	</handler>    
-    
-    <method name="refreshSessionMeth" args="calleeObj">
-        this.refreshSession.doCall();
-    </method>
-    
-    <!-- This Function is just for refreshing the Session -->
-    <netRemoteCallHib name="refreshSession" funcname="userservice.refreshSession" showLoading="false" >    
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
-        <handler name="ondata" args="value">
-            //if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
-            lz.Timer.addTimer( parent.refreshDelegate, canvas.refreshSession );
-        </handler>
-    </netRemoteCallHib>
-      
-    <netRemoteCallHib name="getsessiondata" funcname="xmlcrm.getsessiondata" >      
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("hibRtmpConnection/getsessiondata [",value,"]");
-            canvas.sessionObject = value;
-            canvas.sessionId = value.sessionId;
+	</handler>	
+	
+	<method name="refreshSessionMeth" args="calleeObj">
+		this.refreshSession.doCall();
+	</method>
+	
+	<!-- This Function is just for refreshing the Session -->
+	<netRemoteCallHib name="refreshSession" funcname="userservice.refreshSession" showLoading="false" >	
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
+		<handler name="ondata" args="value">
+			//if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
+			lz.Timer.addTimer( parent.refreshDelegate, canvas.refreshSession );
+		</handler>
+	</netRemoteCallHib>
+	  
+	<netRemoteCallHib name="getsessiondata" funcname="xmlcrm.getsessiondata" >	  
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("hibRtmpConnection/getsessiondata [",value,"]");
+			canvas.sessionObject = value;
+			canvas.sessionId = value.sessionId;
 			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-            parent.getPublicSID.doCall();
-        </handler>  
-    </netRemoteCallHib>
-     
-    <netRemoteCallHib name="getPublicSID" funcname="getPublicSID" >      
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
-            canvas.publicSID = value;     
+				canvas.thishib.loaderVar.setProgress();
+			}
+			parent.getPublicSID.doCall();
+		</handler>  
+	</netRemoteCallHib>
+	 
+	<netRemoteCallHib name="getPublicSID" funcname="getPublicSID" >	  
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
+			canvas.publicSID = value;	 
 			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
+				canvas.thishib.loaderVar.setProgress();
+			}
 			parent.getDefaultLanguage.doCall();
-        </handler>  
-    </netRemoteCallHib>
-    
-    <netRemoteCallHib name="overwritePublicSID" funcname="overwritePublicSID" >     
-        <netparam><method name="getValue"> return canvas.publicSID;</method></netparam>
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("overwritePublicSID: ",value);
-        </handler>  
-    </netRemoteCallHib>    
-    
-    <method name="setDefaultUserLanguage">
-	    <![CDATA[
-	        if (userlang == -1 && canvas.language_id != 0) {
-	            userlang = canvas.language_id;
-	        } else if (userlang == -1) {
-	            userlang = canvas.default_lang_id;
-	        }
-	    ]]>
-    </method>
-    
-    <netRemoteCallHib name="setUsernameReconnect" funcname="setUsernameReconnect" remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return canvas.userId;</method></netparam>
-        <netparam><method name="getValue">return canvas.currentuser;</method></netparam>
-        <netparam><method name="getValue">return canvas.firstName;</method></netparam>
-        <netparam><method name="getValue">return canvas.lastName;</method></netparam>   
-        <netparam><method name="getValue">return canvas.picture_uri;</method></netparam>   
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setUsernameReconnect: ",canvas.userId,value);   
-            parent.reconnectComplete();
-        </handler>  
-    </netRemoteCallHib>    
-        
-    <netRemoteCallHib name="getDefaultLanguage" funcname="languageservice.getDefaultLanguage" >      
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            canvas.default_lang_id = value;
-            if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
-            if (canvas.language_id==0){
-                parent.userlang = canvas.default_lang_id;
-            } else {
-                parent.userlang = canvas.language_id;
-            }
-            parent.getLanguageByIdAndMax.doCall();
-        </handler>  
-    </netRemoteCallHib>      
-    
+		</handler>  
+	</netRemoteCallHib>
+	
+	<netRemoteCallHib name="overwritePublicSID" funcname="overwritePublicSID" >	 
+		<netparam><method name="getValue"> return canvas.publicSID;</method></netparam>
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("overwritePublicSID: ",value);
+		</handler>  
+	</netRemoteCallHib>	
+	
+	<method name="setDefaultUserLanguage">
+		<![CDATA[
+			if (userlang == -1 && canvas.language_id != 0) {
+				userlang = canvas.language_id;
+			} else if (userlang == -1) {
+				userlang = canvas.default_lang_id;
+			}
+		]]>
+	</method>
+	
+	<netRemoteCallHib name="setUsernameReconnect" funcname="setUsernameReconnect" remotecontext="$once{ canvas.thishib }" >   
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		<netparam><method name="getValue">return canvas.userId;</method></netparam>
+		<netparam><method name="getValue">return canvas.currentuser;</method></netparam>
+		<netparam><method name="getValue">return canvas.firstName;</method></netparam>
+		<netparam><method name="getValue">return canvas.lastName;</method></netparam>   
+		<netparam><method name="getValue">return canvas.picture_uri;</method></netparam>   
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("setUsernameReconnect: ",canvas.userId,value);   
+			parent.reconnectComplete();
+		</handler>  
+	</netRemoteCallHib>	
+		
+	<netRemoteCallHib name="getDefaultLanguage" funcname="languageservice.getDefaultLanguage" >	  
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			canvas.default_lang_id = value;
+			if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
+			if (canvas.language_id==0){
+				parent.userlang = canvas.default_lang_id;
+			} else {
+				parent.userlang = canvas.language_id;
+			}
+			parent.getLanguageByIdAndMax.doCall();
+		</handler>  
+	</netRemoteCallHib>	  
+	
 	<netRemoteCallHib name="getInvitationByHash" activeErrorHandler="true" funcname="invitationservice.getInvitationByHash">
 		<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
 		<handler name="ondata" args="value">
@@ -390,7 +394,7 @@
 		]]>
 		</handler>
 	</netRemoteCallHib> 
-    
+	
 	<netRemoteCallHib name="secureLoginByRemote" activeErrorHandler="true" funcname="xmlcrm.secureLoginByRemote" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam name="remoteSessionId"><method name="getValue">return canvas.secureHash;</method></netparam>
@@ -430,25 +434,25 @@
 		]]>
 		</handler>
 	</netRemoteCallHib>  
-    
-    <netRemoteCallHib name="loginUserByRemote" activeErrorHandler="true" 
-        funcname="xmlcrm.loginUserByRemote" >          
-        <netparam name="remoteSessionId"><method name="getValue">return canvas.remoteUserSid;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("loginUserByRemote -1-: ",value);
-                if ($debug) Debug.write("loginUserByRemote -2-: ",canvas.remoteUserSid);
-                if (value<0){
-                    
-                } else {
-                    parent.getCurrentRoomClient.doCall();
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>  
-    
+	
+	<netRemoteCallHib name="loginUserByRemote" activeErrorHandler="true" 
+		funcname="xmlcrm.loginUserByRemote" >		  
+		<netparam name="remoteSessionId"><method name="getValue">return canvas.remoteUserSid;</method></netparam>
+		<handler name="ondata" args="value">
+			<![CDATA[
+				
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("loginUserByRemote -1-: ",value);
+				if ($debug) Debug.write("loginUserByRemote -2-: ",canvas.remoteUserSid);
+				if (value<0){
+					
+				} else {
+					parent.getCurrentRoomClient.doCall();
+				}
+			]]>
+		</handler>   
+	</netRemoteCallHib>  
+	
 	<netRemoteCallHib name="getCurrentRoomClient" funcname="xmlcrm.getCurrentRoomClient" >
 		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
 		<handler name="ondata" args="value">
@@ -495,8 +499,8 @@
 		]]>
 		</handler>
 	</netRemoteCallHib>
-    
-	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >          
+	
+	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >		  
 		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam name="roomId"><method name="getValue">return canvas.initroomid;</method></netparam>
 		<handler name="ondata" args="value">
@@ -519,93 +523,93 @@
 		]]>
 		</handler>
 	</netRemoteCallHib>
-        
-    <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
-        <attribute name="start" value="0" type="number" />
-        <attribute name="step" value="100" type="number" />
-        <attribute name="max" value="1607" type="number" />
-        <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
-        <netparam><method name="getValue">return parent.start;</method></netparam> 
-        <netparam><method name="getValue">return parent.step;</method></netparam> 
-        <handler name="ondata" args="value">
-            <![CDATA[
-            if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.userlang,"]");
-                //if($debug) Debug.write("hibRtmpConnection/getLanguageByIdAndMax:[",value,"]");
-                setLabelObjectByHundred(this.start,value);
-                //The onResult-Handler will be called be the rtmpconnection
-                if (this.start <= max){
-                    this.start += this.step;
-                    if (canvas.thishib.loaderVar != null) {
-                       canvas.thishib.loaderVar.setProgress();
-                    }
-                    this.doCall();
-                } else {
-                	if($debug) Debug.write("loading lang complete");
-                    if (parent.initlanguageLoaded){
-                        if (canvas.thishib.loaderVar != null) {
-                            canvas.thishib.loaderVar.setProgress();
-                        }
-			            parent.setUsernameAndSession.doCall();
-                    } else {
+		
+	<netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
+		<attribute name="start" value="0" type="number" />
+		<attribute name="step" value="100" type="number" />
+		<attribute name="max" value="1607" type="number" />
+		<netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
+		<netparam><method name="getValue">return parent.start;</method></netparam> 
+		<netparam><method name="getValue">return parent.step;</method></netparam> 
+		<handler name="ondata" args="value">
+			<![CDATA[
+			if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.userlang,"]");
+				//if($debug) Debug.write("hibRtmpConnection/getLanguageByIdAndMax:[",value,"]");
+				setLabelObjectByHundred(this.start,value);
+				//The onResult-Handler will be called be the rtmpconnection
+				if (this.start <= max){
+					this.start += this.step;
+					if (canvas.thishib.loaderVar != null) {
+					   canvas.thishib.loaderVar.setProgress();
+					}
+					this.doCall();
+				} else {
+					if($debug) Debug.write("loading lang complete");
+					if (parent.initlanguageLoaded){
+						if (canvas.thishib.loaderVar != null) {
+							canvas.thishib.loaderVar.setProgress();
+						}
+						parent.setUsernameAndSession.doCall();
+					} else {
 						parent.initlanguageLoaded = true;
 						if($debug) Debug.write("getGeneralOptions");
 						parent.getGeneralOptions.doCall();
-                    }
-                }
-            ]]>
-        </handler>  
-    </netRemoteCallHib>
-        
-    <!--
-        There must be a temporary SIP-Account created at this moment
-     -->  
-    <netRemoteCallHib name="markSessionAsLogedIn" funcname="xmlcrm.markSessionAsLogedIn" >
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <handler name="ondata" args="value">
-        <![CDATA[
-            //The onResult-Handler will be called be the rtmpconnection
-                        
-            if (value == null) {
-                new lz.errorPopup(canvas,{error:"Missing User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
-            }
-            
-            if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
-             
-            hib.userobject = value;
-             
-            canvas.userId = hib.userobject.id;
-            
-            if (value.groupUsers.length == 0 && !canvas.isRemoteUser()) {
-                new lz.errorPopup(canvas,{error:"Missing Group in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
-            }
-            
-            if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
-            if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
-            if ($debug) Debug.write("markSessionAsLogedIn4 ",canvas.isinitRoomDirect);
-            if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
-            if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
-            if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
-            if ($debug) Debug.write("markSessionAsLogedIn8 ",canvas.secureRemoteUserLogin);
-            
-            if (canvas.secureRemoteUserLogin) {
-                
-                if ($debug) Debug.write("markSessionAsLogedIn == CALL ",canvas.secureHash);
-             
-                parent.secureLoginByRemote.doCall();
-                
-            } else if (canvas.isinitRoomDirect){
-                parent.getInvitationByHash.doCall();   
-            } else if (canvas.remoteUserLogin) {
-                parent.loginUserByRemote.doCall();   
-            } else if (canvas.directUserLogin) {
-                //show Nick Name or Password Protection Dialog
-                canvas.initroomid = Number(canvas.directRoomId);
-                parent.getRoomById.doCall();
-            }
-        ]]>
-        </handler>  
-    </netRemoteCallHib> 
-    
+					}
+				}
+			]]>
+		</handler>  
+	</netRemoteCallHib>
+		
+	<!--
+		There must be a temporary SIP-Account created at this moment
+	 -->  
+	<netRemoteCallHib name="markSessionAsLogedIn" funcname="xmlcrm.markSessionAsLogedIn" >
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+						
+			if (value == null) {
+				new lz.errorPopup(canvas,{error:"Missing User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
+			}
+			
+			if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
+			 
+			hib.userobject = value;
+			 
+			canvas.userId = hib.userobject.id;
+			
+			if (value.groupUsers.length == 0 && !canvas.isRemoteUser()) {
+				new lz.errorPopup(canvas,{error:"Missing Group in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
+			}
+			
+			if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
+			if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
+			if ($debug) Debug.write("markSessionAsLogedIn4 ",canvas.isinitRoomDirect);
+			if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
+			if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
+			if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
+			if ($debug) Debug.write("markSessionAsLogedIn8 ",canvas.secureRemoteUserLogin);
+			
+			if (canvas.secureRemoteUserLogin) {
+				
+				if ($debug) Debug.write("markSessionAsLogedIn == CALL ",canvas.secureHash);
+			 
+				parent.secureLoginByRemote.doCall();
+				
+			} else if (canvas.isinitRoomDirect){
+				parent.getInvitationByHash.doCall();   
+			} else if (canvas.remoteUserLogin) {
+				parent.loginUserByRemote.doCall();   
+			} else if (canvas.directUserLogin) {
+				//show Nick Name or Password Protection Dialog
+				canvas.initroomid = Number(canvas.directRoomId);
+				parent.getRoomById.doCall();
+			}
+		]]>
+		</handler>  
+	</netRemoteCallHib> 
+	
 	<netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions">
 		<handler name="ondata" args="value">
 		<![CDATA[
@@ -637,29 +641,29 @@
 			} else {
 				if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
 			}
-            if (canvas.wicketsid != null) {
-            	parent.loginWicket.doCall();
-            } else { 
-                if (canvas.thishib.loaderVar != null) {
-                   canvas.thishib.loaderVar.close();
-                }
-                //do not show loggin-PopUp for the test-Application
-                if (parent.testAppLoading){ 
-                    canvas.loadNextStepTestApp();
-                } else {
-                    if (canvas.isRemoteUser()){
-                        if (canvas.thishib.loaderVar != null) {
-                          canvas.thishib.loaderVar.setProgress();
-                        }
-                        if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
-                        parent.markSessionAsLogedIn.doCall();
-                    }
-                }
-            }
+			if (canvas.wicketsid != null) {
+				parent.loginWicket.doCall();
+			} else { 
+				if (canvas.thishib.loaderVar != null) {
+				   canvas.thishib.loaderVar.close();
+				}
+				//do not show loggin-PopUp for the test-Application
+				if (parent.testAppLoading){ 
+					canvas.loadNextStepTestApp();
+				} else {
+					if (canvas.isRemoteUser()){
+						if (canvas.thishib.loaderVar != null) {
+						  canvas.thishib.loaderVar.setProgress();
+						}
+						if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
+						parent.markSessionAsLogedIn.doCall();
+					}
+				}
+			}
 		]]>
 		</handler>
 	</netRemoteCallHib>
-    
+	
 	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam><method name="getValue">return canvas.wicketsid;</method></netparam>
@@ -701,29 +705,29 @@
 		</handler>
 	</netRemoteCallHib>
 	
-        <netRemoteCallHib name="setUsernameAndSession" funcname="setUsernameAndSession" remotecontext="$once{ canvas.thishib }" >   
-            <netparam><method name="getValue"> return canvas.sessionId; </method></netparam> 
-            <netparam><method name="getValue">return canvas.userId;</method></netparam>
-            <netparam><method name="getValue">return canvas.currentuser;</method></netparam>
-            <netparam><method name="getValue">return canvas.firstName;</method></netparam>
-            <netparam><method name="getValue">return canvas.lastName;</method></netparam>      
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("setUsernameAndSession: ",canvas.userId,value);
-                if (canvas.thishib.loaderVar != null) {
-	                canvas.thishib.loaderVar.close();
-                }
-            </handler>  
-        </netRemoteCallHib>        
-        
-        <netRemoteCallHib name="testMethod" funcname="testMethod">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("testMethod ",value);                   
-            </handler>  
-        </netRemoteCallHib>
+		<netRemoteCallHib name="setUsernameAndSession" funcname="setUsernameAndSession" remotecontext="$once{ canvas.thishib }" >   
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam> 
+			<netparam><method name="getValue">return canvas.userId;</method></netparam>
+			<netparam><method name="getValue">return canvas.currentuser;</method></netparam>
+			<netparam><method name="getValue">return canvas.firstName;</method></netparam>
+			<netparam><method name="getValue">return canvas.lastName;</method></netparam>	  
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("setUsernameAndSession: ",canvas.userId,value);
+				if (canvas.thishib.loaderVar != null) {
+					canvas.thishib.loaderVar.close();
+				}
+			</handler>  
+		</netRemoteCallHib>		
+		
+		<netRemoteCallHib name="testMethod" funcname="testMethod">
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("testMethod ",value);				   
+			</handler>  
+		</netRemoteCallHib>
 
-        <!--- Notification of new User --> 
+		<!--- Notification of new User --> 
 		<method name="addNewUser" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("addNewUser: ",value);
@@ -733,23 +737,23 @@
 				canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.roomId,'',value.formatedDate,value.userpos,value.usercolor,value);
 			}
 			canvas.setAttribute('numberofpartners',canvas.numberofpartners+1);
-		</method>    
-        
-        <netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    if ($debug) Debug.write("############ getCurrentModeratorList: ",value);
-                    
-                    canvas.analyzeModerationList(value);
-                    
-                    canvas.currentModeratorList = value;
-                    //Update Moderation Flag
-                    canvas.updateModerationFlag();
-                    
-                    var messageAlreadyThrown = false;
-                    
-                    //if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
-                    
+		</method>	
+		
+		<netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
+			<handler name="ondata" args="value">
+				<![CDATA[
+					if ($debug) Debug.write("############ getCurrentModeratorList: ",value);
+					
+					canvas.analyzeModerationList(value);
+					
+					canvas.currentModeratorList = value;
+					//Update Moderation Flag
+					canvas.updateModerationFlag();
+					
+					var messageAlreadyThrown = false;
+					
+					//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
+					
 					if (this.parent.modus == "conference") {
 						if ($debug) Debug.write("############## start broadcasting ");
 						parent.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
@@ -757,26 +761,26 @@
 						parent.setBroadCastingFlag.isAllowedToBroadCastAV = true;
 						parent.setBroadCastingFlag.doCall();
 					}
-                    canvas._drawarea.onopenWhiteBoard.sendEvent();
-                    
-                    if ($debug) Debug.write("room ", canvas.currentRoomObj);
-                    if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
-                    
-                    if (canvas.currentRoomObj.type != 'restricted') {
-                        if (canvas.currentRoomObj.moderated) {
-                            if (value.length == 0 && !messageAlreadyThrown){
-                                new lz.labelerrorPopup(canvas,{errorlabelid:641});
-                            }
-                        } else {
-                            if (value.length == 0 && !messageAlreadyThrown){
-                                new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-                            }
-                        }
-                    }
-                ]]>
-            </handler>
-        </netRemoteCallHib>
-        
+					canvas._drawarea.onopenWhiteBoard.sendEvent();
+					
+					if ($debug) Debug.write("room ", canvas.currentRoomObj);
+					if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
+					
+					if (canvas.currentRoomObj.type != 'restricted') {
+						if (canvas.currentRoomObj.moderated) {
+							if (value.length == 0 && !messageAlreadyThrown){
+								new lz.labelerrorPopup(canvas,{errorlabelid:641});
+							}
+						} else {
+							if (value.length == 0 && !messageAlreadyThrown){
+								new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
+							}
+						}
+					}
+				]]>
+			</handler>
+		</netRemoteCallHib>
+		
 		<method name="newStream" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("newStream: ",value);
@@ -785,44 +789,42 @@
 			}
 			canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight);
 		</method> 
-           
-        <netRemoteCallHib name="closeStream" funcname="closeStream">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("**** closeStream: ",value);
-                if (value == null) {
-                	return;
-                }
-                if (value.screenClient) {
-                    if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
-                    canvas.commonVideoViewContent.closeScreenSharing(value);
-                } else {
-                    //free the VideoContainer
-                    //canvas._videocontainer.closeStreamClient(value.publicSID);
-                    canvas.commonVideoViewContent.closeStreamClient(value.publicSID);
-                    canvas.setAttribute('numberofpartners',canvas.numberofpartners-1);
-                }
-                //TODO:check first current tab
-            </handler>   
-        </netRemoteCallHib>  
-        
-        <!---
-            Event is invoked if a red5 stream sharing is closed
-         -->
-        <netRemoteCallHib name="stopScreenSharingMessage" funcname="stopScreenSharingMessage">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("**** closeStream: ",value);
-                if ($debug) Debug.write(" onResult stopScreenSharingMessage : ",value.streamPublishName); 
-                canvas.commonVideoViewContent.closeScreenSharing(value);
-            </handler>   
-        </netRemoteCallHib> 
-             
-        <netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
-            <handler name="ondata" args="value">
-                if ($debug) Debug.write("**** clientregisterRoom::ondata ", value);
-            </handler>   
-        </netRemoteCallHib>   
+		   
+		<netRemoteCallHib name="closeStream" funcname="closeStream">
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("**** closeStream: ",value);
+				if (value == null) {
+					return;
+				}
+				if (value.screenClient) {
+					if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
+					canvas.commonVideoViewContent.closeScreenSharing(value);
+				} else {
+					//free the VideoContainer
+					//canvas._videocontainer.closeStreamClient(value.publicSID);
+					canvas.commonVideoViewContent.closeStreamClient(value.publicSID);
+					canvas.setAttribute('numberofpartners',canvas.numberofpartners-1);
+				}
+				//TODO:check first current tab
+			</handler>   
+		</netRemoteCallHib>  
+		
+		<!---
+			Event is invoked if a red5 stream sharing is closed
+		 -->
+		<method name="stopScreenSharingMessage" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("**** closeStream: ",value);
+			if ($debug) Debug.write(" onResult stopScreenSharingMessage : ",value.streamPublishName);
+			canvas.commonVideoViewContent.closeScreenSharing(value);
+		</method> 
+			 
+		<netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
+			<handler name="ondata" args="value">
+				if ($debug) Debug.write("**** clientregisterRoom::ondata ", value);
+			</handler>   
+		</netRemoteCallHib>   
 
 		<method name="roomDisconnectUser" args="value,id">
 			canvas._videocontainer.disconnectclient(id);
@@ -856,81 +858,81 @@
 			this.roomDisconnectUser(value, value.publicSID);
 		]]>
 		</method>
-        
-        <netRemoteCallHib name="stopRecordingMessage" funcname="stopRecordingMessage">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                canvas._mymod.recordingUser = null;
-                canvas._mymod.setMessage();                 
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="stopPublishingMessage" funcname="stopPublishingMessage">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
+		
+		<netRemoteCallHib name="stopRecordingMessage" funcname="stopRecordingMessage">
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				canvas._mymod.recordingUser = null;
+				canvas._mymod.setMessage();				 
+			</handler>   
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="stopPublishingMessage" funcname="stopPublishingMessage">
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
 				canvas._mymod.publishingObj = null;
-                canvas._mymod.setMessage();                 
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="setSyncFlag" funcname="setSyncFlag" >      
-            <handler name="ondata" args="value">
-                if ($debug) Debug.write("setSyncFlag: ",value);
-            </handler>
-        </netRemoteCallHib>   
-             
-        <netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >      
-            <handler name="ondata" args="value">
-                if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
-                parent.roomDisconnectUser(value, value.broadCastID);
-            </handler>
-        </netRemoteCallHib>             
+				canvas._mymod.setMessage();				 
+			</handler>   
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="setSyncFlag" funcname="setSyncFlag" >	  
+			<handler name="ondata" args="value">
+				if ($debug) Debug.write("setSyncFlag: ",value);
+			</handler>
+		</netRemoteCallHib>   
+			 
+		<netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >	  
+			<handler name="ondata" args="value">
+				if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
+				parent.roomDisconnectUser(value, value.broadCastID);
+			</handler>
+		</netRemoteCallHib>			 
   
-        <method name="setUserStatus" args="ctx,user,o">
-            <![CDATA[
+		<method name="setUserStatus" args="ctx,user,o">
+			<![CDATA[
 				if (!o || !user) return;
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) {
-                    Debug.write("setUserStatus: ", user);
-                    Debug.write("setUserStatus: ", o.param);
-                }
-                var aObj = o.param[3];
-                var usPoint = null;
-                if ($debug) Debug.write("drawObj: ", aObj[0]);
-                switch(aObj[0]) {
-                    case 'line':
-                    case 'uline':
-                        usPoint = {x: aObj[aObj.length - 5] + aObj[6], y: aObj[aObj.length - 4] + aObj[7]};
-                        break;
-                    case 'letter':
-                    case 'rectangle':
-                    case 'ellipse':
-                    case 'clipart':
-                        usPoint = {x: aObj[aObj.length - 3] + aObj[aObj.length - 5], y: aObj[aObj.length - 2] + aObj[aObj.length - 4]};
-                        break;
-                    case 'paint':
-                        var points = aObj[1];
-                        //points are empty on 'paint' move
-                        usPoint = {
-                            x: aObj[aObj.length - 5] + (points.length ? points[points.length - 1][3] : aObj[aObj.length - 3])
-                            , y: aObj[aObj.length - 4] + (points.length ? points[points.length - 1][4] : aObj[aObj.length - 2])};
-                        break;
-                    case 'drawarrow':
-                        usPoint = {x: aObj[aObj.length - 5] + aObj[9], y: aObj[aObj.length - 4] + aObj[10]};
-                        break;
-                }
-                if (usPoint) {
-                    var us = new lz.userStatus(ctx, {
-                        width:100
-                        , x: usPoint.x
-                        , y: usPoint.y - 25 //little above
-                        , queueable: false
-                        , statusText: user.firstname + " " + user.lastname
-                        });
-                    if ($debug) Debug.write("us: ", us, "; usPoint: ", usPoint);
-                }
-            ]]>
-        </method>
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) {
+					Debug.write("setUserStatus: ", user);
+					Debug.write("setUserStatus: ", o.param);
+				}
+				var aObj = o.param[3];
+				var usPoint = null;
+				if ($debug) Debug.write("drawObj: ", aObj[0]);
+				switch(aObj[0]) {
+					case 'line':
+					case 'uline':
+						usPoint = {x: aObj[aObj.length - 5] + aObj[6], y: aObj[aObj.length - 4] + aObj[7]};
+						break;
+					case 'letter':
+					case 'rectangle':
+					case 'ellipse':
+					case 'clipart':
+						usPoint = {x: aObj[aObj.length - 3] + aObj[aObj.length - 5], y: aObj[aObj.length - 2] + aObj[aObj.length - 4]};
+						break;
+					case 'paint':
+						var points = aObj[1];
+						//points are empty on 'paint' move
+						usPoint = {
+							x: aObj[aObj.length - 5] + (points.length ? points[points.length - 1][3] : aObj[aObj.length - 3])
+							, y: aObj[aObj.length - 4] + (points.length ? points[points.length - 1][4] : aObj[aObj.length - 2])};
+						break;
+					case 'drawarrow':
+						usPoint = {x: aObj[aObj.length - 5] + aObj[9], y: aObj[aObj.length - 4] + aObj[10]};
+						break;
+				}
+				if (usPoint) {
+					var us = new lz.userStatus(ctx, {
+						width:100
+						, x: usPoint.x
+						, y: usPoint.y - 25 //little above
+						, queueable: false
+						, statusText: user.firstname + " " + user.lastname
+						});
+					if ($debug) Debug.write("us: ", us, "; usPoint: ", usPoint);
+				}
+			]]>
+		</method>
 
 		<method name="sendVarsToWhiteboardById" args="value">
 		<![CDATA[
@@ -940,7 +942,7 @@
 			canvas._drawarea.parent.parent.parent.sendWatchObjectByWhiteboard(value[1]);
 		]]>
 		</method> 
-        
+		
 		<method name="loadWmlToWhiteboardById" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -948,53 +950,53 @@
 			canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
 		]]>
 		</method>
-        
-        <!--
-            Adds this User to the List of current Moderators
-         -->
-        <netRemoteCallHib name="addModerator" funcname="addModerator">
-            <attribute name="publicSIDOfNewModerator" value="0" type="string" />
-            <netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write(" addModerator : ",value);                   
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="removeModerator" funcname="removeModerator">
-            <attribute name="publicSIDOfNewModerator" value="0" type="string" />
-            <netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write(" onResult setModerator : ",value);                   
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <!--
-        public synchronized Long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer podId) 
-         -->
-        <netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
-            <attribute name="publicSIDOfNewModerator" value="0" type="string" />
-            <attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
-            <attribute name="canVideo" value="false" type="boolean" />
-            <attribute name="avsettings" value="av" type="string" />
-            <attribute name="interviewPodId" value="0" type="number" />
-            <netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-            <netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
-            <netparam><method name="getValue">return parent.canVideo;</method></netparam>
-            <netparam><method name="getValue">return parent.interviewPodId;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write(" onResult setModerator : ",value);                   
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
+		
+		<!--
+			Adds this User to the List of current Moderators
+		 -->
+		<netRemoteCallHib name="addModerator" funcname="addModerator">
+			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
+			<netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write(" addModerator : ",value);				   
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="removeModerator" funcname="removeModerator">
+			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
+			<netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write(" onResult setModerator : ",value);				   
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
+		<!--
+		public synchronized Long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer podId) 
+		 -->
+		<netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
+			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
+			<attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
+			<attribute name="canVideo" value="false" type="boolean" />
+			<attribute name="avsettings" value="av" type="string" />
+			<attribute name="interviewPodId" value="0" type="number" />
+			<netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
+			<netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
+			<netparam><method name="getValue">return parent.canVideo;</method></netparam>
+			<netparam><method name="getValue">return parent.interviewPodId;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write(" onResult setModerator : ",value);				   
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
 		<method name="setNewBroadCastingFlag" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -1019,14 +1021,14 @@
 		]]>
 		</method>
 
-        <netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
-            <attribute name="publicSID" value="0" type="string" />
-            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-            <method name="setExclusiveAudio" args="tPublicSID">
-                this.publicSID = tPublicSID;
-                this.doCall();
-            </method>
-        </netRemoteCallHib>
+		<netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
+			<attribute name="publicSID" value="0" type="string" />
+			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+			<method name="setExclusiveAudio" args="tPublicSID">
+				this.publicSID = tPublicSID;
+				this.doCall();
+			</method>
+		</netRemoteCallHib>
 
 		<method name="receiveExclusiveAudioFlag" args="value">
 		<![CDATA[
@@ -1035,139 +1037,131 @@
 		]]>
 		</method>
 
-        <netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
-            <attribute name="publicSID" value="" type="string" />
-            <attribute name="mute" value="false" type="boolean" />
-            <event name="onMute" />
-            <method name="setMute" args="tPublicSID,tMute">
-                this.publicSID = tPublicSID;
-                this.mute = tMute;
-                var obj = new Array();
-                obj["mute"] = tMute;
-                obj["publicSID"] = tPublicSID;
-                this.onMute.sendEvent(obj);
-                this.doCall();
-            </method>
-            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-            <netparam><method name="getValue">return parent.mute;</method></netparam>
-        </netRemoteCallHib>
+		<netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
+			<attribute name="publicSID" value="" type="string" />
+			<attribute name="mute" value="false" type="boolean" />
+			<event name="onMute" />
+			<method name="setMute" args="tPublicSID,tMute">
+				this.publicSID = tPublicSID;
+				this.mute = tMute;
+				var obj = new Array();
+				obj["mute"] = tMute;
+				obj["publicSID"] = tPublicSID;
+				this.onMute.sendEvent(obj);
+				this.doCall();
+			</method>
+			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+			<netparam><method name="getValue">return parent.mute;</method></netparam>
+		</netRemoteCallHib>
 
-        <netRemoteCallHib name="newRed5ScreenCursor" funcname="newRed5ScreenCursor">
-            <netparam><method name="getValue">return null;</method></netparam>
+		<method name="newRed5ScreenCursor" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			//if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);
+			canvas.commonVideoViewContent.updateCursorScreenSharing(value);
+		]]>
+		</method>
+		
+		<!--
+			Red5 Screen Sharing
+		 -->
+		<method name="newScreenSharing" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			//if ($debug) Debug.write(" onResult newScreenSharing 1 : ",value);
+			//if ($debug) Debug.write(" onResult newScreenSharing 2 : ",value.streamid);
+			//if ($debug) Debug.write(" onResult newScreenSharing 3 : ",canvas.streamid);
+			if ($debug) Debug.write(" onResult newScreenSharing 4 : ",value.streamPublishName);
+			if ($debug) Debug.write(" onResult newcreenSharing 5 : ",canvas.publicSID);
+			
+			canvas.commonVideoViewContent.newScreenSharing(value);
+		]]>
+		</method>
+		
+		<netRemoteCallHib name="checkScreenSharing" funcname="checkScreenSharing">
 			<handler name="ondata" args="value">
 			<![CDATA[
 				//The onResult-Handler will be called be the rtmpconnection
-				//if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);
-				canvas.commonVideoViewContent.updateCursorScreenSharing(value);
+				if ($debug) Debug.write(" onResult checkScreenSharing : ",value);  
+				if (value != null) {
+					canvas.commonVideoViewContent.newScreenSharings(value);
+				} else {
+					if ($debug) Debug.warn("Self Screen Sharing");
+				}
 			]]>
 			</handler>   
-        </netRemoteCallHib>
-        
-        
-        <!--
-            Red5 Screen Sharing
-         -->
-        <netRemoteCallHib name="newScreenSharing" funcname="newScreenSharing">
-            <netparam><method name="getValue">return null;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                
-                    //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult newScreenSharing 1 : ",value);  
-                    //if ($debug) Debug.write(" onResult newScreenSharing 2 : ",value.streamid); 
-                    //if ($debug) Debug.write(" onResult newScreenSharing 3 : ",canvas.streamid); 
-                    if ($debug) Debug.write(" onResult newScreenSharing 4 : ",value.streamPublishName); 
-                    if ($debug) Debug.write(" onResult newcreenSharing 5 : ",canvas.publicSID); 
-                    
-                    canvas.commonVideoViewContent.newScreenSharing(value,canvas.currentBaseConferenceRoom._chatPanelStrict.height);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="checkScreenSharing" funcname="checkScreenSharing">
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write(" onResult checkScreenSharing : ",value);  
-                    if (value != null) {
-                    	canvas.commonVideoViewContent.newScreenSharings(value,canvas.currentBaseConferenceRoom._chatPanelStrict.height);
-                    } else {
-                        if ($debug) Debug.warn("Self Screen Sharing");
-                    }
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <!--
-        public synchronized Long applyForModeration(String publicSID)
-         -->
-        <netRemoteCallHib name="applyForModeration" funcname="applyForModeration"
-                       remotecontext="$once{ canvas.thishib }">
-            <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("applyForModeration : ",value);
-                    if (value == 1) {
-                        //Do add direct
-                        parent.addModerator.publicSIDOfNewModerator = canvas.publicSID;
-                        parent.addModerator.doCall();
-                    } else if (value == 2) {
-                        //Ask the Moderator
-                        var tDate = new Date();
-                        parent.sendMessageWithClient.sendMessage("applyForModeration",tDate.getTime());
-                    } else if (value == 3) {
-                        new lz.labelerrorPopup(canvas,{errorlabelid:696});
-                    }
-                ]]>
-            </handler>
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
-                       remotecontext="$once{ canvas.thishib }">
-            <attribute name="publicSID" value="" type="string" />
-            <attribute name="canDraw" value="true" type="boolean" />
-            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-            <netparam><method name="getValue">return parent.canDraw;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("setCanDraw : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="setCanShare" funcname="whiteboardservice.setCanShare"
-                       remotecontext="$once{ canvas.thishib }">
-            <attribute name="publicSID" value="" type="string" />
-            <attribute name="canShare" value="true" type="boolean" />
-            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-            <netparam><method name="getValue">return parent.canShare;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("setCanShare : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
-        <netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
-                       remotecontext="$once{ canvas.thishib }">
-            <attribute name="publicSID" value="" type="string" />
-            <attribute name="canRemote" value="true" type="boolean" />
-            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-            <netparam><method name="getValue">return parent.canRemote;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("setCanRemote : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
+		</netRemoteCallHib>
+		
+		<!--
+		public synchronized Long applyForModeration(String publicSID)
+		 -->
+		<netRemoteCallHib name="applyForModeration" funcname="applyForModeration"
+					   remotecontext="$once{ canvas.thishib }">
+			<netparam><method name="getValue">return canvas.publicSID;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("applyForModeration : ",value);
+					if (value == 1) {
+						//Do add direct
+						parent.addModerator.publicSIDOfNewModerator = canvas.publicSID;
+						parent.addModerator.doCall();
+					} else if (value == 2) {
+						//Ask the Moderator
+						var tDate = new Date();
+						parent.sendMessageWithClient.sendMessage("applyForModeration",tDate.getTime());
+					} else if (value == 3) {
+						new lz.labelerrorPopup(canvas,{errorlabelid:696});
+					}
+				]]>
+			</handler>
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
+					   remotecontext="$once{ canvas.thishib }">
+			<attribute name="publicSID" value="" type="string" />
+			<attribute name="canDraw" value="true" type="boolean" />
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+			<netparam><method name="getValue">return parent.canDraw;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("setCanDraw : ",value);
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="setCanShare" funcname="whiteboardservice.setCanShare"
+					   remotecontext="$once{ canvas.thishib }">
+			<attribute name="publicSID" value="" type="string" />
+			<attribute name="canShare" value="true" type="boolean" />
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+			<netparam><method name="getValue">return parent.canShare;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("setCanShare : ",value);
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
+		<netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
+					   remotecontext="$once{ canvas.thishib }">
+			<attribute name="publicSID" value="" type="string" />
+			<attribute name="canRemote" value="true" type="boolean" />
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+			<netparam><method name="getValue">return parent.canRemote;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("setCanRemote : ",value);
+				]]>
+			</handler>   
+		</netRemoteCallHib>
+		
 		<method name="setNewModeratorByList" args="value">
 		<![CDATA[
 			if ($debug) Debug.write("setNewModeratorByList ",value);
@@ -1179,28 +1173,28 @@
 			canvas.updateModerationFlag();
 		]]>
 		</method> 
-        
-        <netRemoteCallHib name="sendMessage" funcname="sendMessage">
-            <netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("getValue : ",value);
-                
-                ]]>
-            </handler>   
-        </netRemoteCallHib> 
-        
-        <netRemoteCallHib name="sendMessageAll" funcname="sendMessageAll">
-            <netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("getValue : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib> 
-        
+		
+		<netRemoteCallHib name="sendMessage" funcname="sendMessage">
+			<netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write("getValue : ",value);
+				
+				]]>
+			</handler>   
+		</netRemoteCallHib> 
+		
+		<netRemoteCallHib name="sendMessageAll" funcname="sendMessageAll">
+			<netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write("getValue : ",value);
+				]]>
+			</handler>   
+		</netRemoteCallHib> 
+		
 		<method name="sendVarsToMessage" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -1234,60 +1228,60 @@
 		]]>
 		</method>
 		   
-        <netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
-            <netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("sendVarsModeratorGeneral : ",value);
-                
-                ]]>
-            </handler>   
-        </netRemoteCallHib>  
+		<netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
+			<netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
+			<handler name="ondata" args="value">
+				<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write("sendVarsModeratorGeneral : ",value);
+				
+				]]>
+			</handler>   
+		</netRemoteCallHib>  
 
 		<netRemoteCallHib name="sendChatMessageWithClient"
 			funcname="chatservice.sendMessageWithClient" remotecontext="$once{ canvas.thishib }">
-            <attribute name="messageObj" value="null" />
+			<attribute name="messageObj" value="null" />
 			<netparam><method name="getValue">return parent.messageObj;</method></netparam>
 
-            <method name="sendMessage" args="messageObject">
-                this.messageObj = messageObject;
-                this.doCall();
-            </method>
+			<method name="sendMessage" args="messageObject">
+				this.messageObj = messageObject;
+				this.doCall();
+			</method>
 			<handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
-                ]]>
+				<![CDATA[
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
+				]]>
 			</handler>
 		</netRemoteCallHib>
 		
-        <netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
-                          remotecontext="$once{ canvas.thishib }" >  
-            
-            <attribute name="messageObj" value="null" />
-            <method name="sendMessage" args="typeName,messageObject">
-                this.messageObj = new Object();
-                this.messageObj[0] = typeName;
-                this.messageObj[1] = messageObject;
-                this.doCall();
-            </method>
-            
-            <method name="sendAdvMessage" args="typeName,messageObject,tStamp">
-                this.messageObj = new Object();
-                this.messageObj[0] = typeName;
-                this.messageObj[1] = messageObject;
-                this.messageObj[2] = tStamp;
-                this.doCall();
-            </method>
-            
-            <netparam name="vars"><method name="getValue">return parent.messageObj;</method></netparam>
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("sendMessageWithClient : ",value);
-            </handler>
-        </netRemoteCallHib>
-          
+		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
+						  remotecontext="$once{ canvas.thishib }" >  
+			
+			<attribute name="messageObj" value="null" />
+			<method name="sendMessage" args="typeName,messageObject">
+				this.messageObj = new Object();
+				this.messageObj[0] = typeName;
+				this.messageObj[1] = messageObject;
+				this.doCall();
+			</method>
+			
+			<method name="sendAdvMessage" args="typeName,messageObject,tStamp">
+				this.messageObj = new Object();
+				this.messageObj[0] = typeName;
+				this.messageObj[1] = messageObject;
+				this.messageObj[2] = tStamp;
+				this.doCall();
+			</method>
+			
+			<netparam name="vars"><method name="getValue">return parent.messageObj;</method></netparam>
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				//Debug.write("sendMessageWithClient : ",value);
+			</handler>
+		</netRemoteCallHib>
+		  
 		<method name="sendVarsToMessageWithClient" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -1328,9 +1322,9 @@
 				canvas.commonVideoViewContent.setAVSettingsToClient(value.client);
 			} else if (value.message[0]=='whiteboard'){
 				//if (value.message[1]=='wmlloadcomplete'){
-				//    canvas._drawarea.sendCompleteWmlLoadedRClient(value.client);
+				//	canvas._drawarea.sendCompleteWmlLoadedRClient(value.client);
 				//} else if (value.message[1]=='wmlsynccomplete'){
-				//    canvas._drawarea.sendCompleteWmlSync(value.client);
+				//	canvas._drawarea.sendCompleteWmlSync(value.client);
 				//} else
 				if (value.message[1]=='imageloadcomplete'){
 					canvas._drawarea.sendCompleteImageLoadedRClient(value.client);
@@ -1415,8 +1409,8 @@
 				if ($debug) Debug.warn("sendVarsToMessageWithClient unkown message ",value);
 			}
 		]]>
-		</method>     
-    
+		</method>	 
+	
 		<method name="newMessageByRoomAndDomain" args="value">
 		<![CDATA[
 			if (value[0]=='closeprivatechat'){
@@ -1442,16 +1436,16 @@
 				if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
 			}
 		]]>
-		</method>      
-               
+		</method>	  
+			   
 		<netRemoteCallHib name="newPoll" funcname="newPoll">
-		    <switch>
-		        <when property="$as3">
-		            <passthrough>
+			<switch>
+				<when property="$as3">
+					<passthrough>
 						import flash.external.ExternalInterface;
-		            </passthrough>
-		        </when>
-		    </switch>
+					</passthrough>
+				</when>
+			</switch>
 			<handler name="ondata" args="value">
 			<![CDATA[
 				//The onResult-Handler will be called by the rtmpconnection
@@ -1461,8 +1455,8 @@
 				}
 			]]>
 			</handler>
-		</netRemoteCallHib>                    
-                                
+		</netRemoteCallHib>					
+								
 		<method name="sendVarsToModeratorGeneral" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -1474,48 +1468,48 @@
 				}
 			}
 		]]>
-		</method>       
-        
+		</method>	   
+		
    <!-- recordContentings Notifications -->
-    <netRemoteCallHib name="stopedRecording" funcname="stopedRecording" >      
-        <handler name="ondata" args="value">
-            if ($debug) Debug.write("stopedRecording: ",value);
-            canvas._mymod.recordingUser = null;
-            canvas._mymod.setMessage();
-        </handler>
-    </netRemoteCallHib>
-    
+	<netRemoteCallHib name="stopedRecording" funcname="stopedRecording" >	  
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("stopedRecording: ",value);
+			canvas._mymod.recordingUser = null;
+			canvas._mymod.setMessage();
+		</handler>
+	</netRemoteCallHib>
+	
 	<method name="startedRecording" args="value">
 		if ($debug) Debug.write("startedRecording: ",value);
 		canvas._mymod.recordingUser = value;
 		canvas._mymod.setMessage();
 	</method>
-    
-    <netRemoteCallHib name="checkLzRecording" funcname="recordingservice.checkLzRecording" >      
-        <handler name="ondata" args="value">
-            if ($debug) Debug.write("checkLzRecording: ",value);
-            if (value != null) {
-                canvas._mymod.recordingUser = value;
-                canvas._mymod.setMessage();
-            }
-            parent.checkScreenSharing.doCall();
-        </handler>
-    </netRemoteCallHib>
-    
-    <netRemoteCallHib name="startedPublishing" funcname="startedPublishing" >      
-        <handler name="ondata" args="value">
-            if ($debug) Debug.write("startedPublishing: ", value);
-            canvas._mymod.publishingObj = {user: value[0], url: value[1]};
-            canvas._mymod.setMessage();
-        </handler>
-    </netRemoteCallHib>
-    
+	
+	<netRemoteCallHib name="checkLzRecording" funcname="recordingservice.checkLzRecording" >	  
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("checkLzRecording: ",value);
+			if (value != null) {
+				canvas._mymod.recordingUser = value;
+				canvas._mymod.setMessage();
+			}
+			parent.checkScreenSharing.doCall();
+		</handler>
+	</netRemoteCallHib>
+	
+	<netRemoteCallHib name="startedPublishing" funcname="startedPublishing" >	  
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("startedPublishing: ", value);
+			canvas._mymod.publishingObj = {user: value[0], url: value[1]};
+			canvas._mymod.setMessage();
+		</handler>
+	</netRemoteCallHib>
+	
 	<method name="roomConnect" args="value">
 		if ($debug) Debug.write("roomConnect: ",value);
 		canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.username,
 				'',value.formatedDate,value.userpos,value.usercolor,value);
 	</method>
-    
+	
 	<netRemoteCallHib name="nickNameSet" funcname="nickNameSet" >
 		<handler name="ondata" args="value">
 			if ($debug) Debug.write("nickNameSet: ", value);
@@ -1529,8 +1523,8 @@
 			}
 		</handler>
 	</netRemoteCallHib>
-    
-    <!-- Whiteboard sync Events -->
+	
+	<!-- Whiteboard sync Events -->
 	<method name="sendSyncFlag" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
@@ -1539,8 +1533,8 @@
 			canvas.syncWindow = new lz.syncWin(canvas.main_content._content.inner, {labelid: 558, labeliderror: 559});
 		}
 	]]>
-	</method>     
-    
+	</method>	 
+	
 	<method name="sendSyncCompleteFlag" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
@@ -1551,8 +1545,8 @@
 		}
 	]]>
 	</method>  
-    
-    <!-- Whiteboard Object Sync Process -->
+	
+	<!-- Whiteboard Object Sync Process -->
 	<method name="sendObjectSyncFlag" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
@@ -1561,8 +1555,8 @@
 			canvas.syncImageWindow = new lz.syncWin(canvas.main_content._content.inner, {labeliderror: 591});
 		}
 	]]>
-	</method>     
-    
+	</method>	 
+	
 	<method name="sendObjectSyncCompleteFlag" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
@@ -1573,8 +1567,8 @@
 		}
 	]]>
 	</method>  
-    
-    <!-- Recording of Meetings -->
+	
+	<!-- Recording of Meetings -->
 	<method name="interviewStatus" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
@@ -1582,37 +1576,35 @@
 		canvas._drawarea.reloadStatus();
 	]]>
 	</method>  
-    
-    <netRemoteCallHib name="clearChatContent" funcname="clearChatContent">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                canvas._chatcontent.reload();
-            ]]>
-        </handler>   
-    </netRemoteCallHib> 
-    
-    <netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
-                   remotecontext="$once{ canvas.thishib }">
-        <attribute name="publicSID" value="" type="string" />
-        <attribute name="canGiveAudio" value="true" type="boolean" />
-        <method name="sendValue" args="publicSID,giveAudio">
-        	this.publicSID = publicSID;
-        	this.canGiveAudio = giveAudio;
-        	this.doCall();
-        </method>
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.publicSID;</method></netparam>
-        <netparam><method name="getValue">return parent.canGiveAudio;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("setCanGiveAudio : ",value);
-            ]]>
-        </handler>
-    </netRemoteCallHib>
-    
-    
+	
+	<netRemoteCallHib name="clearChatContent" funcname="clearChatContent">
+		<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				canvas._chatcontent.reload();
+			]]>
+		</handler>   
+	</netRemoteCallHib> 
+	
+	<netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
+				   remotecontext="$once{ canvas.thishib }">
+		<attribute name="publicSID" value="" type="string" />
+		<attribute name="canGiveAudio" value="true" type="boolean" />
+		<method name="sendValue" args="publicSID,giveAudio">
+			this.publicSID = publicSID;
+			this.canGiveAudio = giveAudio;
+			this.doCall();
+		</method>
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		<netparam><method name="getValue">return parent.publicSID;</method></netparam>
+		<netparam><method name="getValue">return parent.canGiveAudio;</method></netparam>
+		<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("setCanGiveAudio : ",value);
+			]]>
+		</handler>
+	</netRemoteCallHib>
 </class>
 
 <hibRtmpConnection name="thishib" id="hib" />

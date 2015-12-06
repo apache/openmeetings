@@ -98,7 +98,8 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			String baseUrl = cfgDao.getBaseUrl();
 			URL url = new URL(baseUrl);
 			Room room = getBean(RoomDao.class).get(roomId);
-			Client rc = getClient(getParam(getComponent(), PARAM_PUBLIC_SID).toString());
+			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
+			Client rc = getClient(publicSid);
 			SessionManager sessionManager = getBean(SessionManager.class);
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1);
@@ -118,7 +119,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$host", url.getHost())
 					.replace("$app", path + roomId)
 					.replace("$userId", "" + getUserId())
-					.replace("$publicSid", getSid())
+					.replace("$publicSid", publicSid)
 					.replace("$labels", "<![CDATA[" + getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
 							,  741,  742,  844,  869,  870

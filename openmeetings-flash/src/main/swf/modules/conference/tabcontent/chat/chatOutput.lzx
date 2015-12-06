@@ -114,12 +114,12 @@
     
     <view name="_cbtext" width="${ parent.width }" layout="axis:y;spacing:0" >
     	<method name="clearChatOutput">
-    		<![CDATA[
-    			while (this.subviews.length>0){
-    				this.subviews[0].destroy();
-    			}
-    		]]>
-    	</method>
+		<![CDATA[
+			while (this.subviews.length > 0){
+				this.subviews[0].destroy();
+			}
+		]]>
+		</method>
     </view>
     
     <om_vscrollbar name="myscrollbar" />

@@ -554,7 +554,9 @@
 			var item = canvas.removeModeratorList[i];
 			item.isMod = false;
 			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(item.publicSID);
-			u.update(item, false);
+			if (u != null) {
+				u.update(item, false);
+			}
 		}
 		var isCurrentModerator = false;
 		if ($debug) Debug.write("updateModerationFlag", canvas.currentModeratorList);
