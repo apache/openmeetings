@@ -210,7 +210,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
 			Map<String, Object> cursorPosition = new HashMap<String, Object>();
-			cursorPosition.put("publicSID", publishName);
+			cursorPosition.put("streamPublishName", publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
