@@ -799,11 +799,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public void setNewCursorPosition(Object item) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			@SuppressWarnings("rawtypes")
 			Map cursor = (Map) item;
-			cursor.put("streamPublishName", currentClient.getStreamPublishName());
+			cursor.put("publicSID", c.getStreamPublishName());
 
 			sendMessageToCurrentScope("newRed5ScreenCursor", cursor, true, false);
 		} catch (Exception err) {
@@ -1726,7 +1726,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							if (filter(conn)) {
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[]{newMessage}, ScopeApplicationAdapter.this);
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 							count++;
 						}
 					}

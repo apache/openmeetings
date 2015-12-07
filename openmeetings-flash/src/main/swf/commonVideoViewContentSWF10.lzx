@@ -648,6 +648,7 @@
 			if (canvas.screenSharingDialogContainer == null) {
 				canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
 			}
+			if ($debug) Debug.warn("New Screen Sharing", value);
 			new lz.screenSharingDialog(canvas.screenSharingDialogContainer, {initObject: value}); 
 		} else {
 			if ($debug) Debug.warn("Self Screen Sharing");
@@ -698,7 +699,7 @@
 	</method>
 	
 	<!---
-		change Screen Sharing farme height 
+		change Screen Sharing frame height 
 	 -->
 	<method name="hideChatContent" args="hide">
  	<![CDATA[
@@ -714,6 +715,7 @@
 	 -->
 	<method name="updateCursorScreenSharing" args="value">
 	<![CDATA[
+		//if ($debug) Debug.write("updateCursorScreenSharing ", value);
 		if (canvas.screenSharingDialogContainer != null) {
 			var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
 			if (obj) {
