@@ -79,8 +79,8 @@
 						<configuration>
 							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<ant antfile="${basedir}/openlaszlo.xml" target="compile.laszlo.main.debug"/>
-								<!--ant antfile="${basedir}/openlaszlo.xml" target="client.only"/-->
+								<!--ant antfile="${basedir}/openlaszlo.xml" target="compile.laszlo.main.debug"/-->
+								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
 								<!--ant antfile="${basedir}/openlaszlo.xml" target="client.debug.only"/-->
 							</target>
 							<skip>${om.quick.build}</skip>
