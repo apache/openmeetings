@@ -64,7 +64,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		rtmp, rtmpt, rtmpe, rtmps
 	}
 	private IScreenShare instance = null;
-	private IScreenShare controlInstance = null;
 	private Protocol protocol;
 	private String host;
 	private String app;
@@ -145,28 +144,21 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				switch (protocol) {
 					case rtmp:
 						instance = new RTMPScreenShare(this);
-						controlInstance = new RTMPScreenShare(this);
 						break;
 					case rtmpt:
 						instance = new RTMPTScreenShare(this);
-						controlInstance = new RTMPTScreenShare(this);
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
 						client.setKeystoreBytes(Hex.decodeHex(args[13].toCharArray()));
 						client.setKeyStorePassword(args[14]);
 						instance = client;
-						RTMPSScreenShare controlClient = new RTMPSScreenShare(this);
-						controlClient.setKeystoreBytes(Hex.decodeHex(args[13].toCharArray()));
-						controlClient.setKeyStorePassword(args[14]);
-						controlInstance = controlClient;
 						break;
 					case rtmpe:
 					default:
 						throw new Exception("Unsupported protocol");
 				}
 				instance.setServiceProvider(this);
-				controlInstance.setServiceProvider(this);
 				log.debug(String.format("host: %s, app: %s, port: %s, publish: %s", host, port, app, publishName));
 			} else {
 				System.exit(0);
@@ -210,15 +202,15 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
 			Map<String, Object> cursorPosition = new HashMap<String, Object>();
-			cursorPosition.put("streamPublishName", publishName);
+			cursorPosition.put("publicSID", publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
-			if (controlInstance.getConnection() != null) {
+			if (instance.getConnection() != null) {
 				if (Red5.getConnectionLocal() == null) {
-					Red5.setConnectionLocal(controlInstance.getConnection());
+					Red5.setConnectionLocal(instance.getConnection());
 				}
-				controlInstance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, this);
+				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, this);
 			}
 		} catch (NullPointerException npe) {
 			//noop
@@ -232,7 +224,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		log.debug("########## setConnectionAsSharingClient");
 		try {
 			if (Red5.getConnectionLocal() == null) {
-				Red5.setConnectionLocal(controlInstance.getConnection());
+				Red5.setConnectionLocal(instance.getConnection());
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("screenX", spinnerX);
@@ -243,7 +235,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			map.put("screenWidth", scaledWidth);
 			map.put("screenHeight", scaledHeight);
-
+			map.put("publishName", publishName);
 			map.put("startRecording", startRecording);
 			map.put("startStreaming", startStreaming);
 			map.put("startPublishing", startPublishing);
@@ -251,9 +243,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put("publishingApp", frame.getPublishApp());
 			map.put("publishingId", frame.getPublishId());
 			if (Red5.getConnectionLocal() == null) {
-				Red5.setConnectionLocal(controlInstance.getConnection());
+				Red5.setConnectionLocal(instance.getConnection());
 			}
-			controlInstance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
+			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
 			frame.setStatus("Error: " + err.getLocalizedMessage());
 			log.error("[setConnectionAsSharingClient]", err);
@@ -275,12 +267,12 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		captureScreenStart();
 	}
 	
-	private void connect(String parentSid, boolean control) {
+	private void connect(String parentSid) {
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
 		map.put("userId", userId);
 		map.put("parentSid", parentSid);
-		(control ? controlInstance : instance).connect(host, port, map, this);
+		instance.connect(host, port, map, this);
 	}
 	
 	private void captureScreenStart() {
@@ -288,7 +280,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			log.debug("captureScreenStart");
 			
 			if (!isConnected) {
-				connect(publishName, false);
+				connect(publishName);
 			} else {
 				setConnectionAsSharingClient();
 			}
@@ -321,9 +313,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put(action, true);
 
 			if (Red5.getConnectionLocal() == null) {
-				Red5.setConnectionLocal(controlInstance.getConnection());
+				Red5.setConnectionLocal(instance.getConnection());
 			}
-			controlInstance.invoke("screenSharerAction", new Object[] { map }, this);
+			instance.invoke("screenSharerAction", new Object[] { map }, this);
 		} catch (Exception err) {
 			log.error("captureScreenStop Exception: ", err);
 			frame.setStatus("Exception: " + err);
@@ -367,11 +359,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 		
 		String method = invoke.getCall().getServiceMethodName();
-		if ("stopStream".equals(method)) {
-			stopStream();
-		} else if ("sendRemoteCursorEvent".equals(method)) {
-			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
-		} else if ("screenSharerAction".equals(method)) {
+		if ("screenSharerAction".equals(method)) {
 			Object[] args = invoke.getCall().getArguments();
 			if (args != null && args.length > 0) {
 				@SuppressWarnings("unchecked")
@@ -396,7 +384,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			isConnected = false;
 
 			instance.disconnect();
-			controlInstance.disconnect();
 			setReadyToRecord(false);
 			getCapture().setStartPublish(false);
 			getCapture().release();
@@ -404,7 +391,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		} catch (Exception e) {
 			log.error("ScreenShare stopStream exception " + e);
 		}
-
 	}
 
 	public void onStreamEvent(Notify notify) {
@@ -477,7 +463,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 				int key = getInt(returnMap, "k");
 
-				// logger.debug("key onkeydown -1 "+key);
+				log.trace("KEY EVENT!!!!!  key onkeydown -1 " + key);
 				boolean doAction = true;
 
 				if (key == 221) {
@@ -492,7 +478,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						robot.keyRelease(storedKey);
 					}
 
-					currentPressedKeys = new HashMap<Integer, Boolean>();
+					currentPressedKeys.clear();
 
 					pressSpecialSign(charValue, robot);
 				} else if (key == 188) {
@@ -535,7 +521,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					key = KeyEvent.VK_ENTER;
 				}
 
-				// logger.debug("key onkeyup 2- "+key);
+				log.trace("KEY EVENT!!!!!  key onkeyup 2- " + key);
 
 				if (doAction) {
 					if (currentPressedKeys.containsKey(key)) {
@@ -561,7 +547,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 				String clientId = returnMap.get("clientId").toString();
 
-				controlInstance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
+				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
 			} else if (action.equals("show")) {
 				String paste = getClipboardText();
 
@@ -571,7 +557,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 				String clientId = returnMap.get("clientId").toString();
 
-				controlInstance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
+				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
 			}
 		} catch (Exception err) {
 			log.error("[sendRemoteCursorEvent]", err);
@@ -609,8 +595,12 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	}
 
 	private void pressSequence(Robot robot, long delay, int... codes) throws InterruptedException {
-		for (int code : codes) {
-			robot.keyPress(code);
+		for (int i = 0; i < codes.length; ++i) {
+			robot.keyPress(codes[i]);
+			Thread.sleep(delay);
+		}
+		for (int i = codes.length - 1; i >= 0; --i) {
+			robot.keyRelease(codes[i]);
 			Thread.sleep(delay);
 		}
 	}
@@ -619,10 +609,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		try {
 			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 				// pressing STRG+C == copy
-				pressSequence(robot, 200, KeyEvent.VK_CONTROL, KeyEvent.VK_C, KeyEvent.VK_C, KeyEvent.VK_CONTROL);
+				pressSequence(robot, 200, KeyEvent.VK_CONTROL, KeyEvent.VK_C);
 			} else {
 				// Macintosh simulate Copy
-				pressSequence(robot, 200, 157, 67, 67, 157);
+				pressSequence(robot, 200, 157, 67);
 			}
 			return getClipboardText();
 		} catch (Exception e) {
@@ -637,12 +627,12 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			Transferable transferableText = new StringSelection(charValue);
 			clippy.setContents(transferableText, null);
 
-			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
+			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") > -1) {
 				// pressing STRG+V == insert-mode
-				pressSequence(robot, 100, KeyEvent.VK_CONTROL, KeyEvent.VK_V, KeyEvent.VK_V, KeyEvent.VK_CONTROL);
+				pressSequence(robot, 100, KeyEvent.VK_CONTROL, KeyEvent.VK_V);
 			} else {
 				// Macintosh simulate Insert
-				pressSequence(robot, 100, 157, 86, 86, 157);
+				pressSequence(robot, 100, 157, 86);
 			}
 		} catch (Exception e) {
 			log.error("Unexpected exception while pressSpecialSign", e);
@@ -667,14 +657,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						return;
 					}
 				}
-				if (!isConnected) {
-					instance.invoke("getPublicSID", null, this);
-				} else {
-					setConnectionAsSharingClient();
-				}
 				isConnected = true;
-			} else if ("getPublicSID".equals(method)) {
-				connect((String)o, true);
+				setConnectionAsSharingClient();
 			} else if ("setConnectionAsSharingClient".equals(method)) {
 				@SuppressWarnings("unchecked")
 				Map<String, Object> returnMap = (Map<String, Object>) o;
@@ -725,6 +709,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else if ("screenSharerAction".equals(method)) {
 				if (log.isTraceEnabled()) {
 					log.trace("Result Map Type " + (o == null ? null : o.getClass().getName()));
+					log.trace("" + o);
 				}
 
 				@SuppressWarnings("unchecked")

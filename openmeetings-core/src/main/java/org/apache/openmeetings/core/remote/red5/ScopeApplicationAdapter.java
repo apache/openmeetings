@@ -193,14 +193,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	public Map<String, String> screenSharerAction(Map<String, Object> map) {
+		Map<String, String> returnMap = new HashMap<String, String>();
 		try {
 			log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client control = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Client client = sessionManager.getClientByPublicSID(control.getStreamPublishName(), null);
-
-			Map<String, String> returnMap = new HashMap<String, String>();
+			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			if (client != null) {
 				boolean changed = false;
@@ -241,11 +239,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				}
 			}
 			log.debug("-----------  screenSharerAction, return: " + returnMap);
-			return returnMap;
 		} catch (Exception err) {
 			log.error("[screenSharerAction]", err);
 		}
-		return null;
+		return returnMap;
 	}
 
 	public List<Client> checkScreenSharing() {
@@ -284,8 +281,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setConnectionAsSharingClient");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client control = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Client client = sessionManager.getClientByPublicSID(control.getStreamPublishName(), null);
+			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			if (client != null) {
 				boolean startRecording = Boolean.valueOf("" + map.get("startRecording"));
@@ -308,6 +304,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				client.setVY(Integer.parseInt(map.get("screenY").toString()));
 				client.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
 				client.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+				client.setStreamPublishName(map.get("publishName").toString());
 				sessionManager.updateClientByStreamId(current.getClient().getId(), client, false, null);
 
 				Map<String, Object> returnMap = new HashMap<String, Object>();
@@ -794,7 +791,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			@SuppressWarnings("rawtypes")
 			Map cursor = (Map) item;
-			cursor.put("publicSID", c.getStreamPublishName());
+			cursor.put("streamPublishName", c.getStreamPublishName());
 
 			sendMessageToCurrentScope("newRed5ScreenCursor", cursor, true, false);
 		} catch (Exception err) {
@@ -1965,7 +1962,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
-				return SessionVariablesUtil.isScreenClient(client) && conn.getClient().getId().equals(streamid);
+				return !SessionVariablesUtil.isScreenClient(client) || !conn.getClient().getId().equals(streamid);
 			}
 		}.start();
 		return null;
