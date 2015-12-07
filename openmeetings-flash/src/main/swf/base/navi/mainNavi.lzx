@@ -20,11 +20,6 @@
 -->
 <library>
 
-<class name="textBoxSubBlank" extends="text" text="$once{ parent.text }"
-    fgcolor="0x000000" fontstyle="bold"
-        fontsize="14" y="6" x="10" />
-
-
 <class name="baseDropDownMenuListItem" extends="view" height="36">
 
     <attribute name="action" value="" type="string" />

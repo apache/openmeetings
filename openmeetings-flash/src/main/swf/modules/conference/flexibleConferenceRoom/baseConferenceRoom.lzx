@@ -202,7 +202,6 @@
 		<handler name="ondata" args="value">
 			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
 			//this.parent.destroy();
-			canvas.thishib.reconnectAfterRoomleft = true;
 			canvas.thishib.reconnectedRoomInstance = this.parent;
 			
 			// Reconnect User to default Scope

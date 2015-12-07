@@ -59,7 +59,6 @@
 	<!-- UserId-->
 	<attribute name="UserID" value="1" type="number" />
 	<!-- reconnect after each conferenceView -->
-	<attribute name="reconnectAfterRoomleft" type="boolean" value="false" />
 	<attribute name="reconnectedRoomInstance" value="null" />
 	
 	<attribute name="reconnectionAction" value="false" type="boolean" />
@@ -152,11 +151,6 @@
 				canvas.sessionId = canvas.wicketsid;
 				this.getPublicSID.doCall();
 			}
-		} else if (this.reconnectAfterRoomleft) {
-			//Return to content after reconnect
-			canvas.thishib.reconnectedRoomInstance.destroy();
-			this.overwritePublicSID.doCall();
-			this.setUsernameReconnect.doCall();
 		} else if (canvas.wicketsid != null) {
 			canvas.sessionId = canvas.wicketsid;
 			if (canvas.thishib.loaderVar != null) {
@@ -209,8 +203,6 @@
 		if (this.reconnectionAction){
 			this.reconnectionAction = false;
 			this.reconnectObjRef.reconnectSuccess();
-		} else if (this.reconnectAfterRoomleft) {
-			loadContentByTempActionForNavi();
 		}
 		canvas.currentContentView.sendInit.sendEvent(this);
 	</method>
@@ -219,7 +211,7 @@
 	<![CDATA[
 		canvas.remoteLogWrite("error status='" + this.status + "'; src='" + this.src + "'; lastCalled='" + this.lastCalled
 			+ "'; showKickMessage='" + this.showKickMessage + "'; showFullMessage='" + this.showFullMessage
-			+ "'; reconnectionAction='" + this.reconnectionAction + "'; reconnectAfterRoomleft='" + this.reconnectAfterRoomleft + "'");
+			+ "'; reconnectionAction='" + this.reconnectionAction + "'");
 		if (this.showFullMessage) {
 			new lz.labelerrorPopup(canvas,
 				{
@@ -245,10 +237,6 @@
 			return;
 		} else if (this.reconnectionAction){
 			if ($debug) Debug.write("this.reconnectionAction: ", this.lastCalled);
-			this.connect();
-		} else if (this.reconnectAfterRoomleft) {
-			if ($debug) Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
-			this.counterror=0;
 			this.connect();
 		} else {
 			if (canvas.isRemoteUser() && (this.status == 'NetConnection.Connect.Closed' 

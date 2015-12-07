@@ -64,9 +64,6 @@
     		client.setId = this.setId;
     		
     		this._nc.client = client;
-    		
-			//Register Methods
-			//this.registerMethods();
 		</method>
 		
 		<method name="setId" args="tId">
@@ -126,65 +123,6 @@
                 this._nc.close();
             }
         </method>
-    <!--- 
-        With this function all methods are registered to the NetConnection
-        A server can invoke this Method with a call for it from the Client
-        Only subnodes of rtmpconnections which are a instance of netRemoteCallHib
-        are registered, to add dynamically methods to the remotefunction you will
-        have to invoke this method once again
-        -swagner
-     -->
-	<method name="registerMethods">
-	<![CDATA[
-		if (this.subnodes != null) {
-			//Register all methods which are instanceof netRemoteCallHib
-			for (var i = 0; i < this.subnodes.length; ++i) {
-				//If it is of Type netRemoteCallHib then register it to the NetConnection
-				if (this.subnodes[i] instanceof lz.netRemoteCallHib) {
-					this._nc[this.subnodes[i].funcname] = function(args) {
-						return hib.remoteCallMethod(arguments.callee, arguments);
-					}
-				}
-			}
-		}
-	]]>
-	</method>
-    
-    <!-- 
-        Process the RemoteCall to the Right Funtion
-        -swagner
-     -->
-    <method name="remoteCallMethod" args="callee,args">
-        <![CDATA[
-            for (var eg in this._nc){
-                if (this._nc[eg]==callee){
-                    if (this.debug) {
-                        //_root.Debug.write.write("DEBUG invoked a function remotely: ",eg,args);
-                    }    
-                    if (args.length == 1) {
-                        return this.callFuntion(eg,args[0]);
-                    } else {
-                        return this.callFuntion(eg,args);
-                    }
-                    //return this.callFuntion(eg,args);
-                }
-            }
-        ]]>
-    </method>
-    
-    <!-- 
-        Map the Function to a netRemoteCallHib
-        -swagner
-     -->
-    <method name="callFuntion" args="funcname,args">
-        <![CDATA[
-            for (var i=0;i<this.subnodes.length;i++){
-                if (this.subnodes[i].funcname==funcname){
-                    return this.subnodes[i].onResult(args);
-                }
-            }
-        ]]>
-    </method>		
     
     <method name="callRPC" args="func, obj, params">
     	//if ($debug) Debug.write("*** call: func, obj, params",func,obj, typeof (params) ,params.length);

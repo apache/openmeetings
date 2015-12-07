@@ -407,7 +407,6 @@
 	<method name="quit">
 		canvas.thishib.src = null;
 		canvas.thishib.reconnectionAction = false;
-		canvas.thishib.reconnectAfterRoomleft = false;
 		canvas.thishib.counterror = 100;
 		canvas.thishib.disconnect();
 		if (canvas.thishib._nc) {

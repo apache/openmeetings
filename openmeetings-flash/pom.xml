@@ -36,6 +36,41 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
+	<profiles>
+		<profile>
+			<id>default-target</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<ant.target>client.only</ant.target>
+			</properties>
+		</profile>
+		<profile>
+			<id>debug-target</id>
+			<activation>
+				<property>
+					<name>debug</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<ant.target>client.debug.only</ant.target>
+			</properties>
+		</profile>
+		<profile>
+			<id>client-debug-target</id>
+			<activation>
+				<property>
+					<name>client-debug</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<ant.target>compile.laszlo.main.debug</ant.target>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
 		
@@ -79,9 +114,7 @@
 						<configuration>
 							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<!--ant antfile="${basedir}/openlaszlo.xml" target="compile.laszlo.main.debug"/-->
-								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
-								<!--ant antfile="${basedir}/openlaszlo.xml" target="client.debug.only"/-->
+								<ant antfile="${basedir}/openlaszlo.xml" target="${ant.target}"/>
 							</target>
 							<skip>${om.quick.build}</skip>
 						</configuration>
