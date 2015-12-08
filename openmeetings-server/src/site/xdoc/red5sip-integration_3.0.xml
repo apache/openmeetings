@@ -21,7 +21,7 @@
 	</properties>
 	<body>
 		<section name="SIP-Transport Integration">
-			<p>You need Apache OpenMeetings <strong>version 3.0</strong> to apply this guide!</p>
+			<p>You need Apache OpenMeetings <strong>version 3.0+</strong> to apply this guide!</p>
 			<p>You need Asterisk <strong>version 11</strong> to apply this guide!</p>
 			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
 		</section>
@@ -31,52 +31,6 @@
 				<source>
 <![CDATA[
 sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install build-essential linux-headers-`uname -r` libxml2-dev libncurses5-dev libsqlite3-dev sqlite3 openssl libssl-dev
-]]>
-				</source>
-			</div>
-		</section>
-		<section name="ODBC Setup">
-			<div>
-				Run the commands
-				<source>
-<![CDATA[
-sudo apt-get update
-sudo apt-get install unixODBC unixODBC-dev libmyodbc
-]]>
-				</source>
-			</div>
-			<div>
-				Set up Asterisk connector:<br /><br />
-				Modify file <tt>/etc/odbc.ini</tt> as follows: (replace USER, PASSWORD and Socket with values relative to your system)
-				<source>
-<![CDATA[
-[asterisk-connector]
-Description = MySQL connection to 'openmeetings' database
-Driver = MySQL
-Database = openmeetings
-Server = localhost
-USER = root
-PASSWORD =
-Port = 3306
-Socket = /var/run/mysqld/mysqld.sock
-]]>
-				</source>
-				Modify file <tt>/etc/odbcinst.ini</tt> as follows: (replace the path to the *.so files below with the real paths on your system)<br/>
-				(The path below is for x32 server, x64 version is most probably located at <tt>/usr/lib/x86_64-linux-gnu/odbc</tt>)<br/>
-				<source>
-<![CDATA[
-[MySQL]
-Description = ODBC for MySQL
-Driver = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
-Setup = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so
-FileUsage = 1
-]]>
-				</source>
-				Run the following command to ensure everything works as expected:
-				<source>
-<![CDATA[
-echo "select 1" | isql -v asterisk-connector
 ]]>
 				</source>
 			</div>
@@ -87,10 +41,17 @@ echo "select 1" | isql -v asterisk-connector
 				<source>
 <![CDATA[
 sudo mkdir /usr/src/asterisk &amp;&amp; cd /usr/src/asterisk
-sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-11.2.1.tar.gz
-sudo tar -xvzf asterisk-11.2.1.tar.gz
-cd ./asterisk-11.2.1
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-13.6.0.tar.gz
+sudo tar -xvzf asterisk-13.6.0.tar.gz
+cd ./asterisk-13.6.0
 sudo make clean
+sudo contrib/scripts/install_prereq install
+sudo make menuconfig
+]]>
+				</source>
+				Make sure you have selected  <tt>Add-ons -> res_config_mysql</tt>, Press F12 to save
+				<source>
+<![CDATA[
 sudo ./configure
 sudo make
 sudo make install
@@ -103,24 +64,30 @@ sudo service asterisk start
 		</section>
 		<section name="Configure Asterisk">
 			<div>
-				Enable asterisk ODBC module:<br /><br />
+				Enable asterisk MySQL module:<br /><br />
 				Modify "[modules]" section of <tt>/etc/asterisk/modules.conf</tt> as follows:<br />
 				<strong>Add/uncomment the following lines</strong>
 				<source>
 <![CDATA[
-preload => res_odbc.so
-preload => res_config_odbc.so
+preload => res_config_mysql.so
 ]]>
 				</source>
 			</div><br />
 			<div>
-				Create/update "[asterisk]" section in <tt>/etc/asterisk/res_odbc.conf</tt>:
+				Configure MySQL module:<br /><br />
+				Set valid data for MySQL in <tt>/etc/asterisk/res_config_mysql.conf</tt> :<br />
+				<strong>Example</strong>
 				<source>
 <![CDATA[
-[asterisk]
-enabled => yes
-dsn => asterisk-connector
-pre-connect => yes
+[general]
+dbhost = 127.0.0.1
+dbname = openmeetings
+dbuser = root
+dbpass =
+dbport = 3306
+dbsock = /var/lib/mysql/mysql.sock
+dbcharset = utf8
+requirements=warn
 ]]>
 				</source>
 			</div><br />
@@ -147,7 +114,7 @@ type=friend
 secret=12345
 disallow=all
 allow=ulaw
-allow=h264
+allow=h263
 host=dynamic
 nat=force_rport,comedia
 context=rooms-red5sip
@@ -159,7 +126,7 @@ context=rooms-red5sip
 				<source>
 <![CDATA[
 [settings]
-sippeers => odbc,asterisk,sipusers
+sippeers => mysql,general,sipusers
 ]]>
 				</source>
 			</div><br />
