@@ -630,7 +630,7 @@ form .input {
 	overflow-y: auto;
 }
 #contents .btn-file>input {
-	transform: translate(-3000px, 0) scale(1);
+	transform: translate(-30px, 0) scale(1);
 }
 .room.list.container {
 	height: 150px;
