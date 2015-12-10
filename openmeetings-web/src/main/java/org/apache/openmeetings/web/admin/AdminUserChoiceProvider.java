@@ -27,15 +27,16 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.wicketstuff.select2.Response;
-import org.wicketstuff.select2.TextChoiceProvider;
+import org.wicketstuff.select2.ChoiceProvider;
 
-public abstract class AdminUserChoiceProvider extends TextChoiceProvider<User> {
+public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	protected static int PAGE_SIZE = 20;
 
 	@Override
-	protected Object getId(User choice) {
-		return choice.getId();
+	public String getIdValue(User choice) {
+		Long id = choice.getId();
+		return id == null ? null : "" + id;
 	}
 
 	@Override

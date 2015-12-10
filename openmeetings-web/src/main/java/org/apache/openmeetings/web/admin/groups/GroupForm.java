@@ -63,7 +63,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(User choice) {
+			public String getDisplayValue(User choice) {
 				return formatUser(choice);
 			}
 		}));

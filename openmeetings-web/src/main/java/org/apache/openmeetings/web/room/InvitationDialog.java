@@ -22,8 +22,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,9 +72,9 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.TextChoiceProvider;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -105,7 +105,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<Group>("groups"
 			, new CollectionModel<Group>(new ArrayList<Group>())
-			, new TextChoiceProvider<Group>() {
+			, new ChoiceProvider<Group>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -137,13 +137,14 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 				}
 
 				@Override
-				protected String getDisplayText(Group choice) {
+				public String getDisplayValue(Group choice) {
 					return choice.getName();
 				}
 
 				@Override
-				protected Object getId(Group choice) {
-					return choice.getId();
+				public String getIdValue(Group choice) {
+					Long id = choice.getId();
+					return id == null ? null : "" + id;
 				}
 			});
 

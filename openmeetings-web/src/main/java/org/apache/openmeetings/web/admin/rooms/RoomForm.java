@@ -66,10 +66,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.TextChoiceProvider;
 
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
@@ -115,18 +115,19 @@ public class RoomForm extends AdminBaseForm<Room> {
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new TextChoiceProvider<RoomGroup>() {
+		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new ChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(RoomGroup choice) {
+			public String getDisplayValue(RoomGroup choice) {
 				String name = choice.getGroup().getName();
 				return name == null ? "" : name;
 			}
 
 			@Override
-			protected Object getId(RoomGroup choice) {
-				return choice.getGroup().getId();
+			public String getIdValue(RoomGroup choice) {
+				Long id = choice.getGroup().getId();
+				return id == null ? null : "" + id;
 			}
 
 			@Override
@@ -213,7 +214,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 
 			@Override
-			protected String getDisplayText(User choice) {
+			public String getDisplayValue(User choice) {
 				Address a = choice.getAddress();
 				return String.format("\"%s %s\" <%s>", choice.getFirstname(), choice.getLastname(), a == null ? "" : a.getEmail());
 			}
