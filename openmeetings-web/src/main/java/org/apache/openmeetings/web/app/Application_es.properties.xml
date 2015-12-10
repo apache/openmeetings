@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -413,7 +413,7 @@
   <entry key="397">Grabaciones de salas públicas y privadas</entry>
   <entry key="398">Usuarios:</entry>
   <entry key="399">Unido:</entry>
-  <entry key="400"></entry>
+  <entry key="400"/>
   <entry key="401">Usuarios en la sala:</entry>
   <entry key="402">actualizar</entry>
   <entry key="403">La sala esta llena. Por favor, inténtelo más tarde.</entry>
@@ -982,7 +982,7 @@
   <entry key="968">Número de verificación de la tarjeta</entry>
   <entry key="969">Dirección de facturación</entry>
   <entry key="970">Dirección</entry>
-  <entry key="971"></entry>
+  <entry key="971"/>
   <entry key="972">Ciudad</entry>
   <entry key="973">País</entry>
   <entry key="974">Estado (Sólo US)</entry>
@@ -1009,7 +1009,7 @@
   <entry key="995">EUR</entry>
   <entry key="996">Estado</entry>
   <entry key="997">Factura</entry>
-  <entry key="998"></entry>
+  <entry key="998"/>
   <entry key="999">Necesita comprar una tarifa plana para poder enviar invitaciones o crear encuentros utilizando el calendario. Con el sistema pago por minutos sólo es posible acceder a {0}.</entry>
   <entry key="1000">Esta dirección de correo está siendo utilizada por otro usuario.</entry>
   <entry key="1001">Ajustes SIP</entry>
@@ -1023,7 +1023,7 @@
   <entry key="1009">Puede seleccionar usuarios aquí y crear una nueva sala de (vídeo)conferencia ("sala de equipo") para los mismos. Los usuarios seleccionados automáticamente podrán conectarse a la nueva sala o bien recibir una notificación. Los moderadores conseguirán adicionalmente una lista de las salas actuales de tal modo que puedan conectarse a cada sala si fuera necesario moderarlas.</entry>
   <entry key="1010">Usuario</entry>
   <entry key="1011">Login</entry>
-  <entry key="1012"></entry>
+  <entry key="1012"/>
   <entry key="1013">Usuarios para la nueva sala de equipo:</entry>
   <entry key="1014">Crear sala de equipo</entry>
   <entry key="1015">Cancelar</entry>
@@ -1038,8 +1038,8 @@
   <entry key="1024">Forzar al usuario a conectarse a la nueva sala de equipo</entry>
   <entry key="1025">Nombre</entry>
   <entry key="1026">Creado</entry>
-  <entry key="1027"></entry>
-  <entry key="1028"></entry>
+  <entry key="1027"/>
+  <entry key="1028"/>
   <entry key="1029">Usuarios disponibles</entry>
   <entry key="1030">Añada un usuario con el + en la izquierda o bórrelo con la x de la derecha</entry>
   <entry key="1031">1) Configuración de la sala</entry>
@@ -1210,13 +1210,13 @@
   <entry key="1196">Su lista de contactos</entry>
   <entry key="1197">Editar sus Contactos y Mensajes,&lt;br/&gt; administrar sus contactos pendientes!</entry>
   <entry key="1198">está usted confirmado como contacto!</entry>
-  <entry key="1199"></entry>
+  <entry key="1199"/>
   <entry key="1200">Mostrar / Copiar log del chat</entry>
   <entry key="1201">Log del chat</entry>
   <entry key="1202">De:</entry>
   <entry key="1203">Asunto</entry>
   <entry key="1204">Enviar</entry>
-  <entry key="1205"></entry>
+  <entry key="1205"/>
   <entry key="1206">Mensajes</entry>
   <entry key="1207">Nuevo correo</entry>
   <entry key="1208">Click para escribir nuevo mensaje a cualquiera de sus contactos</entry>
@@ -1717,8 +1717,8 @@
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			Viene predeterminado {0} para emplear la base de datos {1}. Para
-			medios de producción considere emplear {2}, {3}, {4}, {5} or {6}
+			{0} viene predeterminado para emplear la base de datos {1}. Para
+			medios de producción considere emplear {2}, {3}, {4}, {5} u {6}
 		</blockquote>
     ]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
@@ -1727,25 +1727,25 @@
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>
-	<entry key="install.wizard.db.step.field.title">DB configuration</entry>
-	<entry key="install.wizard.db.step.dbtype">Choose DB type</entry>
+	<entry key="install.wizard.db.step.field.title">BD Configuración</entry>
+	<entry key="install.wizard.db.step.dbtype">Tipo base de datos</entry>
 	<entry key="install.wizard.db.step.db2.name">IBM DB2</entry>
 	<entry key="install.wizard.db.step.derby.name">Apache Derby</entry>
 	<entry key="install.wizard.db.step.mssql.name">MSSQL</entry>
 	<entry key="install.wizard.db.step.mysql.name">MySQL</entry>
 	<entry key="install.wizard.db.step.oracle.name">Oracle</entry>
 	<entry key="install.wizard.db.step.postgresql.name">PostgreSql</entry>
-	<entry key="install.wizard.db.step.host">Specify DB host</entry>
-	<entry key="install.wizard.db.step.port">Specify DB port</entry>
-	<entry key="install.wizard.db.step.dbname">Specify the name of the database</entry>
-	<entry key="install.wizard.db.step.user">Specify DB user</entry>
-	<entry key="install.wizard.db.step.pass">Specify DB password</entry>
+	<entry key="install.wizard.db.step.host">Especifique BD host</entry>
+	<entry key="install.wizard.db.step.port">Especifique puerto BD</entry>
+	<entry key="install.wizard.db.step.dbname">Especifique nombre BD</entry>
+	<entry key="install.wizard.db.step.user">Especifique usuario BD</entry>
+	<entry key="install.wizard.db.step.pass">Especifique contraseña BD</entry>
 	<entry key="install.wizard.db.step.check">Check</entry>
-	<entry key="install.wizard.db.step.errorprops">Unable to get the properties</entry>
-	<entry key="install.wizard.db.step.nodriver">Unable to load proper DB driver, please download appropriate jar file, and restart the OM. Instructions: {0}</entry>
-	<entry key="install.wizard.db.step.notvalid">Database check was unsuccessfull</entry>
-	<entry key="install.wizard.db.step.error.patch">Unexpected error while patching persistence file: {0}</entry>
-	<entry key="install.wizard.db.step.valid">Database check was successfull</entry>
+	<entry key="install.wizard.db.step.errorprops">Incapaz obtener propiedades</entry>
+	<entry key="install.wizard.db.step.nodriver">Incapaz cargar driver apropiado de base de datos, por favor descargue el archivo jar apropiado, y reinicie OM. Instrucciones: {0}</entry>
+	<entry key="install.wizard.db.step.notvalid">Base de datos chequeada sin éxito</entry>
+	<entry key="install.wizard.db.step.error.patch">Error inesperado en el parcheo del archivo persistence: {0}</entry>
+	<entry key="install.wizard.db.step.valid">Base de datos chequeada exitosamente</entry>
 	<entry key="install.wizard.params.step1.userdata">Datos del usuario</entry>
 	<entry key="install.wizard.params.step1.username">Nombre de usuario</entry>
 	<entry key="install.wizard.params.step1.username.title">Introduzca un nombre de usuario</entry>
@@ -1803,21 +1803,19 @@
 	</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Introduzca la ruta a ImageMagick, o déjelo en blanco si ImageMagick está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"/>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Introduzca la ruta a FFMPEG, o déjelo en blanco si ImageMagick está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"/>
 	<entry key="install.wizard.params.step3.soxPath">SoX Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Introduzca la ruta a SOX, o déjelo en blanco si SOX está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"/>
 	<entry key="install.wizard.params.step3.jodPath">JOD Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.jodPath.title">Ruta a la libreria JOD (http://code.google.com/p/jodconverter), introduzca la ruta al directorio lib donde se encuentra el archivo jodconverter-core-version.jar</entry>
-	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath.text"/>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Path (Ruta) para jodconverter</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Ruta a OpenOffice/LibreOffice (opcional), por favor introdúzcala en el caso que jodconverter no encuentre a OpenOffice/LibreOffice automáticamente</entry>
-	<entry key="install.wizard.params.step3.officePath.text">El path (ruta) a OpenOffice/LibreOffice (opcional) por favor
-		configúrelo correctamente en caso de que jodconverter no pueda
-		encontrar la instalación de OpenOffice/LibreOffice
+	<entry key="install.wizard.params.step3.officePath.text">El path (ruta) a OpenOffice/LibreOffice (opcional) por favor configúrelo correctamente en caso de que jodconverter no pueda encontrar la instalación de OpenOffice/LibreOffice
 	</entry>
 
 	<entry key="install.wizard.params.step4.crypt">Tipo de Encriptación</entry>
