@@ -1,0 +1,87 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    
+    <!---
+          A pie chart represents a chart that is displayed in the 2D
+          polar plane. This class inherits immediately from chart class
+          and can be instantiated directly. (Warning: Of beta quality.)
+          @access public
+          -->
+    <class name="ompiechart" extends="chart">
+
+        <!--- @keywords private -->
+        <method name="init">
+            plotarea = this.getNodeOfClass("piechartplotarea");
+            _datalabelpool = this.createLabelViewspool();
+            super.init();            
+        </method>  
+        
+        <!--- Renders the plot area which is an instance of the piechartplotarea 
+              class. The plot area requires to read a group of two data series, one
+              for the groups that are represented by the pie slices and the second
+              for their values. -->
+        <method name="renderPlotArea">
+        <![CDATA[
+            super.renderPlotArea();
+            plotarea.clear();
+
+            var topseries = this.getOMDataSeries();
+            
+            //var numSeries = topseries.getNumDataSeries();
+            var numSeries = 1;
+            
+            var xseries = topseries.xseries;
+            var yseries = topseries.yseries;
+            var tooltipseries = topseries.tooltipseries;
+                                
+            for(var i = 0; i < numSeries; i++)
+            {
+                plotarea.renderSeries(xseries, yseries, tooltipseries);          
+            }
+            if ( this.datalabelEnabled ){
+                this.renderDataLabels();
+            }
+
+        ]]>
+        </method>
+        
+        <!--- Renders the labels that display the values of the data series. -->
+        <method name="renderDataLabels">
+        
+            <![CDATA[
+                _datalabelpool.reclaimAll();
+            
+                var arrPiePieces = this.plotarea.arrPiePieces;
+                var topseries = this.getOMDataSeries();
+                
+                var xseries = topseries.xseries;
+                var yseries = topseries.yseries;
+                var tooltipseries = topseries.tooltipseries;
+                
+                if ($debug) Debug.write("arrPiePieces.length ",arrPiePieces.length);
+
+                for(var i = 0; i < arrPiePieces.length; i++){ 
+                    piePiece = arrPiePieces[i];  
+                    
+                    var lbl = _datalabelpool.getView();
+                    var ldatastyle = piePiece.style;
+                    lbl.setAttribute('style', ldatastyle.label);
+                    lbl.render(yseries[i]);
+                    piePiece.renderLabel(lbl);
+                }
+            ]]>
+                
+        </method>
+        
+        <!--- The plot area where the pie slices are rendered -->
+        <piechartplotarea name="plotarea" x="50" y="20" width="500" height="300">
+        	
+        </piechartplotarea>
+
+    </class>
+    
+</library> 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="confirmationBox" extends="labelExplorerBox" labelid="18"
+    docking="true" resizeable="false" closable="true" width="400" x="100" height="240">
+    
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="labeliderror" value="0" type="number" />
+    
+    <attribute name="doAskAgain" value="true" type="boolean" />
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText labelid="$once{ parent.labeliderror }" y="24" 
+    		   width="$once{ parent.width - 40 }"
+    	multiline="true" resize="false" x="30" />
+    
+    <labelCheckbox name="holddatainSO" 
+    			   visibility="$once{ (parent.doAskAgain) ? 'visible' : 'hidden' }" 
+    			   labelid="64" x="10" y="220" />
+    
+    <simpleLabelButton labelid="61" width="100" x="70" y="196">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>    
+    <simpleLabelButton labelid="65" width="100" x="180" y="196">
+    	<handler name="onclick">         
+    		var t = parent.holddatainSO.getValue();
+            this.parent.refObj.sendConfirmation(false,t);
+            this.parent.close();
+    	</handler>
+    </simpleLabelButton>
+    <simpleLabelButton labelid="60" width="100" x="290" y="196">
+    	<handler name="onclick">
+    		var t = parent.holddatainSO.getValue();
+            this.parent.refObj.sendConfirmation(true,t);
+            this.parent.close();
+    	</handler>
+    </simpleLabelButton>  
+    
+</class>
+
+</library>

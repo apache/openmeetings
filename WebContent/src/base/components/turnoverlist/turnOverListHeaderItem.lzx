@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="turnOverListHeaderItem" extends="simpleLabelButton" clip="true" fontstyle="plain">
+
+	<attribute name="subviewsid" value="0" type="number" />
+
+	<view height="$once{ parent.height-2 }" width="5" align="right"
+		cursor="width_gripper_rsc" 
+		onmousedown="parent.rs.apply()" onmouseup="parent.rs.remove()" />
+		
+	<handler name="onwidth" args="w">
+		this.parent.parent.parent.sendWidthUpdate(w,this.subviewsid);
+	</handler>
+	<resizestate name="rs" height="20" />
+</class>
+
+<class name="turnOverListHeaderItemSimple" extends="simpleLabelButton" fontstyle="plain">
+	<attribute name="asc" value="false" type="boolean" />
+	<attribute name="pathOrder" value="" type="string" />
+	<handler name="onclick">
+		if (parent.preButton!=null){
+			parent.preButton._asc.setAttribute('visibility','hidden');
+			parent.preButton._desc.setAttribute('visibility','hidden');
+		}
+		if (!this.asc){
+			this._asc.setAttribute('visibility','hidden');
+			this._desc.setAttribute('visibility','visible');
+		} else {
+			this._asc.setAttribute('visibility','visible');
+			this._desc.setAttribute('visibility','hidden');		
+		}
+		parent.preButton = this;
+		parent.setNewSortOrder(this.pathOrder,this);
+	</handler>
+	<view name="_asc" x="$once{ parent.width-20 }" 
+		  visibility="hidden" resource="sort_asc_turnover_rsc" />
+	<view name="_desc" x="$once{ parent.width-20 }" 
+		  visibility="hidden" resource="sort_desc_turnover_rsc" />
+</class>
+
+<class name="basicturnoverlistheaderitem" fontsize="9"
+       extends="simpleLabelButton" clip="true">
+	
+</class>
+
+<class name="turnoverlistheaderitem" extends="basicturnoverlistheaderitem" >
+
+	<attribute name="subviewsid" value="0" type="number" />
+
+	<handler name="onwidth" args="w">
+		this.parent.parent.parent.sendWidthUpdate(w,this.subviewsid);
+	</handler>
+
+</class>
+
+<class name="turnoverlistheaderitemIcon" extends="basicturnoverlistheaderitem" >
+
+    <attribute name="subviewsid" value="0" type="number" />
+    <attribute name="toolTipLabelId" value="0" type="number" />
+    <attribute name="iconResource" value="" type="string" />
+
+    <handler name="onwidth" args="w">
+        this.parent.parent.parent.sendWidthUpdate(w,this.subviewsid);
+    </handler>
+    
+    <handler name="onclick" >
+        this.parent.parent.parent.sendHeaderClick.sendEvent(this);
+    </handler>
+    
+    <view align="center" valign="middle" 
+          resource="$once{ parent.iconResource }" />
+    
+    <labelTooltip labelid="$once{ parent.toolTipLabelId }" />
+    
+</class>
+
+<class name="turnoverlistheaderitemResize" extends="basicturnoverlistheaderitem" >
+
+	<attribute name="subviewsid" value="0" type="number" />
+
+    <attribute name="minwidth" value="2" type="number" />
+    <attribute name="minheight" value="10" type="number" />
+    
+	<view height="$once{ parent.height }" width="4" align="right" bgcolor="black"
+		cursor="width_gripper_rsc" opacity="0.01"
+		onmousedown="parent.rs.apply()" onmouseup="parent.rs.remove()" />
+
+	<handler name="onwidth" args="w">
+        //////if ($debug) //Debug.write("onwidth: ",w);
+		this.parent.parent.parent.sendWidthUpdate(w-1,this.subviewsid);
+	</handler>
+
+	<resizestatemin name="rs" height="20" />
+
+</class>
+
+<class name="turnoverlistheaderitemResizeWizzardRefresh" extends="basicturnoverlistheaderitem" >
+
+    <attribute name="subviewsid" value="0" type="number" />
+
+    <attribute name="minwidth" value="2" type="number" />
+    <attribute name="minheight" value="10" type="number" />
+    
+    <view height="$once{ parent.height }" width="4" align="right" bgcolor="black"
+        cursor="width_gripper_rsc" opacity="0.01"
+        onmousedown="parent.rs.apply()" onmouseup="parent.rs.remove()" />
+
+    <handler name="onwidth" args="w">
+        //////if ($debug) //Debug.write("onwidth: ",w);
+        this.parent.parent.parent.sendWidthUpdate(w-1,this.subviewsid);
+    </handler>
+    
+    <view name="refresh_geomComp" resource="refresh_geomComp" y="1" x="${ parent.width - 19 }"
+        onmouseover="" onmouseout="">
+        <handler name="onclick">
+           this.parent.parent.parent.parent.parent.updateGeomByValue();
+        </handler>
+        <labelTooltip labelid="62" />
+    </view>   
+
+    <resizestatemin name="rs" height="20" />
+
+</class>
+
+
+
+<class name="turnOverListHeaderItemOrdered" extends="turnoverlistheaderitemResize">
+
+    <attribute name="orderBy" value="" type="string" />
+    <attribute name="asc" value="true" type="boolean" />
+    <attribute name="isSelected" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        if (this.isSelected) {
+            parent.parent.parent.updateOrder(this);
+        }
+    </handler>
+    
+    <handler name="onclick">
+        parent.parent.parent.updateOrder(this);
+    </handler>
+    
+    <image name="_sortUp" visibility="hidden" stretches="both" width="8" height="8" y="6"
+        x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_up_rsc') }" />
+    <image name="_sortDown" visibility="hidden" stretches="both" width="8" height="8" y="6"
+        x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_down_rsc') }" />
+
+</class>
+
+</library>

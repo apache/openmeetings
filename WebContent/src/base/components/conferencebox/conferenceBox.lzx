@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>     
+
+<class name="conferenceBox" extends="view" width="250" height="400" >
+    
+    <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('headerText',canvas.getLabelName(this.labelid));
+    </method>
+    
+    <attribute name="headerText" value="Users" type="string" />
+    
+    <attribute name="closeable" value="false" type="boolean" />
+    <attribute name="isopen" value="true" type="boolean" />
+    
+    <attribute name="textInset" value="10" type="number" />
+    
+    <attribute name="initHeight" value="0" type="number"/>
+    
+    <attribute name="closedHeight" value="40" type="number"/>
+    
+    <handler name="oninit">
+        if (this.initHeight == 0) {
+            this.initHeight = this.height;
+        }
+    </handler>
+    
+    <method name="doOpen">
+        if (!this.isopen) {
+            this.toggleopen();
+        }
+    </method>
+    
+    <method name="toggleopen">
+        if (this.isopen) {
+            this.setAttribute("isopen",false);
+            this.setAttribute("height",this.closedHeight);
+            this.content.setAttribute("visibility","hidden");
+        } else {
+            this.setAttribute("isopen",true);
+            this.setAttribute("height",this.initHeight);
+            //if ($debug) Debug.write("toggleopen TRUE ",this.initHeight)
+            this.content.setAttribute("visibility","visible");
+        }
+    </method>
+    
+    <view name="_head" x="0" y="0" width="${ parent.width }" height="24" 
+    	  clickable="$once{ this.parent.closeable }" >
+        
+        <handler name="onclick">
+        	if (this.parent.closeable) {
+        		this.parent.toggleopen();
+        	}
+        </handler>
+        
+        <view x="8" y="4" visible="${ this.parent.parent.closeable }">
+            
+	        <view visible="${ !this.parent.parent.parent.isopen }" x="2" y="3" resource="conferenceBox_button_min_rsc">
+	            <handler name="onmouseup">
+	                this.parent.parent.parent.toggleopen();
+	            </handler>                                  
+	        </view>
+	        <view visible="${ this.parent.parent.parent.isopen }" x="2" y="3" resource="conferenceBox_button_max_rsc">
+	            <handler name="onmouseup">
+	                this.parent.parent.parent.toggleopen();
+	            </handler>                                  
+	        </view>
+            
+        </view>
+
+        <text x="$once{ parent.parent.textInset }" fontstyle="bold" fontsize="14" fgcolor="0xFFFFFF" 
+              text="${ parent.parent.headerText }" valign="middle"></text>
+        
+    </view>  
+
+</class>
+
+</library>

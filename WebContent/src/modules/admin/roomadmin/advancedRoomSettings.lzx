@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="advancedRoomSettings" extends="view" y="570">
+	
+	<handler name="oninit">
+		<![CDATA[
+			if (parent.rooms_id!=0){
+				this._videoPodHeight.setAttribute('text',parent.roomsObj.videoPodHeight);
+				this._videoPodWidth.setAttribute('text',parent.roomsObj.videoPodWidth);
+				this._videoPodXPosition.setAttribute('text',parent.roomsObj.videoPodXPosition);
+				this._videoPodYPosition.setAttribute('text',parent.roomsObj.videoPodYPosition);
+				
+				this._moderationPanelXPosition.setAttribute('text',parent.roomsObj.moderationPanelXPosition);
+				this._showWhiteBoard.setValue(parent.roomsObj.showWhiteBoard);
+				
+				this._whiteBoardPanelXPosition.setAttribute('text',parent.roomsObj.whiteBoardPanelXPosition);
+				this._whiteBoardPanelYPosition.setAttribute('text',parent.roomsObj.whiteBoardPanelYPosition);
+				this._whiteBoardPanelWidth.setAttribute('text',parent.roomsObj.whiteBoardPanelWidth);
+				this._whiteBoardPanelHeight.setAttribute('text',parent.roomsObj.whiteBoardPanelHeight);
+				
+				this._showFilesPanel.setValue(parent.roomsObj.showFilesPanel);
+				
+				this._filesPanelXPosition.setAttribute('text',parent.roomsObj.filesPanelXPosition);
+				this._filesPanelYPosition.setAttribute('text',parent.roomsObj.filesPanelYPosition);
+				this._filesPanelWidth.setAttribute('text',parent.roomsObj.filesPanelWidth);
+				this._filesPanelHeight.setAttribute('text',parent.roomsObj.filesPanelHeight);
+			} else {
+				this._videoPodHeight.setAttribute('text',280);
+				this._videoPodWidth.setAttribute('text',270);
+				this._videoPodXPosition.setAttribute('text',2);
+				this._videoPodYPosition.setAttribute('text',2);
+				
+				this._moderationPanelXPosition.setAttribute('text',400);
+				this._showWhiteBoard.setValue(true);
+				
+				this._whiteBoardPanelXPosition.setAttribute('text',276);
+				this._whiteBoardPanelYPosition.setAttribute('text',2);
+				this._whiteBoardPanelWidth.setAttribute('text',660);
+				this._whiteBoardPanelHeight.setAttribute('text',592);
+				
+				this._showFilesPanel.setValue(true);
+				
+				this._filesPanelXPosition.setAttribute('text',2);
+				this._filesPanelYPosition.setAttribute('text',284);
+				this._filesPanelWidth.setAttribute('text',270);
+				this._filesPanelHeight.setAttribute('text',310);
+			}
+		]]>
+	</handler>
+    
+    <labelText labelid="486" fontstyle="bold" width="200" 
+    		   y="0" resize="true" x="2" />
+    
+    <labelText labelid="484" width="120" y="30" resize="false" x="2"/>
+    <customEdittext name="_videoPodXPosition" y="30" x="120" width="100" 
+    				regexpType="number" text="" /> 
+    <customEdittext name="_videoPodYPosition" y="30" x="230" width="100" 
+    				regexpType="number" text="" />  
+    
+    <labelText labelid="485" width="200" y="60" resize="false" x="2"/>
+    <customEdittext name="_videoPodWidth" y="60" x="120" width="100" 
+    				regexpType="number" text="" />  
+    <customEdittext name="_videoPodHeight" y="60" x="230" width="100" 
+    				regexpType="number" text="" /> 
+    
+    <labelText labelid="487" fontstyle="bold" width="200"  
+    		   y="90" resize="true" x="2" />
+    		   
+    <labelText labelid="488" width="200" y="120" resize="false" x="2" />
+    <customEdittext name="_moderationPanelXPosition" y="120" 
+    				x="120" width="100"  
+    				regexpType="number" text="" />   
+    
+    <labelText labelid="489" fontstyle="bold" width="200"  
+    		   y="150" resize="true" x="2" />
+    		   
+    <labelText labelid="490" width="200" y="180" resize="false" x="2"/>
+    <checkbox name="_showWhiteBoard" width="100" y="180" x="120" fontsize="11" />
+    
+    <labelText labelid="491" width="200" y="210" resize="false" x="2"/>
+    <customEdittext name="_whiteBoardPanelXPosition" y="210" x="120" width="100"  
+    				regexpType="number" text="" /> 
+    <customEdittext name="_whiteBoardPanelYPosition" y="210" x="230" width="100"  
+    				regexpType="number" text="" /> 
+    
+    <labelText labelid="492" width="200" y="240" resize="false" x="2"/>
+    <customEdittext name="_whiteBoardPanelWidth" y="240" x="120" width="100"  
+    				regexpType="number" text="" />  
+    <customEdittext name="_whiteBoardPanelHeight" y="240" x="230" width="100"  
+    				regexpType="number" text="" />  
+    
+    <labelText labelid="493" fontstyle="bold" width="200"  
+    		   y="270" resize="true" x="2" />
+    		   
+    <labelText labelid="494" width="200" y="300" resize="false" x="2"/>
+    <checkbox name="_showFilesPanel" width="100" y="300" x="120" fontsize="11" />
+    
+    <labelText labelid="495" width="200" y="330" resize="false" x="2"/>
+    <customEdittext name="_filesPanelXPosition" y="330" x="120" width="100"  
+    				regexpType="number" text="" />  
+    <customEdittext name="_filesPanelYPosition" y="330" x="230" width="100"  
+    				regexpType="number" text="" /> 
+    
+    <labelText labelid="496" width="300" y="360" resize="false" x="2"/>
+    <customEdittext name="_filesPanelWidth" y="360" x="120" width="100"  
+    				regexpType="number" text="" /> 
+    <customEdittext name="_filesPanelHeight" y="360" x="230" width="100"  
+    				regexpType="number" text="" />  
+
+</class>
+
+</library>
