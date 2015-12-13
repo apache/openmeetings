@@ -115,14 +115,14 @@
 				</p>
 				
 				<source>
-svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \
-	https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \
+svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/application/trunk \
+	https://svn.apache.org/repos/asf/openmeetings/application/tags/3.1.0RC1 \
 	-m "Release candidate 1"
 				</source>
 				
 
 				<p>Get the source from your TAG: </p>
-				<source>svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</source>
+				<source>svn checkout https://svn.apache.org/repos/asf/openmeetings/application/tags/$BRANCHORTAG/</source>
 				<p>$BRANCHORTAG should be replaced with your new TAG</p>
 
 				<p>Edit the file build.properties change</p>
@@ -222,9 +222,10 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 			<subsection name="Step3 - Sign web start application">
 				<p>If VOTEs positive: Sign screen sharing web application and re-pack the release</p>
 				<ul>
-					<li>Go to the folder you check out: https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</li>
+					<li>Go to the folder you check out: https://svn.apache.org/repos/asf/openmeetings/application/tags/$BRANCHORTAG/</li>
+					<li>Unarchive <tt>openmeetings-server/target/openmeetings-server-$BRANCHORTAG.tgz</tt></li>
 					<li>Run following command: <tt>ant repackWebStartJars</tt></li>
-					<li>Check any jar in <tt>dist/red5/webapps/openmeetings/screensharing/</tt>: Its META-INF/MANIFEST.MF file should NOT contain <tt>SHA1-Digest</tt> entries for classes</li>
+					<li>Check any jar in <tt>webapps/openmeetings/screenshare/</tt>: Its META-INF/MANIFEST.MF file should NOT contain <tt>SHA1-Digest</tt> entries for classes</li>
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
