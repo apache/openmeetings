@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="netRemoteCallHib" extends="netremotecall">
+
+	<!--- this should be the contentSaveWindow -->
+	<attribute name="returnObj" value="null" />
+	 
+	<!--- if true this object will register at the update-observer -->
+	<attribute name="registerObject" value="false" type="boolean" />
+	
+	<!--- show Error Messages with normal Box -->
+    <attribute name="activeErrorHandler" value="false" type="boolean" />	
+    
+	<!--- show Error Messages with normal Box -->
+    <attribute name="showLoading" value="true" type="boolean" />    
+	
+	<!--- show Error Messages with Callback Box -->
+	<attribute name="isCallBackHandler" value="false" type="boolean" />	
+	
+	<handler name="oninit">
+		if (this.registerObject) this.parent.addViewToObserver(this);
+	</handler>	
+	<method name="doCall">
+        if (this.showLoading) canvas._loadingAll.showLoading();
+		//if($debug) Debug.write("netRemoteCallHib/doCall: [ " , this.funcname , " ]",this.parent);
+		this.callRPC();
+	</method>
+	
+	<event name="sendCallBack" />
+	
+	<!---
+        @keywords private
+	 -->
+	<handler name="ondata" args="value">
+		<![CDATA[
+			//Debug.write("ondata: ",this.funcname,value);
+			
+			if (this.showLoading) canvas._loadingAll.hideLoading();
+			
+			//Another Error Handler for the Form-Components
+			if (this.returnObj!=null && Number(value)>0) {
+				//Debug.write("this.returnObj.processNext");
+				this.returnObj.processNext();
+			} else if (this.returnObj!=null && Number(value)<0) {
+				this.returnObj.errorByCode(Number(value));
+			} else if (this.returnObj!=null && value==null) {
+				this.returnObj.errorByCode(-1);
+			}
+			
+            if (this.activeErrorHandler) {
+                if (Number(value)<0){
+                    Debug.warn("Received Error ID: ",value);					
+					if (this.isCallBackHandler) 
+					{
+						var dlg = new lz.callbackRpcErrorDialog(canvas,{callBackObject:this,errorid:Number(value)});						
+						lz.Focus.setFocus(dlg);
+					} else {
+						var dlg = new lz.rpcErrorDialog(canvas,{errorid:Number(value)});
+						lz.Focus.setFocus(dlg);
+					}
+                }
+            }			
+		]]>
+	</handler>	
+</class>
+
+</library>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="bigTextListItem" extends="textlistitem" fontsize="11" />
+
+	<class name="createPollWin" extends="labelExplorerBox" labelid="18"
+		docking="true" resizeable="false" closable="true" width="500" x="100"
+		height="240">
+
+		<labelText fontstyle="bold" labelid="19" y="22" />
+
+		<labelText labelid="1410" y="42" />
+		<customEdittext name="_name" multiline="false" width="390"
+			x="100" y="42" />
+
+		<labelText labelid="20" y="67" />
+		<customEdittext name="_question" multiline="true"
+			width="390" x="100" y="67" height="60" />
+
+		<netRemoteCallHib name="getPollTypeList" funcname="pollservice.getPollTypeList"
+			remotecontext="$once{ canvas.thishib }">
+			<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("getPollTypeList : ",value)
+				for (var i = 0; i < value.length; ++i) {
+					this.parent._polltypes.addItem(canvas.getLabelName(value[i].label.fieldvalues_id), value[i].pollTypesId);
+				}
+				this.parent._polltypes.selectItem(value[0].pollTypesId);
+			]]>
+			</handler>
+		</netRemoteCallHib>
+
+		<labelText labelid="21" y="142" />
+		<resetCombobox name="_polltypes" width="160" x="100" y="142"
+			editable="false" itemclassname="bigTextListItem">
+			<handler name="oninit">
+				this.parent.getPollTypeList.doCall();
+			</handler>
+		</resetCombobox>
+
+		<labelText fgcolor="red" labelid="23" y="175" width="480"
+			multiline="true" resize="false" />
+
+		<netRemoteCallHib name="createPoll" funcname="pollservice.createPoll"
+			remotecontext="$once{ canvas.thishib }">
+			<attribute name="pollname" value="" type="string" />
+			<attribute name="pollquestion" value="" type="string" />
+			<attribute name="polltypesid" value="0" type="number" />
+			<netparam><method name="getValue">return parent.pollname;</method></netparam>
+			<netparam><method name="getValue">return parent.pollquestion;</method></netparam>
+			<netparam><method name="getValue">return parent.polltypesid;</method></netparam>
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("createPoll : ",value);
+				this.parent.close();
+			</handler>
+		</netRemoteCallHib>
+
+		<simpleLabelButton labelid="22" width="100" x="280"
+			y="218">
+			<handler name="onclick">
+				this.parent.createPoll.pollname =
+				this.parent._name.getText();
+				this.parent.createPoll.pollquestion =
+				this.parent._question.getText();
+				this.parent.createPoll.polltypesid =
+				this.parent._polltypes.getValue();
+				//Debug.write("this.parent.createPoll.createPoll:",this.parent.createPoll.createPoll);
+				this.parent.createPoll.doCall();
+			</handler>
+		</simpleLabelButton>
+
+		<simpleLabelButton labelid="25" width="100" x="390"
+			y="218" onclick="this.parent.close();" />
+
+	</class>
+
+
+</library>

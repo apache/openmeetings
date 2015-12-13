@@ -1,0 +1,25 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---A menu item within a context menu -->
+<class name="contextmenuitem" extends="node">
+
+	<!---		Sets the text which is displayed for the menu item-->
+	<attribute name="caption" />
+	
+	<!--- 	Sets the delegate which will be called when the menu item is selected. -->
+	<attribute name="delegate" />
+	
+	<!--- 	Sets the enabled status of the menu item. If false, the menu item is grayed out and will not respond to clicks  -->
+	<attribute name="enabled" type="boolean" />
+	
+	<!---	Draw a horizontal separator line before this item in the menu. -->
+	<attribute name="separatorbefore" type="boolean"/>
+	
+	<!---	Sets the visibility of the menu item. -->
+	<attribute name="visible" />
+	
+		
+</class>
+
+</library>
