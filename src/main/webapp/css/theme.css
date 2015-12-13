@@ -1,0 +1,624 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+html, body {
+	height: 100%;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#header {
+	font-size: 28px;
+	line-height: 40px;
+	font-weight: bold;
+	background-image: url(../public/themes/basic-theme/general/logo.png);
+	background-repeat: no-repeat;
+	padding-left: 150px;
+}
+#topLinks {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+#topLinks span {
+	padding-right: 5px;
+	padding-left: 5px;
+	border-right: 1px solid black;
+	white-space: nowrap;
+}
+
+#topLinks span:last-child {
+	border-right: none;
+}
+
+#menu {
+	background-color: #AFCBFB;
+	margin-top: 10px;
+}
+.ui-menubar .ui-menu {
+	width: 250px;
+}
+.ui-menu .ui-menu-item a {
+	line-height: 1.2em !important;
+	padding-bottom: 5px !important;
+}
+.menuName {
+	font-weight: bold;
+}
+.menuDesc {
+	font-size: smaller;
+	line-height: 1em !important;
+}
+
+#busy_indicator {
+	display: none;
+	float: right;
+	margin-top: 5px;
+	z-index: 1000;
+	width: 200px;
+	font-weight: bold;
+	text-align: center;
+	font-size: 1em;
+	color: #FF0000;
+}
+
+#chatPanel {
+	position: fixed;
+	z-index: 2000;
+	bottom: 0px;
+	right: 10px;
+	width: 600px;
+}
+#chatPanel #chat {
+	height: 20px;
+}
+#chatPanel #chat #controlBlock #control {
+	text-align: center;
+}
+#chatPanel #chat #messageArea .date {
+    margin-right: 5px;
+    font-style: italic;
+    font-size: smaller;
+}
+#chatPanel #chat #messageArea .from {
+	margin-left: 5px;
+    margin-right: 5px;
+	font-weight: bold;
+}
+#messageArea {
+	height: 165px;
+	overflow-y: auto;
+}
+#chatMessage .wysiwyg-editor {
+	height: 70px;
+	max-height: 70px;
+}
+.clickable {
+	cursor: pointer;
+}
+.dragbox-content .tableWrapper {
+	width: auto;
+	height: 100px;
+}
+.dragbox-content .tableWrapper .adminListTable {
+	max-width: none;
+	min-width: 0;
+}
+.help.support h3 {
+	margin-bottom: 5px;
+}
+.tableWrapper, .tableWrapperSmall {
+	background-color: #FFFFFF;
+	border: solid 1px #aacfe4;
+	width: 536px;
+	height: 100px;
+	overflow-y: scroll;
+}
+.tableWrapper {
+	height: 500px;
+}
+
+.formelementradiobox {
+	margin-left: 100px;
+}
+
+.formelementradiobox input {
+	margin: 0px 0px;
+	border: none;
+	width: 20px;
+}
+
+.formelementradiobox label {
+	width: 260px;
+	margin: 0px
+}
+
+.addLanguagePanel {
+	display: block;
+}
+
+.addLanguagePanel select {
+	padding: 0px 0px;
+	border: solid 1px #aacfe4;
+	width: 140px;
+	font-size: 12px;
+	margin-left: 2px;
+}
+
+.pagedEntityListPanel {
+	margin-left: 2px;
+	display: inline-block;
+}
+
+.searchForm {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.pagedEntityListPanel select, .adminForm .pagedEntityListPanel select {
+	padding: 0px 0px;
+	border: solid 1px #aacfe4;
+	width: 60px;
+	font-size: 12px;
+	display: inline;
+	float: none;
+}
+.searchForm input[type="text"], .adminForm .searchForm input[type="text"] {
+	width: 140px;
+	float: none;
+	display: inline-block;
+}
+.searchForm input[type="submit"], .adminForm .searchForm input[type="submit"] {
+	width: auto;
+	float: none;
+	display: inline-block;
+	border: 2px outset buttonface;
+	padding: 1px 6px;
+	font-size: 12px;
+}
+.pagedEntityListPanel input, .adminForm .pagedEntityListPanel input {
+	font-size: 14px;
+	padding: 0px 0px;
+	border: solid 1px #aacfe4;
+	width: 100px;
+	height: 20px;
+	margin: 2px 2px;
+	display: inline;
+	float: none;
+}
+
+.goto, .goto :link, .goto :hover {
+	font-size: 14px;
+	line-height: 14px;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	min-width: 16px;
+}
+
+.goto.icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    zoom: 1.2;
+}
+
+.ui-dialog {
+	-moz-box-shadow: 3px 3px 4px #000;
+	-webkit-box-shadow: 3px 3px 4px #000;
+	/* For IE 8 */
+	-ms-filter:
+		"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+	/* For IE 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135,
+		Color='#000000' );
+	box-shadow: 3px 3px 4px #000;
+}
+
+.sort-icon {
+	display: inline-block !important;
+	text-indent: 0px !important;
+}
+
+.start_step1, .start_step2, .start_step3, .start_step4  {
+	padding-left: 30px;
+	background-position: left top;
+	margin: 5px 0px 5px 0px; 
+	background-size: contain;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+.start_step1 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_1.png);
+}
+.start_step2 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_2.png);
+	margin-left: 20px;
+}
+.start_step3 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_3.png);
+	margin-left: 40px;
+}
+.start_step4 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_4.png);
+	margin-left: 60px;
+}
+.widget {
+	width: 100%;
+}
+.widget td {
+	min-width: 150px;
+}
+#contents .dragbox-content {
+	min-height: 300px;
+	max-height: 300px;
+}
+#feedcontainer {
+	overflow: auto;
+}
+#feeds.ui-accordion .ui-accordion-header {
+	margin-bottom: 2px;
+}
+.recording {
+	width: 100%;
+	display: inline-block;
+}
+.recording .files {
+	width: 250px;
+	border: 1px solid #ccc;
+}
+.trash-toolbar {
+	font-weight: bold;
+	line-height: 20px;
+	color: transparent;
+}
+.trash-toolbar-hover {
+	color: inherit;
+}
+.recording .files .trees {
+	min-height: 400px;
+	max-height: 600px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.recording .files .sizes table, .recording .files .info table {
+	width: 100%;
+}
+.recording .files .info input {
+	width: 100%;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+.recording .video .player {
+	width: 100%;
+	display: inline-block;
+	box-shadow: 0 0 10px 1px rgba(74, 137, 151, 0.5);
+}
+.recording .video .player video {
+	width: 100%;
+}
+.align-left {
+	float: left;
+}
+.align-right {
+	float: right;
+}
+.clear {
+	clear: both;
+}
+.om-icon {
+	background-repeat: no-repeat !important;
+	background-position: 0 0 !important;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+	display: inline-block !important;
+}
+.trees a.om-icon {
+	width: auto;
+}
+.trees a.om-icon span {
+	white-space: nowrap;
+	padding-right: 20px;
+	vertical-align: top;
+}
+.cross.om-icon {
+	background-image: url(images/cross.png);
+}
+.tick.om-icon {
+	background-image: url(images/tick.png);
+}
+.add.om-icon {
+	background-image: url(images/add.png);
+}
+.new-email.om-icon {
+	background-image: url(images/email_add.png);
+}
+.user.om-icon {
+	background: url(images/user.png);
+}
+.refresh.om-icon {
+	background: url(images/refresh.gif);
+}
+.trash.om-icon {
+	background: url(images/trash.png);
+}
+.folder-create.om-icon {
+	background: url(images/folder_add.png);
+}
+.recording.om-icon {
+	padding-left: 18px;
+	background-image: url(images/film.png);
+}
+.broken-recording.om-icon {
+	padding-left: 18px;
+	background-image: url(images/film_error.png);
+}
+.processing-recording.om-icon {
+	padding-left: 18px;
+	background-image: url(images/film_processing.png);
+}
+.my-recordings.om-icon {
+	padding-left: 18px;
+	background-image: url(images/house_link.png);
+}
+.public-recordings.om-icon {
+	padding-left: 18px;
+	background-image: url(images/world_link.png);
+}
+.tree-theme-windows span.tree-content {
+	display: flex !important;
+}
+.recording.item {
+	position: relative;
+	vertical-align: top;
+}
+.recording.item .name {
+	color: black;
+	display: block;
+	overflow: hidden;
+	width: 230px;
+}
+.recording.item .errors {
+	position: absolute;
+	right: 0px;
+	background-image: url(images/script_error.png);
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	padding-right: 20px;
+}
+.recording.dialog.errors {
+	width: 600px;
+	height: 500px;
+	font-size: small;
+}
+.recording.dialog.errors .alert {
+	color: red;
+}
+.recording.dialog.errors .message {
+	display: block;
+	unicode-bidi: embed;
+	font-family: monospace;
+	white-space: pre;
+	margin: 0;
+}
+.online.om-icon {
+	background-image: url(images/bullet_green.png);
+}
+.offline.om-icon {
+	background-image: url(images/bullet_red.png);
+}
+.error {
+	color: red;
+}
+.message {
+	margin: 50px;
+	border: 1px solid black;
+	padding: 15px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+.ui-progressbar div { 
+	text-align: center;
+	padding-top: 7px;
+	font-weight: bold;
+}
+table.messages {
+	width: 100%;
+	min-height: 500px;
+}
+table.messages td.side, table.messages td.main {
+	vertical-align: top;
+}
+table.messages td.side.left {
+	min-width: 150px;
+	overflow-x: hidden;
+}
+table.messages td.side.right {
+	min-width: 200px;
+	overflow-x: hidden;
+}
+table.messages td.main {
+	width: 100%;
+}
+.email {
+	padding-left: 25px;
+	background-repeat: no-repeat !important;
+	background-position: 5px 3px !important;
+	padding-top: 2px;
+	display: block;
+	text-align:left;
+}
+.email.new {
+	background-image: url(images/email_add.png);
+	font-weight: normal;
+}
+.email.new .ui-button-text, .email.newdir .ui-button-text {
+	padding: 0;
+}
+.email.inbox {
+	background-image: url(images/basket_put.png);
+}
+.email.sent {
+	background-image: url(images/email_go.png);
+}
+.email.trash {
+	background-image: url(images/email_delete.png);
+}
+.email.newdir {
+	background-image: url(images/folder_add.png);
+	font-weight: normal;
+}
+.email.folder {
+	background-image: url(images/folder.png);
+	font-weight: normal;
+	position: relative;
+}
+.email.folder .delete {
+	position:absolute;
+	right: 2px;
+	top: 2px;
+	background-image: url(images/cross.png);
+	font-weight: normal;
+	padding: 0;
+	display: inline-block;
+	background-position: 0;
+	width: 18px;
+	height: 18px;
+}
+.messages.column.label {
+	width: 20px;
+	min-height: inherit;
+}
+input[type="text"].messages.text, .messages.text.to {
+	width: 100%;
+	max-height: 100px;
+	overflow-y: auto;
+}
+textarea.messages.body {
+	width: 100%;
+	height: 300px;
+}
+select.messages.selector {
+	width: 220px;
+}
+.info-text {
+	background-image: url(images/information.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	cursor: default;
+	border: none;
+	padding-left: 20px;
+	font-style: italic;
+}
+.invisible-form-component {
+	position: absolute;
+	top: -9999px;
+	width: 1px;
+	height: 1px;
+}
+#messagesTable tr.unread {
+	font-weight: bold;
+}
+.fht-tbody {
+	background-color: white;
+}
+#searchUsersTable th, .fht-table th {
+	font-weight: bold !important;
+	text-align: left;
+}
+#ui-datepicker-div{
+    z-index: 100 !important;
+}
+.room-list {
+	border-collapse: collapse;
+}
+.room-row {
+	background-color: rgb(248, 248, 248);
+	border-bottom: 5px solid white;
+}
+.select2-results .select2-result .select2-result-label .user.external
+, .select2-results .select2-result .select2-result-label .user.internal
+, .select2-choices .select2-search-choice .user.external
+, .select2-choices .select2-search-choice .user.internal {
+	padding-left: 18px;
+	background-repeat: no-repeat;
+	background-position: 0px 2px;
+}
+.select2-results .select2-result .select2-result-label .user.external
+, .select2-choices .select2-search-choice .user.external {
+	background-image: url(images/user_go.png);
+}
+.select2-results .select2-result .select2-result-label .user.internal
+, .select2-choices .select2-search-choice .user.internal {
+	background-image: url(images/user.png);
+}
+.page.recording {
+	padding-top: 40px;
+}
+.page.recording .video, .page.recording .info {
+	display: inline-block;
+	float: left;
+	padding-left: 20px;
+}
+.page.recording .video {
+	min-width: 400px;
+}
+.rooms.title {
+	font-weight: bold;
+	padding: 10px;
+	padding-bottom: 0;
+}
+.rooms.desc {
+	margin: 10px;
+	max-width: 900px;
+}
+.user.info.panel legend {
+	font-style: italic;
+	text-align: right;
+}
+.user.info.panel fieldset table, .user.info.panel fieldset table textarea {
+	width: 100%;
+}
+form .input {
+	display: block;
+	float: left;
+	font-size: 14px;
+	padding: 0px 0px;
+	width: 280px;
+	margin: 2px 2px;
+}
+.date.time.picker {
+	font-size: 12px;
+	white-space: nowrap;
+}
+.profile .ui-button-text-only .ui-button-text {
+	font-size: 12px;
+	padding-right: 0.2em;
+	padding-left: 0.2em;
+}
+.invitees.select2-container-multi .select2-choices {
+	max-height: 80px;
+	overflow-y: auto;
+}

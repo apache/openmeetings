@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="chatParticipantsInviteConference" extends="guiPresenter" resizeable="false"
+    width="490" height="430" y="240" x="240" closable="true" labelid="1131" >
+	
+	<attribute name="publicSID" value="" type="string" />
+	<attribute name="user_id" value="0" type="number" />
+	
+    <view resource="messagebox_info_rsc" x="10" y="24" />
+    
+    <labelText labelid="1132" x="30" y="22" fontstyle="italic"
+               multiline="true" width="$once{ parent.width - 40 }" />
+	
+	<labelText labelid="777" x="2" y="52" fontstyle="bold" />
+	
+    <view x="4" y="72" height="150">
+                    
+        <handler name="oninit">
+            this.getRoomsPublicWithoutType.doCall();
+        </handler>
+
+        <netRemoteCallHib name="getRoomsPublicWithoutType" funcname="conferenceservice.getRoomsPublicWithoutType" 
+            remotecontext="$once{ canvas.thishib }" >   
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+            <handler name="ondata" args="value">    
+                <![CDATA[
+                    if ($debug) Debug.write("getRoomsPublicWithoutType: ", value);
+                    if (value != null) {
+                        for (var eg = 0; eg < value.length; eg++) {
+                            var time = value[eg].starttime.getHours()
+                                    + ':' + value[eg].starttime.getMinutes()
+                                    + ' ' + value[eg].starttime.getDate()
+                                    + '.' + (value[eg].starttime.getMonth() + 1)
+                                    + '.' + value[eg].starttime.getFullYear();
+                                    
+                            new lz.roomListInviteUserItem(parent.inn.inn.inn,
+                                    {
+                                        roomType:value[eg].roomtype.roomtypes_id,
+                                        currentusers : value[eg].currentusers,
+                                        obj : value[eg],
+                                        ispublic : true,
+                                        roomid : value[eg].rooms_id,
+                                        starttime : time,
+                                        roomname : value[eg].name,
+                                        publicSID:parent.parent.publicSID,
+                                        user_id:parent.parent.user_id
+                                    });
+                        }
+                    }
+                ]]>                                     
+            </handler>  
+        </netRemoteCallHib>
+
+        <!-- inn.inn.inn view would be setted object by above ondata hander. -->
+        <view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+            <view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" 
+                        bgcolor="0xFFFFFF" clip="true" >
+                <view name="inn" layout="axis:y;spacing:1"/>
+                <om_vscrollbar />
+            </view>
+        </view>
+    </view>
+	
+	<labelText labelid="779" x="2" y="222" fontstyle="bold" />
+	
+    <view x="4" y="242" height="150">
+        <handler name="oninit">
+            this.getRoomsByOrganisationWithoutType.doCall();
+        </handler>    
+
+        <netRemoteCallHib name="getRoomsByOrganisationWithoutType" funcname="conferenceservice.getRoomsByOrganisationWithoutType" remotecontext="$once{ canvas.thishib }" >   
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+            <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+            <handler name="ondata" args="value">    
+            <![CDATA[
+                if ($debug) Debug.write("getRoomsByOrganisationWithoutType ",value);
+                if (value != null) {
+                    for (var eg = 0; eg < value.length; eg++) {
+                        new lz.roomListInviteUserItem(parent.inn.inn.inn,{
+                                    roomType:value[eg].room.roomtype.roomtypes_id,
+                                    currentusers : value[eg].room.currentusers,
+                                    obj : value[eg],
+                                    ispublic : false,
+                                    roomid : value[eg].room.rooms_id,
+                                    starttime : parseDateToStringTime(value[eg].room.starttime),
+                                    roomname : value[eg].room.name,
+                                    publicSID:parent.parent.publicSID
+                                });
+                    }
+                }
+            ]]>                                     
+            </handler>  
+        </netRemoteCallHib> 
+ 
+                <!-- inn.inn.inn view would be setted object by above ondata hander. -->
+        <view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+            <view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
+                <view name="inn" layout="axis:y;spacing:1"/>
+                <om_vscrollbar />
+            </view>
+        </view>
+    </view>
+    
+    <simpleLabelButton labelid="55" width="100" onclick="this.parent.close();"
+		   x="$once{ parent.width-104 }" y="$once{ parent.height-26 }" />    	
+	
+</class>
+
+</library>
