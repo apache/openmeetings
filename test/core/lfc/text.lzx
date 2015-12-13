@@ -1,0 +1,78 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!---The basic text display element. -->
+<class name="text" extends="view">
+<!--- Antialias type for this text, Flash only One of:  "normal" | "subpixel" | "advanced" -->
+	<attribute name="antiAliasType" value="normal|subpixel|advanced" />
+	<!---  An alias for the text attribute, but with the type cdata, allowing it to be bound to a value that should not be interpreted as markup (when data binding, CSS style binding, or ??? or ???). -->
+	<attribute name="cdata" />
+	<!---  Text direction, either "ltr" (default) or "rtl", Flash only -->
+	<attribute name="direction" />
+	<!---  Grid fit for this text, Flash only One of:  "none" | "pixel" | "subpixel" -->
+	<attribute name="gridFit" value="none|pixel|subpixel"/>
+	<!---  The horizontal scroll position in pixels. Default 0. NOTE: A constraint or handler on onhscroll will automatically enable updating the attribute. -->
+	<attribute name="hscroll" type="number" />
+	<!---  letterspacing accepts any number which is interpreted as a px value -->
+	<attribute name="letterspacing" type="number" />
+	<!--- The height of a line of text in the current style -->
+	<attribute name="lineheight" type="number" />
+	<!---  The maximum horizontal scroll position in pixels. this.setAttribute('hscroll', this.maxhscroll) will cause the end of content to be visible at the edge of the view. (The rightmost content will appear at the right edge of the view for left-to-right scripts, hence this is the pixel position of the leftmost pixel that will appear in the view when scrolled all the way to the right.) NOTE: A constraint or handler on onmaxhscroll will automatically enable updating the attribute. -->
+	<attribute name="maxhscroll" type="number" />
+	<!---  Maximum number of characters allowed in this field -->
+	<attribute name="maxlength" type="number" />
+	<!---  The maximum vertical scroll position (in lines, 1-based). this.setAttribute('scroll', this.maxscroll) will cause the last line of the content to be visible at the bottom of the view (hence this is the line number of the line that will appear at the top of the view when scrolled all the way to the bottom). NOTE: A constraint or handler on onmaxscroll will automatically enable updating the attribute.  -->
+	<attribute name="maxscroll" type="number" />
+	<!---  If true, the lines of text are wrapped to fit within the text width. (The name multiline is a misnomer. Unwrapped text can be multiple lines if it contains a <br /> or <p> element, or a line break within a <pre> element. This attribute defaults to true if width and height are explicitly specified. If you set multiline=true, you probably want to explicitly a width for the text also; if multiline=true and you do not specify a width, the system will pick an arbitrary width (100 pixels at the moment). When multiline=true, the text is automatially re-wrapped whenever the content is modified by calls to setText, or whenever the width of the text view is modified. -->
+	<attribute name="multiline" type="boolean" />
+	<!---  regexp describing set of characters allowed in this field Restrict the characters that can be entered to a pattern specified by a regular expression. Currently only the expression [ ]* enclosing a set of characters or character ranges, preceded by an optional "^", is supported. examples: [0-9]* , [a-zA-Z0-9]*, [^0-9]* -->
+	<attribute name="pattern" />
+	<!---  If true, the width of the text field will be recomputed each time text is changed, so that the text view is exactly as wide as the width of the widest line. Defaults to true. -->
+	<attribute name="resize" type="boolean" />
+	<!---  The vertical scroll position (in lines, 1-based). Default 1.-->
+	<attribute name="scroll" type="number"/>
+	<!---  Use setAttribute('scrollevents', true) to cause scroll events to be sent. NOTE: A constraint or handler on onyscroll, onscroll, onxscroll, onhscroll, onscrollheight, onmaxscroll, onscrollwidth or onmaxhscroll will automatically enable scrollevents. -->
+	<attribute name="scrollevents" type="boolean" />
+	<!---  The total height of the content in pixels. this.setAttribute('height', this.scrollheight) is equivalent to this.setAttribute('height', null) (for the current content: the former will not follow content changes as the latter does). If this.scrollheight > this.height, this.setAttribute('yscroll', this.height - this.scrollheight) will scroll the content so that the bottom of the content appears in the bottom of the view. NOTE: A constraint or handler on onscrollheight will automatically enable updating the attribute. -->
+	<attribute name="scrollheight" type="number" />
+	<!---  The total width of the content in pixels. this.setAttribute('width', this.scrollwidth) is equivalent to this.setAttribute('width', null) (for the current content: the former will not follow content changes as the latter does). If this.scrollwidth > this.width, this.setAttribute('yscroll', this.width - this.scrollwidth) will cause the end of content to be visible at the edge of the view. (The rightmost content will appear at the right edge of the view for left-to-right scripts.) NOTE: A constraint or handler on onscrollwidth will automatically enable updating the attribute. -->
+	<attribute name="scrollwidth" type="number" />
+	<!---  If true, the text is selectable -->
+	<attribute name="selectable" type="boolean"/>
+	<!---  The sharpness for this text, between -400 and 400, Flash only-->
+	<attribute name="sharpness" type="number" />
+	<!---  The text to display in this text field. If set to a value that is not a string, the value will first be converted to a string as if by String(value). To display nothing, set the value to the empty string "". -->
+	<attribute name="text" />
+	<!---  textalign accepts one of [left, right, center, justify]-->
+	<attribute name="textalign" />
+	<!---  text-decoration for this text, either 'none' or 'underline'.-->
+	<attribute name="textdecoration" />
+	<!---  textindent accepts any number which is interpreted as a px value-->
+	<attribute name="textindent" type="number"/>
+	<!---  The thickness for this text, between -200 and 200, Flash only-->
+	<attribute name="thickness" type="number"/>
+	<!---  The x scroll offset of the content in pixels (a negative number specifying how many pixels the content should be scrolled horizontally). Default 0. NOTE: A constraint or handler on onxscroll will automatically enable updating the attribute. -->
+	<attribute name="xscroll" type="number"/>
+	<!---  The y scroll offset of the content in pixels (a negative number specifying how many pixels the content should be scrolled vertically). Default 0. NOTE: A constraint or handler on onyscroll will automatically enable updating the attribute. -->
+	<attribute name="yscroll" type="number"/>
+
+	<event name="ondirection" />      
+	<event name="onhscroll"/>   
+	<event name="onlineheight"/>     
+	<event name="onmaxhscroll"/>     
+	<event name="onmaxlength"/>      
+	<event name="onmaxscroll"/>       
+	<event name="onpattern"/>  
+	<event name="onscroll"/>     
+	<event name="onscrollevents"/>   
+	<event name="onscrollheight"/>   
+	<event name="onscrollwidth"/>    
+	<event name="onselectable"/> 
+	<!--_Sent when a clickable HTML link in the text field is clicked. Event data is a string with the link value. See the makeTextLink method. -->    
+	<event name="ontextlink"/>  
+	<event name="onxscroll"/>    
+	<event name="onyscroll"/>
+
+</class>
+
+</library>

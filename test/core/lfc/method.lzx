@@ -1,0 +1,20 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- Attaches a function or event handler to an object or class. -->
+<class name="method" extends="false">
+	<!---  The name of a variable that will be set to this object when the application is started. If this element is directly within a canvas or library element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object. -->
+	<attribute name="name" type="string" required="true" />
+	<!--- The parameter names of this method. The value of this attribute is a comma-separated list of JavaScript identifiers. -->
+	<attribute name="args" value="" type="string"/>
+    <!--- One of:
+class
+    The attribute will be an attribute of the class; to refer to it, you say lz.classname.attributename . 
+instance
+    Each instance will have an attribute with the specified properties ( name , type , value , etc.). 
+
+You can set allocation to class to get static attributes. Static properties are attached to the class itself, for example lz.classname . -->
+    <attribute name="allocation" type="string" value="instance|class" />
+</class>
+
+</library>

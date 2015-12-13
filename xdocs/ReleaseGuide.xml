@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+
+	<properties>
+		<title>Release Guide</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How to Build a Release of OpenMeetings">
+
+			<p>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+							rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+					<li>A text editor</li>
+				</ul>
+			</p>
+
+			<p>
+				Check that all files:
+				<br />
+				LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README
+				<br />
+				are up to date and refer to the right version.
+			</p>
+
+			<p>
+				Create a TAG of the SVN tree that you would like to release
+			</p>
+
+			<p>Get the source from your TAG: </p>
+			<div class="xmlcode">
+				svn checkout
+				https://svn.apache.org/repos/asf/incubator/openmeetings/$TREE/$BRANCHORTAG/
+				<br />
+				$TREE and $BRANCHORTAG should be replaced with your new TAG
+			</div>
+
+			<p>Edit the file build.properties</p>
+			<div class="xmlcode">
+				project.status=SNAPSHOT
+			</div>
+			<p>to</p>
+			<div class="xmlcode">
+				project.status=RELEASE
+			</div>
+			<p>Run the command: </p>
+			<div class="xmlcode">
+				ant dist-release
+			</div>
+			<p>Test building the source on windows and OSx or Linux</p>
+			<p>Test running the binary's</p>
+			<p>Create MD5 checksums and signatures with the your KEY</p>
+			<p>Upload the build artefacts to your public_html in your home
+				directory at people.apache.org
+			</p>
+			<p>
+				Send a "VOTE" to the developer mailing list including links to
+				release artefacts.
+				<br />
+				After that send a vote to the general-incubator mailing list.
+				<br />
+				You need at least 3 IPMC votes
+			</p>
+			<p>If successful: Upload the release </p>
+			<div class="xmlcode">
+				The distribution upload location (www.apache.org/dist)
+				for all
+				Apache projects is the /www/www.apache.org/dist directory on
+				people.apache.org. Each project (including the Incubator) owns a
+				directory within dist.
+			</div>
+			<p>
+				Wait 24 hours (until all Apache mirrors have synced the packages)
+				and send an announcment to the mailing list + blog and any other
+				channel.
+			</p>
+
+		</section>
+
+	</body>
+
+</document>

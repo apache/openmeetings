@@ -1,0 +1,77 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas debug="true" >
+  <script>
+    _browserjavascriptcallback = "";
+  </script>
+  
+     <attribute name="lzappId" type="string" value="lzapp" />
+     <attribute name="timer" type="number" value="10" />
+     <attribute name="prevalue" type="string" value="_browserjavascriptcallbackprevalue" />
+     <attribute name="value" />
+     
+     <handler name="onvalue" args="v">
+     	if ($debug) Debug.write("onvalue: ",v);
+     	
+     </handler>
+     
+	<edittext name="_hand" />
+  
+  <button name="btn" y="20" text="test" onclick="canvas.testRegExp()" />
+
+  <method name="testRegExp2">
+  	<![CDATA[
+  		var regExp = "[0-9]*";
+  		
+    	var fieldValue = this._hand.getText();
+  	    
+    	var returnValue = flash.external.ExternalInterface.call("replace",fieldValue,escape(regExp),escape);
+    	if ($debug) Debug.write("returnValue: ",returnValue);
+	]]>
+ </method>
+ 
+ <method name="testRegExp" >
+ 	<![CDATA[
+	var fieldValue = "9";
+	var regExp = "[0-9]*";
+    var regex = "/^"+regExp+"$/";
+    var script = "( !( (\""+ fieldValue +"\".replace("+ regex +" ,\"\").length == 0) && ( "+ regex +".test(\""+ fieldValue +"\")) ) ) ";
+  
+	var t = script.split("'").join("\\'");
+	var s = "document.getElementById('"+ lzappId + "').SetVariable('_browserjavascriptcallback', escape((" + t + ")));"
+
+	
+		lz.Browser.loadJS(s);
+		
+		if(typeof this.callDelegate == 'undefined')
+		this.callDelegate = new LzDelegate( this, "callback" );
+		lz.Timer.resetTimer( this.callDelegate, timer );
+		]]>
+   </method>
+
+ <method name="callback">
+	if(unescape(_browserjavascriptcallback) == this.prevalue)
+	lz.Timer.resetTimer( this.callDelegate, timer );
+	else
+	setAttribute("value", unescape(_browserjavascriptcallback));
+ </method>
+
+
+</canvas>

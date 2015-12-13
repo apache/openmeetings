@@ -1,0 +1,29 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---  A description of an instance hierarchy that can be applied and removed at runtime.
+JavaScript: lz.state 
+
+A state is an object that holds its children and attributes for creation or application at a later time when the state's apply method is called. In addition to representing visual state by adding and removing children from a view, states are often used to control constraints which are applied and removed at different times during the run of an application.
+
+For the most part, the declarative style used in OpenLaszlo applications represents an initial state for the application. All modification to application state can be made using the script API's, but it is often convenient to declaratively describe a bit of application state which may be selectively applied or removed at runtime. The <state> tag is provided for this purpose.
+
+Everything within a <state> tag acts as if it were written inside the parent when the state is applied. States can contain attributes, methods, and other nodes.
+
+When a state is removed, any children or constraints created when the state was applied are then removed, but attributes that were set by the application of the state are not restored. 
+
+ -->         
+<class name="state" extends="node">
+    
+    <!--- 
+        Whether or not the state is applied. setAttribute('applied', true) will apply the state. setAttribute('applied', false) will remove the state.
+         -->
+    <attribute name="applied" value="false" type="boolean" />
+    <!---
+        If true, the state will merely hide any views it has created when it is removed (not applied), instead of destroying them. 
+         -->
+    <attribute name="pooling" value="false" type="boolean" />
+    
+</class>
+
+</library>

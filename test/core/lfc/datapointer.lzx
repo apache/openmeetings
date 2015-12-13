@@ -1,0 +1,27 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            
+<!---The binder between data and nodes.
+Datapaths are used to merge data hierarchies with the hierarchy of an OpenLaszlo application. This is done using the the XPath syntax supported by lz.datapointer. When a node is given a datapath attribute, a datapath with the given value as its XPath is created. If the datapath retrieves a node (i.e. it doesn't terminate in an attribute getter or a () operator) then the node is mapped to that data context and all child nodes will implicitly share the datacontext, but no further action is taken. If the datapath retrieves data, rather than just a node, a few extra things happen. First, the node's data property is set and the node's ondata event is sent. Second, the node's applyData method is called with the data as the argument. In cases where a datapath matches more than one data node, the view with the matching datapath is replicated once for each data node that matches, and a lz.ReplicationManager takes over the view's spot in its parent.
+
+When a node is replicated, an LzReplicationManager takes it's place, and an onclones will be sent when the node's clones are updated.
+
+A node can only have one datapath, and datapaths always have the name datapath. Additional options available on datapath such as pooling and replication are specified by writing the <datapath> tag as a separate node. 
+ -->
+<class name="datapointer" extends="node">
+
+	<!---	The reference to a clonemanager from a clone. -->
+	<attribute name="context" />
+	
+	<!---	The LzDataNodeMixin that the datapointer is pointing to. Calling setAttribute on p calls LzDatapointer.setPointer.  -->
+	<attribute name="p" />
+	
+	<!---	This determines the behavior of the datapointer in response to notification that the dataset the datapointer is mapped to has changed. If rerunxpath is true, the datapointer will always rerun its remembered XPath (set with the xpath property). If it is false, the datapointer will only verify that the node it is pointing to is still in the dataset. If it isn't, the datapointer will rerun its remembered xpath (if it has one) or will print a debug message if any further attempt is made to use its current node as the basis for a relative XPath query.  -->
+	<attribute name="rerunxpath" type="boolean" />
+	
+	<attribute name="xpath" />
+	
+</class>
+
+</library>

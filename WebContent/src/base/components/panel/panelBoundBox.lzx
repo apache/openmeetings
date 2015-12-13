@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--
+
+<class name="drawViewNew" extends="drawview" cachebitmap="false" x="-1" y="-1" >
+ -->
+<class name="panelBoundBox" extends="drawview" cachebitmap="false" >
+	
+	<handler name="oncontext">
+		var numberColor = this.stringRgbToInteger(canvas.getThemeColor('basebgcolorizer'));
+		var fillColor = this.stringRgbToInteger(canvas.getThemeColor('baseMousecolorizer'));
+		this.drawBody(this,0,0,this.width,this.height,fillColor,2);
+		this.drawDottedLine(this,0,0,this.width,0,numberColor,2);
+		this.drawDottedLine(this,this.width,0,this.width,this.height,numberColor,2);
+		this.drawDottedLine(this,this.width,this.height,0,this.height,numberColor,2);
+		this.drawDottedLine(this,0,this.height,0,0,numberColor,2);
+	</handler>
+	
+	<method name="stringRgbToInteger" args="rgb">
+	    <![CDATA[
+	        var red=(rgb >> 16) & 0xFF;
+	        var green=(rgb >> 8) & 0xFF;
+	        var blue=rgb & 0xFF;
+	        return (red * 65536 + green * 256 + blue);
+	    ]]>
+	</method>
+	
+  	<method name="drawBody" args="targetObj,x1,y1,x2,y2,fill,lineWidth">
+   		<![CDATA[
+    		
+            //if ($debug) Debug.write("drawBody: ",targetObj,lineWidth);
+        
+    		targetObj.lineWidth = lineWidth;
+    		targetObj.beginPath();
+    		targetObj.moveTo(x1,y1);
+    		targetObj.lineTo(x1,y2);
+    		targetObj.lineTo(x2,y2);
+    		targetObj.lineTo(x2,y1);
+    		targetObj.lineTo (x1,y1);
+    		targetObj.closePath();
+
+    		targetObj.fillStyle = fill;
+    		targetObj.fill();
+    		
+    	]]>   
+  	</method> 	
+
+	<method name="drawDottedLine" args="targetObj,startx,starty,endx,endy,stroke,lineWidth">
+    	<![CDATA[
+    		//var drawObj = new lz.drawview(targetObj,{width:this.width,height:this.height});	    
+    		//if ($debug) Debug.write("drawDottedLine: ",targetObj,startx,starty,endx,endy,stroke,lineWidth);
+	    	Math.linearTween = function (t, b, c, d) {
+			    return c*t/d + b;
+			};
+
+    		//if($debug)  Debug.write("drawDashLine: ",tObject);
+    		var tx = endx;
+    		var ty = endy;
+    		var sx = startx;
+    		var sy = starty;
+    		var distance = Math.sqrt(Math.pow(tx-sx,2)+Math.pow(ty-sy,2)); 
+    		var steps = Math.floor(distance  / 5 ); 
+    		//if($debug)  Debug.write("steps: ",steps);
+    		var gap = false;
+    		//if($debug)  Debug.write("gap1: ",gap);
+	        for (var i = 1; i<=steps; ++i) {
+	            var ctx = Math.linearTween(i, sx, tx-sx,steps);    //equations by R.Penner!
+	            var cty = Math.linearTween(i, sy, ty-sy,steps);
+	            //if($debug)  Debug.write("gap2: ",gap);
+	            gap = !gap;    //abwechselnd luecke/nichtluecke
+	            if(!gap) {
+	            	//if($debug)  Debug.write(csx,csy,"|",ctx,cty);
+    				targetObj.strokeStyle = stroke;
+    				targetObj.lineWidth = lineWidth;
+    				targetObj.beginPath();    			            	
+	               	targetObj.moveTo(csx,csy);
+	                targetObj.lineTo(ctx,cty);
+	                targetObj.stroke();
+	            }
+	            csx =ctx;
+	            csy = cty;
+	        }       		  		
+    	]]>
+	</method>	
+	
+</class>
+
+</library>

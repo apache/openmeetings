@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>  
+
+<class name="changeWidthSlider" extends="basePropertySelector" bgcolor="0xFFFFFF" width="60" height="24">
+
+    <attribute name="numberAlign" value="right" type="string"/>
+    <attribute name="minimum" type="number" value="1" />
+    <attribute name="maximum" type="number" value="100" />
+    <attribute name="step" value="1" type="number"/>
+    <attribute name="initialNumberInit" value="1" type="number"/>
+    <attribute name="initialNumber" value="3" type="number"/>
+    
+    <attribute name="boxPosition" value="down" type="string"/>
+    
+    <attribute name="labelid" value="429" type="number"/>
+    
+    <event name="onplus" />
+    <event name="onminus" />
+    
+    <handler name="oninit">
+        this.initialNumberInit=initialNumber;
+    </handler>
+    
+    <method name="getValue">
+        return this.initialNumber;
+    </method>
+    
+    <method name="setSliderValue" args="v">
+    	this.initialNumber = v;
+    	this.numericValue.setAttribute('tempValue',this.initialNumber);
+    	this.numericValue.setAttribute('text',this.initialNumber);
+    	if ($debug) Debug.write("setSliderValue ",v);
+    	this.setEnabled(true);
+    </method>
+
+    <edittext name="numericValue" width="34" height="24" text="$once{ parent.initialNumber }" >
+        <attribute name="tempValue" value="$once{ parent.initialNumber }" type="number" />
+        <handler name="onfocus">
+            this.tempValue = Number(this.getText());
+        </handler>            
+        <handler name="onblur">
+            <![CDATA[
+                var t = parseInt(this.getText());
+                if (isNaN(t) || t > this.parent.maximum || t < this.parent.minimum){
+                    t = this.tempValue;
+                    this.setAttribute('text',t);
+                    lz.Focus.setFocus(this);
+                } else {
+                    this.tempValue = t;
+                    parent.setAttribute('initialNumber',t);
+                }
+            ]]>
+        </handler>
+    </edittext>
+
+
+    <button name="arrowView" x="36" width="24" y="1" height="23" >
+        <view name="arrow_down_slider" resource="arrow_down_slider_rsc" 
+            x="4" y="3" />
+            <handler name="onclick">
+            	if (this.parent.boxPosition=="up"){
+            		var pick = new lz.changeWidthSliderWin(canvas,{
+					            			initialNumber:parent.numericValue.tempValue,
+					            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
+					            			maxvalue:parent.maximum,
+					            			y:(parent.getAttributeRelative('y',canvas)-140+parent.height)
+				            			});
+            	} else {
+            		var pick = new lz.changeWidthSliderWin(canvas,{
+					            			initialNumber:parent.numericValue.tempValue,
+					            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
+					            			maxvalue:parent.maximum,
+					            			y:(parent.getAttributeRelative('y',canvas))
+				            			});
+            	}
+                lz.ModeManager.makeModal( pick );
+            </handler>
+        <labelTooltip labelid="$once{ parent.parent.labelid }" />
+    </button>
+    
+</class>
+    
+<class name="closableView" extends="view">
+    <method name="close">
+        lz.ModeManager.release(this);
+        this.destroy();
+    </method>
+</class>    
+    
+<class name="changeWidthSliderWin" extends="closableView" bgcolor="white" 
+    clickable="true" width="58" height="140" >
+    
+    <attribute name="btnRef" value="null" />
+    <attribute name="initialNumber" value="3" type="number"/>
+    <attribute name="maxvalue" value="100" type="number" />
+    
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+            if ( eventStr == "onmousedown"  ){
+                if ( view != null ) {
+                   if ( !view.childOf(this) ) {
+                        this.close();
+                   }
+                } else {
+                    this.close();
+                }
+            }
+            if (view && view.childOf(this)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            return true;
+        ]]> 
+    </method>
+
+    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="58" height="138" x="1" y="1" />
+    
+    <vslider name="_slider" height="120" y="10" x="10" minvalue="1" maxvalue="$once{ parent.maxvalue }" 
+        initvalue="$once{ parent.initialNumber }" showrange="false" showvalue="true">
+        <handler name="onvalue" args="v">
+            //if ($debug) Debug.write("onvalue",v);
+            parent.btnRef.numericValue.tempValue = Number(v);
+            parent.btnRef.numericValue.setAttribute('text',v);
+            parent.btnRef.setAttribute('initialNumber',v);
+        </handler>
+        <handler name="onvalueChosenFinal">
+            parent.close();
+        </handler>        
+    </vslider>
+    
+    <view name="_close" x="$once{ parent.width-this.width-2 }" y="2"
+        resource="btn_presenter_close"
+        onmouseover="this.setAttribute('frame',2)"
+        onmouseout="this.setAttribute('frame',1)"
+        onmousedown="this.setAttribute('frame',3)"
+        onmouseup="this.setAttribute('frame',1)" >
+        <handler name="onclick">
+            this.setAttribute('frame',2);
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" />
+    </view>     
+        
+</class>    
+
+</library>

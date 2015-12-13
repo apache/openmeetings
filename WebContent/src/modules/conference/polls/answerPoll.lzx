@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="answerPoll" extends="labelExplorerBox" labelid="18"
+    docking="true" resizeable="false" closable="true" width="500" x="100" height="240">
+    
+	<attribute name="createdBy" type="string" value="" />
+	<attribute name="pollDate" type="string" value="" />
+	<attribute name="pollQuestion" type="string" value="" />
+	<attribute name="pollTypeId" type="string" value="" />
+	<attribute name="roomPollAnswerList" type="string" value="" />
+	<attribute name="roomPollId" type="string" value="" />
+	<attribute name="roomScopeName" type="string" value="" />
+	
+	<labelText y="22" name="head" />
+	<labelText text="$once{ parent.pollQuestion }" y="42" x="0" height="60" width="380" multiline="true" resize="false"/>
+	
+	<handler name="oninit">
+		if ($debug) Debug.write("[answerPoll:oninit] this: ",this);
+		if (this.pollTypeId==1){
+			//Debug.write("Yes/No Question");
+			this.pollboolean.setAttribute('visible',true);
+		} else  if(this.pollTypeId==2) {
+			//Debug.write("Numeric Question");
+			this.pollnumeric.setAttribute('visible',true);
+		}
+		this.head.setAttribute('text',this.createdBy+" "+canvas.getLabelName(36));
+	</handler>
+	
+	<labelText y="102" labelid="33" />
+	
+	<radiogroup name="pollboolean" x="100" y="102" visible="false">
+	  	<labelRadioButton value="1" labelid="34" selected="true" />
+	  	<labelRadioButton value="2" labelid="35" />
+	</radiogroup>
+
+	<resetCombobox name="pollnumeric" visible="false" width="160" x="100" y="102" editable="false" itemclassname="bigTextListItem" >
+		<handler name="oninit">
+			<![CDATA[
+			for (var i=1;i<11;i++){
+				this.addItem(i,i);
+			}
+			this.selectItem('1');
+			]]>
+		</handler>
+	</resetCombobox>
+	
+    <simpleLabelButton labelid="32" width="200" x="80" y="218">
+    	<handler name="onclick">
+    		if (parent.pollTypeId==1){
+    			this.parent.vote.pollvalue = Number(parent.pollboolean.getValue());
+    		} else if (parent.pollTypeId==2){
+    			this.parent.vote.pollvalue = Number(parent.pollnumeric.getValue());
+    		}
+    		this.parent.vote.pollTypesId = parent.pollTypeId;
+    		this.parent.vote.doCall();
+    		
+    	</handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton labelid="25" width="200" x="290" y="218" 
+        onclick="this.parent.close();" />
+    
+        <netRemoteCallHib name="vote" funcname="pollservice.vote" remotecontext="$once{ canvas.thishib }" >
+            <attribute name="pollvalue" type="number" value="0" />
+            <attribute name="pollTypesId" type="number" value="0" />
+            <netparam><method name="getValue">return parent.pollvalue;</method></netparam>
+            <netparam><method name="getValue">return parent.pollTypesId;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    //Debug.write("vote : ",value);
+                    this.parent.close();
+                ]]>
+            </handler>   
+        </netRemoteCallHib>      
+    
+    
+</class>
+
+
+</library>
