@@ -1,0 +1,90 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas debug="true" >
+  
+
+      <script when="immediate" >        
+        class LzRegExp extends Instance{
+          static var regexp_cnt = 0;
+          
+          static function initialize(){
+
+              /* if this was in the html-wrapper, would early instantiations be successful? */
+              lz.Browser.loadJS( "window.__lzregexp={};" + 
+                "window.__createRegExp=function(id,re,mod){window.__lzregexp[id]=new RegExp(re,mod);return true};" +
+                "window.__testRegExp=function(id,s){return window.__lzregexp[id].test(s)};" +
+                "window.__execRegExp=function(id,s){return window.__lzregexp[id].exec(s)};" +
+                "window.__deleteRegExp=function(id){delete window.__lzregexp[id]};" 
+              );
+
+          }
+          
+          function initialize( regexp, mod ){
+            super.initialize( this, arguments );
+
+              this.regexp_id = LzRegExp.regexp_cnt++;
+              this.__isready = true;
+              
+              var me = this;
+              lz.Browser.callJS( "window.__createRegExp", function(res){me.__isready = res == true}, this.regexp_id, regexp, mod );
+
+          }
+          
+          function test( s ){
+              if( this.__isready ){
+                return flash.external.ExternalInterface.call.apply( flash.external.ExternalInterface, ["window.__testRegExp", this.regexp_id, s] );
+              } else {
+                Debug.format( "called %w too early", arguments.callee.name );
+              }
+          }
+          
+          function exec( s ){
+              if( this.__isready ){
+                return flash.external.ExternalInterface.call.apply( flash.external.ExternalInterface, ["window.__execRegExp", this.regexp_id, s] );
+              } else {
+                Debug.format( "called %w too early", arguments.callee.name );
+              }
+          }
+          
+          function destroy(){
+            lz.Browser.callJS( "window.__deleteRegExp", null, this.regexp_id );
+          }
+        }
+      </script>
+
+  <button name="btn" text="test" />
+  
+  <handler name="oninit" reference="canvas" method="testRegExp" />
+  <handler name="onclick" reference="btn" method="testRegExp" />
+  
+  <method name="testRegExp" >
+    var regexp = new LzRegExp( ".ello" );
+    Debug.write( regexp.test( "Hello" ) );
+    Debug.write( regexp.test( "Hallo" ) );
+    regexp.destroy();
+
+    global.regexpflag = global["regexpflag"] == true;
+    if( !global.regexpflag ){
+      global.regexpflag = true;
+      lz.Timer.addTimer( new LzDelegate( canvas, "testRegExp" ), 500 );
+    }
+  </method>
+  
+</canvas>

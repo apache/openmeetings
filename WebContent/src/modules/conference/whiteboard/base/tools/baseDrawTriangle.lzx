@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawTriangle" extends="baseDrawClipArt" >
+    
+    <!--  
+        for drawing rectangles the variable 
+        with *Dis* indicates if the line/fil-color is active (+1/-1)
+     -->
+    <attribute name="currenttrianglestroke" value="0xFF6600" />
+    <attribute name="currenttrianglestrokeDis" value="1" type="number" />
+    <attribute name="currenttrianglestrokeFill" value="0xFFFF33" />
+    <attribute name="currenttrianglestrokeFillDis" value="1" type="number" />
+    <attribute name="currenttriangleineWidth" value="4" type="number" />
+    <attribute name="currenttriangleOpacity" value="1" type="number" />
+     
+      
+    <!-- ###########################
+        triangle
+     -->
+    
+    <method name="startTriangle" args="oid_name">
+        if (oid_name == null){
+            oid_name = 'triangle'+this.getCounter();
+        }
+        //Debug.write("startTriangle");
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width,height:this.height,
+            opacity:this.currenttriangleOpacity});
+        this.currentlayer
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    </method>  
+
+    <method name="endTriangle">
+        <![CDATA[        	
+        
+            ////Debug.write(" this.startx, this.starty , this.endx, this.endy ",this.startx, this.starty , this.endx, this.endy);
+            var tmpName = this.currentlayer.name;
+            this.currentlayer.destroy();
+            
+            var tTriangle = this.getTrianglePointByRect(this.startx,this.starty,this.endx,this.endy);
+            
+            var max_x = Math.max(this.startx,this.endx,tTriangle.x);
+            var min_x = Math.min(this.startx,this.endx,tTriangle.x);
+            var max_y = Math.max(this.starty,this.endy,tTriangle.y);
+            var min_y = Math.min(this.starty,this.endy,tTriangle.y);
+            
+            
+            var x = min_x;
+            var width = max_x - min_x;
+            var y = min_y;
+            var height = max_y - min_y;
+            
+            var tx1 = this.startx-x;
+            var ty1 = this.starty-y;
+            var tx2 = this.endx-x;
+            var ty2 = this.endy-y;
+            var tx3 = tTriangle.x-x;
+            var ty3 = tTriangle.y-y;
+            
+            if(this.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            } 
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                name:tmpName,x:x,y:y,width:width,height:height,
+                opacity:this.currenttriangleOpacity});
+                
+            new lz.drawViewInner(this.currentlayer,{
+                name:'_innerTriangle',x:0,y:0,width:width,height:height});
+                
+            this.drawtriangleHistory(this.currentlayer,0,0,width,height,
+            	tx1,ty1,tx2,ty2,tx3,ty3,
+                this.currenttrianglestroke,this.currenttriangleineWidth,
+                this.currenttrianglestrokeFill,this.currenttrianglestrokeDis,
+                this.currenttrianglestrokeFillDis);
+            //this.currentlayer.setAttribute('stretches','both');
+            this.drawTriangleregisterFinal(this.currentlayer.name,this.currenttrianglestroke,
+                this.currenttriangleineWidth,this.currenttrianglestrokeFill,
+                this.currenttrianglestrokeDis,this.currenttrianglestrokeFillDis,
+                x,y,width,height,
+                tx1,ty1,tx2,ty2,tx3,ty3,
+                this.getSWFDocumentStatus(),
+                this.getZIndex());
+            this.layers.push(this.currentlayer);
+            this.checkStepLayers();
+            if ($debug) Debug.write("############## this.endx : ", this.endx);
+        ]]>
+    </method> 
+    
+    <method name="getTrianglePointByRect" args="x1,y1,x2,y2">
+    	<![CDATA[
+    		if (x2 >= x1 && y1 >= y2) {
+
+               var a = y1 - y2;
+               var b = x2 - x1;
+               
+               return {'x':x2 + a,'y':y2 + b};
+
+           } else if (x2 >= x1 && y1 <= y2) {
+
+               var a = y2 - y1;
+               var b = x2 - x1;
+
+               return {'x':x2 - a,'y':y2 + b};
+
+           } else if (x2 <= x1 && y1 <= y2) {
+
+               var a = y2 - y1;
+               var b = x1 - x2;
+
+               return {'x':x2 - a,'y':y2 - b};
+               
+           } else if (x2 <= x1 && y1 >= y2) {
+
+               var a = y1 - y2;
+               var b = x1 - x2;
+
+               return {'x':x2 + a,'y':y2 - b};
+               
+           } else {
+
+               if ($debug) Debug.warn("DEFAULT drawtriangle ",x1,y1,x2,y2);
+
+           }
+           
+       ]]>
+    </method>
+    
+    <!--
+        Terminate the usage of this function
+     --> 
+    <method name="drawtriangle" args="x1,y1,x2,y2">
+       <![CDATA[
+
+           var tTriangle = this.getTrianglePointByRect(x1,y1,x2,y2);
+
+		   this.drawtriangleByCord(x1,y1,x2,y2,tTriangle.x,tTriangle.y)
+       ]]>   
+   </method> 
+   
+    <method name="drawtriangleByCord" args="tx1,ty1,tx2,ty2,tx3,ty3">
+       <![CDATA[
+
+		   currentlayer.lineWidth = this.currenttriangleineWidth;
+           currentlayer.beginPath();
+           currentlayer.moveTo(tx1, ty1);
+           currentlayer.lineTo(tx2, ty2);
+           currentlayer.lineTo(tx3, ty3);
+           currentlayer.lineTo(tx1, ty1);
+           currentlayer.closePath();
+
+           if (this.currenttrianglestrokeDis != -1) {
+               currentlayer.strokeStyle = this.currenttrianglestroke;
+               currentlayer.stroke();
+           }
+
+           if (this.currenttrianglestrokeFillDis != -1) {
+               currentlayer.fillStyle = this.currenttrianglestrokeFill;
+               currentlayer.fill();
+           }
+       ]]>   
+   </method> 
+    
+    <method name="redrawTriangleItemByScaling" args="objRef">
+        //if ($debug) Debug.write("redrawTriangleItemByScaling: "+objRef);
+        this.currentlayer = objRef;
+        this.currentlayer._innerTriangle.destroy();
+        new lz.drawViewInner(this.currentlayer,{
+            name:'_innerTriangle',x:0,y:0,width:objRef.width,height:objRef.height});
+        this.drawtriangleHistory(this.currentlayer,0,0,
+            objRef.width,objRef.height,
+            this.currenttrianglestroke,this.currenttriangleineWidth,
+            this.currenttrianglestrokeFill,this.currenttrianglestrokeDis,
+            this.currenttrianglestrokeFillDis);
+    </method> 
+    
+    <method name="drawtriangleToHistory" args="lastActionObject,parentView">
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+            name:lastActionObject[lastActionObject.length-1],
+            x:lastActionObject[lastActionObject.length-5],
+            y:lastActionObject[lastActionObject.length-4],
+            width:lastActionObject[lastActionObject.length-3],
+            height:lastActionObject[lastActionObject.length-2],
+            opacity:lastActionObject[6]});
+        new lz.drawViewInner(tmpCurrentlayer,{
+                name:'_innerTriangle',x:0,y:0,
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2]});
+        this.drawtriangleHistory(tmpCurrentlayer,0,0,
+            lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
+            lastActionObject[7],lastActionObject[8], //tx1,ty1
+            lastActionObject[9],lastActionObject[10], //tx2,ty2
+            lastActionObject[11],lastActionObject[12], //tx3,ty3
+            lastActionObject[1],lastActionObject[2],lastActionObject[3],lastActionObject[4],lastActionObject[5]);
+            
+        this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+    </method>
+    
+    <method name="drawtriangleHistory" args="parentObj,x1,y1,x2,y2,tx1,ty1,tx2,ty2,tx3,ty3,stroke,line,fill,strokeDis,fillDis">
+        <![CDATA[
+            //Debug.write("drawtriangleHistory",parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis);
+            parentObj._innerTriangle.lineWidth = line;
+            parentObj._innerTriangle.beginPath();
+            parentObj._innerTriangle.moveTo(tx1,ty1);
+            parentObj._innerTriangle.lineTo(tx2,ty2);
+            parentObj._innerTriangle.lineTo(tx3,ty3);
+            parentObj._innerTriangle.lineTo (tx1,ty1);
+            parentObj._innerTriangle.closePath();
+            
+            if (strokeDis!=-1){
+                parentObj._innerTriangle.strokeStyle = stroke;
+                parentObj._innerTriangle.stroke();
+            }
+            
+            if (fillDis!=-1){
+                parentObj._innerTriangle.fillStyle = fill;
+                parentObj._innerTriangle.fill();
+            }
+            
+        ]]>   
+    </method>  
+    
+    <method name="drawTriangleregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height,tx1,ty1,tx2,ty2,tx3,ty3,swfObj,zIndex" >
+        Debug.write("drawTriangleregisterFinal",newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height);
+        var actionObject = new Array();
+        actionObject[0] = 'triangle';
+        actionObject[1] = stroke;
+        actionObject[2] = line;
+        actionObject[3] = fill;
+        actionObject[4] = strokeDis;
+        actionObject[5] = fillDis;
+        actionObject[6] = this.currenttriangleOpacity;
+        actionObject[7] = tx1;
+        actionObject[8] = ty1;
+        actionObject[9] = tx2;
+        actionObject[10] = ty2;
+        actionObject[11] = tx3;
+        actionObject[12] = ty3;
+        actionObject[13] = zIndex;//-8
+        actionObject[14] = swfObj;//-7
+        actionObject[15] = this.counter;//-6
+        actionObject[16] = x;//-5
+        actionObject[17] = y;//-4
+        actionObject[18] = width;//-3
+        actionObject[19] = height;//-2  
+        actionObject[20] = newName;//-1
+        this.baseactionobjectList.push(actionObject);
+        this.onsharedMessage('draw',actionObject);
+    </method>
+    
+</class>
+
+</library>

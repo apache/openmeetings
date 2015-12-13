@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    
+<chartstyle name="omchartstyle">
+    <plotstyle name="plot" linesize="1" linecolor="0xCCCCCC" fillcolor="0xffffff" opacity="0.5"/>
+    <chartbgstyle name="chartbgstyle">
+        <linestyle name="line" size="0"/>
+        <regionstyle name="region" color="0xFFFFFF" opacity="0.5"/>
+    </chartbgstyle>
+    <valueregionstyle name="valueregionstyle">
+        <linestyle name="line" color="0x000000" size="1" opacity="1"/>
+        <regionstyle name="region" color="0xB71CB3" opacity="0.8" gradient="linear"/>
+        <labelstyle name="label" font="serif" fontsize="12" fontcolor="0x000000"/>
+        <labelstyle name="tip" font="serif" fontsize="12" fontcolor="0x000000"/>
+    </valueregionstyle>
+    <axisstyle name="haxisstyle">
+        <labelstyle name="label" font="Helmet" fontsize="16" fontcolor="0x000000" fontangle="0"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="3" size="1">
+            <labelstyle name="label" font="serif" fontstyle="bold" fontsize="12" fontcolor="0x606060"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0xD3D3D3" position="outside" length="3" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="1"/>
+        <linestyle name="gridline" color="0xD3D3D3" size="1"/>
+    </axisstyle>
+    <axisstyle name="vaxisstyle">
+        <labelstyle name="label" font="Helmet" fontsize="16" fontcolor="0x000000" fontangle="-90"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="3" size="1">
+            <labelstyle name="label" font="serif" fontsize="12" fontcolor="0x606060"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0x000000" position="outside" length="3" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="1"/>
+        <linestyle name="gridline" color="0xD3D3D3" size="1"/>
+        <regionstyle name="band1" color="0xE8EBEE" opacity="1" gradient="linear"/>
+        <regionstyle name="band2" color="0xE3E5E7" opacity="1" gradient="linear"/>
+    </axisstyle>
+    <valuelinestyle name="valuelinestyle">
+        <linestyle name="line" color="0xFF9999" size="2" opacity="1"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuelinestyle>
+    <valuepointstyle name="valuepointstyle">
+        <pointstyle name="point" width="15" height="15" color="0x00ff00" opacity=".5" shape="triangle" image="../../test/images/master.gif"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuepointstyle>
+    <datastylelist name="datastyles">
+        <datastyle name="yline">
+            <pointstyle name="point" width="10" height="10" color="0xF9F932" opacity="1" shape="diamond" strokeStyle="0xA3A304" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xA6CEE3" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0xF9F932" fillcolor="0xFFFFC1" linesize="4"/>
+        </datastyle>
+        <datastyle name="bline">
+            <pointstyle name="point" width="10" height="10" color="0x32ADFB" opacity="1" shape="fourpoint" strokeStyle="0x03609C" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0x1F78B4" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="rline">
+            <pointstyle name="point" width="10" height="10" color="0xFA8159" opacity="1" shape="circle" strokeStyle="0xB24C2C" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xB2DF8A" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="gline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0x33A02C" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="hline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xFB9A99" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="iline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xE31A1C" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="jline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xFDBF6F" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="kline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xFF7F00" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="lline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0xCAB2D6" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="mline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0xCCCCCC" size="1" opacity="1" type="solid"/>
+            <regionstyle name="region" color="0x6A3D9A" opacity="1" gradient="none"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+    </datastylelist>
+</chartstyle>    
+    
+</library> 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="om_hscrollbar" extends="basescrollbar" styleable="false"
+    axis="x">
+
+    <!--- @keywords private -->
+    <attribute name="height" value="10"/>
+    
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        <![CDATA[
+        if (!_enabled) {
+        	//this.scrolltrack.thumb.setAttribute('height', 0);
+            this.scrolltrack.thumb.setAttribute('visibility', 'hidden');
+        } else {
+            this.scrolltrack.thumb.setAttribute('visibility', 'visible');
+        }
+        super._showEnabled();
+    ]]>
+    </method>
+
+	<view name="rightarrow" width="0" />
+    <view name="scrolltrack">
+    	 <basescrolltrack name="left"
+           resource="omscrolltrack_x_rsc" stretches="width">
+         	<attribute name="height" value="${parent.height}"/>
+            <attribute name="width" value="${parent.width}"/>  
+         </basescrolltrack>
+         <basescrollthumb name="thumb" x="1">
+             <view resource="omscrollbar_xthumbleft_rsc"/>
+             <view resource="omscrollbar_xthumbmiddle_rsc" stretches="both"/>
+             <view resource="omscrollbar_xthumbright_rsc"/>
+             <stableborderlayout axis="x"/>
+        </basescrollthumb>
+    </view>
+
+	<view height="0" name="leftarrow" />
+    <stableborderlayout axis="x"/>
+
+</class>
+</library>

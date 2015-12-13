@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="whiteBoardTextField" extends="text" >
+	<handler name="prepareForDelete" args="tRef">
+		//Nothing
+	</handler>
+	<attribute name="typeOfObject" value="text" type="string" />
+	<method name="setTextEncoded" args="tString">
+		<![CDATA[
+		
+		    while (tString.indexOf("<") > 0) {
+		    	tString = tString.replace("<","&#60;");
+		    }
+    		
+		    while (tString.indexOf(">") > 0) {
+                tString = tString.replace(">","&#62;");
+		    }
+    		
+    		this.setAttribute("text",tString);
+		]]>
+	</method>
+</class>
+
+<class name="baseDrawLetter" extends="baseDrawObject">
+
+	<attribute name="currentletterObj" value="null" />
+	
+	<attribute name="letterObjectIsActive" value="false" type="boolean" />
+	
+	<attribute name="edittextLetterObject" value="null" />
+	
+	<attribute name="edittextLetter" value="false" type="boolean" />
+	
+	<method name="letterObjectFree" args="obj">
+		this.setAttribute('letterObjectIsActive',false);
+		if (this.edittextLetter){
+			this.edittextLetter = false;
+			this.setModus('hand');
+		}
+	</method>
+	<method name="letterObjectClose" args="obj">
+		this.setAttribute('letterObjectIsActive',true);
+	</method>
+	
+    <!-- The Color of the letter Object  -->
+  	<attribute name="currentlayerletter" value="0x000000" setter="this.setNewLayerLetter(currentlayerletter)" />
+    
+    <!-- The Size of the Letter Object -->
+  	<attribute name="currentlayersize" value="12" type="number" setter="this.setNewLayerSize(currentlayersize)" />
+  	
+  	<!-- "plain", "bold" , "italic" or "bolditalic". -->
+  	<attribute name="currentlayerstyle" value="plain" type="string" setter="this.setNewLayerStyle(currentlayerstyle)" />
+    
+    <method name="setNewLayerLetter" args="cl">
+        this.currentlayerletter=cl;
+        this.sendNewStyle.sendEvent();
+    </method>
+    
+    <method name="setNewLayerSize" args="cs">
+        this.currentlayersize=cs;
+        this.sendNewStyle.sendEvent();
+    </method>
+    
+    <method name="setNewLayerStyle" args="cs">
+        this.currentlayerstyle=cs;
+        this.sendNewStyle.sendEvent();
+    </method>
+  	
+    <!-- Send Update Events to current Letter Object -->
+    <handler name="sendNewStyle">
+        if (this.letterObjectIsActive){
+            this.currentletterObj.newStyleEvent.sendEvent()
+        }
+    </handler>
+    
+  	<attribute name="italic" value="false" type="boolean" setter="this.setitalic(italic)" />
+  	<attribute name="bold" value="false" type="boolean" setter="this.setbold(bold)" />
+  	<method name="setitalic" args="b">
+  		this.italic = b;
+  		this.doalterStyle();
+  	</method>
+  	<method name="setbold" args="b">
+  		this.bold = b;
+  		this.doalterStyle();
+  	</method>
+  	<method name="doalterStyle">
+  		<![CDATA[
+  		if (this.isinited){
+	  		if (this.bold && this.italic){
+	  			this.setAttribute('currentlayerstyle','bolditalic');
+	  		} else if(!this.bold && this.italic){
+	  			this.setAttribute('currentlayerstyle','italic');
+	  		} else if(this.bold && !this.italic){
+	  			this.setAttribute('currentlayerstyle','bold');
+	  		} else if(!this.bold && !this.italic){
+	  			this.setAttribute('currentlayerstyle','plain');
+	  		}
+	  		//Debug.write("d: ",this.getAttribute('currentlayerstyle'));
+  		}
+  		]]>
+  	</method>
+	
+	<method name="editTextByValues" args="obj,txtName,txt,x,y,width,height">
+		<![CDATA[
+			if (!this.letterObjectIsActive){
+			    //Debug.write("editTextByValues",height); 
+			    this.edittextLetterObject = obj;
+				this.currentletterObj = new lz.baseDrawWords(this,{refObj:this,x:x,y:y,
+					initTextName:txtName,inittext:txt,width:width,height:height});
+				this.edittextLetter = true;
+			}	
+		]]>
+	</method>
+  	
+		<method name="drawTextField" args="textforfield,width,height,x,y" >
+
+			//Debug.write("drawTextField: ",textforfield,width,x,y);
+			var tempO = this.newTextField(this, 'letter' + this.getCounter(),
+					textforfield, width, height, x, y, this.currentlayersize,
+					this.currentlayerletter, this.currentlayerstyle);
+			this.layers.push(tempO);
+			this.drawTextFieldregister(textforfield, width, x, y,
+					this.currentlayersize, this.currentlayerletter,
+					this.currentlayerstyle, tempO.height, this
+							.getSWFDocumentStatus(), this.getZIndex());
+		</method>
+	
+	<!-- editModus -->
+	<method name="setTextFieldByName" args="txtName,textforfield,width,x,y,height" >
+		if ($debug) Debug.write("drawTextFieldByName ",txtName,textforfield,width,x,y);
+		//this.checkForChanges(txtName,textforfield,width,x,y,height);
+		this.edittextLetterObject.setAttribute('text',textforfield);
+		this.edittextLetterObject.setTextEncoded(textforfield);
+		this.edittextLetterObject.setAttribute('width',width);
+		this.edittextLetterObject.setAttribute('height',height);
+		this.edittextLetterObject.setAttribute('visible',true);
+		this.edittextLetterObject.setAttribute('fontsize',this.currentlayersize);
+		this.edittextLetterObject.setAttribute('fgcolor',this.currentlayerletter);
+		this.edittextLetterObject.setAttribute('fontstyle',this.currentlayerstyle);
+		this.updateObjectBounds();
+		this.updateByEditLetterObject();
+		//this.setModus('hand');
+	</method>	
+	
+	<method name="startLetter" args="oid_name">
+		if (oid_name == null) {
+			oid_name = 'letterTemp'+this.getCounter();
+		}		
+    	this.currentlayer = new lz.drawViewNew(this,{name:oid_name,width:this.width+2,height:this.height+2});
+	</method>
+	
+	<method name="drawletterBoundingBox" args="x1,y1,x2,y2">
+   		<![CDATA[
+    		
+    		currentlayer.lineWidth = 1;
+    		currentlayer.beginPath();
+    		currentlayer.moveTo(x1,y1);
+    		currentlayer.lineTo(x1,y2);
+    		currentlayer.lineTo(x2,y2);
+    		currentlayer.lineTo(x2,y1);
+    		currentlayer.lineTo (x1,y1);
+    		currentlayer.closePath();
+    		
+    		currentlayer.strokeStyle = 0x000000;
+    		currentlayer.stroke();
+    		
+    	]]>   
+  	</method>    
+  	
+	<method name="endLetter">
+		<![CDATA[
+			if ($debug) Debug.write("endLetter: ", this.currentlayer);
+			this.currentlayer.destroy();
+			var xProp = 0;
+			var yProp = 0;
+			if (this.startx <= this.endx) {
+				var stx = this.startx;
+			} else {
+				var stx = this.endx;
+			}
+			if (this.starty <= this.endy) {
+				var sty = this.starty;
+			} else {
+				var sty = this.endy;
+			}
+			var width = Math.abs(this.startx - this.endx);
+			var height = Math.abs(this.starty - this.endy);
+			if (width < 20 && height < 20) {
+				width = 160;
+				height = 30;
+			}
+
+			this.currentletterObj = new lz.baseDrawWords(this, {
+						refObj : this,
+						x : xProp + stx,
+						y : yProp + sty,
+						width : width,
+						height : height
+					});
+
+			if ($debug) Debug.write("currentletterObj: ", this.currentletterObj.x, this.currentletterObj.y);
+		]]>
+	</method>
+	
+	
+	<method name="updateByEditLetterObject" >
+		<![CDATA[
+		if ($debug) Debug.write("UpdateByObject : ",this.edittextLetterObject,this.edittextLetterObject.name);
+		var objName = this.edittextLetterObject.name;
+
+		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
+				if ($debug) Debug.write("Found Object: ",this.baseactionobjectList[eg]);
+			    this.baseactionobjectList[eg][1] = this.edittextLetterObject.text;
+			    this.baseactionobjectList[eg][2] = this.edittextLetterObject.fgcolor;
+			    this.baseactionobjectList[eg][3] = this.edittextLetterObject.fontsize;
+			    this.baseactionobjectList[eg][4] = this.edittextLetterObject.fontstyle;			
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] = this.edittextLetterObject.x
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] = this.edittextLetterObject.y;
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3] = this.edittextLetterObject.width;
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] = this.edittextLetterObject.height;
+				var newA = this.baseactionobjectList[eg];
+				if (newA[0]=='paint') newA[1] = new Array();				
+				this.onsharedMessage('editText',newA);	
+			    break;
+			}
+		}	
+			
+		]]>
+	</method>	
+	
+	<method name="editTextByHistory" args="actionObject,obj">
+		var editObj = this.getObjectByName(actionObject[actionObject.length-1]);
+		//Debug.write("editTextByHistory: ",editObj,actionObject,actionObject.length);
+		editObj.setAttribute('text',actionObject[1]);
+		editObj.setTextEncoded(actionObject[1]);
+		editObj.setAttribute('width',actionObject[actionObject.length-3]);
+		editObj.setAttribute('height',actionObject[actionObject.length-2]);
+		editObj.setAttribute('fontsize',actionObject[3]);
+		editObj.setAttribute('fgcolor',actionObject[2]);
+		editObj.setAttribute('fontstyle',actionObject[4]);
+	</method>
+	
+	<method name="checkForChanges" args="txtName,textforfield,width,x,y,height">
+		<![CDATA[
+			//Debug.write("checkForChanges: 1 ",txtName,textforfield,width,x,y,height);
+			//Debug.write("checkForChanges: 2 ",this.edittextLetterObject.name,this.edittextLetterObject.text,this.edittextLetterObject.width,this.edittextLetterObject.x,this.edittextLetterObject.y,this.edittextLetterObject.height);
+			//there is always a change
+			
+		]]>
+	</method>	
+	
+	<method name="drawactionHistory" args="actionObject,obj">
+		this.newTextField(obj,actionObject[actionObject.length-1],actionObject[1],
+		              actionObject[actionObject.length-3],actionObject[actionObject.length-2],
+		              actionObject[actionObject.length-5],actionObject[actionObject.length-4],
+		              actionObject[3],actionObject[2],actionObject[4]);
+		              
+		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
+	</method>
+	
+		<method name="newTextField" args="obj,naming,textforfield,width,height,x,y,fontsize,fgcolor,fontstyle">
+			this.currentlayer = new lz.whiteBoardTextField(obj, {
+						name : naming,
+						x : x,
+						y : y,
+						height : height,
+						multiline : true,
+						width : width,
+						text : textforfield,
+						fontsize : fontsize,
+						fgcolor : fgcolor,
+						fontstyle : fontstyle
+					});
+			this.currentlayer.setTextEncoded(textforfield);
+			//Add Layer to global Layer  	
+			return this.currentlayer;
+		</method>
+	
+	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height,swfObj,zIndex">
+		var actionObject = new Array();
+	    actionObject[0] = "letter";
+	    actionObject[1] = textforfield;
+	    actionObject[2] = fgcolor;
+	    actionObject[3] = fontsize;
+	    actionObject[4] = fontstyle;
+	    actionObject[5] = zIndex;//-8
+	    actionObject[6] = swfObj;//-7
+		actionObject[7] = this.counter;//-6
+	    actionObject[8] = x;//-5
+	    actionObject[9] = y;//-4
+	    actionObject[10] = width;//-3
+	    actionObject[11] = height;//-2
+	    actionObject[12] = this.currentlayer.name;//-1	    	    
+	    this.baseactionobjectList.push(actionObject);	
+	    this.checkStepLayers();
+	    this.onsharedMessage('draw',actionObject);	
+	</method>
+	
+</class>
+
+</library>

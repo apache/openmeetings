@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="baseContentView" extends="view">
+
+    <!---
+        If destroyByMethod is true, the clear content call will not destroy the views, but the method 
+        ontabcontentleave is still invoked, this can be handy if some connections must be closed before 
+        destroying / leaving the module, you could probably also use it to confirm leaving the module 
+     -->
+    <attribute name="destroyByMethod" value="false" type="boolean" />
+    
+    <event name="ontabcontentleave" />
+    
+    <handler name="oninit">
+    	canvas.currentContentView = this;
+    </handler>
+    
+    <!--
+        This Event is for sending additional Init Events, for example after the reconnect
+        the File-List has to be refreshed for the File-Browser Plugin 
+     -->
+    <event name="sendInit" />
+    
+    <method name="close">
+        if ($debug) Debug.write("close: ",this,this.destroyByMethod);
+        //Make sure any cursor status is reset
+		lz.Cursor.restoreCursor();
+		lz.Cursor.showHandCursor(true);
+		//Make sure any tooltip is cleared
+		canvas.clearToolTip();
+        this.ontabcontentleave.sendEvent();
+        if (!this.destroyByMethod) this.destroy();
+        return this.destroyByMethod;
+    </method>
+
+</class>
+
+</library>

@@ -1,0 +1,82 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<!-- CLASS: rtlText ============================================ --> 
+	<!-- use this on dynamic data text tags. -->
+	<class name="rtlText" extends="text">
+		
+		<!-- ATTRIBUTES -->
+		<!-- text alignment: default is right -->
+    <attribute name="textAlign" value="right" type="string" /> 
+    
+    <method name="getTextAlign">    
+    	return this.textAlign;
+    </method>
+    
+    <method name="setTextAlign">
+    	switch ( this.getTextAlign() ) {
+				case "left" :
+					this.setX( 0 );
+				break;
+				case "center" :
+					this.setX( this.parent.width / 2 - this.getTextWidth() / 2 );
+				break;
+				case "right" :
+					this.setX( this.parent.width - this.getTextWidth() );
+				break;
+			}
+    </method>
+    
+    <method name="isLTR" args="c">
+		<![CDATA[
+			return ( c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 );
+		]]>
+	</method>
+    
+    <method name="isHEB" args="c">
+		<![CDATA[
+			return ( c >= 224 && c <= 250 );
+		]]>
+	</method>
+    
+    <method name="reverseWords" args="str">
+		<![CDATA[
+			if ( str == "" || str == null ) return ""; // undefined
+			// first char indicates the main directive of str (rtl/ltr)
+			if ( isLTR( str.charCodeAt( 0 ) ) ) return str; // english or number
+			var words_arr = str.split( "" ); // an array of chars
+			for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+				str += words_arr[ words_arr.length - i - 1 ];
+			return str;
+		]]>
+	</method>
+		
+	<method name="applyData" args="rtl_str">
+		this.setAttribute('text', reverseWords( rtl_str ) );
+	</method>
+	
+	<handler name="ontext">
+		setTextAlign();
+	</handler>
+		
+	</class>
+
+</library>
