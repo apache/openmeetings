@@ -47,7 +47,7 @@
 			</div>
 
 			<p>Get the source: </p>
-			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/]]></source>
+			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/trunk//]]></source>
 			<p>Run the command: </p>
 			<source><![CDATA[mvn clean install ]]></source>
 		</section>
