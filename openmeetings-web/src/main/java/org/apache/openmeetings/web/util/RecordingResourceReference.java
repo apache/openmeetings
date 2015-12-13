@@ -25,10 +25,8 @@ import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,104 +34,49 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.AbstractResource;
-import org.apache.wicket.request.resource.AbstractResource.ResourceResponse;
-import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
-import org.apache.wicket.request.resource.PartWriterCallback;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.io.IOUtils;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.apache.wicket.util.time.Time;
+import org.apache.wicket.resource.FileSystemResource;
+import org.apache.wicket.resource.FileSystemResourceReference;
 import org.slf4j.Logger;
 
-public abstract class RecordingResourceReference extends ResourceReference {
+public abstract class RecordingResourceReference extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = getLogger(RecordingResourceReference.class, webAppRootKey);
 
-	public RecordingResourceReference(Class<? extends RecordingResourceReference> clazz) {
-		super(clazz, "recordings");
+	public RecordingResourceReference() {
+		super("recordings");
 	}
 
 	@Override
 	public IResource getResource() {
-		return new AbstractResource() {
+		return new FileSystemResource() {
 			private static final long serialVersionUID = 1L;
 			private File file;
 			
 			@Override
+			protected String getMimeType() throws IOException {
+				return RecordingResourceReference.this.getMimeType();
+			}
+			
+			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
-				ResourceResponse rr = new ResourceResponse();
 				Recording r = getRecording(attributes);
 				if (r != null) {
 					file = getFile(r);
-					IResourceStream rs = file == null ? null : new FileResourceStream(file);
-					
-					if (rs != null) {
-						rr.setFileName(getFileName(r));
-						rr.setContentType(RecordingResourceReference.this.getContentType());
-						rr.setContentDisposition(ContentDisposition.INLINE);
-						rr.setLastModified(Time.millis(file.lastModified()));
-						rr.setAcceptRange(ContentRangeType.BYTES);
-						
-						try {
-							// read resource data to get the content length
-							InputStream inputStream = rs.getInputStream();
-	
-							byte[] bytes = null;
-							// send Content-Length header
-							bytes = IOUtils.toByteArray(inputStream);
-							rr.setContentLength(bytes.length);
-	
-							// get content range information
-							RequestCycle cycle = RequestCycle.get();
-							Long startbyte = cycle.getMetaData(CONTENT_RANGE_STARTBYTE);
-							Long endbyte = cycle.getMetaData(CONTENT_RANGE_ENDBYTE);
-	
-							// send response body with resource data
-							PartWriterCallback partWriterCallback = new PartWriterCallback(bytes != null
-								? new ByteArrayInputStream(bytes) : inputStream, rr.getContentLength(), startbyte, endbyte);
-	
-							// If read buffered is set to false ensure the part writer callback is going to
-							// close the input stream
-							rr.setWriteCallback(partWriterCallback.setClose(false));
-						} catch (IOException e) {
-							log.debug(e.getMessage(), e);
-							return sendResourceError(rr, file, 500, "Unable to read resource stream");
-						} catch (ResourceStreamNotFoundException e) {
-							log.debug(e.getMessage(), e);
-							return sendResourceError(rr, file, 500, "Unable to open resource stream");
-						} finally {
-							try {
-								IOUtils.close(rs);
-							} catch (IOException e) {
-								log.warn("Unable to close the resource stream", e);
-							}
-						}
-					}
+					return createResourceResponse(file.toPath());
 				} else {
+					log.debug("No recording was found");
+					ResourceResponse rr = new ResourceResponse();
 					rr.setError(HttpServletResponse.SC_NOT_FOUND);
+					return rr;
 				}
-				return rr;
 			}
 		};
 	}
 	
-	private ResourceResponse sendResourceError(ResourceResponse resourceResponse, File file, int errorCode, String errorMessage) {
-		String msg = String.format("resource [file = %s]: %s (status=%d)", file == null ? null : file.getAbsolutePath(), errorMessage, errorCode);
-
-		log.warn(msg);
-
-		resourceResponse.setError(errorCode, errorMessage);
-		return resourceResponse;
-	}
-
-	abstract String getContentType();
+	abstract String getMimeType();
 	abstract String getFileName(Recording r);
 	abstract File getFile(Recording r);
 	

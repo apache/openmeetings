@@ -28,11 +28,11 @@ public class AviRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public AviRecordingResourceReference() {
-		super(AviRecordingResourceReference.class);
+		super();
 	}
 	
 	@Override
-	public String getContentType() {
+	public String getMimeType() {
 		return "video/avi";
 	}
 	

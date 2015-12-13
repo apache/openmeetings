@@ -29,11 +29,11 @@ public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public Mp4RecordingResourceReference() {
-		super(Mp4RecordingResourceReference.class);
+		super();
 	}
 	
 	@Override
-	public String getContentType() {
+	public String getMimeType() {
 		return "video/mp4";
 	}
 	
