@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="imageForDrawView" extends="image" stretches="both">
+	
+	<event name="prepareForDelete" />
+	
+	<attribute name="downloadurl" value="" type="string" />
+		
+	<attribute name="alterModus" value="true" type="boolean" />
+	<attribute name="isLocalSync" value="false" type="boolean" />
+	
+	<attribute name="recorderModus" value="false" type="boolean" />
+	
+	<attribute name="baseurl" value="" type="string" />
+	<attribute name="fileName" value="" type="string" />
+	<attribute name="moduleName" value="" type="string" />
+	<attribute name="parentPath" value="" type="string" />
+	<attribute name="room" value="" type="string" />
+	<attribute name="domain" value="" type="string" />
+	
+	<attribute name="remotewidth" value="0" type="number" />
+	<attribute name="remoteheight" value="0" type="number" />
+	
+	<attribute name="typeOfObject" value="image" type="string" />
+	
+	<!-- holds the reference_id to the SyncProcess -->
+	<attribute name="uniqueObjectSyncName" value="" type="string" />
+	
+		<!--
+			if (this.width>this.refObj.width){
+				var height = this.height/(this.width/this.refObj.width)
+				this.setAttribute('width',this.refObj.width);
+				this.setAttribute('height',height);
+				this.setAttribute('x',0);
+			}
+			if (this.height>this.refObj.height){
+				var width = this.width/(this.height/this.refObj.height)
+				this.setAttribute('height',this.refObj.height);
+				this.setAttribute('width',width);
+				this.setAttribute('y',0);
+			}
+			if(this.y+this.height>this.refObj.height){
+				this.setAttribute('y',0);
+			}
+			if(this.x+this.width>this.refObj.width){
+				this.setAttribute('x',0);
+			}	            	
+         -->            
+	<attribute name="refObj" value="null" />
+	<handler name="onload">
+		<![CDATA[
+			//Debug.write("image loaded");
+			//this.refObj.parent._loading.setAttribute('visible',false);
+			
+			if (this.remotewidth != 0 && this.remoteheight != 0){
+				this.setAttribute('width',this.remotewidth);
+				this.setAttribute('height',this.remoteheight);
+			} else {
+				
+				if (this.width>this.refObj.width){
+					var height = this.height/(this.width/this.refObj.width)
+					this.setAttribute('width',this.refObj.width);
+					this.setAttribute('height',height);
+					this.setAttribute('x',0);
+				}
+				
+				if (this.height>this.refObj.height){
+					var width = this.width/(this.height/this.refObj.height)
+					this.setAttribute('height',this.refObj.height);
+					this.setAttribute('width',width);
+					this.setAttribute('y',0);
+				}
+				
+				if(this.y+this.height>this.refObj.height){
+					this.setAttribute('y',0);
+				}
+				
+				if(this.x+this.width>this.refObj.width){
+					this.setAttribute('x',0);
+				}
+				
+			}
+	
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this image has been loaded
+			//if this is just a recordContent-modi (recordingsViewer) then there should be no syncing
+			if (this.recorderModus) {
+				this.refObj.storeTempValsAndLoadSyncListRecording(this);
+			} else if (this.alterModus){
+				this.refObj.storeTempValsAndLoadSyncList(this);
+			} else if (this.isLocalSync){
+				this.refObj.addImageToLayerHistoryToLocalLoaded.sendEvent(this);
+			} else {
+				this.refObj.sendLoadNotificationImage(this);
+			}
+			this.refObj.layers.push(this);			
+			
+			this.oninit.sendEvent();
+			
+			//This is not needed anymore as it sync's against the server sid, swagner, 11.06.2008
+			//this.refObj.parent.parent.isloadedImage.sendEvent(this);
+			
+			//send notification to wml-loader
+			//this is send later then in normal objects cause it needs to be send after the image
+			//has been loaded completely
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+            //    //Debug.write("1 onwmlLoaderSend.sendEvent( image )");
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
+		]]>
+	</handler>
+	<handler name="onerror" args="error">
+		<![CDATA[
+		//Debug.write("onerror "+error);
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this iamge has been loaded
+			if (this.recorderModus) {
+				this.refObj.storeTempValsAndLoadSyncListRecording(this);
+			} else if (this.alterModus){
+				this.refObj.storeTempValsAndLoadSyncList(this);
+			} else if (this.isLocalSync){
+				this.refObj.addImageToLayerHistoryToLocalLoaded.sendEvent(this);
+			} else {
+				this.refObj.sendLoadNotificationImage(this);
+			}
+			this.refObj.layers.push(this);			
+			
+			this.oninit.sendEvent();
+			
+			//This is not needed anymore as it sync's against the server sid, swagner, 11.06.2008
+			this.refObj.parent.parent.isloadedImage.sendEvent(this);
+			
+			//send notification to wml-loader
+			//this is send later then in normal objects cause it needs to be send after the image
+			//has been loaded completely
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
+		]]>
+	</handler>
+	<handler name="ontimeout" args="error">
+		<![CDATA[
+		//Debug.write("ontimeout "+error);
+			//only send syncCommand if alterModus is true (meaning that this is the Moderator)
+			//otherwise just send a notification to moderator that this iamge has been loaded
+			if (this.recorderModus) {
+				this.refObj.storeTempValsAndLoadSyncListRecording(this);
+			} else if (this.alterModus){
+				this.refObj.storeTempValsAndLoadSyncList(this);
+			} else if (this.isLocalSync){
+				this.refObj.addImageToLayerHistoryToLocalLoaded.sendEvent(this);
+			} else {
+				this.refObj.sendLoadNotificationImage(this);
+			}
+			this.refObj.layers.push(this);			
+			
+			this.oninit.sendEvent();
+			
+			//This is not needed anymore as it sync's against the server sid, swagner, 11.06.2008
+			this.refObj.parent.parent.isloadedImage.sendEvent(this);
+			
+			//send notification to wml-loader
+			//this is send later then in normal objects cause it needs to be send after the image
+			//has been loaded completely
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
+		]]>
+	</handler>	
+</class>
+
+</library>

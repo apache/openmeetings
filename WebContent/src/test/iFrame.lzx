@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- 
+
+Requirements :
+the html must contain the following in the HEAD :
+
+			function createIFrame(n,id,src,x,y,w,h){
+				var newChild = document.createElement('iframe');
+				newChild.style.visibility='hidden';
+				newChild.style.position='absolute';
+				newChild.style.top='0px';
+				newChild.id=id;
+				newChild.name=n;
+				newChild.src=src;
+				newChild.style.border='0px';
+				newChild.style.left=x+"px";
+				newChild.style.top=y+"px";
+				newChild.width=w+"px";
+				newChild.height=h+"px";
+				document.body.appendChild(newChild);
+			}
+			function centerIframe(iid,x,y,w,h) {
+				var frameRef=document.getElementById(iid);
+				frameRef.style.left=x+"px";
+				frameRef.style.top=y+"px";
+				frameRef.width=w+"px";
+				frameRef.height=h+"px";
+			}
+			function hideIFrame(){
+			    document.getElementById("ifrm1_id").style.visibility="hidden";
+			}
+			function showIFrame(){
+			    document.getElementById("ifrm1_id").style.visibility="visible";
+			}
+
+Attributes :
+ - isrc         : url for the iframeView
+ - iname        : name for the iframeView
+ - iid          : id for the iframeView
+ - callbackTimerDelay           : optional
+ - createIFrame_callbackCounter : optional
+ - createIFrame_callbackMax     : optional
+
+Exemple :
+
+      <canvas debug="true" >
+        
+        <include href="library/iFrame.lzx" />
+        
+        
+        <window id="w" x="100" y="50" width="350" height="250" resizable="true" >
+        
+          <handler name="oninit">
+            new LzDelegate(ifrm,"centerIframe",this,"onx");
+            new LzDelegate(ifrm,"centerIframe",this,"ony");
+          </handler>
+          
+          <iframeView name="ifrm"
+            width = "${immediateparent.width  }"
+            height= "${immediateparent.height }"
+            isrc  = "http://www.google.fr/"
+            iid   = "myIframeId"
+            iname = "myIfrName"
+          />
+          
+        </window>
+          
+        
+      </canvas>
+
+-->
+
+<library>
+
+  <class name="iframeView" extends="view" >
+  
+    <attribute name="isrc" type="string" setter="setIsrc(isrc)"/>
+    <attribute name="iname" type="string" />
+    <attribute name="iid" type="string" />
+    
+    <method name="display">
+      var s = "javascript:document.getElementById('"
+                        + iid 
+                        + "').style.visibility='visible'";
+      lz.Browser.loadJS(s);
+    </method>
+    
+    <method name="hide">
+      var s = "javascript:document.getElementById('"
+                        + iid 
+                        + "').style.visibility='hidden'";
+      //Debug.write("on hide l'iframe",iid," :",s);
+      lz.Browser.loadJS(s);
+    </method>    
+    
+    <method name="setIsrc" args="s">
+      if (!this.isinited || this.isrc== null) {                      //catch the case where this.time is being 
+        this.isrc = s;                                               //initialized during object instantiation
+        return;
+      }      
+      var s = "javascript:document.getElementById('"
+                        + iid 
+                        + "').src='"
+                        + s
+                        + "'";
+      lz.Browser.loadJS(s);
+    </method>
+    
+    <handler name="oninit" >
+      // First initialize the iFrame loading detection mechanism :
+      //initCreateIFrameDone();
+      // Now creating the iframeView :
+      //createIFrame();
+    </handler>
+
+    <method name="createIFrame" >
+    	//Debug.write("create IFRAME !!!!!!!!!!!!!!");
+      var s = "javascript:createIFrame('"
+                        + iname  + "','"
+                        + iid + "','"
+                        + isrc + "','"
+                        + this.getAttributeRelative("x",canvas)      + "','"
+                        + this.getAttributeRelative("y",canvas)      + "','"
+                        + (width +1) + "','"
+                        + (height+1)
+                        + "')";
+      // the browser must also tell our laszlo when the iframeView has been loaded :
+      s = s + ";document.getElementById('"
+                        + iid 
+                        + "').style.visibility='visible'";
+      s = s + ";lzSetCanvasAttribute('" + createIFrameDone_attr + "', true)";
+      ////Debug.write("Calling createIFrame ; loadJS : " + s);//
+      lz.Browser.loadJS(s);
+      // initializing the scheduled check of this iFrame's load state
+      if(typeof this.createIFrame_callbackDelegate == 'undefined') {
+         this.createIFrame_callbackDelegate = new LzDelegate( this, "createIFrame_callback" );
+      }
+      lz.Timer.resetTimer( this.createIFrame_callbackDelegate, callbackTimerDelay );
+    </method>
+    
+    <!-- Iframe load state detection state and initialization -->
+    <attribute name="createIFrameDone_attr" type="string"/><!-- is initialized in oninit() -->
+    <method name="initCreateIFrameDone">
+      // Initializes the iFrame loading detection mechanism.
+      // computing and setting the name of this iframeView's own
+      // load state attribute on the canvas :
+      this.createIFrameDone_attr = 'iFrame.createIFrameDone_' + this.iid;
+      // initializing this iframeView's own load state on the canvas :
+      canvas.setAttribute(createIFrameDone_attr, false);
+      ////Debug.write('createIFrameDone_attr='+this.createIFrameDone_attr);//
+      ////Debug.write('createIFrameDone='+this.createIFrameDone+canvas.getAttribute(createIFrameDone_attr));//
+	</method>
+	
+    <!-- IFrame load state scheduled check -->
+    <attribute name="callbackTimerDelay" type="number" value="100" />
+    <attribute name="createIFrame_callbackCounter" type="number" value="0" />
+    <attribute name="createIFrame_callbackMax" type="number" value="1000" />
+    <method name="createIFrame_callback">
+      ////Debug.write("createIFrame_callback : createIFrame_done=" + canvas.getAttribute(createIFrameDone_attr));//
+      if(!canvas.getAttribute(createIFrameDone_attr)) {
+         if (this.createIFrame_callbackCounter * callbackTimerDelay &lt; createIFrame_callbackMax) {
+            this.createIFrame_callbackCounter = this.createIFrame_callbackCounter + 1;
+            lz.Timer.resetTimer( this.createIFrame_callbackDelegate, callbackTimerDelay );
+         }
+      } else {
+         // creating iframeView moves listeners :
+         //Debug.write('createListeners');//
+         createListeners();
+         // now let's make sure the iframeView has been toggled by moving it
+         if (this.iFrameJsStack == 'javascript:') {
+            ////Debug.write('createListeners.move');//
+            // there's no javascript stack yet, so let's simply move the iframeView :
+            centerIframe();
+         } else {
+            ////Debug.write('createListeners.stacked '+this.iFrameJsStack);//
+            // some javascript has been scheduled to be loaded, so let's do it :
+            lz.Browser.loadJS(this.iFrameJsStack);
+         }
+      }
+    </method>
+    
+    <!-- Stackable javascript execution mechanisme -->
+    <attribute name="iFrameJsStack" type="string" value="javascript:" />
+    <method name="executeJs" args="s">
+      ////Debug.write("executeJs", s);//
+      if (canvas.getAttribute(createIFrameDone_attr)) {
+         ////Debug.write("executeJs.direct", s);//
+         lz.Browser.loadJS(s); // iframeView is loaded, so direct execution
+      } else {
+         ////Debug.write("executeJs.stacked", s);//
+         // else the iframeView has not yet been loaded, so let's stack it :
+         this.iFrameJsStack = this.iFrameJsStack + ';' + s ;
+      }
+    </method>
+	
+    <method name="createListeners" >
+      this.myDelx = new LzDelegate(this, "centerIframe", this, "onx");
+      this.myDely = new LzDelegate(this, "centerIframe", this, "ony");
+      this.myDelw = new LzDelegate(this, "centerIframe", this, "onwidth");
+      this.myDelh = new LzDelegate(this, "centerIframe", this, "onheight");
+    </method>
+    
+    <method  name="centerIframe">
+      // we use a timer in order to avoid too many js call (slow)
+      //Debug.write("centerIframe request");
+      if(typeof this.centerIframe_Delegate == 'undefined') {
+         this.centerIframe_Delegate = new LzDelegate( this, "centerIframe_jsCall" );
+      }
+      lz.Timer.resetTimer( this.centerIframe_Delegate, 20 );
+    </method>
+    
+    <method  name="centerIframe_jsCall">
+      var s = "javascript:centerIframe('"
+            + this.iid   + "','"
+            + this.getAttributeRelative("x",canvas)      + "','"
+            + this.getAttributeRelative("y",canvas)      + "','"
+            + (width +1) + "','"
+            + (height+1) + "')";
+      this.executeJs(s); // using the stackable js exec mechanism
+    </method>
+    
+  </class>
+
+</library>
+ 

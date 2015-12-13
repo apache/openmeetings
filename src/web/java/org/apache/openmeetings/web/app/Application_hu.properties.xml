@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Ajánlott környezeti beállítások<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			Az {0} alapértelmezette a beépített Apache Derby adatbázist használja. 
+			További lehetőségként használható a <a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
+			vagy a minta alapján<a target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
+			vagy <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a>
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Képek feltöltése/importálása a prezentációs területbe<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse a <strong>ImageMagick</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt 
+				<a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
+				<a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
+					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>PDF fileok feltöltése a prezentációs területbe<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse a  <strong>GhostScript</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
+					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
+				</li>
+				<li>Telepítse a <strong>SWFTools</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
+					Több linux disztribúció csomagkezelőjében megtalálható <a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
+					ajánlott verzió a <strong>SWFTools</strong> 0.9 egyéb verzió bugja miatt hibát okozhat a prezentációkban. 
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Dokumentumok importálása a prezentációs területrbe
+				.doc, .docx, .ppt, .pptx, ... stb (OpenOfice kompatibilis).<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse az <strong>OpenOffice / LibreOffice</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
+					href="http://www.openoffice.org/" rel="nofollow">http://www.openoffice.org/</a>
+					<a target="_blank"
+					href="http://www.libreoffice.org/" rel="nofollow">http://www.libreffice.org/</a>
+					LibreOffice program csomag használata esetén rendelje hozzá szimbólikus linkként az OpenOffice könyvtárat.
+					<br />
+					ln -s /opt/libreoffice /opt/openoffice 
+				</li>
+				<li><strong>OpenOffice-Service</strong> automatikusan indul és elérhető a
+					8100 porton. Bővebb információ itt <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Videó felvétele és importálása .avi, .flv, .mov and .mp4 formátumokban a prezentációs területbe<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse az <strong>FFMpeg</strong> programcsomagot. Használja az FFMPEG aktuális, friss verzióját.
+				 	Windows rendszerekhez kiadások itt <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux, OSX rendszerkhez
+					többféle lehetőség érhető el, keresse meg a megfelelőt az interneten. 
+					Szükséges a libmp3lame kóder engedélyezése/implementálása!
+				</li>
+				<li>Telepítse a <strong>SoX</strong> programot innen: <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					A SoX friss verzióit használja! SoX 12.xx nem/hibásan működik!
+				</li>
+			</ul>
+		</li>
+	</ol>
+	
+	<b><span style="font-size: 1.2em">Közösségi-támogatás:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Levelező lista</a></span>
+	<br />
+    <br />
+	<br />
+    <b> <span style="font-size: 1.4em">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</span></b>
+	<br />
+	<br />
+    
+	<span style="font-size: 1.3em"><a
+		href="http://openmeetings.apache.org/commercial-support.html"
+		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
+	<br />
+	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Felhasználói adatok</entry>
+	<entry key="install.wizard.params.step1.username">Felhasználónév</entry>
+	<entry key="install.wizard.params.step1.username.title">Adja meg a felhasználói nevét</entry>
+	<entry key="install.wizard.params.step1.password">Jelszó</entry>
+	<entry key="install.wizard.params.step1.password.title">Adja meg a jelszavát</entry>
+	<entry key="install.wizard.params.step1.email">EMail</entry>
+	<entry key="install.wizard.params.step1.email.title">Adja meg az e-mail címét</entry>
+	<entry key="install.wizard.params.step1.tz">Időzóna kiválasztása</entry>
+	<entry key="install.wizard.params.step1.groupdata">Szervezeti egység (Domain)</entry>
+	<entry key="install.wizard.params.step1.group">Név (domain)</entry>
+	<entry key="install.wizard.params.step1.group.title">Adja meg a nevet (domain)</entry>
+
+	<entry key="install.wizard.params.step2.configuration">Beállítások</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Előregisztráció engedélyezése (megjelenik a belépő panelen)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">Regisztrációs e-mail küldése</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Regisztráció megerősítése e-mailben (megerősítő link küldése)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">Alapértelmezett típusú konferencia szobák létrehozása</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Rendszer e-mail cím</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Rendszer e-mail megadása</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP-Szerver (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Enter a SMTP-Server</entry>
+	<entry key="install.wizard.params.step2.smtpPort">SMTP-Szerver Port(alapértelmezett Smtp-Server Port 25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Enter a SMTP-Server.Port normally 25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Felhasználó név (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Adja meg a felhasználó nevet</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Felhasználó jelszó (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Adja meg a jelszót</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">TLS engedélyezése az authentikációhoz</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">A meghívó e-mail címének küldése és beállítása a válasz küldéshez (reply-to) fejlécben(inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Alapértelmezett nyelv</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Alapértelmezett betükészlet [default_export_font]</entry>
+
+	<entry key="install.wizard.params.step3.converters">Konverterek</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> bővebben</entry>
+	<entry key="install.wizard.params.step3.installation">Telepítés</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">Adja meg az SWFTools felbontását (dpi) amit a PDF2SWF konverziónál használ</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a felbontást.
+		Alapértelmezett felbontás 100 dpi.
+	</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Minőség</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">Adja meg a jpeg képek minőségi rátáját. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a 
+		a jpeg képek minőségét. 0 a gyengébb (kicsi),
+		100 a legjobb (nagy). (alapértelmezett:85).
+	</entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools útvonala</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Adja meg az SWFTools elérési útvonalát C:/swftools (Windows) /usr/local/swftools (Linux) vagy hagyja üresen, ha elérhető a rendszerútvonalak közt</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Hagyja üresen, ha nem ismeri, vagy ha elérhető a rendszerútvonalon. 
+	</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick útvonala</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">Adja meg a ImageMagick elérési útvonalát, hagyja üresen, ha az ImageMagick elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG útvonala</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">Adja meg az FFMPEG alérési útvonalát, hagyja üresen, ha az FFMPEG elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath">SoX útvonala</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Adja meg a SoX elérési útvonalát, hagyja üresen, ha a SoX elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath">JOD útvonala</entry>
+	<entry key="install.wizard.params.step3.jodPath.title">A JOD könyvtár útvonala (http://code.google.com/p/jodconverter), a JOD könyvtárban szükséges a jodconverter-core-version.jar</entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice útvonala a jodconverterhez</entry>
+	<entry key="install.wizard.params.step3.officePath.title">Adja meg az OpenOffice/LibreOffice (optional) valós útvonalát, a OpenOffice/LibreOffice nem keresi automatikusan a jodconverter</entry>
+	<entry key="install.wizard.params.step3.officePath.text">
+		Az OpenOffice/LibreOffice (optional) útvonalát a jodconverter nem találja autómatikusan, az abszolút elérési útvonal szükséges
+	</entry>
+
+	<entry key="install.wizard.params.step4.crypt">Titkosítás típusa</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Titkosító osztály</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">Adja meg a titkosító osztály nevét (class). NE VÁLTOZTASSA, HA NEM BIZTOS BENNE!</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Az alapértelmezetten beállított kódolás megfelel a 
+		PHP-MD5 kódolónak, vagy BSD-Stílusú kódoláshoz használja a:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		további kódolási/titkosítási eljárásokról itt olvashat bővebben: <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Egyedi titkosítási mechanizmus </a> Ha a későbbiekben módosítja ezt a beállítást,
+		az előzőleg létrehozott adatok elérhetetlenné válnak, ami működési hibát okozhat a régebbi munkamenetek elérésében 
+		(pl. jelszó, hash kezelés).
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP">Red5SIP Beállítása</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">SIP engedélyezése</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">Red5SIP integráció engedélyezése</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">SIP szoba prefix</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">Telefonszám prefixum beállítása a konferencia szobához</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP kiterjesztés leírása</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Leírás az Asterix konfigurálásához</entry>
+
+	<entry key="install.wizard.install.desc">Kattintson a "Befejezés" gombra a telepítés folytatásához</entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter">Belépés az alkalmazásba</entry>
+	<entry key="install.wizard.congrats.port">Ha a Red5 szervert más porton, domainen, vagy más beállításokkal használja</entry>
+	<entry key="install.wizard.congrats.config">változtassa meg a kliens szükséges konfigurációit</entry>
+	<entry key="install.wizard.congrats.mail">Levelező lista</entry>
+	<entry key="install.wizard.congrats.commercial">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</entry>
+</properties>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="miniIconSmybolExtraIcons" extends="view" width="22" height="22">
+	
+	<attribute name="modi" value="" type="string"/>
+	
+	<handler name="onclick">
+		parent.sendNewIcon(this,"");
+	</handler>
+	
+	<handler name="ondblclick">
+		parent.sendNewIcon(this,"");
+		parent.chooseSelect();
+	</handler>
+	
+	<labelTooltip text="$once{ parent.modi }" />
+	
+</class>
+
+<class name="miniIconSmybolExtraIconsImageMap" extends="view" >
+    
+    <handler name="onclick">
+        parent.parent.sendImageMapNewIcon(this);
+    </handler>
+    
+    <handler name="ondblclick">
+        parent.parent.sendImageMapNewIcon(this);
+        parent.chooseSelect();
+    </handler>
+    
+    <handler name="onmouseover" args="tObj">
+    	parent.onmouseover.sendEvent(tObj);
+    </handler>
+    
+    <handler name="onmouseout" args="tObj">
+    	parent.onmouseout.sendEvent(tObj);
+	</handler>
+    
+</class>
+
+<class name="miniIconSmybolExtraIconsSeparator" extends="view" width="$once{ parent.width }" 
+	   height="22">
+	
+	<attribute name="title" type="string" value="title" />
+	
+	<attribute name="isopen" value="true" type="boolean" />
+	
+	<method name="toggleopen">
+		this.setAttribute("isopen",!this.isopen);
+	</method>
+	
+	<handler name="onclick">
+		this.toggleopen();
+	</handler>
+	
+	<view width="${ this.parent.parent.width }" y="0" stretches="width"
+                resource="presenter_thumb_rsc" >
+        <handler name="oninit">
+            <![CDATA[
+                this.setTintRGB(canvas.getThemeColor('basebgcolorizer'),90);
+            ]]>
+        </handler>
+        <method name="setTintRGB" args="color, brightness">
+            <![CDATA[
+            if (color != "" && color != null){
+                
+                if (brightness == null) { brightness = 0; }
+                var rgb = color;
+                var red=(rgb >> 16) & 0xFF;
+                var green=(rgb >> 8) & 0xFF;
+                var blue=rgb & 0xFF;
+    
+                this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                            rb : 0, gb : 0, bb : 0 } );
+                                            
+                if($debug) Debug.write("explorerBox/setTintRGB",this);
+                if($debug) Debug.write("explorerBox/setTintRGB", { ra : red, ga : green, ba : blue, rb : 0, gb : 0, bb : 0 } );
+            }
+            ]]>
+        </method>            
+    </view>	
+    
+    <view visible="${ !this.parent.isopen }" x="2" y="2" resource="conferenceBox_button_min_small_rsc" />
+    <view visible="${ this.parent.isopen }" x="2" y="2" resource="conferenceBox_button_max_small_rsc" />
+
+    <text fontsize="11" height="17" x="16" y="1" text="${ this.parent.title }" 
+            fgcolor="0xFFFFFF" resize="true" />
+            
+</class>
+
+<class name="miniIconSmybolExtraIconsContainer" extends="text" width="$once{ parent.width }">
+	
+	<attribute name="fName" value="" type="string"/>
+	<attribute name="folderName" value="" type="string"/>
+	<attribute name="iconList" value="null"/>
+	<attribute name="isopen" value="true" type="boolean" />
+	
+	<method name="sendNewIcon" args="tObj">
+        parent.sendNewIcon(tObj,this.folderName);
+    </method>
+    
+    <method name="calcImageMapNewIcon">
+    	var tX = Math.floor(this._content.getMouse('x')/26);
+    	var tY = Math.floor(this._content.getMouse('y')/26);
+    	
+    	var tNumber = tX + (tY * 20);
+    	
+    	if (tNumber > this.iconList.length) {
+    		return "";
+    	}
+    	
+    	return this.iconList[tNumber];
+    </method>
+    
+    <method name="sendImageMapNewIcon">
+        var tObj = new Object();
+        tObj["modi"] = this.calcImageMapNewIcon();
+        if (tObj["modi"] == "") {
+        	return;
+        }
+        this._content.clearToolTipReference();
+        parent.sendNewIcon(tObj,this.folderName);
+    </method>
+    
+    <method name="chooseSelect">
+    	this._content.clearToolTipReference();
+        parent.chooseSelect();
+    </method>
+
+	
+	<miniIconSmybolExtraIconsSeparator title="$once{ parent.fName }" isopen="$once{ parent.isopen }">
+		<handler name="onisopen" args="o">
+			if (o) {
+				parent._content.setAttribute("visibility","visible");
+			} else {
+				parent._content.setAttribute("visibility","hidden");
+			}
+		</handler>
+	</miniIconSmybolExtraIconsSeparator>
+	
+	<view name="_content" y="22" width="$once{ parent.width }">
+		
+		<attribute name="calcItem" value="false" type="boolean" />
+		
+		<attribute name="toolTipReference" value="null" />
+		
+		<method name="clearToolTipReference">
+			if (this.toolTipReference != null) {
+				this.toolTipReference.destroy();
+				this.toolTipReference = null;
+			}
+		</method>
+		
+		<handler name="onmouseover">
+			this.stillDownDelegate = new LzDelegate( this, "stillDownEventGenerator" );
+			this.calcItem = true;
+			this.toolTipReference = new lz.toolTipCustomPic(canvas);
+			lz.Timer.addTimer( this.stillDownDelegate, 100 );
+		</handler>
+		
+		<method name="stillDownEventGenerator" args="ignore" >
+			if (!this.calcItem) {
+				return;
+			}
+			var tString = parent.calcImageMapNewIcon();
+			this.toolTipReference.setAttribute("x", this.getAttributeRelative("x",canvas)+this.getMouse("x")+20);
+			this.toolTipReference.setAttribute("y", this.getAttributeRelative("y",canvas)+this.getMouse("y")+20);
+			this.toolTipReference.setAttribute("text", tString);
+			lz.Timer.removeTimer( this.stillDownDelegate );
+			lz.Timer.addTimer( this.stillDownDelegate, 100 );
+		</method>
+		
+		<handler name="onmouseout">
+			this.clearToolTipReference();
+			lz.Timer.removeTimer( this.stillDownDelegate );
+            this.calcItem = false;
+        </handler>
+		
+		<method name="sendNewIcon" args="tObj">
+            parent.sendNewIcon(tObj);
+        </method>
+        
+        <method name="chooseSelect">
+            parent.chooseSelect();
+        </method>
+
+	</view>
+	
+</class>
+
+<class name="toolTipCustomPic" extends="text" bgcolor="0xFFFFFF">
+	
+</class>
+	
+	
+<class name="subMenuIconToolsToUpload" extends="guiPresenter" labelid="1335" 
+    minimizable="false" maximizable="false" fullToolBar="true" 
+    resizeable="false" width="340" height="280" >
+	
+	<attribute name="currentSelected" value="null" />
+	<attribute name="refToolbar" value="null" />
+	
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+	
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+           if ( eventStr == "onmousedown"  ){
+               if ( view != null ) {
+                  if ( !view.childOf(this) ) {
+                       this.close();
+                  }
+               } else {
+                   this.close();
+               }
+           }
+           if (view && view.childOf(this)) {
+               if (view[ eventStr ]) {
+                   view[ eventStr ].sendEvent( view );
+               }
+               return false;
+           }
+          return true;
+       ]]> 
+    </method>  
+    
+    <method name="sendNewIcon" args="refObj,folderName">
+    	if ($debug) Debug.write("sendNewIcon :: ",refObj.modi);
+    	this.currentSelected = refObj;
+    	
+    	if (folderName != "") {
+    		folderName += "/";
+    	}
+    	
+    	var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'+refObj.modi;
+    	
+        if ($debug) Debug.write("this.refToolbar :: ",this.refToolbar);        
+                                        
+    	this.refToolbar._rscIcon.setSource(imageurl);
+    	
+    	this.refToolbar.parent.parent.parent.setSelection(this.refToolbar);
+    	
+    	canvas._drawarea.currentClipArtRessourceName = folderName + refObj.modi;
+    	
+    	this.close();
+    </method>
+    
+    <method name="chooseSelect">
+    	if ($debug) Debug.write("chooseSelect :: ",this.currentSelected);
+    	this.close();
+    </method>
+    
+    <!--
+    <view resource="sub_menu_top_grip_colored_rsc" y="-14">
+    </view>
+     -->
+    
+    <view x="1" y="22" width="$once{ parent.width-4 }" clip="true" showhandcursor="false"
+    	  height="$once{ parent.height - 23 }" clickable="true">
+    	
+    	<view width="$once{ parent.width-15 }" x="1">
+    		
+    		<handler name="oninit">
+    			this.getClipArtIcons.doCall();
+    		</handler>
+    		
+		    <method name="sendNewIcon" args="tObj,folderName">
+                parent.parent.sendNewIcon(tObj,folderName);
+            </method>
+            
+            <method name="chooseSelect">
+                parent.parent.chooseSelect();
+            </method>
+
+    		
+    		<attribute name="currentContainer" value="null" />
+    		
+    		<!--
+    		getClipArtIcons()
+    		 -->
+            <netRemoteCallHib name="getClipArtIcons" funcname="whiteboardservice.getClipArtIcons"
+                remotecontext="$once{ canvas.thishib }" >
+                <handler name="ondata" args="value">
+                    <![CDATA[
+                        //The onResult-Handler will be called be the rtmpconnection
+                        //if ($debug) Debug.write("############## getClipArtIcons : ",value);
+                        parent.loadIconThumbs(value.generalList,"");
+                    ]]>
+                </handler>   
+            </netRemoteCallHib> 
+            
+            <method name="loadIconThumbs" args="list,folderName">
+            	<![CDATA[
+            	
+                    var imageurl = canvas.getUrl() + 'public/cliparts/thumb/';
+                    
+                    //if ($debug) Debug.write("imageurl :: ",imageurl);            	
+                        	
+                    for (var i=0;i<list.length;i++) {
+                    	
+                    	//if ($debug) Debug.write("list[i].indexOf() ",list[i],list[i].indexOf("."));
+                    	
+                    	if (list[i].indexOf(".") > 1 ) {
+                    	
+                            var iconresourceName = imageurl + list[i];
+                          
+                            new lz.miniIconSmybolExtraIcons(this,{
+                                          modi:list[i],
+                                          resource:iconresourceName,
+                                          stretches:'both'
+                                      });
+                                  
+                    	}
+                      
+                    }
+                
+                ]]>
+            </method>    		 
+    		
+    		<wrappinglayout axis="x" spacing="2" xinset="2" />
+    	</view> 
+    	
+    	<om_vscrollbar />
+    </view>
+    
+</class>
+	
+</library>

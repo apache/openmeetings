@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="imageListInnerTableExplorer" extends="view" width="${ parent.width-2 }" 
+    height="${ parent.height-2 }" 
+	bgcolor="white" x="1" y="1" clip="true">
+    
+    <view name="_listcontent" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width }" >
+        <simplelayout name="_layout" axis="y" spacing="2" inset="1" />
+        
+        <!--
+	  	<netRemoteCallHib name="deleteFile" funcname="fileservice.deleteFile" remotecontext="$once{ canvas.thishib }" >   
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	  		<netparam><method name="getValue">return parent.String1;</method></netparam>
+        	<netparam><method name="getValue">return canvas.uploadmoduleimg;</method></netparam>
+			<netparam><method name="getValue">return parent.String2;</method></netparam>
+			<netparam><method name="getValue">return hib.currentroomid;</method></netparam>        	
+	        <handler name="ondata" args="value">	
+	        	//Debug.write("  deleteFile: ",value);  
+				//Debug.write("  deleteFile: ",this.String1);    
+				//Debug.write("  deleteFile: ",this.String2);   
+		  		var tempSendArray = new Array ();
+		  		tempSendArray[0] = 'fileslist';
+		  		var nowTime = new Date();
+		  		var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+		  		tempSendArray[1] = datumsString;
+	  			//Debug.write("Setting Message");
+	  			tempSendArray[2] = 'newfile';
+	  			tempSendArray[3] = canvas.currentusename;
+		  		//Debug.write("send: ",tempSendArray);
+		  		canvas.objMessage = tempSendArray;
+		  		hib.sendMessage.doCall();         	          				
+	        </handler>	
+	  	</netRemoteCallHib> 
+	  	 -->	
+		
+		<method name="getconfirmationscode">
+			var g = canvas.getUserData();
+			 if (g["wmlfile"]==null) {
+				 g["wmlfile"]=new Array();
+				 g["wmlfile"]["clearField"]=false;
+				 g["wmlfile"]["askagainclear"]=true;
+				 canvas.setUserData(g);
+			 }
+			 return g["wmlfile"];
+		</method>
+		
+		<method name="resetDefaultConfirmations">
+			var g = canvas.getUserData();
+			 if (g["wmlfile"]==null) g["wmlfile"]=new Array();
+			 g["wmlfile"]["clearField"]=false;
+			 g["wmlfile"]["askagainclear"]=true;
+			 canvas.setUserData(g);
+	
+		</method>	
+		
+		<method name="sendConfirmation" args="yesno,askagain" >
+			
+			//Debug.write("clear yesno,askagain: ",yesno,askagain);
+			//can only be true in this case
+		
+			 var g = canvas.getUserData();
+			 if (g["wmlfile"]==null) g["wmlfile"]=new Array();
+			 g["wmlfile"]["clearField"]=yesno;
+			 g["wmlfile"]["askagainclear"]=!askagain;
+			 canvas.setUserData(g);
+	
+			 if (yesno){
+				 //Debug.write("clear field!!");
+				canvas._drawarea.setModus('plain');
+				this.loadWmlObject.doCall();
+			 }
+		</method>				
+		
+		<method name="loadWmlObjectConfirm">
+			<![CDATA[
+			var storedImageDate = this.getconfirmationscode();
+			//Debug.write(" g[wmlfile] ",storedImageDate);
+			if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
+				canvas._drawarea.setModus('plain');
+				this.loadWmlObject.doCall();
+			} else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
+				//this case will never happen
+				this.loadWmlObject.doCall();
+			} else if (storedImageDate["askagainclear"]){
+				new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
+			} else {
+				new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
+			}
+			]]>
+		</method>
+		
+	  	<netRemoteCallHib name="loadWmlObject" funcname="fileservice.loadWmlObject" remotecontext="$once{ canvas.thishib }" >   
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return hib.currentroomid;</method></netparam>        	
+			  <netparam><method name="getValue">return parent.String1;</method></netparam>
+	        <handler name="ondata" args="value">	
+				<![CDATA[
+					if ($debug) Debug.write("  loadwmlObjectToStage ",value); 
+					canvas._drawarea.loadwmlObjectToStage(value,this.String1,hib.currentroomid,hib.conferencedomain,true,false);
+				]]>       	     				
+	        </handler>	
+	  	</netRemoteCallHib>
+        
+        
+        <method name="loadSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+            if ($debug) Debug.write("loadSWFPresentation");
+            canvas._drawarea.loadSWFPresentationSynced(url,fileName,moduleName,parentPath,room,domain,slideNumber,"");
+        </method>
+        
+        <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+            if ($debug) Debug.write("checkSWFPresentation");
+            return canvas._drawarea.checkSWFPresentation(url,fileName,moduleName,parentPath,room,domain,slideNumber);
+        </method>
+        
+        <method name="checkForOriginal" args="slideNumber">
+            <![CDATA[
+                var tWhiteBoard = false;
+                for (var i=0;i<this.subviews.length;i++){
+                    if (this.subviews[i].isoriginal){
+                        tWhiteBoard = this.subviews[i].checkSWFPresentation(slideNumber);
+                        if (!tWhiteBoard) {
+                            this.subviews[i].addSWFPresentation(slideNumber);
+                            break;
+                        }
+                    }
+                }
+                if ($debug) Debug.write("tWhiteBoard: ",tWhiteBoard);
+            ]]>
+        </method>
+		 	 
+    </view>
+
+    <om_vscrollbar name="_scrollbar" />
+</class>
+
+</library>

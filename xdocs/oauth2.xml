@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+	<properties>
+		<title>OAuth2 integration</title>
+		<author email="a_horuzhenko@apache.org">OpenMeetings Team</author>
+	</properties>
+	<body>
+		<section name="OAuth2 integration">
+			<p>You need Apache Openmeetings <strong>version 3.0</strong> to apply this guide!</p>
+			<p>You can manage various OAuth2 servers by opening "Administration => OAuth2". There are already created servers like Facebook or Google. You can use them as example or in production. To add your own servers you need to get their documentation to set necessary attributes.</p>
+		</section>
+		<section name="Attributes">
+			<ul>
+				<li><i>Name</i> - displayed in the login dialog text</li>
+				<li><i>client_id</i> and <i>client_secret</i> - credentials which you got from your oauth2 server.</li>
+				<li><i>Redirect uri</i> - put this value into application settings in the oauth2 server.</li>
+				<li><i>Request key URL</i> - an URL which will be used to request access key.</li>
+				<li><i>Request token URL</i> - an URL which will be used to request access token.</li>
+				<li><i>Request token attributes</i> - attributes for access token request.</li>
+				<li><i>Request info URL</i> - an URL which will be used to request authentication attributes.</li>
+				<li><i>Login param name</i> - login key name to get value from info response.</li>
+				<li><i>Email param name</i> - email key name to get value from info response.</li>
+				<li><i>Firstname param name</i> - firstname key name to get value from info response.</li>
+				<li><i>Lastname param name</i> - lastname key name to get value from info response.</li>
+			</ul>
+			<p>Request attributes (request key url, request token url, request token attributes, request info url) may contain next variables as a part:</p>
+			<ul>
+				<li>{$client_id}</li>
+				<li>{$client_secret}</li>
+				<li>{$redirect_uri}</li>
+				<li>{$code}</li>
+				<li>{$access_token}</li>
+			</ul>
+		</section>
+	</body>
+</document>

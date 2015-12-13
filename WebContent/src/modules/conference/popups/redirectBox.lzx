@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="redirectBox" extends="labelExplorerBox" labelid="50"
+	   valign="middle" align="center"
+	   docking="true" resizeable="false" closable="false" width="260" height="140">
+    
+    <attribute name="timerDel" value="null" />
+    <attribute name="maxTime" value="5000" type="number" />
+    
+    <attribute name="redirectURL" value="" type="string" />
+    
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+		this.timerDel = new LzDelegate( this, "timeLineAction" );
+		this.timeLineAction();
+	</handler>
+
+	<handler name="onclose">
+		lz.ModeManager.release(this);
+	</handler>	
+		
+    <method name="timeLineAction">
+    	<![CDATA[
+    	
+    		var tString = canvas.getLabelName(1098);
+    		tString += " " + Math.round(this.maxTime/1000) + " sek";
+    		
+    	
+	    	this.messageText.setAttribute("text",tString);
+	    	
+	    	this.maxTime -= 1000;
+	    	
+	    	if (this.maxTime >= 0) {
+	    		
+	    		lz.Timer.addTimer( this.timerDel, 1000 );
+	    		
+	    	} else {
+	    		
+	            if ($debug) Debug.write("this.redirectURL ",this.redirectURL);
+	            redirectToUrl(this.redirectURL, null);
+	    	}
+    	]]>
+    </method>
+    
+    <attribute name="refObj" value="null" />
+    
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText name="messageText" text="" y="24" 
+    		   width="$once{ parent.width - 40 }"
+    	multiline="true" resize="false" x="30" />
+    
+</class>
+
+</library>

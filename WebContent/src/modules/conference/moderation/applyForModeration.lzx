@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="userItem" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width }" height="20">
+	<attribute name="streamid" value="0" type="string" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="hasAnswered" value="false" type="boolean" />
+	<attribute name="answer" value="false" type="boolean" />
+	
+	<view name="inner" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" x="1" y="1"
+		onmouseover="this.setAttribute('bgcolor',canvas.getThemeColor('baseMousecolorizer'))"
+		onmouseout="this.setAttribute('bgcolor',0xFFFFFF)" bgcolor="0xFFFFFF">
+		<labelText text="$once{ parent.parent.streamid }" width="50" />
+		<labelText text="$once{ parent.parent.username }" x="50" width="300" />
+		<labelText name="answer" labelid="88" x="350" width="140" />
+	</view>
+</class>
+    
+<class name="applyForModeration"  extends="labelExplorerBox" labelid="81"
+	width="500" height="250" x="14" closable="true">
+	
+	<attribute name="applymessage" value="null" />
+	
+	<labelText labelid="93" y="30" x="2" />
+
+	<handler name="oninit">
+		canvas.currentModApply = this;
+		this.getClientListScope.doCall();
+		this.applymessage = new Array();
+		this.applymessage[0] = 'applyforMod';
+		this.checkRoomValues.doCall();
+	</handler>
+    
+    <!--
+        This is necessary as in some cases the user should not be allowed 
+        to apply for Moderation at all, this Function checks this
+     -->
+    
+    <netRemoteCallHib name="checkRoomValues" funcname="checkRoomValues" 
+                      remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <handler name="ondata" args="value">
+            if (value) {
+                parent.sendMessageWithClient.doCall();
+            } else {
+                new lz.labelerrorPopup(canvas,{errorlabelid:641});
+                parent.close();
+            }
+        </handler>
+    </netRemoteCallHib>
+	
+	<method name="setUserAnswer" args="value">
+		<![CDATA[
+		if ($debug) Debug.write("*** setUserAnswer: ",value,this.userslist);
+
+		var t = this.userslist.userslist.userslist[value.client.streamid];
+		//Debug.write(" t: ",t);
+		t.hasAnswered = true;
+		var answer = value.message[1];
+		//Debug.write("answer: ",answer);
+		if (answer=='ok'){
+			t.inner.answer.setAttribute('text',canvas.getLabelName(94));
+			t.answer = true;
+		} else {
+			t.inner.answer.setAttribute('text',canvas.getLabelName(95));
+			t.answer = false;
+		}
+		]]>
+		this.checkForUpdates();
+	</method>
+	
+	<method name="rejectUser" args="value">
+		this.userslist.userslist.userslist[value.streamid].destroy();
+		this.checkForUpdates();
+	</method>
+	
+	<method name="checkForUpdates">
+		<![CDATA[
+		var b = true;
+		for (var i=0;i<this.userslist.userslist.userslist.subviews.length;i++){
+			//Debug.write("itemID : ",this.userslist.userslist.userslist.subviews[i]);
+			if (!this.userslist.userslist.userslist.subviews[i].answer){
+				b=false;
+				break;
+			}
+		}
+		if (b) this.applyButton.setAttribute('labelid',96);
+		this.applyButton.setAttribute('enabled',b);
+		]]>
+	</method>
+	
+	<netRemoteCallHib name="getClientListScope" funcname="getClientListScope" remotecontext="$once{ canvas.thishib }" >        
+       	<handler name="ondata" args="value">
+       		<![CDATA[
+           	//The onResult-Handler will be called be the rtmpconnection
+           	//Debug.write("INSTANCE getClientListScope : ",value);
+            for (var eg = 0; eg < value.length; ++eg) {
+				//Debug.write("value: ",eg,value,parent.userslist.userslist.userslist);
+				if (canvas.streamid!=value[eg].streamid) {
+				    new lz.userItem(parent.userslist.userslist.userslist,{name:value[eg].streamid,username:value[eg].username,streamid:value[eg].streamid});
+				}
+				//Debug.write("value: ",eg,value,parent.userslist.userslist.userslist);
+			}
+		    if (parent.userslist.userslist.userslist.subviews.length==0)
+				   parent.applyButton.setAttribute('enabled',true);
+           ]]>
+		</handler>   
+    </netRemoteCallHib> 
+     
+    <netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" remotecontext="$once{ canvas.thishib }" >  
+    	<netparam name="vars"><method name="getValue">return parent.parent.applymessage;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("sendMessageWithClient : ",value);
+
+            ]]>
+        </handler>   
+    </netRemoteCallHib>      
+	
+	<view name="userslist" y="60" x="4" height="140" clip="true" width="492" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+		<view name="userslist" y="1" x="1" height="138" clip="true" width="490" bgcolor="0xFFFFFF" >
+			<view name="userslist" layout="axis:y;spacing:2" width="$once{ parent.width }" />
+			<om_vscrollbar />
+		</view>
+	</view>	
+	
+    <simpleLabelButton name="applyButton" labelid="88" width="200" x="80" y="218" enabled="false">
+    	<handler name="onclick">
+    		//hib.setModerator.doCall();
+    		hib.addModerator.publicSIDOfNewModerator = canvas.publicSID;
+    		hib.addModerator.doCall();
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton labelid="83" width="200" x="290" y="218" 
+        onclick="this.parent.close();" />
+  
+</class>
+
+</library>

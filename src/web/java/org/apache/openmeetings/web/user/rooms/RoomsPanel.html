@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<table>
+		<tr>
+			<td style="vertical-align: top">
+				<table class="room-list">
+					<tr wicket:id="list" class="room-row">
+						<td>
+							<div wicket:id="roomContainer">		
+								<span wicket:id="roomName">[room name]</span><br/>
+								<wicket:ommessage key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
+								wicket:id="totalUsers"></span>&nbsp;&nbsp;<span wicket:id="refresh" 
+								class="ui-icon ui-icon-arrowrefresh-1-n" style="display: inline-block"></span>
+							</div>
+						</td>
+						<td><button wicket:id="enter"><wicket:ommessage key="131"/></button></td>
+					</tr>
+				</table>
+			</td>
+			<td style="vertical-align: top">
+				<!-- Users in this Room -->
+				<fieldset wicket:id="details">
+					<div class="formelement" style="font-style: italic;">
+	                    <label><wicket:ommessage key="404" /></label>
+					</div>
+					<div class="formelement">
+	                    <label style="font-weight: bold;"><wicket:ommessage key="406" /></label>
+	                    <span wicket:id="roomName"></span>&nbsp;#<span wicket:id="roomId"></span>
+					</div>
+					<div class="formelement">
+	                    <label style="font-weight: bold;"><wicket:ommessage key="270" /></label>
+	                    <span wicket:id="roomComment"></span>
+					</div>
+					<div class="formelement">
+	                    <label><wicket:ommessage key="407" /></label>
+					</div>
+					<div class="tableWrapper" id="adminTable">
+						<table class="adminListTable">
+							<tbody wicket:id="clientsContainer">		
+					    		<tr wicket:id="clients">
+									<td style="width: 50px; height:50px" ><div style="width: 50px; height:50px"><img wicket:id="clientImage" width="50" height="50" /></div></td>
+									<td style="width: 350px; height:50px">
+										<div style="width: 350px; height:50px"><span wicket:id="clientLogin"></span>&nbsp;<wicket:ommessage key="408"/>&nbsp;<span wicket:id="from"></span></div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+</wicket:panel>
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<!-- APL Author sebawagner -->
+	<resource name="omscrolltrack_y_rsc" src="resources/y_scrolltrack.swf" />
+	
+	<!-- APL Author sebawagner -->
+    <resource name="omscrollbar_ythumbmiddle_rsc" src="resources/scrollthumb_y_mid.swf" />
+    <!-- APL Author sebawagner -->
+    <resource name="omscrollbar_ythumbtop_rsc" src="resources/scrollthumb_y_top.swf" />
+    <!-- APL Author sebawagner -->
+    <resource name="omscrollbar_ythumbbottom_rsc" src="resources/scrollthumb_y_bottom.swf" />
+    <!-- APL Author sebawagner -->
+   	<resource name="omscrolltrack_x_rsc" src="resources/x_scrolltrack.swf" />
+	<!-- APL Author sebawagner -->
+    <resource name="omscrollbar_xthumbmiddle_rsc" src="resources/scrollthumb_x_mid.swf" />
+    <!-- APL Author sebawagner -->
+    <resource name="omscrollbar_xthumbleft_rsc" src="resources/scrollthumb_x_left.swf" />
+    <!-- APL Author sebawagner -->
+    <resource name="omscrollbar_xthumbright_rsc" src="resources/scrollthumb_x_right.swf" />
+
+	<include href="om_vscrollbar.lzx"/>
+	<include href="om_hscrollbar.lzx"/>
+
+</library>

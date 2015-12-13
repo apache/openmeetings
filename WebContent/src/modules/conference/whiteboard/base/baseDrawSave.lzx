@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawSave" extends="baseDrawImage" >
+	
+	<!-- saveing a file to a wml Object -->
+	<attribute name="savefileName" value="savefileName1" type="string" />
+	<attribute name="fileData" value="null" />
+	<attribute name="savefileDataWinRef" value="null" />
+	
+	<!-- loading a file from a wml Object
+	<attribute name="loadfileData" value="null" />
+	<attribute name="loadfileDataIndex" value="0" type="number" />
+	<attribute name="loadfileDataWinRef" value="null" />
+	<attribute name="loadObjectTimer" value="null" />
+	<attribute name="loadmessageId" value="206" type="number" />
+	<attribute name="syncmessageId" value="207" type="number" />
+	<attribute name="_loadmessageTxt" value="" type="string" />
+	<attribute name="_loadingUsers" value="null" />
+	<attribute name="wmlfileName" value="" type="string" />
+	<attribute name="wmlroom" value="" type="string" />
+	<attribute name="wmldomain" value="" type="string" />
+	<attribute name="wmlspreadNews" value="false" type="boolean" />
+	<attribute name="wmlLoadingCompleteMessage" value="null" />
+	<attribute name="synccheckTime" value="1000" type="number" />
+	 -->
+	
+	<!-- loading all stage objects on init -->
+	<attribute name="isInitLoader" value="false" type="boolean" />
+    
+    <!-- Export Image Type -->
+    <attribute name="exportType" value="svg" type="string" />
+    
+	<!-- Vars for storing screenshot
+		removed cause of performance and 
+		no php backend availible anymore -->		
+    <attribute name="MCRef" value="null" />
+    
+    <attribute name="pixelArray" value="null" />
+    <attribute name="snap" value="null" />
+    <attribute name="bpData" value="null" />
+    <attribute name="MatrixValue" value="null" />
+    
+    <attribute name="w" value="0" type="number" />
+    <attribute name="h" value="0" type="number" />
+    
+    <attribute name="a" value="0" type="number" />
+    
+    <attribute name="pixel_del" value="$once{ new LzDelegate(this, 'buildPixelArray' )}" />
+    
+    <attribute name="sendpictureName" value="snapchot.jpg" type="string" />
+    
+    <attribute name="isSendPartArray" value="true" type="boolean" />
+    
+    <attribute name="isRecordingLoad" value="false" type="boolean" />
+    <attribute name="isinitRecordingLoad" value="false" type="boolean" />
+	
+	<!-- Start and Stop Event will be thrown by the loading process -->
+	<event name="onwmlloadStart" />
+	<event name="onwmlloadStop" />
+    
+    <!-- Images will be send in packages 
+    	so timeout is workaround
+     -->
+    <attribute name="sendPartURL" value="http://host/createimagefrombitmap.php" type="string" />
+    
+    <!-- create Image from whole Array
+    	Large Images will not be rendered correctly here cause
+    	there can be a timeout -->
+    <attribute name="sendURL" value="http://host/createimagefrombitmap.php" type="string" />
+    
+    <event name="onprogress" />
+    
+    <method name="catchSnapshot">
+        <![CDATA[
+        this.MCRef = this.getDisplayObject();
+        //Debug.write("this.MCRef: ",this.MCRef);
+        this.snap = new flash.display.BitmapData(this.width, this.height, false, 0 );
+        
+        //Matrix to scale the new image
+        this.MatrixValue = new flash.geom.Matrix();
+        this.MatrixValue.scale(1, 1);
+        //Copy video image
+        this.snap.draw(this.MCRef,  this.MatrixValue); 
+        
+        this.bpData = this.snap.getPixels(this.snap.rectangle);
+        
+        this.w = this.width;
+        this.h = this.height;
+        this.a = 0;
+        this.pixelArray = new Array();
+        
+        //pixel_del.register(lz.Idle,'onidle');
+        this.saveAsImage.doCall();
+        ]]>
+    </method>
+    
+	  	<netRemoteCallHib name="saveAsImage" funcname="fileservice.saveAsImage" remotecontext="$once{ canvas.thishib }" >   
+	  		<netparam><method name="getValue">return parent.parent.bpData;</method></netparam>
+	        <handler name="ondata" args="value">	
+	        	//Debug.write("  saveAsImage: ",value);              	          				
+	        </handler>	
+	  	</netRemoteCallHib>     
+    
+    <method name="buildPixelArray" args="item">
+        <![CDATA[
+        
+        for(var b=0; b<=this.h; b++){
+            var tmp = this.snap.getPixel(a, b);
+            this.pixelArray.push(tmp.toString(16));
+        }
+        var perc =  Math.round((this.a*100)/this.w);
+        if (this.onprogress) this.onprogress.sendEvent(perc);            
+        this.a++
+        if(this.a>this.w){ 
+            //Finish capturing
+            if (this.isSendPartArray){
+            	this.sendPHPData(this.pixelArray, this.h, this.w);
+            } else {
+	            this.sendPHPData(this.pixelArray, this.h, this.w);
+	        }
+            //free memory
+            this.snap.dispose();
+            pixel_del.unregisterAll();
+        }
+        
+        ]]>
+    </method>
+    
+    <method name="sendPHPData" args="pix,pixH,pixW">
+        //Debug.write("### sendPHPData: ",pix,pixH,pixW);
+        <![CDATA[
+	        //Create the LoadVars object and pass data to PHP script
+	        var output = new LoadVars();
+	        output.img = pix.toString();
+	        output.height = pixH;
+	        output.width = pixW;
+	        //The page (and this movie itself) should be in a server to work
+	        output.send(this.sendURL, "output", "POST");
+        ]]> 
+    </method>
+	
+	<!-- saving all object on whiteBoard as wml-file -->
+	
+	<handler name="sendObject">
+		if ($debug) Debug.write("sendObject doSave: ",this.baseactionobjectList);
+		this.fileData = this.baseactionobjectList;
+		this.savefileDataWinRef = new lz.saveAsWmlWindow(canvas.main_content._content.inner,{
+                                                refObj:this});
+	</handler>
+	
+	<method name="confirmSaveAsObject" args="fileName" >
+		this.savefileName = fileName;
+		this.saveAsObject.doCall();
+	</method>
+    
+  	<netRemoteCallHib name="saveAsObject" funcname="fileservice.saveAsObject" remotecontext="$once{ canvas.thishib }" >   
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue">return hib.currentroomid;</method></netparam>        				  
+		<netparam><method name="getValue"> return parent.parent.savefileName; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.fileData;</method></netparam>
+        <handler name="ondata" args="value">	
+			<![CDATA[
+				if ($debug) Debug.write("  saveAsImage: ",value);   
+			    if (value>0){
+					parent.savefileDataWinRef.close();
+					canvas.currentFileExplorer.loadFiles();
+				} else {
+					new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:value});
+				}
+			]]>  	          				
+        </handler>	
+  	</netRemoteCallHib>  
+        
+    <method name="confirmSaveAsImageTypeExport" args="fileName,type">
+        this.savefileName = fileName;
+        this.exportType = type;
+        this.fileData = this.baseactionobjectList;
+        this.addPrintList.doCall();
+    </method> 
+     
+    <method name="confirmSaveAsImageExport" args="fileName">
+        this.savefileName = fileName;
+        this.exportType = "svg";
+        this.fileData = this.baseactionobjectList;
+        this.addPrintList.doCall();
+    </method>	
+    
+        <netRemoteCallHib name="addPrintList" funcname="printservice.addPrintList" remotecontext="$once{ canvas.thishib }" > 
+          
+            <netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+            <!--             
+            <netparam><method name="getValue">return parent.parent.savefileName; </method></netparam>
+             -->
+            <netparam><method name="getValue">return parent.parent.fileData;</method></netparam>
+            <netparam><method name="getValue">return parent.parent.width;</method></netparam>
+            <netparam><method name="getValue">return parent.parent.height;</method></netparam>
+            <handler name="ondata" args="value">    
+                <![CDATA[
+                    if ($debug) Debug.write("addPrintList: ",value);   
+                    var downloadurl = canvas.getUrl()+'ExportToImage?' +
+					                    'fileName=' + parent.savefileName +
+					                    '&hash='+value + 
+                                        '&exportType=' + parent.exportType +
+					                    '&sid='+canvas.sessionId;
+                                        
+                    lz.Browser.loadURL(downloadurl,"_BLANK");
+                ]]>                             
+            </handler>  
+        </netRemoteCallHib>     
+    
+</class>
+
+</library>
