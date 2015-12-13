@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="appointmentNotificationPopUp" extends="guiPresenter" labelid="1144" y="30"
+    isdragable="false" minimizable="false" maximizable="false" fullToolBar="true" 
+    resizeable="false" width="280" height="280" x="$once{ parent.width-this.width-10 }">
+	
+	<attribute name="roomobj" value="null" />
+	
+	<handler name="oninit" >
+		this.getAppointMentAndTimeZones.doCall();
+	</handler>
+	
+	<!-- Retrieving Appointmentdata for Meeting -->
+	<netRemoteCallHib name="getAppointMentAndTimeZones" remotecontext="$once{ canvas.thishib }" 
+		funcname="conferenceservice.getAppointMentAndTimeZones" >   
+		<netparam><method name="getValue">return parent.parent.roomobj.rooms_id;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getAppointMentAndTimeZones 1: ",parent.roomobj.rooms_id);
+		    	if ($debug) Debug.write("getAppointMentAndTimeZones 2: ",value);
+		    	
+		    	if(value!=null){
+		    		
+		    		parent._appstart.setAttribute('text',value.start);
+		    		parent._append.setAttribute('text',value.end);
+		    		parent._timeZone.setAttribute('text',value.timeZone);
+		    		
+		    		parent._appName.setAttribute('text',value.appointment.appointmentName);
+		    		parent._appDescr._appDescr.setAttribute('text',value.appointment.appointmentDescription);
+		    	
+		    		parent._createdby.setAttribute('text',value.appointment.userId.firstname + ' ' + value.appointment.userId.lastname );
+		    		
+		    	}
+		    	
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib> 
+	
+	<labelText name="appName" y="24" labelid="1145" width="50"/>
+	<labelText name="_appName" x="75" y="24" width="200" fontstyle="bold" /> 
+	
+	<labelText name="appDescr" y="46" labelid="1146" width="50"/>
+	<view name="_appDescr" x="75" y="46" width="200" height="100" bgcolor="0xFFFFFF" clip="true">
+		<labelText name="_appDescr" y="24" width="184" multiline="true" /> 
+		<om_vscrollbar />
+	</view>
+	
+	<labelText name="l_sdatum" labelid="1143" y="150" width="50" />
+	<labelText name="_timeZone" x="75" y="150" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 
+	
+	<labelText name="appstartlabel" y="170" labelid="570" width="50"/>
+	<labelText name="_appstart" x="75" y="170" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 
+	
+	<labelText name="l_edatum" labelid="571" y="190" width="50"  />
+	<labelText name="_append" y="190" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 	 
+	
+	<labelText name="l_createdby" labelid="1147" y="210" width="50"  />
+	<labelText name="_createdby" y="210" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 	   
+	
+    <simpleLabelButton labelid="1130" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-24 }" onclick="this.parent.close();" />	           	
+	
+</class>
+
+</library>

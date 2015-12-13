@@ -1,0 +1,23 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- The sender in Laszlo's point-to-point event system.
+Events underly most of the functionality in OpenLaszlo applications. Unlike events in similar systems, OpenLaszlo's events are point-to-point, meaning that there is no general broadcast mechanism for events, and events do not trickle up or down the instance hierarchy. Instead, objects called <handler>s use LzDelegate.register() to register to receive events.
+
+An event is implicitly declared for every attribute of a class or instance and sent when that attribute is changed. So, for instance, if a class has an attribute foo, you can receive events when foo changes by registering for the onfoo event.
+
+Events are sent with a single argument, which usually conveys information about the property that changed. The default behavior of the LzEventable.setAttribute() method is to set the named property and send the event called "on" + property. This is general mechanism that updates constraints in a OpenLaszlo programs. For instance, when a view changes its x position, it sends the event onx with the new value for its x property.
+
+Example:
+<handler name="onavalue" reference="eventSender" args="v">
+  this.setAttribute('x' , v);
+</handler> 
+ -->            
+<class name="event" extends="false">
+
+    <!--- The name of the event -->
+    <attribute name="name" type="string" />
+    
+</class>
+            
+</library>            

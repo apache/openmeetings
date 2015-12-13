@@ -1,0 +1,117 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.openmeetings.utils.sms;
+
+import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.smslib.Message.MessageEncodings;
+import org.smslib.OutboundMessage;
+import org.smslib.Service;
+import org.smslib.http.BulkSmsHTTPGateway;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+
+/**
+ * 
+ * @author iarkh
+ * 
+ */
+
+public class SMSHandler {
+
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			SMSHandler.class, OpenmeetingsVariables.webAppRootKey);
+
+	@Autowired
+	protected ConfigurationDao configurationDao;
+	@Autowired
+	protected TaskExecutor taskExecutor;
+
+	private BulkSmsHTTPGateway gateway = null;
+	
+	private boolean checkBalance() throws Exception {
+		if (gateway == null) {
+			String smsProvider = configurationDao.getConfValue("sms.provider", String.class, null);
+			String smsUsername = configurationDao.getConfValue("sms.username", String.class, null);
+			String smsUserpass = configurationDao.getConfValue("sms.userpass", String.class, null);
+
+			if (smsProvider == null || smsProvider.length() == 0 ||
+					smsUsername == null || smsUsername.length() == 0) {
+				log.error("SMS Provider is not configured properly!");
+				return false;
+			}
+			gateway = new BulkSmsHTTPGateway(smsProvider, smsUsername, smsUserpass);
+			gateway.setOutbound(true);
+			Service.getInstance().addGateway(gateway);
+			Service.getInstance().startService();
+		}
+		return gateway.queryBalance() >= 1; 
+	}
+	
+	public boolean sendSMS(String phone, String subj, long language_id) {
+		try {
+			taskExecutor.execute(new SMSSenderTask(phone, subj, language_id));
+			return true;
+		} catch (Exception ex) {
+			log.error("sendSMS", ex);
+			return false;
+		}
+	}
+	
+	protected class SMSSenderTask implements Runnable {
+		private final String phone;
+		private final String subject;
+		private long language_id;
+
+		public SMSSenderTask(String phone, String subject, long language_id) {
+			this.phone = phone;
+			this.subject = subject;
+			this.language_id = language_id;
+		}
+
+		public void run() {
+			this.send();
+		}
+
+		/**
+		 * Sending an SMS with the given values.
+		 * @return <code>true</code> if sms was sent successfully, <code>false</code> otherwise.
+		 */
+		public boolean send() {
+			try {
+				log.debug("SMS sending to: " + phone + ", subject is: " + subject);
+				if (checkBalance()) {
+					OutboundMessage msg = new OutboundMessage(phone, subject);
+					if (language_id != 1) {
+						msg.setEncoding(MessageEncodings.ENCUCS2);
+					}
+					return Service.getInstance().sendMessage(msg);
+				} else {
+					log.error("Error: insufficient funds on SMS provider account!");
+					return false; 
+				}
+			} catch (Exception ex) {
+				log.error("Error sending sms: ", ex);
+				return false;
+			} 
+		}
+	}
+}

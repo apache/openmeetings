@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="dtmfButton" extends="button" width="20" height="20" >
+    <attribute name="dtmf" value="" type="string"/>
+    <handler name="onclick">
+        callDTMFButton(this,this.text);
+    </handler>
+    <method name="doNextSipNumber">
+        if ($debug) Debug.write("doNextSipNumber ",this.text);
+    </method>
+</class>
+    
+<class name="debugPinCode" extends="labelExplorerBox" title="Enter PIN Code"
+    docking="true" resizeable="false" closable="true" width="100" x="14" height="120">
+    
+    
+    <view y="24">
+        
+        <dtmfButton text="1" x="20" dtmf="1"/> 
+            <dtmfButton text="2" x="40" dtmf="2"/> 
+                <dtmfButton text="3" x="60" dtmf="3"/>
+                
+        <dtmfButton text="4" x="20" y="20" dtmf="4"/> 
+            <dtmfButton text="5" x="40" y="20" dtmf="5"/> 
+                <dtmfButton text="6" x="60" y="20" dtmf="6"/>
+                
+        <dtmfButton text="7" x="20" y="40" dtmf="7"/> 
+            <dtmfButton text="8" x="40" y="40" dtmf="8"/> 
+                <dtmfButton text="9" x="60" y="40" dtmf="9"/>
+                
+        <dtmfButton text="10" x="20" y="60" dtmf="10"/>
+        
+    </view>
+    
+    
+</class>
+
+<class name="baseConferenceRoom" extends="baseContentView" destroyByMethod="true" >
+    
+    <attribute name="roomobj" value="null" />
+    
+    <attribute name="meetingTimer" value="null" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            _mainScrollBar.setAttribute("visibility","hidden");
+            
+            if ($debug) Debug.write("roomobj: ",this.roomobj);
+            
+            canvas.currentRoomObject = this.roomobj;
+            canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,this.roomobj]);
+            
+            if (this.roomobj.isClosed) {
+                canvas.roomClosed();
+            }
+            
+            if (this.roomobj.waitForRecording) {
+                
+                new lz.errorDialog(canvas,{
+                           labelid:1316,
+                           errortext:canvas.getLabelName(1315)
+                        });
+                
+            }
+            
+            canvas.currentRoomObject = this.roomobj;
+            canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeightDelta',28);
+            
+            if(this._chatPanelStrict){
+            	var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
+				this._chatPanelStrict.setAttribute('visible', !hideChat);
+                if (hideChat) {            
+                    this._chatPanelStrict.setAttribute('height', 28);                  
+                }
+            }            
+        ]]>
+    </handler>
+    
+	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
+	<![CDATA[
+		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);
+		// common keys are processed firstly
+		if (canvas.ARRANGE_WINDOWS_KEY == keyCode) {
+			canvas.sendViaLocalConnection(canvas.vid_lc_name, "arrangeWindows", null);
+			return;
+		}
+
+		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
+			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+				var obj = canvas._videocontainer._participants.getUserListItemByPublicSID(canvas.publicSID);
+				if (null != obj) {
+					obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+				}
+				return;
+			} else {
+				new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
+			}
+		}
+	]]>
+	</handler>
+
+    <screenSharingAdapter name="_screenSharingAdapter" />
+    
+    <baseTabChatPanel name="_chatPanelStrict" labelid="616"
+       height="200" x="${ parent._sidePanel.width }"  
+       y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0 : 28) }" 
+       width="${ canvas.width - parent._sidePanel.width }" isopen="${ !canvas.currentRoomObj.chatOpened }" />
+       <!-- isopen need to be reverted, will be toggled -->
+       
+</class>
+
+</library>

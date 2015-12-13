@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="restrictedConferenceMenubar" extends="conferenceMenubar" viewType="restricted" />
+
+	<class name="interviewConferenceMenubar" extends="conferenceMenubar" viewType="interview"/>
+	
+	<class name="conferenceMenubar" extends="view" height="28" width="${ canvas.width }" 
+						bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" >
+						
+		<attribute name="viewType" value="conference" type="string" />
+						
+	    <attribute name="selected" value="null" />
+    
+	    <method name="sendOpenMenu" args="menuref">
+	    	if (this.selected != null) {
+	    		this.selected.setAttribute("selected",false);
+	    	}
+	    	this.selected = menuref;
+	    	this.selected.setAttribute("selected",true);
+	    </method>
+			
+		<view name="itemlist" layout="axis:x;spacing:0" >
+			
+			<conferenceExitButton name="_exitbtn" 
+				text_y_inset="4" text_fontsize="14" down_y_inset="8" height="28" />
+				
+			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(245) }" 
+						text_y_inset="4" text_fontsize="14" down_y_inset="8"
+						textToolTip="" height="28"
+						visible="${ (classroot.viewType=='conference') ? true : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+						>
+				<handler name="onclick">
+			    	new lz.conferenceMenuFiles(canvas,{
+			    				x:this.getAttributeRelative("x",canvas),
+			    				y:this.getAttributeRelative("y",canvas)+this.height,
+			    				btnRef:this,
+			    				list:this.list
+			    			});
+			        this.parent.parent.sendOpenMenu(this);
+			    </handler>
+			</baseMenuMeetingsItem>
+			
+			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(635) }" 
+						text_y_inset="4" text_fontsize="14" down_y_inset="8"
+						textToolTip="" height="28"
+						visible="${ (classroot.viewType=='conference') ? true : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+						>
+				<handler name="oninit">
+					if(canvas.currentRoomObj.hideActionsMenu){	      
+						this.setAttribute("visibility", "hidden");
+					}
+				</handler>		
+				<handler name="onclick">
+			    	new lz.conferenceMenuActions(canvas,{
+			    				x:this.getAttributeRelative("x",canvas),
+			    				y:this.getAttributeRelative("y",canvas)+this.height,
+			    				btnRef:this
+			    			});
+			        this.parent.parent.sendOpenMenu(this);
+			    </handler>
+			</baseMenuMeetingsItem>
+			
+		</view>
+	
+	</class> 
+	
+	<class name="conferenceExitButton" extends="view" height="34" width="${ this._ctext.width+36 }" >
+	
+	    <attribute name="text_y_inset" value="6" type="number" />
+	    <attribute name="text_fontsize" value="14" type="number" />
+	    
+	    <attribute name="down_y_inset" value="10" type="number" />
+	    
+	    <handler name="onmouseover">
+            this.bgc.setAttribute('visibility','visible');
+	    </handler>
+	    <handler name="onmouseout">
+            this.bgc.setAttribute('visibility','hidden');
+	    </handler>
+	    
+	    <handler name="oninit">
+			<![CDATA[
+				if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
+	            	if ($debug) Debug.write("this mbarcontent ",this);
+	            	if (canvas.destroyExitButton) {
+	                    this.destroy();
+	            	}
+	            }
+            ]]>
+		</handler>
+		<handler name="onclick">
+            canvas._videocontainer._videoviewcontent.exitRoom();
+		</handler>
+	    
+	    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
+	        visibility="hidden" name="bgc"/>
+	        
+	    <image src="$once{ canvas.getThemeImage( 'exit_btn_rsc' ) }" y="4" x="4" />
+	    
+	    <view width="1" height="${ parent.height }" y="0" bgcolor="0xEEEEEE" x="${ parent.width-1 }" />
+	    
+	    <labelText labelid="789" name="_ctext" fontstyle="plain" fgcolor="0xFFFFFF"
+	        	fontsize="$once{ parent.text_fontsize }" y="$once{ parent.text_y_inset }" x="30" />
+	
+	    <labelTooltip name="_textToolTip" labelid="309" multiline="false" />
+	    
+	</class>
+	
+	
+	
+	<class name="conferencDropDownMenuItem" extends="view" height="36">
+	
+		<attribute name="isSpacer" value="false" type="boolean" />
+	
+		<attribute name="enabled" type="boolean" setter="this.setEnabled(enabled)" />
+		
+		<method name="setEnabled" args="e">
+			this.enabled = e;
+			if (!this.isinited) {
+				return;
+			}
+			if (this.enabled) {
+				this._ctext.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
+				this._ctextTooltip.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
+			} else {
+				this._ctext.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
+				this._ctextTooltip.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
+			}
+			if (this.command) {
+				this.command.enabled = this.enabled;
+			}
+		</method>
+		
+		<attribute name="labelid" type="number"
+                   setter="this.setLabelId( labelid )"   when="once" />
+                   
+		<method name="setLabelId" args="id" >
+            this.labelid = id;
+            if ( this.labelid ) {
+                this._ctext.setAttribute('text', canvas.getLabelName(this.labelid));
+            }
+        </method>
+		
+		<attribute name="command" type="expression"
+                   setter="this.setCommand( command )"   when="once" />
+		
+		<method name="setCommand" args="cmd" >
+            this.command = cmd;
+            if ( this.command ) {
+                this._ctextTooltip.setAttribute('text',canvas.getLabelName(command.tipLabelId));
+            }
+        </method>
+        
+        <handler name="onclick">
+        	if (!this.enabled) {
+        		return;
+        	}
+        	this.command.execute(null);
+        	parent.parent.close();
+        </handler>
+        
+        <handler name="onmouseover">
+	        this._bg.setAttribute("visibility","visible");
+	    </handler>
+	    
+	    <handler name="onmouseout">
+	        this._bg.setAttribute("visibility","hidden");
+	    </handler>
+	
+	    <view name="_bg" visibility="hidden" width="${ parent.width-2 }" y="0" x="1"
+	          bgcolor="0xFFFFFF" opacity="0.5" height="36" />
+	    
+	    <text name="_ctext" fontstyle="bold" fgcolor="0x666666"
+	        	fontsize="14" y="2" x="10" />
+	        	
+	    <text name="_ctextTooltip" fontstyle="plain" fgcolor="0x666666"
+	        	fontsize="10" y="20" x="10" />	
+		
+	</class> 
+	
+	<class name="conferenceMenuFiles" extends="baseDropDownMenuList"
+			height="${ this._content.height+2 }" width="${ this._content.width+2 }">
+			
+		<view name="_content" x="1" y="1" 
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" >
+			
+			<conferencDropDownMenuItem labelid="15" command="cmd_importFile"
+						enabled="${ canvas.ismoderator }" />
+			
+		</view>
+		
+	</class>
+	
+	<class name="conferenceMenuActions" extends="baseDropDownMenuList"
+			height="${ this._content.height+2 }" width="${ this._content.width+2 }">
+			
+		<handler name="oninit">
+	        this.fixWidth();
+		</handler>
+			
+		<view name="_content" x="1" y="1" 
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" >
+			
+			<conferencDropDownMenuItem labelid="213" command="cmd_invitation" 
+						enabled="${ canvas.ismoderator }" />
+			<horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
+						enabled="${ canvas.ismoderator }" />			
+			<horizontalDropDownSpacer />
+			<!-- 
+			<conferencDropDownMenuItem labelid="306" command="cmd_editCamMicSettings" 
+						enabled="true" />			
+			<horizontalDropDownSpacer />
+			 -->
+			<conferencDropDownMenuItem labelid="784" command="cmd_applyforMod"
+						enabled="${ !canvas.ismoderator }" />	
+			<horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="785" command="cmd_applyforWhiteBoard"
+						enabled="${ !canvas.ismoderator }" />	
+			<horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="786" command="cmd_applyforAV"
+						enabled="${ !canvas.ismoderator }" />				
+			<horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="24" command="cmd_createPoll" 
+						enabled="${ canvas.ismoderator }" />
+			<horizontalDropDownSpacer />			
+			<conferencDropDownMenuItem labelid="37" command="cmd_pollResults" 
+						enabled="true" />
+			<horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" 
+						 enabled="true"/>
+			<horizontalDropDownSpacer
+						 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }" />
+            <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 
+            			 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"
+            			 enabled="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"/>
+            <horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" 
+						 enabled="true"/>
+			<!-- Save Whiteboard as Image menues are commented for now
+            <horizontalDropDownSpacer />
+			<conferencDropDownMenuItem labelid="560" command="cmd_exportFileSVG" enabled="true"/>
+			<conferencDropDownMenuItem labelid="561" command="cmd_exportFilePNG" enabled="true"/>
+			<conferencDropDownMenuItem labelid="562" command="cmd_exportFileJPG" enabled="true"/>
+			-->
+		</view>
+		
+	</class>
+	
+
+
+	
+
+
+</library>

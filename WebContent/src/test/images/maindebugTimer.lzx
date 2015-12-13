@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas debug="true" width="100%" height="100%" title="Geo Map Portal">
+    
+    <debug fontsize="11" oninit="Debug.showInternalProperties = true" />
+
+<attribute name="url" value="" type="string" />
+<attribute name="currentIndex" value="0" type="number" />
+
+<handler name="oninit">
+    <![CDATA[
+    
+	    LzLoadQueue.maxOpen = 100;
+	    
+	    this.url = new Array();
+	    
+	    this.url[5] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSide.jpg";
+	    this.url[4] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSideBig.jpg";
+	    this.url[3] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/VideoClass.png";
+	    this.url[2] = "http://openmeetings.googlecode.com/svn/docs/LanguageNavigationErrors.png";
+	    this.url[1] = "http://openmeetings.googlecode.com/svn/docs/OpenMeetingsSOAPGateway.png";
+	    this.url[0] = "http://openmeetings.googlecode.com/svn/docs/OpenmeetingsAllTables.png";
+	    this.url[6] = "http://openmeetings.googlecode.com/svn/docs/SOAPFlowDirectLogin.png";
+	    this.url[7] = "http://openmeetings.googlecode.com/svn/docs/UserDiagram.png";
+	    this.url[8] = "http://openmeetings.googlecode.com/svn/docs/UserGroupsOrganizationsAndRooms.png";
+	    this.url[9] = "http://openmeetings.googlecode.com/svn/docs/architecture.jpg";
+	    this.url[10] = "http://openmeetings.googlecode.com/svn/docs/moodle_plugin_audience.png";
+	    this.url[11] = "http://openmeetings.googlecode.com/svn/docs/moodle_plugin_conference.png";
+	    this.url[12] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard.PNG";
+	    this.url[13] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard2.PNG";
+	    this.url[14] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard3.PNG";
+	    this.url[15] = "http://openmeetings.googlecode.com/svn/docs/test_application_audio_video.png";
+	    this.url[16] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSideBig.jpg";
+	    
+	    for (var k = 16;k<40;k++) {
+            this.url[k] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSideBig.jpg";
+        }
+	    
+	    this.fadeDelegate = new LzDelegate( this, "sendImage" );
+	    LzTimer.addTimer( this.fadeDelegate, 50 );
+        
+    ]]>
+</handler>
+
+<method name="sendImage">
+    <![CDATA[
+    
+        var d = new Date();
+        
+        new layerImage(canvas.myView,{srcImage:this.url[this.currentIndex]+"?time="+d.getTime()});
+        
+        this.currentIndex ++;
+        
+        if (this.currentIndex < 40) {
+            LzTimer.addTimer( this.fadeDelegate, 50 );
+        }
+
+    ]]>
+</method>
+
+<class name="layerImage" extends="image">
+    <attribute name="layerid" value="0" type="number" />
+    <attribute name="type" value="" type="string" />
+    <attribute name="isLayerImage" value="true" type="boolean" />
+    <attribute name="srcImage" value="" type="string" setter="this.setImageSource(srcImage)" />
+    <method name="setImageSource" args="srcImage">
+        if ($debug) Debug.write("setImageSource",srcImage);
+        //var mcRef = this.getDisplayObject();
+        //mcRef.loadMovie(srcImage);
+        this.setSource(srcImage);
+    </method>
+</class>  
+
+<view name="myView" />
+  
+</canvas>

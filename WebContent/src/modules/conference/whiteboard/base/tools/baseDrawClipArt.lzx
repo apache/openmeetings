@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+
+<class name="drawClipArtWhiteBoard" >
+    
+    <attribute name="clipArtEndx" value="0" type="number" />
+    <attribute name="clipArtEndy" value="0" type="number" />
+    
+    <!-- Not needed anymore, use LzView.setColor instead
+    <method name="setTint" args="color, brightness">
+        <![CDATA[
+        if (color != "" && color != null){
+            if (brightness == null) { brightness = 0; }
+            var rgb = color;
+            var red=(rgb >> 16) & 0xFF;
+            var green=(rgb >> 8) & 0xFF;
+            var blue=rgb & 0xFF;
+
+            this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                        rb : 0, gb : 0, bb : 100 } );
+        }
+        ]]>
+    </method>
+     -->
+     
+</class>	
+    
+<class name="baseDrawClipArt" extends="baseDrawArrow" >
+	
+	<attribute name="minClipArtx" value="0" type="number" />
+	<attribute name="maxClipArtx" value="0" type="number" />
+	<attribute name="minClipArty" value="0" type="number" />
+    <attribute name="maxClipArty" value="0" type="number" />
+    <attribute name="deltaClipArtx" value="0" type="number" />
+    <attribute name="deltaClipArty" value="0" type="number" />
+    
+    <attribute name="clipArtEndx" value="0" type="number" />
+    <attribute name="clipArtEndy" value="0" type="number" />
+	
+	<attribute name="currentClipArtRessourceName" value="idea.png" type="string"/>
+	    
+    <method name="startDrawClipArt" args="oid_name">
+        <![CDATA[
+        if (oid_name == null) {
+            oid_name = 'clipart'+this.getCounter();
+        }
+        
+        this.currentlayer = new lz.drawViewNew(this,{
+                                    name:oid_name,width:this.width,height:this.height,
+                                    opacity:this.currentdrawarrowOpacity});
+         
+        this.startx = this.currentlayer.getMouse('x');
+        this.starty = this.currentlayer.getMouse('y');
+                                    
+        var imageurl = canvas.getUrl() + 'public/cliparts/'+this.currentClipArtRessourceName;
+        
+        if ($debug) Debug.write("imageurl :: ",imageurl);
+        
+        new lz.drawClipArtWhiteBoard(this.currentlayer,{
+        	                width:100,height:100,stretches:'both',
+                            x:this.startx,y:this.starty,
+                            //bgcolor:0xFF3300,
+                            resource:imageurl,name:'clipart'});
+
+        this.minClipArtx = this.startx;
+        this.minClipArty = this.starty;
+        this.maxClipArtx = this.startx+100;
+        this.maxClipArty = this.starty+100;
+        this.clipArtEndx = this.maxClipArtx;
+        this.clipArtEndy = this.maxClipArty;
+        this.deltaClipArtx = 0;
+        this.deltaClipArty = 0;
+            
+                            
+        ]]>
+    </method>
+    
+    <method name="setStartPoint" args="sx,sy">
+    	this.startx = sx;
+        this.starty = sy;
+    </method>
+     
+    <method name="trackDrawClipArt">   
+        <![CDATA[
+        //Add Resource
+        //var t = new lz.drawClipArtWhiteBoard(this.currentlayer,{
+        //                    resource:imageurl,x:this.startx,y:this.starty});
+        
+        //Color
+        //t.setTint(this.currentdrawarrowlinestroke,60);
+        //t.setColor(this.currentdrawarrowlinestroke);
+        var tEndX = this.currentlayer.getMouse('x');
+        var tEndY = this.currentlayer.getMouse('y');
+        
+        this.trackDrawClipArtDraw(tEndX,tEndY,this.currentlayer.clipart);
+        
+        ]]>
+    </method>    
+        
+    <method name="trackDrawClipArtDraw" args="tEndX,tEndY,t">   
+        <![CDATA[
+        //Add Resource
+        //var t = new lz.drawClipArtWhiteBoard(this.currentlayer,{
+        //                    resource:imageurl,x:this.startx,y:this.starty});
+        
+        //Color
+        //t.setTint(this.currentdrawarrowlinestroke,60);
+        //t.setColor(this.currentdrawarrowlinestroke);
+        
+        //if ($debug) Debug.write("trackDrawClipArtDraw ",tEndX,tEndY,t);
+        
+        this.clipArtEndx = tEndX;
+        this.clipArtEndy = tEndY;
+        
+        var tx = tEndX-this.startx;
+        var ty = tEndY-this.starty;
+        
+        var gegenkathete = Math.abs(ty);
+        var ankathete = Math.abs(tx); 
+        var hypothenuse = Math.sqrt((ankathete*ankathete)+(gegenkathete*gegenkathete));
+        var sinAlpha = (gegenkathete/hypothenuse);
+        var palpha = Math.asin(sinAlpha);
+        var alpha = palpha/(Math.PI/180);
+        
+        var tLength = Math.sqrt(2)/2*hypothenuse;
+        
+        //if ($debug) Debug.write("tx,ty,alpha,sinAlpha,tLength "+tx+" "+ty+" "+alpha+" "+sinAlpha+" "+tLength);
+        
+        //if ($debug) Debug.write("CALC tx,ty",tx,ty);
+        
+        if (Math.abs(tx) < 2 && Math.abs(ty) < 2) {
+        	
+        	this.minClipArtx = this.startx;
+            this.minClipArty = this.starty;
+            this.maxClipArtx = this.startx+100;
+            this.maxClipArty = this.starty+100;
+            this.clipArtEndx = this.maxClipArtx;
+            this.clipArtEndy = this.maxClipArty;
+            t.setAttribute('rotation',0);
+            
+            this.deltaClipArtx = 0;
+            this.deltaClipArty = 0;
+            
+            //if ($debug) Debug.write(" IS ZERO ",this.startx,this.starty);
+        	
+        } else if (tx>=0 && ty>=0){    
+            t.setAttribute('rotation',(alpha-45));
+            
+            var tRotate = (alpha-45);
+            var pRotate = tRotate * (Math.PI/180);
+            
+            //1. Quadrant  left-down
+            var ankathete_2 = Math.cos(pRotate)*tLength;
+            var gegenkathete_2 = Math.sin(pRotate)*tLength;
+            var tx2 = this.startx+ankathete_2;
+            var ty2 = this.starty+gegenkathete_2;
+            //if ($debug) Debug.write("_1  ",this.startx,this.starty,tx2,ty2);
+            
+            var tRotate2 = 180-(alpha+45);
+            var pRotate2 = tRotate2 * (Math.PI/180);
+            
+            var ankathete_4 = Math.sin(pRotate2)*tLength;
+            var gegenkathete_4 = Math.cos(pRotate2)*tLength;
+            var tx4 = this.startx-gegenkathete_4;
+            var ty4 = this.starty+ankathete_4;
+            
+            this.minClipArtx = tx4;
+            if (this.startx < tx4) {
+            	this.minClipArtx = this.startx;
+            }
+            
+            this.minClipArty = this.starty;
+            if (ty2 < this.starty) {
+            	this.minClipArty = ty2;
+            }
+            
+            this.maxClipArtx = tx2;
+            if (tEndX > tx2) {
+            	this.maxClipArtx = tEndX;
+            }
+            
+            this.maxClipArty = tEndY;
+            if (ty4 > tEndY) {
+            	this.maxClipArty = ty4;
+            }
+            
+            if (gegenkathete_4 > 0) {
+                this.deltaClipArtx = gegenkathete_4;
+                this.deltaClipArty = 0;
+            } else {
+            	this.deltaClipArtx = 0;
+            	this.deltaClipArty = Math.abs(gegenkathete_2);
+            }
+            
+            
+            //if ($debug) Debug.write("_1  ",gegenkathete_4,gegenkathete_2);
+            
+            //if ($debug) Debug.write("_1  ",this.startx,this.starty,tx4,ty4);
+            
+            //if ($debug) Debug.write("_2 ",pRotate2,tRotate2,Math.sin(pRotate2),gegenkathete_4);
+            //if ($debug) Debug.write("_1  ",this.starty,ty4,ankathete_4,"tRotate2,tLength",tRotate2,tLength);
+            
+        } else if (tx<0 && ty>=0){
+            t.setAttribute('rotation',(90+45)-(alpha));
+            
+            var tRotate = (alpha-45);
+            var pRotate = tRotate * (Math.PI/180);
+            
+            //1. Quadrant  left-down
+            var ankathete_2 = Math.cos(pRotate)*tLength;
+            var gegenkathete_2 = Math.sin(pRotate)*tLength;
+            var tx4 = this.startx-ankathete_2;
+            var ty4 = this.starty+gegenkathete_2;
+            
+            //if ($debug) Debug.write("_1  ",this.startx,this.starty,tx4,ty4);
+            
+            var tRotate2 = 180-(alpha+45);
+            var pRotate2 = tRotate2 * (Math.PI/180);
+            
+            var gegenkathete_4 = Math.sin(pRotate2)*tLength;
+            var ankathete_4 = Math.cos(pRotate2)*tLength;
+            var tx2 = this.startx+ankathete_4;
+            var ty2 = this.starty+gegenkathete_4;
+            
+            //if ($debug) Debug.write("_1  x,y",this.startx,this.starty,"tx2,ty2",tx2,ty2,"tx4,ty4",tx4,ty4);
+            
+            this.minClipArtx = tx4;
+            if (tEndX < tx4) {
+                this.minClipArtx = tEndX;
+            }
+            
+            this.minClipArty = this.starty;
+            if (ty4 < this.starty) {
+                this.minClipArty = ty4;
+            }
+            
+            this.maxClipArtx = tx2;
+            if (this.startx > tx2) {
+                this.maxClipArtx = this.startx;
+            }
+            
+            this.maxClipArty = tEndY;
+            if (ty2 > tEndY) {
+                this.maxClipArty = ty2;
+            }
+            
+            if (gegenkathete_2 > 0) {
+                this.deltaClipArtx = ankathete_2;
+                this.deltaClipArty = 0;
+            } else {
+                this.deltaClipArtx = this.maxClipArtx-this.minClipArtx;
+                this.deltaClipArty = Math.abs(gegenkathete_2);
+            }
+            
+        } else if (tx<0 && ty<0){
+            t.setAttribute('rotation',180+(alpha-45));
+            
+            var tRotate = (alpha-45);
+            var pRotate = tRotate * (Math.PI/180);
+            
+            //1. Quadrant  left-down
+            var ankathete_2 = Math.cos(pRotate)*tLength;
+            var gegenkathete_2 = Math.sin(pRotate)*tLength;
+            var tx4 = this.startx-ankathete_2;
+            var ty4 = this.starty-gegenkathete_2;
+            
+            var tRotate2 = 180-(alpha+45);
+            var pRotate2 = tRotate2 * (Math.PI/180);
+            
+            var gegenkathete_4 = Math.sin(pRotate2)*tLength;
+            var ankathete_4 = Math.cos(pRotate2)*tLength;
+            var tx2 = this.startx+ankathete_4;
+            var ty2 = this.starty-gegenkathete_4;
+            
+            this.minClipArtx = tx4;
+            if (tEndX < tx4) {
+                this.minClipArtx = tEndX;
+            }
+            
+            this.minClipArty = tEndY;
+            if (ty2 < tEndY) {
+                this.minClipArty = ty2;
+            }
+            
+            this.maxClipArtx = tx2;
+            if (this.startx > tx2) {
+                this.maxClipArtx = this.startx;
+            }
+            
+            this.maxClipArty = ty4;
+            if (this.starty > ty4) {
+                this.maxClipArty = this.starty;
+            }
+            
+            //if ($debug) Debug.write("_1  ",gegenkathete_2);
+            
+            if (gegenkathete_2 < 0) {
+                this.deltaClipArtx = this.maxClipArtx-this.minClipArtx;
+                this.deltaClipArty = gegenkathete_4;
+            } else {
+                this.deltaClipArtx = ankathete_2;
+                this.deltaClipArty = this.maxClipArty-this.minClipArty;
+            }
+            
+            
+        } else if (tx>0 && ty<=0){
+            t.setAttribute('rotation',((270+45)-alpha));
+            
+            //if ($debug) Debug.write("alpha :: ",alpha);
+            
+            //if ($debug) Debug.write("_1  ",gegenkathete_2);
+            var tRotate = (alpha-45);
+            var pRotate = tRotate * (Math.PI/180);
+            
+            //1. Quadrant  left-down
+            var ankathete_2 = Math.cos(pRotate)*tLength;
+            var gegenkathete_2 = Math.sin(pRotate)*tLength;
+            var tx4 = this.startx+ankathete_2;
+            var ty4 = this.starty-gegenkathete_2;
+            
+            //if ($debug) Debug.write("gegenkathete_2 :: ",gegenkathete_2);
+            
+            var tRotate2 = 180-(alpha+45);
+            var pRotate2 = tRotate2 * (Math.PI/180);
+            
+            var gegenkathete_4 = Math.sin(pRotate2)*tLength;
+            var ankathete_4 = Math.cos(pRotate2)*tLength;
+            var tx2 = this.startx-ankathete_4;
+            var ty2 = this.starty-gegenkathete_4;
+            
+            //if ($debug) Debug.write("ankathete_4 :: ",ankathete_4);
+            
+            this.minClipArtx = tx2;
+            if (this.startx < tx2) {
+                this.minClipArtx = this.startx;
+            }
+            
+            this.minClipArty = tEndY;
+            if (ty2 < tEndY) {
+                this.minClipArty = ty2;
+            }
+            
+            this.maxClipArtx = tEndX;
+            if (tx4 > tEndX) {
+                this.maxClipArtx = tx4;
+            }
+            
+            this.maxClipArty = this.starty;
+            if (ty4 > this.starty) {
+                this.maxClipArty = ty4;
+            }
+            
+            //if ($debug) Debug.write("_1  ",ankathete_4);
+            
+            if (ankathete_4 < 0) {
+                this.deltaClipArtx = 0;
+                this.deltaClipArty = gegenkathete_4;
+            } else {
+                this.deltaClipArtx = ankathete_4;
+                this.deltaClipArty = this.maxClipArty-this.minClipArty;
+                
+                //this.deltaClipArtx = 0;
+                //this.deltaClipArty = 0;
+            }
+            
+        }
+        
+        //if (tx)
+        
+        //Scaling
+        //var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
+        //t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        //t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
+        
+        //if ($debug) Debug.write("hypothenuse "+hypothenuse);
+        
+        
+        
+        t.setAttribute("width",tLength);
+        t.setAttribute("height",tLength);
+
+        //Set previous to null
+        this.prevx = this.currentlayer.getMouse('x');
+        this.prevy = this.currentlayer.getMouse('y');  
+        
+        ]]>
+    </method> 
+    
+    <method name="drawClipArtToHistory" args="lastActionObject,parentView">
+    	<![CDATA[
+    	
+    	   var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+                name:lastActionObject[lastActionObject.length-1],
+                x:lastActionObject[lastActionObject.length-5],
+                y:lastActionObject[lastActionObject.length-4],
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2],
+                opacity:lastActionObject[4]
+                });
+    	
+           new lz.drawClipArtWhiteBoard(tmpCurrentlayer,{
+                                    width:lastActionObject[7],
+                                    height:lastActionObject[8],
+                                    stretches:'both',
+                                    x:lastActionObject[5],
+                                    y:lastActionObject[6],
+                                    rotation:lastActionObject[3],
+                                    resource:lastActionObject[2],
+                                    clipArtEndx:lastActionObject[9],
+                                    clipArtEndy:lastActionObject[10],
+                                    name:'clipart'
+                                });
+             
+            if ($debug) Debug.write("x,y ",tmpCurrentlayer.x,tmpCurrentlayer.y,tmpCurrentlayer.width,tmpCurrentlayer.height);
+                                
+            //Add Layer to global Layer     
+            this.layers.push(tmpCurrentlayer);                                
+              
+            this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+    	]]>
+    </method>
+    
+    <method name="endDrawClipArtDrag" args="cLayer">
+        <![CDATA[
+        
+            var oid_name = cLayer.name;
+            var tSource = cLayer.clipart.resource;
+            var tRotation = cLayer.clipart.rotation;
+            var tX = cLayer.clipart.x;
+            var tY = cLayer.clipart.y;
+            var tWidth = cLayer.clipart.width;
+            var tHeight = cLayer.clipart.height;
+               
+            //if ($debug) Debug.write("END 0 ",tY);
+            
+            cLayer.destroy();
+           
+            //if ($debug) Debug.write("END 1 ",this.minClipArty,this.starty);
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                                        x:this.minClipArtx,
+                                        y:this.minClipArty,
+                                        name:oid_name,
+                                        width:this.maxClipArtx-this.minClipArtx,
+                                        height:this.maxClipArty-this.minClipArty
+                                        //bgcolor:0x0033FF
+                                    });
+            
+            //if ($debug) Debug.write(" IS ZERO END1 ",this.currentlayer.x,this.currentlayer.y);                        
+                                    
+            new lz.drawClipArtWhiteBoard(this.currentlayer,{
+                                    width:tWidth,height:tHeight,
+                                    stretches:'both',
+                                    x:this.deltaClipArtx,
+                                    y:this.deltaClipArty,
+                                    rotation:tRotation,
+                                    resource:tSource,
+                                    clipArtEndx:this.clipArtEndx-this.minClipArtx,
+                                    clipArtEndy:this.clipArtEndy-this.minClipArty,
+                                    name:'clipart'
+                                    //bgcolor:0xFF3300
+                                });
+        
+            for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+                if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==oid_name) {
+                    
+                    //if ($debug) Debug.write("Found Object 1: ",this.baseactionobjectList[eg]);
+                    
+                	//actionObject[3] = tRotation;
+        //actionObject[5] = deltaClipArtx;
+        //actionObject[6] = deltaClipArty;
+        //actionObject[7] = deltaClipWidth;
+        //actionObject[8] = deltaClipHeight;
+        //actionObject[9] = deltaClipEndx;
+        //actionObject[10] = deltaClipEndy;
+        //actionObject[14] = x;//-5
+        //actionObject[15] = y;//-4
+        //actionObject[16] = width;//-3
+        //actionObject[17] = height;//-2
+        
+            	    this.baseactionobjectList[eg][3] = tRotation;
+                	this.baseactionobjectList[eg][5] = this.deltaClipArtx;
+                	this.baseactionobjectList[eg][6] = this.deltaClipArty;
+                	this.baseactionobjectList[eg][7] = tWidth;
+                	this.baseactionobjectList[eg][8] = tHeight;
+                	this.baseactionobjectList[eg][9] = this.clipArtEndx-this.minClipArtx;
+                	this.baseactionobjectList[eg][10] = this.clipArtEndy-this.minClipArty;
+                	
+                    this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] = this.minClipArtx;
+                    this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] = this.minClipArty;
+                    this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3] = this.maxClipArtx-this.minClipArtx;
+                    this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] = this.maxClipArty-this.minClipArty;
+                    
+                    var newA = this.baseactionobjectList[eg];
+                    
+                    this.onsharedMessage('size',newA);
+                    
+                    break;
+                }
+            }   
+                           
+            //Set previous to null
+            this.prevx = null;
+            this.prevy = null;  
+        
+        ]]>
+    </method>
+    
+    <method name="endDrawClipArt">
+    	<![CDATA[
+    	
+            var oid_name = this.currentlayer.name;
+    	    var tSource = this.currentlayer.clipart.resource;
+    	    var tRotation = this.currentlayer.clipart.rotation;
+    	    var tX = this.currentlayer.clipart.x;
+    	    var tY = this.currentlayer.clipart.y;
+    	    var tWidth = this.currentlayer.clipart.width;
+    	    var tHeight = this.currentlayer.clipart.height;
+    	
+    	    //if ($debug) Debug.write("END 0 ",tY);
+    	    
+    	    this.currentlayer.destroy();
+    	       	        	    
+    	    //if ($debug) Debug.write("END 1 ",this.minClipArty,this.starty);
+    	    
+	     	if(this.isSnapToGrid){        		
+	    		if ($debug) Debug.write("####  this.minClipArtx y ",this.minClipArtx,this.minClipArty);
+	    	
+		    	//this.minClipArtx = Math.round(this.minClipArtx/this.gridWidth)*this.gridWidth;
+		    	//this.minClipArty = Math.round(this.minClipArty/this.gridWidth)*this.gridWidth;
+		    	
+		    	tX = Math.round(tX/this.gridWidth)*this.gridWidth;
+		    	tY = Math.round(tY/this.gridWidth)*this.gridWidth;
+		    	
+		    	this.currentlayer = new lz.drawViewNew(this,{
+    	                                x:tX,
+    	                                y:tY,
+                                        name:oid_name,
+                                        width:this.maxClipArtx-this.minClipArtx,
+                                        height:this.maxClipArty-this.minClipArty
+                                        //bgcolor:0x0033FF
+                                    });
+		    	
+            }else{
+    	    
+	    	    this.currentlayer = new lz.drawViewNew(this,{
+	    	                                x:this.minClipArtx,
+	    	                                y:this.minClipArty,
+	                                        name:oid_name,
+	                                        width:this.maxClipArtx-this.minClipArtx,
+	                                        height:this.maxClipArty-this.minClipArty
+	                                        //bgcolor:0x0033FF
+	                                    });
+            
+            //if ($debug) Debug.write(" IS ZERO END1 ",this.currentlayer.x,this.currentlayer.y);                        
+            }                                                
+            new lz.drawClipArtWhiteBoard(this.currentlayer,{
+                                    width:tWidth,height:tHeight,
+                                    stretches:'both',
+                                    x:this.deltaClipArtx,
+                                    y:this.deltaClipArty,
+                                    rotation:tRotation,
+                                    resource:tSource,
+                                    clipArtEndx:this.clipArtEndx-this.minClipArtx,
+                                    clipArtEndy:this.clipArtEndy-this.minClipArty,
+                                    name:'clipart'
+                                    //bgcolor:0xFF3300
+                                });
+    	
+            //if ($debug) Debug.write(" IS ZERO END2 ",this.deltaClipArtx,this.deltaClipArty);                        
+            
+            //if ($debug) Debug.write("END 2 ",this.currentlayer.y,this.currentlayer.clipart.y);
+            
+    	    this.drawClipArtRegisterFinal(
+    	                   oid_name,
+    	                   tSource,
+    	                   tRotation,
+    	                   1,
+    	                   this.minClipArtx,
+    	                   this.minClipArty,
+    	                   this.maxClipArtx-this.minClipArtx,
+    	                   this.maxClipArty-this.minClipArty,
+    	                   this.deltaClipArtx,
+    	                   this.deltaClipArty,
+    	                   tWidth,
+    	                   tHeight,
+    	                   this.clipArtEndx-this.minClipArtx,
+                           this.clipArtEndy-this.minClipArty,
+    	                   true,
+    	                   this.getSWFDocumentStatus(),
+    	                   this.getZIndex());
+    	     
+            this.layers.push(this.currentlayer);
+            this.checkStepLayers();    	                   
+    	                   
+            //Set previous to null
+            this.prevx = null;
+            this.prevy = null;  
+    	
+    	]]>
+    </method>
+    
+    <method name="drawClipArtRegisterFinal" args="newName,tSource,tRotation,opacity,x,y,width,height,deltaClipArtx,deltaClipArty,deltaClipWidth,deltaClipHeight,deltaClipEndx,deltaClipEndy,doCall,swfObj,zIndex">
+        var actionObject = new Array();
+        actionObject[0] = 'clipart';
+        actionObject[1] = newName;
+        actionObject[2] = tSource;
+        actionObject[3] = tRotation;
+        actionObject[4] = opacity;
+        actionObject[5] = deltaClipArtx;
+        actionObject[6] = deltaClipArty;
+        actionObject[7] = deltaClipWidth;
+        actionObject[8] = deltaClipHeight;
+        actionObject[9] = deltaClipEndx;
+        actionObject[10] = deltaClipEndy;
+        actionObject[11] = zIndex;//-8
+        actionObject[12] = swfObj;//-7
+        actionObject[13] = this.counter;//-6 
+        actionObject[14] = x;//-5
+        actionObject[15] = y;//-4
+        actionObject[16] = width;//-3
+        actionObject[17] = height;//-2
+        actionObject[18] = newName;//-1
+        this.baseactionobjectList.push(actionObject);       
+        if (doCall) this.onsharedMessage('draw',actionObject);
+    </method>      
+    
+</class>
+
+</library>

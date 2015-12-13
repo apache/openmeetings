@@ -1,0 +1,51 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- HTML specific -->
+<class name="a" extends="false">
+	<!--- 	The link target -->
+	<attribute name="href" />
+	<!---	The value of this attribute determines where the link target will be displayed. The interpretation is the same as in HTML, where the "current frame" is the frame containing the LZX application. The value must be a name beginning with an alphabetic character, or one of the following:
+
+_blank
+    The user agent should load the designated document in a new, unnamed window. 
+_parent
+    The user agent should load the document into the full, original window (thus canceling all other frames). This value is equivalent to _self if the current frame has no parent. 
+_self
+    The user agent should load the document in the same frame as the element that refers to this target. 
+_top
+    The user agent should load the document into the immediate FRAMESET parent of the current frame. This value is equivalent to _self if the current frame has no parent. 
+
+	 -->
+	 <attribute name="target" />
+</class>
+
+<!--- HTML specific -->
+<class name="b" extends="false" />
+
+<!--- HTML specific -->
+<class name="br" extends="false" />
+
+<!--- HTML specific -->
+<class name="i" extends="false" />
+
+<!--- HTML specific -->
+<class name="img" extends="false" >
+	<attribute name="align" />
+	<attribute name="height" />
+	<attribute name="hspace" />
+	<attribute name="src" />
+	<attribute name="vspace" />
+	<attribute name="width" />
+</class>
+
+<!--- HTML specific -->
+<class name="p" extends="false" />
+
+<!--- HTML specific -->
+<class name="pre" extends="false" />
+
+<!--- HTML specific -->
+<class name="u" extends="false" />
+
+</library>

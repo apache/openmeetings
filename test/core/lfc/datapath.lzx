@@ -1,0 +1,40 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---A cursor in a dataset.
+A datapointer is an object that represents a pointer to a node in a lz.dataset. The datapointer can be repositioned using either cursor movements calls such as LzDatapointer.selectNext(), or by running an XPath request via LzDatapointer.setXPath().
+
+Datapointers support a subset of the XPath specification, which uses a notation similar to the UNIX file-system to refer to nodes within a dataset. Once a datapointer is bound to a node in a dataset it will keep pointing to that node until it is moved. If the dataset is edited, the behavior of the datapointer will be controlled by its rerunxpath attribute. If this attribute is true, it will continue pointing to its current node as long as it is valid. 
+ -->
+<class name="datapath" extends="datapointer">
+
+	<!---	The direction in which the replicated elements will be layed out.
+		Note
+This attribute is only available if replication is set to either "lazy" or "resize".  
+	One of: "x" | "y"  -->
+	<attribute name="axis" />
+	
+	<!---		This attribute applies to datapaths which match multiple nodes and force replication. If pooling is true, views that are data-bound to this datapath are recycled if the dataset changes. Otherwise, views are deleted when the data nodes they are bound to disappear, and created when new data nodes match the datapath. See the section on Pooling in the Guide for information about the use of this attribute. -->
+	<attribute name="pooling" value="false" type="boolean" />
+	
+	<!---	Determines whether to use normal or lazy replication, if the datapath matches more than one node. See the section on Replication in the Guide for information about the use of this attribute.
+[Note] 	Note
+The choice of replication style implies a choice of replication manager. Each replication manager may have additional attributes which are specified as attributes of the datapath. For example, lz.LazyReplicationManager takes axis and spacing attributes. See the documentaion for the corresponding replication manager for detailed information on these additional attributes.
+
+One of: 	'normal' | 'lazy' | 'resize'  -->
+	<attribute name="replication" value="normal" />
+	
+	<!---	The order to use to sort the dataset if replication occurs. One of "ascending" or "descending" to use built in dictionary sort, or a function which compares two strings and returns 1 if the strings are in order, 0 if they are the same, and -1 if they are out of order. To change this attribute, use setAttribute('sortorder', ...).  -->
+	<attribute name="sortorder" />
+	
+	<!---An XPath to use to obtain the sort key for sorting if replication occurs. To change this attribute, use .setAttribute('sortpath', ...),  -->
+	<attribute name="sortpath" />
+	
+	<!---	The spacing (in pixels) between replicated views.
+[Note] 	Note
+This attribute is only available if replication is set to either "lazy" or "resize".  -->
+	<attribute name="spacing" type="number" />
+	
+</class>
+
+</library>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- all attributes for main.lzx -->
+
+<library>
+	
+	<!--- 
+	   Audio-Video Quality Settings
+		overwritten by values from the config.xml 
+	 -->
+	<attribute name="framesPerSecond" value="30" type="number" />
+	<attribute name="bandwidthNeededNormal" value="16384" type="number" />
+	<attribute name="bandwidthNeededBest" value="32768" type="number" />
+	<attribute name="camQualityNormal" value="75" type="number" />
+	<attribute name="camQualityBest" value="75" type="number" />
+	<attribute name="microphoneRateBest" value="22" type="number" /> 
+	<attribute name="echoPath" value="128" type="number" /> 
+		
+
+	<!--- 
+        Holds a reference to the current VideoCOntainer Object
+        containing the VideoViews
+        and some more references to temp-objects
+	 -->
+	<attribute name="_videocontainer" value="null" />
+
+	<attribute name="currentNC" value="null" />
+
+	<attribute name="currentRoomObject" value="null"/>
+
+	<attribute name="userobject" value="null"/>
+
+	<attribute name="webAppRootKey" value="" type="string" />
+	
+	<!--- 
+		URL/IP to use for the Server for HTTP and HTTPS traffic.
+	    If this value is empty it will use the rtmphostlocal 
+	    variable (and in that way try to connect to the 
+	    domain-name the OpenMeetings-Client has been loading from)
+	 -->
+	<attribute name="httphostlocal" value="" type="string" />
+	
+	<!--- 
+	    Port to use for the Server
+	    This port is used to connect to the HTTP-Servlet
+	    of the Red5-Servlet
+	 -->
+	<attribute name="red5httpport" value="5080" type="string" />
+
+	<attribute name="httpRootKey" value="/" type="string" />
+	
+	<attribute name="protocol" value="/" type="string" />
+	
+	<attribute name="proxyType" value="none" type="string" />
+
+	<!---
+		A reference to the current screenSharingDialogContainer or 
+		null if there is nothing to stream
+	 -->
+	<attribute name="screenSharingDialogContainer" value="null" />
+	
+	<!--
+	    this value indicates if this user is allowed to draw to the Whiteboard
+	    If this user is currently Moderator => he ALWAYS can draw to whiteboard
+	    even if this isAllowedToDraw == false
+	 -->
+	<attribute name="isAllowedToDraw" value="false" type="boolean" />
+	
+	<attribute name="isAllowedToScreenShare" value="false" type="boolean" />
+	
+	<attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
+	
+	<attribute name="isAllowedToGiveExclusiveAudio" value="false" type="boolean" />
+	
+	<attribute name="ismoderator" value="false" type="boolean" />
+	
+	<attribute name="isInterview" value="false" type="boolean" />
+	
+	<!--
+	   Those values are fixed values of the video positions of the videos from the interview room type
+	 -->
+	<attribute name="interviewPod1_x" value="320" type="number" />
+	<attribute name="interviewPod1_y" value="28" type="number" />
+	
+	<attribute name="interviewPod2_x" value="644" type="number" />
+    <attribute name="interviewPod2_y" value="28" type="number" />
+    
+    <!-- 
+		Holds a reference to the current tooltip, if there is one
+	 -->
+	<attribute name="currentToolTip" value="null" />
+	
+	<method name="registerToolTip" args="viewInstance">
+		if (this.currentToolTip != null) {
+			this.currentToolTip.cleanHolder();
+		}
+		this.currentToolTip = viewInstance;
+	</method>
+	
+	<method name="clearToolTip">
+		if (this.currentToolTip != null) {
+			this.currentToolTip.cleanHolder();
+			this.currentToolTip = null;
+		}
+	</method>
+
+</library>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="editUserProfile" extends="baseContentSaveView" width="${ canvas.width - 4 }"
+	addIsVisible="false" deleteIsVisible="false">
+		
+	<!-- recordContent-id -->
+	<attribute name="user_id" value="0" type="number" />
+    <attribute name="userObj" value="null" />
+	
+	<!--handlers -->
+
+	<handler name="onsavecompleted" >
+		this.getUserSelf.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		this.getUserSelf.doCall();
+	</handler>	
+	
+	<handler name="onconstruct">
+		if ($debug) Debug.write("::editUserProfile::");
+	</handler>
+
+    <handler name="oninit">
+		this.getUserSelf.doCall();
+    </handler>
+    
+    <!-- methods -->
+    
+    <method name="sendRefresh">
+    	this.getUserSelf.doCall();
+    </method>    
+	
+    <method name="initFields" args="obj">
+    	<![CDATA[
+            this.userObj = obj;
+			this.user_id = obj.user_id;
+			
+			hib.userobject = obj;
+			
+			if (obj.omTimeZone != null) {
+                canvas.setAttribute('jNameTimeZone',obj.omTimeZone.jname);
+                canvas.timeZoneId = obj.omTimeZone.omtimezoneId;
+            }
+			
+			//this.username.setAttribute('text',obj.login);
+			this.firstname.setAttribute('text',obj.firstname);
+			this.lastname.setAttribute('text',obj.lastname);
+			this.email.setAttribute('text',obj.adresses.email);
+			this.phone.setAttribute('text', obj.adresses.phone);
+			this.age.setAttribute('text',parseDateToString(obj.age));
+			this.street.setAttribute('text',obj.adresses.street);
+			this.house.setAttribute('text',obj.adresses.additionalname);
+			this.zip.setAttribute('text',obj.adresses.zip);
+			this.town.setAttribute('text',obj.adresses.town);
+			this.state.addAndSelectItem(obj.adresses.states.name,String(obj.adresses.states.state_id));
+			this.adress_comment.setAttribute('text',obj.adresses.comment);
+			this.salutation.selectItem(String(obj.salutations_id));
+			this._timeZone.selectItem(String(obj.omTimeZone.jname));
+			this.languages.selectItem(String(obj.language_id));
+			this._organisationslist.clearList();
+			for (var i=0;i<obj.organisation_users.length;i++){
+				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
+			}
+			
+			if (obj.userOffers != null) {
+				this.userOffers.setAttribute('text',obj.userOffers);
+			}
+			if (obj.userSearchs != null) {
+				this.userSearchs.setAttribute('text',obj.userSearchs);
+			}
+			if (obj.showContactData != null && obj.showContactDataToContacts != null) {
+				
+				if (obj.showContactData) {
+					this.showContactData.selectItem("1");
+				} else if (obj.showContactDataToContacts) {
+					this.showContactData.selectItem("2");
+				} else {
+					this.showContactData.selectItem("3");
+				}
+				
+			}
+			
+			parent._userProfile.initFields(obj);
+			
+        ]]>
+    </method>
+	
+	<!-- remotecalls -->
+	
+  	<netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+				parent._userpic.setAttribute('src', canvas.getPictureUrl(value.pictureuri, '&moduleName=userprofile'));
+	    		parent.initFields(value);
+    		]]>
+    	</handler>
+  	</netRemoteCallHib>	
+	
+
+  	<netRemoteCallHib name="updateUserSelfSmall" funcname="userservice.updateUserSelfSmall" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer -->
+  		<method name="prepareCall">
+            if (this.parent.userpass1.getText()==this.parent.userpass2.getText()){
+                this.parent.userObj.password = this.parent.userpass1.getText();
+            } else {
+                this.parent.userObj.password = '';
+            }
+            
+  			this.parent.userObj.firstname = this.parent.firstname.getText();
+  			this.parent.userObj.lastname = this.parent.lastname.getText();
+  			this.parent.userObj.email = this.parent.email.getText();
+  			this.parent.userObj.phone = this.parent.phone.getText();
+  			this.parent.userObj.street = this.parent.street.getText();
+  			this.parent.userObj.additionalname = this.parent.house.getText();
+  			this.parent.userObj.zip = this.parent.zip.getText();
+  			this.parent.userObj.town = this.parent.town.getText();
+  			this.parent.userObj.state_id = this.parent.state.getValue();
+  			this.parent.userObj.comment = this.parent.adress_comment.getText();
+            this.parent.userObj.age = this.parent.age.getDate();
+			this.parent.userObj.salutations_id = Number(this.parent.salutation.getValue());
+			this.parent.userObj.jnameTimeZone = parent._timeZone.getValue();
+			this.parent.userObj.languages_id = parent.languages.getValue();
+			
+			this.parent.userObj.userOffers = parent.userOffers.getText();
+			this.parent.userObj.userSearchs = parent.userSearchs.getText();
+			
+			var showContactData = Number(parent.showContactData.getValue());
+			
+			if (showContactData == 1) {
+				this.parent.userObj.showContactData = true;
+				this.parent.userObj.showContactDataToContacts = true;
+			} else if (showContactData == 2) {
+				this.parent.userObj.showContactData = false;
+				this.parent.userObj.showContactDataToContacts = true;
+			} else if (showContactData == 3) {
+				this.parent.userObj.showContactData = false;
+				this.parent.userObj.showContactDataToContacts = false;
+			}
+            
+			var g = canvas.getUserData();
+            g["showAudioVideoTest"] = parent.doShowTestWizzard.getValue();
+            canvas.setUserData(g);
+			
+            if ($debug) Debug.write("this.parent.userObj: ",this.parent.userObj);
+            if ($debug) Debug.write("this.parent.userObj.adresses.states ",this.parent.userObj.adresses.states);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return this.parent.parent.userObj;</method></netparam>	  		
+        <handler name="ondata" args="value"> 
+            if ($debug) Debug.write("updateUserSelfSmall: ",value);
+        </handler>
+  	</netRemoteCallHib>
+	
+	<!-- content -->	
+    
+    <!-- 143:userdata -->
+    <labelText labelid="143" width="200" y="40" resize="false" fontstyle="bold" />
+
+    <!-- 133:Password -->
+    <labelText labelid="133" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="userpass1" y="70" password="true" x="120" width="270" text="" />
+        
+    <!-- 134:Retype -->
+    <labelText labelid="134" width="200" y="100" resize="false" x="2"/>
+        <customEdittext name="userpass2" y="100" password="true" x="120" width="270" text="" />   
+    
+    <!-- 135:Firstname -->
+    <labelText labelid="135" width="200" y="130" resize="false" x="2"/>
+        <resetCombobox name="salutation" width="100" y="130" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.salutationsInitValues.length;i++){
+	                this.addItem(canvas.salutationsInitValues[i].label.value,canvas.salutationsInitValues[i].salutations_id);
+	            }
+	            this.selectItem(String(canvas.salutationsInitValues[0].salutations_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 	
+        <customEdittext name="firstname" y="130" x="230" width="160" text="" />
+        
+    <!-- 136:Lastname -->
+    <labelText labelid="136" width="200" y="160" resize="false" x="2"/>
+        <customEdittext name="lastname" y="160" x="120" width="270" text="" />  
+        
+    <labelText labelid="1143" width="200" y="190" resize="false" x="2"/>
+         <resetCombobox name="_timeZone" editable="false" y="190" width="270" x="120"
+         			   fontsize="11" style="componentStyle">
+         	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+         </resetCombobox>       
+
+    <labelText labelid="111" width="200" y="220" resize="false" x="2"/>
+        <resetCombobox name="languages" width="270" y="220" x="120" editable="false">
+            <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }"
+                value="$path{ 'language_id/text()' }" />
+            <handler name="oninit">
+                var g = canvas.getUserData();
+                if($debug) Debug.write("checkLoginData/g: ",g);
+                if (g["userlang"]!=null) {
+                    this.selectItem(g["userlang"]);
+                } else {
+                    this.selectItem(String(canvas.thishib.userlang));
+                }
+            </handler>
+        </resetCombobox>
+
+    <!-- 137:Mail -->
+    <labelText labelid="137" width="200" y="250" resize="false" x="2"/>
+        <customEdittext name="email" y="250" x="120" width="270" text="" regexpType="email"/>
+    
+    <!-- 607:Phone -->
+    <labelText labelid="607" width="200" y="280" resize="false" x="2"/>
+        <customEdittext name="phone" y="280" x="120" width="270" text="" />
+        
+    <!-- 138:Birthday -->
+    <labelText labelid="138" width="200" y="310" resize="false" x="2"/>
+        <dateField name="age" y="310" x="120" width="270" text="" />
+        
+    <!-- 139:Street/No -->
+    <labelText labelid="139" width="200" y="340" resize="false" x="2"/>
+        <customEdittext name="street" y="340" x="120" width="220" text="" />
+        <customEdittext name="house" y="340" x="350" width="40" text="" />
+        
+    <!-- 140:ZIP/Town -->
+    <labelText labelid="140" width="280" y="370" resize="false" x="2"/>
+        <customEdittext name="zip" y="370" x="120" width="70" text="" />   
+        <customEdittext name="town" y="370" x="200" width="190" text="" />                        
+         
+    <!-- 141:Country -->
+    <labelText labelid="141" width="200" y="400" resize="false" x="2"/>  
+        <dynamicCombobox name="state" width="270" y="400" x="120"
+                         text="Switzerland" value="204" />
+                         
+                         <!--
+		<validText name="state" width="270" y="340" x="120" fontsize="11" 
+            shownitems="7" validate_method="$once{ canvas.validateCountry }" 
+            resultId="state_id" resultName="name" /> -->
+			
+	 
+    <!-- 142:Adress-Info -->
+    <labelText labelid="142" width="200" y="430" resize="false" x="2"/>
+        <customEdittext name="adress_comment" y="430" x="120" width="270" 
+            height="100" text="" multiline="true"/>
+       
+    <!-- 161:Organisations -->
+    <labelText labelid="161" width="200" y="540" resize="false" x="2"/>     
+    <simpleValueList name="_organisationslist" y="540" x="120" width="270" height="100" 
+		multiselect="true" />
+		
+	
+	<view y="42" x="414" name="_imageProfileBG1" width="128" height="128" 
+    				bgcolor="0xFFFFFF" opacity="0.5" >
+    </view>
+    
+   	<image name="_userpic" y="42" x="414" >
+   
+    	<handler name="onload" args="d">
+            <![CDATA[
+                if (this.height > 116) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/116);
+                    this.setAttribute('height',116);
+                    this.setAttribute('width',width);
+                }
+                if (this.width > 116) {
+                	//If bigger then containter then scale it
+                    var height = this.height/(this.width/116);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',116);
+                }
+                if($debug) Debug.write("onload ",this.height,this.width,d.height,d.width);
+                
+                //makes sure bottom area is updated
+                //this._changeSize.setAttribute('y',this.height-20);
+                //this._changeSize.setAttribute('width',this.width);
+            ]]>
+        </handler>
+    	
+    </image>
+    
+    <view y="42" x="414" name="_imageProfileBG2" width="128" height="128" >
+	    
+	    <view name="_changeSize" height="48" width="128" y="80" bgcolor="0xFFFFFF" opacity="0.6">
+   			<labelText labelid="379" align="center" />
+    		<handler name="onclick">
+        		<![CDATA[
+		        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+		                            x:300,uploadmodule:'userprofile',
+		                            isOnlyProfile:true,
+		                            returnObj:this,
+		                            servletName:'upload.upload'
+		                        });
+	        	]]>
+	        </handler>
+	        <method name="sendRefresh">
+	        	parent.parent.getUserSelf.doCall();
+	        </method>
+	    	<labelTooltip labelid="379" />
+    	</view>
+    
+    </view>
+	
+    <!-- Remember Me -->    
+    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="186" >
+        <handler name="oninit">
+            var g = canvas.getUserData();
+            var save = g["showAudioVideoTest"];
+            if ($debug) Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </labelCheckbox>
+       
+    <!-- 379:Upload new Image -->
+    <simpleLabelButton y="204" labelid="1300" x="550">
+    	<handler name="onclick">
+    		new lz.editWhiteboardDefault(parent,{x:400,y:140});
+    	</handler>
+    </simpleLabelButton>       
+      
+        
+    <!-- Community settings -->
+    <labelText labelid="1159" width="200" y="230" resize="false" 
+               x="410" fontstyle="bold" visibility="visible"/>   
+    
+   <radiogroup name="showContactData" visibility="visible"
+   			layout="class:simplelayout;axis:y;spacing:2" y="260" x="420">
+        <labelRadioButton labelid="1160" value="1" />
+        <labelRadioButton labelid="1168" value="2" />
+        <labelRadioButton labelid="1169" value="3" />
+    </radiogroup> 
+ 
+    <view resource="messagebox_info_rsc" x="410" y="320" visibility="visible"/>
+    
+    <labelText labelid="1161" x="434" y="320"  fontstyle="italic"
+               multiline="true" width="366" visibility="visible"/>  
+                 
+	<labelText labelid="1162" width="200" y="390" resize="false" x="410" visibility="visible"/>
+        <customScrollEdittext name="userOffers" y="390" x="530" width="270" 
+           			 height="100" text="" visibility="visible"/>	
+
+	<labelText labelid="1163" width="200" y="500" resize="false" x="410" visibility="visible"/>
+        <customScrollEdittext name="userSearchs" y="500" x="530" width="270" 
+           			 height="100" text="" visibility="visible"/>	
+           			 
+</class>
+	
+</library>

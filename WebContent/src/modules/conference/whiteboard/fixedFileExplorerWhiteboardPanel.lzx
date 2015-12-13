@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="multiWhiteboardPanel" extends="fixedFileExplorerWhiteBoard" y="42" x="1">
+	
+	<attribute name="whiteboardId" value="0" type="number" />
+	<attribute name="objWhiteboard" value="null" />
+	<attribute name="objMessage" value="null" />
+	
+    <handler name="onsharedMessage" args="obj">
+        //Debug.write("send: ",obj);
+        this.objWhiteboard = obj;
+        this.sendVarsByWhiteboardId.doCall();
+    </handler>
+    
+    <netRemoteCallHib name="sendVarsByWhiteboardId" funcname="sendVarsByWhiteboardId" 
+    				  	showLoading="false" remotecontext="$once{ canvas.thishib }" >
+        <netparam><method name="getValue">return parent.parent.objWhiteboard;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.whiteboardId;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+            	//if ($debug) Debug.write("sendVarsByWhiteboardId : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     
+    
+    <handler name="onvisible" args="v">
+    	<![CDATA[
+	    	if ($debug) Debug.write("onvisible :: ",v);
+    	]]>
+    </handler>
+    
+    <method name="sendActiveWindow">
+    	if ($debug) Debug.warn("sendActiveWindow :: ");
+    	if (canvas.ismoderator || canvas.isAllowedToDraw) {
+    		if ($debug) Debug.warn("DO sendActiveWindow :: ");
+    		canvas._drawarea = this._drawareaMask._drawarea;
+    		this.objMessage = new Array();
+    		this.objMessage[0] = "activateWhiteboard";
+    		this.objMessage[1] = this.whiteboardId;
+    		this.sendMessageToMembers.doCall();
+    	}
+    </method>
+    
+    <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
+    				  	showLoading="false" remotecontext="$once{ canvas.thishib }" >
+        <netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendMessageToMembers :: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+</class>
+    
+<class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" allowToggle="false"
+	   labelid="615" visible="${((canvas.currentRoomObj.hideWhiteboard) ? false:true)}">
+	<attribute name="whiteboardCount" value="0" type="number" />	
+	<!--
+	
+	 -->
+	<handler name="oninit">
+		canvas._drawarea = this;
+	</handler>
+	
+	<handler name="onopenWhiteBoard" >
+        if ($debug) Debug.write(".. onopenWhiteBoard ..");
+        this.loadInitObject()
+    </handler>
+            
+    <!--
+    	##########################################
+    	Add, remove and change Focus of Whiteboard
+    	##########################################
+     -->
+     
+    <method name="addNewItem">
+    	this.getNewWhiteboardId.doCall();
+    </method>
+    
+    <!--
+    public Long getNewWhiteboardId() {
+     -->
+    <netRemoteCallHib name="getNewWhiteboardId" funcname="whiteboardservice.getNewWhiteboardId"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("############## getNewWhiteboardId : ",value);
+                parent.addNewItemSynced(value);
+                parent.sendNewWindow(value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>       
+    
+    <method name="addNewItemSynced" args="whiteboardId">
+    	for (var eg in this._bar.subviews) {
+    		this._bar.subviews[eg].isactive = false;
+    		this._bar.subviews[eg].onmouseout.sendEvent(null);
+    		this._bar.subviews[eg].objRef.setAttribute("visibility","hidden");
+    	}
+    	
+    	var whiteboard = new lz.multiWhiteboardPanel(this,{
+								    		whiteboardId:whiteboardId
+								    	});
+    	var tempWidth = this._bar.getCurrentSize();
+    	
+    	var whiteboardName = canvas.getLabelName(615) + (whiteboardCount > 0 ? " " + whiteboardCount : "");
+    	whiteboardCount++;
+    	var tWhiteboardBtn = new lz.whiteboardMiniButton(this._bar,{
+                            	   objRef:whiteboard,
+                            	   width:tempWidth,
+                            	   isactive:true,
+                            	   btnName: whiteboardName
+                            	});
+        
+        this._bar.currentBtn = tWhiteboardBtn;                    	
+                            	
+    	tWhiteboardBtn.onmouseout.sendEvent(null);
+        this.addNewItemButton.updatePosition();
+        return whiteboard;
+    </method>
+    
+    <method name="sendNewWindow" args="whiteboardId">
+    	if ($debug) Debug.warn("sendNewWindow :: ");
+    	if (canvas.ismoderator || canvas.isAllowedToDraw) {
+    		if ($debug) Debug.warn("DO sendActiveWindow :: ");
+    		this.objMessage = new Array();
+    		this.objMessage[0] = "newWhiteboard";
+    		this.objMessage[1] = whiteboardId;
+    		this.sendMessageToMembers.doCall();
+    	}
+    </method>
+    
+    <method name="newWhiteboard" args="obj">
+    	if ($debug) Debug.write("newWhiteboard :: ",obj);
+    	this.addNewItemSynced(obj[1]);
+    </method>
+    
+    
+    <!--
+        ##########################################
+        Removal of Whiteboards
+        ##########################################
+     -->
+    <method name="sendRemoveWindow" args="whiteboardId">
+    	if ($debug) Debug.warn("sendRemoveWindow :: ");
+    	if (canvas.ismoderator || canvas.isAllowedToDraw) {
+    		this.deleteWhiteboard.whiteboardId = whiteboardId;
+    		this.deleteWhiteboard.doCall();
+    		if ($debug) Debug.warn("DO sendRemoveWindow :: ");
+    		this.objMessage = new Array();
+    		this.objMessage[0] = "removeWindow";
+    		this.objMessage[1] = whiteboardId;
+    		this.sendMessageToMembers.doCall();
+    	}
+    </method>
+    
+    <!--
+    public Boolean deleteWhiteboard(Long whiteBoardId)
+     -->
+    <netRemoteCallHib name="deleteWhiteboard" funcname="whiteboardservice.deleteWhiteboard"
+        remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="whiteboardId" value="0" type="number" />
+        <netparam><method name="getValue">return parent.whiteboardId;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("############## deleteWhiteboard : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>       
+    
+    <method name="removeWindow" args="obj">
+    	if ($debug) Debug.write("removeWindow :: ",obj);
+    	for (var eg in this._bar.subviews) {
+    		
+    		if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
+    			
+    			this._bar.removeObjectSynced(this._bar.subviews[eg]);
+    			return;
+    			
+    		}
+    		
+    	}
+    </method>
+    
+    <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
+    				  	showLoading="false" remotecontext="$once{ canvas.thishib }" >
+        <netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendMessageToMembers :: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     
+    
+    <method name="sendWatchObjectByWhiteboard" args="obj">
+    	if ($debug) Debug.write("sendWatchObjectByWhiteboard :: ",obj);
+    	for (var eg in this.subviews) {
+    		if (obj.id == this.subviews[eg].whiteboardId) {
+    			this.subviews[eg]._drawareaMask._drawarea.sendWatchObject(obj.param[2],obj.param[3],false);
+    			return;
+    		}
+    	}
+    </method>
+    
+    <method name="loadWmlToWhiteboardById" args="obj">
+        if ($debug) Debug.write("loadWmlToWhiteboardById :: ",obj);
+        for (var eg in this.subviews) {
+            if (obj.id == this.subviews[eg].whiteboardId) {
+                this.subviews[eg]._drawareaMask._drawarea.loadWmlToWhiteboardById(obj.roomitems);
+                return;
+            }
+        }
+    </method>
+    
+    <method name="activateWhiteboard" args="obj">
+    	if ($debug) Debug.write("activateWhiteboard :: ",obj);
+    	for (var eg in this._bar.subviews) {
+    		
+    		if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
+    			
+    			this._bar.subviews[eg].activateSynced();
+    			return;
+    			
+    		}
+    		
+    	}
+    </method>
+    
+    <!--
+    	##########################################
+    	StarUp Loading Of Objects
+    	##########################################
+     -->
+    
+    <method name="loadInitObject">
+    	this.getRoomItemsBy.doCall();
+    </method>
+    
+	<netRemoteCallHib name="getRoomItemsBy" funcname="whiteboardservice.getRoomItemsBy"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("############## getRoomItemsBy : ",value);
+            	parent.loadWhiteboards(value.whiteboardObjects);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>   
+    
+    <method name="loadWhiteboards" args="whiteboardObjects">
+    	<![CDATA[
+    	   if ($debug) Debug.write("whiteboardObjects :: ",whiteboardObjects.length);
+    	   var mainArray = new Array();
+    	   for (var eg in whiteboardObjects) {
+    	   	   mainArray.push(whiteboardObjects[eg]);
+    	   }
+    	   mainArray.reverse();
+    	   
+    	   for (var eg=0;eg<mainArray.length;eg++) {
+    	   	  var whiteBoard = this.addNewItemSynced(mainArray[eg].whiteBoardId);
+    	   	  
+    	   	  whiteBoard._drawareaMask._drawarea.loadObjectList(mainArray[eg]);
+    	   }
+    	]]>
+    </method>
+      
+    
+    <whiteboardBarMenu name="_bar" height="20" y="21">
+    	
+    	<attribute name="whiteboardId" value="-1" type="number" />
+    	
+    	<handler name="onsubview" args="newSub">
+    		parent.addNewItemButton.updatePosition();
+    	</handler>
+    	<handler name="onwidth" args="newSub">
+            parent.addNewItemButton.updatePosition();
+        </handler>
+        
+        <!-- 
+        <handler name="oninit">
+        	this.currentBtn = this._button1;
+        </handler>
+         -->
+    	
+    	<!--
+    	<whiteboardMiniButton name="_button1" isactive="true">
+    		<handler name="oninit">
+    			this.setAttribute("btnName",canvas.getLabelName(615)+" 1");
+    			this.objRef = parent.parent._whiteboard1;
+    			this.onmouseout.sendEvent(this);
+    		</handler>
+    	</whiteboardMiniButton>
+    	 -->
+    	
+    </whiteboardBarMenu>
+    
+    <view name="addNewItemButton" y="24" 
+    	  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+    	  >
+    	
+    	<attribute name="whiteboardId" value="-1" type="number" />
+    	
+    	<method name="updatePosition">
+    		if (parent._bar.subviews.length != 0) {
+        		var borderItem = parent._bar.subviews[parent._bar.subviews.length-1];
+        		this.setAttribute("x",borderItem.x + borderItem.width + 2);
+    		} else {
+    			this.setAttribute("x",2);
+    		}
+    	</method>
+    	
+    	<handler name="onmouseover" args="refOb">
+    		this.bg.setAttribute("visibility","visible");
+    	</handler>
+    	
+    	<handler name="onmouseout" args="refOb">
+            this.bg.setAttribute("visibility","hidden");
+        </handler>
+        
+        <handler name="onclick" args="refOb">
+            parent.addNewItem();
+        </handler>
+        
+        <view name="bg" bgcolor="0xEEEEEE" opacity="0.5" 
+        	  width="18" height="18" visibility="hidden" />
+    	
+    	<view resource="add_whiteboard_rsc" y="0" x="0" />
+    	
+    	<labelTooltip text="Add Whiteboard" />
+    </view>
+    
+    <view width="${ parent.width }" height="1" y="41"
+    	  bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+    	<attribute name="whiteboardId" value="-1" type="number" />
+    </view>
+    
+    <!--
+    <multiWhiteboardPanel name="_whiteboard1" whiteboardId="1" /> 
+     -->
+    
+</class>
+
+</library>

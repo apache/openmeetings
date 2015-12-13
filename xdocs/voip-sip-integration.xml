@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>VoIP and SIP Integration</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="VoIP and SIP Integration">
+
+			<p>
+				There are multiple ways to integrate with VoIP and or SIP.
+				OpenMeetings does not provide out of the box a ready to run VoIP
+				integration / integration to cell phone or usual land lane.
+				The
+				nature of such integrations is that it depends heavily on the
+				infrastructure that you are using and where you would like to
+				integrate OpenMeetings into.
+				<br />
+				<br />
+				It also depends on a number of factors of which OpenMeetings is
+				impossible to set up for you, for example setting up your VoIP
+				server or provide you with a range of telephone numbers reserved for
+				conference calls in your national phone network.
+				Such an integration
+				project is likely to become a consulting job for a
+				telecommunications consultant.
+				<br />
+				<br />
+				To get help on the integration you can contact the
+				<a href="mail-lists.html">mailing lists</a>
+				or for example somebody from the list of
+				<a href="commercial-support.html">commercial support</a>
+				.
+                <br/><br/>
+                <a href="red5sip-integration.html">
+                Instruction how-to set up OpenMeetings SIP-Transport integration
+                </a>.<br/>
+                <a href="red5sip-integration_2.1.html">
+                Instruction how-to set up OpenMeetings SIP-Transport integration for Openmeetings 2.1
+                </a>.<br/>
+			</p>
+		</section>
+
+	</body>
+
+</document>

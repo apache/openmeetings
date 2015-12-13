@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!-- 
+############################
+
+    Class newWhiteBoard
+    
+    
+    @keywords deprecated
+    
+ -->
+
+
+<class name="fixedFileExplorerWhiteBoard" extends="view" showhandcursor="false">
+    
+    <attribute name="baseurl" value="" type="string" />
+    <attribute name="fileName" value="" type="string" />
+    <attribute name="moduleName" value="" type="string" />
+    <attribute name="parentPath" value="" type="string" />
+    <attribute name="room" value="" type="string" />
+    <attribute name="domain" value="" type="string" />
+    
+    <attribute name="downloadurl" value="" type="string" />
+    <attribute name="iamgex" value="" type="string" />
+    <attribute name="imagey" value="" type="string" />
+    
+    <attribute name="restricted" value="false" type="boolean" />
+    
+    <event name="onsharedMessage" />
+    
+    <attribute name="sendObject" value="null" />
+    <attribute name="sendObjectToClientID" value="0" type="number"  />
+    
+    <attribute name="confirmdialog" value="null" />
+    
+    <attribute name="documentmenuIsInited" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        if ($debug) Debug.info("Init Whiteboard ",this.restricted);
+    </handler>
+
+    <method name="sendConfirmation" args="yesno,askagain" >
+        
+        ////Debug.write("clear yesno,askagain: ",yesno,askagain);
+    
+         var g = canvas.getUserData();
+         if (g["image"]==null) g["image"]=new Array();
+         g["image"]["clearField"]=yesno;
+         g["image"]["askagainclear"]=!askagain;
+         canvas.setUserData(g);
+
+         if (yesno){
+            ////Debug.write("clear field!!");
+            canvas._drawarea.setModus('plain');
+            canvas._drawarea.addNewSyncImage(this.downloadurl,this.iamgex,this.imagey,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         } else {
+            ////Debug.write("don't clear field!!");
+            canvas._drawarea.addNewSyncImage(this.downloadurl,this.iamgex,this.imagey,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         }
+         this.confirmdialog.close();
+    </method>
+    
+    <method name="getconfirmationscode">
+        var g = canvas.getUserData();
+        if (g["image"]==null) {
+            g["image"]=new Array();
+            g["image"]["clearField"]=false;
+            g["image"]["askagainclear"]=true;
+            canvas.setUserData(g);
+        }
+        return g["image"];
+    </method>
+    
+    <method name="resetDefaultConfirmations">
+        var g = canvas.getUserData();
+        if (g["image"]==null) g["image"]=new Array();
+        g["image"]["clearField"]=false;
+        g["image"]["askagainclear"]=true;
+        canvas.setUserData(g);
+    </method>   
+    
+    <method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">
+        <![CDATA[
+        ////Debug.write("clearAreaAndAddImage: ",downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain);
+        this.downloadurl=downloadurlVal;
+        this.iamgex=xVal;
+        this.imagey=yVal;   
+        this.baseurl=baseurl;
+        this.fileName=fileName;
+        this.moduleName=moduleName;
+        this.parentPath=parentPath;
+        this.room=room;
+        this.domain=domain;
+        var storedImageDate = this.getconfirmationscode();
+        ////Debug.write(" g[image] ",storedImageDate);
+        if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
+            canvas._drawarea.setModus('plain');
+            if ($debug) Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+        } else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+            if ($debug) Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
+        } else if (storedImageDate["askagainclear"]){
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        } else {
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        }
+        ]]> 
+    </method>
+    
+    <event name="isloadingImage" />
+    <event name="isloadedImage" />
+    
+    
+    <text fontsize="11" x="10" y="2" 
+        name="_sharingClientName" fontstyle="bold" />    
+    
+    
+	<method name="checkForApplyScreen">
+		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
+	</method> 
+	
+    <!-- 
+        The Content Area    
+     -->
+    <view width="${ parent.parent.width-2 }" 
+          height="${ (canvas.ismoderator) ? (parent.parent.height-42-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-42-parent._propertyPanel.height) : (parent.parent.height-42)) }" 
+          y="0" name="_drawareaMask" clip="true" bgcolor="0xFFFFFF" >
+    	
+    	<handler name="oninit">
+            if ($debug) Debug.info("lz.Track.register ",canvas.currentImagesListdraw.currentTrackGroupName);
+            lz.Track.register(this, canvas.currentImagesListdraw.currentTrackGroupName);
+        </handler>
+    	
+    	<handler name="onmousedown">
+            this._drawarea.onmousedownMethod();
+        </handler>
+        
+        <handler name="onmouseup">
+            this._drawarea.onmouseupMethod();
+        </handler>
+        
+        <handler name="onmouseover">
+        	lz.Cursor.restoreCursor();
+        	lz.Cursor.showHandCursor(false);
+            this._drawarea.onmouseoverMethod();
+        </handler>
+        
+        <handler name="onmouseout">
+        	lz.Cursor.showHandCursor(true);
+        	lz.Cursor.unlock();
+            this._drawarea.onmouseoutMethod();
+        </handler>
+        
+        <handler name="onmousetrackover">
+            if ($debug) Debug.write("onmousetrackover");
+            canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
+            this.setAttribute("bgcolor",0x93FE92);
+        </handler>
+        
+        <handler name="onmousetrackout">
+            if ($debug) Debug.write("onmousetrackout");
+            canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler>
+        
+        <handler name="onmousetrackup">
+            if ($debug) Debug.write("onmousetrackup");
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler>   
+    	
+    	<remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" height="${parent.height}" width="${parent.height}"
+                          restricted="$once{ parent.parent.restricted }" >
+    		
+    		<attribute name="sendUpdate" value="true" type="boolean"/>
+    		
+    		<handler name="onx" args="x">
+                if (this.sendUpdate) {
+                    if ($debug) Debug.write("# x",x);
+                    parent.parent.scrollContainer.calcScrollContent();
+                }
+            </handler>
+            
+            <handler name="ony" args="y">
+                if (this.sendUpdate) {
+                    if ($debug) Debug.write("# y",y);
+                    parent.parent.scrollContainer.calcScrollContent();
+                }
+            </handler>
+            
+            <handler name="onheight" args="h">
+                if ($debug) Debug.write("# height",h);
+                //this.dragger.drag_min_x = parent.width - w;
+                parent.parent.scrollContainer.calcScrollContent();
+            </handler>
+            
+            <handler name="onwidth" args="w">
+                if ($debug) Debug.write("# width",w);
+                //this.dragger.drag_min_y = parent.height - h;
+                parent.parent.scrollContainer.calcScrollContent();
+            </handler>
+            
+            <handler name="onupdateScale" args="tRef">
+                if ($debug) Debug.write("# updateScale",this.getDisplayObject()._xscale);
+                parent.parent.scrollContainer.calcScrollContent();
+            </handler>
+    		
+            <attribute name="initH"/>
+            <attribute name="initW"/>
+            <handler name="oninit">
+                canvas._drawarea = this; 
+            </handler>
+            
+            <handler name="onprogress" args="perc">
+                //Debug.write("onprogress: ",perc);
+                this.parent.parent._progress.setProgress(perc);
+            </handler>
+            <!--
+            <handler name="onmousedown" >
+                //Debug.write("onprogress: ",perc);
+            </handler>
+             -->
+            <handler name="ondrawmodus" args="d">
+                this.drawmodus = d;
+                //change Enabled Status of Toolbar Menu Button
+                parent.parent._propertyPanel.loadPanelByModus(this);
+            </handler>
+            <handler name="setNewScreenUserName" args="value">
+                this.parent.parent._sharingClientName.setAttribute('text',value);
+            </handler>
+            <!-- @overwrite -->
+            <method name="onsharedMessage" args="action,obj">
+                
+                if ($debug) Debug.write("###### onsharedMessage",action,obj);
+    
+                var tempSendArray = new Array ();
+                tempSendArray[0] = 'whiteboard';
+                tempSendArray[1] = new Date();
+                tempSendArray[2] = action;
+                tempSendArray[3] = obj;
+                     
+                parent.parent.onsharedMessage.sendEvent(tempSendArray);
+            </method>
+            
+            <!--
+            <handler name="onopenWhiteBoard" >
+                var obj = new Array();
+                obj[0] = 'whiteboard';
+                obj[1] = 'initgetVars';
+                obj[2] = canvas.streamid;
+                
+                //Debug.write("Setting Message onopenWhiteBoard: ",canvas.moderatorStreamID,obj);
+                
+                this.parent.parent.sendObjectToClientID = canvas.moderatorStreamID;
+                this.parent.parent.sendObject = obj;
+                     
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </handler>
+             -->
+             
+            <handler name="onopenWhiteBoard" >
+                //parent.parent.getRoomItems.doCall();
+            </handler>
+            
+            <!-- clientid  = streamid of the user -->
+            <method name="oninitUser" args="clientid,objectList">
+                this.parent.parent.sendObjectToClientID = clientid;
+                this.parent.parent.sendObject = objectList;
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </method>
+            
+            <handler name="onboundingIsActive" args="b">
+                if ($debug) Debug.write("boundingIsActive: ",b);
+                if (b){
+                    var boundingDoUpdateOnInit = true;
+                    if (this.ObjectByName instanceof lz.swfResourceView){
+                        //Debug.write("is swf Presentation");
+                        boundingDoUpdateOnInit=false;
+                    }
+                    if (!boundingDoUpdateOnInit) {
+                        parent.parent._propertyPanel.setObjectBounds(
+                            this.ObjectByName.x,this.ObjectByName.y,
+                            this.ObjectByName._swfView.width,this.ObjectByName._swfView.height);
+                    } else {
+                        parent.parent._propertyPanel.setObjectBounds(
+                            this.ObjectByName.x,this.ObjectByName.y,
+                            this.ObjectByName.width,this.ObjectByName.height);
+                    }
+                }
+            </handler>
+            
+            <!--  bounding Box (selection Box) -->
+            <handler name="onBoundingBox" args="boundingBoxRef">
+                var boundingDoUpdateOnInit = true;
+                if (boundingBoxRef.objRef instanceof lz.swfResourceView){
+                //Debug.write("is swf Presentation");
+                    boundingDoUpdateOnInit=false;
+                }
+                if (!boundingDoUpdateOnInit) {
+                    parent.parent._propertyPanel.setObjectBounds(
+                    boundingBoxRef.objRef.x,boundingBoxRef.objRef.y,
+                    boundingBoxRef.objRef._swfView.width,boundingBoxRef.objRef._swfView.height);
+                } else {
+                    parent.parent._propertyPanel.setObjectBounds(
+                    boundingBoxRef.objRef.x,boundingBoxRef.objRef.y,
+                    boundingBoxRef.objRef.width,boundingBoxRef.objRef.height);
+                }
+            </handler>
+            
+            <method name="getDocumentToolBar">
+                return parent.parent.panelArea.getDocumentsToolbar();
+            </method>
+            
+            <method name="getPaintToolBar">
+                return parent.parent.panelArea._mainToolsPanel;
+            </method>
+            
+            <view name="_grid" x="-2" y="-2" height="${parent.height}" width="${parent.height}" 
+                  visibility="${ (parent.showGrid) ? 'visible' : 'hidden'}">
+            	<!-- resource="_grid" -->
+            
+            </view>
+            
+        </remoteWhiteboard>   
+    	
+    </view>
+    
+    
+    <view name="scrollContainer" width="${ parent.parent.width-2 }" 
+          visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+          height="${ (canvas.ismoderator) ? (parent.parent.height-42-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-33-parent._propertyPanel.height) : (parent.parent.height-33)) }" >
+        
+        <attribute name="sendUpdate" value="true" type="boolean"/>
+        
+        <method name="calcScrollContent">
+            var rHeight = Math.round(parent._drawareaMask._drawarea.height * (parent._drawareaMask._drawarea.getDisplayObject()._xscale / 100));
+            var rWidth = Math.round(parent._drawareaMask._drawarea.width * (parent._drawareaMask._drawarea.getDisplayObject()._yscale / 100));
+            this.sendUpdate = false;
+            this.scrollview.setAttribute("x",parent._drawareaMask._drawarea.x);
+            this.scrollview.setAttribute("y",parent._drawareaMask._drawarea.y);
+            this.scrollview.setAttribute("height", Math.max(rHeight, parent._drawareaMask._drawarea.getDisplayObject()._height));
+            this.scrollview.setAttribute("width", Math.max(rWidth, parent._drawareaMask._drawarea.getDisplayObject()._width));
+            this.sendUpdate = true;
+        </method>
+        
+        <view name="scrollview">
+            
+            <attribute name="timeisInited" value="false" type="boolean" />
+            <attribute name="sendObjectDel" value="null" />
+            
+            <handler name="oninit">
+                this.sendObjectDel = new LzDelegate( this, "sendObject" );
+            </handler>
+            
+            <handler name="onx" args="x">
+                if (parent.sendUpdate) {
+                    if ($debug) Debug.write("# scrollview x",x);
+                    parent.parent._drawareaMask._drawarea.setAttribute("x",x);
+                    
+                    if (!this.timeisInited){
+                        this.timeisInited=true;
+                        lz.Timer.addTimer( this.sendObjectDel, 250 );
+                    } else {
+                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
+                    }
+                }
+            </handler>
+            <handler name="ony" args="y">
+                if (parent.sendUpdate) {
+                    if ($debug) Debug.write("# scrollview y",y);
+                    parent.parent._drawareaMask._drawarea.setAttribute("y",y);
+                    
+                    if (!this.timeisInited){
+                        this.timeisInited=true;
+                        lz.Timer.addTimer( this.sendObjectDel, 250 );
+                    } else {
+                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
+                    }
+                }
+            </handler>
+            
+            <method name="sendObject" args="itemRef">
+                if ($debug) Debug.info("sendObject :: scrollview");
+                
+                var tArray = new Array();
+                tArray[0] = "moveMap";
+                tArray[1] = Math.round(this.x);
+                tArray[2] = Math.round(this.y);
+                
+                this.parent.parent._drawareaMask._drawarea.onsharedMessage('moveMap',tArray);
+                this.timeisInited=false;
+            </method>
+        </view>
+    
+        <om_vscrollbar name="_scrollstv"/> 
+        <om_hscrollbar name="_scrollsth" /> 
+    
+    </view>    
+    
+    
+        <netRemoteCallHib name="sendMessageWithClientById" funcname="sendMessageWithClientById"
+            remotecontext="$once{ canvas.thishib }" >
+            <netparam><method name="getValue">return parent.parent.sendObject;</method></netparam>
+            <netparam><method name="getValue">return parent.parent.sendObjectToClientID;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    //Debug.write("sendMessageWithClientById : ",value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>     
+    
+    <!-- 
+        <netRemoteCallHib name="getRoomItems" funcname="whiteboardservice.getRoomItems"
+            remotecontext="$once{ canvas.thishib }" >
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("############## getRoomItems : ",value);
+                    canvas._drawarea.loadObjectList(value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>  
+     -->  
+        
+    <view name="panelArea" width="${ parent.parent.width }" 
+          height="${ parent.parent.height-42-parent._propertyPanel.height }">
+        
+        <attribute name="objectRef" value="null" />
+        
+        <!--- @deprecated -->
+        <method name="_setSelection" args="obj">
+            parent._drawareaMask._drawarea.removeObjectBounds();
+            if (obj.setSelectionToItem){            
+                if (this.objectRef!=null){
+                    this.objectRef._isselected = false;
+                    this.objectRef._area.setAttribute('bgcolor',0xFFFFFF);
+                }
+                this.objectRef = obj;
+                this.objectRef._isselected = true;
+                this.objectRef._area.setAttribute('bgcolor',canvas.getThemeColor('basebgcolorizer'));
+                parent._drawareaMask._drawarea.setModus(this.objectRef.modi);
+            }
+        </method>
+        
+        <method name="setSelection" args="obj">
+            if ($debug) Debug.write("setSelection ",obj);
+            parent._drawareaMask._drawarea.removeObjectBounds();
+            if (obj.setSelectionToItem){            
+                if (this.objectRef!=null){
+                    this.objectRef._isselected = false;
+                    this.objectRef.setAttribute('enabled',true);
+                }
+                this.objectRef = obj;
+                this.objectRef._isselected = true;
+                this.objectRef.setAttribute('enabled',false);
+            }
+            if (obj.modi=="saveobj"){
+                parent._drawareaMask._drawarea.doAction(obj.modi);
+            } else {
+                parent._drawareaMask._drawarea.setModus(obj.modi);
+            }
+        </method>
+        
+        <method name="setSelectionWithoutEvent" args="obj">
+            if (obj.setSelectionToItem){         
+                if (this.objectRef!=null){
+                    this.objectRef._isselected = false;
+                    this.objectRef.setAttribute('enabled',true);
+                }
+                this.objectRef = obj;
+                this.objectRef._isselected = true;
+                this.objectRef.setAttribute('enabled',false);
+            }
+        </method>
+        
+        <!--
+                                
+         -->
+         
+        <method name="sendNewPropertyHeight" args="objRef">
+            <![CDATA[
+                for (var i=0;i<this.subviews.length;i++) {
+                    if (this.subviews[i].y != 0) {
+                        if (this.subviews[i] instanceof lz.mainToolsTopPanel
+                            || this.subviews[i] instanceof lz.documentIconTopPanel) {
+                            if (objRef.height<=22){
+                                if (this.subviews[i].y+this.subviews[i].height+5>=parent.parent.height-objRef.initheight-21){
+                                    if ($debug) Debug.write("mainToolsTopPanel");
+                                    this.subviews[i].setAttribute('y',objRef.y-this.subviews[i].height);
+                                }
+                            } else {
+                                if (this.subviews[i].y+this.subviews[i].height+5>=objRef.y){
+                                    if ($debug) Debug.write("mainToolsTopPanel");
+                                    this.subviews[i].setAttribute('y',objRef.y-this.subviews[i].height);
+                                }
+                            }
+                        }   
+                    }
+                }
+            ]]>
+        </method>
+        
+        <method name="getDocumentsToolbar">
+            return parent._propertyPanel._content._documentsPanel;
+        </method>
+        <!--
+        <method name="getDocumentsToolbar">
+            <![CDATA[
+                for (var i=0;i<this.subviews.length;i++) {
+                    if (this.subviews[i] instanceof lz.documentIconTopPanel
+                        || this.subviews[i] instanceof lz.documentIconLeftPanel) {
+                        //this.subviews[i].setAttribute('visibility','visible');
+                        return this.subviews[i]._inner;
+                    }
+                }
+            ]]>
+        </method>
+         -->
+        
+        <mainToolsTopPanel x="100" y="0" name="_mainToolsPanel" 
+             visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
+        
+        <mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer" 
+             visible="${ (parent.parent.restricted) ? false : (((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true ))) }"/>
+        
+        <!--
+        <documentIconTopPanel x="100" valign="bottom" name="_documentPanel"
+             visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />
+         -->
+         
+    </view> 
+    
+    <view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2"
+          visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+        
+        <attribute name="ignoreUpdates" value="false" type="boolean" />
+        
+        <handler name="onx" args="x">
+        	if (this._fullFit.getValue()) {
+        		if ($debug) Debug.write("on x ",x);
+        		lz.Timer.addTimer( new LzDelegate( this, "sendUpdate" ), 100 );
+        	}
+        </handler>
+        
+        <method name="sendUpdate" args="refObj">
+        	parent._drawareaMask._drawarea.doFullFit(true);
+        </method>
+        
+        <method name="setWhiteboardValues" args="fullFit,zoom">
+            if ($debug) Debug.write("setWhiteboardValues -1- ",fullFit,zoom);
+            this.ignoreUpdates = true;
+            this._zoom.setSliderValue(zoom);
+            this._fullFit.setValue(fullFit);
+            this.ignoreUpdates = false;
+        </method>
+        
+        <method name="setCurrentScaleByFullFit" args="tScale">
+            if ($debug) Debug.write("setCurrentScaleByFullFit -2- ",tScale);
+            this.ignoreUpdates = true;
+            this._zoom.setSliderValue(tScale);
+            this.ignoreUpdates = false;
+        </method>
+        
+        <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" bgcolor="0xFFFFFF" >
+            <handler name="onvalue" args="v">
+                if (parent.ignoreUpdates) {
+                    return;
+                }
+                if ($debug) Debug.warn("onvalue Full Fit ",v);
+                
+                parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
+            </handler>
+            <labelTooltip labelid="1212" multiline="true" />
+        </labelCheckbox>
+        
+        <changeWidthSlider name="_zoom" initialNumberInit="50" 
+              boxPosition="down" initialNumber="50" maximum="200">
+            <handler name="oninitialNumber" args="i">
+                if (parent.ignoreUpdates) {
+                    return;
+                }
+                
+                if ($debug) Debug.warn("onvalue Zoom Fit ",this.initialNumber);
+                
+                parent._fullFit.setValue(false);
+                
+                parent.parent._drawareaMask._drawarea.doUpdateZoom(parent._fullFit.getValue(),this.initialNumber);
+            </handler>
+        </changeWidthSlider>
+        
+        <view width="2" />
+        
+    </view>    
+    
+    <propertyPanel name="_propertyPanel" x="0" y="${ parent.parent.height-this.height-42 }" 
+                    visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+        <handler name="onheight" args="h">
+            this.height = h;
+            if ($debug) Debug.write("onheight: ",h);
+            parent.panelArea.sendNewPropertyHeight(this);
+        </handler>
+    </propertyPanel>
+    
+    <!--
+    <view name="resetSize" x="${parent.width - 20}" width="10" height="10" >
+        <handler name="onclick">
+            this.parent.parent.setAttribute("width",this.parent.parent.initW); 
+            this.parent.parent.setAttribute("height",this.parent.parent.initH);
+            
+            this.parent.parent.onheight.sendEvent();
+            this.parent.parent.onwidth.sendEvent();
+            
+            this.setAttribute("x",this.parent.parent.initW - 20);
+        </handler>
+    </view>
+     -->
+</class>
+
+</library>

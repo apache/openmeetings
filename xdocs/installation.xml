@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="OpenMeetings Installation">
+
+			<p>
+				To update from past versions or migrate see
+				<a href="Upgrade.html">Upgrade</a>
+				.
+				If you are looking for commercial help have a look at
+				<a href="commercial-support.html" target="_BLANK" rel="nofollow">commercial
+					support
+				</a>
+				.
+			</p>
+			<div>
+				<a href="downloads.html" rel="nofollow">
+					<img src="images/installation_instructions.png" alt="Grafik" />
+				</a>
+				<p>
+					<i>Note: OpenMeetings requires SUN/Oracle JRE 6, not openJDK!</i>
+					<br />
+					<i>
+						Since Version 2.0 you can also install OpenMeetings from command
+						line. Just cd to the unpacked archive and type ./admin.sh or
+						admin.bat, please see
+						<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin
+						</a>
+						for more options
+					</i>
+				</p>
+			</div>
+			<ol>
+				<li>
+					<b>Recommendation for production environment</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						By default OpenMeetings uses the integrated Apache Derby database.
+						For production environment you should consider using
+						<a href="MySQLConfig.html">MySQL</a>
+						,
+						<a href="PostgresConfig.html">Postgres</a>
+						, or for example
+						<a href="IBMDB2Config.html">IBM DB2</a>
+						, or
+						<a href="OracleConfig.html">Oracle</a>
+					</div>
+				</li>
+				<li>
+					<b>Enabling Image Upload and import to whiteboard</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						Install
+						<b>ImageMagick</b>
+						on the server, you can get more information on
+						<a href="http://www.imagemagick.org" rel="nofollow" target="_BLANK">http://www.imagemagick.org
+						</a>
+						regarding installation. The instructions
+						for installation can be
+						found there
+						<a href="http://www.imagemagick.org/script/binary-releases.php"
+							target="_BLANK" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
+						</a>
+						,
+						however on
+						most Linux systems you can get it via your favorite
+						package
+						managers (apt-get it)
+					</div>
+				</li>
+				<li>
+					<b>Enabling import of PDFs into whiteboard</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<ul>
+							<li>
+								Install
+								<b>GhostScript</b>
+								on the server, you can get more
+								information on
+								<a href="http://www.ghostscript.com/download/gsdnld.html" target="_BLANK"
+									rel="nofollow">
+									http://www.ghostscript.com/download/gsdnld.html
+								</a>
+								regarding
+								installation. The instructions for installation can be
+								found
+								there, however on most Linux systems you can get it via
+								your
+								favorite package managers (apt-get it).
+							</li>
+							<li>
+								Install
+								<b>SWFTools</b>
+								on the server, you can get more information
+								on
+								<a href="http://www.swftools.org/" target="_BLANK" rel="nofollow">http://www.swftools.org/
+								</a>
+								regarding installation. Some of the
+								Linux distributions already
+								have it in there package manager (see
+								<a href="http://packages.debian.org/unstable/utils/swftools"
+									target="_BLANK" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
+								</a>
+								), the
+								recommended version of SWFTools is 0.9 as prior version
+								have a
+								bug that does lead to wrong object dimensions at
+								whiteboard
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<b>Enabling import of .doc, .docx, .ppt, .pptx, ... all Office
+						Documents into whitebaord
+					</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<ul>
+							<li>
+								<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
+									rel="nofollow">JODConverter</a>
+								installed (needed since v2.x)
+							</li>
+							<li>OpenOffice or Libre Office Installed</li>
+						</ul>
+						Since Version 2.x of OpenMeetings it is no more required to start
+						OpenOffice (or Libreoffice) service, see
+						<a href="OpenOfficeConverter.html">OpenOfficeConverter</a>
+						for details
+					</div>
+				</li>
+				<li>
+					<b>Enabling Recording and import of .avi, .flv, .mov and .mp4 into
+						whiteboard
+					</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<ul>
+							<li>
+								Install
+								<b>FFMpeg (with -enabled libmp3lame and libx264 options)</b>
+								. You should get FFMPEG in an up to date copy! OpenMeetings is
+								tested with FFMPEG Version 10.3 and latest build from GIT
+								For Windows you can download a Build for example from
+								<a href="http://ffmpeg.zeranoe.com/builds/" target="_BLANK"
+									rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
+								Linux or OSx Users should be able to use one of the various
+								Installation Instructions on the Web. You need to enable
+								libmp3lame and libx264!
+							</li>
+							<li>
+								Install
+								<b>SoX</b>
+								<a href="http://sox.sourceforge.net/" target="_BLANK" rel="nofollow">http://sox.sourceforge.net/
+								</a>
+								. You should install SoX in a up
+								to date copy! SoX 12.xx will NOT
+								work!
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ol>
+
+		</section>
+
+		<section name="Ports, NAT Settings, Customize">
+
+			<p>
+				See
+				<a href="PortSettings.html">PortSettings</a>
+			</p>
+		</section>
+
+		<section name="VMWare">
+			<ul>
+				<li>
+					See
+					<a href="http://nightly.openmeetings.de/openmeetings/builds/vmware/"
+						rel="nofollow">http://nightly.openmeetings.de/openmeetings/builds/vmware/</a>
+				</li>
+				<li>
+					VMWare 1.6.1
+					<a
+						href="http://openstudio.no-ip.info/2011/01/openmeetings-1-6-rc1-vmware-appliance-using-ubuntu-server-10-04-lts/"
+						rel="nofollow">blog-entry</a>
+				</li>
+			</ul>
+		</section>
+
+		<section name="Hardware Requirements">
+			<ul>
+				<li>
+					Minimalistic requirement (without Document Converters, Recorder and
+					Upload feature) 1GHz CPU 1 GB RAM (
+					<i>server-side</i>
+					)
+				</li>
+				<li>
+					Recommended requirement 2x/4x 2GHz ++ CPU (32 or 64Bit) 4GB RAM. If
+					you have a 64Bit Operating System check if there is a OpenOffice
+					64Bit Version
+					<a href="http://download.openoffice.org/other.html#de" rel="nofollow">available
+						for your OS
+					</a>
+					(
+					<i>server-side</i>
+					)
+				</li>
+				<li>
+					Headset/Microphone recommendation: Logitech ClearChat PC Wireless,
+					for example from
+					<a
+						href="http://www.amazon.de/Logitech-ClearChat-kabelloser-Kopfh%C3%B6rer-Transmitter/dp/B00166WSN4"
+						rel="nofollow">Amazon</a>
+					or
+					<a
+						href="http://shop.ebay.com/i.html?_nkw=Logitech+ClearChat.+Wireless&amp;_sacat=0&amp;_trksid=p3286.m270.l1313&amp;LH_BIN=1&amp;LH_IncludeSIF=1&amp;_odkw=Logitech+ClearChat+PC&amp;_osacat=0"
+						rel="nofollow">EBay Auctions</a>
+					(
+					<i>cient-side</i>
+					).
+					<a href="RecommendedHardwareList.html">See all recommendations</a>
+					for cameras, headsets and speakerphones.
+				</li>
+			</ul>
+
+		</section>
+
+		<section name="Debian, Links, Changelog, VoIP">
+
+			<ul>
+				<li>
+					for VoIP and SIP Integration see also
+					<a href="voip-sip-integration.html">VoIPAndSIP</a>
+				</li>
+				<li>
+					<a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/
+					</a>
+				</li>
+				<li>
+					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Installation of OM 2.0 for Ubuntu 12.04 x64, Ubuntu 12.10 x64, Debian, Windows XP, 7, 2003, 2008</a>
+				</li>
+				<li>
+					<a
+						href="http://liberamemoria.blogspot.com/2009/02/instalando-openmeetings-07-rc-2-en.html"
+						rel="nofollow">Espanol Version for Debian Installation</a>
+				</li>
+				<li>
+					<a
+						href="http://aitinet.com/blog/wp-content/uploads/2009/08/TUTORIAL-PARA-INSTALACAO-DO-RED5-E-OPENMEETINGS-NO-LINUX-DEBIAN-LENNY-51.pdf"
+						rel="nofollow">Portuguese Version for Debian Installation of 0.9 RC1</a>
+				</li>
+				<li>
+					<a
+						href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
+						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
+				</li>
+				<li>
+					French version of Installation Instructions:
+					<a
+						href="http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation"
+						rel="nofollow">http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation
+					</a>
+				</li>
+			</ul>
+		</section>
+
+		<section name="Tips and Tricks">
+			<ul>
+				<li>
+					Use the Debug-Application: Enter in your browser
+					<a
+						href="http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=swf8.swf"
+						rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=swf8.swf
+					</a>
+					for example
+					<a href="http://localhost:5080/openmeetings/maindebug.lzx.lzr=swf8.swf"
+						rel="nofollow">http://localhost:5080/openmeetings/maindebug.lzx.lzr=swf8.swf
+					</a>
+				</li>
+				<li>If you have Problems with conversion-jobs check your Red5-Log
+					output. There will be error Messages which help you. You must
+					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
+					all conversion-Jobs correctly.
+				</li>
+				<li>if you have problems in converting Files check the Batch-Scripts
+					in $OPENMEETINGS_HOME/jod
+				</li>
+				<li>
+					If you want to use red5 as a service (without red5.bat), you need
+					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
+					some path in conf\wrapper.conf (like ..\lib\foo.jar to
+					lib\foo.jar). And finally change the register key in
+					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Red5\ImagePath
+					to point to the new wrapper.
+				</li>
+				<li>
+					you can query a Mysql Database to get the schema_collection by
+					using this query:
+					<div class="xmlcode">
+						SELECT Table_name, TABLE_COLLATION FROM
+						information_schema.tables WHERE table_schema = 'openmeetings'
+						ORDER BY table_name DESC
+					</div>
+				</li>
+			</ul>
+		</section>
+
+	</body>
+
+</document>
+

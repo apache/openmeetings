@@ -1,0 +1,1173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="privateMessages" extends="view" height="$once{ parent.height }" 
+	   width="$once{ canvas.width - 276 }">
+	
+	<attribute name="newMessageActive" value="false" type="boolean" />
+	
+	<handler name="oninit">
+		this._Buttons._inbox.onclick.sendEvent(null);
+	</handler>
+	
+	<method name="newMessage" args="userObject">
+		if (this.newMessageActive) {
+			this._newPrivateMessage.destroy();
+		}
+		
+		new lz.newPrivateMessage(this,{
+						x:154,
+						refObj:this,
+						userObject:userObject,
+						width:this._table.width+8,
+						height:this.height-2
+					});
+				
+		this.newMessageActive = true;
+	</method>
+	
+	<view name="_status" width="152">
+		
+		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5" height="22">
+			<handler name="onclick">
+				parent.parent.newMessage(null);
+			</handler>
+			<view resource="private_message_add_rsc" x="10" y="2"></view>
+			<labelTooltip labelid="1208"></labelTooltip>
+		</simpleLabelRoundButton>
+		
+	</view>
+	
+	<view name="_Buttons" width="152" y="35" layout="axis:y;spacing:2">
+		
+		<attribute name="selectMenuItemObj" value="null" />
+		
+		<method name="selectMenuItem" args="refObj">
+			if (this.selectMenuItemObj != null) {
+				this.selectMenuItemObj.selected = false;
+				this.selectMenuItemObj._text.setAttribute("bgcolor",0xEEF0EB);
+			}
+			this.selectMenuItemObj = refObj;
+			this.selectMenuItemObj.selected = true;
+			this.selectMenuItemObj._text.setAttribute("bgcolor",0xD3D3D3);
+		</method>
+		
+		<method name="resetMenuItem">
+			this.selectMenuItemObj = null;
+			this._inbox.onclick.sendEvent(null);
+		</method>
+		
+		<view name="_inbox" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
+			<handler name="onclick">
+				parent.parent._table.getInbox.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_inbox_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1222" />
+		</view>
+		
+		<view name="_send" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
+			<handler name="onclick">
+				parent.parent._table.getSend.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_send_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1223" />
+		</view>
+		
+		<view name="_trash" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
+			<handler name="onclick">
+				parent.parent._table.getTrash.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_trash_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1224" />
+		</view>
+		
+		<view height="1"></view>
+		 
+		<simpleLabelButton name="_addFolder" labelid="1258" width="142" x="5" height="22">
+			<handler name="onclick">
+				//this.setAttribute("enabled",false);
+				new lz.newPrivateMessageFolder(canvas,{refObj:this});
+			</handler>
+			<method name="sendReload">
+				parent._privateFolders.getPrivateMessageFoldersByUser.doCall();
+			</method>
+			<view resource="private_message_folder_add_rsc" x="10" y="2"></view>
+			<labelTooltip labelid="1259" />
+		</simpleLabelButton>
+		
+		<view height="1"></view>
+		
+		<view name="_privateFolders" layout="axis:y;spacing:1">
+			
+			<handler name="oninit">
+				this.reload();
+			</handler>
+			
+			<method name="reload">
+				this.getPrivateMessageFoldersByUser.doCall();
+			</method>
+			
+			<method name="removeAll">
+				<![CDATA[
+					for (var eg in this.subviews) {
+						this.subviews[eg].destroy();
+					}
+				]]>
+			</method>
+			<!--
+			public List<PrivateMessageFolder> getPrivateMessageFoldersByUser(String SID)
+			 -->
+			<netRemoteCallHib name="getPrivateMessageFoldersByUser" funcname="userservice.getPrivateMessageFoldersByUser" 
+					  remotecontext="$once{ canvas.thishib }" >  
+				<attribute name="onlyUpdateDropDown" value="false" type="boolean"/>    
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("getPrivateMessageFoldersByUser: ",value);
+			    		if (this.onlyUpdateDropDown) {
+			    			this.onlyUpdateDropDown = false;
+			    			parent.parent.parent._actionButtons._move.initItems(value);
+			    		} else {
+			    			parent.loadResult(value);
+			    		}
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+		    
+		    <method name="loadPrivateMessage" args="privateMessageFolderId,refObj">
+		    	parent.selectMenuItem(refObj);
+		    	parent.parent._table.privateMessageFolderId = privateMessageFolderId;
+		    	parent.parent._table.getFolder.doCall();
+		    </method>
+		    
+		    <method name="deleteFolder" args="privateMessageFolderId,refObj">
+		    	if (parent.selectMenuItemObj == refObj) {
+		    		parent.parent.resetMenuItem();
+		    	}
+		    	this.deletePrivateMessageFolder.privateMessageFolderId = privateMessageFolderId;
+		    	this.deletePrivateMessageFolder.doCall();
+		    </method>
+		    
+		    <!--
+				Send update to drop down list of folder names 
+			 -->
+			<method name="updateConnectedFolderBox">
+				this.getPrivateMessageFoldersByUser.onlyUpdateDropDown = true;
+				this.getPrivateMessageFoldersByUser.doCall();
+			</method>
+		    
+		    <!--
+		    public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName)
+		     -->
+		    <netRemoteCallHib name="deletePrivateMessageFolder" funcname="userservice.deletePrivateMessageFolder" 
+					  remotecontext="$once{ canvas.thishib }" >  
+				<attribute name="privateMessageFolderId" value="0" type="number"/>        
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.privateMessageFolderId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("deletePrivateMessageFolder: ",value);
+			    		parent.reload();
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>
+		    
+		    <method name="loadResult" args="tList">
+		    	<![CDATA[
+		    	
+		    		this.removeAll();
+		    		
+		    		for (var i=0;i<tList.length;i++) {
+		    			new lz.privateMessageFolder(this,{
+				    				privateMessageFolderId:tList[i].privateMessageFolderId,
+				    				folderName:tList[i].folderName
+				    			});
+		    		}
+		    		
+		    		parent.parent._actionButtons._move.initItems(tList);
+		    	
+		    	]]>
+		    </method>
+		    
+	    	
+			
+		</view>
+		
+	</view>
+	
+	
+	<view height="$once{ parent.height }" width="1" x="154" 
+		  bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"></view>
+	
+	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
+	
+	<turnOverListOrderedPaged name="_table" showTopBar="true" x="158" 
+					 height="250" width="$once{ parent.width-160 }"
+		             y="24" itemHeight="20" listLabelId="1237" headerHeight="22" 
+		             listItemName="privateMessagItem" menuBarXIndent="80"
+		             multiselect="true" orderby="c.inserted">
+		
+		
+		<attribute name="countUnRead" value="0" type="number" />
+		<attribute name="isInbox" value="false" type="boolean" />
+		<attribute name="isSend" value="false" type="boolean" />
+		<attribute name="isTrash" value="false" type="boolean" />
+		<attribute name="isFolder" value="false" type="boolean" />
+		<attribute name="privateMessageFolderId" value="0" type="number" />
+		
+		<attribute name="selectedRefObjIds" value="null"/>
+		
+		<method name="updatePrivateMessageLabelText" args="countUnRead">
+			<![CDATA[
+		    	this.countUnRead = countUnRead;
+		    	parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(parent._labelPrivateMessages.labelid)+' <i>( '+this.countUnRead+' </i>)');
+	    	]]>
+	    </method>
+			
+		<handler name="oninit">
+			this.addHeaderItem(1205,20);
+			
+			this.addHeaderItemOrdered(1202,160,"c.from.lastname",false,false);
+			this.addHeaderItemOrdered(1203,this.width-316,"c.subject",false,false);
+			this.addHeaderItemOrdered(1204,120,"c.inserted",true,true);
+			
+			//this.getInbox.doCall();
+		</handler>
+		
+		<handler name="onload">
+			if (this.isInbox) {
+				this.getInbox.doCall();
+			} else if (this.isSend) {
+				this.getSend.doCall();
+			} else if (this.isTrash) {
+				this.getTrash.doCall();
+			}
+		</handler>
+		
+		<method name="itemSelected" args="listObj,bool">
+			<![CDATA[
+			
+				if ($debug) Debug.write("itemSelected :: ",listObj);
+				
+				listObj.setAttribute("itemSelected",bool);
+				this.renderList[listObj.itemId].itemSelected = bool;
+				
+			
+			]]>
+		</method>
+		
+		<method name="selectUnread">
+			<![CDATA[
+			
+				if (!this.isInbox) {
+					return;
+				}
+            	
+            	//list.subviews[i].setAttribute("isRead",records[i].isRead);
+			
+	            this._selectedRefObj = new Array();
+	            this._selected = new Array();
+	            
+	            for (var i=0;i<this.renderList.length;i++) {
+	            	if (!this.renderList[i].isRead) {
+		            	this.renderList[i].itemSelected = true;
+		                this.renderList[i].isselected = true;
+		                this._selectedRefObj.push(i);
+	            	} else {
+	            		this.renderList[i].itemSelected = false;
+		                this.renderList[i].isselected = false;
+	            	}
+	            }
+	            
+	            if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+	        
+	            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+	            	if (!this._innerlist._inn._inn.subviews[i].isRead) {
+		            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+			            this._innerlist._inn._inn.subviews[i].isselected = true;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+		                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+	            	} else {
+	            		this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
+			            this._innerlist._inn._inn.subviews[i].isselected = false;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	            	}
+		        }
+			]]>
+		</method>
+		
+		<method name="selectRead">
+			<![CDATA[
+				if (!this.isInbox) {
+					return;
+				}
+            	
+            	//list.subviews[i].setAttribute("isRead",records[i].isRead);
+			
+	            this._selectedRefObj = new Array();
+	            this._selected = new Array();
+	            
+	            for (var i=0;i<this.renderList.length;i++) {
+	            	if (this.renderList[i].isRead) {
+		            	this.renderList[i].itemSelected = true;
+		                this.renderList[i].isselected = true;
+		                this._selectedRefObj.push(i);
+	            	} else {
+	            		this.renderList[i].itemSelected = false;
+		                this.renderList[i].isselected = false;
+	            	}
+	            }
+	            
+	            if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+	        
+	            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+	            	if (this._innerlist._inn._inn.subviews[i].isRead) {
+		            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+			            this._innerlist._inn._inn.subviews[i].isselected = true;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+		                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+	            	} else {
+	            		this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
+			            this._innerlist._inn._inn.subviews[i].isselected = false;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	            	}
+		        }
+			]]>
+		</method>
+		
+		<method name="moveToTrash" args="isTrash">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+				
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.moveMailsToTrash.isTrash = isTrash;
+				this.moveMailsToTrash.doCall();
+				
+			]]>
+		</method>
+		
+		<!--
+		public Long moveMailsToTrash(String SID, List privateMessageIds, Boolean isTrash)
+		 -->
+		<netRemoteCallHib name="moveMailsToTrash" funcname="userservice.moveMailsToTrash" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="isTrash" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.isTrash; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("moveMailsToTrash: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			parent.getFolder.doCall();
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="moveToFolderById" args="newFolderId">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				if ($debug) Debug.write("moveToFolderById ",newFolderId);
+				
+				this.selectedRefObjIds = new Array();
+				
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.moveMailsToFolder.newFolderId = newFolderId;
+				this.moveMailsToFolder.doCall();
+				
+			]]>
+		</method>
+	    <!--
+	    public Integer moveMailsToFolder(String SID, List privateMessageIntsIds,
+			Long newFolderId)
+		 -->
+	    <netRemoteCallHib name="moveMailsToFolder" funcname="userservice.moveMailsToFolder" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="newFolderId" value="0" type="number" />
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.newFolderId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("moveMailsToFolder: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			parent.getFolder.doCall();
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>			 
+	    
+	    <method name="finalDelete">
+	    	<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+			
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.deletePrivateMessages.doCall();
+				
+			]]>
+	    </method>
+	    
+	    <!--
+	    public Integer deletePrivateMessages(String SID, List privateMessageIntsIds)
+	     -->
+	    <netRemoteCallHib name="deletePrivateMessages" funcname="userservice.deletePrivateMessages" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("deletePrivateMessages: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			parent.getFolder.doCall();
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="markToRead" args="isRead">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+			
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				if ($debug) Debug.write("this.markReadStatusMails ",isRead);
+				
+				this.markReadStatusMails.isRead = isRead;
+				this.markReadStatusMails.doCall();
+				
+			]]>
+		</method>
+	    
+	    <!--
+	    public Long markReadStatusMails(String SID, List privateMessageIntsIds, Boolean isRead)
+	     -->
+	    <netRemoteCallHib name="markReadStatusMails" funcname="userservice.markReadStatusMails" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="isRead" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.isRead; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("markReadStatusMails: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			parent.getFolder.doCall();
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+		
+		<handler name="onclickedItem" args="listObj">
+			<![CDATA[
+			
+				if ($debug) Debug.write("onclickedItem :: ",listObj.refObj);
+				
+				var bool = !listObj.itemSelected;
+				
+				this.itemSelected(listObj,bool);
+				
+				if (this.isInbox) {
+					
+					if (!listObj.isRead) {
+						
+						this.renderList[listObj.itemId].isRead = true;
+						
+						listObj.setAttribute("isRead",true);
+						
+						//if ($debug) Debug.write("onclickedItem :: ",listObj.refObj.privateMessageId);
+						
+						this.markReadStatusMail.privateMessageId = listObj.refObj.privateMessageId;
+						this.markReadStatusMail.isRead = true;
+						
+						this.updatePrivateMessageLabelText(this.countUnRead-1);
+						
+						this.markReadStatusMail.doCall();
+					}
+					
+				}
+				
+				parent._privateMessageDetails.loadMessageDetails(listObj.refObj);
+			
+			]]>
+		</handler>
+		
+		<handler name="onUpdateOrder" args="itemRef">
+			if (this.isInbox) {
+    			this.getInbox.doCall();
+    		} else if (this.isSend) {
+    			this.getSend.doCall();
+    		} else if (this.isFolder) {
+    			this.getFolder.doCall();
+    		} else if (parent.isTrash) {
+    			this.getTrash.doCall();
+    		}
+		</handler>
+		
+		<!--
+		public Long markReadStatusMail(String SID, Long privateMessageId,
+			Boolean isRead)
+	     -->
+	    <netRemoteCallHib name="markReadStatusMail" funcname="userservice.markReadStatusMail" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="privateMessageId" value="0" type="number"/>
+			<attribute name="isRead" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.privateMessageId; </method></netparam>
+			<netparam><method name="getValue"> return parent.isRead; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("markReadStatusMail: ",value);
+		    		//this.parent.destroy();
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+		<!--
+		public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max)
+		 -->
+	    <netRemoteCallHib name="getInbox" funcname="userservice.getInbox" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("getInbox: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = true;
+		    		parent.isSend = false;
+		    		parent.isTrash = false;
+		    		parent.isFolder = false;
+		    		
+		    		parent.countUnRead = 0;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].from.firstname+' '+value.result[k].from.lastname+' &#60;'+value.result[k].from.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    			if (!value.result[k].isRead) {
+		    				parent.countUnRead++;
+		    			}
+		    		}
+		    		
+		    		parent.updatePrivateMessageLabelText(parent.countUnRead);
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <!--
+	    public SearchResult getSend(String SID, String orderBy, Integer start, Boolean asc, Integer max) {
+		 -->
+	    <netRemoteCallHib name="getSend" funcname="userservice.getSend" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		parent.isSend = true;
+		    		parent.isTrash = false;
+		    		parent.isFolder = false;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <!--
+	    public SearchResult getTrash(String SID, String search, String orderBy, Integer start, Boolean asc, Integer max)
+	     -->
+	    <netRemoteCallHib name="getTrash" funcname="userservice.getTrash" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		parent.isSend = false;
+		    		parent.isTrash = true;
+		    		parent.isFolder = false;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    
+	    <!--
+	    public SearchResult getFolder(String SID, Long privateMessageFolderId, String search, String orderBy, 
+			Integer start, Boolean asc, Integer max)
+	     -->
+	    <netRemoteCallHib name="getFolder" funcname="userservice.getFolder" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.privateMessageFolderId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("getFolder: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		parent.isSend = false;
+		    		parent.isTrash = false;
+		    		parent.isFolder = true;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <!--
+		    from" value="" type="string"/>
+			<attribute name="subject" value="" type="string"/>
+			<attribute name="strTime
+	     -->	
+	    
+	    <method name="renderContent" args="rList">
+            <![CDATA[
+            
+            	this._selectedRefObj = new Array();
+	            this._selected = new Array();
+	            
+            	if (this.isTrash) {
+            		parent._actionButtons._moveToTrash.setAttribute("visibility","hidden");
+            		parent._actionButtons._moveToInbox.setAttribute("visibility","visible");
+            		parent._actionButtons._read.setAttribute("visibility","hidden");
+            		parent._actionButtons._unread.setAttribute("visibility","hidden");
+            		parent._actionButtons._finalDelete.setAttribute("visibility","visible");
+            	} else if (this.isFolder) {
+                    parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
+                    parent._actionButtons._moveToInbox.setAttribute("visibility","visible");
+                    parent._actionButtons._read.setAttribute("visibility","visible");
+                    parent._actionButtons._unread.setAttribute("visibility","visible");
+                    parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
+                } else {
+                    parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
+                    parent._actionButtons._moveToInbox.setAttribute("visibility","hidden");
+                    parent._actionButtons._read.setAttribute("visibility","visible");
+                    parent._actionButtons._unread.setAttribute("visibility","visible");
+                    parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
+                }
+            
+            	this.renderList = rList;
+            
+                this.isLoaded = true;
+                var list = this._innerlist._inn._inn;
+                
+                if (this.renderList == null) {
+                	this.renderList = new Array();
+                }
+                //this.renderList = records;
+                var records = this.renderList;
+                this._innerlist._inn.setAttribute("y",0);
+                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+                this._innerlist._inn.resetItems();
+                
+                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+                
+                //this._records.setAttribute("text",records.length);
+                
+                for (var i=0;i<list.subviews.length;i++){
+                    
+                    //if (i % 2 == 0) {
+                    //    list.subviews[i].setIsSecond(true);
+                    //} else {
+                    //    list.subviews[i].setIsSecond(false);
+                    //}
+                    
+                    if (records.length > i) {
+                    	
+                    	//if ($debug) Debug.write("Render Item ",records[i]);
+                        
+                        list.subviews[i].setAttribute("clickable",true);
+                        list.subviews[i].refObj = records[i];
+                        
+                        if (records[i]["isselected"] && records[i].isselected) {
+                            list.subviews[i].isselected = true;
+                        } else {
+                            list.subviews[i].isselected = false;
+                        }
+                        
+                        list.subviews[i].setAttribute("from",records[i].userName);
+                        list.subviews[i].setAttribute("subject",records[i].subject);
+                        list.subviews[i].setAttribute("strTime",records[i].strTime);
+                        list.subviews[i].setAttribute("itemSelected",records[i].itemSelected);
+                        
+                        if (this.isInbox) {
+                        	list.subviews[i].setAttribute("isRead",records[i].isRead);
+                        } else {
+                        	list.subviews[i].setAttribute("isRead",true);
+                        }
+                        
+                        list.subviews[i].setAttribute("itemId",i);
+                        
+                    } else {
+                        
+                        list.subviews[i].refObj = null;
+                        
+                        list.subviews[i].isselected = false;
+                        list.subviews[i].onmouseout.sendEvent();
+                        
+                        list.subviews[i].setAttribute("from",'');
+                        list.subviews[i].setAttribute("subject",'');
+                        list.subviews[i].setAttribute("strTime",'');
+                        list.subviews[i].setAttribute("itemSelected",false);
+                        
+                        list.subviews[i].setAttribute("itemId","");
+                        
+                        list.subviews[i].setAttribute("clickable",false);
+                        
+                    }
+                    
+                    list.subviews[i].onmouseout.sendEvent();
+                    
+                }
+                
+                
+                this.sendInitialWidthUpdate();
+                
+            ]]>
+        </method>   
+	        
+        <handler name="onScrollItem" args="item">
+            <![CDATA[
+                if (this.renderList.length > item.itemId) {
+                    item.setAttribute("clickable",true);
+                    item.refObj = this.renderList[item.itemId];
+                    
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+                        //if ($debug) Debug.write("item.isselected ",item.itemId);
+                        item.isselected = true;
+                        item.onmouseout.sendEvent();
+                    } else {
+                    	//if ($debug) Debug.write("item NOT .isselected ",item.itemId);
+                        item.isselected = false;
+                        item.onmouseout.sendEvent();
+                    }
+                    
+                    //if ($debug) Debug.write(item.itemId);
+                    
+                    item.setAttribute("from",this.renderList[item.itemId].userName);
+                    item.setAttribute("subject",this.renderList[item.itemId].subject);
+                    item.setAttribute("strTime",this.renderList[item.itemId].strTime);
+                    item.setAttribute("itemSelected",this.renderList[item.itemId].itemSelected);
+                    
+                    if (this.isInbox) {
+                    	item.setAttribute("isRead",this.renderList[item.itemId].isRead);
+                    } else {
+                    	item.subviews[i].setAttribute("isRead",true);
+                    }
+                    
+                    item.setAttribute("itemId",item.itemId);
+                    
+                } else {
+                    
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+                    item.isselected = false;
+                    item.onmouseout.sendEvent();
+                    
+                    item.refObj = null;
+                    
+                    item.setAttribute("from","");
+                    item.setAttribute("subject","");
+                    item.setAttribute("strTime","");
+                    item.setAttribute("itemSelected",false);
+                    
+                    item.setAttribute("itemId","");
+                    
+                    item.setAttribute("clickable",false);
+                    
+                }
+                
+            ]]>
+        </handler>
+    
+			
+	</turnOverListOrderedPaged>
+	
+	<view name="_actionButtons" y="274" x="158" layout="axis:x;spacing:2">
+		<view resource="private_message_select_part_rsc"></view>
+		
+		<resetCombobox name="_action" width="90" 
+					   editable="false" fontsize="10" height="20" >
+            <attribute name="sendEventToReload" value="false" type="boolean" />
+            <handler name="oninit">
+                this.addItem(canvas.getLabelName(1252),"0");//Actions ...
+                this.addItem(canvas.getLabelName(1239),"1");//Select All 
+                this.addItem(canvas.getLabelName(1240),"2");//Select None
+                this.addItem(canvas.getLabelName(1241),"3");//Select Unread
+                this.addItem(canvas.getLabelName(1242),"4");//Select Read
+                this.selectItemAt(0);
+            </handler>
+            <handler name="onselect" args="sel">
+                if (sel.value == "1") {
+                	parent.parent._table.selectAll();
+                } else if (sel.value == "2") {
+                	parent.parent._table.deselectAll();
+                } else if (sel.value == "3") {
+                	parent.parent._table.selectUnread();
+                } else if (sel.value == "4") {
+                	parent.parent._table.selectRead();
+                }
+            </handler>
+        </resetCombobox>
+        
+        <simpleLabelButton name="_moveToTrash" labelid="1245" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.moveToTrash(true);
+        	</handler>
+        	<labelTooltip labelid="1246" />
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_read" labelid="1248" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.markToRead(true);
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_unread" labelid="1247" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.markToRead(false);
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_moveToInbox" labelid="1255" visibility="hidden"
+        				   fontstyle="plain" width="120" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.moveToTrash(false);
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_finalDelete" labelid="1256" visibility="hidden"
+        				   fontstyle="plain" width="120" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.finalDelete();
+        	</handler>
+        	<labelTooltip labelid="1257" />
+        </simpleLabelButton>
+        
+        <resetCombobox name="_move" width="120" x="42"
+					   editable="false" fontsize="10" height="20" >
+            <attribute name="sendEventToReload" value="false" type="boolean" />
+            <method name="initItems" args="tList">
+            	<![CDATA[
+	            	this.reset();
+	            	
+	            	this.addItem(canvas.getLabelName(1243),"0");//Move to folder ...
+	            	
+	            	for (var i=0;i<tList.length;i++) {
+	            		
+	            		this.addItem(tList[i].folderName,tList[i].privateMessageFolderId);
+	            		
+	            	}
+	            	
+	            	this.addItem(canvas.getLabelName(1244),"-1");//Create Folder ...
+	            	this.selectItemAt(0);
+            	]]>
+            </method>
+            <handler name="oninit">
+                //this.addItem(canvas.getLabelName(1243),"0");//Move to folder ...
+                //this.addItem(canvas.getLabelName(1244),"-1");//Create Folder ...
+                //this.selectItemAt(0);
+            </handler>
+            <handler name="onselect" args="sel">
+            	<![CDATA[
+            		if ($debug) Debug.write("onselect :: ",sel.value);
+	                if (sel.value == "-1") {
+	                	//Init Add Folder Dialog
+	                	parent.parent._Buttons._addFolder.onclick.sendEvent(null);
+	                } else if (Number(sel.value) > 0) {
+	                	parent.parent._table.moveToFolderById(Number(sel.value));
+	                }
+                ]]>
+            </handler>
+        </resetCombobox>
+	</view>
+	
+	<view name="_privateMessageDetails" x="155" width="$once{ parent.width-155 }" y="296" 
+		  height="${ parent.height - 298 }" clip="true">
+		
+		<attribute name="pendingUserStatusRef" value="null"/>
+		<attribute name="roomObjectRef" value="null"/>
+		
+		<attribute name="senderuserId" value="0" type="number" />
+		
+		<method name="loadMessageDetails" args="refObj">
+			<![CDATA[
+			
+			    this.senderuserId = refObj.from.user_id;
+			    
+			    this._answer_area.setAttribute("visibility","visible");
+			
+				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.adresses.email+'&#62;');
+				if (refObj.to != null) {
+					this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
+				} else {
+					this.to.setAttribute("text","");
+				}
+				
+				this.subject.setAttribute("text",refObj.subject);
+				
+				this.message.message.setAttribute("text",refObj.message);
+				
+				if (this.pendingUserStatusRef != null) {
+					this.pendingUserStatusRef.destroy();
+				}
+				
+				if (refObj.isContactRequest) {
+					this.checkPendingStatus.userContactId = refObj.userContactId;
+					this.checkPendingStatus.doCall();
+				}
+				
+				if (this.roomObjectRef != null) {
+                    this.roomObjectRef.destroy();
+                }
+				
+				if (refObj.room != null) {
+				    
+				    if ($debug) Debug.write("loadMessageDetails :: ",refObj.room);
+				    
+				    this.roomObjectRef = new lz.roomAccessMessage(this,{
+                            				        rooms_id:refObj.room.rooms_id
+                            				    });
+				    
+				}
+			
+			]]>
+		</method>
+		
+		<!--
+		 public Long checkPendingStatus(String SID, Long userContactId)
+		 -->
+		<netRemoteCallHib name="checkPendingStatus" funcname="userservice.checkPendingStatus" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<attribute name="userContactId" value="0" type="number" />
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.userContactId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("checkPendingStatus: ",value);
+		    		if (value > 0) {
+		    			parent.pendingUserStatusRef = new lz.pendingUserStatus(parent,{
+								userContactId:this.userContactId,
+								message:parent.subject.getText()
+							});
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>		 
+	    
+	    <view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
+		  height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
+		
+		<view name="_privateMessageDetailsBorder3" width="$once{ parent.width }" y="1"
+		  	height="61" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" opacity="0.1" />
+		  	
+		<labelText name="_labelFrom" x="2" labelid="1202" y="2" />
+		<labelText name="from" width="$once{ parent.width-100 }" fontstyle="italic"
+				   x="100" y="2" resize="false" />
+		
+		<labelText name="_labelTo" x="2" labelid="1210" y="22"/>
+		<labelText name="to" width="$once{ parent.width-100 }" fontstyle="italic"
+				   x="100" y="22" resize="false" />
+		
+		<labelText name="_labelSubject" x="2" labelid="1211" y="42"/>
+		<labelText name="subject" width="$once{ parent.width-100 }" fontstyle="bold"
+				   x="100" y="42" resize="false" />
+		
+		<view name="_privateMessageDetailsBorder1" width="$once{ parent.width }" y="62"
+		  	height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
+		  
+		<view name="message" y="64" bgcolor="0xFFFFFF" x="2"
+			  width="$once{ parent.width-4 }" height="${ parent.height-86 }">
+			<labelText name="message" width="$once{ parent.width-16 }" 
+					   multiline="true" resize="false" />
+			<om_vscrollbar />
+		</view>
+		
+		<view name="_answer_area" height="22" visibility="hidden"
+			  y="${ parent.height-22 }" width="$once{ parent.width }">
+			
+			<view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
+                    height="1" bgcolor="0x666666" />
+			
+            <!-- label: cancel -->
+            <simpleLabelButton labelid="1303" x="$once{ parent.width-130 }" width="120" y="2">
+                <handler name="onclick">
+                    new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                userObject:null,
+                                isdragable:true,
+                                user_id:parent.parent.senderuserId,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+                </handler>
+            </simpleLabelButton>
+		</view>
+		
+		
+	</view>
+	
+</class>
+
+</library>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<config 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="config.xsd">
+
+<!-- URL/IP to use for the Server for RTMP and RTMPT traffic.
+    If this value is empty it will try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from
+    
+    Can be either and IP or a domain name. 
+    For example: 
+    <rtmphostlocal>192.168.254.182</rtmphostlocal>
+    or
+    <rtmphostlocal>mysubdomain.streaming.to</rtmphostlocal>
+    -->
+<rtmphostlocal></rtmphostlocal>
+
+<!-- URL/IP to use for the Server for HTTP and HTTPS traffic.
+    If this value is empty it will use the rtmphostlocal 
+    variable (and in that way try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from)
+    -->
+<httphostlocal></httphostlocal>
+
+<!--  
+Port to use for the Server
+To this port the default server lookup is done
+
+You can find all this configuration in your red5-Config in: $RED5_HOME/conf/red5.properties
+ -->
+<rtmpport>1935</rtmpport>
+
+<!-- 
+Port to use for the Server
+To this port the fallback is done once the default rtmport failed
+this should workaround 99% of all firewalls
+ -->
+<rtmpTunnelport>8088</rtmpTunnelport>
+
+<rtmpsslport>443</rtmpsslport>
+<!--
+Wether it should try to connect to rtmps first or not
+Valid values: yes / no
+
+NOTE: The OSx and Linux Flash Player are NOT able to connect via rtmps
+The support for Windows is experimental
+ -->
+<useSSL>no</useSSL>
+
+<!-- 
+Port to use for the Server
+This port is used to connect to the http-servlet
+of the red5-servlet
+ -->
+<red5httpport>5080</red5httpport>
+
+<!--
+    The protocol to use for the http connections
+    for example upload/download of files 
+ -->
+<protocol>http</protocol>
+
+<!--
+    The setting for the NetConnection
+    default settings is "none"
+    set to value "best" if you are trying to use rtmp over native SSL
+    see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/NetConnection.html#proxyType
+ -->
+<proxyType>none</proxyType>
+	
+<!--
+    Name of the Application
+    this is the Top-Icon Name of the Application
+ -->    
+<currentappname>Apache OpenMeetings</currentappname>    
+    
+<!-- 
+    URL to the Home of the Application
+    this is the URL which is used if you click on the Top-icon
+-->    
+<currentappnameurl>http://openmeetings.apache.org</currentappnameurl>        
+
+<!-- 
+    Should APP name and/or logo be displayed
+-->    
+<appdisplay>
+	<displayelement name="logo" display="true" x="5" y="5"/>
+	<displayelement name="name" display="true" x="140" y="10"/>
+</appdisplay>
+
+<!--
+    URL to Bugs/Support
+    this is the URL which is used if you click on *report a bug*
+ -->
+<currentappnamebugurl>https://issues.apache.org/jira/browse/OPENMEETINGS</currentappnamebugurl>   
+        
+<!--
+    Video-Settings
+    
+    Number that specifies the amount of sound required to activate the microphone 
+	Acceptable values from 0 to 100.	
+    this value is used in Audio_Streaming, at which the *activity-meter* will
+    send a notification for all connected hosts of a conference
+    the result of this notification is that you see the green-light highlighted if
+    a remote user is speaking
+ -->
+<loudnessAcitviation>0</loudnessAcitviation>  
+    
+<!--
+    OpenMeetings-Webapp Name
+    This is the name of the WebApp the Client will try to connect
+    in former versions (till 0.5 Beta7) the name was xmlcrm
+    the same param kann be find in the webapp in the Red5-Webapp
+    red5-web.properties
+    web.xml
+ -->
+<webAppRootKey>openmeetings</webAppRootKey>  
+
+<!--
+    We need this additional ROOT-Key as we have to deploy the application 
+    as Global Contex Root. 
+    
+    If the rtmpt issues is solved sothat several Webapps can use different RTMPT connection
+    we might change this value again to its origin / webapp-context
+
+ -->
+<httpRootKey>/openmeetings/</httpRootKey>  
+    
+<!--
+    Window-Effect Settings
+    showWindowEffect-values:
+    y = yes
+    n = no
+    showWindowEffectOpacity-values
+    between 0 and 1
+ -->
+<showWindowEffect>n</showWindowEffect> 
+
+<!--
+    Show the recorder buttons in the Conference Rooms
+    visible = yes
+    hidden = no
+ -->	
+<showRecording>hidden</showRecording>
+
+<!--
+    
+	To enable the modern whiteboard Panel you need to switch this to y
+    old menu bar is not active any more
+    
+<showmodernWhiteBoard>y</showmodernWhiteBoard>    
+ -->    
+	
+<!--
+	First day in the Week used by the Calendar
+	0 means Sunday
+	1 means Monday
+	this is the way how the calendar UI shows a week
+-->
+<firstdayinweek>0</firstdayinweek>	
+    
+    
+<!--
+    #############################################################################
+    Audio and Video Settings
+    Before you change settings here,
+    you should first Play and learn how the Settings work in the Documentation:
+    http://code.google.com/p/openmeetings/wiki/AudioVideoTestingApplication
+    #############################################################################
+ -->
+    
+<!-- Camera Settings for the FramesPerSecond
+    
+    fps:Number [optional] - The requested rate at which the camera should capture 
+    data, in frames per second. The default value is 15.
+ -->    
+<framesPerSecond>30</framesPerSecond>
+    
+    
+<!-- Camera Settings for the Bandwidth:
+    
+    bandwidth:Number [optional] - An integer that specifies the maximum amount 
+    of bandwidth that the current outgoing video feed can use, in bytes per second. 
+    To specify that Flash video can use as much bandwidth as needed to maintain 
+    the value of frameQuality, pass 0 for bandwidth. The default value is 16384.
+ -->
+<!-- These are the settings for the Quality-Modus *normal*
+    The Quality-Modus can be chosen in the Login-Box --> 
+<bandwidthNeededNormal>16384</bandwidthNeededNormal>    
+<!-- These are the settings for the Quality-Modus *best* -->    
+<bandwidthNeededBest>0</bandwidthNeededBest>
+    
+    
+<!-- Camera Settings for the Quality
+    
+    quality:Number [optional] - An integer that specifies the required level of 
+    picture quality, as determined by the amount of compression being applied to 
+    each video frame. Acceptable values range from 1 (lowest quality, maximum 
+    compression) to 100 (highest quality, no compression). To specify that picture 
+    quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality. 
+    The default value is 0.
+ --> 
+<!-- These are the settings for the Quality-Modus *normal* -->  
+<camQualityNormal>85</camQualityNormal>     
+<!-- These are the settings for the Quality-Modus *best* -->       
+<camQualityBest>90</camQualityBest> 
+    
+    
+<!-- Microphone Settings for the Rate:
+    
+    rate:Number - 
+    The rate at which the microphone should capture sound, in kHz. 
+    Acceptable values are 5, 8, 11, 22, and 44. 
+    The default value is 8 kHz if your sound capture 
+    device supports this value. Otherwise, the default value 
+    is the next available capture level above 8 kHz that your sound 
+    capture device supports, usually 11 kHz.
+ -->
+<!-- Microphone Settings Quality-Modus -->
+<microphoneRateBest>22</microphoneRateBest>
+
+<!-- AEC configuration value
+Specifies the echo path length (in milliseconds). A longer echo path means better 
+echo cancellation but also introduces longer delays and requires more processing power. 
+The default value is 128; the only other possible value is 256.
+ -->
+<echoPath>128</echoPath>
+
+<!--
+    The Size of the Whiteboard
+    The Whiteboard has scrollbars so you may increase the size without problems
+ -->
+<defaultWhiteboardWidth>2400</defaultWhiteboardWidth>  
+<defaultWhiteboardHeight>1200</defaultWhiteboardHeight>  
+
+<!-- Available Configurations -->
+
+<availableCameraResolutions>
+    <resolution type="4:3 (~6 KByte/sec)" width="40" height="30" isDefault="false" />
+    <resolution type="4:3 (~12 KByte/sec)" width="80" height="60" isDefault="false" />
+    <resolution type="4:3 (~20 KByte/sec)" width="120" height="90" isDefault="true" />
+    <resolution type="QQVGA 4:3 (~36 KByte/sec)" width="160" height="120" isDefault="false" />
+    <resolution type="4:3 (~40 KByte/sec)" width="240" height="180" isDefault="false" />
+    <resolution type="HVGA 4:3 (~56 KByte/sec)" width="320" height="240" isDefault="false" />
+    <resolution type="4:3  (~60 KByte/sec)" width="480" height="360" isDefault="false" />
+    <resolution type="4:3 (~68 KByte/sec)" width="640" height="480" isDefault="false" />
+    <resolution type="XGA 4:3" width="1024" height="768" isDefault="false" />
+    <resolution type="16:9" width="256" height="150" isDefault="false" />
+    <resolution type="WQVGA 9:5" width="432" height="240" isDefault="false" />
+    <resolution type="pseudo 16:9" width="480" height="234" isDefault="false" />
+    <resolution type="16:9" width="512" height="300" isDefault="false" />
+    <resolution type="nHD 16:9" width="640" height="360" isDefault="false" />
+    <resolution type="16:9" width="1024" height="600" isDefault="false" />
+</availableCameraResolutions>
+    
+ 
+<!-- Module Configuration -->
+<!-- #############################################
+    Admin Modules
+  -->   
+    
+<adminModuleUser>userAdmin</adminModuleUser>
+
+<adminModuleRoom>roomAdmin</adminModuleRoom>
+
+<adminModuleOrg>orgAdmin</adminModuleOrg>
+
+<adminModuleLanguages>languagesEditor</adminModuleLanguages>
+
+<adminModuleConnections>roomClient</adminModuleConnections>
+
+<adminModuleConfiguration>confAdmin</adminModuleConfiguration>
+
+<adminModuleBackup>backupContent</adminModuleBackup>
+
+<adminModuleLDAP>ldapAdmin</adminModuleLDAP>
+
+<adminModuleServers>serversAdmin</adminModuleServers>
+<!-- #############################################
+    Moderator Modules
+ -->
+
+<moderatorModuleUser>userModerate</moderatorModuleUser>
+
+<moderatorModuleRoom>roomModerate</moderatorModuleRoom>
+
+
+<!-- #############################################
+    Dashboard Modules
+ -->
+
+<dashboardModuleStartScreen>mainDashboard</dashboardModuleStartScreen>
+
+<dashboardModuleCalendar>lzCalendar</dashboardModuleCalendar>
+
+
+<!-- Conference Room Modules -->
+
+<conferenceModuleRoomList>allmeetings</conferenceModuleRoomList>
+
+
+<!-- #############################################
+    Conference Room
+    
+    Room Layout's: flexibleConferenceRoom,conferenceView
+ -->
+
+<conferenceRoomModule>flexibleConferenceRoom</conferenceRoomModule>
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<restrictedRoomModule>restrictedConferenceRoom</restrictedRoomModule>
+
+<!-- #############################################
+    Interview Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<recordModule>lzRecordContent</recordModule>
+
+<!-- #############################################
+    Profiles Panel Modules
+ -->
+
+<userSettingsModule>userSettings</userSettingsModule>
+        
+</config>

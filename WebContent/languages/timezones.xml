@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<timezones xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="timezones.xsd">
+	<!-- 
+		This file is loaded during installation to the database table "om_timezones" of OpenMeetings. 
+		Changes at runtime to this file have no effect to OpenMeetings.
+	
+		Attributes:
+	
+		1) orderId
+		The orderId is just an indicator for the position in the drow down box inside 
+		OpenMeetings UI, there can be duplicates
+		However the order in the XML should be correct cause the Web-installer/CLI-Installer
+		will display the timezones exactly in the order of the XML.
+		
+		2) name
+		A common name in short
+		
+		3) label
+		Long name, displayed in UI
+		
+		4) iCal
+		this is the actual name, OpenMeetings will use to match again Java's timezones 
+		(http://docs.oracle.com/javase/6/docs/api/java/util/TimeZone.html)
+		
+		to get all available id that are available in your Java JRE see:
+		http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/src/org/apache/openmeetings/test/timezone/TestGetIds.java
+		
+		For updating the JRE runtime with different tz-file, see:		
+		http://www.oracle.com/technetwork/java/javase/timezones-137583.html
+	 -->
+	<timezone orderId="1" name="Etc/GMT+12 (New Zealand)" label="New Zealand" iCal="Pacific/Auckland" />
+    <timezone orderId="1" name="Etc/GMT+12" label="Kiribati (Gilbert Islands), Fiji, Russia (Kamchatka Krai)" iCal="Pacific/Fiji" />
+    <timezone orderId="2" name="Etc/GMT+11" label="Vladivostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
+    <timezone orderId="3" name="Etc/GMT+10 (Australia/NSW)" label="Australia (NSW,Sydney,Tasmania), Yakutsk" iCal="Australia/Sydney" />
+    <timezone orderId="3" name="Etc/GMT+10 (Australia/Queensland)" label="Russia (Zabaykalsky Krai), Papua New Guinea, Australia (Queensland)" iCal="Australia/Queensland" />
+    <timezone orderId="3" name="Etc/GMT+10" label="Lord Howe Island - Australia GMT+10:30" iCal="Australia/Lord_Howe" />
+    <timezone orderId="4" name="Etc/GMT+9 (Japan)" label="Japan/Korea Standard Time, Irkutsk, East Timor" iCal="Asia/Tokyo" />
+    <timezone orderId="4" name="Etc/GMT+9 (Australia-North)" label="Australia (Nothern Territory,Darwin) GMT+9:30" iCal="Australia/Darwin" />
+    <timezone orderId="4" name="Etc/GMT+9 (Australia-South)" label="Australia (Southern Territory,Adelaide) GMT+9:30" iCal="Australia/Adelaide" />
+    <timezone orderId="5" name="Etc/GMT+8" label="China Standard Time, Krasnoyarsk, Philippines, Singapore" iCal="Asia/Singapore" />
+    <timezone orderId="6" name="Etc/GMT+7" label="Novosibirsk, Indochina Time, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
+    <timezone orderId="7" name="Etc/GMT+6" label="Yekaterinburg, Almaty, Bangladesh" iCal="Asia/Yekaterinburg" />
+    <timezone orderId="8" name="IST" label="Indian Standard Time GMT+5.30" iCal="Asia/Kolkata" />
+    <timezone orderId="9" name="Etc/GMT+5" label="Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
+    <timezone orderId="10" name="Asia/Kabul" label="Kabul GMT+4.30 " iCal="Asia/Kabul" />
+    <timezone orderId="11" name="Etc/GMT+4" label="Moscow, Saint Petersburg, Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Europe/Moscow" />
+    <timezone orderId="12" name="Asia/Tehran" label="Tehran GMT+3.30" iCal="Asia/Tehran" />
+    <timezone orderId="13" name="Etc/GMT+3" label="Kaliningrad, Minsk, Iraq, Saudi Arabia" iCal="Europe/Kaliningrad" />
+    <timezone orderId="14" name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Helsinki" />
+    <timezone orderId="14" name="Etc/GMT+2" label="Libya, Egypt, South Africa, Zimbabwe" iCal="Africa/Cairo" />
+    <timezone orderId="15" name="Etc/GMT+1" label="France, Germany, Spain, Italy" iCal="Europe/Berlin" />
+    <timezone orderId="15" name="Etc/GMT+1 (North Africa)" label="Angola, Cameroon, Nigeria, Tunisia" iCal="Africa/Tunis" />
+    <timezone orderId="16" name="Etc/GMT" label="Iceland, United Kingdom, Ireland" iCal="Europe/London" />
+    <timezone orderId="16" name="Etc/GMT (North Africa)" label="Côte d'Ivoire, Faroe Islands, Ghana, Iceland, Senegal" iCal="Africa/Dakar" />
+    <timezone orderId="17" name="Etc/GMT-1" label="Azores, Cape Verde" iCal="Atlantic/Cape_Verde" />
+    <timezone orderId="18" name="Etc/GMT-2" label="Fernando de Noronha" iCal="America/Noronha" />
+    <timezone orderId="19" name="Etc/GMT-3 (Brazil)" label="Brazil (Brasília, Rio de Janeiro, São Paulo), most of Greenland, Uruguay" iCal="America/Sao_Paulo" />
+    <timezone orderId="19" name="Etc/GMT-3" label="Argentina, Paraguay" iCal="America/Buenos_Aires" />
+    <timezone orderId="19" name="Etc/GMT-3:30" label="Canada GMT+3:30" iCal="CNT" />
+    <timezone orderId="20" name="Etc/GMT-4" label="Nova Scotia, Dominican Republic, Puerto Rico, Santiago" iCal="America/Santiago" />
+    <timezone orderId="20" name="Etc/GMT-4:30" label="Venezuela GMT+4:30" iCal="America/Caracas" />
+    <timezone orderId="21" name="Etc/GMT-5 (New York)" label="Ottawa, Toronto, Montreal, Boston, New York" iCal="America/New_York" />
+    <timezone orderId="21" name="Etc/GMT-5" label="Colombia, Cuba, Ecuador, Haiti, Jamaica, Panama, Peru" iCal="America/Jamaica" />
+    <timezone orderId="22" name="Etc/GMT-5 (Panama)" label="Panama Port-au-Prince" iCal="America/Panama" />
+    <timezone orderId="23" name="Etc/GMT-6 (Chicago)" label="Chicago, Dallas" iCal="America/Chicago" />
+    <timezone orderId="24" name="Etc/GMT-6" label="Costa Rica , El Salvador, Guatemala, Honduras" iCal="America/El_Salvador" />
+    <timezone orderId="24" name="Etc/GMT-6 (Illinois)" label="Canada (Manitoba), United States (Illinois, most of Texas)" iCal="America/Chicago" />
+    <timezone orderId="25" name="Etc/GMT-7 (Phoenix)" label="Alberta, Colorado, Phoenix" iCal="America/Phoenix" />
+    <timezone orderId="26" name="Etc/GMT-7 (Colorado)" label="Canada (Alberta), Mexico (Chihuahua), USA (Colorado)" iCal="America/Denver" />
+    <timezone orderId="26" name="Etc/GMT-7" label="Canada (northeastern British Columbia), Mexico (Sonora), USA (Arizona)" iCal="America/Phoenix" />
+    <timezone orderId="27" name="Etc/GMT-8" label="Vancouver, Portland, Las Vegas, California" iCal="America/Los_Angeles" />
+    <timezone orderId="28" name="Etc/GMT-9" label="Anchorage, Fairbanks, Juneau" iCal="America/Juneau" />
+    <timezone orderId="28" name="Etc/GMT-9 (Alaska)" label="United States (most of Alaska)" iCal="US/Alaska" />
+    <timezone orderId="29" name="Etc/GMT-10" label="Hawaii" iCal="Pacific/Honolulu" />
+    <timezone orderId="30" name="Etc/GMT-11" label="Samoa" iCal="Pacific/Apia" />
+</timezones>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!-- 
+#########################################
+
+Test the setup values before you enter a room => is moved to the SWF10 app
+
+The only thing remaining here to do, is to load the correct server 
+RTMP-host, RTMP/RTMPT-port for the session
+
+ -->
+ 
+<class name="testSetup" extends="view" 
+    x="$once{ parent.width/2 - 300 }" y="100" 
+    width="600" height="400">
+
+    <attribute name="roomClassName" type="string" value="" />
+    
+    <attribute name="roomObj" value="null"/>
+    
+    <attribute name="forceTest" value="false" type="boolean" />
+    
+    <attribute name="isDirectLink" value="false" type="boolean" />
+    
+    <!--- @keywords private if doJustClose is true the confirmation will be wait and 
+    then the window just closed -->
+    <attribute name="doJustClose" value="false" type="boolean" />
+    
+    <handler name="oninit">
+    	<![CDATA[
+            this.getServerForSession.doCall();
+    	]]>
+    </handler>
+    
+    <!-- 
+    public Server getServerForSession(String SID, long roomId)
+     -->
+   	<netRemoteCallHib name="getServerForSession" funcname="conferenceservice.getServerForSession" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.roomObj.rooms_id; </method></netparam>
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("getServerForSession ",value);
+			//if return value is null, everything stays the same, session is on the current host
+			if (value != null){
+				//is not loaded from config.xml from slave as this is variable is empty by default!
+				canvas.slaveRtmphostlocal = value.address;
+				
+				var slaveUrl = value.protocol + "://" + value.address + ":" + value.port + "/" + value.webapp + "/";
+				
+				var d = new Date();
+		        parent.myConfigSet.setAttribute("src", slaveUrl + "config.xml?random="+d.getTime());
+		        parent.myConfigSet.doRequest();
+				
+			} else {
+				//Hosted on master
+				canvas.isSlaveHosted = false;
+				this.parent.startConference();
+			}
+		</handler>
+	</netRemoteCallHib>	
+	
+	<!-- get values from config.xml from slave -->
+	<dataset type="http" name="myConfigSet" request="false" ondata="parent.parseResultsToSlaveClusterConfig()">
+	    <handler name="ondata">
+	        if ($debug) Debug.write("ondata");
+	    </handler>
+	    <handler name="onerror" args="e">
+	        if ($debug) Debug.write("onerror",e);
+	    </handler>
+	    <handler name="ontimeout" args="e">
+	        if ($debug) Debug.write("ontimeout",e);
+	    </handler>
+	</dataset>
+	
+	<!-- 
+		Parse the results so that the RTMP traffic points to the slave
+		and the HTTP traffic points to the master
+	 -->
+	<method name="parseResultsToSlaveClusterConfig">
+		
+        canvas.slaveRtmpport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()'));  
+        canvas.slaveRtmpTunnelport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()')); 
+        canvas.slaveRtmpsslport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()')); 
+        canvas.slaveWebAppRootKey = this.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'); 
+		
+		if ($debug) Debug.write("parseResults: ",canvas.slaveRtmphostlocal,canvas.slaveRtmpport,canvas.slaveRtmpTunnelport,canvas.slaveRtmpsslport,canvas.slaveWebAppRootKey);
+		
+		//Hosted on slave
+		canvas.isSlaveHosted = true;
+		this.startConference();
+	</method>
+    
+    <method name="startConference">
+    	<![CDATA[
+            clearStageContent();
+            if ($debug) Debug.warn("roomClassname : ", this.roomClassName);
+            if ($debug) Debug.warn("canvas.currentRoomObj will be : ", this.roomObj);
+            canvas.currentRoomObj = this.roomObj;
+            
+            new lz[this.roomClassName](canvas.main_content._content.inner, {
+                        roomobj:this.roomObj
+                    });
+    	
+            this.destroy();
+    	]]>
+    </method>
+
+</class>
+
+
+</library>

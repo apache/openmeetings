@@ -1,0 +1,367 @@
+<library>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!---
+	extends the Video-View with Streaming functions
+ -->
+
+<class name="baseVideoStream" extends="baseVideoView">
+
+    <switch>
+    <when property="$as3">
+        <passthrough>
+        	import flash.events.*;
+            import flash.net.*;
+            import flash.media.*
+        </passthrough>
+    </when>
+    </switch>
+    
+    <attribute name="yDebug" value="-20" type="number" />
+    
+    <method name="getYDebug">
+    	this.yDebug += 20;
+    	return this.yDebug;
+    </method>
+
+	<!--- the NetStream Object
+              @keywords final -->
+	<attribute name="_ns" value="null" />
+
+	<!--- This value does indicate if this stream play or broadcasts
+              @keywords readonly -->
+	<attribute name="mode" value="play" type="string" />
+
+	<!--- This is the current buffer used, in Live Streaming this MUST be 0
+              @keywords readonly -->
+	<attribute name="bufferTime" value="0" type="number" />
+
+	<!--- This is a reference to the current microphone, only set if broadcasting
+              @keywords readonly -->
+	<attribute name="micro" value="null" />
+
+	<!--- This is a reference to the current camara, only set if broadcasting
+              @keywords readonly -->
+	<attribute name="camera" value="null" />
+
+	<!--- Reference To the Sound Object
+		@keywords final -->
+	<attribute name="soundRef" value="null" />
+	<!--- Reference To the Sound MovieClip
+		@keywords final -->
+	<attribute name="soundRefMC" value="null" />
+
+    <!--- Default mic gain -->
+    <attribute name="micGain" value="50" type="number"/>
+
+	<event name="onMetaDataEvent" />
+	<event name="onPlayStatusEvent" />
+	<event name="onCuePointEvent" />
+	<event name="onAsyncError" />
+	<event name="onNetStatus" />
+	<event name="onIoError" />
+
+	<!-- save value for restart -->
+        <attribute name="streamName" />
+        <attribute name="delay" />
+	<!--- @keywords private -->
+	<method name="createStream">
+		var tStream = this._findnc();
+        if (!tStream.connected) {
+        	if ($debug) Debug.warn("NetConnection is not connected");
+        }
+		this._ns = new NetStream(tStream);
+		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
+        //according to the docs the construct to catch event has to be implemented like this.
+        var t = this;
+		var clientObject = new Object();
+		clientObject.onMetaData = function(metadata:Object):void {
+			t.onMetaData(metadata);
+		};
+		clientObject.onPlayStatus = function(metadata:Object):void {
+			t.onPlayStatus(metadata);
+		};
+		clientObject.onCuePoint = function(metadata:Object):void {
+			t.onCuePoint(metadata);
+		};
+		clientObject.ioError = function(error:Object):void {
+			t.ioError(error);
+		};
+		clientObject.netStatus = function(status:Object):void {
+			t.netStatus(status);
+		};
+		clientObject.asyncError = function(error:Object):void {
+			t.asyncError(error);
+		};
+		this._ns.client = clientObject;
+		//this is a workaround, attaching the event to the client object does not work
+		this._ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
+	</method>
+	
+	<method name="onNetStatus2" args="evt">
+		if($debug) Debug.write("netStream_onNetStatus: " , evt.info.code, evt.target);
+		this.onNetStatus.sendEvent(evt.info);
+	</method>
+	
+	<method name="asyncError" args="error">
+		if($debug) Debug.write("simpleNetStream asyncError",error);
+		this.onAsyncError.sendEvent(error);
+	</method>
+	
+	<method name="netStatus" args="status">
+		if($debug) Debug.write("simpleNetStream netStatus",status);
+		this.onNetStatus.sendEvent(status);
+	</method>
+	
+	<method name="ioError" args="error">
+		if($debug) Debug.write("simpleNetStream ioError",error);
+		this.onIoError.sendEvent(error);
+	</method>
+
+    <method name="onCuePoint" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onCuePoint",info);
+        this.onCuePointEvent.sendEvent(info);
+    ]]></method>
+
+    <method name="onPlayStatus" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onPlayStatus",info);
+        this.onPlayStatusEvent.sendEvent(info);
+    ]]></method>
+
+    <method name="onMetaData" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onMetaData",info);
+        this.onMetaDataEvent.sendEvent(info);
+    ]]></method>
+
+    <!--- Find the Flash NetConnection object.
+          @keywords private -->
+    <method name="_findnc">
+    	if (canvas.currentNC == null) {
+    		if ($debug) Debug.warn("canvas.currentNC is NULL, maybe connection did fail?");
+    	}
+        return canvas.currentNC;
+    </method>
+
+	<!---
+		Plays a Video Stream, makes a new Instance of a NetStream, if previous NetStream
+		is still open it will first close that, used to subscribe to a live-stream
+		@param string streamName the streamname to play
+		@param number delay The time it should seek, for Live-Streams this value should be -1
+	 -->
+	<method name="playStream" args="streamName,delay">
+		<![CDATA[
+			this.streamName=streamName;
+			this.delay=delay;
+			if (this._ns!=null){
+				this._stop();
+			}
+			this.mode = "play";
+			this.createStream();
+			//invokes Method in baseVideoView which shows the stream
+			this.attachVideo(this._ns);
+			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
+			//after re-syncing the stream
+			//this.setBuffer(0.1);
+			if (delay == 0) {
+			    this._ns.play(streamName);
+			} else {
+			    this._ns.play(streamName,delay);
+			}
+		]]>
+	</method>
+
+	<method name="justPlayStream" args="streamName,delay">
+        <![CDATA[
+            this.streamName=streamName;
+            this.delay=delay;
+            if (this._ns!=null){
+            	if ($debug) Debug.write("STOP NS is NOT null ")
+                this._stop();
+            }
+            this.mode = "play";
+            this.createStream();
+            //invokes Method in baseVideoView which shows the stream
+            this.attachVideo(this._ns);
+            //FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
+            //after re-syncing the stream
+
+            this.setBuffer(6);
+
+            if ($debug) Debug.write("Play Stream "+streamName);
+
+            this._ns.play(streamName,delay);
+        ]]>
+    </method>
+
+	<method name="prepare" args="mode,streamName,camReference,micReference">
+		if (this._ns != null){
+			this._stop();
+		}
+		this.mode = mode;
+		this.createStream();
+		
+		if (camReference != null) {
+			this.setAttribute('camera', camReference);
+			this._ns.attachCamera(camReference);
+			//invokes Method in baseVideoView which shows the cam
+			this.attachCamera(camReference);
+			
+			var h264Settings:H264VideoStreamSettings = new H264VideoStreamSettings();
+			h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_1_2);
+			h264Settings.setQuality(camReference.bandwidth, camReference.quality);
+			h264Settings.setKeyFrameInterval(camReference.keyFrameInterval);
+			h264Settings.setMode(camReference.width, camReference.height, camReference.fps);
+			this._ns.videoStreamSettings = h264Settings;
+		}
+		if (micReference != null) {
+			this.setAttribute('micro', micReference);
+			this._ns.attachAudio(micReference);
+		}
+		
+		this._ns.publish(streamName, (mode == "broadcast") ? "live" : mode);
+	</method>
+	<!---
+		BroadCasts a Stream
+		@param string streamName the streamname to broadcast
+		@param camera camReference a reference to the Camera-Object to stream
+		@param micropone micReference a reference to the Micropohne Object to stream
+	 -->
+	<method name="broadcast" args="streamName,camReference,micReference">
+		prepare("broadcast", streamName, camReference, micReference);
+	</method>
+
+	<method name="record" args="streamName,camReference,micReference">
+		prepare("record", streamName, camReference, micReference);
+    </method>
+    
+	<!---
+		Stops playing or broadcasting a Stream and clears the Video-Object
+	 -->
+	<method name="_stop">
+		if ($debug) Debug.write("STOP: ",this.mode,this._ns);
+		//Stop NetStream
+		if (this._ns==null) return;
+		this.camera = null;
+		this.micro = null;
+		if (this.mode == "play") {
+            this.soundRefMC = null;
+			this.soundRef = null;
+			this._ns.pause();
+			this._ns.close();
+			//remove NetStream from Video-Object
+			this.clear();
+			this._ns = null;
+		} else if (this.mode == "broadcast") {
+            this._ns.publish(false);
+            //remove NetStream from Video-Object
+            this.clear();
+            this._ns.close();
+            this._ns = null;
+        } else if (this.mode == "record") {
+            this._ns.publish(false);
+            //remove NetStream from Video-Object
+            this.clear();
+            this._ns.close();
+            this._ns = null;
+        } else {
+			if ($debug) Debug.warn("Not known Mode: ",this.mode,this);
+		}
+	</method>
+
+	<method name="restart">
+	     this._stop();
+	     this.playStream(this.streamName ,this.delay);
+	</method>
+	
+	<method name="setBuffer" args="time">
+	    if ($debug) Debug.warn("setBuffer has no 1:1 equivalent in AS3 ");
+	    return;
+		if(this._ns!=null){
+			this.bufferTime = time;
+			this._ns.setBufferTime(time);
+		} else {
+			if ($debug) Debug.warn("setBuffer but no NetStream initialized",this);
+		}
+	</method>
+
+	<!--- sets the Volume of the VideoStream
+		@param number volume Number between 0 and 100
+	 -->
+	<method name="setSoundVolume" args="volume">
+		//if ($debug) Debug.write(":: setSoundVolume ", parent.parent.publicSID);
+		//this.soundRef.setVolume(volume);
+		if (this._ns!=null){
+			this._ns.soundTransform = new SoundTransform(volume/100.0);
+		}
+	</method>
+
+	<method name="muteMicro" args="mute">
+		if ($debug) Debug.write(":: muteMicro ", mute, parent.parent.publicSID);
+		if(this.micro != null) {
+			if(mute) {
+				if (this.micro.gain == 0) {
+					return;
+				}
+				if ($debug) Debug.write("Make Gain mute again from ",this.micro.gain);
+				this.setAttribute('micGain', this.micro.gain);
+				this.micro.gain = 0;
+			} else {
+				if ($debug) Debug.write("Make Gain loud again to ",this.micGain);
+				this.micro.gain = this.micGain;
+			}
+		}
+	</method>
+    
+    <!---
+        pause or resumes the NetStream
+        @args pauseStatus true pause, false resume
+     -->
+    <method name="pause" args="pauseStatus">
+    	if ($debug) Debug.write("do Pause",pauseStatus);
+    	if (this._ns==null){
+    		if ($debug) Debug.warn("No NetStream");
+    		return;
+    	}
+    	if (pauseStatus) {
+    		this._ns.pause();
+    	} else {
+    		this._ns.resume();
+    	}
+    </method>
+    
+    <!---
+        Seek the stream to a flvTime
+        this might only work if there are keyframes in the FLV, normally it should 
+        try to use the nearest keyframe available for the specified time.
+     -->
+    <method name="seekStream" args="flvTime">
+    	if ($debug) Debug.write("do seek",flvTime);
+        if (this._ns==null){
+            if ($debug) Debug.warn("No NetStream");
+            return;
+        }
+        this._ns.seek(flvTime);
+    </method>
+
+</class>
+
+
+</library>

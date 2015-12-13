@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Source Code</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="OpenMeetings Source Code">
+
+			<p>
+				OpenMeetings uses
+				<a class="external" rel="nofollow" href="http://subversion.tigris.org">
+					Subversion
+				</a>
+				to manage its source code.
+				If you're new to Subversion, you can check out the
+				<a href="http://svnbook.red-bean.com/">online book</a>
+				about Subversion.
+				Note that we are currently using Subversion 1.1.x (there are separate
+				versions of the book covering 1.0 and 1.1).
+			</p>
+			<p>
+				To receive notice of commits to the repository subscribe to
+				<a href="mailto:commits@openmeetings.apache.org">
+					commits@openmeetings.apache.org
+				</a>
+				by sending email to
+				<a href="mailto:commits-subscribe@openmeetings.apache.org">
+					commits-subscribe@openmeetings.apache.org
+				</a>
+				.
+			</p>
+
+		</section>
+
+		<section name="Web Access to Subversion">
+
+			<p>
+				If you just want to browse the source code, you can use the
+				<a class="external" rel="nofollow"
+					href="http://svn.apache.org/viewcvs/openmeetings">
+					ViewCVS web interface
+				</a>
+				to Subversion. This is current at all times.
+			</p>
+
+		</section>
+
+		<section name="Checking Out Code Using Subversion">
+
+			<p>Anyone can check code out of Subversion. You only need to specify
+				a
+				username and password to update the Subversion repository, and only
+				OpenMeetings committers can do that.
+				If you are a committer, are working from behind a firewall, or are
+				connected to the internet through a proxy server, please see the
+				sections
+				below for more information.
+			</p>
+
+			<subsection name="Anonymous check out from Subversion">
+				<p>Use a command like:</p>
+				<pre>% svn checkout
+					http://svn.apache.org/repos/asf/openmeetings </pre>
+				<p>Once you have OpenMeetings checked out you can update the source
+					by executing the following command from within the openmeetings
+					directory.
+				</p>
+				<pre>
+					% svn update
+				</pre>
+			</subsection>
+			<subsection name="Access from behind a firewall">
+
+				<p>For those users who are stuck behind a corporate firewall which
+					is
+					blocking http access to the Subversion repository, you can try to access it
+					via HTTPS:
+				</p>
+				<pre>
+					% svn checkout
+					https://svn.apache.org/repos/asf/openmeetings
+				</pre>
+
+			</subsection>
+			<subsection name="Access through a proxy">
+
+				<p>The Subversion client can go through a proxy, if you configure it
+					to do so. First, edit your "servers" configuration file to indicate
+					which
+					proxy to use. The files location depends on your operating system.
+					On Linux or Unix it is located in the directory "~/.subversion".
+					On Windows it is in "%APPDATA%\Subversion". (Try "echo %APPDATA%",
+					note this is a hidden directory.)
+				</p>
+				<p>There are comments in the file explaining what to do. If you
+					don't have
+					that file, get the latest Subversion client and run any command; this
+					will
+					cause the configuration directory and template files to be created.
+				</p>
+				<p>Example : Edit the 'servers' file and add something like :
+				</p>
+				<pre>
+					[global]
+					http-proxy-host = your.proxy.name
+					http-proxy-port = 3128
+				</pre>
+
+			</subsection>
+
+			<subsection name="Committer access">
+
+				<p>Everyone can access the Apache Podling Subversion repository via
+					HTTPS,
+					but OpenMeetings Committers must checkout the Subversion repository
+					via HTTPS.
+				</p>
+				<pre>
+					% svn checkout
+					https://svn.apache.org/repos/asf/openmeetings
+				</pre>
+			</subsection>
+		</section>
+
+		<section name="Submitting Code Changes">
+			<subsection name="Submitting a patch">
+
+				<p>If you make changes to OpenMeetings, and would like to contribute
+					it to the project, you should open a JIRA issue and discuss the
+					merits
+					of the proposal with the developer community. If there is agreement,
+					create a patch and attach it to the JIRA issue.
+				</p>
+				<p>
+					To create a patch, execute the svn diff command. This creates a patch
+					that
+					can easily be uploaded to a JIRA issue. A good name for the patch
+					includes
+					the JIRA issue name, e.g. OPENMEETINGS-104.patch. If there are several
+					patches
+					for the same JIRA issue, you might include your initials, e.g.
+					OPENMEETINGS-104.clr.patch
+				</p>
+				<pre>
+					% svn diff &gt; OPENMEETINGS-104.clr.patch
+				</pre>
+			</subsection>
+
+			<subsection name="Committing changes to subversion">
+				<p>
+					To commit changes to the subversion repository, you must be an
+					OpenMeetings committer. See
+					<a href="get-involved.html">get involved</a>
+					for information on how to become a committer and how to set up your
+					password once you become a committer.
+				</p>
+
+				<p>
+					Once your password is set, you can use a command like this to commit:
+				</p>
+				<pre>
+					$&gt; svn commit --username your-username
+					Authentication realm: &lt;https://svn.apache.org:443&gt; ASF Committers
+					Password for 'your-username': your-password
+				</pre>
+				<p>You can also pass your password on the command line directly, but
+					this is a security problem on multiuser unix computers (the command
+					line
+					arguments are available via the ps command). Here is the command if you
+					are Windows or a single user unix computer:
+				</p>
+				<pre>
+					$&gt; svn commit --username your-username --password your-password
+				</pre>
+				<p>Remember to replace 'your-username' and 'your-password' with
+					your actual username and password on svn.apache.org.
+				</p>
+
+			</subsection>
+		</section>
+
+		<section name="Building Podling from Source">
+			<p>
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+				<!-- ***************** TBD ************************** -->
+			</p>
+
+		</section>
+
+		<section name="Using Subversion on Windows with cygwin">
+
+			<p>
+				If you use Subversion on Windows under cygwin, you may find that the
+				Subversion client automatically assigns the executable property to
+				non-executable files. In that case, you would see this at the bottom
+				of
+				an
+				<em>svn diff</em>
+				of the file:
+			</p>
+			<pre>
+				Property changes on: test/sql/derby/datastoreidentity/schema1.sql
+				___________________________________________________________________
+				Name: svn:executable
+				+ *
+			</pre>
+			<p>This section explains the source of the problem and suggests some
+				actions to avoid it.
+			</p>
+
+			<subsection name="Background">
+
+				<p>Subversion carries executable information in the built-in
+					property
+					called svn:executable. This property, unlike others, may be present
+					or absent, but it has no value. You can add it or delete it, but you
+					cannot change its value.
+				</p>
+				<p>In theory, Subversion ignores Windows file permissions and by
+					default
+					does not set svn:executable. However, cygwin svn acts like Unix svn and
+					determines the svn:executable property based on file permissions.
+				</p>
+				<p>
+					If you create a file from the cygwin command line, by default it is
+					executable only if the filename ends with .bat, .com or .exe, or if
+					its
+					content starts with #!. [This is what the doc says, but you may see -x
+					for all files.] If you create a file using a Windows tool, by default
+					its Windows permissions are executable by all. Cygwin interprets
+					the
+					Unix-style permissions this way as well. If the file is executable by all,
+					cygwin svn sets the svn:executable property on the file when you
+					invoke
+					<em>svn add</em>
+					.
+				</p>
+			</subsection>
+			<subsection
+				name="Removing existing executable properties from the repository">
+
+				<p>You can use svn propdel to remove the svn:executable property
+					from your
+					working copy.
+				</p>
+				<pre>
+					svn propdel -R svn:executable .
+				</pre>
+				<p>will recursively remove the svn:executable property from all of
+					the
+					files below the current directory. You can use this and commit the
+					files to clean the repository if necessary.
+				</p>
+
+			</subsection>
+			<subsection
+				name="Preventing Subversion from adding unwanted executable 
+properties">
+
+				<p>
+					Windows/cygwin users who don't want to have to think about using
+					<em>svn
+						propdel
+					</em>
+					or
+					<em>chmod</em>
+					on each added file can use a non-cygwin
+					version of svn. The Subversion 1.2.3 Win32 binaries, downloadable from the
+					link at the bottom of
+					<a rel="nofollow" href="http://subversion.tigris.org/project_packages.html">
+						http://subversion.tigris.org/project_packages.html
+					</a>
+					, appear to work
+					well. After installation add the svn.exe location to your Windows PATH
+					variable. If you are switching from cygwin svn to Win32 svn
+				</p>
+				<ol type="1">
+					<li>
+						<p>Remove the subversion component from your cygwin installation
+							because when svn is invoked from a cygwin window, the cygwin
+							version is
+							found even if your cygwin/bin directory is later on the path. (In the
+							Select Packages window of the setup wizard, navigate to the
+							subversion
+							package in the Devel. category. Click on the status icon until Uninstall
+							is displayed. Click next and continue through the wizard until
+							installation
+							is complete.)
+						</p>
+					</li>
+					<li>
+						<p>Copy the servers file and the auth folder from the sygwin
+							~/.subversion
+							directory to C:\Documents and
+							Settings\&lt;user&gt;\Application Data\Subversion used by Win32
+							subversion.
+						</p>
+					</li>
+				</ol>
+				<p>Note that windows svn uses backslash as the path separator when
+					displaying file names. You cannot just copy and paste this file
+					name
+					to another svn command when running from within a cygwin shell.
+					You need to enclose the file name into double quotes.
+				</p>
+				<p>Alternatively, Windows users can set file permissions in Windows
+					Explorer. (Right-click on the top-level folder &amp; select
+					Properties.
+					Select the Security tab. Click Advanced. Remove all instances of
+					Read &amp; Execute from the Permission Entries. Click "Reset
+					permissions
+					on all child objects and enable propogations of inheritable
+					permissions".
+					Click Apply. OK. OK.) You will have to do this again when you do a clean
+					checkout to a new directory.
+				</p>
+
+			</subsection>
+		</section>
+	</body>
+</document>

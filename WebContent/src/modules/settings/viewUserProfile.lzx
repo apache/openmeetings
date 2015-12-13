@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="viewUserProfileWindow" extends="guiPresenter" labelid="1235" isdragable="true" 
+    minimizable="true" maximizable="false" fullToolBar="true" y="100" x="$once{ (parent.width-this.width)/2 }"
+    resizeable="false" width="470" height="$once{ parent.height-this.y-10 }" >
+	
+	<attribute name="userId" value="0" type="number"/>
+	
+	<handler name="oninit">
+		this.getUserById.doCall();
+	</handler>
+	
+	<!--
+	public Users getUserById(String SID, long user_id)
+	 -->
+	<netRemoteCallHib name="getUserById" funcname="userservice.getUserById" 
+			  remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.userId; </method></netparam>
+    	<handler name="ondata" args="value">
+   		<![CDATA[
+    		parent.setAttribute("title",parent.title+" "+value.firstname+" "+value.lastname);
+    		this.parent.viewUserProfile.viewUserProfile.initFields(value);
+   		]]>
+    	</handler>
+    </netRemoteCallHib>	
+	
+    <!--
+    public Long requestUserToContactList(String SID, Long userToAdd_id, 
+                String domain, String port, String webapp)
+     -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.viewUserProfile.viewUserProfile.userObject.user_id; </method></netparam>
+        <netparam><method name="getValue"> return canvas.getHttpHost(); </method></netparam>
+        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("requestUserToContactList: ",value);
+                if (value > 0) {
+                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+	
+	<view name="viewUserProfile" y="24" height="$once{ parent.height-60 }" 
+		  width="$once{ parent.width-2 }" clip="true">
+		
+		<viewUserProfile name="viewUserProfile" />
+		
+		<om_vscrollbar />
+		
+	</view>
+	
+	<simpleLabelButton labelid="1253" width="190" x="5" y="$once{ parent.height - 26 }">
+        <handler name="onclick">
+            new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                isdragable:true,
+                                userObject:null,
+                                user_id:parent.viewUserProfile.viewUserProfile.userObject.user_id,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+        </handler>
+    </simpleLabelButton>  
+	
+	<simpleLabelButton labelid="1186" width="160" x="$once{ parent.width - 270 }" y="$once{ parent.height - 26 }">
+    	<handler name="onclick">
+    		if (hib.userobject.user_id == parent.viewUserProfile.viewUserProfile.userObject.user_id) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+                return;
+            }
+            parent.requestUserToContactList.doCall();
+    	</handler>
+    </simpleLabelButton>   
+	
+    <simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>
+	
+</class>	
+	
+<!--- User Profile Setting Panel -->
+<class name="viewUserProfile" extends="view" >
+	
+	<attribute name="userObject" value="null" />
+			
+	<method name="initFields" args="obj">
+    	<![CDATA[
+    	    this.userObject = obj;
+	        this._userpic.setAttribute('src', canvas.getPictureUrl(obj.pictureuri
+				, '&moduleName=remoteuserprofile&remoteUserid='+obj.user_id));
+	        
+	        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
+    			
+	        tUserName += " <u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(obj.lastname) +"'>" + this.removeWhitespace(obj.lastname) + "</a></FONT></u>";
+    	
+    		this.username.setAttribute("text",tUserName);
+    		
+    		this.timezone.setAttribute("text",this.userObject.omTimeZone.jname + ' (' + this.userObject.omTimeZone.ical + ')');
+    		
+    		this.memberSince.setAttribute("text",parseDateToString(this.userObject.starttime));
+    		
+    		var aOfferings = obj.userOffers.split(",");
+    		
+    		var tOfferings = "";
+    		
+    		for (var t=0;t<aOfferings.length;t++) {
+    			
+    			tOfferings += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchOffers,"+ this.removeWhitespace(aOfferings[t]) +"'>" + this.removeWhitespace(aOfferings[t]) + "</a></FONT></u>";
+    			
+    			if (t+1 < aOfferings.length) {
+    				tOfferings += ", ";
+    			}
+    		}
+    		
+    		this.userOffers._text.setAttribute("text",tOfferings);
+    		
+    		
+    		var aSearchs = obj.userSearchs.split(",");
+    		
+    		var tSearchs = "";
+    		
+    		for (var t=0;t<aSearchs.length;t++) {
+    			
+    			tSearchs += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchInterest,"+ this.removeWhitespace(aSearchs[t]) +"'>" + this.removeWhitespace(aSearchs[t]) + "</a></FONT></u>";
+    			
+    			if (t+1 < aSearchs.length) {
+    				tSearchs += ", ";
+    			}
+    		}
+    		
+    		this.userSearchs._text.setAttribute("text",tSearchs);
+    		
+    		if (hib.userobject.user_id == this.userObject.user_id) {
+    			//Self always show
+    			this.showUserContactData();
+    		} else if (obj.showContactData) {
+    			this.showUserContactData();
+    		}  else if (obj.showContactDataToContacts) {
+                this.checkUserIsInContactList.doCall();
+            } else {
+    			this.userContactData.setAttribute("text",canvas.getLabelName(1268));
+    		}
+    		
+    	
+    	]]>
+	</method>
+	
+	<!--
+	public Boolean checkUserIsInContactList(String SID, Long user_id)
+	 -->
+	<netRemoteCallHib name="checkUserIsInContactList" funcname="userservice.checkUserIsInContactList" 
+              remotecontext="$once{ canvas.thishib }" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.userObject.user_id; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("checkUserIsInContactList: ",value);
+                
+                if (value){
+                    parent.showUserContactData();
+                } else {
+                    parent.userContactData.setAttribute("text",canvas.getLabelName(1269));
+                }
+                
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+	
+	<method name="showUserContactData">
+		<![CDATA[
+		
+            var tString = this.userObject.adresses.street + " " + this.userObject.adresses.additionalname + "<br/>";
+		    tString +=  this.userObject.adresses.zip + " " + this.userObject.adresses.town + "<br/>";
+		    tString +=  this.userObject.adresses.states.name + "<br/><br/>";
+            tString +=  this.userObject.adresses.email + "<br/>";
+            tString +=  this.userObject.adresses.phone + "<br/><br/>";
+            tString +=  this.userObject.adresses.comment + "<br/>";
+            
+            this.userContactData.setAttribute("text",tString);
+            
+		]]>
+	</method>
+	
+	<method name="removeWhitespace" args="str">
+		<![CDATA[
+		
+			//if ($debug) Debug.write("removeWhitespace 1 ",str);
+			//if ($debug) Debug.write("removeWhitespace 2 ",str.length);
+		
+			var tResultingString = "";
+			
+			for (var i=0;i<str.length;i++) {
+				
+				var tChar = str.substring(i,i+1);
+				
+				if (tChar != " ") {
+					tResultingString = str.substring(i,str.length);
+					break;
+				}
+				
+			}
+			
+			for (var i=tResultingString.length;i>0;i--) {
+				
+				var tChar = tResultingString.substring(i-1,i);
+				
+				if (tChar != " ") {
+					tResultingString = tResultingString.substring(0,i);
+					break;
+				}
+				
+			}
+			
+			
+			return tResultingString;
+			
+		
+		]]>
+	</method>
+	
+	<image y="10" x="10" name="_userpic" />
+	
+	<view x="180" width="260" y="10" height="120" bgcolor="0xFFFFFF" />
+	
+	<labelText name="usernameLabel" x="180" y="10" labelid="1164" />
+	<labelText name="username" x="260" y="10" />
+	
+	<labelText name="timezoneLabel" x="180" y="30" labelid="1165" />
+	<labelText name="timezone" x="260" y="30" />
+	
+	<labelText name="memberSinceLabel" x="180" y="50" labelid="1296" />
+    <labelText name="memberSince" x="260" y="50" />
+	
+	<labelText name="userFields" x="10" y="140" labelid="1166" fontstyle="bold" />
+	
+	<labelText name="userOffersLabel" x="10" y="160" labelid="1162" />
+	
+	<view name="userOffers" x="120" y="160" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
+		<om_vscrollbar />
+	</view>
+	
+	<labelText name="userSearchsLabel" x="10" y="270" labelid="1163" />
+	
+	<view name="userSearchs" x="120" y="270" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
+		<om_vscrollbar />
+	</view>
+	
+	<labelText name="userContact" x="10" y="380" labelid="1167" fontstyle="bold" />
+	
+	<labelText x="10" y="400" labelid="1270" />
+	
+	<labelText name="userContactData" x="120" y="400" multiline="true" width="320" 
+			   selectable="true" bgcolor="0xFFFFFF" resize="false" />
+	    	
+</class>
+
+
+</library>

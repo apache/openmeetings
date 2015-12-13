@@ -1,0 +1,1117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- methods for main.lzx -->
+
+<library>
+
+	<class name="baseconfmenucommand" extends="command" >
+    	<attribute name="enabled" value="true" type="boolean" />
+    	<attribute name="tipLabelId" value="0" type="number" />
+    </class>
+    
+    <class name="confmenucommand" extends="baseconfmenucommand" >
+    	<attribute name="actionCommand" value="" type="string" />
+    	<handler name="onselect" args="sel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		canvas.doActionmenu(this.actionCommand);
+    	</handler>
+    </class>
+        
+    <baseconfmenucommand id="cmd_shareDesktop" tipLabelId="1480" >
+    	<handler name="onselect" args="sel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		canvas._mymod.checkForApplyScreen("no");
+    	</handler>
+    </baseconfmenucommand>
+    
+    <confmenucommand id="cmd_applyforMod" tipLabelId="1481" actionCommand="applyForMod" />
+    
+    <confmenucommand id="cmd_applyforWhiteBoard" tipLabelId="1492" key="['control','shift','2']">
+    	<handler name="onselect" args="tSel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		if ($debug) Debug.write("cmd_applyforWhiteBoard onselect",tSel);
+    		//Ask for Right to Draw on Whiteboard
+			var tDate = new Date();
+			canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
+    	</handler>
+    </confmenucommand>
+    
+    <baseconfmenucommand id="cmd_applyforAV" tipLabelId="1482">
+    	<handler name="onselect" args="tSel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		if ($debug) Debug.write("cmd_applyforAV onselect",canvas.ismoderator,tSel);
+    		if (canvas.ismoderator) {
+				//Do directly send confirmation to share Audio/Video to SELF! so that all users get
+				//the notification and the broadcasting Bit is set for this User
+				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+				canvas.thishib.setBroadCastingFlag.doCall();
+			} else {
+				//Apply for Right to Share Audio/Video
+				var tDate = new Date();
+				canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
+			}
+    	</handler>
+    </baseconfmenucommand>
+    
+    <confmenucommand id="cmd_createPoll" tipLabelId="1483" actionCommand="createPoll" />
+    <confmenucommand id="cmd_pollResults" tipLabelId="1484" actionCommand="pollResults" />
+    <confmenucommand id="cmd_checkPollVoted" tipLabelId="1485" actionCommand="checkPollVoted" />
+    <confmenucommand id="cmd_importFile" tipLabelId="1479" actionCommand="importFile" />
+    <confmenucommand id="cmd_editCamMicSettings" actionCommand="editCamMicSettings" tipLabelId="1486" /> 
+    <confmenucommand id="cmd_quit" actionCommand="quit" tipLabelId="1487" />
+    <confmenucommand id="cmd_showSipDialer" actionCommand="showSipDialer" tipLabelId="1488" />
+    
+    <confmenucommand id="cmd_invitation" actionCommand="invitation" tipLabelId="1489" /> 
+    <confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" tipLabelId="1490" /> 
+    
+    <!-- 
+    <confmenucommand id="cmd_coBrowser" actionCommand="browser_open" key="['control','b']"/> 
+     -->
+   
+    <confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" tipLabelId="1489" />
+    <!-- 
+    <confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" tipLabelId="1489" />
+     -->
+    
+    <attribute name="colorArray" value="null" />
+    
+    <method name="getColorForUser">
+    	<![CDATA[
+    	   var colorArray = [0x92E8A4,0xC2F1FF,0xFFFCAE,0xE8C792,0xFF8073,
+                            0xE8DB87,0xAFFFB8,0xBED4FF,0xE0BBE8,0xFFBBA5];
+    	   return colorArray[Math.round(Math.random()*10)];
+    	]]>
+    </method>
+    
+    <method name="getHttpHost">
+   	<![CDATA[
+    	if (canvas.httphostlocal != null && canvas.httphostlocal.length > 0) {
+			return canvas.httphostlocal;
+		}
+		return canvas.rtmphostlocal;
+	]]>
+    </method>
+        
+	<method name="getUrl">
+	<![CDATA[
+		return canvas.protocol + '://' + getHttpHost()
+			+ ':' + canvas.red5httpport + canvas.httpRootKey;
+	]]>
+	</method>
+        
+	<method name="getServicesUrl">
+	<![CDATA[
+		return getUrl() + 'services/';
+	]]>
+	</method>
+
+	<method name="getTestingUrl">
+	<![CDATA[
+		return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
+	]]>
+	</method>
+
+	<method name="getAppBaseUrl">
+	<![CDATA[
+		var urlObject = lz.Browser.getBaseURL();
+		//If Port is Null or undefinied use port 80
+		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
+		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
+		return urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;;
+	]]>
+	</method>
+
+	<method name="getScreenSharingUrl">
+	<![CDATA[
+		var organisation_id = (hib.currentdomainObj != null && hib.currentdomainObj.organisation_id != null)
+			? hib.currentdomainObj.organisation_id : 1;
+		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
+		
+		var downloadurl = canvas.getAppBaseUrl() + 'screen.upload?'
+			+'rtmphostlocal=' + canvas.getHttpHost()
+			+'&domain=' + hib.conferencedomain
+			+'&organization_id=' + organisation_id
+			+'&sid=' + canvas.sessionId
+			+'&red5httpport=' + canvas.red5httpport
+			+'&connectionType=' + canvas.thishib.getProtocol()
+			+'&port=' + canvas.thishib.getPort()
+			+'&publicSID=' + canvas.publicSID
+			+'&httpRootKey=' + canvas.httpRootKey
+			+'&languageAsString=' + hib.userlang;
+		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", downloadurl); 
+		return downloadurl;
+	]]>
+	</method>
+	
+    <dataset type="http" name="languageData" request="false" 
+        src="${ canvas.currentlanguage+'.xml' }" proxied="false">
+        <handler name="ondata" args="value">
+            parent.parseLanugageObject(value);
+        </handler>
+    </dataset>
+
+    <method name="myinit">
+        <![CDATA[
+        canvas.mediaerrortimeout = 30000;
+        canvas.medialoadtimeout = 30000;
+        
+        if($debug) Debug.write("main.lzx/config.xml ondata",this);
+        
+        //Set Config-values by config.xml, see comments on config.xml
+        this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
+        this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
+        this.setAttribute('rtmpTunnelport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()'))); 
+        this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
+        
+        var userSSLString = canvas.myConfigSet.getPointer().xpathQuery('config/useSSL/text()');
+        if ($debug) Debug.write("userSSLString",userSSLString)
+        if (userSSLString == "yes") {
+            this.setAttribute('useSSL',true);
+        }
+        
+        this.setAttribute('red5httpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()')));
+        
+        this.setAttribute('currentappname',canvas.myConfigSet.getPointer().xpathQuery('config/currentappname/text()'));  
+        this.setAttribute('currentappnameurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnameurl/text()'));  
+        this.setAttribute('currentappnamebugurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnamebugurl/text()'));
+        this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
+        this.setAttribute('webAppRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'));
+        this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
+        this.setAttribute('firstdayinweek',canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()'));
+        this.setAttribute('showRecording',canvas.myConfigSet.getPointer().xpathQuery('config/showRecording/text()'));
+        
+        //old menubar is not active anymore
+        //this.setAttribute('showmodernWhiteBoard',canvas.myConfigSet.getPointer().xpathQuery('config/showmodernWhiteBoard/text()'));
+        
+        //Audio-Video-Settings
+        this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
+        this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
+        this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
+        this.setAttribute('camQualityNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityNormal/text()')));  
+        this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
+        
+        this.setAttribute('defaultWhiteboardWidth',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardWidth/text()')));  
+        this.setAttribute('defaultWhiteboardHeight',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardHeight/text()')));  
+        
+        
+        this.setAttribute('adminModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleUser/text()'));  
+        this.setAttribute('adminModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleRoom/text()'));  
+        this.setAttribute('adminModuleOrg',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleOrg/text()'));  
+        this.setAttribute('adminModuleLanguages',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleLanguages/text()'));  
+        this.setAttribute('adminModuleConnections',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConnections/text()'));  
+        this.setAttribute('adminModuleConfiguration',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConfiguration/text()'));  
+        this.setAttribute('adminModuleBackup',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleBackup/text()'));  
+        this.setAttribute('adminModuleServers',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleServers/text()'));  
+        
+        this.setAttribute('moderatorModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleUser/text()'));  
+        this.setAttribute('moderatorModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleRoom/text()'));  
+        
+        this.setAttribute('dashboardModuleStartScreen',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleStartScreen/text()'));  
+        this.setAttribute('dashboardModuleCalendar',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleCalendar/text()'));  
+        this.setAttribute('conferenceModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceModuleRoomList/text()'));  
+        this.setAttribute('conferenceRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceRoomModule/text()'));  
+        this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
+        this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
+        this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
+        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));
+          
+        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
+        this.setAttribute('httphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/httphostlocal/text()'));
+        this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));  
+        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
+
+		//set user color
+		canvas.currentusercolor = canvas.getColorForUser();
+
+        var lc_SID = lz.Browser.getInitArg('lc_SID');
+        
+        if($debug) Debug.write("lc_SID: ", lc_SID);
+        
+        if (lc_SID == undefined) {
+        	new lz.errorPopup(canvas,{'error':'You are loading the wrong SWF, there is no lz_SID given'});
+        	return;
+        }
+        
+        
+
+        this.setAttribute('lc_SID', lc_SID);
+        this.setAttribute('vid_lc_name', this.lc_SID + "__videoLC");
+        this.setAttribute('rtmp_lc_name', this.lc_SID + "__rtmpLC");
+        this.setAttribute('videoComp_lc_name', this.lc_SID + "__streamLC");
+        this.setAttribute('videoComp_lc_callback_name', this.lc_SID + "__streamLC_cback");
+
+        var videoComp_lc = new LocalConnection();
+        videoComp_lc.connect(this.videoComp_lc_name);
+        this.setAttribute('videoComp_lc', videoComp_lc);
+        
+        var t = this;
+    	canvas.videoComp_lc.regExpResult = function(tId,tResult) {
+      		t.regExpResult(tId,tResult);
+        }
+        canvas.videoComp_lc.exitRoom = function(confirm) {
+            if ($debug) Debug.write("confirm exitRoom:", confirm);
+            if (confirm) {
+                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
+                if (canvas.appointmentNotificationPopUp != null) {
+                    canvas.appointmentNotificationPopUp.destroy();
+                }
+                canvas.doActionmenu('quit');
+            }
+        }
+    
+        mainBaseText.setAttribute('text',canvas.currentappname);
+        var elemPrefix = "config/appdisplay/displayelement";
+        var cfgDp = canvas.myConfigSet.getPointer();
+        mainBaseText.setAttribute('x', cfgDp.xpathQuery(elemPrefix + "[@name='name']/@x"));
+        mainBaseText.setAttribute('y', cfgDp.xpathQuery(elemPrefix + "[@name='name']/@y"));
+        mainBaseText.setAttribute('visible', "true" == cfgDp.xpathQuery(elemPrefix + "[@name='name']/@display"));
+        mainBaseText.setShadow();
+        mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  
+		mainApplogo.setAttribute('src', getThemeImage('logo_image'));
+        mainApplogo.setAttribute('x', cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@x"));
+        mainApplogo.setAttribute('y', cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@y"));
+        mainApplogo.setAttribute('visible', "true" == cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@display"));
+        
+        var cleanUrl = _url;
+        
+        var hasParams = _url.indexOf("?");
+        if (hasParams != -1) {
+            cleanUrl = _url.substr(0,hasParams-1);
+        }
+        
+        if ($debug) Debug.write("_url ",_url,cleanUrl);
+        var doubleSlash = cleanUrl.indexOf("//");
+        var isNotPort80 = cleanUrl.indexOf(":", doubleSlash+2);
+        if ($debug) Debug.write("isNotPort80: ",isNotPort80,doubleSlash);
+        if (isNotPort80!=-1){
+            //Debug.write("isNotPort80: ",doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
+            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2); 
+        } else {
+            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf("/", doubleSlash+2)-doubleSlash-2); 
+        }
+        
+        if ($debug) Debug.write("this zielnr: ",this,server);
+        
+        this.setAttribute('rtmphost',server);
+    
+        if (this.rtmphostlocal.length==0){
+            this.setAttribute('rtmphostlocal',server);
+        }
+        
+        //Check for Invitation
+        var invitationHash = lz.Browser.getInitArg('invitationHash');
+        
+        if ($debug) Debug.info("###################### -1 ");
+        if ($debug) Debug.info("invitationHash :: ",invitationHash);
+        
+        if (invitationHash != undefined){
+            canvas.isinitRoomDirect = true;
+            canvas.invitationHash = invitationHash;
+        }
+        
+        var secureHash = lz.Browser.getInitArg('secureHash');
+        if (secureHash != undefined){
+            canvas.secureRemoteUserLogin = true;
+            canvas.secureHash = secureHash;
+        }
+        
+        if ($debug) Debug.info("###################### -2 ");
+        
+        //sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
+        var sid = lz.Browser.getInitArg('sid');
+        var initroomid = lz.Browser.getInitArg('roomid');
+        if (sid != undefined && initroomid != undefined){
+            canvas.remoteUserLogin = true;
+            canvas.initroomid = initroomid;
+            canvas.remoteUserSid = sid;
+        }
+        
+        var directRoomId = lz.Browser.getInitArg('directRoomId');
+        if (directRoomId != undefined) {
+            canvas.directUserLogin = true;
+            canvas.directRoomId = directRoomId;
+        }
+        
+        var language = lz.Browser.getInitArg('language');
+        if (language != undefined) {
+            canvas.language_id = Number(language);
+        }
+    
+        //check for reset password
+        var hash = lz.Browser.getInitArg('hash');
+        if (hash!=undefined){
+            canvas.isResetUsername = true;
+            canvas.resetHash = hash;        
+        }
+        
+        var cuserItem = lz.Browser.getInitArg('cuser');
+        if (cuserItem!=undefined){
+            canvas.cuser = cuserItem;  
+            
+            //Lookup additional actions
+            var tAccept = lz.Browser.getInitArg('tAccept');
+            if (tAccept != undefined) {
+                canvas.cuserStatus = tAccept;
+            } else {
+                canvas.cuserStatus = "none";
+            }
+            
+        }
+        
+        var moodleRoom = lz.Browser.getInitArg('moodleRoom');
+        var becomemoderator = lz.Browser.getInitArg('becomemoderator');
+        
+        if (becomemoderator != undefined) {
+            if (becomemoderator == "2"){
+                canvas.becomemoderator = true;
+            } else {
+                canvas.becomemoderator = false;
+            }
+        }
+        
+        if (moodleRoom != undefined){
+            canvas.isMoodleRoom = true;
+            
+            var moodleWwwRoot = lz.Browser.getInitArg('wwwroot');
+            var moodleUserId = lz.Browser.getInitArg('user_id');
+            var moodlePicture = lz.Browser.getInitArg('picture');
+            
+            if (moodleWwwRoot != undefined) {
+                canvas.moodleWwwRoot = moodleWwwRoot;
+            }
+            if (moodleUserId != undefined) {
+                canvas.moodleUserId = Number(moodleUserId);
+            }
+            if (moodlePicture != undefined) {
+                canvas.moodlePicture = moodlePicture;
+            }
+        }
+        
+        var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');
+        if (scopeRoomId != undefined){
+            hib.userScope = scopeRoomId;
+        }
+        
+        this.setBaseColors();
+    
+        //Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost); 
+        var src = hib.getUrl();
+        
+        canvas.thishib.setAttribute('src',src);
+        canvas.thishib.loaderVar = new lz.autoLoader(canvas);
+        canvas.thishib.loaderVar._src.setAttribute('text',src);
+        canvas.thishib.connect();
+        ]]>
+    </method>
+    
+    <method name="getLabelName" args="id">
+        //if($debug) Debug.write("main.lzx/getLabelName()",id);
+        return getLabelTag(id);
+    </method>
+    
+    <!--
+        exportFilePNG exportFileJPG exportFilePDF exportFileSVG exportFileTIF
+     -->
+     
+    <method name="doWhiteboardActionmenu" args="action">
+        if (action == "exportFilePNG") {
+            canvas._drawarea.confirmSaveAsImageTypeExport("image","png");
+        } else if (action == "exportFileJPG") {
+            canvas._drawarea.confirmSaveAsImageTypeExport("image","jpg");
+        } else if (action == "exportFilePDF") {
+            canvas._drawarea.confirmSaveAsImageTypeExport("image","pdf");
+        } else if (action == "exportFileSVG") {
+            canvas._drawarea.confirmSaveAsImageExport("image");
+        } else if (action == "exportFileTIF") {
+            canvas._drawarea.confirmSaveAsImageTypeExport("image","tif");
+        }
+    </method>
+
+	<!---
+		Actions connected to the shortcuts
+	 -->
+    <method name="doActionmenu" args="stringSub">
+        <![CDATA[
+            if($debug) Debug.write("doActionmenu: ",stringSub);
+            if (canvas._conferencemenu.visibility == 'visible'){
+            	 if (stringSub == "invitation") {
+			        new lz.inviteMainWindow(canvas.main_content._content.inner);
+			    } else if (stringSub=='editWhiteboardDefault') {
+                    new lz.editWhiteboardDefault(canvas.main_content._content.inner);
+                } else if (stringSub=='createPoll') {
+                    new lz.createPollWin(canvas.main_content._content.inner);
+                } else if (stringSub=='pollResults') {
+                    this.getVotes.doCall();
+                } else if (stringSub=='checkPollVoted') {
+                    this.checkHasVoted.doCall();
+                } else if (stringSub=='importFile') {
+                    new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                            x:60,uploadmodule:canvas.uploadmoduleimg,
+                            parentFolderId:0,
+                            isOwner:false,
+                            fileExplorerRef:null,
+                            isOnlyImage:true,
+                            servletName:'file.upload'
+                        });
+                } else if (stringSub=='applyForMod') {
+                    if ($debug) Debug.info("Apply For Mod through doActionmenu");
+                    //new lz.applyForModeration(canvas.main_content._content.inner);
+                    canvas.thishib.applyForModeration.doCall();
+                } else if (stringSub=='editCamMicSettings') {
+                    canvas._videocontainer._videoviewcontent.changeDevice();
+                } else if (stringSub=='showSipDialer') {
+                    new lz.sipDialer(canvas.main_content._content.inner);
+                } else if (stringSub=='quit') {
+                    
+                    quicklinkAct('conferenceModuleRoomList')
+                
+                } else if( stringSub == "browser_open" ){
+                    var browserPanelWidth  = canvas.browserPanelWidth;
+                    var browserPanelHeight = canvas.browserPanelHeight;
+
+                    if ($debug) Debug.write( "is browser[open] ? ", canvas.main_content._content.inner.conferenceBrowser );
+                    if ($debug) Debug.write( "is browser[browserPanelWidth] ? ", browserPanelWidth );
+                    if ($debug) Debug.write( "is browser[browserPanelHeight] ? ", browserPanelHeight );
+
+                    if( !canvas.conferenceBrowserIsinited ){
+                        new lz.conferenceBrowser( canvas.main_content._content.inner,{
+                                                         name:'conferenceBrowser',y:30,
+                                                         width:canvas.width-220, 
+                                                         height:canvas.height-100,
+                                                         width:browserPanelWidth, 
+                                                         height:browserPanelHeight
+                                                     });
+                    } else{
+                    with( canvas.main_content._content.inner ){
+                            conferenceBrowser.htmlviewer.setVisible( true );
+                            conferenceBrowser.setVisible( true );
+                    }
+                }
+             } else if( stringSub == "browser_close" ){
+                if ($debug) Debug.write( "is browser[close] ? ", canvas.main_content._content.inner.conferenceBrowser );
+                with( canvas.main_content._content.inner ){
+                    if( conferenceBrowser  != undefined ){
+                            conferenceBrowser.htmlviewer.setVisible( false );
+                            conferenceBrowser.setVisible( false );
+                    }
+                }
+            }
+          }
+        ]]>
+    </method> 
+    
+    <method name="startBrowser" args="objMessage">
+        <![CDATA[
+            if( !canvas.conferenceBrowserIsinited ){
+                        if ($debug) Debug.write( "if this" );
+                new lz.conferenceBrowser(canvas.main_content._content.inner,{
+                                             name:'conferenceBrowser',y:30,
+                                             width:canvas.width-220, 
+                                             height:canvas.height-100,
+                                             initedByUser:false,
+                                             initURL:objMessage[1]
+                                        });
+            } else{Debug.write( "else this" );
+                with( canvas.main_content._content.inner ){
+                        conferenceBrowser.htmlviewer.setVisible( true );
+                        conferenceBrowser.setVisible( true );
+                        conferenceBrowser.newBrowserURL(objMessage[1]);
+                }
+            }
+        ]]>
+    </method>   
+    
+    <method name="closeBrowser" args="objMessage">
+        <![CDATA[
+            if( canvas.conferenceBrowserIsinited ){
+                with( canvas.main_content._content.inner ){
+                        conferenceBrowser.close();
+                }
+            }
+        ]]>
+    </method>
+    
+    <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
+        </handler>   
+    </netRemoteCallHib>  
+        
+    <netRemoteCallHib name="checkHasVoted" funcname="pollservice.checkHasVoted" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+                      if (value==1){
+                        parent.getPoll.doCall();
+                      } else if (value==-1){
+                        new lz.messageWin(canvas.main_content._content.inner,{labeliderror:31});
+                      } else if (value==-2){
+                            new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="getPoll" funcname="pollservice.getPoll" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if (value!=null){
+                    if ($debug) Debug.write(":: getPoll: ", value);
+                     new lz.answerPoll(
+                        canvas.main_content._content.inner
+                        , {
+                            createdBy: value.createdBy.login
+                            , pollDate: value.created
+                            , pollQuestion: value.pollQuestion
+                            , pollTypeId: value.pollType.pollTypesId
+                            , roomPollAnswerList: value.roomPollAnswerList
+                            , roomPollId: value.roomPollId
+                            , roomScopeName: value.roomScopeName
+                        }
+                     );
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+    
+    <method name="setRoomValues" args="roomTypeId,roomId,roomObj">
+    
+        if ($debug) Debug.warn("setRoomValues ",roomTypeId,roomId,roomObj);
+        if (roomTypeId==1){
+                canvas.isConference = true;
+            } else {
+                canvas.isConference = false;
+        }
+        
+        //this is needed cause in the rpc-method *getCurrentModeratorList* we check if its roomtype_id == 3
+        //and if roomtype_id == 3 we will not show any *There is no Moderator* Warning Dialog
+        canvas.currentRoomObject = roomObj;
+        
+        hib.currentroomid = roomId;
+        if (roomObj!=null){
+            if (roomTypeId==1){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:roomObj});
+                 
+            } else if (roomTypeId==2){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:roomObj});
+                new lz.labelerrorPopup(canvas,{error:'No RoomType currently available for roomTypeId 2'});
+                 
+            } else if (roomTypeId==3){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:roomObj});
+                 
+            } else if (roomTypeId==4){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:roomObj});
+                 
+            } else if (roomTypeId==5){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.customRoomModule,roomObj:roomObj});
+                 
+            } 
+        }
+    </method>
+    
+	<method name="roomClosed">
+	    <![CDATA[
+	        if ($debug) Debug.write("canvas.currentRoomObject ",canvas.currentRoomObject);
+	        new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObject.redirectURL});
+	    ]]>
+	</method>
+                 
+        
+
+	
+	<method name="parseLanugageObject" args="obj">
+	
+	    ////Debug.write('parseLanugageObject: ',obj);
+	    ////Debug.write('parseLanugageObject: ',obj.childNodes);
+	    <![CDATA[
+	    var t = new Array();
+	    for (var i=0;i<obj.childNodes.length;i++){
+	        for (var k=0;k<obj.childNodes[i].childNodes.length;k++){
+	            ////Debug.write(obj.childNodes[i].childNodes[k]);
+	            var t2 = new Array();
+	            t2[obj.childNodes[i].childNodes[k].childNodes[0].nodeName]=obj.childNodes[i].childNodes[k].childNodes[0].childNodes[0].data;
+	            t2[obj.childNodes[i].childNodes[k].childNodes[1].nodeName]=obj.childNodes[i].childNodes[k].childNodes[1].childNodes[0].data;
+	            t.push(t2);
+	        }
+	    }
+	    setLabelObject(t);
+	    canvas.initScreen();
+	    //Debug.write(t);
+	    ]]>
+	</method>
+	
+	<!-- Data Source Definition -->
+	<dataset name="getSessionVarsData" request="false" proxied="false"
+	    querytype="POST" src="${ 'http://'+canvas.rtmphost+'/webrooms/checksession.php' }" 
+	    type="http" >
+	    <handler name="ondata" args="value">
+	    
+	        //Debug.write(value);
+	        canvas.setAttribute('currentcourse',value.childNodes[0].childNodes[0].childNodes[0].childNodes[0].data);
+	        canvas.setAttribute('currentcourseName',canvas.currentcourse);
+	        canvas.setAttribute('currentcourseNameLong',value.childNodes[0].childNodes[0].childNodes[1].childNodes[0].data);
+	        canvas.setAttribute('currentlanguage',value.childNodes[0].childNodes[0].childNodes[8].childNodes[0].data);
+	
+	        canvas.setAttribute('currentusename',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data+' '+value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        
+	        canvas.setAttribute('user_id',value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
+	        canvas.setAttribute('firstName',value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        canvas.setAttribute('lastName',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
+	        canvas.setAttribute('mail',value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
+	        canvas.setAttribute('lastLogin','');
+	        canvas.setAttribute('official_code',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        canvas.setAttribute('picture_uri','');
+	        canvas.setAttribute('language',value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
+	
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[4].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[6].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
+	        
+	        switch (canvas.currentlanguage){
+	            case 'english':
+	            break;
+	            case 'german':
+	            break;
+	            case 'french':
+	            break;          
+	            default:
+	            canvas.setAttribute('currentlanguage','english');
+	            break;
+	        }
+	        
+	        var addIt='conf';
+	        if (!canvas.isConference){
+	            addIt='meet'
+	        }
+	        canvas.setAttribute('currentcourse',canvas.rtmphost+canvas.currentcourse+addIt);
+	        canvas.setAttribute('currentuser',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        
+	        canvas.setAttribute('loadingmessage','loading language data');
+	        canvas.languageData.doRequest();
+	    </handler>
+	</dataset>
+	
+	<method name="addBrowserTabHistory" args="value">
+	    <![CDATA[
+	    //Debug.write("addBrowserTabHistory: ",value);
+	    _browserhistory.addItem(value);
+	    this.browserTabHistory.push(value);
+	    ]]>
+	</method>
+	  
+	<!---
+	@doc The function does compare the new moderator list with the old and prepares the list 
+		the removeModeratorList is used in the performance optimized user list of the restricted 
+		room type to re-render the list items only if really something has changed in any 
+		of the user list items
+	 -->
+	<method name="analyzeModerationList" args="newList">
+	    <![CDATA[
+	    
+	       canvas.newModeratorList = new Array();
+	       canvas.removeModeratorList = new Array();
+	       
+	       if (canvas.currentModeratorList != null) {
+	           for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                canvas.currentModeratorList[i].found = false;
+	           }
+	       
+	           for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                
+	                for (var k=0;k<newList.length;k++) {
+	                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+	                        canvas.currentModeratorList[i].found = true;
+	                    }
+	                }
+	            }
+	        }
+	        
+	        for (var k=0;k<newList.length;k++) {
+	            newList[k].found = false;
+	        }
+	       
+	        for (var k=0;k<newList.length;k++) {
+	        	if (canvas.currentModeratorList != null) {
+	                for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+	                        newList[k].found = true;
+	                    }
+	                }
+	        	}
+	        }
+	        
+	        for (var k=0;k<newList.length;k++) {
+	            if (!newList[k].found) {
+	                canvas.newModeratorList.push(newList[k]);
+	            }
+	        }
+	        
+	        if (canvas.currentModeratorList != null) {
+	            for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                
+	                if (!canvas.currentModeratorList[i].found) {
+	                    canvas.removeModeratorList.push(canvas.currentModeratorList[i])
+	                }
+	            }
+	        }
+	        
+	        if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);
+	        if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);
+	    ]]>
+	</method>
+	
+	<!---
+		Updates the "ismoderator" flag
+		the setAttribute method will broadcast an event to all event listeners that 
+		did subscribe using the "onismoderator" handler with reference to canvas !
+		For example in the userlist's of the roomtypes
+	 -->
+	<method name="updateModerationFlag">
+	    <![CDATA[
+	        if ($debug) Debug.write("updateModerationFlag",canvas.currentModeratorList);
+	        var isCurrentModerator = false;
+	        for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	            var item = canvas.currentModeratorList[i];
+	            if (canvas.publicSID == item.publicSID) {
+	                isCurrentModerator = true;
+	            }
+	        }
+	        
+	        //Only send this event if the current user moderators status changes
+	        if (isCurrentModerator != this.ismoderator) {
+		        canvas.sendViaLocalConnection(canvas.vid_lc_name, "updateModerationFlag", [isCurrentModerator]);
+	        }
+	        
+	        // do always spread this event, we need to broadcast the "onismoderator" event
+	        // so that we can update the status of other users in the user list
+	        this.setAttribute('ismoderator',isCurrentModerator);
+	    ]]>
+	</method> 
+	
+	<!---
+		Checks if a certain publicSID is a moderator
+	 -->
+	<method name="getIsModeratorByPublicSID" args="publicSID">
+	    <![CDATA[
+	        for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	            var item = canvas.currentModeratorList[i];
+	            if (publicSID == item.publicSID) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    ]]>
+	</method>
+	 
+	<!---
+		Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
+		and broadcasts the three rights to SWF10 container
+	 -->
+	<method name="setDrawAllowStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("drawAllowStatus changes ###### ");
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("isAllowedToDraw",roomClientObj.canDraw);
+	            canvas.setAttribute("isAllowedToScreenShare",roomClientObj.canShare);
+	            canvas.setAttribute("isAllowedToRemoteControl",roomClientObj.canRemote);
+	            canvas.sendViaLocalConnection(canvas.vid_lc_name, "setDrawAllowStatus", [roomClientObj.canDraw, roomClientObj.canShare, roomClientObj.canRemote]);
+	        }
+	    ]]>
+	</method>
+	
+	<!---
+		Sets the flag for the isAllowedToGiveExclusiveAudio status and broadcasts it to the 
+		SWF10 container
+	 -->
+	<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
+	            canvas.sendViaLocalConnection(canvas.vid_lc_name, "setExclusiveAudioAllowStatus", [roomClientObj.canGiveAudio]);
+	        }
+	    ]]>
+	</method>
+	
+	<method name="setMuteStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
+	        //Check for self status
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("micMuted",roomClientObj.micMuted);
+	        }
+	        
+	        canvas._videocontainer.updateMuteStatusVideoView(roomClientObj);
+	        
+	        //Notify all Listeners for change of the item
+	        canvas.setAttribute("micMutedStatusChangedItem",roomClientObj);
+	    ]]>
+	</method>
+	
+	<method name="addFolderSequence" args="foldername">
+	    <![CDATA[
+	    this.uploadmoduleimgfolder = '/';
+	    this.uploadmoduleimgfolder += foldername;
+	    this.setAttribute('uploadmoduleimgfolder',this.uploadmoduleimgfolder);
+	    ]]>
+	</method>
+	    
+	    
+	<!-- country validation -->
+	<method name="validateCountry" args="str">
+	    ////Debug.write("validateCountry: ",str);
+	    str = str.toLowerCase();
+	    <![CDATA[
+	        if (str.length!=0){
+	            var a = new Array();
+	            for (var i=0;i<canvas.statesInitValues.length;i++){
+	                var st = canvas.statesInitValues[i].name.toLowerCase();
+	                if (st.startsWith(str))a.push(canvas.statesInitValues[i]);
+	                //this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
+	            }
+	            return a;
+	        }
+	    ]]> 
+	</method>
+	    
+	<method name="getCountryRecord" args="id">
+	    return canvas.statesInitValues[id];
+	</method>
+	    
+	<handler name="onmousewheeldelta" reference="lz.Keys" args="d">
+	    var obj = getCurrentMouseWheelObject();
+	    ////Debug.write("onmousewheeldelta 12: ",d,obj);
+	    <![CDATA[
+	        if (obj!=null) {
+	            obj.step(-d);
+	        }
+	    ]]>
+	</handler>    
+	
+	<method name="reverseWordingsBySplit" args="str">
+	    <![CDATA[
+	        var words_arr = str.split( " " ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	        {
+	            str += words_arr[ words_arr.length - i - 1 ];
+	            if (words_arr.length != 1) {
+	                str += " ";
+	            }
+	        }
+	        return str;
+	        
+	    ]]>
+	</method> 
+	
+	<method name="reverseAll" args="str">
+	    <![CDATA[
+	        var words_arr = str.split( "" ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	        {
+	            str += words_arr[ words_arr.length - i - 1 ];
+	            
+	        }
+	        return str;
+	        
+	    ]]>
+	</method> 
+	    
+	<method name="reverseWords" args="str">
+	    <![CDATA[
+	        if ( str == "" || str == null ) return ""; // undefined
+	        // first char indicates the main directive of str (rtl/ltr)
+	        if ( isLTR( str.charCodeAt( 0 ) ) ) return str; // english or number
+	        var words_arr = str.split( "" ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	            str += words_arr[ words_arr.length - i - 1 ];
+	        return str;
+	    ]]>
+	</method>
+	    
+	<method name="isLTR" args="c">
+	    <![CDATA[
+	        return ( c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 );
+	    ]]>
+	</method>
+	
+	<method name="isHEB" args="c">
+	    <![CDATA[
+	        return ( c >= 224 && c <= 250 );
+	    ]]>
+	</method>    
+	
+	<method name="setTextAlign" args="obj,type">
+	    switch ( type ) {
+	        case "left" :
+	            obj.setX( 0 );
+	        break;
+	        case "center" :
+	            obj.setX( this.parent.width / 2 - this.getTextWidth() / 2 );
+	        break;
+	        case "right" :
+	            obj.setX( this.parent.width - this.getTextWidth() );
+	        break;
+	    }
+	</method>  
+	
+	<method name="initSharedObject">
+	    if (canvas.sharedObject == null) {
+	        if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
+	        canvas.sharedObject = new lz.sharedObject();
+	        canvas.sharedObject.getLocal('userdata');
+	    }
+	</method>
+	
+	<method name="getUserData">
+	    canvas.initSharedObject();
+	    var g = canvas.sharedObject.getData('userdata');
+	    if (g==null) {
+	        if($debug) Debug.write("sharedObject.getData IS null");
+	        g = new Array();
+	    }
+	    return g;
+	</method>
+	
+	<method name="setUserData" args="g">
+	    canvas.initSharedObject();
+	    canvas.sharedObject.setData('userdata', g);
+	    canvas.sharedObject.flush();
+	</method>
+	
+	<attribute name="regExpCounter" value="0" type="number" />
+	<attribute name="regExpResultArray" value="null" />
+	
+	<method name="doRegExpCheck" args="fieldValue,regExpV">
+		this.regExpCounter = this.regExpCounter +1;
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "regExpTest", [fieldValue, regExpV, this.regExpCounter]);
+		return this.regExpCounter;
+	</method>
+	
+	<method name="regExpResult" args="tId,tResult">
+		if (this.regExpResultArray == null) {
+			this.regExpResultArray = new Array();
+		}
+		this.regExpResultArray[tId] = tResult;
+		if ($debug) Debug.write("regExpResult ",tId,tResult);
+	</method>
+	
+	<method name="checkRegExpResult" args="tId">
+		return this.regExpResultArray[tId];
+	</method>
+	
+	
+	<method name="getThemeImage" args="tName">
+		//if ($debug) Debug.write("load Image by Name: ",tName);
+		var tPath = canvas.mainTheme.getPointer().xpathQuery("theme/resource[@name='"+tName+"']/@src");
+		//if ($debug) Debug.write("tPath "+tPath);
+		if (tPath == null) {
+			if ($debug) Debug.warn("getThemeImage - No Image found for config: ",tName);
+		}
+		return tPath;
+	</method>
+	
+	<method name="getThemeColor" args="tColor">
+		//if ($debug) Debug.write("load Color by Name: ",tColor);
+		var tResColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
+		//if ($debug) Debug.write("tColor "+tColor);
+		if (tResColor == null) {
+			if ($debug) Debug.warn("getThemeColor - No Color found for config: ",tColor);
+		}
+		return tResColor;
+	</method>
+	
+	<method name="setBaseColors">
+		defaultstyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
+		itemStyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
+		menuStyle.setAttribute("basecolor",canvas.getThemeColor('styleMenuBarBaseColor'));
+		_conferencemenu.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
+		_mainbgcontentNavi.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
+		main_content.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
+	</method>
+
+	<method name="getPictureUrl" args="pictureuri,extraParams">
+	<![CDATA[
+		var pUri = (pictureuri == null || pictureuri.length == 0) ? "d.jpg" : pictureuri;
+		var downloadurl = pUri;
+		if (!pUri.startsWith("http://") && !pUri.startsWith("https://")) {
+			pUri = "_profile_" + pUri;
+			
+			downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=' + pUri
+				+ '&parentPath=&room_id=&r=' + (new Date()).getTime()
+				+ extraParams + '&sid='+canvas.sessionId;
+		}
+		if($debug) Debug.write("getPictureUrl/downloadurl ", downloadurl);
+		return downloadurl;
+	]]>
+	</method>
+		
+	<method name="sendViaLocalConnection" args="lc_name,methodName,tArray">
+		//if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
+		if (tArray == null || tArray.length == 0) {
+			canvas.lc.send(lc_name,methodName);
+		} else if (tArray.length == 1) {
+			canvas.lc.send(lc_name,methodName,tArray[0]);
+		} else if (tArray.length == 2) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1]);
+		} else if (tArray.length == 3) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2]);
+		} else if (tArray.length == 4) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3]);
+		} else if (tArray.length == 5) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4]);
+		} else if (tArray.length == 6) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5]);
+		} else if (tArray.length == 7) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6]);
+		} else if (tArray.length == 8) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7]);
+		} else if (tArray.length == 9) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7],tArray[8]);
+		} else if (tArray.length == 10) {
+			canvas.lc.send(lc_name,methodName,tArray[0],tArray[1],tArray[2],tArray[3],tArray[4],tArray[5],tArray[6],tArray[7],tArray[8],tArray[9]);
+		} else {
+			if ($debug) Debug.error("tArray in sendViaLocalConnection longer then allowed")
+		}
+	</method>
+	
+</library>

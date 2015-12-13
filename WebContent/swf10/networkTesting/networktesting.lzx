@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas width="100%" height="100%" title="NetworkTesting">
+
+	<switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.external.ExternalInterface;
+            </passthrough>
+        </when>
+    </switch>
+	<switch>
+		<when property="$debug">
+			<method name="doDebugInit">
+				canvas.setAttribute('debug', true);
+			</method>
+			<debug fontsize="11" oninit="Debug.showInternalProperties = true" width="40%" y="50%" x="60%" height="50%" />
+		</when>
+		<otherwise>
+			<method name="doDebugInit">
+			</method>
+		</otherwise>
+    </switch>
+    
+    <include href="testsView.lzx" />
+    <handler name="oninit"><![CDATA[
+		doDebugInit();
+	]]></handler>
+	
+    <!--
+        These attributes are rewritten by values from "config.xml"
+    -->
+    <attribute name="rtmpProtocol" type="string" value="rtmp" />
+    <attribute name="rtmpHost" type="string" value="" />
+    <attribute name="rtmpPort" type="number" value="1935" />
+    
+    <attribute name="httpProtocol" type="string" value="http" />
+    <attribute name="httpHost" type="string" value="" />
+    <attribute name="httpPort" type="number" value="5080" />
+    <attribute name="uriContext" type="string" value="/openmeetings" />
+    <attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
+
+	<method name="getBrowserHost">
+		var host:String = ExternalInterface.call("window.location.host.toString()");
+		// in case of IE or some other security issues we will fail ...
+		if (!host) {
+			var url:String = canvas.proxyurl;
+			if (url) {
+				if ($debug) Debug.write("url ", url);
+				var paramsIdx = url.indexOf("?");
+				if (paramsIdx != -1) {
+					url = url.substr(0, paramsIdx);
+				}
+				if ($debug) Debug.write("url ", url);
+				url = url.substr(url.indexOf("//") + 2);
+				var portIdx = url.indexOf(":");
+				host = url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/"));
+				if ($debug) Debug.write("host ", host);
+			}
+		}
+		return host;
+	</method>
+	
+	<method name="getSettings">
+		var settingsPtr = canvas.settings.getPointer();
+		
+		var useSSL:Boolean = ("yes" == settingsPtr.xpathQuery("config/useSSL/text()"));
+		canvas.setAttribute("rtmpProtocol", useSSL ? "rtmps" : "rtmp");
+		canvas.setAttribute("rtmpHost", settingsPtr.xpathQuery("config/rtmphostlocal/text()"));
+		if (!canvas.rtmpHost) {
+			canvas.rtmpHost = getBrowserHost();
+		}
+		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
+		
+		canvas.setAttribute("httpProtocol", settingsPtr.xpathQuery("config/protocol/text()"));
+		canvas.setAttribute("httpHost", settingsPtr.xpathQuery("config/httphostlocal/text()"));
+		if (!canvas.httpHost) {
+			canvas.httpHost = rtmpHost;
+		}
+		canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/red5httpport/text()"));
+
+		canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
+		canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
+	</method>
+
+    <method name="showTests">
+        var tests = new lz.TestsView(canvas, {name:"testsView"});
+        tests.testAll();
+    </method>
+
+    <dataset type="http" name="settings" request="false" >
+        <handler name="oninit">
+            this.setAttribute("src","networktesting-config.xml");
+            this.doRequest();
+        </handler>
+        <handler name="ondata">
+            if ($debug) Debug.write("Settings are retrieved");
+            canvas.getSettings();
+            canvas.showTests();
+        </handler>
+        <handler name="onerror" args="e">
+            if ($debug) Debug.write("Settings error", e);
+        </handler>
+        <handler name="ontimeout" args="e">
+            if ($debug) Debug.write("Settings timeout error", e);
+        </handler>
+    </dataset>
+
+    <attribute name="busy" type="boolean" value="false"/>
+    <attribute name="log" type="string" value="" />
+
+    <attribute name="testsView" value="null"/>
+
+</canvas>

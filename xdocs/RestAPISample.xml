@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Introduction">
+
+			<p> For a detailed instruction which services, methods and params are available see the list in the SoapMethods. ALL methods that are implemented for the SOAP API are also available via REST. 
+			</p>
+
+		</section>
+		
+		<section name="How to invoke Services via REST">
+
+			<p>For example for the method getSession in the UserService, you would use this URL via REST:
+			</p>
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
+			<p>Result: </p>
+			<div class="xmlcode">
+				&lt;ns:getSessionResponse/&gt;<br/>
+				&lt;ns:return type="org.apache.openmeetings.hibernate.beans.basic.Sessiondata"/&gt;<br/>
+				<div style="margin-left:20px">
+					&lt;ax219:id&#62;156971&lt;/ax219:id/&gt;<br/>
+					&lt;ax219:language_id xsi:nil="true"//&gt;<br/>
+					&lt;ax219:organization_id xsi:nil="true"//&gt;<br/>
+					&lt;ax219:refresh_time&#62;2011-07-03T14:40:44.000Z&lt;/ax219:refresh_time/&gt;<br/>
+					&lt;ax219:sessionXml xsi:nil="true"//&gt;<br/>
+					&lt;ax219:session_id&#62;26584705202d7c1de6cc8e7e28890e3d&lt;/ax219:session_id/&gt;<br/>
+					&lt;ax219:starttermin_time&#62;2011-07-03T14:40:44.000Z&lt;/ax219:starttermin_time/&gt;<br/>
+					&lt;ax219:storePermanent xsi:nil="true"//&gt;<br/>
+					&lt;ax219:user_id xsi:nil="true"//&gt;<br/>
+				</div>
+				&lt;/ns:return/&gt;<br/>
+				&lt;/ns:getSessionResponse/&gt;<br/>
+			</div>
+			<p>To login a user the call to auth would be:</p>
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=hans&#38;userpass=test">http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=han&#38;userpass=test</a>
+			<p>Result: </p>
+			<div class="xmlcode">
+				&lt;ns:loginUserResponse/&gt;<br/>
+				<div style="margin-left:20px">
+				    &lt;ns:return&#62;-11&lt;/ns:return/&gt;<br/>
+				</div>
+				&lt;/ns:loginUserResponse/&gt;<br/>
+			</div>
+			<p>=> It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1">http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1</a>
+			<p>Result:</p>
+			<div class="xmlcode">
+				&lt;ns:getErrorByCodeResponse/&gt;<br/>
+				&lt;ns:return type="org.apache.openmeetings.data.beans.basic.ErrorResult"/&gt;<br/>
+				<div style="margin-left:20px">
+					&lt;ax218:errmessage&#62;Username not found&lt;/ax218:errmessage/&gt;<br/>
+					&lt;ax218:errorId&#62;-10&lt;/ax218:errorId/&gt;<br/>
+					&lt;ax218:errortype&#62;Error&lt;/ax218:errortype/&gt;<br/>
+				</div>
+				&lt;/ns:return/&gt;<br/>
+				&lt;/ns:getErrorByCodeResponse/&gt;<br/>
+			</div>
+		</section>
+
+
+
+	</body>
+</document>

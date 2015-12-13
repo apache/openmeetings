@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="moderationMiniIconRestricted" extends="view" y="20" x="2" height="18">
+	
+	<attribute name="isMod" value="false" type="boolean"/>
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+	<![CDATA[
+		this.isMod = parent.parent.isMod;
+		this.isSuperModerator = parent.parent.isSuperModerator;
+		
+		if ($debug) Debug.write(" :: moderationMiniIconRestricted :. ",this.isMod);
+		
+		if (this.isMod) {
+			this._isMod.setAttribute("visibility","visible");
+			this._isModAddbutton.setAttribute("visibility","hidden");
+		} else {
+			this._isMod.setAttribute("visibility","hidden");
+            this._isModAddbutton.setAttribute("visibility","visible");
+		}
+		
+		if (this.isMod) {
+			this._canDraw.setAttribute("visibility","visible");
+            this._canDraw.isActive = false;
+            this._canDraw.setAttribute("showhandcursor",false);
+            this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
+            this._canDrawModerator.setAttribute("visibility","hidden");
+		} else {
+			if (parent.parent.refObj.canDraw) {
+                this._canDraw.setAttribute("visibility","visible");
+                this._canDraw.isActive = true;
+                this._canDraw.setAttribute("showhandcursor",true);
+                this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                this._canDrawModerator.setAttribute("visibility","hidden");
+            } else {
+                this._canDraw.setAttribute("visibility","hidden");
+                this._canDrawModerator.setAttribute("visibility","visible");
+            }
+		}
+		
+		if (this.isMod) {
+			this._allowScreen.setAttribute("visibility","visible");
+            this._allowScreen.isActive = false;
+            this._allowScreen.setAttribute("showhandcursor",false);
+            this._allowScreen._text.setAttribute("text",canvas.getLabelName(1069));
+            
+            this._allowRemote.setAttribute("visibility","visible");
+            this._allowRemote.isActive = false;
+            this._allowRemote.setAttribute("showhandcursor",false);
+            this._allowRemote._text.setAttribute("text",canvas.getLabelName(1083));
+
+            this._allowExclusiveAudio.setAttribute("visibility","visible");
+            this._allowExclusiveAudio.isActive = false;
+            this._allowExclusiveAudio.setAttribute("showhandcursor",false);
+            this._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1083));
+            
+            this._denyScreen.setAttribute("visibility","hidden");
+            this._denyRemote.setAttribute("visibility","hidden");
+            this._denyExclusiveAudio.setAttribute("visibility","hidden");
+		} else {
+			
+			if ($debug) Debug.write("parent.parent.refObj.canShare :: ",parent.parent.refObj.canShare);
+		
+			if (parent.parent.refObj.canShare) {
+    			this._allowScreen.setAttribute("visibility","visible");
+                this._allowScreen.isActive = true;
+                this._allowScreen.setAttribute("showhandcursor",true);
+                this._allowScreen._text.setAttribute("text",canvas.getLabelName(1068));
+                this._denyScreen.setAttribute("visibility","hidden");
+			} else {
+				this._allowScreen.setAttribute("visibility","hidden");
+				this._denyScreen.setAttribute("visibility","visible");
+			}
+			
+			if (parent.parent.refObj.canRemote) {
+    			this._allowRemote.setAttribute("visibility","visible");
+                this._allowRemote.isActive = true;
+                this._allowRemote.setAttribute("showhandcursor",true);
+                this._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
+                this._denyRemote.setAttribute("visibility","hidden");
+			} else {
+				this._allowRemote.setAttribute("visibility","hidden");
+				this._denyRemote.setAttribute("visibility","visible");
+			}
+
+            if (parent.parent.refObj.canGiveAudio) {
+    			this._allowExclusiveAudio.setAttribute("visibility","visible");
+                this._allowExclusiveAudio.isActive = true;
+                this._allowExclusiveAudio.setAttribute("showhandcursor",true);
+                this._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
+                this._denyExclusiveAudio.setAttribute("visibility","hidden");
+            } else {
+				this._allowExclusiveAudio.setAttribute("visibility","hidden");
+				this._denyExclusiveAudio.setAttribute("visibility","visible");
+            }
+		}
+		
+		if (parent.parent.refObj.isBroadcasting) {
+			this._allowDevice.setAttribute("visibility","hidden");
+			this._denyDevice.setAttribute("visibility","visible");
+		} else {
+			this._allowDevice.setAttribute("visibility","visible");
+            this._denyDevice.setAttribute("visibility","hidden");
+		}
+		
+		if ($debug) Debug.write("Set micMuted ",parent.parent.refObj.micMuted);
+		
+		if (parent.parent.refObj.micMuted) {
+			this._muteDevice.setAttribute("visibility","hidden");
+            this._unMuteDevice.setAttribute("visibility","visible");
+		} else {
+			this._muteDevice.setAttribute("visibility","visible");
+            this._unMuteDevice.setAttribute("visibility","hidden");
+		}
+		
+		this._start_private_chat_rsc.setAttribute('visible'
+			, (canvas.currentRoomObj.hideChat == null || !canvas.currentRoomObj.hideChat)
+				&& parent.parent.refObj.publicSID != canvas.publicSID);
+	]]>
+	</handler>
+        
+    <miniIcons name="_isMod" x="0" width="16" showhandcursor="true"
+    		   resource="participants_isMod_rsc" height="16">
+        <handler name="onclick">
+            <![CDATA[
+            
+                if (parent.isSuperModerator) {
+                    new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:838});
+                    return;
+                }
+            
+                //if the label is set and this is a Moderator then this user should
+                //allow the click event => the click event will trigger
+                //this user away from beeing able to draw on the whiteboard
+                if (canvas.ismoderator) {
+                    //Do it 
+                    if ($debug) Debug.write("Do Remove It");
+                    if (parent.parent.parent.refObj.publicSID != canvas.publicSID) {
+                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+                        hib.removeModerator.doCall();
+                    } else {
+                    	new lz.labelerrorPopup(canvas,{errorlabelid:682});
+                    }
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="675" />
+    </miniIcons>
+    
+    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" showhandcursor="true"
+    		   width="16" resource="participants_isMod_rsc" height="16">
+        <handler name="onclick">
+            <![CDATA[
+                //if the label is set and this is a Moderator then this user should
+                //allow the click event => the click event will trigger
+                //this user away from beeing able to draw on the whiteboard
+                if (canvas.ismoderator) {
+                    //Do it 
+                    if ($debug) Debug.write("Do Add It");
+                    hib.addModerator.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+                    hib.addModerator.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="676" />
+    </miniIcons>
+        
+    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc"
+               height="16" showhandcursor="false" >
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+            <![CDATA[
+                //if the label is set and this is a Moderator then this user should
+                //allow the click event => the click event will trigger
+                //this user away from beeing able to draw on the whiteboard
+                if (canvas.ismoderator && this.isActive) {
+                    //Do it 
+                    if ($debug) Debug.write("Do add draw to it");
+                    canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanDraw.canDraw = false;
+                    canvas.thishib.setCanDraw.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="612" />
+    </miniIcons>
+    
+    <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
+               resource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
+        <handler name="onclick">
+            //Do it 
+            if (canvas.ismoderator) {
+                if ($debug) Debug.write("Do it");
+                canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
+                canvas.thishib.setCanDraw.canDraw = true;
+                canvas.thishib.setCanDraw.doCall();
+            }
+        </handler>
+        <labelTooltip labelid="611" />
+    </miniIcons>
+    
+    <miniIcons name="_allowScreen" x="40" width="16" height="16" 
+               resource="screen_allow_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Screen: ",parent.parent.parent.refObj.publicSID);
+                if (canvas.ismoderator && this.isActive) {
+                	canvas.thishib.setCanShare.publicSID = parent.parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanShare.canShare = false;
+                    canvas.thishib.setCanShare.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1068" />
+    </miniIcons>
+    
+    <miniIcons name="_denyScreen" x="40" width="16" height="16"  opacity="0.5"
+               resource="screen_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
+            if (canvas.ismoderator) {
+                canvas.thishib.setCanShare.publicSID = parent.parent.parent.refObj.publicSID;
+                canvas.thishib.setCanShare.canShare = true;
+                canvas.thishib.setCanShare.doCall();
+            }
+        </handler>
+        <labelTooltip labelid="1067" />
+    </miniIcons>  
+    
+     <miniIcons name="_allowRemote" x="60" width="16" height="16" 
+               resource="remote_allow_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Screen: ",parent.parent.parent.refObj.publicSID);
+                if (canvas.ismoderator && this.isActive) {
+                	canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanRemote.canRemote = false;
+                    canvas.thishib.setCanRemote.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1079" />
+    </miniIcons>
+    
+    <miniIcons name="_denyRemote" x="60" width="16" height="16"  opacity="0.5"
+               resource="remote_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
+            if (canvas.ismoderator) {
+                canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
+                canvas.thishib.setCanRemote.canRemote = true;
+                canvas.thishib.setCanRemote.doCall();
+            }
+        </handler>
+        <labelTooltip labelid="1078" />
+    </miniIcons>        
+    
+    <miniIcons name="_allowDevice" x="80" width="40" height="16" 
+    		   resource="av_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip labelid="683" />
+    </miniIcons>
+    
+    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" 
+   				opacity="0.5" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip labelid="684" />
+    </miniIcons>
+    
+    <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" 
+    				opacity="0.5" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
+            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, true);
+        </handler>
+        <labelTooltip labelid="1384" />
+    </miniIcons>
+    
+    <miniIcons name="_unMuteDevice" x="120" width="16" height="16" resource="unmute_btn_rsc" 
+    		   showhandcursor="true" visibility="hidden">
+        <handler name="onclick">
+            if ($debug) Debug.write("unmute: ",parent.parent.parent.refObj.publicSID);
+            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, false);
+        </handler>
+        <labelTooltip labelid="1385" />
+    </miniIcons>
+
+    <miniIcons name="_allowExclusiveAudio" x="136" width="16" height="16"
+               resource="participants_exclusive_audio_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Give Exclusive Audio: ",parent.parent.parent.refObj.publicSID);
+                if (canvas.ismoderator && this.isActive) {
+                    canvas.thishib.setCanGiveAudio.sendValue(parent.parent.parent.refObj.publicSID,false);
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1425" />
+    </miniIcons>
+
+    <miniIcons name="_denyExclusiveAudio" x="136" width="16" height="16" opacity="0.5"
+               resource="participants_exclusive_audio_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Give Exclusive Audio: ",parent.parent.parent.refObj.publicSID);
+            if (canvas.ismoderator) {
+                canvas.thishib.setCanGiveAudio.sendValue(parent.parent.parent.refObj.publicSID,true);
+            }
+        </handler>
+        <labelTooltip labelid="1424" />
+    </miniIcons>
+    
+	<miniIcons name="_kickUser" x="154" width="16" height="16"
+               resource="kick_user_rsc" showhandcursor="true">
+        <handler name="onclick">
+        	
+        	if (parent.parent.parent.refObj.publicSID == canvas.publicSID) {
+				new lz.labelerrorPopup(canvas.main_content._content.inner,{
+             				errorlabelid:1214
+        				});
+				return;
+			}
+        	
+        	if (parent.isSuperModerator) {
+                new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:1217});
+                return;
+            }
+        	
+            if ($debug) Debug.write("USER Kick: ",parent.parent.parent.refObj.publicSID);
+            new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                           labelid:1216,labeliderror:1215,
+                                           refObj:this,showCheckBox:false});
+            
+        </handler>
+        
+        <method name="sendConfirmation" args="yesno" >
+            this.kickUserByPublicSID.publicSID = parent.parent.parent.refObj.publicSID;
+            this.kickUserByPublicSID.doCall();
+        </method>
+        
+        <netRemoteCallHib name="kickUserByPublicSID" funcname="userservice.kickUserByPublicSID" 
+                          remotecontext="$once{ canvas.thishib }" >    
+            <attribute name="publicSID" value="" type="string" />  
+            <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+            <netparam><method name="getValue"> return parent.publicSID; </method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("kickUserByPublicSID: ",value);
+            </handler>
+        </netRemoteCallHib> 
+        
+        <labelTooltip labelid="1213" />
+    </miniIcons>              
+    
+	<miniIcons name="_start_private_chat_rsc" x="172" y = "2" width="16" height="16"
+		resource="start_private_chat_rsc" showhandcursor="true">
+		
+		<handler name="onclick">
+			var refObj = parent.parent.parent.refObj;
+			if ($debug) Debug.write("Start Private Chat: ", refObj);
+			if (refObj.publicSID == canvas.publicSID) {
+				new lz.labelerrorPopup(canvas.main_content._content.inner
+					,{errorlabelid:1495});
+				return;
+			}
+			canvas._currentChatPanel.addChat(refObj);
+		</handler>
+		<labelTooltip labelid="1493" />
+	</miniIcons>
+</class>
+
+</library>

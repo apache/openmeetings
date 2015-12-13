@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="baseContentSaveView" extends="baseContentView">
+
+    <attribute name="observerViews" value="null" />
+	
+	<attribute name="saveIsVisible" value="true" type="boolean" />
+	<attribute name="addIsVisible" value="true" type="boolean" />
+	<attribute name="refreshIsVisible" value="true" type="boolean" />
+	<attribute name="deleteIsVisible" value="true" type="boolean" />
+	
+	<attribute name="confirmMessageLabelId" value="661" type="number" />
+    
+	<event name="onnew" />
+    <event name="ondelete" />
+    <handler name="onsavecompleted" >
+		this.hideNewRecordText();
+	</handler>
+    
+    <method name="hideNewRecordText">
+        this._newRecord.setAttribute('visibility','hidden');
+    </method>
+    
+	<event name="onreload" />
+
+    <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
+        bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
+        
+        <state applied="$once{ parent.parent.saveIsVisible }">
+	        <baseChooseIcon resourceN="filesave_rsc" labelid="144" y="2" 
+	        	onclick="this.parent.parent.doSaveEvent()" />
+        </state>	
+        <state applied="$once{ parent.parent.addIsVisible }">
+        	<baseChooseIcon resourceN="edit_add_rsc" labelid="155" y="2" 
+        		onclick="this.parent.parent.doAddEvent()" />  
+        </state>
+        <state applied="$once{ parent.parent.refreshIsVisible }">
+	        <baseChooseIcon resourceN="reload_rsc" labelid="156" y="2" 
+	        	onclick="this.parent.parent.doReloadEvent()" />
+        </state> 
+        <state applied="$once{ parent.parent.deleteIsVisible }">    
+	        <baseChooseIcon resourceN="button_cancel_rsc" labelid="157" y="2" 
+	        	onclick="this.parent.parent.doDeleteEvent()"  />
+        </state>
+        
+		  
+		 	 	      	
+    </view>
+    
+    <labelText name="_newRecord" x="120"
+   						visibility="hidden" labelid="344" fgcolor="green" width="150" />     
+    
+    <method name="addViewToObserver" args="obj">
+    	if (this.observerViews==null) this.observerViews = new Array();
+        this.observerViews.push(obj);
+    </method>
+	
+	<method name="doAddEvent">
+		this._newRecord.setAttribute('visibility','visible');
+		this.onnew.sendEvent();
+	</method>
+    
+    <method name="doSaveEvent">
+    	if (this.observerViews.length!=0){
+        	new lz.contentSaveWindow(canvas.main_content._content.inner,{refObj:this,saveObj:this.observerViews});
+        }
+    </method>
+	
+	<method name="doReloadEvent">
+		this.onreload.sendEvent();
+	</method>
+    
+    <method name="doDeleteEvent">
+    	new lz.confirmDeleteWindow(canvas.main_content._content.inner,{
+    	                   refObj:this,
+    	                   messagelabelid:confirmMessageLabelId
+    	               });
+    </method> 
+    
+    <method name="confirmDelete">
+    	this.ondelete.sendEvent();
+    </method>
+
+    <event name="ontabcontentleave" />
+    
+    <method name="close">
+        this.ontabcontentleave.sendEvent();
+        this.destroy();
+    </method>
+
+</class>
+
+</library>

@@ -1,0 +1,225 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="addAttendee" extends="labelExplorerBox" labelid="574"
+	 closable="true" width="500" x="$once{ parent.width/2-this.width/2 + 10 }" 
+	 y="110" height="310" >
+    
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
+	<!-- resizeable="false" -->
+	<attribute name="refObj" value="null"/>
+	
+	<method name="chooseAndClose">
+		<![CDATA[
+		
+			if (this._turnoverlist._selected == null) {
+				new lz.labelerrorPopup(canvas,{errorlabelid:811});
+				return;
+			}
+			
+			var jNameTimeZone = canvas.jNameTimeZone;
+			
+			if (this._turnoverlist._selected.omTimeZone != null) {
+				jNameTimeZone = this._turnoverlist._selected.omTimeZone.jname;
+			}
+			
+            this.refObj.addListItem(
+                              this._turnoverlist._selected.userId, 
+                              this._turnoverlist._selected.firstname, 
+                              this._turnoverlist._selected.lastname, 
+                              this._turnoverlist._selected.email,
+                              0,
+                              jNameTimeZone
+                          );
+
+						      
+			this.close();
+		]]>
+	</method>
+	
+	<view name="_search" layout="axis:x;spacing:2;inset:4" y="24" x="0">
+		
+		<labelText width="70" resize="false" labelid="809" />
+		
+		<customEdittext name="_criteria" width="220" height="20">
+            <handler name="onkeyup" args="key">
+                <![CDATA[
+	                // 13 is return
+	                if (key==13) {
+	                	parent.parent._turnoverlist.getAllUserBySearchRange.doCall();
+	                }
+                ]]>
+            </handler>
+		</customEdittext>
+		
+		<simpleLabelButton labelid="628" width="200" >
+			<handler name="onclick">			
+    			//parent.parent.getUserContactsBySearchByList.doCall();
+    			parent.parent._turnoverlist.getAllUserBySearchRange.doCall();
+			</handler>
+		</simpleLabelButton >
+		
+		
+	</view>
+	
+	
+	<turnOverList name="_turnoverlist" width="${ parent.width - 4 }" 
+                  height="$once{ (parent.isSuperModerator) ? parent.height-144 : parent.height-94 }" x="2" y="46" 
+		orderby="lastname" step="50" asc="false" bgcolor="0xFFFFFF">
+
+		<handler name="oninit">
+			this.addHeaderItemOrdered(146,70,"user_id",false,false); //labelid,width,orderBy,asc,isSelected
+			this.addHeaderItemOrdered(148,136,"firstname",false,false);
+			this.addHeaderItemOrdered(149,136,"lastname",false,true);
+			this.addHeaderItemOrdered(137,138,"adresses.email",false,false);
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="onUpdateOrder" args="refObj">
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+		</handler>
+		
+		<handler name="ondblclickedItem" args="obj">
+			if ($debug) Debug.write("ondblclickedItem",obj,obj.obj);
+			parent.chooseAndClose();
+		</handler>
+		
+		<!--
+		   Get all users by range and parse result List into View
+		 -->
+	 	<netRemoteCallHib name="getAllUserBySearchRange" funcname="userservice.getAllUserBySearchRange" 
+	                      remotecontext="$once{ canvas.thishib }" showLoading="false">
+	        
+	        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.parent._search._criteria.getText();</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.start;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.step;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.orderby;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.asc;</method></netparam>
+	        
+	        <handler name="ondata" args="valueList">
+	            <![CDATA[
+		            if ($debug) Debug.write("getAllUserBySearchRange ",valueList);
+		            this.parent.initValues(valueList.records);
+		    		this.parent.renderContent(valueList.result);
+	            ]]>
+	        </handler>
+	    </netRemoteCallHib>			
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+		    	this.clearList();
+		    	for (var i=0;i<records.length;i++){
+		    		new lz.attendeItemListItem(this._innerlist._inn._inn,{
+			    					obj:records[i],
+			    					userId:records[i].user_id,
+			    					login:records[i].login,
+			    					email:records[i].adresses.email,
+			    					firstname:records[i].firstname,
+			    					lastname:records[i].lastname,
+			    					omTimeZone:records[i].omTimeZone
+		    					});
+		    	}
+		    	this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+    
+    <view resource="messagebox_info_rsc" x="10" 
+          y="$once{ parent.height-96 }"
+          visibility="$once{ (!parent.isSuperModerator) ? 'hidden' : 'visible' }" />
+    
+    <labelText labelid="824" x="34" y="$once{ parent.height-94 }" multiline="true" 
+               visibility="$once{ (!parent.isSuperModerator) ? 'hidden' : 'visible' }" 
+               width="$once{ parent.width-60 }" />
+    
+    <labelCheckbox x="4" y="$once{ parent.height-63 }" 
+           visibility="$once{ (!parent.isSuperModerator) ? 'hidden' : 'visible' }"
+           fontsize="11" name="_savelogindata" labelid="825" />
+	
+	<simpleLabelButton labelid="629" visibility="$once{ (parent.isSuperModerator) ? 'hidden' : 'visible' }"
+                       width="240" x="4" y="$once{ parent.height - 24 }">
+		<handler name="onclick">
+			<![CDATA[			
+    			//parent.parent.getUserContactsBySearchByList.doCall();
+    			//parent.parent.getAllUserBySearchRange.doCall();
+    			new lz.addExternalAttendee(parent.parent, {
+        			         refObj:parent.refObj,
+        			         parentSearch: parent, 
+        			         x:parent.x+parent.width/2, 
+        			         y:parent.y+40
+    			         });
+            ]]>
+		</handler>
+	</simpleLabelButton >
+	
+	<simpleLabelButton labelid="810" x="$once{ parent.width - 250 }"
+                       y="$once{ parent.height - 24 }" width="120">
+        <handler name="onclick">
+            //parent.parent.parent.delTermin.doCall();
+            parent.chooseAndClose();
+        </handler>     
+    </simpleLabelButton>    	
+	     
+	     
+    <simpleLabelButton labelid="697" x="$once{ parent.width - 125 }"
+                       y="$once{ parent.height - 24 }" width="120">
+        <handler name="onclick">
+            //parent.parent.parent.delTermin.doCall();
+            parent.close();
+        </handler>     
+    </simpleLabelButton>    	
+	     
+
+
+</class>
+
+<class name="attendeItemListItem" extends="baseContentListItem"> 
+    
+	<attribute name="userId" value="0" type="number" /> 
+	<attribute name="login" value="" type="string" />
+	<attribute name="firstname" value="" type="string" />
+	<attribute name="lastname" value="" type="string" />
+	<attribute name="email" value="" type="string" />
+	<attribute name="omTimeZone" value="null" />
+	
+	<turnOverTextItem text="$once{ parent.userId }" width="60" />
+	<turnOverTextItem text="$once{ parent.firstname }" width="100" />
+	<turnOverTextItem text="$once{ parent.lastname }" width="132" />
+	<turnOverTextItem text="$once{ parent.email }" width="132" />
+	
+</class>
+
+</library>

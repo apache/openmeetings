@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Confluence Plugin</title>
+		<author email="eugen.schwert@gmail.com">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Confluence Plugin for OpenMeetings">
+			<p>				
+				Current Development Snapshots for testing can be downloaded from:
+				<a href="https://svn.apache.org/repos/asf/openmeetings/branches/confluence-plugin/target/openmeetingsconfluence-1.0-SNAPSHOT.jar">here</a>
+				.
+			</p>			
+		</section>
+		
+		<section name="Features">
+			<p>The plugin contains the following features: </p>
+			<ul>
+				<li>Create videoconference rooms through Confluence: </li>
+				<li>
+					<ol>
+						<li>Integrated with Confluence content </li>										
+						<li>Configurable room type </li>
+					</ol>
+				</li>
+			</ul>
+		</section>	
+		
+		<section name="Demo video">			
+			<p>The demo video of Confluence plugin show you the plugin in action </p>              
+		      <object style="height: 390px; width: 640px">
+			      <param name="movie" value="http://www.youtube.com/v/YFKlXggtld0?version=3&amp;feature=player_detailpage"/>
+			      <param name="allowFullScreen" value="true"/>
+			      <param name="allowScriptAccess" value="always"/>
+			      <embed src="http://www.youtube.com/v/YFKlXggtld0?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
+		      </object> 
+		</section>
+
+	</body>
+
+</document>

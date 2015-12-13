@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<!---
+		Create the visual output for the viewstates: days, months, weeks 
+		and navigation between the viewstates
+	 -->
+	<class name="lzCalendarGrid" extends="view" x="204" y="26" bgcolor="0xFFFFFF"
+					width="${ parent.width - 204 }" height="${ parent.height-26 }" >
+		
+		<attribute name="currentDate" value="null" />
+		<attribute name="currentWeek" value="0" type="number" />
+		<attribute name="currentDay" value="0" type="number" />
+		<attribute name="viewType" value="month" type="string" />
+		
+		<!---
+			Prevent from re-rendering when switching the viewState 
+		 -->
+		<attribute name="reRenderLock" value="false" type="boolean" />
+		
+		<!---
+			A reference to the current selected calendar event view
+		 -->
+		<attribute name="calendarEvent" value="null" />
+		
+		<!---
+			Thrown whenever the user scrolls the day or week view
+		 -->
+		<event name="onScollContent" />
+		
+		<!---
+			Thrown when the user clicks on the date header in week or on the 
+			date text in the week view
+		 -->
+		<event name="onSelectDate" />
+		
+		<!---
+			Thrown when the user clicks in the empty space in a date in the month view
+		 -->
+		<event name="onNewEventDate" />
+		
+		<!---
+			Thrown when the user selects a date in the day or week view
+			in this event the user chooses two dates as he 
+			can drag an area in the calendar
+			start and end can be found in: tStartDate,tEndDate
+		 -->
+		<event name="onStartEndDate" />
+		
+		<attribute name="tStartDate" value="null" />
+		<attribute name="tEndDate" value="null" />
+		
+		<method name="setCurrentDate" args="tDate">
+			if (this.currentDate != tDate) {
+				this.currentDate = tDate;
+			}
+		</method>
+		
+		<method name="selectStartEndDateTime" args="tStartDate,tEndDate">
+			this.tStartDate = tStartDate;
+			this.tEndDate = tEndDate;
+			this.onStartEndDate.sendEvent(null);
+		</method>
+		
+		<method name="checkAndShow" args="tDate,dayIndex,weekIndex">
+			this.setCurrentDate(tDate);
+			this.currentWeek = weekIndex + 1; //the index in the xml dataset list construct starts counting with 1
+			this.currentDay = dayIndex + 1; //the index in the xml dataset list construct starts counting with 1
+			if (this.viewType == "day") {
+				this.setAttribute("viewType","none");
+				this.showDay();
+			} else if (this.viewType == "week") {
+				this.setAttribute("viewType","none");
+				this.showWeek();
+			}
+		</method>
+		
+		<method name="isCurrentMonth" args="tMonth">
+			if (this.currentDate == null) {
+				if ($debug) Debug.warn("currentDate is NULL ");
+				return false;
+			}
+			return (tMonth == this.currentDate.getMonth());
+		</method>
+		
+		<method name="showDay">
+			if ($debug) Debug.write("Show Day ",this.currentDay,this.currentWeek);
+			this.setAttribute("reRenderLock",false);
+			this.setAttribute("viewType","day");
+		</method>
+		
+		<method name="showWeek">
+			this.setAttribute("reRenderLock",true);
+			this.setAttribute("viewType","week");
+			this.setAttribute("reRenderLock",false);
+		</method>
+		
+		<method name="showMonth">
+			this.setAttribute("reRenderLock",true);
+			this.setAttribute("viewType","month");
+			this.setAttribute("reRenderLock",false);
+		</method>
+		
+		<method name="selectCalendarEvent" args="tRef">
+			if ($debug) Debug.write("selectCalendarEvent ",tRef);
+			this.setAttribute("calendarEvent",tRef);
+		</method>
+		
+		<!-- 
+			The day grid
+		 -->
+		<state name="day" applied="${ classroot.viewType == 'day' }">
+		
+			<lzDayView currentDay="${ classroot.currentDay }">
+				<handler name="oninit">
+					this.setAttribute("datapath","getAppointmentsByWeekCalendarResponse/return["+classroot.currentWeek+"]");
+				</handler>
+			</lzDayView>
+			
+		</state>
+		
+		<!-- 
+			The week grid
+		 -->
+		<state name="week" applied="${ classroot.viewType == 'week' }">
+		
+			<!-- A week view is nothing else then 7 days next to each other -->
+			<lzDayView currentDay="${ classroot.currentDay }" singleDayView="false" daysPerWeek="7"
+						reRenderLock="${ classroot.reRenderLock }">
+				<handler name="oninit">
+					this.setAttribute("datapath","getAppointmentsByWeekCalendarResponse/return["+classroot.currentWeek+"]");
+				</handler>
+			</lzDayView>
+			
+		</state>
+		
+		<!-- 
+			The month grid
+		 -->
+		<state name="month" applied="${ classroot.viewType == 'month' }">
+		
+			<lzMonthView />
+			
+		</state>
+		
+	</class>
+	
+	<class name="textHourHelper" extends="text" height="30" 
+		width="40" fgcolor="0x666666" />
+
+</library>

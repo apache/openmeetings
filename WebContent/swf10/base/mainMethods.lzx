@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- methods for main.lzx -->
+
+<library>
+    
+    <method name="myinit">
+        <![CDATA[
+        canvas.mediaerrortimeout = 30000;
+        canvas.medialoadtimeout = 30000;
+        
+        if($debug) Debug.write("main.lzx/config.xml ondata",this);
+        
+        //Audio-Video-Settings
+        this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
+        this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
+        this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
+        this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
+        this.setAttribute('camQualityNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityNormal/text()')));  
+        this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
+        this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
+        this.setAttribute('echoPath',Number(canvas.myConfigSet.getPointer().xpathQuery('config/echoPath/text()')));
+        
+        //httphostlocal variable is loaded from the SWF8 application, cause it needs value, SWF10 app
+        //knows nothing about the rtmphostlocal, and we don't want to parse the URL from the browser
+        //in both applications to find out where the user loaded the SWF from and extract the domain/ip 
+        //from it
+        
+        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
+        this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()')); 
+        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
+
+        var _url = this.getDisplayObject().loaderInfo.url;
+        if($debug) Debug.write("_url: ",_url);
+        
+        ]]>
+    </method>
+    
+    <method name="getLabelName" args="id">
+    	// return "label "+id;
+        //if($debug) Debug.write("main.lzx/getLabelName()",id);
+        return getLabelTag(id);
+    </method>
+    
+    <method name="getThemeImage" args="tName">
+		if ($debug) Debug.write("load Image by Name SWF10: ",tName);
+		var tPath = canvas.mainTheme.getPointer().xpathQuery("theme/resource[@name='"+tName+"']/@src");
+		if ($debug) Debug.write("tPath SWF10 "+tPath);
+		return tPath;
+	</method>
+	
+	<method name="getThemeColor" args="tColor">
+		if ($debug) Debug.write("load Color by Name SWF10: ",tColor);
+		var tColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
+		if ($debug) Debug.write("tColor SWF10 "+tColor);
+		return tColor;
+	</method>
+	
+	<!-- 
+		httphostlocal is synced from the SWF8 application, it will always point to the master
+	 -->
+	<method name="getHttpHost">
+		return canvas.httphostlocal;
+    </method>
+	
+	<method name="getUrl">
+		<![CDATA[
+			return canvas.protocol + '://' + getHttpHost()
+				+ ':' + canvas.red5httpport + canvas.httpRootKey;
+		]]>
+	</method>
+    
+	<method name="getPictureUrl" args="pictureuri,extraParams">
+	<![CDATA[
+		var pUri = (pictureuri == null || pictureuri.length == 0) ? "d.jpg" : pictureuri;
+		var downloadurl = pUri;
+		if (!pUri.startsWith("http://") && !pUri.startsWith("https://")) {
+			pUri = "_profile_" + pUri;
+			
+			downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=' + pUri
+				+ '&parentPath=&room_id=&r=' + (new Date()).getTime()
+				+ extraParams + '&sid='+canvas.sessionId;
+		}
+		if($debug) Debug.write("getPictureUrl/downloadurl ", downloadurl);
+		return downloadurl;
+	]]>
+	</method>
+		
+</library>

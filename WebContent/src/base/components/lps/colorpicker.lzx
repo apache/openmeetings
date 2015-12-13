@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!---
+      changed by swagner
+  -->
+<library>
+    
+    
+<class name="colorSlider" extends="slider" x="4"
+    minvalue="1" maxvalue="240" 
+    trackheight="4" thumbheight="12"
+    showrange="false" showvalue="true">
+    <attribute name="doSendValueEvent" value="false" type="boolean" />
+    <handler name="onvalue">
+        if (this.doSendValueEvent) { 
+            classroot.updateColor();
+        } else {
+            this.doSendValueEvent=true;
+        }
+    </handler>
+</class>    
+
+<class name="colorPot" width="13" height="13" 
+    onmouseout="">
+    <handler name="onmouseover">
+        var t = _root.createEmptyMovieClip('hans2',20);
+        var myColorTZ = new Color(t);
+        myColorTZ.setRGB(this.mycolor);        
+        this.setAttribute('mycolorString',this.parent.parent.parent.numberToRGB(myColorTZ));
+    </handler>
+    <attribute name="mycolor" type="color" value="0x000000"/>
+    <attribute name="mycolorString" type="string" value="0x000000"/>
+    <attribute name="listener" type="expression"/>
+    <handler name="onclick">
+        listener.changeColor(this.mycolor);
+        listener.close();
+    </handler>
+    <handler name="ondblclick">
+        listener.changeColor(this.mycolor);
+        listener.close();
+    </handler>    
+    <labelTooltip text="${ parent.mycolorString }" />
+    <view bgcolor="#444444" width="13" height="13" >
+        <view bgcolor="${classroot.mycolor}"  x="1" y="1" width="11" height="11"/>
+    </view>
+</class>
+  
+<class name="colorRow" layout="axis:x;spacing:-1" />
+    
+<class name="colorpicker" extends="guiPresenter" labelid="425" isdragable="false" 
+    minimizable="false" maximizable="false" fullToolBar="true" 
+    resizeable="false" width="250" height="154" >
+    
+    <attribute name="btnRef" value="null" />
+      
+    <attribute name="selectedColor" type="number" value="0x00aeef"/>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+        this.btnRef.closedColorPicker();
+        this.btnRef.setAttribute('selectedColor', this.selectedColor);
+        this.btnRef.setTransformedStringColor();        
+    </handler>
+    
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+           if ( eventStr == "onmousedown"  ){
+               if ( view != null ) {
+                  if ( !view.childOf(this) ) {
+                       this.close();
+                  }
+               } else {
+                   this.close();
+               }
+           }
+           if (view && view.childOf(this)) {
+               if (view[ eventStr ]) {
+                   view[ eventStr ].sendEvent( view );
+               }
+               return false;
+           }
+          return true;
+       ]]> 
+    </method>  
+    
+    <method name="doDefaultColor" args="thisC">
+        <![CDATA[            
+            var c = thisC.getRGB();
+            var r = (c >> 16) & 0xff;
+            var g = (c >> 8) &  0xff;
+            var b = c & 0xff;
+            ////Debug.write("r g b: ",r,g,b);
+            var hsl = RGBtoHLS(r,g,b);
+            ////Debug.write("doDefaultColor ",hsl);
+            this.updateSlidersByValue(hsl);
+            var rgb = HLStoRGB(s_hue.value, s_bri.value, s_sat.value);
+            var c = rgb.r << 16 | rgb.g << 8 | rgb.b
+            this.setAttribute('selectedColor', c);
+        ]]>    
+    </method>  
+    
+    <method name="updateColor" >
+        <![CDATA[
+            ////Debug.write("updateColor ");
+            var rgb = HLStoRGB(s_hue.value, s_bri.value, s_sat.value);
+            var c = rgb.r << 16 | rgb.g << 8 | rgb.b
+            this.setAttribute('selectedColor', c);
+
+        ]]>
+    </method>
+    
+    <method name="changeColor" args="c">
+        <![CDATA[
+            ////Debug.write("changeColor ");
+            this.setAttribute('selectedColor', c);
+            var r = (c >> 16) & 0xff;
+            var g = (c >> 8) &  0xff;
+            var b = c & 0xff;
+            var hsl = RGBtoHLS(r,g,b);
+            this.updateSlidersByValue(hsl);
+        ]]>
+    </method>
+    
+    <method name="updateSlidersByValue" args="hsl">
+        s_hue.doSendValueEvent=false;
+        s_hue.setValue(hsl.h);
+        s_bri.doSendValueEvent=false;
+        s_bri.setValue(hsl.l);
+        s_sat.doSendValueEvent=false;
+        s_sat.setValue(hsl.s);        
+    </method>
+    
+    <method name="numberToRGB" args="thisC">
+        <![CDATA[            
+            var c = thisC.getRGB();
+            var r = (c >> 16) & 0xff;
+            var g = (c >> 8) &  0xff;
+            var b = c & 0xff;
+            ////Debug.write("r g b: ",r,g,b);
+            
+            HEX_R = r.toString(16).toUpperCase();
+            HEX_G = g.toString(16).toUpperCase();
+            HEX_B = b.toString(16).toUpperCase();
+            
+            if (HEX_R.length < 2) {
+                HEX_R = "0"+HEX_R;
+            }
+            if (HEX_G.length < 2) {
+                HEX_G = "0"+HEX_G;
+            }
+            if (HEX_B.length < 2) {
+                HEX_B = "0"+HEX_B;
+            }
+            var hex = "0x"+HEX_R + HEX_G + HEX_B;
+
+            return hex;
+        ]]>
+    </method>
+    
+    <method name="RGBtoHLS" args="r,g,b">
+        <![CDATA[
+            var h,l,s;
+            var max = (Math.max(Math.max(r, g), b))/255;
+            var min = (Math.min(Math.min(r, g), b))/255;
+            var delta = max-min;
+            l = (max+min)/2;
+            s = (max == min) ? 0 : ((l <= 0.5) ? delta/l/2 : delta/(2-l*2));
+            if(r/255 == max) h = (g-b)/delta/255;
+            else if(g/255 == max) h = 2+(b-r)/delta/255;
+            else if(b/255 == max) h = 4+(r-g)/delta/255;
+            h *= 40;
+            if(h < 0) h += 240;
+            h = Math.round(h);
+            return {h:((isNaN(h)) ? 0 : h), l:Math.round(l*240), s:Math.round(s*240)};
+        ]]>
+    </method>
+    
+    <method name="HLStoRGB" args="h,l,s">
+        <![CDATA[
+            var r,g,b;
+            if(s == 0) {
+                r = g = b = Math.round(l/240*255);
+            } else {
+                h /= 240; l /= 240; s /= 240;
+                var temp4,temp3;
+                var temp2 = (l < 0.5) ? l*(s+1) : l+s-l*s;
+                var temp1 = l*2 - temp2;
+                for(var i=0; i<3; i++) {
+                    switch(i) {
+                        case 0: temp3 = h+1/3; break;
+                        case 1: temp3 = h; break;
+                        case 2: temp3 = h-1/3; break;
+                    }
+                    if(temp3 < 0) temp3++;
+                    else if(temp3 > 1) temp3--;
+                    if(temp3*6 < 1) temp4 = temp1+(temp2-temp1)*6*temp3;
+                    else if(temp3*2 < 1) temp4 = temp2;
+                    else if(temp3*3 < 2) temp4 = temp1+(temp2-temp1)*((2/3)-temp3)*6;
+                    else temp4 = temp1;
+                    switch(i) {
+                        case 0: r = Math.round(temp4*255); break;
+                        case 1: g = Math.round(temp4*255); break;
+                        case 2: b = Math.round(temp4*255); break;
+                    }
+                }
+            }
+            return {r:r, g:g, b:b};
+        ]]>
+    </method>
+    
+    
+    <text fontsize="8" x="$once{classroot.s_hue.width + classroot.s_hue.x}"
+          y="$once{classroot.s_hue.y - 4}" text="HUE" width="26"/>
+      
+    <colorSlider name="s_hue" y="102" />
+    
+    <text fontsize="8" x="$once{classroot.s_bri.width + classroot.s_bri.x}"
+          y="$once{classroot.s_bri.y - 4}" text="BRI" />
+      
+    <colorSlider name="s_bri" y="120" />
+    
+    <text fontsize="8" x="$once{classroot.s_sat.width + classroot.s_sat.x}"
+          y="$once{classroot.s_sat.y - 4}" text="SAT" />
+    
+    <colorSlider name="s_sat" y="138" />  
+    
+    
+    <!-- current color -->
+    <view name="c2" bgcolor="black" width="30" height="66" y="24" x="206">
+        <view name="current" x="1" y="1" bgcolor="${classroot.selectedColor}" 
+            width="$once{parent.width -2}" height="$once{parent.height -2}" />
+    </view>
+
+    <!-- default colors -->
+    <view x="4" y="26" layout="axis:y;spacing:-1" >
+
+        <colorRow>
+            <colorPot listener="$once{classroot}" mycolor="#ff0000" mycolorString="0xFF0000" />
+            <colorPot listener="$once{classroot}" mycolor="#ffff00" mycolorString="0xFFFF00" />
+            <colorPot listener="$once{classroot}" mycolor="#00ff00" mycolorString="0x00FF00" />
+            <colorPot listener="$once{classroot}" mycolor="#00ffff" mycolorString="0x00FFFF" />
+            <colorPot listener="$once{classroot}" mycolor="#0000ff" mycolorString="0x0000FF" />
+            <colorPot listener="$once{classroot}" mycolor="#ff00ff" mycolorString="0xFF00Ff" />
+            <colorPot listener="$once{classroot}" mycolor="#ffffff" mycolorString="0xFFFFFF" />
+            <colorPot listener="$once{classroot}" mycolor="#ebebeb" mycolorString="0xEBEBEB" />
+            <colorPot listener="$once{classroot}" mycolor="#e1e1e1" mycolorString="0xE1E1E1" />
+            <colorPot listener="$once{classroot}" mycolor="#d7d7d7" mycolorString="0xD7D7D7" />
+            <colorPot listener="$once{classroot}" mycolor="#cccccc" mycolorString="0xCCCCCC" />
+            <colorPot listener="$once{classroot}" mycolor="#c2c2c2" mycolorString="0xC2C2C2" />
+            <colorPot listener="$once{classroot}" mycolor="#b7b7b7" mycolorString="0xB7B7B7" />
+            <colorPot listener="$once{classroot}" mycolor="#acacac" mycolorString="0xACACAC" />
+            <colorPot listener="$once{classroot}" mycolor="#a0a0a0" mycolorString="0xA0A0A0" />
+            <colorPot listener="$once{classroot}" mycolor="#959595" mycolorString="0x959595" />
+        </colorRow>
+        <colorRow>
+            <colorPot listener="$once{classroot}" mycolor="#ee1d24" mycolorString="0xEE1D24" />
+            <colorPot listener="$once{classroot}" mycolor="#fff100" mycolorString="0xFFF100" />
+            <colorPot listener="$once{classroot}" mycolor="#00a650" mycolorString="0x00A650" />
+            <colorPot listener="$once{classroot}" mycolor="#00aeef" mycolorString="0x00AEEF" />
+            <colorPot listener="$once{classroot}" mycolor="#2f3192" mycolorString="0x2F3192" />
+            <colorPot listener="$once{classroot}" mycolor="#ed008c" mycolorString="0xED008C" />
+            <colorPot listener="$once{classroot}" mycolor="#898989" mycolorString="0x898989" />
+            <colorPot listener="$once{classroot}" mycolor="#7d7d7d" mycolorString="0x7D7D7D" />
+            <colorPot listener="$once{classroot}" mycolor="#707070" mycolorString="0x707070" />
+            <colorPot listener="$once{classroot}" mycolor="#626262" mycolorString="0x626262" />
+            <colorPot listener="$once{classroot}" mycolor="#555555" mycolorString="0x555555" />
+            <colorPot listener="$once{classroot}" mycolor="#464646" mycolorString="0x464646" />
+            <colorPot listener="$once{classroot}" mycolor="#363636" mycolorString="0x363636" />
+            <colorPot listener="$once{classroot}" mycolor="#262626" mycolorString="0x262626" />
+            <colorPot listener="$once{classroot}" mycolor="#111111" mycolorString="0x111111" />
+            <colorPot listener="$once{classroot}" mycolor="#000000" mycolorString="0x000000" />
+        </colorRow>
+          
+        <colorRow>
+            <colorPot listener="$once{classroot}" mycolor="#f7977a" mycolorString="0xF7977A" />
+            <colorPot listener="$once{classroot}" mycolor="#fbad82" mycolorString="0xFBAD82" />
+            <colorPot listener="$once{classroot}" mycolor="#fdc68c" mycolorString="0xFDC68C" />
+            <colorPot listener="$once{classroot}" mycolor="#fff799" mycolorString="0xFFF799" />
+            <colorPot listener="$once{classroot}" mycolor="#c6df9c" mycolorString="0xC6DF9C" />
+            <colorPot listener="$once{classroot}" mycolor="#a4d49d" mycolorString="0xA4D49D" />
+            <colorPot listener="$once{classroot}" mycolor="#81ca9d" mycolorString="0x81CA9D" />
+            <colorPot listener="$once{classroot}" mycolor="#7bcdc9" mycolorString="0x7bcdc9" />
+            <colorPot listener="$once{classroot}" mycolor="#6ccff7" mycolorString="0x6CCFF7" />
+            <colorPot listener="$once{classroot}" mycolor="#7ca6d8" mycolorString="0x7CA6D8" />
+            <colorPot listener="$once{classroot}" mycolor="#8293ca" mycolorString="0x8293CA" />
+            <colorPot listener="$once{classroot}" mycolor="#8881be" mycolorString="0x8881BE" />
+            <colorPot listener="$once{classroot}" mycolor="#a286bd" mycolorString="0xA286BD" />
+            <colorPot listener="$once{classroot}" mycolor="#bc8cbf" mycolorString="0xBC8CBf" />
+            <colorPot listener="$once{classroot}" mycolor="#f49bc1" mycolorString="0xF49BC1" />
+            <colorPot listener="$once{classroot}" mycolor="#f5999d" mycolorString="0xf5999d" />
+        </colorRow>
+          
+        <colorRow>
+            <colorPot listener="$once{classroot}" mycolor="#f16c4d" mycolorString="0xF16C4D" />
+            <colorPot listener="$once{classroot}" mycolor="#f68e54" mycolorString="0xF68E54" />
+            <colorPot listener="$once{classroot}" mycolor="#fbaf5a" mycolorString="0xFBAF5A" />
+            <colorPot listener="$once{classroot}" mycolor="#fff467" mycolorString="0xFFF467" />
+            <colorPot listener="$once{classroot}" mycolor="#acd372" mycolorString="0xACD372" />
+            <colorPot listener="$once{classroot}" mycolor="#7dc473" mycolorString="0x7DC473" />
+            <colorPot listener="$once{classroot}" mycolor="#39b778" mycolorString="0x39B778" />
+            <colorPot listener="$once{classroot}" mycolor="#16bcb4" mycolorString="0x16BCB4" />
+            <colorPot listener="$once{classroot}" mycolor="#00bff3" mycolorString="0x00BFF3" />
+            <colorPot listener="$once{classroot}" mycolor="#438ccb" mycolorString="0x438CCB" />
+            <colorPot listener="$once{classroot}" mycolor="#5573b7" mycolorString="0x5573B7" />
+            <colorPot listener="$once{classroot}" mycolor="#5e5ca7" mycolorString="0x5E5CA7" />
+            <colorPot listener="$once{classroot}" mycolor="#855FA8" mycolorString="0x855FA8" />
+            <colorPot listener="$once{classroot}" mycolor="#a763a9" mycolorString="0xA763A9" />
+            <colorPot listener="$once{classroot}" mycolor="#ef6ea8" mycolorString="0xEf6EA8" />
+            <colorPot listener="$once{classroot}" mycolor="#f16d7e" mycolorString="0xF16D7E" />
+        </colorRow>
+          
+          
+        <colorRow>
+            <colorPot listener="$once{classroot}" mycolor="#9a8575" mycolorString="0x9A8575" />
+            <colorPot listener="$once{classroot}" mycolor="#726357" mycolorString="0x726357" />
+            <colorPot listener="$once{classroot}" mycolor="#524842" mycolorString="0x524842" />
+            <colorPot listener="$once{classroot}" mycolor="#362f2c" mycolorString="0x362F2C" />
+            <colorPot listener="$once{classroot}" mycolor="#c69c6d" mycolorString="0xC69C6D" />
+            <colorPot listener="$once{classroot}" mycolor="#a77c50" mycolorString="0xA77C50" />
+            <colorPot listener="$once{classroot}" mycolor="#8c623a" mycolorString="0x8C623A" />
+            <colorPot listener="$once{classroot}" mycolor="#744b24" mycolorString="0x744B24" />
+            <colorPot listener="$once{classroot}" mycolor="#613813" mycolorString="0x613813" />
+        </colorRow>
+      
+    </view>
+    
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2007 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

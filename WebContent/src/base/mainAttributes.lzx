@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- all attributes for main.lzx -->
+
+<library>
+<!-- 
+##########################################################
+these properties will be overwritten by config.xml -->  
+
+<attribute name="vid_lc_name" value="" type="string"/>
+
+<attribute name="lc_SID" value="" type="string"/>
+
+<attribute name="lc"/>
+
+<attribute name="rtmp_lc_name" value="" type="string"/>
+
+<attribute name="rtmp_lc"/>
+
+<attribute name="videoComp_lc_name" value="" type="string"/>
+
+<attribute name="videoComp_lc_callback_name" value="" type="string"/>
+
+<attribute name="videoComp_lc"/>
+
+<!--- URL/IP to use for the Server 192.168.178.28
+    inno02.fh-pforzheim.de macbook 192.168.2.103
+    192.168.2.102 bxlug.homelinux.org 213.219.160.72
+        if this value is empty it will try to connect to the 
+    domain-name it has been loading from
+    -->
+<attribute name="rtmphostlocal" value="" type="string" />
+
+<!-- 
+	URL/IP to use for the Server for HTTP and HTTPS traffic.
+    If this value is empty it will use the rtmphostlocal 
+    variable (and in that way try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from)
+ -->
+<attribute name="httphostlocal" value="" type="string" />
+ 
+<!---  
+    Port to use for the Server
+    To this port the default server lookup is done
+    
+    You can find all this configuraiton in your red5-Config in: $RED5_HOME/conf/red5.properties
+ -->
+<attribute name="rtmpport" value="1935" type="string" />
+
+<!--- 
+    Port to use for the Server
+    To this port the fallback is done once the default rtmport failed
+    this should workaround 99% of all firewalls
+ -->
+<attribute name="rtmpTunnelport" value="8088" type="string" />
+
+<!--- 
+    Port to use for the Server
+    This port is used to connect to the HTTP-Servlet
+    of the Red5-Servlet
+ -->
+<attribute name="red5httpport" value="5080" type="string" />
+
+<attribute name="useSSL" value="false" type="boolean" />
+<attribute name="rtmpsslport" value="443" type="string" />
+
+<!---
+#############################################################
+    These colors are the main colors and style the hole application
+ -->
+<attribute name="basebgcolorizer" value="" type="string" /> 
+<attribute name="baseMousecolorizer" value="" type="string" />  
+<attribute name="baseMouseOvercolorizer" value="" type="string" />      
+<attribute name="styleMenuBarBaseColor" value="0xFFFFFF" type="string" />    
+
+<attribute name="fontColorHeader" value="0x000000" type="string" />
+<attribute name="bgColorMenuItems" value="0xEAEAEA" type="string" />
+
+<attribute name="webAppRootKey" value="" type="string" />
+
+<attribute name="httpRootKey" value="/" type="string" />
+
+<attribute name="protocol" value="http" type="string" />
+<attribute name="proxyType" value="none" type="string" />
+
+<attribute name="showAudioVideoTest" value="true" type="boolean" />
+
+<!-- 
+#############################################################
+Attributes needed for clustering -->
+
+<attribute name="isSlaveHosted" value="false" type="boolean" />
+
+<!-- server object's address (not loaded from config.xml cause this variable is empty by default) -->
+<attribute name="slaveRtmphostlocal" value="" type="string" />
+<!-- rtmpport from slave's config.xml  --> 
+<attribute name="slaveRtmpport" value="5080" type="string" />
+<!-- rtmpTunnelport from slave's config.xml -->
+<attribute name="slaveRtmpTunnelport" value="8088" type="string" />
+<!-- rtmpsslport from slave's config.xml -->
+<attribute name="slaveRtmpsslport" value="443" type="string" />
+<!-- from slave's config.xml -->
+<attribute name="slaveWebAppRootKey" value="" type="string" /> 
+
+<!--
+#############################################################
+    Id of the Recording that is played when access the Recordings Player via Direct Link URL
+ -->
+<attribute name="roomRecordingId" value="0" type="number" />
+
+<!--- Name of the Application -->
+<attribute name="currentappname" value="OpenMeetings" type="string" />   
+<attribute name="currentappnameurl" value="OpenMeetings" type="string" />   
+<attribute name="currentappnamebugurl" value="OpenMeetings" type="string" /> 
+
+<!--- Video Settings -->
+<attribute name="loudnessAcitviation" value="10" type="number" />
+<attribute name="showWindowEffect" value="y" type="string" /> 
+
+<!--- Calendar Settings -->
+<attribute name="firstdayinweek" value="1" type="number" />
+
+<attribute name="showmodernWhiteBoard" value="y" type="string" />
+
+<attribute name="showRecording" value="visible" type="string" />
+
+<attribute name="defaultWhiteboardWidth" value="2400" type="number" />
+<attribute name="defaultWhiteboardHeight" value="1200" type="number" />
+
+<!-- END OF config.xml attributes
+##########################################################
+ -->
+
+<attribute name="userHistory" value="null" />
+<attribute name="browserTabHistory" value="null" />
+
+<!-- this attribute holds an object of type RoomClient
+ the LAST RoomClient Object that has been changed the drawstatus
+ so ondrawAllowStatus = will trigger that the draw-status of ANYBODY has changed
+ and canvas.drawAllowStatus = is the RoomClient that has changed
+ and canvas.drawAllowStatus.canDraw = is the new Status of that RoomClient
+ -->
+
+<attribute name="drawAllowStatus" value="null"/>
+
+<!-- this attribute holds an object of type RoomClient
+the LAST RoomClient Object that has been changed the giveExclusiveAudio status
+-->
+<attribute name="exclusiveAudioAllowStatus" value="null"/>
+
+<!--
+    this value indicates if this user is allowed to draw to the Whiteboard
+    If this user is currently Moderator => he ALWAYS can draw to whiteboard
+    even if this isAllowedToDraw == false
+ -->
+<attribute name="isAllowedToDraw" value="false" type="boolean" />
+
+<!-- 
+    this attribute holds an object of type RoomClient
+    the LAST RoomClient Object that has been changed the mute-status
+ -->
+<attribute name="micMutedStatusChangedItem" value="null" />
+
+<!--
+    this value indicates if this user is currently muted
+ -->
+<attribute name="micMuted" value="false" type="boolean" />
+
+<!--- URL/IP to use for the Server -->
+<attribute name="rtmphost" value="" type="string" />
+
+<!--- Username/Nickname -->
+<attribute name="currentuser" value="" type="string" />
+
+<!--- Roomname internaly Scope -->
+<attribute name="currentcourse" value="" type="string" />
+
+<!--- Roomname/Coursename -->
+<attribute name="currentcourseName" value="" type="string" />
+
+<attribute name="currentImagesListdraw" value="null" />
+
+<!--- 
+    The Reference for a Streaming Object
+    This should be removed later when the OpenLaszlo API handles
+    the broadcast better
+    -swagner
+ -->
+<attribute name="_nc" value="null" />
+    
+<!--
+<attribute name="moderatorStreamID" value="" type="string" />
+<attribute name="moderatorationObject" value="" type="string" />
+<attribute name="moderatorName" type="string" setter="this.setModeratorName(moderatorName)" />
+ -->
+<attribute name="currentModeratorList" value="null" />
+
+<attribute name="newModeratorList" value="null" />
+<attribute name="removeModeratorList" value="null" />
+
+<attribute name="ismoderator" value="false" type="boolean" />
+
+<attribute name="loadingmessage" value="" type="string" />
+<!--- 
+    The state of the Application
+    At the beginning you should choose how many users are allowed to
+    login simultaniously
+ -->
+<attribute name="islogedin" value="false" type="boolean" />
+   
+<attribute name="htmlframeisloaded" value="false" type="boolean" />
+<attribute name="createIFrameDone_attr" value="false" type="boolean" />
+
+
+<attribute name="uploadmoduleppt" value="videoconf1ppt" type="string" />
+<attribute name="uploadmoduleimg" value="videoconf1" type="string" />
+<attribute name="foldersequence" value="null" />
+<attribute name="uploadmoduleimgfolder" value="" type="string" />
+<!---
+    Can be either 2 or 4
+    But theoretically there is no limit
+ -->
+<attribute name="numberofallowedpartners" value="0" type="number" />
+
+<!--- Number of currently connected Users -->
+<attribute name="numberofpartners" value="0" type="number" />
+
+<!--- unique ID of this Stream -->
+<attribute name="streamid" value="0" type="string" />
+
+<!--- id of the current Mod in this room -->
+<attribute name="currentmodid" value="0" type="string" />
+
+<attribute name="currentlanguage" value="english" type="string" />
+
+<attribute name="objWhiteboard" value="null" />
+<attribute name="objMessage" value="null" />
+<attribute name="VarsModeratorGeneral" value="null" />
+
+<attribute name="isConference" value="false" type="boolean" />
+
+<attribute name="statesInitValues" value="null" />
+<attribute name="salutationsInitValues" value="null" />
+<attribute name="roomTypesInitValues" value="null" />
+
+<!--- Audio-Video Quality Settings
+    overwritten by values from the config.xml 
+ -->
+<attribute name="framesPerSecond" value="30" type="number" />
+<attribute name="bandwidthNeededNormal" value="16384" type="number" />
+<attribute name="bandwidthNeededBest" value="32768" type="number" />
+<attribute name="camQualityNormal" value="75" type="number" />
+<attribute name="camQualityBest" value="75" type="number" />
+        
+<!--- Reference to the current active drawarea -->
+<attribute name="_drawarea" value="null" /> 
+
+<!--- Username of current user -->
+<attribute name="currentusename" value="defaultname" type="string" />
+<attribute name="user_id" value="0" type="number" />
+<attribute name="firstName" value="" type="string" />
+<attribute name="timeZoneId" value="0" type="number" />
+<attribute name="jNameTimeZone" value="" type="string" />
+<attribute name="lastName" value="" type="string" />
+<attribute name="mail" value="" type="string" />
+<attribute name="lastLogin" value="" type="string" />
+<attribute name="official_code" value="" type="string" />
+<attribute name="picture_uri" value="" type="string" />
+<attribute name="language" value="" type="string" />
+
+<!--- User porperties -->
+<attribute name="currentusercolor" value="0" type="number" />
+<attribute name="currentuserpos" value="0" type="number" />
+    
+<attribute name="currentModApply" value="null" />   
+
+<attribute name="sessionObject" value="null" />
+<attribute name="sessionId" value="" type="string" />
+
+<attribute name="syncWindow" value="null" />
+<attribute name="syncImageWindow" value="null" />
+<attribute name="syncSWFWindow" value="null" />
+<attribute name="publicSID" value="" type="string" />
+
+<!--- attributes for direct room access -->
+<attribute name="initroomid" value="0" type="number" />
+<attribute name="initroomStr" value="" type="string" />
+<attribute name="initroomtype" value="" type="string" />
+<attribute name="initdomainid" value="" type="string" />
+<attribute name="initlangid" value="1" type="number" />
+<attribute name="isinitRoomDirect" value="false" type="boolean" />
+<attribute name="isinitRoomObject" value="null" /> 
+
+<!-- attributes for direct room access via direct link -->
+<attribute name="directUserLogin" value="false" type="boolean" />
+<attribute name="directRoomId" value="1" type="number" />
+<attribute name="directRoomObj" value="null" />
+
+<!--- attributes for direct room access via remoteUser -->
+<attribute name="remoteUserLogin" value="false" type="boolean" />
+<attribute name="remoteUserSid" value="" type="string" />
+
+<!--- attributes for direct room access via remoteUser
+    This is using the advanced methods to prevent abuse
+ -->
+<attribute name="secureRemoteUserLogin" value="false" type="boolean" />
+<attribute name="secureHash" value="" type="string" />
+
+<!--- skip loading of Language -->
+<attribute name="language_id" value="0" type="number" />
+<!--- application default language -->
+<attribute name="default_lang_id" value="1" type="number" />
+
+<attribute name="isResetUsername" value="false" type="boolean" />
+<attribute name="resetHash" value="" type="string" />
+    
+<attribute name="naviHeight" value="84" type="number" />    
+<attribute name="naviHeightDelta" value="84" type="number" />  
+
+<attribute name="currentrecorder" value="null" /> 
+<attribute name="currentrecorder_id" value="0" type="number" /> 
+
+<!--- 
+Holds a refernce to the current VideoCOntainer Object
+containing the VideoViews
+and some more references to temp-objects
+ -->
+<attribute name="_videocontainer" value="null" />
+<attribute name="_mymod" value="null" />
+
+<attribute name="isrtl" value="false" type="boolean" />    
+
+<!---
+    Attributes for browser panel size.
+    Those attributes are used to determine size of browser class (modules/conference/browser/conferenecBrowser.lzx)
+    in base/mainMethods.lzx.
+        2008 Apr 9 commented by onokeiji@gmail.com
+-->
+<attribute name="browserPanelWidth" value="600"/>
+<attribute name="browserPanelHeight" value="500"/>
+
+<attribute name="currentSlideNo" value="0" type="number" />
+<attribute name="currentSlideTotal" value="0" type="number" />
+<attribute name="currentSlideZoom" value="0" type="number" />
+
+<attribute name="currentUploadWindow" value="null" />
+
+<!--
+    ################################
+    Attributes for direct Moderator setup via Moodle
+ -->
+<attribute name="isMoodleRoom" value="false" type="boolean" /> 
+
+<attribute name="becomemoderator" value="false" type="boolean" />
+<attribute name="becomeSuperModerator" value="false" type="boolean" />
+
+<attribute name="moodleWwwRoot" value="" type="string" />
+<attribute name="moodleUserId" value="0" type="number" />
+<attribute name="moodlePicture" value="0" type="number" />
+
+
+<attribute name="currentRoomObj" value="null" />
+
+<attribute name="refreshSession" value="60000" type="number" />
+
+<attribute name="globalFontSize" value="11" type="number" />
+
+<attribute name="lastBroadCastingUser" value="null" />
+
+<attribute name="isBroadCasting" value="false" type="boolean" />
+
+<attribute name="currentContentView" value="null" />
+
+<!-- item to focus on after rpcErrorDialog has been shown-->
+<attribute name="focusOnItem" value="null"/>
+
+<attribute name="currentRoomObject" value="null"/>
+
+<attribute name="appointmentNotificationPopUp" value="null"/>
+
+<attribute name="conferenceBrowserIsinited" value="false" type="boolean" />
+
+<attribute name="isAllowedToScreenShare" value="false" type="boolean" />
+
+<attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
+
+<attribute name="isAllowedToGiveExclusiveAudio" value="false" type="boolean" />
+
+<attribute name="lzCalendarInfoTab" value="null"/>
+
+<attribute name="roomJumpId" value="0" type="number" />
+
+<attribute name="userContacts" value="null" />
+
+<!--
+    Loads a User profile page directly instead of loading the Dashboard
+    cuser is a hash that can be found in the UserContacts Table
+ -->     
+<attribute name="cuser" value="" type="string"/>
+
+<!--
+    Indicates if the user does accept or deny a user contact request
+ -->    
+<attribute name="cuserStatus" value="none" type="string"/>
+
+<!--
+    Attributes to handle the click search on linked user-keywords
+ -->
+<attribute name="userSettingsModuleOpt" value="userProfile" type="string"/>
+
+<attribute name="userSettingsSearchType" value="" type="string"/>
+<attribute name="userSettingsSearchPhrase" value="" type="string"/>
+<attribute name="userSettingsSearchRef" value="null"/>
+
+<!--
+    Attribute to load a custom user calendar instead of the own one
+-->
+<attribute name="contactUser" value="0" type="number" />
+
+<attribute name="monthnames" value="['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/> 
+
+<attribute name="dayShortNames" value="null" />
+
+<!--
+    Used in SOAP API to indicate if the user will see a pop up to enter its nickname
+ -->
+<attribute name="showNickNameDialog" value="false" type="boolean" />
+
+<!--
+    Used in SOAP API to indicate if the user logs directly into a room or into the dashboard
+ -->
+<attribute name="landingZone" value="" type="string"/>
+
+<!--
+    if the users logs in via SOAP he does not see the exit button by default
+    only if the landingZone == dashboard
+ -->
+<attribute name="destroyExitButton" value="true" type="boolean" />
+
+<attribute name="currentFileExplorer" value="null"/>
+
+<attribute name="allowRecording" value="true" type="boolean" />
+
+<!-- userdata -->
+<attribute name="sharedObject" value="null" />
+
+<attribute name="currentMicName" value="" type="string"/>
+<attribute name="currentCamName" value="" type="string"/>
+
+<attribute name="currentBaseConferenceRoom" value="null" />
+
+<attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> <!-- F12 --> 
+<attribute name="ARRANGE_WINDOWS_KEY" value="119"/> <!-- F8 --> 
+
+<!-- 
+	Indicates if the Red5 SIP Integration is enabled or not and 
+	if the SIP Dialer is shown in the conference menu
+ -->
+<attribute name="RED5_SIP_ENABLE" value="no" type="string" /> 
+
+<!-- 
+	The server side configuration of the max upload size for files
+ -->
+<attribute name="MAX_UPLOAD_SIZE" value="-1" type="string" /> 
+
+<attribute name="currentNC" value="null" />
+
+<!-- 
+	Holds a reference to the current tooltip, if there is one
+ -->
+<attribute name="currentToolTip" value="null" />
+
+<method name="registerToolTip" args="viewInstance">
+	if (this.currentToolTip != null) {
+		this.currentToolTip.cleanHolder();
+	}
+	this.currentToolTip = viewInstance;
+</method>
+
+<method name="clearToolTip">
+	if (this.currentToolTip != null) {
+		this.currentToolTip.cleanHolder();
+		this.currentToolTip = null;
+	}
+</method>
+
+<!-- 
+	Holds a reference to the current activity list, if there is one
+ -->
+<attribute name="currentActivityList" value="null" />
+
+</library>

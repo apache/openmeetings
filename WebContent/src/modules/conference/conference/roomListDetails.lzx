@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="userRoomTabItem" extends="view" 
+	   width="$once{ parent.width }" >
+
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="usertime" value="" type="string" />
+	<attribute name="cbtext" value="" type="string" />
+	
+	<handler name="oninit">
+		<![CDATA[
+	        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
+	        		+'&moduleName=chat&parentPath=&room_id='
+	        		+'&remoteUserid='+this.user_id
+	        		+'&sid='+canvas.sessionId;
+	        		
+	        if ($debug) Debug.write("downloadurl "+downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);	
+	        
+	        if ($debug) Debug.write("TIME: "+this.usertime);
+	        
+        ]]>
+	</handler>
+	
+	<image name="_userpic" />
+
+	<text text="$once{ parent.username }" x="40"
+		  width="$once{ parent.width - 40 }"
+		  selectable="true" />
+	
+	<text text="$once{ parent.usertime }" x="40" y="20" />
+
+</class>
+
+<class name="roomListDetails" extends="view" >
+
+	<attribute name="roomid" value="0" type="number" />
+	<attribute name="roomname" value="" type="string" />
+	<attribute name="roomcomment" value="" type="string" />
+	<attribute name="currentusers" value="null" />
+	
+	
+	<method name="doinit" args="currentusers,roomid,roomname,roomcomment">
+		<![CDATA[
+			if ($debug) Debug.write("doinit",currentusers,roomid,roomname);
+			this.setAttribute('currentusers',currentusers);
+			this.setAttribute('roomid',roomid);
+			this.setAttribute('roomname',roomname);
+			this.setAttribute('roomcomment',roomcomment);
+			this._roomname.setAttribute('text',canvas.getLabelName(406)+" "+roomname);
+			this._roomcomment.setAttribute('text', roomcomment);
+			this._users.clearList();
+			if (this.currentusers != null) {
+				for (var i = 0;i<this.currentusers.length;i++){
+					var username = this.currentusers[i].firstname + " "
+							+ this.currentusers[i].lastname
+							+ " (" + this.currentusers[i].username + ") ";
+					 new lz.userRoomTabItem(this._users._users._cbtext,{user_id:this.currentusers[i].user_id,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
+				}
+			}
+			this.bdatum.setAttribute("visibility", "hidden");
+    		this.edatum.setAttribute("visibility", "hidden");
+    		this.l_bdatum.setAttribute("visibility", "hidden");
+    		this.l_edatum.setAttribute("visibility", "hidden");
+    		if (roomid > 0) {
+				this.getAppointmentData.doCall();
+			}
+		]]>
+	</method>
+	
+	<!-- Retrieving Appointmentdata for Meeting -->
+	<netRemoteCallHib name="getAppointmentData" remotecontext="$once{ canvas.thishib }" 
+		funcname="conferenceservice.getAppointMentDataForRoom" >   
+		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getAppointmentData: ",value);
+		    	
+		    	if(value!=null){
+		    		
+		    		if ($debug) Debug.write("Appointment Name : " + value.appointmentName);
+		    		parent.bdatum.setAttribute('text',""+value.appointmentStarttime);
+		    		parent.edatum.setAttribute('text',""+value.appointmentEndtime);
+		    		
+		    		
+		    		parent.bdatum.setAttribute("visibility","visible");
+		    		parent.edatum.setAttribute("visibility","visible");
+		    		parent.l_bdatum.setAttribute("visibility","visible");
+		    		parent.l_edatum.setAttribute("visibility","visible");
+		    		
+		    		if ($debug) Debug.write("Appointment Start : " + value.appointmentStarttime);
+		    		if ($debug) Debug.write("Appointment End : " + value.appointmentEndtime);
+		    		
+		    	} else{
+		    		
+		    		parent.bdatum.setAttribute('text','');
+		    		parent.edatum.setAttribute('text','');
+		    		
+		    		parent.bdatum.setAttribute("visibility", "hidden");
+		    		parent.edatum.setAttribute("visibility", "hidden");
+		    		parent.l_bdatum.setAttribute("visibility", "hidden");
+		    		parent.l_edatum.setAttribute("visibility", "hidden");
+		    		
+		    	}
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib> 	
+	
+	<netRemoteCallHib name="getRoomClientsListByRoomId" funcname="conferenceservice.getRoomClientsListByRoomId" 
+		remotecontext="$once{ canvas.thishib }" >   
+		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getRoomClientsListByRoomId: ",value);
+		    	parent.currentusers = value;
+		    	parent.doinit();
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib>   	
+	
+	<labelText labelid="404" fontstyle="italic" width="200" />
+	
+	<labelText name="_roomname" labelid="406" y="20" width="200" />
+	
+	<labelText name="l_bdatum" labelid="570" y="40" width="50" visible="false" />
+	<labelText name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
+
+	<labelText name="l_edatum" labelid="571" y="60" width="50" visible="false" />
+	<labelText name="edatum" y="60" x="75" width="100" text="" visible="false" />
+
+	<labelText name="_roomcomment" x="75" y="${parent.l_edatum.y + (parent.l_edatum.visible ? 30 : 0)}" width="100" text=""/>
+	<labelText labelid="270" y="${parent._roomcomment.y}" width="50" />
+
+	<labelText name="user_label" labelid="407" y="${10 + parent._roomcomment.y + parent._roomcomment.height}" width="200" />
+	<view name="_users" width="300" y="${30 + parent._roomcomment.y + parent._roomcomment.height}"
+				height="${ parent.height - parent._users.y }" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+		<method name="clearList">
+			for (var eg in this._users._cbtext.subviews) 
+				this._users._cbtext.subviews[eg].destroy();
+		</method>
+		<view name="_users" width="299" height="${ parent.height - 1 }" bgcolor="0xFFFFFF" 
+			  x="1" y="1" clip="true" >
+			<view name="_cbtext" width="286" layout="axis:y;spacing:2" />
+			<om_vscrollbar />
+		</view>
+	</view>
+	
+</class>
+
+</library>

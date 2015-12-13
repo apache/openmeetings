@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Release Guide</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How to Build a Release of OpenMeetings">
+
+			<subsection name="Required tools">
+
+				<div>
+					<p>To build a binary release of OpenMeetings you need: </p>
+					<ul>
+						<li>Sun JDK6</li>
+						<li>Apache ANT (minimum) 1.8.3</li>
+						<li>
+							SVN Command line client (Subversion 1.7 required!)
+							<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+								rel="nofollow">http://subversion.apache.org/packages.html</a>
+						</li>
+						<li>A text editor</li>
+						<li>You need to be online! The build process actively downloads
+							needed libraries and dependencies.
+						</li>
+					</ul>
+				</div>
+
+			</subsection>
+
+			<subsection name="Prepare your Apache ID">
+
+				<div>
+					Every release package must be signed with a PGP/GPG key.
+					<br />
+					So if you want to release a package your Apache Id must be
+					connected with a PGP key!
+					<br />
+					<br />
+					You might follow:
+					<br />
+					<a
+						href="http://www.apache.org/dev/new-committers-guide.html#security-and-pgp"
+						target="_blank">http://www.apache.org/dev/new-committers-guide.html#security-and-pgp
+					</a>
+					<br />
+					<br />
+					In short:
+					<br />
+					Create PGP key pairs (private + public) (and I recommend creating a
+					Revoke Cert)
+					<br />
+					Upload the public key (either bei using the PGP Tool that you use
+					to create the key) or by using the web form to:
+					<a href="http://pgp.mit.edu/" target="_blank" rel="nofollow">http://pgp.mit.edu/
+					</a>
+					<br />
+					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE
+					4413 09AB 0055 16BF 93A3 0395") to your profile at
+					<a href="http://id.apche-org" target="_blank" rel="nofollow">id.apche-org
+					</a>
+					<br />
+					Wait for 6-8 hours, the server will search for a public key based
+					on your fingerprint, if success it will create a file with your
+					name at:
+					<br />
+					<a href="https://people.apache.org/keys/committer/">https://people.apache.org/keys/committer/</a>
+					<br />
+					<br />
+					If that is "success" then add your key to:
+					<br />
+					<a
+						href="https://svn.apache.org/repos/asf/openmeetings/project/KEYS">https://svn.apache.org/repos/asf/openmeetings/project/KEYS
+					</a>
+					<br />
+					and follow the instructions in the file.
+					<br />
+				</div>
+
+			</subsection>
+
+			<subsection name="Step1 - Prepare files">
+				<p>
+					Check that all files:
+					<br />
+					LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README
+					<br />
+					are up to date and refer to the right version.
+				</p>
+
+				<p>
+					Create a TAG of the SVN tree that you would like to release
+				</p>
+
+				<p>Get the source from your TAG: </p>
+				<div class="xmlcode">
+					svn checkout
+					https://svn.apache.org/repos/asf/openmeetings/$TREE/$BRANCHORTAG/
+					<br />
+					$TREE and $BRANCHORTAG should be replaced with your new TAG
+				</div>
+
+				<p>Edit the file build.properties</p>
+				<div class="xmlcode">
+					project.status=SNAPSHOT
+				</div>
+				<p>to</p>
+				<div class="xmlcode">
+					project.status=RELEASE
+				</div>
+				<p>Run the command: </p>
+				<div class="xmlcode">
+					ant dist-release
+				</div>
+				<p>Test building the source on windows and OSx or Linux</p>
+				<p>Test running the binary's</p>
+				<p>Create MD5 checksums</p>
+				<div class="xmlcode">
+					#On OSX you might use this command to make a MD5 checksum and store
+					it to a file
+					<br />
+					md5 -r apache-openmeetings-XXX-src.zip >
+					apache-openmeetings-XXX-src.zip.md5
+				</div>
+				<p>
+					Create signatures with the your KEY for every file, the KEY must be
+					available at:
+					<br />
+					<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">http://www.apache.org/dist/incubator/openmeetings/KEYS
+					</a>
+				</p>
+				<p>Upload the build artefacts to your public_html in your home
+					directory at people.apache.org
+				</p>
+				<div class="xmlcode">
+					#On OSX you might use this command to upload the file
+					<br />
+					scp apache-openmeetings-XXXX.zip
+					sebawagner@people.apache.org:~/public_html/
+				</div>
+			</subsection>
+
+			<subsection name="Step2 - VOTE and RESULT emails">
+				<p>
+					Send a "VOTE" to the developer mailing list including links to
+					release artefacts.
+					<br />
+					A VOTE always contains two parts:
+					<br />
+					Send an email to the developer mailing list with the subject line:
+					<br />
+					[VOTE] Apache OpenMeetings x.xx release
+					<br />
+					An example for such an email:
+					<a
+						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA9dXXMnxA3EhJVPGhpvO4z2cLNqHVP7uOhSHT8e_vHoFQ%40mail.gmail.com%3E">example Vote email</a>
+					<br />
+					Forward (Not CC) this Vote email to: private@incubator.apache.org
+					<br />
+					<br />
+					After the vote is over, send a "RESULT" email to the list with the
+					subject line:
+					<br />
+					[RESULT][VOTE] Apache OpenMeetings x.xx release
+					<br />
+					An example for such an email:
+					<a
+						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA-ibo6fGCbnLjJX9H5H2kFGDVJRMfxPyMtzWzCWNi%2BpOg%40mail.gmail.com%3E">example Result email</a>
+					<br />
+					Forward (Not CC) this RESULT VOTE email to:
+					private@incubator.apache.org
+					<br />
+					<br />
+					After the Vote was successful on the Developer mailing list,
+					you
+					need organize a vote on the general list:
+					general@incubator.apache.org
+					<br />
+					The vote on the general list has the same process, first a VOTE
+					email, then a RESULT email.
+					<br />
+					You need at least 3 IPMC votes for the release. You can summarize
+					the IPMC votes from both votes (dev + general).
+				</p>
+
+			</subsection>
+
+			<subsection name="Step3 - Distribute and announce">
+				<p>If VOTEs positive: Upload the release </p>
+				<div class="xmlcode">
+					The distribution upload location
+					(www.apache.org/dist)
+					for all Apache projects is the
+					/www/www.apache.org/dist directory on
+					people.apache.org. Each
+					project owns a directory within dist.
+				</div>
+				<p>
+					Our distribution directory is:
+					<br />
+					/www/www.apache.org/dist/incubator/openmeetings
+					<br />
+					each version should have a subfolder within this directory matching
+					the name of the release:
+					<br />
+					for example 2.0
+					<br />
+					Make sure the the files/folders in the section
+					/www/www.apache.org/dist/incubator/openmeetings have the proper
+					rights,
+					see:
+					<a
+						href="http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions"
+						target="_BLANK">http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions
+					</a>
+				</p>
+				<p>
+					Wait 24 hours (until all Apache mirrors have synced the packages)
+					and send an announcement to the mailing list + blog and any other
+					channel.
+				</p>
+				<p>
+					Email announcements should have the subject line:
+					<br />
+					[ANNOUNCE] Apache OpenMeetings x.xx [Incubating] released
+				</p>
+				<p>
+					Add a section to
+					<a href="downloads.html">downloads</a>
+					website.
+					<br />
+					Make sure that the binary packages are linked using the mirror URL
+					as base path (
+					<b>not</b>
+					www.apache.org/dist):
+					<br />
+					Mirror URL:
+					<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/">http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/
+					</a>
+				</p>
+			</subsection>
+
+		</section>
+
+	</body>
+
+</document>

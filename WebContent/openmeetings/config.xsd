@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="rtmphostlocal"/>
+        <xs:element ref="httphostlocal"/>
+        <xs:element ref="rtmpport"/>
+        <xs:element ref="rtmpTunnelport"/>
+        <xs:element ref="rtmpsslport"/>
+        <xs:element ref="useSSL"/>
+        <xs:element ref="red5httpport"/>
+        <xs:element ref="protocol"/>
+        <xs:element ref="proxyType"/>
+        <xs:element ref="currentappname"/>
+        <xs:element ref="currentappnameurl"/>
+        <xs:element ref="appdisplay"/>
+        <xs:element ref="currentappnamebugurl"/>
+        <xs:element ref="loudnessAcitviation"/>
+        <xs:element ref="webAppRootKey"/>
+        <xs:element ref="httpRootKey"/>
+        <xs:element ref="showWindowEffect"/>
+        <xs:element ref="showRecording"/>
+        <xs:element ref="firstdayinweek"/>
+        <xs:element ref="framesPerSecond"/>
+        <xs:element ref="bandwidthNeededNormal"/>
+        <xs:element ref="bandwidthNeededBest"/>
+        <xs:element ref="camQualityNormal"/>
+        <xs:element ref="camQualityBest"/>
+        <xs:element ref="microphoneRateBest"/>
+        <xs:element ref="echoPath" />
+        <xs:element ref="defaultWhiteboardWidth"/>
+        <xs:element ref="defaultWhiteboardHeight"/>
+        <xs:element ref="availableCameraResolutions"/>
+        <xs:element ref="adminModuleUser"/>
+        <xs:element ref="adminModuleRoom"/>
+        <xs:element ref="adminModuleOrg"/>
+        <xs:element ref="adminModuleLanguages"/>
+        <xs:element ref="adminModuleConnections"/>
+        <xs:element ref="adminModuleConfiguration"/>
+        <xs:element ref="adminModuleBackup"/>
+        <xs:element ref="adminModuleLDAP"/>
+        <xs:element ref="adminModuleServers"/>
+        <xs:element ref="moderatorModuleUser"/>
+        <xs:element ref="moderatorModuleRoom"/>
+        <xs:element ref="dashboardModuleStartScreen"/>
+        <xs:element ref="dashboardModuleCalendar"/>
+        <xs:element ref="conferenceModuleRoomList"/>
+        <xs:element ref="conferenceRoomModule"/>
+        <xs:element ref="restrictedRoomModule"/>
+        <xs:element ref="interviewRoomModule"/>
+        <xs:element ref="recordModule"/>
+        <xs:element ref="userSettingsModule"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rtmphostlocal">
+  	<xs:annotation>
+    	<xs:documentation>
+    		URL/IP to use for the Server for RTMP and RTMPT traffic.
+		    If this value is empty it will try to connect to the 
+		    domain-name the OpenMeetings-Client has been loading from
+		    
+		    Can be either and IP or a domain name. 
+		    For example: 
+		    192.168.254.182
+		    or
+		    mysubdomain.streaming.to
+    	</xs:documentation>
+    </xs:annotation>
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="httphostlocal">
+    <xs:annotation>
+    	<xs:documentation>
+    		URL/IP to use for the Server for HTTP and HTTPS traffic.
+		    If this value is empty it will use the rtmphostlocal 
+		    variable (and in that way try to connect to the 
+		    domain-name the OpenMeetings-Client has been loading from)
+    	</xs:documentation>
+    </xs:annotation>
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rtmpport" type="xs:integer"/>
+  <xs:element name="rtmpTunnelport" type="xs:integer"/>
+  <xs:element name="rtmpsslport" type="xs:integer"/>
+  <xs:element name="useSSL" type="xs:NCName"/>
+  <xs:element name="red5httpport" type="xs:integer"/>
+  <xs:element name="protocol" type="xs:NCName"/>
+  <xs:element name="proxyType" type="xs:NCName"/>
+  <xs:element name="currentappname" type="xs:string"/>
+  <xs:element name="currentappnameurl" type="xs:anyURI"/>
+  <xs:element name="appdisplay">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="2" minOccurs="2" ref="displayelement"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="displayelement">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+      <xs:attribute name="display" use="required" type="xs:boolean"/>
+      <xs:attribute name="x" use="required" type="xs:integer"/>
+      <xs:attribute name="y" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="currentappnamebugurl" type="xs:anyURI"/>
+  <xs:element name="loudnessAcitviation" type="xs:integer"/>
+  <xs:element name="webAppRootKey" type="xs:NCName"/>
+  <xs:element name="httpRootKey" type="xs:string"/>
+  <xs:element name="showWindowEffect" type="xs:NCName"/>
+  <xs:element name="showRecording" type="xs:NCName"/>
+  <xs:element name="firstdayinweek" type="xs:integer"/>
+  <xs:element name="framesPerSecond" type="xs:integer"/>
+  <xs:element name="bandwidthNeededNormal" type="xs:integer"/>
+  <xs:element name="bandwidthNeededBest" type="xs:integer"/>
+  <xs:element name="camQualityNormal" type="xs:integer"/>
+  <xs:element name="camQualityBest" type="xs:integer"/>
+  <xs:element name="microphoneRateBest" type="xs:integer"/>
+  <xs:element name="echoPath">
+    <xs:annotation>
+        <xs:documentation>
+            AEC configuration value - 
+			Specifies the echo path length (in milliseconds). A longer echo path means better 
+			echo cancellation but also introduces longer delays and requires more processing power. 
+			The default value is 128; the only other possible value is 256.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+        <xs:restriction base="xs:int">
+            <xs:enumeration value="128" />
+            <xs:enumeration value="256" />
+        </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="defaultWhiteboardWidth" type="xs:integer"/>
+  <xs:element name="defaultWhiteboardHeight" type="xs:integer"/>
+  <xs:element name="availableCameraResolutions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="resolution"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resolution">
+    <xs:complexType>
+      <xs:attribute name="height" use="required" type="xs:integer"/>
+      <xs:attribute name="isDefault" use="required" type="xs:boolean"/>
+      <xs:attribute name="type" use="required"/>
+      <xs:attribute name="width" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="adminModuleUser" type="xs:NCName"/>
+  <xs:element name="adminModuleRoom" type="xs:NCName"/>
+  <xs:element name="adminModuleOrg" type="xs:NCName"/>
+  <xs:element name="adminModuleLanguages" type="xs:NCName"/>
+  <xs:element name="adminModuleConnections" type="xs:NCName"/>
+  <xs:element name="adminModuleConfiguration" type="xs:NCName"/>
+  <xs:element name="adminModuleBackup" type="xs:NCName"/>
+  <xs:element name="adminModuleLDAP" type="xs:NCName"/>
+  <xs:element name="adminModuleServers" type="xs:NCName"/>
+  <xs:element name="moderatorModuleUser" type="xs:NCName"/>
+  <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
+  <xs:element name="dashboardModuleStartScreen" type="xs:NCName"/>
+  <xs:element name="dashboardModuleCalendar" type="xs:NCName"/>
+  <xs:element name="conferenceModuleRoomList" type="xs:NCName"/>
+  <xs:element name="conferenceRoomModule" type="xs:NCName"/>
+  <xs:element name="restrictedRoomModule" type="xs:NCName"/>
+  <xs:element name="interviewRoomModule" type="xs:NCName"/>
+  <xs:element name="recordModule" type="xs:NCName"/>
+  <xs:element name="userSettingsModule" type="xs:NCName"/>
+</xs:schema>

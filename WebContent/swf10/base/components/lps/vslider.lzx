@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<!--
+    vertical slider contributed by Sebastian Wagner
+-->
+<library>
+  
+  <class name="vslidertrack" extends="view" bgcolor="0x000000">
+        <view width="${ parent.width-2}" height="${ parent.height-2 }" 
+          x="1" y="1" bgcolor="0xFFFFFF"/>
+        <view width="${ parent.width-2}" bgcolor="0xCCCCCC"
+          x="1" y="${ (this.parent.parent.switchaxis) ? 
+                parent.parent._sliderthumb.y : 1 }" 
+          visible="${ parent.parent.showrange }" 
+          height="${ (this.parent.parent.switchaxis) ? 
+        (parent.parent._vslidertrack.height - parent.parent._sliderthumb.y-1) : 
+        parent.parent._sliderthumb.y }" />
+  </class>
+  
+  <class name="vsliderthumb" extends="button" bgcolor="0x999999" 
+        height="10" width="20" 
+    onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)">
+        <attribute name="drag_min" value="0" type="number" />
+        <attribute name="showvalue" type="boolean" value="true" />
+        <attribute name="drag_max" value="0" type="number" />
+        <handler name="oninit">
+                //Setting the initVal
+                this.setAttribute('y', getPosFromValue(this.parent.initvalue));
+        </handler>
+        
+        <method name="getValueFromPos">
+                var delta1 = this.parent.maxvalue-this.parent.minvalue;
+                var perc = (this.parent.switchaxis) ? 1-(y / (this.parent.height-this.height)) : (y / (this.parent.height-this.height));
+                //Debug.write(delta1,perc);
+                return (Math.round(perc*delta1))+this.parent.minvalue;
+        </method>
+        
+        <method name="getPosFromValue" args="val">
+                var perc = (val-this.parent.minvalue) / (this.parent.maxvalue-this.parent.minvalue);
+                //Debug.write(perc);
+                var valY = (this.parent.switchaxis) ? ( (1-perc) * (this.parent.height-this.height)) : (perc * (this.parent.height-this.height));
+                //Debug.write("valY: ",Math.round(valY));
+                return Math.round(valY);
+        </method>
+        
+        <setter name="y" args="v">
+                super.setAttribute('y', v);
+                var thumbVal = getValueFromPos();
+                if (thumbVal != parent.value) {
+                        this.parent.setValue(thumbVal);
+                }               
+        </setter>
+    <dragstate name="dragger" drag_axis="y"
+        drag_min_y="${ this.drag_min }"  
+        drag_max_y="${ this.drag_max }">
+            <text name="t1" x="-24" text="${ this.parent.parent.value }" y="-4" resize="true" />
+    </dragstate>
+  </class>
+
+  <class name="vslider" extends="view" >
+        <!--- Minimum Value -->
+        <attribute name="minvalue" type="number" value="0"/>
+        
+        <!--- Maximum Value -->
+        <attribute name="maxvalue" type="number" value="100"/>
+        
+        <!--- Showrange should the slidertrack be with color while 'sliding' -->
+        <attribute name="showrange" type="boolean" value="true"/>
+        
+        <!--- showvalue should the slider show the numbers of min/max -->
+        <attribute name="showvalue" type="boolean" value="true"/>
+        
+        <!--- switchaxis true means minimum-value is 
+                t op maximum is bottom false turns around -->
+        <attribute name="switchaxis" type="boolean" value="false"/>
+        
+        <!-- Initial Value -->
+        <attribute name="initvalue" value="0" type="number" />          
+        
+    <!--- @keywords private -->
+    <event name="onvalue"/>
+        
+    <!--- @keywords private -->
+    <attribute name="value" value="0" setter="setValue(value)"/>
+    <method name="setValue" args="v">
+        if (!isinited) {
+          this.value = v;
+          return;
+        }
+        if (this.value == v) return;
+        this.value = v;
+        if (onvalue) onvalue.sendEvent(v);
+    </method>
+       
+        <vslidertrack name="_vslidertrack" x="5" 
+        width="10" height="${ parent.height }" />
+        <vsliderthumb name="_sliderthumb" 
+        drag_max="${ parent.height-this.height }" 
+        showvalue="${ parent.showvalue }" />
+        
+        <text text="${ ( (this.parent.switchaxis) ? 
+                this.parent.maxvalue : this.parent.minvalue ) }" 
+        visible="${ parent.showvalue }" 
+        y="-8" x="${ this.parent._vslidertrack.width+10 }" />
+        
+        <text text="${ ( (this.parent.switchaxis) ? 
+                this.parent.minvalue : this.parent.maxvalue ) }" 
+          visible="${ parent.showvalue }" 
+          y="${ this.parent.height-10 }" 
+          x="${ this.parent._vslidertrack.width+10 }" />
+  </class>
+  
+  
+
+</library>

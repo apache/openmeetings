@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link media="screen" type="text/css" rel="stylesheet" href="css/theme.css"/>
+		
+		<script type="text/javascript" src="js/jquery-ui-1.9.0.custom.min.js"></script>
+		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery-ui-1.9.0.custom.min.css"/>
+		<script type="text/javascript">
+			function showBusyIndicator() {
+				$('#busy_indicator').show();
+			}
+			function hideBusyIndicator() {
+				$('#busy_indicator').hide();
+			}
+			function showAbout() {
+				$('#aboutDialog').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+					, width: 400
+					, modal: true
+				});
+				$('#aboutDialog').dialog('open');
+			}
+		</script>
+	</wicket:head>
+	<wicket:extend>
+		<script type="text/javascript">
+			$(function() {
+				Wicket.Event.subscribe('/ajax/call/failure', hideBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/before', showBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/success', hideBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/complete', hideBusyIndicator);
+			});
+		</script>
+		<div id="topLinks"><span 
+			id="contactsAndMessages"><wicket:ommessage key="1188"/></span><span 
+			id="profile"><wicket:ommessage key="5"/></span><span 
+			id="logout"><a wicket:id="logout"><wicket:ommessage key="310"/></a></span><span 
+			id="reportBug"><wicket:ommessage key="284"/></span><span><a 
+			wicket:id="about">About</a></span></div>
+		<div id="busy_indicator">Loading ...</div>
+		<div wicket:id="menu"></div>
+		<div wicket:id="contents"><div wicket:id="child"></div></div>
+		<div wicket:id="chatPanel"></div>
+		<div wicket:id="aboutDialog" style="display: none;"></div>
+	</wicket:extend>
+</html>
