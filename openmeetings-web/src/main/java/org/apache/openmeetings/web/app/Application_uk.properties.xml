@@ -1869,4 +1869,5 @@
   <entry key="error.type.info">Повідомлення</entry>
   <entry key="poll.type.yesNo">Так/Ні</entry>
   <entry key="poll.type.numeric">В числовому порядку 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>
