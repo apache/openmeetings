@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<canvas debug="true" width="100%" height="100%" fontsize="14" title="OpenMeetings - Computer testing">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+
+<include href="lang/en.lzx"/>
+
+<include href="lib/"/>
+<include href="content/"/>
+
+            <tabs name="mainTabs">
+               <tabpane selected="true" text="${mess.home}">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.welcome}" multiline="true" width="${this.parent.width - 20}" />
+                    <nextButton nextTabpane="${this.parent.parent.soundTab}" text="${mess.next}" />
+                </tabpane>
+
+                <tabpane text="${mess.sound}" name="soundTab" onselect="//Debug.write('focus'); audioplayer.play();">
+					
+					<!-- define content areas which are 
+						kind of component in classes -->
+					 <audioTest name="_audiotest" />
+					
+                </tabpane>                
+                
+                <tabpane text="${mess.micro}" name="microTab">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.microRecord}" multiline="true" width="${this.parent.width - 20}" />
+					        <view>
+					            <simplelayout axis="x" spacing="-1"/>
+					           <button width="40" onclick="audioplayer.stop()">
+					                <view resource="resources/play.png" y="6" align="center"/>
+					            </button>
+					            <button width="40" onclick="audioplayer.play()">
+					                <view resource="resources/record.png" y="5" align="center"/>
+					            </button>
+					        </view>
+					        
+					        <view>
+					            <simplelayout axis="x" spacing="-1"/>
+					            <button width="40" onclick="audioplayer.setVolume( audioplayer.getVolume() -10)">
+					                    -<view resource="resources/mix_volume.png" y="5" align="right"/>
+					                </button>
+					            <button width="40" onclick="audioplayer.setVolume( audioplayer.getVolume() +10)">
+					                    +<view resource="resources/mix_volume.png" y="5" align="right"/>
+					                </button>
+					        </view>
+                    <nextButton nextTabpane="${this.parent.parent.webcamTab}" text="${mess.next}" />
+                </tabpane>                
+
+                <tabpane text="${mess.webcam}" name="webcamTab">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.webcamText}" multiline="true" width="${this.parent.width - 20}" />
+		<view id="v1" layout="axis:y; spacing:4">
+			<videoview id="live" type="rtmp" stream="$once{canvas.s1}" width="240" height="160">
+				<camera id="cam" show="true" fps="20" width="240" height="160" 
+																picturequality="0"/>
+				<microphone id="mic" capturing="false"/>
+				
+			</videoview>
+		</view>                    
+                    <nextButton nextTabpane="${this.parent.parent.messTab}" text="${mess.next}" />
+                </tabpane>                
+
+                <tabpane text="${mess.bandwidth}" name="messTab">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.bandwidthText}" multiline="true" width="${this.parent.width - 20}" />
+                    <nextButton nextTabpane="${this.parent.parent.latencyTab}" text="${mess.next}" />
+                </tabpane>                
+
+                <tabpane text="${mess.latency}" name="latencyTab">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.latencyText}" multiline="true" width="${this.parent.width - 20}" />
+                    <nextButton nextTabpane="${this.parent.parent.synthesisTab}" text="${mess.next}" />
+                </tabpane>                
+
+                <tabpane text="${mess.synthesis}" name="synthesisTab">
+					<simplelayout axis="y" spacing="5"/>
+                    <text text="${mess.synthesisText}" multiline="true" width="${this.parent.width - 20}" />
+                </tabpane>                
+            </tabs>
+
+	
+	<rtmpconnection src="rtmp://192.168.0.1/'+canvas.webAppRootKey+'/test" autoconnect="true"/>
+	<mediastream name="s1" type="rtmp"/>
+	<mediastream name="s2" type="rtmp"/>
+	<simplelayout/>
+
+<!--	
+	<text multiline="true" width="100%"> Instructions:
+		<br/> 1. Either run a flash media server on localhost (127.0.0.1), or ssh tunnel to a
+		media server at a known host
+		<br/> 2. Press the broadcast button. (Grant camera access permission if needed.) The
+		button should change to say "stop broadcasting"
+		<br/> 3. Press the receive button. You should be receiving audio and video from
+		yourself and the button should say "stop receiving."
+		<br/> 4. Try out the audio and video mute buttons. The video mute should freeze the
+		received picture. The audio mute should silence the received sound.
+		<br/> 5. Press the receive button. The received video should freeze and the button
+		should say "stop receiving".
+		<br/> 6. Press the receive button again. The video should resume and the button should
+		say "receiving".
+		<br/> 7. Press the broadcast button. The received video should freeze and the button
+		should say "broadcast".<br/> <br/> The indicator below shows the status of the video
+		connection.
+		</text>
+-->	
+</canvas>

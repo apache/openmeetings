@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<!-- TODO design should be changed in the future -->
+	<table class="messages">
+		<tr>
+			<td class="side left">
+				<div class="email new clickable" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
+				<div wicket:id="folders">
+					<div wicket:id="inbox"><wicket:ommessage key="1222"/></div>
+					<div wicket:id="sent"><wicket:ommessage key="1223"/></div>
+					<div wicket:id="trash"><wicket:ommessage key="1224"/></div>
+					<div class="email newdir clickable" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
+					<div wicket:id="folder">
+						<div wicket:id="name"></div>
+						<div class="delete" wicket:id="delete" wicket:ommessage="title:1262"></div>
+					</div>
+				</div>
+			</td>
+			<td class="main">
+				<div><b><wicket:ommessage key="1206"/>&nbsp;(<span wicket:id="unread"></span>)</b></div>
+				<div wicket:id="navigator"></div>
+				<table id="messagesTable" style="width: 100%;">
+					<thead>
+					<tr>
+						<th align="left"><span wicket:id="orderById"></span><wicket:ommessage key="1205"/></th>
+						<th align="left"><span wicket:id="orderByFrom"></span><wicket:ommessage key="1202"/></th>
+						<th align="left"><span wicket:id="orderBySubject"></span><wicket:ommessage key="1203"/></th>
+						<th align="left"><span wicket:id="orderBySend"></span><wicket:ommessage key="1204"/></th>
+					</tr>
+					</thead>
+					<tbody wicket:id="container" style="background-color: white;">
+					<tr wicket:id="messages">
+						<td wicket:id="id"></td>
+						<td wicket:id="from"></td>
+						<td wicket:id="subject"></td>
+						<td wicket:id="send"></td>
+					</tr>
+					</tbody>
+				</table>
+				<div wicket:id="buttons">
+					<select wicket:id="msgSelect"></select>
+					<input wicket:id="toInboxBtn" type="button" wicket:ommessage="value:1255"/>
+					<input wicket:id="deleteBtn" type="button" wicket:ommessage="value:1245"/>
+					<input wicket:id="readBtn" type="button" wicket:ommessage="value:1248"/>
+					<input wicket:id="unreadBtn" type="button" wicket:ommessage="value:1247"/>
+					<select wicket:id="msgMove"></select>
+				</div>
+				<div wicket:id="selectedMessage">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1202"/></td>
+							<td wicket:id="from"></td>
+						</tr>
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1210"/></td>
+							<td wicket:id="to"></td>
+						</tr>
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1211"/></td>
+							<td wicket:id="subj"></td>
+						</tr>
+					</table>
+					<div style="background-color: white;min-height: 300px;" wicket:id="body"></div>
+				</div>
+			</td>
+			<td class="side right" wicket:id="contacts">
+				<div><b><wicket:ommessage key="1189"/>&nbsp;(<span wicket:id="pendingContacts"></span>)</b></div>
+				<div><b><wicket:ommessage key="1188"/>&nbsp;(<span wicket:id="allContacts"></span>)</b></div>
+				<table style="width: 100%">
+					<tr>
+						<th><wicket:ommessage key="1180"/></th>
+						<th><wicket:ommessage key="1185"/></th>
+					</tr>
+					<tr wicket:id="users">
+						<td><div wicket:id="name" style="overflow-x: hidden;"></div></td>
+						<td><div wicket:id="accept" class="tick om-icon clickable" wicket:ommessage="title:1190"
+							></div><div wicket:id="decline" class="cross om-icon clickable" wicket:ommessage="title:1191"
+							></div><div wicket:id="view" class="user om-icon clickable" wicket:ommessage="title:1236"
+							></div><div wicket:id="message" class="new-email om-icon clickable" wicket:ommessage="title:1253"
+							></div><div wicket:id="delete" class="cross om-icon clickable" wicket:ommessage="title:1234"
+							></div></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<div wicket:id="addFolder"></div>
+	<div wicket:id="newMessage"></div>
+	<div wicket:id="infoDialog"></div>
+</wicket:panel>
+</html>

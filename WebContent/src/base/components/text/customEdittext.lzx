@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="customEdittext" extends="inputtext" bgcolor="0xFFFFFF" fontsize="11" height="20" >
+	
+	<view name="v_border" height="1"       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="$once{parent.height -1}" />
+	
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	
+	<attribute name="isvalidInput" value="true" type="boolean" />
+	<attribute name="regexpType" value="none" type="string" />
+	<attribute name="regexpLabelid" type="number" />
+	<attribute name="preText" value="" type="string" />
+	
+	<event name="onafterCheck" />
+
+	<handler name="onfocus" args="f">
+    	this.preText = this.getText();
+    </handler>
+    
+    <handler name="oninit">
+    	//this.field.setAttribute("bgcolor",0xFFFFFF);
+    </handler>
+    
+    <handler name="ontext" args="txt">
+    	<![CDATA[
+            
+    	    //
+    	   
+    	    if (System.capabilities.os.indexOf('Linux')==-1) { 
+                return; 
+	        }
+	        
+	        //if ($debug) Debug.write("System.capabilities.os -- START ",System.capabilities.os,txt);
+	        
+	        if (txt == null || txt.length == 0) {
+	        	return;
+	        }
+	        
+	        
+	        //UTF8 character remappings
+            var cp1252 = new Object();
+            cp1252[0x20ac]=0x80;
+            cp1252[0x201a]=0x82;
+            cp1252[0x0192]=0x83;
+            cp1252[0x201e]=0x84;
+            cp1252[0x2026]=0x85;
+            cp1252[0x2020]=0x86;
+            cp1252[0x2021]=0x87;
+            cp1252[0x02c6]=0x88;
+            cp1252[0x2030]=0x89;
+            cp1252[0x0160]=0x8a;
+            cp1252[0x2039]=0x8b;
+            cp1252[0x0152]=0x8c;
+            cp1252[0x017d]=0x8e;
+            cp1252[0x2018]=0x91;
+            cp1252[0x2019]=0x92;
+            cp1252[0x201c]=0x93;
+            cp1252[0x201d]=0x94;
+            cp1252[0x2022]=0x95;
+            cp1252[0x2013]=0x96;
+            cp1252[0x2014]=0x97;
+            cp1252[0x02dc]=0x98;
+            cp1252[0x2122]=0x99;
+            cp1252[0x0161]=0x9a;
+            cp1252[0x203a]=0x9b;
+            cp1252[0x0153]=0x9c;
+            cp1252[0x017e]=0x9e;
+            cp1252[0x0178]=0x9f;
+    	
+            
+            var s=eval(Selection.getFocus()); 
+            var t=txt;
+                    
+            var i=Selection.getCaretIndex()-1; 
+            
+            //if ($debug) Debug.write("i",i,Selection.getCaretIndex());
+            
+            var d=i;
+            
+            //if ($debug) Debug.write("DO WHILE -1- ",t.charCodeAt(i),cp1252[t.charCodeAt(i)],i,0x80,0xBF);
+            
+            while (((t.charCodeAt(i)>=0x80 && t.charCodeAt(i)<=0xBF) || (cp1252[t.charCodeAt(i)])) && i>0) {
+            	
+            	//if ($debug) Debug.write("DO WHILE -2- ",t.charCodeAt(i),cp1252[t.charCodeAt(i)],i);
+            	
+                if (cp1252[t.charCodeAt(i)]) {
+                    t=t.substr(0,i)+String.fromCharCode(cp1252[t.charCodeAt(i)])+t.substr(i+1);
+                }
+                i--;
+            }
+            if (i==d) { 
+            	//if ($debug) Debug.write("i == d NOTHING TO REPLACE!");
+                return; 
+            }
+        
+            var u=0;
+            
+            if (t.charCodeAt(i)>=0xC2 && t.charCodeAt(i)<=0xDF && d-i==1) {
+                 // two-byte sequence
+                u= (t.charCodeAt(i+1) & 0x3F)       +
+                  ((t.charCodeAt(i  ) & 3   ) << 6) +
+                  ((t.charCodeAt(i  ) & 0x1C) << 6);
+            } else if (t.charCodeAt(i)>=0xE0 && t.charCodeAt(i)<=0xEF && d-i==2) {
+                // three-byte sequence
+                // (Flash Player doesn't cope with any more obscure Unicode)
+                u= (t.charCodeAt(i+2) & 0x3F)        +
+                  ((t.charCodeAt(i+1) & 3   ) << 6 ) +
+                  ((t.charCodeAt(i+1) & 0x3C) << 6 ) +
+                  ((t.charCodeAt(i  ) & 0x0F) << 12);
+            }
+        
+            if (u!=0) {
+            	//if ($debug) Debug.write("Replace String -1- ",txt,u,"Replace With ",String.fromCharCode(u));
+            	
+                this.setAttribute("text",t.slice(0,i)+String.fromCharCode(u)+t.slice(d+1));
+                
+                //if ($debug) Debug.write("Replace String -2- ",txt,u);
+                
+                this.setAttribute("text",this.text.split(String.fromCharCode(0x03)).join(''));
+            }
+            
+            //if ($debug) Debug.write("-- END ",this.text);
+            
+    	]]>
+    </handler>
+    
+    <attribute name="callDelegate" value="null" />
+    <attribute name="regExpCheckId" value="-1" />
+	
+	<handler name="onblur">
+		<![CDATA[
+			if (this.regexpType!="none"){
+			
+				//if ($debug) Debug.write("onblur");
+				//if ($debug) Debug.write("onblur check ",this.regexpType);		
+				var fieldValue = this.getText();
+				if (this.regexpType=="email") {
+					//var regExpV = ".+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)";
+					var regExpV = "^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+([a-zA-Z]{1,3})$";
+					//var regExpV = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+					this.regexpLabelid = 519;
+				} else if (this.regexpType=="date"){
+					var regExpV = "(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d";
+					this.regexpLabelid = 518;
+				} else if (this.regexpType=="float"){
+					var regExpV = "[0-9]*\\.[0-9]*";
+					this.regexpLabelid = 520;
+				} else if (this.regexpType=="phone"){
+					var regExpV = "\\+[0-9]+ [0-9]+ [0-9\\-]+";
+					this.regexpLabelid = 522;
+				} else if (this.regexpType=="number"){
+					var regExpV = "[0-9]*";
+					this.regexpLabelid = 521;
+				} else if (this.regexpType=="time"){
+					var regExpV = "([01][0-9]|2[0-3]):[0-5][0-9]";
+					this.regexpLabelid = 523;
+				} else {
+					if ($debug) Debug.warn("Unkown Regexp Type: ",this.regexpType);
+				}
+				//if ($debug) Debug.write("regExpV: ",regExpV);
+		  	    var fieldValue = this.getText();
+		  	    
+		  	    this.regExpCheckId = canvas.doRegExpCheck(this.getText(),regExpV);
+		  	    
+		  	    if(this.callDelegate == null) {
+		  	    	this.callDelegate = new LzDelegate( this, "checkRegExpResult" );
+		  	    }
+		
+				lz.Timer.resetTimer( this.callDelegate, 50 );
+			}
+		]]>
+	</handler>
+	
+	<method name="checkRegExpResult" args="item">
+		var tResult = canvas.checkRegExpResult(this.regExpCheckId);
+     	if ($debug) Debug.write("callback",tResult);
+     
+		if(tResult == undefined || tResult == null) {
+			lz.Timer.resetTimer( this.callDelegate, 50 );
+		} else {
+			if(!tResult){
+                if ($debug) Debug.warn("FALSE: regexperror");
+              	disablesTooltips(new lz.regexptip(canvas,{x:this.getAttributeRelative('x',canvas)+12,
+              					y:this.getAttributeRelative('y',canvas)+26,
+              					regexptext:canvas.getLabelName(this.regexpLabelid)}));
+              	this.usePreContent();
+              	this.setAttribute('isvalidInput',false);
+            } else {
+              	if(!this.isvalidInput){
+                	disablesTooltips(null);
+              	}
+              	this.setAttribute('isvalidInput',true);
+            }
+            if ($debug) Debug.write("-- Complete --");
+            this.onafterCheck.sendEvent();
+		}
+     </method>
+	
+    
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+    
+  	<method name="usePreContent">
+  		this.setAttribute('text',this.preText);
+  	</method>    
+    
+</class>
+
+</library>

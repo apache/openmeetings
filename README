@@ -1,0 +1,158 @@
+Apache OpenMeetings - README
+Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+--------------------------------------------------------------------------------
+
+About
+=====
+Apache Openmeetings provides video conferencing, instant messaging, white board,
+collaborative document editing and other groupware tools using API functions of 
+the Red5 Streaming Server for Remoting and Streaming. 
+
+Release Notes 3.0
+=============
+see CHANGELOG file for detailed log
+
+Refactoring main interface (admin, dashboard, etc.) to use HTML5 instead of Flash. 
+All the screens but the room are on HTML5. The room is still on Flash.
+
+The release also includes some bug fixes, timezone refactoring and a lot of 
+localization improvements.
+
+_Known Issues And Limitations_
+* RTMPS seems to be very unstable (will try to fix it in 3.1)
+* Recent version of Adobe Flash still causes crash (please downgrade to 11.5 version)
+https://bugzilla.mozilla.org/show_bug.cgi?id=885188
+* Multi-tabbing (no other flash application should be running in
+different browsers or tabs)
+* Chat clean up and log copying is not implemented
+* Moving recordings between folders does not work
+
+Please not that this is a first HTML5 release, so some minor UI issues are possible
+
+
+Release Notes 2.2.0
+=============
+see CHANGELOG file for detailed log
+
+Bug fix release for 2.1.1
+This release includes lots of UI and command line fixes, as well as some improvements:
+MSSQL DB support, Faster screen sharing, improved SOAP/REST call and LDAP support.
+
+_Known Issues_
+RTMPS seems to be very unstable (will try to fix it in 3.0)
+
+
+Release Notes 2.1.1
+=============
+see CHANGELOG file for detailed log
+
+Bug fix release for 2.1.0.
+This release includes some improvements in user interface, fixes for the 
+interview and video only rooms, and localization issues. 
+Configurable hot key for Mute/Unmute have been added.
+
+_Known Issues_
+Video/audio SIP integration is not a part of this Apache release.
+Check free red5sip product for this integration.
+
+Release passed reliability testing (great job, Vasily Degtyarev!)
+For 1 hour long conferences the following does not work with this release:
+* Recordigs (expected to work in 3.0)
+https://issues.apache.org/jira/browse/OPENMEETINGS-669
+* Recent version with Adobe Flash (please downgrade to 11.5 version)
+https://bugzilla.mozilla.org/show_bug.cgi?id=885188
+* Multi-tabbing (no other flash application should be running in
+different browsers or tabs)
+
+Release Notes 2.1
+=============
+see CHANGELOG file for detailed log
+
+_Integration with Asterisk_
+SIP/VOIP integration with Asterisk was refactored. 
+Confbridge application is now used instead of Meetme for the conferences.
+Sound quality and SIP transport stability was significantly improved.
+Basic support for video is added (is unstable and in beta version stage now).
+See also: http://openmeetings.apache.org/red5sip-integration_2.1.html
+
+_Improving the sound and video quality_
+All the audio/video related components now use SWF11 for broadcasting and 
+receiving audio and video signals. 
+Echo cancellation can be enabled in the config. 
+H264 video codec is now used instead of H263 to enable SIP video support.
+
+_Private and moderated chat_
+Ability to send private chat messages in the room is added as well as the chat 
+moderation funmctionality.
+
+_SMS sending module_
+Possibility to send SMS message as a meeting reminder is added.
+See also: https://cwiki.apache.org/confluence/display/OPENMEETINGS/SMS+Sending+Module
+
+_Network testing tool/script_
+Network testing tool is implemented and its link is added to the login page.
+See also: https://cwiki.apache.org/confluence/display/OPENMEETINGS/Connection+testing+tool
+
+_Improvements in the mail sending process_
+Now e-mails are re-send again in case of unsuccessfull result at the first 
+attempt or OpenMeetings re-start before the sending. 
+SMTP setting updates now takes effect just after they saving whereas previously 
+they started to work after the OpenMeetings re-start only.
+
+_Calendar_
+Messages about the meeting updates are sent only when substantial changes were made. 
+Multiple external attendees can be added as one operation, it's now possible to 
+specify user name for external guests (user will appear with this name in the user 
+list in the room). 
+
+_Room Interface_
+Possibility to get invitation link without sending an e-mail was added. 
+Confirmation dialog for exclusive audio no longer appears.
+Hot key is added to be able to "rearrange" video windows in the room. 
+Volume slider on the video pod toolbar was added.
+
+_Recordings and screen sharing improvements_
+Some improvements for the screen sharing and recordings quality and stability 
+were made.
+
+_Cluster capabilities_
+In the beta stage: OpenMeetings  can be configured in the cluster environment and 
+is ready for the testing, but development has not been fnished yet. 
+See also: http://openmeetings.apache.org/Clustering.html,
+https://cwiki.apache.org/confluence/display/OPENMEETINGS/Cluster+Master-Slave+overview
+
+_Admin/Calendar HTML5 UI_
+Additional HTML5 Wicket based UI (fully customizable with CSS) is added for 
+static screens as a proof of the concept.
+
+Getting Started
+===============
+Please visit the project website for the latest information:
+    http://openmeetings.apache.org/
+    
+Documentation for Installation and Upgrade:
+    http://openmeetings.apache.org/installation.html
+    http://openmeetings.apache.org/Upgrade.html
+
+Along with the developer mailing list archive:
+    http://openmeetings.apache.org/mail-lists.html
+    
+    
+System Requirements
+===================
+You need a platform that supports Sun Java SE 6.
+
+
+Building and running
+====================
+To build from source code:
+
+  - Requirements:
+    Sources compilation require Sun Java SE 6.
+    The project is built with Apache ANT 1.8.6 or later.
+  
+  - To build the OpenMeetings project run ant in the root directory:
+     ant
+    
+For a detailed documentation on how to build from source and options see:
+    http://openmeetings.apache.org/BuildInstructions.html

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+<ivy-module version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="apache" module="openmeetings" />
+	<configurations defaultconfmapping="default">
+		<conf name="default" />
+		<conf name="mainlib" extends="default" description="Top level libraries" />
+		<conf name="mainlib.ext" extends="mainlib" description="Top level libraries with different pattern" />
+		<conf name="openmeetings" description="Openmeetings required libraries" />
+		<conf name="openmeetings.ext" extends="openmeetings" description="Openmeetings required libraries with different pattern" />
+		<conf name="openmeetings.axis2" extends="openmeetings.ext" description="Axis required libraries with dependencies" />
+		<conf name="anakia" description="Openmeetings required libraries" />
+		<conf name="junit" description="Unit testing dependencies" />
+		<conf name="cmdadmin" description="Command Line Admin dependencies" />
+		<conf name="rat" extends="cmdadmin" description="Apache Rat dependencies" />
+		<conf name="dtd" description="Dtd-generator dependencies" />
+		<conf name="svntask" description="Svn task dependencies" />
+		<conf name="openlaszlo" description="Openlaszlo dependencies" />
+		<conf name="openlaszlo46" description="Openlaszlo with Flex 4.6 dependencies" />
+		<conf name="mysql" description="MySQL JDBC driver" />
+		<conf name="tomcat7" description="Libraries necessary for patching Red5 to use Tomcat7" />
+		<conf name="mvn" description="Maven Ant task to build Red5" />
+		<conf name="red5-client" description="Red5 Client/Server for screensharing" />
+	</configurations>
+	<dependencies>
+		<!--  START OF mainlib -->
+		<dependency org="commons-fileupload" name="commons-fileupload" rev="1.3" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-io" name="commons-io" rev="2.4" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="asm" name="asm" rev="3.1" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-aspects" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-jdbc" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-orm" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-tx" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-webmvc" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-context-support" rev="3.1.1.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
+		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec" rev="1.1" conf="mainlib.ext->*" transitive="false"/>
+		<!--  END OF mainlib -->
+		
+		<!--  START OF ANAKIA -->
+		<dependency org="org.jdom" name="jdom" rev="1.1" conf="anakia->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="logkit" name="logkit" rev="1.0.1" conf="anakia->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="oro" name="oro" rev="2.0.8" conf="anakia->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.velocity" name="velocity-anakia" rev="1.1.0-SNAPSHOT" conf="anakia->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF ANAKIA -->
+
+		<!--  START OF OPENMEETINGS -->
+		<dependency org="org.apache.axis2" name="axis2" rev="1.7.0-SNAPSHOT" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-anim" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-awt-util" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-bridge" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-codec" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-css" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-dom" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-ext" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-extension" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-gui-util" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-gvt" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-parser" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-rasterizer" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-script" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-slideshow" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-squiggle" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-svg-dom" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-svggen" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-svgpp" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-swing" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-transcoder" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-ttf2svg" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-util" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="batik-xml" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="fop" rev="1.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlgraphics" name="xmlgraphics-commons" rev="1.4" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="xml-apis" name="xml-apis-ext" rev="1.3.04" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.derby" name="derby" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.derby" name="derbyclient" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.derby" name="derbynet" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.postgresql" name="postgresql" rev="9.3-1101-jdbc4" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.velocity" name="velocity-tools" rev="2.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  added to avoid downloading version 1.3 with Axis2 -->
+		<dependency org="commons-codec" name="commons-codec" rev="1.8" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.2" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.ws.commons.util" name="ws-commons-util" rev="1.0.2" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlrpc" name="xmlrpc-common" rev="3.1.3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.xmlrpc" name="xmlrpc-client" rev="3.1.3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-transaction" name="commons-transaction" rev="1.2" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="net.sourceforge.serp" name="serp" rev="1.13.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-dbcp" name="commons-dbcp" rev="1.4" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-digester" name="commons-digester" rev="2.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="xpp3" name="xpp3" rev="1.1.4c" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="javax.mail" name="mail" rev="1.4.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.simpleframework" name="simple-xml" rev="2.7" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-request" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-util" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="joda-time" name="joda-time" rev="2.3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.14.0" conf="openmeetings->*" transitive="false">
+            <include type="jar" />
+        </dependency>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.9" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.google.code.gson" name="gson" rev="2.2.4" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.github.svenmeier.wicket-dnd" name="wicket-dnd" rev="0.6.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.14.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.vaynberg.wicket.select2" name="wicket-select2" rev="2.2.2" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		
+		<!-- iCal4j seems to need this JAR -->
+		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
+
+		<dependency org="commons-net" name="commons-net" rev="3.3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.googlecode.jsmpp" name="jsmpp" rev="2.1.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.smslib" name="smslib" rev="3.5.3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20130102.214528-1134" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!-- Selenium -->
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.35.0" >
+			<include type="jar" />
+		</dependency>
+
+		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
+		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
+		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.2" conf="openmeetings.ext->*" transitive="false"/>
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="openmeetings.ext->*" transitive="false"/> <!-- required by PCEnchancer -->
+		
+		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.14" conf="openmeetings.axis2->*" transitive="true">
+			<exclude name='commons-io' />
+			<exclude name='commons-logging' />
+		</dependency>
+		<dependency org="org.apache.ws.commons.axiom" name="axiom-dom" rev="1.2.14" conf="openmeetings.axis2->*" transitive="false" />
+		<dependency org="org.apache.axis2" name="axis2-transport-http" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="axis2-transport-local" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="mex" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="axis2-jaxws" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<!--  END OF OPENMEETINGS -->
+
+		<!--  START OF JUNIT -->
+		<dependency org="org.springframework" name="spring-test" rev="3.1.1.RELEASE" conf="junit->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF JUNIT -->
+		
+		<!--  START OF RAT -->
+		<dependency org="org.apache.rat" name="apache-rat-core" rev="0.10" conf="rat->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.10" conf="rat->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF RAT -->
+		
+		<!--  START OF DTD -->
+		<dependency org="com.thaiopensource" name="trang" rev="20091111" conf="dtd->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF DTD -->
+		
+		<!--  START OF svntask -->
+		<dependency org="org.tmatesoft.svnkit" name="svnkit" rev="1.7.11" conf="svntask->*" transitive="true">
+			<include type="jar" />
+		</dependency>
+		<dependency org="svnant" name="svnant" rev="1.3.1" conf="svntask->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="svnClientAdapter" name="svnClientAdapter" rev="1.3.1" conf="svntask->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF svntask -->
+		
+		<!--  START OF openlaszlo -->
+		<dependency org="openlaszlo" name="openlaszlo" rev="4.9" conf="openlaszlo->*" transitive="false">
+			<artifact name="openlaszlo" type="tgz"/>
+			<include type="tgz" />
+		</dependency>
+		<!--  END OF openlaszlo -->
+		
+		<!--  START OF openlaszlo46 -->
+		<dependency org="openlaszlo" name="openlaszlo" rev="4.9.5" conf="openlaszlo46->*" transitive="false">
+			<artifact name="openlaszlo" type="tgz"/>
+			<include type="tgz" />
+		</dependency>
+		<!--  END OF openlaszlo46 -->
+		
+		<!--  START OF Command Line Admin -->
+		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="cmdadmin->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF Command Line Admin -->
+		
+		<!--  START OF MySQL Driver -->
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="mysql->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF MySQL Driver -->
+
+		<!-- Tomcat 7 --> 
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-core" conf="tomcat7->*" rev="7.0.50" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-jasper" conf="tomcat7->*" rev="7.0.50" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-juli" conf="tomcat7->*" rev="7.0.50" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-log4j" conf="tomcat7->*" rev="7.0.50" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="tomcatplugin" name="tomcatplugin" rev="1.4" conf="tomcat7->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+
+		<!-- MVN --> 
+		<dependency org="org.apache.maven" name="maven-ant-tasks" conf="mvn->*" rev="2.1.3" transitive="false" >
+			<include type="jar" />
+		</dependency>
+
+		<!-- Red5 Client/Server for screensharing -->
+		<!-- dependency org="red5_client" name="red5_client" rev="r4393" conf="red5-client->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="red5_server" name="red5_server" rev="r4393" conf="red5-client->*" transitive="false">
+			<include type="jar" />
+		</dependency-->
+		
+		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
+		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
+	</dependencies>
+</ivy-module>
+

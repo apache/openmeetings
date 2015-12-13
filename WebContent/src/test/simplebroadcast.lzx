@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas debug="true" width="1000" height="700">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+	
+	<rtmpconnection src="rtmp://macbook/'+canvas.webAppRootKey+'/hibernate" autoconnect="true"/>
+	<mediastream name="s1" type="rtmp"/>
+	<mediastream name="s2" type="rtmp"/>
+	<simplelayout/>
+	
+	<text multiline="true" width="100%"> Instructions:
+		<br/> 1. Either run a flash media server on localhost (127.0.0.1), or ssh tunnel to a
+		media server at a known host
+		<br/> 2. Press the broadcast button. (Grant camera access permission if needed.) The
+		button should change to say "stop broadcasting"
+		<br/> 3. Press the receive button. You should be receiving audio and video from
+		yourself and the button should say "stop receiving."
+		<br/> 4. Try out the audio and video mute buttons. The video mute should freeze the
+		received picture. The audio mute should silence the received sound.
+		<br/> 5. Press the receive button. The received video should freeze and the button
+		should say "stop receiving".
+		<br/> 6. Press the receive button again. The video should resume and the button should
+		say "receiving".
+		<br/> 7. Press the broadcast button. The received video should freeze and the button
+		should say "broadcast".<br/> <br/> The indicator below shows the status of the video
+		connection.
+		</text>
+	<rtmpstatus/>
+	<view layout="axis:x; inset:10; spacing:10">
+		<view id="v1" layout="axis:y; spacing:4">
+			<videoview id="live" type="rtmp" stream="$once{canvas.s1}" width="240" height="160">
+				<camera id="cam" show="false" fps="20" width="240" height="160" 
+																picturequality="0"/>
+				<microphone id="mic" capturing="false"/>
+				
+			</videoview>
+			<edittext name="username">YourName</edittext>
+			<button text="broadcast">
+				<attribute name="text"
+					value="${(s1.broadcasting == false) ? 'broadcast' : 'stop broadcasting'}"/>
+				<handler name="onclick">
+					<![CDATA[
+                    if (cam.show == false) {
+                        live.stream.setAttribute('url', parent.username.text);
+                        live.stream.broadcast();
+							cam.setAttribute('show', true);
+                    } else {
+                        live.stream.stop();
+                        cam.setAttribute('show', false);
+                    }
+                  ]]>
+				</handler>
+			</button>
+			
+			<checkbox onvalue="s1.setAttribute('muteaudio', value)">Mute
+				Audio</checkbox>
+			<checkbox onvalue="s1.setAttribute('mutevideo', value)">Mute
+				Video</checkbox>
+			<button text="checkValues">
+				<handler name="onclick">
+					//Debug.write("this: ",live);
+					//Debug.write("this: ",cam);
+					//Debug.write("this: ",cam._dev);
+					//Debug.write("this: ",mic._dev);
+				</handler>
+			</button>
+		</view>
+		<view id="v2" layout="axis:y; spacing:4">
+			<videoview name="vid" type="rtmp" stream="$once{canvas.s2}"/>
+			<edittext name="username">YourName</edittext>
+			<button text="${s2.playing ? 'stop receiving' : 'receive'}"
+				onclick="s2.setAttribute('url', parent.username.text);
+                         if (s2.playing) s2.stop(); else s2.play();"/>
+		</view>
+	</view>
+	
+</canvas>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="project.xsd"
+	name="Apache OpenMeetings Project"
+    href="http://openmeetings.apache.org/">
+
+    <title>Apache OpenMeetings</title>
+    <!--  -->
+    <logo href="/images/logo-2.jpg">Apache OpenMeetings</logo>
+	
+    <body>
+
+    <menu name="General">
+        <item name="Home"                   href="/index.html"/>
+        <item name="License"                href="/license.html"/>
+        <item name="ASF"                    href="http://www.apache.org/"/>
+        <item name="Downloads"              href="/downloads.html"/>
+        <item name="Commercial Support"     href="/commercial-support.html"/>
+    </menu>
+    
+    <menu name="Installation and Upgrade">
+    	<item name="Installation"           href="/installation.html"/>
+    	<item name="Upgrade"           		href="/Upgrade.html"/>
+    	<item name="Tutorials"				href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools" />
+    	<item name="Command Line Admin"		href="/CommandLineAdmin.html" />
+    </menu>
+
+    <menu name="Community">
+        <item name="Get Involved"           href="/get-involved.html"/>
+        <item name="Committers"             href="/team-list.html"/>
+        <item name="Mailing Lists"          href="/mail-lists.html"/>
+    	<item name="Wiki"                   href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
+    </menu>
+
+    <menu name="Development">
+        <item name="Source Code"            href="/svn.html"/>
+        <item name="Bugs / Issues (JIRA)"   href="http://issues.apache.org/jira/browse/OPENMEETINGS"/>
+        <item name="Dependencies"           href="/dependencies.html"/>
+        <item name="Build Instructions"     href="/BuildInstructions.html"/>
+        <item name="JUnit Testing"          href="/JUnitTesting.html"/>
+        <item name="Manual Testing"         href="/ManualTesting.html"/>
+        <item name="Release Guide"          href="/ReleaseGuide.html"/>
+        <item name="Website Guide"          href="/WebsiteGuide.html"/>
+    </menu>
+    
+    <menu name="Integration">
+        <item name="SOAP/REST API"          href="/SoapRestAPI.html" />
+        <item name="REST API Sample"        href="/RestAPISample.html" />
+        <item name="Ldap and ADS"           href="/LdapAndADS.html" />
+	<item name="OAuth2"		    href="/oauth2.html" />
+        <item name="VoIP and SIP"           href="/voip-sip-integration.html" />
+        <item name="Errors table"           href="/ErrorsTable.html" />
+    </menu>
+    
+    <menu name="Plugins">
+        <item name="Moodle Plugin"          href="/MoodlePlugin.html" />
+        <item name="Sakai Plugin"          	href="/SakaiPlugin.html" />
+        <item name="Jira Plugin"          	href="/JiraPlugin.html" />
+        <item name="Joomla Plugin"          href="/JoomlaPlugin.html" />
+        <item name="Drupal Plugin"          href="/DrupalPlugin.html" />
+		<item name="Bitrix Plugin"			href="/BitrixPlugin.html" />
+        <item name="Confluence Plugin"      href="/ConfluencePlugin.html" />
+        <item name="SugarCRM Plugin"        href="/SugarCRMPlugin.html" />
+        <item name="Redmine Plugin"         href="/RedminePlugin.html" />
+    </menu>
+    
+    <menu name="Configuration">
+    	<item name="DB Sample Configurations" >
+    		<subitem name="Apache Derby" href="/ApacheDerbyConfig.html" />
+    		<subitem name="IBM DB2" href="/IBMDB2Config.html" />
+    		<subitem name="Oracle" href="/OracleConfig.html" />
+    		<subitem name="MySQL" href="/MySQLConfig.html" />
+    		<subitem name="Postgres" href="/PostgresConfig.html" />
+    		<subitem name="MSSQL" href="/MSSQLConfig.html" />
+    	</item>
+    	<item name="Localization and languages" >
+    		<subitem name="Internationalisation" href="/Internationalisation.html" />
+    		<subitem name="LanguageEditor" href="/LanguageEditor.html" />
+    		<subitem name="TimeZoneHandling" href="/TimeZoneHandling.html" />
+    		<subitem name="EditTemplates" href="/EditTemplates.html" />
+    	</item>
+    	<item name="NAT Port Settings" >
+    		<subitem name="Port settings" href="/PortSettings.html" />
+    	</item>
+    	<item name="Performance" >
+    		<subitem name="JVM performance tuning" href="/JVMPerformanceTuning.html" />
+    	</item>
+    	<item name="User Interface">
+    		<subitem name="Themes" href="/themes-and-branding.html" />
+    		<subitem name="Dashboard" href="/Dashboard.html" />
+    		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />
+    		<subitem name="Room layout options" href="/ConferenceRoomLayoutOptions.html" />
+    		<subitem name="Hot Keys" href="/HotKeys.html" />
+    	</item>
+    	<item name="Customization" >
+    		<subitem name="Webapp name/path" href="/WebappNamePath.html" />
+    		<subitem name="Navigation" href="/Navigation.html" />
+    		<subitem name="Calendar and timezone" href="/CalendarAndTimezone.html" />
+    		<subitem name="Custom room type" href="/CustomRoomTypeHowTo.html" />
+    		<subitem name="Custom ctypt mechanism" href="/CustomCryptMechanism.html" />
+    		<subitem name="General Configuration" href="/GeneralConfiguration.html" />
+    	</item>
+    	<item name="Security" >
+    		<subitem name="Restricted Access" href="/RestrictedAccess.html" />
+    		<subitem name="RTMPS and HTTPS" href="/RTMPSAndHTTPS.html" />
+    	</item>
+    	<item name="Converters" >
+    		<subitem name="OpenOffice Converter" href="/OpenOfficeConverter.html" />
+            <subitem name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
+        </item>
+    	<item name="Clustering" >
+    		<subitem name="Clustering" href="/Clustering.html" />
+    	</item>
+    	<item name="Misc" >
+    		<subitem name="Get version info" href="/GetVersionInfo.html" />
+    	</item>
+    </menu>
+    
+    <!-- 
+    <menu name="Integration">
+        <item name="SOAP/REST API"          href="/integration_api.html"/>
+        <item name="LDAP and ADS"           href="/integration_ldap.html"/>
+        <item name="VoIP and SIP"           href="/integration_voip.html"/>
+        <item name="Moodle Plugin"          href="/moodle_plugin.html"/>
+        <item name="SugarCRM Plugin"        href="/sugarcrm_plugin.html"/>
+    </menu>
+     -->
+     
+    
+
+    </body>
+</project>

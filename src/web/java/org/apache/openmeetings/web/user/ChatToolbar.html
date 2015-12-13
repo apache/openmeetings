@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<style>
+		.emt {
+			font-size: 10pt;
+		}
+		.chat.btn{
+			font-weight: bold;
+		}
+		.chat.dropdown-menu {
+			left: -50px;
+		}
+	</style>
+	<script type="text/javascript">
+	    function emtClick(emoticon) {
+	        var editor = $('#chatMessage .wysiwyg-editor');
+	        editor.html(editor.html() + ' ' + emoticon + ' ');
+	    }
+		$(function() {
+			 var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
+			 	, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
+			 	, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
+			 	, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
+			 	, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
+			 var emotMenuList = $('#emotMenuList');
+			 var rowSize = 15;
+			 var row = $('<tr></tr>');
+			 for (var i = 0; i < emots.length; ++i) {
+			 	row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
+			 		+ emots[i] + '</div></td>');
+			 	if (i != 0 && i % rowSize == 0) {
+			 		emotMenuList.append(row);
+			 		row = $('<tr></tr>');
+			 	}
+			 }
+			 $('.emt').emoticonize();
+		});
+	</script>
+</wicket:head>
+<wicket:panel>
+	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">
+		<div class="btn-group">
+			<a id="emoticons" class="chat btn emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"> :) <b class="caret"></b></a>
+			<ul class="chat dropdown-menu" >
+				<li>
+					<table id="emotMenuList">
+					</table>
+				</li>
+			</ul>
+		</div>
+		<div class="btn-group">
+			<a id="fontSize" class="chat btn dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				<li><a data-edit="fontSize 5"><font size="3">Huge</font></a></li>
+				<li><a data-edit="fontSize 3"><font size="2">Normal</font></a></li>
+				<li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+			</ul>
+			<a id="bold" class="chat btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B
+			</a> <a id="italic" class="chat btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I
+			</a> <a id="strikethrough" class="chat btn" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S
+			</a> <a id="underline" class="chat btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U
+			</a>
+		</div>
+	</div>
+</wicket:panel>
+</html>

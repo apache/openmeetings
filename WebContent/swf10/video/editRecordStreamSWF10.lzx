@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<!-- #######################
+	Class editRecordStream
+	
+	Description:
+	This Class shows a window where you can alter you Video-/Microphone- Input-Resources
+	and start to stream. The app could also use the default values for Cam/Mic but
+	most users don't know how to alter this (weather in System-Control-Panel or by Right Clicking
+	on the Flash-Screen and *>Preferences>Camera* )
+	So I think it is better if Users are forced to choose something from this list
+	
+ -->
+ 
+<class name="editRecordStreamSWF10"  extends="labelExplorerBox" labelid="51"
+	width="680" height="540" x="14" y="-540" >
+
+    <switch>
+        <when property="$as3">
+            <passthrough>
+				import flash.events.StatusEvent;
+                import flash.media.Camera;
+                import flash.media.Microphone;
+                import flash.media.MicrophoneEnhancedMode;
+                import flash.media.MicrophoneEnhancedOptions;
+                import flash.net.SharedObject;
+                import flash.media.SoundCodec;
+            </passthrough>
+        </when>
+    </switch>
+
+    <attribute name="myvideocontainer" value="null" />
+
+    <attribute name="chosenCam" value="null" />
+    <attribute name="chosenMic" value="null" />
+    <attribute name="chosenSetting" value="null" />
+    <attribute name="currentClient" value="null" />
+
+    <attribute name="remoteMessage" value="null" />
+
+    <!---
+        if true the user will see the dialog no matter if he has choosen "do not show again" or not
+     -->
+    <attribute name="isSyncUpdate" value="false" type="boolean" />
+
+    <attribute name="doDefaultAnimation" value="true" type="boolean" />
+
+    <attribute name="cam_default_width" value="320" type="number" />
+    <attribute name="cam_default_height" value="260" type="number" />
+    
+    <attribute name="interviewPodId" value="0" type="number" />
+    
+    <attribute name="lastRecorded" value="" type="string" />
+	
+	<attribute name="isRunning" value="false" type="boolean" />
+	
+	<attribute name="recordingsCounter" value="5" type="number" />
+	
+	<attribute name="timerIsRunning" value="false" type="boolean" />
+	
+	<attribute name="counterDelegate" value="null" />
+	
+	<method name="startTimer">
+		this.timerIsRunning = true;
+		this.timerWasUnmutedTheFirstTime = true;
+		lz.Timer.addTimer( this.counterDelegate, 1000 );
+	</method>
+	
+	<method name="count" args="calleeObj">
+		if (this.recordingsCounter != 0){
+			this.recordingsCounter -= 1;
+			lz.Timer.addTimer( this.counterDelegate, 1000 );
+			
+			this._text._info.setAttribute("text",""+this.recordingsCounter+" sec");
+			
+		} else {
+			this._text.setAttribute("visibility","hidden");
+			this.doStop();
+			this.timerIsRunning = false;
+			this.doPlay();
+		}
+	</method>
+	
+	<method name="startTimerToCount">
+		if (!this.timerIsRunning) {
+			this.startTimer();
+		}
+	</method>
+	
+	<handler name="oninit">
+		<![CDATA[
+			//Make this view the upmost in the z-Index order
+			canvas.inner.bringToFront();
+		
+			this.counterDelegate = new LzDelegate( this, "count" );
+		
+			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
+			if ($debug) Debug.write("editrecordstream ###################### ");
+
+			canvas.videoComp_lc.client = {clb_getBroadCastId: this.clb_getBroadCastId, clb_setUserAVSettings: this.clb_setUserAVSettings};
+
+	        var sharedData = this.checkDeviceSettingsRememberStatus();
+            if(sharedData != null) {
+                this.chosenCam = sharedData["cam"];
+                this.chosenMic = sharedData["mic"];
+                this.cam_default_width = canvas.isInterview ? 320 : sharedData["width"];
+                this.cam_default_height = canvas.isInterview ? 260 : sharedData["height"];
+                this.chosenSetting = sharedData["avstored"];
+                this.remoteMessage = new Array();
+                this.remoteMessage[0] = 'avsettings';
+                this.remoteMessage[2] = this.chosenSetting; 
+                this.getBroadCastId.doCall();
+            } else {
+                if (this.doDefaultAnimation && !canvas.isInterview) {
+                    this._chooseDeviceAnimation.setAttribute('started', true);
+                }
+                this.initItemsAndDefaultAttachCamera();
+            }
+	        
+	        if (canvas.isInterview) {
+	        	if ($debug) Debug.write("Is interview ",interviewPodId);
+                this.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+                this.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+	        }
+        ]]>
+	</handler>
+	
+	<!-- 
+	   If the remember check-box was true, this flag in the Flash Cookie (aka SharedObject)
+	   is true and the box will close without asking for device settings.
+	 -->
+	<method name="checkDeviceSettingsRememberStatus">
+	<![CDATA[
+		var t:SharedObject = SharedObject.getLocal('userdata');
+		var g = t.data;
+		var save = g["savecamdata"];
+		if ($debug) Debug.write("save: ",save,g["cam"],g["mic"],this.isSyncUpdate);
+		//In case its an Audio-Only Room this box should not close automatically
+		if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
+		
+		//In case the user presses the Sync Button this box should
+        //not close automatically and do the user-prefered values
+        if (canvas.currentRoomObject.roomtype.roomtypes_id == 3) {
+        	//restricted room
+        	return null;
+        }
+		if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
+		    return g;
+		}
+		return null;
+	]]>
+	</method>
+	
+	<!-- 
+	   Checks if all needed data in the shared object is available
+	 -->
+	<method name="checkLocalDataComplete">
+        <![CDATA[
+        	var t:SharedObject = SharedObject.getLocal('userdata');
+	        var g = t.data;
+            if (g["width"] > 0 && g["height"] > 0) {
+                return true;
+            }
+            return false;
+        ]]>
+    </method>
+    
+    
+    <netRemoteCallHib name="getBroadCastId" funcname="getBroadCastId"
+                      remotecontext="$once{ canvas.thishib }" >
+
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
+                parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, parent.interviewPodId, canvas.userobject);
+
+                if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
+                if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
+                if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.cam_default_width);
+                if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.cam_default_height);
+                if ($debug) Debug.write("parent.setUserAVSettings -5a- ",canvas.currentRoomObject.rooms_id);
+                if ($debug) Debug.write("parent.setUserAVSettings -6- ",canvas.publicSID);
+                
+                parent.setUserAVSettings.doCall();
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+    
+    <netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <netparam><method name="getValue">return parent.parent.chosenSetting;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.cam_default_width;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentRoomObject.rooms_id;</method></netparam>
+        <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.interviewPodId;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("setUserAVSettings",value);
+                parent.currentClient = value;
+                parent.doStartConference();
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+
+    <method name="storelocaldata">
+        <![CDATA[
+            //Debug.write("sharedobject store ");
+            var t:SharedObject = SharedObject.getLocal('userdata');
+            var g = t.data;
+            if (g==null) g = new Array();
+            g["cam"] = this.availibleCams.getValue();
+	        g["mic"] = this.availibleMics.getValue();
+	        g["avstored"] = this.availibleSettings.getValue();
+	        g["savecamdata"] = this.holddatainSO.getValue();
+	        g["width"] = this.cam_default_width;
+	        g["height"] = this.cam_default_height;
+            t.flush();
+        ]]>
+    </method>
+
+	<method name="getMic" args="valMic">
+	<![CDATA[
+		if ($debug) Debug.write("Entering getMic ...", valMic);
+		var _micro = null;
+		if (valMic != null) {
+			_micro = canvas.echoPath == 0 ? Microphone.getMicrophone(valMic) : Microphone.getEnhancedMicrophone(valMic);
+			
+			if (_micro != null && canvas.echoPath == 256) {
+				var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
+				options.mode = MicrophoneEnhancedMode.FULL_DUPLEX;
+				options.echoPath = 256;
+				options.nonLinearProcessing = true;
+				_micro.enhancedOptions = options;
+				if ($debug) Debug.write("echoPath set to 256");
+				if ($debug) Debug.write(_micro.enhancedOptions);
+			}
+			
+			if (_micro != null) {
+				_micro.codec = SoundCodec.NELLYMOSER;
+				_micro.framesPerPacket = 1;
+				_micro.setSilenceLevel(0, 2000);
+				if ($debug) Debug.write("canvas.microphoneRateBest: ",canvas.microphoneRateBest);
+				_micro.rate = (canvas.microphoneRateBest == 'undefined') ? 22 : canvas.microphoneRateBest;
+				_micro.gain = 50;
+				// this has no effect if enhanced microphone is obtained
+				//Microphone setUseEchoSupression(bool)
+				var enableEchoSupression = !(canvas.echoSuppression === "false");
+				if ($debug) Debug.write("canvas.echoSuppression: ",canvas.echoSuppression);
+				_micro.setUseEchoSuppression(enableEchoSupression);
+			}
+		}
+		if ($debug) Debug.write("... getMic DONE", _micro);
+		return _micro;
+	]]>
+	</method>
+	
+	<method name="getCam" args="valCam,videoview">
+	<![CDATA[
+		if ($debug) Debug.write("Entering getCam ...", valCam);
+		var _camera = null;
+		if (valCam != null) {
+			_camera = Camera.getCamera(valCam);
+		}
+		if (_camera != null) {
+            if ($debug) Debug.write("videoview: ",videoview);
+			
+			if ($debug) Debug.write("_camera.setQuality BEST: ", canvas.isInterview, (canvas.bandwidthNeededBest*2), canvas.camQualityBest);
+			if (canvas.isInterview) {
+				//we need a fixed frame rate for the videos to merge them later on
+				_camera.setMode(videoview.width, videoview.height, 24, true);
+				if ($debug) Debug.warn("IS INTERVIEW ");
+				_camera.setQuality(0, 98);
+			} else {
+				if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
+				_camera.setMode(videoview.width, videoview.height, canvas.framesPerSecond, true);
+				if ($debug) Debug.warn("IS NO INTERVIEW ");
+				_camera.setQuality(canvas.bandwidthNeededBest, canvas.camQualityBest);
+			}
+		}
+		if ($debug) Debug.write("... getCam DONE", _camera);
+		return _camera;
+	]]>
+	</method>
+	
+	<method name="doStartConference">
+	<![CDATA[
+		if ($debug) Debug.write("doninitalize");
+		var settings = this.chosenSetting;
+		if (!canvas.isInterview) {
+			this.myvideocontainer.setDefaultVideoSize(this.cam_default_width, this.cam_default_height);
+		}
+		
+		var videoview = this.myvideocontainer._chatvideoinner._videostream;
+		if ($debug) Debug.write("this.myvideocontainer: ", this.myvideocontainer);
+		this.myvideocontainer.setAttribute('isremote',false);
+		var _micro = this.getMic(this.chosenMic);
+		var _camera = this.getCam(this.chosenCam, videoview);
+		if ($debug) Debug.write(_camera , _micro, settings);
+		
+		if ($debug) Debug.write("BroadcastId: ", this.currentClient.broadCastID);
+		switch (settings){
+			case "s":
+				this.myvideocontainer.setAttribute("visible", false);
+				break;
+			case "vs":
+				videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+				this.myvideocontainer.setAttribute("visible", true);
+				if(canvas.isInterview) {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
+				} else {
+					if (this.myvideocontainer.minimized) {
+						this.myvideocontainer.reminimize();
+					}
+				}
+				break;
+			case "av":
+				videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
+				this.myvideocontainer.setAttribute("visible", true);
+				if(canvas.isInterview) {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
+				} else {
+					if (this.myvideocontainer.minimized) {
+						this.myvideocontainer.reminimize();
+					}
+				}
+				break;
+			case "a":
+				videoview.broadcast(this.currentClient.broadCastID,null,_micro);
+				this.myvideocontainer.setAttribute("visible", canvas.isInterview || !this.myvideocontainer.hidebyAudioOnly);
+				if(canvas.isInterview) {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
+				} else {
+					if (!this.myvideocontainer.hidebyAudioOnly) {
+						if (!this.myvideocontainer.minimized) {
+							this.myvideocontainer.minimize();
+						}
+					}
+				}
+				break;
+			case "v":
+				videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+				this.myvideocontainer.setAttribute("visible", true);
+				if(canvas.isInterview) {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
+				} else {
+					if (this.myvideocontainer.minimized) {
+						this.myvideocontainer.reminimize();
+					}
+				}
+				break;
+			case "n":
+				if ($debug) Debug.write("Do not Publish A/V");
+				//Prevent from Hiding the Box in Event Modus
+				if (canvas.thishib.modus == "conference") {
+					this.myvideocontainer.setAttribute("visibility","hidden");
+				}
+				break;
+			default:
+				if ($debug) Debug.warn("no valid device Setup chosen");
+				break;
+		}
+		this.close();
+	]]>
+	</method>
+    
+	<method name="doStartRecording">
+	<![CDATA[
+		this._btnStartRecording.setAttribute("enabled",false);
+		this._play.setAttribute("enabled",false);
+		this.recordingsCounter = 5;
+		this._text.setAttribute("visibility","visible");
+		this._text._info.setAttribute("text","5 sec");
+		this.isRunning = true;
+		
+		var videoview = this._video.content._publisher._chatvideoinner._videostream;
+		var _micro = this.getMic(this.availibleMics.getValue());
+		var _camera = this.getCam(this.availibleCams.getValue(), videoview);
+		if ($debug) Debug.write(_camera, _micro);
+		
+		if ($debug && _camera != null) Debug.warn("_camera.muted ", _camera.muted);
+		if ($debug && _micro != null) Debug.warn("_micro.muted ", _micro.muted);
+		if ((_camera != null && !_camera.muted) || (_camera == null && _micro != null)) {
+			this.startTimer();
+		}
+		
+		//start recording of client stream
+		var t = new Date();
+		this.lastRecorded = "TEST_SETUP_"+t.getTime();
+		this._video.content._publisher.setAttribute("visibility","visible");
+		this._video.content._viewer.setAttribute("visibility","hidden");
+		videoview.record(this.lastRecorded,_camera,_micro);
+	]]>
+	</method>
+    
+    <method name="doPlay">
+    	<![CDATA[
+    	   if (this.lastRecorded == "") {
+    	   	   //Error - nothing recorded yet
+    	   	   if ($debug) Debug.warn("Nothing to Play");
+    	   } else {
+    	   	   this._play.setAttribute("enabled",true);
+    	   	   this._video.content._publisher.setAttribute("visibility","hidden");
+               this._video.content._viewer.setAttribute("visibility","visible");
+               var videoview = this._video.content._viewer._chatvideoinner._videostream;
+               videoview.justPlayStream(this.lastRecorded+".flv",0);
+    	   }
+    	]]>
+    </method>
+    
+    <method name="doStop">
+    	if (this.isRunning) {
+    		this.isRunning = false;
+    		var videoview = this._video.content._publisher._chatvideoinner._videostream;
+    		this._btnStartRecording.setAttribute("enabled",true);
+    		videoview._stop();
+    		this.doPlay();
+    	}
+    	var videoviewViewer = this._video.content._viewer._chatvideoinner._videostream;
+        videoviewViewer._stop();
+    </method>
+
+    <animator name="_chooseDeviceAnimation" started="false" attribute="y" to="40" duration="750" />
+    
+    
+    <labelText fontstyle="bold" labelid="758"
+			   width="${ parent.width-2 }" height="30" multiline="true" y="20" /> 
+
+    <labelText labelid="447" fontsize="11" fontstyle="bold" 
+    			x="10" y="80" width="$once{ parent.width-20 }" />
+
+    <resetCombobox fontsize="11" name="availibleSettings" x="10" y="100" width="280" editable="false">
+
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+
+        <handler name="oninit">
+            <![CDATA[
+
+                if (canvas.currentRoomObject.isAudioOnly) {
+                    this.addItem(canvas.getLabelName(449),"a");
+                    this.addItem(canvas.getLabelName(451),"n");
+                } else {
+                	this.addItem(canvas.getLabelName(448),"av");
+                    this.addItem(canvas.getLabelName(449),"a");
+                    this.addItem(canvas.getLabelName(450),"v");
+                    //this.addItem(canvas.getLabelName(845),"s");
+                    //this.addItem(canvas.getLabelName(846),"sv");
+                    this.addItem(canvas.getLabelName(451),"n");
+                }
+
+				var t:SharedObject = SharedObject.getLocal('userdata');
+				var g = t.data;
+				var cam = null;
+				if (g!=null){
+					var avstored = g["avstored"];
+				}
+
+				var tItem = this.getItem(String(avstored));
+				if (tItem != null) {
+				    this.selectItem(String(avstored));
+				} else {
+					this.selectItemAt(0);
+				}
+            ]]>
+        </handler>
+
+        <handler name="onselect">
+        	<![CDATA[
+        		var camVisible = "visible";
+        		var micVisible = "visible";
+        		var textVisible = "hidden";
+	        	switch (this.getValue()){
+	        		case "av":
+	        			break;
+	        		case "a":
+	        			camVisible = "hidden";
+	        			break;
+	        		case "v":
+	        			micVisible = "hidden";
+	        			break;
+	        		case "n":
+	        			camVisible = "hidden";
+	        			micVisible = "hidden";
+	        			textVisible = "visible";
+	        			break;
+	        		default:
+	        			if ($debug) Debug.warn("no valid device Setup chosen");
+	        			break;
+	        	}
+                this.parent.availibleCamsLabel.setAttribute("visibility",camVisible);
+                this.parent.availibleCams.setAttribute("visibility",camVisible);
+                this.parent.availibleMicsLabel.setAttribute("visibility",micVisible);
+                this.parent.availibleMics.setAttribute("visibility",micVisible);       
+                this.parent.infoTextNoAV.setAttribute("visibility",textVisible);
+                this.parent.availibleResolutionsLabel.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
+                this.parent.availibleResolutionsWarning.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
+                this.parent.availibleResolutions.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
+        	]]>
+        </handler>
+    </resetCombobox>
+    
+    <attribute name="executeAttachCamera" value="false" type="boolean" />
+
+    <!-- 
+        Initialize the default settings for cam and resolution and attach the camera 
+        after we have made sure the values are there one time
+     -->
+	<method name="initItemsAndDefaultAttachCamera">
+        <![CDATA[
+            //Initialize and get eventually stored camera
+            var t:SharedObject = SharedObject.getLocal('userdata');
+            var g = t.data;
+            var cam;
+            if (g != null){
+                cam = ""+g["cam"];
+            }
+        
+            //Get all availible Cam's
+            var tw = Camera.names;
+            var r = "";
+            var foundStoredCam = null;
+            for (var eg=0;eg<tw.length;eg++){
+                this.availibleCams.addItem(tw[eg],eg);
+                r=""+eg;
+                if (r == cam) {
+                    foundStoredCam = r;
+                }
+            }
+            
+            if (foundStoredCam != null) {
+                this.availibleCams.selectItem(foundStoredCam);
+            } else {
+                if (tw.length > 0) {
+                    this.availibleCams.selectItemAt(0);
+                }
+            }
+            
+            //Initialize and set default resolutions combobox
+            if ($debug) Debug.write("myConfigSet 1 ",canvas.myConfigSet);
+            if ($debug) Debug.write("myConfigSet 2 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution'));
+            if ($debug) Debug.write("myConfigSet 3 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/'));
+            if ($debug) Debug.write("myConfigSet 4 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/*'));
+            
+            this.executeAttachCamera = true;
+            
+            this.attachCamera();
+        ]]>
+    </method>
+	
+	<method name="attachCamera">
+	    <![CDATA[
+		    //if the user has configured this box to auto-close, do not try to
+		    //attach the cam to the preview (black) box
+		    var sharedData = this.checkDeviceSettingsRememberStatus();
+	        if(sharedData != null) {
+	            return;
+	        }
+	        
+	        //Don't execute before combobox items are not initialized
+	        if (!this.executeAttachCamera) {
+	            if ($debug) Debug.write("Return, executeAttachCamera is false");
+                return;
+	        }
+		
+			if (_video == undefined)  {
+			    if ($debug) Debug.write("Return, video video not yet ready");
+                return;
+			}
+			_video.content._publisher.setAttribute("visibility", "visible");
+			_video.content._viewer.setAttribute("visibility", "hidden");
+			var videoview = this._video.content._publisher._chatvideoinner._videostream;
+			var _camera = getCam(availibleCams.getValue(), videoview);
+			if (_camera != null) {
+			    //stop will not call clear as there is no NetStream
+				videoview._stop();
+				videoview.clear();
+				videoview.attachCamera(_camera);
+			}
+		]]>
+	</method>
+	
+	<method name="cleanVideos">
+	   if (_video == undefined) return;
+	   //make sure stop and clear is called, as the _stop method does not work for all
+	   //videoviews in the device settings.
+	   _video.content._publisher._chatvideoinner._videostream._stop();
+       _video.content._viewer._chatvideoinner._videostream._stop();
+       _video.content._publisher._chatvideoinner._videostream.clear();
+       _video.content._viewer._chatvideoinner._videostream.clear();
+       if ($debug) Debug.write("Cleaned up videos and free resources");
+	</method>
+	
+    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
+    <resetCombobox fontsize="11" name="availibleCams" x="10" y="160" width="280" editable="false">
+		<handler name="onselect">
+			parent.attachCamera();
+		</handler>
+    </resetCombobox>
+
+    <labelText name="availibleMicsLabel" labelid="53" fontsize="11"
+               x="10" y="180" width="$once{ parent.width-20 }" />
+
+    <resetCombobox fontsize="11" name="availibleMics"  x="10" y="200" width="280" editable="false">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.media.Microphone;
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+        <handler name="oninit">
+            <![CDATA[
+            	//Get eventually stored mic from user settings/shared object/cookie
+            	var t:SharedObject = SharedObject.getLocal('userdata');
+	            var g = t.data;
+	            var mic = null;
+	            if (g != null) {
+	            	mic = "" + g["mic"];
+	            }
+            
+	            //Get all availible Mic's
+	            var tw = Microphone.names;
+	            var r = "";
+	            var foundStoredMic = null;
+	            for (var eg=0;eg<tw.length;eg++){
+	                r = "" + eg;
+	                this.addItem(tw[eg],eg);
+	                
+	                if (r == mic) {
+	                	foundStoredMic = r;
+	                }
+	            }
+
+                if ($debug) Debug.write("Select foundStoredMic: ",foundStoredMic);
+                if (foundStoredMic != null) {
+                	this.selectItem(foundStoredMic);
+                } else {
+                    if (tw.length > 0) {
+                    	this.selectItemAt(0);
+                    }
+                }
+            ]]>
+        </handler>
+    </resetCombobox>
+
+    <labelText name="infoTextNoAV" labelid="452" multiline="true" width="280" 
+               fontsize="11" x="10" y="130" visibility="hidden" />
+               
+    <labelText name="availibleResolutionsLabel" labelid="1429" 
+            fontsize="11" x="10" y="224" width="$once{ parent.width-20 }" />
+            
+    <view name="availibleResolutionsWarning" x="272" y="224" 
+            resource="warning_icon_popup_devices_rsc" clickable="true">
+        <labelTooltip multiline="true" labelid="1430" />
+    </view>     
+    
+    <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
+                y="244" width="280" editable="false">
+        <!--- @keywords private -->
+        <attribute name="counter" value="0" />
+		<handler name="onselect" args="item">
+		<![CDATA[
+			if (!canvas.isInterview) {
+				if ($debug) Debug.write("onselect w ", item.cam_width);
+				if ($debug) Debug.write("onselect h ", item.cam_height);
+				parent.setAttribute("cam_default_width",item.cam_width);
+				parent.setAttribute("cam_default_height",item.cam_height);
+				
+				if (item.cam_width > 240) {
+					var newWidth = 600 + item.cam_width - 240;
+					if (newWidth+parent.x+10 > canvas.width) {
+						newWidth = canvas.width - 10 - this.x;
+					}
+					parent.setAttribute("width",newWidth);
+				} else {
+					parent.setAttribute("width",600);
+				}
+				
+				if (item.cam_height > 180) {
+					var newHeight = 500 + item.cam_height - 180;
+					if (newHeight+parent.y+10 > canvas.height) {
+						newHeight = canvas.height - 10 - parent.y;
+					}
+					parent.setAttribute("height",newHeight);
+				} else {
+					parent.setAttribute("height",500);
+				}
+			}
+			parent.attachCamera();
+		]]>
+		</handler>
+        <textlistitem datapath="myConfigSet:/config/availableCameraResolutions/resolution" >
+            <switch>
+	            <when property="$as3">
+	                <passthrough>
+	                    import flash.net.SharedObject;
+	                </passthrough>
+	            </when>
+	        </switch>
+            <attribute name="cam_width" value="320" type="number" />
+            <attribute name="cam_height" value="240" type="number" />
+            <handler name="ondata">
+                <![CDATA[
+                    // if ($debug) Debug.write("ondata ", this);
+                    var type = this.datapath.xpathQuery('@type');
+                    this.cam_width = Number(this.datapath.xpathQuery('@width'));
+                    this.cam_height = Number(this.datapath.xpathQuery('@height'));
+                    this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
+                    var isDefault = this.datapath.xpathQuery('@isDefault');
+                    
+                    var t:SharedObject = SharedObject.getLocal('userdata');
+                    var g = t.data;
+                    var width = g["width"];
+                    var height = g["height"];
+                    if (width!=null && width > 0 && height!=null && height>0) {
+                        if (width == this.cam_width && height == this.cam_height) {
+                            parent.selectItemAt(parent.counter);
+                            parent.onselect.sendEvent(this);
+                        }
+                    } else {
+                        if (isDefault == "true") {
+                            if ($debug) Debug.write("Found default one ",type);
+                            parent.selectItemAt(parent.counter);
+                            parent.onselect.sendEvent(this);
+                        }
+                    }
+                    parent.counter+=1;
+                ]]>
+            </handler>
+        </textlistitem>
+    </resetCombobox>      
+    
+    <simpleLabelButton name="_btnStartRecording" labelid="775" 
+    				   width="140" x="150" y="280" height="28">
+    	<handler name="onclick">
+            parent._level_meter.startLevel();
+            parent.doStartRecording();
+        </handler>
+    </simpleLabelButton>
+    
+	<view x="340" y="60" name="_video" clip="true" 
+			width="${ parent.width-this.x-10 }" height="${ parent.height-260 }"> 
+		<view name="content">
+		
+			<videoObjectTestBroadcast name="_publisher"  
+					width="${ parent.parent.parent.cam_default_width }" 
+					height="${ parent.parent.parent.cam_default_height }">
+				<handler name="sendCameraStatus" args="camStatus">
+		            if ($debug) Debug.write("sendCameraStatus -1- ",camStatus);
+		            if (camStatus == "Camera.Unmuted") {
+		            	parent.parent.parent.startTimerToCount();
+		            }
+		        </handler>
+		        
+		        <handler name="sendMicroStatus" args="micStatus">
+		            if ($debug) Debug.write("sendMicroStatus -1- ",micStatus);
+		            if (micStatus == "Microphone.Unmuted") {
+		                parent.parent.parent.startTimerToCount();
+		            }
+		        </handler>
+			</videoObjectTestBroadcast>
+			
+			<videoObjectPlayTestBroadcast name="_viewer" visibility="hidden" 
+						width="${ parent.parent.parent.cam_default_width }" 
+						height="${ parent.parent.parent.cam_default_height }" />
+		</view>
+		
+		<om_vscrollbar />
+		<om_hscrollbar />
+	</view>
+	
+								  
+	<view name="_text" x="340" y="60" width="240" height="180" visibility="hidden">
+		<text name="_info" resize="true" bgcolor="0xFFFFFF" align="right"
+			  fontsize="12" fontstyle="bold" />
+	</view>
+    
+    <simpleLabelButton name="_play" y="${ parent.height-166 }" x="490" enabled="false"
+                	width="90" labelid="764" >
+        <handler name="onclick">
+            parent.doPlay();
+        </handler>
+    </simpleLabelButton>
+     
+    <view name="_level_meter" x="340" y="${ parent.height-190 }" width="240" height="20" clip="true" bgcolor="0x000000">
+    	
+    	 <!--- Level delegate, used to track level changes. 
+              @keywords private -->
+        <attribute name="_leveldel" value="$once{new LzDelegate(this, '_updateLevel')}"/>
+    	
+    	<method name="_updateLevel" args="no">
+    		<![CDATA[
+    		    if (parent._video.content._publisher._chatvideoinner._videostream.micro == null)
+    		    {
+    		    	return;
+    		    }
+    		    this.setNewLevel(parent._video.content._publisher._chatvideoinner._videostream.micro.activityLevel);
+    		]]>
+    	</method>
+    	
+    	<method name="startLevel">
+    		this._leveldel.register(lz.Idle, "onidle");
+    	</method>
+    	
+    	<method name="resetNewLevel">
+    		this._leveldel.unregisterAll();
+    		this.setNewLevel(0);
+    	</method>
+    	
+    	<method name="setNewLevel" args="no">
+    		<![CDATA[
+                var newLevel = (238/100) * no;
+                this._over.setAttribute("width",238-newLevel);
+                this._over.setAttribute("x",1+(newLevel));
+            ]]>
+    	</method>
+    	
+    	<view name="_bg" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
+    	<view name="_grip" resource="level_meter_rsc" x="1" y="1" />
+    	<view name="_over" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
+    	<labelText labelid="767" x="2" y="2" height="16" width="236" resize="false" />
+    </view>
+    
+    <view y="${ parent.height-98 }" resource="test_setup_info_rsc" x="16" />
+    
+    <labelText fontstyle="bold" labelid="765" x="39" y="${ parent.height-100 }"
+               width="${ parent.width-50 }" multiline="true" />
+
+    <!-- Remember Me -->
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="${ parent.height-20 }" >
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+        <handler name="oninit">
+            var t:SharedObject = SharedObject.getLocal('userdata');
+            var g = t.data;
+            var save = g["savecamdata"];
+            if ($debug) Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>
+    </labelCheckbox>
+
+    <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
+                       labelid="54" x="${ parent.width-220 }" y="${ parent.height-50 }" width="100">
+        <handler name="onclick">
+            parent.cleanVideos();
+            this.parent.storelocaldata();
+            this.parent.chosenCam = parent.availibleCams.getValue();
+            this.parent.chosenMic = parent.availibleMics.getValue();
+            this.parent.chosenSetting = parent.availibleSettings.getValue();
+            this.parent.remoteMessage = new Array();
+            this.parent.remoteMessage[0] = 'avsettings';
+            this.parent.remoteMessage[1] = "0";
+            this.parent.remoteMessage[2] = this.parent.chosenSetting;
+            this.parent.getBroadCastId.doCall();
+        </handler>
+    </simpleLabelButton>
+
+    <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
+                       labelid="918" x="${ parent.width-110 }" y="${ parent.height-50 }" width="100">
+        <handler name="onclick">
+            parent.cleanVideos();
+            parent.close();
+        </handler>
+    </simpleLabelButton>
+
+    <simpleLabelButton fontsize="11" visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }"
+    				   labelid="761" width="160" x="${ parent.width-170 }" y="${ parent.height-50 }" height="28">
+        <handler name="onclick">
+            parent.cleanVideos();
+        	this.parent.storelocaldata();
+        	this.parent.chosenCam = parent.availibleCams.getValue();
+        	this.parent.chosenMic = parent.availibleMics.getValue();
+        	this.parent.chosenSetting = parent.availibleSettings.getValue();
+			this.parent.remoteMessage = new Array();
+			this.parent.remoteMessage[0] = 'avsettings';
+			this.parent.remoteMessage[1] = "0";
+			this.parent.remoteMessage[2] = this.parent.chosenSetting;
+            this.parent.getBroadCastId.doCall();
+        </handler>
+    </simpleLabelButton>
+
+</class>
+    
+</library>

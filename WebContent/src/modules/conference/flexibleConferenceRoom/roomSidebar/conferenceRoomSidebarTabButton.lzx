@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="conferenceRoomSidebarTabButton" extends="view" 
+	   width="$once{ (parent.width-2)/2 }" height="36" y="0">
+	
+	<attribute name="labelid" value="0" type="number" />
+	
+	<attribute name="selected" value="false" type="boolean" />
+	
+	<attribute name="textFontSize" value="14" type="number" />
+	
+	<attribute name="currentIconRsc" value="" type="string"/>
+	
+	<handler name="oninit">
+		if (this.selected) {
+			parent.parent.doSelection(this);
+		}
+	</handler>
+	
+	<handler name="onclick">
+		parent.parent.doSelection(this);
+	</handler>
+	
+	<handler name="onmouseover">
+		if (!this.selected) {
+			this._bg1.setAttribute("visibility","visible");
+		}
+	</handler>
+	
+	<handler name="onmouseout">
+        this._bg1.setAttribute("visibility","hidden");
+    </handler>
+	
+	<method name="select">
+		this.selected = true;
+		this._icon.setAttribute("opacity",1);
+        this._text.setAttribute("opacity",1);
+        this._bg1.setAttribute("visibility","hidden");
+		this._bg2.setAttribute("visibility","visible");
+		this._text.setAttribute("fontstyle","bold");
+		this._text.setAttribute("fgcolor","0xFFFFFF");
+	</method>
+     
+    <method name="deselect">
+        this.selected = false;
+        this._icon.setAttribute("opacity",0.5);
+        this._text.setAttribute("opacity",0.5);
+        this._bg2.setAttribute("visibility","hidden");
+        this._text.setAttribute("fontstyle","bold");
+        this._text.setAttribute("fgcolor","0xFFFFFF");
+    </method>       
+    
+    
+    <view name="_bg1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
+          height="$once{ parent.height }" opacity="0.7" visibility="hidden"/> 
+          
+    <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
+          height="$once{ parent.height }" opacity="0.4" visibility="hidden"/>
+    
+    <view x="4" y="6" name="_icon" resource="$once{ parent.currentIconRsc }" />
+                
+    <labelText name="_text" x="28" fontsize="$once{ parent.textFontSize }" valign="middle" 
+               fgcolor="0xFFFFFF" labelid="$once{ parent.labelid }" />
+	
+</class>
+
+</library>

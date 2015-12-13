@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="verticalMenuIconBar" extends="view" y="22" x="4" clickable="true">
+	<simplelayout axis="y" spacing="2" />
+	<mainToolsPanelItem name="plain" modi="plainConfirm" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
+	
+	<!--
+	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
+	 -->
+
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
+	
+	<mainToolsHPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsHPanelSeperator>
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resourceItem="revert" />
+	<mainToolsHPanelSeperator>
+		<attribute name="modi" value="" type="string"/>
+	</mainToolsHPanelSeperator>
+	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
+						resourceItem="menupointer_rsc" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
+                        labelid="557" x_insetResource="1" y_insetResource="1"
+                        resourceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resourceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resourceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resourceItem="drawarrowicon_rsc" />
+
+    <mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
+        
+        <handler name="oninit">
+            this._bgIcon.setAttribute("visibility","hidden");
+            var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
+                                           + canvas._drawarea.currentClipArtRessourceName;
+            
+            this._rscIcon.setSource(imageurl);
+        </handler>
+        
+        <!--
+        <view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }" 
+              height="18" width="18" stretches="both" name="_bgIconIcon" />      
+         -->
+              
+        <view resource="sub_menu_tools_panel_rsc"
+              x="$once{ parent.width - 10 }" y="$once{ parent.height - 10 }">
+            <handler name="onclick">
+            	<![CDATA[
+                if ($debug) Debug.write("Show Sub Menu");
+                new lz.subMenuIconToolsToUpload(canvas,{
+                                x:500,
+                                y:82,
+                                refToolbar:parent
+                            });
+                ]]>
+            </handler>
+            <labelTooltip labelid="1335" />
+        </view>
+        
+    </mainToolsPanelItem>
+
+</class>
+
+<class name="horizontalMenuIconBar" extends="view" y="22" x="4" clickable="true">
+	<simplelayout axis="x" spacing="2" />
+	<mainToolsPanelItem name="plain" modi="plainConfirm" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
+	<!--
+	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
+     -->
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
+	
+	<mainToolsVPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsVPanelSeperator>
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resourceItem="revert" />
+	<mainToolsVPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsVPanelSeperator>	
+	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
+						resourceItem="menupointer_rsc" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
+                        labelid="557" resourceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resourceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resourceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resourceItem="drawarrowicon_rsc" />
+	<mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
+        
+        <handler name="oninit">
+            if (this["_bgIcon"]) {
+        	   this._bgIcon.setAttribute("visibility","hidden");
+        	}
+            var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
+                                           + canvas._drawarea.currentClipArtRessourceName;
+            
+            this._rscIcon.setSource(imageurl);
+        </handler>
+        
+        <view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }" 
+              height="18" width="18" stretches="both" name="_bgIconIcon" />      
+        
+        <view resource="sub_menu_tools_panel_rsc"
+              x="$once{ parent.width - 10 }" y="$once{ parent.height - 10 }">
+            <handler name="onclick">
+                if ($debug) Debug.write("Show Sub Menu");
+                new lz.subMenuIconToolsToUpload(canvas,{
+                                x:500,
+                                y:82,
+                                refToolbar:parent
+                            });
+            </handler>
+            <labelTooltip labelid="1335" />
+        </view>
+        
+    </mainToolsPanelItem>
+</class>
+
+
+<class name="mainToolsTopPanel" extends="baseTopPanel" 
+	   width="420" height="33" title="" docking="true"
+	   activationClassBounding="mainToolsLeftPanel"
+	   activationVClassBounding="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="true"
+	   hWidth="33" hHeight="420">
+	
+    <method name="updateToolSelection" args="modi">
+    	<![CDATA[
+            if ($debug) Debug.write("-updateToolSelection-  ",modi);
+            
+            for (var i=0;i<this._tools.subviews.length;i++){
+                
+            	if (this._tools.subviews[i].modi == modi) {
+            		
+            		this._tools.subviews[i].setSelectionWithoutEvent();
+            		return;
+            	}
+            	
+            }
+            
+        ]]>
+    </method>
+    
+	<horizontalMenuIconBar name="_tools" x="20" y="4" />
+</class>	
+	
+<class name="mainToolsLeftPanel" extends="baseLeftPanel" 
+	   width="33" height="420" title="" docking="true"
+	   activationClassBounding="mainToolsLeftPanel"
+	   activationVClassBounding="mainToolsTopPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="false"
+	   vWidth="420" vHeight="33">
+	
+    <method name="updateToolSelection" args="modi">
+        <![CDATA[
+            if ($debug) Debug.write("-updateToolSelection-  ",modi);
+            
+            for (var i=0;i<this._tools.subviews.length;i++){
+                
+                if (this._tools.subviews[i].modi == modi) {
+                    
+                    this._tools.subviews[i].setSelectionWithoutEvent();
+                    return;
+                }
+                
+            }
+            
+        ]]>
+    </method>	
+	
+	<verticalMenuIconBar name="_tools" x="3" y="20" />
+</class>
+
+<!-- ################
+    Non Moderator Tools
+-->
+
+<class name="verticalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
+    <simplelayout axis="y" spacing="2" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
+                        resourceItem="pointer_whiteboard_menu_rsc" />
+</class>
+
+<class name="horizontalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
+    <simplelayout axis="x" spacing="2" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
+                        resourceItem="pointer_whiteboard_menu_rsc" />
+</class>
+
+<class name="mainToolsTopPanelPointer" extends="baseTopPanel" 
+       width="52" height="32" title="" docking="true"
+       activationClassBounding="mainToolsLeftPanelPointer"
+       activationVClassBounding="mainToolsTopPanelPointer"
+       leftClassPanel="mainToolsLeftPanelPointer"
+       topClassPanel="mainToolsTopPanelPointer"
+       bottomClassPanel="mainToolsTopPanelPointer"
+       rightClassPanel="mainToolsLeftPanelPointer"
+       verticalClassActive="true"
+       hWidth="32" hHeight="52">
+    
+    <horizontalMenuIconBarPointer x="20" y="4" />
+</class>    
+
+<class name="mainToolsLeftPanelPointer" extends="baseLeftPanel" 
+       width="32" height="52" title="" docking="true"
+       activationClassBounding="mainToolsLeftPanelPointer"
+       activationVClassBounding="mainToolsTopPanelPointer"
+       topClassPanel="mainToolsTopPanelPointer"
+       bottomClassPanel="mainToolsTopPanelPointer"
+       leftClassPanel="mainToolsLeftPanelPointer"
+       rightClassPanel="mainToolsLeftPanelPointer"
+       verticalClassActive="false"
+       vWidth="52" vHeight="32">
+    
+    <verticalMenuIconBarPointer x="2" y="20" />
+</class>	
+
+</library>

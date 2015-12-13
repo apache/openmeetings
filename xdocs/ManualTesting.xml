@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+
+	<properties>
+		<title>Manual Testing</title>
+		<author email="iarkh@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Introduction">
+
+			<p>
+				Below is a test plan for the OpenMeetings 2.1 pre-release testing.
+			</p>
+		</section>
+
+		<section name="Details">
+
+			<ol>
+				<li>
+					<b>User GUI tests</b>
+					<ol>
+						<li>
+							Login/logout 
+							<ol>
+								<li>Password recovering </li>
+								<li>Self-registering </li>
+								<li>"Visit Apache OpenMeetings" link </li>
+								<li>Enter wrong login/password </li>
+								<li>Enter correct login/password </li>
+								<li>Exit the system by click the Exit button </li>
+							</ol>
+						</li>
+						<li>
+							Dashboard
+							<ol>
+								<li>Correct user info in the upper left corner </li>
+								<li>Links in the "Help and support" section </li>
+								<li>It should be possible to enter user’s room from the dashboard </li>
+								<li>Room details should be shown correctly in the "Rooms in this section…" part of the screen </li>
+							</ol>					
+						</li>
+						<li>
+							Global chat 
+							<ol>
+								<li>Send/receive message where at least 3 users in the system </li>
+								<li>Adding a contact to the contact list </li>
+								<li>Private message </li>
+								<li>Showing user profile </li>
+								<li>Inviting user to the conference room </li>
+								<li>Copy chat log </li>
+								<li>Delete chat log </li>
+								<li>Changing font style in the massage </li>
+								<li>Adding emotions to the message </li>
+							</ol>
+							Attention! Correct RTL support does not work in the current implementation 
+						</li>
+						<li>
+							Calendar view
+							<ol>
+								<li>Change view (weekly/daily/monthly) and moving between the dates </li>
+								<li>Adding/removing/moving by mouse an event </li>
+							</ol>
+						</li>
+						<li>
+							Calendar invitation window
+							<ol>
+								<li>Creating/updating/deleting an event </li>
+								<li>Inviting 3 internal and 3 external guests </li>
+								<li>Different reminder types: receiving e-mail invitation for internal and external guests </li>
+								<li>Password protected invitation </li>
+								<li>Inviting to the rooms of the different types </li>
+								<li>Choosing time zone for external guest </li>
+								<li>Correct user data in the invitations </li>
+								<li>SMS reminder for internal and external guests </li>
+								<li>E-mail reminder for internal and external guests </li>
+								<li>It should be possible to enter to the event via invitation link room at the particular time slot only </li>
+								<li>Enter the room via invitation window </li>
+							</ol>
+						</li>
+						<li>
+							My Profile: User profile should contain correct user info and allow to edit this 
+						</li>
+						<li>
+							Contacts and Messages
+							<ol>
+								<li>Add/remove a message </li> 
+								<li>Creating a new folder </li>
+								<li>Moving between the folders </li>
+								<li>Marking messages as read/unread </li>
+								<li>Message filters </li>
+								<li>Contact list </li>
+							</ol>
+						</li>
+						<li>
+							User settings
+							<ol>
+								<li>Possibility to change the user info </li>
+								<li>Changing time zone and language (should start to work after user re-login </li>
+								<li>Community settings or different users </li>
+								<li>Display settings</li> 
+							</ol>
+						</li>
+						<li>
+							Search users
+							<ol>
+								<li>Send a private message </li>
+								<li>Adding a contact </li>
+								<li>View contact details via user list </li>
+							</ol>
+						</li>
+						<li>
+							Room lists 
+							<ol>
+								<li>Public rooms, private rooms and my rooms should contain correct room lists </li>
+								<li>User list for the selected room </li>
+								<li>Room details for the selected room </li>
+							</ol>
+						</li>
+						<li>
+							Recordings
+							<ol> 
+								<li>The list should contain available recordings in public and private folders </li>
+								<li>Info panel should contain actual info about the recording </li>
+								<li>Downloading a recording is different formats (AVI/FLV) </li>
+								<li>Play the recording in OpenMeetings </li>
+								<li>Play downloaded recording by Windows player </li>
+								<li>Remove a recording from the folder </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – general issues (should be tested with at least 3 attendees)
+							<ol>
+								<li>Enter the room: different cases for the cam/micro, choosing of the cam resolution, test recording, allow/deny of video </li>
+								<li>User list should be shown correctly </li>
+								<li>Correct user credentials after  the room entering </li>
+								<li>Add moderator permissions to the user </li>
+								<li>Turn micro on/off in the user list </li>
+								<li>Increasing/decreasing sound level and turning micro on/off in the video window </li>
+								<li>Turn micro on/off in the user list to another user – possible by the moderator only </li>
+								<li>Increasing/decreasing sound level and turning micro on/off in the video window - possible by the moderator only </li>
+								<li>Allow/deny drawing on whiteboard – possible by the moderator only </li>
+								<li>Allow/deny screen sharing – possible by the moderator only </li>
+								<li>Allow/deny remote screen control – possible by the moderator only </li>
+								<li>Allow/deny exclusive audio – possible by the moderator only </li>
+								<li>Re-start devise settings via user list </li>
+								<li>Re-start devise settings via video window </li>
+								<li>Kick the user off by the moderator </li>
+								<li>Click F8 key to arrange videos </li>
+								<li>Activity and actions panel should contain correct info </li>
+								<li>Exit the room </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing: file uploading + documents
+							<ol>
+								<li>Upload a document with "Load directly to whiteboard" switch turned on </li>
+								<li>Upload a with "Load directly to whiteboard" switch turned on off </li>
+								<li>Upload a document with the localized file name and spaces in the name </li>
+								<li>Uploading a document into different folders: private files should be visible only their owner only </li>
+								<li>Removing a file from the room </li>
+								<li>Home and public drive size should change correctly </li>
+								<li>Adding a new folder </li>
+								<li>Removing a folder </li>
+								<li>Load a document of each supported type and check that it’s shown correctly </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – whiteboard and properties panels (should be tested with at least 3 attendees)
+							<ol>
+								<li>Adding a removing a whiteboard </li>
+								<li>Full-fit switch </li>
+								<li>Clear whiteboard </li>
+								<li>Clear objects of current slide only </li>
+								<li>Save and export </li>
+								<li>Undo </li>
+								<li>Select an object </li>
+								<li>Pointer </li>
+								<li>Text </li>
+								<li>Paint </li>
+								<li>Draw line </li>
+								<li>Draw underline </li>
+								<li>Rectangle </li>
+								<li>Ellipse </li>
+								<li>Arrow </li>
+								<li>Cliparts</li>
+							</ol>						
+						</li>
+						<li>
+							Restricted room testing – chat (should be tested with at least 3 attendees)
+							<ol>
+								<li>Send a message </li>
+								<li>Start a private chat </li>
+								<li>Chat moderation </li>
+								<li>Font style </li>
+								<li>Emotions </li>
+								<li>Show/copy chat log </li>
+								<li>Delete server chat log </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – screen sharing and recordings (should be tested with at least 3 attendees)
+							<ol>
+								<li>"Share record/screen" button in the room </li>
+								<li>Desktop sharer: start/stop sharing </li>
+								<li>Change the shared screen area (X-offset, Y-offset, width, height) </li>
+								<li>Change the screen sharing quality </li>
+								<li>Start/stop recordings – need to check that it works as expected </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – Actions menu
+							<ol>
+								<li>Send invitation: send English and localized message </li>
+								<li>Send invitation with password </li>
+								<li>Send invitations with 3 different time periods </li>
+								<li>Change time zone of the invitation </li>
+								<li>Change language of the invitation </li>
+								<li>Send invitation screen: "Generate URL" button – check the same things as for the invitations sent by email </li>
+								<li>Apply to be moderator </li>
+								<li>Apply to whiteboard access </li>
+								<li>Apply to audio/video access </li>
+								<li>Create a poll </li>
+								<li>Poll results </li>
+								<li>Vote </li>
+								<li>Default whiteboard settings: check all of them </li>
+							</ol>
+						</li>
+						<li>
+							Conference room testing
+							<ol>
+								<li>User list should look in another way in compare with restricted type </li>
+								<li>Generally, all should look OK when enter the room </li>
+							</ol>
+						</li>
+						<li>
+							Interview room testing (should be tested with at least 3 attendees)
+							<ol>
+								<li>User list should look as expected </li>
+								<li>Change a user for video pod </li>
+								<li>Start/stop recordings </li>
+							</ol>
+						</li>						
+					</ol>			
+				</li>
+				<li>
+					<b>Admin GUI tests</b>
+					<ol>
+						<li>
+							Users
+							<ol>
+								<li>Add/edit/remove/search user in the table </li>
+								<li>Move between screens where there are many users in the table </li>
+								<li>Edit text fields </li>
+								<li>Change a time zone, re-login and check the calendar </li>
+								<li>Change a language, re-login and check the GUI language </li>
+								<li>Е-mail: e-mails should pass </li>
+								<li>Phone and SMS switch: if set and turned on, sms messages should pass </li>
+								<li>Change a status – non-active user cannot login </li>
+								<li>Change user role and re-login </li>
+								<li>Change user group  - user has an access only to the rooms belong to his organization </li>
+								<li>Change community settings and check </li>
+							</ol>
+						</li>
+						<li>
+							Connections
+							<ol>
+								<li>Should be tested with at least 3 users in the system </li>
+								<li>Sessionvars table should be shown correctly </li>
+								<li>Kick the user from the system </li>
+							</ol>
+						</li>
+						<li>
+							Organizations 
+							<ol>
+								<li>Add/remove/edit/search an organization </li>
+								<li>Add/remove a user from the user list of selected organization </li>
+							</ol>
+						</li>
+						<li>
+							Conference rooms
+							<ol>
+								<li>Add/remove/edit/search a room </li>
+								<li>User list for the given room should contain actual list </li>
+								<li>Turn the Moderation switch on/off and enter the room </li>
+								<li>Add/remove a user to the default moderator list </li>
+								<li>Check max participants number in the room </li>
+								<li>Change room type and enter the room </li>
+								<li>Turn public switch on/off </li>
+								<li>Turn "Demo switch" on/off, change the demonstration time </li>
+								<li>Turn "Allow user questions" on/off and enter the room </li>
+								<li>Turn "Audio only" switch on/off and enter the room </li>
+								<li>Set "Close URL" to some URL, enter the room and then exit – you should be re-directed correspondingly </li>
+								<li>Check that SIP settings work as expected </li>
+								<li>Check that "Allow recordings" switch  works as expected </li>
+								<li>Check that "Layout options" switch work as expected </li>
+								<li>Check that "Allow font styles" switch works as expected </li>
+							</ol>
+						</li>
+						<li>					
+							Configuration
+							<ol>
+								<li>Allow_frontend_register </li>
+								<li>Mail server settings </li>
+								<li>SMS provider settings </li>
+								<li>Application.name </li>
+								<li>Default_lang_id </li>
+								<li>default time zone </li>
+								<li>SIP settings </li>
+								<li>Reminder minutes </li>
+							</ol>
+						</li>
+						<li>					
+							Language editor 
+							<ol>
+								<li>Add/remove/edit/search a key </li>
+								<li>Import/export of localization files </li>
+							</ol>
+						</li>
+						<li>					
+							LDAP: Add/remove/edit/search a record
+						</li>
+						<li>
+							Backup
+							<ol>
+								<li>System import </li>
+								<li>System backup </li>
+								<li>TBD – need to add tests for command line admin here </li>
+							</ol> 
+						</li>
+						<li>
+							Servers: Add/remove/edit/search a server
+						</li>						
+					</ol>
+				</li>
+				<li>
+					<b>SIP integration tests</b> (should be tested with at least 3 attendees in the room; for restricted and interview rooms)
+					<ol>
+						<li>Call from the room to the external phone number </li>
+						<li>Call from external phone number to the room </li>
+						<li>Call from the software phone to the room </li>
+						<li>Call from the software phone with video to the room </li>
+					</ol>
+				</li>
+				<li>
+					<b>Network testing script</b>
+				</li>
+				<li>
+					<b>Site integration tests</b>
+					<ol>
+						<li>Enter OpenMeetings room from Mooddle site </li>
+						<li>Check that recordings link are shown on the Moodle site </li>
+						<li>Enter OpenMeetings room from Joomla site </li>
+						<li>Check that recordings link are shown on the Joomla site </li>
+						<li>Enter OpenMeetings room from Drupal site </li>
+						<li>Check that recordings link are shown on the Drupal site </li>
+					</ol>
+				</li>
+			</ol>
+		</section>
+
+	</body>
+
+</document>
