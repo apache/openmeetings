@@ -1,0 +1,16 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!-- The receiver in Laszlo's point-to-point event system.
+A delegate is an object that calls a specific method on a specific object when its execute method is called. It is essentially a method closure.
+
+Delegates, along with <event>, comprise Laszlo's point to point event system. A delegate represents a named method of an object. Delegates are mostly registered with events, but they can be used anywhere a function callback would traditionally be called for: for instance, LzTimerService.addTimer() takes a delegate as its argument.
+
+You can create a delegate explicitly using the LzDelegate class, or implicitly by specifying an event handler. There are two syntaxes with which you can specify an event handler: in the open tag used to create that object, or by using the <handler> tag in the body of the object. -->
+<class name="handler" extends="false">
+	<attribute name="name" type="string" required="true" />
+	<attribute name="reference" value="this" type="reference"/>
+	<attribute name="args" value="" type="string"/>
+	<attribute name="method" type="string"/>
+</class>
+</library>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	<include href="userContacts.lzx" />
+	
+<class name="editUserContacts" extends="view">
+	
+	<attribute name="contactContent" value="null"/>
+	
+	<handler name="onvisible" args="v">
+		if ($debug) Debug.write("editUserContacts onvisible",v);
+		if (v) {
+			if (this.contactContent == null) {
+				//We do some tricks to render / to show some of the visible area 
+				//even if the UI is not yet completely rendered
+				lz.Timer.addTimer( new LzDelegate( this, "initContent" ), 250 );
+			}
+		} else {
+			if (this.contactContent != null) {
+				this.contactContent.destroy();
+				this.contactContent = null;
+			}
+		}
+	</handler>
+	
+	<method name="initContent" args="tRef">
+		if (this.contactContent != null) {
+			return;
+		}
+		this.contactContent = new lz.editUserContactsContent(this);
+	</method>
+	
+</class>
+
+<class name="editUserContactsContent" extends="view" height="$once{ parent.height }">
+	
+	<handler name="oninit">
+		//We do some tricks to render / to show some of the visible area 
+		//even if the UI is not yet completely rendered
+		lz.Timer.addTimer( new LzDelegate( this, "initContent" ), 250 );
+	</handler>
+	
+	<method name="initContent" args="tRef">
+		new lz.userContacts(this,{name:'_userContacts'});
+	</method>
+	
+	<privateMessages name="_privateMessages" x="0" y="0" />
+	
+	<view height="$once{ parent.height }" width="1" x="$once{ canvas.width-276 }" 
+		  bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"></view>
+	
+</class>	
+	
+</library>

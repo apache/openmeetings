@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+	
+<class name="menuListItemUserProfile" extends="view" height="24"
+    width="${ this._ctext.width+20 }" >
+
+    <attribute name="action" value="" type="string" />
+
+    <attribute name="isopen" value="false" type="boolean" />
+    <attribute name="isleaf" value="false" type="boolean" />
+    <attribute name="list" value="null" />
+    <attribute name="textvalue" value="null" />
+    <attribute name="selected" value="false" type="boolean" />
+    
+    <attribute name="textLabel" value="" type="string" />
+    
+    <attribute name="labelLabelid" type="number" value="-1" />
+
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('textLabel',canvas.getLabelName(this.labelid));
+		if ($debug) Debug.write("this.textLabel :: ",this.textLabel,this.labelid);
+	</method>
+	
+	<labelTooltip name="_labelTooltip" labelid="$once{ parent.labelLabelid }" />
+
+    <handler name="onmouseover">
+        if (!this.selected){
+            this._bg.setAttribute("visibility","visible");
+        }
+    </handler>
+    <handler name="onmouseout">
+        if (!this.selected){
+            this._bg.setAttribute("visibility","hidden");
+        }
+    </handler>
+
+    <method name="resetItem">
+        this.selected = false;
+        this._bg.setAttribute("visibility","hidden");
+        this._ctext.setAttribute("fgcolor",0x000000);
+    </method>
+
+    <view name="_bg" visibility="hidden" width="${ parent.width-1 }" y="1"
+          bgcolor="0xFFFFFF" opacity="0.4" height="23" />
+    <view width="1" height="8" y="8" bgcolor="0x000000" x="${ parent.width-1 }" />
+    <textBoxSubBlank name="_ctext" fontsize="11" text="${ parent.textLabel }" y="2" />
+
+    <handler name="onclick">
+        this._bg.setAttribute("visibility","visible");
+        this._ctext.setAttribute("fgcolor",0xFFFFFF);
+        this.selected=true;
+        parent.parent.setSubItem(this);
+    </handler>
+    
+    
+</class>
+
+<!--- User Profile Setting Panel -->
+<class name="userSettings" extends="baseContentView">
+	
+    <handler name="oninit">
+        _mainScrollBar.setAttribute("visibility","hidden");
+    </handler>
+    
+    <handler name="ontabcontentleave">
+    	//Clear reference to search to make sure it will re-initialize
+    	canvas.userSettingsSearchRef = null;
+    	_mainScrollBar.setAttribute("visibility","visible");
+    </handler>
+	
+	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+   	
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />  
+   			
+    <attribute name="refObjItem" value="null" />
+    
+    <method name="doSelection" args="objRef">
+    	if (this.refObjItem != null) {
+    		this.refObjItem.deselect();
+    	}
+    	this.refObjItem = objRef;
+		this._content.hideAll();
+		this._content[objRef.name].setAttribute("visibility","visible");
+    	this.refObjItem.select();
+    </method>
+      
+	<view name="_tabbar" width="${ canvas.width }" y="1" height="32"
+  		  layout="axis:x;spacing:2;inset:2" >
+  		  
+    	<handler name="oninit">
+	   		for (var eg in this.subviews) {
+           		this.subviews[eg].deselect();
+            }
+            
+            if (canvas.userSettingsModuleOpt == "editUserProfile") {
+	        	this._editUserProfile.onclick.sendEvent(null);
+	        } else if (canvas.userSettingsModuleOpt == "userProfile") {
+	        	this._userProfile.onclick.sendEvent(null);
+	        } else if (canvas.userSettingsModuleOpt == "userSearch") {
+	            this._searchUserProfile.onclick.sendEvent(null);
+	            parent._content._searchUserProfile.searchByUpdate();
+	        } else {
+	        	this._editUserContacts.onclick.sendEvent(null);
+	        }
+	   	</handler>
+		
+		<tabButtonMain name="_userProfile" selected="true" height="$once{ parent.height }" 
+        		 x="0" labelid="1170" width="${ (parent.width-10)/4 }" showIcon="false" />
+        
+        <tabButtonMain name="_editUserContacts" selected="true" height="$once{ parent.height }" 
+        		 x="0" labelid="1188" width="${ (parent.width-10)/4 }" showIcon="false" />
+		
+		<tabButtonMain name="_editUserProfile" width="${ (parent.width-10)/4 }" height="$once{ parent.height }" 
+        		 labelid="1171" showIcon="false" />
+        		
+        <tabButtonMain name="_searchUserProfile" width="${ (parent.width-10)/4 }" height="$once{ parent.height }" 
+        		 labelid="1172" showIcon="false" />
+		
+	</view>
+	
+	<view name="_content">
+		
+		<method name="hideAll">
+			for (var eg in this.subviews) {
+				this.subviews[eg].setAttribute("visibility","hidden");
+			}
+		</method>
+		
+		<viewUserProfile name="_userProfile" y="40" />
+			
+	    <editUserContacts name="_editUserContacts" visibility="hidden"  
+	    			y="40" height="$once{ canvas.height - 84 - 40 }" />
+	     
+	    <editUserProfile name="_editUserProfile" visibility="hidden"  y="40" />
+	    
+	    <searchUserProfile name="_searchUserProfile" visibility="hidden" 
+	    			y="40" height="$once{ canvas.height - canvas.naviHeight - 40 }" />
+	    			
+    </view>
+           			      
+</class>
+
+</library>

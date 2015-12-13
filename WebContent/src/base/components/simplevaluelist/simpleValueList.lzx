@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="simpleListItem" extends="view"
+	bgcolor="0xFFFFFF" onmouseup="this.parent.parent.parent.parent.toggleSelected(this)" >
+	<handler name="onmouseover">
+		<![CDATA[
+			if (this.selected) this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'))
+			else this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
+		]]>
+	</handler>
+	<handler name="onmouseout">
+		<![CDATA[
+			if (this.selected)  this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'))
+			else this.setAttribute('bgcolor',0xFFFFFF);
+		]]>
+	</handler>
+	<attribute name="selected" value="false" type="boolean"/>
+	<attribute name="value" value="null" />
+	<attribute name="text" value="" type="string" />
+	<text text="$once{ parent.text }" resize="true" fontsize="11" />
+</class>
+	
+	
+<class name="simpleValueList" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" >
+	
+	<attribute name="_selected" value="null" />
+	
+	<attribute name="multiselect" value="false" type="boolean" />
+    
+    <attribute name="itemclassname" type="string" value="simpleListItem" />
+	
+	<event name="onselect" />
+	
+	<method name="toggleSelected" args="obj">
+		<![CDATA[
+			var downkeys = lz.Keys.downKeysArray;
+			
+			//Select the Obj
+			
+			
+			if(downkeys.length==1 && downkeys[0]==17 && this.multiselect){
+				if (this._selected == null) this._selected = new Array();
+				if (this._checkForAlreadySelected(obj)) {
+					obj.setAttribute('selected',false);
+					obj.setAttribute('bgcolor',0xFFFFFF);
+				} else {
+					obj.setAttribute('selected',true);
+					this._selected.push(obj);
+				}				
+			} else if (downkeys.length==0 && this.multiselect){
+				if (this._selected == null) this._selected = new Array();
+				this._deslectAll();
+				obj.setAttribute('selected',true);
+				this._selected.push(obj);	
+			} else if (!this.multiselect) {
+				if(this._selected!=null) {
+					this._selected.setAttribute('selected',false);
+					this._selected.setAttribute('bgcolor',0xFFFFFF);
+				}
+				this._selected = obj;
+			    this._selected.setAttribute('selected',true);
+			} else {
+				Debug.warning("not handled",this);
+			}
+			
+		]]>
+	</method>
+	
+	<method name="_checkForAlreadySelected" args="obj">
+		<![CDATA[
+			for (var i=0;i<this._selected.length;i++){
+				if (this._selected[i]==obj) {
+					this._selected.splice(i,1);
+					return true;
+				}
+			}
+			return false;
+		]]>
+	</method>
+	
+	<method name="_deslectAll">
+		<![CDATA[
+			for (var i=0;i<this._selected.length;i++){
+				this._selected[i].setAttribute('selected',false);
+				this._selected[i].setAttribute('bgcolor',0xFFFFFF);
+			}
+			this._selected=new Array();
+		]]>
+	</method>
+	
+    <method name="addItem" args="txt,value">
+    	new lz[this.itemclassname](this.content.content.inn,{text:txt,value:value,width:this.width});
+    </method>
+	
+    <method name="removeItem" args="value">
+		<![CDATA[
+			if (this._selected!=null){
+				if (this.multiselect){
+					for (var i=0;i<this._selected.length;i++){
+						if (this._selected[i].value==value){
+							this._selected.splice(i,1);
+						}
+					}
+				} else {
+					if (this._selected.value==value) this._selected==null;
+				}
+			}
+			for (var i=0;i<this.content.content.inn.subviews.length;i++){
+				if(this.content.content.inn.subviews[i].value==value){
+					this.content.content.inn.subviews[i].destroy();
+				}
+			}
+		]]>
+    </method>
+	<method name="checkValue" args="value">
+		<![CDATA[
+			var t = this.getAllObjects();
+			if (t!=null){
+				for (var i=0;i<t.length;i++){
+					if (t[i].value==value) return true;
+				}
+			}
+			return false;
+		]]>
+	</method>		
+		
+    <method name="getAllItems">
+    	<![CDATA[
+    	var a = new Array();
+    	for (var i=0;i<this.content.content.inn.subviews.length;i++){
+    		//Debug.write("t: ",this.content.content.inn.subviews[i].value);
+    		a.push(Number(this.content.content.inn.subviews[i].value));
+    	}
+    	return a;
+    	]]>
+    </method>
+	<method name="getAllObjects">
+    	<![CDATA[
+    	var a = new Array();
+    	for (var i=0;i<this.content.content.inn.subviews.length;i++){
+    		a.push(this.content.content.inn.subviews[i]);
+    	}
+    	return a;
+    	]]>
+	</method>
+    <method name="clearList">
+    	for (var eg in this.content.content.inn.subviews){
+    		this.content.content.inn.subviews[eg].destroy();
+    	}
+    </method>
+    <view name="content" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
+    	x="1" y="1" clip="true" bgcolor="0xFFFFFF">
+    	<view name="content" >
+    		<view name="inn" layout="axis:y;spacing:2" />
+    	</view>
+    	<om_vscrollbar />
+    </view>
+</class>
+
+</library>

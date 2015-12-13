@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="orgAdminValueForm" extends="baseContentSaveView">
+	
+	<!--- recordContent id -->
+	<attribute name="organisation_id" value="0" type="number" />	
+
+	<!-- handler -->
+	
+	<handler name="onsavecompleted" >
+		this.getOrganisationById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.organisation_id!=0) {
+            this.getOrganisationById.doCall();
+            this._userlist.getUsersByOrganisation.doCall();
+        }
+	</handler>	
+
+	<handler name="onnew">
+		this.organisation_id=0;
+        this.orgname.setAttribute('text','');
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.organisation_id!=0){
+			this.deleteOrganisation.doCall();
+		}
+    </handler>	
+	
+	<!-- methods -->
+	
+    <method name="initValueFieldsByObject" args="obj">
+		this.organisation_id = obj.organisation_id;
+		if (this.organisation_id!=0){
+			this.getOrganisationById.doCall();
+			this._userlist.getUsersByOrganisation.doCall();
+		}
+    </method>	
+	
+  	<netRemoteCallHib name="getOrganisationById" funcname="organisationservice.getOrganisationById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.organisation_id;</method></netparam>
+    	<handler name="ondata" args="value">
+    		parent.initFields(value);
+    	</handler>
+  	</netRemoteCallHib>	
+	
+	
+    
+    <method name="initFields" args="obj">
+    	<![CDATA[
+    	this.organisation_id = obj.organisation_id;
+        this.orgname.setAttribute('text',obj.name);
+        ]]>
+    </method>
+	
+	<!-- remotecalls -->
+
+	<netRemoteCallHib name="deleteOrganisation" funcname="organisationservice.deleteOrganisation" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.organisation_id; </method></netparam>
+		<handler name="ondata" args="value">
+			//Debug.write("deleteOrganisation ",value);
+			//this.parent.destroy();
+			if (value>0){
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				this.parent.onnew.sendEvent();
+			}
+		</handler>
+	</netRemoteCallHib>	
+	
+  	<netRemoteCallHib name="saveOrUpdateOrganisation" funcname="organisationservice.saveOrUpdateOrganisation" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer -->
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+  			this.sendObject["organisation_id"] = this.parent.organisation_id;
+  			this.sendObject["orgname"] = this.parent.orgname.getText();
+
+  			//Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+    		//Debug.write("saveOrUpdateOrganisation: ",val);
+			if (val>0){
+				//Debug.write("saveOrUpdateUser val greater 0: ",val);
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				var obj = new Array();
+				obj["organisation_id"] = val;
+				this.parent.initValueFieldsByObject(obj);
+			}
+			]]>
+    	</handler>
+  	</netRemoteCallHib>		
+	
+	<!-- content -->	
+    
+    <labelText labelid="170" width="200" y="40" resize="false" fontstyle="bold" />	
+	
+    <labelText labelid="171" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="orgname" y="70" x="120" width="270" text="" />	
+	
+    <labelText labelid="273" width="200" y="100" resize="false" x="2" fontstyle="bold" />   
+    
+    <labelText labelid="177" width="200" y="130" resize="false" x="2"/>
+         
+    <orgUsersRecordValueList name="_userlist" y="130" x="120" width="300" height="200" />  
+
+	<blueButton resourceItem="edit_add_rsc" y="100" x="400"
+		x_insetResource="2" y_insetResource="2" width="20" height="20"
+		width_insetResource="16" height_insetResource="16"
+		onclick="this.parent.addOrganisationToUser()">
+		<labelTooltip labelid="178" />
+	</blueButton>
+			
+	<method name="addOrganisationToUser">
+		if (this.organisation_id!=0) {
+			new lz.orgAdminChooseUserWindow(canvas.main_content._content.inner,{
+			     refObj:this,organisation_id:this.organisation_id,
+			     isOrgUserAddForm:true});
+        } else {
+            new lz.labelerrorPopup(canvas.main_content._content.inner,{
+                     errorlabelid:654
+                    })
+        }
+	</method>	
+    
+</class>
+	
+</library>

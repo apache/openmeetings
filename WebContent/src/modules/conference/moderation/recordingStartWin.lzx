@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+	<!---
+		Dialog box for recording data.
+		When you click the Recording button on your conference menu, this class shows a dialog box for saving it.
+	--> 
+    
+	<!-- label: save as -->
+	<class name="recordingStartWin" extends="labelExplorerBox" labelid="391"
+	    		docking="true" resizeable="false" closable="false" width="400" x="300" height="226">
+	 	
+		<attribute name="recordingsName" value="" type="string" />
+	 	
+	 	<handler name="oninit">
+	 		this.rName.setAttribute('text',"recording_"+getStringDateFileSave());
+	 	</handler>
+	 	
+	   	<!-- label: record name --> 
+	    	<labelText labelid="392" width="200" y="22" resize="false" x="2"/>
+	      <customEdittext name="rName" y="22" x="120" width="270" />	
+		
+		<!-- label: comment -->
+	    	<labelText labelid="393" width="200" y="52" resize="false" x="2"/>
+	      <customScrollEdittext name="rComment" y="52" x="120" width="270" height="120" />	   					
+	  
+	    	<!-- label: cancel -->	
+	    	<simpleLabelButton labelid="438" width="100" x="180" y="190" >
+	    		<handler name="onclick">
+	    			parent.close();
+	    		</handler>
+	    	</simpleLabelButton>
+	        
+	    	<!-- label: start -->
+	    	<simpleLabelButton labelid="439" width="100" x="290" y="190" 
+                               onclick="this.parent.checkForRecording.doCall();" />
+	  	
+		<netRemoteCallHib name="recordMeetingStream" funcname="flvrecorderservice.recordMeetingStream" remotecontext="$once{ canvas.thishib }" >  
+	  		<netparam><method name="getValue">return canvas.thishib.modus;</method></netparam>
+	  		<netparam><method name="getValue">return canvas._drawarea.baseactionobjectList;</method></netparam> 
+	    		<netparam><method name="getValue">return parent.parent.rName.getText();</method></netparam>
+			<netparam><method name="getValue">return parent.parent.rComment.getText();</method></netparam>    
+	    	
+	    		<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debug ) Debug.write("recordingStartWin.recordMeetingsStream(): ",value);	
+				canvas._mymod.recordingsName = value;
+				canvas._mymod.sta_btn.setAttribute('visibility','hidden');
+				canvas._mymod.stp_btn.setAttribute('visibility','visible');	
+				parent.close();			
+			</handler>	
+	  	</netRemoteCallHib>
+	  	
+	  	<netRemoteCallHib name="checkForRecording" funcname="flvrecorderservice.checkForRecording" remotecontext="$once{ canvas.thishib }" >  
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debgug ) Debug.write("recordingStartWin.checkForRecording(): ",value);	
+				parent.recordingUser = value;
+				if (value==null) {
+					parent.recordMeetingStream.doCall();
+				} else {
+					new lz.errorPopupUserInfo(canvas,{error:canvas.getLabelName(418),user:value});
+				}
+			</handler>	
+	  	</netRemoteCallHib>  	
+         
+	</class>
+</library>

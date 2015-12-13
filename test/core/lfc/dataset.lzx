@@ -1,0 +1,72 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---An in-memory xml-style data hierarchy. -->
+<class name="dataset" extends="node">
+
+	<!-- Inherited from DataElementMixin -->
+	<!--- The dictionary of attributes for this node. -->
+	<attribute name="attributes" />
+	<!--- 	The name of this node. -->
+	<attribute name="nodeName" />
+	
+	<!-- Inherited from lz.DataNodeMixin  -->
+	<!---	An array of children of this node -->
+	<attribute name="childNodes" />
+	<!--- 	The type of this node one of lz.DataElement.DOCUMENT_NODE, lz.DataElement.ELEMENT_NODE or lz.DataElement.TEXT_NODE -->
+	<attribute name="nodeType" />
+	<!---	The owner document for this node. -->
+	<attribute name="ownerDocument" />
+	<!--- 	The parent of this node -->
+	<attribute name="parentNode" />
+	<!---	Selection state of this node, used by dataselectionmanager -->
+	<attribute name="sel" />
+	
+	<!---	When true, the server will accept encoded responses for this request. Encoded responses require more work for the LPS (encoding the response) and client (decoding the response) in trade for lower network bandwidth usage.  -->
+	<attribute name="acceptencodings" type="boolean"/>
+	<!---	If true, changes to src or querystring attributes cause doRequest() to be called automatically. If false, doRequest() must be called manually when src or querystring attributes change.  -->
+	<attribute name="autorequest" type="boolean" value="false" />
+	<!---	When true, the server will attempt to cache response (defaults to false). There are security concerns when this field is true. When this field is true, you will usually want the getresponseheaders field to be false. -->
+	<attribute name="cacheable" type="boolean" value="false" />
+	<!--- 	When true, data responses can be cached by the client (browser). When false, a unique valued argument will be added to the request string in the format '__lzbc__=1204685840777' to defeat the browser's cache.  -->
+	<attribute name="clientcacheable" type="boolean" value="false" />
+	<!---When true, the withCredentials property on the XHR object will be set to true, allowing credentialled cross-origin resource sharing (CORS) requests. If withCredentials is not set for a CORS request using credentials, the browser will not set any cookies sent by the server. See http://www.w3.org/TR/cors/#access-control-allow-credentials-respons and http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-withcredentials-attribute for more information.  -->
+	<attribute name="credentialled" type="boolean" value="false" />
+	<!--- 	Holds a pointer to the DataProvider which handles data load requests for this dataset. Default value is canvas.defaultdataprovider  -->
+	<attribute name="dataprovider" />
+	<!---	When true, the proxy server (if making a proxied request) will encode and send the HTTP response headers along with the data (defaults to false). Due to a lack of a native API to get this information, SOLO SWF applications will always return an empty set. When making a proxied request, getresponseheaders must be true in order for the response headers to be retrieved via the getResponseHeader or getAllResponseHeaders methods.  -->
+	<attribute name="getresponseheaders" type="boolean"/>
+	<!---	Create a new data request object for each request. -->
+	<attribute name="multirequest" />
+	<!---	When true, the server will preserve namespace prefixes on data node names and attribute names  -->
+	<attribute name="nsprefix" />
+	<!---	An lz.Param object which holds query key-value pairs. -->
+	<attribute name="params" />
+	<!---	Used to send a string as the entire body of a POST request. For a POST request, setting postbody to a non-null string value will send that string as the complete body of the POST request. In this case any other query parameters that have been set via setQueryParam dataset will be ignored. The behavior of a GET request with a non-null postbody is not defined. Note, the swf8 runtime is forced to XML-quote the postbody, due to limitations in the Flash 8 player API. This restriction is not present in later swf runtimes, or in the DHTML runtime.  -->
+ 	<attribute name="postbody" />
+ 	<!---Sets whether or not the dataset makes its request directly to the target server or via the server proxy. Inherits value from canvas.proxied flag.  -->
+ 	<attribute name="proxied" />
+ 	<!---	The URL of the proxy server, for proxied requests -->
+ 	<attribute name="proxyurl" />
+ 	<!---	A string to be appended to the request that the dataset makes.  -->
+ 	<attribute name="querystring" />
+ 	<!---HTTP request method. Value must be one of "GET" or "POST". -->
+ 	<attribute name="querytype" value="GET" />
+  	<!---	Holds raw data response string from data source -->
+  	<attribute name="rawdata" />
+  	<!---	If true, the datset will make a request upon initialization -->
+  	<attribute name="request" type="boolean" value="false" />
+  	<!---	TCP port number to use for secure (HTTPS) requests -->
+  	<attribute name="secureport" value="443" type="number" />
+  	<!---	The source for requests made by this dataset. The value can be a pathname or an absolute or relative URL. If the value is a URL (starts with "http:"), the dataset will be configured to load its data at runtime. Otherwise, the data is included inline into the application at compile time.  -->
+  	<attribute name="src" />
+  	<!---	The numer of milliseconds to wait before the request times out, and an ontimeout event is sent. -->
+  	<attribute name="timeout" />
+  	<!---	When true, the server will trim whitespace in the XML data (defaults to false).  -->
+  	<attribute name="trimwhitespace" />
+  	<!---	When set to "http" or "soap", the dataset interprets it's src attribute as a URL to be loaded at runtime. If the "src" attribute is set to a URL (e.g., starts with "http:") then the type attribute implicitly becomes "http".  -->
+  	<attribute name="type" />
+ 	
+</class>
+
+</library>

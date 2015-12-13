@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="folderFLVExplorerItem" extends="baseFLVExplorerItem" isFolder="true">
+	
+	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
+		<contextmenu>
+			
+			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
+							 onselect="parent.parent.parent.editFolderName()" />
+			
+            <contextmenuitem caption="$once{ canvas.getLabelName(709) }" 
+            				 onselect="parent.parent.parent.addFolder()" />
+            				 
+            <contextmenuitem caption="$once{ canvas.getLabelName(710) }" 
+            				 onselect="parent.parent.parent.deleteFile(719)" />
+            				 
+        </contextmenu>
+        
+        <handler name="onmousetrackover">
+            //if ($debug) Debug.write("onmousetrackover");
+            canvas.currentImagesListdraw.currentDragItem.sendOverItem(parent);
+            this.setAttribute("bgcolor",0x93FE92);
+        </handler>
+        
+        <handler name="onmousetrackout">
+            //if ($debug) Debug.write("onmousetrackout");
+            canvas.currentImagesListdraw.currentDragItem.sendOutItem(parent);
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler>
+        
+        <handler name="onmousetrackup">
+            if ($debug) Debug.write("onmousetrackup");
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler> 
+        
+        <handler name="onmousedown">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+        </handler>
+        <handler name="onmouseup">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+        </handler>
+		<handler name="onclick">
+            parent.toggleOpen(true);
+        </handler>
+	</text>
+	
+	<view name="content" x="12" y="18" layout="axis:y;inset:1" visibility="hidden">
+		
+	</view>
+</class>
+
+
+</library>
