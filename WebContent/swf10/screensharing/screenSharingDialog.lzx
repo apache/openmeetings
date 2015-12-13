@@ -1,0 +1,1122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="screenSharingDialogContainer" extends="view" 
+       width="${parent.width }" height="${ parent.height }">
+	
+	<method name="closeAll">
+		<![CDATA[
+		    if ($debug) Debug.write("screenSharingDialogContainer closeAll");
+            for (var eg in this.subviews) {
+                this.subviews[eg].doClose();
+            }
+            //do first close the video connection before removing the client view
+            this.clearAllSessions();
+        ]]>
+	</method>
+    
+    <method name="clearAllSessions">
+        <![CDATA[
+            if ($debug) Debug.write("screenSharingDialogContainer clearAllSessions");
+            for (var eg in this.subviews) {
+                this.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+    
+    <method name="searchForSession" args="streamPublishName">
+        <![CDATA[
+        
+            for (var i=0;i<this.subviews.length;i++) {
+                if (this.subviews[i].initObject.streamPublishName == streamPublishName) {
+                    return this.subviews[i];
+                }
+            }
+            
+            if ($debug) Debug.write("No Screen Session "+streamPublishName);
+            return null;
+        ]]>
+    </method>
+    
+</class>    
+
+<class name="screenSharingDialog" extends="labelExplorerBox" labelid="855"
+    docking="true" resizeable="true" closable="true" 
+    width="270" x="$once{ canvas.width - this.width - 20 }" height="100">
+    
+    <attribute name="isStarted" value="false" type="boolean" />
+    
+    <attribute name="currentCursorObject" value="null" />
+    
+    <attribute name="initObject" value="null"/>
+    
+    <handler name="oninit">
+    	var fName = " " + this.initObject.firstname 
+                  + " " + this.initObject.lastname;
+        var tString = canvas.getLabelName(849)
+                        + " " + fName
+                        + " " + canvas.getLabelName(850);
+        
+		this.setAttribute('title', canvas.getLabelName(855) + " " + fName);
+        if (parent.subviews.length > 1) {
+            this.setAttribute("y",((parent.subviews.length-1)*100)+40);
+        } else {
+            this.setAttribute("y",40);
+        }
+        
+        this._initText._infoText.setAttribute("text",tString);
+    </handler>
+    
+    <method name="startViewerSession">
+        <![CDATA[
+        
+            this.isStarted = true;
+            
+            this._subcontent.setAttribute("visibility","visible");
+            
+            this._initText.setAttribute("visibility","hidden");
+        
+            this._showScreenSharing._y.setAttribute("to",0);
+            this._showScreenSharing._height.setAttribute("to",canvas.height);
+            this._showScreenSharing._width.setAttribute("to",canvas.width-260);
+            this._showScreenSharing._x.setAttribute("to",260);
+        
+            this._showScreenSharing.setAttribute('started', true);
+            
+            if ($debug) Debug.write("this.initObject ",this.initObject);
+            
+            this._subcontent._content._video.setAttribute("width",this.initObject.VWidth);
+            this._subcontent._content._video.setAttribute("height",this.initObject.VHeight);
+            
+            this._subcontent._content._video._videostream.playStream(this.initObject.streamPublishName,-1);
+            
+        ]]>
+    </method>
+    
+    <method name="doMinimize">
+        <![CDATA[
+           
+           this.isStarted = false;
+           
+           this._subcontent._content._video._videostream.stop();
+           
+           this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
+           this._showScreenSharing._x.setAttribute("to",canvas.width - 270 - 20);
+           this._showScreenSharing._height.setAttribute("to",100);
+           this._showScreenSharing._width.setAttribute("to",270);
+           
+           this._showScreenSharing.setAttribute('started', true);
+           
+           this._infoBox.setAttribute("visibility","hidden");
+           this._zoombar.setAttribute("visibility","hidden");
+           this._pause.setAttribute("visibility","hidden");
+           this._close.setAttribute("visibility","hidden");
+           
+           this._subcontent.setAttribute("visibility","hidden");
+           
+        ]]>
+    </method>
+    
+    <method name="doClose">
+        if (this.isStarted) {
+            this._subcontent._content._video._videostream.stop();
+        }
+        this.close();
+    </method>
+    
+    <method name="updateCursor" args="x,y">
+        if (this.currentCursorObject == null) {
+            this.currentCursorObject = new lz.screenShareCursorObject(this._subcontent._content,{
+                        refObj:this._subcontent._content._video._videostream
+                    });
+        }
+        this.currentCursorObject.setAttribute("x",x * (this._zoombar._zoom.initialNumber/100));
+        this.currentCursorObject.setAttribute("y",y * (this._zoombar._zoom.initialNumber/100));
+    </method>    
+    
+    <view name="_initText">
+        
+        <!--
+        <view x="4" resource="warning_icon_rsc" y="24" />
+         -->
+         
+        <labelText name="_infoText" labelid="724" width="230" 
+                   x="10" y="26" multiline="true" />
+    
+        <simpleLabelButton name="_startButton" labelid="848" x="10" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.startViewerSession();
+            </handler>
+        </simpleLabelButton> 
+          
+        <simpleLabelButton name="_closeButton" labelid="851" x="138" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.close();
+            </handler>
+        </simpleLabelButton>   
+        
+    </view>
+    
+    <view name="_subcontent" width="${ parent.width }" visibility="hidden"
+          y="20" height="${ parent.height - 48 }" clip="true">
+    	
+        <view name="_content">
+            
+            <videoObjectPlayScreenShare name="_video">
+            	
+            	<contextmenu>
+			
+					<contextmenuitem caption="$once{ canvas.getLabelName(1087) }" 
+									 onselect="parent.parent.parent.pasteContent()" />
+		        
+		        </contextmenu>
+		                
+                <attribute name="doSendEvents" type="boolean" value="true" />
+                
+                <attribute name="idleDelegate" value="null" type="expression" />
+                
+                <attribute name="isMouseOverActive" value="false" type="boolean"/>
+                
+                <attribute name="lastMouseX" value="-1" type="number"/>
+                <attribute name="lastMouseY" value="-1" type="number"/>
+                
+                <attribute name="isMac" value="false" type="boolean"/>
+                <attribute name="isWindows" value="false" type="boolean"/>
+                <attribute name="isLinux" value="false" type="boolean"/>
+                
+                <handler name="oninit">
+                	
+                	var osInfo = lz.Browser.getOS();
+                	
+                	if ($debug) Debug.write("osInfo :: ",osInfo);
+                	
+                	if (osInfo.indexOf("Mac") >= 0) {
+                		this.isMac = true;
+                	} else if (osInfo.indexOf("Win") >= 0) {
+                        this.isWindows = true;
+                    } else if (osInfo.indexOf("Linux") >= 0) {
+                        this.isLinux = true;
+                    }
+                    
+                    if ($debug) Debug.write("this.isMac :: ",this.isMac);
+                    if ($debug) Debug.write("this.isWindows :: ",this.isWindows);
+                	
+                    this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
+                </handler>
+                
+                <method name="pasteContent">
+                	if ($debug) Debug.write("pasteContent :: ");
+                </method>
+                
+                <handler name="onkeydown" reference="lz.Keys" args="k">
+                	<![CDATA[
+	                    if (this.isMouseOverActive) {
+	                        if ($debug) Debug.write("onkeydown ",k);
+	                        
+	                        var tObject = new Object();
+	                        tObject["action"] = "onkeydown";
+	                        tObject["k"] = k;
+	                        
+	                        var downkeys = lz.Keys.downKeysArray;
+	                        
+	                        if ($debug) Debug.write("downkeys ",downkeys,downkeys.length);
+				
+	                        if (this.isWindows) {
+	                        
+    							if (downkeys.length==2 && downkeys[0]==16) {
+    								if (k == 187) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "*";
+    		                        } else if (k == 191) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "'";
+    		                        } else if (k == 189) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "_";
+    		                        } else if (k == 221) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "`";
+    		                        } else if (k == 219) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "?";
+    		                        } else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = ">";
+    		                        } else if (k == 220) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "°";
+    		                        } else if (k == 186) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ü";
+    		                        } else if (k == 222) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ä";
+    		                        } else if (k == 192) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ö";
+    		                        }
+    		                        
+    		                        
+    							} else if (downkeys.length==2 && downkeys[0]==18) {
+    								
+    								if (k == 81) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "@";
+    								} else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "|";
+    								}
+    								
+    							} else {
+    								
+    		                        if (k == 187) {
+    		                        	tObject["k"] = -1;
+    		                        	tObject["c"] = "+";
+    		                        } else if (k == 191) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "#";
+    		                        } else if (k == 189) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "-";
+    		                        } else if (k == 221) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "`";
+    		                        } else if (k == 219) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ß";
+    		                        } else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "<";
+    		                        } else if (k == 220) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "^";
+    		                        } else if (k == 186) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ü";
+    		                        } else if (k == 222) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ä";
+    		                        } else if (k == 192) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ö";
+    		                        }
+    		                        
+    							}
+							
+	                        } else if (this.isMac) {
+	                        	
+	                        	if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 221) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 220) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 191) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 225) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 192) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 219) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 186) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 221) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 220) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 191) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 225) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 192) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 219) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 186) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+	                        	
+	                        } else if (this.isLinux) {
+	                        	
+	                        	if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 252) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+	                        	
+	                        }
+							
+							if (lz.Keys.downKeysArray.length > 1) {
+								for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
+									if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
+										lz.Keys.downKeysArray = new Array();
+										break;
+									}
+								}
+							}
+							
+	                        
+							
+							if (k == 18 || k == 17) {
+								return;
+							}
+	                        
+	                        this.sendRemoteCursorEvent.tObject = tObject;
+	                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+	                            this.sendRemoteCursorEvent.doCall();
+	                        }
+	                        
+	                    }
+                    ]]>
+                </handler>
+                
+                <handler name="onkeyup" reference="lz.Keys" args="k">
+                	<![CDATA[
+                        if (this.isMouseOverActive) {
+                            if ($debug) Debug.write("onkeyup ",k);
+                            
+                            var tObject = new Object();
+                            tObject["action"] = "onkeyup";
+                            tObject["k"] = k;
+                            
+                            var downkeys = lz.Keys.downKeysArray;
+    				        
+                            if (this.isWindows) {
+                            	
+    					        if (downkeys.length==2 && downkeys[0]==16) {
+    								if (k == 187) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "*";
+    		                        } else if (k == 191) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "'";
+    		                        } else if (k == 189) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "_";
+    		                        } else if (k == 221) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "`";
+    		                        } else if (k == 219) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "?";
+    		                        } else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = ">";
+    		                        } else if (k == 220) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "°";
+    		                        } else if (k == 186) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ü";
+    		                        } else if (k == 222) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ä";
+    		                        } else if (k == 192) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ö";
+    		                        }
+    		                        
+    		                        
+    							} else if (downkeys.length==2 && downkeys[0]==18) {
+    								
+    								if (k == 81) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "@";
+    								} else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "|";
+    								}
+    								
+    							} else {
+    								
+    		                        if (k == 187) {
+    		                        	tObject["k"] = -1;
+    		                        	tObject["c"] = "+";
+    		                        } else if (k == 191) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "#";
+    		                        } else if (k == 189) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "-";
+    		                        } else if (k == 221) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "`";
+    		                        } else if (k == 219) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "ß";
+    		                        } else if (k == 226) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "<";
+    		                        } else if (k == 220) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "^";
+    		                        } else if (k == 186) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ü";
+    		                        } else if (k == 222) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ä";
+    		                        } else if (k == 192) {
+    									tObject["k"] = -1;
+    		                        	tObject["c"] = "Ö";
+    		                        }
+    		                        
+    							}
+    						
+                            } else if (this.isMac) {
+                        	
+                                if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 221) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 220) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 191) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 225) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 192) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 219) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 186) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 221) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 220) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 191) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 225) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 192) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 219) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 186) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+                                
+                            } else if (this.isLinux) {
+	                        	
+	                        	if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 252) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+	                        	
+	                        }
+    							
+    						if (k == 18 || k == 17) {
+    							return;
+    						}
+    						
+    						if (lz.Keys.downKeysArray.length > 1) {
+    							for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
+    								if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
+    									lz.Keys.downKeysArray = new Array();
+    									break;
+    								}
+    							}
+    						}
+                        
+    						if ($debug) Debug.write("tObject :: ",tObject,this.isWindows,this.isMac);
+    						
+                            this.sendRemoteCursorEvent.tObject = tObject;
+                            if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+                                this.sendRemoteCursorEvent.doCall();
+                            }
+                        }
+                    ]]>
+                </handler>
+                
+                <handler name="onmouseover">
+                    //if ($debug) Debug.write("onmouseout ");
+                    this.isMouseOverActive = true;
+                    lz.Timer.addTimer( this.idleDelegate, 500 );
+                </handler>
+                
+                <handler name="onmouseout">
+                    //if ($debug) Debug.write("onmouseout ");
+                    this.isMouseOverActive = false;
+                    lz.Timer.removeTimer( this.idleDelegate);
+                </handler>
+                
+                <method name="sendMousePosition" args="refObj">
+                    <![CDATA[
+                        var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "mousePos";
+                        
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+                            
+                            //if ($debug) Debug.write("sendMousePosition ",x,y);
+                            
+                            if (tObject["x"] != this.lastMouseX && tObject["y"] != this.lastMouseY) {
+                                
+                                this.lastMouseX = tObject["x"];
+                                this.lastMouseY = tObject["y"];
+                            
+                                this.sendRemoteCursorEvent.doCall();
+                            }
+                            
+                        }
+                        
+                        if (this.isMouseOverActive) {
+                            lz.Timer.addTimer( this.idleDelegate, 500 );
+                        }
+                    ]]>
+                </method>
+                
+                <handler name="onmousedown" args="refObj">
+                    <![CDATA[
+                        var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        if ($debug) Debug.write("1 x,y :: ",x,y);
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        if ($debug) Debug.write("2 x,y :: ",x,y);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "onmousedown";
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+                    ]]>
+                </handler>
+                
+                <handler name="onmouseup" args="refObj">
+                    <![CDATA[
+                        var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        if ($debug) Debug.write("1 x,y :: ",x,y);
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        if ($debug) Debug.write("2 x,y :: ",x,y);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "onmouseup";
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+                    ]]>
+                </handler>
+                
+                <!--
+                public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj)
+                 -->
+                <netRemoteCallHib name="sendRemoteCursorEvent"  showLoading="false"
+                                  remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
+                        <attribute name="tObject" value="null" />
+                        <netparam><method name="getValue">return parent.parent.parent.parent.parent.initObject.streamid;</method></netparam>
+                        <netparam><method name="getValue">return parent.tObject;</method></netparam>
+                        <handler name="ondata" args="value">
+                        //The onResult-Handler will be called be the rtmpconnection
+                        //if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);    
+                        //parent.close();
+                    </handler>  
+                </netRemoteCallHib> 
+                 
+            </videoObjectPlayScreenShare>
+            
+        </view>
+        
+        <om_vscrollbar />
+        <om_hscrollbar />
+        
+    </view>    
+    
+    <view name="_infoBox" x="0" visibility="hidden" >
+    	
+    	<view name="innerBox" height="${ parent.parent.height }" 
+    		  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToRemoteControl) ? true : false )) }">
+    		
+            <labelExplorerBox name="_infoBox" labelid="1088" 
+                  docking="true" resizeable="false" closable="true" valign="middle"
+                    x="0" height="400" width="170">
+                <switch>
+                    <when property="$as3">
+                        <passthrough>
+                            import flash.net.SharedObject;
+                        </passthrough>
+                    </when>
+                </switch>
+                <handler name="oninit">
+                	<![CDATA[
+                	this.bringToFront();
+                    var t:SharedObject = SharedObject.getLocal('userdata');
+                    var g = t.data;
+                    if (g["image"]!=null) {
+                    	if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
+                        if ($debug) Debug.write("g[image] ",g["image"]);
+                        if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                        	if ($debug) Debug.write("DO CLOSE IT")
+                            this.close();
+                        }
+                    }
+                    ]]>
+                </handler>
+            
+                <view x="4" resource="warning_icon_rsc" y="26" />
+            
+                <view y="22" width="$once{ parent.width - 35 }" height="130" x="30" >
+                    <labelText fontsize="10" fontstyle="bold" labelid="1086"
+                        multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+                </view>
+                
+                <view y="76" width="$once{ parent.width - 7 }" height="130" x="4" >
+                    <labelText fontsize="10" labelid="1085"
+                        multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+                </view>
+                
+                <labelCheckbox x="4" y="$once{ parent.height-42 }" fontsize="11"
+                                    name="_doNotShowAgain" labelid="1123" >
+                	<attribute name="checkboxIsinited" value="false" type="boolean"/>
+                	<switch>
+                        <when property="$as3">
+                            <passthrough>
+                                import flash.net.SharedObject;
+                            </passthrough>
+                        </when>
+                    </switch>
+                    <handler name="oninit">
+                    	<![CDATA[
+                    	    var t:SharedObject = SharedObject.getLocal('userdata');
+                            var g = t.data;
+                            if (g["image"]!=null) {
+                            	if ($debug) Debug.write("g[image]",g["image"]);
+                                if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                                    if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
+                                    this.setValue(true);
+                                }
+                            }
+                            this.checkboxIsinited = true;
+                        ]]>
+                    </handler>
+                    <handler name="onvalue" args="v">
+                    	if (!this.checkboxIsinited) {
+                    		return;
+                    	}
+                        if ($debug) Debug.write("onselect ",v);
+                        var t:SharedObject = SharedObject.getLocal('userdata');
+                        var g = t.data;
+                        if (g["image"]==null) g["image"]=new Array();
+                        g["image"]["donotaskagainrdc"]=v;
+                        
+                        if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
+                        if ($debug) Debug.write("g[image] ",g["image"]);
+                        
+                        t.flush();
+                    </handler>
+                </labelCheckbox>    
+                
+                <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
+                       y="$once{ parent.height-24 }" onclick="this.parent.close();" />
+                       
+            </labelExplorerBox>  
+            
+        </view>
+        
+    </view>  
+
+    <view name="_zoombar" x="20" visibility="hidden" y="${ parent.height-26 }">
+        
+        <method name="setDefaultZoom">
+            if (parent.initObject.VWidth > (parent._subcontent.width-16) ) {
+                var newZoom = Math.round(( (parent._subcontent.width-16) /parent.initObject.VWidth)*100);
+                
+                if ($debug) Debug.write("newZoom ",newZoom);
+                
+                this._zoom.setSliderValue(newZoom);
+                
+                this._zoom.oninitialNumber.sendEvent(newZoom);
+            }
+            
+            this.setDefaultHeight();
+        </method>
+        
+        <method name="setDefaultHeight">
+            if (parent.initObject.VHeight > (parent._subcontent.height-16)) {
+                var newZoom = Math.round(( (parent._subcontent.height-16) /parent.initObject.VHeight)*100);
+                
+                if ($debug) Debug.write("newZoom ",newZoom);
+                
+                this._zoom.setSliderValue(newZoom);
+                
+                this._zoom.oninitialNumber.sendEvent(newZoom);
+            }
+        </method>
+        
+        <simplelayout axis="x" spacing="2" />
+        
+        <labelText labelid="852" resize="true" y="4" />
+        
+        <changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
+              boxPosition="up" initialNumber="100" maximum="200">
+            <handler name="oninitialNumber" args="i">
+                if (parent.parent.isStarted) {
+                    
+                    var newWidth = parent.parent.initObject.VWidth * (i/100);
+                    var newHeight = parent.parent.initObject.VHeight * (i/100);
+                    
+                    parent.parent._subcontent._content._video.setAttribute("width",newWidth);
+                    parent.parent._subcontent._content._video.setAttribute("height",newHeight);
+                    
+                }
+            </handler>
+        </changeWidthSlider>
+        
+        <labelText x="64" y="4" labelid="253" />   
+        
+        <labelText x="84" y="4" labelid="1096" />  
+        
+        <!--
+        <resetCombobox name="languages" width="60" y="6" x="200" >
+        	<handler name="oninit">
+        		<![CDATA[
+            		//getBrowserLang
+            		
+        		    var thisItem = this;
+        		
+            		function callback(returnValue) {
+                            
+                        if ($debug) Debug.write(" callback ",returnValue);
+                        
+                        if (returnValue.indexOf("de") >= 0) {
+                        	thisItem.selectItemAt(1);
+                        } else if (returnValue.indexOf("de") >= 0) {
+                        	thisItem.selectItemAt(0);
+                        } else {
+                        	thisItem.selectItemAt(0);
+                        	//Show Error Box that we currently have no 
+                        	//Keyboard Scheme available for that country
+                        }
+                        
+                    }
+                    
+                    lz.Browser. callJS("getBrowserLang",callback);
+            		
+            		
+            		//var t = lz.Browser;
+            		//if ($debug) Debug.write("lz.Browser :: ",t);
+            		
+            		//this.selectItemAt(0);
+        		]]>
+        	</handler>
+        	<labeldTextListItem labelid="1094" value="en_US" />
+            <labeldTextListItem labelid="1095" value="de_DE" />
+        </resetCombobox> 
+         -->
+    </view>
+    
+    <simpleLabelButton name="_pause" visibility="hidden"
+        labelid="854" width="100" x="${ parent.width-204 }" 
+        y="${ parent.height-22 }" onclick="this.parent.doMinimize();" />
+    
+    <simpleLabelButton name="_close" visibility="hidden"
+        labelid="851" width="100" x="${ parent.width-102 }" 
+        y="${ parent.height-22 }" onclick="this.parent.doClose();" />
+        
+    <animatorgroup name="_showScreenSharing" started="false" 
+                   process="simultaneous" duration="1000" >
+        <handler name="onstop">
+            if ($debug) Debug.write("onstop this._y.to ",this._y.to);
+            if (!parent.isStarted) {
+                parent._initText.setAttribute("visibility","visible");
+            } else {
+            	parent._infoBox.setAttribute("visibility","visible");
+                parent._zoombar.setAttribute("visibility","visible");
+                parent._zoombar.setDefaultZoom();
+                parent._close.setAttribute("visibility","visible");
+                parent._pause.setAttribute("visibility","visible");
+            }
+        </handler>
+        <animator name="_y" attribute="y" to="0" />
+        <animator name="_x" attribute="x" to="0" />
+        <animator name="_height" attribute="height" />
+        <animator name="_width" attribute="width" />
+    </animatorgroup>        
+
+</class>
+
+</library>

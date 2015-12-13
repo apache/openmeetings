@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script type="text/javascript" src="js/openmeetings_functions.js" >
+	</script>
+	<style type="text/css">
+		form,fieldset {
+			margin: 0;
+			padding: 0;
+		}
+		fieldset {
+			border: 1px solid #000;
+		}
+		legend {
+			padding: 0;
+			color: #000;
+		}
+		input:focus,textarea:focus {
+			color: #000;
+			background: #fff;
+			outline: 1px solid black;
+		}
+		input,textarea,select {
+			margin: 0;
+			padding: 1px;
+			position: absolute;
+			left: 700px;
+			background: #ddd;
+			font-size: 100%;
+			font-family: inherit;
+			width: 300px;
+		}
+		select {
+			padding: 0;
+		}
+		form.wicketExtensionsWizardForm {
+			width: 1024px;
+			font-size: 1.1em;
+			color: #333;
+		}
+		form.wicketExtensionsWizardForm legend {
+			padding-left: 0;
+		}
+		form.wicketExtensionsWizardForm legend,form.wicketExtensionsWizardForm label {
+			color: #333;
+		}
+		form.wicketExtensionsWizardForm fieldset {
+			border: none;
+			border-top: 1px solid #C9DCA6;
+		}
+		form.wicketExtensionsWizardForm fieldset fieldset {
+			background: none;
+		}
+		form.wicketExtensionsWizardForm fieldset li {
+			padding: 5px 10px 7px;
+		}
+		form.wicketExtensionsWizardForm fieldset {
+			margin-bottom: 10px;
+		}
+		form.wicketExtensionsWizardForm legend {
+			padding: 0 2px;
+			font-weight: bold;
+		}
+		form.wicketExtensionsWizardForm label {
+			display: inline-block;
+			line-height: 1.8;
+			vertical-align: top;
+		}
+		form.wicketExtensionsWizardForm fieldset ol {
+			margin: 0;
+			padding: 0;
+		}
+		form.wicketExtensionsWizardForm fieldset li {
+			list-style: none;
+			margin: 0;
+		}
+		form.wicketExtensionsWizardForm fieldset fieldset {
+			border: none;
+			margin: 3px 0 0;
+		}
+		form.wicketExtensionsWizardForm fieldset fieldset legend {
+			padding: 0 0 5px;
+			font-weight: normal;
+		}
+		form.wicketExtensionsWizardForm fieldset fieldset label {
+			display: block;
+			width: auto;
+		}
+		form.wicketExtensionsWizardForm em {
+			font-weight: bold;
+			font-style: normal;
+			color: #f00;
+		}
+		form.wicketExtensionsWizardForm label {
+			width: 420px;
+		}
+		form.wicketExtensionsWizardForm fieldset fieldset label {
+			margin-left: 123px;
+		}
+		.wicketExtensionsWizard {
+			padding-right: 100px;
+			padding-left: 100px;
+			width: 850px;
+		}
+		.wicketExtensionsWizardHeader {
+			font-size: 2em;
+			padding: 10px;
+		}
+		.wicketExtensionsWizardViewInner {
+			padding: 5px;
+		}
+		.wicketExtensionsWizardInnerTable, .wicketExtensionsWizardOuterTable {
+			width: 100%;
+		}
+		.wicketExtensionsWizardButtonBar input {
+			position: static;
+			width: auto;
+			padding-right: 15px;
+			padding-left: 15px;
+			margin: 5px;
+		}
+	</style>
+</wicket:head>
+<wicket:extend>
+	<div>
+		<div wicket:id="wizard"></div>
+	</div>
+</wicket:extend>
+</html>

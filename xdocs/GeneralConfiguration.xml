@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+
+	<properties>
+		<title>List of general configuration options</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="List of general configuration options">
+			<style><!--
+				.configCell {
+					border: 1px solid rgb(204, 204, 204);
+					padding: 5px;
+				}
+			--></style>
+			<p>In Administration &gt; Configuration there are a number of
+				configuration values.
+			</p>
+			<p></p>
+			<table>
+				<tr>
+					<th class="configCell"> key </th>
+					<th class="configCell"> default </th>
+					<th class="configCell"> meaning </th>
+					<th class="configCell"> availabe since OpenMeetings version </th>
+				</tr>
+				<tr>
+					<td class="configCell"> user.login.minimum.length </td>
+					<td class="configCell"> 4 </td>
+					<td class="configCell"> minimum chars required for the login to create a user </td>
+					<td class="configCell"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> user.pass.minimum.length </td>
+					<td class="configCell"> 4 </td>
+					<td class="configCell"> minimum chars required for the password to create a
+						user
+					</td>
+					<td class="configCell"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> number.minutes.reminder.send </td>
+					<td class="configCell"> 15 </td>
+					<td class="configCell"> minutes the one-time reminder in the calender is
+						send, set to 0 to disable reminder
+					</td>
+					<td class="configCell"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> max_upload_size </td>
+					<td class="configCell"> 1073741824 </td>
+					<td class="configCell"> Maximum size of upload file (bytes) 1073741824 bytes
+						= 1GB
+					</td>
+					<td class="configCell"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> show.whiteboard.draw.status </td>
+					<td class="configCell"> 0 </td>
+					<td class="configCell"> Display name of the user who draw the current object
+						(User Name auto-disapper after 3 seconds.
+					</td>
+					<td class="configCell"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> use.old.style.ffmpeg.map.option </td>
+					<td class="configCell"> 0 </td>
+					<td class="configCell"> If the system should "." (old ffmpeg) instead of ":"
+						(new ffmpeg) for the -map option in FFMPEG
+					</td>
+					<td class="configCell"> 1.9.x </td>
+
+				</tr>
+				<tr>
+					<td class="configCell"> inviter.email.as.replyto </td>
+					<td class="configCell"> 1 </td>
+					<td class="configCell"> Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)	</td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> office.path </td>
+					<td class="configCell"> </td>
+					<td class="configCell"> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> default.landing.zone </td>
+					<td class="configCell"> user/dashboard </td>
+					<td class="configCell"> Area to be shown to the user after login. Possible values are: user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection
+						, admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2 </td>
+					<td class="configCell"> 2.1.x, <b> values are changed in 3.0.0</b> </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sms.provider </td>
+					<td class="configCell">  </td>
+					<td class="configCell"> SMS service provider (bulksms.http.1) </td>
+					<td class="configCell"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sms.Username </td>
+					<td class="configCell">  </td>
+					<td class="configCell"> Login for SMS service provider </td>
+					<td class="configCell"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sms.Userpass </td>
+					<td class="configCell">  </td>
+					<td class="configCell"> Password for SMS service provider </td>
+					<td class="configCell"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sms.subject </td>
+					<td class="configCell">  </td>
+					<td class="configCell"> Subject of SMS reminder message </td>
+					<td class="configCell"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> swftools_zoom </td>
+					<td class="configCell"> 100 </td>
+					<td class="configCell"> DPI for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 DPI) </td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> swftools_jpegquality </td>
+					<td class="configCell"> 85 </td>
+					<td class="configCell"> Compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85) </td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sendEmailAtRegister </td>
+					<td class="configCell"> 0 </td>
+					<td class="configCell"> User get a EMail with their Account data. Values: 0(No) or 1(Yes) </td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td class="configCell"> sendEmailWithVerficationCode </td>
+					<td class="configCell"> 0 </td>
+					<td class="configCell"> User must activate their account by clicking on the 
+								activation-link in the registering Email. Values: 0(No) or 1(Yes) 
+								It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while 
+								sendEmailAtRegister is 0(No) cause you need
+								to send a EMail. </td>
+					<td class="configCell"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> redirect.url.for.external.users </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.2.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> allow_frontend_register </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> (configurable during install) </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is user register available on login screen </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> allow.soap.register </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is user register available via SOAP/REST </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.x </td>
+				</tr>
+			</table>
+		</section>
+
+	</body>
+
+</document>

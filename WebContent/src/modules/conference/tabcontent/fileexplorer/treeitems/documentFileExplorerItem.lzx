@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+ 
+<class name="documentFileExplorerItem" extends="baseFileExplorerItem" isFolder="true">
+	
+	<method name="formatURL" args="filename">
+        <![CDATA[
+            var uploadmoduleimgfolderVar = '/' + this.fileHash;
+            var downloadurl = canvas.getUrl()+'DownloadHandler?' +
+                'fileName=' + encodeURIComponent(this.fileHash + ".swf") +
+                '&moduleName=' + 'videoconf1' + 
+                '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/' )+
+                '&room_id=files'+ 
+                '&sid='+canvas.sessionId;
+            ////Debug.write("downloadurl: ",downloadurl);
+            return downloadurl;
+        ]]>
+    </method>    
+    
+	<method name="loadDocumentToWhiteboard">
+		if (canvas.ismoderator || canvas.isAllowedToDraw) {
+    		var uploadmoduleimgfolderVar = '/' + this.fileHash;
+            
+            if ($debug) Debug.write("loadDocumentToWhiteboard ",this.fileName);
+            
+    		canvas._drawarea.loadSWFPresentationSynced(this.formatURL(this.fileHash),this.fileHash + ".swf",
+    		              "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
+                          this.fileName);
+		} else {
+			new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(721)});
+		}
+	</method>
+	
+	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
+		<contextmenu>
+			
+			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
+							 onselect="parent.parent.parent.editFolderName()" />
+			
+            <!--	
+            //Load File To Whiteboard missing	
+             -->	 
+			<contextmenuitem name="_openDocument"
+				             caption="$once{ canvas.getLabelName(716) }" 
+							 separatorbefore="true"
+                             onselect="parent.parent.parent.loadDocument()" />
+            				 
+            <contextmenuitem caption="$once{ canvas.getLabelName(719) }" 
+            				 onselect="parent.parent.parent.deleteFile(719)" />
+            				 
+        </contextmenu>
+        
+        <handler name="onmousedown">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+        </handler>
+        <handler name="onmouseup">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+        </handler>
+		<handler name="onclick">
+            parent.toggleOpen(true);
+        </handler>
+	</text>
+	
+
+</class>
+
+
+</library>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="listPresentationFilePDFExplorer" extends="baseListPresentationItemExplorer" selectable="false">
+    
+    
+    <attribute name="pdfname" value="null" />
+    <attribute name="swfName" value="null" />
+    
+    <attribute name="fileExplorerItemId" value="-1" type="number" />
+    
+    <method name="loadFileByName" args="filename">
+    	<![CDATA[
+    		var lzURLToLoad = this.formatURL(filename)+"&fileExplorerItemId="+this.fileExplorerItemId;
+    		if ($debug) Debug.write("lzURLToLoad ",lzURLToLoad);
+        	lz.Browser.loadURL(lzURLToLoad,'_parent');
+        ]]>
+    </method>
+
+    <handler name="onclick">
+        this.parent.loadSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,'files',hib.conferencedomain,1);
+    </handler>
+    
+    <method name="checkSWFPresentation" args="slideNumber">
+        return this.parent.checkSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,'files',hib.conferencedomain,slideNumber);
+    </method>    
+    
+    <method name="addSWFPresentation" args="slideNumber">
+        this.parent.loadSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,'files',hib.conferencedomain,slideNumber);
+    </method>    
+    
+    <view name="_filesave_icon_pdf" x="150" y="6" resource="_filesave_icon_pdf_rsc">
+        <handler name="onclick">
+            //Debug.write("this.parent.pdfname: ",this.parent.pdfname.filename);
+            //Debug.write("this.parent: ",this.parent);
+            this.parent.loadFileByName(this.parent.pdfname.filename);
+        </handler>
+        <labelTooltip labelid="248" />
+    </view>
+        
+    <labelText name="_Text" y="40" labelid="249" width="240" />
+    
+</class>
+
+</library>

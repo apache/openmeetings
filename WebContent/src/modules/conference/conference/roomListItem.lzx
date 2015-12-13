@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="roomListItem" extends="view" bgcolor="$once{ canvas.bgColorMenuItems }" 
+		   height="50" onmouseover="" onmouseout="" width="478" >
+
+		<attribute name="ispublic" value="false" type="boolean" />
+		<attribute name="isaudience" value="false" type="boolean" />
+		<attribute name="obj" value="null" />
+		<attribute name="roomid" value="0" type="number" />
+		<attribute name="starttime" value="" type="string" />
+		<attribute name="roomname" value="" type="string" />
+		<attribute name="roomcomment" value="" type="string" />
+
+		<attribute name="roomClassName" value="conferenceView" type="string" />
+		<attribute name="currentusers" value="null" />
+
+		<attribute name="maxUsers" value="4" type="number" />
+		
+		<attribute name="roomType" value="0" type="number" />
+
+		<attribute name="checkForMaxUsers" value="false" type="boolean" />
+
+		<handler name="oninit">
+		<![CDATA[
+
+		    if (obj != null) {
+    			//if ($debug) Debug.write("obj: ",obj);
+    			if (this.ispublic) {
+    				this.maxUsers = obj.numberOfPartizipants;
+    			} else {
+    				this.maxUsers = obj.room.numberOfPartizipants;
+    			}
+    			this._users.setAttribute('text', canvas.getLabelName(398) + ' '
+    							+ this.currentusers.length + " / " + this.maxUsers);
+    			var tString = canvas.getLabelName(401) + "<br/>";
+    			for (var i = 0; i < this.currentusers.length; i++) {
+    				tString += this.currentusers[i].firstname + " "
+    						+ this.currentusers[i].lastname + " ("
+    						+ this.currentusers[i].username + ") "
+    						+ canvas.getLabelName(399)
+    						+ parseDateToStringTime(this.currentusers[i].roomEnter)
+    						+ " <br/>";
+    			}
+    			this._labeltooltip.setAttribute('text', tString);
+		    }
+		]]>
+		</handler>
+
+		<handler name="onclick">
+			if (obj != null) {
+    			canvas.isConference = !this.isaudience;
+    			if (this.isaudience)
+    				connectedIsAudience = '_' + 'audi';
+    			if (this.ispublic) {
+    				hib.conferencedomain = "public";
+    				hib.currentroomid = this.obj.rooms_id;
+    			} else {
+    				hib.conferencedomain = this.obj.organisation.organisation_id;
+    				hib.currentroomid = this.obj.room.rooms_id;
+    			}
+			}
+			parent.parent.parent.parent.parent._roomlistdetails.doinit(
+    					this.currentusers, this.roomid, this.roomname, this.roomcomment);
+		</handler>
+
+		<method name="checkMaxUsers">
+		<![CDATA[
+			if (this.currentusers == null || this.currentusers.length < this.maxUsers) {
+				this.enterRoom();
+			} else {
+				new lz.labelerrorPopup(canvas,{errorlabelid:99});
+				//new lz.rpcErrorDialog(canvas.main_content._content.inner, {
+				//			errorid : 30
+				//		});
+			}
+		]]>
+		</method>
+		
+		<method name="enterRoom">
+			if (this.obj == null) {
+				this.getRoomByOwnerAndType.doCall();
+			} else {
+				this.initRoom();
+			}
+		</method>
+		
+		<netRemoteCallHib name="getRoomByOwnerAndType" funcname="conferenceservice.getRoomByOwnerAndType"
+            remotecontext="$once{ canvas.thishib }" >
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+            <netparam> <method name="getValue">return parent.parent.roomType;</method></netparam>
+            <netparam> <method name="getValue">return parent.parent.roomname;</method></netparam>
+            <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getRoomByOwnerAndType: ", value);
+                if (value != null) {
+                    parent.obj = value;
+                    parent.enterRoom();
+                }
+            ]]>
+            </handler>
+        </netRemoteCallHib>
+
+		<method name="initRoom">
+			if ($debug) Debug.write("roomListItem::initRoom ", this);
+			
+			canvas.isConference = !this.isaudience;
+			if (this.isaudience)
+				connectedIsAudience = '_' + 'audi';
+			if (this.ispublic) {
+				var roomObj = this.obj;
+				hib.conferencedomain = "public";
+				hib.currentroomid = this.obj.rooms_id;
+				//Debug.write("ispublic");
+			} else {
+				var roomObj = this.obj.room;
+				hib.conferencedomain = this.obj.organisation.organisation_id;
+				hib.currentroomid = this.obj.room.rooms_id;
+				//Debug.write("non ispublic");
+			}
+			
+			if (this.roomType == 1) {
+				this.roomClassName = canvas.conferenceRoomModule;
+			} else if (this.roomType == 2) {
+				new lz.labelerrorPopup(canvas,{error:'No RoomType currently available for roomTypeId 2'});
+				this.roomClassName = canvas.restrictedRoomModule;
+			} else if (this.roomType == 3) {
+                this.roomClassName = canvas.restrictedRoomModule;
+            } else if (this.roomType == 4) {
+                this.roomClassName = canvas.interviewRoomModule;
+            } else if (this.roomType == 5) {
+                this.roomClassName = canvas.customRoomModule;
+            } else {
+				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
+			}
+			//the conferencedomain is no more interesting, swagner 07.10.2009
+			//if ($debug) Debug.write("hib.conferencedomain: ", hib.conferencedomain);
+
+			if ($debug) Debug.write("Test Setup ",this.roomClassName);
+            
+			new lz.testSetup(canvas,{roomClassName:this.roomClassName,roomObj:roomObj});
+			
+		</method>
+
+		<netRemoteCallHib name="getRoomClientsListByRoomId" funcname="conferenceservice.getRoomClientsListByRoomId"
+			remotecontext="$once{ canvas.thishib }" >
+			<netparam> <method name="getValue">return parent.parent.roomid;</method></netparam>
+			<handler name="ondata" args="value">
+			<![CDATA[
+				if ($debug) Debug.write("getRoomClientsListByRoomId: ", value);
+				parent.currentusers = value;
+				parent.oninit.sendEvent();
+				if (parent.checkForMaxUsers) {
+					parent.checkMaxUsers();
+				}
+			]]>
+			</handler>
+		</netRemoteCallHib>
+
+		<labelText text="$once{ parent.roomname }" />
+
+		<labelText name="_users" y="26" />
+		<image name="_r" src="$once{ canvas.getThemeImage('reload_rsc') }" x="130" y="26"
+			onclick="parent.getRoomClientsListByRoomId.doCall()" >
+			<labelTooltip labelid="402" />
+		</image>
+  
+		<method name="checkConditionsWhenButtonClicked" args="_clicked">
+		<![CDATA[
+			if (parent.parent.parent.parent.parent.parent.parent.parent.finishedTabsQuantity < 3) {
+				parent.parent.parent.parent.parent.parent.parent.parent.clickedButton = _clicked;
+			} else {
+				checkForMaxUsers = true;
+				getRoomClientsListByRoomId.doCall();
+			}
+		]]>
+		</method>
+
+		<simpleLabelButton labelid="131" x="364" width="100" height="24" y="24"
+			onclick="parent.checkConditionsWhenButtonClicked(this)">
+		</simpleLabelButton>
+		
+		<labelTooltip multiline="true" name="_labeltooltip" />
+
+	</class>
+
+</library>

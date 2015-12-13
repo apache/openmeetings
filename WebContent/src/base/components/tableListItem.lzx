@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="tableListItem" extends="view"
+    bgcolor="${ ( this.isaltered ) ? red : white }" height="22">
+    
+    <handler name="oninit">
+        this.changeholder = new Array();
+    </handler>
+
+    <attribute name="isdatarecord" value="true" type="boolean" />
+    
+    <attribute name="changeholder" value="null" />
+    <attribute name="isaltered" value="false" type="boolean" />
+
+    <method name="sendchange" args="obj,oldv,newv">
+        ////Debug.write("check Update");
+        var t = false;
+        for (var eg in this.changeholder){
+            if (this.changeholder[eg][0]==obj){
+                t = true;
+                this.changeholder[eg][1]=oldv;
+                this.changeholder[eg][2]=newv;
+                break;
+            }
+        }
+        if (!t) this.changeholder.push(new Array(obj,oldv,newv));
+        
+        t = false;
+        for (var eg in this.changeholder){
+            if (this.changeholder[eg][1]!=this.changeholder[eg][2]){
+                t = true;
+                break;
+            }
+        }
+        
+        this.setAttribute('isaltered',t);
+        this._doupdate.setValue(t);
+        this.parent.parent.parent.sendchange(this);
+        
+    </method>
+    <simplelayout axis="x" spacing="3" inset="2" />
+
+</class>
+
+</library>
