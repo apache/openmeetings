@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<include href="utils/states/resizestatemin.lzx"/>
+
+<!--
+    The order of views is important in this class
+    otherwise the scrollbar of the swfPresentation would be not visible or partly overlayed
+    
+    
+    this is the selection Box for all Whiteboard Objects
+ -->
+ 
+<class name="boundingBoxAllRotationMarger" extends="view" 
+	   width="24" height="24" resource="bounding_item_rsc">
+	
+	<attribute name="dragStarted" value="false" type="boolean"/>
+	
+	<handler name="onmouseover">
+        lz.Cursor.setCursorGlobal("arrow_rotate_panel_cursor");
+    </handler>
+    <handler name="onmouseout">
+        lz.Cursor.unlock();
+    </handler>
+    
+    <handler name="onx" args="x">
+    	this.doMoveDragPoint();
+    </handler>
+    <handler name="ony" args="y">
+        this.doMoveDragPoint();
+    </handler>
+    
+    <method name="doMoveDragPoint">
+    	if (!this.dragStarted) {
+    		return;
+    	}
+    	parent.doMoveDragPoint(this.x+12,this.y+12);
+    </method>
+    
+    <handler name="onmousedown">
+    	this.dragStarted = true;
+    	parent.doStartDragPoint();
+        this.dragger.apply();
+    </handler>
+    <handler name="onmouseup">
+    	this.dragStarted = false;
+        this.dragger.remove();
+        parent.endDrawClipArtDrag();
+        lz.Cursor.unlock();
+    </handler>
+    
+    <dragstate name="dragger" />  
+    
+</class> 
+    
+<class name="boundingBoxAll" extends="view" focusable="true">
+    
+<!-- 
+	<method name="removeIt">
+		canvas._drawarea.setAttribute('boundingIsActive',true);
+	</method>
+ -->	
+	<method name="removeIt">
+		//Debug.write("removeIt +**********",this.isinited);
+		this.whiteboardRef.setAttribute('boundingIsActive',false);
+		if (this.rs) this.rs.remove();
+		if (this.dragger) this.dragger.remove();
+		this.destroy();
+	</method>
+
+	<attribute name="ex" value="0" type="number" />
+	<attribute name="ey" value="0" type="number" />
+	<attribute name="ewidth" value="0" type="number" />
+	<attribute name="eheight" value="0" type="number" />
+	
+	<attribute name="innerInsetScrollbars" value="0" type="number"/>
+	
+	<attribute name="startdragX" value="0" type="number" />
+	<attribute name="startdragY" value="0" type="number" />
+	<attribute name="startdragWidth" value="0" type="number" />
+	<attribute name="startdragHeight" value="0" type="number" />
+	
+	<attribute name="objRef" value="null" />
+	<attribute name="whiteboardRef" value="null" />
+	<attribute name="doHandlerUpdates" value="false" type="boolean" />	
+    <attribute name="boundingDoUpdateOnInit" value="true" type="boolean" />	 
+    
+    <attribute name="canBeDragged" value="true" type="boolean" />
+    <attribute name="canBeResized" value="true" type="boolean" />
+    
+    <!--- Minimum width for the windowy, default: 60.
+          @keywords final -->
+    <attribute name="minwidth" value="2"/>
+
+    <!--- Minimum height for the window, default: 50.
+          @keywords final -->
+    <attribute name="minheight" value="2"/>    
+	
+	<method name="__LZRemoveItem" args="itemRef">
+		this.whiteboardRef.deleteItemByName(this.objRef.name);
+		//Debug.write("__LZRemoveItem");
+	</method>
+	
+	<handler name="oninit">
+		<![CDATA[
+		    if (!this.boundingDoUpdateOnInit) {
+		    	if ($debug) Debug.write("DESTROY the clickable view");
+		    	//this._innerDrag.destroy();
+		    }
+		    
+		    if (!this.canBeResized) {
+		    	this._gripperNoResize.setAttribute("visibility","visible");
+		    	this._gripperResize.setAttribute("visibility","hidden");
+		    }
+		
+			this.setAttribute('x',this.ex);
+			this.setAttribute('y',this.ey);
+			this.setAttribute('width',this.ewidth);
+			this.setAttribute('height',this.eheight);	
+			this.setStartValues();		
+			if ($debug) Debug.write("Update Property Panel Settings to Object Properties ",this.objRef.name);
+			
+			lz.Focus.setFocus(this, false); 
+			
+			if (this.objRef.typeOfObject == "text") {
+				this._editText.setAttribute("visibility","visible");
+			}
+			
+            //FIXME - Add Ellipse, Line and Free Draw Tool to it
+            if (this.objRef.name.indexOf('rectangle') >= 0){
+				if ($debug) Debug.write("this.objRef._innerRect ",this.objRef._innerRect);
+				
+				if ($debug) Debug.write("strokeStyle: ",this.objRef._innerRect.strokeStyle);
+				if (this.objRef._innerRect.strokeStyle == '#000000') {
+					if ($debug) Debug.write("strokeStyle EMPTY ");
+					this.whiteboardRef.currentrectanglestrokeDis = -1;
+				} else {
+					this.whiteboardRef.currentrectanglestroke = this.objRef._innerRect.strokeStyle;
+					this.whiteboardRef.currentrectanglestrokeDis = 1;
+				}
+				
+				if ($debug) Debug.write("fillStyle: ",this.objRef._innerRect.fillStyle);
+				if (this.objRef._innerRect.fillStyle == '#000000') {
+					if ($debug) Debug.write("fillStyle EMPTY ");
+					this.whiteboardRef.currentrectanglestrokeFillDis = -1;
+				} else {
+					this.whiteboardRef.currentrectanglestrokeFill = this.objRef._innerRect.fillStyle;
+					this.whiteboardRef.currentrectanglestrokeFillDis = 1;
+				}
+				
+				if ($debug) Debug.write("lineWidth: ",this.objRef._innerRect.lineWidth);
+				this.whiteboardRef.currentrectangleineWidth = this.objRef._innerRect.lineWidth;
+				
+			} else if (this.objRef.name.indexOf('swf') >= 0) {
+                this.setAttribute("innerInsetScrollbars",16);
+            } else if (this.objRef.name.indexOf('clipart') >= 0) {
+            	this.canBeResized = false;
+            	this._gripperNoResize.setAttribute("visibility","visible");
+		    	this._gripperResize.setAttribute("visibility","hidden");
+            	
+            	new lz.boundingBoxAllRotationMarger(this,{
+                    	       x:this.objRef.clipart.clipArtEndx-12,
+                    	       y:this.objRef.clipart.clipArtEndy-12
+                        	});
+            	
+            }
+            
+            
+            this.whiteboardRef.parent.parent._propertyPanel.loadPanelByBoundingBox(this.whiteboardRef,this.objRef);
+            
+			this.doUpdateAction();
+		]]>
+	</handler>
+	
+	<method name="doStartDragPoint">
+		this.whiteboardRef.setStartPoint(this.objRef.clipart.x+this.x,this.objRef.clipart.y+this.y);
+	</method>
+	
+	<method name="doMoveDragPoint" args="x,y">
+		this.whiteboardRef.trackDrawClipArtDraw(this.x+x,this.y+y,this.objRef.clipart);
+	</method>
+	
+	<method name="endDrawClipArtDrag">
+        this.whiteboardRef.endDrawClipArtDrag(this.objRef);
+        this.whiteboardRef.reselectShowObjectBounds(this.objRef.name);
+    </method>
+    
+	<!--
+	   Do update the Selection-Box, in case another Moderator or User has moved the Object
+	   while you have it in focus
+	 -->
+    <method name="sendRemoteUpdate" args="obj">
+        <![CDATA[
+           
+           if (this.objRef.name == obj.name) {
+           	   
+           	    this.resetValues();
+           	
+           }
+        
+        ]]>
+    </method>
+    
+	
+	<method name="resetValues">
+		this.ex = this.objRef.x;
+		this.ey = this.objRef.y;
+		this.ewidth = this.objRef.width;
+		this.eheight = this.objRef.height;			
+		this.setAttribute('x',this.objRef.x);
+		this.setAttribute('y',this.objRef.y);
+		this.setAttribute('width',this.objRef.width);
+		this.setAttribute('height',this.objRef.height);	
+		this.setStartValues();	
+	</method>
+
+    <method name="doUpdateAction" >
+    	this.setAttribute('doHandlerUpdates',true);
+    	if (this.boundingDoUpdateOnInit) {
+    	    this._innerDrag.onmousedown.sendEvent();
+    	}
+    </method>
+    
+    <handler name="onheight">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('height',this.height);
+    	}
+    </handler>
+    
+    <handler name="onwidth">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('width',this.width);
+    	}
+    </handler>
+    
+    <handler name="onx">
+        if(this.doHandlerUpdates){
+            
+            var tx = this.getAttributeRelative('x',objRef);
+        
+            if(this.objRef.parent.isSnapToGrid){   
+                tx = Math.round(tx/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth;
+                this.setAttribute("x",Math.round(this.x/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
+            }
+            
+            this.objRef.setAttribute('x',tx);
+        }
+    </handler>
+    
+    <handler name="ony">
+        if(this.doHandlerUpdates){
+            
+            var ty = this.getAttributeRelative('y',objRef);
+        
+            if(this.objRef.parent.isSnapToGrid){   
+                ty = Math.round(ty/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth;
+                this.setAttribute("y",Math.round(this.y/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
+            }
+            
+            this.objRef.setAttribute('y',ty);
+        }
+    </handler>
+    
+    <handler name="onkeydown" args="key">
+        if ($debug) Debug.write("onkeydown ",key);
+
+        //this.objRef.parent.UpdateByObject(this.objRef);
+
+        if (key == 46) {
+        	this.__LZRemoveItem(this.objRef);
+        } else if (key == 40) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	if ($debug) Debug.write("shiftPressed ",shiftPressed);
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("y",this.y+(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 38) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("y",this.y-(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 39) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("x",this.x+(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 37) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("x",this.x-(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        }
+    </handler>
+	
+	<method name="setStartValues">
+		this.startdragX = this.x;
+		this.startdragY = this.y;
+		this.startdragWidth = this.width;
+		this.startdragHeight = this.height;			
+	</method>
+
+    <method name="_applyResizestateFromThis">
+    	lz.Focus.setFocus(this, true); 
+    	if ($debug) Debug.write("Apply resize State");
+    	if (!this.canBeResized) {
+            return;
+        }
+		this.setStartValues();		
+		this.rs.apply()
+	</method>
+    
+    <method name="_removeResizestateFromThis">
+		<![CDATA[
+		if (!this.canBeResized) {
+            return;
+        }
+    	this.rs.remove();
+		
+		if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
+			//Debug.write("value changed 1");
+			this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+		}
+		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);
+			
+		]]>
+    </method>
+	
+	<method name="_applyDragstateFromThis">
+		lz.Focus.setFocus(this, true); 
+		if (!this.canBeDragged) {
+			return;
+		}
+		this.setStartValues();
+		this.dragger.apply()
+	</method>	
+    
+    <method name="_removeDragstateFromThis">
+		<![CDATA[
+		if (!this.canBeDragged) {
+            return;
+        }
+    	this.dragger.remove();
+		
+    	if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
+			//Debug.write("value changed 2");
+			this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+		}
+		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);
+		
+		]]>			
+    </method>
+
+    <method name="doSetInnerObjectsBounds" args="w,h">
+        this._inner._inner.setAttribute('width',w);
+        this._inner._inner.setAttribute('height',h);
+    </method>
+    
+    <method name="applyScrollbarToObject">
+        <![CDATA[
+            //if ($debug) Debug.write("-- applyScrollbarToObject --",this.objRef.typeOfObject);
+	        if (this.objRef.typeOfObject == 'swf'){
+	            if (canvas.ismoderator || canvas.isAllowedToDraw) {
+                    //if ($debug) Debug.write("-- setCurrentMouseWheelObject --",this.objRef._scrollstv);
+                    //setCurrentMouseWheelObject(this.objRef._scrollstv);
+                }
+	        }
+        ]]>
+    </method>
+    
+    <method name="removeScrollbarToObject">
+        if (this.objRef.typeOfObject == 'swf'){
+            //Well disable, you can always disable without any problem
+            //and in case you do exactly switch the moderation now
+            //it will remove it in any case
+            disableCurrentMouseWheelObject();
+        }
+    </method>
+        
+    <resizestatemin name="rs"> 	
+    	<text x="2" y="2" text="${ 'w: '+parent.width+' h: '+parent.height }" bgcolor="white"/>
+    </resizestatemin>
+    
+   	<dragstate name="dragger">    
+		<text x="2" y="2" text="${ 'x: '+parent.getAttributeRelative('x',parent.objRef)+' y: '+parent.getAttributeRelative('y',parent.objRef) }" bgcolor="white"/>   	
+   	</dragstate>
+	
+	<view name="_innerDrag" width="${ parent.width-parent.innerInsetScrollbars }" 
+		  height="${ parent.height-parent.innerInsetScrollbars }" 
+		  onmouseover="parent.applyScrollbarToObject()" 
+          onmouseout="parent.removeScrollbarToObject()"
+		  onmousedown="parent._applyDragstateFromThis()" 
+    	  onmouseup="parent._removeDragstateFromThis()">
+    	
+    	<contextmenu>
+			<contextmenuitem caption="$once{ canvas.getLabelName(80) }" 
+							 onselect="parent.parent.parent.__LZRemoveItem()" />
+        </contextmenu>
+		 
+		<handler name="ondblclick">
+
+			//Debug.write("ondblclick: ",this.parent.objRef.typeOfObject);
+			if (this.parent.objRef.typeOfObject == "text") {
+				var x = this.parent.objRef.x; //this.parent.objRef.getAttributeRelative('x', canvas);
+				var y = this.parent.objRef.y; //this.parent.objRef.getAttributeRelative('y', canvas);
+				//Debug.write("x,y ",x,y);
+				this.parent.whiteboardRef
+						.editTextByValues(this.parent.objRef,
+								this.parent.objRef.name,
+								this.parent.objRef.text, x, y,
+								this.parent.objRef.width,
+								this.parent.objRef.height);
+			}
+		</handler>	
+		
+		<handler name="onmouseover">
+			if (this.parent.objRef.typeOfObject != "swf") {
+	           lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+			}
+		</handler>
+		
+		<handler name="onmouseout">
+			lz.Cursor.unlock();
+		</handler>
+		
+		
+	</view>
+	
+	<image src="$once{ canvas.getThemeImage('bounding_box_textedit_item_rsc') }" y="2"  width="16" height="16" stretches="both"
+				name="_editText" visibility="hidden" x="${ parent.width-this.width-parent.innerInsetScrollbars-18 }" >
+		<handler name="onclick">
+			this.parent.whiteboardRef
+						.editTextByValues(this.parent.objRef,
+								this.parent.objRef.name,
+								this.parent.objRef.text, 
+								this.parent.x, 
+								this.parent.y,
+								this.parent.objRef.width,
+								this.parent.objRef.height);
+		</handler>
+		<handler name="onmouseover">
+	        lz.Cursor.restoreCursor();
+	        lz.Cursor.showHandCursor(true);
+	    </handler>
+	    <handler name="onmouseout">
+	    	lz.Cursor.showHandCursor(false);
+	        lz.Cursor.unlock();
+	    </handler>
+    
+		<labelTooltip labelid="1463" />
+	</image>	
+	
+	<image src="$once{ canvas.getThemeImage('bounding_box_delete_item_rsc') }" y="2"  width="16" height="16"
+					x="${ parent.width-this.width-parent.innerInsetScrollbars-2 }" stretches="both">
+		<handler name="onclick">
+			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
+			//this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
+			parent.__LZRemoveItem(this.parent.objRef);
+		</handler>
+		<handler name="onmouseover">
+	        lz.Cursor.restoreCursor();
+	        lz.Cursor.showHandCursor(true);
+	    </handler>
+	    <handler name="onmouseout">
+	    	lz.Cursor.showHandCursor(false);
+	        lz.Cursor.unlock();
+	    </handler>
+    
+		<labelTooltip labelid="80" />
+	</image>	    
+    
+    <view resource="_boundingBoxPointerTL" x="0" y="0" />
+    <view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
+    <view name="_gripperResize" visibility="visible"
+        resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
+        onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
+    	<handler name="onmouseover">
+	        lz.Cursor.setCursorGlobal("arrow_resize_panel_cursor");
+	    </handler>
+	    <handler name="onmouseout">
+	        lz.Cursor.unlock();
+	    </handler>
+        <labelTooltip labelid="252" />
+    </view>
+    <view name="_gripperNoResize" visibility="hidden" 
+        resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
+    <view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
+
+</class>
+
+</library>

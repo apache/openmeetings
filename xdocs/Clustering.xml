@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
+	<properties>
+		<title>Clustering</title>
+		<author email="solomax@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+		<section name="Description">
+			<p>
+				OpenMeetings 2.1 or later is required to use clustering. One database is used for all OpenMeetings 
+				servers, so all database tables are shared across OM instances. Certain folders should be shared 
+				between all servers to allow access to the files/recording.</p>
+		</section>
+		<section name="Configuration">
+			<ul>
+				<li>
+					Multiple OM servers should be set up as described in
+					<a href="installation.html" target="_BLANK">
+						<b>Installation</b>
+					</a>
+				</li>
+				<li>All servers should be configured to have same Time zone (To avoid
+					Schedulers to drop user sessions as outdated)
+				</li>
+				<li>All servers should be configured to use the same DB</li>
+				<li>Servers should be added in Administration -&gt; Servers section</li>
+			</ul>
+		</section>
+		<section name="Database">
+			All servers should be configured to use the same database. It can be on the server or on the one node 
+			of the cluster. 
+			<ul>
+				<li>Add users who can connect to the database remotely</li>
+				<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
+					set correct server address, login and password. Also add the following section:
+					<div class="xmlcode">&lt;property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" /&gt;</div>
+					Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
+				</li>
+			</ul>
+		</section>
+		<section name="File systems">
+			If files and recordings using the same physical folders the files and recordings will be available for 
+			each node. You can do this using Samba or NFS, for example. For using NFS do the following:
+			<ul>
+				<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
+					<div class="xmlcode">
+						/opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)<br/>
+						/opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+					</div>
+					Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with 
+					folders.
+				</li>
+				<li>
+					Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
+					<div class="xmlcode">
+						10.1.1.1:/opt/red5/webapps/openmeetings/upload/<br/>
+						/opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr<br/>
+						10.1.1.1:/opt/red5/webapps/openmeetings/streams/<br/>
+						/opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
+					</div>
+					Here 10.1.1.1 – data server ip. And run the command:
+					<div class="xmlcode">
+						mount -a
+					</div>
+				</li>
+			</ul> 
+		</section>
+		<section name="OM nodes configuration">
+			In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt>:
+			<ul>
+				<li>
+					For each node uncomment line:
+					<div class="xmlcode">
+						&lt;!-- Need to be uncommented and set to the real ID if in cluster mode--&gt;<br/>
+						&lt;property name="serverId" value="1" /&gt;
+					</div>
+					and input the unique value for each node.
+				</li>
+				<li> 
+					Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br/>
+					with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt> 
+					(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
+				</li>
+			</ul>
+		</section>
+		<section name="Configuring cluster in Administration">
+			Run red5 on each node. Login to the system as admin.
+			<ul>
+				<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
+				<li>
+					Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
+					<div class="xmlcode">
+						Server Name = node name;<br/>
+						Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;<br/>
+						Server Address = node ip;<br/>
+						HTTP Port = 5080 - port for http part of Openmeetings;<br/>
+						User (SOAP Access) = login of Webservice user from the previous step;<br/>
+						Password = password of Webservise user;<br/>
+						Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;<br/>
+						Protocol = http.
+					</div>
+				</li> 
+			</ul>
+			<img src="images/cluster1.png" alt="" width="650" height="461" />
+		</section>
+		<section name="Ensure everything works as expected">
+			<ul>
+				<li>Set up the cluster and loggin with two users, go to the same room (also check before room 
+				entering that the status page with the room list shows the correct number of participants before 
+				entering the room). You should login to the same server initially, the server will redirect you 
+				for the conference room to the appropriate server automatically. Both users should be in the same room.
+				</li>
+				<li>Do the same with only two users but go to _different_ rooms. The calculation should send 
+				both users to different servers, cause based on the calculation two different rooms on a cluster 
+				with two nodes should go exactly one room for each node. You can now loggin really to node1 
+				and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
+				and check in the column "servers" where they are located. They should be on different server.
+				</li>
+			</ul>
+			<img src="images/cluster2.png" alt="" width="650" height="369" />
+		</section>
+	</body>
+</document>
