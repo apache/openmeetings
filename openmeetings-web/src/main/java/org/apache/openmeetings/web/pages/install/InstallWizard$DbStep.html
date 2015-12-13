@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset class="ui-widget-content" id="userData">
+		<legend class="ui-widget-header"><wicket:message key="install.wizard.db.step.field.title"/></legend>
+		<div wicket:id="note"></div>
+		<form class="adminForm" wicket:id="form">
+            <div class="formelement">
+                  <label wicket:for="dbType"><wicket:message key="install.wizard.db.step.dbtype" /></label> <select wicket:id="dbType"></select>
+            </div>
+            <div wicket:id="hostelem" class="formelement">
+                  <label wicket:for="host"><wicket:message key="install.wizard.db.step.host" /></label> <input type="text" wicket:id="host"/>
+            </div>
+            <div wicket:id="portelem" class="formelement">
+                  <label wicket:for="port"><wicket:message key="install.wizard.db.step.port" /></label> <input type="text" wicket:id="port"/>
+            </div>
+            <div class="formelement">
+                  <label wicket:for="dbname"><wicket:message key="install.wizard.db.step.dbname" /></label> <input type="text" wicket:id="dbname"/>
+            </div>
+            <div class="formelement">
+                  <label wicket:for="login"><wicket:message key="install.wizard.db.step.user" /></label> <input type="text" wicket:id="login"/>
+            </div>
+            <div class="formelement">
+                  <label wicket:for="password"><wicket:message key="install.wizard.db.step.pass" /></label> <input type="text" wicket:id="password"/>
+            </div>
+            <div class="formelement" style="max-width:860px;">
+            	<button class="align-right" wicket:id="check"><wicket:message key="install.wizard.db.step.check"/></button>
+            </div>
+		</form>
+	</fieldset>
+</wicket:panel>
+</html>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+	<properties>
+		<title>List of general configuration options</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="List of general configuration options">
+			<p>In Administration &gt; Configuration there are a number of
+				configuration values.
+			</p>
+			<p></p>
+			<table>
+				<tr>
+					<th> key </th>
+					<th> default </th>
+					<th> meaning </th>
+					<th> availabe since OpenMeetings version </th>
+				</tr>
+				<tr>
+					<td> dashboard.show.myrooms </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the MyRooms widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> dashboard.show.chat </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the Chat widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> dashboard.show.rssfeed </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the RSS-Feed widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> rss_feed1 </td>
+					<td> http-URL </td>
+					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> rss_feed2 </td>
+					<td> http-URL </td>
+					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
+				</tr>
+				<tr>
+					<td> user.login.minimum.length </td>
+					<td> 4 </td>
+					<td> minimum chars required for the login to create a user </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> user.pass.minimum.length </td>
+					<td> 4 </td>
+					<td> minimum chars required for the password to create a
+						user
+					</td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> number.minutes.reminder.send </td>
+					<td> 15 </td>
+					<td> minutes the one-time reminder in the calender is
+						send, set to 0 to disable reminder
+					</td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> max_upload_size </td>
+					<td> 1073741824 </td>
+					<td> Maximum size of upload file (bytes) 1073741824 bytes
+						= 1GB
+					</td>
+					<td> 1.8.x </td>
+				</tr>
+				<tr>
+					<td> show.whiteboard.draw.status </td>
+					<td> 0 </td>
+					<td> Display name of the user who draw the current object
+						(User Name auto-disapper after 3 seconds.
+					</td>
+					<td> 1.8.x </td>
+				</tr>
+				<tr>
+					<td> use.old.style.ffmpeg.map.option </td>
+					<td> 0 </td>
+					<td> If the system should "." (old ffmpeg) instead of ":"
+						(new ffmpeg) for the -map option in FFMPEG
+					</td>
+					<td> 1.9.x </td>
+
+				</tr>
+				<tr>
+					<td> smtp_server </td>
+					<td> localhost </td>
+					<td> this is the smtp server to send messages </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> smtp_port </td>
+					<td> 25 </td>
+					<td> this is the smtp server port normally 25 </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> email_username </td>
+					<td> </td>
+					<td> System auth email username </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> email_userpass </td>
+					<td> </td>
+					<td> System auth email password </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.starttls.enable </td>
+					<td> 0 </td>
+					<td> Enable TLS 1=true, 0=false </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.connection.timeout </td>
+					<td> 30000 </td>
+					<td> Socket connection timeout value in milliseconds. Default is 30 seconds (30000). </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.timeout </td>
+					<td> 30000 </td>
+					<td> Socket I/O timeout value in milliseconds. Default is 30 seconds (30000). </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> system_email_addr </td>
+					<td> noreply@openmeetings.apache.org </td>
+					<td> all send e-mails by the system will have this address </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> inviter.email.as.replyto </td>
+					<td> 1 </td>
+					<td> Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)	</td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> office.path </td>
+					<td> </td>
+					<td> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> default.landing.zone </td>
+					<td> user/dashboard </td>
+					<td> Area to be shown to the user after login. Possible values are: user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection
+						, admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2 </td>
+					<td> 2.1.x, <b> values are changed in 3.0.0</b> </td>
+				</tr>
+				<tr>
+					<td> sms.provider </td>
+					<td>  </td>
+					<td> SMS service provider (bulksms.http.1) </td>
+					<td> 2.1.x </td>
+				</tr>
+				<tr>
+					<td> sms.Username </td>
+					<td>  </td>
+					<td> Login for SMS service provider </td>
+					<td> 2.1.x </td>
+				</tr>
+				<tr>
+					<td> sms.Userpass </td>
+					<td>  </td>
+					<td> Password for SMS service provider </td>
+					<td> 2.1.x </td>
+				</tr>
+				<tr>
+					<td> sms.subject </td>
+					<td>  </td>
+					<td> Subject of SMS reminder message </td>
+					<td> 2.1.x </td>
+				</tr>
+				<tr>
+					<td> swftools_zoom </td>
+					<td> 100 </td>
+					<td> DPI for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 DPI) </td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> swftools_jpegquality </td>
+					<td> 85 </td>
+					<td> Compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85) </td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> sendEmailAtRegister </td>
+					<td> 0 </td>
+					<td> User get a EMail with their Account data. Values: 0(No) or 1(Yes) </td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> sendEmailWithVerficationCode </td>
+					<td> 0 </td>
+					<td> User must activate their account by clicking on the 
+								activation-link in the registering Email. Values: 0(No) or 1(Yes) 
+								It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while 
+								sendEmailAtRegister is 0(No) cause you need
+								to send a EMail. </td>
+					<td> 2.0.x </td>
+				</tr>
+				<tr>
+					<td> redirect.url.for.external.users </td>
+					<td>  </td>
+					<td> Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost </td>
+					<td> 2.2.x </td>
+				</tr>
+				<tr>
+					<td> allow_frontend_register </td>
+					<td> (configurable during install) </td>
+					<td> Is user register available on login screen </td>
+					<td> 1.8.x </td>
+				</tr>
+				<tr>
+					<td> allow.soap.register </td>
+					<td> 1 </td>
+					<td> Is user register available via SOAP/REST </td>
+					<td> 3.0.x </td>
+				</tr>
+				<tr>
+					<td> allow.oauth.register </td>
+					<td> 1 </td>
+					<td> Is user register available via OAuth </td>
+					<td> 3.0.x </td>
+				</tr>
+				<tr>
+					<td> application.base.url </td>
+					<td> http://localhost:5080/openmeetings </td>
+					<td> Base URL your OPenmeetings installation will be accessible at. </td>
+					<td> 3.0.2 </td>
+				</tr>
+				<tr>
+					<td> default.quality.screensharing </td>
+					<td> 1 </td>
+					<td> Default selection in ScreenSharing Quality:<br/>
+						0 - bigger frame rate, no resize<br/>
+						1 - no resize<br/>
+						2 - size == 1/2 of selected area<br/>
+						3 - size == 3/8 of selected area </td>
+					<td> 3.0.3 </td>
+				</tr>
+				<tr>
+					<td> default.fps.screensharing </td>
+					<td> 10 </td>
+					<td> Default selection in ScreenSharing FPS. </td>
+					<td> 3.0.3 </td>
+				</tr>
+				<tr>
+					<td> screensharing.fps.show </td>
+					<td> true </td>
+					<td> Is screensharing FPS should be displayed or not (true/false). </td>
+					<td> 3.0.3 </td>
+				</tr>
+				<tr>
+					<td> screensharing.allow.remote </td>
+					<td> true </td>
+					<td> Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false). </td>
+					<td> 3.0.4 </td>
+				</tr>
+				<tr>
+					<td> calendar.firstday </td>
+					<td> 0 </td>
+					<td> The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc. </td>
+					<td> 3.0.4 </td>
+				</tr>
+				<tr>
+					<td> flash.protocol </td>
+					<td> rtmp </td>
+					<td> Protocol for flash connections, can be rtmp, rtmpt, rtmpe, rtmps. <b>(will be used in case passed protocol is invalid)</b> </td>
+					<td> 3.1.0 </td>
+				</tr>
+				<tr>
+					<td> flash.port </td>
+					<td> 1935 </td>
+					<td> Port for flash connections. <b>(will be used in case passed port is invalid)</b> </td>
+					<td> 3.1.0 </td>
+				</tr>
+			</table>
+		</section>
+
+	</body>
+
+</document>

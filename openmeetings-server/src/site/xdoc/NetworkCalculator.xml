@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Network bandwidth calculator for OpenMeetings</title>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
+	</properties>
+
+	<head>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/netcalc.js"></script>
+		<link rel="stylesheet" href="css/jquery-ui.css"/>
+		<link rel="stylesheet" href="css/netcalc.css"/>
+	</head>
+	<body>
+		<section name="Network bandwidth for OpenMeetings">
+			
+			<div id="content">
+				<span class="result-area">
+					Server inbound bandwidth:
+					<input name="bandwidth" type="text" id="sib" disabled="disabled" />
+					kbit/s
+					<br />
+					Server outbound bandwidth:
+					<br />
+					<input name="bandwidth" type="text" id="sob" disabled="disabled" />
+					kbit/s
+					<br />
+					Participant inbound bandwidth:
+					<br />
+					<input name="bandwidth" type="text" id="uib" disabled="disabled" />
+					kbit/s
+					<br />
+					Participant outbound bandwidth:
+					<br />
+					<input name="bandwidth" type="text" id="uob" disabled="disabled" />
+					kbit/s
+				</span>
+
+				<span id="sliders-area">
+					<span id="slider-cam-res"></span>
+					<input name="one" style="width: 400px;" type="text" id="amount_cam_res" value="" disabled="disabled" />
+					<input name="onea" type="text" id="cam_res" value="" disabled="disabled" />
+
+					<span id="slider-num-with-cam"></span>
+					<input name="two" style="width: 400px;" type="text" id="amount_pwv" value="" disabled="disabled" />
+					<input name="twoa" type="text" id="pwv" value="" disabled="disabled" />
+
+					<span id="slider-num-without-cam"></span>
+					<input name="three" style="width: 400px;" type="text" id="amount_pnv" value="" disabled="disabled" />
+					<input name="threea" type="text" id="pnv" value="" disabled="disabled" />
+
+					<span>
+						<strong>Note:</strong>
+						This is calculation with default parameters:<br/>
+						Video codec: h263<br/>
+						Audio codec: Nellymoser<br/>
+						And without screen sharing.
+					</span>
+				</span>
+			</div>
+		</section>
+	</body>
+</document>

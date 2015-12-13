@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="dynamicFileName" extends="customInputtext" fontsize="10" bgcolor="0xFFFFFF">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.net.*;
+			</passthrough>
+		</when>
+	</switch>
+	
+	<attribute name="refObj" value="null" />
+	
+	<handler name="onblur">
+		lz.ModeManager.release(this);
+		if ($debug) Debug.write("Store and Destroy ", this.refObj.parentId);
+		if (this.refObj.fileId == 0) {
+		    canvas.currentFileExplorer.createFile(this.text, null, this, this.refObj);
+		} else {
+			this.rename();
+		}
+	</handler>
+	
+	<handler name="onkeydown" args="k">
+	<![CDATA[
+		if (k == 13 || k == 27) {
+			this.onblur.sendEvent();
+		}
+	]]>
+	</handler>
+	
+	<method name="rename">
+	<![CDATA[
+		var moveLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/rename/' + this.refObj.fileId + '/' + this.text
+				, method: URLRequestMethod.POST
+				, errorCallback: renameError
+				, successCallback: renameComplete
+				});
+		moveLoader.load('--dummy--');
+	]]>
+	</method>
+
+	<method name="createFileComplete" args="event">
+		var o = JSON.parse(event.target.data);
+		var f = o.fileExplorerItemDTO;
+		if ($debug) Debug.info("addFolderComplete ", event, o);
+		this.refObj.setAttribute("fileName", f.name);
+		this.refObj.setAttribute("fileId", f.id);
+		this.refObj.parent.parent.doOpen();
+		this.destroy();
+	</method>
+
+	<method name="createFileError" args="event">
+		if ($debug) Debug.error("addFolderError ", event);
+		this.refObj.destroy();
+		this.destroy();
+	</method>
+	
+	<method name="renameComplete" args="event">
+		this.refObj.setAttribute("fileName", this.text);
+		this.destroy();
+	</method>
+	
+	<method name="renameError" args="event">
+		if ($debug) Debug.error("renameError ", event);
+		this.destroy();
+	</method>
+</class>
+
+</library>

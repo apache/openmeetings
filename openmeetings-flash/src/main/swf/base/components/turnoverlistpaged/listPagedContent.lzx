@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<!--- common TurnOverList view class. -->
+<class name="listPagedContent" extends="view" clip="true" >
+	
+	<attribute name="itemHeight" value="20" type="number"/>
+    
+    <attribute name="showHScrollbar" value="visible" type="string"/>
+    
+    <method name="initItemsBySubItemNo" args="itemName,noSubItems,subItemClassName"> 
+        this._inn.initItemsBySubItemNo(itemName,noSubItems,subItemClassName);
+    </method>    
+	
+    <view name="_inn" >
+        
+        <!-- calculates the additional items -->
+        <attribute name="itemsToShow" value="0" type="number" />
+        <attribute name="totalItemsInList" value="0" type="number" />
+        
+        <attribute name="currentLastItemInList" value="0" type="number" />
+        
+        <attribute name="itemHeight" value="$once{ parent.itemHeight }" type="number"/>
+        
+		<method name="initItems" args="itemName">
+	        <![CDATA[
+	            this.totalItemsInList = Math.round(parent.height/this.itemHeight);
+	            for (var i=0;i<this.totalItemsInList;i++){
+	                this.currentLastItemInList = i;
+	                new lz[itemName](this._inn,{y:i*this.itemHeight,itemId:i,clickable:false});
+	            }
+                
+                if ($debug) Debug.write("initItems -1- ",i,itemName,lz[itemName]);
+                if ($debug) Debug.write("initItems -2- ",this._inn.subviews.length);
+                if ($debug) Debug.write("initItems -3- ",totalItemsInList);
+                if ($debug) Debug.write("initItems -4- ",parent.height);
+                if ($debug) Debug.write("initItems -5- ",this.itemHeight);
+                
+                //canvas.currentDebugPageList = this;
+                
+	        ]]>
+	    </method>	
+	    
+	    <handler name="ony" args="y">
+	    	parent.parent.onMoveList.sendEvent(y);
+	    </handler> 
+        
+        <method name="initItemsBySubItemNo" args="itemName,noSubItems,subItemClassName">
+           <![CDATA[
+                this.totalItemsInList = Math.round(parent.height/this.itemHeight);
+                for (var i=0;i<this.totalItemsInList;i++){
+                    this.currentLastItemInList = i;
+                    var baseItem = new lz[itemName](this._inn,{y:i*this.itemHeight,itemId:i,clickable:false});
+                    
+                    for (var k=0;k<noSubItems;k++) {
+                        new lz[subItemClassName](baseItem);
+                    }
+                    
+                }
+            ]]>
+        </method>      
+        
+        <method name="resetItems">
+            <![CDATA[
+                for (var i=0;i<this._inn.subviews.length;i++) {
+                    this._inn.subviews[i].itemId = i;
+                    this.currentLastItemInList = i;
+                    this._inn.subviews[i].setAttribute("y",i*this.itemHeight);
+                }
+            ]]>
+        </method>
+        
+        <handler name="ony" args="y">
+            <![CDATA[
+                //if ($debug) Debug.write("ony ",y);
+                var items = Math.round(y/this.itemHeight);
+                //if ($debug) Debug.write("items ",items);
+                if (this.itemsToShow != items) {
+                    var deltaItem = itemsToShow - items;
+                    
+                    //if ($debug) Debug.write("deltaItem ",deltaItem);
+                    
+                    if (deltaItem > 0) {
+                        //Add new Items to the end
+                        for (var i=0;i<deltaItem;i++) {
+                            var item = this._inn.getUpmostItemInList();
+                            this.shiftToLast(item);
+                        }
+                    } else {
+                        //Add new Items to the beginning
+                        for (var i=0;i>deltaItem;i--) {
+                            var item = this._inn.getLastItemInList();
+                            this.shiftToFirst(item);
+                        }
+                    }
+                    
+                    this.itemsToShow = items;
+                }
+            ]]>
+        </handler>
+        
+        <method name="shiftToLast" args="item">
+            <![CDATA[
+                parent.parent.onNextScrollItem.sendEvent(item);
+                //if ($debug) Debug.write("shiftToLast ",item,item.itemId);
+                this.currentLastItemInList++;
+                item.setAttribute("y",this.currentLastItemInList*this.itemHeight);
+                //if ($debug) Debug.write("shiftToLast -1- ",item.y,this.currentLastItemInList);
+                //if ($debug) Debug.write("++ shiftToLast 4 ",item.y,this.currentLastItemInList);
+                item.itemId = this.currentLastItemInList;
+                parent.parent.onScrollItem.sendEvent(item);
+            ]]>
+        </method>
+        
+        <method name="shiftToFirst" args="item">
+            <![CDATA[
+                parent.parent.onNextScrollItem.sendEvent(item);
+                //if ($debug) Debug.write("shiftToFirst 1 ",item.itemId);
+                //if ($debug) Debug.write("shiftToFirst 2 ",item.y);
+                var newItem = this.currentLastItemInList-this.totalItemsInList;
+                //if ($debug) Debug.write("shiftToFirst 3 ",newItem);
+                item.setAttribute("y",newItem*this.itemHeight);
+                //if ($debug) Debug.write("-- shiftToFirst 4 ",item.y,newItem,this.currentLastItemInList);
+                item.itemId = newItem;
+                //if ($debug) Debug.write("shiftToFirst 5 ",item.itemId);
+                this.currentLastItemInList--;
+                parent.parent.onScrollItem.sendEvent(item);
+            ]]>
+        </method>
+            
+        <innerListPagingContent name="_inn" />
+        
+    </view>
+    <om_vscrollbar name="_scrollbar" stepsize="$once{ parent.itemHeight }" />
+    
+    
+    <om_hscrollbar visibility="$once{ parent.showHScrollbar }" />
+
+</class>
+
+<class name="innerListPagingContent" extends="view">
+    
+    <method name="getItemByPosition" args="yPos">
+        <![CDATA[
+            for (var i=0;i<this.subviews.length;i++) {
+                if (this.subviews[i].y == yPos){
+                    return this.subviews[i];
+                }
+            }
+        ]]>
+    </method>
+    
+    <method name="getUpmostItemInList">
+        <![CDATA[
+            var item = this.subviews[0];
+            
+            //if ($debug) Debug.write("getUpmostItemInList ",this.subviews.length);
+            
+            for (var i=0;i<this.subviews.length;i++) {
+                if (this.subviews[i].itemId < item.itemId){
+                    item = this.subviews[i];
+                    //break;
+                }
+            }
+            
+            //if ($debug) Debug.write("getUpmostItemInList ",item);
+            
+            return item;
+        ]]>
+    </method>
+    
+    <method name="getLastItemInList">
+        <![CDATA[
+            var item = this.subviews[0];
+            for (var i=0;i<this.subviews.length;i++) {
+                if (this.subviews[i].itemId > item.itemId){
+                    item = this.subviews[i];
+                    //break;
+                }
+            }
+            return item;
+        ]]>
+    </method>
+    
+</class>
+
+</library>

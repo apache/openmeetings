@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+	<properties>
+		<title>Build instructions</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+		<section name="Nightly Builds">
+			<p>
+				You can find Nightly Builds of the software at:
+				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" rel="nofollow" target="_blank">
+					https://builds.apache.org/view/M-R/view/OpenMeetings/
+				</a>
+			</p>
+		</section>
+
+		<section name="How to Build a Distribution">
+			<div>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Oracle JDK7</li>
+					<li>Apache Maven (minimum) 3.2.1</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_blank" rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+				</ul>
+			</div>
+
+			<p>Get the source: </p>
+			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/]]></source>
+			<p>Run the command: </p>
+			<source><![CDATA[mvn clean install ]]></source>
+		</section>
+
+		<section name="Run, Develop, Test">
+			<p>
+				To develop Openmeetings you need to import maven project into Eclipse
+				<img src="images/eclipse-import-maven-project.png" alt="Import OM into Eclipse" width="526" height="394" />
+			</p>
+		</section>
+
+		<section name="Tips and Gotchas">
+			<p>To compile only client you can run following command: </p>
+			<source>
+<![CDATA[
+mvn install -pl openmeetings-flash               # compiles a complete package into the folder openmeetings-flash/target
+]]>
+			</source>
+			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
+			<source>
+<![CDATA[
+mvn clean install -Dunpacked=true -Dmaven.test.skip=true -Dold-backups.dwnd.skip=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+]]>
+			</source>
+			<p>After modifications are made you can run <i>"quick"</i> build: </p>
+			<source>
+<![CDATA[
+mvn install -pl openmeetings-web -pl openmeetings-server -Dquick=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+]]>
+			</source>
+			<p>Any number of projects can be specified during build: </p>
+			<source>
+<![CDATA[
+mvn install -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dquick=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+]]>
+			</source>
+			<p>
+				<b>Working behind a proxy:</b>
+				If you are sitting behind a proxy you should add some proxy settings before starting the build process.
+				<br />
+				For SVN Command Line Client (From CollabNet 1.7) see:
+				<a
+					href="https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html"
+					target="_blank" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
+				</a>
+			</p>
+
+		</section>
+
+	</body>
+
+</document>

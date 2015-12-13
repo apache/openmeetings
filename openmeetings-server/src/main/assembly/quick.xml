@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>server</id>
+	<formats>
+		<format>dir</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/src/main/webapp</directory>
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<includes>
+				<include>css/**</include>
+				<include>js/**</include>
+				<include>images/**</include>
+				<include>WEB-INF/**</include>
+			</includes>
+			<excludes>
+				<exclude>WEB-INF/web.xml</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/src/main/webapp</directory>
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<filtered>true</filtered>
+			<includes>
+				<include>WEB-INF/web.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-core/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-db/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-install/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-service/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-util/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/classes/META-INF</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/classes/META-INF</outputDirectory>
+			<includes>
+				<include>*.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-webservice/target</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
+			<includes>
+				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	<componentDescriptors>
+		<componentDescriptor>src/main/assembly/components/templates.xml</componentDescriptor>
+	</componentDescriptors>
+</assembly>

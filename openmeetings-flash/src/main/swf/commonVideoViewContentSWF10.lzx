@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+	  http://www.apache.org/licenses/LICENSE-2.0
+		  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="commonVideoViewContentSWF10" extends="view">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
+
+	<attribute name="offsetLength" type="number" value="40"/>
+	<attribute name="videoWidth" type="number" value="132"/>
+	<attribute name="videoHeight" type="number" value="132"/>
+	<attribute name="SIDEPANEL_WIDTH" type="number" value="270" />
+	<attribute name="testingApplication" value="null" />
+	<attribute name="baseVideoStream" value="null" />
+	
+	<method name="toggleVideo" args="value">
+		if($debug) Debug.info("toggleVideo ", canvas.currentClient, value);
+		canvas.currentClient.canVideo = value;
+	</method>
+	
+	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
+		if($debug) Debug.info("createEditRecordStream,", syncUpdate, isInterview, interviewPodId, canvas.currentClient);
+		if (canvas.inner.editRecordStream != null)
+			canvas.inner.editRecordStream.destroy();
+			new lz.editRecordStreamSWF10(canvas.inner, {
+					name:"editRecordStream",
+					isSyncUpdate:syncUpdate,
+					isInterview:isInterview,
+					interviewPodId:interviewPodId
+				});
+		return;
+	</method>
+
+	<method name="batchCreateVideo" args="selfStreamId, clients">
+	<![CDATA[
+		if ($debug) Debug.info("batchCreateVideo: ", selfStreamId, clients.length);
+		for (var i = 0; i < clients.length; ++i) {
+			var c = clients[i];
+			if (c.streamid != selfStreamId) {
+				if (c.isBroadcasting) {
+					createVideo(c.publicSID, c.firstname + ' ' + c.lastname, c.broadCastID, c.avsettings, -1, c);
+				} else {
+					createVideoObject(c.publicSID, false, -1, c);
+				}
+			}
+		}
+	]]>
+	</method>
+	
+	<!-- 
+		Method that creates the video views when another user enters a room and his 
+		item in the list of participants is created.
+		The method to "play" the stream is invoked later, when the user
+		really starts to stream and not only when he just enters the room.
+	 -->
+	<method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
+		if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting, "object", object);
+		var vidContainer = getVideoObjectByPublicSID(publicSID);
+		if(vidContainer == null) {
+			vidContainer = isBroadcasting ? this.getNewVideoObject(publicSID) : this.getNewVideoObjectByPos(publicSID);
+			vidContainer.publicSID = publicSID;
+		}
+		if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
+		if (canvas.isInterview) {
+			if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+			if (interviewPodId != null) {
+				vidContainer.setAttribute("interviewPodId", interviewPodId);
+				vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+				vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+			}
+			vidContainer.setAttribute("width",322);
+			vidContainer.setAttribute("height",281);
+		}
+		vidContainer.clientVars = object;
+		vidContainer.setAttribute('visibility','hidden');
+		return vidContainer;
+	</method>
+
+	<!-- 
+		
+		Method that creates the video views when user(self) initially entering a room.
+		Creates the video-view AND starts to stream/play the video
+	 -->
+	<method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
+		<![CDATA[
+			if ($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
+			if ($debug) Debug.write(" createVideo ALL vars ",object);
+			var vidContainer = getVideoObjectByPublicSID(publicSID);
+			if(vidContainer == null) {
+				vidContainer = this.getNewVideoObjectByPos(publicSID);
+				vidContainer.clientVars = object;
+				vidContainer.setAttribute('chatpartnername',displayName);
+				if (avsettings=="n"){
+					vidContainer.setVideouserProfilePic(object);
+					vidContainer.setAttribute("visibility","hidden");
+				} else if (avsettings=="a"){
+					vidContainer.setVideouserProfilePic(object);
+					if ($debug) Debug.warn("start play");
+					vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
+					vidContainer.setAttribute("visible", false);
+				} else if (avsettings=="v" || avsettings=="av") {
+					//this means avsettings is either: "v" or "av"
+					vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
+					vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
+					vidContainer.setAttribute("visibility","visible");
+				} else {
+					//this means user did not select anything yet and streaming has not started
+					vidContainer.setAttribute("visibility","hidden");
+				}
+				vidContainer.setAttribute("interviewPodId", interviewPodId);
+				vidContainer.updateAVSettingsSymbol(object);
+				if (object.micMuted) {
+					vidContainer.setMicMuted(object.micMuted);
+		   	 	}
+			}
+			
+			
+			if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
+			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+				if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+				vidContainer.setAttribute("interviewPodId", interviewPodId);
+				vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+				vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+				vidContainer.setAttribute("width",322);
+				vidContainer.setAttribute("height",281);
+			}
+			return;
+		]]>
+	</method>
+	
+	<method name="getVideoObjectByPublicSID" args="publicSID">
+		<![CDATA[
+			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+			for (var i=0;i<this.subviews.length;i++){
+				//if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
+				if (this.subviews[i].publicSID==publicSID){
+					return this.subviews[i];
+				}
+			}
+			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+			return null;
+		]]>
+	</method>
+
+	<method name="getNewVideoObjectByPos" args="publicSID">
+		<![CDATA[
+			//Get a Free VideoView Slot
+			var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
+
+			return new lz.videoObjectPlayBroadcast(this,{
+					publicSID:publicSID,
+					width:videoWidth,
+					height:videoHeight,
+					x:freePos[0],
+					y:freePos[1],
+					isInterview:canvas.isInterview
+				});
+		]]>
+	</method>
+
+	<method name="getNewVideoObject" args="publicSID">
+	<![CDATA[
+		this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
+		this.broadCastViewRef._chatvideoinner.r.destroy();
+		if ($debug) Debug.write("getNewVideoObject canvas.currentClient ",publicSID, canvas.currentClient);
+		this.broadCastViewRef.setAttribute('chatpartnername', canvas.currentClient.firstname + ' ' + canvas.currentClient.lastname);
+		return this.broadCastViewRef;
+	]]>
+	</method>
+
+	<method name="getVideoObjectByInterviewPodId" args="interviewPodId">
+		<![CDATA[
+			for (var i=0;i<this.subviews.length;i++){
+				if (this.subviews[i].interviewPodId==interviewPodId){
+					return this.subviews[i];
+				}
+			}
+			if ($debug) Debug.warn(" - getVideoObjectByInterviewPodId - DID NOT FIND THE USER BY ",interviewPodId);
+			return null;
+		]]>
+	</method>
+
+	<method name="getVideoObjectCount">
+	<![CDATA[
+		var count = 0;
+		for (var i = 0; i < this.subviews.length; ++i) {
+			if (this.subviews[i].visible) {
+				count++;
+			}
+		}
+		return count;
+	]]>
+	</method>
+
+	<method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
+		<![CDATA[
+			var newx = 20;
+			if (canvas.currentRoomObj.hideWhiteboard) {
+				newx += SIDEPANEL_WIDTH;
+			}
+			var newy = 0;
+			var posFound = false;
+			if (offsetLength == undefined) {
+				offsetLength=10;
+			}
+			while (!posFound) {
+				posFound = true;
+				for (var i=0;i<this.subviews.length;i++){
+					var subview = this.subviews[i];
+					var left = subview.x;
+					var right = subview.x + subview.width;
+					var top = subview.y;
+					var bottom = subview.y + subview.height;
+
+					if( !(newx > right
+						|| (newx + videoWidth) < left
+						|| newy > bottom
+						|| (newy + videoHeight) < top ))
+					{
+						newx = right + offsetLength;
+						posFound = false;
+					}
+					if ((newx + videoWidth) >= canvas.width) {
+						newx = 20;
+						if (canvas.currentRoomObj.hideWhiteboard) {
+							newx += SIDEPANEL_WIDTH;
+						}
+						newy += 10;
+						posFound = false;
+					}
+				}
+			}
+
+			if ((newy + videoHeight) >= canvas.height) {
+				newy = 0;
+			}
+
+			var result = [newx, newy];
+			return result;
+		]]>
+	</method>
+
+	<method name="disconnectclient" args="publicSID">
+	<![CDATA[
+		if ($debug) Debug.write("disconnectclient: ", publicSID);
+		var obj = closeStreamclient(publicSID);
+		if (obj == null) {
+			if ($debug) Debug.warn("Could Not find this To disconnect",publicSID);
+		} else {
+			obj.destroy();
+		}
+	]]>
+	</method>
+
+	<method name="muteSound" args="publicSID, bool">
+		<![CDATA[
+			var obj = this.getVideoObjectByPublicSID(publicSID);
+			if (obj != null) {
+				obj.silenceMicrophone(bool);
+			}
+			return;
+		]]>
+	</method>
+
+	<method name="resetAllValues">
+		for (var eg in this.subviews){
+			this.subviews[eg].resetValues();
+		}
+		return;
+	</method>
+
+	<method name="closeStreamclient" args="publicSID">
+	<![CDATA[
+		if ($debug) Debug.write("closeStreamthis: ", publicSID);
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		if ($debug) Debug.write("closeStreamthis obj: ", obj);
+		if (obj != null) {
+			obj.resetValues();
+		}
+		if (canvas.publicSID == publicSID && canvas.inner.editRecordStream != null) {
+			canvas.inner.editRecordStream.cleanVideos();
+			canvas.inner.editRecordStream.destroy();
+			canvas.inner.editRecordStream = null;
+		}
+		return obj;
+	]]>
+	</method>
+
+	<method name="removeVideoByUser" args="publicSID"><![CDATA[
+		var obj = this.closeStreamclient(publicSID);
+		if(obj != null) {
+			obj.destroy();
+		}
+		return;
+	]]></method>
+
+	<method name="updateMuteStatusVideoView" args="roomClient">
+	<![CDATA[
+		var obj = this.getVideoObjectByPublicSID(roomClient.publicSID);
+		if (obj != null) {
+			obj.muteMicrophone(roomClient);
+		}
+	]]>
+	</method>
+
+	<method name="setSpeakingByPos" args="publicSID,bool">
+	<![CDATA[
+		//if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		if (obj == null) {
+			if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
+			return;
+		}
+		obj._loudness.setSpeaking(bool);
+	]]>
+	</method>
+
+	<method name="setAVSettingsToClient" args="rcl">
+	<![CDATA[
+		if ($debug) Debug.write("setAVSettingsToClient: ", rcl.publicSID, rcl);
+		var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
+		if ($debug) Debug.write("setAVSettingsToClient: ", obj, rcl.avsettings);
+		if (obj == null) {
+			obj = this.getNewVideoObjectByPos(rcl.publicSID);
+		}
+		if ("n" == rcl.avsettings){
+			obj.setVideouserProfilePic(rcl);
+		} else if ("a" == rcl.avsettings){
+			obj.setVideouserProfilePic(rcl);
+		} else {
+			obj.deleteVideoConfProfilePic();
+		}
+		obj.thisVars = rcl;
+		obj.updateAVSettingsSymbol(rcl);
+		var v = ("a" == rcl.avsettings && obj.isInterview) || ("a" != rcl.avsettings && rcl.avsettings != "n");
+		obj.setAttribute("visible", v);
+		obj.setAttribute("visibility", v ? "visible" : "hidden");
+		if ($debug) Debug.write("setAVSettingsToClient: ", v, obj.visible);
+	]]>
+	</method>
+
+	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
+		<![CDATA[
+			if ($debug) Debug.write("startStream: ", publicSID,broadcastId,firstname,lastname,interviewPodId,width,height);
+			var obj = this.getVideoObjectByPublicSID(publicSID);
+			//if ($debug) Debug.write("startStream obj: ",obj);
+			if (obj != null ){
+				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
+				obj.setDefaultVideoSize(width,height);
+				obj.setAttribute('chatpartnername',firstname+' '+lastname);
+			}
+			//we have to do this again when the stream starts, the initial video 
+			//component does not know the interviewPodId as the user has not selected 
+			//which interview video pod he is going to use
+			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+				if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+				obj.setAttribute("interviewPodId", interviewPodId);
+				obj.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+				obj.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+				obj.setAttribute("width",322);
+				obj.setAttribute("height",281);
+			}
+			return;
+		]]>
+	</method>
+
+	<!---
+		Clear all views, probably this is called whenever a user leaves the room for example
+	 -->
+	<method name="clearAll">
+	<![CDATA[
+		if ($debug) Debug.write("clearAll", this.subviews);
+		while(this.subviews.length > 0) {
+			if (this.subviews[0]._chatvideoinner != null) {
+				this.subviews[0]._chatvideoinner._videostream._stop();
+			}
+			this.subviews[0].destroy();
+		}
+		if (canvas.inner.editRecordStream != null) {
+			canvas.inner.editRecordStream.destroy();
+		}
+		return;
+	]]>
+	</method>
+	
+	<method name="setExclusiveAudioAllowStatus" args="canGiveAudio">
+		<![CDATA[
+			if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
+			canvas.setAttribute("isAllowedToGiveExclusiveAudio",canGiveAudio);
+			return;
+		]]>
+	</method>
+
+	<!---
+		Shows the window with device settings
+	-->
+	<method name="changeDevice">
+		<![CDATA[
+			if ($debug) Debug.write("changeDevice");
+			new lz.changeDevice(canvas.inner, {
+									name:"changeDeviceDialog"
+								});
+			return;
+		]]>
+	</method>
+
+	<!---
+		Shows the exit dialog
+	-->
+	<method name="exitRoom">
+		if ($debug) Debug.write("exitRoom");
+		new lz.confirmationSingle(canvas,{
+				refObj:this,
+				labelid:791,
+				labeliderror:790,
+				refReturnMethod:'immediateExitRoom',
+				showCheckBox:false
+			});
+		return;
+	</method>
+
+	<method name="immediateExitRoom" args="bool,ctx">
+	<![CDATA[
+		if($debug) Debug.write("0", bool,ctx);
+		if (bool) {
+			if (canvas.wicketsid != null) {
+				if($debug) Debug.write("1");
+				clearAll();
+			}
+			if (canvas.thishib.connected) {
+				canvas.logicalRoomLeave.doCall();
+			} else {
+				canvas.doActionmenu('quit');
+			}
+		}
+	]]>
+	</method>
+
+	<method name="updateFirstLastName" args="publicSID,first,last">
+		var v = getVideoObjectByPublicSID(publicSID);
+		if (v != null) {
+			v.setAttribute('chatpartnername', first + ' ' + last);
+		}
+	</method>
+	
+	<!-- arranges video pods -->
+	<method name="arrangeWindows">
+	<![CDATA[
+		if ($debug) Debug.write("arrangeWindows");
+		var windowsList = this.subviews;
+
+		if (0 == windowsList.length) {
+			return;
+		}
+
+		windowsList.sort(this.sortFunction);
+
+		var offsetInPx = 40;
+		var initX = 20;
+		var initY = 20;
+		var xPos = initX;
+		var yPos = initY;
+		var rowHeight = windowsList[0].height;
+
+		// arrange windows with new positions
+		for (var winIdx = 0; winIdx < windowsList.length; winIdx++) {
+			var window = windowsList[winIdx];
+			if (canvas.width < xPos + window.width) {
+				yPos += rowHeight + offsetInPx;
+				xPos = initX;
+				rowHeight = window.height;
+			}
+			if (canvas.height < yPos) {
+				initX += 10;
+				initY += 10;
+				xPos = initX;
+				yPos = initY;
+			}
+			window.setAttribute("x", xPos);
+			window.setAttribute("y", yPos);
+			window.bringToFront();
+
+			xPos += window.width + offsetInPx;
+		}
+	]]>
+	</method>
+
+	<!-- @keyword private -->
+	<method name="sortFunction" args="el1, el2">
+		<![CDATA[
+			if (el1.height > el2.height) {
+				return -1;
+			} else if (el1.height < el2.height) {
+				return 1;
+			}
+			return 0;
+		]]>
+	</method>
+
+	<!---
+		Starts the 5 second audio/video testing application and connect to RTMP
+	 -->
+	<method name="doInitTestingApplication" args="x,y,connection_url">
+		if($debug) Debug.write("doInitTestingApplication ",x,y);
+		canvas.thishib.setAttribute('src',connection_url);
+		canvas.thishib.connect();
+		this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
+	</method>
+	
+	<!---
+		Stops and destroys the view with the audio/video testing application
+		and send confirmation back via LocalConnection
+	 -->
+	<method name="closeInitTestingApplication">
+		if($debug) Debug.write("closeInitTestingApplication ");
+		if (this.testingApplication != null) {
+			this.testingApplication.storeSettings();
+			this.testingApplication.destroy();
+			this.testingApplication = null;
+		}
+	</method>
+	
+	<!---
+		Initializes video playback component
+		and connect to RTMP
+	 -->
+	<method name="connectRecordingPlayer" args="connection_url,x,y,width,height">
+		if($debug) Debug.write("connectRecordingPlayer ", connection_url,x,y,width,height);
+		canvas.thishib.setAttribute('src',connection_url);
+		canvas.thishib.connect();
+		this.baseVideoStream = new lz.playBackVideoStream(canvas,{
+			x:x,
+			y:y,
+			width:width,
+			height:height
+		});
+	</method> 
+	
+	<!---
+		plays a recorded stream
+	 -->
+	<method name="playRecordingStream" args="streamName,delay,x,y,width,height">
+		if($debug) Debug.write("playRecordingStream ",streamName,x,y,width,height);
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		this.baseVideoStream.setAttribute("x",x);
+		this.baseVideoStream.setAttribute("y",y);
+		this.baseVideoStream.setAttribute("width",width);
+		this.baseVideoStream.setAttribute("height",height);
+		this.baseVideoStream.setAttribute("visibility","visible");
+		this.baseVideoStream.playRecordingStream(streamName,delay);
+	</method>
+	
+	<!---
+		Updates the width/height property of the recording playback video 
+	 -->	
+	<method name="updateRecordingVideoPosition" args="width,height">
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		this.baseVideoStream.setAttribute("width",width);
+		this.baseVideoStream.setAttribute("height",height);
+	</method>
+	
+	<!---
+		stops and hides the recording playback video
+	 -->
+	<method name="stopRecordingStream">
+		if($debug) Debug.write("stopRecordingStream ");
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		if($debug) Debug.write(" stopRecording ");
+		this.baseVideoStream.stopRecording();
+		this.baseVideoStream.setAttribute("visibility","hidden");
+	</method>
+	
+	<!--- 
+		pauses the current video or continue at the same position
+	 -->
+	<method name="pauseRecordingPlayback" args="pauseBool">
+		if($debug) Debug.write("pauseRecordingPlayback ");
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		this.baseVideoStream.pause(pauseBool);
+	</method>
+	
+	<method name="seekRecordingPlayback" args="flvTime">
+		if($debug) Debug.write("seekRecordingPlayback ",flvTime);
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		this.baseVideoStream.seekStream(flvTime);
+	</method>
+	
+	<method name="stopAndCloseRecordingConnection">
+		if($debug) Debug.write("stopAndCloseRecordingConnection ");
+		if (this.baseVideoStream == null) {
+			if ($debug) Debug.warn("baseVideoStream is NULL");
+			return;
+		}
+		this.baseVideoStream.stopRecording();
+		this.baseVideoStream.destroy();
+		this.baseVideoStream = null;
+	</method>
+	
+	<!---
+	   #################################
+	   Methods to handle screen sharing video playback and cursor
+	 -->
+	 
+	<!---
+		Adds a new screen sharing playback video
+	 -->
+	<method name="newScreenSharing" args="value">
+	<![CDATA[
+		if (value.streamPublishName != canvas.publicSID) {
+			if (canvas.screenSharingDialogContainer == null) {
+				canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+			}
+			if ($debug) Debug.warn("New Screen Sharing", value);
+			new lz.screenSharingDialog(canvas.screenSharingDialogContainer, {initObject: value}); 
+		} else {
+			if ($debug) Debug.warn("Self Screen Sharing");
+		}
+	]]>
+	</method> 
+	
+	<!---
+		Add a list of screen sharing playback videos 
+		(initially when entering the room invoked)
+	 -->
+	<method name="newScreenSharings" args="value">
+	<![CDATA[
+		for (var eg in value) {
+			this.newScreenSharing(value[eg]);
+		}
+	]]>
+	</method>
+   
+	<!---
+		Close a single screen sharing playback video
+	 --> 
+	<method name="closeScreenSharing" args="value">
+	<![CDATA[
+		if (canvas.screenSharingDialogContainer != null) {
+			var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+			if (obj) {
+				obj.doClose();
+			}
+		}
+	]]>
+	</method>
+		
+	<!---
+	   Closes all screen sharing playback videos, whiteboard videos, user videos 
+	   and closes the rtmp connection
+	 -->
+	<method name="closeAllScreenSharings">
+	<![CDATA[
+		if ($debug) Debug.write("RECEIVE closeAllScreenSharings ");
+		if (canvas.screenSharingDialogContainer != null) {
+			canvas.screenSharingDialogContainer.closeAll();
+			canvas.screenSharingDialogContainer.destroy();
+			canvas.screenSharingDialogContainer = null;
+		}
+		parent._videoComponent.clearAll();
+	]]>
+	</method>
+	
+	<!---
+		change Screen Sharing frame height 
+	 -->
+	<method name="hideChatContent" args="hide">
+ 	<![CDATA[
+		if (canvas.screenSharingDialogContainer != null) {
+			if ($debug) Debug.write("hideChatContent::hide " + hide);
+			canvas.screenSharingDialogContainer.hideChatContent(hide);
+		}
+ 	]]>
+	</method>
+	
+	<!---
+		Update the position of the cursor from the sharing screen
+	 -->
+	<method name="updateCursorScreenSharing" args="value">
+	<![CDATA[
+		//if ($debug) Debug.write("updateCursorScreenSharing ", value);
+		if (canvas.screenSharingDialogContainer != null) {
+			var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+			if (obj) {
+				obj.updateCursor(value.cursor_x, value.cursor_y);
+			}
+		}
+	]]>
+	</method>
+	
+	<!---
+		Make regExpTest 
+	 -->
+	<method name="regExpTest" args="fieldValue,regExStr">
+	<![CDATA[
+		var re = new RegExp(regExStr);
+		var testResult = re.test( fieldValue );
+		if ($debug) Debug.write(fieldValue, testResult);
+		return testResult;
+	]]>
+	</method>
+	
+	<!--
+		Container to hold all whiteboard videos
+	-->	
+</class>
+
+</library>

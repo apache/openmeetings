@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseFileExplorerItem" extends="view">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.net.*;
+			</passthrough>
+		</when>
+	</switch>
+	<attribute name="isRoot" value="false" type="boolean" />
+	<attribute name="fileIcon" type="string" value="string" />
+	<attribute name="open" value="false" type="boolean" />
+	<attribute name="fileId" value="0" type="number" />
+	<attribute name="ownerId" value="0" type="number" />
+	<attribute name="roomId" value="0" type="number" />
+	<attribute name="type" type="string" />
+	<attribute name="fileName" value="" type="string" />
+	<attribute name="fileHash" value="" type="string" />
+	<attribute name="selected" value="false" type="boolean"/>
+	<attribute name="singleClickDelegate" value="null" />
+	<attribute name="singleClickStarted" value="false" type="boolean" />
+	<attribute name="isMouseDownDragAction" value="false" type="boolean"/>
+	<!-- If this is true, then this item has been drag-n-droped and it makes no sense to handle any single or double click event -->
+	<attribute name="mouseDownClickUsed" value="false" type="boolean" />
+	<attribute name="mouseDownClickDelegate" value="null" />
+	<attribute name="isTrashCan" value="false" type="boolean" />
+	<attribute name="folderLoader" />
+	<attribute name="deleteLoader" />
+		
+	<handler name="oninit">
+		this.singleClickDelegate = new LzDelegate(this, "doSingleClick");
+		this.resetClickDelegate = new LzDelegate(this, "doResetSingleClick");
+		this.mouseDownClickDelegate = new LzDelegate(this, "doMouseDownClick");
+		if (this.type == 'Folder') {
+		    lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
+		}
+	</handler>
+	
+	<method name="doOpen">
+		this.open = true;
+		if (this.type == 'Folder') {
+    		this.icon_folder_pre.setAttribute("frame",2);
+    		this.content.setAttribute("visibility","visible");
+			this._folderIcon.setAttribute("frame",2);
+		    this.loadFiles();
+		}
+	</method>
+	
+	<method name="doClose">
+		this.open = false;
+		if (this.type == 'Folder') {
+            this.icon_folder_pre.setAttribute("frame",1);
+            this.content.setAttribute("visibility","hidden");
+            this._folderIcon.setAttribute("frame",1);
+		}
+	</method>
+	
+	<method name="doMouseDownClick" args="itemObj">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
+			return;
+		}
+		this.mouseDownClickUsed = true;
+		if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
+		new lz.dragItemFileExplorer(canvas,{
+				dragItemResource:this.fileIcon,
+				refObj:this,
+				x:canvas.getMouse('x'),
+				y:canvas.getMouse('y')
+			});
+	]]>
+	</method>
+    
+    <!--
+    	Check if this is the Owner
+     -->
+    <method name="checkForIsOwner">
+    	if (this.isRoot) {
+    		return this.isOwner;
+    	} else {
+    		return parent.parent.checkForIsOwner();
+    	}
+    </method>
+    
+    <!--
+    	Check if the user tries to move a file in its own tree,
+    	see moveFile
+     -->
+    <method name="checkForIsChild" args="compFileId">
+    	if (this.isRoot) {
+    		return false;
+    	} else {
+    		if (this.fileId == compFileId) {
+    			return true;
+    		} else {
+    			return parent.parent.checkForIsChild(compFileId);
+    		}
+    	}
+    </method>
+    
+    <method name="deleteFile" args="labelid">
+    	<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	    	new lz.confirmationSingle(canvas,{
+	                           refObj:this,
+	                           labelid:labelid,
+	                           labeliderror:713,
+	                           showCheckBox:false
+	                        });
+    	]]>
+    </method>
+    
+    <method name="sendConfirmation" args="bool,askAgain">
+        if (bool) {
+            this.deleteFileOrFolder();
+        }
+    </method>
+    
+	<method name="deleteFileOrFolder">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
+			return;
+		}
+		
+		if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
+		if (!deleteLoader) {
+			deleteLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/' + this.fileId
+				, method: URLRequestMethod.POST
+				, hdrs: [new URLRequestHeader("X-HTTP-Method-Override", "DELETE")]
+				, errorCallback: deleteError
+				, successCallback: deleteComplete
+				});
+		}
+		deleteLoader.load('--dummy--');
+	]]>
+	</method>
+    
+	<method name="deleteComplete" args="event">
+		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("base::deleteComplete ", o);
+		//TODO check return code
+		this.parent.parent.doOpen();
+		canvas.currentFileExplorer._selected = null;
+	</method>
+    
+	<method name="deleteError" args="event">
+		if ($debug) Debug.error("base::deleteError ", event);
+	</method>
+	
+	<method name="doSingleClick" args="itemObj">
+		this.singleClickStarted = false;
+		//Cannot change name for Root Icons
+		if (this.isRoot) {
+            return;
+        }
+		this.addOrUpdateFolderName();
+	</method>
+	
+	<method name="doResetSingleClick" args="itmeObj">
+		this.singleClickStarted = false;
+	</method>
+	
+	<method name="addFile">
+		canvas.currentFileExplorer.selectItem(this);
+		canvas.currentFileExplorer.addFile();
+	</method>
+	
+	<method name="addFolder">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
+		if (this.type == 'Folder') {
+			if ($debug) Debug.write("NEW this.fileId INTO ", this);
+			if ($debug) Debug.write("NEW this.fileId ", this.fileId);
+			if (this["icon_folder_pre"]) {
+				this.icon_folder_pre.setAttribute("frame", 2);
+				this.content.setAttribute("visibile", true);
+				this._folderIcon.setAttribute("frame", 2);
+				var t = new lz.folderFileExplorerItem(this.content, {
+						parentId: this.fileId
+						, ownerId: this.ownerId
+						, roomId: this.roomId
+						, type: 'Folder'
+						, fileIcon: 'icon_folder_rsc'
+						, fileName: canvas.getLabelName(712)
+						});
+				t.addOrUpdateFolderName();
+			}
+		}
+	]]>
+	</method>
+	
+	<method name="refresh">
+		this.doOpen();
+	</method>
+	
+	<method name="playVideo">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+    		return;
+    	}
+		canvas.currentFileExplorer.playVideo(this);
+	]]>
+	</method>
+	
+	<method name="editFolderName">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+    		return;
+    	}
+		this.addOrUpdateFolderName();
+	]]>
+	</method>
+	
+	<method name="loadDocument">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+    		return;
+    	}
+		canvas.currentFileExplorer.loadDocument(this);
+	]]>
+	</method>
+	
+	<method name="loadWmlFile">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+    		return;
+    	}
+		canvas.currentFileExplorer.loadWmlFile(this);
+	]]>
+	</method>
+
+	<method name="loadChart">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+    		return;
+    	}
+		canvas.currentFileExplorer.loadChart(this);
+	]]>
+	</method>
+	
+	<method name="addOrUpdateFolderName">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
+		
+		if ($debug) Debug.write("addOrUpdateFolderName ", this.parentId);
+		var tWidth = this._fileName.width;
+		if (tWidth < 160) {
+			tWidth = 160;
+		}
+		var _y = this._fileName.getAttributeRelative("y", canvas);
+		var _x = this._fileName.getAttributeRelative("x", canvas);
+		if (this.fileId == 0) {
+			_y = 65;
+			_x += 10;
+		}
+		
+		var t = new lz.dynamicFileName(canvas, {
+				text: this.fileName
+				, refObj: this
+				, width: tWidth + 10
+				, x: _x
+				, y: _y
+				});
+
+		lz.Focus.setFocus(t,true);
+		lz.ModeManager.makeModal(t);
+	]]>
+	</method>
+	
+	<method name="doSetSelection">
+		this.singleClickStarted = true;
+		if (this.selected) {
+			if ($debug) Debug.write("Is this selected => Do Edit !!!");
+			lz.Timer.addTimer(this.singleClickDelegate, 300);
+		} else {
+			selectItem(null);
+			lz.Timer.addTimer(this.resetClickDelegate, 300);
+		}
+	</method>
+	
+	<method name="toggleOpen" args="setSelection">
+	<![CDATA[
+		if (this.mouseDownClickUsed) {
+			if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
+			this.mouseDownClickUsed = false;
+			return;
+		}
+		if (this.singleClickStarted) {
+			if ($debug) Debug.write("Is this selected => Double Click !!!");
+			this.singleClickStarted = false;
+			lz.Timer.removeTimer(this.singleClickDelegate);
+			
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+				new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
+				return;
+			}
+			
+			switch (this.type) {
+				case 'Video':
+					this.playVideo();
+					break;
+				case 'WmlFile':
+					this.loadWmlFile();
+					break;
+				case 'Folder':
+					this.doSingleClick(null);
+					break;
+				case 'Presentation':
+					this.loadDocument();
+					break;
+				}
+		} else {
+			if ($debug) Debug.write("toggleOpen:: ", setSelection);
+			if (this.type == 'Folder'){
+				if (this.open) {
+					if (setSelection) {
+						doSetSelection()
+					} else {
+						this.doClose();
+					}
+				} else {
+					this.doOpen();
+				}
+			} else {
+				if (setSelection) {
+					doSetSelection()
+				}
+			}
+		}
+		if (setSelection) canvas.currentFileExplorer.selectItem(this);
+	]]>
+	</method>
+	
+	<method name="selectItem" args="none">
+		this.selected = true;
+		this._fileName.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
+	</method>
+	
+	<method name="deselectItem">
+		this.selected = false;
+		if (this["_fileName"]) {
+            this._fileName.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
+        } else {
+            if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
+        }
+    </method>
+	
+	<method name="clearContent">
+	<![CDATA[
+		while (this.content.subviews.length > 0) {
+			this.content.subviews[0].destroy();
+		}
+	]]>
+	</method>
+    
+	<method name="loadFiles">
+	<![CDATA[
+		if (!folderLoader) {
+			folderLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/room/' + hib.currentroomid + '/' + this.fileId
+				, method: URLRequestMethod.GET
+				, errorCallback: loadFilesError
+				, successCallback: loadFilesComplete
+				});
+		}
+		folderLoader.load('');
+	]]>
+	</method>
+
+	<method name="loadFilesComplete" args="event">
+		var o = JSON.parse(event.target.data);
+		if ($debug) Debug.info("base::loadFilesComplete ", o);
+		setNodes(o.fileExplorerItemDTO);
+	</method>
+    
+	<method name="loadFilesError" args="event">
+		if ($debug) Debug.error("base::loadFilesError ", event);
+	</method>
+
+	<view name="icon_folder_pre" visible="$once{ parent.type == 'Folder' }" resource="icon_folder_pre_rsc" frame="1" >
+		<handler name="onclick">
+			parent.toggleOpen(false);
+		</handler>
+	</view>
+	
+	<view name="_folderIcon" resource="$once{ parent.fileIcon }" x="16" y="2" >
+		<handler name="onmousedown">
+			if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+        </handler>
+        <handler name="onmouseup">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+        </handler>
+		<handler name="onclick">
+			parent.toggleOpen(false);
+		</handler>
+	</view>
+	
+	<method name="getDownloadURL" args="fName, parentPath">
+	<![CDATA[
+		var downloadurl = canvas.getUrl() + 'DownloadHandler?' +
+			'fileName=' + fName +
+			'&moduleName=videoconf1' +
+			'&parentPath=/' + parentPath +
+			'&room_id=files'+
+			'&sid=' + canvas.sessionId +
+			"&fileId=" + this.fileId;
+		if ($debug) Debug.write("formatURL: ", this, downloadurl);
+		return downloadurl;
+	]]>
+	</method>
+
+	<method name="downloadDocumentByName">
+	<![CDATA[
+		var fName = this.fileHash;
+		var pos = this.fileName.lastIndexOf(".");
+		var strlen = this.fileName.length;
+		if (pos != -1 && strlen != pos + 1) {
+			var ext = this.fileName.split(".");
+			var len = ext.length;
+			var extension = ext[len - 1].toLowerCase();
+			fName += "." + extension;
+		}
+		lz.Browser.loadURL(this.getDownloadURL(fName, this.fileHash + '/'), '_parent');
+	]]>
+	</method>
+	
+	<method name="downloadImageByName">
+		lz.Browser.loadURL(this.getDownloadURL(this.fileHash, ''), '_parent');
+	</method>
+
+	<method name="setNodes" args="list">
+	<![CDATA[
+		this.clearContent();
+		//if ($debug) Debug.info("setNodes:: ", list.length, list);
+		if (!list) {
+			return;
+		}
+		if (!list.length) {
+			list = [list];
+		}
+		for (var i = 0; i < list.length; ++i) {
+			var f = list[i];
+			//if ($debug) Debug.write("fileItem, ", f);
+			switch (f.type) {
+				case 'Folder':
+					new lz.folderFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'icon_folder_rsc'
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							});
+					break;
+				case 'Image':
+					new lz.imageFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							, fileIcon: 'file_explorer_image_rsc'
+							});
+					break;
+				case 'Presentation':
+					new lz.documentFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							, fileIcon: 'file_explorer_document_rsc'
+							});
+					break;
+				case 'Video':
+					new lz.videoFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileHash: f.hash
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							, fileIcon: 'file_explorer_video_rsc'
+							, flvHeight: f.flvHeight
+							, flvWidth: f.flvWidth
+							});
+					break;
+				case 'WmlFile':
+					new lz.wmlFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'file_explorer_wml_rsc'
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							, isWmlFile: true
+							});
+					break;
+				case 'PollChart':
+					new lz.wmlFileExplorerItem(this.content,{
+							fileId: f.id
+							, fileName: f.name
+							, fileIcon: 'file_explorer_chart_rsc'
+							, type: f.type
+							, ownerId: f.ownerId
+							, roomId: f.roomId
+							});
+					break;
+			}
+		}
+	]]>
+	</method>
+</class>
+</library>

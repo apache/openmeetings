@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Release Guide</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How to Build a Release of OpenMeetings">
+
+			<subsection name="Required tools">
+
+				<div>
+					<p>To build a binary release of OpenMeetings you need: </p>
+					<ul>
+						<li>Sun JDK7</li>
+						<li>Apache ANT (minimum) 1.8.3</li>
+						<li>
+							SVN Command line client (Subversion 1.7 required!)
+							<a href="http://subversion.apache.org/packages.html" target="_blank"
+								rel="nofollow">http://subversion.apache.org/packages.html</a>
+						</li>
+						<li>A text editor</li>
+						<li>You need to be online! The build process actively downloads
+							needed libraries and dependencies.
+						</li>
+						<li>Valid certficate to be able to enter <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a>
+							Please ask INFRA in case you need one.
+						</li>
+					</ul>
+				</div>
+
+			</subsection>
+
+			<subsection name="Prepare your Apache ID">
+
+				<div>
+					Every release package must be signed with a PGP/GPG key.
+					<br />
+					So if you want to release a package your Apache Id must be
+					connected with a PGP key!
+					<br />
+					<br />
+					You might follow:
+					<br />
+					<a
+						href="http://www.apache.org/dev/new-committers-guide.html#security-and-pgp"
+						target="_blank">http://www.apache.org/dev/new-committers-guide.html#security-and-pgp
+					</a>
+					<br />
+					<br />
+					In short:
+					<br />
+					Create PGP key pairs (private + public) (and I recommend creating a
+					Revoke Cert)
+					<br />
+					Upload the public key (either bei using the PGP Tool that you use
+					to create the key) or by using the web form to:
+					<a href="http://pgp.mit.edu/" target="_blank" rel="nofollow">http://pgp.mit.edu/
+					</a>
+					<br />
+					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE
+					4413 09AB 0055 16BF 93A3 0395") to your profile at
+					<a href="https://id.apache.org/" target="_blank" rel="nofollow">https://id.apache.org/</a>
+					<br />
+					Wait for 6-8 hours, the server will search for a public key based
+					on your fingerprint, if success it will create a file with your
+					name at:
+					<br />
+					<a href="https://people.apache.org/keys/committer/">https://people.apache.org/keys/committer/</a>
+					<br />
+					<br />
+					If that is "success" then add your key to:
+					<br />
+					<a
+						href="https://svn.apache.org/repos/asf/openmeetings/project/KEYS">https://svn.apache.org/repos/asf/openmeetings/project/KEYS
+					</a>
+					<br />
+					and follow the instructions in the file.
+					<br />
+				</div>
+
+			</subsection>
+
+			<subsection name="Step1 - Prepare files">
+				<p>
+					Check that all files:
+					<br />
+					LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README
+					<br />
+					are up to date and refer to the right version.
+				</p>
+
+				<p>
+					Create a TAG of the SVN tree that you would like to release<br/>
+					Example:
+				</p>
+				
+				<source>
+svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \
+	https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \
+	-m "Release candidate 1"
+				</source>
+				
+
+				<p>Get the source from your TAG: </p>
+				<source>svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</source>
+				<p>$BRANCHORTAG should be replaced with your new TAG</p>
+
+				<p>Edit the file build.properties change</p>
+				<source>project.status=SNAPSHOT</source>
+				<p>to</p>
+				<source>project.status=RELEASE</source>
+				<p>Run the command: </p>
+				<source>ant dist-release</source>
+				<p>Test building the source on windows and OSx or Linux</p>
+				<p>Test running the binary's</p>
+				<p>Create sha256sum checksums</p>
+				<source>
+#On OSX you might use this command to make a MD5 checksum and store it to a file
+shasum -a 256 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.md5
+				</source>
+				<source>
+<![CDATA[
+#To create MD5 hashes On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do sha256sum $f > $f.sha; done
+
+#To check MD5 hashes On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do sha256sum -c $f.sha; done
+]]>
+				</source>
+				<p>
+					Create signatures with the your KEY for every file, the KEY must be available at:<br />
+					<a href="https://svn.apache.org/repos/asf/openmeetings/project/KEYS">
+						https://svn.apache.org/repos/asf/openmeetings/project/KEYS
+					</a>
+				</p>
+				<source>
+<![CDATA[
+#To create signatures On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do gpg --armor --output $f.asc --detach-sig $f; done
+
+#To check signatures On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
+]]>
+				</source>
+				
+				<p>
+					Commit artifacts you have created with KEYS file to the
+					<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
+					Proposed file structure for "Release Candidate 1" of 2.1 will be:
+				</p>
+				<source>
+2.1
+2.1/rc1
+2.1/rc1/src
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.md5
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.asc
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.md5
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.asc
+2.1/rc1/bin
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip.md5
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip.asc
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc
+2.1/rc1/CHANGELOG
+2.1/rc1/KEYS
+				</source>
+			</subsection>
+
+			<subsection name="Step2 - VOTE and RESULT emails">
+				<p>
+					Send a "VOTE" to the developer mailing list including links to release artifacts.<br />
+					A VOTE always contains two parts:<br />
+					Send an email to the developer mailing list with the subject line:<br />
+					[VOTE] Apache OpenMeetings x.xx release<br />
+					An example for such an email:
+					<a href="http://s.apache.org/vote-2.1.0RC1">example Vote email</a>
+					<a href="http://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
+					<br />
+					Forward (Not CC) this Vote email to: private@openmeetings.apache.org<br />
+					<br />
+					After the vote is over, send a "RESULT" email to the list with the subject line:<br />
+					[RESULT][VOTE] Apache OpenMeetings x.xx release<br />
+					An example for such an email:
+					<a
+						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA-ibo6fGCbnLjJX9H5H2kFGDVJRMfxPyMtzWzCWNi%2BpOg%40mail.gmail.com%3E">example Result email</a>
+					<br />
+					Forward (Not CC) this RESULT VOTE email to: private@openmeetings.apache.org<br />
+					<br />
+					Votes on whether a package is ready to be released use majority approval -- i.e., at 
+					least three PMC members must vote affirmatively for release, and there must be more 
+					positive than negative votes. Releases may not be vetoed. Before voting +1 PMC members
+					are required to download the signed source code package, compile it as provided, and 
+					test the resulting executable on their own platform, along with also verifying that 
+					the package meets the requirements of the ASF policy on releases.
+				</p>
+			</subsection>
+
+			<subsection name="Step3 - Sign web start application">
+				<p>If VOTEs positive: Sign screen sharing web application and re-pack the release</p>
+				<ul>
+					<li>Go to the folder you check out: https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</li>
+					<li>Run following command: <tt>ant repackWebStartJars</tt></li>
+					<li>Check any jar in <tt>dist/red5/webapps/openmeetings/screensharing/</tt>: Its META-INF/MANIFEST.MF file should NOT contain <tt>SHA1-Digest</tt> entries for classes</li>
+					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
+					<li>Select "Signing Sets"</li>
+					<li>Select "Add signing set"</li>
+					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.0.4-RELEASE"</li>
+					<li>Enter "Version" for ex. "3.0.4-RELEASE"</li>
+					<li>Select "Java Signing" as "Signing service"</li>
+					<li>Select "Upload files" and add all <b>jar</b> files from <tt>dist/red5/webapps/openmeetings/screensharing/</tt></li>
+					<li>Select "Sign now"</li>
+					<li>Select "Type of signing" -> "Production"</li>
+					<li>Select "Sign"</li>
+					<li>Select "Download set"</li>
+					<li>Open binary artifacts of OM created on previous step (both <b>tar.gz</b> and <b>zip</b>)</li>
+					<li>Replace jar files inside artifacts <tt>webapps/openmeetings/screenshare</tt> with the signed ones</li>
+					<li>Re-create artifact signatures</li>
+				</ul>
+				<p>NOTE: "Type of signing" can be selected as "Test" to check everything works as expected</p>
+				
+			</subsection>
+			
+			<subsection name="Step4 - Distribute and announce">
+				<p>If VOTEs positive: Upload the release </p>
+				<p>Upload Artifacts with signatures created on the previous steps to https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION</p>
+				<p>
+					Wait 24 hours (until all Apache mirrors have synced the packages)
+					and send an announcement to the mailing list + blog and any other
+					channel.
+				</p>
+				<p>
+					Email announcements should have the subject line:
+					<br />
+					[ANNOUNCE] Apache OpenMeetings x.xx released
+				</p>
+				<p>
+					Update release section of DOAP file <tt>openmeetings-server/src/site/xdoc/doap.rdf</tt>
+				</p>
+				<p>
+					Add a section to <a href="downloads.html">downloads</a> website.<br />
+					Make sure that the binary packages are linked using the mirror URL as base path (
+					<b>not</b> http://www.apache.org/dist):<br />
+					Mirror URL: 
+					<a href="http://www.apache.org/dyn/closer.lua/openmeetings/">http://www.apache.org/dyn/closer.lua/openmeetings/</a>
+				</p>
+				<p>
+					Release candidates should be deleted from <tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt><br/>
+					Old releases should be deleted from <tt>https://dist.apache.org/repos/dist/release/openmeetings/</tt>
+				</p>
+			</subsection>
+		</section>
+	</body>
+</document>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="customEdittext" extends="inputtext" bgcolor="0xFFFFFF" fontsize="11" height="20" >
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.system.Capabilities;
+            </passthrough>
+        </when>
+    </switch>
+	<view name="v_border" height="1"       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="$once{parent.height -1}" />
+	
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	
+	<attribute name="isvalidInput" value="true" type="boolean" />
+	<attribute name="regexpType" value="none" type="string" />
+	<attribute name="regexpLabelid" type="number" />
+	<attribute name="preText" value="" type="string" />
+    <attribute name="emailRegEx" type="string" value=""/>
+	
+	<event name="onafterCheck" />
+
+	<handler name="onfocus" args="f">
+    	this.preText = this.getText();
+    </handler>
+    
+    <handler name="oninit">
+    <![CDATA[
+    	emailRegEx = "^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+([a-zA-Z]{1,3})$";
+    	//this.field.setAttribute("bgcolor",0xFFFFFF);
+    ]]>
+    </handler>
+    
+	<handler name="onblur">
+	<![CDATA[
+		if (this.regexpType != "none") {
+			//if ($debug) Debug.write("onblur");
+			//if ($debug) Debug.write("onblur check ",this.regexpType);
+			var fieldValue = this.getText();
+			if (this.regexpType=="email") {
+				//var regExpV = ".+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)";
+				var regExpV = this.emailRegEx;
+				//var regExpV = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+				this.regexpLabelid = 519;
+			} else if (this.regexpType=="date"){
+				var regExpV = "(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d";
+				this.regexpLabelid = 518;
+			} else if (this.regexpType=="float"){
+				var regExpV = "[0-9]*\\.[0-9]*";
+				this.regexpLabelid = 520;
+			} else if (this.regexpType=="phone"){
+				var regExpV = "\\+[0-9]+ [0-9]+ [0-9\\-]+";
+				this.regexpLabelid = 522;
+			} else if (this.regexpType=="number"){
+				var regExpV = "[0-9]*";
+				this.regexpLabelid = 521;
+			} else if (this.regexpType=="time"){
+				var regExpV = "([01][0-9]|2[0-3]):[0-5][0-9]";
+				this.regexpLabelid = 523;
+			} else {
+				if ($debug) Debug.warn("Unkown Regexp Type: ",this.regexpType);
+			}
+			//if ($debug) Debug.write("regExpV: ",regExpV);
+			
+			var tResult = canvas.commonVideoViewContent.regExpTest(this.getText(), regExpV);
+			if ($debug) Debug.write("callback",tResult);
+			
+			if (!tResult) {
+				if ($debug) Debug.warn("FALSE: regexperror");
+				disablesTooltips(new lz.regexptip(canvas,{x:this.getAttributeRelative('x',canvas)+12,
+						y:this.getAttributeRelative('y',canvas)+26,
+						regexptext:canvas.getLabelName(this.regexpLabelid)}));
+				this.usePreContent();
+				this.setAttribute('isvalidInput',false);
+			} else {
+				if (!this.isvalidInput) {
+					disablesTooltips(null);
+				}
+				this.setAttribute('isvalidInput',true);
+			}
+			if ($debug) Debug.write("-- Complete --");
+			this.onafterCheck.sendEvent();
+		}
+	]]>
+	</handler>
+	
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+    
+  	<method name="usePreContent">
+  		this.setAttribute('text',this.preText);
+  	</method>    
+    
+</class>
+
+</library>

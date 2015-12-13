@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Introduction">
+
+			<p> For a detailed instruction which services, methods and params are available see the list in the SoapMethods. ALL methods that are implemented for the SOAP API are also available via REST. 
+			</p>
+
+		</section>
+		
+		<section name="How to invoke Services via REST">
+
+			<p>For example for the method getSession in the UserService, you would use this URL via REST:
+			</p>
+			<p>Sample URL: </p><a href="https://demo-openmeetings.apache.org/openmeetings/services/UserService/getSession">https://demo-openmeetings.apache.org/openmeetings/services/UserService/getSession</a>
+			<p>Result: </p>
+			<source>
+<![CDATA[
+<ns:getSessionResponse>
+    <ns:return type="org.apache.openmeetings.hibernate.beans.basic.Sessiondata">
+        <ax219:id>156971</ax219:id>
+        <ax219:language_id xsi:nil="true"/>
+        <ax219:organization_id xsi:nil="true"/>
+        <ax219:refresh_time>2011-07-03T14:40:44.000Z</ax219:refresh_time>
+        <ax219:sessionXml xsi:nil="true"/>
+        <ax219:session_id>26584705202d7c1de6cc8e7e28890e3d</ax219:session_id>
+        <ax219:starttermin_time>2011-07-03T14:40:44.000Z</ax219:starttermin_time>
+        <ax219:storePermanent xsi:nil="true"/>
+        <ax219:user_id xsi:nil="true"/>
+    </ns:return>
+</ns:getSessionResponse>
+]]>
+			</source>
+			<p>To login a user the call to auth would be:</p>
+			<p>Sample URL: </p><a href="https://demo-openmeetings.apache.org/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=hans&#38;userpass=test">https://demo-openmeetings.apache.org/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=han&#38;userpass=test</a>
+			<p>Result: </p>
+			<source>
+<![CDATA[
+<ns:loginUserResponse>
+    <ns:return>-11</ns:return>
+</ns:loginUserResponse>
+]]>
+			</source>
+			<p>=> It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
+			<p>Sample URL: </p><a href="https://demo-openmeetings.apache.org/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1">https://demo-openmeetings.apache.org/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1</a>
+			<p>Result:</p>
+			<source>
+<![CDATA[
+<ns:getErrorByCodeResponse>
+    <ns:return type="org.apache.openmeetings.db.dto.basic.ErrorResult">
+        <ax218:errmessage>Username not found</ax218:errmessage>
+        <ax218:errorId>-10</ax218:errorId>
+        <ax218:errortype>Error</ax218:errortype>
+    </ns:return>
+</ns:getErrorByCodeResponse>
+]]>
+			</source>
+		</section>
+	</body>
+</document>
