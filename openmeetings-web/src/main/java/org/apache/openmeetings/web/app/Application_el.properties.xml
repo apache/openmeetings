@@ -1869,4 +1869,5 @@
   <entry key="error.type.info">Μήνυμα</entry>
   <entry key="poll.type.yesNo">Ναι/Όχι</entry>
   <entry key="poll.type.numeric">Αριθμός 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>

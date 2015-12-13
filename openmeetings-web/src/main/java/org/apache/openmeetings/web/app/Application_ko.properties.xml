@@ -1871,4 +1871,5 @@
   <entry key="error.type.info">Message</entry>
   <entry key="poll.type.yesNo">네/아니오</entry>
   <entry key="poll.type.numeric">숫자 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>

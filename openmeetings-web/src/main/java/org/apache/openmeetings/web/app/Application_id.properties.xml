@@ -1869,4 +1869,5 @@
   <entry key="error.type.info">Pesan</entry>
   <entry key="poll.type.yesNo">Ya/Tidak</entry>
   <entry key="poll.type.numeric">Angka dari 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>

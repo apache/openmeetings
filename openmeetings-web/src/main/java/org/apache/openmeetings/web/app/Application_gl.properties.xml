@@ -1869,4 +1869,5 @@
   <entry key="error.type.info">Mensaxe</entry>
   <entry key="poll.type.yesNo">Sí/Non</entry>
   <entry key="poll.type.numeric">Valor numérico 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>
