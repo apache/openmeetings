@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+
+	<class name="lzDayView" extends="view" width="${ parent.width }" height="${ parent.height }">
+	
+		<!---
+			Show only a single day over the whole width
+		 -->
+		<attribute name="singleDayView" value="true" type="boolean" />
+	
+		<!---
+			the row index of the day to show (makes only sense if singleDayView is true)
+		 -->
+		<attribute name="currentDay" value="0" type="number" />
+		
+		<!---
+			the number of days that are shown next to each other
+		 -->
+		<attribute name="daysPerWeek" value="1" type="number" />
+		
+		<!--
+			Name of the trackgroup
+		 -->
+		<attribute name="dayViewTrackGroup" value="dayViewTrackGroup" type="string" />
+		
+		<!-- 
+			Current Dragging object
+		 -->
+		<attribute name="currentDragEvent" value="null" />
+		
+		<!-- 
+			Current dayDate that receives the track scroll over
+		 -->
+		<attribute name="currentOverTrackView" value="null" />
+		
+		<!---
+			Prevent from re-rendering when switching the viewState 
+		 -->
+		<attribute name="reRenderLock" value="false" type="boolean" />
+		
+		<handler name="oninit">
+			//fix z-Layer
+			this._header.sendInFrontOf(this._grid);
+			this._grid.sendToBack();
+		</handler>
+			
+		<view name="_header" x="41" width="${ parent.width-10 }" height="20" bgcolor="0xDDDDDD">
+			<view name="days" datapath="days" width="${ (parent.width-41)/classroot.daysPerWeek }" clip="true"
+								bgcolor="0xDDDDDD" height="19">
+				
+				<handler name="oninit">
+					if (classroot.singleDayView) {
+						this.setAttribute("datapath","days["+classroot.currentDay+"]");
+					}
+				</handler>
+								
+				<text name="_title" width="${ parent.width -1 }" fgcolor="0x666666"
+								datapath="tDate" bgcolor="0xFFFFFF" height="19" >
+					<attribute name="tDate" value="null" />
+					<handler name="ondata" args="d">
+						this.tDate = parseDateOnlyFromXmlString(d.childNodes[0].data);
+						var tStringWeekDay = canvas.dayShortNames[tDate.getDay()];
+						if ($debug) Debug.write("Calc Week day ",tStringWeekDay,this.tDate.getDay(),this.tDate);
+						this.setAttribute("text",canvas.dayShortNames[this.tDate.getDay()]+" "+this.tDate.getDate()+"."+(this.tDate.getMonth()+1)+".");
+					</handler>
+					<handler name="onmouseover">
+						if (!classroot.singleDayView) {
+							this.setAttribute("fontstyle","bold");
+						}
+					</handler>
+					<handler name="onmouseout">
+						if (!classroot.singleDayView) {
+							this.setAttribute("fontstyle","plain");
+						}
+					</handler>
+					<handler name="onclick">
+						if (!classroot.singleDayView) {
+							parent.parent.parent.parent.onSelectDate.sendEvent(this.tDate);
+						}
+					</handler>
+				</text>
+				
+			</view>
+			<simplelayout axis="x" spacing="0" />
+		</view>
+		
+		<view name="dragAndDropArea" y="20" width="${ parent.width }" height="${ parent.height-20 }" clip="true">
+			
+			<view name="_content" width="${ parent.width-10 }" height="720" y="${ parent.parent._grid._bgArea._scrollArea.y }">
+				
+			
+			</view>
+			
+		</view>
+		
+		<view name="_grid" y="20" width="${ parent.width }" height="${ parent.height-20 }">
+	
+			<view name="_bgArea" width="${ parent.width }" height="${ parent.height }" clip="true" bgcolor="0xDDDDDD">
+		
+				<view name="_scrollArea" width="${ parent.width-10 }" height="721" >
+				
+					<handler name="oninit">
+						this.setAttribute("y",parent.height-721);
+					</handler>
+					
+					<handler name="ony" args="y">
+						parent.parent.parent.parent.onScollContent.sendEvent(null);
+					</handler>
+				
+					<view name="hours" width="40" height="720" >
+							
+						<view name="dayBg2" resource="calendar_day_hours_index_bg_rsc" />
+						
+						<view>
+							<handler name="oninit">
+								<![CDATA[
+									for (var i=0;i<24;i++) {
+										if (i<10) {
+											new lz.textHourHelper(this,{text:"0"+i+":00"});
+										} else {
+											new lz.textHourHelper(this,{text:i+":00"});
+										}
+									}
+								]]>
+							</handler>
+							<simplelayout axis="y" />
+						</view>
+							
+					</view>
+					
+					<view width="1" />
+					
+					<!-- The days -->
+					<view name="days" datapath="days" width="${ (parent.width-41)/classroot.daysPerWeek }" 
+								height="720" bgcolor="0xDDDDDD" >
+								
+						<attribute name="dayDate" value="null" />
+								
+						<handler name="oninit">
+							if (classroot.singleDayView) {
+								this.setAttribute("datapath","days["+classroot.currentDay+"]");
+							}
+							lz.Track.register(this, classroot.dayViewTrackGroup);
+						</handler>
+						
+						<handler name="onmousetrackover">
+							if (!classroot.currentDragEvent.dragEndOnly) {
+					        	classroot.currentOverTrackView = this;
+					        }
+					    </handler>
+					
+					    <handler name="onmousetrackout">
+					    	//We do not track out cause otherwise the dragging view would be at undefined position
+					    </handler>
+					    
+					    <handler name="onmousetrackup">
+					        this._content.setAttribute('bgcolor', 0xFFFFFF);
+					    </handler>
+						
+						<handler name="ondata" args="d">
+							if(d is lz.DataNodeMixin){
+								var lzDataPointer = new lz.datapointer();
+								lzDataPointer.setPointer(d);
+								var xmlDate = lzDataPointer.xpathQuery('tDate/text()');
+								var splitDate = xmlDate.split("-");
+								this.dayDate = new Date(splitDate[0], Number(splitDate[1])-1, splitDate[2]);
+							}
+						</handler>
+						
+						<view name="_content" width="${ parent.width -1 }" bgcolor="0xFFFFFF"
+										height="720" clickable="true" showhandcursor="false">
+										
+							<attribute name="lzCalGridTempDrawView" value="null" />
+							
+							<handler name="onmousedown">
+								<![CDATA[
+									var heightInMinutes = this.height/1440;
+									//round by 30 minutes
+									var tPixels30Minutes = heightInMinutes*30;
+									var tStarty = this.getMouse("y");
+									tStarty = Math.round(tStarty/tPixels30Minutes)*tPixels30Minutes;
+									this.lzCalGridTempDrawView = new lz.lzCalGridTempDrawView(this,{
+																			y:tStarty,
+																			starty:tStarty,
+																			height:tPixels30Minutes,
+																			heightInMinutes:heightInMinutes,
+																			tPixels30Minutes:tPixels30Minutes
+																		});
+								]]>								
+							</handler>
+							
+							<handler name="onmouseup">
+								if (this.lzCalGridTempDrawView != null) {
+									var tStartDate = new Date();
+									//clone Date to have day and month
+									tStartDate.setTime(parent.dayDate.getTime());
+									var startMinutesTotal = this.lzCalGridTempDrawView.getStartMinutesTotal();
+									tStartDate.setHours(Math.floor(startMinutesTotal/60));
+									tStartDate.setMinutes(startMinutesTotal-(tStartDate.getHours()*60));
+									
+									var tEndDate = new Date();
+									//clone Date to have day and month
+									tEndDate.setTime(parent.dayDate.getTime());
+									var endMinutesTotal = this.lzCalGridTempDrawView.getEndMinutesTotal();
+									tEndDate.setHours(Math.floor(endMinutesTotal/60));
+									tEndDate.setMinutes(endMinutesTotal-(tEndDate.getHours()*60));
+								
+									this.lzCalGridTempDrawView.destroy();
+									this.lzCalGridTempDrawView = null;
+									
+									classroot.parent.selectStartEndDateTime(tStartDate,tEndDate);
+								}
+							</handler>
+							
+							<!--
+								Detect events that are parallel
+							 -->
+							<method name="calcWidthFactors" args="tItem">
+								<![CDATA[
+									for (var eg in this.subviews) {
+										if (this.subviews[eg] == tItem) {
+											continue;
+										}
+										if (!this.subviews[eg].event) {
+											continue;
+										}
+										
+										//if ($debug) Debug.write("Cond1 ",(this.subviews[eg].y + this.subviews[eg].height >= tItem.y));
+										//if ($debug) Debug.write("Cond2 ",(this.subviews[eg].y <= tItem.y + tItem.height));
+										
+										if (this.subviews[eg].y + this.subviews[eg].height >= tItem.y 
+												&& this.subviews[eg].y <= tItem.y + tItem.height) {
+											
+											var newWidthFactor = this.subviews[eg].widthFactor+1;
+											var newInsetFactor = this.subviews[eg].insetFactor+1;
+											
+											//if ($debug) Debug.write("Found newInsetFactor,newWidthFactor: ",newInsetFactor,newWidthFactor);
+											
+											//fix width	
+											this.subviews[eg].setAttribute("widthFactor",newWidthFactor);
+											tItem.setAttribute("widthFactor",newWidthFactor);
+											
+											//fix x-position
+											if (tItem.y >= this.subviews[eg].y) {
+												//if ($debug) Debug.write("AFTER");
+												tItem.setAttribute("insetFactor",newInsetFactor);
+												this.subviews[eg].sendInFrontOf(this.dayBg2);
+											} else {
+												//if ($debug) Debug.write("BEFORE");
+												this.subviews[eg].setAttribute("insetFactor",newInsetFactor);
+												tItem.sendInFrontOf(this.dayBg2);
+											}
+											
+										}
+									}
+								]]>
+							</method>
+							
+							<view name="dayBg2" resource="calendar_one_day_hours_index_bg_rsc" stretches="width" 
+								width="${ parent.width }"  >
+								<attribute name="event" value="false" type="boolean" /> 
+							</view>
+										
+							<view datapath="appointments" bgcolor="0xA59CFC" 
+										x="${ (parent.width/this.widthFactor) * insetFactor }"
+										width="${ parent.width/this.widthFactor }" height="60">
+								
+								<attribute name="event" value="true" type="boolean" /> 
+								
+								<attribute name="rememberX" value="-1" />
+								<attribute name="rememberY" value="-1" />
+								<attribute name="mouseUpDetect" value="false" type="boolean"/>
+								<attribute name="startedToDrag" value="false" type="boolean"/>
+								
+								<attribute name="widthFactor" value="1" type="number"/>
+								<attribute name="insetFactor" value="0" type="number"/>
+							
+								<handler name="ondata" args="d">
+									<![CDATA[
+										if (classroot.reRenderLock) {
+											if ($debug) Debug.info("Prevent un-neccessary Rendering!");
+											return;
+										}
+										this.setAttribute("visibility","visible");
+										var dataPointer = new lz.datapointer();
+										dataPointer.setPointer(d);
+										var startDate = parseDateTimeFromXmlString(dataPointer.xpathQuery('start/text()'));
+										var endDate = parseDateTimeFromXmlString(dataPointer.xpathQuery('end/text()'));
+										
+										if ($debug) Debug.write("COMPARE -- ",startDate,endDate);
+										
+										var heightInMinutes = parent.height/1440;
+										var startMin = (startDate.getHours() * 60 ) + startDate.getMinutes();
+										this.setAttribute("y",Math.round(heightInMinutes*startMin));
+										
+										if (endDate.getFullYear() > startDate.getFullYear() 
+												|| endDate.getMonth() > startDate.getMonth()
+													|| endDate.getDate() > startDate.getDate()) {
+											//If the end date is next year or month or day we need
+											//to mark the rest of the day with the event
+											this.setAttribute("height",parent.height-this.y);
+										} else {
+											var endMin = (endDate.getHours() * 60 ) + endDate.getMinutes();
+											this.setAttribute("height",Math.round((endMin - startMin)*heightInMinutes));
+										}
+										if ($debug) Debug.write("y,height -- ",this.y,this.height);
+										parent.calcWidthFactors(this);
+									]]>
+								</handler>
+								
+								<handler name="onmousedown">
+									this.mouseUpDetect = false;
+									this.startedToDrag = false;
+									this.rememberX = this.getMouse("x");
+									this.rememberY = this.getMouse("y");
+									lz.Timer.addTimer( new LzDelegate( this, "checkIfDragging" ), 250 );
+								</handler>
+								
+								<handler name="onmouseup" >
+									<![CDATA[
+										if (this.rememberX == this.getMouse("x")
+												&& this.rememberY == this.getMouse("y")) {
+											this.mouseUpDetect = true;
+											var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
+											if ($debug) Debug.write("click ",appointmentId);
+											classroot.parent.selectCalendarEvent(this);
+										}
+									]]>
+								</handler>
+								
+								<method name="closeDragItem">
+									<![CDATA[
+										var appointmentId = -1;
+										lz.Track.deactivate(classroot.dayViewTrackGroup);
+										
+										//Fixme: Prevent saving the object if it is dragged 
+										//at the exact same position as it was before
+										appointmentId = Number(this.datapath.xpathQuery('appointmentId/text()'));
+										
+										classroot.currentDragEvent = null;
+										return appointmentId;
+									]]>
+								</method>
+								
+								<method name="checkIfDragging" args="tRef">
+									<![CDATA[
+										if (this.mouseUpDetect) {
+											return;
+										}
+										if (this.rememberX == this.getMouse("x")
+													&& this.rememberY == this.getMouse("y")) {
+											lz.Timer.addTimer( new LzDelegate( this, "checkIfDragging" ), 250 );			
+										} else {
+											this.startDragItem(false);
+										}
+									]]>
+								</method>
+								
+								<method name="startDragItem" args="dragEndOnly">
+									<![CDATA[
+										//we need to move the object by the y position that the mouse
+										//was moved since mousedown
+										var tNewY = this.y + (this.getMouse("y") -  this.rememberY);
+									
+										this.startedToDrag = true;
+										classroot.currentOverTrackView = parent.parent;
+										classroot.currentDragEvent = new lz.dragEvent(classroot.dragAndDropArea._content,{
+													x:(dragEndOnly) ? this.getAttributeRelative('x',parent.parent.parent.parent) : parent.parent.parent.x,
+													startx:(dragEndOnly) ? this.getAttributeRelative('x',parent.parent.parent.parent) : parent.parent.parent.x,
+													y:(dragEndOnly) ? this.y : tNewY,
+													starty:this.y,
+													bgcolor:this.bgcolor,
+													height:this.height,
+													startheight:this.height,
+													width:(dragEndOnly) ? this.width : parent.width,
+													eventRef:this,
+													showTime:false,
+													titleText:this._title.text,
+													calendarViewRef:classroot,
+													dragEndOnly:dragEndOnly
+												});
+												
+										lz.Track.activate(classroot.dayViewTrackGroup);
+										this.setAttribute("visibility","hidden");
+									]]>
+								</method>
+								
+								<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" clip="true" 
+										width="${ parent.width-2 }" multiline="true" height="${ parent.height }"/>
+								
+								
+								<view width="20" height="4" valign="bottom" align="center" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
+									<handler name="onmouseover">
+										lz.Cursor.setCursorGlobal('calendar_change_event_height_rsc');
+									</handler>
+									<handler name="onmouseout">
+										lz.Cursor.restoreCursor(); 
+									</handler>
+									<handler name="onmousedown">
+										parent.startDragItem(true);
+									</handler>
+								</view>
+								
+							</view>
+						</view>
+						
+					</view>
+					
+					<simplelayout axis="x" spacing="0" />
+					
+				</view>
+				
+				<om_vscrollbar />
+				
+			</view>
+			
+		</view>
+		
+	</class>
+	
+</library>

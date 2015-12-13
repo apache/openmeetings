@@ -1,0 +1,66 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- 
+The canvas is the container for all views within an application.
+
+The lz.canvas class represents the viewable area of the application. There is one instance of lz.canvas, named canvas. The canvas contains all views within an application.
+
+The <canvas> tag is the document root of an LZX application file. It contains class, resource, and font definitions, library includes, and view and other instances.
+
+See the Guide for a complete discussion of the <canvas> tag. 
+ -->
+<class name="canvas" isRoot="true" extends="view">
+
+	<!--- Whether fullscreen display state is supported for the SWFx runtimes. -->
+	<attribute name="allowfullscreen" type="boolean"/>
+	<!---  A String specifying the date and time of the application build. "2008-09-12T14:15:12Z" -->
+    <attribute name="appbuilddate" type="string"/>
+    <!---   If present, specifies the default timeout in milliseconds for data load requests -->
+    <attribute name="dataloadtimeout" type="number"/>
+    <!---   Dictionary of all named datasets. -->
+    <attribute name="datasets" type="string"/>
+    <!--- 
+defaultdataprovider is bound to the system default DataProvider.
+By default, this will be an instance of LzHTTPDataProvider, which will also be pointed to by the canvas.httpdataprovider. -->
+    <attribute name="defaultdataprovider" type="string"/>
+    <!---   Whether to embed fonts in the compiled application. -->
+    <attribute name="defaultdataprovider" type="string"/>
+    <!--- The framerate that should be used for this application -->
+    <attribute name="framerate" type="number"/>
+    <!---   Used to switch into fullscreen display mode or back to normal display. -->
+    <attribute name="fullscreen" type="boolean"/>
+    <!---   
+httpdataprovider is bound to the system default HTTP DataProvider.
+This will be an instance of LzHTTPDataProvider, which implements HTTP request transport. The default value of the canvas.defaultdataprovider is initially set to point to this same object. -->
+    <attribute name="httpdataprovider" type="string"/>
+    <!---   A String specifying the LPS build revision and the build directory: e.g. "4075 /Users/maxcarlson/openlaszlo/legals" -->
+    <attribute name="lpsbuild" type="string"/>
+    <!---   A String specifying the date and time of the LPS build. "2007-03-05T15:33:42-0800" -->
+    <attribute name="lpsbuilddate" type="string"/>
+    <!---   release of the LPS that generated this application (for .lzo files, this is the release of the server that generated the optimized file, not the one that served it). -->
+    <attribute name="lpsrelease" type="string"/>
+    <!--- version number of the LPS that generated this application (for .lzo files, this is the version number of the server that generated the optimized file, not the one that served it). -->
+    <attribute name="lpsversion" type="string"/>
+    <!---   If present, specifies the default timeout in milliseconds for media errors. An error occurs when no bytes have been received. This is used in Flash to detect media loads that have failed due to the security policy. -->
+    <attribute name="mediaerrortimeout" type="number"/>
+    <!---   If present, specifies the default timeout in milliseconds for media load requests -->
+    <attribute name="medialoadtimeout" type="number"/>
+    <!---   A number from 0-1 that represents the percentage of the app that has been instantiated.  -->
+    <attribute name="percentcreated" type="number"/>
+    <!--- If true, requests for data and media are proxied through LPS server. if false, requests are made directly to target URLs. if inherit, inherit from lzproxied query arg. -->
+    <attribute name="proxied" type="string"/>
+    <!---   A String describing the target runtime. "dhtml" | "swf8" | "swf9" | "swf10" are currently supported. Others are in development.-->
+    <attribute name="runtime" type="string"/>
+    <!---   Used to tell what the screen orientation is, 'portrait' or 'landscape' -->
+    <attribute name="screenorientation" type="boolean"/>
+    <!---   A CSS declaration of property: value pairs used to advise the underlying runtime of desired recursion and timeout limits. Not all runtimes respect this advice. The default value is runtime dependent, but typically recursion is at least 100 and timeout at least 10 (seconds). Example: scriptlimits="recursion: 256, timeout: 15"-->
+    <attribute name="scriptlimits" type="string"/>
+    
+    <attribute name="debug" value="boolean" />
+    
+    <attribute name="title" value="string" />
+    	
+</class>
+
+</library>

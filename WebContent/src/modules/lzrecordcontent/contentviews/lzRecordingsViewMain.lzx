@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordingsViewMain" extends="basePropertyPanelWhiteboard" labelid="858" allowToggle="false"
+           x="${ parent._navigationArea.width + parent._navigationArea.x }"
+           height="${ canvas.height - canvas.naviHeightDelta - parent._recordingsViewBottom.height }"
+          width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
+        
+        <attribute name="recordingName" value="" type="string"/>
+        
+        <!---
+        isPaused is true if a video is running but paused
+         -->
+        <attribute name="isPaused" value="false" type="boolean"/>
+        
+        <!--- 
+            Shows if there is currently a video running
+         -->
+        <attribute name="timerDelegateStarted" value="false" type="boolean"/>
+        
+        <attribute name="recordingLog" value="" type="string"/>
+        
+        <attribute name="deltaInSeconds" value="0" type="number"/>
+        
+        <!-- invoked after the connection in the audio/video container was closed -->
+        <event name="onRecordingStoppedAndDisconnected" />
+        
+        <method name="connect">
+        	this._content._videostream.connect();
+        </method>
+        
+        <method name="showLog">
+        	if ($debug) Debug.write("getFlvRecordingLog flvRecordingId ",this.getFlvRecordingLog.flvRecordingId);
+        	this.getFlvRecordingLog.doCall();
+        </method>
+        
+        <netRemoteCallHib name="getFlvRecordingLog" funcname="flvrecorderservice.getFlvRecordingLog" 
+            remotecontext="$once{ canvas.thishib }" showLoading="false"> 
+            <attribute name="flvRecordingId" value="0" type="number"/>  
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.flvRecordingId;</method></netparam>
+            <handler name="ondata" args="value">    
+                <![CDATA[
+                    var tLogString = "";
+                    var headerMessage = "<br/>"+canvas.getLabelName(889);
+                    for (var i = 0;i<value.length;i++) {
+                        
+                        tLogString += headerMessage 
+                                    + parseDateToStringTimeSeconds(value[i].inserted)
+                                    + '<br/>'
+                                    + value[i].msgType
+                                    + '<br/>'
+                                    + value[i].fullMessage
+                                    + '<br/>'
+                                    + value[i].exitValue
+                                    + '<br/>';
+                        
+                    }
+                    
+                    if ($debug) Debug.write("getFlvRecordingLog: ");
+                    
+                    new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:903});
+                ]]>
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="restartConversion" args="left,right,leftTime,rightTime">
+        	<![CDATA[
+	            if ($debug) Debug.write("restartConversion ",this.getFlvRecordingLog.flvRecordingId);
+	            
+	            if (left == "" || right == "" || leftTime == "" || rightTime == "") {
+	            	new lz.labelerrorPopup(canvas,{
+			            		error:'You have to set at least 0 as value for Left, Right, Time'
+			            	});
+	            	return;
+	            }
+	            
+	            this.restartInterviewConversion.left = Number(left);
+	            this.restartInterviewConversion.right = Number(right);
+	            
+	            this.restartInterviewConversion.leftTime = Math.round(Number(leftTime));
+	            this.restartInterviewConversion.rightTime = Math.round(Number(rightTime));
+	            
+	            if ($debug) Debug.write("this.restartInterviewConversion.left :: ",this.restartInterviewConversion.left);
+	            if ($debug) Debug.write("this.restartInterviewConversion.right :: ",this.restartInterviewConversion.right);
+	            
+	            this.restartInterviewConversion.doCall();
+            ]]>
+        </method>
+        
+        <netRemoteCallHib name="restartInterviewConversion" funcname="flvrecorderservice.restartInterviewConversion" 
+            remotecontext="$once{ canvas.thishib }" showLoading="false"> 
+            <attribute name="flvRecordingId" value="0" type="number"/>
+            <attribute name="left" value="0" type="number"/>  
+            <attribute name="right" value="0" type="number"/>
+            <attribute name="leftTime" value="0" type="number"/>
+            <attribute name="rightTime" value="0" type="number"/>         
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.flvRecordingId;</method></netparam>
+            <netparam><method name="getValue">return parent.left;</method></netparam>
+            <netparam><method name="getValue">return parent.right;</method></netparam>
+            <netparam><method name="getValue">return parent.leftTime;</method></netparam>
+            <netparam><method name="getValue">return parent.rightTime;</method></netparam>
+            <handler name="ondata" args="value">    
+                if ($debug) Debug.write("restartInterviewConversion: ",value);
+                new lz.errorPopup(canvas,{error:"Re-Sampling Started, that can take some time, click on the Interview to get the status "});
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="setNewStream" args="recording">
+        	<![CDATA[
+        	
+        		this.stopStream();
+        	    this.isPaused = false;
+        	    
+        	    var hasFailed = false;
+        			
+    			var tLogString = "";
+    			var headerMessage = "<br/>"+canvas.getLabelName(889);
+    			
+    			this.recordingLog = "";
+    			
+    			this.recordingName = recording.fileHash;
+    			
+    			this.getFlvRecordingLog.flvRecordingId = recording.flvRecordingId;
+    			this.restartInterviewConversion.flvRecordingId = recording.flvRecordingId;
+    			
+    			//Check if recording is not yet completed or if it has failed
+    			// *** This is disabled for now as the Log can grow too big ***
+    			for (var i = 0;i<recording.flvRecordingLog.length;i++) {
+    				
+    				if (recording.flvRecordingLog[i].exitValue != "0") {
+    					
+    					hasFailed = true;
+    					tLogString += headerMessage 
+    								+ parseDateToStringTimeSeconds(recording.flvRecordingLog[i].inserted)
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].msgType
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].fullMessage
+    								+ '<br/>';
+    					
+    				}
+    				
+    				this.recordingLog += headerMessage 
+    								+ parseDateToStringTimeSeconds(recording.flvRecordingLog[i].inserted)
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].msgType
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].fullMessage
+    								+ '<br/>';
+    				
+    			}
+    			
+    			if (hasFailed) {
+    				
+    				if ($debug) Debug.write("tLogString "+tLogString);
+					//var tString = canvas.getLabelName(887) + tLogString;
+					
+					new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:887});
+					
+				} 
+				
+				if (recording.previewImage != null && recording.previewImage != "") {
+					
+	            	this.recordingName = recording.fileHash;
+	            	
+	            	this._content.initW = recording.flvWidth;
+	            	this._content.initH = recording.flvHeight;
+	            	
+	            	var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+recording.previewImage
+	                            +'&moduleName=lzRecorderApp&parentPath=&room_id='
+	                            +'&sid='+canvas.sessionId;
+	                
+	                if($debug) Debug.write("lzRecorder/downloadurl "+downloadurl);
+	            	
+	            	this._content._preview.imagePreview.setAttribute("src",downloadurl)
+	            	
+	            	this._content._preview.bringToFront();
+	            	
+	            	this._content.setItemContraints(0);
+	            	
+	            	this.deltaInSeconds = Math.round((recording.recordEnd.getTime() - recording.recordStart.getTime())/1000);
+	                
+	                if ($debug) Debug.write("deltaInSeconds ",this.deltaInSeconds);
+	                
+	                var minutes = Math.floor(this.deltaInSeconds/60);
+	                
+	                if ($debug) Debug.write("minutes ",minutes);
+	                
+	                var restSeconds = this.deltaInSeconds - ( minutes * 60 );
+	                
+	                this._progress._progressbar._duration.setAttribute("text",minutes+" min "+restSeconds+" sec");
+                
+        		} else {
+        			
+        			var error = canvas.getLabelName(888);
+        			
+        			if (recording.isInterview) {
+        				error += "<br/>" + canvas.getLabelName(919) + " " + recording.progressPostProcessing + "%";
+        			}
+        			
+    				new lz.labelerrorPopup(canvas,{error:error});
+        			
+        		}
+            	
+        	]]>
+        </method>
+        
+        <method name="calcProgressBar">
+        	<![CDATA[
+        	
+        	   var flvTime = this._content._videostream.getTime();
+        	   
+        	   if ($debug) Debug.write("flvTime :calcProgressBar: ",flvTime);
+        	   parent._recordingsViewBottom.showProgress(flvTime);
+        	   
+        	   this._progress._progressbar._pointer.setAttribute("visibility","visible");
+        	   
+        	   var tString = "";
+        	   
+        	   if (flvTime > 60) {
+        	   	
+        	   	   var minutes = Math.floor(flvTime/60);
+        	   	   
+        	   	   var restSeconds = Math.round(flvTime) - ( minutes * 60 );
+        	   	   
+        	   	   tString = minutes + " min " + restSeconds + " sec";
+        	   	
+        	   } else {
+        	   	
+        	   	   tString = Math.round(flvTime) + " sec";
+        	   
+        	   }
+        	   
+        	   this._progress._progressbar._time.setAttribute("text",tString);
+        	   
+        	   var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * flvTime);
+        	
+        	   this._progress._progressbar._pointer.setAttribute("x",tNewX);
+        	   
+        	]]>
+        </method>
+        
+        <method name="startStream">
+        	
+        	if ($debug) Debug.write("startStream ",this.recordingName);
+        	
+        	if (this.recordingName != "") {
+        		
+        		this.isPaused = false;
+        		
+        		if (!this.timerDelegateStarted) {
+        			this.timerDelegateStarted = true;
+                }
+                
+            	this._content._videostream.bringToFront();
+                this._content._videostream.playStream(this.recordingName,0);
+        	}
+        </method>
+        
+        <method name="toggleStream">
+        	if (this.timerDelegateStarted) {
+        		this.pauseStream();
+        	} else {
+        		this.startStream();
+        	}
+        </method>
+        
+        <method name="pauseStream">
+        	this.isPaused = !this.isPaused;
+        	this._content._videostream.pause(this.isPaused);
+        </method>
+        
+        <method name="seekStream" args="newX">
+            <![CDATA[
+        	
+                if ($debug) Debug.write("seekStream ",newX);
+        	
+                if (this.timerDelegateStarted) {
+        	   	
+                    var flvTime = Math.round( newX / (this._progress._progressbar.width / this.deltaInSeconds) );
+                    
+                    if ($debug) Debug.write("seekStream :: this.deltaInSeconds ",this.deltaInSeconds);
+                    
+                    if ($debug) Debug.write("seekStream :: flvTime ",flvTime);
+                    
+                    this._content._videostream.seek(flvTime);
+        	   	
+                }
+        	
+            ]]>
+        </method>
+        
+        <method name="stopStreamAndCloseRecorder">
+        	this._stopStream();
+            this._content._videostream.stopAndCloseConnection();
+        </method>
+        
+        <method name="stopStream">
+            this._stopStream();
+            this._content._videostream.stop();
+        </method>
+        
+        <!---
+            @keywords private
+         -->
+        <method name="_stopStream">
+        	if (this.timerDelegateStarted) {
+                this.timerDelegateStarted = false;
+            }
+        	parent._recordingsViewBottom.stopProgress();
+            this._progress._progressbar._time.setAttribute("text","");
+            this._progress._progressbar._pointer.setAttribute("x",0);
+        </method>
+        
+        <view name="_content" height="${ parent.height-22-18 }" y="22">
+        	
+    	    <attribute name="initH" value="480" type="number" />
+            <attribute name="initW" value="640" type="number" />
+    
+    	    <handler name="oninit">
+                <![CDATA[
+                    var prop2 = [this, "height"];
+                    this.applyConstraintMethod("setItemContraints", prop2);
+                    this.setItemContraints(0);
+                ]]>
+            </handler>
+            
+            <method name="setItemContraints" args="w">
+                <![CDATA[
+                    var w = this.height * this.initW/this.initH;
+                    this.setAttribute("width",w);
+                ]]>
+            </method>
+            
+            <view name="_preview" width="${parent.width}" height="${parent.height}" bgcolor="0x000000">
+            	<image name="imagePreview" stretches="both"
+            		   width="${parent.width}" height="${parent.height}" />
+                <handler name="onclick">
+                	if ($debug) Debug.write("onclick -- toggleStream");
+                    parent.parent.toggleStream();
+                </handler>		   
+                <view width="60" height="40" valign="middle" opacity="0.7"
+                	  align="center" bgcolor="0xFFFFFF">
+                	<view resource="lz_recorder_play" valign="middle" align="center" />
+                </view>
+            </view>
+            
+            <lzRecordingsViewAdapter name="_videostream" width="${parent.width}" height="${parent.height}">
+            	
+            	<handler name="onwidth" args="w">
+            		this.updateRecordingVideoPosition();
+            	</handler>
+            	
+            	<handler name="onheight" args="h">
+            		this.updateRecordingVideoPosition();
+            	</handler>
+            	
+            	<handler name="onUpdateRecordingStreamTime">
+            		if ($debug) Debug.write("onUpdateRecordingStreamTime ");
+            		parent.parent.calcProgressBar();
+            	</handler>
+            	
+            	<handler name="onTogglePlayRecordingStream">
+            		if ($debug) Debug.write("onTogglePlayRecordingStream ");
+            		parent.parent.toggleStream();
+            	</handler>
+            	
+            	<handler name="onRecordingStoppedAndDisconnected">
+            		if ($debug) Debug.write("onRecordingStoppedAndDisconnected ");
+            		parent.parent.onRecordingStoppedAndDisconnected.sendEvent();
+            	</handler>
+            	
+            </lzRecordingsViewAdapter>
+            
+        </view>
+        
+        <view name="_progress" height="18" valign="bottom" width="${ parent.width }"
+        	                   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+        	
+        	<view resource="flv_recorder_play_small_rsc" y="1" height="16" width="16"
+        		      bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+        		<handler name="onmouseover">
+                    this.setAttribute("bgcolor",0xFFFFFF);
+                </handler>
+                <handler name="onmouseout">
+                    this.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
+                </handler>
+        		<handler name="onclick">
+        			parent.parent.startStream();
+        		</handler>
+        		<labelTooltip labelid="875" />
+        	</view>
+        	
+        	<view name="_progressbar" x="16" width="${ parent.width - 32 }" y="1" 
+        		  height="16" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+        		
+        		<view x="0" width="${ parent.width }" y="0" height="16" bgcolor="0xFFFFFF" opacity="0.5" /> 
+        		
+        		<handler name="onclick">
+        			parent.parent.seekStream(this.getMouse("x"));
+        		</handler>
+        		
+        		<view name="_pointer" resource="flv_progress_pointer_rsc" visibility="hidden" />
+        		
+        		<text name="_time" resize="true" fontsize="10" />
+        		
+        		<text name="_duration" align="right" resize="true" fontsize="10" />
+        		
+        	</view>
+        	
+        	<view resource="flv_recorder_stop_small_rsc" align="right" y="1" height="16" width="16"
+        		  bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+        		<handler name="onmouseover">
+        			this.setAttribute("bgcolor",0xFFFFFF);
+        		</handler>
+        		<handler name="onmouseout">
+                    this.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
+                </handler>
+                <handler name="onclick">
+                    parent.parent.stopStream();
+                </handler>
+                <labelTooltip labelid="876" />
+            </view>
+        	
+        </view>
+        
+</class>
+
+
+
+</library>

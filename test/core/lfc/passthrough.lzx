@@ -1,0 +1,35 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!--- Provides a way to import SWF10 declarations. -->
+<class name="passthrough" extends="false">
+	<!--
+	The possible compile time constants are:
+
+    $runtime : string
+    $swf7 : boolean
+    $swf8 : boolean
+    $as2 : boolean
+    $swf9 : boolean
+    $swf10 : boolean
+    $as3 : boolean
+    $dhtml : boolean
+    $j2me : boolean
+    $svg : boolean
+    $js1 : boolean
+    $debug : boolean
+    $profile : boolean
+    $backtrace : boolean
+
+
+     <class name="microphone" extends="mediadevice">
+    <passthrough when="$as3">
+        import flash.media.*;
+    </passthrough>
+    
+	 -->
+	<attribute name="when" type="string"/>
+	
+</class>
+
+</library>

@@ -1,0 +1,34 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            
+<!--- Sets an attribute of the object that contains it. -->
+<class name="attribute" extends="false">
+	<!--- One of:
+class
+    The attribute will be an attribute of the class; to refer to it, you say lz.classname.attributename . 
+instance
+    Each instance will have an attribute with the specified properties ( name , type , value , etc.). 
+
+You can set allocation to class to get static attributes. Static properties are attached to the class itself, for example lz.classname . -->
+    <attribute name="allocation" type="string" value="instance|class" />
+	<!--- The name of the attribute. -->
+	<attribute name="name" type="token" required="true"/>
+	<!--- True if this is a required attribute. -->
+	<attribute name="required" type="boolean" value="false" />
+	<!--- The CSS property name that can be used to set the value of this attribute under the control of a <stylesheet> (See Chapter 19. Cascading Style Sheets ). style can be any valid CSS property name, and need not be the same as the attribute name; for example you could use the standard CSS property name background-color as the style of the bgcolor attribute. When an attribute has a style property, the value property acts as the default value for the attribute: in the absence of any applicable CSS rule specifying the corresponding property, the attribute will be given the default value. In the case of dynamic CSS, the attribute will revert to the default value if CSS was applied and is removed. (See Dynamic CSS .) -->
+	<attribute name="style" value="string"/>
+	<!-- The type of the attribute. 
+	Possible value:    "boolean" | "color" | "expression" | "number" | "size" | "string" | "text" | "html" 
+	
+	This determines how the value is parsed. Attributes of type string are automatically quoted if when="immediate", for any other value of when, a literal string would have to be quoted to be used as a value. -->
+	<attribute name="type" type="expression" value="string"/>
+	<!---  The initial value of the attribute. The type of this value is specified by the value of the type attribute; if that attribute is not present, it's the type of this attribute in this element's tag. The attribute is given this value when the element is created. -->
+	<attribute name="value" />
+	
+	<!--- Delegate the event to a method on changes through setAttribute('...',$value) -->
+	<attribute name="setter" value="string" />
+	
+</class>
+
+</library>

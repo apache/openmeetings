@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Logged-in User Profile Panel on the dashboard -->
+<class name="profilesPanel" extends="view" width="500" height="224" y="0" >
+	
+	<view y="10" x="0" width="$once{ parent.width-2 }" 
+		  height="$once{ parent.height-10 }" clip="true">
+	
+	<handler name="oninit">
+        <![CDATA[
+            this.homepage.setAttribute('text', this.formatLinkText(canvas.getLabelName(286)));
+            this.homepage.setAttribute('link',canvas.getLabelName(282));
+            this.mailing.setAttribute('text',this.formatLinkText(canvas.getLabelName(287)));
+            this.mailing.setAttribute('link',canvas.getLabelName(283));
+            this.testing.setAttribute('text',this.formatLinkText(canvas.getLabelName(1527)));
+            this.testing.setAttribute('link',canvas.getTestingUrl());
+        ]]>
+    </handler>
+        	
+    <handler name="oninit">
+        <![CDATA[
+        	this.getNumberUnreadMessages.doCall();
+			this.getUserSelf.doCall();
+        ]]>
+    </handler>
+
+    <method name="formatLinkText" args="text">
+        <![CDATA[
+            return "<u><FONT color='#0000CC'>"+text+"</FONT></u>";
+        ]]>
+    </method>
+
+    <netRemoteCallHib name="getNumberUnreadMessages" funcname="userservice.getNumberUnreadMessages" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+				if($debug) Debug.write("dashboard/getNumberUnreadMessages: ",value);
+				parent._newmessages._text.setAttribute("text","<u>"+value+"</u>");
+	        ]]>
+    	</handler>
+  	</netRemoteCallHib>	    
+   
+   
+  	<netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+				if($debug) Debug.write("dashboard/getUserSelf: ",value);
+				parent._username.setAttribute('text',canvas.getLabelName(376)+" "+value.firstname+' '+value.lastname);
+				
+				if (value.adresses != null && value.adresses.town != null) {
+					parent._langAndCountry._town.setAttribute("text","<u>" + value.adresses.town + "</u>");
+				}
+				if (value.omTimeZone != null) {
+					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.jname + "</u>");
+					canvas.timeZoneId = value.omTimeZone.omtimezoneId;
+				}
+		        parent._userpic.setAttribute('src', canvas.getPictureUrl(value.pictureuri, '&moduleName=userprofile'));
+	        ]]>
+    	</handler>
+  	</netRemoteCallHib>	    
+    
+    <view y="2" x="4" name="_imageProfileBG1" width="128" height="128" 
+    				bgcolor="0xFFFFFF" opacity="0.5" >
+    </view>
+    
+   	<image name="_userpic" y="2" x="4" >
+   
+    	<handler name="onload" args="d">
+            <![CDATA[
+                if (this.height > 116) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/116);
+                    this.setAttribute('height',116);
+                    this.setAttribute('width',width);
+                }
+                if (this.width > 116) {
+                	//If bigger then containter then scale it
+                    var height = this.height/(this.width/116);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',116);
+                }
+                if($debug) Debug.write("onload ",this.height,this.width,d.height,d.width);
+                
+                //makes sure bottom area is updated
+                //this._changeSize.setAttribute('y',this.height-20);
+                //this._changeSize.setAttribute('width',this.width);
+            ]]>
+        </handler>
+    	
+    </image>
+    
+    <view y="2" x="4" name="_imageProfileBG2" width="128" height="128" >
+	    
+	    <view name="_changeSize" height="48" width="128" y="80" bgcolor="0xFFFFFF" opacity="0.6">
+   			<labelText labelid="379" align="center" />
+    		<handler name="onclick">
+        		<![CDATA[
+		        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+		                            x:300,uploadmodule:'userprofile',
+		                            isOnlyProfile:true,
+		                            returnObj:this,
+		                            servletName:'upload.upload'
+		                        });
+	        	]]>
+	        </handler>
+	        <method name="sendRefresh">
+	        	parent.parent.getUserSelf.doCall();
+	        </method>
+	    	<labelTooltip labelid="379" />
+    	</view>
+    
+    </view>
+
+    
+    <labelText name="_username" fontstyle="bold" y="2" labelid="376" x="140" />
+    
+    <view name="_langAndCountry" layout="axis:x;spacing:2" y="20" x="140">
+    	<labelText name="_town" fgcolor="0x0000CC">
+	    	<handler name="onclick">
+	        	canvas.userSettingsModuleOpt = "userProfile";
+	            quicklinkAct("userSettingsModule");
+	        </handler>
+	    </labelText>
+	    <labelText labelid="1143" />
+	    <labelText name="_timeZone" fgcolor="0x0000CC">
+	    	<handler name="onclick">
+	        	canvas.userSettingsModuleOpt = "userProfile";
+	            quicklinkAct("userSettingsModule");
+	        </handler>
+	    </labelText>
+    </view>
+    
+    <view name="_newmessages" layout="axis:x;spacing:2" y="40" x="140">
+	    <labelText name="_label" labelid="378" />
+	    <labelText name="_text" fgcolor="0x0000CC">
+	    	<handler name="onclick">
+	        	canvas.userSettingsModuleOpt = "contactMessages";
+	            quicklinkAct("userSettingsModule");
+	        </handler>
+	    </labelText>
+    </view>
+    
+    <labelText y="60" labelid="377" x="140" width="180" fgcolor="0x0000CC">
+    	<handler name="oninit">
+    		<![CDATA[
+				this.setAttribute("text","<u>..."+canvas.getLabelName(377)+"</u>");
+	        ]]>
+    	</handler>
+    	<handler name="onclick">
+        	canvas.userSettingsModuleOpt = "userProfile";
+            quicklinkAct("userSettingsModule");
+        </handler>
+    </labelText>
+             
+    <labelText name="help" fontstyle="bold" x="2"
+               y="$once{parent._imageProfileBG2.y + parent._imageProfileBG2.height}"
+               labelid="281" width="200"/>
+    
+    <labelText name="homepage" x="2" y="$once{parent.help.y + parent.help.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>            
+    </labelText>    
+    
+    <labelText name="mailing" x="2" y="${parent.homepage.y + parent.homepage.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>            
+    </labelText>
+
+    <labelText name="testing" x="2" y="${parent.mailing.y + parent.mailing.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>
+    </labelText>
+              
+	</view>
+	
+</class> 
+
+</library>

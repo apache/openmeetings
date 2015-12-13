@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Howto create a custom room type in OpenMeetings</title>
+		<author email="sebawagner@apache.org">
+            OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Why creating a custom room type in OpenMeetings">
+
+			<p>If you want to create your own styled room the best thing to do in 
+            order to be "update-save" is to create your own custom room type. There is an empty configuration 
+				by default shipped with every release of OpenMeetings, the room type "custom" (ID = 5).<br/>
+				<br/>
+            You can use that and extend it, or you can add more room types to fit your use case.
+			</p>
+			<p></p>
+		</section>
+		
+		<section name="Create your own room type class (User Interface)">
+			
+			<p>Lets start by creating your custom room type class.
+				<br/>
+					You could for example duplicate an existing room class, from <br/>
+					<tt>src/modules/conference/flexibleConferenceRoom</tt> folder, for example the 
+			flexibleConferenceRoom.lzx: Generate a duplicate, change the name, for example to 
+			myCustomConferenceRoom.lzx and edit the class name inside the file name="flexibleConferenceRoom" to
+			name="myCustomConferenceRoom". Also don't miss to add an entry to library.lzx so that the compiler 
+			will find your new class.
+			</p>
+			
+		</section>
+        
+		<section name="Create nesseccary entries in configuration tables">
+        	
+			<p>You first need to create a number of configuration files </p>
+			<ul>
+				<li>To have your roomtype available everytime you install OpenMeetings you need to add 
+					it to the default rooms: <tt>ImportInitvalues.java Method: loadDefaultRooms()</tt>. Add your entry here. 
+				You can choose any random name for the room. The ID is the important trigger for the room type 
+				to identify later. You need to run the installer so that your new room type is in the database.</li>
+				
+				<li>Add your room type in the default module configuration: 
+					<tt>src/base/moduleConfiguration.lzx</tt>, 
+				here you need to add a default class name for your room type </li>
+				
+				<li>Add your room type in the real configuration: config.xml, add a new entry.
+					<br/>
+					You should fix also the file <tt>openmeetings-config.xsd</tt> that is the Schema file for the config.xml.
+				</li>
+        		
+				<li>Add a parser entry to modify the room type mapping: 
+					<tt>base/mainMethods.lzx method: myinit</tt>. You 
+        		can see some example parsing, you should add your one similar to the existing room types.</li>
+        		
+			</ul>
+			
+		</section>
+		
+		<section name="Link your room type config with your room type class ">
+			
+			<p>Now you need to make sure that everytime the conference room is created 
+			your new class "myCustomConferenceRoom" is used. There are 3 places you need to add your mapping.</p>
+			
+			<ul>
+				<li>In the global mapping: 
+					<tt>base/mainMethods.lzx method name="setRoomValues"</tt> 
+				</li>
+				<li>In file: 
+					<tt>modules/conference/conference/roomListItem.lzx method name="initRoom"</tt> 
+				</li>
+				<li>In file: 
+					<tt>modules/invitation/autoloaderBarOnly.lzx netRemoteCallHib name="setUsernameAndSession"</tt> 
+				</li>
+			</ul>
+			
+			<p>Thats it. You can add/edit/delete your room with the new room type in the Administration > Rooms interface of 
+			OpenMeetings like any other room.</p>
+			<p>If you need to have this room type available as option in the Calendar UI, you need to add it to the combobox manually.</p>
+			
+		</section>
+		
+		
+
+	</body>
+
+</document>

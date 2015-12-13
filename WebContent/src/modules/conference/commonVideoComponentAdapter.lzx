@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="commonVideoComponentAdapter" extends="node">
+	
+
+    <handler name="oninit">
+    	var t = this;
+        canvas.videoComp_lc.lc_switchMicMuted = function(publicSID, tMute) {
+            if ($debug) Debug.write("lc_switchMicMuted", publicSID, tMute);
+            canvas.thishib.switchMicMuted.setMute(publicSID, tMute);
+        };
+        canvas.videoComp_lc.lc_giveExclusiveAudio = function(publicSID) {
+            if ($debug) Debug.write("lc_giveExclusiveAudio", publicSID);
+            canvas.thishib.giveExclusiveAudio.setExclusiveAudio(publicSID);
+        };
+        canvas.videoComp_lc.as3ConnectionSuccess = function() {
+        	//FIXME: Throws a Null Pointer Exception if the parent view was already destroyed
+        	t.parent.as3ConnectionSuccess();
+        }
+    </handler>
+    
+    <!---
+        Show the popup with the possibility to choose the device settings
+        @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
+        @param interviewPodId the view id
+        @param tx x-position
+        @param ty y-position
+        @param twidth width-position
+        @param theight height-position
+     -->
+    <method name="showDevicePopUpInterview" args="isSyncUpdate,interviewPodId,tx,ty,twidth,theight">
+    	if ($debug) Debug.write("showDevicePopUpInterview ",isSyncUpdate,interviewPodId,tx,ty,twidth,theight);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [isSyncUpdate, true, interviewPodId]);
+    </method>
+    
+    <!---
+        Show the popup with the possibility to choose the device settings
+        @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
+     -->
+    <method name="showDevicePopUp" args="isSyncUpdate">
+    	if ($debug) Debug.write("showDevicePopUp ",isSyncUpdate);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [isSyncUpdate, false, -1]);
+    </method>
+    
+    <!---
+        Invoked after the user enters the room to connect the SWF10 app to the server via rtmp(t/s)
+     -->
+    <method name="reconnectSuccess" args="isInterview">
+    	if ($debug) Debug.write("Send reconnectSuccess to ",canvas.rtmp_lc_name);
+    	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "reconnectSuccess", [canvas.thishib.src, canvas.publicSID, hib.userobject, isInterview, canvas.getHttpHost()]);
+    </method>
+    
+    <handler name="onismoderator" reference="canvas" args="m">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "ismoderatorChanged", [m]);
+    </handler>
+
+    <!---
+        Creates video object
+    -->
+    <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createVideo", [publicSID, displayName, broadcastId, avsettings, interviewPodId, object]);
+    </method>
+
+    <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createVideoObject", [publicSID, isBroadcasting, interviewPodId,object]);
+    </method>
+
+    <!---
+        invoked whenever a User starts to Stream Video in this Room,
+        interviewPodId has only a meaning in the Room Type Interview
+     -->
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,vWidth,vHeight">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "startStream", [publicSID,broadcastId,firstname,lastname,interviewPodId,vWidth,vHeight]);
+    </method>
+
+    <!---
+        invoked remotely by Red5-notification
+        shows a green light if somebody is speaking
+        @param string broadcastId broadcastId
+        @param boolean bool show light on/off
+    -->
+    <method name="setSpeakingByPos" args="publicSID,bool">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSpeakingByPos", [publicSID, bool]);
+    </method>
+
+    <!---
+        stops the streaming but does not destroy the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="closeStreamClient" args="publicSID">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeStreamClient", [publicSID]);
+    </method>
+
+    <!---
+        stops the streaming but and destroys the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="disconnectclient" args="publicSID">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "disconnectclient", [publicSID]);
+    </method>
+
+    <method name="resetAllValues">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "resetAllValues",null);
+    </method>
+
+    <!---
+     invoked if another client logs into the room
+    after choosing devices -->
+    <method name="setAVSettingsToClient" args="rcl">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setAVSettingsToClient", [rcl]);
+    </method>
+
+    <method name="createEditRecordStream" args="syncUpdate"><![CDATA[
+        //this.syncUpdate = syncUpdate;
+        //h.getBroadCastId.doCall();
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [syncUpdate]);
+    ]]></method>
+
+    <method name="removeVideoByUser" args="publicSID">
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "removeVideoByUser", [publicSID]);
+    </method>
+
+    <!--
+        Mutes/unmutes a sound of user's video
+        with the publicSID
+    -->
+    <method name="muteSound" args="publicSID, bool">
+    	if ($debug) Debug.write("muteSound :: ",publicSID,bool);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "muteSound", [publicSID, bool]);
+    </method>
+
+    <method name="giveExclusiveAudio" args="publicSID">
+    	if ($debug) Debug.write("giveExclusiveAudio :: ",publicSID);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "giveExclusiveAudio", [publicSID]);
+    </method>
+
+    <!---
+        Updates microphone's state of roomClient
+    -->
+    <method name="updateMuteStatusVideoView" args="roomClient">
+    	if ($debug) Debug.write("updateMuteStatusVideoView :: ",roomClient);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "updateMuteStatusVideoView", [roomClient]);
+    </method>
+
+    <!---
+        Shows the window with device settings
+    -->
+    <method name="changeDevice">
+    	if ($debug) Debug.write("changeDevice :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "changeDevice", null);
+    </method>
+
+    <!---
+        Shows the exit dialog
+    -->
+    <method name="exitRoom">
+    	if ($debug) Debug.write("exitRoom :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "exitRoom", null);
+    </method>
+
+    <!---
+        Shows the close whiteboard dialog
+    -->
+    <method name="closeWhiteboard">
+    	if ($debug) Debug.write("closeWhiteboard :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeWhiteboard", null);
+    </method>
+</class>
+
+</library>

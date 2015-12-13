@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.laszlosystems.com/2003/05/lzx" xmlns:lzx="http://www.laszlosystems.com/2003/05/lzx">
+  <xs:simpleType name="booleanLiteral">
+    <xs:restriction base="xs:boolean"/>
+  </xs:simpleType>
+  <xs:simpleType name="colorLiteral">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="numberLiteral">
+    <xs:restriction base="xs:double"/>
+  </xs:simpleType>
+  <xs:simpleType name="sizeLiteral">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="inheritableBooleanLiteral">
+    <xs:union memberTypes="lzx:booleanLiteral">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="inherit"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="constraint">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="$(style|path|immediately|once|always)?\{.*\}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="boolean">
+    <xs:union memberTypes="lzx:booleanLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="booleanOrNull">
+    <xs:union memberTypes="lzx:boolean">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="null"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="color">
+    <xs:union memberTypes="lzx:colorLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="script">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="expression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="reference">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="number">
+    <xs:union memberTypes="lzx:numberLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="size">
+    <xs:union memberTypes="lzx:sizeLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="numberExpression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="sizeExpression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="css">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="opacity">
+    <xs:union memberTypes="lzx:constraint">
+      <xs:simpleType>
+        <xs:restriction base="xs:double">
+          <xs:minInclusive value="0.0"/>
+          <xs:maxInclusive value="1.0"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="percentage">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\d+(.\d?)|.\d+)%"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="canvas">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:connection"/>
+        <xs:element ref="lzx:splash"/>
+        <xs:group ref="lzx:datapathChildren"/>
+        <xs:group ref="lzx:toplevelElements"/>
+      </xs:choice>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="oninit" type="lzx:script"/>
+      <xs:attribute name="width" default="500">
+        <xs:simpleType>
+          <xs:union memberTypes="lzx:sizeLiteral lzx:percentage"/>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="height" default="400">
+        <xs:simpleType>
+          <xs:union memberTypes="lzx:sizeLiteral lzx:percentage"/>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bgcolor" default="white" type="lzx:colorLiteral"/>
+      <xs:attribute name="title" default="OpenLaszlo Application" type="xs:string"/>
+      <xs:attribute name="font" default="lztahoe8" type="xs:string"/>
+      <xs:attribute name="fontsize" default="8" type="lzx:size"/>
+      <xs:attribute name="fontstyle" default="">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="bold"/>
+            <xs:enumeration value="italic"/>
+            <xs:enumeration value="bold italic"/>
+            <xs:enumeration value="plain"/>
+            <xs:enumeration value=""/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="layout" type="lzx:css"/>
+      <xs:attribute name="validate" default="true" type="lzx:booleanLiteral"/>
+      <xs:attribute name="proxied" default="inherit" type="lzx:inheritableBooleanLiteral"/>
+      <xs:attribute name="debug" default="false" type="lzx:booleanLiteral"/>
+      <xs:attribute name="backtrace" default="false" type="lzx:booleanLiteral"/>
+      <xs:attribute name="maxtextwidth" type="lzx:sizeLiteral"/>
+      <xs:attribute name="maxtextheight" type="lzx:sizeLiteral"/>
+      <xs:attribute name="dataloadtimeout" type="lzx:numberExpression"/>
+      <xs:attribute name="medialoadtimeout" type="lzx:numberExpression"/>
+      <xs:attribute name="libraries" default="" type="xs:string"/>
+      <xs:attribute name="embedfonts" default="true" type="lzx:booleanLiteral"/>
+      <xs:attribute name="version" default="1.1" type="xs:string"/>
+      <xs:attribute name="accessible" default="false" type="lzx:booleanLiteral"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="library">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="lzx:toplevelElements"/>
+        <xs:element ref="lzx:datapointer"/>
+      </xs:choice>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="includes" type="xs:string"/>
+      <xs:attribute name="proxied" default="inherit">
+        <xs:simpleType>
+          <xs:union memberTypes="lzx:booleanLiteral">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="inherit"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="validate" default="true" type="lzx:booleanLiteral"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="toplevelElements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice>
+          <xs:element ref="lzx:viewElement"/>
+          <xs:element ref="lzx:script"/>
+          <xs:element ref="lzx:stylesheet"/>
+          <xs:element ref="lzx:asset"/>
+          <xs:group ref="lzx:font"/>
+        </xs:choice>
+        <xs:element ref="lzx:datarequest"/>
+        <xs:element ref="lzx:datasource"/>
+        <xs:element ref="lzx:connectiondatasource"/>
+        <xs:element ref="lzx:dataset"/>
+        <xs:element ref="lzx:debug"/>
+        <xs:element ref="lzx:command"/>
+        <xs:group ref="lzx:objectElements"/>
+        <xs:element ref="lzx:class"/>
+        <xs:element ref="lzx:interface"/>
+        <xs:element ref="lzx:trait"/>
+        <xs:element ref="lzx:include"/>
+        <xs:element ref="lzx:import"/>
+        <xs:element ref="lzx:library"/>
+        <xs:element ref="lzx:layout"/>
+        <xs:element ref="lzx:security"/>
+        <xs:element ref="lzx:switch"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="debug">
+    <xs:complexType>
+      <xs:attributeGroup ref="lzx:viewAttributes"/>
+      <xs:attribute name="showInternalProperties" type="lzx:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="include">
+    <xs:complexType>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
+      <xs:attribute name="type" default="xml">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="xml"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="switch">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:when"/>
+        <xs:element ref="lzx:otherwise"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="when">
+    <xs:complexType>
+      <xs:group ref="lzx:toplevelElements"/>
+      <xs:attribute name="runtime" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="otherwise">
+    <xs:complexType>
+      <xs:group ref="lzx:toplevelElements"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="idAttribute">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="srcAttribute">
+    <xs:attribute name="src" use="required" type="xs:anyURI"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="nameAttribute">
+    <xs:attribute name="name" use="required" type="xs:token"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="oninitAttribute">
+    <xs:attribute name="oninit" use="required" type="lzx:script"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="initstageAttribute">
+    <xs:attribute name="initstage" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="early"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="late"/>
+          <xs:enumeration value="immediate"/>
+          <xs:enumeration value="defer"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="datapathAttribute">
+    <xs:attribute name="datapath" use="required" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="placementAttribute">
+    <xs:attribute name="placement" use="required" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="classAttribute">
+    <xs:attribute name="class" use="required" type="xs:token"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="ignoreplacementAttribute">
+    <xs:attribute name="ignoreplacement" use="required" type="lzx:boolean"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="objectAttributes">
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="name" type="xs:token"/>
+    <xs:attribute name="class" type="xs:token"/>
+    <xs:attribute name="oninit" type="lzx:script"/>
+    <xs:attribute name="datapath" type="xs:string"/>
+    <xs:attribute name="placement" type="xs:string"/>
+    <xs:attribute name="ignoreplacement" type="lzx:boolean"/>
+    <xs:attribute name="initstage">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="early"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="late"/>
+          <xs:enumeration value="immediate"/>
+          <xs:enumeration value="defer"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="viewAttributes">
+    <xs:attributeGroup ref="lzx:nodeAttributes"/>
+    <xs:attribute name="opacity" default="1.0" type="lzx:opacity"/>
+    <xs:attribute name="bgcolor" type="lzx:color"/>
+    <xs:attribute name="cursor" type="xs:token"/>
+    <xs:attribute name="clickable" type="lzx:boolean"/>
+    <xs:attribute name="clickregion" type="xs:string"/>
+    <xs:attribute name="focustrap" type="lzx:boolean"/>
+    <xs:attribute name="focusable" type="lzx:boolean"/>
+    <xs:attribute name="frame" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="fgcolor" type="lzx:color"/>
+    <xs:attribute name="font" type="xs:string"/>
+    <xs:attribute name="fontstyle" type="xs:string"/>
+    <xs:attribute name="fontsize" type="lzx:size"/>
+    <xs:attribute name="resource" type="xs:string"/>
+    <xs:attribute name="source" type="lzx:expression"/>
+    <xs:attribute name="clip" default="false" type="lzx:boolean"/>
+    <xs:attribute name="align" default="left">
+      <xs:simpleType>
+        <xs:union memberTypes="lzx:constraint">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="left"/>
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="center"/>
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="right"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="valign" default="top">
+      <xs:simpleType>
+        <xs:union memberTypes="lzx:constraint">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="top"/>
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="middle"/>
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="bottom"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="layout" type="lzx:css"/>
+    <xs:attribute name="pixellock" default="false" type="lzx:booleanLiteral"/>
+    <xs:attribute name="rotation" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="xoffset" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="yoffset" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="play" default="true" type="lzx:boolean"/>
+    <xs:attribute name="selectiontype">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="none"/>
+          <xs:enumeration value="single"/>
+          <xs:enumeration value="toggle"/>
+          <xs:enumeration value="multi"/>
+          <xs:enumeration value="range"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="stretches">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="width"/>
+          <xs:enumeration value="height"/>
+          <xs:enumeration value="both"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="visible" default="true" type="lzx:booleanOrNull"/>
+    <xs:attribute name="visibility" default="visible" type="xs:string"/>
+    <xs:attribute name="width" type="lzx:sizeExpression"/>
+    <xs:attribute name="height" type="lzx:sizeExpression"/>
+    <xs:attribute name="textwidth" type="lzx:sizeExpression"/>
+    <xs:attribute name="textheight" type="lzx:sizeExpression"/>
+    <xs:attribute name="x" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="y" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="aaname" type="xs:string"/>
+    <xs:attribute name="aaactive" type="lzx:boolean"/>
+    <xs:attribute name="aadescription" type="xs:string"/>
+    <xs:attribute name="aatabindex" type="lzx:number"/>
+    <xs:attribute name="aasilent" type="lzx:boolean"/>
+    <xs:attribute name="showhandcursor" type="lzx:boolean"/>
+    <xs:attribute name="options" type="lzx:css"/>
+    <xs:attributeGroup ref="lzx:eventAttributes"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="eventAttributes">
+    <xs:attribute name="onclick" type="lzx:script"/>
+    <xs:attribute name="ondblclick" type="lzx:script"/>
+    <xs:attribute name="onmousedown" type="lzx:script"/>
+    <xs:attribute name="onmouseup" type="lzx:script"/>
+    <xs:attribute name="onmouseover" type="lzx:script"/>
+    <xs:attribute name="onmouseout" type="lzx:script"/>
+    <xs:attribute name="onfocus" type="lzx:script"/>
+    <xs:attribute name="onblur" type="lzx:script"/>
+    <xs:attribute name="onkeydown" type="lzx:script"/>
+    <xs:attribute name="onkeyup" type="lzx:script"/>
+    <xs:attribute name="onselect" type="lzx:script"/>
+    <xs:attribute name="ondata" type="lzx:script"/>
+  </xs:attributeGroup>
+  <xs:group name="viewContent">
+    <xs:sequence>
+      <xs:group ref="lzx:viewContentElements"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="viewContent">
+    <xs:attributeGroup ref="lzx:viewAttributes"/>
+  </xs:attributeGroup>
+  <xs:group name="viewContentElements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="lzx:nodeElements"/>
+        <xs:choice>
+          <xs:element ref="lzx:include"/>
+          <xs:element ref="lzx:viewElement"/>
+          <xs:element ref="lzx:dataselectionmanager"/>
+          <xs:element ref="lzx:selectionmanager"/>
+          <xs:element ref="lzx:layout"/>
+        </xs:choice>
+        <xs:element ref="lzx:command"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="dataselectionmanager">
+    <xs:complexType>
+      <xs:group ref="lzx:objectElements"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="toggle" type="lzx:boolean"/>
+      <xs:attribute name="oninit" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="selectionmanager">
+    <xs:complexType>
+      <xs:group ref="lzx:objectElements"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="toggle" type="lzx:boolean"/>
+      <xs:attribute name="oninit" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="command">
+    <xs:complexType>
+      <xs:group ref="lzx:objectElements"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="onselect" type="lzx:script"/>
+      <xs:attribute name="active" type="lzx:boolean"/>
+      <xs:attribute name="key" type="lzx:expression"/>
+      <xs:attribute name="oninit" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="animator" type="lzx:animatorContent"/>
+  <xs:element name="animatorgroup">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="lzx:animatorContent">
+          <xs:attribute name="process" default="sequential">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="sequential"/>
+                <xs:enumeration value="simultaneous"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="animatorContent">
+    <xs:group ref="lzx:objectElements"/>
+    <xs:attributeGroup ref="lzx:objectAttributes"/>
+    <xs:attribute name="attribute" type="xs:token"/>
+    <xs:attribute name="start" default="true" type="lzx:boolean"/>
+    <xs:attribute name="from" type="lzx:number"/>
+    <xs:attribute name="to" type="lzx:number"/>
+    <xs:attribute name="duration">
+      <xs:simpleType>
+        <xs:union memberTypes="lzx:constraint">
+          <xs:simpleType>
+            <xs:restriction base="xs:float">
+              <xs:minInclusive value="0"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="indirect" default="false" type="lzx:boolean"/>
+    <xs:attribute name="relative" default="false" type="lzx:boolean"/>
+    <xs:attribute name="motion" default="easeboth">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="linear"/>
+          <xs:enumeration value="easein"/>
+          <xs:enumeration value="easeout"/>
+          <xs:enumeration value="easeboth"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="onstart" type="lzx:script"/>
+    <xs:attribute name="onstop" type="lzx:script"/>
+    <xs:attribute name="repeat" type="lzx:expression"/>
+    <xs:attribute name="paused" default="false" type="lzx:boolean"/>
+    <xs:attribute name="target" type="lzx:reference"/>
+  </xs:complexType>
+  <xs:element name="viewElement" abstract="true"/>
+  <xs:element name="view" substitutionGroup="lzx:viewElement">
+    <xs:complexType>
+      <xs:group ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:viewContent"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="text" substitutionGroup="lzx:viewElement">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="lzx:viewContent"/>
+        <xs:group ref="lzx:htmlText"/>
+      </xs:choice>
+      <xs:attributeGroup ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:textAttributes"/>
+      <xs:attribute name="embedfonts" type="lzx:boolean"/>
+      <xs:attribute name="text" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inputtext" substitutionGroup="lzx:viewElement">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:textAttributes"/>
+      <xs:attribute name="embedfonts" type="lzx:boolean"/>
+      <xs:attribute name="resizable" type="lzx:boolean"/>
+      <xs:attribute name="password" default="false" type="lzx:boolean"/>
+      <xs:attribute name="text" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="textAttributes">
+    <xs:attribute name="multiline" default="false" type="lzx:boolean"/>
+    <xs:attribute name="resize" default="false" type="lzx:booleanLiteral"/>
+    <xs:attribute name="selectable" default="false" type="lzx:booleanLiteral"/>
+    <xs:attribute name="maxlength" default="null" type="lzx:numberExpression"/>
+    <xs:attribute name="pattern" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="antiAliasType" default="advanced">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="advanced"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="gridFit" default="subpixel">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="none"/>
+          <xs:enumeration value="pixel"/>
+          <xs:enumeration value="subpixel"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="sharpness" default="0" type="lzx:numberExpression"/>
+    <xs:attribute name="thickness" default="0" type="lzx:numberExpression"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="textContent">
+    <xs:attribute name="text" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:group name="htmlContent">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="lzx:htmlText"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="htmlContent">
+    <xs:attribute name="text" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:group name="htmlText">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:pre"/>
+        <xs:element ref="lzx:a"/>
+        <xs:element ref="lzx:b"/>
+        <xs:element ref="lzx:li"/>
+        <xs:element ref="lzx:img"/>
+        <xs:element name="font">
+          <xs:complexType mixed="true">
+            <xs:group ref="lzx:htmlText"/>
+            <xs:attribute name="face" type="xs:string"/>
+            <xs:attribute name="size" type="lzx:sizeLiteral"/>
+            <xs:attribute name="color" type="lzx:colorLiteral"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="lzx:i"/>
+        <xs:element ref="lzx:p"/>
+        <xs:element ref="lzx:br"/>
+        <xs:element ref="lzx:u"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="pre">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="a">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
+      <xs:attribute name="target">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="_blank"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="_parent"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="_self"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="_top"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[a-zA-Z][a-zA-Z0-9\-_:.]*"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="b">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="li">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="img">
+    <xs:complexType>
+      <xs:attribute name="src" type="xs:string"/>
+      <xs:attribute name="align" type="xs:string"/>
+      <xs:attribute name="width" type="xs:string"/>
+      <xs:attribute name="height" type="xs:string"/>
+      <xs:attribute name="hspace" type="xs:string"/>
+      <xs:attribute name="vspace" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="i">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="p">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="br">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="u">
+    <xs:complexType mixed="true">
+      <xs:group ref="lzx:htmlText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="asset" abstract="true"/>
+  <xs:element name="audio" substitutionGroup="lzx:asset">
+    <xs:complexType>
+      <xs:attributeGroup ref="lzx:srcAttribute"/>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attributeGroup ref="lzx:nameAttribute"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resource" substitutionGroup="lzx:asset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="lzx:frame"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="lzx:nameAttribute"/>
+      <xs:attribute name="src" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="frame">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attributeGroup ref="lzx:srcAttribute"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="datasource">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:dataset"/>
+        <xs:group ref="lzx:objectElements"/>
+      </xs:choice>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="timeout" type="lzx:number"/>
+      <xs:attribute name="secure" default="false" type="lzx:booleanLiteral"/>
+      <xs:attribute name="proxied" default="inherit">
+        <xs:simpleType>
+          <xs:union memberTypes="lzx:booleanLiteral">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="inherit"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="oninit" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dataset">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="lzx:anyXML">
+          <xs:attributeGroup ref="lzx:datasetAttributes"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="connectiondatasource">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dataset">
+          <xs:complexType>
+            <xs:attributeGroup ref="lzx:datasetAttributes"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="lzx:method"/>
+      </xs:choice>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="onconnect" type="lzx:script"/>
+      <xs:attribute name="oninit" type="lzx:script"/>
+      <xs:attribute name="ondata" type="lzx:script"/>
+      <xs:attribute name="onerror" type="lzx:script"/>
+      <xs:attribute name="ontimeout" type="lzx:script"/>
+      <xs:attribute name="ondisconnect" type="lzx:script"/>
+      <xs:attribute name="onuserdisconnect" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="agent">
+    <xs:complexType>
+      <xs:attribute name="url" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="connection">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:agent"/>
+        <xs:element ref="lzx:method"/>
+        <xs:element ref="lzx:handler"/>
+      </xs:choice>
+      <xs:attribute name="heartbeat" type="xs:integer"/>
+      <xs:attribute name="timeout" type="lzx:number"/>
+      <xs:attribute name="secure" type="lzx:booleanLiteral"/>
+      <xs:attribute name="secureport" type="xs:integer"/>
+      <xs:attribute name="receiveuserdisconnect" default="false" type="lzx:booleanLiteral"/>
+      <xs:attribute name="group" type="xs:string"/>
+      <xs:attribute name="authenticator" type="xs:string"/>
+      <xs:attribute name="authparam" type="xs:string"/>
+      <xs:attribute name="onconnect" type="lzx:script"/>
+      <xs:attribute name="ondata" type="lzx:script"/>
+      <xs:attribute name="onerror" type="lzx:script"/>
+      <xs:attribute name="ontimeout" type="lzx:script"/>
+      <xs:attribute name="ondisconnect" type="lzx:script"/>
+      <xs:attribute name="onuserdisconnect" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="datasetAttributes">
+    <xs:attributeGroup ref="lzx:objectAttributes"/>
+    <xs:attribute name="nsprefix" type="lzx:boolean"/>
+    <xs:attribute name="acceptencodings" type="lzx:boolean"/>
+    <xs:attribute name="timeout" type="lzx:number"/>
+    <xs:attribute name="proxied" default="inherit">
+      <xs:simpleType>
+        <xs:union memberTypes="lzx:booleanLiteral">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="inherit"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="src">
+      <xs:simpleType>
+        <xs:union memberTypes="xs:anyURI lzx:constraint"/>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="request" type="lzx:boolean"/>
+    <xs:attribute name="autorequest" type="lzx:boolean"/>
+    <xs:attribute name="queuerequests" type="lzx:boolean"/>
+    <xs:attribute name="querystring" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="datafromchild" type="lzx:boolean"/>
+    <xs:attribute name="endpoint" type="xs:string"/>
+    <xs:attribute name="namespace" type="xs:string"/>
+    <xs:attribute name="method" type="xs:string"/>
+    <xs:attribute name="secure" default="false" type="lzx:booleanLiteral"/>
+    <xs:attribute name="secureport" default="443">
+      <xs:simpleType>
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="0"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="getresponseheaders" default="true" type="lzx:boolean"/>
+    <xs:attribute name="trimwhitespace" default="false" type="lzx:boolean"/>
+    <xs:attribute name="cacheable" default="false" type="lzx:boolean"/>
+    <xs:attribute name="ondata" type="lzx:script"/>
+    <xs:attribute name="onerror" type="lzx:script"/>
+    <xs:attribute name="ontimeout" type="lzx:script"/>
+    <xs:attribute name="querytype">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="get"/>
+          <xs:enumeration value="post"/>
+          <xs:enumeration value="GET"/>
+          <xs:enumeration value="POST"/>
+          <xs:enumeration value="put"/>
+          <xs:enumeration value="PUT"/>
+          <xs:enumeration value="delete"/>
+          <xs:enumeration value="DELETE"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:complexType name="anyXML" mixed="true">
+    <xs:sequence>
+      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:attributeGroup name="dataptrAttributes">
+    <xs:attribute name="ondata" type="lzx:script"/>
+    <xs:attribute name="onerror" type="lzx:script"/>
+    <xs:attribute name="ontimeout" type="lzx:script"/>
+    <xs:attribute name="rerunxpath" type="lzx:boolean"/>
+    <xs:attribute name="xpath" type="xs:string"/>
+    <xs:attribute name="spacing" default="0" type="lzx:size"/>
+  </xs:attributeGroup>
+  <xs:element name="datapointer">
+    <xs:complexType>
+      <xs:group ref="lzx:objectElements"/>
+      <xs:attributeGroup ref="lzx:objectAttributes"/>
+      <xs:attributeGroup ref="lzx:dataptrAttributes"/>
+      <xs:attribute name="p" type="lzx:expression"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="datapath">
+    <xs:complexType>
+      <xs:group ref="lzx:objectElements"/>
+      <xs:attributeGroup ref="lzx:objectAttributes"/>
+      <xs:attributeGroup ref="lzx:dataptrAttributes"/>
+      <xs:attribute name="pooling" default="false" type="lzx:boolean"/>
+      <xs:attribute name="axis">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="x"/>
+            <xs:enumeration value="y"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="sortpath" type="xs:string"/>
+      <xs:attribute name="sortorder" type="xs:string"/>
+      <xs:attribute name="replication">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="lazy"/>
+            <xs:enumeration value="resize"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="p" type="lzx:expression"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="datapathChildren">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:datapath"/>
+        <xs:element ref="lzx:datapointer"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="deviceAttribute">
+    <xs:attribute name="device" type="lzx:boolean"/>
+  </xs:attributeGroup>
+  <xs:group name="font">
+    <xs:sequence>
+      <xs:element name="font">
+        <xs:complexType>
+          <xs:choice minOccurs="0">
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="lzx:face"/>
+          </xs:choice>
+          <xs:attributeGroup ref="lzx:nameAttribute"/>
+          <xs:attributeGroup ref="lzx:deviceAttribute"/>
+          <xs:attribute name="src" type="xs:anyURI"/>
+          <xs:attribute name="style">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="bold"/>
+                <xs:enumeration value="italic"/>
+                <xs:enumeration value="bold italic"/>
+                <xs:enumeration value="italic bold"/>
+                <xs:enumeration value="plain"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="face">
+    <xs:complexType>
+      <xs:attribute name="style">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="bold"/>
+            <xs:enumeration value="italic"/>
+            <xs:enumeration value="bold italic"/>
+            <xs:enumeration value="italic bold"/>
+            <xs:enumeration value="plain"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="lzx:srcAttribute"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="styleAttribute">
+    <xs:attribute name="style" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="bold"/>
+          <xs:enumeration value="italic"/>
+          <xs:enumeration value="bold italic"/>
+          <xs:enumeration value="italic bold"/>
+          <xs:enumeration value="plain"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:group name="objectElements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:method"/>
+        <xs:element ref="lzx:handler"/>
+        <xs:element ref="lzx:event"/>
+        <xs:element ref="lzx:attribute"/>
+        <xs:element ref="lzx:state"/>
+        <xs:element ref="lzx:node"/>
+        <xs:element ref="lzx:animator"/>
+        <xs:element ref="lzx:animatorgroup"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="attribute">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:token"/>
+      <xs:attribute name="style" type="xs:string"/>
+      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="when" default="immediately">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="immediately"/>
+            <xs:enumeration value="once"/>
+            <xs:enumeration value="always"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="type" default="expression">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="color"/>
+            <xs:enumeration value="expression"/>
+            <xs:enumeration value="number"/>
+            <xs:enumeration value="size"/>
+            <xs:enumeration value="string"/>
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="html"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="required" default="false" type="lzx:booleanLiteral"/>
+      <xs:attribute name="setter" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="class">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:doc"/>
+        <xs:group ref="lzx:viewContentElements"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:token"/>
+      <xs:attribute name="extends" default="view" type="xs:token"/>
+      <xs:attribute name="with" type="xs:string"/>
+      <xs:anyAttribute processContents="skip"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="interface">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:doc"/>
+        <xs:group ref="lzx:viewContentElements"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:token"/>
+      <xs:attribute name="extends" default="view" type="xs:token"/>
+      <xs:anyAttribute processContents="skip"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="doc" type="lzx:any"/>
+  <xs:complexType name="any" mixed="true">
+    <xs:sequence>
+      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="trait">
+    <xs:complexType>
+      <xs:group ref="lzx:viewContentElements"/>
+      <xs:attribute name="name" use="required" type="xs:token"/>
+      <xs:anyAttribute processContents="skip"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="handler">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="lzx:nameAttribute"/>
+      <xs:attribute name="reference" default="this" type="lzx:reference"/>
+      <xs:attribute name="args" default="" type="xs:string"/>
+      <xs:attribute name="method" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="event">
+    <xs:complexType>
+      <xs:attributeGroup ref="lzx:nameAttribute"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="method">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="event" type="xs:string"/>
+      <xs:attribute name="reference" default="this" type="lzx:reference"/>
+      <xs:attribute name="args" default="" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="import">
+    <xs:complexType>
+      <xs:group ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:viewContent"/>
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
+      <xs:attribute name="stage" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="late"/>
+            <xs:enumeration value="defer"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="onload" type="lzx:script"/>
+      <xs:attribute name="proxied" default="inherit">
+        <xs:simpleType>
+          <xs:union memberTypes="lzx:booleanLiteral">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="inherit"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="onerror" type="lzx:script"/>
+      <xs:attribute name="ontimeout" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="state">
+    <xs:complexType>
+      <xs:group ref="lzx:viewContent"/>
+      <xs:attributeGroup ref="lzx:viewContent"/>
+      <xs:attribute name="apply" type="lzx:boolean"/>
+      <xs:attribute name="pooling" default="false" type="lzx:boolean"/>
+      <xs:attribute name="onapply" type="lzx:script"/>
+      <xs:attribute name="onremove" type="lzx:script"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="nodeAttributes">
+    <xs:attributeGroup ref="lzx:objectAttributes"/>
+    <xs:attribute name="defaultplacement" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:group name="nodeElements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="lzx:objectElements"/>
+        <xs:group ref="lzx:datapathChildren"/>
+        <xs:element ref="lzx:data"/>
+        <xs:element ref="lzx:dataset"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="lzx:anyXML">
+          <xs:attributeGroup ref="lzx:datasetAttributes"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="nodeContent">
+    <xs:group ref="lzx:nodeElements"/>
+    <xs:attributeGroup ref="lzx:nodeAttributes"/>
+  </xs:complexType>
+  <xs:element name="node" type="lzx:nodeContent"/>
+  <xs:element name="datarequest" type="lzx:nodeContent"/>
+  <xs:element name="layout">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="lzx:nodeContent">
+          <xs:attribute name="locked" type="lzx:booleanLiteral"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="splash">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="view">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:token"/>
+            <xs:attribute name="resource" use="required" type="xs:anyURI"/>
+            <xs:attribute name="ratio" type="xs:string"/>
+            <xs:attribute name="x" default="0" type="lzx:numberLiteral"/>
+            <xs:attribute name="y" default="0" type="lzx:numberLiteral"/>
+            <xs:attribute name="center" default="false" type="lzx:booleanLiteral"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="hideafterinit" type="lzx:booleanLiteral"/>
+      <xs:attribute name="persistent" default="false" type="lzx:booleanLiteral"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="script">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" default="Javascript" type="xs:string"/>
+      <xs:attribute name="when" default="normal">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="immediate"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="src" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="stylesheet">
+    <xs:complexType mixed="true">
+      <xs:attribute name="src" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="preloadresource">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:token"/>
+      <xs:attribute name="ratio" type="xs:string"/>
+      <xs:attribute name="synctoload" use="required" type="lzx:booleanLiteral"/>
+      <xs:attribute name="hideafterinit" use="required" type="lzx:booleanLiteral"/>
+      <xs:attribute name="center" use="required" type="lzx:booleanLiteral"/>
+      <xs:attribute name="synchronized" type="lzx:booleanLiteral"/>
+      <xs:attribute name="lastframe" type="lzx:numberLiteral"/>
+      <xs:attribute name="resource" type="xs:string"/>
+      <xs:attribute name="resourcename" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pattern" type="xs:string"/>
+  <xs:element name="allow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="lzx:pattern"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="deny">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="lzx:pattern"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="security">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="lzx:allow"/>
+        <xs:element ref="lzx:deny"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

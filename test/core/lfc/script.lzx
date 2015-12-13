@@ -1,0 +1,11 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!--- Client executed script -->
+
+<class name="script" extends="false">
+    <attribute name="src" type="string" />
+</class>
+
+
+</library>

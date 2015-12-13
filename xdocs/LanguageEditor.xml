@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Language Editor</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Language Editor">
+
+			<p>Features:</p>
+			<ul>
+				<li>edit the labels of any language, changes will take effect as
+					soon as you re-login
+				</li>
+				<li>add new languages (for example to fit your co-operative design
+					and language of your company)
+				</li>
+				<li>export the language-files to an XML File (these language Files
+					can be used for your next installation or as contribution to the
+					project)
+				</li>
+				<li>
+					import of language files (
+					<i>you should restart the server if you face problems, as the
+						database cache might be invalid
+					</i>
+					)
+				</li>
+			</ul>
+			<p>Screen from the Administration Panel: </p>
+			<p>
+				<a class="fancybox-buttons" href="images/langeditor_screen_v2.png">
+					<img src="images/langeditor_screen_v2.png" alt="" width="475"
+						height="324" />
+				</a>
+			</p>
+
+		</section>
+
+	</body>
+
+</document>

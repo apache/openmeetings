@@ -1,0 +1,22 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---
+The basic input-text element.
+JavaScript: lz.inputtext
+
+This tag creates an area of the canvas that the user can use to edit text. It is equivalent to the HTML <input type="text">, <input type="password">, and textarea tags.
+
+See the documentation for the <text> tag for a description of the width and height attributes, and of scrolling. 
+ -->
+<class name="inputtext" extends="text">
+	<!---	If true, the inputtext will be editable -->
+    <attribute name="enabled" type="boolean"/>
+    <!---	If true, the inputtext contents will be obscured -->
+    <attribute name="password" />
+
+    <!---Sent whenever the text field is enabled. -->
+    <event name="onenabled" />
+    
+</class>
+</library>

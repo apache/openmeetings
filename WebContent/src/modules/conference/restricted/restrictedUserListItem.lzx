@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="restrictedUserListItem" extends="basePagingListItem" 
+	   showhandcursor="false" width="254" height="42">
+	
+	<attribute name="connectedSince" value="" type="string" />
+	
+    <attribute name="isMod" value="false" type="boolean" />
+    
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
+    <attribute name="userpicURL" value="" type="string" />
+    <attribute name="userpicView" value="null" />
+    
+    <attribute name="selfItem" value="false" type="boolean"/>
+    
+    <handler name="onisMod">
+    	<![CDATA[
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj != null && this.refObj.canDraw) {
+                this._content.userStatus.setAttribute("frame",2);
+            } else {
+                this._content.userStatus.setAttribute("frame",1);
+            }
+        ]]>
+    </handler>
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(this.refObj.publicSID == event.publicSID) {
+                this.refObj.micMuted = event.mute;
+                this.updateModeratorIcons();
+            }
+        ]]>
+    </handler>
+
+	<method name="updateIconByMod">
+		if (this.clickable) {
+        	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+        	//if ($debug) Debug.write(" :: updateIconByMod :: ",this.isMod)
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj.canDraw) {
+            	this._content.userStatus.setAttribute("frame",2);
+            } else {
+            	this._content.userStatus.setAttribute("frame",1);
+            }
+		}
+    </method>  
+    
+    <method name="updateIconByModScroll">
+    	if (this.clickable) {
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj.canDraw) {
+            	this._content.userStatus.setAttribute("frame",2);
+            } else {
+            	this._content.userStatus.setAttribute("frame",1);
+            }
+    	}
+    </method>  
+    
+    <method name="initModeratorIcons">
+    	//if ($debug) Debug.write(" :1: initModeratorIcons :: ");
+    	if (canvas.ismoderator) {
+    		//if ($debug) Debug.write(" :2: initModeratorIcons :: ");
+			this._content._iconsModerator.setAttribute("visibility","visible");
+			this._content._iconsModerator.oninit.sendEvent();
+    	}
+    </method>
+    
+    <method name="updateModeratorIcons">
+		if (this._content._iconsModerator.visibility == "visible") {
+            this._content._iconsModerator.oninit.sendEvent();
+		}
+    </method>
+    
+    <method name="hideModeratorIcons">
+    	if (this._content._iconsModerator.visibility == "visible") {
+            this._content._iconsModerator.setAttribute("visibility","hidden");
+    	}
+    </method>
+
+	<view name="_content" width="254">
+		
+		<view name="_contentIsCurrent" visible="${ parent.parent.selfItem }"
+                        width="254" height="40" bgcolor="0x7CFC00"/>
+          
+		<!--
+		+ ' ' + parent.parent.itemId
+		 -->
+		 
+    	<labelText name="_userName" x="2" y="2"
+    		   text="${ parent.parent.firstname+' '+parent.parent.lastname  }" />
+    		   
+	    <view name="userStatus" visible="${ parent.parent.clickable }" 
+	    	  x="238" frame="1" resource="userstatus_multiframe_rsc" />
+	    	
+	    	
+	    <moderationMiniIconRestricted name="_iconsModerator" visibility="hidden"/>
+	</view>
+	
+	
+	
+</class>
+
+</library>

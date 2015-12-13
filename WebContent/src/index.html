@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html>
+<head>
+
+<meta http-equiv="cache-control" content="no-cache">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<meta name="viewport" content="width=device-width; initial-scale=1.0;">
+<title>OpenLaszlo Application</title>
+<script type="text/javascript">
+          // If loaded bare into a browser, set the browser size to the canvas size
+          if (window === top) {
+            (function (width, height) {
+              // Cf. http://www.quirksmode.org/viewport/compatibility.html
+              if (window.innerHeight) {
+                // Sadly, innerHeight/Width is not r/w on some browsers, and resizeTo is for outerHeight/Width
+                window.resizeTo(width ? (width + window.outerWidth - window.innerWidth) : window.outerWidth,
+                                height ? (height + window.outerHeight - window.innerHeight) : window.outerHeight);
+              } else if (document.documentElement && document.documentElement.clientHeight) {
+                if (width) {
+                  document.documentElement.clientWidth = width;
+                }
+                if (height) {
+                  document.documentElement.clientHeight = height;
+                }
+              } else {
+                if (width) {
+                  document.body.clientWidth = width;
+                }
+                if (height) {
+                  document.body.clientHeight = height;
+                }
+              }
+            })(null, null);
+          }
+        </script>
+<script type="text/javascript"
+	src="embed-compressed.js"></script>
+<script type="text/javascript">
+
+function getBrowserInfo() {
+	//alert(navigator.userAgent);
+	return navigator.userAgent;
+}
+
+</script>
+	
+<style type="text/css">
+html,body { /* http://www.quirksmode.org/css/100percheight.html */
+	height: 100%;
+	/* prevent scrollbars */
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+	overflow: hidden;
+}
+
+body {
+	background-color: #ffffff;
+}
+
+img {
+	border: 0 none;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript">
+    lz.embed.swf({url: 'maindebug.lzx?lzr=swf8&lzproxied=solo&lzt=swf', allowfullscreen: 'true', bgcolor: '#ffffff', width: '100%', height: '100%', id: 'lzapp', accessible: 'false'});
+
+    lz.embed.lzapp.onloadstatus = function loadstatus(p) {
+      // called with a percentage (0-100) indicating load progress
+    }
+
+    lz.embed.lzapp.onload = function loaded() {
+      // called when this application is done loading
+    }
+</script>
+<div style="width: 100%; height: 100%;" id="lzappContainer"><embed
+	src="maindebug.lzx-Dateien/maindebug.lzx" quality="high"
+	bgcolor="#ffffff" wmode="window" allowfullscreen="false" id="lzapp"
+	name="lzapp"
+	flashvars="lzt=swf&amp;lzproxied=solo&amp;lzr=swf8&amp;bgcolor=%23ffffff&amp;width=100%25&amp;height=100%25&amp;__lzurl=maindebug.lzx%3Flzt%3Dswf%26lzproxied%3Dsolo%26lzr%3Dswf8&amp;__lzminimumversion=8&amp;id=lzapp"
+	swliveconnect="true" allowscriptaccess="sameDomain"
+	type="application/x-shockwave-flash"
+	pluginspage="http://www.macromedia.com/go/getflashplayer"
+	align="middle" height="100%" width="100%"></div>
+<noscript>Please enable JavaScript in order to use this
+application.</noscript>
+</body>
+</html>

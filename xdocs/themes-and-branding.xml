@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Theme and color</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Available with Apache OpenMeetings 2.0">
+
+			<p>
+				Themes are only available starting with Openmeetings 2.x.
+				<br />
+				There are also more general client side configuration like port
+				configuration. Those configs are stored in the config.xml
+			</p>
+
+		</section>
+
+		<section name="Editing the theme">
+
+			<p>You can find the default theme in the SVN: </p>
+			<p>
+				<a
+					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/openmeetings/default-theme.xml"
+					target="_BLANK" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/openmeetings/default-theme.xml
+				</a>
+			</p>
+			<p>
+				Or if you already installed OpenMeetings on your machine at:
+				<br />
+				<tt>/webapps/openmeetings/default-theme.xml</tt>
+				<br />
+				The file contains border, background and font color definitions as
+				well as paths to icons that are loaded at runtime.
+				<br />
+				You can change the theme at runtime and just reload the browser
+				(eventually clear the browser cache) to see updates based on
+				modification in your theme.
+			</p>
+
+
+		</section>
+
+	</body>
+
+</document>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="boxInitEffect" extends="view" width="100" height="20" 
+    opacity="0.3" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+    
+    <attribute name="zielx" value="200" type="number" />
+    <attribute name="ziely" value="200" type="number" />
+    <attribute name="zielwidth" value="100" type="number" />
+    <attribute name="zielheight" value="100" type="number" />
+    
+    <attribute name="objRef" value="null" />
+    
+    <handler name="oninit">
+    	//It seems like you need additionally to start it oninit, the start = true works
+    	//only for the first initialization, sebawagner 19.03.2012
+    	//the following call seems to be redundant after using non-deprecated attribute name -- solomax 2012.07.20 
+    	this.anm.setAttribute('started', true);
+    </handler>
+    
+    <method name="sendStop">
+        this.objRef.sendAnniComplete();
+        this.destroy();
+    </method>
+
+    <animatorgroup name="anm" started="true" process="simultaneous" 
+        		duration="500" onstop="this.parent.sendStop()" >
+        <animator attribute="x" to="$once{ parent.parent.zielx }" />
+        <animator attribute="y" to="$once{ parent.parent.ziely }" />
+        <animator attribute="width" to="$once{ parent.parent.zielwidth }" />
+        <animator attribute="height" to="$once{ parent.parent.zielheight }" />
+    </animatorgroup>
+    
+</class>
+
+</library>

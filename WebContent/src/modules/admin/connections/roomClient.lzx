@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Admin module to configure the Conference or Audience room.-->
+<class name="roomClient" extends="baseContentView">	
+
+    <handler name="oninit">
+    	_mainScrollBar.setAttribute("visibility","hidden");
+    </handler>
+    <handler name="ontabcontentleave">
+        _mainScrollBar.setAttribute("visibility","visible");
+    </handler>
+	
+	<turnOverList name="_turnoverlist" width="780" 
+			height="${ canvas.height - canvas.naviHeight }" 
+            x="2" y="0" orderby="room_id" step="50" asc="true">
+
+		<handler name="oninit">
+			this.addHeaderItem(599,80);
+			this.addHeaderItem(600,240);
+			this.addHeaderItem(601,130);
+            this.addHeaderItem(602,100);
+            this.addHeaderItem(603,100);
+            this.addHeaderItem(1501,100);
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//Debug.write("onclickedItem",obj,obj.obj);
+			parent._roomvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<netRemoteCallHib name="getRoomClientsMap" funcname="conferenceservice.getRoomClientsMap" remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		if ($debug) Debug.write("getRoomClientsMap: ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+	    	this.clearList();
+	    	for (var i=0;i<records.length;i++){
+	    		var tServer = "no cluster";
+	    		var serverId = 0;
+	    		if (records[i].server != null) {
+	    		    serverId = records[i].server.id;
+	    			tServer = records[i].server.address + " ["+records[i].server.id+"]";
+	    		}
+
+	    		new lz.roomClientListItem(this._innerlist._inn._inn,{
+	                    obj:records[i],
+	                    streamid:records[i].streamid,
+	                    login:records[i].username,
+                        dateConnected:parseDateToStringTime(records[i].connectedSince),
+	                    scope:records[i].scope,
+	                    kickable: true != records[i].isScreenClient && true != records[i].isAVClient,
+	                    serverId:serverId,
+	                    serverAddr:tServer
+                    });
+	    	}
+            this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+	<text name="_header" fontstyle="bold" text="Sessionvars" x="790" y="2"/>
+	
+	<view resource="messagebox_info_rsc" x="${ canvas.width - 20 }" y="2">
+		<handler name="onclick">
+			<![CDATA[
+				new lz.sessionDetails(parent);
+			]]>
+		</handler>
+		<labelTooltip labelid="1534" />
+	</view>
+	
+	<view name="_roomvalueform" x="790" y="20" clip="true" 
+		  height="${ canvas.height - canvas.naviHeight - 20 }" width="${ canvas.width - 790 }">
+		
+		<method name="initValueFieldsByObject" args="value">
+			<![CDATA[
+			    var tArray = new Array();
+			    for (var eg in value) {
+			    	tArray.push(new Array(eg, value[eg]))
+			    }
+			
+			    function sortByKey(a,b) {
+                   
+                    if(a[0].toLowerCase() < b[0].toLowerCase()) return -1;
+                    else if(a[0].toLowerCase() > b[0].toLowerCase()) return 1;
+                    else return 0;
+                
+                }
+			    tArray.sort(sortByKey);
+			    
+			    var tString = "";
+			    for (var i=0;i<tArray.length;i++) {
+			    	tString += "" + tArray[i][0] + ": " + tArray[i][1]+ " <br/>";
+			    }
+			    this._contentView.setAttribute("text",tString);
+			]]>
+		</method>
+		
+		<text name="_contentView" multiline="true" selectable="true" />
+		<om_vscrollbar />
+		<om_hscrollbar />
+	</view>
+    
+</class>
+
+</library>

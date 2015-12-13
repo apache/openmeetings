@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Upgrade</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Upgrading OpenMeetings via the Web-Interface">
+
+			<p>There is a System Backup and Import tool. Login as Administrator
+				and Goto > Backup
+			</p>
+			<a class="fancybox-buttons" href="images/backup.png">
+				<img src="images/backup.png" alt="" width="600" height="145" />
+			</a>
+			<p>
+				The Text in the Administration>Backup section actually just says
+				it
+				all. The backup contains users, rooms, organizations and
+				appointements (Invitations and Reminders are NOT included in the
+				Backup and Reminders will not be send again!). The Backup contains
+				also all uploaded Files and Documents and will re-import them again.
+
+				Max Upload Size is 1000 MB.
+			</p>
+		</section>
+
+		<section name="Upgrading OpenMeetings from command line">
+			<p>
+				<i>You need OpenMeetings 2.x or later to have the command line interface (CLI) 
+					feature available
+				</i>
+			</p>
+			<p>
+				Alternatively to the Web-Installer you can also export and import
+				via the command line. <br/>
+				<b>You should shutdown the Red5-Service while doing CLI export or import operations</b>
+				<br />
+				Cd to your red5-home directory, type "admin" and hit enter. You will
+				get options available.
+				<br />
+				<br />
+				A typical export would be:
+				<br />
+				<tt>admin -b -file backup_today.zip</tt>
+				<br />
+				<br />
+				A typical import would be:
+				<br />
+				<tt>admin -r -file backup_yesterday.zip</tt>
+				<br />
+				<br />
+				You can also combine the installation with a backup, that way you
+				will create exactly the user table that existed in the backup.
+				<br />
+				A typical install from backup would be:
+				<br />
+				<tt>admin -i -file backup_yesterday.zip</tt>
+				<br/>
+				please see
+				<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin
+				</a>
+				for more options
+			</p>
+		</section>
+
+	</body>
+
+</document>

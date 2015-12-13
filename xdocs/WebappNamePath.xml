@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Webapp Name / Path</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Customize Openmeetings logo">
+			<p>If you want to set up your logo in Openmeetings header you can do the following:</p>
+			<ol>
+				<li>create your logo image as PNG 40px height</li>
+				<li>replace <tt>/opt/red5/webapps/openmeetings/public/themes/basic-theme/general/logo.png</tt> with your logo file</li>
+				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/config.xml</tt> and modify <tt>appdisplay</tt> section: set position and display for the logo and/or name</li>
+				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/default-theme.xml</tt> (around line 57) and change image name/path</li>
+			</ol>
+		</section>
+		<section name="Renaming /openmeetings context">
+			<p>
+				If you want to have
+				<tt>http://yourcorp.com:5080/yourmeetings</tt>
+				instead of
+				<tt>http://yourcorp.com:5080/openmeetings</tt>
+				you need to do the following
+			</p>
+			<ol>
+				<li>stop openmmetings if it is running </li>
+				<li>
+					go to openmeetings install dir (for ex.
+					<tt>/opt/red5</tt>
+					)
+				</li>
+				<li>
+					rename
+					<tt>/opt/red5/webapps/openmeetings</tt>
+					to
+					<tt>/opt/red5/webapps/yourmeetings</tt>
+					(for ex.
+					<tt>mv /opt/red5/webapps/openmeetings
+						/opt/red5/webapps/yourmeetings
+					</tt>
+					)
+				</li>
+				<li>
+					open
+					<tt>/opt/red5/webapps/yourmeetings/config.xml</tt>
+					using your favorite text editor (for ex.
+					<tt>vim /opt/red5/webapps/yourmeetings/config.xml</tt>
+					)
+				</li>
+				<li>
+					find and modify
+					<tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
+					to be
+					<tt>&lt;webAppRootKey&gt;</tt>
+					<strong>yourmeetings</strong>
+					<tt>&lt;/webAppRootKey&gt;</tt>
+				</li>
+				<li>
+					find and modify
+					<tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
+					to be
+					<tt>&lt;httpRootKey&gt;</tt>
+					<strong>/yourmeetings/</strong>
+					<tt>&lt;/httpRootKey&gt;</tt>
+				</li>
+			</ol>
+			That's it
+		</section>
+
+		<section name="Changing hard-coded application name in string labels">
+			<p>
+				To have
+				<i>Your Application Name</i>
+				instead of
+				<i>Openmeetings</i>
+				in
+				<strong>all</strong>
+				text labels you need to do the following
+			</p>
+			<ol>
+				<li>
+					ensure
+					<strong>
+						<tt>$APP_NAME</tt>
+					</strong>
+					placeholder is used in
+					<i>all</i>
+					strings you have added and/or modified (all strings bundled into
+					Openmeetings already have this placeholder)
+				</li>
+				<li>login to Openmeetings as user with administrator privileges </li>
+				<li>
+					go to
+					<tt>Administration -&gt; Configuration</tt>
+				</li>
+				<li>
+					find and edit configuration with name
+					<strong>
+						<tt>application.name</tt>
+					</strong>
+				</li>
+				<li>
+					Set its value to be
+					<i>
+						<tt>Your Application Name</tt>
+					</i>
+				</li>
+				<li>
+					<tt>Save</tt>
+				</li>
+				<li>reload page or relogin </li>
+			</ol>
+			<p>
+			All string will display
+			<i>
+				<tt>Your Application Name</tt>
+			</i>
+			in place of
+			<i>
+				<tt>Openmeetings</tt>
+			</i>
+			</p>
+			<p>
+				Please
+				<i>NOTE</i>
+				there are 3 additional properties in the config.xml file which
+				should be modified for
+				<strong>TOTAL</strong>
+				Openmeetings clean up:
+			</p>
+			<div class="xmlcode">
+				&lt;currentappname&gt;OpenMeetings&lt;/currentappname&gt;
+				<br />
+				&lt;currentappnameurl&gt;http://openmeetings.apache.org&lt;/currentappnameurl&gt;
+				<br />
+				&lt;currentappnamebugurl&gt;https://issues.apache.org/jira/browse/OPENMEETINGS&lt;/currentappnamebugurl&gt;
+				<br />
+			</div>
+
+		</section>
+
+		<section name="Running multiple Openmeetings instances on the same server">
+			<p>
+				If you want to run multiple Openmeetings instances on the same server i.e. to have<br/>  
+				<tt>http://yourcorp.com:5080/openmeetings1</tt><br/> 
+				<tt>http://yourcorp.com:5080/openmeetings2</tt><br/> etc.<br/> you need to do the following:
+			</p>
+			<ol>
+				<li>edit <tt>webapps/openmeetings1/WEB-INF/red5-web.properties</tt> for <strong>every</strong> Openmeetings 
+				instance and add the following line <tt>webapp.contextPath=/openmeetings1</tt>  to it (context of 
+				<strong>every</strong> instance <strong>should</strong> match the folder name in webapps dir)
+				</li>
+				<li>in case of java memory problems modify <tt>red5.sh</tt> add following line:<br/>
+					<div class="xmlcode">
+					export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M"
+					</div>
+					or <tt>red5.bat</tt>:<br/>
+					<div class="xmlcode">
+					set JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M
+					</div>
+				</li>
+			</ol>
+		</section>
+	</body>
+
+</document>

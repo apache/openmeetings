@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="interviewWhiteboard" extends="view" clip="true">
+        
+    <handler name="oninit">
+        canvas._drawarea = this;
+        this.reloadStatus();
+    </handler>
+    <handler name="onopenWhiteBoard" >
+        if ($debug) Debug.write("-- onOpenWhiteBoard --");
+    </handler>
+    
+    <method name="newInterviewStarting" args="refObj">
+        <![CDATA[
+           this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
+        ]]>
+    </method>
+        
+    <method name="reloadStatus">
+        this.getInterviewRecordingStatus.doCall();
+    </method>
+    
+    <!--
+    getInterviewRecordingStatus()
+     -->
+    <netRemoteCallHib name="getInterviewRecordingStatus" funcname="getInterviewRecordingStatus" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getInterviewRecordingStatus: ",value);
+                if (value) {
+                    parent._recStarted.setAttribute("visibility","visible");
+                } else {
+                    parent._recStarted.setAttribute("visibility","hidden");
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+    
+    <simplelayout axis="y" spacing="2" />
+    
+    <commonVideoViewContent name="_videoviewcontent" x="40" >
+        <simplelayout axis="x" spacing="2" />
+        
+        <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" />
+        <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" />
+    </commonVideoViewContent>
+    
+    <view name="_interview" align="center" visible="${ canvas.ismoderator }">
+        
+        <!--
+           public synchronized Boolean startInterviewRecording()
+         -->
+        <netRemoteCallHib name="startInterviewRecording" funcname="startInterviewRecording" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    if ($debug) Debug.write("startInterviewRecording: ",value);
+                    if (!value) {
+                        new lz.labelerrorPopup(canvas,{errorlabelid:915});
+                    }
+                ]]>
+            </handler>
+        </netRemoteCallHib>          
+        
+        <netRemoteCallHib name="stopInterviewRecording" funcname="stopInterviewRecording" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    if ($debug) Debug.write("stopInterviewRecording: ",value);
+                    if (!value) {
+                        new lz.labelerrorPopup(canvas,{errorlabelid:916});
+                    }
+                ]]>
+            </handler>
+        </netRemoteCallHib>  
+        
+        <simplelayout axis="x" spacing="2" />
+        
+        <simpleLabelButton name="_start" labelid="913" height="30" width="200">
+            <handler name="onclick">
+                if ($debug) Debug.write("Start Recording");
+                parent.startInterviewRecording.doCall();
+            </handler>
+            <view x="2" y="4" resource="interview_record_start" />
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_stop" labelid="914" height="30" width="200">
+            <handler name="onclick">
+                if ($debug) Debug.write("Stop Recording");
+                parent.stopInterviewRecording.doCall();
+            </handler>
+            <view x="2" y="4" resource="interview_record_stop" />
+        </simpleLabelButton>
+        
+    </view>
+    
+    <view name="_recStarted" align="center" visibility="hidden">
+        <labelText labelid="917" />
+    </view>
+        
+</class>
+
+</library>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="interviewUserListItem" extends="view" showhandcursor="false" 
+	   bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" width="252" height="42">
+	
+	<attribute name="connectedSince" value="" type="string" />
+    <attribute name="isMod" value="" type="string" />
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
+    <attribute name="isSelected" value="false" type="boolean" />
+    
+	<handler name="oninit">
+        <![CDATA[
+        
+            //this._userpic.setAttribute('src',downloadurl); 
+            //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
+            lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
+
+            if (this.isMod) {
+            	this.userStatus.setAttribute("frame",3);
+            }
+               
+            if (canvas.publicSID == this.refObj.publicSID) {
+                //this._userName.setAttribute("fontstyle","bold");
+                this.setAttribute("bgcolor",0x00FF00);
+            }
+            
+            this.updateIconByMod();
+        ]]>
+    </handler>
+    
+    <method name="updateIconByMod">
+    	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+    	if (this.isMod) {
+            this.userStatus.setAttribute("frame",3);
+        } else if (this.refObj.canDraw) {
+        	this.userStatus.setAttribute("frame",2);
+        } else {
+        	this.userStatus.setAttribute("frame",1);
+        }
+        
+        if (this.isSelected) {
+        	this._miniIcons.oninit.sendEvent();
+        }
+    </method>
+    
+    <method name="fadeText" args="ignore=null"> 
+        <![CDATA[
+            if (this.refObj.picture_uri.startsWith("http") || this.refObj.picture_uri.startsWith("https")) {
+                var downloadurl = this.refObj.picture_uri;
+            //Do Load the Custom Moodle Profilee Picture
+            } else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
+                
+                if (this.refObj.externalUserId == 1) {
+                    //Means it is a guest
+                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.png";
+                } else {
+                    var downloadurl = canvas.moodleWwwRoot+"/user/pix.php/"+ this.refObj.externalUserId +"/f2.jpg";
+                }
+                
+            } else {
+        
+                var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
+                                    +'&moduleName=chat&parentPath=&room_id='
+                                    +'&remoteUserid='+this.user_id
+                                    +'&sid='+canvas.sessionId;
+                        
+            }
+            
+            this._userpic.setAttribute('src',downloadurl); 
+        ]]>          
+    </method>
+     
+    <handler name="onclick">
+    	parent.parent.parent.selectItem(this);
+    </handler>
+     
+    <method name="select">
+    	if (!this.isSelected) {
+	    	new lz.interviewModerationMiniIcons(this,{name:'_miniIcons',align:'right',
+                isMod:this.isMod,
+                isSuperModerator:this.isSuperModerator});
+	    	this.isSelected = true;
+	    	this._userName.text = "";
+	    	this.showItem.setAttribute('started', true);
+    	}
+    </method>
+    
+    <method name="deselect">
+    	if (this.isSelected) {
+	    	this._miniIcons.destroy();
+	    	this.isSelected = false;
+	    	this._userName.text = this.firstname+' '+this.lastname;
+	    	this.closeItem.setAttribute('started', true);
+    	}
+    </method>
+     
+    <image name="_userpic" stretches="both" x="1" y="1">
+        <handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+            ]]>
+        </handler>
+    </image>
+    
+    <view name="userStatus" align="right" frame="1" 
+    	  resource="userstatus_multiframe_rsc" />
+    
+    <labelText name="_userName" x="41" y="2"
+    		   text="$once{ parent.firstname + ' ' + parent.lastname }" />
+     
+    <animatorgroup name="showItem" started="false" process="simultaneous">
+    	<animator attribute="height" to="62" duration="750" />
+    	<animator attribute="width" to="252" duration="750" />
+    </animatorgroup>
+    
+    <animatorgroup name="closeItem" started="false" process="simultaneous">
+        <animator attribute="height" to="42" duration="750" />
+        <animator attribute="width" to="252" duration="750" />
+    </animatorgroup>
+                 
+</class>
+
+</library>

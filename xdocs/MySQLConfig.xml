@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>MySQL Configuration</title>
+		<author email="sebawagner@apache.org">
+			Apache OpenMeetings Documentation Team
+		</author>
+	</properties>
+
+	<body>
+		<section name="MySQL Configuration">
+
+			<subsection name="Before you start">
+				<ul>
+					<li>Make sure that you have set utf8 as
+						default/server-character-set in your MySQL configuration (my.cnf)
+						before you start the installation process of OpenMeetings!
+					</li>
+					<li>
+						make sure MySQL is listening on TCP/IP connections!
+						<br />
+						To verify if MySQL connection is working: OpenMeetings will
+						automatically create all tables in the database and all tables
+						should have utf8 as encoding/collation!
+					</li>
+					<li>If you encounter issues, you can drop the db again and delete
+						the file $red5/webapps/openmeetings/conf/install.xml and then run
+						the web based installer again
+					</li>
+				</ul>
+			</subsection>
+
+			<subsection name="Steps todo">
+				<ul>
+					<li>
+						You need to download the JConnector from mysql
+						<a href="http://www.mysql.com/downloads/connector/j/" target="_BLANK"
+							rel="nofollow">http://www.mysql.com/downloads/connector/j/</a>
+						and place it into:
+						<tt>$red5/webapps/openmeetings/WEB-INF/lib/</tt>
+					</li>
+					<li>
+						Rename:
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml
+						<br />
+						to
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+					</li>
+					<li>
+						Prepare Database Settings - go to
+						openmeetings_version_no_xx/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+						<br />
+						Alter config values in persistence.xml DB_HOST USER_NAME USER_PASS
+						with your values
+					</li>
+					<li>
+						Run red5-service and goto the web-based installer:
+						http://localhost:5080/openmeetings/install
+					</li>
+				</ul>
+			</subsection>
+
+			<subsection name="MySQL Sample Configuration">
+				<p>
+					There is a sample configuration for MySQL that ships with
+					every
+					release in:
+					<br />
+					/webapps/openmeetings/WEB-INF/classes/META-INF/mysql_persistence.xml
+				</p>
+			</subsection>
+
+
+		</section>
+
+	</body>
+
+</document>

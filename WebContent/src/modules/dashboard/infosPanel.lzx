@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="iconStepButtonWizzard" extends="view">
+	
+	<attribute name="resourceViewName" value="" type="string" />
+	
+	<attribute name="labelid" value="0" type="number" />
+    
+	<image src="$once{ canvas.getThemeImage( parent.resourceViewName ) }" 
+		stretches="both" width="24" height="24" />
+	
+	<labelText name="_txt" labelid="$once{ parent.labelid }" x="30" 
+			   y="2" fontstyle="bold" fgcolor="0x14537C" />
+	
+</class>
+
+<!--- "System" panel on the dashboard -->
+<class name="infosPanel" extends="view" 
+    width="${ canvas.width - this.x - 10}" height="224" y="10">
+    
+	<view width="${ parent.width-2 }" height="$once{ parent.height }" >
+        
+        <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
+        
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" x="110" y="30" labelid="768">
+        	<handler name="onclick">
+                quicklinkAct('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
+        
+      
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" x="140" y="60" labelid="771">
+        	<handler name="onclick">
+                quicklinkAct('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
+        
+
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" x="170" y="90" labelid="772" >
+        	<handler name="onclick">
+                quicklinkAct('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
+        
+        
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" x="200" y="120" labelid="773">
+        	<handler name="onclick">
+                quicklinkAct('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
+        
+        <labelText labelid="804" x="10" y="$once{ parent.height-70 }" multiline="true"
+        		   width="$once{ parent.width-210 }" />
+        
+        <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-70 }" height="24" 
+               onclick="this.parent.storeSettings();">
+            <handler name="onclick">
+                quicklinkAct('conferenceModuleRoomList');
+            </handler>
+            <labelTooltip labelid="769" />
+        </simpleLabelButton>
+        
+        <simpleLabelButton labelid="291" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-44 }" height="24" 
+               onclick="this.parent.storeSettings();">
+            <handler name="onclick">
+                quicklinkAct('dashboardModuleCalendar');
+            </handler>
+            <labelTooltip labelid="805" />
+        </simpleLabelButton>
+           
+	</view>
+</class> 
+
+</library>

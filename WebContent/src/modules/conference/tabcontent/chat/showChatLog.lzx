@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!---
+Chat tabpane class. It contains chatOutput-class and catTabBottom-class.
+This is used in the conference.
+-->
+<class name="showChatLog" extends="labelExplorerBox" labelid="1201"
+	    docking="true" resizeable="true" closable="true" width="500" 
+	    x="$once{ parent.width/2 - this.width/2 }" height="240">
+    
+    <attribute name="error" value="" type="string" />
+    
+    <view x="2" width="${ parent.width - 4 }" clip="true"
+        				y="24" height="${ parent.height-50 }">
+        <labelText text="$once{ parent.parent.error }" width="${ parent.width - 18 }"
+        		   multiline="true" resize="false" selectable="true" />
+        <om_vscrollbar />
+    </view>
+	
+    <simpleLabelButton labelid="891" width="100" onclick="this.parent.close();" 
+		   x="${ parent.width-104 }" y="${ parent.height-24 }" />
+</class>
+
+</library>

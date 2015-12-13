@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="errorPopupUserInfo" extends="labelExplorerBox" labelid="204"
+    docking="true" resizeable="false" closable="true" 
+    width="224" x="300" height="230">
+
+    <attribute name="error" value="" type="string" />
+    <attribute name="user" value="null" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            Debug.write(user);
+            var tString = this.error + "<BR/>"
+                    + user.username+"<BR/>" 
+                    + user.firstname + " " + user.lastname + "<BR/>"
+                    + parseDateToStringTime(user.roomEnter);
+            this.textInner._inner.setAttribute('text',tString);
+        ]]>
+    </handler>
+
+    <view name="textInner" y="24" width="218" height="200" x="2" clip="true">
+        <text name="_inner" fontsize="10" fontstyle="bold"
+            multiline="true" width="190" />
+        <om_vscrollbar />
+    </view>
+
+</class>
+
+<class name="moderationPanel" extends="view" layout="axis:x;spacing:2">
+    
+    <attribute name="recordingsName" value="" type="string" />
+    <attribute name="initial" value="true" type="boolean" />
+    <attribute name="recordingUser" value="null" />
+    <attribute name="publishingObj" value="null" />
+    
+    <attribute name="allowUserQuestions" value="true" type="boolean" />
+    <attribute name="roomName" value="" type="string" />
+    
+    <handler name="oninit">
+        <![CDATA[
+	        canvas._mymod = this;
+	        if (this.allowUserQuestions != null && !this.allowUserQuestions) {
+	            this.mod_btn.destroy();
+	        }
+	        this._roomName.setAttribute("text",this.roomName);
+        ]]>
+    </handler>
+    
+    <method name="setMessage">
+        <![CDATA[
+            if ($debug) Debug.write("setMessage: ",this.recordingUser);
+            var tString = "";
+            if (this.recordingUser!=null){
+                tString += canvas.getLabelName(419)
+               		+ " " + this.recordingUser.username
+               		+ " " + this.recordingUser.firstname
+               		+ " " + this.recordingUser.lastname
+               		+ " " + parseDateToStringTime(this.recordingUser.roomEnter) + ";";
+            }
+			if (this.publishingObj != null) {
+            	tString += canvas.getLabelName(1504)
+					+ " " + this.publishingObj.user.username
+					+ " " + this.publishingObj.user.firstname
+					+ " " + this.publishingObj.user.lastname
+					+ " " + this.publishingObj.url + ";";
+            }
+			this._inner.setAttribute('text', tString);
+        ]]>
+    </method>   
+    
+	<method name="checkForApplyScreen" args="record">
+		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
+	</method>  
+    
+    <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 
+    
+    <miniIconsNew name="mod_btn" y="6" innerResource="applyformodicon_rsc" width="16" height="16"
+               visible="${ (canvas.ismoderator) ? false : true  }" showhandcursor="true">
+        <handler name="onclick">
+            //We do only ask the Moderator(s) to change Moderation
+            //new lz.applyForModeration(canvas.main_content._content.inner);
+            canvas.thishib.applyForModeration.doCall();
+        </handler>  
+        <labelTooltip inittwice="true" labelid="906" />      
+    </miniIconsNew>
+    
+    <miniIconsNew name="_doShare" y="6" innerResource="start_screensharing_rsc" width="16" height="16" 
+    			showhandcursor="true"
+               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
+        <handler name="onclick">
+            this.parent.checkForApplyScreen("no");
+        </handler>
+        <labelTooltip labelid="239" />
+    </miniIconsNew>
+    
+    <labelText name="_inner" fgcolor="0xFF3300" y="4" />
+    
+    <view width="2" />
+    
+</class>
+
+</library>
