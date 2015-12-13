@@ -1882,4 +1882,5 @@
   <entry key="error.type.info">Сообщение</entry>
   <entry key="poll.type.yesNo">Да/Нет</entry>
   <entry key="poll.type.numeric">Число 1 - 10</entry>
+  <entry key="wizard.button.finish">Закончить</entry>
 </properties>

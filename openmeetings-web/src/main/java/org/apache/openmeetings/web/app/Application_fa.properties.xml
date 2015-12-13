@@ -1869,4 +1869,5 @@
   <entry key="error.type.info">پيام</entry>
   <entry key="poll.type.yesNo">خير/بله</entry>
   <entry key="poll.type.numeric">1-10 اعداد</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>
