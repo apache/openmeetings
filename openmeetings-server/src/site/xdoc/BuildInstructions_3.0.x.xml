@@ -47,7 +47,7 @@
 			</div>
 
 			<p>Get the source: </p>
-			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/branches/3.0.x/]]></source>
+			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/branches/3.0.x]]></source>
 			<p>Run the command: </p>
 			<source><![CDATA[ant ]]></source>
 			<p>There is no need to compile the client additionally! The ant task
