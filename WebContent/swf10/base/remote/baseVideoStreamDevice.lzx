@@ -1,0 +1,171 @@
+<library>
+	<!-- Licensed to the Apache Software Foundation (ASF) under one or more 
+		contributor license agreements. See the NOTICE file distributed with this 
+		work for additional information regarding copyright ownership. The ASF licenses 
+		this file to you under the Apache License, Version 2.0 (the "License"); you 
+		may not use this file except in compliance with the License. You may obtain 
+		a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless 
+		required by applicable law or agreed to in writing, software distributed 
+		under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+		OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+		the specific language governing permissions and limitations under the License. -->
+
+	<!--- extends the baseVideoStream with functions to catch Device Events 
+		this Class uses Events from the Base Class baseVideoStream onmicro and oncamera, 
+		which are thrown, once a device was set -->
+
+	<class name="baseVideoStreamDevice" extends="baseVideoStream">
+
+		<switch>
+			<when property="$as3">
+				<passthrough>
+					import flash.events.StatusEvent;
+					import flash.events.ActivityEvent;
+				</passthrough>
+			</when>
+		</switch>
+
+		<!--- Shows if there is Activity on the Microphone -->
+		<attribute name="micactive" value="false" type="boolean" />
+
+		<!--- Level delegate, used to track level changes.
+			@keywords private -->
+		<attribute name="_leveldel"
+			value="$once{new LzDelegate(this, '_updateLevel')}" />
+
+		<!--- Audio level, 0-100, the amount of sound detected by this microphone. 
+			Reset to 0 when there is no audio (no activity or not allowed).
+			@keywords readonly -->
+		<attribute name="level" type="number" value="0" />
+
+		<!--- Shows if there is Activity on the Camera -->
+		<attribute name="camactive" value="false" type="boolean" />
+
+		<!--- Message to send to Clients -->
+		<attribute name="objMessage" value="null" />
+		<!--- indicates if the message should be send, you can change the notification 
+			level by changing the loudnessAcitviation in the config.xml -->
+		<attribute name="isgreater" value="false" type="boolean" />
+
+		<attribute name="doSendNotification" value="true" type="boolean" />
+
+		<!--- If true the component will send an event via LocalConnection when 
+			sound is louder or less 5% -->
+		<attribute name="sendNotificationViaLocalConnection" value="true"
+			type="boolean" />
+
+		<event name="sendCameraStatus" />
+
+		<event name="sendMicroStatus" />
+
+		<handler name="oncamera" args="c">
+			//if ($debug) Debug.write("Cam: ",c);
+			c.addEventListener(ActivityEvent.ACTIVITY, onActivity);
+			c.addEventListener(StatusEvent.STATUS, onStatus);
+		</handler>
+
+		<method name="onStatus" args="stats">
+			if ($debug) Debug.write("CamStatus: ",stats);
+			this.sendCameraStatus.sendEvent(stats.code);
+		</method>
+
+		<method name="onActivity" args="event">
+			this.setAttribute("camactive", event.activating);
+		</method>
+
+		<handler name="onmicro" args="m">
+			//if ($debug) Debug.write("onmicro: ",m);
+			var t = this;
+			//send mic active to true to start the onActivity callback Idle job
+			this.setAttribute("micactive", true);
+			m.addEventListener(ActivityEvent.ACTIVITY, onMicActivity);
+			m.addEventListener(StatusEvent.STATUS, onMicStatus);
+		</handler>
+
+		<method name="onMicStatus" args="stats">
+			if ($debug) Debug.write("onMicStatus 1: ",stats);
+			this.sendMicroStatus.sendEvent(stats.code);
+		</method>
+
+		<method name="onMicActivity" args="event">
+			if ($debug) Debug.write("onMicActivity: ",event);
+		</method>
+
+		<!--- Handler for the Flash Microphone onActivity callback.
+			@keywords private -->
+		<handler name="onmicactive">
+		<![CDATA[
+			if (this.onlevel) {
+				if (this.micactive) {
+					this._leveldel.register(lz.Idle, "onidle");
+				} else {
+					this._leveldel.unregisterAll();
+					this.setAttribute("level", 0);
+				}
+			}
+		]]>
+		</handler>
+
+		<!--- Handler for updating the microphone activity level attribute.
+			@keywords private -->
+		<method name="_updateLevel" args="arg">
+		<![CDATA[
+			if (this.micro == null) {
+				return;
+			}
+			var level = this.micro.activityLevel;
+			if (level < 0) {
+				level = 0;
+			}
+
+			if (level != this.level) {
+				this.setAttribute("level", level);
+			}
+		]]>
+		</method>
+
+		<!-- these methods send a Notification to all Connected users of a Room 
+			about the onActivity-Change -->
+		<handler name="onlevel" args="level">
+		<![CDATA[
+			//if ($debug) Debug.write("onlevel ",this.level,level);
+			
+			if (!this.doSendNotification) {
+				return;
+			}
+			
+			//greater 5 means the green dot starts to blink if the loudness is greater then 5%
+			//it makes no sense to set this to zero as there will be 1000 of events send
+			//per minute to change the status just of this icon, swagner 12.02.2012
+			var tVal = (level > 8);
+			
+			if (this.isgreater != tVal) {
+				//if ($debug) Debug.write("Level sendNotification ",this.isgreater,tVal,level);
+				this.isgreater = tVal;
+				this.sendNotification();
+			}
+		]]>
+		</handler>
+
+		<method name="sendNotification">
+			//if ($debug) Debug.write("Level sendNotification ",this.isgreater);
+			if (!this.sendNotificationViaLocalConnection) {
+				return;
+			}
+			if (parent.parent._loudness != null) {
+				parent.parent._loudness.setSpeaking(this.isgreater);
+			}
+			this.objMessage = new Array ();
+			this.objMessage[0] = 'audioActivity';
+			this.objMessage[1] = this.isgreater;
+			this.objMessage[2] = parent.parent.publicSID;
+			//if ($debug) Debug.write("Level sendNotification ",this.objMessage);
+			this.sendMessage.doCall();
+		</method>
+
+		<netRemoteCallHib name="sendMessage" funcname="sendMessage"
+			remotecontext="$once{ canvas.thishib }" showLoading="false">
+			<netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+		</netRemoteCallHib>
+	</class>
+</library>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+	<properties>
+		<title>Joomla Plugin</title>
+		<author email="solomax@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+	<body>
+		<section name="OpenMeetings Plugin for Joomla">
+			<p>
+				Current Development Snapshots for testing can be created from the sources:
+				<a href="https://svn.codespot.com/a/apache-extras.org/openmeetings-joomla-plugin/trunk">here</a>
+				.
+			</p>			
+		</section>
+		<section name="Features">
+			<p>The plugin contains the following features: </p>
+			<ul>
+				<li>Create videoconference rooms from Joomla: </li>
+				<li>
+					<ol>
+						<li>Create rooms</li>										
+						<li>Enter the room</li>
+					</ol>
+				</li>
+				<li>Access recordings from Joomla: </li>
+				<li>
+					<ol>
+						<li>Download recordings</li>										
+					</ol>
+				</li>
+			</ul>
+		</section>
+		<section name="Demo video">			
+			<div>
+				<b>OpenMeetings Joomla Plugin Installation</b><br/>              
+				<object style="height: 360px; width: 640px">
+					<param name="movie" value="http://www.youtube.com/v/jt8ejgtHavc?version=3&amp;feature=player_detailpage"/>
+					<param name="allowFullScreen" value="true"/>
+					<param name="allowScriptAccess" value="always"/>
+					<embed src="http://www.youtube.com/v/jt8ejgtHavc?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
+				</object> 
+			</div>
+			<br/>
+			<div>
+				<b>OpenMeetings Integration with Joomla</b><br/>              
+				<object style="height: 360px; width: 640px">
+					<param name="movie" value="http://www.youtube.com/v/H61N0pfLusA?version=3&amp;feature=player_detailpage"/>
+					<param name="allowFullScreen" value="true"/>
+					<param name="allowScriptAccess" value="always"/>
+					<embed src="http://www.youtube.com/v/H61N0pfLusA?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
+				</object> 
+			</div>
+		</section>
+	</body>
+
+</document>

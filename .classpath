@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<classpath>
+	<classpathentry kind="src" path="WebContent/WEB-INF"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="WebContent/openmeetings/WEB-INF/classes"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=build%2Fred5%2Fserver%2Fivy.xml&amp;confs=default%2Cjava6&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%2Fbuild%2Fred5%2Fserver%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="lib" path="build/red5/server/dist/red5.jar" sourcepath="build/red5/server/src"/>
+	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar" sourcepath="build/red5/client/src"/>
+	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
+	<classpathentry kind="lib" path="WebContent/screensharing"/>
+	<classpathentry kind="output" path="build/classes/eclipse"/>
+</classpath>

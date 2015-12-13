@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+ 
+<class name="interviewUserList" extends="view" width="$once{ parent.width }" 
+       height="${ parent.height-34 }">
+
+    <!--- holds a references to the videoview which is broadcasting -->
+    <attribute name="broadCastViewRef" value="null" />
+    
+    <!--- colors for each user -->
+    <attribute name="colorArray" value="null" />
+
+    <attribute name="showsVideoInSeparateComponent" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        //set modus
+        canvas.thishib.modus = "interview";
+        
+        //set reference, this reference will be cleared at *ontabcontenctleave* event
+        canvas._videocontainer=this;
+        
+        // Reconnect User to its Room Id
+        canvas.thishib.userScope = canvas.thishib.currentroomid;
+        var src = hib.getUrl();
+        
+        if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
+        
+        if (canvas.thishib.src != src) {
+            canvas.thishib.setAttribute('src',src);
+            
+            canvas.thishib.reconnectionAction = true;
+            canvas.thishib.reconnectObjRef = this;
+            canvas.thishib.disconnect();
+        } else {
+            //The user is already in the correct Scope
+            this.reconnectSuccess();
+        }
+    </handler>
+                  
+    <method name="reconnectSuccess">
+        if ($debug) Debug.warn("User Reloged In ",canvas.becomemoderator);
+        //Send to SWF10 video-container to connect on the conference room url 
+        //and wait for the as3ConnectionSuccess-Event
+        this._videoviewcontent.reconnectSuccess(true);
+    </method>
+    
+    <!---
+        We need to wait till the video-container / as3 app has the connection established
+        otherwise it can happen that the video tries to start playing before the rtmp-connection
+        was established
+     -->
+    <method name="as3ConnectionSuccess">
+        if ($debug) Debug.write("as3ConnectionSuccess continue loading");
+        //set default values and get already availible streams
+        //it can happen that if you click to exit the room the views are not 
+        //not cleaned up yet and you receive this event from the LocalConnection
+        if (this["getRoomModeratorsByRoomId"]) {
+            this.getRoomModeratorsByRoomId.doCall();
+        }
+    </method>
+    
+    <netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>    
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                canvas.becomeSuperModerator = false;
+                
+                parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
+                
+                for (var i=0;i<value.length;i++) {
+                    
+                    if (value[i].user.user_id == canvas.user_id) {
+                        parent.setRoomValues.applyDefaultModeration = true;
+                        canvas.becomeSuperModerator = value[i].isSuperModerator;
+                        if ($debug) Debug.info("Make this User to an Moderator");
+                        break;
+                    }
+                    
+                }
+                
+                if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
+                if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
+                
+                canvas.currentusercolor = canvas.getColorForUser();
+                
+                var organisation_id = 1;
+            
+                if ($debug) Debug.write(hib.userobject); 
+                if ($debug) Debug.write(hib.currentdomainObj); 
+                
+                if (hib.currentdomainObj != null) {
+                    organisation_id = hib.currentdomainObj.organisation_id
+                }
+                
+                this.parent.setRoomValues.organisation_id = organisation_id;
+                this.parent.setRoomValues.doCall();
+            
+            ]]>
+        </handler>
+    </netRemoteCallHib>     
+
+    <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+        <attribute name="applyDefaultModeration" value="false" type="boolean" />
+        <attribute name="organisation_id" value="0" type="number" />
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
+        <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
+        <netparam><method name="getValue">return parent.organisation_id;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
+        <handler name="ondata" args="roomStatus">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //if ($debug) Debug.write("setRoomValues1: ",value);
+            //if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
+            
+            if (roomStatus.roomFull) {
+                canvas.thishib.showFullMessage = true;
+                canvas.thishib.disconnect();
+            }
+            
+            if (roomStatus.browserStatus.browserInited) {
+                var tObj = new Object();
+                tObj[0] = "newBrowserURL";
+                tObj[1] = roomStatus.browserStatus.currentURL;
+                canvas.startBrowser(tObj);
+            }
+            
+            var value = roomStatus.clientList;
+            
+            for (var i = 0; i < value.length; ++i){
+                if ( value[i].streamid == canvas.streamid ) {
+                    canvas.isAllowedToDraw = value[i].canDraw;
+                }
+
+                this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
+                              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
+            }
+            //this content must be inited _after_ setting the default values
+            canvas.thishib.getCurrentModeratorList.doCall(); 
+            //FIXME Issue-1076
+            canvas.thishib.checkLzRecording.doCall();
+            if (canvas._currentChatPanel.visible) {
+				canvas._currentChatPanel.toggleopen();
+			}
+            ]]>
+        </handler>  
+    </netRemoteCallHib>
+
+    <!-- invoked if another client logs into the room 
+    after choosing devices -->     
+    <method name="setAVSettingsToClient" args="rcl">
+         this._videoviewcontent.setAVSettingsToClient(rcl);
+    </method> 
+    
+    <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+        <![CDATA[
+            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,object);
+            
+            //Do init only in case this stream is NOT the same as we are
+            if (streamid!=canvas.streamid){
+                //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+                this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, object.interviewPodId, object);
+            }
+           
+            //do add self too
+            this._participants.addItem(object);
+        ]]>
+    </method>
+    
+    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+        <![CDATA[
+        if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+
+        if (canvas.publicSID != object.publicSID){
+            this._videoviewcontent.createVideoObject(object.publicSID, false, object.interviewPodId, object);
+        }
+
+        //Do Add it anyway
+        this._participants.addItem(object);
+        ]]>
+    </method>
+        
+    <!--
+        invoked whenever a User starts to Stream Video in this Room,
+        interviewPodId has only a meaning in the Room Type Interview
+     -->
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight">
+        this._videoviewcontent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
+    </method>
+
+    <method name="updateMuteStatusVideoView" args="roomClient">
+        this._videoviewcontent.updateMuteStatusVideoView(roomClient);
+    </method>
+    
+    <method name="setSpeakingByPos" args="publicSID,bool">
+        this._videoviewcontent.setSpeakingByPos(publicSID, bool);
+    </method>  
+    
+    <!--- 
+        stops the streaming but does not destroy the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="closeStreamClient" args="publicSID">
+        this._videoviewcontent.closeStreamClient(publicSID);
+    </method>
+    
+    <method name="removeVideoByUser" args="userObject">
+    	if ($debug) Debug.write("removeVideoByUser ",userObject);
+        this.closeStreamClient(userObject.publicSID);
+    </method>
+    
+    <method name="disconnectclient" args="publicSID">
+        this._videoviewcontent.disconnectclient(publicSID);
+        this._participants.disconnectclient(publicSID);
+    </method>
+    
+    <method name="resetAllValues">
+        this._videoviewcontent.resetAllValues();
+    </method>
+    
+    <interviewListInner name="_participants" />
+    
+    <commonVideoComponentAdapter name="_videoviewcontent"/>
+    
+</class>
+
+</library>

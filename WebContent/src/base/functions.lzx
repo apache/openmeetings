@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<script>
+<![CDATA[
+
+var labelObj;
+    
+var tempActionForNavi = null;
+
+// Load Labels from List
+var labels = new Object();
+
+String.prototype.startsWith = function(prefix) {
+    return (this.indexOf(prefix) === 0);
+};	
+
+var _labelObject = new Array();
+
+var RegExpTooltiplist = null;
+
+function disablesTooltips(obj){
+  if(RegExpTooltiplist!=null){
+    RegExpTooltiplist.destroy();
+    RegExpTooltiplist=null;
+  }
+  RegExpTooltiplist = obj;
+}
+
+function setLabelObject(lableObj){
+	_labelObject = lableObj;
+}
+
+function getLabelObjectById(labelid){
+	for (var i=0;i<_labelObject.length;i++){
+		if (Number(_labelObject[i]['labelid'])==labelid){
+			return _labelObject[i];
+		}
+	}
+}
+
+function getLabelNameGlob(labelid){
+	for (var i=0;i<_labelObject.length;i++){
+		if (Number(_labelObject[i]['labelid'])==labelid){
+			return _labelObject[i]['labelvalue'];
+		}
+	}
+}
+    
+var currentMouseWheelObject = null;
+    
+function setCurrentMouseWheelObject(obj) {
+    currentMouseWheelObject=obj;
+}    
+function getCurrentMouseWheelObject(obj) {
+    return currentMouseWheelObject;
+}  
+function disableCurrentMouseWheelObject() {
+    currentMouseWheelObject=null;
+}  
+
+function setLabelObjectByHundred(no,obj){
+    canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "hibAdapter_setLabelObjectByHundred", [no, obj]); 
+   	for (var i = 0; i < obj.length; ++i) {
+	    labels["id" + obj[i].id] = obj[i].value;
+   	}
+}
+
+function getLabelTag(labelid){
+	var l = labels["id" + labelid];
+	if (l != undefined) {
+		if ($debug) l += " [" + labelid + "]";
+	} else {
+		l = "Error Missing [" + labelid + "]";
+	}
+    return l;
+}
+
+function quicklinkAct(action) {
+    // if($debug) Debug.write("FUNC/quicklinkAct",action);
+    loadContent({action: action, params: null},null,null);
+}            
+
+function loadContent(obj,parentobj,preparentobj){
+    if($debug) Debug.write("FUNC/loadContent: ", obj);
+    
+	if (obj.action!="logout") {
+	    tempActionForNavi = {action: obj.action, params: obj.params};
+		if (!clearStageContent()) {
+			loadContentByTempActionForNavi();
+		}
+	} else {
+		new lz.logoutConfirm(canvas,{objectsToClean: obj});
+	}
+    
+}
+    
+function loadContentByTempActionForNavi(){
+    // if($debug) Debug.write("FUNC/loadContentByTempActionForNavi");
+    
+	if (canvas.roomJumpId != 0) {
+		canvas.initroomid = canvas.roomJumpId;
+        canvas.thishib.getRoomById.doCall();
+		canvas.roomJumpId = 0;
+	} else {
+        if($debug) Debug.write("FUNC/loadContentByString -1- ",tempActionForNavi);
+        if($debug) Debug.write("FUNC/loadContentByString -2- ",canvas[tempActionForNavi.action]);
+        if($debug) Debug.write("FUNC/loadContentByString -3- ",lz[canvas[tempActionForNavi.action]]);
+        
+        new lz[canvas[tempActionForNavi.action]](canvas.main_content._content.inner, {params: tempActionForNavi.params});
+	}
+}    
+
+function clearStageContent(){
+    return canvas.main_content._content.clearAll();
+}
+
+function setLabelObject(labelObjRef){
+    // if($debug) Debug.write("FUNC/setLabelObject",labelObjRef);
+    labelObj = labelObjRef;
+}
+
+function getLabelNameXMLCRM(labelid){
+    // if($debug) Debug.write("FUNC/getLabelNameXMLCRM",labelid);
+    for (var i=0;i<labelObj.length;i++){
+        if (labelid==labelObj[i].fieldvalues_id){
+            return labelObj[i].value;
+        }
+    }
+    
+}
+
+function getStringTime(){
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    return ''+hours+':'+minutes;
+}   
+
+function getStringTimeWithSeconds(){
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}   
+
+function parseDateToString(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToString",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var m = dateObj.getMonth()+1;
+    if (m<10) m = "0"+m;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    return d+'.'+m+'.'+y;
+}
+
+function parseDateToStringTimeOnly(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m;        
+    return h+':'+m;
+}
+
+function parseTimeStringToDate(t){
+    // if($debug) Debug.write("FUNC/parseStringToTime",t);
+    if (t.length==5){
+        var d = 1;
+        var m = 1;
+        var y = 1970;
+        var std = Number(t.substring(0, 2));
+        var min = Number(t.substring(3, 5));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            if ($debug) Debug.write("parseTimeStringToDate: ",new Date(y, m-1, d, std, min))
+            return new Date(y, m-1, d, std, min);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function parseDateToStringTime(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m;        
+    return d+'.'+mo+'.'+y+' '+h+':'+m;
+}
+
+function parseDateToStringTimeSeconds(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m; 
+    var s = dateObj.getSeconds();
+    if (s<10) s = "0"+s; 
+    return d+'.'+mo+'.'+y+' '+h+':'+m+':'+s;
+}
+
+function parseStringToDate(t){
+    // if($debug) Debug.write("FUNC/parseStringToDate",t);
+    if (t.length==10){
+        var d = Number(t.substring(0, 2));
+        var m = Number(t.substring(3, 5));
+        var y = Number(t.substring(6, 10));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            return new Date(y, m-1, d);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function parseStringToDateTime(t){
+    // if($debug) Debug.write("FUNC/parseStringToDate",t);
+    if (t.length==15){
+        var d = Number(t.substring(0, 2));
+        var m = Number(t.substring(3, 5));
+        var y = Number(t.substring(6, 10));
+        var h = Number(t.substring(10, 12));
+        var min = Number(t.substring(13, 15));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            if ($debug) Debug.write("parseStringToDateTime+: ",new Date(y, m-1, d, h, min))
+            return new Date(y, m-1, d, h, min);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function getStringDateFileSave(){
+    // if($debug) Debug.write("FUNC/getStringDateFileSave");
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var date = dateObj.getDate();
+    if (date<10) date="0"+date;
+    var month = dateObj.getMonth()+1;
+    if (month<10) month="0"+month;
+    return date+'_'+month+'_'+dateObj.getFullYear()+'_at_'+hours+'_'+minutes;
+} 
+
+function getStringTimeByTimeStamp(tStamp){
+    if ($debug) Debug.write("getStringTimeByTimeStamp "+tStamp);
+    var dateObj = new Date(tStamp);
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}  
+
+
+function strtrim(str)
+{
+    for(var i = 0; str.charCodeAt(i) < 33; i++);
+    for(var j = str.length-1; str.charCodeAt(j) < 33; j--);
+    return str.substring(i, j+1);
+}
+
+function parseDateTimeStringFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+	var tHour = str.substr(11,2);
+	var tMin = str.substr(14,2);
+	return ""+tDay+"."+tMonth+"."+tYear+" "+tHour+":"+tMin;
+}
+
+function parseDateStringFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+	return ""+tDay+"."+tMonth+"."+tYear;
+}
+
+function parseTimeStringFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tHour = str.substr(11,2);
+	var tMin = str.substr(14,2);
+	
+	return ""+tHour+":"+tMin;
+}
+
+/*
+ * parse date from string
+ * sample strings:
+ * 2012-03-05
+ */
+function parseDateOnlyFromXmlString(str) { 
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+	return new Date(tYear,Number(tMonth)-1,tDay);
+}
+
+
+/*
+ * parse date from string
+ * sample strings:
+ * 0123456789012345678901234567890
+ * 2012-03-08T06:30:00.000+01:00
+ * 2012-03-11T15:00:00.713Z
+ */
+function parseDateTimeFromXmlString(str) { 
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+	var tHour = str.substr(11,2);
+	var tMin = str.substr(14,2);
+	return new Date(tYear,Number(tMonth)-1,tDay,tHour,tMin,0);
+}
+
+/**
+ * Correct REST format for java.util.Calendar is: yyyy-mm-ddTHH:MM:SS
+ *
+ *
+ */
+function parseDateToRestDateCalendar(dateObj){
+    if($debug) Debug.write("FUNC/parseDateToStringTime 1",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m; 
+    var s = dateObj.getSeconds();
+    if (s<10) s = "0"+s; 
+    if($debug) Debug.write("FUNC/parseDateToStringTime 2",""+y+"-"+mo+"-"+d+"T"+h+":"+m+":"+s);
+    return ""+y+"-"+mo+"-"+d+"T"+h+":"+m+":"+s;
+}
+
+]]>
+</script>
+		
+</library>

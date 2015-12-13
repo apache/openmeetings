@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="lzCalGridTempDrawView" extends="view" opacity="0.6"
+				bgcolor="0xA59CFC" width="${ parent.width }" height="60">
+	
+		<attribute name="starty" value="-1" type="number" />
+		
+		<attribute name="heightInMinutes" value="0" type="number" />
+		
+		<attribute name="tPixels30Minutes" value="0" type="number" />
+		
+		<handler name="onidle" reference="LzIdleService.LzIdle">
+			<![CDATA[
+				//Scroll calendar day view to position if neccessary
+				var tParentScrolly = parent.parent.parent.parent.getMouse("y");
+				if (tParentScrolly < 0) {
+					if (parent.parent.parent.y < 0) {
+						if (parent.parent.parent.y+20 < 0) {
+							parent.parent.parent.setAttribute("y",parent.parent.parent.y+20);
+						} else {
+							parent.parent.parent.setAttribute("y",0);
+						}
+					}
+				} else if (parent.parent.parent.parent.height < tParentScrolly) {
+					var maxScroll = parent.parent.parent.parent.height - parent.parent.parent.height;
+					if (parent.parent.parent.y > maxScroll) {
+						if (parent.parent.parent.y-20 > maxScroll) {
+							parent.parent.parent.setAttribute("y",parent.parent.parent.y-20);
+						} else {
+							parent.parent.parent.setAttribute("y",maxScroll);
+						}
+					} else {
+						parent.parent.parent.setAttribute("y",maxScroll);
+					}
+				}
+				
+				//fix height and position depending if area is selected in top or bottom of starting 
+				//position in day view
+				var tNewMouseY = parent.getMouse("y");
+				tNewMouseY = Math.round(tNewMouseY/tPixels30Minutes)*tPixels30Minutes;
+				if (tNewMouseY > this.starty) {
+					var newHeight = tNewMouseY - starty;
+					if (newHeight > (parent.height-starty)) {
+						newHeight = parent.height-starty;
+					}
+					this.setAttribute("y",this.starty);
+					this.setAttribute("height",newHeight);
+				} else {
+					if (tNewMouseY < 0) {
+						tNewMouseY = 0;
+					}
+					var newHeight = this.starty - tNewMouseY;
+					this.setAttribute("y",tNewMouseY);
+					this.setAttribute("height",newHeight);
+				}
+				if (this.height == 0) {
+					this.setAttribute("height",tPixels30Minutes);
+				}
+				if (this.height == tPixels30Minutes 
+							&& this.height+this.y >= parent.parent.parent.height) {
+					this.setAttribute("y", parent.parent.parent.height-tPixels30Minutes);
+				}
+				
+				//show start time of new event
+				var startMinutesTotal = this.getStartMinutesTotal();
+				var startHours = Math.floor(startMinutesTotal/60);
+				var startMinutes = startMinutesTotal-(startHours*60);
+				if (startHours < 10) {
+					startHours = "0"+startHours;
+				}
+				if (startMinutes < 10) {
+					startMinutes = "0"+startMinutes;
+				}
+				
+				var endMinutesTotal = this.getEndMinutesTotal();
+				var endHours = Math.floor(endMinutesTotal/60);
+				var endMinutes = endMinutesTotal-(endHours*60);
+				if (endHours < 10) {
+					endHours = "0"+endHours;
+				}
+				if (endMinutes < 10) {
+					endMinutes = "0"+endMinutes;
+				}
+				
+				this.fromToTime.setAttribute("text",""+startHours+":"+startMinutes+" - "+endHours+":"+endMinutes);
+				
+			]]>
+		</handler>
+		
+		<method name="getStartMinutesTotal">
+			return Math.round(this.y/heightInMinutes);
+		</method>
+		
+		<method name="getEndMinutesTotal">
+			return Math.round((this.y+this.height)/heightInMinutes);
+		</method>
+		
+		<text name="fromToTime" resize="true" fontsize="10" fgcolor="0x666666" />
+	
+	</class>
+
+</library>

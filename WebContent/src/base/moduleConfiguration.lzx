@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<library>
+<!-- 
+##########################################################
+these properties can be overwritten by config.xml -->  
+   
+   
+<!-- #############################################
+    Admin Modules
+  -->   
+    
+<attribute name="adminModuleUser" value="userAdmin" type="string" />
+
+<attribute name="adminModuleRoom" value="roomAdmin" type="string" />
+
+<attribute name="adminModuleOrg" value="orgAdmin" type="string" />
+
+<attribute name="adminModuleLanguages" value="languagesEditor" type="string" />
+
+<attribute name="adminModuleConnections" value="roomClient" type="string" />
+
+<attribute name="adminModuleConfiguration" value="confAdmin" type="string" />
+
+<attribute name="adminModuleLDAP" value="ldapAdmin" type="string" />
+
+<attribute name="adminModuleBackup" value="backupContent" type="string" />
+
+<attribute name="adminModuleServers" value="serversAdmin" type="string" />
+
+
+<!-- #############################################
+    Moderator Modules
+ -->
+
+<attribute name="moderatorModuleUser" value="userModerate" type="string" />
+
+<attribute name="moderatorModuleRoom" value="roomModerate" type="string" />
+
+
+<!-- #############################################
+    Dashboard Modules
+ -->
+
+<attribute name="dashboardModuleStartScreen" value="mainDashboard" type="string" />
+
+<attribute name="dashboardModuleCalendar" value="myScheduledMeetings" type="string" />
+
+
+<!-- Conference Room Modules -->
+
+<attribute name="conferenceModuleRoomList" value="allmeetings" type="string" />
+
+
+<!-- #############################################
+    Conference Room
+ -->
+
+<attribute name="conferenceRoom" value="conferenceView" type="string" />
+
+
+<!-- #############################################
+    Restricted Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<attribute name="restrictedRoomModule" value="restrictedConferenceRoom" type="string" />
+
+<!-- #############################################
+    Custom Room
+ -->
+
+<attribute name="customRoomModule" value="flexibleCustomRoom" type="string" />
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<attribute name="interviewRoomModule" value="interviewConferenceRoom" type="string" />
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<attribute name="recordModule" value="recordContent" type="string" />
+
+<!-- #############################################
+    Profiles Panel Modules
+ -->
+
+<attribute name="userSettingsModule" value="userSettings" type="string" />
+
+</library>

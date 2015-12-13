@@ -1,0 +1,336 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+
+<class name="rtmpConnection" extends="node">
+    	
+    	<attribute name="debug" value="false" type="boolean" />
+    	
+    	<event name="onconnect"/>
+    	<event name="onerror"/>
+    	<event name="ondisconnect" />
+        
+        <!-- this attribute holds a reference to the current/last called netremoteCall,
+        in case of error you can debug that way which call did fail -->
+        <attribute name="lastCalled" value="null" />
+    	
+    	<attribute name="src" value="" type="string"/>
+    	
+		<method name="connect">
+            this._nc = new NetConnection();
+
+            // local reference to rtmpconnection
+            this._nc.t = this;     
+            
+            this._nc.proxyType = canvas.proxyType;
+            
+            var ok = this._nc.connect(src == "null" ? null : src, false); //isAVClient = false
+            if (this.debug) {
+            	if($debug) Debug.write("*** debug ***");
+            }
+            
+            //canvas.currentNC is the reference to the NetConnection that is used in the NetStream
+            canvas.currentNC = this._nc;
+            
+            this._nc.onStatus = function(info){
+                this.t._onStatus(info);
+            }
+            
+    		if($debug) Debug.write("devRtmpConnection/registerMethods()");
+			//Register Methods
+			this.registerMethods();    	            
+		</method>
+		
+        <method name="_onStatus" args="info"><![CDATA[
+            if (this.debug) {
+                Debug.write("devrtmpconnection", this, "_onStatus", info.code);
+            }
+
+            var msg = "";
+
+            switch (info.code) {
+
+                case "NetConnection.Connect.Success": {
+                    // The connection attempt succeeded.
+                    msg = info.code;
+                    s = 2;
+                    break;
+                }
+
+                default: {
+                    msg = info.code;
+                    s = 0;
+                    break;
+                }
+
+            }
+
+            this.setAttribute("status", msg);
+
+            if (s == 2) {
+                this.onconnect.sendEvent();
+            } else {
+            	this.onerror.sendEvent();
+            }
+
+          ]]>
+        </method>	
+        
+        <method name="disconnect">
+            this.ondisconnect.sendEvent();
+        	canvas.currentNC = null;
+            this._nc.close();
+        </method>
+    <!--- 
+        With this function all methods are registered to the NetConnection
+        A server can invoke this Method with a call for it from the Client
+        Only subnodes of rtmpconnections which are a instance of netRemoteCallHib
+        are registered, to add dynamically methods to the remotefunction you will
+        have to invoke this method once again
+        -swagner
+     -->
+    <method name="registerMethods">
+        <![CDATA[
+	        if (this.subnodes!=null){
+		        //Register all methods which are onstanceof netRemoteCallHib
+		        for (var i=0;i<this.subnodes.length;i++){
+		            //If it is of Type netRemoteCallHib then register it to the NetConnection
+		            if (this.subnodes[i] instanceof lz.netRemoteCallHib){
+		                var t = hib;
+		                this._nc[this.subnodes[i].funcname] = function( args ){
+                            return hib.remoteCallMethod(arguments.callee,arguments);
+		                    //return hib.remoteCallMethod(arguments.callee,args);
+		                }
+		            }
+		        }
+        	}
+        ]]>
+    </method>
+    
+    <!-- 
+        Process the RemoteCall to the Right Funtion
+        -swagner
+     -->
+    <method name="remoteCallMethod" args="callee,args">
+        <![CDATA[
+            for (var eg in this._nc){
+                if (this._nc[eg]==callee){
+                    if (this.debug) {
+                        //_root.Debug.write.write("DEBUG invoked a function remotely: ",eg,args);
+                    }    
+                    if (args.length == 1) {
+                        return this.callFuntion(eg,args[0]);
+                    } else {
+                        return this.callFuntion(eg,args);
+                    }
+                    //return this.callFuntion(eg,args);
+                }
+            }
+        ]]>
+    </method>
+    
+    <!-- 
+        Map the Function to a netRemoteCallHib
+        -swagner
+     -->
+    <method name="callFuntion" args="funcname,args">
+        <![CDATA[
+            for (var i=0;i<this.subnodes.length;i++){
+                if (this.subnodes[i].funcname==funcname){
+                    return this.subnodes[i].onResult(args);
+                }
+            }
+        ]]>
+    </method>		
+    
+    <method name="callRPC" args="func, obj, params">
+    	if (this.debug) Debug.write("*** call: func, obj, params",func,obj, typeof (params) ,params.length);
+    	if (params.length != 0){
+	    	//does this really work?
+	    	ASSetPropFlags(_global, null, 8, 1);
+	    	//Debug.write("does it work?",arguments);
+	    	<!--
+	    	this._nc.call.apply(this._nc,arguments);
+	    	 -->
+			if (params.length==1){
+			    this._nc.call(func, obj,params[0]);
+			} else if (params.length==2){
+			    this._nc.call(func, obj,params[0],params[1]);
+			} else if (params.length==3){
+			    this._nc.call(func, obj,params[0],params[1],params[2]);
+			} else if (params.length==4){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3]);
+			} else if (params.length==5){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4]);
+			} else if (params.length==6){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5]);
+			} else if (params.length==7){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6]);
+			} else if (params.length==8){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7]);
+			} else if (params.length==9){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8]);
+			} else if (params.length==10){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9]);
+			} else if (params.length==11){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10]);
+			} else if (params.length==12){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11]);
+			} else if (params.length==13){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12]);
+			} else if (params.length==14){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13]);
+			} else if (params.length==15){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14]);
+			} else if (params.length==16){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14],params[15]);
+			} else if (params.length==17){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14],params[15],params[16]);
+			} else if (params.length==18){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14],params[15],params[16],params[17]);
+			} else if (params.length==19){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14],params[15],params[16],params[17],params[18]);
+			} else if (params.length==20){
+			    this._nc.call(func, obj,params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10],params[11],params[12],params[13],params[14],params[15],params[16],params[17],params[18],params[19]);
+			}	    	 
+        } else {
+            this._nc.call(func, obj);
+        }
+    </method>
+    
+</class>
+
+
+    <!---
+        Net remote call. 
+        @todo Document netremotecall class.
+    -->
+    <class name="netremotecall" extends="node">
+
+
+        <!--- Name of the remote function. -->
+        <attribute name="funcname" value="$once{null}" type="string" />
+    
+        <attribute name="remotecontext" value="null" />
+    
+        <attribute name="dataobject" value="null" />
+		
+        <!--- Data handling event. args="value" 
+        @keywords private  -->
+        <event name="ondata" />
+
+        <!--- Error handling event. -->
+        <event name="onerror"/>
+
+        <!--- Call the remote method, passing the array of params. -->
+        <method name="callRPC" args="params"><![CDATA[
+            if (this.funcname == null) {
+                //Debug.write("No funcname given");
+                if (this.onerror) this.onerror.sendEvent("No funcname given");
+                return;
+            }
+
+            if (params == null) {
+                params = [];
+
+                var subnodes = this.subnodes;
+                if (subnodes != null) {
+                    var i;
+                    var n = subnodes.length;
+                    for (i = 0; i < n; i++) {
+                        // If getValue method is declared in param, call that
+                        // instead to get value.
+                        var tsi = subnodes[i];
+                        if ((tsi["getValue"] != null) && 
+                            (tsi.getValue["prototype"] != null)) {
+                            params[i] = tsi.getValue();
+                        } else {
+                            params[i] = tsi.value;
+                        }
+                    }
+                }
+
+            } else if (params.__proto__ != Array.prototype) {
+                //Debug.write(this.name, "error: first argument (params) is not an array");
+                return -1;
+            }
+
+            //if ($debug) Debug.write("call", this, this.parent, this.parent.status);
+            var rtmpObject = null;
+            if (this.parent instanceof lz.rtmpConnection){
+        	    rtmpObject = this.parent;
+            } else if(this.remotecontext  instanceof lz.rtmpConnection){
+        	    rtmpObject = this.remotecontext;
+            } else {
+        	    if ($debug) Debug.warn("ERROR: no remotecontext availible abort call", this.funcname, this);
+        	    return;
+            }
+        	//Debug.write('call', this, rtmpObject, rtmpObject.status);
+        	//Debug.write('call', this.remotecontext);
+            if (rtmpObject.debug) Debug.write('call', this, rtmpObject, rtmpObject.status);
+            rtmpObject.lastCalled = this;
+            rtmpObject.callRPC(this.funcname, this, params);
+
+          ]]>
+        </method>
+
+
+        <!--- Handle the result returned from the remote method. -->
+        <method name="onResult" args="value"><![CDATA[
+            // Can be overriden.
+            // Would be great if it can be used with dataobject,
+            // but I don't know how to convert Array/primitive to LzDataset/LzDataPointer.
+            ////Debug.write("netremotecall", this, "onResult", value);
+
+            if (this.dataobject!=null) {
+                if ( this.dataobject instanceof LzDataset ) {
+                    //Debug.write("onResult: ",this,value,dataobject);
+                    var element = LzDataElement.valueToElement(value);
+                    this.dataobject.setData(element.childNodes);
+                } else if ( this.dataobject instanceof LzDataElement ) {
+                    var element = LzDataElement.valueToElement(value);
+                    this.dataobject.appendChild( element );
+                } else {
+                    Debug.warn("dataobject is not LzDataset or LzDataElement: ",this,this.dataobject,delegate);
+                }
+            }
+            this.ondata.sendEvent(value);		
+          ]]>
+        </method>
+
+
+    </class>
+
+
+    <!---
+        Net parameter.
+        Element to use inside netremotecall.
+        @todo Document netparam class.
+    -->
+    <class name="netparam" extends="node">
+
+        <!--- The value of the netparam. -->
+        <attribute name="value" value="null"/>
+
+    </class>
+
+
+</library>

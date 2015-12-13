@@ -1,0 +1,246 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!--- The <view> is the most basic viewable element in an OpenLaszlo application. Anything that is displayed on the canvas is a view or extends the view class. A view is a rectangle, which can be visible or invisible, and which can contain other views or display "resources" such as images, .swf files, or other supported media. One view controls one displayable resource. The view system is strictly hierarchical; that is, each view has a single parent but can have multiple children.  -->
+<class name="view" extends="node" >
+ <!--- 	Activate/inactivate children for accessibility -->
+	<attribute name="aaactive" type="boolean" />
+	<attribute name="aadescription" />
+	<!--- 	Set accessibility description -->
+	<attribute name="aaname" />
+	<!--- 	Set accessibility silencing/unsilencing -->
+	<attribute name="aasilent" type="boolean"/>
+	<!---	Set accessibility tab order -->
+	<attribute name="aatabindex" type="number" />
+	<!---Sets the alignment for the view to the given value. The alignment is based on the size of this view as compared to the size of the view's immediate parent. 
+	One of: 	"left" | "center" | "right" | constraint -->
+	<attribute name="align" type="string" value="left"/>
+	<!---	Setting backgroundrepeat causes a view to repeat its resource to fit the view's width and/or height. Can be 'repeat', 'repeat-x', 'repeat-y' or 'norepeat' per the CSS1 background-repeat style. 
+	One of: 	"repeat" | "repeat-x" | "repeat-y" | "norepeat" -->
+	<attribute name="backgroundrepeat" value="norepeat" type="string" />
+	<!---	The background color of the view. Setting bgcolor to null will make the view transparent. May be set to any valid CSS color specification. When read, will be read as the equivalent numeric value. To retrieve a CSS color specification, use this.presentAttribute('bgcolor', 'color'). Default is null (transparent).  -->
+	<attribute name="bgcolor" type="color"/>
+	<!---	A value of true means that this view's bitmap will be cached, if available. -->
+	<attribute name="cachebitmap" type="boolean" value="false"/>
+	<!---An object containing properties corresponding to the current runtime's capabilities. For example, capabilities.rotation is true in swf and recent versions of Safari and Firefox.  -->
+	<attribute name="capabilities" />
+	<!---	If true, this view intercepts click events; otherwise they are passed to its container. This defaults to true if the view defines a mouse event handler or a cursor. -->
+	<attribute name="clickable" type="boolean" value="false"/>
+	<!---	Setting to a vector-based resource changes the clickable hotspot for the mouse. Check capabilities.clickregion before using to avoid debugger warnings.  -->
+	<attribute name="clickregion" />
+	<!--- 	Clip the view's contents to its size. -->
+	<attribute name="clip" type="boolean" value="false"/>
+	<!---	color transforms everything contained in the view (except the background) by the transformation dictionary given in o. The dictionary has the following possible keys: o.redMultiplier: multiplier for red component (0 to 1) defaults to 1 o.redOffset: offset for red component (-255 to 255) defaults to 0 o.greenMultiplier: multiplier for green component (0 to 1) defaults to 1 o.greenOffset: offset for green component (-255 to 255) defaults to 0 o.blueMultiplier: multiplier for blue component (0 to 1) defaults to 1 o.blueOffset: offset for blue component (-255 to 255) defaults to 0 o.alphaMultiplier: multiplier for alpha component (0 to 1) defaults to 1 o.alphaOffset: offset for alpha component (-255 to 255) defaults to 0  -->
+	<attribute name="colortransform" type="expression"/>
+	<!--- 	Contains a reference to the raw drawing context. The oncontext event is sent when the context is ready to use, which can take some time in IE DHTML.  -->
+	<attribute name="context" type="expression"/>
+	<!---The context menu installed on this view -->
+	<attribute name="contextmenu" />
+	<!---	The corner radius for the background, e.g. '4' or a list of up to 8 numbers '4 0 0 4 / 2 0 0 2'. Per http://www.w3.org/TR/css3-background/#the-border-radius the 8 values for each radii are given in the order top-left, top-right, bottom-right, bottom-left. If you use the '/' notation, the values before the slash are the horizontal radii, and the values after the slash are the vertical radii.  -->
+	<attribute name="cornerradius" />
+	<!---	The cursor to display when the mouse is over this view. Any resource ID can be used as a cursor, or '' for the default cursor. This attribute can be set for any view with clickable=true.  -->
+	<attribute name="cursor" />
+	<!---The foreground color of any <text> or <inputtext> elements that appear inside this view. To apply a color transform, see tintcolor. May be set to any valid CSS color specification. When read, will be read as the equivalent numeric value. To retrieve a CSS color specification, use this.presentAttribute('fgcolor', 'color'). Default is 0 (black).  -->
+	<attribute name="fgcolor" type="number"/>
+	<!---	If true, this view will receive focus events. See focus manager (lz.Focus) for more details.  -->
+	<attribute name="focusable" type="boolean"/>
+	<!---	If true, this view "traps" the focus, for example in a window or dialog. See focus manager (lz.Focus) for more details.  -->
+	<attribute name="focustrap" type="boolean"/>
+	<!---	The font to use for any <text> or <inputtext> elements that appear inside this view. Like all the font properties (fontstyle and fontsize too) these properties cascade down the view hierarchy until a new value is specified.  -->
+	<attribute name="font" />
+	<!---	Pixel size to use to render text which appears inside this view. The default is 8.  -->
+	<attribute name="fontsize" />
+	<!---	The style to use to render text fields that appear inside of this view. One of "plain", "bold" , "italic" or "bolditalic".  -->
+	<attribute name="fontstyle" />
+	<!---	If this view has a multi-frame resource, this allows setting which resource frame is displayed. Defaults to the first frame (1). See also the resource attribute. Setting this attribute will change the frame that is being displayed by the resource associated with this view. The first frame of the resource is frame 1. Setting a view's 'donttrackplay' option to true will allow the view's resource to play without updating the value of the view's frame property. This can save CPU usage in cases where the application doesn't need to know what frame the resource is showing while it is playing.  -->
+	<attribute name="frame" type="number"/>
+	<!---	For views whose resource is loaded at runtime, the ratio of the loaded frames to the total frames. This is a number between zero and 1.  -->
+	<attribute name="framesloadratio" type="number"/>
+	<!---If true, sprite will use TLF text framework class that supports bidirectional text layout. -->
+	<attribute name="hasdirectionallayout" type="number"/>
+	<!---	If true, then this view has an assigned or constrained height, and the view will not be sized to its contents.  -->
+	<attribute name="hassetheight" type="boolean"/>
+	<!---	If true, then this view has an assigned or constrained width, and the view will not be sized to its contents.  -->
+	<attribute name="hassetwidth" type="boolean"/>
+	<!---	The height of the view. Can be set to either a number, or null, to indicate that the view should be sized to hold its content. If the view is set to stretch its resource, the resource will be resized to the new value. When read, reflects the actual size of the view.  -->
+	<attribute name="height" type="number"/>
+	<!---	A CSS declaration of property: value pairs of layout attributes, which are used to create a layout that is attached to this view. If there is a class property, it names the class of the layout to be created, otherwise <simplelayout> is used. To remove the previously set layout, use {'class': 'none'} Examples: layout="axis: x", layout="class: constantlayout", layout="axis: y", layout="axis: x; spacing: 5".  -->
+	<attribute name="layout" />
+	<!---	For views whose resource is loaded at runtime, ratio of the loaded bytes to the total bytes. This is a number between zero and 1.  -->
+	<attribute name="loadratio" />
+	<!---	Reference to closest masked view in the hierarchy at or above this one  -->
+	<attribute name="mask" />
+	<!---	The opacity of the view's contents. 1.0 is opaque; 0.0 is totally transparent (invisible).  -->
+	<attribute name="opacity" type="number" />
+	<!--- 	The view system supports sub-pixel positioning to enable smooth animation. This may be turned off to make the view snap to a pixel boundary by setting pixellock to true.  -->
+	<attribute name="pixellock" />
+	<!---	If true, this view is currently playing. Setting to true causes the view to play, false causes playback to stop. -->
+	<attribute name="playing" type="boolean"/>
+	<!---	The url of the proxy server, if the app is running in proxied mode. proxyurl can be null, a URL string, or a function.
+
+    If the value is a string, treat it as a URL to the proxy server.
+    If the value is a function, it should return the URL of the proxy server.
+
+The default proxy policy references the proxyurl of the canvas.  -->
+	<attribute name="proxyurl" />
+	<!---A resource that is presented in the background of this view. The value can be either the name of a resource defined with the resource tag, a URL, or a pathname. If the value is a URL, the resource is requested when the view is displayed. If it's a pathname, the file named by the pathname is compiled into the application, and attached to this view.  -->
+	<attribute name="resource" />
+	<!---	The height of the resource that this view attached -->
+	<attribute name="resourceheight" type="number"/>
+	<!---The width of the resource that this view attached -->
+	<attribute name="resourcewidth" type="number"/>
+	<!---	The rotation value for the view (in degrees). Value may be less than zero or greater than 360.  -->
+	<attribute name="rotation" type="number" value="0"/>
+	<!---	The angle for the drop shadow, in degrees -->
+	<attribute name="shadowangle" type="number" value="0"/>
+	<!---The blur radius for the drop shadow, in pixels. A negative value will cause the shadow to be inset. -->
+	<attribute name="shadowblurradius" type="number" value="4"/>
+	<!---The color for the drop shadow -->
+	<attribute name="shadowcolor" />
+	<!---	The distance for the drop shadow, in pixels -->
+	<attribute name="shadowdistance" />
+	<!---	Show or hide the hand cursor for this view, if clickable -->
+	<attribute name="showhandcursor" type="boolean"/>
+	<!---	The URL from which to load the resource for this view. If this attribute is set, the media for the view is loaded at runtime.  -->
+	<attribute name="source" />
+	<!---	Setting stretches causes a view to change its coordinate space so that everything it contains (resources and other views) fit exactly into the view's width and/or height. The default for this property is "none". This is used to resize a view's contents by setting its width and/or height. 
+	One of: 	"width" | "height" | "both" | "none" -->
+	<attribute name="stretches" value="none"/>
+	<!---	An array of the subviews that are children of this view. This is initialized to an empty array for views that have no subviews.  -->
+	<attribute name="subviews" />
+	<!---	Sets the color offset, based on a hexadecimal color string, e.g. '#ff00ff'. See setColorTransform() for details. -->
+	<attribute name="tintcolor" />
+	<!---	The total number of frames for this view's resource. -->
+	<attribute name="totalframes" type="number"/>
+	<!---	If stretches is not set to none, the height that this view would be if it weren't stretched. This attribute can be used to scale a view by a percentage of its original size, or to determine the aspect ratio for a view.  -->
+	<attribute name="unstretchedheight" type="number"/>
+	<!---	If stretches is not set to none, the width that this view would be if it weren't stretched. This attribute can be used to scale a view by a percentage of its original size, or to determine the aspect ratio for a view.  -->
+	<attribute name="unstretchedwidth" type="number"/>
+	<!---	True if this view requires a call to getBounds() for accurate width and height measurement. This may be necessary when an offset or rotation are applied.  -->
+	<attribute name="usegetbounds" type="boolean"/>
+	<!---	Sets the vertical alignment for the view to the given value. The alignment is based on the height of this view as compared to the height of the view's immediateparent. 
+	One of: 	"top" | "middle" | "bottom" | constraint -->
+	<attribute name="valign" value="top"/>
+	<!---	A value of "visible" means that this view is shown. A value of "hidden" means that this view is hidden. Setting this attribute to "collapse" means that the runtime will hide this view when: its opacity is zero, it has a datapath that does not match a node, or it is loading its media. In this case, the the value of the 'visible' attribute of the view will reflect the view's current visible state. 
+	One of: hidden|visible|collapse -->
+	<attribute name="visibility" value="collapse"/>
+	<!---	A value of true means that this view is shown. A value of false means that this view is hidden. Note that an otherwise clickable view that is not visible will have no click region and will not be clickable.  -->
+	<attribute name="visible" type="boolean"/>
+	<!---The width of the view. Can be set to either a number, or null, to indicate that the view should be sized to hold its content. If the view is set to stretch its resource, the resource will be resized to the new value. When read, reflects the actual size of the view.  -->
+	<attribute name="width" type="number"/>
+	<!---	The horizontal offset of this view's upper left corner from the upper left corner of its container.  -->
+	<attribute name="x" type="number"/>
+	<!---	Specifies a translation point for drawing of this view. If the xoffset is set, then rotation and x position will be calculated by first adding the xoffset.  -->
+	<attribute name="xoffset" type="number"/>
+	<!---	Specifies this horizontal scale for this and all child views. -->
+	<attribute name="xscale" type="number" value="1"/>
+	<!---	The vertical offset of this view's upper left corner from the upper left corner of its container  -->
+	<attribute name="y" type="number"/>
+	<!---Specifies a translation point for drawing of this view. If the yoffset is set, then rotation and y position will be calculated by first adding the yoffset.  -->
+	<attribute name="yoffset" type="number"/>
+	<!---	Specifies this vertical scale for this and all child views. -->
+	<attribute name="yscale" type="number" value="1"/>
+	
+	<!-- extra attributes -->
+	<attribute name="with" />
+	
+	
+	<!---Event called when this view adds a subview -->   
+	<event name="onaddsubview" />
+	<!--- event for changes to view's backgroundrepeat property -->
+    <event name="onbackgroundrepeat" />
+    <!---  The onblur event is sent when an element loses focus either by the pointing device or by tabbing navigation.--> 
+    <event name="onblur" />
+    <!---   The onclick event is sent when the pointing device button is clicked over an element.--> 
+    <event name="onclick" />
+    <!--- Event for changes to view's clickable property--> 
+    <event name="onclickable" />
+    <!--- The onclip event is sent when the clip attribute of a view is changed--> 
+    <event name="onclip" />
+    <!--- Sent when the drawing context is ready to use, which can take some time in IE DHTML.-->
+    <event name="oncontext" /> 
+    <!--- Sent when cornerradius changes-->
+    <event name="oncornerradius" />
+    <!--- The ondblclick event is sent when the pointing device button is double clicked over an element.-->
+    <event name="ondblclick" /> 
+    <!--- Sent when there is an error loading the view's resource. The argument sent with the event is an error string.-->
+    <event name="onerror" />
+    <!--- The onfocus event is sent when an element receives focus either by the pointing device or by tabbing navigation.-->
+    <event name="onfocus" />
+    <!--- Sent onidle while view is playing its resource-->
+    <event name="onframe" /> 
+    <!--- Sends a percentage (0-1) reflecting the number of frames downloaded.-->
+    <event name="onframesloadratio" /> 
+    <!---The ongesture event is sent when a touch device receives a gesture event. The value sent with the event is an object with two properties: scale and rotation. Currently supported only in iOS on DHTML. -->
+    <event name="ongesture" />
+    <!--- Event for changes to view's height property-->
+    <event name="onheight" />
+    <!--- The onkeydown event is sent when this view has the focus and a key is pressed down. Multiple key down events are sent for a key that is held down. If you want the script executed only once, use onkeyup. This event is sent with the keycode for the key that is down.-->
+    <event name="onkeydown" />
+    <!--- The onkeyup event is sent when this view has the focus and a key is released. This event is sent with the keycode for the key that went up. -->
+    <event name="onkeyup" />
+    <!---Sent when the view sets its frame (resource number) to the last frame. This can be used to find out when a streaming media clip is done playing. -->
+    <event name="onlastframe" />
+    <!---Send when the view finishes loading media. -->
+    <event name="onload" />
+    <!---Sends a percentage (0-1) reflecting the amount of a media file that's been downloaded. -->
+    <event name="onloadratio" />
+    <!---The onmousedown event is sent when the pointing device button is pressed over an element. -->
+    <event name="onmousedown" />
+    <!---The onmousedragin event is sent when the pointing device button has moved off the element and back on again while the button is down. -->
+    <event name="onmousedragin" />
+    <!---The onmousedragout event is sent when the pointing device is moved off the element while the button is down. down. -->
+    <event name="onmousedragout" /> 
+    <!---The onmouseout event is sent when the pointing device is moved so that is is no longer over an element. -->
+    <event name="onmouseout" />
+    <!---The onmouseover event is sent when the pointing device is moved onto an element. -->
+    <event name="onmouseover" />
+    <!---Sent when the mouse leaves the visible area of a view that previously sent an 'ontrackover' event. -->
+    <event name="onmousetrackout" />
+    <!---Sent when the mouse is over a view that is registered to an active track group. -->
+    <event name="onmousetrackover" />
+    <!---Sent when the mouse button is released over a view that is registered to an active track group. -->
+    <event name="onmousetrackup" />
+    <!---The onmouseup event is sent when the pointing device button is released over an element. -->
+    <event name="onmouseup" />
+    <!---The onmouseup event is sent when the pointing device button is released outside the element it went down on. -->
+    <event name="onmouseupoutside" />
+    <!---Sent when a view changes its opacity -->
+    <event name="onopacity" />
+    <!---Sent when a view begins playing its resource -->
+    <event name="onplay" />
+    <!---Sent when a view begins playing its resource -->
+    <event name="onplaying" />
+    <!---Event called when this view removes a subview -->
+    <event name="onremovesubview" />
+    <!---Sent when shadowangle changes -->
+    <event name="onshadowangle" />
+    <!---Sent when shadowblurradius changes -->
+    <event name="onshadowblurradius" />
+    <!---Sent when shadowcolor changes -->
+    <event name="onshadowcolor" />
+    <!---Sent when shadowdistance changes -->
+    <event name="onshadowdistance" />
+    <!---Sent when a view's resource that is capable of playing is stopped. This is only called if stop is called directly; when a resource hits its last frame, the lz.view event onlastframe is called. -->
+    <event name="onstop" />
+    <!---Sent when the request to load media for the view times out -->
+    <event name="ontimeout" />
+    <!---The ontouch event is sent when a touch device receives a multitouch event. The value sent with the event is an array of objects with with two properties: clientX and clientY. Currently supported only in iOS on DHTML. Note that Android Webkit doesn't send multitouch events - see http://www.quirksmode.org/mobile/tableTouch.html -->
+    <event name="ontouch" />
+    <!---Sent when the view changes visibility (true/false) -->
+    <event name="onvisible" />
+    <!---event for changes to view's width property -->
+    <event name="onwidth" />
+    <!---event for changes to view's x property -->
+    <event name="onx" />
+    <!---event for changes to view's y property --> 
+    <event name="ony" />
+    
+    <!--- This element is only available in the splash SWF specific -->
+    <attribute name="center" type="boolean"/>
+    <!--- This element is only available in the splash SWF specific -->
+    <attribute name="ratio" type="boolean"/>
+	
+</class>
+
+</library>

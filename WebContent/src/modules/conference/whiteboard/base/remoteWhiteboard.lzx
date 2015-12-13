@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="remoteWhiteboard" extends="baseDrawSave">
+	
+	<attribute name="loadingObjectListId" value="0" type="number" />
+	<attribute name="loadingObjectList" value="null" />
+	
+	<attribute name="loadObjectDelegate" value="null" />
+	
+	<method name="loadObjectList" args="whiteBoardObject">
+		<![CDATA[
+		
+			if ($debug) Debug.info("loadObjectList :1: ",whiteBoardObject,whiteBoardObject.fullFit,whiteBoardObject.zoom);
+		
+			if (parent.parent["zoombox"]) {
+			    parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
+			}
+			
+			
+			this.setAttribute("x",whiteBoardObject.x);
+			this.setAttribute("y",whiteBoardObject.y);	
+			this.last_x = this.x;
+			this.last_y = this.y;
+			
+			/*
+			if (whiteBoardObject.brainStorming != null) {
+                this.loadBrainStormingObject(whiteBoardObject.brainStorming);
+            }
+            */
+			
+			this.fullFit = whiteBoardObject.fullFit;
+			
+			this.getDisplayObject()._xscale = whiteBoardObject.zoom;
+    		this.getDisplayObject()._yscale = whiteBoardObject.zoom;
+    		
+    		this.onupdateScale.sendEvent(null);
+			
+			this.loadingObjectList = new Array();
+			
+			for (var eg in whiteBoardObject.roomItems) {
+				this.loadingObjectList.push(whiteBoardObject.roomItems[eg]);
+			}
+			
+			//return;
+			//if ($debug) Debug.write("loadObjectList :2: ",this.loadingObjectList);
+			
+			function sortItemByIndex(a,b){
+                var a1 = a[a.length-8];
+                var b1 = b[b.length-8];
+                //_root.//Debug.write("natcompare: ",a1,b1,natcompare(a1,b1));
+                if(a1==b1){
+                    return 0;
+                } else if(a1>b1){
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+            
+            //for (var i=0;i<this.loadingObjectList.length;i++) {
+            //	if ($debug) Debug.write(" 1 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            //}
+            
+            this.loadingObjectList.sort(sortItemByIndex);
+			
+            //for (var i=0;i<this.loadingObjectList.length;i++) {
+            //    if ($debug) Debug.write(" 2 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            //}
+            
+			this.loadingObjectListId = 0;
+			//this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+			//if (this.loadingObjectList.length != 0){
+			//	lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+			//}
+			//for (var i=0;i<this.loadingObjectList.length;i++){
+			//	if ($debug) Debug.write("i this.loadingObjectList[i] ",i,this.loadingObjectList[i]);
+			//}
+			
+			if ($debug) Debug.write("Number of Whiteboard Objects ",this.loadingObjectList.length);
+			
+			if (this.loadingObjectList != null && this.loadingObjectList.length != 0){
+				this.startNewSyncprocess.doCall();
+			}
+		]]>
+	</method>
+	
+	<method name="loadSavedObjectList" args="objList">
+        <![CDATA[
+            
+            var tempArray = new Array();            
+            tempArray[0] = "loadSavedWhiteboard";
+            ///tempArray[1] = itemObj;
+            tempArray[1] = objList;
+            hib.sendMessageWithClient.sendMessage("whiteboard", tempArray);
+        
+            this.loadingObjectList = objList;
+            
+            if ($debug) Debug.write("loadObjectList :: ",this.loadingObjectList);
+            
+            function sortItemByIndex(a,b){
+                var a1 = a[a.length-8];
+                var b1 = b[b.length-8];
+                //_root.//Debug.write("natcompare: ",a1,b1,natcompare(a1,b1));
+                if(a1==b1){
+                    return 0;
+                } else if(a1>b1){
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+            
+            for (var i=0;i<this.loadingObjectList.length;i++) {
+                if ($debug) Debug.write(" 1 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            }
+            
+            this.loadingObjectList.sort(sortItemByIndex);
+            
+            for (var i=0;i<this.loadingObjectList.length;i++) {
+                if ($debug) Debug.write(" 2 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            }
+            
+            this.loadingObjectListId = 0;
+            //this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+            //if (this.loadingObjectList.length != 0){
+            //  lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+            //}
+            //for (var i=0;i<this.loadingObjectList.length;i++){
+            //  if ($debug) Debug.write("i this.loadingObjectList[i] ",i,this.loadingObjectList[i]);
+            //}
+            if (this.loadingObjectList != null && this.loadingObjectList.length != 0){
+                this.startSavedSyncprocess.doCall();
+            }
+            
+        ]]>
+    </method>
+    
+    <method name="prepareLoadWMLFile" args="itemObj">
+        if ($debug) Debug.write("loadWMLFile: ",itemObj);
+        
+        this.loadWMLFile.setAttribute('fileExplorerItemId', itemObj.fileExplorerItemId);
+                  
+        if ($debug) Debug.write("prepareLoadWMLFile 1: ",parent.parent.whiteboardId);
+        
+        this.loadWMLFile.doCall();
+    </method>
+    
+    
+    <netRemoteCallHib name="loadWMLFile" funcname="fileservice.loadWmlObject"
+        remotecontext="$once{ canvas.thishib }" >
+        <attribute name="fileExplorerItemId" type="number" value="0"/>
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam> 
+        <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam> 
+        <netparam><method name="getValue">return parent.parent.parent.parent.whiteboardId;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("loadWMLFile: ",value);
+                //canvas._drawarea.clearAll();
+                //parent.loadSavedObjectList(value);
+                
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <method name="loadWmlToWhiteboardById" args="roomItems">
+    	this.clearRemote();
+    	this.loadSavedObjectList(roomItems);
+    </method>
+	
+    <netRemoteCallHib name="startNewSyncprocess" funcname="whiteboardservice.startNewSyncprocess"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("startNewSyncprocess: ",value);
+            	if (value.publicSID == canvas.publicSID){
+            		if ($debug) Debug.write("currentLoadingItem IS mine");
+                    //TODO: Check usage of currentLoadingItem
+            		//if (value.currentLoadingItem){
+            			parent.startInitialLoadinProcess();
+            		//}
+            	}
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+     <netRemoteCallHib name="startSavedSyncprocess" funcname="whiteboardservice.startNewSyncprocess"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("startNewSyncprocess: ",value);
+                //if (value.publicSID == canvas.publicSID){
+                    if ($debug) Debug.write("currentLoadingItem IS mine");
+                    //TODO: Check usage of currentLoadingItem
+                    //if (value.currentLoadingItem){
+                        parent.startInitialLoadinProcess();
+                    //}
+                //}
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="sendCompletedSyncEvent" funcname="whiteboardservice.sendCompletedSyncEvent"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendCompletedSyncEvent: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     	
+    
+    <method name="startInitialLoadinProcess">
+		this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+		if (this.loadingObjectList.length != 0){
+			lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+		}
+    </method>
+	
+	<method name="loadRemoteObject" args="ref">
+		<![CDATA[
+			this.sendRemoteWatchObject(this.loadingObjectList[this.loadingObjectListId]);
+			this.loadingObjectListId++;
+			if (this.loadingObjectListId < this.loadingObjectList.length){
+				lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+			} else {
+				this.sendCompletedSyncEvent.doCall();
+				this.updateAllObjectsToSlideNumber();
+				this.setModusWithUpdate("hand");
+				this.onupdateScale.sendEvent(null);
+			}
+		]]>
+	</method>
+	
+	<method name="sendRemoteWatchObject" args="actionObject">
+		if ($debug) Debug.write("[sendRemoteWatchObject]: ",actionObject);
+		<![CDATA[
+			
+			//Redraw the View on the paintarea
+			if (actionObject[0]=='paint'){
+				this.paintactionHistory(actionObject,this);
+			} else if (actionObject[0]=='line'){
+				this.lineactionHistory(actionObject,this);
+			} else if (actionObject[0]=='uline'){
+				this.ulineactionHistory(actionObject,this);
+			} else if (actionObject[0]=='drawarrow'){
+				this.drawarrowlineactionHistory(actionObject,this);
+			} else if(actionObject[0]=='letter'){
+				this.drawactionHistory(actionObject,this);
+			} else if(actionObject[0]=='image'){
+				this.addImageToLayerHistoryToLocal(actionObject,this);
+			} else if(actionObject[0]=='swf'){
+				this.addSWFToLayerHistory(actionObject,this,true);
+			} else if(actionObject[0]=='rectangle'){
+				this.drawrectangleToHistory(actionObject,this);
+			} else if(actionObject[0]=='ellipse'){
+				this.drawellipseToHistory(actionObject,this);
+			} else if(actionObject[0]=='flv'){
+                this.drawFlvToHistory(actionObject,this);
+            } else if(actionObject[0]=='mindMapCenter'){
+                this.drawMindMapCenterToHistory(actionObject,this);
+            } else if(actionObject[0]=='mindMapNode'){
+                this.drawMindMapNodeToHistory(actionObject,this);
+            } else if(actionObject[0]=='clipart'){
+                this.drawClipArtToHistory(actionObject,this);
+            }
+			
+			if ($debug) Debug.write("[store actionObject] ",actionObject);
+			
+			this.baseactionobjectList.push(actionObject);
+				
+		]]>
+	</method>	
+	
+	<!-- methods for syncing events -->
+    <netRemoteCallHib name="startNewObjectSyncProcess" funcname="whiteboardservice.startNewObjectSyncProcess"
+        remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="isStarting" value="false" type="boolean" />
+    	<attribute name="uniqueObjectSyncName" value="" type="string" />
+    	<netparam><method name="getValue">return parent.uniqueObjectSyncName;</method></netparam>
+        <netparam><method name="getValue">return parent.isStarting;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("startNewImagesSyncprocess: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="sendCompletedObjectSyncEvent" funcname="whiteboardservice.sendCompletedObjectSyncEvent"
+        remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="uniqueObjectSyncName" value="" type="string" />
+    	<netparam><method name="getValue">return parent.uniqueObjectSyncName;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendCompletedImagesSyncEvent: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>   
+    
+    
+    <method name="startStreaming" args="messageObj">
+        new lz.incomingScreenSharing(canvas,{messageObj:messageObj});
+    </method>
+    
+    <method name="stopStreaming" args="messageObj">
+        
+    </method>
+	
+</class>
+
+</library>

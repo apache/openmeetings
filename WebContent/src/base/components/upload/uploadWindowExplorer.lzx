@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+ 
+ <class name="uploadWindowExplorer" extends="labelExplorerBox" labelid="304"
+    docking="true" closable="true" width="264" x="200" height="230">
+    
+    <handler name="oninit">
+    	lz.ModeManager.makeModal(this);
+        canvas.currentUploadWindow = this;
+        if (this.servletName != "file.upload") {
+        	this._loadToWhiteboard.destroy();
+        }
+    </handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <attribute name="winobj" value="null" />
+	<attribute name="sessionid" value="" type="string" />
+	<attribute name="isOwner" value="0" type="string" />
+	<attribute name="usersid" value="" type="string" />
+	<attribute name="singleslidesmodule_id" type="string" value="" />
+	<attribute name="fileExplorerRef" value="null" />
+	<attribute name="secondid" value="0" type="string" />
+	
+	<attribute name="servletName" value="upload.upload" type="string" />
+	<attribute name="parentFolderId" value="0" type="number" />
+    
+    <attribute name="uploadmodule" value="videoconf1" type="string" />
+    
+    <attribute name="isOnlyImage" value="false" type="boolean" />
+    <attribute name="isOnlyPpt" value="false" type="boolean" />
+    <attribute name="isOnlyProfile" value="false" type="boolean" />
+    <attribute name="isOnlyXml" value="false" type="boolean" />
+    <attribute name="isOnlyZip" value="false" type="boolean" />
+    
+    <attribute name="isdefaultreturn" value="true" type="boolean" />
+    <attribute name="returnObj" value="true" type="boolean" />
+    
+ 	<fileUpload name="myFileUpload" isOnlyImage="${ this.parent.isOnlyImage }" 
+ 		 isOnlyPpt="${ this.parent.isOnlyPpt }" isOnlyProfile="${ this.parent.isOnlyProfile }" 
+ 		 isOnlyXml="${ this.parent.isOnlyXml }" isOnlyZip="${ this.parent.isOnlyZip }">
+		<method name="onComplete" args="fr">
+            if ($debug) Debug.write("oncomplete ",fr);
+        </method>
+        <method name="formatURL" args="fileHash">
+            <![CDATA[
+                var uploadmoduleimgfolderVar = '/' + fileHash;
+                var downloadurl = canvas.getUrl()+'DownloadHandler?' +
+                    'fileName=' + encodeURIComponent(fileHash + ".swf") +
+                    '&moduleName=' + 'videoconf1' + 
+                    '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/' )+
+                    '&room_id=files'+ 
+                    '&sid='+canvas.sessionId;
+                ////if ($debug) Debug.write("downloadurl: ",downloadurl);
+                return downloadurl;
+            ]]>
+        </method> 
+        
+        <method name="generateFileLink" args="fileHash">
+            <![CDATA[
+                return canvas.getUrl()+'DownloadHandler?' +
+                        'fileName='+ fileHash + 
+                        '&moduleName='+ "videoconf1" +
+                        '&parentPath='+ '/' +
+                        '&room_id=files' +
+                        '&sid='+canvas.sessionId;
+            ]]>
+        </method>
+    
+        <method name="onCompleteByRemote" args="tArrayValueObj">
+            
+            if ($debug) Debug.write("onCompleteByRemote ",tArrayValueObj);
+            this.parent.progressBar.setValue(100);
+            this.parent.upload.setAttribute('enabled', false);
+            this.parent.upload.setAttribute("visible",false);
+            this.parent.browse.setAttribute("visible",false);
+            this.parent.txtFile.setAttribute("visible",false);
+            
+            if (this.isOnlyZip) {
+            	this.parent.close();
+            	return;
+            }
+            
+            if (this.isOnlyXml) {
+            	parent.returnObj.sendRefresh();
+            	this.parent.close();
+            	return;
+            }
+            
+            if (this.isOnlyProfile) {
+            	parent.returnObj.sendRefresh();
+            	this.parent.close();
+            	return;
+            }
+            
+            if (parent._loadToWhiteboard.getValue()) {
+            	
+            	if ($debug) Debug.write(tArrayValueObj);
+            	if (tArrayValueObj.isPresentation) {
+            		var url = this.formatURL(tArrayValueObj.fileHash);
+            		
+            		var uploadmoduleimgfolderVar = '/' + tArrayValueObj.fileHash;
+            		
+            		if ($debug) Debug.write(url);
+            		
+                	canvas._drawarea.loadSWFPresentationSynced(url,tArrayValueObj.fileHash + ".swf",
+                              "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
+                              tArrayValueObj.fileSystemName);
+            	} else if (tArrayValueObj.isImage) {
+            		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(tArrayValueObj.fileHash),0,0,
+                      canvas.getUrl() +'DownloadHandler',
+                      tArrayValueObj.fileHash,"videoconf1","/","files",hib.conferencedomain);
+            	}
+            }
+            
+            if (parent.isdefaultreturn) {
+            	
+                var tempSendArray = new Array ();
+                tempSendArray[0] = 'fileslist';
+                var nowTime = new Date();
+                var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+                tempSendArray[1] = datumsString;
+                //if ($debug) Debug.write("Setting Message");
+                tempSendArray[2] = 'newfile';
+                tempSendArray[3] = canvas.currentusename;
+                //if ($debug) Debug.write("send: ",tempSendArray);
+                canvas.objMessage = tempSendArray;
+                canvas.thishib.sendMessageAll.doCall();
+
+            } else {
+                parent.returnObj.sendRefresh();
+            }
+            
+            if (parent.fileExplorerRef != null) {
+            	parent.fileExplorerRef.onClose.sendEvent();
+            }
+            
+            parent.close();
+        </method>
+
+		<method name="onProgress" args="fr, bytesLoaded, bytesTotal">
+			<![CDATA[
+    			this.parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+    			if (Math.round(bytesLoaded * 100 / bytesTotal)==100){
+    				this.parent.progressBar.setAttribute('visibility','hidden');
+    				this.parent.progress2.startShowing();
+    			}
+    		]]>
+		</method>
+    
+	    <method name="onHTTPError" args="fr, httpError">
+	        <![CDATA[
+	            if ($debug) Debug.write('onHTTPError invoked: ' + httpError);
+	            new lz.errorPopup(canvas,{error:'HTTP-ERROR: '+httpError});
+	            this.parent.close();
+		  		var tempSendArray = new Array ();
+		  		tempSendArray[0] = 'fileslist';
+		  		var nowTime = new Date();
+		  		var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+		  		tempSendArray[1] = datumsString;
+	  			//if ($debug) Debug.write("Setting Message");
+	  			tempSendArray[2] = 'newfile';
+	  			tempSendArray[3] = canvas.currentusename;
+		  		//if ($debug) Debug.write("send: ",tempSendArray);
+		  		canvas.objMessage = tempSendArray;
+		  		hib.sendMessage.doCall();	            
+	        ]]>
+	    </method>
+    
+		<method name="onSelect" args="fr">
+			//if ($debug) Debug.write("onSelect: ",getName());
+			this.parent.txtFile.setAttribute('text',getName());
+			this.parent.upload.setAttribute('enabled', true);
+		</method>
+	</fileUpload>
+    
+    <labelText x="10" width="250" y="24" multiline="true" name="txtFileDescr" labelid="594" />
+	
+	<labelText x="10" fontsize="11" y="60" width="250" name="txtFile" multiline="true" 
+			   resize="false" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" />
+
+	<simpleLabelButton fontsize="11" name="browse" x="10" y="100" labelid="596" width="250" height="20">
+		<handler name="onclick">
+			parent.myFileUpload.browse();
+		</handler>
+	</simpleLabelButton>
+
+    <!-- moduleName=videoconf1'; -->
+	<simpleLabelButton name="upload" x="10" y="120" labelid="593" width="250" enabled="false" height="20">
+		<handler name="onclick">
+			<![CDATA[
+			var uploadurl = canvas.getUrl() + parent.servletName +'?' +
+					'moduleName='+this.parent.uploadmodule +
+                    '&publicSID='+canvas.publicSID +
+                    '&filename='+encodeURIComponent(parent.txtFile.text) +
+                    '&parentFolderId='+parent.parentFolderId +
+					'&room_id='+hib.currentroomid +
+					'&secondid='+parent.secondid +
+					'&isOwner='+parent.isOwner + 
+					'&sid='+canvas.sessionId;
+            if ($debug) Debug.write("uploadurl: ",uploadurl);
+			parent.myFileUpload.upload(uploadurl);
+			]]>
+		</handler>
+	</simpleLabelButton>
+    
+    <!--
+    <labelText labelid="592" name="progress2" visibility="hidden" x="10" y="140" 
+    		   width="250" multiline="true">
+    	
+    </labelText>
+     -->
+    <view name="progress2" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
+        <attribute name="isStarted" value="false" type="boolean" />
+        <method name="startShowing">
+        	if (!this.isStarted) {
+        		this.isStarted = true;
+        		this.status._hide.setAttribute('started', true);
+        		this.setAttribute("visibility","visible");
+        	} else {
+        		return;
+        	}
+        </method>
+        <view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
+        <view name="status" x="1" y="1" height="8" width="248" bgcolor="#D6DEEF">
+        	
+        	<animator name="_hide" attribute="opacity" to="0" from="1" duration="1000" started="false">
+        		<handler name="onstop">
+        			if (parent["_show"]) {
+        				parent._show.setAttribute('started', true);
+        			}
+        		</handler>
+        	</animator>
+        	<animator name="_show" attribute="opacity" to="1" from="0" duration="1000" started="false">
+                <handler name="onstop">
+                	if (parent["_show"]) {
+                    	parent._show.setAttribute('started', true);
+                    }
+                </handler>
+            </animator>
+        </view>
+        <labelText name="percent" align="center" resize="true" y="-18" fontstyle="bold" 
+            fontsize="10" fgcolor="#555555" labelid="592"/>
+    </view>
+    		   
+	<view name="progressBar" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
+		<view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
+		<view name="status" x="1" y="1" height="8" bgcolor="#D6DEEF"/>
+		<method name="setValue" args="value">
+			<![CDATA[
+                this.setAttribute("visible",true);
+                status.setAttribute('width', value * 248 / 100);
+                percent.setAttribute('text',Math.round(value) + '%');
+			]]>
+		</method>
+		<text name="percent" align="center" resize="true" y="-18" fontstyle="bold" 
+			fontsize="10" fgcolor="#555555" />
+	</view>
+	
+	<labelCheckbox name="_loadToWhiteboard" x="4" y="184" fontsize="11" 
+				   labelid="1312" value="true" />
+	
+	<simpleLabelButton name="_close" x="100" y="204" labelid="595" width="160" height="20">
+		<handler name="onclick">
+			if ($debug) Debug.write("this.parent: ",this.parent);
+			this.parent.close();
+		</handler>
+	</simpleLabelButton>
+</class>
+	
+</library>
+ 

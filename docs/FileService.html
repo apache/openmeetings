@@ -1,0 +1,1555 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE TEMPLATE INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    
+     <html>
+        <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
+		<title>OpenMeetings API Methods</title>
+		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
+        </head>
+	<body>
+	
+		<h3>Available WebServices:</h3>
+	
+		<iframe src="WebserviceIndex.html" width="100%" height="210" name="WebserviceIndex.html"
+			scrolling="no" marginheight="0" marginwidth="0" frameborder="0">
+		  <p>Your Browser does not support frames ...</p>
+		</iframe>
+		
+		<hr />
+	
+	   <h3>WebService: FileService</h3>
+	   <p>Contains methods to import and upload files into the Files section of the
+ conference room and the personal drive of any user<p>
+	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/FileService?wsdl">http://localhost:5080/openmeetings/services/FileService?wsdl</a><p>
+	
+	<!-- Links to Methods -->
+	   <h3>Index of Methods available in FileService</h3>
+	   
+       <div class="navigation">
+	                               <div>
+                <a href="#importFile"><b>importFile</b></a><br/>
+                <div class="navigation_comment"><i >Import file from external source
+ 
+ to upload a file to a room-drive you specify: externalUserId, user if of
+ openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 0 parentFolderId = 0
+ 
+ to upload a file to a private-drive you specify: externalUserId, user if
+ of openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 1 parentFolderId = -2</i></div>
+                </div>
+                                               <div>
+                <a href="#importFileByInternalUserId"><b>importFileByInternalUserId</b></a><br/>
+                <div class="navigation_comment"><i >Import file from external source
+ 
+ to upload a file to a room-drive you specify: internalUserId, user if of
+ openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 0 parentFolderId = 0
+ 
+ to upload a file to a private-drive you specify: internalUserId, user if
+ of openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 1 parentFolderId = -2</i></div>
+                </div>
+                                               <div>
+                <a href="#addFolderByExternalUserIdAndType"><b>addFolderByExternalUserIdAndType</b></a><br/>
+                <div class="navigation_comment"><i >to add a folder to the private drive, set parentFileExplorerItemId = 0
+ and isOwner to 1/true and externalUserId/externalUserType to a valid user</i></div>
+                </div>
+                                               <div>
+                <a href="#addFolderByUserId"><b>addFolderByUserId</b></a><br/>
+                <div class="navigation_comment"><i >to add a folder to the private drive, set parentFileExplorerItemId = 0
+ and isOwner to 1/true and userId to a valid user</i></div>
+                </div>
+                                               <div>
+                <a href="#addFolderSelf"><b>addFolderSelf</b></a><br/>
+                <div class="navigation_comment"><i >Add a folder by the current user - similar to RTMP Call</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteFileOrFolderByExternalIdAndType"><b>deleteFileOrFolderByExternalIdAndType</b></a><br/>
+                <div class="navigation_comment"><i >deletes a file by its external Id and type</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteFileOrFolder"><b>deleteFileOrFolder</b></a><br/>
+                <div class="navigation_comment"><i >deletes files or folders based on it id</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteFileOrFolderSelf"><b>deleteFileOrFolderSelf</b></a><br/>
+                <div class="navigation_comment"><i >deletes files or folders based on it id</i></div>
+                </div>
+                                               <div>
+                <a href="#getImportFileExtensions"><b>getImportFileExtensions</b></a><br/>
+                <div class="navigation_comment"><i >Get available import File Extension allowed during import</i></div>
+                </div>
+                                               <div>
+                <a href="#getPresentationPreviewFileExplorer"><b>getPresentationPreviewFileExplorer</b></a><br/>
+                <div class="navigation_comment"><i >Get a LibraryPresentation-Object for a certain file</i></div>
+                </div>
+                                               <div>
+                <a href="#getFileExplorerByRoom"><b>getFileExplorerByRoom</b></a><br/>
+                <div class="navigation_comment"><i >Get a File Explorer Object by a given Room and owner id</i></div>
+                </div>
+                                               <div>
+                <a href="#getFileExplorerByRoomSelf"><b>getFileExplorerByRoomSelf</b></a><br/>
+                <div class="navigation_comment"><i >Get a File Explorer Object by a given Room</i></div>
+                </div>
+                                               <div>
+                <a href="#getFileExplorerByParent"><b>getFileExplorerByParent</b></a><br/>
+                <div class="navigation_comment"><i >Get FileExplorerItem list by parent folder</i></div>
+                </div>
+                                               <div>
+                <a href="#getFileExplorerByParentSelf"><b>getFileExplorerByParentSelf</b></a><br/>
+                <div class="navigation_comment"><i >Get FileExplorerItem[] by parent and owner id</i></div>
+                </div>
+                                               <div>
+                <a href="#updateFileOrFolderName"><b>updateFileOrFolderName</b></a><br/>
+                <div class="navigation_comment"><i >update a file or folder name</i></div>
+                </div>
+                                               <div>
+                <a href="#updateFileOrFolderNameSelf"><b>updateFileOrFolderNameSelf</b></a><br/>
+                <div class="navigation_comment"><i >update a file or folder name</i></div>
+                </div>
+                                               <div>
+                <a href="#moveFile"><b>moveFile</b></a><br/>
+                <div class="navigation_comment"><i >move a file or folder</i></div>
+                </div>
+                                               <div>
+                <a href="#moveFileSelf"><b>moveFileSelf</b></a><br/>
+                <div class="navigation_comment"><i >move a file or folder</i></div>
+                </div>
+                           </div>
+	   
+	    <h3>Methods Details in FileService</h3>
+	
+				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="importFile" ><b>importFile</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>importFile (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   Long externalFileId
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   boolean isOwner
+    			       			    			       			     , 
+    			       			   String path
+    			       			    			       			     , 
+    			       			   Long parentFolderId
+    			       			    			       			     , 
+    			       			   String fileSystemName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Import file from external source
+ 
+ to upload a file to a room-drive you specify: externalUserId, user if of
+ openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 0 parentFolderId = 0
+ 
+ to upload a file to a private-drive you specify: externalUserId, user if
+ of openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 1 parentFolderId = -2
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.axis.services.FileImportError[]
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The logged in session id with minimum webservice level</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">the external user id =&gt; If the file should goto a private
+            section of any user, this number needs to be set</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFileId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
+            user, you can set a random number here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+            the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">path</td>
+	                     <td valign="top">http-path where we can grab the file from, the file has to be
+            accessible from the OpenMeetings server</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFolderId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
+            the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileSystemName</td>
+	                     <td valign="top">the filename =&gt; Important WITH file extension!</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/importFile?SID=VALUE&externalUserId=VALUE&externalFileId=VALUE&externalType=VALUE&room_id=VALUE&isOwner=VALUE&path=VALUE&parentFolderId=VALUE&fileSystemName=VALUE">http://localhost:5080/openmeetings/services/FileService/importFile?SID=VALUE&amp;externalUserId=VALUE&amp;externalFileId=VALUE&amp;externalType=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;path=VALUE&amp;parentFolderId=VALUE&amp;fileSystemName=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="importFileByInternalUserId" ><b>importFileByInternalUserId</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>importFileByInternalUserId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long internalUserId
+    			       			    			       			     , 
+    			       			   Long externalFileId
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   boolean isOwner
+    			       			    			       			     , 
+    			       			   String path
+    			       			    			       			     , 
+    			       			   Long parentFolderId
+    			       			    			       			     , 
+    			       			   String fileSystemName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Import file from external source
+ 
+ to upload a file to a room-drive you specify: internalUserId, user if of
+ openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 0 parentFolderId = 0
+ 
+ to upload a file to a private-drive you specify: internalUserId, user if
+ of openmeetings user for which we upload the file room_id = openmeetings
+ room id isOwner = 1 parentFolderId = -2
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.axis.services.FileImportError[]
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">internalUserId</td>
+	                     <td valign="top">the openmeetings user id =&gt; If the file should goto a private
+            section of any user, this number needs to be se</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFileId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
+            user, you can set a random number here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+            the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">path</td>
+	                     <td valign="top">http-path where we can grab the file from, the file has to be
+            accessible from the OpenMeetings server</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFolderId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
+            the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileSystemName</td>
+	                     <td valign="top">the filename =&gt; Important WITH file extension!</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/importFileByInternalUserId?SID=VALUE&internalUserId=VALUE&externalFileId=VALUE&externalType=VALUE&room_id=VALUE&isOwner=VALUE&path=VALUE&parentFolderId=VALUE&fileSystemName=VALUE">http://localhost:5080/openmeetings/services/FileService/importFileByInternalUserId?SID=VALUE&amp;internalUserId=VALUE&amp;externalFileId=VALUE&amp;externalType=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;path=VALUE&amp;parentFolderId=VALUE&amp;fileSystemName=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addFolderByExternalUserIdAndType" ><b>addFolderByExternalUserIdAndType</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addFolderByExternalUserIdAndType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   Long parentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   String folderName
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			       			     , 
+    			       			   Long externalFilesid
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  to add a folder to the private drive, set parentFileExplorerItemId = 0
+ and isOwner to 1/true and externalUserId/externalUserType to a valid user
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">folderName</td>
+	                     <td valign="top">the name of the folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
+            user, you can set a random number here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+            the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/addFolderByExternalUserIdAndType?SID=VALUE&externalUserId=VALUE&parentFileExplorerItemId=VALUE&folderName=VALUE&room_id=VALUE&isOwner=VALUE&externalFilesid=VALUE&externalType=VALUE">http://localhost:5080/openmeetings/services/FileService/addFolderByExternalUserIdAndType?SID=VALUE&amp;externalUserId=VALUE&amp;parentFileExplorerItemId=VALUE&amp;folderName=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;externalFilesid=VALUE&amp;externalType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addFolderByUserId" ><b>addFolderByUserId</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addFolderByUserId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long userId
+    			       			    			       			     , 
+    			       			   Long parentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   String folderName
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			       			     , 
+    			       			   Long externalFilesid
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  to add a folder to the private drive, set parentFileExplorerItemId = 0
+ and isOwner to 1/true and userId to a valid user
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">userId</td>
+	                     <td valign="top">the openmeetings user id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">folderName</td>
+	                     <td valign="top">the name of the folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an user, you can set a random number here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/addFolderByUserId?SID=VALUE&userId=VALUE&parentFileExplorerItemId=VALUE&folderName=VALUE&room_id=VALUE&isOwner=VALUE&externalFilesid=VALUE&externalType=VALUE">http://localhost:5080/openmeetings/services/FileService/addFolderByUserId?SID=VALUE&amp;userId=VALUE&amp;parentFileExplorerItemId=VALUE&amp;folderName=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;externalFilesid=VALUE&amp;externalType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addFolderSelf" ><b>addFolderSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addFolderSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long parentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   String fileName
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Add a folder by the current user - similar to RTMP Call
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">the file name</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/addFolderSelf?SID=VALUE&parentFileExplorerItemId=VALUE&fileName=VALUE&room_id=VALUE&isOwner=VALUE">http://localhost:5080/openmeetings/services/FileService/addFolderSelf?SID=VALUE&amp;parentFileExplorerItemId=VALUE&amp;fileName=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteFileOrFolderByExternalIdAndType" ><b>deleteFileOrFolderByExternalIdAndType</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteFileOrFolderByExternalIdAndType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long externalFilesid
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  deletes a file by its external Id and type
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the od of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the externalType</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolderByExternalIdAndType?SID=VALUE&externalFilesid=VALUE&externalType=VALUE">http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolderByExternalIdAndType?SID=VALUE&amp;externalFilesid=VALUE&amp;externalType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteFileOrFolder" ><b>deleteFileOrFolder</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteFileOrFolder (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  deletes files or folders based on it id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">the id of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolder?SID=VALUE&fileExplorerItemId=VALUE">http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolder?SID=VALUE&amp;fileExplorerItemId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteFileOrFolderSelf" ><b>deleteFileOrFolderSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteFileOrFolderSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  deletes files or folders based on it id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">the id of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolderSelf?SID=VALUE&fileExplorerItemId=VALUE">http://localhost:5080/openmeetings/services/FileService/deleteFileOrFolderSelf?SID=VALUE&amp;fileExplorerItemId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getImportFileExtensions" ><b>getImportFileExtensions</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getImportFileExtensions (
+    			    			    			)
+    			</i><br/>
+    			<p>
+    			  Get available import File Extension allowed during import
+    			</p>
+    			<p>
+                  Return Type: java.lang.String[]
+                </p>
+    			<p>Params:</p>
+    			    			
+    			    				<i>No Params</i>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    							<a href="http://localhost:5080/openmeetings/services/FileService/getImportFileExtensions">http://localhost:5080/openmeetings/services/FileService/getImportFileExtensions</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getPresentationPreviewFileExplorer" ><b>getPresentationPreviewFileExplorer</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getPresentationPreviewFileExplorer (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String parentFolder
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get a LibraryPresentation-Object for a certain file
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.data.file.dto.LibraryPresentation
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">parentFolder</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/getPresentationPreviewFileExplorer?SID=VALUE&parentFolder=VALUE">http://localhost:5080/openmeetings/services/FileService/getPresentationPreviewFileExplorer?SID=VALUE&amp;parentFolder=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFileExplorerByRoom" ><b>getFileExplorerByRoom</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getFileExplorerByRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Long owner_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get a File Explorer Object by a given Room and owner id
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.data.file.dto.FileExplorerObject
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">Room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">Owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/getFileExplorerByRoom?SID=VALUE&room_id=VALUE&owner_id=VALUE">http://localhost:5080/openmeetings/services/FileService/getFileExplorerByRoom?SID=VALUE&amp;room_id=VALUE&amp;owner_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFileExplorerByRoomSelf" ><b>getFileExplorerByRoomSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getFileExplorerByRoomSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get a File Explorer Object by a given Room
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.data.file.dto.FileExplorerObject
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">Room Id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/getFileExplorerByRoomSelf?SID=VALUE&room_id=VALUE">http://localhost:5080/openmeetings/services/FileService/getFileExplorerByRoomSelf?SID=VALUE&amp;room_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFileExplorerByParent" ><b>getFileExplorerByParent</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getFileExplorerByParent (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long parentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			       			     , 
+    			       			   Long owner_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get FileExplorerItem list by parent folder
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.files.FileExplorerItem[]
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">the parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">true if its a private drive</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">the owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/getFileExplorerByParent?SID=VALUE&parentFileExplorerItemId=VALUE&room_id=VALUE&isOwner=VALUE&owner_id=VALUE">http://localhost:5080/openmeetings/services/FileService/getFileExplorerByParent?SID=VALUE&amp;parentFileExplorerItemId=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;owner_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFileExplorerByParentSelf" ><b>getFileExplorerByParentSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getFileExplorerByParentSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long parentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get FileExplorerItem[] by parent and owner id
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.files.FileExplorerItem[]
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">the parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">true to request private drive</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/getFileExplorerByParentSelf?SID=VALUE&parentFileExplorerItemId=VALUE&room_id=VALUE&isOwner=VALUE">http://localhost:5080/openmeetings/services/FileService/getFileExplorerByParentSelf?SID=VALUE&amp;parentFileExplorerItemId=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateFileOrFolderName" ><b>updateFileOrFolderName</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>updateFileOrFolderName (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			       			     , 
+    			       			   String fileName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  update a file or folder name
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">file or folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">new file or folder name</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/updateFileOrFolderName?SID=VALUE&fileExplorerItemId=VALUE&fileName=VALUE">http://localhost:5080/openmeetings/services/FileService/updateFileOrFolderName?SID=VALUE&amp;fileExplorerItemId=VALUE&amp;fileName=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateFileOrFolderNameSelf" ><b>updateFileOrFolderNameSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>updateFileOrFolderNameSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			       			     , 
+    			       			   String fileName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  update a file or folder name
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">file or folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">new file or folder name</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/updateFileOrFolderNameSelf?SID=VALUE&fileExplorerItemId=VALUE&fileName=VALUE">http://localhost:5080/openmeetings/services/FileService/updateFileOrFolderNameSelf?SID=VALUE&amp;fileExplorerItemId=VALUE&amp;fileName=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="moveFile" ><b>moveFile</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>moveFile (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long newParentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			       			     , 
+    			       			   Boolean moveToHome
+    			       			    			       			     , 
+    			       			   Long owner_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  move a file or folder
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">current file or folder id to be moved</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">newParentFileExplorerItemId</td>
+	                     <td valign="top">new parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">if true owner id will be set</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">moveToHome</td>
+	                     <td valign="top">if true move to private drive</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/moveFile?SID=VALUE&fileExplorerItemId=VALUE&newParentFileExplorerItemId=VALUE&room_id=VALUE&isOwner=VALUE&moveToHome=VALUE&owner_id=VALUE">http://localhost:5080/openmeetings/services/FileService/moveFile?SID=VALUE&amp;fileExplorerItemId=VALUE&amp;newParentFileExplorerItemId=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;moveToHome=VALUE&amp;owner_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="moveFileSelf" ><b>moveFileSelf</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>moveFileSelf (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long fileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long newParentFileExplorerItemId
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isOwner
+    			       			    			       			     , 
+    			       			   Boolean moveToHome
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  move a file or folder
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">current file or folder id to be moved</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">newParentFileExplorerItemId</td>
+	                     <td valign="top">new parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">if true owner id will be set</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">moveToHome</td>
+	                     <td valign="top">move to private drive</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/FileService/moveFileSelf?SID=VALUE&fileExplorerItemId=VALUE&newParentFileExplorerItemId=VALUE&room_id=VALUE&isOwner=VALUE&moveToHome=VALUE">http://localhost:5080/openmeetings/services/FileService/moveFileSelf?SID=VALUE&amp;fileExplorerItemId=VALUE&amp;newParentFileExplorerItemId=VALUE&amp;room_id=VALUE&amp;isOwner=VALUE&amp;moveToHome=VALUE</a>
+    		  </div>
+    	   			
+	
+	</body>
+</html>
+

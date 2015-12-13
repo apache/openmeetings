@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>SugarCRM Plugin</title>
+		<author email="eugen.schwert@gmail.com">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="SugarCRM Plugin for OpenMeetings">
+			<p>
+				You can get the latest Version of the Plugin for SugarCRM from the
+				<a href="downloads.html">downloads</a>
+				.
+			</p>
+			<p>
+				You can find the OpenMeetings Plugin also in the
+				<a href="http://www.sugarforge.org/projects/openmeetings/"
+					target="_BLANK" rel="nofollow">SugarCRM Plugin database</a>
+				.
+			</p>
+			<p>
+				A demo version of the SugarCRM plugin is available at
+				<a href="http://demo.e-schwert.de/sugarcrm/" target="_BLANK" rel="nofollow">demo.e-schwert.de</a>
+				. Username: demo Password: Demouser55 
+			</p>
+		</section>
+		
+		<section name="Features">
+			<p>The plugin contains the following features: </p>
+			<ul>
+				<li>Create videoconference rooms through SugarCRM: </li>
+				<li>
+					<ol>
+						<li>Integrated with calendar </li>
+						<li>Integrated with SugarCRM meetings </li>
+						<li>Sends invetations emails to meeting participants </li>					
+						<li>Configurable room type </li>
+					</ol>
+				</li>
+			</ul>			
+		</section>
+
+		<section name="Installation the SugarCRM Plugin for OpenMeetings">			
+			<p>In SugarCRM's administration web-interface you will find the
+				module loader.
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_plugin_conference.png">
+				<img src="images/SugarCRM_Installation.png" alt="" width="640"
+					height="320" />
+			</a>
+			<ol>
+				<li>Upload the module with module loader in administration area. </li>
+				<li>Configure OpenMeetings settings. </li>
+				<li>Create OpenMeetings rooms. </li>				
+			</ol>
+		</section>
+		
+		<section name="Demo video">			
+			<p>The demo video of SugarCRM plugin show you the plugin in action </p>              
+		      <object style="height: 390px; width: 640px">
+			      <param name="movie" value="http://www.youtube.com/v/xrDbcXqxDq8?version=3&amp;feature=player_detailpage"/>
+			      <param name="allowFullScreen" value="true"/>
+			      <param name="allowScriptAccess" value="always"/>
+			      <embed src="http://www.youtube.com/v/xrDbcXqxDq8?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
+		      </object> 
+		</section>
+
+	</body>
+
+</document>

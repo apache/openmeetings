@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="explorerBox" extends="view" width="250" y="100" visibility="hidden"
+    height="400" bgcolor="0x000088" 
+	onmousedown="this._startDragState(this)" onmouseup="this._removeDragState(this)" >
+
+    <switch>
+	  <when property="$as3">
+		<passthrough>
+		  import flash.filters.DropShadowFilter;
+		</passthrough>
+	  </when>
+	</switch>
+
+    <handler name="oninit">
+    	//if($debug) Debug.write("explorerBox/oninit showWindowEffect? ",canvas.showWindowEffect);
+    	if (canvas.showWindowEffect=="y"){
+    		//if($debug) Debug.write("explorerBox/showWindowEffect == YES");
+    		new lz.boxInitEffect(parent,{x:this.x+(this.width/2)-50,y:this.y+(this.height/2)-10,zielx:this.x,ziely:this.y,zielwidth:this.width,zielheight:this.height,objRef:this});
+    	} else {
+    		this.sendAnniComplete();
+    	}
+    </handler>
+    
+    <method name="sendAnniComplete">
+    	//if($debug) Debug.write("sendAnniComplete");
+    	this.setAttribute('visibility','visible');
+    	this.setShadow(true);
+    </method>
+
+    <method name="setShadow" args="bool">
+        this.hasshadow = bool;
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getDisplayObject();
+            //Debug.write(this.normalMC);
+            ////Debug.write("this.normalMC: ",this.normalMC);
+            ////Debug.write("this: ",this);
+           	this.displacementMap = new DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method>	
+          
+	<!--- The Title of this Box -->
+	<attribute name="title" value="defaulttitle" type="string" />
+	
+	<!--- if this Box should be closeable -->
+	<attribute name="closable" value="false" type="boolean" />
+    
+    <!--- if this Box should be resizeable  -->
+    <attribute name="resizeable" value="false" type="boolean" />
+	
+	<!--- Can this Box be docked to others and 
+			the width/height of parent compoent barrier -->
+	<attribute name="docking" value="false" type="boolean" />
+	
+	<!--- Hard to explain but its clear if you play around 
+		with that. Its the number of minimum pixels before 
+		the "docking" effect will be there -->
+	<attribute name="dockingbarrier" value="15" type="number" />
+	
+	<!--- the Event will be thrown if you close the Box -->
+	<event name="onclose" />
+	
+	<!---@keywords private the list of connected views -->
+	<attribute name="dockinglist" value="null" />
+	
+	<!--- @keywords private temp-older of x-distance to docked-Box  -->
+	<attribute name="tempXdistance" value="0" type="number" />
+
+	<!--- @keywords private temp-older of y-distance to docked-Box  -->
+	<attribute name="tempYdistance" value="0" type="number" />
+	
+	<!--- @keywords private is the Box minimized  -->
+	<attribute name="isopen" value="true" type="boolean" />
+	
+	<!--- @keywords private is the Box minimized  -->
+	<attribute name="open" value="true" type="boolean" />	
+	
+	<!--- @keywords private  -->
+	<attribute name="initheight" value="0" type="number" />
+	
+	<!--- @keywords private store initial height so toggleopen can reset height  -->
+	<handler name="oninit">
+		this.initheight=this.height;
+		////Debug.write("this.isopen: ",this.isopen);
+		if (!this.open) toggleopen();
+	</handler>
+	
+	<method name="close">
+		if (this.onclose) this.onclose.sendEvent();
+		this.doDestroy();
+	</method>
+	
+	<method name="toggleopen">
+		////Debug.write("this.isopen",this.isopen);
+		this.setAttribute('isopen',!this.isopen);
+		if (this.isopen){
+			_calcdockingList();
+			for (var eg in this.dockinglist){
+				if(this.dockinglist[eg].docking){
+					////Debug.write("this.dockinglist[eg]: ",this.dockinglist[eg].title);
+					////Debug.write("open new y",this.y+this.initheight);
+					this.dockinglist[eg].toggleOpenByParent(this.initheight-22);
+					this.dockinglist[eg].setAttribute('y',this.y+this.initheight);
+					
+				}
+			}			
+			this.setAttribute('height',this.initheight);
+		} else {
+			_calcdockingList();
+			for (var eg in this.dockinglist){
+				if(this.dockinglist[eg].docking){
+					////Debug.write("this.dockinglist[eg]: ",this.dockinglist[eg].title);
+					this.dockinglist[eg].toggleOpenByParent(-(this.initheight-22));
+					this.dockinglist[eg].setAttribute('y',this.y+22);
+				}
+			}	
+			this.setAttribute('height',22);		
+		}
+	</method>
+	
+	<method name="toggleOpenByParent" args="changeY">
+		////Debug.write("+++++ toggleOpenByParent +++++ changeY: ",this.title,changeY);
+		var tempList=new Array();
+		<![CDATA[
+		//check for dockable stuff which is connected to this Box
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				var proof=false;
+				////Debug.write("found some: ",this.parent.subviews[eg].title);
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < 1 ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -1 ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					proof=true;
+				}
+					
+				if (proof) tempList.push(this.parent.subviews[eg]);
+			}
+		}
+		]]>
+		////Debug.write("tempList.length: ",tempList.length);
+		if (tempList.length!=0){
+			for (var eg in tempList){
+				if(tempList[eg].docking){
+					////Debug.write("toggleOpenByParent 1 [eg],changeY: ",tempList[eg].title,changeY);
+					tempList[eg].toggleOpenByParent(changeY);
+					tempList[eg].setAttribute('y',tempList[eg].y+changeY);
+				}
+			}	
+		}
+		
+	</method>
+	
+	<!--- @keywords private  -->
+	<method name="_removeDragState" args="obj">
+		//It's important to remove the dragger and do docking stuff before you check for conencted Boxes
+		dragger.remove();
+		if (obj==this){
+			if (docking) arrangePosition();
+		} else {
+			if (docking) _lookforParentOnly(obj);
+		}
+			
+		//check for connected Boxes
+		for (var eg in this.dockinglist){
+			if(this.dockinglist[eg].docking){
+				this.dockinglist[eg]._removeDragState(this);
+			}
+		}
+
+	</method>
+
+	
+	<!--- @keywords private
+		the arg obj is needed because the dragging can be called by the Box itself
+		or by a Box which is connected to this Box!  -->
+	<method name="_startDragState" args="obj">
+		this.bringToFront();
+		_calcdockingList();
+		for (var eg in this.dockinglist){
+			if(this.dockinglist[eg].docking){
+				this.dockinglist[eg]._startDragState(this);
+			}
+		}
+		//store position cause it wasn't dragged by itself
+		if (obj!=this){
+			storeAdjustmentToParent(obj.x,obj.y);
+		}
+		dragger.apply();
+	</method>
+	
+	<!--- Calc the List of Boxes which will be dragged and setposition if this Box
+		will be dragged,docked or minimized/maximized  -->
+	<method name="_calcdockingList">
+		//Clear list of conencted Boxes
+		this.dockinglist=new Array();
+		<![CDATA[
+		//check for dockable stuff which is connected to this Box
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				var proof=false;
+
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < 1 ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -1 ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					proof=true;
+				}
+
+				if (proof) this.dockinglist.push(this.parent.subviews[eg]);
+			}
+		}
+		]]>
+		////Debug.write("this.dockinglist.length:",this.dockinglist.length);
+	</method>
+	
+	<!--- @keywords private  -->
+	<method name="arrangePosition">
+		//do the magic
+		//the idea is: look for all on the view container one level above this one
+		//and look for the width/height and 0/0 and look for "dockable" stuff there
+		var newx=this.x;
+		var newy=this.y;
+	  
+		<![CDATA[
+				
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				//left box-border
+				if ( ( ((this.x+this.width)-this.parent.subviews[eg].x) < this.dockingbarrier ) && ( ((this.x+this.width)-this.parent.subviews[eg].x) > -this.dockingbarrier ) &&  ( (this.y+this.height) > this.parent.subviews[eg].y ) &&  ( this.y < (this.parent.subviews[eg].y+this.parent.subviews[eg].height) ) ){
+					newx= ( this.parent.subviews[eg].x - this.width );
+				}
+				//right box-border
+				if ( ( ((this.parent.subviews[eg].x+this.parent.subviews[eg].width)-this.x)<this.dockingbarrier ) && ( ((this.parent.subviews[eg].x+this.parent.subviews[eg].width)-this.x)>-this.dockingbarrier ) &&  ( (this.y+this.height) > this.parent.subviews[eg].y ) &&  ( this.y < (this.parent.subviews[eg].y+this.parent.subviews[eg].height) ) ){
+					newx= ( this.parent.subviews[eg].x + this.parent.subviews[eg].width );
+				}
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < this.dockingbarrier ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -this.dockingbarrier ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					newy = this.parent.subviews[eg].y-this.height;
+				}
+				//bottom box-border
+				if ( ( ((this.parent.subviews[eg].y+this.parent.subviews[eg].height)-this.y) < this.dockingbarrier ) && ( ((this.parent.subviews[eg].y+this.parent.subviews[eg].height)-this.y) > -this.dockingbarrier ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					newy = this.parent.subviews[eg].y+this.parent.subviews[eg].height;
+				}
+			}
+		}
+		
+		//Check for Borders
+		//should be done _after_ checking for other dockable stuff so it gets 
+		//priority to dock against the border of parent view
+		if (this.x<this.dockingbarrier){
+			newx=0;
+		}
+		if (this.y<this.dockingbarrier){
+			newy=0;
+		}
+		if ( (this.parent.width-(this.x+this.width))<this.dockingbarrier){
+			newx=this.parent.width-this.width;
+		}
+		if ( (this.parent.height-(this.y+this.height))<this.dockingbarrier){
+			newy=this.parent.height-this.height;
+		}
+		
+		//set position
+		this.setAttribute('x',newx);
+		this.setAttribute('y',newy);
+		]]>
+	</method>
+	
+	<method name="storeAdjustmentToParent" args="objX,objY">
+		this.tempXdistance=objX-this.x;
+		this.tempYdistance=objY-this.y;
+	</method>
+	
+	<!--- @keywords private 
+		this method is needed because if the dragging end and
+		it was not dragged _itself_ it was draged just because a connected
+		dockable Box was dragged than it could be that the connected
+		Box was forced to dock against something different onmouseup
+		so you have to rearrange the old "adjustment"	-->
+	<method name="_lookforParentOnly" args="obj">
+		<![CDATA[		
+		var newx=obj.x-tempXdistance;
+		var newy=obj.y-tempYdistance;
+		
+		this.setAttribute('x',newx);
+		this.setAttribute('y',newy);
+		]]>
+	</method>
+	
+	<dragstate name="dragger" />
+    
+    <animator attribute="y" to="20" duration="1000" started="false" />
+        
+    <animator name="doOut" attribute="y" to="-500" duration="1000" started="false" onstop="parent.doDestroy()" />    
+    
+    <method name="doDestroy">
+        this.destroy();
+    </method>
+	
+	<view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }" 
+		  x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" />
+	<view x="1" y="1" width="${ this.parent.width-2 }" height="20" >
+		
+		<gradientview x="0" width="${ this.parent.width }" height="20"
+				colorFrom="$once{ canvas.getThemeColor('baseMousecolorizer') }"
+				colorTo="0x000088" >
+		</gradientview>
+		
+        <text fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
+			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
+	
+		<view visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-20 }" 
+			y="2" resource="btn_presenter_close"
+                onmouseover="this.setAttribute('frame',2)"
+                onmouseout="this.setAttribute('frame',1)"
+                onmousedown="this.setAttribute('frame',3)"
+                onmouseup="this.setAttribute('frame',1)" >
+			<handler name="onclick">
+				this.parent.parent.close();
+			</handler>									
+		</view>
+		<!-- 
+		<view visible="${ !this.parent.parent.isopen }" x="2" y="3" resource="explorer_button_min_rsc">
+			<handler name="onmouseover">
+				this.setAttribute('frame',2);
+			</handler>
+			<handler name="onmouseout">
+				this.setAttribute('frame',1);
+			</handler>
+			<handler name="onmousedown">
+				this.setAttribute('frame',3);
+			</handler>	
+			<handler name="onmouseup">
+				this.setAttribute('frame',1);
+				this.parent.parent.toggleopen();
+			</handler>									
+		</view>
+		<view visible="${ this.parent.parent.isopen }" x="2" y="3" resource="explorer_button_max_rsc">
+			<handler name="onmouseover">
+				this.setAttribute('frame',2);
+			</handler>
+			<handler name="onmouseout">
+				this.setAttribute('frame',1);
+			</handler>
+			<handler name="onmousedown">
+				this.setAttribute('frame',3);
+			</handler>	
+			<handler name="onmouseup">
+				this.setAttribute('frame',1);
+				this.parent.parent.toggleopen();
+			</handler>									
+		</view>
+		 -->
+	</view>
+    <handler name="onaddsubview" args="v">
+		////Debug.write("onaddsubview",v);
+		if (v.parent.subviews.length>2) this._resizeview.bringToFront();
+    </handler>
+    <view visible="${ this.parent.resizeable }" name="_resizeview" 
+    	  x="${ this.parent.width - 17 }" y="${ this.parent.height - 17 }" 
+        resource="explorer_resize_rsc" cursor="explorer_resizemouse_rsc" 
+        onmousedown="this.parent.rs.apply()"
+        onmouseup="this.parent.rs.remove()" >
+    	<handler name="oninit">
+    		//if ($debug) Debug.write("setTint");
+    		//TODO: Fix this, does not work at the moment
+    		//http://code.google.com/p/openmeetings/issues/detail?id=470
+    		this.setColor(canvas.getThemeColor('baseMousecolorizer'));
+    	</handler>  	
+    </view>
+    <resizestate name="rs"/>
+</class>
+
+</library>

@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<canvas debug="true" height="100%" title="Audio-Video Test-Application">
+
+	<debug width="450" x="460" y="600" height="100" />
+
+	<switch>
+		<when property="$as3">
+			<passthrough>
+			    import flash.events.*;
+	            import flash.net.*;
+	            import flash.media.*
+			</passthrough>
+		</when>
+	</switch>
+	
+	<class name="myListItem" extends="textlistitem">
+	</class>
+
+	<!--- NetConnection -->
+	<attribute name="_nc" value="null" />
+
+	<!--- NetStream -->
+	<attribute name="_nsBroadCast" value="null" />
+	<attribute name="_nsPlay" value="null" />
+
+	<!--- devices - Reference -->
+	<attribute name="_camera" value="null" />
+	<attribute name="_micro" value="null" />
+
+	<method name="connectRtmpConnection">
+		this._nc = new NetConnection();
+		this._nc.proxyType = "best";
+		Debug.write("connectRtmpConnection URL:",url.getText());
+		this._nc.connect(url.getText());
+		
+		this._nc.addEventListener(NetStatusEvent.NET_STATUS, _onStatus);
+		var clientObj = {};
+   		clientObj.setId = this.setId;
+   		
+   		this._nc.client = clientObj;
+    		
+		//this._nc.onStatus = function(info){
+		//Debug.write(info.code,info);
+		//}
+	</method>
+	
+	<method name="setId" args="tId">
+		if ($debug) Debug.write("setId ", tId);
+	</method>
+	
+    <method name="_onStatus" args="stats"><![CDATA[
+        if ($debug) {
+            Debug.write("devrtmpconnection", this, "_onStatus", stats.info.code);
+        }
+      ]]>
+    </method>
+
+	<method name="startBroadCast">
+	<![CDATA[
+	    if ($debug) Debug.write("startBroadCast 1");
+	    if (this._camera != null) {
+		  this._camera = Camera.getCamera(camDevices.getValue());
+		}
+		if ($debug) Debug.write("startBroadCast 2");
+		//sets the Mode
+		//see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Camera.html#setMode%28%29
+		if (this._camera != null) this._camera.setMode(Number(streamwidth.getText()),Number(streamheight.getText()),Number(streamfps.getText()),streamfavorarea.getValue());	
+		if ($debug) Debug.write("startBroadCast 3");
+		//sets the Quality
+		//see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Camera.html#setQuality%28%29
+		if (this._camera != null) this._camera.setQuality(Number(streambandwidth.getText()),Number(streamquality.getText()));	
+		if ($debug) Debug.write("startBroadCast 4");
+		if (useEnhancedMicrophone.getValue()) {
+			this._micro = Microphone.getEnhancedMicrophone(micDevices.getValue());
+			
+			if ($debug) Debug.write(this._micro.enhancedOptions);
+			
+		} else {
+			this._micro = Microphone.getMicrophone(micDevices.getValue());
+		}
+		if ($debug) Debug.write("startBroadCast 5");
+		this._micro.codec = SoundCodec.NELLYMOSER;
+		if ($debug) Debug.write("startBroadCast 6");
+		//sets the Microphone Rate in Khz
+		//see:http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Microphone.html#rate
+		this._micro.rate = Number(streamrate.getText());
+		if ($debug) Debug.write("startBroadCast 7");
+		this._micro.gain = 50;
+		if ($debug) Debug.write("startBroadCast 8");
+		//sets wether useEchoSupression should be used or not
+		//http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Microphone.html#useEchoSuppression
+		this._micro.setUseEchoSuppression(streamuseEchoSuppression.getValue());
+		if ($debug) Debug.write("startBroadCast 9");
+		//attaches the Camera to the View
+		if (this._camera != null) broadCastVideo.attachVideo(this._camera);
+		if ($debug) Debug.write("startBroadCast 10");
+		this._nsBroadCast =  new NetStream(this._nc);
+		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
+        //according to the docs the construct to catch event has to be implemented like this.
+        var t = this;
+		var clientObject = new Object();
+		if ($debug) Debug.write("startBroadCast 11");
+		clientObject.onMetaData = function(metadata:Object):void {
+			t.onMetaData(metadata);
+		};
+		clientObject.onPlayStatus = function(metadata:Object):void {
+			t.onPlayStatus(metadata);
+		};
+		clientObject.onCuePoint = function(metadata:Object):void {
+			t.onCuePoint(metadata);
+		};
+		clientObject.ioError = function(error:Object):void {
+			t.ioError(error);
+		};
+		clientObject.netStatus = function(status:Object):void {
+			t.netStatus(status);
+		};
+		clientObject.asyncError = function(error:Object):void {
+			t.asyncError(error);
+		};
+		if ($debug) Debug.write("startBroadCast 12");
+		this._nsBroadCast.client = clientObject;
+		//this is a workaround, attaching the event to the client object does not work
+		this._nsBroadCast.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
+	    if ($debug) Debug.write("startBroadCast 13");
+		if (this._camera != null) this._nsBroadCast.attachCamera(this._camera);
+	    this._nsBroadCast.attachAudio(this._micro);
+	    if ($debug) Debug.write("startBroadCast 14");
+	    this._nsBroadCast.publish(streamname.getText(),"live");
+	    if ($debug) Debug.write("startBroadCast 15");
+    ]]>
+	</method>
+	
+	<method name="onNetStatus2" args="evt">
+		if($debug) Debug.write("netStream_onNetStatus: " , evt.info.code, evt.target);
+	</method>
+	
+	<method name="asyncError" args="error">
+		if($debug) Debug.write("simpleNetStream asyncError",error);
+	</method>
+	
+	<method name="netStatus" args="status">
+		if($debug) Debug.write("simpleNetStream netStatus",status);
+	</method>
+	
+	<method name="ioError" args="error">
+		if($debug) Debug.write("simpleNetStream ioError",error);
+	</method>
+
+    <method name="onCuePoint" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onCuePoint",info);
+    ]]></method>
+
+    <method name="onPlayStatus" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onPlayStatus",info);
+    ]]></method>
+
+    <method name="onMetaData" args="info"><![CDATA[
+        if($debug) Debug.write("simpleNetStream onMetaData",info);
+    ]]></method>
+
+	<method name="stopBroadCast">
+		this._nsBroadCast.publish(false);
+		broadCastVideo.attachVideo(null);
+		broadCastVideo.stopIt();
+		this._nsBroadCast.close();
+	</method>
+
+
+	<method name="playBroadCast">
+	<![CDATA[
+		//attaches the Camera to the View
+	
+		this._nsPlay =  new NetStream(this._nc);
+		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
+        //according to the docs the construct to catch event has to be implemented like this.
+        var t = this;
+		var clientObject = new Object();
+		clientObject.onMetaData = function(metadata:Object):void {
+			t.onMetaData(metadata);
+		};
+		clientObject.onPlayStatus = function(metadata:Object):void {
+			t.onPlayStatus(metadata);
+		};
+		clientObject.onCuePoint = function(metadata:Object):void {
+			t.onCuePoint(metadata);
+		};
+		clientObject.ioError = function(error:Object):void {
+			t.ioError(error);
+		};
+		clientObject.netStatus = function(status:Object):void {
+			t.netStatus(status);
+		};
+		clientObject.asyncError = function(error:Object):void {
+			t.asyncError(error);
+		};
+		this._nsPlay.client = clientObject;
+		//this is a workaround, attaching the event to the client object does not work
+		this._nsPlay.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
+	
+	    //sets the Buffer for the Playing
+	    //see: http://livedocs.adobe.com/flash/8/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00002567.html#wp393038
+	    //this._nsPlay.setBufferTime(Number(this.streambuffer.getText())); 
+	    //=> disabled, cause this leads to Buffer-Full-Buffer-Empty-Events after re-syncing
+		playVideo.attachVideo(this._nsPlay);
+	    
+	    this._nsPlay.play(streamname.getText(),-1);
+    ]]>
+	</method>
+
+	<method name="stopPlayBroadCast">
+		this._nsPlay.pause();
+		this._nsPlay.close();
+		playVideo.attachVideo(null);
+		playVideo.stopIt();
+	</method>
+
+	<view layout="axis:y;spacing:4" width="450" x="0">
+		<text fontstyle="bold"
+			text="Connection - Settings (user for both BroadCasting and Subscribing)" />
+		<view width="450">
+			<text text="URL:" />
+			<edittext align="right" width="350" id="url"
+				text="rtmp://127.0.0.1:1935/openmeetings/testscope" />
+		</view>
+		<button align="right" width="200" text="connectRtmpConnection"
+			onclick="canvas.connectRtmpConnection()" />
+	</view>
+	<!-- some description -->
+	<text fontstyle="italic" y="0" width="450" multiline="true" x="450">
+		You can test all Settings of Audio and Video Streamings which are currently used in OpenMeetings here. <br /> 
+		Change the URL so that 127.0.0.1 points to your Red5-Installation! <br />
+		You first need to <b>connect</b> to a stream before you start to <b>broadcast</b>!<br />
+		You first need <b>broadcast</b> a stream with a name before you try to <b>subscribe</b> to it!<br />
+		If somebody already uses that streamname you get an NetStream *Bad.StreamName*, you can take an StreamName you like, but of course you have to tell the *player* that it will need to use that StreamName!
+		<br />
+	</text>
+
+	<checkbox name="modus" y="120"
+		text="Event Modus (320x240) or Conference Modus (128x96)" value="true">
+		<handler name="onvalue" args="v">
+			if (canvas.isinited) {
+				if (v){
+					broadCastVideo.setAttribute('width',320);
+					broadCastVideo.setAttribute('height',240);
+					broadCastVideo.applySizeToVid();
+					playVideo.setAttribute('width',320);
+					playVideo.setAttribute('height',240);
+					playVideo.applySizeToVid();
+				} else {
+					broadCastVideo.setAttribute('width',128);
+					broadCastVideo.setAttribute('height',96);
+					broadCastVideo.applySizeToVid();
+					playVideo.setAttribute('width',128);
+					playVideo.setAttribute('height',96);
+					playVideo.applySizeToVid();
+				}
+			}
+		</handler>
+	</checkbox>
+
+	<view bgcolor="black" width="${ canvas.width }" height="2" y="140" />
+
+	<!-- two columns left BroadCast, right Subscribe a Stream -->
+	<view y="144" height="$once{ canvas.height-this.y }" clip="true">
+		<!--- ScrollArea -->
+		<view layout="axis:x;spacing:10">
+			<!--- BroadCasting Area -->
+			<view layout="axis:y;spacing:4" width="450">
+
+				<!--- Video Area -->
+				<view id="broadCastVideo" bgcolor="black" width="320" height="240">
+				
+					<passthrough when="$as3">
+				        import flash.media.*;
+				        import flash.net.NetConnection;
+				        import flash.net.NetStream;
+				    </passthrough>
+				    
+				    <attribute name="__LZvideo" value="null" />
+								
+					<method name="init"><![CDATA[
+				        super.init();
+				        var mc = new Video(this.width, this.height);
+				        this.sprite.addChild(mc);
+				        this.__LZvideo = mc;
+				        this.applySizeToVid();
+				    ]]></method>
+					<method name="applySizeToVid">
+						if (this.__LZvideo == null) {
+							return;
+						}
+						var vid = this._getflashvideo();
+						vid.width = this.width;
+						vid.height = this.height;
+					</method>
+					<method name="_getflashvideo">
+						<![CDATA[
+				            //Debug.write("_getflashvideo()");
+				            return this.__LZvideo;
+				        ]]>
+				    </method>
+					<method name="stopIt">
+						if (this.__LZvideo == null) {
+							return;
+						}
+						var vid = this._getflashvideo();
+				    	vid.attachNetStream(null);
+						this.__LZvideo.clear();
+					</method>
+					<!--- shows the Video (can be a Cam-Instance or a NetStream) in the 
+						View -->
+					<method name="attachVideo" args="video">
+						if (this.__LZvideo == null) {
+							return;
+						}
+						var vid = this._getflashvideo();
+						vid.attachCamera(video);
+					</method>
+				</view>
+
+				<text fontstyle="bold" text="BroadCast - Settings" />
+				<view width="450">
+					<text text="StreamName (BroadCast):" />
+					<edittext align="right" width="150" id="streamname" text="stream1" />
+				</view>
+
+				<button align="right" width="200" text="startBroadCast"
+					onclick="canvas.startBroadCast()" />
+				<button align="right" width="200" text="stopBroadCast"
+					onclick="canvas.stopBroadCast()" />
+
+				<text fontstyle="bold" text="Video and Audio - Settings for Broad-Casting" />
+
+				<!--- Settings -->
+				<view width="450">
+					<text text="Camera:" />
+					<combobox align="right" width="350" id="camDevices"
+						editable="false" itemclassname="myListItem">
+						<switch>
+				            <when property="$as3">
+				                <passthrough>
+				                    import flash.media.Camera;
+				                </passthrough>
+				            </when>
+				        </switch>
+						<handler name="oninit">
+						<![CDATA[
+							//Get all availible Cam's
+							var tw = Camera.names;
+							var r = "";
+							for (var eg=0;eg<tw.length;eg++){
+								this.addItem(tw[eg],eg);
+								r=eg;
+							}
+							this.selectItem(String(r));  
+						]]>
+						</handler>
+					</combobox>
+				</view>
+				<!--- Width -->
+				<view width="450">
+					<text text="Width:" />
+					<edittext align="right" width="150" id="streamwidth"
+						text="$ { broadCastVideo.width }" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						width:Number [optional] - The requested capture width, in pixels. The default value is 160.
+					</text>
+				</view>
+				<!--- Height -->
+				<view width="450">
+					<text text="Height:" />
+					<edittext align="right" width="150" id="streamheight"
+						text="$ { broadCastVideo.height }" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						height:Number [optional] - The requested capture height, in pixels. The default value is 120.
+					</text>
+				</view>
+				<!-- Frames Per Second -->
+				<view width="450">
+					<text text="FPS:" />
+					<edittext align="right" width="150" id="streamfps" text="30" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						fps:Number [optional] - The requested rate at which the camera should capture data, in frames per second. The default value is 15.
+					</text>
+				</view>
+				<!--- FavorArea -->
+				<view width="450">
+					<checkbox id="streamfavorarea" text="Favorarea" value="true" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						favorArea:Boolean [optional] - A Boolean value that specifies how to manipulate the width, height, and frame rate if the camera does
+						not have a native mode that meets the specified requirements. The default value is true, which means that maintaining capture size
+						is favored; using this parameter selects the mode that most closely matches width and height values, even if doing so
+						adversely affects performance by reducing the frame rate. To maximize frame rate at the expense of camera height and width,
+						pass false for the favorArea parameter.
+					</text>
+				</view>
+				<!--- Bandwidth -->
+				<view width="450">
+					<text text="Bandwidth:" />
+					<edittext align="right" width="150" id="streambandwidth"
+						text="0" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						bandwidth:Number [optional] - An integer that specifies the maximum amount of bandwidth that the current outgoing video feed
+						can use, in bytes per second. To specify that Flash video can use as much bandwidth as needed to maintain the value of frameQuality, pass 0 for bandwidth.
+					</text>
+				</view>
+				<!--- Quality -->
+				<view width="450">
+					<text text="Quality:" />
+					<edittext align="right" width="150" id="streamquality"
+						text="90" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						quality:Number [optional] - An integer that specifies the required level of picture quality, as determined by the amount of
+						compression being applied to each video frame. Acceptable values range from 1 (lowest quality, maximum compression) to 100 (highest
+						quality, no compression). To specify that picture quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality. The
+						default value is 0.
+					</text>
+				</view>
+				<!--- Choose Microphone -->
+				<view width="450">
+					<text text="Microphone:" />
+					<combobox align="right" width="350" id="micDevices"
+						editable="false" itemclassname="myListItem">
+						<switch>
+				            <when property="$as3">
+				                <passthrough>
+				                    import flash.media.Microphone;
+				                </passthrough>
+				            </when>
+				        </switch>
+						<handler name="oninit">
+						<![CDATA[
+							//Get all availible Cam's
+							var tw = Microphone.names;
+							var r = "";
+							for (var eg=0;eg<tw.length;eg++){
+								this.addItem(tw[eg],eg);
+								r=eg;
+							}
+							this.selectItem(String(r));  
+						]]>
+						</handler>
+					</combobox>
+				</view>
+				<!--- Audio-Rate -->
+				<view width="450">
+					<text text="Rate:" />
+					<edittext align="right" width="150" id="streamrate" text="22" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						rate:Number - The rate at which the microphone should capture sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The
+						default value is 8 kHz if your sound capture device supports this value. Otherwise, the default value is the next available capture
+						level above 8 kHz that your sound capture device supports, usually 11 kHz.
+					</text>
+				</view>
+				<!--- useEchoSupression -->
+				<view width="450">
+					<checkbox id="streamuseEchoSuppression" text="useEchoSuppression"
+						value="true" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						public useEchoSuppression : Boolean [read-only] Property (read-only); a Boolean value of true if echo suppression is enabled, false
+						otherwise. The default value is false unless the user has selected Reduce Echo in the Flash Player Microphone Settings panel.
+						<br/><br/>
+						Echo suppression is an effort to reduce the effects of audio feedback, which is caused when sound going out the speaker is picked up by the microphone on the same system. (This is different from acoustic echo cancellation, which completely removes the feedback. The setUseEchoSuppression() method is ignored when you call the getEnhancedMicrophone() method to use acoustic echo cancellation.)
+					</text>
+				</view>
+				
+				<!--- enhanced Microphone -->
+				<view width="450">
+					<checkbox id="useEnhancedMicrophone" text="Use Enhanced Microphone"
+						value="true" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+					To use acoustic echo cancellation, set this value to true.
+					</text>
+				</view>
+			</view>
+
+			<!--- Play Area -->
+			<view layout="axis:y;spacing:4" width="450">
+
+				<!--- Video Output -->
+				<view id="playVideo" bgcolor="black" width="320" height="240">
+				
+					<passthrough when="$as3">
+				        import flash.media.*;
+				        import flash.net.NetConnection;
+				        import flash.net.NetStream;
+				    </passthrough>
+				
+					<method name="init"><![CDATA[
+				        super.init();
+				        var mc = new Video(this.width, this.height);
+				        this.sprite.addChild(mc);
+				        this.__LZvideo = mc;
+				        this.applySizeToVid();
+				    ]]></method>
+					<method name="applySizeToVid">
+						if (this.__LZvideo == null) {
+							return;
+						}
+						var vid = this._getflashvideo();
+						vid.width = this.width;
+						vid.height = this.height;
+					</method>
+					<method name="_getflashvideo">
+						<![CDATA[
+				            //Debug.write("_getflashvideo()");
+				            return this.__LZvideo;
+				        ]]>
+				    </method>
+					<method name="stopIt">
+						if (this.__LZvideo == null) {
+							return;
+						}
+						var vid = this._getflashvideo();
+				    	vid.attachNetStream(null);
+						this.__LZvideo.clear();
+					</method>
+					<!--- shows the Video (can be a Cam-Instance or a NetStream) in the 
+						View -->
+					<method name="attachVideo" args="video">
+						var vid = this._getflashvideo();
+						vid.attachNetStream(video);
+					</method>
+				</view>
+
+				<view height="20" />
+				<text fontstyle="bold"
+					text="Play-Broadcast(Subscribe to a Live Stream) - Settings" />
+				<view width="450">
+					<text text="StreamName (Play):" />
+					<edittext align="right" width="150" id="streamname2" text="stream1" />
+				</view>
+				<!--- Buffer Time -->
+				<view width="450">
+					<text text="BufferTime:" />
+					<edittext align="right" width="150" id="streambuffer"
+						text="0.3" />
+					<text fontstyle="italic" y="26" width="450" multiline="true">
+						public bufferTime : Number [read-only] The number of seconds assigned to the buffer by
+						NetStream.setBufferTime(). The default value is .1(one-tenth of a second). To determine the number of seconds currently in the
+						buffer, use NetStream.bufferLength.
+					</text>
+				</view>
+				<button align="right" width="200" text="playBroadCast"
+					onclick="canvas.playBroadCast()" />
+				<button align="right" width="200" text="stopPlayBroadCast"
+					onclick="canvas.stopPlayBroadCast()" />
+			</view>
+		</view>
+		<vscrollbar />
+	</view>
+
+</canvas>

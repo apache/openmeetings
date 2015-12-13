@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+	<properties>
+		<title>Howto create a Custom Crypt styles</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+	<body>
+		<section name="Configuration of Custom Crypt-Style">
+			<p>
+				You can use custom Crypt-Types, but you should decide during
+				installation which Type of encryption you want to use. By default
+				two type are available:
+			</p>
+
+			<ul>
+				<li>org.xmlcrm.utils.crypt.MD5Implementation - this uses common MD5
+					Crypt like PHP does, this is the default one (results in something
+					like: fe01ce2a7fbac8fafaed7c982a04e229)</li>
+				<li>org.xmlcrm.utils.crypt.MD5CryptImplementation - does use
+					BSD-Style of encryption using a salt (results in something like:
+					$1$GMsj7F2I$5S3r9CeukXGXNwf6b4sph1)</li>
+			</ul>
+			<p>
+				You can edit the config-key during Installation or later in the
+				Administration Panel. But if you change it using the
+				Administration-Panel previous passwords might be not working anymore
+				as they are encrypted with another algorithm.
+			</p>
+		</section>
+		<section name="Configuration of Custom Crypt-Style">
+			<p>
+				To add your own crypt style you need to write a class which
+				implements the interface: org.xmlcrm.utils.cryptCryptString
+				<br />
+				and extends the Adapter: org.xmlcrm.utils.CryptStringAdapter
+				<br />
+				Example of an Implementation:
+			</p>
+			<div class="xmlcode">
+				package org.xmlcrm.utils.crypt;
+				
+				import java.security.NoSuchAlgorithmException;
+				
+				public class MD5Implementation extends CryptStringAdapter implements CryptString {
+				
+				        @Override
+				        public String createPassPhrase(String userGivenPass) {
+				                String passPhrase = null;
+				                try {
+				                        passPhrase = MD5.do_checksum(userGivenPass);
+				                } catch (NoSuchAlgorithmException e) {
+				                        e.printStackTrace();
+				                }
+				                return passPhrase;
+				        }
+				
+				        @Override
+				        public Boolean verifyPassword(String passGiven, String passwdFromDb) {
+				                return (passwdFromDb.equals(createPassPhrase(passGiven)));
+				        }
+				        
+				}
+			</div>
+			<p>To add your own Encryption-Class you need to add your class to the
+				OpenMeetings-Webapp (make it available to the webapp-classpath) and
+				use your custom-class-name instead of
+				org.xmlcrm.utils.crypt.MD5Implementation during the Installation or
+				at runtime by editing the config-key crypt_ClassName</p>
+		</section>
+		<section name="Configuration of Custom Crypt-Style">
+			<p>credits goto Mika for sharing his Implementation of the
+				MD5Crypt-Style</p>
+		</section>
+	</body>
+</document>

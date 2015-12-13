@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd">
+				   			   						   
+	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" init-method="init" destroy-method="shutdown" depends-on="context.loader">
+
+		<property name="webappFolder" value="${red5.root}/webapps" />
+			      
+	    <property name="connector">
+			<bean class="org.apache.catalina.connector.Connector">
+				<!-- Blocking I/O -->
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11Protocol" />
+				<!-- Non-blocking I/O -->
+				<!--
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11NioProtocol" />	
+				-->
+                <property name="port"><value>${https.port}</value></property>
+		        <property name="redirectPort"><value>${http.port}</value></property>
+                <property name="enableLookups"><value>false</value></property>
+                <property name="useIPVHosts"><value>true</value></property>
+			</bean>
+	    </property>
+	    	
+        <property name="address">
+            <bean class="java.net.InetSocketAddress">
+                <constructor-arg index="0" type="java.lang.String" value="${http.host}" />  
+                <constructor-arg index="1" type="int" value="${http.port}" />  
+            </bean>	
+        </property>
+        
+        		<property name="connectionProperties">
+			<map>
+				<entry>
+					<key><value>port</value></key>
+					<value>${https.port}</value>
+				</entry>
+				<entry>
+					<key><value>redirectPort</value></key>
+					<value>${http.port}</value>
+				</entry>
+				<entry>
+					<key><value>SSLEnabled</value></key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key><value>sslProtocol</value></key>
+					<value>TLS</value>
+				</entry>
+				<entry>
+					<key><value>clientAuth</value></key>
+					<value>false</value>
+				</entry>
+				<entry>
+					<key><value>keystoreFile</value></key>
+					<value>conf/keystore</value>
+				</entry>
+				<entry>
+					<key><value>keystorePass</value></key>
+					<value>${rtmps.keystorepass}</value>
+				</entry>
+				<entry>
+					<key><value>keystoreType</value></key>
+					<value>JKS</value>
+				</entry>
+				<entry key="maxKeepAliveRequests" value="${rtmps.max_keep_alive_requests}"/>
+				<entry key="useExecutor" value="true"/>
+				<entry key="maxThreads" value="${rtmps.max_threads}"/>
+				<entry key="acceptorThreadCount" value="${rtmps.acceptor_thread_count}"/>
+				<entry key="processorCache" value="${rtmps.processor_cache}"/>
+			</map>
+		</property>	
+
+	    	
+        <property name="baseHost">
+	       <bean class="org.apache.catalina.core.StandardHost">
+	           <property name="name" value="${http.host}" />
+	           <property name="unpackWARs" value="true" />
+	           <property name="autoDeploy" value="true" />
+	       </bean>	   
+	    </property>		
+
+		<property name="valves">
+      		<list>
+        	</list>
+        </property>
+	    
+	</bean>
+	
+	<!-- RTMPT (dedicated server) -->
+<!--
+	<bean id="rtmpt.server" class="org.red5.server.tomcat.rtmpt.RTMPTLoader" init-method="init" lazy-init="true">
+	
+		<property name="webappFolder" value="${red5.root}/webapps" />
+		
+		<property name="connector">
+			<bean class="org.apache.catalina.connector.Connector">
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11NioProtocol" />	
+				<property name="port"><value>${rtmpt.port}</value></property>
+				<property name="enableLookups"><value>false</value></property>
+			</bean>
+		</property>
+
+		<property name="connectionProperties">
+			<map>
+				<entry key="maxKeepAliveRequests" value="${rtmpt.max_keep_alive_requests}"/>
+				<entry key="useExecutor" value="true"/>
+				<entry key="maxThreads" value="${rtmpt.max_threads}"/>
+				<entry key="acceptorThreadCount" value="${rtmpt.acceptor_thread_count}"/>
+				<entry key="processorCache" value="${rtmpt.processor_cache}"/>
+			</map>
+		</property>
+		
+		<property name="host">
+			<bean class="org.apache.catalina.core.StandardHost">
+				<property name="name" value="${rtmpt.host}" />
+				<property name="unpackWARs" value="false" />
+				<property name="autoDeploy" value="false" />
+			</bean>	   
+		</property>		
+
+	</bean>
+-->
+	
+	<!-- RTMPS (dedicated server) -->	
+<!--
+	<bean id="rtmps.server" class="org.red5.server.tomcat.rtmps.RTMPSLoader" init-method="init" lazy-init="true">
+	
+		<property name="webappFolder" value="${red5.root}/webapps" />
+		
+		<property name="connector">
+			<bean class="org.apache.catalina.connector.Connector">
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11NioProtocol" />	
+				<property name="port" value="${rtmps.port}" />
+				<property name="redirectPort" value="${rtmp.port}" />
+			</bean>			
+		</property>	
+		
+		<property name="host">
+			<bean class="org.apache.catalina.core.StandardHost">
+				<property name="name" value="${rtmps.host}" />
+				<property name="unpackWARs" value="false" />
+				<property name="autoDeploy" value="false" />
+			</bean>	   
+		</property>		
+	
+		<property name="connectionProperties">
+			<map>
+				<entry>
+					<key><value>port</value></key>
+					<value>${rtmps.port}</value>
+				</entry>
+				<entry>
+					<key><value>redirectPort</value></key>
+					<value>${rtmp.port}</value>
+				</entry>
+				<entry>
+					<key><value>SSLEnabled</value></key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key><value>sslProtocol</value></key>
+					<value>TLS</value>
+				</entry>
+				<entry>
+					<key><value>clientAuth</value></key>
+					<value>false</value>
+				</entry>
+				<entry>
+					<key><value>keystoreFile</value></key>
+					<value>conf/keystore</value>
+				</entry>
+				<entry>
+					<key><value>keystorePass</value></key>
+					<value>${rtmps.keystorepass}</value>
+				</entry>
+				<entry>
+					<key><value>keystoreType</value></key>
+					<value>JKS</value>
+				</entry>
+				<entry key="maxKeepAliveRequests" value="${rtmps.max_keep_alive_requests}"/>
+				<entry key="useExecutor" value="true"/>
+				<entry key="maxThreads" value="${rtmps.max_threads}"/>
+				<entry key="acceptorThreadCount" value="${rtmps.acceptor_thread_count}"/>
+				<entry key="processorCache" value="${rtmps.processor_cache}"/>
+			</map>
+		</property>	
+
+		<property name="valves">
+      		<list>
+	    		<bean id="valve.access" class="org.apache.catalina.valves.AccessLogValve">
+	                <property name="directory" value="log" />
+	                <property name="prefix" value="${rtmps.host}_rtmps_access." />
+	                <property name="suffix" value=".log" />
+	                <property name="pattern" value="common" />
+	                <property name="resolveHosts" value="false" />
+	                <property name="rotatable" value="true" />
+	        	</bean>
+        	</list>
+        </property>			
+	
+	</bean>		
+-->
+	
+</beans>

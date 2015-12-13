@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+       <script type="text/javascript">
+           function omConfigPanelInit() {
+               var documentHeight = $(document).height();
+               $('#adminForm').height(documentHeight-114);
+               $('#adminTable').height(documentHeight-144);
+           }
+       </script>
+    </wicket:head>
+	<wicket:panel>	
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<thead>
+						<tr>
+							<th class="three_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="264" /></th>
+							<th class="three_column_layout_column2"><span wicket:id="orderByKey"></span><wicket:ommessage key="265" /></th>
+							<th class="three_column_layout_column3"><span wicket:id="orderByValue"></span><wicket:ommessage key="598" /></th>
+						</tr>	
+					</thead>
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">
+						<tbody wicket:id="listContainer" >	
+				    		<tr wicket:id="configList">
+								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="configuration_id"></span></div></td>
+								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="conf_key"></span></div></td>
+								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="conf_value"></span></div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+						<fieldset>
+							<legend><wicket:ommessage key="266" /></legend>
+							<div class="formelement">
+							    <label><wicket:ommessage key="267" /></label><input type="text" wicket:id="conf_key"/>
+				            </div>
+				            <div class="formelement">
+                                   <label><wicket:ommessage key="271" /></label><input type="text" wicket:id="conf_value"/>
+				            </div>
+                               <div class="formelement">
+                                   <label><wicket:ommessage key="268" /></label><span wicket:id="updatetime"/>
+				            </div>
+                               <div class="formelement">
+                                   <label><wicket:ommessage key="269" /></label><span wicket:id="user.login"/>
+				            </div>
+                               <div class="formelement">
+                                   <label><wicket:ommessage key="270" /></label><textarea wicket:id="comment"/>
+				            </div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+	</wicket:panel>
+</html>

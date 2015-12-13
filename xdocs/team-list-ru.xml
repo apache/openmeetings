@@ -1,0 +1,89 @@
+﻿<?xml version="1.0"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Команда проекта</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="OpenMeetings Committers">
+
+			<p>
+				Люди, отмеченные на этой странице, имеют доступ к репозиторию исходного кода Apache Openmeetings. 
+				Данная страница предназначена для того, чтобы служить основой квалификационного отбора
+				по проектам, требующим модификации исходного кода Openmeetings.
+			</p>
+
+			
+			<table>
+				<tr>
+					<th>Имя</th>
+				</tr>
+				<tr>
+					<td>Себастьян Вагнер</td>
+				</tr>
+				<tr>
+					<td>Алексей Федотов</td>
+				</tr>
+				<tr>
+					<td>Евгений Ровинский</td>
+				</tr>
+				<tr>
+					<td>Максим Солодовник</td>
+				</tr>
+				<tr>
+					<td>Oliver Becherer</td>
+				</tr>
+				<tr>
+					<td>Eugen Schwert</td>
+				</tr>
+				<tr>
+					<td>Sascha Xander</td>
+				</tr>
+				<tr>
+					<td>Johnny Strom</td>
+				</tr>
+				<tr>
+					<td>Герман Грехов</td>
+				</tr>
+				<tr>
+					<td>Тимур Тлеукенов</td>
+				</tr>
+				<tr>
+					<td>Alvaro Bustos</td>
+				</tr>
+				<tr>
+					<td>George Kirkham</td>
+				</tr>
+				<tr>
+					<td>Stephen Cottham</td>
+				</tr>
+				<tr>
+					<td>Ирина Архипец</td>
+				</tr>
+				<tr>
+					<td>Василий Дегтярев</td>
+				</tr>
+			</table>
+			
+		</section>
+
+	</body>
+</document>

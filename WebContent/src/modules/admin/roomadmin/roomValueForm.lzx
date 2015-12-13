@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- configure value for roomadmin module -->
+<class name="roomValueForm" extends="baseContentSaveView">
+
+	<!-- recordContent-id -->
+	<attribute name="rooms_id" value="0" type="number" />
+	<attribute name="roomsObj" value="null" />
+	
+	<!--handlers -->
+
+	<handler name="onsavecompleted" >
+		this.getRoomById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.rooms_id!=0) this.getRoomById.doCall();
+	</handler>	
+
+	<handler name="onnew">
+		this.rooms_id=0;
+        this.roomname.setAttribute('text','');
+		this.comment.setAttribute('text','');
+		this.ispublic.setValue(false);
+		this.isModeratedRoom.setValue(false);
+		this.isDemoRoom.setValue(false);
+		this.demoTime.setAttribute('text','');
+		this.isappointment.setValue(false);
+		this.numberOfParticipants.selectItem('4');
+		this._organisationslist.clearList();
+        this._turnoverlist.clearList();
+        this.allowUserQuestions.setValue(true);
+        this.isAudioOnly.setValue(false);
+        this.allowFontStyles.setValue(true);
+        this.sipNumber.setAttribute("text","");
+        this.conferencePin.setAttribute("text","");
+        this.isClosed.setValue(false);
+        this.redirectURL.setAttribute("text","");
+        this._listRoomModerators.clearList();
+        this.ownerId.setAttribute("text","0");
+        this.waitForRecording.setValue(false);
+        this.allowRecording.setValue(false);
+        this.hideTopBar.setValue(false);
+        this.hideChat.setValue(false);        
+        this.hideActivitiesAndActions.setValue(false);
+        this.hideFilesExplorer.setValue(false);
+        this.hideActionsMenu.setValue(false);
+        this.hideScreenSharing.setValue(false);
+        this.hideWhiteboard.setValue(false); 
+        this.showMicrophoneStatus.setValue(false);
+		this.chatModerated.setValue(false);
+		this.chatOpened.setValue(false);
+		this.filesOpened.setValue(false);
+		this.autoVideoSelect.setValue(false);
+		this.sipEnabled.setValue(false);
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.rooms_id!=0){
+			this.deleteRoom.doCall();
+		}
+    </handler>
+	
+	<!-- methods -->
+
+    <method name="initValueFieldsByObject" args="obj">
+		this.rooms_id = obj.rooms_id;
+		if (this.rooms_id!=0){
+			this.getRoomById.doCall();
+		}
+    </method>
+    
+    <method name="initFields" args="obj">
+    	<![CDATA[
+    	
+    	   if (obj == null) {
+                return;
+            }
+            
+    		this.roomsObj = obj;
+    		if ($debug) Debug.write("initFields: ",obj);
+    		this.rooms_id = obj.rooms_id;
+    		
+			this.roomname.setAttribute('text',obj.name);
+			this.comment.setAttribute('text',obj.comment);
+			this.ispublic.setValue(obj.ispublic);
+            this.demoTime.setAttribute("enabled",true);
+			if ($debug) Debug.write("Appointment: ",obj.appointment);
+			this.isappointment.setValue(obj.appointment);
+			
+		    if (obj.isModeratedRoom != null && obj.isModeratedRoom){
+                this.isModeratedRoom.setValue(true);
+            } else {
+                this.isModeratedRoom.setValue(false);
+            }
+            
+            if (obj.demoTime != null) {
+                this.demoTime.setText(obj.demoTime);
+            } else {
+                this.demoTime.setAttribute("text","");
+            }
+            
+            if (obj.isDemoRoom != null && obj.isDemoRoom){
+                this.isDemoRoom.setValue(true);
+            } else {
+                this.isDemoRoom.setValue(false);
+            }
+            
+            if (obj.allowUserQuestions != null && obj.allowUserQuestions){
+                this.allowUserQuestions.setValue(true);
+            } else {
+                this.allowUserQuestions.setValue(false);
+            }
+            
+            if (obj.isAudioOnly != null && obj.isAudioOnly){
+                this.isAudioOnly.setValue(true);
+            } else {
+                this.isAudioOnly.setValue(false);
+            }
+            
+            if (obj.allowFontStyles != null && obj.allowFontStyles){
+            	this.allowFontStyles.setValue(true);
+            } else {
+            	this.allowFontStyles.setValue(false);
+            }
+            
+            if (obj.isClosed != null && obj.isClosed){
+                this.isClosed.setValue(true);
+            } else {
+                this.isClosed.setValue(false);
+            }
+            
+            this.redirectURL.setAttribute("text",obj.redirectURL);
+                
+			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
+			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
+			
+			if (obj != null && obj.confno != null) {
+		        this.sipNumber.setAttribute("text", obj.confno);
+			} else {
+				this.sipNumber.setAttribute("text","");
+			}
+			
+			if (obj != null && obj.pin != null) {
+                this.conferencePin.setAttribute("text", obj.pin);
+			} else {
+				this.conferencePin.setAttribute("text", "");
+			}
+			
+            this._turnoverlist.clearList();
+            this._turnoverlist.getRoomClientsListByRoomId.doCall();
+            
+            if (obj.ownerId != null) {
+                this.ownerId.setAttribute("text",obj.ownerId);
+            } else {
+                this.ownerId.setAttribute("text","0");
+            }
+            
+            if (obj.waitForRecording != null && obj.waitForRecording){
+            	this.waitForRecording.setValue(true);
+            } else {
+            	this.waitForRecording.setValue(false);
+            }
+            
+            if (obj.allowRecording != null && obj.allowRecording){
+                this.allowRecording.setValue(true);
+            } else {
+                this.allowRecording.setValue(false);
+            }
+            
+            if (obj.hideTopBar != null && obj.hideTopBar){
+                this.hideTopBar.setValue(true);
+            } else {
+                this.hideTopBar.setValue(false);
+            }
+            
+            if (obj.hideChat != null && obj.hideChat){
+                this.hideChat.setValue(true);
+            } else {
+                this.hideChat.setValue(false);
+            }
+            
+            if (obj.hideActivitiesAndActions != null && obj.hideActivitiesAndActions){
+                this.hideActivitiesAndActions.setValue(true);
+            } else {
+                this.hideActivitiesAndActions.setValue(false);
+            }
+            
+            if (obj.hideFilesExplorer != null && obj.hideFilesExplorer){
+                this.hideFilesExplorer.setValue(true);
+            } else {
+                this.hideFilesExplorer.setValue(false);
+            }
+            
+            if (obj.hideActionsMenu != null && obj.hideActionsMenu){
+                this.hideActionsMenu.setValue(true);
+            } else {
+                this.hideActionsMenu.setValue(false);
+            }
+            
+            if (obj.hideScreenSharing != null && obj.hideScreenSharing){
+                this.hideScreenSharing.setValue(true);
+            } else {
+                this.hideScreenSharing.setValue(false);
+            }
+            
+            if (obj.hideWhiteboard != null && obj.hideWhiteboard){
+                this.hideWhiteboard.setValue(true);
+            } else {
+                this.hideWhiteboard.setValue(false);
+            }
+			this.chatOpened.setValue(obj.chatOpened);
+			this.filesOpened.setValue(obj.filesOpened);
+			this.autoVideoSelect.setValue(obj.autoVideoSelect);
+            
+            if (obj.showMicrophoneStatus != null && obj.showMicrophoneStatus){
+                this.showMicrophoneStatus.setValue(true);
+            } else {
+                this.showMicrophoneStatus.setValue(false);
+            }
+			this.chatModerated.setValue(obj.chatModerated != null && obj.chatModerated);
+			this.sipEnabled.setValue(obj.sipEnabled != null && obj.sipEnabled);
+			
+            
+            this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
+        ]]>
+    </method>
+	
+	<method name="initOrganisations" args="obj">
+		<![CDATA[
+			this._organisationslist.clearList();
+			for (var i=0;i<obj.length;i++){
+				//if ($debug) Debug.write("initOrganisations: ",obj[i]);
+				this._organisationslist.addItem(obj[i].organisation.name,obj[i].organisation.organisation_id);
+			}
+		]]>
+	</method>
+	
+	<!-- remotecalls -->
+	
+  	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+    		parent.initFields(value);
+			parent.getOrganisationByRoom.doCall();
+    	</handler>
+  	</netRemoteCallHib>
+	
+  	<netRemoteCallHib name="getOrganisationByRoom" funcname="conferenceservice.getOrganisationByRoom" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+			//Debug.write("getOrganisationByRoom: ",value);
+    		parent.initOrganisations(value);
+    	</handler>
+  	</netRemoteCallHib>
+	
+	<netRemoteCallHib name="deleteRoom" funcname="conferenceservice.deleteRoom" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.rooms_id; </method></netparam>
+		<handler name="ondata" args="value">
+			//Debug.write("deleteUserAdmin ",value);
+			//this.parent.destroy();
+			if (value>0){
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				this.parent.onnew.sendEvent();
+			}
+		</handler>
+	</netRemoteCallHib>		
+
+  	<netRemoteCallHib name="saveOrUpdateRoom" funcname="conferenceservice.saveOrUpdateRoom" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer  -->
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+            
+  			this.sendObject["rooms_id"] = this.parent.rooms_id;
+  			this.sendObject["name"] = this.parent.roomname.getText();
+			this.sendObject["roomtypes_id"] = Number(this.parent.roomtype.getValue());
+  			this.sendObject["comment"] = this.parent.comment.getText();
+  			this.sendObject["ispublic"] = this.parent.ispublic.getValue();
+			this.sendObject["numberOfPartizipants"] = Number(this.parent.numberOfParticipants.getValue());
+  			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
+  			this.sendObject["appointment"] = this.parent.isappointment.getValue();
+  			this.sendObject["isModeratedRoom"] = this.parent.isModeratedRoom.getValue();
+            
+            this.sendObject["isDemoRoom"] = parent.isDemoRoom.getValue();
+            this.sendObject["demoTime"] = parent.demoTime.getText();
+            
+            this.sendObject["roomModerators"] = parent._listRoomModerators.getValues();
+
+            this.sendObject["allowUserQuestions"] = parent.allowUserQuestions.getValue();
+            
+            this.sendObject["isAudioOnly"] = parent.isAudioOnly.getValue();
+            
+            this.sendObject["allowFontStyles"] = parent.allowFontStyles.getValue();
+            
+            this.sendObject["isClosed"] = parent.isClosed.getValue();
+            this.sendObject["redirectURL"] = parent.redirectURL.getText();
+            
+            this.sendObject["conferencePin"] =  parent.conferencePin.getText();
+            
+            this.sendObject["waitForRecording"] = parent.waitForRecording.getValue();
+            this.sendObject["allowRecording"] = parent.allowRecording.getValue();
+            
+            this.sendObject["hideTopBar"] = parent.hideTopBar.getValue();
+            
+            this.sendObject["hideChat"] = parent.hideChat.getValue();
+            
+            this.sendObject["hideActivitiesAndActions"] = parent.hideActivitiesAndActions.getValue();
+            
+            this.sendObject["hideFilesExplorer"] = parent.hideFilesExplorer.getValue();
+            
+            this.sendObject["hideActionsMenu"] = parent.hideActionsMenu.getValue();
+            
+            this.sendObject["hideScreenSharing"] = parent.hideScreenSharing.getValue();
+            
+            this.sendObject["hideWhiteboard"] = parent.hideWhiteboard.getValue();      
+            
+            this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue();
+			this.sendObject["chatModerated"] = parent.chatModerated.getValue();
+			this.sendObject["chatOpened"] = parent.chatOpened.getValue();
+			this.sendObject["filesOpened"] = parent.filesOpened.getValue();
+            this.sendObject["autoVideoSelect"] = parent.autoVideoSelect.getValue();
+			this.sendObject["sipEnabled"] = parent.sipEnabled.getValue();
+            
+            var ownerId = parent.ownerId.getText();
+            if (ownerId == "") ownerId = 0;
+            this.sendObject["ownerId"] = ownerId;
+
+  			if ($debug) Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+    		//Debug.write("saveOrUpdateRoom ",val);
+			if (val>0){
+				//Debug.write("saveOrUpdateRoom val greater 0: ",val);
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				var obj = new Array();
+				obj["rooms_id"] = val;
+				this.parent.initValueFieldsByObject(obj);
+			}
+			]]>
+    	</handler>
+  	</netRemoteCallHib>	
+	
+	<!-- content -->
+    
+    <!-- 187:Conferencerooms -->
+    <labelText labelid="187" width="200" y="40" resize="false" fontstyle="bold" />
+    
+    <!-- 193:Name -->
+    <labelText labelid="193" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="roomname" y="70" x="120" width="270" text="" />   
+    
+    <!-- 482:Participants -->
+    <labelText labelid="482" width="200" y="100" resize="false" x="2"/>
+        <resetCombobox name="numberOfParticipants" width="270" y="100" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            	this.addItem(2,2);
+	            	this.addItem(4,4);
+	            	this.addItem(6,6);
+	            	this.addItem(8,8);
+	            	this.addItem(10,10);
+	            	this.addItem(12,12);
+	            	this.addItem(14,14);
+	            	this.addItem(16,16);
+                    this.addItem(25,25);
+                    this.addItem(32,32);
+                    this.addItem(50,50);
+                    this.addItem(100,100);
+                    this.addItem(150,150);
+                    this.addItem(200,200);
+                    this.addItem(1000,1000);
+	            	this.selectItemAt(1);
+	            ]]>
+	        </handler> 
+        </resetCombobox> 
+
+	<!-- 194:Type -->
+    <labelText labelid="194" width="200" y="130" resize="false" x="2"/>  
+        <resetCombobox name="roomtype" width="270" y="130" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+	            }
+	            this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 	                  
+
+	<!-- 196:Comment -->
+	<labelText labelid="196" width="200" y="160" resize="false" x="2"/>
+        <customScrollEdittext name="comment" y="160" x="120" width="270" 
+            height="100" text="" />	
+	
+	<!-- Appointment -->
+	<labelText labelid="620" width="200" y="270" resize="false" x="2"/>  
+        <labelCheckbox name="isappointment" width="270" y="270" x="130" fontsize="11" />
+	
+	<!-- 191:organisations -->
+    <labelText labelid="191" width="200" y="300" fontstyle="bold"
+               resize="false" x="2"/>    
+               
+    <!-- 195:Public -->
+    <labelText labelid="195" width="200" y="320" resize="false" x="2"/>  
+        <labelCheckbox name="ispublic" width="270" y="320" x="130" fontsize="11" />               
+    
+    <view resource="messagebox_info_rsc" x="0" y="340" />
+    
+    <labelText labelid="828" x="24" y="340" fontstyle="italic"
+               multiline="true" width="370" />    
+     
+    <labelText labelid="191" width="200" y="390" resize="false" x="2"/>     
+     
+    <!-- 172:add organisation -->
+    <blueButton width="20" height="20" resourceItem="edit_add_rsc"
+        			x_insetResource="2" y_insetResource="2" y="390" x="370" 
+        			width_insetResource="16" height_insetResource="16"
+        			onclick="this.parent.addOrganisationToUser()" />        
+    <method name="addOrganisationToUser">
+        new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.rooms_id});
+    </method>   
+     
+     <!--
+    <simpleValueList name="_organisationslist" y="410" x="120" width="270" height="80" 
+		multiselect="true" />
+         -->
+        
+	<simpleTurnOverList name="_organisationslist" y="390" x="0" 
+                        width="390" height="100" mainBgColor="0xFFFFFF">
+
+        <handler name="oninit">
+            this.addHeaderItem(588,30);
+            this.addHeaderItem(831,320);
+            this.addHeaderItem(590,22);
+        </handler>
+        
+        <method name="getAllItems">
+            <![CDATA[
+		        var a = new Array();
+		        for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+		            //Debug.write("t: ",this.content.content.inn.subviews[i].value);
+		            a.push(Number(this._innerlist._inn._inn.subviews[i].orgId));
+		        }
+		        return a;
+	        ]]>
+        </method>
+        
+        <method name="addItem" args="orgName,orgId">
+            new lz.roomAdminOrgListItem(this._innerlist._inn._inn,{
+	                obj:null,
+	                orgName:orgName,
+	                orgId:orgId
+                });
+            this.sendInitialWidthUpdate();
+        </method>
+    </simpleTurnOverList>	
+    
+    <!-- Limitations -->
+    <labelText labelid="830" width="200" y="500" fontstyle="bold"
+               resize="false" x="2"/>    
+    
+    <!-- Is Demo Room -->
+    <labelText labelid="636" width="200" y="520" resize="false" x="2"/>  
+        <labelCheckbox name="isDemoRoom" width="250" y="520" x="270" fontsize="11">
+            <handler name="onvalue" args="v">
+                if (!parent.isinited) {
+                    return;
+                }
+                if (v) {
+                    parent.demoTime.setAttribute("editable",true);
+                } else {
+                    parent.demoTime.setAttribute("editable",false);
+                }
+            </handler>
+        </labelCheckbox>   
+	
+    <!-- Demo Time -->
+    <labelText labelid="637" width="200" y="550" resize="false" x="2"/>  
+        <customEdittext name="demoTime" y="546" x="120" width="270" regexpType="number"
+                        text="" /> 
+                        
+     
+    <!-- Rights -->
+    <labelText labelid="881" width="200" y="580" fontstyle="bold"
+               resize="false" x="2"/>    
+     
+    <!-- allowUserQuestions -->          
+    <labelText labelid="879" width="200" y="610" resize="false" x="2"/>  
+        <labelCheckbox name="allowUserQuestions" width="250" y="610" x="270" fontsize="11" />
+    
+    <!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="630" />
+    
+    <labelText labelid="880" x="24" y="630"  fontstyle="italic"
+               multiline="true" width="370" /> 
+               
+    <labelText labelid="1076" width="200" y="680" resize="false" x="2"/>  
+        <labelCheckbox name="isAudioOnly" width="250" y="680" x="270" fontsize="11" />  
+        
+    <!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="700" />
+    
+    <labelText labelid="1077" x="24" y="700"  fontstyle="italic"
+               multiline="true" width="370" /> 
+                
+    <labelText labelid="1531" x="2" resize="false" width="250" y="760" />
+    	<labelCheckbox name="allowFontStyles" width="250" y="760" x="270" />           
+               
+    <!-- Room termination settings -->
+    <labelText labelid="1101" width="250" y="780" fontstyle="bold"
+               resize="false" x="2"/>            
+                                   
+    <!-- isClosed -->          
+    <labelText labelid="1099" width="200" y="810" resize="false" x="2"/>  
+        <labelCheckbox name="isClosed" width="250" y="810" x="270" fontsize="11" />
+        
+    <!-- 1100:Exit URL -->
+    <labelText labelid="1100" width="200" y="840" resize="false" x="2"/>
+        <customEdittext name="redirectURL" y="840" x="120" width="270" text="" />    
+      
+    <!-- termination Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="870" />
+    
+    <labelText labelid="1102" x="24" y="870"  fontstyle="italic"
+               multiline="true" width="370" /> 
+                
+    <!-- isClosed -->          
+    <labelText labelid="1355" width="200" y="910" resize="false" x="2"/>  
+        <labelCheckbox name="waitForRecording" width="250" y="910" x="270" fontsize="11" />
+ 
+    <labelText labelid="1356" width="200" y="930" resize="false" x="2" visibility="hidden" />  
+        <labelCheckbox name="allowRecording" width="250" y="930" x="270" fontsize="11" visibility="hidden" />
+ 
+ 	
+ 	<!-- Room Layout options -->
+    <labelText labelid="1443" width="250" y="950" fontstyle="bold"
+               resize="false" x="2"/>  
+ 
+    <labelText labelid="1357" width="250" y="990" resize="false" x="2" />  
+        <labelCheckbox name="hideTopBar" width="270" y="990" x="270" fontsize="11" />
+        
+    <labelText labelid="1436" width="250" y="1010" resize="false" x="2" />  
+        <labelCheckbox name="hideChat" width="270" y="1010" x="270" fontsize="11" />
+        
+    <labelText labelid="1437" width="250" y="1030" resize="false" x="2" />  
+        <labelCheckbox name="hideActivitiesAndActions" width="250" y="1030" x="270" fontsize="11" />
+        
+    <labelText labelid="1438" width="250" y="1050" resize="false" x="2" />  
+        <labelCheckbox name="hideFilesExplorer" width="250" y="1050" x="270" fontsize="11" />
+    
+    <labelText labelid="1439" width="250" y="1070" resize="false" x="2" />  
+        <labelCheckbox name="hideActionsMenu" width="250" y="1070" x="270" fontsize="11" />
+ 	
+ 	<labelText labelid="1440" width="250" y="1090" resize="false" x="2" />  
+        <labelCheckbox name="hideScreenSharing" width="250" y="1090" x="270" fontsize="11" />
+        
+    <labelText labelid="1441" width="250" y="1110" resize="false" x="2" />  
+        <labelCheckbox name="hideWhiteboard" width="250" y="1110" x="270" fontsize="11" />
+     
+    <labelText labelid="1442" width="250" y="1130" resize="false" x="2" />  
+        <labelCheckbox name="showMicrophoneStatus" width="250" y="1130" x="270" fontsize="11" />
+                                  
+    <labelText labelid="1513" width="250" y="1150" resize="false" x="2" />  
+        <labelCheckbox name="chatModerated" width="250" y="1150" x="270" fontsize="11" />
+                                  
+    <labelText labelid="1515" width="250" y="1170" resize="false" x="2" />  
+        <labelCheckbox name="chatOpened" width="250" y="1170" x="270" fontsize="11" />
+                                  
+	<labelText labelid="1516" width="250" y="1190" resize="false" x="2" />  
+		<labelCheckbox name="filesOpened" width="250" y="1190" x="270" fontsize="11" />
+
+	<labelText labelid="1528" width="250" y="1210" resize="false" x="2" />  
+		<labelCheckbox name="autoVideoSelect" width="250" y="1210" x="270" fontsize="11" />
+
+    <!-- RoomClient List Right Side -->
+    <labelText labelid="587" width="300" y="40" resize="false" 
+                x="398" fontstyle="bold" />   
+    
+    <simpleTurnOverList name="_turnoverlist" width="300" mainBgColor="0xFFFFFF"
+                height="200" y="40" x="400">
+
+        <handler name="oninit">
+            this.addHeaderItem(588,30);
+            this.addHeaderItem(589,230);
+            this.addHeaderItem(590,22);
+        </handler>
+        
+        <handler name="onclickedItem" args="obj">
+            if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+        </handler>
+        
+        <netRemoteCallHib name="getRoomClientsListByRoomId" funcname="conferenceservice.getRoomClientsListByRoomId" 
+                          remotecontext="$once{ canvas.thishib }" >      
+            <netparam><method name="getValue"> return parent.parent.parent.rooms_id; </method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("getRoomClientsListByRoomId: ",value);
+                //this.parent.destroy();
+                this.parent.renderContent(value);
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="renderContent" args="records">
+            <![CDATA[
+            this.clearList();
+            for (var i = 0; i < records.length; ++i) {
+                new lz.roomAdminRoomClientListItem(this._innerlist._inn._inn,{
+                    obj:records[i],
+                    red5_id:i,
+                    login:records[i].username+"("+records[i].streamid+")"});
+            }
+            this.sendInitialWidthUpdate();
+            ]]>
+        </method>
+
+    </simpleTurnOverList>
+    
+    <!--Moderated -->
+    <labelText labelid="829" width="200" y="250" resize="false" 
+               x="400" fontstyle="bold" />   
+    
+    <labelText labelid="640" width="200" y="270" resize="false" x="400"/>  
+        <labelCheckbox name="isModeratedRoom" width="270" y="270" x="688" fontsize="11" />
+    
+    <view resource="messagebox_info_rsc" x="400" y="290" />
+    
+    <labelText labelid="823" x="424" y="290"  fontstyle="italic"
+               multiline="true" width="270" />
+        
+    
+    <labelText labelid="816" width="300" y="380" resize="false" x="400"/>  
+    
+    <!-- 172:add default moderator -->
+	<blueButton width="20" height="20" resourceItem="edit_add_rsc"
+        			x_insetResource="2" y_insetResource="2" y="380" x="680" 
+        			width_insetResource="16" height_insetResource="16"    
+        			onclick="this.parent.addModeratorToRoom()" />        
+    <method name="addModeratorToRoom">
+        new lz.addAttendee(canvas.main_content._content.inner,{
+	                                isSuperModerator:true,
+                                    labelid:835,
+	                                refObj:this._listRoomModerators
+                                });
+    </method>   
+
+    <simpleTurnOverList name="_listRoomModerators" width="300" mainBgColor="0xFFFFFF"
+                        height="200" y="382" x="400">
+
+        <handler name="oninit">
+            this.addHeaderItem(817,50);
+            this.addHeaderItem(818,30);
+            this.addHeaderItem(819,100);
+            this.addHeaderItem(820,84);
+            this.addHeaderItem(827,20);
+        </handler>
+        
+        <method name="getValues">
+            <![CDATA[
+                
+                var tArray = new Array();
+                
+                for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++) {
+                    
+                    var tObject = new Object();
+                    var item = this._innerlist._inn._inn.subviews[i];
+                    
+                    tObject.roomModeratorsId = item.roomModeratorsId;
+                    tObject.userId = item.userId;
+                    tObject.isSuperModerator = item.isSuperModerator;
+                    
+                    tArray.push(tObject);
+                }
+            
+                return tArray;
+            ]]>
+        </method>
+        
+        <handler name="onclickedItem" args="obj">
+            if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+        </handler>
+        
+        <netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>    
+            <netparam><method name="getValue">return parent.parent.parent.rooms_id;</method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                //this.parent.destroy();
+                this.parent.renderContent(value);
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="addListItem" args="userId,first,last,email,superAdmin">
+            new lz.roomModeratorsRoomClientListItem(this._innerlist._inn._inn,{
+                    roomModeratorsId:0,
+                    obj:null,
+                    isSuperModerator:superAdmin,
+                    userId:userId,
+                    email:email,
+                    uName:first+' '+last
+                });
+            this.sendInitialWidthUpdate();
+        </method>
+        
+        <method name="renderContent" args="records">
+            <![CDATA[
+	            this.clearList();
+                
+	            for (var i in records){
+	                new lz.roomModeratorsRoomClientListItem(this._innerlist._inn._inn,{
+		                    roomModeratorsId:records[i].roomModeratorsId,
+		                    obj:records[i],
+		                    isSuperModerator:records[i].isSuperModerator,
+		                    userId:records[i].user.user_id,
+		                    email:records[i].user.adresses.email,
+		                    uName:records[i].user.firstname+' '+records[i].user.lastname
+                        });
+	            }
+                
+	            this.sendInitialWidthUpdate();
+            ]]>
+        </method>
+
+    </simpleTurnOverList>    
+    
+    <!--SIP Settings -->
+    <labelText labelid="1001" width="200" y="600" resize="false" 
+               x="400" fontstyle="bold" />   
+    
+    <view resource="messagebox_info_rsc" x="400" y="620" />
+    
+    <labelText labelid="1002" x="424" y="620" fontstyle="italic"
+               multiline="true" width="270" />   
+     
+    <labelText labelid="1003" x="400" y="670" width="270" /> 
+    	<customEdittext name="sipNumber" x="520" y="670" width="180" enabled="false" />  
+               
+    <labelText labelid="1004" x="400" y="692" width="270" />                 
+    	<customEdittext name="conferencePin" x="520" y="692" width="180" />                         
+    
+	<labelText labelid="1308" x="400" y="722" width="270" />                 
+		<customEdittext name="ownerId" x="520" y="722" width="180" />      
+
+	<labelText labelid="1538" x="400" y="750" width="250" />                 
+        <labelCheckbox name="sipEnabled" width="180" y="750" x="688" fontsize="11" />
+
+    <view x="400" y="1400" />    
+    
+</class>
+
+<!--- list of conference/audience rooms -->
+<class name="roomAdminRoomClientListItem" extends="baseContentListItem">
+    
+    <attribute name="red5_id" value="0" type="number" />
+    <attribute name="login" value="" type="string" />
+    <attribute name="ispublic" value="" type="string" />
+    
+    <turnOverTextItem text="$once{ parent.red5_id }" width="60" />
+    <turnOverTextItem text="$once{ parent.login }" width="200" />
+    <turnOverTextItem width="40" text="">
+        
+    </turnOverTextItem>
+    
+</class>
+
+<!--- list of conference/audience rooms -->
+<class name="roomAdminOrgListItem" extends="baseContentListItem">
+    
+    <attribute name="orgId" value="0" type="number" />
+    <attribute name="orgName" value="" type="string" />
+    
+    <turnOverTextItem text="$once{ parent.orgId }" width="60" />
+    <turnOverTextItem text="$once{ parent.orgName }" width="200" />
+    
+    <view width="20" height="18" 
+        onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:833,showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.destroy();
+        </method>
+        <image src="$once{ canvas.getThemeImage('button_cancel_rsc') }" align="center" valign="middle" />
+        <labelTooltip labelid="274" />
+    </view>  
+    
+</class>
+
+<!--- list of ddefault moderators rooms -->
+<class name="roomModeratorsRoomClientListItem" extends="baseContentListItem">
+    
+    <attribute name="roomModeratorsId" value="0" type="number" />
+    <attribute name="isSuperModerator" value="false" type="boolean" />
+    <attribute name="modRoomId" value="0" type="number" />
+    <attribute name="uName" value="" type="string" />
+    <attribute name="userId" value="0" type="number" />
+    <attribute name="email" value="" type="string" />
+    
+    <view width="20" height="18" opacity="${ (parent.isSuperModerator) ? 1 : 0.4 }" 
+          onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:((parent.isSuperModerator) ? 837 : 836),showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.setAttribute("isSuperModerator",!parent.isSuperModerator)
+        </method>
+        <view resource="user_moderator_list_apply_rsc" align="center" valign="middle" />
+        <labelTooltip labelid="${ (parent.parent.isSuperModerator) ? 826 : 825 }" />
+    </view> 
+    
+    <turnOverTextItem text="$once{ parent.userId }" width="200" />
+    <turnOverTextItem text="$once{ parent.uName }" width="200" />
+    <turnOverTextItem text="$once{ parent.email }" width="200" />
+    
+    <view width="20" height="18" 
+        onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:833,showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.destroy();
+        </method>
+        <image src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
+        		 align="center" valign="middle" />
+        <labelTooltip labelid="274" />
+    </view>    
+    
+</class>
+
+</library>

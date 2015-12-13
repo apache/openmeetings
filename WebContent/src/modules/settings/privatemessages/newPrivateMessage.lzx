@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="newPrivateMessage" extends="guiPresenter" labelid="1209" isdragable="false" 
+    minimizable="false" maximizable="false" fullToolBar="true" 
+    resizeable="false" width="250" height="154" >
+	
+	<attribute name="refObj" value="null"/>
+	
+	<attribute name="userObject" value="null" />
+	
+	<attribute name="user_id" value="0" type="number"/>
+	
+	<attribute name="parentMessageId" value="0" type="number" />
+	
+	<attribute name="receipents" value="null" />
+	
+	<attribute name="saveRefObj" value="null" />
+	
+	<handler name="oninit">
+		<![CDATA[
+			if (this.userObject != null) {
+				
+				var tString = this.userObject.firstname + ' ' + this.userObject.lastname  + ' ' 
+							+ '<' + this.userObject.adresses.email + '>';
+				
+				this._to.sendUpdateText = false;
+				this._to.setAttribute("text",tString);
+				this._to.sendUpdateText = true;
+			} else if (this.user_id != 0) {
+				this.getUserById.doCall();
+			}
+		]]>
+	</handler>
+	
+	<netRemoteCallHib name="getUserById" funcname="userservice.getUserById" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.parent.user_id;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+            if($debug) Debug.write("[admin]userValueForm/getUserById: ",value.lastname);
+            parent.userObject = value;
+            var tString = value.firstname + ' ' + value.lastname  + ' ' 
+                            + '<' + value.adresses.email + '>';
+                
+            parent._to.sendUpdateText = false;
+            parent._to.setAttribute("text",tString);
+            parent._to.sendUpdateText = true;
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+	
+	<handler name="onclose">
+		if (this.refObj != null) {
+		    this.refObj.newMessageActive = false;
+		}
+	</handler>
+	
+	<method name="send">
+		<![CDATA[
+		
+			var tAString = this._to.getText().split(",");
+			
+			this.receipents = new Array();
+			
+			for (var i=0;i<tAString.length;i++) {
+				
+				var sString = tAString[i];
+				
+				var t1 = sString.indexOf("<");
+				var t2 = sString.indexOf(">");
+				
+				if ($debug) Debug.write("++ ",i,sString,t1,t2);
+				
+				var email = sString;
+				if (t1 > -1 && t2 > -1) {
+					email = sString.substring(t1 + 1, t2);
+				}
+				
+				if ($debug) Debug.write("++ ",email);
+				
+				this.receipents.push(email);
+				
+			}
+			
+			if ($debug) Debug.write("receipents :: ",this.receipents);
+			if ($debug) Debug.write("receipents :: ",this._richText.getText());
+		
+			this.composeMail.doCall();
+		]]>
+	</method>
+	
+	<!--
+	public Long composeMail(String SID, Map receipents, String subject, String message, Boolean bookedRoom, 
+    		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
+    		Long parentMessageId, Long roomtype_id)
+	 -->
+	<netRemoteCallHib name="composeMail" funcname="userservice.composeMail" remotecontext="$once{ canvas.thishib }" >    
+    		
+    		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		    <netparam><method name="getValue">return parent.parent.receipents</method></netparam>
+            <netparam><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._richText.getText();</method></netparam>
+            <netparam><method name="getValue">return this.parent.parent._bookRoom.getValue();</method></netparam>
+            <netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent._valid_from.getDate());</method></netparam>
+            <netparam><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
+            <netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent._valid_to.getDate());</method></netparam>
+            <netparam><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
+            <netparam><method name="getValue">return parent.parent.parentMessageId;</method></netparam>
+            <netparam><method name="getValue">return Number(parent.parent._roomtype.getValue());</method></netparam>
+            <!--String domain, String port, String webapp-->
+            <netparam><method name="getValue"> return canvas.getHttpHost(); </method></netparam>
+            <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+            <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+            <handler name="ondata" args="value">
+            	<![CDATA[
+                	//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("composeMail : ",value);
+			if (parent.saveRefObj != null) {
+				parent.saveRefObj.saveNotification(parent._bookRoom.getValue());
+			}
+			parent.close();
+           ]]>
+		</handler>   
+	</netRemoteCallHib>	
+	
+	<labelText name="_labelTo" x="2" labelid="1210" y="24"/>
+	
+	<customScrollEdittext name="_to" y="22" x="80" width="$once{ parent.width-82 }" 
+						  text="" height="60">
+		
+		<attribute name="sendUpdateText" value="true" type="boolean"/>
+		<attribute name="sendSingleUpdateText" value="true" type="boolean"/>
+		
+		<handler name="oninit">
+			this.closeDelegate = new LzDelegate( this, "onblurFunction" );
+			this._list.refObj = this;
+			this._list.setAttribute("width",this.width);
+		</handler>
+		
+		<handler name="ontextChange" args="t">
+			<![CDATA[
+				if ($debug) Debug.write("-- ontextChange ",this.sendUpdateText,t);
+				
+				if (!this.sendUpdateText) {
+					return;
+				}
+				
+				var tAString = t.split(",");
+				
+				var tString = tAString[tAString.length-1];
+				
+				if ($debug) Debug.write("-1- tString ",tString);
+				
+				tString = tString.split(' ').join('');
+				
+				if ($debug) Debug.write("-2- tString ",tString);
+				
+				if (tString != "") {
+					
+					this.startSearch(tString);
+					
+				}
+				
+			]]>
+		</handler>
+		
+		<method name="addText" args="txt">
+			<![CDATA[
+			
+				if ($debug) Debug.write("-- addText ",txt);
+				
+				var t = this.getText();
+				var tAString = t.split(",");
+				
+				var nString = "";
+				
+				if ($debug) Debug.write("-- tAString.length ",tAString.length);
+				
+				for (var i=0; i<tAString.length-1; i++) {
+					if (i!=0) {
+						nString += ", ";
+					}
+					nString += tAString[i];
+					if ($debug) Debug.write("-- nString 1 ",nString);
+				}
+				
+				if ($debug) Debug.write("-- nString 2 ",nString);
+				
+				if (nString != "") {
+					nString += ", "
+				}
+				
+				nString += txt;
+				
+				if ($debug) Debug.write("-- nString 3 ",nString);
+				
+				this.sendUpdateText = false;
+				this.setAttribute("text",nString);
+				this.sendUpdateText = true;
+			
+			]]>
+		</method>
+		
+		<handler name="onblur">
+			<![CDATA[
+			
+				if (!this.sendUpdateText) {
+					return;
+				}
+				
+				lz.Timer.addTimer( this.closeDelegate, 10 );
+				
+			]]>
+		</handler>				
+				
+		<method name="onblurFunction" args="refObj" >
+			<![CDATA[
+				if ($debug) Debug.write("-- onblur");
+				
+				if (!this.sendSingleUpdateText) {
+					this.sendSingleUpdateText = true;
+					return;
+				}
+				
+				if (this._list.visibility == "visible") {
+					this._list.setAttribute("visibility","hidden");
+				}
+				
+				var t = this.getText();
+				var tAString = t.split(", ");
+				
+				var lastString = tAString[tAString.length-1];
+				
+				var lastChar = lastString.charAt(lastString.length-1);
+
+				if (lastChar != ">") {
+					var nString = "";
+					
+					for (var i=0;i<tAString.length-1;i++) {
+						if (i!=0) {
+							nString += ",";
+						}
+						nString += tAString[i];
+					}
+					
+					this.sendUpdateText = false;
+					this.setAttribute("text",nString);
+					this.sendUpdateText = true;
+					
+				}
+				
+			]]>
+		</method>
+		
+		<method name="startSearch" args="tString">
+			<![CDATA[
+			
+				if ($debug) Debug.write("startSearch :: ",tString);
+				var tResultA = new Array();
+				
+				for (var i=0; i<canvas.userContacts.length; i++) {
+					
+					if (canvas.userContacts[i].contact.firstname.startsWith(tString) 
+						|| canvas.userContacts[i].contact.lastname.startsWith(tString) 
+						|| canvas.userContacts[i].contact.adresses.email.startsWith(tString) ) {
+					
+						tResultA.push(canvas.userContacts[i]);
+							
+					}
+					
+				}
+				
+				if (tResultA.length > 0) {
+					this._list.removeAllItems();
+					
+					for (var k=0;k<tResultA.length;k++) {
+						
+						this._list.addItem(tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' &#60;' + tResultA[k].contact.adresses.email + '&#62;', tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' <' + tResultA[k].contact.adresses.email + '>'); 
+						
+					}
+					
+					
+				} else {
+					
+					this._list.removeAllItems();
+					
+					this._list.addItem("No Contact Found","0");
+					
+				}
+				
+				this.sendUpdateText = false;
+				this._list.sendUpdateAttr = false;
+				this._list.selectItemAt(0);
+				this._list.sendUpdateAttr = true;
+				
+				//lz.Focus.setFocus(this._list, true);
+				this.sendUpdateText = true;
+				
+				//this._list.setHilite(this._list.getItemAt(0));
+				this._list.setAttribute("visibility","visible");
+				
+				if ($debug) Debug.write("LIST :1: ",this._list.sendUpdateAttr);
+			
+			]]>
+		</method>
+		<floatinglist name="_list" width="100" 
+					  attach="bottom" visibility="hidden">
+			<attribute name="sendUpdateAttr" value="true" type="boolean"/>
+			<attribute name="refObj" value="null"/>
+			<handler name="onfocus">
+				if ($debug) Debug.write("onfocus");
+				this.refObj.sendSingleUpdateText = false;
+			</handler>
+			<handler name="onselect" args="sel">
+				if ($debug) Debug.write("onselect :1: ",this.sendUpdateAttr);
+				if (this.sendUpdateAttr) {
+					if ($debug) Debug.write("onselect :2: ",sel.value);
+					if (sel.value != "0") {
+						if ($debug) Debug.write("this.parent :: ",this.parent);
+						this.refObj.addText(sel.value);
+						this.setAttribute("visibility","hidden");
+					}
+				}
+			</handler>
+            <textlistitem text="one"/>
+            <textlistitem text="two"/>
+        </floatinglist>
+	</customScrollEdittext>
+	
+	<labelText name="_labelSubject" x="2" labelid="1211" y="86"/>
+	
+	<customEdittext name="_subject" y="84" x="80" width="$once{ parent.width-82 }" />
+
+	<customScrollEdittext name="_richText" y="108" clip="true" x="1"
+		width="$once{ parent.width-2 }" height="$once{ parent.height-225 }">
+		
+	</customScrollEdittext> 	
+	
+	<labelCheckbox name="_bookRoom" labelid="1218"
+				   width="270" y="$once{ parent.height-120 }" x="4">
+		<handler name="onvalue" args="v">
+			if ($debug) Debug.write("onvalue ",v);
+			if (parent._hideRoomConfig != null) {
+				parent._hideRoomConfig.setAttribute("visibility", v ? "hidden" : "visible");
+			}
+		</handler>
+	</labelCheckbox>
+	
+	<view name="_roomConfigBG" width="290" height="76" bgcolor="0xDDDDDD" 
+		   opacity="0.1" y="$once{ parent.height-104 }" x="2">
+	</view>
+	
+	<labelText labelid="194" width="200" y="$once{ parent.height-100 }" resize="false" x="4"/>  
+        <resetCombobox name="_roomtype" width="164" y="$once{ parent.height-100 }" 
+        			   x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+		            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+		                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+		            }
+		            this.selectItemAt(0);
+	            ]]>
+	        </handler> 
+        </resetCombobox> 
+        
+	<labelText labelid="1219" width="200" y="$once{ parent.height-76 }" resize="false" x="4"/>  
+	<dateField x="120" y="$once{ parent.height-76 }" name="_valid_from" 
+			   setDefaultToday="true" additionalDay="1" />		
+	<customEdittext name="_timeFrom" 
+					width="50" x="232" y="$once{ parent.height-76 }" 
+					regexpType="time">
+		<handler name="oninit">
+			<![CDATA[
+				var tDate = new Date();
+				var hour = tDate.getHours();
+				if (hour < 10) {
+					hour = "0"+hour;
+				}
+				
+				var minutes = tDate.getMinutes();
+				if (minutes < 15) {
+					minutes = "00";
+				} else if (minutes < 30) {
+					minutes = "15";
+				} else if (minutes < 45) {
+					minutes = "30";
+				} else {
+					minutes = "45";
+				}
+				
+				var hour2 = tDate.getHours()+1;
+				if (hour2 < 10) {
+					hour2 = "0"+hour;
+				} else if (hour2 > 25) {
+					hour2 = 24;
+				}
+				
+				this.setAttribute("text",hour+":"+minutes);
+				parent._timeTo.setAttribute("text",hour2+":"+minutes);
+			]]>
+		</handler>
+	</customEdittext>
+        
+    <labelText labelid="1220" width="200" y="$once{ parent.height-52 }" resize="false" x="4"/>  
+	<dateField x="120" y="$once{ parent.height-52 }" name="_valid_to" 
+			   setDefaultToday="true" additionalDay="1" />		
+	<customEdittext name="_timeTo" 
+					width="50" x="232" y="$once{ parent.height-52 }" 
+					regexpType="time">
+	</customEdittext>
+	
+	<!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="302" y="$once{ parent.height-96 }" />
+    
+    <labelText labelid="1221" x="324" y="$once{ parent.height-96 }" fontstyle="italic"
+               multiline="true" width="$once{ parent.width-332 }" /> 
+	
+	<view name="_hideRoomConfig" width="290" height="76" bgcolor="0xFFFFFF" 
+		   opacity="0.6" y="$once{ parent.height-104 }" x="2">
+		<handler name="onclick">
+			parent._bookRoom.setValue(true);
+		</handler>
+	</view>
+		   
+	<!-- label: send -->
+	<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
+		<handler name="onclick">
+			<![CDATA[
+                parent.baseUrl = canvas.getAppBaseUrl();
+				
+				parent.send();
+			]]>
+		</handler>
+	</simpleLabelButton>
+
+	<!-- label: cancel -->
+	<simpleLabelButton labelid="219" x="$once{ parent.width-130 }" width="120" y="$once{ parent.height-26 }">
+		<handler name="onclick">
+			parent.close();
+		</handler>
+	</simpleLabelButton>
+	   		   
+						  
+</class>	
+	
+</library>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="autoloaderBarOnly" extends="view" x="400" valign="middle" pixellock="true">
+
+	<attribute name="maxwidth" value="400" type="number" />
+	<attribute name="maxsteps" value="22" type="number" />
+	<attribute name="currentsteps" value="0" type="number" />
+	
+	<method name="close">
+		canvas.thishib.loaderVar = null;
+		this.destroy();
+	</method>
+	
+	<method name="setProgress">
+		this.currentsteps += 1;
+		if($debug) Debug.write("autoLoader/setProgress ===== ",this.currentsteps);
+		var w = Math.round(((this.maxwidth)/this.maxsteps)*this.currentsteps);
+		this.loadingbar.setAttribute('visibility','visible');
+		if($debug) Debug.write("autoLoader/setResourceNumber == ",w);
+		this.loadingbar._loading.setAttribute('width',w);
+	</method>
+      
+    <view name="loadingbar"  height="1" pixellock="true"
+          x="-5" y="40" width="$once{ parent.maxwidth+2 }" visibility="hidden">
+          <view x="1" y="1" width="$once{ parent.width-2 }" height="1" opacity="0.3"
+          		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" />
+          <view name="_loading" x="1" y="1" width="0" height="1"  pixellock="true" 
+          		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }"/>
+    </view>  
+          
+    <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" 
+		remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="start" value="0" type="number" />
+    	<attribute name="step" value="100" type="number" /> 
+    	<attribute name="max" value="1300" type="number" />    
+        <netparam><method name="getValue">return canvas.thishib.userlang;</method></netparam> 
+        <netparam><method name="getValue">return parent.start;</method></netparam> 
+        <netparam><method name="getValue">return parent.step;</method></netparam> 
+        <handler name="ondata" args="value">
+        	<![CDATA[
+        		//if ($debug) Debug.write("getLanguageByIdAndMax: ",value);
+        		setLabelObjectByHundred(this.start,value);
+	            //The onResult-Handler will be called be the rtmpconnection
+	            if (this.start <= max){
+	            	this.start += this.step;
+					canvas.thishib.loaderVar.setProgress();
+					this.doCall();
+	            } else {
+            		parent.setProgress();
+            		parent.getStates.doCall();
+				}
+			]]>
+        </handler>  
+    </netRemoteCallHib>	 
+    
+    <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" 
+		remotecontext="$once{ canvas.thishib }" dataobject="countrySet"> 
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("getStates: ",value);
+            canvas.statesInitValues = value;
+            parent.setProgress();
+            parent.getTimeZones.doCall();
+        </handler>  
+    </netRemoteCallHib>   
+    
+    <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" 
+		  remotecontext="$once{ canvas.thishib }" dataobject="timeZoneSet">
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("getStates: ",value);
+            parent.setProgress();
+            parent.getUserSalutations.doCall();
+        </handler>  
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" 
+		remotecontext="$once{ canvas.thishib }" >  
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue"> return hib.userlang; </method></netparam> 
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("getUserSalutations ",value);
+            canvas.salutationsInitValues = value;
+            parent.setProgress();
+            parent.getRoomTypes.doCall();
+        </handler>  
+    </netRemoteCallHib>   
+    
+    <netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" 
+		remotecontext="$once{ canvas.thishib }" >  
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("getRoomTypes ",value);
+            canvas.roomTypesInitValues = value;
+            parent.setProgress();
+            parent.setUsernameAndSession.doCall();
+        </handler>  
+    </netRemoteCallHib>    	 
+	 
+    <netRemoteCallHib name="setUsernameAndSession" funcname="setUsernameAndSession" remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return canvas.user_id;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentuser;</method></netparam>
+        <netparam><method name="getValue">return canvas.firstName;</method></netparam>
+        <netparam><method name="getValue">return canvas.lastName;</method></netparam>      
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("setUsername: value, ",canvas.thishib.currentInvitation.room.roomtype.roomtypes_id);
+            clearStageContent();		
+            parent.close();
+            
+			if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==1){
+				
+				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+				
+			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==2){
+				
+				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+				new lz.labelerrorPopup(canvas,{error:'No RoomType currently available for roomTypeId 2'});
+				
+			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==3){
+				
+				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+				
+			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==4){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+                
+            } else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==5){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.customRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+                
+            }                 
+        </handler>  
+    </netRemoteCallHib>     
+          
+</class>
+
+</library>

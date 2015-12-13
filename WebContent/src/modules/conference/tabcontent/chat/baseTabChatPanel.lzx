@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<!-- 
+	#################################################
+	Provides functions to chat and extends the chat with the panel for blinking
+	when new messages arrive when the tab is closed
+	#################################################
+	 -->
+
+	<class name="baseTabChatPanel" extends="basePropertyPanel" >
+
+		<attribute name="fadeDelegate" value="null" />
+		<attribute name="doBlink" value="false" type="boolean" />
+
+		<handler name="oninit">
+			canvas._currentChatPanel = this;
+			this.fadeDelegate = new LzDelegate( this, "showText" );
+		</handler>
+
+        <method name="newprivatechat" args="refObj">
+            this.addChatSync(refObj[1],true);
+        </method>
+        
+        <method name="closeprivatechat" args="value">
+            if ($debug) Debug.write("closeprivatechat _1a_ ",value);
+            var publicSID = value[1];
+            if ($debug) Debug.write("closeprivatechat _1b_ ",publicSID);
+            
+			for (var eg in this.content.chatbar.subviews) {
+				if(typeof this.content.chatbar.subviews[eg].objRef.refObj == 'undefined') {
+					continue;
+				}
+				if ($debug) Debug.write("closeprivatechat _2A_ ",this.content.chatbar.subviews[eg].objRef);
+				if ($debug) Debug.write("closeprivatechat _2B_ ",this.content.chatbar.subviews[eg].objRef.refObj);
+				if ($debug) Debug.write("closeprivatechat _2C_ ",this.content.chatbar.subviews[eg].objRef.refObj.publicSID);
+				    
+				if (this.content.chatbar.subviews[eg].objRef.refObj.publicSID == publicSID ) {
+					this.content.chatbar.removeObjectSynced(this.content.chatbar.subviews[eg]);
+					return;
+				}
+            }
+        </method>
+        
+        <method name="privatechat" args="value,client">
+            if ($debug) Debug.write("privatechat A ",client.publicSID);
+            if ($debug) Debug.write("privatechat B ",value[6]);
+            
+            for (var eg in this.content.subviews) {
+                if (this.content.subviews[eg].refObj != null) {
+                    
+                    if ($debug) Debug.write("privatechat _1_ ",this.content.subviews[eg].refObj);
+                    if ($debug) Debug.write("privatechat _2_ ",this.content.subviews[eg].refObj.publicSID);
+                    
+                    if (this.content.subviews[eg].refObj.publicSID == client.publicSID 
+                            || this.content.subviews[eg].refObj.publicSID == value[6] ) {
+                        this.content.subviews[eg]._chatoutputborder._chatoutput.addChatHistory(value,client);
+                    }
+                }
+            }
+        </method>
+        
+        <method name="addChat" args="refObj">
+            this.addChatSync(refObj,false);
+        </method>
+        
+        <method name="addChatSync" args="refObj,remoteOpen">
+            if (this.content.visibility == "hidden") {
+                this.toggleopen();
+            }
+            
+            for (var eg in this.content.subviews) {
+                if (this.content.subviews[eg].refObj != null) {
+                    if (this.content.subviews[eg].refObj.publicSID == refObj.publicSID) {
+                        new lz.labelerrorPopup(canvas.main_content._content.inner,{
+                                    errorlabelid:1496
+                                });
+                        return;
+                    }
+                }
+            }
+            
+            if ($debug) Debug.write("addChat :: ",refObj);
+            for (var eg in this.content.chatbar.subviews) {
+                this.content.chatbar.subviews[eg].isactive = false;
+                this.content.chatbar.subviews[eg].onmouseout.sendEvent(null);
+                this.content.chatbar.subviews[eg].objRef.setAttribute("visibility","hidden");
+            }
+            
+            var chatTabPrivateRef = new lz.chatTabPrivateChat(this.content,{
+                                                refObj:refObj,
+                                                remoteOpen:remoteOpen
+                                                
+                                            });
+            var tempWidth = this.content.chatbar.getCurrentSize();
+            
+            var tWhiteboardBtn = new lz.chatMiniButton(this.content.chatbar,{
+                                       objRef:chatTabPrivateRef,
+                                       width:tempWidth,
+                                       isactive:true,
+                                       btnName:refObj.firstname+" "+refObj.lastname
+                                    });
+            
+            this.content.chatbar.currentBtn = tWhiteboardBtn;                       
+                                    
+            tWhiteboardBtn.onmouseout.sendEvent(null);
+        </method>
+        
+        <handler name="onisopen" args="o">
+			if ($debug) Debug.write("onisopen",o);
+			if (o) {
+				canvas._chatcontent.doInitByOpen();
+				if (canvas.currentRoomObject != null)
+					content._content1._chattabbottom.updatefontbuttonvisible();
+				this.doBlink = false;
+				this._newMessage.setAttribute("visibility","hidden");
+				this._newMessage.setAttribute( "opacity", 0 );
+				this.content.setAttribute("visibility","visible");
+			} else {
+				this.content.setAttribute("visibility","hidden");
+			}
+		</handler>
+
+		<method name="startBlink">
+			if ($debug) Debug.write("startBlink",this.opacity);
+			if (this.isopen) return;
+			if (this.doBlink) {
+				if ($debug) Debug.write("doBlink already started !!!");
+			} else {
+				if ($debug) Debug.write("doBlink");
+				this.doBlink = true;
+				this._newMessage.setAttribute("visibility","visible");
+				lz.Timer.addTimer( this.fadeDelegate , 1000 );
+			}
+		</method>
+
+		<method name="showText" args="refObj">
+			if (this.doBlink) {
+				lz.Timer.addTimer( this.fadeDelegate , 1000 );
+				if (this._newMessage.opacity == 0) {
+					this._newMessage.animate( "opacity", 1.0, 400 );
+				} else {
+					this._newMessage.animate( "opacity", 0, 400 );
+				}
+			} else {
+				this._newMessage.setAttribute("visibility","hidden");
+			}
+		</method>
+
+        <view name="content" visibility="hidden" y="22"
+              height="${ parent.height-22 }" width="${ parent.width }">
+            <chatBarMenu name="chatbar">
+                <attribute name="refObj" value="null" />
+                <attribute name="objMessage" value="null" />
+                <attribute name="publicSID" value="" type="string" />
+                
+                <handler name="oninit">
+                    this.currentBtn = this._button1;
+                </handler>
+                
+                <handler name="onRemoveWindow" args="publicSID">
+                    <![CDATA[
+                    
+                        if ($debug) Debug.write("onRemoveWindow :: ",publicSID);
+                        
+                        this.publicSID = publicSID;
+                    
+                        this.objMessage = new Array();
+                        this.objMessage[0] = 'closeprivatechat';
+                        this.objMessage[1] = canvas.publicSID;
+                        
+                        this.sendMessageWithClientByPublicSID.doCall();
+                    ]]>
+                </handler>
+                
+                <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+                    remotecontext="$once{ canvas.thishib }" > 
+                    <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+                    <netparam><method name="getValue"> return parent.parent.publicSID; </method></netparam>
+                    <handler name="ondata" args="value">
+                        <![CDATA[
+                            //The onResult-Handler will be called be the rtmpconnection
+                            if ($debug) Debug.write("sendMessageWithClientByPublicSID getValue : ",value);
+                        ]]>
+                    </handler>   
+                </netRemoteCallHib>
+                
+                <chatMiniButton name="_button1" isactive="true" isClosable="false" >
+                    <handler name="oninit">
+                        this.setAttribute("btnName", canvas.getLabelName(1494) + " 1");
+                        this.objRef = parent.parent._content1;
+                        this.onmouseout.sendEvent(this);
+                    </handler>
+                </chatMiniButton>
+                
+            </chatBarMenu>
+            
+            <chatTab name="_content1" />
+            
+        </view>
+			
+		<labelText labelid="1199" x="${ parent.width - this.width }" bgcolor="0xFFFFFF"
+        		   y="2" fontsize="10" fontstyle="bold" fgcolor="0xFF3300" />
+
+		<view name="_newMessage" y="0" x="${ parent.width-this.width }"
+			visibility="hidden">
+			<view x="1" y="2" resource="chat_message_incoming_rsc" />
+			<labelText x="22" y="2" fgcolor="0x008000" fontstyle="bold"
+				labelid="1417" />
+		</view>
+
+	</class>
+
+</library>

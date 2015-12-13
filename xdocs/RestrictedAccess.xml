@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>How to restrict access to your Openmeetings server</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+	
+		<section name="Server Side">
+	
+			<p>You can protect your OpenMeetings instance from beeing accessed
+				from 3th party by using the file:
+			</p>
+			<p>$RED5_HOME/webapps/openmeetings/WEB-INF/red5-web.properties </p>
+			<p>Content: </p>
+			<div class="xmlcode">
+				webapp.virtualHosts=*,localhost, 127.0.0.1
+			</div>
+			Sample file:
+			<a
+				href="http://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties"
+				rel="nofollow">http://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties
+			</a>
+		</section>
+
+		<section name="Client Side">
+
+			<p>And you can restrict the access also for the client side: Every
+				Flash Plugin will check a file called "crossdomain.xml" before it
+				tries to access the server using rtmp/RPC. This file is located: </p>
+			<p>$RED5_HOME/webapps/root/crossdomain.xml </p>
+			<p>Content: </p>
+			<div class="xmlcode">
+				&lt;?xml version="1.0"?&gt;<br/>
+				&lt;cross-domain-policy&gt;<br/>
+				        &lt;site-control permitted-cross-domain-policies="all"/&gt;<br/>
+				        &lt;allow-access-from domain="localhost" to-ports="20-65535"/&gt;<br/>
+				        &lt;allow-access-from domain="*.local" to-ports="20-65535"/&gt;<br/>
+				&lt;/cross-domain-policy&gt;<br/>
+			</div>
+			
+            <p>
+				Sample file:
+				<a
+					href="http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml"
+					rel="nofollow">http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml
+				</a>
+			</p>
+				<p>
+					If you accessing your application behind an Apache Webservre (using
+					mod_proxy or mod_jk2) be careful to make the crossdomain.xml
+					accessible. Flash will always search for this file in the www-root
+					directory of every URL you connect to. You might use
+					<a href="https://addons.mozilla.org/de/firefox/addon/firebug/" rel="nofollow">FireBug
+					</a>
+					for example to lookup requests.
+				</p>
+
+		</section>
+
+	</body>
+
+</document>

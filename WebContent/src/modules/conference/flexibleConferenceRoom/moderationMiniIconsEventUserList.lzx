@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="moderationMiniIconsEventUserList" extends="view">
+
+    <attribute name="showAvIcons" value="true" type="boolean" />
+	
+    <handler name="oninit">
+    	this.updateIcons();
+    </handler>	
+    
+    <method name="updateIcons">
+        if (canvas.ismoderator) {
+            this._isMod.setAttribute("visibility","visible");
+            this._isModAddbutton.setAttribute("visibility","hidden");
+        } else {
+            this._isMod.setAttribute("visibility","hidden");
+            this._isModAddbutton.setAttribute("visibility","visible");
+        }
+        
+        if (canvas.ismoderator) {
+            this._canDraw.setAttribute("visibility","visible");
+            this._canDraw.isActive = false;
+            //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
+            this._canDrawModerator.setAttribute("visibility","hidden");
+        } else {
+            if (canvas.isAllowedToDraw) {
+                this._canDraw.setAttribute("visibility","visible");
+                this._canDraw.isActive = true;
+                //this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                this._canDrawModerator.setAttribute("visibility","hidden");
+            } else {
+                this._canDraw.setAttribute("visibility","hidden");
+                this._canDrawModerator.setAttribute("visibility","visible");
+            }
+        }
+        
+        if ($debug) Debug.write("canvas.isAllowedToScreenShare :: ",canvas.isAllowedToScreenShare);
+        
+        if (canvas.ismoderator) {
+            this._allowScreen.setAttribute("visibility","visible");
+            this._allowScreen.isActive = false;
+            
+            this._allowRemote.setAttribute("visibility","visible");
+            this._allowRemote.isActive = false;
+
+            this._allowExclusiveAudio.setAttribute("visibility","visible");
+            this._allowExclusiveAudio.isActive = false;
+            
+            //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
+            this._denyScreen.setAttribute("visibility","hidden");
+            this._denyRemote.setAttribute("visibility","hidden");
+            this._denyExclusiveAudio.setAttribute("visibility","hidden");
+        } else {
+            if (canvas.isAllowedToScreenShare) {
+                this._allowScreen.setAttribute("visibility","visible");
+                this._allowScreen.isActive = true;
+                //this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                this._denyScreen.setAttribute("visibility","hidden");
+            } else {
+                this._allowScreen.setAttribute("visibility","hidden");
+                this._denyScreen.setAttribute("visibility","visible");
+            }
+            
+            if (canvas.isAllowedToRemoteControl) {
+            	this._allowRemote.setAttribute("visibility","visible");
+            	this._allowRemote.isActive = true;
+            	this._denyRemote.setAttribute("visibility","hidden");
+            } else {
+            	this._allowRemote.setAttribute("visibility","hidden");
+            	this._denyRemote.setAttribute("visibility","visible");
+            }
+
+            if (canvas.isAllowedToGiveExclusiveAudio) {
+                this._allowExclusiveAudio.setAttribute("visibility","visible");
+            	this._allowExclusiveAudio.isActive = true;
+            	this._denyExclusiveAudio.setAttribute("visibility","hidden");
+            } else {
+                this._allowExclusiveAudio.setAttribute("visibility","hidden");
+            	this._denyExclusiveAudio.setAttribute("visibility","visible");
+            }
+        }
+        
+        if ($debug) Debug.write("+ STATUS ICONS + ",this.showAvIcons,canvas.isBroadCasting);
+        
+        if (this.showAvIcons) {
+	        if (canvas.isBroadCasting) {
+	            this._allowDevice.setAttribute("visibility","hidden");
+	            this._denyDevice.setAttribute("visibility","visible");
+	        } else {
+	            this._allowDevice.setAttribute("visibility","visible");
+	            this._denyDevice.setAttribute("visibility","hidden");
+	        }
+        }
+        
+        
+        if (canvas.micMuted) {
+            this._muteDevice.setAttribute("visibility","hidden");
+            this._unMuteDevice.setAttribute("visibility","visible");
+        } else {
+            this._muteDevice.setAttribute("visibility","visible");
+            this._unMuteDevice.setAttribute("visibility","hidden");
+        }
+        
+        
+    </method>
+    
+    <simplelayout axis="x" spacing="2" />
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(canvas.publicSID == event.publicSID) {
+                canvas.micMuted = event.mute;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+	
+    <miniIconsNew name="_isMod" x="0" width="16" innerResource="participants_isMod_rsc" 
+    		   height="16" showhandcursor="false">
+        <handler name="onclick">
+            <![CDATA[
+                //Nothing happens here
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="688" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_isModAddbutton" opacity="0.5" x="0" width="16" innerResource="participants_isMod_rsc" height="16">
+        <handler name="onclick">
+            <![CDATA[
+                //Apply for Moderation
+                canvas.thishib.applyForModeration.doCall();
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="685" />
+    </miniIconsNew>
+        
+    <miniIconsNew name="_canDraw" x="20" width="16" innerResource="participants_allow_drawing_rsc" 
+               height="16" showhandcursor="false" >
+        <attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+            <![CDATA[
+                //Nothing happens here
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="689" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_canDrawModerator" x="20" width="16" opacity="0.5"
+               innerResource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
+        <handler name="onclick">
+            //Ask for Right to Draw on Whiteboard
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
+        </handler>
+        <labelTooltip labelid="686" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_allowScreen" x="40" width="16" height="16" 
+               innerResource="screen_allow_rsc" showhandcursor="false">
+        <attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+            <![CDATA[
+                if ($debug) Debug.write("Deny Screen: ",canvas.publicSID);
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1071" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
+               innerResource="screen_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Screen: ",canvas.refObj.publicSID);
+            var tDate = new Date();
+        	canvas.thishib.sendMessageWithClient.sendMessage("applyForScreen",tDate.getTime());
+        </handler>
+        <labelTooltip labelid="1072" />
+    </miniIconsNew>    
+    
+ 	<miniIconsNew name="_allowRemote" x="60" width="16" height="16" 
+               innerResource="remote_allow_rsc" showhandcursor="false">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Remote: ",canvas.publicSID);
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1081" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_denyRemote" x="60" width="16" height="16" opacity="0.5"
+               innerResource="remote_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Remote: ",parent.parent.parent.refObj.publicSID);
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForRemote",tDate.getTime());
+        </handler>
+        <labelTooltip labelid="1080" />
+    </miniIconsNew>      
+          
+    
+    <miniIconsNew name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
+            visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
+            if (canvas.ismoderator) {
+                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+                //the notification and the broadcasting Bit is set for this User
+                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+                canvas.thishib.setBroadCastingFlag.doCall(); 
+            } else {
+                //Apply for Right to Share Audio/Video
+                var tDate = new Date();
+                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
+            }
+        </handler>
+        <labelTooltip labelid="687" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_denyDevice" x="80" width="40" height="16" 
+            visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="false">
+        <handler name="onclick">
+            if ($debug) Debug.write("DENY: ",canvas.publicSID);
+            //Nothing happens here
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip name="_text" labelid="690" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_muteDevice" x="120" width="16" height="16" 
+    		   innerResource="mute_btn_rsc" showhandcursor="true">
+    	<handler name="onclick">
+            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, true);
+    	</handler>
+        <labelTooltip name="_tip" labelid="1403" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_unMuteDevice" x="120" width="16" height="16" innerResource="unmute_btn_rsc" 
+               showhandcursor="true" >
+    	<handler name="onclick">
+            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, false);
+        </handler>
+        <labelTooltip name="_tip" labelid="1404" />
+    </miniIconsNew>
+
+    <miniIconsNew name="_allowExclusiveAudio" x="60" width="16" height="16"
+               innerResource="participants_exclusive_audio_rsc" showhandcursor="false">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Give Exclusive Audio: ",canvas.publicSID);
+                if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+	                canvas.thishib.giveExclusiveAudio.publicSID = canvas.publicSID;
+	                canvas.thishib.giveExclusiveAudio.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1433" />
+    </miniIconsNew>
+
+    <miniIconsNew name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
+               innerResource="participants_exclusive_audio_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Give Exclusive Audio: ",canvas.publicSID);
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForGiveExclusiveAudioOn",tDate.getTime());
+        </handler>
+        <labelTooltip labelid="1432" />
+    </miniIconsNew>
+</class>
+
+</library>

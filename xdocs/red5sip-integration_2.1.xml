@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+	<properties>
+		<title>SIP-Transport Integration</title>
+		<author email="solomax@apache.org">OpenMeetings Team</author>
+	</properties>
+	<body>
+		<section name="SIP-Transport Integration">
+			<p>You need Apache OpenMeetings <strong>version 2.1</strong> to apply this guide!</p>
+			<p>You need Asterisk <strong>version 11</strong> to apply this guide!</p>
+			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
+		</section>
+		<section name="Prerequisites">
+			<div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update &amp;&amp; sudo apt-get upgrade<br />
+						sudo apt-get install build-essential linux-headers-`uname -r` libxml2-dev libncurses5-dev libsqlite3-dev sqlite3 openssl libssl-dev<br />
+					</i>
+				</blockquote>
+			</div>
+		</section>
+		<section name="ODBC Setup">
+			<div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update<br />
+						sudo apt-get install unixODBC unixODBC-dev libmyodbc
+					</i>
+				</blockquote>
+			</div>
+			<div>
+				Set up Asterisk connector:<br /><br />
+				Modify file <tt>/etc/odbc.ini</tt> as follows: (replace USER, PASSWORD and Socket with values relative to your system)
+				<blockquote>
+					<i>
+						[asterisk-connector]<br />
+						Description = MySQL connection to 'openmeetings' database<br />
+						Driver = MySQL<br />
+						Database = openmeetings<br />
+						Server = localhost<br />
+						USER = root<br />
+						PASSWORD =<br />
+						Port = 3306<br />
+						Socket = /var/run/mysqld/mysqld.sock<br />
+					</i>
+				</blockquote><br /><br />
+				Modify file <tt>/etc/odbcinst.ini</tt> as follows: (replace the path to the *.so files below with the real paths on your system)
+				<blockquote>
+					(The path below is for x32 server, x64 version is most probably located at <tt>/usr/lib/x86_64-linux-gnu/odbc</tt>)<br/>
+					<i>
+						[MySQL]<br />
+						Description = ODBC for MySQL<br />
+						Driver = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so<br />
+						Setup = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so<br />
+						FileUsage = 1<br />
+					</i>
+				</blockquote><br /><br />
+				Run the following command to ensure everything works as expected:
+				<blockquote>
+					<i>echo "select 1" | isql -v asterisk-connector</i>
+				</blockquote>
+			</div>
+		</section>
+		<section name="Building and setting up Asterisk">
+			<div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo mkdir /usr/src/asterisk &amp;&amp; cd /usr/src/asterisk<br />
+						sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-11.2.1.tar.gz<br />
+						sudo tar -xvzf asterisk-11.2.1.tar.gz<br />
+						cd ./asterisk-11.2.1<br />
+						sudo make clean<br />
+						sudo ./configure<br />
+						sudo make<br />
+						sudo make install<br />
+						sudo make samples<br />
+						sudo make config<br />
+						sudo service asterisk start<br />
+					</i>
+				</blockquote>
+			</div>
+		</section>
+		<section name="Configure Asterisk">
+			<div>
+				Enable asterisk ODBC module:<br /><br />
+				Modify "[modules]" section of <tt>/etc/asterisk/modules.conf</tt> as follows:<br />
+				<strong>Add/uncomment the following lines</strong>
+				<blockquote>
+					<i>
+						preload => res_odbc.so<br />
+						preload => res_config_odbc.so<br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Create/update "[asterisk]" section in <tt>/etc/asterisk/res_odbc.conf</tt>:
+				<blockquote>
+					<i>
+						[asterisk]<br />
+						enabled => yes<br />
+						dsn => asterisk-connector<br />
+						pre-connect => yes
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Modify <tt>/etc/asterisk/sip.conf</tt><br />
+				<strong>Add/uncomment the following line</strong>:<br />
+				<blockquote>
+					<i>
+						videosupport=yes<br />
+						rtcachefriends=yes<br />
+					</i>
+				</blockquote>
+				<strong>Add user for the "SIP Transport"</strong>:<br />
+				<blockquote>
+					<i>
+						[red5sip_user]<br />
+						type=friend<br />
+						secret=12345<br />
+						disallow=all<br />
+						allow=ulaw<br />
+						allow=h264<br />
+						host=dynamic<br />
+						nat=force_rport,comedia<br />
+						context=rooms-red5sip<br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Add next lines into the <tt>/etc/asterisk/extconfig.conf</tt>:
+				<blockquote>
+					<i>
+						[settings]<br />
+						sippeers => odbc,asterisk,sipusers<br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Modify <tt>/etc/asterisk/extensions.conf</tt><br />
+				<strong>Add the following section</strong>:<br />
+				<blockquote>
+					<i>
+						[rooms]<br />
+						exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)<br />
+						exten => _400X!,n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})<br />
+						exten => _400X!,n,Set(CONFBRIDGE(user,template)=sip_user)<br />
+						exten => _400X!,n,Set(CONFBRIDGE(user,pin)=${PIN})<br />
+						exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,)<br />
+						exten => _400X!,n,Hangup<br />
+						exten => _400X!,n(notavail),Answer()<br />
+						exten => _400X!,n,Playback(invalid)<br />
+						exten => _400X!,n,Hangup<br />
+						<br />
+						[rooms-originate]<br />
+						exten => _400X!,1,Confbridge(${EXTEN},default_bridge,sip_user)<br />
+						exten => _400X!,n,Hangup<br />
+						<br />
+						[rooms-out]<br />
+						; *****************************************************<br />
+						; Extensions for outgoing calls from Openmeetings room.<br />
+						; *****************************************************<br />
+						<br />
+						[rooms-red5sip]<br />
+						exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavil)<br />
+						exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,red5sip_user)<br />
+						exten => _400X!,n(notavail),Hangup <br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Modify <tt>/etc/asterisk/confbridge.conf</tt><br />
+				<strong>Add/Modify the following secions</strong>:<br />
+				<blockquote>
+					<i>
+						[general]<br />
+						<br />
+						[red5sip_user]<br />
+						type=user<br />
+						marked=yes<br />
+						<br />
+						[sip_user]<br />
+						type=user<br />
+						end_marked=yes<br />
+						wait_marked=yes<br />
+						music_on_hold_when_empty=yes<br />
+						<br />
+						[default_bridge]<br />
+						type=bridge<br />
+						video_mode=follow_talker<br /> 
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				To enable Asterisk Manager API modify <tt>/etc/asterisk/manager.conf</tt><br />
+				<strong>Add/Modify the following sections</strong>:<br />
+				<blockquote>
+					<i>
+						[general]<br />
+						enabled = yes<br />
+						webenabled = no<br />
+						port = 5038<br />
+						bindaddr = 127.0.0.1<br />
+						<br />
+						[openmeetings]<br />
+						secret = 12345<br />
+						deny=0.0.0.0/0.0.0.0<br />
+						permit=127.0.0.1/255.255.255.0<br />
+						read = all<br />
+						write = all<br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Update Openmeetings with creadentials for Asterisk manager. 
+				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt><br />
+				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.data.conference.dao.SipDao"&gt;</strong>
+				uncomment its parameters and set it to your custom values.
+				<p style="font-size: larger; color: blue;">
+					IMPORTANT: this step should be done <strong>BEFORE</strong> system install/restore
+					otherwise all SIP related room information will be lost
+				</p>   
+			</div><br />
+			<div>
+				Restart asterisk:
+				<blockquote>
+					<i>service asterisk restart</i>
+				</blockquote>
+			</div><br />
+		</section>
+
+		<section name="Setup red5sip transport">
+			<div>
+				Download red5sip from
+				<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
+			</div>
+			<div>
+				Build with Apache Ant
+				<blockquote>
+					<i>ant</i>
+				</blockquote>
+			</div>
+			<div>
+				Insert proper values to the <tt>/opt/red5sip/settings.properties</tt>
+
+				<blockquote>
+					<i>
+						red5.host=127.0.0.1 # red5 server address<br />
+						om.context=openmeetings # Openmeetings context<br /> 
+						red5.codec=asao<br />
+						red5.codec.rate=22 # should correlate with mic settings in config.xml<br />
+						sip.obproxy=127.0.0.1 # asterisk adderss<br />
+						sip.phone=red5sip_user # sip phone number<br />
+						sip.authid=red5sip_user # sip auth id<br />
+						sip.secret=12345 # sip password<br />
+						sip.realm=asterisk # sip realm<br />
+						sip.proxy=127.0.0.1 # address of sip proxy <br />
+						rooms.forceStart=no # TBD <br />
+						rooms=1 # TBD (not in use) <br />
+					</i>
+				</blockquote>
+			</div>
+			<div>
+				Add red5sip to autostart:
+				<blockquote>
+					<i>
+						sudo cp /opt/red5sip/red5sip /etc/init.d/<br />
+						sudo chmod a+x /etc/init.d/red5sip<br />
+						sudo update-rc.d red5sip defaults
+					</i>
+				</blockquote>
+			</div>
+			<div>
+				Start openmeetings
+				<blockquote>
+					<i>service red5 start</i>
+				</blockquote>
+			</div>
+			<div>
+				Start red5sip
+				<blockquote>
+					<i>service red5sip start</i>
+				</blockquote>
+			</div>
+		</section>
+	</body>
+</document>

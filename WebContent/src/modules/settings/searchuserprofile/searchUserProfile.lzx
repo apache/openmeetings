@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<script>
+    <![CDATA[
+    
+        function searchOffers(str) {
+            if ($debug) Debug.write("searchOffers ",str);
+            
+        	canvas.userSettingsSearchType = "searchOffers";
+        	canvas.userSettingsSearchPhrase = str;
+            	
+            if (canvas.userSettingsSearchRef == null) {
+            	canvas.userSettingsModuleOpt = "userSearch";
+            	quicklinkAct("userSettingsModule");
+            } else {
+            	canvas.userSettingsSearchRef.searchByUpdate();
+            	canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
+            }
+        }
+        
+        function searchUsers(str) {
+            if ($debug) Debug.write("searchUsers ",str);
+            
+            canvas.userSettingsSearchType = "searchUsers";
+            canvas.userSettingsSearchPhrase = str;
+            
+            if (canvas.userSettingsSearchRef == null) {
+                canvas.userSettingsModuleOpt = "userSearch";
+                quicklinkAct("userSettingsModule");
+            } else {
+                canvas.userSettingsSearchRef.searchByUpdate();
+                canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
+            }
+        }
+        
+        function searchInterest(str) {
+            if ($debug) Debug.write("searchInterest ",str);
+            
+            canvas.userSettingsSearchType = "searchInterest";
+            canvas.userSettingsSearchPhrase = str;
+                
+            if (canvas.userSettingsSearchRef == null) {
+                canvas.userSettingsModuleOpt = "userSearch";
+                quicklinkAct("userSettingsModule");
+            } else {
+                canvas.userSettingsSearchRef.searchByUpdate();
+                canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
+            }
+        }
+    
+    ]]>
+</script>
+
+<!---  modules:dashboard -->
+<class name="searchUserProfile" extends="view" >	
+
+	<method name="search">
+		<![CDATA[
+			this._searchUserResult._table.searchUserProfile.doCall();
+		]]>
+	</method>
+	
+	<method name="searchByUpdate">
+		if ($debug) Debug.write("searchByUpdate -2- ",canvas.userSettingsSearchType);
+		canvas.userSettingsModuleOpt = "";
+		if (canvas.userSettingsSearchType == "searchOffers") {
+			this.searchInterest.setAttribute("text","");
+			this.searchTxt.setAttribute("text","");
+            this.searchOffers.setAttribute("text",canvas.userSettingsSearchPhrase);
+            this.search();
+        } else if (canvas.userSettingsSearchType == "searchInterest") {
+            this.searchInterest.setAttribute("text",canvas.userSettingsSearchPhrase);
+            this.searchTxt.setAttribute("text","");
+            this.searchOffers.setAttribute("text","");
+            this.search();
+        } else if (canvas.userSettingsSearchType == "searchUsers") {
+        	this.searchInterest.setAttribute("text","");
+            this.searchTxt.setAttribute("text",canvas.userSettingsSearchPhrase);
+            this.searchOffers.setAttribute("text","");
+            this.search();
+        }
+	</method>
+	
+	<handler name="oninit">
+		canvas.userSettingsSearchRef = this;
+	</handler>
+	
+	<labelText labelid="1179" y="4" x="4"/>
+	
+	<customEdittext name="searchTxt" y="24" x="4" width="120" text="">
+		<handler name="onkeydown" args="k">
+            <![CDATA[
+                if (k == 13 || k == 27) {
+                    parent.search();
+                }
+            ]]>
+        </handler>
+	</customEdittext>
+	
+	
+	<labelText labelid="1177" y="50" x="4"/>
+	
+	<customEdittext name="searchOffers" y="70" x="4" width="120" text="" >
+        <handler name="onkeydown" args="k">
+            <![CDATA[
+                if (k == 13 || k == 27) {
+                    parent.search();
+                }
+            ]]>
+        </handler>
+    </customEdittext>
+	
+	
+	<labelText labelid="1178" y="96" x="4" />
+	
+	<customEdittext name="searchInterest" y="116" x="4" width="120" text="" >
+        <handler name="onkeydown" args="k">
+            <![CDATA[
+                if (k == 13 || k == 27) {
+                    parent.search();
+                }
+            ]]>
+        </handler>
+    </customEdittext>
+	
+	
+    <simpleLabelButton labelid="1176" width="80" x="44" 
+           y="152" onclick="this.parent.search();" />
+           
+           
+    <view name="_borderLine" width="1" x="129" 
+    	  height="$once{ parent.height }" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" />
+    	  
+    	  
+	<view name="_searchUserResult" x="130" height="$once{ parent.height }">
+		
+		<turnOverListOrderedPaged name="_table" showTopBar="true" x="0" height="$once{ parent.height }" 
+             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="c.lastname"
+             listItemName="searchUserProfileListItem" menuBarXIndent="100"
+             multiselect="false" width="$once{ canvas.width - 130 }">
+			
+			<attribute name="_newPrivateMessage" value="null" />
+			<attribute name="newMessageActive" value="false" type="boolean"/>
+			
+			<!--
+				public SearchResult searchUserProfile(String SID, String searchTxt, String userOffers, 
+		   			String userSearchs, String orderBy, int start, int max, boolean asc)
+		    -->
+		    <netRemoteCallHib name="searchUserProfile" funcname="userservice.searchUserProfile" 
+						  remotecontext="$once{ canvas.thishib }" >      
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchTxt.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchOffers.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchInterest.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		//if ($debug) Debug.write("searchUserProfile: ",value);
+			    		//this.parent.destroy();
+			    		this.parent.initValues(value.records);
+			    		
+			    		for (var t=0;t<value.result.length;t++) {
+			    			value.result[t]["pending"] = false;
+			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
+			    				if (canvas.salutationsInitValues[i].salutations_id == value.result[t].salutations_id) {
+					                value.result[t]["title"] = canvas.salutationsInitValues[i].label.value;
+					                break;
+			    				}
+								
+				            }
+			    			
+			    		}
+			    		
+			    		this.parent.renderContent(value.result);
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>
+			
+			<handler name="oninit">
+	        	//addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected
+	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
+	            this.addHeaderItemOrdered(1181,100,"c.omTimeZone.omTimeZoneId",false,false);
+	            this.addHeaderItem(1182,250);
+	            this.addHeaderItem(1183,this.width-250-60-100-200-16);
+	            this.addHeaderItem(1185,60);
+	        </handler>
+	        
+	        <method name="newMessage" args="userObject">
+                if (this.newMessageActive) {
+                    this._newPrivateMessage.destroy();
+                }
+                
+                new lz.newPrivateMessage(this,{
+                                x:0,
+                                refObj:this,
+                                userObject:userObject,
+                                width:this.width,
+                                height:this.height
+                            });
+                        
+                this.newMessageActive = true;
+            </method>
+	        
+	        <handler name="onclickedItem" args="refObj">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("onclickedItem ",refObj);
+	                
+	            ]]>
+	        </handler>
+	        
+	        <handler name="onUpdateOrder">
+	        	this.searchUserProfile.doCall();
+	        </handler>
+	        
+	        <method name="updatePendingStatus" args="itemId">
+	        	this.renderList[itemId]["pending"] = true;
+	        </method>
+	        
+	        <!--
+	        <attribute name="username" value="" type="string" />
+			<attribute name="timezone" value="" type="string" />
+			<attribute name="searchOffers" value="" type="string" />
+			<attribute name="searchSearchs" value="" type="string" />
+			 -->
+	        
+	        <method name="renderContent" args="rList">
+	            <![CDATA[
+	            
+	            	this.renderList = rList;
+	            
+	                this.isLoaded = true;
+	                var list = this._innerlist._inn._inn;
+	                
+	                if (this.renderList == null) {
+	                	this.renderList = new Array();
+	                }
+	                //this.renderList = records;
+	                var records = this.renderList;
+	                this._innerlist._inn.setAttribute("y",0);
+	                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+	                this._innerlist._inn.resetItems();
+	                
+	                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+	                
+	                //this._records.setAttribute("text",records.length);
+	                
+	                for (var i=0;i<list.subviews.length;i++){
+	                    
+	                    //if (i % 2 == 0) {
+	                    //    list.subviews[i].setIsSecond(true);
+	                    //} else {
+	                    //    list.subviews[i].setIsSecond(false);
+	                    //}
+	                    
+	                    if (records.length > i) {
+	                    	
+	                    	//if ($debug) Debug.write("Render Item ",records[i]);
+	                        
+	                        list.subviews[i].setAttribute("clickable",true);
+	                        list.subviews[i].refObj = records[i];
+	                        
+	                        if (records[i]["isselected"] && records[i].isselected) {
+	                            list.subviews[i].isselected = true;
+	                        } else {
+	                            list.subviews[i].isselected = false;
+	                        }
+	                        
+	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname + ' ['+records[i].login+']');
+	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '<br/>('+records[i].omTimeZone.ical+')');
+	                        list.subviews[i].setAttribute("searchOffers",records[i].userOffers);
+	                        list.subviews[i].setAttribute("searchSearchs",records[i].userSearchs);
+	                        list.subviews[i].setAttribute("pending",records[i].pending);
+	                        
+	                        list.subviews[i].setAttribute("itemId",i);
+	                        
+	                    } else {
+	                        
+	                        list.subviews[i].refObj = null;
+	                        
+	                        list.subviews[i].isselected = false;
+	                        list.subviews[i].onmouseout.sendEvent();
+	                        
+	                        list.subviews[i].setAttribute("username",'');
+	                        list.subviews[i].setAttribute("timezone",'');
+	                        list.subviews[i].setAttribute("searchOffers",'');
+	                        list.subviews[i].setAttribute("searchSearchs",'');
+	                        list.subviews[i].setAttribute("pending",false);
+	                        
+	                        list.subviews[i].setAttribute("itemId","");
+	                        
+	                        list.subviews[i].setAttribute("clickable",false);
+	                        
+	                    }
+	                    
+	                }
+	                
+	                
+	                this.sendInitialWidthUpdate();
+	                
+	            ]]>
+	        </method>   
+		        
+	        <handler name="onScrollItem" args="item">
+	            <![CDATA[
+	                if (this.renderList.length > item.itemId) {
+	                    item.setAttribute("clickable",true);
+	                    item.refObj = this.renderList[item.itemId];
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+	                        item.isselected = true;
+	                        item.onmouseout.sendEvent();
+	                    } else {
+	                        item.isselected = false;
+	                        item.onmouseout.sendEvent();
+	                    }
+	                    
+	                    //if ($debug) Debug.write(item.itemId);
+	                    
+	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname + ' ['+this.renderList[item.itemId].login+']');
+	                    item.setAttribute("timezone",this.renderList[item.itemId].omTimeZone.jname + '<br/>('+this.renderList[item.itemId].omTimeZone.ical+')');
+                        item.setAttribute("searchOffers",this.renderList[item.itemId].userOffers);
+                        item.setAttribute("searchSearchs",this.renderList[item.itemId].userSearchs);
+	                    item.setAttribute("pending",this.renderList[item.itemId].pending);
+	                        
+	                    item.setAttribute("itemId",item.itemId);
+	                        
+	                } else {
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    item.isselected = false;
+	                    item.onmouseout.sendEvent();
+	                    
+	                    item.refObj = null;
+	                    
+	                    item.setAttribute("username","");
+	                    item.setAttribute("timezone","");
+                        item.setAttribute("searchOffers","");
+                        item.setAttribute("searchSearchs","");
+                        item.setAttribute("pending",false);
+	                    
+	                    item.setAttribute("itemId","");
+	                    
+	                    item.setAttribute("clickable",false);
+	                    
+	                }
+	                
+	            ]]>
+	        </handler>
+	        
+			
+		</turnOverListOrderedPaged>
+		
+	</view>
+	
+
+</class>
+
+</library>

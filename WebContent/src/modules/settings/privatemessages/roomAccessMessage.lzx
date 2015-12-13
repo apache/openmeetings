@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	
+<class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" 
+	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-62 }"
+	   visibility="hidden">
+	
+	<attribute name="rooms_id" value="0" type="number" />
+	
+	<handler name="oninit">
+		this.getAppointmentByRoomId.doCall();
+	</handler>
+	
+	<netRemoteCallHib name="getAppointmentByRoomId" funcname="calendarservice.getAppointmentByRoomId" 
+                      remotecontext="$once{ canvas.thishib }" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.rooms_id; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("checkPendingStatus: ",value);
+                
+                if (value == null) {
+                	parent.destroy();
+                } else {
+                	parent.setAttribute("visibility","visible");
+                }
+                //private Date appointmentStarttime;
+                //private Date appointmentEndtime;
+                parent._content._labels._start._text.setAttribute("text",parseDateToStringTimeSeconds(value.appointmentStarttime));
+                parent._content._labels._end._text.setAttribute("text",parseDateToStringTimeSeconds(value.appointmentEndtime));
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+
+    <view name="_bg" x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
+    	  bgcolor="0xFFFFFF" />
+    	  
+	<miniIconsPresenter name="_close" x="$once{ parent.width-20 }" y="2"
+        iconRessourceName="btn_presenter_close2">
+        <handler name="onclick">
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" />
+    </miniIconsPresenter>  
+    
+    <view name="_content" x="10" layout="axis:x;spacing:2">
+    	
+    	<simpleLabelButton labelid="1283" y="10">
+            <handler name="onclick">
+                canvas.initroomid = parent.parent.rooms_id;
+                canvas.thishib.getRoomById.doCall();
+            </handler>
+            <labelTooltip labelid="1284" />
+        </simpleLabelButton>
+    
+        <view name="_labels" layout="axis:y;spacing:0">
+        	
+        	<view name="_start">
+        		<labelText labelid="1219" />
+        		<labelText name="_text" x="80" />
+        	</view>
+        	
+        	<view name="_end">
+                <labelText labelid="1220" />
+                <labelText name="_text" x="80" />
+            </view>
+        	
+        </view>
+    
+    </view>
+    
+    
+    
+</class> 
+	
+
+</library>
