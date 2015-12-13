@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+
+    <!---
+     simple legend class
+     @access public
+      -->
+    <class name="omlegend" extends="drawview" >
+        <!--- @keyword private -->
+        <attribute name="topmargin" type="number" value="0"/>
+        <!--- @keyword private -->
+        <attribute name="bottommargin" type="number" value="0"/>
+        <!--- @keyword private -->
+        <attribute name="leftmargin" type="number" value="0"/>
+        <!--- @keyword private -->
+        <attribute name="rightmargin" type="number" value="0"/>
+        <!--- @keyword private -->
+        <attribute name="verticalgap" type="number" value="1"/>
+        <!--- Indicates if legend box will have a border, default: true -->
+        <attribute name="legendborder" type="boolean" value="true"/>
+        <!--- Allow to set the line width from the legend tag -->
+        <attribute name="borderWidth" type="number" value="1"/>
+        <!--- Allow to set the color line from the legend tag -->
+        <attribute name="borderColor" type="color" value="0x000000"/>
+        <!--- Allow to set the fill color from the legend tag -->
+        <attribute name="fillColor" type="color" value="0xFFFFFF"/>
+        <!--- Indicates how the legend items will be displayed, default: vertical -->
+        <attribute name="direction" type="string" value="vertical"/>     
+        <!--- Indicates the style will be applied tho the border legend box -->
+        <attribute name="styleBorder" type="string" value="null"/>
+        <!--- Indicates the Font will be used in the legend item text -->
+        <attribute name="legendFont" type="string" value="serif"/>
+        <!--- Indicates the Font size wiil be used in the legend item text, default: 10px -->
+        <attribute name="legendFontsize" type="size" value="6"/>
+        <!--- Indicates the Font color wiil be used in the legend item text, default: black -->
+        <attribute name="legendFontcolor" type="color" value="0x000000"/>
+        <!--- Indicates where the legend box will be positioned, default: right -->
+        <attribute name="position" type="string" value="right"/>
+
+        <!--- Takes the relationship with the chart -->
+        <attribute name="chart" type="expression" value="${null}"/>
+        <attribute name="chartClassName" type="string" value="${null}"/>
+
+        <simplelayout axis="y"/>
+        
+                
+       <!--- @keywords private
+        <handler name="oninitdone" reference="this.chart">
+            if(chart.initdone)
+            {
+                var lChart = this.getChartInstance();
+                if( lChart != null ) {
+                    this.chartClassName = lChart.constructor.tagname;
+                    this.datapath.setFromPointer(lChart.getDataSeries().getLegend());
+                }   
+            }
+        </handler>
+         -->
+         
+        <handler name="oninit">
+        	<![CDATA[
+        	    var tObject = parent.getOMDataSeries();
+        	    this.chart = parent;
+        	    
+        	    for (var i=0;i<tObject.tooltipseries.length;i++) {
+        	    	
+        	    	new lz.omlegenditem(this.viewlegendbox,{tBox:tObject.tooltipseries[i]});
+        	    	
+        	    }
+        	    
+        	    //this.bringToFront();
+        	    this.border();
+        	]]>
+        </handler> 
+        
+        <!-- Top Margin -->
+        <view height="${parent.topmargin}" />
+        <!-- Legend box -->
+        <view name="viewlegendbox">    
+            <simplelayout spacing="${parent.parent.verticalgap}"/>       
+            <method name="init">
+                <![CDATA[
+    
+                    super.init();
+                    if ( parent.direction == 'horizontal'){
+                        this.layouts[0].setAttribute('axis', 'x');
+                    } else {
+                        this.layouts[0].setAttribute('axis', 'y');
+                    }
+                   
+                ]]>
+            </method>    
+                  
+        </view>
+        <!-- Bottom Margin -->
+        <view height="${parent.bottommargin}"/>        
+
+
+        <!--- @keywords private -->
+        <method name="border">
+            var lStartX = Math.ceil(this.lineWidth/2);
+            var lStartY = Math.ceil(this.lineWidth/2);
+            var lOrgWidth = this.width;
+            var lOrgHeight = this.height;
+
+            this.lineWidth = this.borderWidth;
+            this.strokeStyle = this.borderColor;
+            this.fillStyle = this.fillColor;
+
+            this.beginPath();
+            this.moveTo(lStartX, lStartY);
+            this.lineTo(this.width, lStartY);
+            this.lineTo(this.width, this.height);
+            this.lineTo(lStartY, this.height);
+            this.lineTo(lStartX, lStartY);
+            this.closePath();
+            this.stroke();
+            this.fill();
+
+            // Restores the original dimensions of the legend, due to the changes
+            // that the lineTo()'s calls perform over the legendbox dimensions.
+            this.setAttribute( "width", lOrgWidth );
+            this.setAttribute( "height", lOrgHeight );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="getChartInstance">
+        <![CDATA[
+            return this.chart;
+        ]]>
+        </method>
+
+        <!--- event that allows custom action for mouse over event
+            @param Number item: The identifier legend item
+         -->
+        <event name="onitemmouseover" />
+        <!--- event that allows custom action for mouse out event
+            @param Number item: The identifier legend item
+         -->
+        <event name="onitemmouseout" />
+        <!--- event that allows custom action for mouse down event
+            @param Number item: The identifier legend item
+         -->
+        <event name="onitemmousedown" />
+        <!--- event that allows custom action for mouse up event
+            @param Number item: The identifier legend item
+         -->
+        <event name="onitemmouseup" />
+        <!--- event that allows custom action for mouse click event
+            @param Number item: The identifier legend item
+         -->
+        <event name="onitemmouseclick" />
+        
+    </class>
+    
+    <!--- @keyword private
+    individual legend item -->
+    <class name="omlegenditem" >
+        <attribute name="identifier" type="number" value="0"/>
+        <attribute name="tBox" type="string" value=""/>
+        <attribute name="linevisible" type="boolean" value="false"/>
+        <simplelayout axis="x" spacing="$once{parent.parent.parent.verticalgap}"/>
+        <view name="leftmarginview" width="$once{parent.parent.parent.leftmargin}" />
+        <marker name="legendmarker"></marker>    
+        <text name="legendtext" resize="true" text="$once{ parent.tBox }" 
+        	  fontsize="$once{parent.parent.parent.legendFontsize}"
+              fgcolor="$once{parent.parent.parent.legendFontcolor}"
+              height="$once{parent.parent.parent.legendFontsize+6}">
+        </text>
+        <view name="rightmarginview" width="${parent.parent.parent.rightmargin}"/>
+        <method name="init">
+            <![CDATA[
+                super.init();
+
+                var colors = new Array(0);
+                var imagesPath = new Array(0);
+                var legenditems = parent.subviews;
+                var legendmarkeritem;
+
+                if( parent.parent.chartClassName == "piechart" ) {
+                    var arrPieces = parent.parent.getChartInstance().plotarea.arrPiePieces;
+                    var piePiece;
+
+                    for(var i = 0; i < arrPieces.length; i++){ 
+                        piePiece = arrPieces[i];  
+                        colors[i] = piePiece.style.region.color;
+                        
+                        if ( legenditems[i] != null ){                
+                            legendmarkeritem = legenditems[i].legendmarker;
+                            legendmarkeritem.setAttribute('width', piePiece.style.point.width);
+                            legendmarkeritem.setAttribute('height', piePiece.style.point.height);
+                        }
+                    }
+                } else {
+                    var topseries = parent.parent.getChartInstance().getDataSeries();
+                    var numSeries = topseries.getNumDataSeries();
+                    for(var i = 0; i < numSeries; i++){ 
+                        var ldatastyle = parent.parent.getChartInstance().style.getDataStyle(i);
+                        if ( parent.parent.chartClassName == "linechart" )
+                            colors[i] = ldatastyle.line.color;
+                        else
+                            if ( ldatastyle.region.image != null ){
+                                imagesPath[i] = ldatastyle.region.image;
+                            } else {
+                                colors[i] = ldatastyle.region.color;
+                            }
+                        if ( legenditems[i] != null ){                
+                            legendmarkeritem = legenditems[i].legendmarker;
+                            legendmarkeritem.setAttribute('width', ldatastyle.point.width);
+                            legendmarkeritem.setAttribute('height', ldatastyle.point.height);
+                        }
+                    }
+                }
+
+                for(var i = 0; i < legenditems.length; i++){
+                    var legenditem = legenditems[i];
+                    legendmarkeritem = legenditem.legendmarker;
+                    if ( imagesPath[i] != null ){
+                        legendmarkeritem.setSource(imagesPath[i]);
+                        legendmarkeritem.setAttribute('opacity', ldatastyle.region.opacity);
+                        legendmarkeritem.setAttribute( "visible", true );
+                    }
+                    else
+                        legendmarkeritem.setAttribute('bgcolor', colors[i]);
+                    this.setAttribute('identifier', i);
+                }
+            ]]>
+        </method>
+        <!--- calls the method that implements the acton
+            @keyword private-->
+        <handler name="onmouseover">
+        	this.legendtext.setAttribute("fontstyle","bold");
+            parent.classroot.onitemmouseover.sendEvent(this);
+        </handler>
+        <!--- calls the method that implements the acton
+            @keyword private-->
+        <handler name="onmouseout">
+        	this.legendtext.setAttribute("fontstyle","plain");
+            parent.classroot.onitemmouseout.sendEvent(this);
+        </handler>
+        <!--- calls the method that implements the acton
+            @keyword private-->
+        <handler name="onmousedown">
+            parent.classroot.onitemmousedown.sendEvent(this);
+        </handler>
+        <!--- calls the method that implements the acton
+            @keyword private-->
+        <handler name="onmouseup">
+            parent.classroot.onitemmouseup.sendEvent(this);
+        </handler>
+        <!--- calls the method that implements the acton
+            @keyword private-->
+        <handler name="onclick">
+            parent.classroot.onitemmouseclick.sendEvent(this);
+        </handler>
+    </class>
+
+</library>

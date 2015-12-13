@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="typingIcon" extends="view" width="30" height="16" resource="typing_rsc">
+	<attribute name="timerDelegate" value="null"/>
+	<attribute name="frm" value="0" type="number" />
+	          
+    <handler name="oninit">
+		//if ($debug) Debug.write("typingIcon::oninit ");
+    	startTyping();
+    </handler>
+    
+    <handler name="ondestroy">
+		//if ($debug) Debug.write("typingIcon::ondestroy ");
+		stopTyping();
+    </handler>
+    
+	<handler name="onvisible">
+		//if ($debug) Debug.write("typingIcon::onvisible ", this.visible);
+		toggle(this.visible);
+	</handler>
+	
+	<method name="startTyping">
+	<![CDATA[
+		//if ($debug) Debug.write("typingIcon::startTyping ");
+		if (timerDelegate == null && this.visible) {
+			frm = 0;
+			this.timerDelegate = new LzDelegate(this, "changeFrame");
+			lz.Timer.addTimer(this.timerDelegate, 1000);
+		}
+	]]>
+	</method>
+
+	<method name="stopTyping">
+		//if ($debug) Debug.write("typingIcon::stopTyping ");
+		if (timerDelegate != null) {
+			lz.Timer.removeTimer(timerDelegate);
+			timerDelegate = null;
+		}
+	</method>
+	 
+	<method name="toggle" args="v">
+		//if ($debug) Debug.write("typingIcon::toggle ", this.visible);
+		if (v) {
+			startTyping();
+		} else {
+			stopTyping();
+		}
+	</method>
+	
+	<method name="changeFrame" args="ignore=null">
+		//if ($debug) Debug.write("typingIcon::frm ", frm);
+		frm = (++frm) % 4;
+		this.setAttribute('frame', frm + 1);
+		lz.Timer.resetTimer(timerDelegate, 1000);
+		if (frm == 3) {
+			this.setAttribute('visible', false);
+		}
+	</method>
+</class>
+
+</library>

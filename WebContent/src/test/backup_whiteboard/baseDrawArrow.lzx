@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="baseDrawArrow" extends="baseDrawULine" >
+    
+    <!-- for drawing drawarrow -->
+    <attribute name="currentdrawarrowlinestroke" value="0x000000" />
+    <attribute name="currentdrawarrowlinestrokeDis" value="1" type="number" />
+    <attribute name="currentdrawarrowlinestrokeFill" value="0xFF6600" />
+    <attribute name="currentdrawarrowlinestrokeFillDis" value="1" type="number" />
+    
+    <attribute name="currentdrawarrowlinelineWidth" value="4" type="number" />   
+    <attribute name="currentdrawarrowOpacity" value="1" type="number" />
+      
+    <!-- ###########################
+    drawarrow
+     -->
+     
+    
+    <method name="startDrawarrowline" args="oid_name">
+        <![CDATA[
+	        if (oid_name == null) {
+	            oid_name = 'drawarrow'+this.getCounter();
+	        }
+	        
+	        this.currentlayer = new lz.drawViewNew(this,{
+		            name:oid_name,width:this.width,height:this.height,
+		            opacity:this.currentdrawarrowOpacity});
+            
+            var pArrowStart = new flash.geom.Point(this.startx,this.starty);
+            var pArrowEnd = new flash.geom.Point(this.endx,this.endy);
+            
+            if ($debug) Debug.write("start,end,line",pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth);
+            this.drawArrow(this.currentlayer,pArrowStart,pArrowEnd,this.currentdrawarrowlinelineWidth);
+        ]]>
+    </method> 
+    
+    <method name="endDrawarrowline">
+        //Debug.write("endDrawarrowline",this.startx,this.starty,this.endx,this.endy);
+        <![CDATA[
+        var tempName = this.currentlayer.name;
+        //Debug.write("tempName: ",tempName);
+        this.currentlayer.destroy();
+        
+        //GetBounds of that Object
+        var minx = this.width+2;
+        var miny = this.height+2;
+        var maxx = -2;
+        var maxy = -2;
+
+        if (this.startx<minx) minx=this.startx;
+        if (this.endx<minx) minx=this.endx;
+        
+        if (this.startx>maxx) maxx=this.startx;
+        if (this.endx>maxx) maxx=this.endx;
+        
+        if (this.starty<miny) miny=this.starty;
+        if (this.endy<miny) miny=this.endy;
+        
+        if (this.starty>maxy) maxy=this.starty;
+        if (this.endy>maxy) maxy=this.endy;
+        
+        var width = maxx-minx;
+        var height = maxy-miny;
+        
+        //Debug.write("minx,miny,width,height: ",minx,miny,width,height);
+
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:tempName,x:minx,y:miny,width:width,height:height,
+            opacity:this.currentdrawarrowOpacity});
+            
+        this.currentlayer.fillstyle = '0x000000';
+        this.currentlayer.lineWidth = this.currentdrawarrowlinelineWidth;
+        this.currentlayer.strokeStyle = this.currentdrawarrowlinestroke;
+        
+        //Debug.write("this.currentlayer: ",this.currentlayer);
+
+        var t = new lz.drawArrowWhiteBoard(this.currentlayer,{x:0,y:0});
+
+        //Color
+        //t.setTint(this.currentdrawarrowlinestroke,60);
+        t.setColor(this.currentdrawarrowlinestroke);
+        
+        var tx = this.endx-this.startx;
+        var ty = this.endy-this.starty;
+
+        var gegenkathete = Math.abs(ty);
+        var ankathete = Math.abs(tx); 
+        var hypothenuse = Math.sqrt((ankathete*ankathete)+(gegenkathete*gegenkathete));
+        var sinAlpha = (gegenkathete/hypothenuse);
+        var alpha = Math.asin(sinAlpha);
+        alpha = alpha/(Math.PI/180);
+            
+        var newx = 0;
+        var newy = 0;
+        if (tx>=0 && ty>=0){    
+            t.setAttribute('rotation',(alpha-45));
+        } else if (tx<0 && ty>=0){
+            newx = width;
+            t.setAttribute('rotation',(45+90-alpha));
+        } else if (tx<0 && ty<0){
+            newy = height;
+            newx = width;
+            t.setAttribute('rotation',(alpha+45+90));
+        } else if (tx>0 && ty<=0){
+            newy = height;
+            t.setAttribute('rotation',(45-alpha-90));
+        }
+        
+        t.setAttribute('x',newx);
+        t.setAttribute('y',newy);
+        
+        //Scaling
+        var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
+        
+
+        //Set previous to null
+        this.prevx = null;
+        this.prevy = null;  
+        
+        //Add Layer to global Layer     
+        this.layers.push(this.currentlayer);  
+        ]]>
+        this.drawarrowlineregisterFinal();
+        this.currentlayer = new LzView();
+        //Debug.write("t: ",t);
+    </method> 
+       
+    
+    
+    <method name="drawArrow" args="graphics,start,end,thickness">
+        <![CDATA[
+    //(graphics:Graphics,
+    //            start:Point,end:Point,
+    //            style:Object=null):void {
+            
+            if (start.equals(end)) return;
+            
+            
+            var arrowStyle = {'shaftControlPosition':0.5,
+                    'shaftControlSize':0.5,
+                    'headLength':thickness*5, //Pixel Length of arrow head
+                    'headWidth':thickness*5,//Relative width of arrow head
+                    'edgeControlPosition':0.5,
+                    'edgeControlSize':0.5,
+                    'shaftPosition':0,
+                    'shaftThickness':thickness
+                    };
+            
+            var fullVect:Point = end.subtract(start);
+            var halfWidth:Number = (arrowStyle.headWidth != -1) ? arrowStyle.headWidth/2 : arrowStyle.headLength/2; 
+            
+            //Figure out the line start/end points
+            var startNorm = new flash.geom.Point(fullVect.y,-fullVect.x);
+            startNorm.normalize(arrowStyle.shaftThickness/2);
+            var start1 = start.add(startNorm);
+            var start2 = start.subtract(startNorm);
+            var end1 = end.add(startNorm);
+            var end2 = end.subtract(startNorm);
+            
+            //if ($debug) Debug.write("startNorm: ",startNorm.toString());
+            //if ($debug) Debug.write("start1: ",start1.toString());
+            //if ($debug) Debug.write("start2: ",start2.toString());
+            //if ($debug) Debug.write("end1: ",end1.toString());
+            //if ($debug) Debug.write("end2: ",end2.toString());
+            
+            //figure out where the arrow head starts
+            var headPnt = fullVect.clone();
+            //if ($debug) Debug.write("headPnt 1: ",headPnt.toString());
+            //if ($debug) Debug.write("headPnt.length 1: ",headPnt.length);
+            //if ($debug) Debug.write("arrowStyle.headLength 1: ",arrowStyle.headLength);
+            headPnt.normalize(headPnt.length-arrowStyle.headLength);
+            //if ($debug) Debug.write("headPnt 2: ",headPnt.toString());
+            headPnt = headPnt.add(start);
+            //if ($debug) Debug.write("headPnt 3: ",headPnt.toString());
+            
+            //calculate the arrowhead corners
+            var headPntNorm = startNorm.clone();
+            //if ($debug) Debug.write("headPntNorm ^^: ",headPntNorm.toString());
+            //if ($debug) Debug.write("halfWidth ^^: ",halfWidth);
+            headPntNorm.normalize(halfWidth);
+            //if ($debug) Debug.write("headPntNorm: ",headPntNorm.toString());
+            var edge1 = headPnt.add(headPntNorm);
+            var edge2 = headPnt.subtract(headPntNorm);
+            
+            //if ($debug) Debug.write("edge1: ",edge1.toString());
+            //if ($debug) Debug.write("edge2: ",edge2.toString());
+            
+            //Figure out where the arrow connects the the shaft, then calc the intersections
+            var shaftCenter = flash.geom.Point.interpolate(end,headPnt,arrowStyle.shaftPosition);
+            //if ($debug) Debug.write("end: ",end.toString());
+            //if ($debug) Debug.write("headPnt",headPnt.toString());
+            //if ($debug) Debug.write("arrowStyle.shaftPosition: ",arrowStyle.shaftPosition);
+            //if ($debug) Debug.write("shaftCenter",shaftCenter.toString());
+            var inter1 = this.getLineIntersection(start1,end1,shaftCenter,edge1);
+            var inter2 = this.getLineIntersection(start2,end2,shaftCenter,edge2);
+            
+            //if ($debug) Debug.write("inter1: ",inter1.toString());
+            //if ($debug) Debug.write("inter2: ",inter2.toString());
+            
+            //Figure out the control points
+            var edgeCenter = flash.geom.Point.interpolate(end,headPnt,arrowStyle.edgeControlPosition);
+            var edgeNorm = startNorm.clone();
+            edgeNorm.normalize(halfWidth*arrowStyle.edgeControlSize);
+            //if ($debug) Debug.write("halfWidth*arrowStyle.edgeControlSize: "+(halfWidth*arrowStyle.edgeControlSize));
+            //if ($debug) Debug.write("edgeNorm: "+edgeNorm.toString());
+            var edgeCntrl1 = edgeCenter.add(edgeNorm);
+            var edgeCntrl2 = edgeCenter.subtract(edgeNorm);
+
+            //if ($debug) Debug.write("edgeCntrl1: ",edgeCntrl1.toString());
+            //if ($debug) Debug.write("edgeCntrl2: ",edgeCntrl2.toString());
+
+            //if ($debug) Debug.write("moveTo: ",start1.x,start1.y);
+            //if ($debug) Debug.write("lineTo",inter1.x,inter1.y);
+            //if ($debug) Debug.write("lineTo",edge1.x,edge1.y);
+            //if ($debug) Debug.write("quadraticCurveTo",edgeCntrl1.x,edgeCntrl1.y,end.x,end.y);
+            //if ($debug) Debug.write("quadraticCurveTo",edgeCntrl2.x,edgeCntrl2.y,edge2.x,edge2.y);
+            //if ($debug) Debug.write("lineTo",inter2.x,inter2.y);
+            //if ($debug) Debug.write("lineTo",start2.x,start2.y);
+            //if ($debug) Debug.write("lineTo",start1.x,start1.y);
+            
+            graphics.moveTo(start1.x,start1.y);
+            graphics.lineTo(inter1.x,inter1.y);
+            graphics.lineTo(edge1.x,edge1.y);
+            graphics.quadraticCurveTo(edgeCntrl1.x,edgeCntrl1.y,end.x,end.y);
+            graphics.quadraticCurveTo(edgeCntrl2.x,edgeCntrl2.y,edge2.x,edge2.y);
+            graphics.lineTo(inter2.x,inter2.y);
+            graphics.lineTo(start2.x,start2.y);
+            graphics.lineTo(start1.x,start1.y);
+            
+            if (this.currentdrawarrowlinestrokeDis!=-1){
+                graphics.strokeStyle = this.currentdrawarrowlinestroke;
+                graphics.stroke();
+            }
+
+            if (this.currentdrawarrowlinestrokeFillDis!=-1){
+                graphics.fillStyle = this.currentdrawarrowlinestrokeFill;
+                graphics.fill();
+            }
+        ]]>
+    </method>
+    
+    <method name="getLineIntersection" args="a1,a2,b1,b2">
+        <![CDATA[ 
+        
+            //calculate directional constants
+            var k1 = (a2.y-a1.y) / (a2.x-a1.x);
+            var k2 = (b2.y-b1.y) / (b2.x-b1.x);
+            
+            // if the directional constants are equal, the lines are parallel,
+            // meaning there is no intersection point.
+            if( k1 == k2 ) return null;
+            
+            var x = 0;
+            var y = 0;
+            var m1 = 0;
+            var m2 = 0;
+            
+            //if ($debug) Debug.write("k1",k1);
+            //if ($debug) Debug.write("k2",k2);
+            
+            // an infinite directional constant means the line is vertical
+            if( !isFinite(k1) ) {
+                
+                //if ($debug) Debug.write("k1 ^^ 0");
+                //if ($debug) Debug.write("k2",k2,(b2.y-b1.y));
+                //if ($debug) Debug.write("b1.getY(): "+b1.y);
+                //if ($debug) Debug.write("b2.getY(): "+b2.y);
+                // so the intersection must be at the x coordinate of the line
+                x = a1.x;
+                m2 = b1.y - k2 * b1.x;
+                //if ($debug) Debug.write("m2",m2);
+                y = k2 * x + m2;
+                //if ($debug) Debug.write("y",y);
+                
+            // same as above for line 2
+            } else if ( !isFinite(k2) ) {
+                
+                //if ($debug) Debug.write("k2 ^ 0");
+                
+                m1 = a1.y - k1 * a1.x;
+                x = b1.x;
+                y = k1 * x + m1;
+
+            // if neither of the lines are vertical
+            } else {
+                
+                //if ($debug) Debug.write("neither");
+            
+                m1 = a1.y - k1 * a1.x;
+                m2 = b1.y - k2 * b1.x;              
+                x = (m1-m2) / (k2-k1);
+                y = k1 * x + m1;
+                
+            }
+            
+            return new flash.geom.Point(x,y);
+        ]]>
+    </method>    
+    
+     
+    
+    
+    <method name="drawarrowlineregisterFinal">
+        var actionObject = new Array();
+        actionObject[0] = 'drawarrow';
+        actionObject[1] = currentlayer.fillstyle;
+        actionObject[2] = currentlayer.lineWidth;
+        actionObject[3] = currentlayer.strokeStyle;
+        actionObject[4] = this.startx;  
+        actionObject[5] = this.starty;  
+        actionObject[6] = this.endx;    
+        actionObject[7] = this.endy;
+        actionObject[8] = this.currentdrawarrowOpacity;
+        actionObject[9] = this.counter;   
+        actionObject[10] = currentlayer.x;
+        actionObject[11] = currentlayer.y;
+        actionObject[12] = currentlayer.width;
+        actionObject[13] = currentlayer.height;  
+        actionObject[14] = this.currentlayer.name;
+        this.baseactionobjectList.push(actionObject);       
+        this.onsharedMessage('draw',actionObject);
+    </method>       
+    
+    
+    <method name="drawarrowlineactionHistory" args="lastActionObject,parentView">
+        <![CDATA[
+            //Debug.write("## lineactionHistory",parentView," 2 ## NEW x,y ",lastActionObject[lastActionObject.length-5],lastActionObject[lastActionObject.length-4]," width,height: ",lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2]);
+            
+            this.currentlayer = new lz.drawViewNew(parentView,{
+                name:lastActionObject[lastActionObject.length-1],
+                x:lastActionObject[lastActionObject.length-5],
+                y:lastActionObject[lastActionObject.length-4],
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2],
+                opacity:lastActionObject[8]});
+            
+            var t = new lz.drawArrowWhiteBoard(this.currentlayer,{x:0,y:0});
+            
+            //t.setTint(lastActionObject[3],60);
+            t.setColor(lastActionObject[3]);
+            
+            var tx = lastActionObject[6]-lastActionObject[4];
+            var ty = lastActionObject[7]-lastActionObject[5];
+    
+            var gegenkathete = Math.abs(ty);
+            var ankathete = Math.abs(tx); 
+            var hypothenuse = Math.sqrt((ankathete*ankathete)+(gegenkathete*gegenkathete));
+            var sinAlpha = (gegenkathete/hypothenuse);
+            var alpha = Math.asin(sinAlpha);
+            var alpha = alpha/(Math.PI/180);
+                
+            var newx = 0;
+            var newy = 0;
+            if (tx>=0 && ty>=0){    
+                t.setAttribute('rotation',(alpha-45));
+            } else if (tx<0 && ty>=0){
+                newx = lastActionObject[lastActionObject.length-3];
+                t.setAttribute('rotation',(45+90-alpha));
+            } else if (tx<0 && ty<0){
+                newy = lastActionObject[lastActionObject.length-2];
+                newx = lastActionObject[lastActionObject.length-3];
+                t.setAttribute('rotation',(alpha+45+90));
+            } else if (tx>0 && ty<=0){
+                newy = lastActionObject[lastActionObject.length-2];
+                t.setAttribute('rotation',(45-alpha-90));
+            }
+            
+            t.setAttribute('x',newx);
+            t.setAttribute('y',newy);
+            
+            //Scaling
+            var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
+            t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+            t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
+            
+            this.currentlayer.fillstyle = lastActionObject[1];
+            this.currentlayer.lineWidth = lastActionObject[2];
+            this.currentlayer.strokeStyle = lastActionObject[3];
+
+        ]]>
+    </method>
+    
+    
+    
+    
+    
+    
+    <!--
+        @keywords deprecated
+     -->
+    <method name="_startDrawarrowline" args="oid_name">
+        <![CDATA[
+        if (oid_name == null) {
+            oid_name = 'drawarrow'+this.getCounter();
+        }
+        
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width,height:this.height,
+            opacity:this.currentdrawarrowOpacity});
+            
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+        
+        //Add Resource
+        var t = new lz.drawArrowWhiteBoard(this.currentlayer,{x:this.startx,y:this.starty});
+        
+        //Color
+        //t.setTint(this.currentdrawarrowlinestroke,60);
+        t.setColor(this.currentdrawarrowlinestroke);
+        
+        var tx = this.currentlayer.getMouse('x')-this.startx;
+        var ty = this.currentlayer.getMouse('y')-this.starty;
+
+        var gegenkathete = Math.abs(ty);
+        var ankathete = Math.abs(tx); 
+        var hypothenuse = Math.sqrt((ankathete*ankathete)+(gegenkathete*gegenkathete));
+        var sinAlpha = (gegenkathete/hypothenuse);
+        var alpha = Math.asin(sinAlpha);
+        alpha = alpha/(Math.PI/180);
+            
+        if (tx>=0 && ty>=0){    
+            t.setAttribute('rotation',(alpha-45));
+        } else if (tx<0 && ty>=0){
+            t.setAttribute('rotation',(45+90-alpha));
+        } else if (tx<0 && ty<0){
+            t.setAttribute('rotation',(alpha+45+90));
+        } else if (tx>0 && ty<=0){
+            t.setAttribute('rotation',(45-alpha-90));
+        }
+        
+        //Scaling
+        var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
+        
+
+        //Set previous to null
+        this.prevx = null;
+        this.prevy = null;  
+        
+        currentlayer.strokeStyle = this.currentdrawarrowlinestroke;
+        currentlayer.lineWidth = this.currentdrawarrowlinelineWidth;
+        currentlayer.fillstyle = '0x000000';
+        ]]>
+    </method> 
+    
+    <!--
+        @keywords deprecated
+     -->
+    <method name="__startDrawarrowline" args="oid_name">
+        <![CDATA[
+        if (oid_name == null) {
+            oid_name = 'drawarrow'+this.getCounter();
+        }
+        
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width+2,height:this.height+2,
+            opacity:this.currentdrawarrowOpacity});
+            
+        var distance_x = Math.abs(this.startx - this.endx);
+        var distance_y = Math.abs(this.starty - this.endy);
+        
+        var point_distance_x = Math.round( distance_x/10 );
+        var point_distance_y = Math.round( distance_y/10 );
+        
+        if (this.startx <= this.endx && this.starty >= this.endy) {
+            
+            currentlayer.lineWidth = this.currentrectangleineWidth;
+            currentlayer.beginPath();
+            currentlayer.moveTo(this.startx,this.starty); //1
+            currentlayer.lineTo(this.startx-point_distance_x,this.starty-point_distance_y); //2
+            currentlayer.lineTo(this.endx-point_distance_x*3,this.endy+point_distance_y); //3
+            currentlayer.lineTo(this.endx-point_distance_x*4,this.endy); //4
+            currentlayer.lineTo(this.endx,this.endy); //5
+            currentlayer.lineTo(this.endx,this.endy+point_distance_y*4); //6
+            currentlayer.lineTo(this.endx-point_distance_x,this.endy+point_distance_y*3); //7
+            currentlayer.lineTo(this.startx+point_distance_x,this.starty+point_distance_y); //8
+            currentlayer.lineTo(this.startx,this.starty); //9
+            this.closePath();
+            
+            currentlayer.strokeStyle = 0x000000;
+            currentlayer.stroke();
+
+            currentlayer.fillStyle = this.currentdrawarrowlinelineWidth;
+            currentlayer.fill();
+            
+        }
+        
+        ]]>
+    </method>
+    <!--
+        @keywords deprecated
+     -->
+    <method name="_endDrawarrowline">
+        //Debug.write("endDrawarrowline",this.startx,this.starty,this.endx,this.endy);
+        <![CDATA[
+        var tempName = this.currentlayer.name;
+        //Debug.write("tempName: ",tempName);
+        this.currentlayer.destroy();
+        
+        //GetBounds of that Object
+        var minx = this.width+2;
+        var miny = this.height+2;
+        var maxx = -2;
+        var maxy = -2;
+
+        if (this.startx<minx) minx=this.startx;
+        if (this.endx<minx) minx=this.endx;
+        
+        if (this.startx>maxx) maxx=this.startx;
+        if (this.endx>maxx) maxx=this.endx;
+        
+        if (this.starty<miny) miny=this.starty;
+        if (this.endy<miny) miny=this.endy;
+        
+        if (this.starty>maxy) maxy=this.starty;
+        if (this.endy>maxy) maxy=this.endy;
+        
+        var width = maxx-minx;
+        var height = maxy-miny;
+        
+        //Debug.write("minx,miny,width,height: ",minx,miny,width,height);
+
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:tempName,x:minx-1,y:miny-1,width:width,height:height,
+            opacity:this.currentdrawarrowOpacity});
+            
+        this.currentlayer.fillstyle = '0x000000';
+        this.currentlayer.lineWidth = this.currentdrawarrowlinelineWidth;
+        this.currentlayer.strokeStyle = this.currentdrawarrowlinestroke;
+        
+        //Debug.write("this.currentlayer: ",this.currentlayer);
+
+        var t = new lz.drawArrowWhiteBoard(this.currentlayer,{x:0,y:0});
+
+        //Color
+        //t.setTint(this.currentdrawarrowlinestroke,60);
+        t.setColor(this.currentdrawarrowlinestroke);
+        
+        var tx = this.endx-this.startx;
+        var ty = this.endy-this.starty;
+
+        var gegenkathete = Math.abs(ty);
+        var ankathete = Math.abs(tx); 
+        var hypothenuse = Math.sqrt((ankathete*ankathete)+(gegenkathete*gegenkathete));
+        var sinAlpha = (gegenkathete/hypothenuse);
+        var alpha = Math.asin(sinAlpha);
+        alpha = alpha/(Math.PI/180);
+            
+        var newx = 0;
+        var newy = 0;
+        if (tx>=0 && ty>=0){    
+            t.setAttribute('rotation',(alpha-45));
+        } else if (tx<0 && ty>=0){
+            newx = width;
+            t.setAttribute('rotation',(45+90-alpha));
+        } else if (tx<0 && ty<0){
+            newy = height;
+            newx = width;
+            t.setAttribute('rotation',(alpha+45+90));
+        } else if (tx>0 && ty<=0){
+            newy = height;
+            t.setAttribute('rotation',(45-alpha-90));
+        }
+        
+        t.setAttribute('x',newx);
+        t.setAttribute('y',newy);
+        
+        //Scaling
+        var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
+        
+
+        //Set previous to null
+        this.prevx = null;
+        this.prevy = null;  
+        
+        //Add Layer to global Layer     
+        this.layers.push(this.currentlayer);  
+        ]]>
+        this.drawarrowlineregisterFinal();
+        this.currentlayer = new LzView();
+        //Debug.write("t: ",t);
+    </method> 
+    
+</class>
+
+</library>

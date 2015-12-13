@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+
+<!---
+	Contains no microphone or camera Object, this view can only 
+	subscribe to a video or live-stream
+
+ -->
+	
+<class name="tempTextBox" extends="view" width="120" height="40" bgcolor="0x000000">
+	
+	<attribute name="isStopped" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+		parent.sendCursorVisible(false);
+        lz.Timer.addTimer( new LzDelegate( this, "removeThis" ), 3000 );
+    </handler>
+    
+    <method name="removeThis" args="refObj">
+        this._out.setAttribute('started', true);
+    </method>
+    
+    <animator name="_out" attribute="opacity" to="0" 
+    		  duration="750" started="false">
+    	<handler name="onstop">
+    		if (parent.isStopped) {
+    			return;
+    		}
+    		parent.isStopped = true;
+    		parent._bg._in.stop();
+    		parent._bg._out.stop();
+    		parent.destroy();
+    		parent.parent.sendCursorVisible(true);
+    	</handler>
+    </animator>
+    
+	<view name="_bg" bgcolor="0x7fff00" width="$once{ parent.width }"
+		  height="$once{ parent.height }">
+		<handler name="oninit">
+			this._in.setAttribute('started', true);
+		</handler>
+		
+		<animator name="_out" attribute="opacity" to="0.3" 
+              duration="250" started="false">
+            <handler name="onstop">
+            	if (parent.parent.isStopped) {
+                    return;
+                }
+                parent._in.setAttribute('started', true);
+            </handler>
+        </animator>
+        
+        <animator name="_in" attribute="opacity" to="1" 
+              duration="250" started="false">
+            <handler name="onstop">
+            	if (parent.parent.isStopped) {
+            		return;
+            	}
+                parent._out.setAttribute('started', true);
+            </handler>
+        </animator>
+		
+	</view>
+	
+	<view name="_bg2" bgcolor="0x7fff00" width="$once{ parent.width }" height="18">
+		<labelText x="2" y="1" labelid="1124" />
+	</view>
+	
+	<inputtext name="_text" width="$once{ parent.width - 4 }" height="20" y="18"
+			   bgcolor="0xFFFFFF" x="2" >
+		<handler name="ontext" args="txt">
+			if ($debug) Debug.warn("ontext ",txt);
+			parent.parent.doBroadcastText(txt);
+			parent._out.setAttribute('started', true);
+		</handler>
+	</inputtext>
+	
+</class>	
+
+<class name="copiedTextPopup" extends="labelExplorerBox" labelid="1121"
+    docking="true" resizeable="true" closable="true" y="100"
+    x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
+
+    <attribute name="error" value="" type="string" />
+    
+    <view name="_box" y="24" width="${ parent.width - 20 }" 
+    	  height="${ parent.height - 50 }" x="10" clip="true">
+        <text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+            multiline="true" width="${ parent.width - 16 }" selectable="true" />
+    </view>
+    
+    <simpleLabelButton labelid="642" width="100" x="${ parent.width-105 }" 
+           y="${ parent.height-24 }" onclick="this.parent.close();" />
+
+</class>
+			
+<class name="screenShareCursorObject" extends="view" resource="menupointer_rsc">
+	
+	<attribute name="refObj" value="null" />
+	
+    <contextmenu>
+            
+        <handler name="onmenuopen">
+            parent.refObj.currentX = parent.refObj.getMouse("x");
+            parent.refObj.currentY = parent.refObj.getMouse("y");
+            if ($debug) Debug.write("onmenuopen x,y ",parent.currentX,parent.currentY);
+        </handler>
+        
+        <contextmenuitem caption="$once{ canvas.getLabelName(1119) }" 
+                         onselect="parent.parent.refObj.insertText()" />
+        
+        <contextmenuitem caption="$once{ canvas.getLabelName(1120) }" 
+                         onselect="parent.parent.refObj.copyFromRemote()" />
+                         
+        <contextmenuitem caption="$once{ canvas.getLabelName(1122) }" 
+                         onselect="parent.parent.refObj.showFromRemote()" />
+                         
+    </contextmenu>
+</class>			
+					   
+<class name="videoObjectPlayScreenShare" extends="view">
+	
+    <baseVideoStream name="_videostream" bgcolor="black" 
+          width="${parent.width}" height="${parent.height}" >
+    	
+    	<attribute name="currentX" value="0" type="number" />
+    	<attribute name="currentY" value="0" type="number" />
+    	
+    	<method name="insertText">
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		new lz.tempTextBox(this,{
+                		   x:this.currentX,
+                		   y:this.currentY
+                		});
+    		} else {
+    			new lz.labelerrorPopupSWF10(canvas,{
+                               errorlabelid:1125
+                            });
+    		}
+    	</method>
+    	
+    	<method name="sendCursorVisible" args="bool">
+    		if (bool) {
+    			parent.parent.parent.parent.currentCursorObject.setAttribute("visibility","visible");
+    		} else {
+    			parent.parent.parent.parent.currentCursorObject.setAttribute("visibility","hidden");
+    		}
+    	</method>
+    	
+    	<method name="doBroadcastText" args="txt">
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		var tObject = new Object();
+                tObject["action"] = "paste";
+                
+                tObject["paste"] = txt;
+                
+                parent.sendRemoteCursorEvent.tObject = tObject;
+                
+                if ($debug) Debug.warn("doBroadcastText :: ",txt);
+                
+                parent.sendRemoteCursorEvent.doCall();
+    		} else {
+    			new lz.labelerrorPopupSWF10(canvas,{
+                               errorlabelid:1125
+                            });
+    		}
+    	</method>
+    	
+    	<method name="copyFromRemote">
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		var tObject = new Object();
+                tObject["action"] = "copy";
+                
+                tObject["clientId"] = canvas.streamid;
+                
+        		parent.sendRemoteCursorEvent.tObject = tObject;
+                parent.sendRemoteCursorEvent.doCall();
+    		} else {
+    			new lz.labelerrorPopupSWF10(canvas,{
+                			   errorlabelid:1125
+                			});
+    		}
+    	</method>
+    	
+    	<method name="showFromRemote">
+            var tObject = new Object();
+            tObject["action"] = "show";
+            
+            tObject["clientId"] = canvas.streamid;
+            
+            parent.sendRemoteCursorEvent.tObject = tObject;
+            parent.sendRemoteCursorEvent.doCall();
+        </method>
+    	
+    	<contextmenu>
+    		
+    		<handler name="onmenuopen">
+    			parent.currentX = parent.getMouse("x");
+    			parent.currentY = parent.getMouse("y");
+    			if ($debug) Debug.write("onmenuopen x,y ",parent.currentX,parent.currentY);
+    		</handler>
+            
+            <contextmenuitem caption="$once{ canvas.getLabelName(1119) }" 
+                             onselect="parent.parent.insertText()" />
+            
+            <contextmenuitem caption="$once{ canvas.getLabelName(1120) }" 
+                             onselect="parent.parent.copyFromRemote()" />
+                             
+            <contextmenuitem caption="$once{ canvas.getLabelName(1122) }" 
+                             onselect="parent.parent.showFromRemote()" />
+                             
+        </contextmenu>
+        
+    </baseVideoStream>
+        
+</class>
+
+</library>

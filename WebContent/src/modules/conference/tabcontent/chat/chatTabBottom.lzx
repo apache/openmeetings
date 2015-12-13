@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<!--- View of the buttom area of chat. It contains buttons of message,emoticons,clear. -->
+	<class name="chatTabBottom" extends="view" height="42">
+		<attribute name="isPrivate" value="false" type="boolean" />
+		
+		<view x="0" y="0" height="20" width="${ parent.width-2 }" name="message"
+			bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+			<method name="getText">
+				return this._ctext.getText();
+			</method>
+			<method name="setText" args="txt">
+				this._ctext.setAttribute('text',txt);
+			</method>
+			<customInputtext name="_ctext" width="${ parent.width-2 }"
+				height="$once{ parent.height-2 }" x="1" y="1" bgcolor="white">
+				<handler name="onkeyup" args="key">
+	                <![CDATA[
+	                var reverse = canvas.reverseAll(parent.getText());
+	                
+	                // parent.setText(reverse);
+	                // 13 is return
+	                if ((key==27) || (key==13)) {
+	                	this.parent._button.onclick.sendEvent();
+	                }
+	                ]]>
+				</handler>
+			</customInputtext>
+
+			<attribute name="objMessage" value="null" />
+			
+			<simpleLabelButton name="_button" labelid="220"
+				height="21" width="80" x="$once{ parent.width-80 }">
+				<handler name="onclick">
+				<![CDATA[
+					var message = this.parent.getText();
+					if (message.length != 0) {
+						parent.objMessage = new Array();
+						var om = parent.objMessage;
+						om[0] = parent.parent.isPrivate ? 'privatechat' : 'chat';
+						//The server side will put time here
+						om[1] = "";
+						//if ($debug) Debug.write("Setting Message");
+						om[2] = 'newtextmessage';
+						om[3] = hib.userobject.login;
+						//if (parent.parent._inverseWording.getValue()) message = canvas.reverseAll(message)
+						om[4] = message;
+						om[5] = canvas.currentusercolor;
+						om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
+						om[7] = canvas.isrtl;
+						om[8] = hib.userobject.user_id;
+						om[9] = canvas.currentRoomObject.chatModerated && !canvas.ismoderator;
+						if ($debug) Debug.write("send: ", parent.parent.parent);
+						if (parent.parent.isPrivate) {
+							parent.sendMessageWithClientByPublicSID.doCall();
+						} else {
+							hib.sendChatMessageWithClient.sendMessage(om);
+						}
+						this.parent.setText('');
+					}
+				]]>
+				</handler>
+			</simpleLabelButton>
+
+			<netRemoteCallHib name="sendMessageWithClientByPublicSID"
+				funcname="chatservice.sendMessageWithClientByPublicSID" remotecontext="$once{ canvas.thishib }">
+				<netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>
+				<netparam><method name="getValue">return parent.parent.parent.parent.refObj.publicSID;</method></netparam>
+				<handler name="ondata" args="value">
+					//The onResult-Handler will be called be the rtmpconnection
+					if ($debug) Debug.write("chatservice.sendMessageWithClientByPublicSID getValue : ",value);
+				</handler>
+			</netRemoteCallHib>
+		</view>
+
+		<labelCheckbox name="_inverseWording" x="2" y="24"
+			labelid="580">
+			<attribute name="doUpdate" value="false" type="boolean" />
+			<handler name="oninit">
+				var g = canvas.getUserData();
+				var save = g["rtlCheckbox"];
+				//if ($debug) Debug.write("oninit doUpdate",save,g);
+				if(save) {
+					this.doUpdate = false;
+					this.setValue(true);
+				}
+				this.doUpdate = true;
+			</handler>
+			<handler name="onvalue" args="v">
+				if (this.doUpdate) {
+					//if ($debug) Debug.write("onvalue doUpdate",this.getValue());
+					var g = canvas.getUserData();
+					g["rtlCheckbox"]=this.getValue();
+					//if ($debug) Debug.write("onvalue doUpdate",g["rtlCheckbox"]);
+					canvas.setUserData(g);
+				}
+			</handler>
+			<labelTooltip labelid="581" />
+		</labelCheckbox>
+
+		<method name="updatefontbuttonvisible">
+			if ($debug) Debug.write("chatTabBottom updatefontbuttonvisible allowFontStyles",
+						canvas.currentRoomObject.allowFontStyles);
+			_button.fontbutton.setVisible(canvas.currentRoomObject.allowFontStyles == true ||
+			    			   canvas.currentRoomObject.allowFontStyles == null);
+		</method>
+
+		<view name="_button" width="140" y="22" align="right">
+
+			<miniIconsImage name="fontbutton" y="2" x="62" width="16" height="16" 
+				showhandcursor="true" src="$once{ canvas.getThemeImage('font_style') }" >
+        		<handler name="onclick">
+        			var pick = new lz.fontOptions(canvas,{
+						btnRef:this.parent.parent,
+						x:(this.getAttributeRelative('x',canvas)-130),
+						y:(this.getAttributeRelative('y',canvas)-42)
+					});
+					lz.ModeManager.makeModal(pick);   
+        		</handler>
+        		<handler name="onmouseover">
+        			<!-- lost selection workaround -->
+        			parent.parent.message._ctext.saveselection();
+        		</handler>
+        		<labelTooltip labelid="1530" />
+        	</miniIconsImage>
+
+			<miniIcons y="2" x="82" resource="smile_chat_log_rsc"
+				width="16" height="16" showhandcursor="true">
+				<handler name="onclick">
+					var pick = new lz.emotIconsSelector(canvas,{
+						btnRef:this.parent.parent,
+						x:(this.getAttributeRelative('x',canvas)-140),
+						y:(this.getAttributeRelative('y',canvas)-140)
+					});
+					lz.ModeManager.makeModal( pick );
+				</handler>
+				<labelTooltip labelid="445" />
+			</miniIcons>
+
+			<miniIcons y="2" x="102" resource="copy_chat_log_rsc"
+				width="16" height="16" showhandcursor="true" visible="$once{ !parent.parent.isPrivate }">
+				<handler name="onclick">
+                <![CDATA[
+                    var tString = canvas._chatcontent.getLog();
+                    new lz.showChatLog(canvas,{
+                                    error:tString
+                                });
+                ]]>
+				</handler>
+				<labelTooltip labelid="1200" />
+			</miniIcons>
+
+			<miniIconsImage src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
+				y="2" x="122" width="16" height="16" showhandcursor="true"
+				visible="$once{ !parent.parent.isPrivate }">
+				<handler name="onclick">
+					if (!canvas.ismoderator) {
+					//Do not allow
+						new lz.labelerrorPopup(canvas,{errorlabelid:783});
+						return;
+					}
+					parent.clearChat.doCall();
+				</handler>
+				<labelTooltip labelid="442" />
+			</miniIconsImage>
+
+			<view width="1" />
+
+			<netRemoteCallHib name="clearChat" funcname="chatservice.clearChat"
+				remotecontext="$once{ canvas.thishib }">
+				<handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("clearChat : ",value);
+                ]]>
+				</handler>
+			</netRemoteCallHib>
+
+		</view>
+
+	</class>
+
+</library>

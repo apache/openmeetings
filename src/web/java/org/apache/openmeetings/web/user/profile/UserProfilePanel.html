@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<div class="user info panel">
+		<table>
+			<tr>
+				<td><div wicket:id="img"></div></td>
+				<td>
+					<table>
+						<tr>
+							<td><wicket:message key="1164"/></td><td><span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="1165"/></td><td><span wicket:id="timeZoneId"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="1296"/></td><td><span wicket:id="regdate"></span></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<div>
+			<fieldset class="ui-widget-content">
+				<legend class="ui-widget-header"><wicket:message key="1166"/></legend>
+				<table>
+					<tr>
+						<td><wicket:message key="1162"/></td>
+						<td><textarea wicket:id="userOffers"></textarea></td>
+					</tr>
+					<tr>
+						<td><wicket:message key="1163"/></td>
+						<td><textarea wicket:id="userSearchs"></textarea></td>
+					</tr>
+				</table>
+			</fieldset> 
+		</div>
+		<div>
+			<fieldset class="ui-widget-content">
+				<legend class="ui-widget-header"><wicket:message key="1167"/></legend>
+				<table wicket:id="address">
+					<tr>
+						<td><wicket:message key="607" /></td>
+						<td><span wicket:id="adresses.phone"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:message key="139" /></td>
+						<td><span wicket:id="adresses.street"></span>&nbsp;<span wicket:id="adresses.additionalname"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:message key="140" /></td>
+						<td><span wicket:id="adresses.zip"></span>&nbsp;<span wicket:id="adresses.town"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:message key="141" /></td>
+						<td><span wicket:id="adresses.states.name"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:message key="142" /></td>
+						<td><span wicket:id="adresses.comment"></span></td>
+					</tr>
+				</table>
+				<div wicket:id="addressDenied"></div>
+			</fieldset> 
+		</div>
+	</div>
+</wicket:panel>
+</html>
