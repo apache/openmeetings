@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!---
+Chat tabpane class. It contains chatOutput-class and catTabBottom-class.
+This is used in the conference.
+-->
+<class name="chatTab" extends="simpleBaseTabpane" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" x="0">
+	<view name="_chatoutputborder" height="${ parent.height-48 }" width="${ parent.width-2 }" 
+				bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+		
+		<chatOutput name="_chatoutput" x="1" y="1" >
+			<handler name="oninit">
+				canvas._chatcontent = this;
+			</handler>
+		</chatOutput>
+	</view>
+	
+	<chatTabBottom name="_chattabbottom" 
+				   y="${ parent.height-46 }" x="0" width="${ parent.width-2 }" />
+				   
+</class>
+
+<class name="chatTabPrivateChat" extends="simpleBaseTabpane" y="22" height="${ parent.height-22 }" 
+                 width="${ parent.width }">
+
+	<attribute name="refObj" value="null"/>
+	<attribute name="objMessage" value="null"/>
+	<attribute name="remoteOpen" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+		<![CDATA[
+			if (this.remoteOpen) {
+				return;
+			}
+			this.objMessage = new Array();
+			this.objMessage[0] = 'newprivatechat';
+			var u = canvas.thishib.userobject;
+			this.objMessage[1] = {
+				publicSID: canvas.publicSID
+				, firstname: u.firstname
+				, lastname: u.lastname
+				};
+			
+			this.sendMessageWithClientByPublicSID.doCall();
+			
+			if (canvas.currentRoomObject != null) {
+				_chattabbottom.updatefontbuttonvisible();
+			}
+		]]>
+	</handler>
+	
+    <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.refObj.publicSID; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("sendMessageWithClientByPublicSID getValue : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+	
+	<view name="_chatoutputborder" height="${ parent.height-48 }"
+       bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }"  width="${ parent.width-2 }">
+		
+		<chatOutput name="_chatoutput" x="1" y="1" />
+	</view>
+	
+	<chatTabBottom name="_chattabbottom" isPrivate="true" 
+				   y="${ parent.height-46 }" x="0" width="${ parent.width-2 }" />
+</class>
+</library>

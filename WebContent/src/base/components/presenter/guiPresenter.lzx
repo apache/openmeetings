@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>     
+
+<class name="guiPresenter" extends="view" width="250" height="400" 
+    clickable="$once{ this.isdragable }"
+	onmousedown="this._startDragState(this)" onmouseup="this._removeDragState(this)" >
+    
+    <handler name="oninit">
+        this.setShadow();
+    </handler>
+    
+    <method name="setShadow">
+        <![CDATA[
+        if (this.isinited && this.hasshadow){
+            this.normalMC = this.getDisplayObject();
+            this.displacementMap = new flash.filters.DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method>	    
+
+    <attribute name="hasshadow" value="true" type="boolean" />
+          
+	<!--- The Title of this Box -->
+	<attribute name="title" value="defaulttitle" type="string" />
+	
+	<!--- if this Box should be closeable -->
+	<attribute name="closable" value="true" type="boolean" />
+    
+    <!--- if this Box should be resizeable  -->
+    <attribute name="resizeable" value="true" type="boolean" />
+	
+	<!--- Can this Box be docked to others and 
+			the width/height of parent compoent barrier -->
+	<attribute name="docking" value="true" type="boolean" />
+	
+	<!--- Hard to explain but its clear if you play around 
+		with that. Its the number of minimum pixels before 
+		the "docking" effect will be there -->
+	<attribute name="dockingbarrier" value="15" type="number" />
+
+	<!---@keywords private the list of connected views -->
+	<attribute name="dockinglist" value="null" />
+	
+	<!--- @keywords private temp-older of x-distance to docked-Box  -->
+	<attribute name="tempXdistance" value="0" type="number" />
+
+	<!--- @keywords private temp-older of y-distance to docked-Box  -->
+	<attribute name="tempYdistance" value="0" type="number" />
+	
+	<!--- @keywords private is the Box minimized  -->
+	<attribute name="isopen" value="true" type="boolean" />
+	
+	<!--- @keywords private is the Box minimized  -->
+	<attribute name="open" value="true" type="boolean" />	
+	
+	<!--- @keywords private  -->
+	<attribute name="initheight" value="0" type="number" />
+    
+    <!--- @keywords private show minimize, maximize, close buttons -->
+    <attribute name="fullToolBar" value="true" type="boolean" />
+    
+    <attribute name="maximizable" value="true" type="boolean" />
+    
+    <attribute name="minimizable" value="true" type="boolean" />
+    
+    <attribute name="minimized" value="false" type="boolean" />
+    
+    <attribute name="customMinimizeMethod" value="false" type="boolean" />
+    
+    <attribute name="initialHeight" value="0" type="number"/>
+    
+    <!--- @keywords private if this window is dragable -->
+    <attribute name="isdragable" value="true" type="boolean" />
+    
+    <attribute name="_barmenuButtonRef" value="null" />
+    
+    <!--- if this Box should be resizeable  -->
+    <attribute name="ismaximized" value="false" type="boolean" />    
+    <attribute name="maxi_x" value="0" type="number" />
+    <attribute name="maxi_y" value="0" type="number" />
+    <attribute name="maxi_height" value="0" type="number" />
+    <attribute name="maxi_width" value="0" type="number" />
+    
+    <attribute name="isresizeing" value="false" type="boolean" />
+    
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="id">
+		this.labelid=id;
+		this.setAttribute('title',canvas.getLabelName(this.labelid));
+	</method>    
+	
+	<!--- the Event will be thrown if you close the Box -->
+	<event name="onclose" />    
+    
+	<!--- the Event will be thrown if you do click on it and drag -->
+	<event name="onactivate" />   
+    
+    <!--- this Event will be triggered after resizing -->
+    <event name="onresized" />
+    
+	<!--- @keywords private store initial height so toggleopen can reset height  -->
+	<handler name="oninit">
+		this.initheight=this.height;
+		//Debug.write("this.isopen: ",this.isopen);
+		if (!this.open) toggleopen();
+	</handler>
+    
+    <handler name="onwidth" args="w">
+        <![CDATA[
+            if (this.isresizeing){
+            	if (w<40){
+            		this.setAttribute('width',41); 
+            		this._resizeview.onmouseup.sendEvent();
+            	}
+                if (w<_titlebar._title.width+70) {
+                    this.setAttribute('width',_titlebar._title.width+71); 
+                    this._resizeview.onmouseup.sendEvent();
+                }
+            }
+        ]]>
+    </handler>
+    
+    <handler name="onheight" args="h">
+        <![CDATA[
+            if (this.isresizeing){
+                if (h<40) {
+                    this.setAttribute('height',41); 
+                    this._resizeview.onmouseup.sendEvent();
+                }
+            }
+        ]]>
+    </handler>
+    
+	<method name="close">
+		if (this.onclose) this.onclose.sendEvent();
+        if (this._barmenuButtonRef!=null){
+            this._barmenuButtonRef.destroy();
+            this._barmenuButtonRef.parent.onwidth.sendEvent();
+        }
+		this.destroy();
+	</method>
+    
+    <method name="minimize">
+        <![CDATA[
+	        this.setAttribute("minimized",true);
+	        
+	        this._titlebar._toolbar._minimize.setAttribute("visibility","hidden");
+	        this._titlebar._toolbar._maximize2.setAttribute("visibility","visible");
+	        
+	        if (this.customMinimizeMethod) {
+	            return;
+	        }
+	        
+	        for (var eg in this.subviews) {
+	            if (this.subviews[eg].name != "_titlebar" 
+	                    && this.subviews[eg].name != "_bg") {
+	                 this.subviews[eg].setAttribute("visibility","hidden");   
+	            }
+	        }
+            
+	        this.initialHeight = this.height;
+	        //this.setAttribute("height",20);
+            this._minimizeZoom.setAttribute("to",20);
+            this._minimizeZoom.setAttribute('started', true);
+        ]]>
+    </method>
+    
+    <method name="reminimize">
+        <![CDATA[
+	        this.setAttribute("minimized",false);
+	        
+	        this._titlebar._toolbar._minimize.setAttribute("visibility","visible");
+	        this._titlebar._toolbar._maximize2.setAttribute("visibility","hidden");
+	        
+	        if (this.customMinimizeMethod) {
+	            return;
+	        }
+	        
+	        //this.setAttribute("height",this.initialHeight); 
+            this._minimizeZoom.setAttribute("to",this.initialHeight);
+            this._minimizeZoom.setAttribute('started', true);
+        ]]>
+    </method>
+    
+    <method name="reminimizeComplete">
+        <![CDATA[
+	        if (!this.minimized) {
+	            
+	            for (var eg in this.subviews) {
+	                if (this.subviews[eg].name != "_titlebar" 
+	                        && this.subviews[eg].name != "_bg") {
+	                     this.subviews[eg].setAttribute("visibility","visible");   
+	                }
+	            }
+	            
+	            if (!this.resizeable) {
+	                this._resizeview.setAttribute("visibility","hidden");   
+	            }
+	        
+	        }
+        ]]>
+    </method>
+	
+	<method name="toggleopen">
+		//////Debug.write("this.isopen",this.isopen);
+		this.setAttribute('isopen',!this.isopen);
+		if (this.isopen){
+			_calcdockingList();
+			for (var eg in this.dockinglist){
+				if(this.dockinglist[eg].docking){
+					//////Debug.write("this.dockinglist[eg]: ",this.dockinglist[eg].title);
+					//////Debug.write("open new y",this.y+this.initheight);
+					this.dockinglist[eg].toggleOpenByParent(this.initheight-22);
+					this.dockinglist[eg].setAttribute('y',this.y+this.initheight);
+					
+				}
+			}			
+			this.setAttribute('height',this.initheight);
+		} else {
+			_calcdockingList();
+			for (var eg in this.dockinglist){
+				if(this.dockinglist[eg].docking){
+					//////Debug.write("this.dockinglist[eg]: ",this.dockinglist[eg].title);
+					this.dockinglist[eg].toggleOpenByParent(-(this.initheight-22));
+					this.dockinglist[eg].setAttribute('y',this.y+22);
+				}
+			}	
+			this.setAttribute('height',22);		
+		}
+	</method>
+	
+	<method name="toggleOpenByParent" args="changeY">
+		//////Debug.write("+++++ toggleOpenByParent +++++ changeY: ",this.title,changeY);
+		var tempList=new Array();
+		<![CDATA[
+		//check for dockable stuff which is connected to this Box
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				var proof=false;
+				//////Debug.write("found some: ",this.parent.subviews[eg].title);
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < 1 ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -1 ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					proof=true;
+				}
+					
+				if (proof) tempList.push(this.parent.subviews[eg]);
+			}
+		}
+		]]>
+		//////Debug.write("tempList.length: ",tempList.length);
+		if (tempList.length!=0){
+			for (var eg in tempList){
+				if(tempList[eg].docking){
+					//////Debug.write("toggleOpenByParent 1 [eg],changeY: ",tempList[eg].title,changeY);
+					tempList[eg].toggleOpenByParent(changeY);
+					tempList[eg].setAttribute('y',tempList[eg].y+changeY);
+				}
+			}	
+		}
+		
+	</method>
+    
+    <method name="activate">
+        this.onactivate.sendEvent();
+        this.bringToFront();
+        if (this._barmenuButtonRef!=null) this._barmenuButtonRef.sendActiveWindow(this);
+    </method>
+    
+    <method name="rsapply">
+        this.isresizeing=true;
+        this.rs.apply();
+    </method>
+    
+    <method name="rsremove">
+        this.rs.remove();
+        this.isresizeing=false;
+        //Debug.write("rsremove",this,this.isinited);
+        this.onresized.sendEvent();
+    </method>    
+    	
+	<!--- @keywords private  -->
+	<method name="_removeDragState" args="obj">
+        if (!this.ismaximized){
+            //It's important to remove the dragger and do docking stuff before you check for conencted Boxes
+            dragger.remove();
+            if (obj==this){
+                if (docking) arrangePosition();
+            } else {
+                if (docking) _lookforParentOnly(obj);
+            }
+                
+            //check for connected Boxes
+            for (var eg in this.dockinglist){
+                if(this.dockinglist[eg].docking){
+                    this.dockinglist[eg]._removeDragState(this);
+                }
+            }
+        }
+	</method>
+
+
+	
+	<!--- @keywords private
+		the arg obj is needed because the dragging can be called by the Box itself
+		or by a Box which is connected to this Box!  -->
+	<method name="_startDragState" args="obj">
+        this.activate();
+        if (!this.ismaximized){
+            _calcdockingList();
+            for (var eg in this.dockinglist){
+                if(this.dockinglist[eg].docking){
+                    this.dockinglist[eg]._startDragState(this);
+                }
+            }
+            //store position cause it wasn't dragged by itself
+            if (obj!=this){
+                storeAdjustmentToParent(obj.x,obj.y);
+            }
+            dragger.apply();
+        }
+	</method>
+	
+	<!--- Calc the List of Boxes which will be dragged and setposition if this Box
+		will be dragged,docked or minimized/maximized  -->
+	<method name="_calcdockingList">
+		//Clear list of conencted Boxes
+		this.dockinglist=new Array();
+		<![CDATA[
+		//check for dockable stuff which is connected to this Box
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				var proof=false;
+
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < 1 ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -1 ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					proof=true;
+				}
+
+				if (proof) this.dockinglist.push(this.parent.subviews[eg]);
+			}
+		}
+		]]>
+		//////Debug.write("this.dockinglist.length:",this.dockinglist.length);
+	</method>
+	
+	<!--- @keywords private  -->
+	<method name="arrangePosition">
+		//do the magic
+		//the idea is: look for all on the view container one level above this one
+		//and look for the width/height and 0/0 and look for "dockable" stuff there
+		var newx=this.x;
+		var newy=this.y;
+	  
+		<![CDATA[
+				
+		for (var eg in this.parent.subviews){
+			//check that you do not calc with yourself
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+				// there are 4 cases which have to be proofed to check every possible situation
+				//left box-border
+				if ( ( ((this.x+this.width)-this.parent.subviews[eg].x) < this.dockingbarrier ) && ( ((this.x+this.width)-this.parent.subviews[eg].x) > -this.dockingbarrier ) &&  ( (this.y+this.height) > this.parent.subviews[eg].y ) &&  ( this.y < (this.parent.subviews[eg].y+this.parent.subviews[eg].height) ) ){
+					newx= ( this.parent.subviews[eg].x - this.width );
+				}
+				//right box-border
+				if ( ( ((this.parent.subviews[eg].x+this.parent.subviews[eg].width)-this.x)<this.dockingbarrier ) && ( ((this.parent.subviews[eg].x+this.parent.subviews[eg].width)-this.x)>-this.dockingbarrier ) &&  ( (this.y+this.height) > this.parent.subviews[eg].y ) &&  ( this.y < (this.parent.subviews[eg].y+this.parent.subviews[eg].height) ) ){
+					newx= ( this.parent.subviews[eg].x + this.parent.subviews[eg].width );
+				}
+				//top box-border
+				if  ( ( ((this.y+this.height)-this.parent.subviews[eg].y) < this.dockingbarrier ) && ( ((this.y+this.height)-this.parent.subviews[eg].y) > -this.dockingbarrier ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					newy = this.parent.subviews[eg].y-this.height;
+				}
+				//bottom box-border
+				if ( ( ((this.parent.subviews[eg].y+this.parent.subviews[eg].height)-this.y) < this.dockingbarrier ) && ( ((this.parent.subviews[eg].y+this.parent.subviews[eg].height)-this.y) > -this.dockingbarrier ) && ( (this.x+this.width) > this.parent.subviews[eg].x )  && ( this.x < (this.parent.subviews[eg].x+this.parent.subviews[eg].width) ) ){
+					newy = this.parent.subviews[eg].y+this.parent.subviews[eg].height;
+				}
+			}
+		}
+		
+		//Check for Borders
+		//should be done _after_ checking for other dockable stuff so it gets 
+		//priority to dock against the border of parent view
+		if (this.x<this.dockingbarrier){
+			newx=0;
+		}
+		if (this.y<this.dockingbarrier){
+			newy=0;
+		}
+		if ( (this.parent.width-(this.x+this.width))<this.dockingbarrier){
+			newx=this.parent.width-this.width;
+		}
+		if ( (this.parent.height-(this.y+this.height))<this.dockingbarrier){
+			newy=this.parent.height-this.height;
+		}
+
+		//set position
+		this.setAttribute('x',newx);
+		this.setAttribute('y',newy);
+		]]>
+	</method>
+	
+	<method name="storeAdjustmentToParent" args="objX,objY">
+		this.tempXdistance=objX-this.x;
+		this.tempYdistance=objY-this.y;
+	</method>
+	
+	<!--- @keywords private 
+		this method is needed because if the dragging end and
+		it was not dragged _itself_ it was draged just because a connected
+		dockable Box was dragged than it could be that the connected
+		Box was forced to dock against something different onmouseup
+		so you have to rearrange the old "adjustment"	-->
+	<method name="_lookforParentOnly" args="obj">
+		<![CDATA[		
+		var newx=obj.x-tempXdistance;
+		var newy=obj.y-tempYdistance;
+		
+		this.setAttribute('x',newx);
+		this.setAttribute('y',newy);
+		]]>
+	</method>
+	
+	<dragstate name="dragger" />
+    
+	<view name="_bg" width="${ this.parent.width }" height="${ this.parent.height }" 
+        bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" > 
+        <view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }"
+             x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" />
+    </view>        
+    
+	<view x="1" y="1" width="${ this.parent.width-1 }" height="20" name="_titlebar" >
+		<!-- stretches="width" -->
+		<gradientview x="0" width="${ this.parent.width }" height="20"
+				colorFrom="$once{ canvas.getThemeColor('baseMousecolorizer') }"
+				colorTo="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" >
+		</gradientview>
+		
+        <text name="_title" fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
+			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
+			
+	    <view name="_toolbar" visibility="$once{ ((parent.parent.fullToolBar) ? 'visible' : 'hidden' ) }" 
+	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
+            
+            <miniIconsPresenter name="_minimize"
+                visibility="$once{ ((parent.parent.parent.minimizable) ? 'visible' : 'hidden' ) }" 
+                iconRessourceName="btn_presenter_minimize">
+                <handler name="onclick">
+                    this.parent.parent.parent.minimize();
+                </handler>
+                <labelTooltip labelid="856" />
+            </miniIconsPresenter>
+            
+            <miniIconsPresenter name="_maximize2" visibility="hidden"
+                iconRessourceName="btn_presenter_maximize">
+                <handler name="onclick">
+                    this.parent.parent.parent.reminimize();
+                </handler>
+                <labelTooltip labelid="857" />
+            </miniIconsPresenter>
+            
+	        <miniIconsPresenter name="_close"
+	            visibility="$once{ ((parent.parent.parent.closable) ? 'visible' : 'hidden' ) }"
+	            iconRessourceName="btn_presenter_close2">
+	            <handler name="onclick">
+	                this.parent.parent.parent.close();
+	            </handler>
+	            <labelTooltip labelid="430" />
+	        </miniIconsPresenter>  
+            
+	    </view>  			
+	</view>
+    <handler name="onaddsubview" args="v">
+		//Debug.write("onaddsubview",v);
+		if (v.parent.subviews.length>2) this._resizeview.bringToFront();
+    </handler>
+    <view visibility="$once{ ((this.parent.resizeable) ? 'visible' : 'hidden' ) }"
+        name="_resizeview" x="${ this.parent.width - 16 }" 
+        y="${ this.parent.height - 16 }" resource="explorer_resize_rsc" 
+        cursor="explorer_resizemouse_rsc" onmousedown="this.parent.rsapply()"
+        onmouseup="this.parent.rsremove()" >
+        <labelTooltip text="resize" />
+    </view>    
+    <resizestate name="rs"/>
+    
+    <animator name="_minimizeZoom" attribute="height" 
+              duration="750" to="20" started="false">
+        <handler name="onstop" args="s">
+            parent.reminimizeComplete();
+        </handler>
+    </animator>
+    
+</class>
+
+<class name="miniIconsPresenter" extends="view">
+    
+    <attribute name="iconRessourceName" value="" type="string"/>
+    
+    <handler name="onmouseover">
+        this._bg.setAttribute("bgcolor",0xFFFFFF);
+        this._bg.setAttribute("visibility","visible");
+    </handler>
+    
+    <handler name="onmouseout">
+        this._bg.setAttribute("visibility","hidden");
+    </handler>
+    
+    <handler name="onmousedown">
+        this._bg.setAttribute("bgcolor",canvas.getThemeColor('basebgcolorizer'));
+        this._bg.setAttribute("visibility","visible");
+    </handler>
+    
+    <handler name="onmouseup">
+        this._bg.setAttribute("visibility","hidden");
+    </handler>
+    
+    <view name="_bg" visibility="hidden" opacity="0.7"
+          width="14" height="14" x="1" y="1" bgcolor="0xFFFFFF" />
+          
+    <view name="_itemRsc" resource="$once{ parent.iconRessourceName }" />
+    
+</class>
+
+</library>

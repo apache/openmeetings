@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Рекомендации
+				для настроек продукта<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			По умолчанию {0} использует интегрированную базу данных Apache Derby. В 
+			продакшине Вы должны задуматься об использовании таких баз, как  <a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
+			или например <a target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
+			или <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a>
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Для возможности
+				загрузки и импорта изображений на доску<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>ImageMagick</strong> на Ваш сервер, более
+					подробную информацию касающуюся установки можно посмотреть тут <a target="_blank"
+					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
+					Инструкцию по установке Вы можете найти здесь
+					<a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
+					однако в большинстве систем Линукс Вы можете установить его через Ваш 
+					менеджер пакетов (apt-get it)
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Для возможности
+				импорта PDF файлов на доску<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>GhostScript</strong> на Ваш сервер, более подробную
+					информацию Вы можете посмотреть на сайте <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
+					Инструкции по установке Вы можете
+					найти здесь, однако в большинстве систем Линукс Вы можете установить его через Ваш 
+					менеджер пакетов (apt-get it).
+				</li>
+				<li>Установите <strong>SWFTools</strong> на Ваш сервер, более подробную информацию
+					можно найти на сайте <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
+					Некоторые дистрибутивы Линукс уже включают его
+					в свои менеджеры пакетов, посмотреть можно здесь <a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
+					для установки рекомендуется <strong>SWFTools</strong> версии 0.9 так как 
+					предыдущая версия содержит баг который приводил к ошибке отображения размеров объекта 
+					на доске
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Для возможности
+				импорта файлов .doc, .docx, .ppt, .pptx, ... и прочих документов на
+				доску<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li><strong>OpenOffice-Service</strong> запускается и прослушивает
+					порт 8100, подробности можно посмотреть здесь <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
+					</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Для возможности
+				записи и импорта файлов .avi, .flv, .mov и .mp4 на доску<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>FFMpeg</strong>. Вы должны получить последнюю версию
+					FFMPEG! Для Windows Вы можете скачать программу с этого
+					сайта <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Пользователи Linux 
+					или OSx могут использовать одну из различных
+					Инструкций по установке из Сети. Вы должны установить libmp3lame!
+				</li>
+				<li>Установите <strong>SoX</strong> <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					Вы должны установить последнюю версию SoX! SoX 12.xx не будет
+					работать!
+				</li>
+			</ul>
+		</li>
+	</ol>
+
+	<br />
+	<b> <span style="font-size: 1.2em">Если у Вас остались
+			вопросы или Вам требуется поддержка по установке или хостингу:</span></b>
+	
+	<br />
+	<br />
+	<b><span style="font-size: 1.2em">Поддержка сообщества:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Список рассылки</a></span>
+	<br />
+    <br />
+	<br />
+    <b> <span style="font-size: 1.4em">Это компании,
+        которые также оказывают коммерческую поддержку Apache OpenMeetings:</span></b>
+	<br />
+	<br />
+    
+	<span style="font-size: 1.3em"><a
+		href="http://openmeetings.apache.org/commercial-support.html"
+		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
+	<br />
+	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Пользовательские данные</entry>
+	<entry key="install.wizard.params.step1.username">Логин</entry>
+	<entry key="install.wizard.params.step1.username.title">Введите логин пользователя</entry>
+	<entry key="install.wizard.params.step1.password">Пароль</entry>
+	<entry key="install.wizard.params.step1.password.title">Введите пароль</entry>
+	<entry key="install.wizard.params.step1.email">Электронная почта</entry>
+	<entry key="install.wizard.params.step1.email.title">Введите адрес электронной почты</entry>
+	<entry key="install.wizard.params.step1.tz">Часовой пояс пользователя</entry>
+	<entry key="install.wizard.params.step1.groupdata">Организация(Домен)</entry>
+	<entry key="install.wizard.params.step1.group">Наименование</entry>
+	<entry key="install.wizard.params.step1.group.title">Введите организацию по умолчанию</entry>
+
+	<entry key="install.wizard.params.step2.configuration">Конфигурация</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Разрешить саморегистрацию (allow_frontend_register)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">Посылать сообщения новым пользователям (sendEmailAtRegister)</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Новые пользователи должны подтвердить свой Email (sendEmailWithVerficationCode)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">По умолчанию создать комнаты всех типов</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Электронная почта рассылки (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Введите адрес электронной почты с которой будет отправляться информация</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP-Сервер (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Введите адрес SMTP-Сервера</entry>
+	<entry key="install.wizard.params.step2.smtpPort">Порт SMTP-сервера (по умолчению 25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Введите порт SMTP-Сервера, обычно 25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Пользователь (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Введите логин для электронной почты</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Пароль пользователя (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Введите пароль для электронной почты</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">Включить проверку TLS на почтовом сервере</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">Устанавливать адрес электронной
+					почты организатора, как адрес ответа на приглашения  (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Язык по умолчанию</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Шрифт для экспорта по умолчанию [default_export_font]</entry>
+
+	<entry key="install.wizard.params.step3.converters">Конвертеры</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> смотрите также</entry>
+	<entry key="install.wizard.params.step3.installation">Установка</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools масштабирование</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">Укажите разрешение (dpi), которое вы будите использовать для конвертации PDF в SWF</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">
+		DPI которое swftools будет использовать для конвертации PDF в SWF. По умолчанию 100 dpi.
+	</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Качество</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">Укажите качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">
+		Качество встроенного jpeg изображения. 0 плохое (маленькое),
+		100 высокое (большое). (по умолчанию:85)
+	</entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools Путь</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Укажите путь к swftools например C:/swftools (Windows) или или не заполняйте данное поле если путь к swftools задан в системных путях</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">
+		Вы можете проверить, настроен ли запуск swftools на Вашей системе
+		с помошью командной строки или shell или cmd-prompt набрав команду pdf2swf. Если будет показан
+		список опций оставьте это поле пустым, в противном случае вы должны
+		указать путь к pdf2swf на Вашей системе,
+	</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Путь</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">Укажите путь к ImageMagick, или не заполняйте данное поле если ImageMagick установлен в путях Вашей системы</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Путь</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">Укажите путь к FFMPEG, или не заполняйте данное поле если FFMPEG установлен в путях Вашей системы</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath">SoX Путь</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Укажите путь к SoX, или не заполняйте данное поле если SoX установлен в путях Вашей системы</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath">JOD Путь</entry>
+	<entry key="install.wizard.params.step3.jodPath.title">Путь к библиотеке JOD (http://code.google.com/p/jodconverter), сконфигурируйте путь, указываюший на папку библиотеки JOD, которая содержит jodconverter-core-version.jar файл</entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Путь для jodconverter</entry>
+	<entry key="install.wizard.params.step3.officePath.title">Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот путь в случае когда jodconverter не в состоянии найти автоматически путь к  установленному OpenOffice/LibreOffice</entry>
+	<entry key="install.wizard.params.step3.officePath.text">
+		Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот путь
+		в случае когда jodconverter не в состоянии найти
+		путь к установленному OpenOffice/LibreOffice
+	</entry>
+
+	<entry key="install.wizard.params.step4.crypt">Тип шифрования</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Класс шифрования</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">Укажите имя класса для шифрования. НЕ ИЗМЕНЯЙТЕ УКАЗАННЫЙ КЛАСС ЕСЛИ ВЫ В ЭТОМ НЕ УВЕРЕНЫ</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Вы можете использовать заданный по умолчанию тип шифрования, который соответствует
+		функционалу PHP-MD5 или BSD-Style шифрованию, используя:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>.
+		Дополнительную информацию или описание создания собственного класса шифрования смотрите тут: <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Пользовательский механизм шифрования</a> Вы можете изменить это
+		значение позже, НО созданные ранее Пользователи и Сессии могут быть
+		не доступны в дальнейшем
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP">Конфигурация red5SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">Разрешить SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">Разрешить интеграцию с red5SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">Префикс дла комнат SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">Префикс для номеров телефонов для входа в комнаты</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">Окружение расширений SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Окружение расширений Asterisk</entry>
+
+	<entry key="install.wizard.install.desc">Пожалуйста нажмите кнопку "Закончить" для запуска установки!</entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter">Вход в приложение</entry>
+	<entry key="install.wizard.congrats.port">Если Ваш Red5-сервер запущен на другом порту или на другом домене</entry>
+	<entry key="install.wizard.congrats.config">измените конфигурацию клиента</entry>
+	<entry key="install.wizard.congrats.mail">Список рассылки</entry>
+	<entry key="install.wizard.congrats.commercial">Это компании,
+		которые так же оказывают коммерческую поддержку Apache OpenMeetings:</entry>
+</properties>

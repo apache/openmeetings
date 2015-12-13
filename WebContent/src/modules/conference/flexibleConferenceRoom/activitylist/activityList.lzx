@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="simplebaseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+    
+    <attribute name="message" value="" type="string" />
+    
+    <attribute name="rcl" value="null" />
+    
+    <attribute name="tStamp" value="null" />
+    
+    <method name="removeObject">
+        this.sendClearMessage(false);
+    </method>
+    
+    <method name="closeItem">
+        this._doHide.setAttribute('started', true);
+    </method>
+    
+    <method name="destroyItem">
+        this.destroy();
+        parent.scrollToMax();
+    </method>
+    
+    <method name="sendClearMessage" args="bool">
+        canvas.thishib.sendMessageWithClient.sendAdvMessage("hideActivityObj",bool,this.tStamp);
+    </method>
+    
+    <miniIcons resource="allow_deny_icon_rsc" visible="${ canvas.ismoderator }"
+               x="$once{ parent.width - 18 }" y="0">
+        <handler name="onclick">
+            this.parent.removeObject();
+        </handler>
+        <labelTooltip labelid="154" />
+    </miniIcons>   
+    
+    <animator name="_doHide" attribute="opacity" duration="1250" to="0" started="false">
+        <handler name="onstop">
+            parent.destroyItem();
+        </handler>
+    </animator>    
+    
+</class>	
+	
+<class name="baseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+	
+	<attribute name="message" value="" type="string" />
+	
+	<attribute name="labelidToolTipOkButton" value="1360" type="number" />
+	<attribute name="labelidToolTipDenyButton" value="1361" type="number" />
+    
+    <attribute name="rcl" value="null" />
+    
+    <attribute name="tStamp" value="null" />
+    
+    <method name="removeObject">
+        this.sendClearMessage(false);
+    </method>
+    
+    <method name="closeItem">
+    	this._doHide.setAttribute('started', true);
+    </method>
+    
+    <method name="destroyItem">
+        this.destroy();
+        parent.scrollToMax();
+    </method>
+    
+    <method name="sendClearMessage" args="bool">
+		canvas.thishib.sendMessageWithClient.sendAdvMessage("hideActivityObj",bool,this.tStamp);
+    </method>
+    
+    <miniIcons resource="allow_ok_icon_rsc" visible="${ canvas.ismoderator }"
+    		   x="$once{ parent.width - 18 }" >
+        <handler name="onclick">
+            this.parent.applyObject();
+        </handler>
+        <labelTooltip labelid="$once{ parent.parent.labelidToolTipOkButton }" />
+    </miniIcons> 
+               
+    <miniIcons resource="allow_deny_icon_rsc" visible="${ canvas.ismoderator }"
+    		   x="$once{ parent.width - 18 }" y="16">
+        <handler name="onclick">
+            this.parent.removeObject();
+        </handler>
+        <labelTooltip labelid="$once{ parent.parent.labelidToolTipDenyButton }" />
+    </miniIcons>   
+    
+    <animator name="_doHide" attribute="opacity" duration="1250" to="0" started="false">
+        <handler name="onstop">
+            parent.destroyItem();
+        </handler>
+    </animator>    
+	
+</class>
+
+<class name="activityListRestrictedRoomAV" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+        canvas.thishib.setBroadCastingFlag.avsettings = "av";
+        canvas.thishib.setBroadCastingFlag.doCall(); 
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="av_allow_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="40"
+               width="$once{ parent.width - 60 }"/>
+               
+</class>
+	
+<class name="activityListRestrictedRoomApplyForMuteOn" extends="baseItemActivityList" 
+	   labelidToolTipOkButton="1400">
+    
+    <method name="applyObject">
+        canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,true);
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="mute_btn_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="40"
+               width="$once{ parent.width - 60 }"/>
+               
+</class>
+
+<class name="activityListRestrictedRoomApplyForGiveExclusiveAudioOn" extends="baseItemActivityList"
+	   labelidToolTipOkButton="1428">
+
+    <method name="applyObject">
+        canvas.thishib.setCanGiveAudio.sendValue(this.rcl.publicSID,true);
+        this.sendClearMessage(true);
+    </method>
+
+    <view resource="participants_exclusive_audio_rsc" x="2" y="2" />
+
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+
+</class>
+	
+<class name="activityListRestrictedRoomApplyForMuteOff" extends="baseItemActivityList" 
+	   labelidToolTipOkButton="1401">
+	
+    <method name="applyObject">
+    	canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,false);
+        this.sendClearMessage(true);
+    </method>	
+	
+	<view resource="unmute_btn_rsc" x="2" y="2" />
+	
+	<labelText text="$once{ parent.message }" multiline="true" x="20"
+			   width="$once{ parent.width - 40 }"/>
+               
+</class>	
+
+<class name="activityListRestrictedRoomA" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+        canvas.thishib.setBroadCastingFlag.avsettings = "a";
+        canvas.thishib.setBroadCastingFlag.doCall(); 
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="allow_audio_only_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>  
+    
+<class name="activityListRestrictedRoomV" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+        canvas.thishib.setBroadCastingFlag.avsettings = "v";
+        canvas.thishib.setBroadCastingFlag.doCall(); 
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="allow_video_only_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>   
+
+<class name="activityListRestrictedRoomWhiteboard" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.setCanDraw.publicSID = this.rcl.publicSID;
+        canvas.thishib.setCanDraw.canDraw = true;
+        canvas.thishib.setCanDraw.doCall();
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="participants_allow_drawing_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>  
+
+<class name="activityListRestrictedRoomScreen" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        
+        canvas.thishib.setCanShare.publicSID = this.rcl.publicSID;
+        canvas.thishib.setCanShare.canShare = true;
+        canvas.thishib.setCanShare.doCall();
+        
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="screen_allow_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>  
+
+<class name="activityListRestrictedRoomRemote" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        
+        canvas.thishib.setCanRemote.publicSID = this.rcl.publicSID;
+        canvas.thishib.setCanRemote.canRemote = true;
+        canvas.thishib.setCanRemote.doCall();
+
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="remote_allow_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class> 
+
+<class name="activityListMessageRequest" extends="simplebaseItemActivityList">
+    
+    <method name="applyObject">
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="warning_icon_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>  
+
+<class name="activityListRestrictedRoomModeration" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.addModerator.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.addModerator.doCall();
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="participants_isMod_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }"/>
+               
+</class>  
+
+<class name="activityList" y="${ parent.height - 200 }" x="0"
+	   extends="basePropertyPanelWhiteboard" height="200" 
+         width="$once{ parent.width-10 }" labelid="1363" 
+         visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}">
+    
+    <handler name="oninit">
+        canvas.currentActivityList = this;
+    </handler>
+    
+    <method name="addMessageRequest" args="rcl,message,tStamp">
+        <![CDATA[
+            var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] : " +
+                                   message + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            
+            new lz.activityListMessageRequest(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                        
+    </method>
+    
+    
+    <method name="addModerationRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                                   canvas.getLabelName(693) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(693) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+            
+            new lz.activityListRestrictedRoomModeration(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                        
+    </method>
+    
+    <method name="addScreenRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1070) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1070) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomScreen(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="addRemoteRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomRemote(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="applyForMuteOn" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1396) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1399) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomApplyForMuteOn(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+
+    <method name="applyForGiveExclusiveAudioOn" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1427) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1426) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+
+            new lz.activityListRestrictedRoomApplyForGiveExclusiveAudioOn(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+
+            this._list._list.scrollToMax();
+        ]]>
+    </method>
+    
+    <method name="applyForMuteOff" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1397) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1398) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomApplyForMuteOff(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="addWhiteboardRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(694) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(694) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomWhiteboard(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="addAudioRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                           
+            new lz.activityListRestrictedRoomA(this._list._list,{
+                                        message:txt,
+                                        width:this._list.width-14,
+                                        rcl:rcl,
+                                        tStamp:tStamp
+                                    });
+                                    
+            this._list._list.scrollToMax();                                    
+       ]]>                  
+    </method>
+    
+    <method name="addVideoRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1081) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {                
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1081) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                           
+            new lz.activityListRestrictedRoomV(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();
+        ]]>
+    </method>
+    
+    <method name="addAudioAndVideoRequest" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                               canvas.getLabelName(695) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(695) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+            
+            new lz.activityListRestrictedRoomAV(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();
+        ]]>
+    </method>
+    
+    <method name="hideActivityObj" args="messageObj">
+    	<![CDATA[
+    	
+    	    for (var i=0;i<this._list._list.subviews.length;i++) {
+    	    	
+    	    	if ($debug) Debug.write("hideActivityObj:: ",this._list._list.subviews[i].tStamp,messageObj.message[2]);
+    	    	
+    	    	if (this._list._list.subviews[i].tStamp == messageObj.message[2]) {
+    	    		
+    	    		this._list._list.subviews[i].closeItem();
+    	    		
+    	    		return;
+    	    		
+    	    	}
+    	    	
+    	    }
+    	
+    	]]>
+    </method>
+    
+    <view name="_list" y="21" height="179" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }"
+    	  width="$once{ parent.width }" clip="true">
+        
+        <view name="_list">
+            
+            <method name="scrollToMax">
+                <![CDATA[
+			        if(this.height>parent.height){
+			            parent.myscrollbar.scrolltarget.setAttribute(parent.myscrollbar.scrollattr,(parent.height-this.height));
+			        }
+		        ]]>
+            </method>
+            
+            <simplelayout name="_layout" axis="y" spacing="1" />
+            
+        </view>
+        
+        <om_vscrollbar name="myscrollbar" />
+        
+    </view>
+    
+</class>
+
+</library>

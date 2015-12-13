@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="interviewListTable" extends="view" y="60" 
+       height="${ parent.height-64-parent.moderationPanel.height }"
+        bgcolor="0xFFFFFF" x="2" clip="true" width="$once{ parent.width-4 }" >
+        <innerlistViewEventUserListTable name="innerList" />
+    <om_vscrollbar />
+</class>    
+
+<class name="interviewListInner" extends="baseRoomInnerList"  
+       width="$once{ parent.width }" height="${ parent.height }" 
+       bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+    
+    <attribute name="selectedItem" value="null" />
+    
+    <attribute name="sortType" value="alphabetical" type="string" />    
+    
+    <handler name="oninit">
+        <![CDATA[
+            if ($debug) Debug.write("!!!!! interviewListTable oninit: ");
+            this.initList();
+        ]]>
+    </handler>
+    
+    <!-- clip="true" -->
+    
+    <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
+        x="1" y="1" bgcolor="white" />
+
+    <method name="addItem" args="object">
+        <![CDATA[
+            if ($debug) Debug.write("interviewListTable addItem: ",object,object.publicSID);
+            var list = this._table.innerList;
+            for (var i = 0; i < list.subviews.length;i++) {
+                if (list.subviews[i].refObj.publicSID == object.publicSID) {
+                    //if ($debug) Debug.warn("Already on List, do not add twice");
+                    return;
+                }
+            }
+            var lastname = object.lastname;
+            if (object.isSuperModerator) {
+                lastname += " *";
+            }
+            
+            new lz.interviewUserListItem(list,{
+                    user_id:object.user_id,
+                    firstname:object.firstname,
+                    isSuperModerator:object.isSuperModerator,
+                    lastname:lastname,
+                    refObj:object,
+                    connectedSince:object.connectedSince,
+                    isMod:object.isMod,
+                    streamid:object.streamid,
+                    username:object.username,
+                    formatedDate:object.formatedDate
+                });
+            
+            this.sortUserList();
+            if (canvas.currentRoomObj.autoVideoSelect) {
+				if (object.publicSID == canvas.publicSID && !object.interviewPodId
+					&& (object.isMod || object.isSuperModerator || object.canDraw))
+				{
+		            for (var ii = 1; ii < 3; ++ii) {
+		            	var obj = getVideoObjectByInterviewPodId(ii);
+		            	if (!obj) {
+	            			var interviewBox = canvas._drawarea._videoviewcontent.searchImmediateSubnodes("name", "interviewVideoBox" + ii);
+	            			//if ($debug) Debug.write("!!!! interviewListInner:: interviewBox = ", ii, interviewBox);
+	           				interviewBox.sendConfirmation(canvas.publicSID);
+		            		break;
+		            	}
+					}
+				}
+			}
+        ]]>
+    </method>
+    
+    <method name="sortUserList">
+        <![CDATA[ 
+        
+           if (this.sortType == "alphabetical") {
+                function sortByName(a,b) {
+                   
+                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+                    else return 0;
+                
+                }
+            
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            } else {
+                function sortByStreamId(a,b) {
+                   
+                    if(Number(a.streamid) == Number(b.streamid)) return 0;
+                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                    else return -1;
+                
+                }
+            
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            }
+            
+            this._table.innerList._layout.update(); 
+        ]]>
+    </method>
+        
+    
+    <method name="initList">
+        new lz.interviewListTable(this,{name:'_table'});
+        this.moderationPanel.bringToFront();
+    </method>
+    
+    <method name="clearList">
+        this._table.destroy();
+        this.initList();
+    </method>
+    
+	<method name="disconnectclient" args="publicSID">
+	<![CDATA[
+		var item = getUserListItemByPublicSID(publicSID);
+		if (item) {
+			item.destroy();
+		}
+	]]>
+	</method>
+    
+    <!--- get a Objects List Item
+        @param string publicSID publicSID
+     -->
+	<method name="getUserListItemByPublicSID" args="publicSID">
+	<![CDATA[
+		for (var i=0;i<this._table.innerList.subviews.length;i++){
+			//if ($debug) Debug.write("getUserListItemByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
+			if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+				return this._table.innerList.subviews[i];
+			}
+		}
+		return null;
+	]]>
+	</method>
+
+	<method name="getVideoObjectByInterviewPodId" args="interviewPodId">
+	<![CDATA[
+		var list = this._table.innerList.subviews;
+		for (var i = 0; i < list.length; ++i) {
+			//if ($debug) Debug.write("getVideoObjectByInterviewPodId : list[i]", list[i]);
+			if (list[i].refObj.interviewPodId == interviewPodId){
+				if ($debug) Debug.write("getVideoObjectByInterviewPodId : list[i].refObj.interviewPodId", interviewPodId, list[i].refObj.interviewPodId);
+				return list[i];
+			}
+		}
+		return null;
+	]]>
+	</method>
+
+    <method name="selectItem" args="itemObj">
+        <![CDATA[
+        if ($debug) Debug.write("selectItem ",itemObj);
+        
+        if (canvas.ismoderator) {
+            if (this.selectedItem != null && this.selectedItem != itemObj) {
+                this.selectedItem.deselect();
+            }
+            
+            this.selectedItem = itemObj;
+            if (this.selectedItem.isSelected) {
+                this.selectedItem.deselect();
+            } else {
+                this.selectedItem.select();
+            }
+        }
+        ]]>
+    </method>
+
+    <view name="userStatus" layout="axis:y">
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="1" />
+             <labelText x="16" labelid="677" />
+        </view>
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="2" />
+             <labelText x="16" labelid="678" />
+        </view>
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="3" />
+             <labelText x="16" labelid="679" />
+        </view>
+    </view>
+    
+    <moderationMiniIconsInterviewUserList name="_applyAndStatusIcons" 
+                          x="$once{ parent.width-this.width-4 }" y="2" />
+    
+    <!--
+    <eventUserListTable name="_table" /> 
+     -->
+    <view name="moderationPanel" height="0" clip="true" 
+          y="${ parent.height - this.height - 2 }">
+        
+        <handler name="onismoderator" reference="canvas" args="m">
+            if ($debug) Debug.write("###### ismoderator ",m);
+            <![CDATA[
+                //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+                this.updateIcons();
+            ]]>
+        </handler>
+        
+        <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+            <![CDATA[
+                //search for the user and update its drawStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == drawObject.publicSID) {
+                        vList[i].refObj.canDraw = drawObject.canDraw;
+                        vList[i].updateIconByMod();
+                        break;
+                    }
+                }
+            ]]>
+        </handler>
+        
+        <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
+            <![CDATA[
+                
+                if (!userObject.isBroadcasting) {
+                    //Stop Broadcasting and close Dialog
+                    //Search, stop and remove video
+                    parent.parent.removeVideoByUser(userObject);
+                }
+                
+                //search for the user and update its drawStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == userObject.publicSID) {
+                        vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
+                        vList[i].updateIconByMod();
+                        break;
+                    }
+                }
+                
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
+        </handler>
+        
+        <method name="updateIcons">
+            <![CDATA[
+                if (canvas.ismoderator) {
+                    this.showItem.setAttribute('started', true);
+                } else {
+                    this.setAttribute("height",0);
+                }
+                var vList = parent._table.innerList.subviews;
+                
+                for (var i=0;i<vList.length;i++) {
+                    vList[i].updateIconByMod();
+                }
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
+        </method>
+        
+        <labelText labelid="912" width="270" x="0" multiline="true" y="0" />
+        
+        <animator name="showItem" attribute="height" 
+                  to="60" duration="1000" started="false" />
+    </view>
+
+</class>
+
+
+</library>
