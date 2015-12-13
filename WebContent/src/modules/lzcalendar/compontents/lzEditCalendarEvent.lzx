@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="lzEditCalendarEvent" extends="labelExplorerBox" labelid="815" allowDragging="true" 
+		    x="$once{ parent.width/2 - 300 }" y="100" docking="false" resizeable="false" 
+		    closable="true" width="600" height="602" 
+		    showWindowEffect="true" annimationStartStyle="mouse">
+		    
+		<attribute name="reminderTypeId" value="0" type="number" />
+		
+		<attribute name="dataElement" value="null" />
+		<attribute name="remindertypes" value="null" />
+		
+		<attribute name="baseUrl" value="" type="string" />
+		
+		<attribute name="lzCalendarRef" value="null" />
+		
+		<dataset name="eventDS" />
+		
+		<attribute name="updateObj" value="null" />
+		
+		<attribute name="appointmentId" value="0" type="number" />
+		<attribute name="roomId" value="0" type="number" />
+		
+		<attribute name="isConnectedEvent" value="false" type="boolean" />
+		
+		<handler name="oninit">
+			if (this.lzCalendarRef.requestUserId != canvas.user_id) {
+				this._saveEvent.setAttribute("visibility","hidden");
+				this._deleteEvent.setAttribute("visibility","hidden");
+			}
+			this.getAppointmentReminderTypList.setData(this.remindertypes.data);
+		</handler>
+		    
+		<handler name="animationInited">
+			<![CDATA[
+				canvas._loadingAll.hideContentOnly();
+				
+				//Point URL to actual File
+                this.baseUrl = canvas.getAppBaseUrl();
+						
+	            if ($debug) Debug.write("this.baseUrl ",this.baseUrl);
+			
+	            if ($debug) Debug.write("this.dataElement ",this.dataElement);
+	            
+            	this.eventDS.setAttribute("data", this.dataElement.childNodes);
+            	
+            	this.appointmentId = this.eventDS.getPointer().xpathQuery('appointmentId/text()');
+            	this.roomId = this.eventDS.getPointer().xpathQuery('roomId/text()');
+	            this._room.getRoomsPublicWithoutType.doCall();
+	            
+	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
+	            if ($debug) Debug.write("this.appointmentId ",this.appointmentId);
+	            
+	            if (this.appointmentId == 0) {
+	            	this._saveEvent.setAttribute("x",this._deleteEvent.x);
+	            	this._deleteEvent.setAttribute("visibility","hidden");
+	            }
+	            
+	            lz.Focus.setFocus(this._title, false);
+            ]]>
+		</handler>
+		
+		<handler name="onclose">
+			canvas._loadingAll.hideLoading();
+		</handler>
+		
+		<method name="saveAndClose">
+			<![CDATA[
+				this.updateObj = new Object();
+			
+				updateObj.tMemberArgs = this._participentList.getMemberArrayValue();
+				
+				if ($debug) Debug.write("tMemberArgs: ",updateObj.tMemberArgs.length,updateObj.tMemberArgs);
+				
+				updateObj.appointmentId = Number(this.eventDS.getPointer().xpathQuery('appointmentId/text()'));
+				updateObj.appointmentstart = this._dateStart.getDate();
+				if ($debug) Debug.write("appointmentstart ",updateObj.appointmentstart);
+				var tTimeStart = this._timeStart.getText();
+				var hours = Number(tTimeStart.substr(0,2));
+				var mins = Number(tTimeStart.substr(3,2));
+				if ($debug) Debug.write("hours:mins",hours,mins,tTimeStart.substr(4),tTimeStart);
+				updateObj.appointmentstart.setHours(hours);
+				updateObj.appointmentstart.setMinutes(mins);
+				
+				var tEnd = new Date();
+				tEnd.setTime(this._dateStart.getDate().getTime());
+				updateObj.appointmentend = tEnd; //this._dateEnd.getDate(); we currently do not support multi date events
+				var tTimeEnd = this._timeEnd.getText();
+				var hours = Number(tTimeEnd.substr(0,2));
+				var mins = Number(tTimeEnd.substr(3,2));
+				updateObj.appointmentend.setHours(hours);
+				updateObj.appointmentend.setMinutes(mins);
+				
+				//if we choose 00:00 we actually mean the next day at noon
+				if (hours == 0) {
+					tEnd.setTime(tEnd.getTime()+86400000);
+				}
+				
+                updateObj.appointmentName = this._title.getText();
+                updateObj.appointmentLocation = this._location.getText();
+                updateObj.appointmentDescription = this._descr.getText();
+                updateObj.isDaily = false;
+                updateObj.isWeekly = false;
+                updateObj.isMonthly = false;
+                updateObj.isYearly = false;
+                updateObj.categoryId = 1;
+                updateObj.remind = this._reminderType.getValue();
+                updateObj.roomType = this._roomType.getValue();
+                updateObj.isPasswordProtected = this._ispasswordProtected.getValue();
+                updateObj.password = this._password.getText();
+                updateObj.roomId = (!this._createNewRoom.getValue() ? this._room.getValue() : -1);
+                
+                if ($debug) Debug.write("updateObj: ", updateObj);
+                
+                if ($debug) Debug.write("appointmentstart: ",parseDateToStringTimeSeconds(updateObj.appointmentstart));
+                if ($debug) Debug.write("appointmentstart: ",parseDateToStringTimeSeconds(updateObj.appointmentend));
+                
+				if (updateObj.appointmentId > 0) {
+					this.updateAppointment.doCall();
+				} else {
+					this.saveAppointment.doCall();
+				} 
+			]]>
+		</method>
+		
+		<dataset name="getAppointmentReminderTypList" />
+		
+		<netRemoteCallHib name="saveAppointment" funcname="calendarservice.saveAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentstart);</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentend);</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isYearly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.categoryId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.remind;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.tMemberArgs;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isPasswordProtected;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.password;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomId;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("saveAppointment ",value);
+		    		parent.lzCalendarRef.reload();
+					parent.close();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
+    	<netRemoteCallHib name="updateAppointment" funcname="calendarservice.updateAppointment" 
+						  remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentstart);</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentend);</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isYearly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.categoryId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.remind;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.tMemberArgs;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isPasswordProtected;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.password;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomId;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+	    			if ($debug) Debug.write("updateAppointment ",value);
+	    			parent.lzCalendarRef.reload();
+					parent.close();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
+	    <netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.appointmentId;</method></netparam>	
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("deleteAppointment ",value);
+		    		parent.lzCalendarRef.reload();
+					parent.close();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+		
+		<labelText name="_titleLabel" x="4" y="24" labelid="572" fontstyle="bold" /> 
+			
+		<customEdittext name="_title" x="120" y="24" datapath="local:classroot.eventDS:/title"
+				text="$path{'text()'}" 
+			width="$once{ parent.width-130 }" height="24" />
+			
+			
+		<!-- Start Date / Time -->
+		<dateField name="_dateStart" y="50" x="120" width="104" datapath="local:classroot.eventDS:/start">
+			<handler name="ondata" args="d">
+				this.setAttribute("text",parseDateStringFromXmlString(d.childNodes[0].data));
+			</handler>
+		</dateField>
+		
+		<labelText name="_dateTimeStartLabel" x="240" y="50" labelid="570" fontstyle="bold" /> 
+			
+		<customEdittext name="_timeStart" x="290" 
+      					y="50" width="50" regexpType="time" text="08:00" datapath="local:classroot.eventDS:/start">
+      		<handler name="ondata" args="d">
+				this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+			</handler>
+      	</customEdittext>
+      					
+      	<!-- End Date / Time -->			
+		<labelText name="_dateTimeEndLabel" x="346" y="50" labelid="571" fontstyle="bold" />  
+			
+		<!-- 
+		 we currently do not support multi date events
+		<dateField name="_dateEnd" y="50" x="372" width="104" datapath="local:classroot.eventDS:/end">
+			<handler name="ondata" args="d">
+				this.setAttribute("text",parseDateStringFromXmlString(d.childNodes[0].data));
+			</handler>
+		</dateField>
+		 -->
+			
+		<customEdittext name="_timeEnd" x="396" 
+      					y="50" width="50" regexpType="time" text="10:00" datapath="local:classroot.eventDS:/end">
+      		<handler name="ondata" args="d">
+				this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+			</handler>
+      	</customEdittext>
+      					
+        <!-- Remindertype -->
+		<labelText name="_reminderTypeLabel" x="4" y="76" labelid="565" fontstyle="bold" /> 
+		
+		<resetCombobox name="_reminderType" x="120" width="$once{ parent.width-130 }"
+			 			  editable="false" shownitems="5" y="76" datapath="local:classroot.eventDS:/reminderId">
+			<handler name="onvalue" args="v">						
+				if ($debug) Debug.write("reminderTypeId: ",parent.reminderTypeId);
+				if(this.getValue == 0 ) {
+					parent.reminderTypeId = null;
+				} else{
+  					parent.reminderTypeId = this.getValue();												
+  					if ($debug) Debug.write("reminderTypeId: ",parent.reminderTypeId);
+				}
+			</handler> 
+			<handler name="ondata" args="remindtypeNode">
+				if ($debug) Debug.write("remindtype ondata 1: ", remindtypeNode.childNodes[0].data);
+				var remTypeId = Number(remindtypeNode.childNodes[0].data);
+				if (remTypeId > 0) {
+					parent.reminderTypeId = remTypeId;
+				    this.selectItem(remTypeId);
+			    }
+			</handler>
+			<textlistitem datapath="local:classroot.getAppointmentReminderTypList:/getAppointmentReminderTypListResponse/return"
+				text="$path{'name/text()'}" value="$path{'typId/text()'}" />
+	 	</resetCombobox>
+	 	
+	 	<!-- New/Existent room selector -->
+		<labelCheckbox name="_createNewRoom" y="102" fontsize="11" x="10" labelid="1509"
+				datapath="local:classroot.eventDS:/roomId">
+			<handler name="ondata" args="d">
+				if ($debug) Debug.write("ondata _createNewRoom ", d.childNodes[0].data, (d.childNodes[0].data == "0"));
+				var val = (d.childNodes[0].data == "0");
+				this.setValue(val);
+				if (!val) {
+					this.setAttribute("enabled", false);
+				}
+			</handler>
+		</labelCheckbox>
+	 	
+	 	<!-- Roomtype -->
+		<labelText name="_roomTypeLabel" x="4" y="128" labelid="619" fontstyle="bold" /> 
+		
+		<resetCombobox name="_roomType" width="$once{ parent.width-130 }" y="128" x="120" editable="false" 
+					datapath="local:classroot.eventDS:/roomTypeId" enabled="${ parent._createNewRoom.value }">
+			<handler name="ondata" args="roomTypeIdNode">
+				if ($debug) Debug.write("_roomType ondata 1: ", roomTypeIdNode.childNodes[0].data);
+				var remTypeId = Number(roomTypeIdNode.childNodes[0].data);
+				if (remTypeId > 0) {
+				    this.selectItem(remTypeId);
+			    }
+			</handler>
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+	            }
+	            //this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 
+	 	
+	 	<!-- Room list -->
+		<labelText name="_roomLabel" x="4" y="154" labelid="406" fontstyle="bold" /> 
+		
+		<resetCombobox name="_room" width="$once{ parent.width-130 }" y="154" x="120" editable="false" 
+				enabled="${ !parent._createNewRoom.value }">
+			<attribute name="appointmentRoomInList" type="boolean" value="false" />
+			
+			<netRemoteCallHib name="getRoomsPublicWithoutType" funcname="conferenceservice.getRoomsPublicWithoutType" 
+				remotecontext="$once{ canvas.thishib }" >
+				<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+				
+				<handler name="ondata" args="value">	
+				<![CDATA[
+					if ($debug) Debug.write("getRoomsPublicWithoutType: ", value);
+					for (var i = 0; value != null && i < value.length; ++i) {
+		                parent.addItem(value[i].name, value[i].rooms_id);
+		                if (parent.parent.roomId == value[i].rooms_id) {
+		                	parent.appointmentRoomInList = true;
+		                }
+					}
+					parent.getRoomsByOrganisationWithoutType.doCall();
+				]]>
+				</handler>
+			</netRemoteCallHib>
+			
+			<netRemoteCallHib name="getRoomsByOrganisationWithoutType" funcname="conferenceservice.getRoomsByOrganisationWithoutType" remotecontext="$once{ canvas.thishib }" >
+				<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+				<netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+				
+				<handler name="ondata" args="value">	
+				<![CDATA[
+					if ($debug) Debug.write("getRoomsByOrganisationWithoutType ",value);
+					for (var i = 0; value != null && i < value.length; ++i) {
+		                parent.addItem(value[i].room.name, value[i].room.rooms_id);
+		                if (parent.parent.roomId == value[i].room.rooms_id) {
+		                	parent.appointmentRoomInList = true;
+		                }
+					}
+					parent.selectRoom();
+				]]>
+				</handler>
+			</netRemoteCallHib>
+			
+			<method name="selectRoom">
+				if ($debug) Debug.write("parent.roomId != 0 ? ", parent.roomId != 0);
+				if (parent.roomId != 0) {
+					if(!this.appointmentRoomInList) {
+						this.addItem(parent._title.getText(), parent.roomId);
+						parent._createNewRoom.setAttribute("enabled", true);
+						parent._createNewRoom.setValue(true);
+					}
+					this.selectItem(parent.roomId);
+				}
+			</method>
+			
+			<handler name="onvalue" args="v">
+			<![CDATA[
+				if ($debug) Debug.write("_room:: onvalue ", parent.roomId, v, this.getValue(), (!this.appointmentRoomInList && parent.roomId == v));
+				if (parent.roomId != 0 && v) {
+					parent._createNewRoom.setAttribute("enabled", !this.appointmentRoomInList && parent.roomId == v);
+				}
+			]]>
+			</handler>
+        </resetCombobox> 
+	 	
+	 	<!-- password protected -->
+		<labelCheckbox name="_ispasswordProtected" y="180" fontsize="11" x="10" labelid="524"
+				datapath="local:classroot.eventDS:/isPasswordProtected">
+			<handler name="ondata" args="d">
+				if ($debug) Debug.write("ondata _ispasswordProtected ", d.childNodes[0].data);
+				this.setValue(d.childNodes[0].data == "true");
+			</handler>
+		</labelCheckbox>
+			
+		<!-- password -->
+		<labelText labelid="525" y="206" x="4" fontstyle="bold" 
+				fgcolor="${ ((!parent._ispasswordProtected.value) ? 0xCCCCCC : 0x000000 ) }" />
+		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" password="true"
+						width="$once{ parent.width-130 }" x="120" y="206" />
+						
+		<view resource="messagebox_info_rsc" x="4" y="226" />
+	
+		<labelText name="password_info" labelid="1445" x="24" y="226" 
+							multiline="true" width="$once{ parent.width-34 }" />
+	 	
+	 	<!-- participents -->
+	 	<view name="_participentsIconBar" layout="axis:x" x="$once{ parent.width-50 }" y="282">
+	        <baseChooseIconView labelid="812" height="20" width="19" 
+	        		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
+	                            resourceN="calendar_add_user_rsc">
+	            <handler name="onclick">
+	                new lz.addAttendee(canvas,{refObj:parent.parent._participentList});
+	            </handler>
+	        </baseChooseIconView>
+	        <baseChooseIconView labelid="629" height="20" width="19" 
+	        			bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
+	                            resourceN="calendar_add_user_external_rsc" >
+	            <handler name="onclick">
+	                new lz.addExternalAttendee(canvas,{refObj:parent.parent._participentList});
+	            </handler>
+	        </baseChooseIconView>
+	        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
+	    </view>
+	 	
+	 	<labelText name="_participentLabel" x="4" y="302" labelid="803" fontstyle="bold" /> 
+	 	
+	 	<view name="_participentList" x="120" y="302" height="100" 
+            		  bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" 
+            		  width="$once{ parent.width-130 }">
+           
+            <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
+            	<![CDATA[
+            		var tObject = new Object();
+            		tObject.meetingMember = new Object();
+            		tObject.meetingMember.userid = userId;
+           			tObject.meetingMember.firstname = firstName;
+           			tObject.meetingMember.lastname = lastName;
+           			tObject.meetingMember.email = email;
+           			tObject.meetingMember.meetingMemberId = memberId;
+           			tObject.meetingMember.jNameTimeZone = jNameTimeZone;
+           			var tDataElement = LzDataElement.valueToElement(tObject);
+           			var tPointer = new lz.datapointer();
+           			tPointer.setPointer(tDataElement.childNodes[0]);
+           			parent.eventDS.getPointer().addNodeFromPointer(tPointer);
+           			//parent.eventDS.getPointer().updateData();
+            	]]>
+            </method> 	
+            
+            <method name="getMemberArrayValue">
+            	<![CDATA[
+            		var tArray = new Array();
+            		
+            		for (var i=0;i<this._content._inner.subviews.length;i++) {
+            		
+            			var tViewObj = this._content._inner.subviews[i];
+            			
+            			if (!tViewObj.isLoaded) {
+            				continue;
+            			}
+            			
+            			var tObject = new Object();
+            			tObject.meetingMemberId = tViewObj.memberId;
+		        		tObject.firstname = tViewObj.firstName;
+		        		tObject.lastname = tViewObj.lastName;
+		        		tObject.email = tViewObj.email;
+		        		tObject.userId = tViewObj.userId;
+		        		tObject.jNameTimeZone = tViewObj.jNameTimeZone;
+		        		
+		        		tArray.push(tObject);
+            		}
+            		
+            		return tArray;
+            	]]>
+            </method>
+              
+          	<view name="_content" bgcolor="0xFFFFFF" x="1" y="1" clip="true"
+          			width="$once{ parent.width-1 }" height="$once{ parent.height-1 }">
+          		<view name="_inner">
+          			<attendeeListItem datapath="local:classroot.eventDS:/meetingMember"
+           						width="$once{ parent.parent.width-10 }">
+           						
+           				<attribute name="isLoaded" value="false" type="boolean" />
+           				
+           				<handler name="ondata" args="d">
+           					if ($debug) Debug.write("meetingMember -- ondata ",d);
+           					this.isLoaded = true;
+           					var tDataPointer = new lz.datapointer();
+           					tDataPointer.setPointer(d);
+           					this.userId = tDataPointer.xpathQuery( 'userid/text()' );
+           					this.firstName = tDataPointer.xpathQuery( 'firstname/text()' );
+           					this.lastName = tDataPointer.xpathQuery( 'lastname/text()' );
+           					this.email = tDataPointer.xpathQuery( 'email/text()' );
+           					this.memberId = tDataPointer.xpathQuery( 'meetingMemberId/text()' );
+           					this.jNameTimeZone = tDataPointer.xpathQuery( 'jNameTimeZone/text()' );
+           					this.memberText.setAttribute("text",this.firstName+' '+this.lastName+' ['+this.email+']');
+           				</handler>
+     				</attendeeListItem>
+          			<simplelayout axis="y" spacing="1" />
+          		</view>
+           		<om_vscrollbar />
+           	</view>
+        </view>
+        
+        <!-- Location -->
+        <labelText name="_locationLabel" x="4" y="406" labelid="569" fontstyle="bold" /> 
+        
+        <customEdittext name="_location" 
+        		datapath="local:classroot.eventDS:/location" text="$path{'text()'}" 
+        		width="$once{ parent.width-130 }" x="120" y="406" />
+		
+		<!-- Comment -->
+		<labelText name="_descrLabel" x="4" y="432" labelid="573" fontstyle="bold" /> 
+	
+		<customScrollEdittext name="_descr" y="432" x="120" 
+				datapath="local:classroot.eventDS:/comment" text="$path{'text()'}" 
+				width="$once{ parent.width-130 }" height="124" /> 
+			
+		<simpleLabelButton name="_saveEvent" labelid="813" width="100" 
+				x="$once{ parent.width-315 }" y="$once{ parent.height-24 }" >
+	        <handler name="onclick">
+				this.setAttribute('enabled', false);
+                parent.saveAndClose();
+	        </handler>
+        </simpleLabelButton>
+		
+		<simpleLabelButton name="_deleteEvent" labelid="814" width="100" 
+	           x="$once{ parent.width-210 }" y="$once{ parent.height-24 }" >
+	         <handler name="onclick">
+         		if (canvas.contactUser != 0) {
+           			new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+           			return;
+           		}
+           		
+           		if (parent.isConnectedEvent) {
+           			new lz.confirmationSingle(canvas,{refObj:this,labelid:1281,
+                                   labeliderror:1280,showCheckBox:false});
+           		} else {
+           			new lz.confirmationSingle(parent.parent,{
+			        				refObj:this,labelid:797,
+	           						showCheckBox:false,
+	           						labeliderror:796
+           						});
+           		} 
+           	</handler>
+           	<method name="sendConfirmation" args="refObj,t">
+           		parent.deleteAppointment.doCall();
+           	</method>
+        </simpleLabelButton>
+	
+	    <simpleLabelButton labelid="1130" width="100" x="$once{ parent.width-105 }" 
+	           y="$once{ parent.height-24 }" 
+	           onclick="this.parent.close();" />			
+		
+	</class>
+
+</library>

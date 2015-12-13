@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="allmeetings" extends="baseContentView" height="${ canvas.height-canvas.naviHeight }">
+	<attribute name="finishedTabsQuantity" type="number" value="0"/>	
+	<attribute name="clickedButton" value="null"/>
+	<attribute name="params" value="" type="string" />
+    
+	<method name="updateFinishedTabsQuantity">
+		this.finishedTabsQuantity = this.finishedTabsQuantity + 1;
+
+		if (this.finishedTabsQuantity == 3) {
+			if (clickedButton != null) {
+				lz.Cursor.unlock();
+
+				clickedButton.onclick.sendEvent();
+			}
+		}
+	</method>
+	
+	<handler name="oninit">
+		_mainScrollBar.setAttribute("visibility","hidden");
+		switch (this.params) {
+			case "publicTabButton":
+				doSelection(this._tabbar.publicTabButton);
+				break;
+			case "privateTabButton":
+				doSelection(this._tabbar.privateTabButton);
+				break;
+			case "myTabButton":
+				doSelection(this._tabbar.myTabButton);
+				break;
+		}
+	</handler>
+	
+	<handler name="ontabcontentleave">
+		_mainScrollBar.setAttribute("visibility","visible");
+	</handler>
+    
+    <attribute name="refObjItem" value="null" />
+    
+    <method name="doSelection" args="objRef">
+    	if (this.refObjItem != null) {
+    		this.refObjItem.deselect();
+    	}
+    	this.refObjItem = objRef;
+    	
+    	switch (this.refObjItem.name) {
+    		case "publicTabButton":
+	    		this._conferences.PublicMeetings.setAttribute("visibility","visible");
+	    		this._conferences.PrivateMeetings.setAttribute("visibility","hidden");
+	    		this._conferences.MyMeetings.setAttribute("visibility","hidden");
+	    		break;
+	    	case "privateTabButton":
+	    		this._conferences.PublicMeetings.setAttribute("visibility","hidden");
+	    		this._conferences.PrivateMeetings.setAttribute("visibility","visible");
+	    		this._conferences.MyMeetings.setAttribute("visibility","hidden");
+	    		break;
+	    	case "myTabButton":
+	    		this._conferences.PublicMeetings.setAttribute("visibility","hidden");
+	    		this._conferences.PrivateMeetings.setAttribute("visibility","hidden");
+	    		this._conferences.MyMeetings.setAttribute("visibility","visible");
+	    		break;
+    	}
+    	
+    	this.refObjItem.select();
+    </method>
+    
+   	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+   	
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />  
+      
+	<view name="_tabbar" width="${ canvas.width }" y="1" height="32"
+  		  layout="axis:x;spacing:2;inset:2" >
+  		  	
+	 	<handler name="oninit">
+	   		for (var eg in this.subviews) {
+           		this.subviews[eg].deselect();
+            }
+            this.publicTabButton.select();
+	   	</handler>
+		
+		<tabButtonMain name="publicTabButton" selected="true" height="$once{ parent.height }" 
+        		currentIconRsc="icon_btn_rooms_conference" x="0" labelid="777" width="${ (parent.width-6)/3 }"/>
+		
+		<tabButtonMain name="privateTabButton" width="${ (parent.width-6)/3 }" height="$once{ parent.height }" 
+        		 currentIconRsc="icon_btn_rooms_conference" labelid="779" />
+        		
+        <tabButtonMain name="myTabButton" width="${ (parent.width-6)/3 }" height="$once{ parent.height }" 
+        		currentIconRsc="icon_btn_rooms_conference" labelid="781" />
+		
+	</view>
+	
+	<!-- public rooms -->
+	<view name="_conferences" height="${ parent.height-40 }" y="40">
+		<view name="PublicMeetings" height="${ parent.height }">
+			
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
+			
+			<labelText labelid="778" x="30" width="400" multiline="true" />
+			
+			<view y="40" height="${ parent.height-40 }">
+		    
+				<netRemoteCallHib name="removeClientFromChatNotification" funcname="chatservice.removeClientFromChatNotification"	
+					remotecontext="$once{ canvas.thishib }" >      
+					<handler name="ondata" args="value">
+						if ($debug) Debug.write("removeClientFromChatNotification: ",value);
+						this.parent.destroy();
+					</handler>
+				</netRemoteCallHib>
+    
+	  
+				<view y="4" x="4" height="${ parent.height-4 }">
+					
+					<handler name="oninit">
+						canvas.thishib.roomtype = "public";
+						this.getRoomsPublicWithoutType.doCall();
+					</handler>
+	        
+					<netRemoteCallHib name="getRoomsPublicWithoutType" funcname="conferenceservice.getRoomsPublicWithoutType" 
+						remotecontext="$once{ canvas.thishib }" >   
+						<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+						<handler name="ondata" args="value">	
+							<![CDATA[
+								if ($debug) Debug.write("getRoomsPublicWithoutType: ", value);
+								if (value != null) {
+									for (var eg = 0; eg < value.length; eg++) {
+										var time = value[eg].starttime.getHours()
+												+ ':' + value[eg].starttime.getMinutes()
+												+ ' ' + value[eg].starttime.getDate()
+												+ '.' + (value[eg].starttime.getMonth() + 1)
+												+ '.' + value[eg].starttime.getFullYear();
+												
+										new lz.roomListItem(parent.inn.inn.inn,
+												{
+													roomType:value[eg].roomtype.roomtypes_id,
+													currentusers : value[eg].currentusers,
+													obj : value[eg],
+													ispublic : true,
+													roomid : value[eg].rooms_id,
+													starttime : time,
+													roomname : value[eg].name,
+													roomcomment : value[eg].comment
+												});
+									}
+								}
+								parent.parent.parent.parent.parent.updateFinishedTabsQuantity();
+							]]>	        	          				
+						</handler>	
+					</netRemoteCallHib>
+
+					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
+					<view name="inn" width="480" height="${ parent.height }" 
+									bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+						<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" 
+							  		bgcolor="0xFFFFFF" clip="true" >
+							<view name="inn" layout="axis:y;spacing:1"/>
+							<om_vscrollbar />
+						</view>
+					</view>
+				</view>
+				<!-- description panel for eache room. right hand on this class view.
+						roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
+							Mar 24 2008 commented by onokeiji@gmal.com
+					 -->
+				<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
+			</view>
+		</view>
+	
+	
+		<!-- private Meetings -->	
+		<view name="PrivateMeetings" visibility="hidden" height="${ parent.height }">
+			
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
+			
+			<labelText labelid="780" x="30" width="400" multiline="true" />
+				
+			<view y="40" height="${ parent.height-40 }">
+			
+				<!-- Declared conference rooms list -->
+				<view y="4" x="4" height="${ parent.height-4 }">
+					<handler name="oninit">
+						canvas.thishib.roomtype = "private";
+						this.getRoomsByOrganisationWithoutType.doCall();
+					</handler>    
+	        
+					<netRemoteCallHib name="getRoomsByOrganisationWithoutType" funcname="conferenceservice.getRoomsByOrganisationWithoutType" remotecontext="$once{ canvas.thishib }" >   
+						<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+						<netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+						<handler name="ondata" args="value">	
+						<![CDATA[
+                            if ($debug) Debug.write("getRoomsByOrganisationWithoutType ",value);
+							if (value != null) {
+								for (var eg = 0; eg < value.length; eg++) {
+									new lz.roomListItem(parent.inn.inn.inn,{
+												roomType:value[eg].room.roomtype.roomtypes_id,
+												currentusers : value[eg].room.currentusers,
+												obj : value[eg],
+												ispublic : false,
+												roomid : value[eg].room.rooms_id,
+												starttime : parseDateToStringTime(value[eg].room.starttime),
+												roomname : value[eg].room.name,
+												roomcomment : value[eg].room.comment
+											});
+								}
+							}
+
+							parent.parent.parent.parent.parent
+									.updateFinishedTabsQuantity();
+						]]>	        	          				
+						</handler>	
+					</netRemoteCallHib> 
+	 
+					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
+					<view name="inn" width="480" height="${ parent.height }" 
+									bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+						<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" bgcolor="0xFFFFFF" clip="true" >
+							<view name="inn" layout="axis:y;spacing:1"/>
+							<om_vscrollbar />
+						</view>
+					</view>
+				</view>
+	
+				<!-- description panel for eache room. right hand on this class view.
+						roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
+							Mar 24 2008 commented by onokeiji@gmal.com
+					 -->
+				<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
+			</view>
+  			
+		</view>
+		
+		<!-- Appointed Meetings -->
+		<view name="MyMeetings" visibility="hidden" height="${ parent.height }">
+			
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
+			
+			<labelText labelid="782" x="30" width="400" multiline="true" />
+			
+			<!-- Declared conference rooms list -->
+			<view y="60" height="${ parent.height-60 }">
+				
+				<handler name="oninit">
+					canvas.thishib.roomtype = "public";
+					
+                    new lz.roomListItem(this.inn.inn.inn,{
+                                                roomType:1,
+                                                ispublic:true,
+                                                roomname : canvas.getLabelName(1306)
+                                            });
+
+                    new lz.roomListItem(this.inn.inn.inn,{
+                                                roomType:3,
+                                                ispublic:true,
+                                                roomname : canvas.getLabelName(1307)
+                                            });
+                        
+					this.getAppointedMeetingRoomsWithoutType.doCall();
+				</handler>    
+	        
+				<netRemoteCallHib name="getAppointedMeetingRoomsWithoutType" funcname="conferenceservice.getAppointedMeetingRoomsWithoutType" remotecontext="$once{ canvas.thishib }" >   
+					<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+					<handler name="ondata" args="value">	
+						<![CDATA[
+							if ($debug) Debug.write("getRoomsPublic: ", value);
+							if (value != null) {
+								for (var eg = 0; eg < value.length; eg++) {
+									var time = value[eg].starttime.getHours()
+											+ ':'
+											+ value[eg].starttime.getMinutes()
+											+ ' '
+											+ value[eg].starttime.getDate()
+											+ '.'
+											+ (value[eg].starttime.getMonth() + 1)
+											+ '.'
+											+ value[eg].starttime.getFullYear();
+									new lz.roomListItem(parent.inn.inn.inn, 
+										   {
+										        roomType:value[eg].roomtype.roomtypes_id,
+												currentusers : value[eg].currentusers,
+												obj : value[eg],
+												ispublic : true,
+												roomid : value[eg].rooms_id,
+												starttime : time,
+												roomname : value[eg].name
+											});
+								}
+	
+								
+							}
+							
+							parent.parent.parent.parent.updateFinishedTabsQuantity();
+						]]>		        	          				
+					</handler>	
+				</netRemoteCallHib> 
+	 
+				<!-- inn.inn.inn view would be setted object by above ondata hander. -->
+				<view name="inn" width="480" height="${ parent.height }" 
+								bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+					<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" bgcolor="0xFFFFFF" clip="true" >
+						<view name="inn" layout="axis:y;spacing:1"/>
+						<om_vscrollbar />
+					</view>
+				</view>
+			</view>
+	
+			<!-- description panel for eache room. right hand on this class view.
+					roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
+						Mar 24 2008 commented by onokeiji@gmal.com
+				 -->
+			<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
+			
+		</view>
+		
+	</view>
+	
+</class>
+
+
+</library>

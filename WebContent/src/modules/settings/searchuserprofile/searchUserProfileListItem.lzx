@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="searchUserProfileListItem" extends="basePagingListItem" showhandcursor="false" height="40">
+	
+	<attribute name="username" value="" type="string" />
+	<attribute name="timezone" value="" type="string" />
+	<attribute name="searchOffers" value="" type="string" />
+	<attribute name="searchSearchs" value="" type="string" />
+	<attribute name="pending" value="false" type="boolean"/>
+	
+	<attribute name="searchUserProfileImage" value="null" />
+	
+	<handler name="onpending" args="p">
+		this.pending = p;
+		if (p) {
+			this.setAttribute("opacity",0.5);
+			this._icons.add.setAttribute("clickable",false);
+		} else {
+			this.setAttribute("opacity",1);
+			this._icons.add.setAttribute("clickable",true);
+		}
+	</handler>
+	
+	<handler name="onmouseover">
+		<![CDATA[
+			if (this.searchUserProfileImage != null) {
+				this.searchUserProfileImage.destroy();
+				this.searchUserProfileImage = null;
+			}
+			
+			if (this.refObj != null) {
+				this.searchUserProfileImage = new lz.searchUserProfileImage(canvas,{
+						x:this.getAttributeRelative("x",canvas) - 120,
+						y:this.getAttributeRelative("y",canvas) - 30,
+						profileUrl: canvas.getPictureUrl(this.refObj.pictureuri
+							, '&moduleName=remoteuserprofile&remoteUserid='+this.refObj.user_id)
+					});
+			}
+		]]>
+	</handler>
+	
+	<handler name="onmouseout">
+		if (this.searchUserProfileImage != null) {
+			this.searchUserProfileImage.destroy();
+			this.searchUserProfileImage = null;
+		}
+	</handler>
+	
+	<turnOverTextItem name="_username" width="200" multiline="true"
+					  text="${ parent.username }" />
+	<turnOverTextItem name="_timezone" width="80" multiline="true"
+					  text="${ parent.timezone }" />
+	<turnOverTextItem name="_searchOffers" width="300" multiline="true"
+					  text="${ parent.searchOffers }" />
+	<turnOverTextItem name="_searchSearchs" width="300" multiline="true"
+					  text="${ parent.searchSearchs }" />
+	
+	<view name="_icons" >
+		
+		<view visible="${ parent.parent.clickable }">
+			
+		    <miniIconsImage name="add" y="1" x="1" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="18" height="18" 
+	               showhandcursor="true">
+		        <handler name="onclick">
+		            if ($debug) Debug.write("Start Conference");
+		            if (hib.userobject.user_id == parent.parent.parent.refObj.user_id) {
+		            	new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+		            	return;
+		            }
+		            parent.parent.parent.requestUserToContactList.doCall();
+		        </handler>
+		        <labelTooltip labelid="1186" />
+		    </miniIconsImage> 
+		    
+		    <miniIcons name="message" y="1" x="20" resource="private_message_add_rsc" width="18" height="18" 
+                   showhandcursor="true">
+                <handler name="onclick">
+                    if ($debug) Debug.write("Start Conference 1 ",parent.parent.parent.refObj.user_id);
+                    if ($debug) Debug.write("Start Conference 2 ",parent.parent.parent.parent.parent.parent.parent);
+                    parent.parent.parent.parent.parent.parent.parent.newMessage(parent.parent.parent.refObj);
+                </handler>
+                <labelTooltip labelid="1253" />
+            </miniIcons> 
+		    
+		    <miniIcons name="profile" y="1" x="40" resource="user_profile_rsc" width="18" height="18" 
+	               showhandcursor="true">
+		        <handler name="onclick">
+		            if ($debug) Debug.write("Start Conference");
+		            new lz.viewUserProfileWindow(canvas,{
+				            	userId:parent.parent.parent.refObj.user_id
+				            });
+		        </handler>
+		        <labelTooltip labelid="1236" />
+		    </miniIcons> 
+		    
+	    
+	    </view>
+		
+		<view height="$once{ parent.parent.height }" width="1" 
+        	align="right" bgcolor="black" />
+	</view>
+	
+	<!--
+	public Long requestUserToContactList(String SID, Long userToAdd_id, 
+		   		String domain, String port, String webapp)
+	 -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.refObj.user_id; </method></netparam>
+    	<netparam><method name="getValue"> return canvas.getHttpHost(); </method></netparam>
+    	<netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+    	<netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("requestUserToContactList: ",value);
+	    		if (value > 0) {
+	    			parent.setAttribute("pending",true);
+	    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
+	    		}
+	    		parent.onmouseout.sendEvent(null);
+    		]]>
+    	</handler>
+    </netRemoteCallHib>	
+					  
+</class>
+
+</library>

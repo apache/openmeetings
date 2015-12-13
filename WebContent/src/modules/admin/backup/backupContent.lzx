@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Backup module for admin. It can export or import user account data as xml-file. -->
+<class name="backupContent" extends="baseContentView">
+	
+	<labelText fontsize="10" fontstyle="bold" y="2" x="2" labelid="1066" />
+	
+    <view x="4" resource="warning_icon_rsc" y="26" />
+
+    <labelText fontsize="10" y="24"
+	     x="30" width="600" labelid="1065" multiline="true" />
+	
+	<labelCheckbox x="10" y="180" fontsize="11"
+        name="_includeFileOption" labelid="1537" >
+        <handler name="oninit">
+            this.setValue(true);
+        </handler>
+    </labelCheckbox>  
+	
+	<!-- System Import -->
+    <simpleLabelButton labelid="1536" x="30" y="220" width="200">
+    	<handler name="onclick">
+        	<![CDATA[
+	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+	                            x:300,
+	                            isOnlyZip:true,
+	                            servletName:'backup.upload'
+	                        });
+        	]]>
+        </handler>
+	    <!-- 
+	        new lz.backupImportWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
+	     -->
+    </simpleLabelButton> 
+    
+    <!-- System Backup -->
+    <simpleLabelButton labelid="1066" x="232" y="220" width="200">
+        <handler name="onclick">
+            <![CDATA[
+                var exporturl = canvas.getUrl() + 'BackupExport?moduleName=backup'
+                        +'&sid='+canvas.sessionId;
+                
+                if (parent._includeFileOption.getValue()) {
+                	exporturl += "&includeFileOption=yes";
+                } else {
+                	exporturl += "&includeFileOption=no";
+                }
+                        
+                if($debug) Debug.write("BACKUP/exporturl "+exporturl);
+                lz.Browser.loadURL(exporturl,"_parent");
+            ]]>
+        </handler>
+    </simpleLabelButton>  
+    
+    <labelText fontsize="10" fontstyle="italic" y="250" x="10">
+    	<handler name="oninit">
+    		var mBytes = Math.round(Number(canvas.MAX_UPLOAD_SIZE)/1024/1024);
+    		this.setAttribute("text",canvas.getLabelName(1491)+" "+mBytes+" MB  [max_upload_size = "+canvas.MAX_UPLOAD_SIZE+" Bytes]");
+    	</handler>
+    </labelText>    
+    
+    <labelText fontsize="10" y="280" labelid="1505" multiline="true" />
+</class>
+
+</library>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<!--- common simpleTurnOverList view class. -->
+<class name="simpleTurnOverList" extends="view">
+    
+    <attribute name="_selected" value="null"/>
+    
+    <event name="ondblclickedItem" />
+
+    <handler name="onclickedItem" args="itemObj">
+        if (this._selected != null) {
+            this._selected.deselect();
+        }
+        this._selected = itemObj;
+        this._selected.select();
+    </handler>
+	
+	<attribute name="mainBgColor" value="0xEEF0EB" />
+    
+	<method name="addHeaderItem" args="labelid,width" >
+		new lz.turnOverListHeaderItem(this._innerlisthead._inn,{labelid:labelid,width:width,subviewsid:this._innerlisthead._inn.subviews.length});
+	</method>
+    
+    <method name="sendInitialWidthUpdate">
+        for (var eg in this._innerlisthead._inn.subviews) {
+            this._innerlisthead._inn.subviews[eg].onwidth.sendEvent(this._innerlisthead._inn.subviews[eg].width);
+        }
+    </method> 
+	
+	<method name="sendWidthUpdate" args="w,subviewsid" >
+		<![CDATA[
+		////Debug.write(w,subviewsid,this._innerlist._inn);
+		for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+			this._innerlist._inn._inn.subviews[i].subviews[subviewsid].setAttribute('width',w);
+		}
+		]]>
+	</method>
+    
+    <method name="initValues" args="numberOfRecords">
+        <![CDATA[
+            this._records.setAttribute('text',numberOfRecords + ' ' + canvas.getLabelName(272) );
+        ]]>
+    </method>
+	
+	<method name="clearList">
+        this._selected = null;
+		this._innerlist._inn._inn.destroy();
+		new lz.innerList(this._innerlist._inn,{name:'_inn'});
+	</method>
+    
+    <!-- =========  BgArea area  =========-->
+    <view width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
+          height="$once{ parent.height-20 }" x="0" y="20">
+        <view width="$once{ parent.width-2 }" bgcolor="$once{ parent.parent.mainBgColor }"
+          height="$once{ parent.height-2 }" x="1" y="1"></view>
+    </view>
+    
+	<!-- =========  Control area  =========-->
+
+    <labelText name="_records" x="2" resize="true" />
+    
+    
+	<!-- =========  List Header area  =========-->
+
+	<view name="_innerlisthead" height="20" x="1" width="$once{ parent.width-2 }"
+         y="22" clip="true">
+        <view name="_inn" x="${ parent.parent._innerlist._inn.x }" layout="axis:x;spacing:0" />
+    </view> 
+	
+	<!-- =========  List Contents area  =========-->
+	<view name="_innerlist" height="$once{ parent.height-43 }" x="1" width="$once{ parent.width-2 }"
+		y="42" clip="true" bgcolor="$once{ parent.mainBgColor }">
+		<view name="_inn" >
+			<innerList name="_inn" />
+		</view>
+		<om_vscrollbar />
+		<om_hscrollbar />
+	</view>
+
+</class>
+
+</library>

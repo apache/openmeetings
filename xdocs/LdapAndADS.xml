@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="LDAP and Active Directory Integration">
+
+			<p> In: $RED5_HOME/webapps/openmeetings/conf<br/>
+
+				you will find sample configurations for LDAP and Active Directory. The
+				nature of those Directory Servers are that they are individual for
+				every organization, so you have to modify of course at least the
+				path to your user-base et cetera.<br/>
+				<br/>
+				To activate any of those configurations you have to login into
+				OpenMeetings, goto Administration > Ldap.
+			</p>
+			
+			<a class="fancybox-buttons" href="images/ldap_screen.png">
+					<img src="images/ldap_screen.png" alt="" width="442" height="282" />
+				</a>
+			
+			<p>
+				Import is that you configure LDAP_SEARCH_PATH so that it points to the node of your directory server that contains the users
+			</p>
+			
+			<p>
+				If you have multiple search paths you can either try to define a search path that points to multiple nodes or define multiple ldap configurations.
+			</p>
+			
+			<p>
+				Successful integration is also reported with Novell eDirectory
+			</p>
+			
+			<p>
+				You can configure multiple domains or different user-paths in the Administration of OpenMeetings. 
+			</p>
+
+		</section>
+
+	</body>
+</document>

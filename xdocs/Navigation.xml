@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Change main navigation</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Changing the main navigation">
+
+			<p>To customize the main menu (for example remove entries or changing
+				the order) you can edit the tables:  </p>
+			<ul>
+				<li>navimain </li>
+				<li>naviglobal </li>
+				<li>navisub (currently not in use) </li>
+			</ul>
+			<p></p>
+			<p>
+				You need to make sure that you
+				<strong>restart red5 after doing changes to the database</strong>
+				, there is a database cache, so changes might not take affect as
+				long as you did not restart.
+			</p>
+		</section>
+
+	</body>
+
+</document>

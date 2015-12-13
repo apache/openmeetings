@@ -1,0 +1,52 @@
+## OpenMeetings
+## author swagner
+## 10.04.2007
+## revised H.Kuze(minamotonoason) 2008.Apr.2
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
+</head>
+<body>
+<h3>$APP_NAME - Installation</h3>
+
+<h3><A HREF="?command=step1">Continue with STEP 1</A></h3>
+
+<ol><li>
+<h4><a name="Recommendation_for_production_environment"></a>Recommendation for production environment<a target="_blank" href="#Recommendation_for_production_environment" class="section_anchor"></a></h4>
+</li><blockquote>By default $APP_NAME uses the integrated Apache Derby database. For production environment you should consider using <a target="_blank" href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a target="_blank" href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a> or for example <a target="_blank" href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a> or <a href="http://openmeetings.apache.org/OracleConfig.html" target="_blank">Oracle</a>
+</blockquote><li><h4><a name="Enabling_Image_Upload_and_import_to_whiteboard"></a>Enabling Image Upload and import to whiteboard<a href="#Enabling_Image_Upload_and_import_to_whiteboard" class="section_anchor"></a></h4></li><ul><li>Install <strong>ImageMagick</strong> on the server, you can get more information on <a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a> regarding installation. The instructions for installation can be found there <a target="_blank" href="http://www.imagemagick.org/script/binary-releases.php" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>, however on most linux systems you can get it via your favorite package managers (apt-get it) </li></ul><li><h4><a name="Enabling_import_of_PDFs_into_whiteboard"></a>Enabling import of PDFs into whiteboard<a href="#Enabling_import_of_PDFs_into_whiteboard" class="section_anchor"></a></h4></li><ul><li>Install <strong>GhostScript</strong> on the server, you can get more information on <a target="_blank" href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a> regarding installation. The instructions for installation can be found there, however on most linux systems you can get it via your favorite package managers (apt-get it). </li><li>Install <strong>SWFTools</strong> on the server, you can get more information on <a target="_blank" href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a> regarding installation. Some of the Linux distributions already have it in there package manager see <a target="_blank" href="http://packages.debian.org/unstable/utils/swftools" rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>), the recommended version of <strong>SWFTools</strong> is 0.9 as prior version have a bug that does lead to wrong object dimensions in the Whiteboard </li></ul><li><h4><a name="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Enabling import of .doc, .docx, .ppt, .pptx, ... all Office Documents into whitebaord<a href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu" class="section_anchor"></a></h4></li><ul><li><strong>OpenOffice-Service</strong> started and listening on port 8100, see <a target="_blank" href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a> for details </li></ul><li><h4><a name="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Enabling Recording and import of .avi, .flv, .mov and .mp4 into whiteboard<a href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into" class="section_anchor"></a></h4></li><ul><li>Install <strong>FFMpeg</strong>. You should get FFMPEG in an up to date copy! For Windows you can download a Build for example from <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/" rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux or OSx Users should be able to use one of the various Installation Instructions on the Web. You need to enable libmp3lame! </li><li>Install <strong>SoX</strong> <a href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>. You should install SoX in a up to date copy! SoX 12.xx will NOT work! </li></ul></ol>
+
+<h3><A HREF="?command=step1">Continue with STEP 1</A></h3>
+
+<br/>
+<b> <span style="font-size:1.2em">If you have further questions or need support in installation or hosting:</span></b><br/><br/>
+
+<b> <span style="font-size:1.2em">Commercial-Support:</span></b><br/><br/>
+
+<span style="font-size:1.1em"><b>By phone</b></span><br/>
+<span style="font-size:1.1em">++49 721 467 27327</span><br/>
+<span style="font-size:1.1em"><b>By email</b></span><br/>
+<span style="font-size:1.1em"><a href="mailto:service@openmeetings.de">service@openmeetings.de</a></span> <br/>
+<br/><br/>
+<b><span style="font-size:1.2em">Community-Support:</span></b><br/><br/>
+<span style="font-size:1.1em"><a href="https://groups.google.com/forum/#!forum/openmeetings-user" target="_blank">User-Forums</a></span> <br/>
+<span style="font-size:1.1em"><a href="https://groups.google.com/forum/#!forum/openmeetings-dev" target="_blank">Developer-Forums</a></span><br/>
+
+
+</body>
+</html>

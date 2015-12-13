@@ -1,0 +1,16 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- Defines a font face or style within the font family that the outer element defines.
+ -->
+<class name="face" extends="false">
+
+	<!---	The path of a file that contains the source for this object. -->
+    <attribute name="src" type="string" />
+    <!---	Corresponds to the fontstyle attribute of a view.
+    One of: 	bold | italic | bold italic | italic bold | plain  -->
+    <attribute name="style" type="string" value="bold|italic|bold italic|italic bold|plain"/>
+    
+</class>
+
+</library>

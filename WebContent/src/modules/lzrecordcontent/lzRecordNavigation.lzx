@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordNavigation" extends="view" width="280" height="${ canvas.height-canvas.naviHeight }">	
+
+    <attribute name="isOpen" value="true" type="boolean"/>
+    
+    <attribute name="playSelected" value="false" type="boolean"/>
+    
+    <attribute name="parentFolderId" value="-2" type="number" />
+    
+    <attribute name="_selected" value="null" />
+    
+    <attribute name="currentRecording" value="null" />
+    
+    <handler name="oninit">
+        lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
+        if (canvas.roomRecordingId > 0) {
+        	_mainScrollBar.setAttribute("visibility","hidden");
+            canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeightDelta',0);
+            this.parentFolderId = canvas.roomRecordingId;
+            this.getFlvRecordingWithMetaData.doCall();
+            this._doClose.setAttribute('started', true);
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+        } else {
+        	this.getFLVExplorerByRoom.doCall();
+        }
+    </handler>
+    
+    <method name="toggleStatus">
+    	if (canvas.roomRecordingId != 0) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:909});
+    		return;
+    	}
+        if (this.isOpen) {
+            this._doClose.setAttribute('started', true);
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+        } else {
+            this._doOpen.setAttribute('started', true);
+            this.isOpen = true;
+            this._minimizeSidebar._icon.setAttribute("frame",1);
+        }
+    </method>
+    
+    <!--
+        public FLVRecorderObject getFLVExplorerByRoom(String SID)
+     -->
+    <netRemoteCallHib name="getFLVExplorerByRoom" funcname="flvrecorderservice.getFLVExplorerByRoom" 
+        remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFLVExplorerByRoom: ",value);
+            parent.parseRootItems(value);
+        </handler>
+    </netRemoteCallHib>  
+    
+     <!--
+        Parse Items and generate Output
+     --> 
+    <method name="parseRootItems" args="roomObject">
+        <![CDATA[
+            this.clearContent();
+            
+            var homeSizeInMBytes = Math.round( (roomObject.userHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._statusArea._userHomeSize.setAttribute("text","" + homeSizeInMBytes + " MBytes");
+            
+            var roomHomeSizeInMBytes = Math.round( (roomObject.roomHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._statusArea._roomHomeSize.setAttribute("text","" + roomHomeSizeInMBytes + " MBytes");
+                        
+            
+            var homeIcon = new lz.rootFLVExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(860),
+                                        name:'_home',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_home_rsc',
+                                        isOwner:true,
+                                        refObjListRoot:this
+                                    });
+                                    
+            homeIcon.content.setAttribute("visibility","visible");
+            homeIcon.icon_folder_pre.setAttribute("frame",2);
+            homeIcon._folderIcon.setAttribute("frame",2);
+            
+            //Home area
+            for (var i=0;i<roomObject.userHome.length;i++) {
+                var fileExplorerItem = roomObject.userHome[i];
+                //if ($debug) Debug.write("fileExplorerItem -1- ",fileExplorerItem);
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFLVExplorerItem(homeIcon.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else {
+                    new lz.flvExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_video_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+            //Public - Room Area
+            var roomHome = new lz.rootFLVExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(861),
+                                        name:'_roomHome',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_network_rsc',
+                                        refObjListRoot:this
+                                    });
+                                    
+            roomHome.content.setAttribute("visibility","visible");
+            roomHome.icon_folder_pre.setAttribute("frame",2);
+            roomHome._folderIcon.setAttribute("frame",2);
+            
+            //Public area
+            for (var i=0;i<roomObject.roomHome.length;i++) {
+                var fileExplorerItem = roomObject.roomHome[i];
+                //if ($debug) Debug.write("fileExplorerItem -2- ",fileExplorerItem);
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFLVExplorerItem(roomHome.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else {
+                    new lz.flvExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_video_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+        ]]>
+    </method>
+    
+    <method name="clearContent">
+        <![CDATA[
+            for (var eg in this._filearea._contentarea.subviews) {
+                this._filearea._contentarea.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+    
+    <method name="addFolder">
+        if (this._selected == null) {
+            this._filearea._contentarea.subviews[0].addFolder();
+        } else {
+            if (this._selected.isFolder) {
+                this._selected.addFolder();
+            } else {
+                if ($debug) Debug.write("this._selected ",this._selected);
+                this._selected.parent.parent.addFolder();
+            }
+        }
+    </method>
+    
+    <method name="selectItem" args="itemRef">
+        if (this._selected != null) {
+            this._selected.deselectItem();
+        }
+        
+        this._selected = itemRef;
+        this._selected.selectItem();
+        
+        //Set parent folder id for next Folder or uploaded file
+        if (this._selected.fileExplorerItemId == 0) {
+            if (this._selected.isOwner) {
+                this.parentFolderId = -2;
+            } else {
+                this.parentFolderId = 0;
+            }
+        } else {
+            this.parentFolderId = this._selected.fileExplorerItemId;
+        }
+        
+        if (itemRef.isFolder) {
+            return;
+        }
+        if ($debug) Debug.write("selectItem",itemRef);
+        
+        this.getFlvRecordingWithMetaData.doCall();
+    </method>
+    
+
+    <netRemoteCallHib name="getFlvRecordingWithMetaData" funcname="flvrecorderservice.getFlvRecordingWithMetaData" 
+        remotecontext="$once{ canvas.thishib }" showLoading="false">   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.parentFolderId;</method></netparam>
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFlvRecordingWithMetaData: ");
+            parent.setRecording(value);
+        </handler>
+    </netRemoteCallHib>   
+    
+    <method name="setRecording" args="rec">
+        <![CDATA[
+        
+            if (rec.isFolder) {
+                return;
+            }
+        
+            this.currentRecording = rec;
+        
+            this._recordingsInfo.content._flvName.setAttribute("text",rec.fileName);
+            
+            var deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
+            
+            if ($debug) Debug.write("deltaInSeconds ",deltaInSeconds);
+            
+            var minutes = Math.floor(deltaInSeconds/60);
+            
+            var restSeconds = deltaInSeconds - (minutes*60);
+            
+            var timeInMinutes = minutes+" min "+restSeconds+" sec";
+            
+            if (minutes > 60) {
+                var hours = Math.floor(minutes/60);
+                
+                var restMinutes = minutes - (hours*60);
+                
+                var timeInMinutes = hours+" h "+restMinutes+" min "+restSeconds+" sec";
+            }
+            
+            this._recordingsInfo.content.recordingName = rec.fileHash;
+            this._recordingsInfo.content.alternateName = rec.alternateDownload;
+            
+            this._recordingsInfo.content._flvLength.setAttribute("text",timeInMinutes);
+            
+            this._recordingsInfo.content._flvDate.setAttribute("text",parseDateToStringTime(rec.inserted));
+            
+            this._recordingsInfo.content._flvRoom.setAttribute("text",rec.room.name);
+        
+            this.playRecording();
+        ]]>
+    </method>
+    
+    <method name="playRecording">
+        if ($debug) Debug.write("playRecording :showMetaData: ");
+        parent._recordingsViewBottom.showMetaData(this.currentRecording);
+    </method>   
+    
+    <method name="loadFLV" args="refObj">
+        if ($debug) Debug.write("loadFLV ",refObj);
+        this.playSelected = true;
+        this.selectItem(refObj);
+    </method>
+        
+    <!--
+        Borders
+    
+    
+    <view name="_bg1" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width-10 }" 
+          x="0" y="0" height="${ parent.height }" />
+          
+           
+          
+    <view name="_bg2" bgcolor="0xFFFFFF" x="1" y="0" width="$once{ parent.width - 12 }" 
+          height="${ parent.height - 1 - parent._recordingsInfo.height }" />
+    --> 
+               
+    <view name="_border2" x="0" y="19" width="$once{ parent.width-10 }" 
+          height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />     
+    
+    <view name="_fileBar" layout="axis:x" x="0" y="0">
+        <baseChooseIconFLVView labelid="703" height="20" width="19" 
+                            resourceN="file_explorer_add_folder_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Add Folder");
+                parent.parent.addFolder();
+            </handler>
+        </baseChooseIconFLVView>
+        <baseChooseIconFLVView labelid="704" height="20" width="19" 
+                            resourceN="file_explorer_reload_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Refresh Folder");
+                parent.parent.getFLVExplorerByRoom.doCall();
+            </handler>
+        </baseChooseIconFLVView>
+        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" 
+        				height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content Trashbar
+     --> 
+     
+    <view name="_trashBar" layout="axis:x" x="$once{ parent.width - 30 }" y="0">
+        <baseChooseIconFLVView name="_trashIcon" labelid="705" height="20" width="19" 
+                         resourceN="file_explorer_trash_rsc">
+            <attribute name="isTrashCan" value="true" type="boolean" />
+            <handler name="onclick">
+                if ($debug) Debug.write("Delete Folder and Files");
+            </handler>
+            <handler name="onmousetrackover">
+                //if ($debug) Debug.write("onmousetrackover");
+                canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
+                this.onmouseover.sendEvent();
+            </handler>
+            <handler name="onmousetrackout">
+                //if ($debug) Debug.write("onmousetrackout");
+                canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
+                this.onmouseout.sendEvent();
+            </handler>
+            <handler name="onmousetrackup">
+                if ($debug) Debug.write("onmousetrackup");
+                this.onmouseout.sendEvent();
+            </handler> 
+        </baseChooseIconFLVView>
+        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content
+     --> 
+    
+    <view name="_filearea" x="1" y="20" clip="true" bgcolor="0xFFFFFF" 
+          height="${ parent.height - 21 - parent._recordingsInfo.height - 40 }" 
+          width="$once{ parent.width - 12 }">
+        
+        <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
+        
+        <attribute name="currentDragItem" value="null" />
+        
+        <handler name="oninit">
+            canvas.currentImagesListdraw = this;
+        </handler>
+        
+        <view name="_contentarea" layout="axis:y;inset:1" />
+        
+        <om_vscrollbar name="_scrollbar" />
+        <om_hscrollbar name="_hscrollbar" />
+    </view>  
+    
+    <view name="_statusArea" x="1" y="${ parent._recordingsInfo.y - 40 }" 
+    	   width="$once{ parent.width - 12 }">
+    	
+        <labelText name="_userHomeSizeLabel" labelid="923" />
+        
+        <labelText name="_userHomeSize" align="right" />
+        
+        <labelText name="_roomHomeSizeLabel" labelid="924" y="20" />
+        
+        <labelText name="_roomHomeSize" align="right" y="20" />
+    	
+    </view>  
+    
+    <basePropertyPanel name="_recordingsInfo" labelid="862" valign="bottom"
+                   width="$once{ parent.width - 12 }" height="180">
+        
+        <view name="content" y="24" 
+              width="$once{ parent.width }" height="$once{ parent.height - 24 }">
+            
+            <attribute name="recordingName" value="" type="string" />
+            <attribute name="alternateName" value="" type="string" />
+            
+            <!--
+            <labelText text="Cut" resize="true" x="$once{ parent.width - 118 }" y="0"/>
+            
+            <customEdittext name="left" x="$once{ parent.width - 108 }" width="26" text="0" y="0"/>
+             -->
+            
+            <labelText text="Shift (in ms)" resize="true" x="0" y="0"/>
+            
+            <labelText text="Left" resize="true" x="$once{ parent.width - 200 }" y="0"/>
+            
+            <customEdittext name="leftTime" x="$once{ parent.width - 158 }" width="26" text="0" y="0"/>
+            
+            <labelText text="Right" resize="true" x="$once{ parent.width - 118 }" y="0"/>
+            
+            <customEdittext name="rightTime" x="$once{ parent.width - 68 }" width="26" text="0" y="0"/>
+            
+            
+            <labelText text="Loudness" resize="true" x="0" y="20"/>
+            
+            <labelText text="Left" resize="true" x="$once{ parent.width - 200 }" y="20"/>
+            
+            <customEdittext name="left" x="$once{ parent.width - 158 }" width="26" text="0" y="20"/>
+            
+            <labelText text="Right" resize="true" x="$once{ parent.width - 118 }" y="20"/>
+            
+            <customEdittext name="right" x="$once{ parent.width - 68 }" width="26" text="0" y="20"/>
+            
+            <view name="_show_log1" resource="flv_reload_rsc" y="18" x="$once{ parent.width - 36 }">
+            	<handler name="oninit">
+            		if ($debug) Debug.write("_show_log1::oninit ", this);
+            	</handler> 
+                <handler name="onclick" args="clickObj">
+                    parent.parent.parent.parent._recordingsViewMain.restartConversion(parent.left.getText(),parent.right.getText(),parent.leftTime.getText(),parent.rightTime.getText());
+                </handler>
+                <labelTooltip text="Re-Sample File" />
+            </view>
+            
+            <view name="_show_log2" resource="recorder_show_log_rsc" y="18" x="$once{ parent.width - 18 }">
+            	<handler name="onclick" args="clickObj">
+            		parent.parent.parent.parent._recordingsViewMain.showLog();
+            	</handler>
+            	<labelTooltip labelid="902" />
+            </view>
+            
+            <labelText labelid="863" y="38" />
+            <labelText name="_flvName" y="38" x="80" multiline="true" height="32" 
+                       width="${ parent.width-80 }"/>
+            
+            <labelText labelid="864" y="58" />
+            <labelText name="_flvLength" y="58" x="80" />
+            
+            <labelText labelid="865" y="78" />
+            <labelText name="_flvDate" y="78" x="80" />
+            
+            <!--
+            <labelText labelid="866" y="60" />
+            <labelText name="_flvBy" y="60" />
+             -->
+            
+            <labelText labelid="874" y="98" />
+            <labelText name="_flvRoom" y="98" x="80" />
+            
+            <simpleLabelButton y="130" align="right" text_padding_x="40"
+                              height="26" width="$once{ parent.width / 2 }" labelid="883">
+                <view resource="flv_download_rsc" x="4" y="4" />
+                <handler name="onclick">
+                	<![CDATA[
+                	
+                	   if (parent.recordingName == "") {
+                	   	   return;
+                	   }
+                	
+	                   var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+parent.recordingName
+                                    +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                                    +'&sid='+canvas.sessionId;
+                	
+                        lz.Browser.loadURL(downloadurl,"_parent");
+                	
+                	]]>
+                </handler>
+                
+                <labelTooltip labelid="873" />
+                
+            </simpleLabelButton>
+            
+            
+            <simpleLabelButton y="130" align="left" text_padding_x="40" 
+                              height="26" width="$once{ parent.width / 2 }" labelid="884">
+                <view resource="flv_download_rsc" x="4" y="4" />
+                <handler name="onclick">
+                	<![CDATA[
+                	
+                	   if (parent.recordingName == "") {
+                	   	   return;
+                	   }
+                	
+	                   var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+parent.alternateName
+                                    +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                                    +'&sid='+canvas.sessionId;
+                	
+                        lz.Browser.loadURL(downloadurl,"_parent");
+                	
+                	]]>
+                </handler>
+                
+                <labelTooltip labelid="882" />
+                
+            </simpleLabelButton>            
+            
+        </view>
+        
+        
+        
+    </basePropertyPanel>
+
+    <!--
+        Sidebar to minimize
+     -->
+     
+    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
+          				bgcolor="0xE0E1EB" height="${ parent.height-1 }">
+        <handler name="onclick">
+            parent.toggleStatus();
+        </handler>
+        
+        <view width="${ parent.width }" height="$once{ parent.height }" 
+               bgcolor="0xE0E1EB" >
+        </view>
+            
+        <view name="_icon" resource="sidebar_tab_btn" y="0">
+             <handler name="onclick">
+	            parent.parent.toggleStatus();
+	         </handler>
+	         <labelTooltip name="_labelTooltip" labelid="856" />
+        </view>
+        
+    </view>
+        
+    <animator name="_doOpen" attribute="x" to="0" 
+              duration="750" started="false" />
+              
+    <animator name="_doClose" attribute="x" to="-270" 
+              duration="750" started="false">
+    </animator>
+    
+</class>
+
+
+
+</library>
