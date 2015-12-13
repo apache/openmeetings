@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="changeDevice" extends="labelExplorerBox" labelid="51"
+    docking="true" resizeable="false" closable="true" width="300" x="14" height="260">
+
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.net.SharedObject;
+            </passthrough>
+        </when>
+    </switch>
+
+    <method name="storelocaldata">
+        <![CDATA[
+        var so:SharedObject = SharedObject.getLocal('userdata');
+        var sdata = so.data;
+        if (sdata==null) sdata = new Array();
+        sdata["cam"]=availibleCams3.getValue();
+        sdata["mic"]=availibleMics3.getValue();
+        sdata["savecamdata"] = this.holddatainSO.getValue();
+        so.flush();
+        ]]>
+    </method>   
+    
+    <method name="doninitalize">
+        this.storelocaldata();
+        this.close();
+    </method>
+     
+    <labelText labelid="52" fontsize="11" x="10" y="30" />
+
+    <resetCombobox fontsize="11" id="availibleCams3" x="10" y="50" width="280" editable="false">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.media.Camera;
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+
+        <handler name="oninit">
+            <![CDATA[
+            //Get all availible Cam's
+            var tw = Camera.names;
+            var t = "";
+            for (var eg=0;eg<tw.length;eg++){
+                this.addItem(tw[eg],eg);
+                t=eg;
+            }
+
+            var so:SharedObject = SharedObject.getLocal('userdata');
+	        var sdata = so.data;
+	        var cam;
+            if (sdata != null){
+                cam = sdata["cam"];
+                if (cam == 'undefined') {
+                    cam = t;
+                }
+            } else {
+                cam = t;
+            }
+            this.selectItem(String(cam));
+            ]]>
+        </handler>
+    </resetCombobox>
+    
+    <labelText text="LABEL53" labelid="53" fontsize="11" x="10" y="80" />
+
+    <resetCombobox fontsize="11" id="availibleMics3"  x="10" y="100" width="280" editable="false">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.media.Microphone;
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+
+        <handler name="oninit">
+            <![CDATA[
+            //Get all availible Mic's
+            var tw = Microphone.names;
+            var t = "";
+            for (var eg=0;eg<tw.length;eg++){
+                t=eg;
+                this.addItem(tw[eg],eg);
+            }
+
+            var so:SharedObject = SharedObject.getLocal('userdata');
+	        var sdata = so.data;
+	        var mic;
+	        if (sdata != null){
+                mic = sdata["mic"];
+                if (mic == 'undefined') {
+                    mic = t;
+                }
+            } else {
+                mic = t;
+            }
+            this.selectItem(String(mic));
+            ]]>
+        </handler>
+    </resetCombobox>
+
+    <!-- Remember Me -->
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="220">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
+
+        <handler name="oninit">
+            var so:SharedObject = SharedObject.getLocal('userdata');
+	        var sdata = so.data;
+            var save = sdata["savecamdata"];
+            if ($debug) Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </labelCheckbox>
+    
+    <simpleLabelButton fontsize="11" labelid="54" x="80" y="190" width="100">
+        <handler name="onclick">
+            this.parent.doninitalize();
+        </handler>
+    </simpleLabelButton>
+    
+    <labelText labelid="56" width="280" x="10"
+    	y="150" multiline="true" resize="false"/>
+    
+    <simpleLabelButton labelid="55" width="100" x="190" y="190"
+        onclick="this.parent.close();" />
+    
+</class>
+
+</library>

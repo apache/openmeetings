@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawULine" extends="baseDrawLine" >
+    
+    <!-- for drawing uline -->
+    <attribute name="currentulinestroke" value="0xFF6600" />
+    <attribute name="currentulinelineWidth" value="20" type="number" />  
+    <attribute name="currentulineOpacity" value="0.5" type="number" />
+      
+    
+    <!-- ###########################
+    Underline
+     -->
+    <method name="startUline" args="oid_name">
+        if (oid_name == null){
+            oid_name = 'uline'+this.getCounter();
+        }
+        //Debug.write("startUline ",this.startx,this.starty);
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width+2,height:this.height+2,
+            x:-1,y:-1,
+            opacity:this.currentulineOpacity});
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    
+        //Set previous to null
+        this.prevx = null;
+        this.prevy = null;  
+        
+        currentlayer.strokeStyle = this.currentulinestroke;
+        currentlayer.lineWidth = this.currentulinelineWidth;
+        currentlayer.fillstyle = '0x000000';
+    </method>  
+    
+    <method name="endUline">
+        //Debug.write("endUline",this.startx,this.starty,this.endx,this.endy);
+        <![CDATA[
+            var tempName = this.currentlayer.name;
+            //Debug.write("tempName: ",tempName);
+            this.currentlayer.destroy();
+            
+            //GetBounds of that Object
+            var minx = this.width+2;
+            var miny = this.height+2;
+            var maxx = -2;
+            var maxy = -2;
+    
+            if (this.startx<minx) minx=this.startx;
+            if (this.endx<minx) minx=this.endx;
+            
+            if (this.startx>maxx) maxx=this.startx;
+            if (this.endx>maxx) maxx=this.endx;
+            
+            if (this.starty<miny) miny=this.starty;
+            if (this.endy<miny) miny=this.endy;
+            
+            if (this.starty>maxy) maxy=this.starty;
+            if (this.endy>maxy) maxy=this.endy;
+            
+            var width = maxx-minx;
+            var height = maxy-miny;
+            
+            var x1 = this.startx-minx+(this.currentulinelineWidth/2);
+            var y1 = this.starty-miny+(this.currentulinelineWidth/2);
+            var x2 = this.endx-minx+(this.currentulinelineWidth/2);
+            var y2 = this.endy-miny+(this.currentulinelineWidth/2);
+            
+            //Debug.write("minx,miny,width,height: ",minx,miny,width,height);
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                name:tempName,x:(minx-1-(this.currentulinelineWidth/2)),
+                y:(miny-1-(this.currentulinelineWidth/2)),
+                width:(width+this.currentulinelineWidth),
+                height:(height+this.currentulinelineWidth),
+                opacity:this.currentulineOpacity});
+                
+            //this.currentlayer.fillstyle = '0x000000';
+            this.currentlayer.lineWidth = this.currentulinelineWidth;
+            this.currentlayer.strokeStyle = this.currentulinestroke;
+    
+            this.drawline((x1),(y1),(x2),(y2));
+    
+            //Add Layer to global Layer     
+            this.layers.push(this.currentlayer);  
+            this.ulineregisterFinal(this.currentlayer.name,this.currentulinestroke,
+                this.currentulinelineWidth,this.currentulineOpacity,
+                this.currentlayer.x,this.currentlayer.y,
+                this.currentlayer.width,this.currentlayer.height,
+                x1,y1,x2,y2,true,this.getSWFDocumentStatus(),
+                this.getZIndex());
+        ]]>
+    </method> 
+    
+    
+    <method name="ulineregisterFinal" args="newName,stroke,line,opacity,x,y,width,height,x1,y1,x2,y2,doCall,swfObj,zIndex">
+        var actionObject = new Array();
+        actionObject[0] = 'uline';
+        actionObject[1] = stroke;
+        actionObject[2] = line;
+        actionObject[3] = opacity;
+        actionObject[4] = x1  
+        actionObject[5] = y1;  
+        actionObject[6] = x2;    
+        actionObject[7] = y2;  
+        actionObject[8] = zIndex;//-8
+        actionObject[9] = swfObj;//-7
+        actionObject[10] = this.counter;//-6 
+        actionObject[11] = x;//-5
+        actionObject[12] = y;//-4
+        actionObject[13] = width;//-3
+        actionObject[14] = height;//-2
+        actionObject[15] = newName;//-1
+        this.baseactionobjectList.push(actionObject);       
+        if (doCall) this.onsharedMessage('draw',actionObject);
+    </method>       
+    
+    
+    <method name="ulineactionHistory" args="lastActionObject,parentView">
+        <![CDATA[
+        //Debug.write("## lineactionHistory",parentView," 2 ## NEW x,y ",lastActionObject[lastActionObject.length-5],lastActionObject[lastActionObject.length-4]," width,height: ",lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2]);
+        
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+                name:lastActionObject[lastActionObject.length-1],
+                x:lastActionObject[lastActionObject.length-5],
+                y:lastActionObject[lastActionObject.length-4],
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2],
+                opacity:lastActionObject[3]});
+            
+            //this.currentlayer.fillstyle = lastActionObject[1];
+            tmpCurrentlayer.lineWidth = lastActionObject[2];
+            tmpCurrentlayer.strokeStyle = lastActionObject[1];
+    
+            this.drawlineOnObject(tmpCurrentlayer, lastActionObject[4],lastActionObject[5],lastActionObject[6],lastActionObject[7]);
+            
+            //Add Layer to global Layer     
+            this.layers.push(tmpCurrentlayer);  
+            
+            this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+
+        ]]>
+    </method>
+    
+</class>
+
+</library>

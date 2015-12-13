@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="baseDrawPaint" extends="baseDraw" >
+    
+		<!-- paint -->
+		<attribute name="currentlayerstroke" value="0xFF6600" />
+		<attribute name="currentlayerlineWidth" value="2" type="number" />
+		<attribute name="currentlayerOpacity" value="1" type="number" />
+    
+		<!-- TODO: Check if needed, seems to have no reference -->
+		<attribute name="painttrans" value="false" type="boolean" />
+          
+		<!-- #####################
+				Paint
+			 -->
+    
+		<method name="drawline" args="x1,y1,x2,y2">
+		<![CDATA[
+			currentlayer.beginPath();
+			currentlayer.moveTo(x1, y1);
+			currentlayer.lineTo(x2, y2);
+			currentlayer.stroke();
+		]]>
+		</method>
+    
+		<method name="drawlineOnObject" args="obj,x1,y1,x2,y2">
+		<![CDATA[
+			obj.beginPath();
+			obj.moveTo(x1, y1);
+			obj.lineTo(x2, y2);
+			obj.stroke();
+		]]>
+		</method>
+        
+    
+		<method name="drawlineRegisterPaint" args="x1,y1,x2,y2">
+			var actionObject = new Array();
+			actionObject[0] = 'point';
+			actionObject[1] = x1;
+			actionObject[2] = y1;
+			actionObject[3] = x2;
+			actionObject[4] = y2;
+			this.basetempactionobjectList.push(actionObject);
+		</method> 
+         
+		<method name="startPaint">
+
+			//Debug.write("startPaint ",this.startx,this.starty);
+			this.currentlayer = new lz.drawViewNew(this, {
+						name : 'paint' + this.getCounter(),
+						width : this.width + 2,
+						height : this.height + 2,
+						x : -1,
+						y : -1,
+						opacity : this.currentlayerOpacity
+					});
+			this.drawlineOnObject(this.currentlayer, -1, -1, 0, 0);
+			this.drawlineOnObject(this.currentlayer, this.width, this.height,
+					this.width + 1, this.height + 1);
+
+			this.startx = this.currentlayer.getMouse('x');
+			this.starty = this.currentlayer.getMouse('y');
+
+			//Set previous to null
+			this.prevx = null;
+			this.prevy = null;
+
+			currentlayer.strokeStyle = this.currentlayerstroke;
+			currentlayer.lineWidth = this.currentlayerlineWidth;
+			currentlayer.fillstyle = '0x000000';
+
+			this.basetempactionobjectList = new Array();
+
+			//beginFill( the_colorpicker.selectedColor );
+		</method>
+
+		<method name="endPaint">
+        ////Debug.write("endPaint");
+		<![CDATA[
+			var tempName = this.currentlayer.name;
+			this.currentlayer.destroy();
+
+			//GetBounds of that Object
+			var minx = this.width + 2;
+			var miny = this.height + 2;
+			var maxx = -2;
+			var maxy = -2;
+
+			for (var eg = 0; eg < this.basetempactionobjectList.length; eg++) {
+				////Debug.write(this.basetempactionobjectList[eg][1],this.basetempactionobjectList[eg][3]);
+				if (this.basetempactionobjectList[eg][1] < minx)
+					minx = this.basetempactionobjectList[eg][1];
+				if (this.basetempactionobjectList[eg][3] < minx)
+					minx = this.basetempactionobjectList[eg][3];
+
+				if (this.basetempactionobjectList[eg][1] > maxx)
+					maxx = this.basetempactionobjectList[eg][1];
+				if (this.basetempactionobjectList[eg][3] > maxx)
+					maxx = this.basetempactionobjectList[eg][3];
+
+				if (this.basetempactionobjectList[eg][2] < miny)
+					miny = this.basetempactionobjectList[eg][2];
+				if (this.basetempactionobjectList[eg][4] < miny)
+					miny = this.basetempactionobjectList[eg][4];
+
+				if (this.basetempactionobjectList[eg][2] > maxy)
+					maxy = this.basetempactionobjectList[eg][2];
+				if (this.basetempactionobjectList[eg][4] > maxy)
+					maxy = this.basetempactionobjectList[eg][4];
+			}
+
+			for (var eg = 0; eg < this.basetempactionobjectList.length; eg++) {
+
+				this.basetempactionobjectList[eg][1] -= minx;
+				this.basetempactionobjectList[eg][2] -= miny;
+				this.basetempactionobjectList[eg][3] -= minx;
+				this.basetempactionobjectList[eg][4] -= miny
+
+			}
+
+			var width = maxx - minx;
+			var height = maxy - miny;
+			//if ($debug) Debug.info("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+
+			if (width < 2 && height < 2) {
+
+				//if ($debug) Debug.info("Add minimum size of Painting Line");
+
+				if (this.basetempactionobjectList.length > 0) {
+
+					var lastPoint = this.basetempactionobjectList[this.basetempactionobjectList.length
+							- 1];
+
+					var actionObject = new Array();
+					actionObject[0] = 'point';
+					actionObject[1] = lastPoint[3];
+					actionObject[2] = lastPoint[4];
+					actionObject[3] = lastPoint[3] + 2;
+					actionObject[4] = lastPoint[4] + 2;
+					this.basetempactionobjectList.push(actionObject);
+
+				} else {
+
+					//if ($debug) Debug.info("## 2 ## CURRENT width,height ",this.width,this.height);
+
+					minx = this.startx;
+					miny = this.starty;
+
+					var actionObject = new Array();
+					actionObject[0] = 'point';
+					actionObject[1] = 0;
+					actionObject[2] = 0;
+					actionObject[3] = 2;
+					actionObject[4] = 2;
+					this.basetempactionobjectList.push(actionObject);
+
+					width = 2;
+					height = 2;
+
+				}
+
+			}
+
+			if (this.isSnapToGrid) {
+
+				xgrid = Math.round((minx - 1) / this.gridWidth)
+						* this.gridWidth;
+				ygrid = Math.round((miny - 1) / this.gridWidth)
+						* this.gridWidth;
+
+				this.currentlayer = new lz.drawViewNew(this, {
+							name : tempName,
+							x : xgrid,
+							y : ygrid,
+							width : width,
+							height : height,
+							opacity : this.currentlayerOpacity
+						});
+			} else {
+				this.currentlayer = new lz.drawViewNew(this, {
+							name : tempName,
+							x : minx - 1,
+							y : miny - 1,
+							width : width,
+							height : height,
+							opacity : this.currentlayerOpacity
+						});
+			}
+
+			this.currentlayer.fillstyle = '0x000000';
+			this.currentlayer.lineWidth = this.currentlayerlineWidth;
+			this.currentlayer.strokeStyle = this.currentlayerstroke;
+
+			for (var eg = 0; eg < this.basetempactionobjectList.length; eg++)
+				this.drawline(this.basetempactionobjectList[eg][1],
+						this.basetempactionobjectList[eg][2],
+						this.basetempactionobjectList[eg][3],
+						this.basetempactionobjectList[eg][4]);
+
+			//this.currentlayer.setAttribute('stretches','both');
+
+			//Add Layer to global Layer     
+			this.layers.push(this.currentlayer);
+
+			this.registerFinal(this.getSWFDocumentStatus(), this.getZIndex());
+		]]>
+		</method>    
+
+		<method name="registerFinal" args="swfObj,zIndex">
+			var actionObject = new Array();
+			actionObject[0] = 'paint';
+			actionObject[1] = this.basetempactionobjectList;
+			actionObject[2] = currentlayer.fillstyle;
+			actionObject[3] = currentlayer.lineWidth;
+			actionObject[4] = currentlayer.strokeStyle;
+			actionObject[5] = this.currentlayerOpacity;
+			actionObject[6] = zIndex;//-8
+			actionObject[7] = swfObj;//-7
+			actionObject[8] = this.counter;//-6
+			actionObject[9] = currentlayer.x;//-5
+			actionObject[10] = currentlayer.y;//-4
+			actionObject[11] = currentlayer.width;//-3
+			actionObject[12] = currentlayer.height;//-2
+			actionObject[13] = this.currentlayer.name;//-1
+			if ($debug)
+				Debug.write("registerFinal :: ", actionObject);
+			this.baseactionobjectList.push(actionObject);
+			this.onsharedMessage('draw', actionObject);
+		</method>      
+    
+    
+		<method name="paintactionHistory" args="lastActionObject,parentView">
+		<![CDATA[
+			if ($debug) Debug.write("## paintactionHistory", parentView, " opacity:",
+						lastActionObject[5]);
+
+			var tmpCurrentlayer = new lz.drawViewNew(parentView, {
+						name : lastActionObject[lastActionObject.length - 1],
+						x : lastActionObject[lastActionObject.length - 5],
+						y : lastActionObject[lastActionObject.length - 4],
+						width : lastActionObject[lastActionObject.length - 3],
+						height : lastActionObject[lastActionObject.length - 2],
+						opacity : lastActionObject[5]
+					});
+					
+			if ($debug) ("paintactionHistory 1 ",tmpCurrentlayer.x,tmpCurrentlayer.y,tmpCurrentlayer.opacity);
+
+			tmpCurrentlayer.fillstyle = lastActionObject[2];
+			tmpCurrentlayer.lineWidth = lastActionObject[3];
+			tmpCurrentlayer.strokeStyle = lastActionObject[4];
+			
+			if ($debug) ("paintactionHistory 2 ",tmpCurrentlayer.fillstyle,tmpCurrentlayer.lineWidth,tmpCurrentlayer.strokeStyle);
+
+			for (var eg = 0; eg < lastActionObject[1].length; eg++) {
+				if ($debug) ("paintactionHistory 3 ",lastActionObject[1][eg][1], lastActionObject[1][eg][2],
+										lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
+				this.drawlineOnObject(tmpCurrentlayer,
+						lastActionObject[1][eg][1], lastActionObject[1][eg][2],
+						lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
+			}
+
+			//tmpCurrentlayer.setAttribute('stretches','both');
+			this.doSWFDocumentStatus(tmpCurrentlayer,
+					lastActionObject[lastActionObject.length - 7]);
+		]]>
+		</method>
+    
+	</class>
+
+</library>

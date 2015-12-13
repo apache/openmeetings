@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="tabButtonMain" extends="view" focusable="true"
+	   width="$once{ (parent.width-2)/2 }" height="36" y="2">
+	
+	<attribute name="labelid" value="0" type="number" />
+	
+	<attribute name="selected" value="false" type="boolean" />
+	
+	<attribute name="textFontSize" value="14" type="number" />
+	
+	<attribute name="currentIconRsc" value="" type="string"/>
+	
+	<attribute name="showIcon" value="true" type="boolean" />
+	
+	<handler name="oninit">
+		if (this.selected) {
+			this.doSelection();
+		}
+	</handler>
+	
+	<handler name="onclick">
+		this.doSelection();
+	</handler>
+	
+	<method name="doSelection">
+		parent.parent.doSelection(this);
+	</method>
+	
+	<handler name="onmouseover">
+		if (!this.selected) {
+			this._bg2.setAttribute("visibility","visible");
+		}
+	</handler>
+	
+	<handler name="onmouseout">
+		if (!this.selected) {
+        	this._bg2.setAttribute("visibility","hidden");
+        }
+    </handler>
+	
+	<method name="select">
+		this.selected = true;
+		if (this.showIcon) this._icon.setAttribute("opacity",1);
+        this._selectedView.setAttribute("visibility","visible");
+        this._deselectedView.setAttribute("visibility","hidden");
+		this._bg2.setAttribute("visibility","hidden");
+		this._text.setAttribute("fontstyle","bold");
+		this._text.setAttribute("y",6);
+		if (this.showIcon) this._icon.setAttribute("y",6);
+		this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
+	</method>
+     
+    <method name="deselect">
+        this.selected = false;
+        if (this.showIcon) this._icon.setAttribute("opacity",0.5);
+        this._selectedView.setAttribute("visibility","hidden");
+        this._deselectedView.setAttribute("visibility","visible");
+        this._text.setAttribute("y",8);
+        if (this.showIcon) this._icon.setAttribute("y",8);
+        this._text.setAttribute("fontstyle","plain");
+        this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
+    </method>       
+    
+    <view name="_selectedView" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" width="$once{ parent.width }" 
+            height="$once{ parent.height }" visibility="visible">
+        <view name="borderRight" width="1" x="0"
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+        <view name="borderTop" width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
+        <view name="borderLeft" width="1" x="$once{ parent.width-1 }"
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+    </view>
+    
+    <view name="_deselectedView" bgcolor="0xFAFAFA" 
+    		width="$once{ parent.width }" y="2"
+            height="$once{ parent.height-3 }" visibility="visible">
+        <view name="borderRight" width="1" x="0"
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+        <view name="borderTop" width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
+        <view name="borderLeft" width="1" x="$once{ parent.width-1 }"
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+    </view>       
+          
+    <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" y="3" x="1"
+          height="$once{ parent.height-4 }" opacity="1" visibility="hidden"/>
+    
+    <state applied="$once{ parent.showIcon }" >
+	    <image x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
+    				width="20" height="20" stretches="both" />
+    </state>
+                
+    <labelText name="_text" x="$once{ (parent.showIcon) ? 28 : 6 }" fontsize="$once{ parent.textFontSize }" 
+    		valign="middle" fgcolor="0xFFFFFF" labelid="$once{ parent.labelid }" />
+	
+</class>
+
+</library>

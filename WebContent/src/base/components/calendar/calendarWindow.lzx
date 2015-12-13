@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="calendarWindow" extends="view" clickable="true" 
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">	
+
+	<attribute name="fieldRef" value="null" />
+	
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+	<method name="close">
+		lz.ModeManager.release(this);
+		this.destroy();
+	</method>	
+	
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+            if ( eventStr == "onmousedown"  ){
+                if ( view != null ) {
+                   if ( !view.childOf(this) ) {
+                        this.close();
+                   }
+                } else {
+                    this.close();
+                }
+            }
+            if (view && view.childOf(this)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            return true;
+        ]]> 
+    </method> 	
+	
+	<labelText fgcolor="0xFFFFFF" fontstyle="bold" labelid="481" x="1" y="1" />
+	
+    <view name="_close" x="${ this.parent.width-19 }" y="1" 
+        resource="btn_presenter_close"
+        onmouseover="this.setAttribute('frame',2)"
+        onmouseout="this.setAttribute('frame',1)"
+        onmousedown="this.setAttribute('frame',3)"
+        onmouseup="this.setAttribute('frame',1)" >
+        <handler name="onclick">
+            this.setAttribute('frame',2);
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" />
+    </view>  	
+
+	<dateSelector y="20" name="_dateselector">
+		<handler name="oninit">
+			<![CDATA[
+			//Debug.write("dateselector oninit. ",this);
+			var t = parent.fieldRef.getText();
+			var newDate = parseStringToDate(t);
+			this.showingdate = newDate;
+			//Debug.write("n1:",this.showingdate);
+			this.init();
+			]]>
+		</handler>
+		<handler name="ondoubleselect" args="d">
+			parent.fieldRef.setAttribute('text',parseDateToString(d));
+			this.parent.close();
+		</handler>
+	</dateSelector>	
+
+</class>
+
+</library>

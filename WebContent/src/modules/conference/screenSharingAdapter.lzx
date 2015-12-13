@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="screenSharingAdapter" extends="node">
+
+	<!---
+		Send via LocalConnection to SWF10 container
+		to show a new screen sharing video
+		@param rcl RoomClient Object
+	 -->
+	<method name="newScreenSharing" args="rcl">
+		//Send via LocalConnection to SWF10 container
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharing", [rcl]);
+	</method>
+	
+	<!---
+        Send via LocalConnection to SWF10 container
+        to show multiple new screen sharing video
+        @param rcl RoomClient Object Map/list
+     -->
+    <method name="newScreenSharings" args="rcls">
+        //Send via LocalConnection to SWF10 container
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharings", [rcls]);
+    </method>
+	
+	<!--- 
+		Send via LocalConnection to SWF10 container 
+		to close a single screen sharing session
+		@param rcl RoomClient Object
+	 -->
+	<method name="closeScreenSharing" args="rcl">
+		//Send via LocalConnection to SWF10 container
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeScreenSharing", [rcl]);
+	</method>
+	
+	<!--- 
+		Send via LocalConnection to SWF10 container 
+		to close all screen sharing viewer videos
+	 -->
+	<method name="closeAllScreenSharings" >
+		//Send via LocalConnection to SWF10 container
+		if ($debug) Debug.write("closeAllScreenSharings SEND");
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeAllScreenSharings", null);
+	</method>
+	
+	<!--- 
+		Send via LocalConnection to SWF10 container 
+		to update the mouse position of a certain screen sharing
+		@param cursorMap Map Object
+	 -->
+	<method name="updateCursorScreenSharing" args="cursorMap">
+		//Send via LocalConnection to SWF10 container
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "updateCursorScreenSharing", [cursorMap]);
+	</method>
+
+</class>
+
+</library>

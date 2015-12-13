@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas debug="true" width="100%" height="100%" title="Geo Map Portal">
+    
+    <debug fontsize="11" oninit="Debug.showInternalProperties = true" />
+
+<handler name="oninit">
+    <![CDATA[
+    
+        LzLoadQueue.maxOpen = 100;
+
+    
+	    //
+        var url = new Array();
+	    
+	    
+        
+        url[5] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSide.jpg";
+		url[4] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSideBig.jpg";
+		url[3] = "http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/VideoClass.png";
+		url[2] = "http://openmeetings.googlecode.com/svn/docs/LanguageNavigationErrors.png";
+		url[1] = "http://openmeetings.googlecode.com/svn/docs/OpenMeetingsSOAPGateway.png";
+		url[0] = "http://openmeetings.googlecode.com/svn/docs/OpenmeetingsAllTables.png";
+        url[6] = "http://openmeetings.googlecode.com/svn/docs/SOAPFlowDirectLogin.png";
+        url[7] = "http://openmeetings.googlecode.com/svn/docs/UserDiagram.png";
+        url[8] = "http://openmeetings.googlecode.com/svn/docs/UserGroupsOrganizationsAndRooms.png";
+        url[9] = "http://openmeetings.googlecode.com/svn/docs/architecture.jpg";
+        url[10] = "http://openmeetings.googlecode.com/svn/docs/moodle_plugin_audience.png";
+        url[11] = "http://openmeetings.googlecode.com/svn/docs/moodle_plugin_conference.png";
+        url[12] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard.PNG";
+        url[13] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard2.PNG";
+        url[14] = "http://openmeetings.googlecode.com/svn/docs/newWhiteBoard3.PNG";
+        url[15] = "http://openmeetings.googlecode.com/svn/docs/test_application_audio_video.png";
+        
+        
+        
+        
+        for (var i=0;i<16;i++) {
+            var d = new Date();
+            new layerImage(canvas.myView,{srcImage:url[i]+"?time="+i+d.getTime()});
+        }
+        
+        
+        for (var i=0;i<40;i++) {
+            var d = new Date();
+            new layerImage(canvas.myView,{srcImage:"http://openmeetings.googlecode.com/svn/docs/uml/images/openmeetings/diagram/ModerationChangeClientSideBig.jpg?time="+i+d.getTime()});
+        }
+
+    ]]>
+</handler>
+
+<class name="layerImage" extends="image">
+    <attribute name="layerid" value="0" type="number" />
+    <attribute name="type" value="" type="string" />
+    <attribute name="isLayerImage" value="true" type="boolean" />
+    <attribute name="srcImage" value="" type="string" setter="this.setImageSource(srcImage)" />
+    <method name="setImageSource" args="srcImage">
+        if ($debug) Debug.write("setImageSource",srcImage);
+        //var mcRef = this.getDisplayObject();
+        //mcRef.loadMovie(srcImage);
+        this.setSource(srcImage);
+    </method>
+</class>  
+
+<view name="myView" />
+  
+</canvas>
