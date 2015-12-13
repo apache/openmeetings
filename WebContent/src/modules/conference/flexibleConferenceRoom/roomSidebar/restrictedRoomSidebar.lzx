@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="restrictedRoomSidebar" extends="view" width="280"
+       height="${ canvas.height - 28 }" y="0" clip="true">
+    
+    <attribute name="selected" value="null" />
+    
+    <attribute name="isOpen" value="true" type="boolean"/>
+    
+    <attribute name="restricted" value="true" type="boolean" />
+   
+    <attribute name="listType" value="eventUserListTable" type="string" />
+    
+    <method name="doSelection" args="itemRef">
+        <![CDATA[
+        	if (itemRef.name == "filesTabButton") {
+            	if (this.restricted) {
+            		if (!canvas.ismoderator && !canvas.isAllowedToDraw) {
+            			//Do not allow
+            			new lz.labelerrorPopup(canvas,{errorlabelid:783});
+            			return;
+            		}
+            	}
+        	}
+            	
+            if (this.selected != null) {
+                this.selected.deselect();
+            }
+            
+            this.selected = itemRef;
+            this.selected.select();
+          
+            if ($debug) Debug.write("this.selected.name ",this.selected.name, this.inited);
+            
+            if (this.selected.name == "userTabButton") {
+                if ($debug) Debug.write("-- userTabButton");
+                this._files.setAttribute("visibility","hidden");
+                this._participants.setAttribute("visibility","visible");
+            } else if (this.selected.name == "filesTabButton") {
+                if ($debug) Debug.write("-- filesTabButton");
+                this._files.setAttribute("visibility","visible");
+                this._participants.setAttribute("visibility","hidden");
+            }
+        ]]>
+    </method>
+    
+    <method name="toggleStatus">
+        if (this.isOpen) {
+            this._doClose.setAttribute('started', true);
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",857);
+        } else {
+            this._doOpen.setAttribute('started', true);
+            this.isOpen = true;
+            this._minimizeSidebar._icon.setAttribute("frame",1);
+            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",856);
+        }
+    </method>
+    
+    <view name="borderBarTop" y="0"
+    			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
+   	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" /> 
+    
+    <view name="_head" y="1" width="${ parent.width-10 }" height="32"
+    		  layout="axis:x;spacing:2;inset:2" >
+    
+    	<handler name="oninit">
+		<![CDATA[
+    		for (var eg in this.subviews) {
+            	this.subviews[eg].deselect();
+            }
+            if (!canvas.currentRoomObj.hideFilesExplorer && canvas.currentRoomObj.filesOpened) {
+				this.filesTabButton.doSelection();
+			} else {
+				this.userTabButton.doSelection();
+			}
+		]]>
+    	</handler>
+   
+        <tabButtonMain name="userTabButton" height="$once{ parent.height }" width="$once{ (parent.width-6)/2 }"
+                currentIconRsc="users_tab_btn" labelid="613" />
+        
+        <tabButtonMain name="filesTabButton" currentIconRsc="files_tab_btn" height="$once{ parent.height }" 
+                labelid="614" width="$once{ (parent.width-6)/2 }"
+                visible="${(canvas.currentRoomObj.hideFilesExplorer ? false:true)}"/>
+        
+    </view>
+    
+    <fileExplorer name="_files" y="22" width="$once{ parent.width-12 }" 
+               height="${ parent.height-222 }" visibility="hidden" />
+    
+    <restrictedUserList name="_participants" y="36" 
+			    width="$once{ parent.width-10 }" 
+			   height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
+			   
+    <activityList name="_activityList" />
+    
+    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
+          				bgcolor="0xE0E1EB" height="${ parent.height-1 }">
+        <handler name="onclick">
+            parent.toggleStatus();
+        </handler>
+        
+        <view width="${ parent.width }" height="$once{ parent.height }" 
+               bgcolor="0xE0E1EB" >
+        </view>
+            
+        <view name="_icon" resource="sidebar_tab_btn" y="0">
+             <handler name="onclick">
+	            parent.parent.toggleStatus();
+	         </handler>
+	         <labelTooltip name="_labelTooltip" labelid="856" />
+        </view>
+        
+    </view>
+    
+    <animator name="_doOpen" attribute="width" to="$once{ parent.width }" 
+              duration="750" started="false" />
+              
+    <animator name="_doClose" attribute="width" to="10" 
+              duration="750" started="false" />
+    
+</class>
+
+</library>

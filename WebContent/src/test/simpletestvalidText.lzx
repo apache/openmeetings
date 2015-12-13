@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas height="400" debug="true">
+	
+<include href="lz/textlistitem.lzx" />
+<include href="lz/edittext.lzx" />
+<include href="lz/button.lzx" />
+	
+<script>
+<![CDATA[
+	
+String.prototype.startsWith = function(prefix) {
+    return (this.indexOf(prefix) === 0);
+};	
+	
+]]>
+</script>
+	
+<attribute name="statesInitValues" value="null" />
+	
+<handler name="oninit">
+	<![CDATA[
+		var tChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		var tCharsSmall = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+		
+		this.statesInitValues = new Array();
+		var m = 0;
+		while (m<20){
+			for (var i = 0;i<26;i++){
+				for (var r=0;r<3;r++){
+					var t = new Array();
+					t["state_id"] = i*r;
+					t["name"] = tChars.charAt(i)+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100))+tCharsSmall.charAt(( Math.random()*100));
+					this.statesInitValues.push(t);
+				}
+			}
+			m++;
+		}
+		//Debug.write(this.statesInitValues);
+		
+		this._validbox.addAndSelectItem("Da","1");
+	]]>
+</handler>
+	
+<method name="validateCountry" args="str">
+	//Debug.write("validateCountry: ",str);
+	<![CDATA[
+		if (str.length!=0){
+			var a = new Array();
+			for (var i=0;i<canvas.statesInitValues.length;i++){
+				if (canvas.statesInitValues[i].name.startsWith(str))a.push(canvas.statesInitValues[i]);
+				//this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
+			}
+			return a;
+		}
+	]]>	
+</method>	
+	
+
+    <class name="validText" extends="edittext">
+        
+        <!--- The method to be called for validating -->
+        <attribute name="validate_method" value="null" />
+        
+        <!--- the id-attribute of the resultset -->
+        <attribute name="resultId" value="id" type="string" />
+        <!--- the name-attribute of the resultset -->
+        <attribute name="resultName" value="name" type="string" />        
+					
+        <attribute name="initSelect" value="false" type="boolean" />
+					
+        <attribute name="timerDelegate" value="null"/>
+        <attribute name="typetime" type="number" value="500"/>
+        <attribute name="timerIsInited" value="false" type="boolean"/>
+        
+        <!--- items to be shown in the floatinglist -->
+        <attribute name="shownitems" value="7" type="number" />          
+        <attribute name="spacing" value="1" type="number" />  
+        <!--- The vertical offset of the floatinglist attached to this
+              combobox. -->
+        <attribute name="attachoffset" value="-1" type="number"/>
+        <!--- Whether a scrollbar should automatically show up when there are more
+              items than shownitems. -->
+        <attribute name="autoscrollbar" value="true"/>   
+
+        <!--- The border size ( in pixels ) of the popup list.  -->
+        <attribute name="bordersize"   value="1" />      
+        
+        <attribute name="currentValue" type="string" value="" />
+        
+        <!--- refernce to the current selected item -->
+        <attribute name="_selected" value="null" />    
+        
+        <method name="addAndSelectItem" args="txt,id">
+            this.cblist.addItem(txt,id);
+            this.currentValue = id;
+            this.setAttribute('text',txt);
+        </method>    
+        
+        <method name="setSelection" args="obj">
+            this._selected = obj;
+            this.currentValue = obj.value;
+            this.setAttribute('text',obj.text);
+            this.setOpen(false,true);
+            this.onselect.sendEvent();
+        </method>    
+        
+        <handler name="onselect" args="obj" />
+        
+        <method name="getValue">
+            return this.currentValue;
+        </method>
+
+                    <!-- arrow down and up both popup floatinglist, and pass the key event to it -->
+        <handler name="onkeydown" args="key">
+            <![CDATA[
+                //Debug.write("onkeydown: ",key);
+                // 38 is up-arrow
+                // 40 is down-arrow
+                // 32 is space
+                // 13 is return
+                if ((key==38) || (key==40)) {
+                    if (!this.isopen) {
+                        this.setOpen(true, true); // open, withKey
+                    } else {
+                        lz.Focus.setFocus(this.cblist, true);
+                    }
+                    // pass the key event on to the floatinglist
+                    this.cblist.onkeydown.sendEvent(key);
+                } else if (key==27){
+                    if (!this.isopen) {
+                        this.setOpen(true, true); // open, withKey
+                    } else {
+                        lz.Focus.setFocus(this.cblist, true);
+                    }
+                    this.cblist.onkeydown.sendEvent(key);
+                } else if (key!=13 && key!=9){
+                    //Don't handle Enter and Tab Events cause it will open the listItems
+                    ////Debug.write("onkeydown txt: ",this.getText());
+                    if (!this.initSelect){
+                        ////Debug.write("onvalue: ",txt,this);
+                        if (!this.timerIsInited){
+                            this.timerIsInited = true;
+                            this.timerDelegate = new LzDelegate( this, "validatedText" );
+                            ////Debug.write("+++++++++++++++++ addTimer");
+                            //Debug.write("+++++++++++++++++ removeTimer ",lz.Timer.countTimers());
+                            lz.Timer.addTimer( this.timerDelegate, this.typetime );
+                        } else {
+                            ////Debug.write("############### resetTimer NO ADDING ");
+                            //Debug.write("############### resetTimer ",lz.Timer.countTimers());
+                            lz.Timer.resetTimer( this.timerDelegate, this.typetime );
+                        }
+                    } else {
+                        this.initSelect = false;
+                    }
+                }
+            ]]>
+        </handler>
+        
+        <method name="validatedText">
+            <![CDATA[
+                ////Debug.write("validatedText: ",this.getText());
+                //this.reset();
+                if (!this.initSelect){
+                    var t = this.validate_method(this.getText());
+                    ////Debug.write('t: ',t.length);
+                    //this.parent._cblist.setAttribute('visible',true);
+                    this.cblist.removeAllItems();
+                    for (var i=0;i<t.length;i++){
+                        ////Debug.write(t[i][this.resultName],t[i][this.resultId]);
+                        this.cblist.addItem(t[i][this.resultName],t[i][this.resultId]);
+                    }                
+
+                    ////Debug.write("validateText: ",this.getText());
+                    if (!this.isopen) {
+                        this.setOpen(true, true); // open, withKey
+                    }
+                    this.timerIsInited = false;
+                } else {
+                    this.initSelect=false;
+                    this.timerIsInited = false;
+                }
+            ]]>
+        </method>	
+        
+        <attribute name="isopen" value="false" type="boolean" setter="this.setOpen(isopen)" />
+        
+        <handler name="onisopen" args="bool" />
+        
+        <method name="setOpen" args="open, withkey" >
+            if (!this.isinited) {
+                this.isopen = open;
+                return;
+            }
+            if (open) { // open combox
+                if (this.isopen) return; // tends to get called more than once, esp when
+
+                this.cblist.bringToFront();
+                this.cblist.setVisible(true);
+
+                this.isopen = true;
+                if (this['onisopen']) this.onisopen.sendEvent(true);
+            } else { // close combox
+                if (!this['isopen']) return;
+                this.isopen = false;
+
+                this.cblist.setVisible(false);
+                if (this['onisopen']) this.onisopen.sendEvent(false);
+                if ( lz.Focus.getFocus() == this.cblist ) {
+                    lz.Focus.setFocus(this, withkey);
+                }
+            }
+        </method>           
+
+        <floatinglist name="cblist"
+                      width="${owner.width - 1}"
+                      bordersize="${this.owner.bordersize}"
+                      spacing="${this.owner.spacing}"
+                      visible="false"
+                      shownitems="${this.owner.shownitems}"
+                      attach="bottom"
+                      attachoffset="${this.owner.attachoffset}"
+                      multiselect="false"
+                      autoscrollbar="${owner.autoscrollbar}" >
+
+            <method name="_dokeyup" args="kc"
+                    event="onkeyup">
+                if (kc == 27) {  // escape needs to close floating list
+                    this.owner.setOpen(false);
+                }
+            </method>
+            <method name="removeAllItems" args="index"> 
+                for (var eg in _contentview.subviews){
+                    _removeitem(_contentview.subviews[eg]); 
+                } 
+            </method>	
+            <handler name="onselect" args="obj">
+                ////Debug.write("obj: ",obj);
+                this.owner.setSelection(obj);
+            </handler>	            	
+        </floatinglist>        
+        
+         <handler name="onclick" reference="lz.GlobalMouse" args="who">
+           <![CDATA[ 
+               //need to use lz.GlobalMouse, since we don't get clicks if we're
+               //checked. NB that lz.GlobalMouse sends its events before the view
+               //receives the events, so we can just unlock it here, and the
+               //checkbox can do its normal onclick handling.
+               //Debug.write("onclick lz.GlobalMouse",lz.GlobalMouse,who);
+               //if (who != this.cblist && who.childOf(this.cblist)){
+               //    this.setOpen(false,false);
+               //} 
+               // LPP-3165
+           ]]>
+         </handler>        
+
+    </class>
+	
+
+	<validText y="20" width="270" name="_validbox" 
+        shownitems="7" validate_method="$once{ canvas.validateCountry }" 
+        resultId="state_id" resultName="name" />
+    
+    <button x="300" y="20" text="getValues">
+        <handler name="onclick">
+            //Debug.write(parent._validbox.getValue());
+            //Debug.write(parent._validbox.getText());
+            //Debug.write(parent._validbox._selected);
+        </handler>
+    </button>
+    
+ </canvas>

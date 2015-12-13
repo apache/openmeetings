@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Content Stylesheet for Site -->
+
+    ## Defined variables
+    #set ($menutablebg = "#FFFFFF")
+    #set ($menutablefg = "#000000")
+    #set ($bodybg = "#ffffff")
+    #set ($bodyfg = "#000000")
+    #set ($bodylink = "#123465")
+    #set ($pagebannerbg = "#669AE6")
+    #set ($pagebannerfg = "#000000")
+    #set ($bannerbg = "#EEEEEE")
+    #set ($bannerfg = "#000000")
+    #set ($subbannerbg = "#EFEFEF")
+    #set ($subbannerfg = "#000000")
+    #set ($tablethbg = "#039acc")
+    #set ($tabletdbg = "#a0ddf0")
+    #set ($colorhrline = "#999999")
+    
+<!-- start the processing -->
+#document()
+<!-- end the processing -->
+
+## This is where the macro's live
+
+#macro ( feature $feature)
+	<h3>$feature.getAttribute("title").getValue()</h3>
+	<table border="0">
+		<tbody>
+			<tr>
+				<td style="text-align: center;" width="300">
+					#foreach ( $items in $feature.getChildren() )
+						#if ($items.getName().equals("image"))
+							<p>
+							<a class="group1 fancybox-buttons" href="$items.getAttribute("fullhref").getValue()">
+								<img src="$items.getAttribute("href").getValue()" alt="" width="$items.getAttribute("width").getValue()" 
+									height="$items.getAttribute("height").getValue()" />
+							</a>
+						#end
+					#end
+				</td>
+				<td>
+					#foreach ( $items in $feature.getChildren() )
+						#if ($items.getName().equals("text"))
+							$items.getChildren()
+						#end
+					#end
+				</td>
+			</tr>
+	    </tbody>
+	</table>
+#end
+
+#macro ( table $table)
+<table>
+    #foreach ( $items in $table.getChildren() )
+        #if ($items.getName().equals("tr"))
+            #tr ($items)
+        #end
+    #end
+</table>
+#end
+
+#macro ( tr $tr)
+<tr>
+    #foreach ( $items in $tr.getChildren() )
+        #if ($items.getName().equals("td"))
+            #td ($items)
+        #elseif ($items.getName().equals("th"))
+            #th ($items)
+        #end
+    #end
+</tr>
+#end
+
+#macro ( td $value)
+#if ($value.getAttributeValue("colspan"))
+#set ($colspan = $value.getAttributeValue("colspan"))
+#end
+#if ($value.getAttributeValue("rowspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+#end
+#if ($value.getAttributeValue("class"))
+#set ($class = $value.getAttributeValue("class"))
+#end
+<td bgcolor="$tabletdbg" class="$class" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+    #if ($value.getText().length() != 0 || $value.hasChildren())
+    $value.getContent()
+    #else
+    &nbsp;
+    #end
+</td>
+#end
+
+#macro ( th $value)
+#if ($value.getAttributeValue("colspan"))
+#set ($colspan = $value.getAttributeValue("colspan"))
+#end
+#if ($value.getAttributeValue("rowspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+#end
+#if ($value.getAttributeValue("class"))
+#set ($class = $value.getAttributeValue("class"))
+#end
+<th bgcolor="$tablethbg" class="$class" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+    #if ($value.getText().length() != 0 || $value.hasChildren())
+    $value.getContent()
+    #else
+    &nbsp;
+    #end
+</th>
+#end
+
+#macro ( projectanchor $name $value )
+#if ($value.startsWith("http://") || $value.startsWith("https://"))
+    <a href="$value">$name</a>
+#elseif ($value.startsWith("/site"))
+    <a href="http://jakarta.apache.org$value">$name</a>
+#else
+    <a href="$relativePath$value">$name</a>
+#end
+#end
+
+#macro ( metaauthor $author $email )
+            <meta name="author" content="$author">
+            <meta name="email" content="$email">
+#end
+
+#macro ( image $value )
+#if ($value.getAttributeValue("width"))
+#set ($width=$value.getAttributeValue("width"))
+#end
+#if ($value.getAttributeValue("height"))
+#set ($height=$value.getAttributeValue("height"))
+#end
+#if ($value.getAttributeValue("align"))
+#set ($align=$value.getAttributeValue("align"))
+#else
+#set ($align="middle")
+#end
+<img src="$relativePath/$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
+#end
+
+#macro ( source $value)
+    <div align="left">
+    <table style="border: solid 1px #023264; padding: 5px;">
+    <tr>
+      <td bgcolor="#ffffff"><pre>$escape.getText($value.getText())</pre></td>
+    </tr>
+    </table>
+    </div>
+#end
+
+#macro ( subsection $subsection)
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="$subbannerbg">
+        <font color="$subbannerfg" face="arial,helvetica,sanserif">
+          <a name="$subsection.getAttributeValue("name")"><strong>$subsection.getAttributeValue("name")</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+        #foreach ( $items in $subsection.getChildren() )
+            #if ($items.getName().equals("img"))
+                #image ($items)
+            #elseif ($items.getName().equals("source"))
+                #source ($items)
+            #elseif ($items.getName().equals("table"))
+                #table ($items)
+            #else
+                $items
+            #end
+        #end
+        </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+#end
+
+#macro ( section $section)
+    <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="$bannerbg" -->
+        <font color="$bannerfg" face="verdana,arial,helvetica,sanserif">
+          <a name="$section.getAttributeValue("name")"><strong>$section.getAttributeValue("name")</strong></a>
+        </font>
+        <hr style="width:100%; color:$colorhrline; background-color:$colorhrline; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+        #foreach ( $items in $section.getChildren() )
+            #if ($items.getName().equals("img"))
+                #image ($items)
+            #elseif ($items.getName().equals("source"))
+                #source ($items)
+            #elseif ($items.getName().equals("table"))
+                #table ($items)
+            #elseif ($items.getName().equals("feature"))
+                #feature ($items)
+            #elseif ($items.getName().equals("subsection"))
+                #subsection ($items)
+            #else
+                $items
+            #end
+        #end
+        </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+#end
+
+#macro ( makeProject )
+
+    <!-- ============================================================ -->
+    <div id="accordion" style="width: 100%">
+    
+    #set ($menus = $project.getChild("body").getChildren("menu"))
+    #foreach ( $menu in $menus )
+    	<h3><a href="#$menu.getAttributeValue("name").replaceAll(" ","")">$menu.getAttributeValue("name")</a></h3>
+    	<div>
+	        #foreach ( $item in $menu.getChildren() )
+	            #set ($name = $item.getAttributeValue("name"))
+	            #if ( $item.getAttributeValue("href").length() > 0 )
+	            	#projectanchor($name $item.getAttributeValue("href"))<br/>
+	        	#else
+	            	<b>$name</b><br/>
+	            		#foreach ( $subitem in $item.getChildren() )
+	            			#set ($name = $subitem.getAttributeValue("name"))
+	            			#projectanchor($name $subitem.getAttributeValue("href"))<br/>
+	            		#end
+	        	#end
+	        #end
+    	</div>
+    #end
+    
+    </div>
+     
+    <br/>
+    
+#end
+
+#macro (getProjectImage)
+#if ($project.getChild("logo"))
+#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+<td align="left">
+#if ( $logoString.startsWith("/") )
+<a href="$project.getAttributeValue("href")"><img src="$relativePath$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+#else
+<a href="$project.getAttributeValue("href")"><img src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+#end
+</td>
+#end
+#end
+
+#macro (getBannerTitle)
+#if ( $root.getChild("properties").getChild("bannertitle") )
+    #set ( $pageBanner = $root.getChild("properties").getChild("bannertitle") )
+#else
+    #set ( $pageBanner = $root.getChild("properties").getChild("title").getText() )
+#end
+<td width="80%" align="right" valign="top" >
+	<a href="demo.html">Demo</a>
+	<span>|</span> 
+	<a href="downloads.html" target="_PARENT">Download</a>
+	<span>|</span> 
+	<a href="installation.html" target="_PARENT">Installation</a>
+	<span>|</span> 
+	<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS" target="_BLANK">Wiki</a>
+	<span>&nbsp;</span>
+</td>
+#end
+
+#macro (printMeta $metaElement)
+<meta #set ($attribs = $metaElement.getAttributes())
+#foreach ($a in $attribs) $a.getName()="$a.getValue()" #end />
+#end
+
+#macro (document)
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE XML FILE IN xdocs INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+            #set ($authors = $root.getChild("properties").getChildren("author"))
+            #foreach ( $au in $authors )
+                #metaauthor ( $au.getText() $au.getAttributeValue("email") )
+            #end
+
+           #set ($metas = $root.getChildren("meta"))
+
+            ##    Parse meta directives such as
+            ##    <meta name="keyword" content="jakarta, java"/>
+            #foreach ($meta in $metas) #printMeta($meta) #end
+
+            ##    Support for <base> tags.
+            #if ($root.getChild("properties").getChild("base"))
+              #set ($url = $root.getChild("properties").getChild("base").getAttributeValue("href"))
+              <base href="$url"/>
+            #end
+
+            <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
+            <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
+            <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+            <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
+            <link rel="stylesheet" type="text/css" href="css/colorbox.css" />
+            
+			<!-- Add jQuery library -->
+			<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		
+			<!-- Add coinslider plugins -->
+			<script type="text/javascript" src="js/coin-slider.min.js"></script>
+			
+			<!-- Add colorbox plugin -->
+			<script type="text/javascript" src="js/jquery.colorbox.js"></script>
+		
+			<script src="js/jquery.ui.core.js"></script>
+			<script src="js/jquery.ui.widget.js"></script>
+		
+			<script src="js/jquery.ui.accordion.js"></script>
+			
+			<script>
+			$(function() {
+				$( "#accordion" ).accordion({
+					autoHeight: false,
+					navigation: true,
+					navigationFilter: function () {
+						var sidebarHrefArray = this.href.split("/");
+    					var sideBarLastString = sidebarHrefArray[sidebarHrefArray.length - 1].toLowerCase();
+						
+						if (sideBarLastString.indexOf("#") == -1) {
+							return false;
+						}
+						
+						#set ($menus = $project.getChild("body").getChildren("menu"))
+						/* document.location.href */
+						var currentSection = "";
+						
+						var currentLocation = "";
+						var currentLink = "";
+						if (false) {
+						
+						}
+    					#foreach ( $menu in $menus )
+					        #foreach ( $item in $menu.getChildren() )
+					            #set ($name = $item.getAttributeValue("name"))
+					            #if ( $item.getAttributeValue("href").length() > 0 )
+					            	
+					            	else if (document.location.href.indexOf("$item.getAttributeValue("href")") > 0) {
+					            		currentLocation = "$menu.getAttributeValue("name").replaceAll(" ","")";
+					            		currentLink = "$item.getAttributeValue("href")".substr(1, "$item.getAttributeValue("href")".length);
+					            	} 
+					            	
+					        	#else
+				            		#foreach ( $subitem in $item.getChildren() )
+				            			#set ($name = $subitem.getAttributeValue("name"))
+				            			else if (document.location.href.indexOf("$subitem.getAttributeValue("href")") > 0) {
+				            				currentLocation = "$menu.getAttributeValue("name").replaceAll(" ","")";
+					            			currentLink = "$subitem.getAttributeValue("href")".substr(1, "$subitem.getAttributeValue("href")".length);
+						            	} 
+				            		#end
+					        	#end
+			        		#end
+    					#end
+    					
+    					currentLink = currentLink.toLowerCase();
+    					currentLocation = currentLocation.toLowerCase();
+    					
+						return sideBarLastString == currentLink+"#"+currentLocation;
+					}
+				});
+			});
+			</script>
+			
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('.fancybox-buttons').colorbox({rel:'fancybox-buttons',width:"75%", height:"75%"});
+					$('#accordion a').each(function() {
+				      var a = $(this);
+				      var href = a.attr("href");
+				      if (href.indexOf("#") == -1) {
+				      	  var compareIt = href.substr(2, href.length);
+					      if (document.location.href.indexOf(compareIt)!= -1) {
+					       a.addClass('active');
+					      }
+				      }
+				    });
+					$('#coin-slider').coinslider({ width: 640,height: 400, delay: 4000  });					
+				});
+			</script>	
+						
+			<style type="text/css">
+				.fancybox-custom .fancybox-outer {
+					box-shadow: 0 0 50px #222;
+				}
+			</style>
+        </head>
+
+        <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink" vlink="$bodylink" alink="#000000">  
+        	<div class="mainbody" style="min-width: 960px; width: 94%;">
+        	<div class="superbody" style="width: 100%;">
+            <table border="0" width="100%" cellspacing="0">
+                <!-- TOP IMAGE -->
+                <tr>
+                    #getProjectImage()
+                    #getBannerTitle()
+                </tr>
+            </table>
+            <table border="0" width="100%" cellspacing="4">
+                <tr><td colspan="2">
+                    <hr noshade="noshade" size="1"/>
+                </td></tr>
+
+                <tr>
+                    <!-- LEFT SIDE NAVIGATION -->
+                    <td width="20%" valign="top" nowrap="nowrap">
+
+                    <!-- special ACon Logo - leave here for next time
+                    <a href="http://apachecon.com/2005/US/">
+                        <img src="http://apache.org/images/ac2005us_blue_125x125.jpg" height="125"
+                             width="125" border="0" alt="ApacheCon US 2005" />
+                    </a>  -->
+
+                   <!-- regular menu -->
+
+                    #makeProject()
+                    </td>
+                    <td width="80%" align="left" valign="top">
+                    #set ($allSections = $root.getChild("body").getChildren("section"))
+                    #foreach ( $section in $allSections )
+                        #section ($section)
+                    #end
+                    </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr><td colspan="2">
+                    <hr noshade="noshade" size="1"/>
+                </td></tr>
+                <tr><td colspan="2">
+                    <div align="center"><font color="$bodylink" size="-1"><em>
+                    Copyright &#169; 2003-2013, The Apache Software Foundation
+                    </em></font></div>
+                </td></tr>
+            </table>
+            </div>
+            </div>
+        </body>
+    </html>
+#end
+
+
+
+
+

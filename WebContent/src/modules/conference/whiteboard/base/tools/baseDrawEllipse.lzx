@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawEllipse" extends="baseDrawRect" >
+    
+    <!-- 
+        for drawing ellipse the variable 
+        with *Dis* indicates if the line/fil-color is active (+1/-1)
+     -->
+    <attribute name="currentellipsestroke" value="0xFF6600" />
+    <attribute name="currentellipsestrokeDis" value="1" type="number" />
+    <attribute name="currentellipsestrokeFill" value="0xFFFF33" />
+    <attribute name="currentellipsestrokeFillDis" value="1" type="number" />
+    <attribute name="currentellipselineWidth" value="4" />
+    <attribute name="currentellipseOpacity" value="1" type="number" />
+  
+    <!-- ################
+    Ellipse
+     -->
+    <method name="startEllipse" args="oid_name">
+        //Debug.write("startEllipse");
+        if (oid_name == null) {
+            oid_name = 'ellipse'+this.getCounter();
+        }
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width+2,height:this.height+2,
+            opacity:this.currentellipseOpacity});
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    </method>    
+    
+    <method name="endEllipse">
+        <![CDATA[
+            ////Debug.write(" this.startx, this.starty , this.endx, this.endy ",this.startx, this.starty , this.endx, this.endy);
+            var tmpName = this.currentlayer.name;
+            this.currentlayer.destroy();
+            var x = this.startx;
+            var width = this.endx - this.startx;
+            if (this.endx<this.startx){
+                x = this.endx;
+                width = Math.abs(width);
+            }
+            var y = this.starty;
+            var height = this.endy - this.starty;
+            if (this.endy<this.starty){
+                y = this.endy;
+                height = Math.abs(height);
+            }
+            
+            if(this.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            } 
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                name:tmpName,x:x,y:y,width:width,height:height,
+                opacity:this.currentellipseOpacity});
+                
+            new lz.drawViewInner(this.currentlayer,{
+                name:'_innerEllipse',x:0,y:0,width:width,height:height});
+                
+            //this.drawellipse(0,0,width,height);
+            //Debug.write("this.currentellipsestroke,this.currentellipselineWidth: ",this.currentellipsestroke,this.currentellipselineWidth);
+            
+            this.drawellipseHistory(this.currentlayer,
+                0,0,width,height,
+                this.currentellipsestroke,this.currentellipselineWidth,
+                this.currentellipsestrokeFill,this.currentellipsestrokeDis,
+                this.currentellipsestrokeFillDis)
+            
+            //Draw On Object    
+                
+            this.drawellipseregisterFinal(this.currentlayer.name,
+                this.currentellipsestroke,this.currentellipselineWidth,
+                this.currentellipsestrokeFill,this.currentellipsestrokeDis,
+                this.currentellipsestrokeFillDis,
+                x,y,width,height,this.getSWFDocumentStatus(),this.getZIndex());
+            this.layers.push(this.currentlayer);
+            this.checkStepLayers();
+        ]]>
+    </method>
+    
+    <method name="drawellipseToHistory"  args="lastActionObject,parentView">
+
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+            name:lastActionObject[lastActionObject.length-1],
+            x:lastActionObject[lastActionObject.length-5],
+            y:lastActionObject[lastActionObject.length-4],
+            width:lastActionObject[lastActionObject.length-3],
+            height:lastActionObject[lastActionObject.length-2],
+            opacity:lastActionObject[6]});
+            
+        new lz.drawViewInner(tmpCurrentlayer,{
+                name:'_innerEllipse',x:0,y:0,
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2]});
+                
+        //Debug.write("lastActionObject[1],lastActionObject[2]: ",lastActionObject[1],lastActionObject[2]);
+        this.drawellipseHistory(tmpCurrentlayer,
+            0,0,lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
+            lastActionObject[1],lastActionObject[2],
+            lastActionObject[3],lastActionObject[4],
+            lastActionObject[5]);
+
+        this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+    </method>
+    
+    <method name="redrawEllipseItemByScaling" args="objRef">
+        //if ($debug) Debug.write("redrawRectItemByScaling: "+objRef);
+        this.currentlayer = objRef;
+        this.currentlayer._innerEllipse.destroy();
+        new lz.drawViewInner(this.currentlayer,{
+            name:'_innerEllipse',x:0,y:0,width:objRef.width,height:objRef.height});
+        this.drawellipseHistory(this.currentlayer,0,0,
+            objRef.width,objRef.height,
+            this.currentellipsestroke,this.currentellipselineWidth,
+            this.currentellipsestrokeFill,this.currentellipsestrokeDis,
+            this.currentellipsestrokeFillDis);
+    </method> 
+    
+    <method name="drawellipseHistory" args="parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis">
+        <![CDATA[
+        
+            //Debug.write("stroke,line: ",stroke,line);
+            var rx = (x1+x2)/2;
+            var ry = (y1+y2)/2;
+            var xradius = Math.abs(rx-x1);
+            var yradius = Math.abs(ry-y1);
+            
+            parentObj._innerEllipse.lineWidth = line;
+            parentObj._innerEllipse.oval(rx,ry,xradius,yradius);
+            
+            if (strokeDis!=-1){
+                parentObj._innerEllipse.strokeStyle = stroke;
+                parentObj._innerEllipse.stroke();
+            }
+
+            if (fillDis!=-1){
+                parentObj._innerEllipse.fillStyle = fill;
+                parentObj._innerEllipse.fill();
+            }
+
+        ]]>   
+    </method>   
+     
+    <method name="drawellipse" args="x1,y1,x2,y2">
+        <![CDATA[
+            //Debug.write("stroke,line: ",this.currentellipsestroke,this.currentellipselineWidth);
+            var rx = (x1+x2)/2;
+            var ry = (y1+y2)/2;
+            var xradius = Math.abs(rx-x1);
+            var yradius = Math.abs(ry-y1);
+            
+            currentlayer.lineWidth = this.currentellipselineWidth;
+            currentlayer.oval(rx,ry,xradius,yradius);
+            
+            if (this.currentellipsestrokeDis!=-1){
+                currentlayer.strokeStyle = this.currentellipsestroke;
+                currentlayer.stroke();
+            }
+            
+            if (this.currentellipsestrokeFillDis!=-1){
+                currentlayer.fillStyle = this.currentellipsestrokeFill;
+                currentlayer.fill(); 
+            }
+    
+        ]]>   
+    </method>
+    
+    <method name="drawellipseregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height,swfObj,zIndex" >
+        var actionObject = new Array();
+        actionObject[0] = 'ellipse';
+        actionObject[1] = stroke;
+        actionObject[2] = line;
+        actionObject[3] = fill;
+        actionObject[4] = strokeDis;
+        actionObject[5] = fillDis;
+        actionObject[6] = this.currentellipseOpacity;
+        actionObject[7] = zIndex;//-8
+        actionObject[8] = swfObj;//-7
+        actionObject[9] = this.counter;//-6
+        actionObject[10] = x;//-5
+        actionObject[11] = y;//-4
+        actionObject[12] = width;//-3
+        actionObject[13] = height;//-2 
+        actionObject[14] = newName;//-1
+        this.baseactionobjectList.push(actionObject);
+        this.onsharedMessage('draw',actionObject);
+    </method>
+
+    
+</class>
+
+</library>

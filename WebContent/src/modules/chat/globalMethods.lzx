@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<!-- global methods for chat module -->
+<library>
+
+<script>
+<![CDATA[
+
+	// global chat history array for all chat module
+	this.chathistory=new Array();
+
+var maxsize = 220;
+var textFieldtext = "";
+var startIndex = 0;
+var currentLine = 0;
+var textObject = null;
+var myTextFormat = null;
+var lineHeight = 0;
+
+function calcLineWidthByTextField(maxsizeText,textForCalcing,fontsize, fontname){
+	//check test/testLineWidth.lzx in test-directory for a detailed example calculation 
+	//Debug.write("calcLineWidthByTextField: ",textForCalcing);
+	
+	maxsize = maxsizeText;
+	startIndex = 0;
+	currentLine = 0;
+	textObject = new Array();
+	
+	textFieldtext = textForCalcing;
+	myTextFormat = new TextFormat();
+	myTextFormat.size = fontsize;
+	myTextFormat.font = fontname;
+	
+	var metrics = myTextFormat.getTextExtent(textFieldtext, 100000);
+	lineHeight = metrics.ascent+metrics.descent;
+	//Debug.write(lineHeight);
+	
+	measureLine();
+	
+	return textObject;
+}
+
+function measureLine(){
+    var remainingLength = textFieldtext.length;
+        
+    var testTxt = "";
+    var testTxt2 = "";
+    var textFieldtext2 = textFieldtext;
+    var metrics = 0;
+    var firstSpaceIndex = 0;
+    var isFirstWord = true;
+
+    //if ($debug) Debug.write("FUNC/chat Message: ", textFieldtext);
+    //if ($debug) Debug.write("FUNC/length of chat Message: ", remainingLength);
+
+    while (remainingLength > 0) {
+        testTxt = "";
+        testTxt2 = "";
+        textFieldtext2 = textFieldtext;
+        metrics = myTextFormat.getTextExtent(textFieldtext2, 100000);
+        isFirstWord = true;
+        
+        //if ($debug) Debug.write("size of the current part: ", metrics.width);
+        do {
+            firstSpaceIndex = textFieldtext2.indexOf(" ");
+            testTxt2 = testTxt;
+
+            if (firstSpaceIndex != -1) {
+                //if ($debug) Debug.write("the first space is at position: ", firstSpaceIndex);
+                if (isFirstWord) {
+                    testTxt = textFieldtext2.slice(startIndex, firstSpaceIndex);
+                    isFirstWord = false;
+                } else {
+                    testTxt = testTxt + " " + textFieldtext2.slice(startIndex, firstSpaceIndex);
+                }
+                textFieldtext2 = textFieldtext2.slice(firstSpaceIndex + 1, textFieldtext2.length);
+                metrics = myTextFormat.getTextExtent(testTxt, 100000);
+            } else {
+                // this is the last word
+                //if ($debug) Debug.write("this is the last word!");
+                testTxt = testTxt + " " + textFieldtext2;
+                metrics = myTextFormat.getTextExtent(testTxt, 100000);
+                if (isFirstWord && metrics.width < maxsize) {
+                    testTxt2 = testTxt;
+                    isFirstWord = false;
+                }
+                break;
+            }
+        } while (metrics.width < maxsize)
+        
+        if (metrics.width < maxsize) {
+            testTxt2 = testTxt;
+        }
+
+        if (testTxt2.length == 0) {
+            // the first word is already too long
+            //if ($debug) Debug.write("the first word is already too long!");
+            testTxt = "";
+            textFieldtext2 = textFieldtext;
+            metrics = myTextFormat.getTextExtent(testTxt, 100000);
+            isFirstWord = true;
+
+            while (metrics.width < maxsize) {
+                testTxt = testTxt + textFieldtext2.slice(startIndex, 1);
+                textFieldtext2 = textFieldtext2.slice(1, remainingLength);
+                metrics = myTextFormat.getTextExtent(testTxt, 100000);
+            }
+            
+            testTxt2 = testTxt;
+        }
+                
+        textObject[currentLine] = new Array();
+        textObject[currentLine]["text"] = testTxt2;
+        metrics2 = myTextFormat.getTextExtent(textObject[currentLine]["text"], 100000);
+        textObject[currentLine]["lineWidth"] = metrics2.width;
+        currentLine += 1;
+        //if ($debug) Debug.write("new line: ", textObject[currentLine]["text"]);
+               
+        textFieldtext = textFieldtext.slice(testTxt2.length, textFieldtext.length)
+        if (textFieldtext.indexOf(" ") == 0) {
+           textFieldtext = textFieldtext.slice(1, textFieldtext.length)
+        }
+        remainingLength = textFieldtext.length;
+
+        //if ($debug) Debug.write("remaining text: ", textFieldtext);
+    }
+}
+
+function getLineHeight(){
+	return lineHeight;
+}
+
+
+
+
+]]>
+</script>
+
+
+
+
+<method name="addChatHistory" args="value,client">
+  	<![CDATA[
+  	Debug.write("addChatHistory: ",value,client);
+    if (value[7]){
+          var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+    } else {
+          var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+    }
+  	//Debug.write("newmessage: ",newmessage);
+  	canvas._chatcontent.addChatItem(newmessage);  // Is "addChatItem()" used?  By what? h.kuze 2008/3/27
+  	canvas._chathistory.push(newmessage);
+  	]]>
+</method>
+
+<method name="resetFormatedChatHistory">
+  	<![CDATA[
+  	if (this.chathistory==null) return '';
+  	var completeText = '';
+  	for (var i=0;i<chathistory.length;i++){
+  		completeText+=chathistory[i];
+  	}
+  	//Debug.write("getFormatedChatHistory: ",completeText);
+  	return completeText;
+  	]]>
+</method>
+<method name="getFormatedChatHistory">
+  	<![CDATA[
+  	if (this.chathistory==null) return '';
+  	var completeText = '';
+  	for (var i=0;i<chathistory.length;i++){
+  		completeText+=chathistory[i];
+  	}
+  	//Debug.write("getFormatedChatHistory: ",completeText);
+  	return completeText;
+  	]]>
+</method>
+
+
+</library>

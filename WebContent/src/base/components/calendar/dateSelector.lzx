@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDateSelectorComponent" extends="view">
+
+	<attribute name="daynumbers" value="[0,1,2,3,4,5,6]" />
+
+	<attribute name="showingdate" type="string" value="" />
+	
+	<attribute name="dayclass" when="once" />
+
+	<attribute name="weekclass" when="once" />
+	<attribute name="showcalenderweek" value="true" type="boolean" />
+	
+	<attribute name="monthclass" when="once" />
+	<attribute name="showcalendermonth" value="true" type="boolean" />	
+	
+</class>
+
+<class name="dateSelectorDay" extends="baseDateSelectorComponent" width="24" bgcolor="0xFFFFFF">
+
+	<attribute name="dayIndexNumber" value="-1" type="number" />
+	<attribute name="weekIndexNumber" value="-1" type="number" />
+
+	<handler name="onclick">
+		this.parent.parent.parent.parent.parent.parent.selectDate(this.daydate,this.dayIndexNumber,this.weekIndexNumber);
+	</handler>
+	
+	<handler name="ondblclick">
+		this.parent.parent.parent.parent.parent.parent.selectDoubleDate(this.daydate);
+	</handler>
+	
+	<attribute name="daydate" value="null" />
+	
+	<method name="init">
+		<![CDATA[
+        super.init();
+        if (parent.parent.parent.parent.month!=daydate.getMonth())
+        	this._date.setAttribute('text','<FONT COLOR="#CCCCCC">'+daydate.getDate()+'</FONT>');
+        else 
+        	this._date.setAttribute('text',daydate.getDate());
+        ]]>
+	</method>
+	
+	<text name="_date" fontsize="10" align="center" resize="true" />
+
+</class>
+
+<class name="dateSelectorDayHeader" extends="baseDateSelectorComponent" width="24" bgcolor="0xF9F9F9" >
+
+	<attribute name="daynumber" value="0" type="number" />
+	
+	<method name="init">
+		<![CDATA[
+	        super.init();
+	        var dateRoot = parent.parent.parent.parent;
+	        //if ($debug) Debug.write("daynumber",this,dateRoot);
+	        this._date.setAttribute('text',canvas.getLabelName(dateRoot.dayNamesLabelIds[( (daynumber>6) ? (daynumber-7) : daynumber )]));
+	        this._date._tip.setAttribute('labelid',dateRoot.dayLabelNamesLabelIds[( (daynumber>6) ? (daynumber-7) : daynumber )]); 
+        ]]>
+	</method>
+	
+	<text fgcolor="0x000000" name="_date" fontsize="10" align="center" resize="true"
+		  onmouseover="" onmouseout="">
+		<labelTooltip name="_tip" />
+	</text>
+
+</class>
+
+<class name="dateSelectorWeekNumber" extends="view" width="24" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+
+	<attribute name="weeknumber" value="0" type="number" />	
+	<text name="_date" fgcolor="white" fontsize="10" text="$once{ parent.weeknumber }" 
+		  align="center" resize="true" />
+
+</class>
+
+<class name="dateSelectorWeekNumberHeader" extends="view" width="24" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+
+	<attribute name="labelWeekHeader" value="" type="string" />	
+	<text name="_date" fgcolor="white" fontsize="10" text="$once{ parent.labelWeekHeader }" 
+		  align="center" resize="true" 
+		  onmouseover="" onmouseout="">
+		<labelTooltip name="_tip" labelid="468" />
+	</text>
+
+</class>
+
+<class name="dateSelectorWeek" extends="baseDateSelectorComponent" 
+		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+
+	<attribute name="weekIndexNumber" value="-1" type="number" />
+
+	<attribute name="firstweekddaydate" value="null" />
+	
+	<method name="init">
+        <![CDATA[ 
+        super.init();
+        for( var i = 0 ; i < 7 ; i++ )  {
+        	new dayclass(this.content,{
+        						daydate:new Date(firstweekddaydate.getTime()+(86400000*i)),
+        						weekIndexNumber:this.weekIndexNumber,
+        						dayIndexNumber:i
+        					});
+       	}  
+		]]>
+	</method>
+	
+	<view name="content" layout="axis:x;spacing:1" />
+	
+</class>
+
+
+<class name="dateSelectorMonth" extends="baseDateSelectorComponent" 
+		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="137" width="176">
+            
+	<attribute name="month" value="0" type="number" />
+	<attribute name="firstweekNumber" value="0" type="number" />
+	<attribute name="currentMonthName" value="" type="string" />
+
+	<method name="init">
+        <![CDATA[ 
+        super.init();
+        var dateRoot = parent.parent;
+        //if ($debug) Debug.write("dateRoot: ",dateRoot);
+        this.setAttribute('currentMonthName',dateRoot.monthnames[month]); 
+        for( var i = 0 ; i < 6 ; i++ ) new lz.dateSelectorWeek(this.content,{firstweekddaydate:new Date(this.showingdate.getTime()+(604800000*i)),dayclass:dayclass,month:month,weekIndexNumber:i});  
+        for( var i = 0 ; i < 7 ; i++ ) new lz.dateSelectorDayHeader(this.weekheader,{daynumber:(this.showingdate.getDay()+i)});  
+		]]>
+	</method> 
+	<view name="header" layout="axis:x" height="18" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+		<text width="20" fgcolor="0x000000" height="18" 
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
+			<handler name="oninit"><![CDATA[
+				this.setAttribute('text','&#60;');]]>
+			</handler>
+			<handler name="onclick">
+				this.parent.parent.parent.parent.showPreviewsMonth();
+			</handler>
+		</text>
+		<text width="22" fgcolor="0x000000" height="18"
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
+			<handler name="oninit"><![CDATA[
+				this.setAttribute('text','&#60;&#60;');]]>
+			</handler>			
+			<handler name="onclick">
+				this.parent.parent.parent.parent.showPreviewsYear();
+			</handler>
+		</text>	
+		<view width="91" height="$once{ parent.height }" >
+			<text fontsize="10" fgcolor="0x000000" align="center" text="${ parent.parent.parent.currentMonthName+' '+parent.parent.parent.parent.parent.year }" resize="true" />
+		</view>
+		<text width="22" fgcolor="0x000000" text=">>" height="18"
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
+			<handler name="onclick">
+				this.parent.parent.parent.parent.showNextYear();
+			</handler>
+		</text>
+		<text width="20" fgcolor="0x000000" text="  >" height="18"
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
+			<handler name="onclick">
+				this.parent.parent.parent.parent.showNextMonth();
+			</handler>
+		</text>	
+	</view>
+	<view name="weekheader" layout="axis:x;spacing:1" x="1" y="18" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"/>
+	<!-- 
+	<view name="weekNumber" layout="axis:y;spacing:1" x="1" y="35" />
+	 -->
+	<view name="content" layout="axis:y;spacing:1" x="1" y="35" />
+</class>
+
+<class name="baseDateSelector" extends="baseDateSelectorComponent" >
+	
+	<attribute name="dayNamesLabelIds" value="null" />
+	<attribute name="dayLabelNamesLabelIds" value="null" />
+	<attribute name="monthnames" value="['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/> 
+
+
+	<attribute name="firstdayinweek" value="$once{ canvas.firstdayinweek }" type="number" />
+	<attribute name="year" value="" type="string" />
+	<attribute name="selecteddate" value="null" />
+	<attribute name="selected" value="null" />
+	
+	<event name="onselect" />
+	<event name="ondoubleselect" />
+	
+	<event name="onmonthSel" />
+	<event name="onyearSel" />
+	
+	<attribute name="dayIndexNumber" value="-1" type="number" />
+	<attribute name="weekIndexNumber" value="-1" type="number" />
+	
+	<handler name="oninit">
+		<![CDATA[
+			this.dayNamesLabelIds = [459,453,454,455,456,457,458];
+			this.dayLabelNamesLabelIds = [466,460,461,462,463,464,465];
+			this.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
+								canvas.getLabelName(471),canvas.getLabelName(472),
+								canvas.getLabelName(473),canvas.getLabelName(474),
+								canvas.getLabelName(475),canvas.getLabelName(476),
+								canvas.getLabelName(477),canvas.getLabelName(478),
+								canvas.getLabelName(479),canvas.getLabelName(480)]
+			
+			this.init();
+		]]>
+	</handler>	
+	
+	<method name="loadDate" args="datObj">
+		this.showingdate = datObj;
+		this.init();
+		this.showDate(this.selecteddate);
+		//this.onselect.sendEvent(this.selecteddate);
+	</method>
+	
+	<method name="init">
+        <![CDATA[ 
+	        super.init();
+	        
+	        var tIsInit = false;
+	        if (this.showingdate==""){
+	        	tIsInit = true;
+	        	this.showingdate = new Date();
+	        }
+	        this.setAttribute('year',this.showingdate.getFullYear());
+	        this.selecteddate = this.showingdate;
+	        var firstdayDate = this.getDateFirstDayInMonth();
+	        this.content.content.destroy();
+	        new lz.dateSelectorMonth(this.content,{name:'content',
+		        	firstweekNumber:this.getWeekNumber(firstdayDate.getTime()),
+		        	month:this.selecteddate.getMonth(),
+		        	showingdate:firstdayDate,
+		        	dayclass:dayclass,
+		        	weekclass:weekclass,
+		        	showcalenderweek:showcalenderweek,
+		        	showcalendermonth:showcalendermonth
+	        	});
+	        this.hiliteDate(this.showingdate);
+	        //this.onselect.sendEvent(this.selecteddate);
+	        var ref = this.checkToday();
+	        
+	        if ($debug) Debug.write("INIT ",ref,ref.daydate);
+	        
+	        if (ref != null && tIsInit) {
+		        this.selectDate(ref.daydate, ref.dayIndexNumber, ref.weekIndexNumber);
+	        }
+		]]>
+	</method>
+	
+	<method name="checkToday">
+		<![CDATA[
+		var tDate = new Date();
+        if (this.showingdate.getMonth()== tDate.getMonth() && this.showingdate.getFullYear() == tDate.getFullYear()){
+        	//Debug.write("+++++++ Found Today");
+        	var ref = this.getDateRefByDateNumber(tDate.getDate(),tDate.getMonth());
+        	if (ref == null) {
+        		if ($debug) Debug.warn("Could not find date ref",tDate);
+        	}
+        	ref.setAttribute('bgcolor',0xCECECE);
+        	return ref;
+        }
+        
+        return this.getDateRefByDateNumber(this.showingdate.getDate(),this.showingdate.getMonth())
+		]]>
+	</method>
+	
+	<method name="showDate" args="dateObj">
+		<![CDATA[
+		if(this.selected!=null) this.selected.setAttribute('bgcolor',"white");
+		var i=0;
+		while (i<this.content.content.content.subviews.length){
+			var k=0;
+			while (k<this.content.content.content.subviews[i].content.subviews.length){
+				var t = this.content.content.content.subviews[i].content.subviews[k].daydate;
+				if (t.getDate()==dateObj.getDate() && t.getMonth()==dateObj.getMonth()){
+					this.content.content.content.subviews[i].content.subviews[k].onclick.sendEvent(null);
+					return;
+				}
+				k++;
+			}
+			i++;
+		}
+		]]>
+	</method>
+	
+	<method name="selectDate" args="dateObj,dayIndex,weekIndex">
+		dayIndexNumber = dayIndex;
+		weekIndexNumber = weekIndex;
+		this.showingdate = dateObj;
+		this.selecteddate = dateObj;
+		this.hiliteDate(this.showingdate);
+		this.checkToday();
+		this.onselect.sendEvent(this.selecteddate);
+	</method>
+	
+	<method name="selectDoubleDate" args="dateObj">
+		this.showingdate = dateObj;
+		this.selecteddate = dateObj;
+		this.hiliteDate(this.showingdate);
+		this.checkToday();
+		this.ondoubleselect.sendEvent(this.selecteddate);
+	</method>
+	
+	<method name="hiliteDate" args="dateObj">
+		<![CDATA[
+		if(this.selected!=null) this.selected.setAttribute('bgcolor',"white");
+		var i=0;
+		while (i<this.content.content.content.subviews.length){
+			var k=0;
+			while (k<this.content.content.content.subviews[i].content.subviews.length){
+				var t = this.content.content.content.subviews[i].content.subviews[k].daydate;
+				if (t.getDate()==dateObj.getDate() && t.getMonth()==dateObj.getMonth()){
+					this.selected = this.content.content.content.subviews[i].content.subviews[k];
+					this.selected.setAttribute('bgcolor',0xCCD7E1);
+					return;
+				}
+				k++;
+			}
+			i++;
+		}
+		]]>
+	</method>
+	
+	<!-- 
+		Here the Date has to be changed sothat the firstday in week is the first day in month
+	 -->
+	<method name="getDateFirstDayInMonth">
+		<![CDATA[
+		//First calc the date by the given first day in week
+		var newDateTemp = new Date(this.showingdate.getFullYear(), this.showingdate.getMonth(), 1, 12); //set hours to 12 to prevent timezone issues
+		////Debug.write(newDateTemp);
+		var factor = 0;
+		if (newDateTemp.getDay()>this.firstdayinweek)	
+			factor = -((newDateTemp.getDay()-this.firstdayinweek));
+		else if (newDateTemp.getDay()<this.firstdayinweek)
+			factor = (this.firstdayinweek-newDateTemp.getDay());
+		////Debug.write("factor: ",factor);
+		
+		//calc first day
+		var newDate = new Date( (newDateTemp.getTime()+(86400000*factor)) );
+
+		//if the first day is after the first day of the selected month then we have to add 7 Days
+		if (newDate.getDate()>1 && newDate.getMonth()==newDateTemp.getMonth()){
+			newDate = new Date( (newDate.getTime()-(86400000*7)) );
+		}
+		if ($debug) Debug.write("getDateFirstDayInMonth ",newDate);
+		return newDate;
+		]]>
+	</method>
+	
+	<method name="isoWeekDays" args="yday,wday" >
+		<![CDATA[
+		return yday - ((yday - wday + 382) % 7) + 3;
+		]]>
+	</method>
+	
+	<method name="isLeapYear" args="year" >
+		<![CDATA[
+		if (((year % 4) == 0 && (year % 100)!=0) || (year % 400)==0)
+			return 1;
+		else
+			return 0;
+		]]>
+	</method>
+	
+	<method name="getDaysInMonth" args="iYear,iMonth" >
+		<![CDATA[
+			return 32 - new Date(iYear, iMonth, 32).getDate();
+		]]>
+	</method>
+	
+	<method name="getWeekNumber" args="DateInMilliseconds" >
+		<![CDATA[
+		var d = new Date(DateInMilliseconds);
+		if ($debug) Debug.write("getWeekNumber: ",d);
+		var NumerOfDaysIn = d.getDate();
+		
+		for (var i=0;i<d.getMonth();i++) {
+			var monthDays = this.getDaysInMonth(d.getFullYear(),d.getMonth());
+			NumerOfDaysIn+=monthDays;
+		}
+		if ($debug) Debug.write("NumerOfDaysIn,month: ",NumerOfDaysIn,d.getMonth());
+		
+		var days = this.isoWeekDays(NumerOfDaysIn,d.getDay());
+		if ($debug) Debug.write("days: ",days);
+		
+		if (days < 0) {
+			NumerOfDaysIn += 365 + isLeapYear(--NumerOfDaysIn);
+			days = this.isoWeekDays(NumerOfDaysIn, d.getDay());
+		} else {
+			NumerOfDaysIn -= 365 + isLeapYear(NumerOfDaysIn);
+			var d2 = this.isoWeekDays(NumerOfDaysIn,d.getDay());
+			if (0 <= d2) {
+				days = d2;
+			}
+		}
+
+		if ($debug) Debug.write("days: ",days);
+		
+		return (Math.floor((days / 7)));
+		]]>
+	</method>
+	
+	<method name="clearContent">
+		this.content.destroy();
+		new LzView(this,{name:'content'});
+	</method>
+	
+	<method name="showPreviewsMonth">
+		<![CDATA[
+		this.clearContent();
+		var preyear = this.showingdate.getFullYear();
+		var previewsMonth = this.showingdate.getMonth()-1;
+		if (previewsMonth<0) {
+			previewsMonth=11;
+			preyear--;
+		}
+		this.showingdate = new Date(preyear, previewsMonth, this.showingdate.getDate());
+		this.onmonthSel.sendEvent(previewsMonth);
+		this.init();
+		]]>
+	</method>
+	
+	<method name="showNextMonth">
+		<![CDATA[
+		this.clearContent();
+		var nextyear = this.showingdate.getFullYear();
+		var nextMonth = this.showingdate.getMonth()+1;
+		if (nextMonth>11) {
+			nextMonth=0;
+			nextyear++;
+		}		
+		this.showingdate = new Date(nextyear, nextMonth, this.showingdate.getDate());
+		this.onmonthSel.sendEvent(nextMonth);
+		this.init();
+		]]>
+	</method>
+	
+	<method name="showPreviewsYear">
+		this.clearContent();
+		this.showingdate = new Date(this.showingdate.getFullYear()-1, this.showingdate.getMonth(), this.showingdate.getDate());
+		this.onyearSel.sendEvent(this.showingdate.getFullYear());
+		this.init();
+	</method>
+	
+	<method name="showNextYear">
+		this.clearContent();
+		this.showingdate = new Date(this.showingdate.getFullYear()+1, this.showingdate.getMonth(), this.showingdate.getDate());
+		this.onyearSel.sendEvent(this.showingdate.getFullYear());
+		this.init();
+	</method>
+	
+	<method name="getDateRefByDateNumber" args="dayNumber,month">
+		<![CDATA[
+		////Debug.write(this.content.content.content);
+		for (var i=0;i<this.content.content.content.subviews.length;i++){
+			////Debug.write("this.content.content.content.subviews: ",i,this.content.content.content.subviews[i]);
+			for (var k=0;k<this.content.content.content.subviews[i].content.subviews.length;k++){
+				////Debug.write("this.content.content.content.subviews[i].content.subviews[k].daydate.getDate(): ",this.content.content.content.subviews[i].content.subviews[k].daydate.getDate(),dayNumber);
+				////Debug.write("this.content.content.content.subviews[i].content.subviews[k].daydate.getMonth(): ",this.content.content.content.subviews[i].content.subviews[k].daydate.getMonth(),month);
+				if(this.content.content.content.subviews[i].content.subviews[k].daydate.getDate()==dayNumber && this.content.content.content.subviews[i].content.subviews[k].daydate.getMonth()==month){
+					return this.content.content.content.subviews[i].content.subviews[k];
+				}
+				////Debug.write("k: ",k,this.content.content.content.subviews[i].content.subviews[k]);
+				////Debug.write(this.content.content.content.subviews[i].content.subviews[k].daydate);
+			}
+		}
+		return null;
+		]]>
+	</method>
+	
+	<view name="content">
+		<view name="content" />
+	</view>
+
+</class>
+
+<class name="dateSelector" extends="baseDateSelector"
+	weekclass="lz.dateSelectorWeek" dayclass="lz.dateSelectorDay" monthclass="lz.dateSelectorMonth" >
+
+</class>
+
+</library>

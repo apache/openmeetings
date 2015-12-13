@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+       <script type="text/javascript">
+           function oauthPanelInit() {
+               var documentHeight = $(document).height();
+               $('#adminForm').height(documentHeight-114);
+               $('#adminTable').height(documentHeight-144);
+           }
+       </script>
+    </wicket:head>
+	<wicket:panel>
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<thead>
+						<tr>
+							<th class="two_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="1104" /></th>
+							<th class="two_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="1105" /></th>
+						</tr>
+					</thead>
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">
+						<tbody wicket:id="listContainer">
+				    		<tr wicket:id="oauthServersList">
+								<td class="two_column_layout_column1"><div class="two_column_layout_divcolumn1"><span wicket:id="oauthServerId"></span></div></td>
+								<td class="two_column_layout_column2"><div class="two_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+							</tr>
+						</tbody>			
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+						<fieldset>
+							<legend><wicket:ommessage key="1581" /></legend>
+							<div class="formelement">
+								<label><wicket:ommessage key="1574" /></label><input type="checkbox" class="formcheckbox" wicket:id="isEnabled"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1573" /></label><input type="text" wicket:id="name"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1575" /></label><input type="text" wicket:id="iconUrl"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1576" /></label><input type="text" wicket:id="clientId"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1577" /></label><input type="text" wicket:id="clientSecret"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1587" /></label><input type="text" readonly="readonly" wicket:id="redirectUri"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1578" /></label><input type="text" wicket:id="requestKeyUrl"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1579" /></label><input type="text" wicket:id="requestTokenUrl"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1586" /></label><input type="text" wicket:id="requestTokenAttributes"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1580" /></label><input type="text" wicket:id="requestInfoUrl"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1582" /></label><input type="text" wicket:id="loginParamName"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1583" /></label><input type="text" wicket:id="emailParamName"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1584" /></label><input type="text" wicket:id="firstnameParamName"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:ommessage key="1585" /></label><input type="text" wicket:id="lastnameParamName"/>
+							</div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+	</wicket:panel>
+</html>

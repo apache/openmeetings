@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<!--- it shows chat participants. -->
+<class name="chatParticipants" extends="view" height="40" clickable="true"
+	   width="$once{ parent.width }" bgcolor="$once{ canvas.bgColorMenuItems }">
+	
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="connectedSince" value="" type="string" />
+	<attribute name="publicSID" value="" type="string" />
+	
+	<attribute name="picture_uri" value="" type="string"/>
+	
+	<handler name="oninit">
+		<![CDATA[
+			if($debug) Debug.write("chatParticipants/picture_uri: ",this.picture_uri);
+			
+			if (this.picture_uri != null && this.picture_uri.startsWith("http")) {
+				
+				this._userpic.setAttribute('src',this.picture_uri);  
+				
+			} else {
+				
+				var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
+                        +'&moduleName=chat&parentPath=&room_id='
+                        +'&remoteUserid='+this.user_id
+                        +'&sid='+canvas.sessionId;
+                //Debug.write("downloadurl "+downloadurl);
+                this._userpic.setAttribute('src',downloadurl);  
+                
+			}
+	        
+	        //Debug.write("TIME: "+this.usertime);
+        ]]>
+	</handler>
+	
+	<!--
+    public Long requestUserToContactList(String SID, Long userToAdd_id, 
+                String domain, String port, String webapp)
+     -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.user_id; </method></netparam>
+        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("requestUserToContactList: ",value);
+                if (value > 0) {
+                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+    
+    <view width="$once{ parent.width }" height="$once{ parent.height-1 }" 
+    	bgcolor="0xFFFFFF" opacity="0.2" />
+	
+	<image name="_userpic" stretches="both" x="1" y="1">
+		<handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+            ]]>
+        </handler>
+	</image>
+	
+	<text text="$once{ parent.username }" x="40" resize="false"
+		  width="$once{ parent.width - 40 }" />	
+		  
+	<miniIconsImage name="add" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="16" height="16" 
+                   y="20" x="$once{ parent.width - 80 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            if (hib.userobject.user_id == parent.user_id) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+                return;
+            }
+            parent.requestUserToContactList.doCall();
+        </handler>
+        <labelTooltip labelid="1186" />
+    </miniIconsImage>
+    
+    <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
+                   y="20" x="$once{ parent.width - 60 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                userObject:null,
+                                isdragable:true,
+                                user_id:parent.user_id,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+        </handler>
+        <labelTooltip labelid="1253" />
+    </miniIcons>
+	
+	<miniIcons resource="user_profile_rsc" width="16" height="16" 
+               y="20" x="$once{ parent.width - 40 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.viewUserProfileWindow(canvas,{
+                                userId:parent.user_id
+                            });
+        </handler>
+        <labelTooltip labelid="1236" />
+    </miniIcons>    
+	
+	<miniIcons resource="start_conference2_rsc" width="16" height="16" 
+			   y="20" x="$once{ parent.width - 20 }" showhandcursor="true">
+		<handler name="onclick">
+			if ($debug) Debug.write("Start Conference");
+			new lz.chatParticipantsInviteConference(canvas,{
+            			    publicSID:parent.publicSID
+            			});
+		</handler>
+		<labelTooltip labelid="1131" />
+	</miniIcons>	 
+	
+	<labelTooltip text="$once{ parent.connectedSince }" /> 
+	
+</class>
+
+</library>

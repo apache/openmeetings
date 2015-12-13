@@ -1,0 +1,1065 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Content Stylesheet for Site -->
+
+        
+<!-- start the processing -->
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE XML FILE IN xdocs INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+                                                    <meta name="author" content="
+			OpenMeetings Team
+		">
+            <meta name="email" content="iarkh@apache.org">
+            
+           
+                                    
+                        
+            <title>Apache OpenMeetings - Manual Testing</title>
+            <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
+            <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+            <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
+            <link rel="stylesheet" type="text/css" href="css/colorbox.css" />
+            
+			<!-- Add jQuery library -->
+			<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		
+			<!-- Add coinslider plugins -->
+			<script type="text/javascript" src="js/coin-slider.min.js"></script>
+			
+			<!-- Add colorbox plugin -->
+			<script type="text/javascript" src="js/jquery.colorbox.js"></script>
+		
+			<script src="js/jquery.ui.core.js"></script>
+			<script src="js/jquery.ui.widget.js"></script>
+		
+			<script src="js/jquery.ui.accordion.js"></script>
+			
+			<script>
+			$(function() {
+				$( "#accordion" ).accordion({
+					autoHeight: false,
+					navigation: true,
+					navigationFilter: function () {
+						var sidebarHrefArray = this.href.split("/");
+    					var sideBarLastString = sidebarHrefArray[sidebarHrefArray.length - 1].toLowerCase();
+						
+						if (sideBarLastString.indexOf("#") == -1) {
+							return false;
+						}
+						
+												/* document.location.href */
+						var currentSection = "";
+						
+						var currentLocation = "";
+						var currentLink = "";
+						if (false) {
+						
+						}
+    										        					            					            	
+					            	else if (document.location.href.indexOf("/index.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/index.html".substr(1, "/index.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/license.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/license.html".substr(1, "/license.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("http://www.apache.org/") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "http://www.apache.org/".substr(1, "http://www.apache.org/".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/downloads.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/downloads.html".substr(1, "/downloads.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/commercial-support.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/commercial-support.html".substr(1, "/commercial-support.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/installation.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/installation.html".substr(1, "/installation.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/Upgrade.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/Upgrade.html".substr(1, "/Upgrade.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools".substr(1, "https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/CommandLineAdmin.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/CommandLineAdmin.html".substr(1, "/CommandLineAdmin.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/get-involved.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/get-involved.html".substr(1, "/get-involved.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/team-list.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/team-list.html".substr(1, "/team-list.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/mail-lists.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/mail-lists.html".substr(1, "/mail-lists.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("http://cwiki.apache.org/confluence/display/OPENMEETINGS/") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "http://cwiki.apache.org/confluence/display/OPENMEETINGS/".substr(1, "http://cwiki.apache.org/confluence/display/OPENMEETINGS/".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/svn.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/svn.html".substr(1, "/svn.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("http://issues.apache.org/jira/browse/OPENMEETINGS") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "http://issues.apache.org/jira/browse/OPENMEETINGS".substr(1, "http://issues.apache.org/jira/browse/OPENMEETINGS".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/dependencies.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/dependencies.html".substr(1, "/dependencies.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/BuildInstructions.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/BuildInstructions.html".substr(1, "/BuildInstructions.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/JUnitTesting.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/JUnitTesting.html".substr(1, "/JUnitTesting.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ManualTesting.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/ManualTesting.html".substr(1, "/ManualTesting.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ReleaseGuide.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/ReleaseGuide.html".substr(1, "/ReleaseGuide.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/WebsiteGuide.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/WebsiteGuide.html".substr(1, "/WebsiteGuide.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/SoapRestAPI.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/SoapRestAPI.html".substr(1, "/SoapRestAPI.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/RestAPISample.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/RestAPISample.html".substr(1, "/RestAPISample.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/LdapAndADS.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/LdapAndADS.html".substr(1, "/LdapAndADS.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/oauth2.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/oauth2.html".substr(1, "/oauth2.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/voip-sip-integration.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/voip-sip-integration.html".substr(1, "/voip-sip-integration.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ErrorsTable.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/ErrorsTable.html".substr(1, "/ErrorsTable.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/MoodlePlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/MoodlePlugin.html".substr(1, "/MoodlePlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/SakaiPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/SakaiPlugin.html".substr(1, "/SakaiPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/JiraPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/JiraPlugin.html".substr(1, "/JiraPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/JoomlaPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/JoomlaPlugin.html".substr(1, "/JoomlaPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/DrupalPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/DrupalPlugin.html".substr(1, "/DrupalPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/BitrixPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/BitrixPlugin.html".substr(1, "/BitrixPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ConfluencePlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/ConfluencePlugin.html".substr(1, "/ConfluencePlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/SugarCRMPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/SugarCRMPlugin.html".substr(1, "/SugarCRMPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/RedminePlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/RedminePlugin.html".substr(1, "/RedminePlugin.html".length);
+					            	} 
+					            	
+					        				        		    										        					            				            						            			else if (document.location.href.indexOf("/ApacheDerbyConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/ApacheDerbyConfig.html".substr(1, "/ApacheDerbyConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/IBMDB2Config.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/IBMDB2Config.html".substr(1, "/IBMDB2Config.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/OracleConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/OracleConfig.html".substr(1, "/OracleConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/MySQLConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/MySQLConfig.html".substr(1, "/MySQLConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/PostgresConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/PostgresConfig.html".substr(1, "/PostgresConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/MSSQLConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/MSSQLConfig.html".substr(1, "/MSSQLConfig.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/Internationalisation.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Internationalisation.html".substr(1, "/Internationalisation.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/LanguageEditor.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/LanguageEditor.html".substr(1, "/LanguageEditor.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/TimeZoneHandling.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/TimeZoneHandling.html".substr(1, "/TimeZoneHandling.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/EditTemplates.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/EditTemplates.html".substr(1, "/EditTemplates.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/PortSettings.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/PortSettings.html".substr(1, "/PortSettings.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/JVMPerformanceTuning.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/JVMPerformanceTuning.html".substr(1, "/JVMPerformanceTuning.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/themes-and-branding.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/themes-and-branding.html".substr(1, "/themes-and-branding.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/Dashboard.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Dashboard.html".substr(1, "/Dashboard.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/WebcamResolutions.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/WebcamResolutions.html".substr(1, "/WebcamResolutions.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/ConferenceRoomLayoutOptions.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/ConferenceRoomLayoutOptions.html".substr(1, "/ConferenceRoomLayoutOptions.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/HotKeys.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/HotKeys.html".substr(1, "/HotKeys.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/WebappNamePath.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/WebappNamePath.html".substr(1, "/WebappNamePath.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/Navigation.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Navigation.html".substr(1, "/Navigation.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/CalendarAndTimezone.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/CalendarAndTimezone.html".substr(1, "/CalendarAndTimezone.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/CustomRoomTypeHowTo.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/CustomRoomTypeHowTo.html".substr(1, "/CustomRoomTypeHowTo.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/CustomCryptMechanism.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/CustomCryptMechanism.html".substr(1, "/CustomCryptMechanism.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/GeneralConfiguration.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/GeneralConfiguration.html".substr(1, "/GeneralConfiguration.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/RestrictedAccess.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/RestrictedAccess.html".substr(1, "/RestrictedAccess.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/RTMPSAndHTTPS.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/RTMPSAndHTTPS.html".substr(1, "/RTMPSAndHTTPS.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/OpenOfficeConverter.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/OpenOfficeConverter.html".substr(1, "/OpenOfficeConverter.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/FFMPEGVersionSwitch.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/FFMPEGVersionSwitch.html".substr(1, "/FFMPEGVersionSwitch.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/Clustering.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Clustering.html".substr(1, "/Clustering.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/GetVersionInfo.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/GetVersionInfo.html".substr(1, "/GetVersionInfo.html".length);
+						            	} 
+				            							        				        		    					    					
+    					currentLink = currentLink.toLowerCase();
+    					currentLocation = currentLocation.toLowerCase();
+    					
+						return sideBarLastString == currentLink+"#"+currentLocation;
+					}
+				});
+			});
+			</script>
+			
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('.fancybox-buttons').colorbox({rel:'fancybox-buttons',width:"75%", height:"75%"});
+					$('#accordion a').each(function() {
+				      var a = $(this);
+				      var href = a.attr("href");
+				      if (href.indexOf("#") == -1) {
+				      	  var compareIt = href.substr(2, href.length);
+					      if (document.location.href.indexOf(compareIt)!= -1) {
+					       a.addClass('active');
+					      }
+				      }
+				    });
+					$('#coin-slider').coinslider({ width: 640,height: 400, delay: 4000  });					
+				});
+			</script>	
+						
+			<style type="text/css">
+				.fancybox-custom .fancybox-outer {
+					box-shadow: 0 0 50px #222;
+				}
+			</style>
+        </head>
+
+        <body bgcolor="#ffffff" text="#000000" link="#123465" vlink="#123465" alink="#000000">  
+        	<div class="mainbody" style="min-width: 960px; width: 94%;">
+        	<div class="superbody" style="width: 100%;">
+            <table border="0" width="100%" cellspacing="0">
+                <!-- TOP IMAGE -->
+                <tr>
+                    <td align="left">
+<a href="http://openmeetings.apache.org/"><img src="./images/logo-2.jpg" alt="Apache OpenMeetings" border="0"/></a>
+</td>
+                    <td width="80%" align="right" valign="top" >
+	<a href="demo.html">Demo</a>
+	<span>|</span> 
+	<a href="downloads.html" target="_PARENT">Download</a>
+	<span>|</span> 
+	<a href="installation.html" target="_PARENT">Installation</a>
+	<span>|</span> 
+	<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS" target="_BLANK">Wiki</a>
+	<span>&nbsp;</span>
+</td>
+                </tr>
+            </table>
+            <table border="0" width="100%" cellspacing="4">
+                <tr><td colspan="2">
+                    <hr noshade="noshade" size="1"/>
+                </td></tr>
+
+                <tr>
+                    <!-- LEFT SIDE NAVIGATION -->
+                    <td width="20%" valign="top" nowrap="nowrap">
+
+                    <!-- special ACon Logo - leave here for next time
+                    <a href="http://apachecon.com/2005/US/">
+                        <img src="http://apache.org/images/ac2005us_blue_125x125.jpg" height="125"
+                             width="125" border="0" alt="ApacheCon US 2005" />
+                    </a>  -->
+
+                   <!-- regular menu -->
+
+                    
+    <!-- ============================================================ -->
+    <div id="accordion" style="width: 100%">
+    
+            	<h3><a href="#General">General</a></h3>
+    	<div>
+	        	            	            	    <a href="./index.html">Home</a>
+<br/>
+	        		        	            	            	    <a href="./license.html">License</a>
+<br/>
+	        		        	            	            	    <a href="http://www.apache.org/">ASF</a>
+<br/>
+	        		        	            	            	    <a href="./downloads.html">Downloads</a>
+<br/>
+	        		        	            	            	    <a href="./commercial-support.html">Commercial Support</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#InstallationandUpgrade">Installation and Upgrade</a></h3>
+    	<div>
+	        	            	            	    <a href="./installation.html">Installation</a>
+<br/>
+	        		        	            	            	    <a href="./Upgrade.html">Upgrade</a>
+<br/>
+	        		        	            	            	    <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Tutorials</a>
+<br/>
+	        		        	            	            	    <a href="./CommandLineAdmin.html">Command Line Admin</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#Community">Community</a></h3>
+    	<div>
+	        	            	            	    <a href="./get-involved.html">Get Involved</a>
+<br/>
+	        		        	            	            	    <a href="./team-list.html">Committers</a>
+<br/>
+	        		        	            	            	    <a href="./mail-lists.html">Mailing Lists</a>
+<br/>
+	        		        	            	            	    <a href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/">Wiki</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#Development">Development</a></h3>
+    	<div>
+	        	            	            	    <a href="./svn.html">Source Code</a>
+<br/>
+	        		        	            	            	    <a href="http://issues.apache.org/jira/browse/OPENMEETINGS">Bugs / Issues (JIRA)</a>
+<br/>
+	        		        	            	            	    <a href="./dependencies.html">Dependencies</a>
+<br/>
+	        		        	            	            	    <a href="./BuildInstructions.html">Build Instructions</a>
+<br/>
+	        		        	            	            	    <a href="./JUnitTesting.html">JUnit Testing</a>
+<br/>
+	        		        	            	            	    <a href="./ManualTesting.html">Manual Testing</a>
+<br/>
+	        		        	            	            	    <a href="./ReleaseGuide.html">Release Guide</a>
+<br/>
+	        		        	            	            	    <a href="./WebsiteGuide.html">Website Guide</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#Integration">Integration</a></h3>
+    	<div>
+	        	            	            	    <a href="./SoapRestAPI.html">SOAP/REST API</a>
+<br/>
+	        		        	            	            	    <a href="./RestAPISample.html">REST API Sample</a>
+<br/>
+	        		        	            	            	    <a href="./LdapAndADS.html">Ldap and ADS</a>
+<br/>
+	        		        	            	            	    <a href="./oauth2.html">OAuth2</a>
+<br/>
+	        		        	            	            	    <a href="./voip-sip-integration.html">VoIP and SIP</a>
+<br/>
+	        		        	            	            	    <a href="./ErrorsTable.html">Errors table</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#Plugins">Plugins</a></h3>
+    	<div>
+	        	            	            	    <a href="./MoodlePlugin.html">Moodle Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./SakaiPlugin.html">Sakai Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./JiraPlugin.html">Jira Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./JoomlaPlugin.html">Joomla Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./DrupalPlugin.html">Drupal Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./BitrixPlugin.html">Bitrix Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./ConfluencePlugin.html">Confluence Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./SugarCRMPlugin.html">SugarCRM Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./RedminePlugin.html">Redmine Plugin</a>
+<br/>
+	        		            	</div>
+        	<h3><a href="#Configuration">Configuration</a></h3>
+    	<div>
+	        	            	            	<b>DB Sample Configurations</b><br/>
+	            			            			    <a href="./ApacheDerbyConfig.html">Apache Derby</a>
+<br/>
+	            			            			    <a href="./IBMDB2Config.html">IBM DB2</a>
+<br/>
+	            			            			    <a href="./OracleConfig.html">Oracle</a>
+<br/>
+	            			            			    <a href="./MySQLConfig.html">MySQL</a>
+<br/>
+	            			            			    <a href="./PostgresConfig.html">Postgres</a>
+<br/>
+	            			            			    <a href="./MSSQLConfig.html">MSSQL</a>
+<br/>
+	            			        		        	            	            	<b>Localization and languages</b><br/>
+	            			            			    <a href="./Internationalisation.html">Internationalisation</a>
+<br/>
+	            			            			    <a href="./LanguageEditor.html">LanguageEditor</a>
+<br/>
+	            			            			    <a href="./TimeZoneHandling.html">TimeZoneHandling</a>
+<br/>
+	            			            			    <a href="./EditTemplates.html">EditTemplates</a>
+<br/>
+	            			        		        	            	            	<b>NAT Port Settings</b><br/>
+	            			            			    <a href="./PortSettings.html">Port settings</a>
+<br/>
+	            			        		        	            	            	<b>Performance</b><br/>
+	            			            			    <a href="./JVMPerformanceTuning.html">JVM performance tuning</a>
+<br/>
+	            			        		        	            	            	<b>User Interface</b><br/>
+	            			            			    <a href="./themes-and-branding.html">Themes</a>
+<br/>
+	            			            			    <a href="./Dashboard.html">Dashboard</a>
+<br/>
+	            			            			    <a href="./WebcamResolutions.html">Webcam resolutions</a>
+<br/>
+	            			            			    <a href="./ConferenceRoomLayoutOptions.html">Room layout options</a>
+<br/>
+	            			            			    <a href="./HotKeys.html">Hot Keys</a>
+<br/>
+	            			        		        	            	            	<b>Customization</b><br/>
+	            			            			    <a href="./WebappNamePath.html">Webapp name/path</a>
+<br/>
+	            			            			    <a href="./Navigation.html">Navigation</a>
+<br/>
+	            			            			    <a href="./CalendarAndTimezone.html">Calendar and timezone</a>
+<br/>
+	            			            			    <a href="./CustomRoomTypeHowTo.html">Custom room type</a>
+<br/>
+	            			            			    <a href="./CustomCryptMechanism.html">Custom ctypt mechanism</a>
+<br/>
+	            			            			    <a href="./GeneralConfiguration.html">General Configuration</a>
+<br/>
+	            			        		        	            	            	<b>Security</b><br/>
+	            			            			    <a href="./RestrictedAccess.html">Restricted Access</a>
+<br/>
+	            			            			    <a href="./RTMPSAndHTTPS.html">RTMPS and HTTPS</a>
+<br/>
+	            			        		        	            	            	<b>Converters</b><br/>
+	            			            			    <a href="./OpenOfficeConverter.html">OpenOffice Converter</a>
+<br/>
+	            			            			    <a href="./FFMPEGVersionSwitch.html">FFMPEG Version Switch</a>
+<br/>
+	            			        		        	            	            	<b>Clustering</b><br/>
+	            			            			    <a href="./Clustering.html">Clustering</a>
+<br/>
+	            			        		        	            	            	<b>Misc</b><br/>
+	            			            			    <a href="./GetVersionInfo.html">Get version info</a>
+<br/>
+	            			        		            	</div>
+        
+    </div>
+     
+    <br/>
+    
+                    </td>
+                    <td width="80%" align="left" valign="top">
+                                                                    <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Introduction"><strong>Introduction</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				Below is a test plan for the OpenMeetings 2.1 pre-release testing.
+			</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Details"><strong>Details</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ol>
+				<li>
+					<b>User GUI tests</b>
+					<ol>
+						<li>
+							Login/logout 
+							<ol>
+								<li>Password recovering </li>
+								<li>Self-registering </li>
+								<li>"Visit Apache OpenMeetings" link </li>
+								<li>Enter wrong login/password </li>
+								<li>Enter correct login/password </li>
+								<li>Exit the system by click the Exit button </li>
+							</ol>
+						</li>
+						<li>
+							Dashboard
+							<ol>
+								<li>Correct user info in the upper left corner </li>
+								<li>Links in the "Help and support" section </li>
+								<li>It should be possible to enter user’s room from the dashboard </li>
+								<li>Room details should be shown correctly in the "Rooms in this section…" part of the screen </li>
+							</ol>					
+						</li>
+						<li>
+							Global chat 
+							<ol>
+								<li>Send/receive message where at least 3 users in the system </li>
+								<li>Adding a contact to the contact list </li>
+								<li>Private message </li>
+								<li>Showing user profile </li>
+								<li>Inviting user to the conference room </li>
+								<li>Copy chat log </li>
+								<li>Delete chat log </li>
+								<li>Changing font style in the massage </li>
+								<li>Adding emotions to the message </li>
+							</ol>
+							Attention! Correct RTL support does not work in the current implementation 
+						</li>
+						<li>
+							Calendar view
+							<ol>
+								<li>Change view (weekly/daily/monthly) and moving between the dates </li>
+								<li>Adding/removing/moving by mouse an event </li>
+							</ol>
+						</li>
+						<li>
+							Calendar invitation window
+							<ol>
+								<li>Creating/updating/deleting an event </li>
+								<li>Inviting 3 internal and 3 external guests </li>
+								<li>Different reminder types: receiving e-mail invitation for internal and external guests </li>
+								<li>Password protected invitation </li>
+								<li>Inviting to the rooms of the different types </li>
+								<li>Choosing time zone for external guest </li>
+								<li>Correct user data in the invitations </li>
+								<li>SMS reminder for internal and external guests </li>
+								<li>E-mail reminder for internal and external guests </li>
+								<li>It should be possible to enter to the event via invitation link room at the particular time slot only </li>
+								<li>Enter the room via invitation window </li>
+							</ol>
+						</li>
+						<li>
+							My Profile: User profile should contain correct user info and allow to edit this 
+						</li>
+						<li>
+							Contacts and Messages
+							<ol>
+								<li>Add/remove a message </li> 
+								<li>Creating a new folder </li>
+								<li>Moving between the folders </li>
+								<li>Marking messages as read/unread </li>
+								<li>Message filters </li>
+								<li>Contact list </li>
+							</ol>
+						</li>
+						<li>
+							User settings
+							<ol>
+								<li>Possibility to change the user info </li>
+								<li>Changing time zone and language (should start to work after user re-login </li>
+								<li>Community settings or different users </li>
+								<li>Display settings</li> 
+							</ol>
+						</li>
+						<li>
+							Search users
+							<ol>
+								<li>Send a private message </li>
+								<li>Adding a contact </li>
+								<li>View contact details via user list </li>
+							</ol>
+						</li>
+						<li>
+							Room lists 
+							<ol>
+								<li>Public rooms, private rooms and my rooms should contain correct room lists </li>
+								<li>User list for the selected room </li>
+								<li>Room details for the selected room </li>
+							</ol>
+						</li>
+						<li>
+							Recordings
+							<ol> 
+								<li>The list should contain available recordings in public and private folders </li>
+								<li>Info panel should contain actual info about the recording </li>
+								<li>Downloading a recording is different formats (AVI/FLV) </li>
+								<li>Play the recording in OpenMeetings </li>
+								<li>Play downloaded recording by Windows player </li>
+								<li>Remove a recording from the folder </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – general issues (should be tested with at least 3 attendees)
+							<ol>
+								<li>Enter the room: different cases for the cam/micro, choosing of the cam resolution, test recording, allow/deny of video </li>
+								<li>User list should be shown correctly </li>
+								<li>Correct user credentials after  the room entering </li>
+								<li>Add moderator permissions to the user </li>
+								<li>Turn micro on/off in the user list </li>
+								<li>Increasing/decreasing sound level and turning micro on/off in the video window </li>
+								<li>Turn micro on/off in the user list to another user – possible by the moderator only </li>
+								<li>Increasing/decreasing sound level and turning micro on/off in the video window - possible by the moderator only </li>
+								<li>Allow/deny drawing on whiteboard – possible by the moderator only </li>
+								<li>Allow/deny screen sharing – possible by the moderator only </li>
+								<li>Allow/deny remote screen control – possible by the moderator only </li>
+								<li>Allow/deny exclusive audio – possible by the moderator only </li>
+								<li>Re-start devise settings via user list </li>
+								<li>Re-start devise settings via video window </li>
+								<li>Kick the user off by the moderator </li>
+								<li>Click F8 key to arrange videos </li>
+								<li>Activity and actions panel should contain correct info </li>
+								<li>Exit the room </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing: file uploading + documents
+							<ol>
+								<li>Upload a document with "Load directly to whiteboard" switch turned on </li>
+								<li>Upload a with "Load directly to whiteboard" switch turned on off </li>
+								<li>Upload a document with the localized file name and spaces in the name </li>
+								<li>Uploading a document into different folders: private files should be visible only their owner only </li>
+								<li>Removing a file from the room </li>
+								<li>Home and public drive size should change correctly </li>
+								<li>Adding a new folder </li>
+								<li>Removing a folder </li>
+								<li>Load a document of each supported type and check that it’s shown correctly </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – whiteboard and properties panels (should be tested with at least 3 attendees)
+							<ol>
+								<li>Adding a removing a whiteboard </li>
+								<li>Full-fit switch </li>
+								<li>Clear whiteboard </li>
+								<li>Clear objects of current slide only </li>
+								<li>Save and export </li>
+								<li>Undo </li>
+								<li>Select an object </li>
+								<li>Pointer </li>
+								<li>Text </li>
+								<li>Paint </li>
+								<li>Draw line </li>
+								<li>Draw underline </li>
+								<li>Rectangle </li>
+								<li>Ellipse </li>
+								<li>Arrow </li>
+								<li>Cliparts</li>
+							</ol>						
+						</li>
+						<li>
+							Restricted room testing – chat (should be tested with at least 3 attendees)
+							<ol>
+								<li>Send a message </li>
+								<li>Start a private chat </li>
+								<li>Chat moderation </li>
+								<li>Font style </li>
+								<li>Emotions </li>
+								<li>Show/copy chat log </li>
+								<li>Delete server chat log </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – screen sharing and recordings (should be tested with at least 3 attendees)
+							<ol>
+								<li>"Share record/screen" button in the room </li>
+								<li>Desktop sharer: start/stop sharing </li>
+								<li>Change the shared screen area (X-offset, Y-offset, width, height) </li>
+								<li>Change the screen sharing quality </li>
+								<li>Start/stop recordings – need to check that it works as expected </li>
+							</ol>
+						</li>
+						<li>
+							Restricted room testing – Actions menu
+							<ol>
+								<li>Send invitation: send English and localized message </li>
+								<li>Send invitation with password </li>
+								<li>Send invitations with 3 different time periods </li>
+								<li>Change time zone of the invitation </li>
+								<li>Change language of the invitation </li>
+								<li>Send invitation screen: "Generate URL" button – check the same things as for the invitations sent by email </li>
+								<li>Apply to be moderator </li>
+								<li>Apply to whiteboard access </li>
+								<li>Apply to audio/video access </li>
+								<li>Create a poll </li>
+								<li>Poll results </li>
+								<li>Vote </li>
+								<li>Default whiteboard settings: check all of them </li>
+							</ol>
+						</li>
+						<li>
+							Conference room testing
+							<ol>
+								<li>User list should look in another way in compare with restricted type </li>
+								<li>Generally, all should look OK when enter the room </li>
+							</ol>
+						</li>
+						<li>
+							Interview room testing (should be tested with at least 3 attendees)
+							<ol>
+								<li>User list should look as expected </li>
+								<li>Change a user for video pod </li>
+								<li>Start/stop recordings </li>
+							</ol>
+						</li>						
+					</ol>			
+				</li>
+				<li>
+					<b>Admin GUI tests</b>
+					<ol>
+						<li>
+							Users
+							<ol>
+								<li>Add/edit/remove/search user in the table </li>
+								<li>Move between screens where there are many users in the table </li>
+								<li>Edit text fields </li>
+								<li>Change a time zone, re-login and check the calendar </li>
+								<li>Change a language, re-login and check the GUI language </li>
+								<li>Е-mail: e-mails should pass </li>
+								<li>Phone and SMS switch: if set and turned on, sms messages should pass </li>
+								<li>Change a status – non-active user cannot login </li>
+								<li>Change user role and re-login </li>
+								<li>Change user group  - user has an access only to the rooms belong to his organization </li>
+								<li>Change community settings and check </li>
+							</ol>
+						</li>
+						<li>
+							Connections
+							<ol>
+								<li>Should be tested with at least 3 users in the system </li>
+								<li>Sessionvars table should be shown correctly </li>
+								<li>Kick the user from the system </li>
+							</ol>
+						</li>
+						<li>
+							Organizations 
+							<ol>
+								<li>Add/remove/edit/search an organization </li>
+								<li>Add/remove a user from the user list of selected organization </li>
+							</ol>
+						</li>
+						<li>
+							Conference rooms
+							<ol>
+								<li>Add/remove/edit/search a room </li>
+								<li>User list for the given room should contain actual list </li>
+								<li>Turn the Moderation switch on/off and enter the room </li>
+								<li>Add/remove a user to the default moderator list </li>
+								<li>Check max participants number in the room </li>
+								<li>Change room type and enter the room </li>
+								<li>Turn public switch on/off </li>
+								<li>Turn "Demo switch" on/off, change the demonstration time </li>
+								<li>Turn "Allow user questions" on/off and enter the room </li>
+								<li>Turn "Audio only" switch on/off and enter the room </li>
+								<li>Set "Close URL" to some URL, enter the room and then exit – you should be re-directed correspondingly </li>
+								<li>Check that SIP settings work as expected </li>
+								<li>Check that "Allow recordings" switch  works as expected </li>
+								<li>Check that "Layout options" switch work as expected </li>
+								<li>Check that "Allow font styles" switch works as expected </li>
+							</ol>
+						</li>
+						<li>					
+							Configuration
+							<ol>
+								<li>Allow_frontend_register </li>
+								<li>Mail server settings </li>
+								<li>SMS provider settings </li>
+								<li>Application.name </li>
+								<li>Default_lang_id </li>
+								<li>default time zone </li>
+								<li>SIP settings </li>
+								<li>Reminder minutes </li>
+							</ol>
+						</li>
+						<li>					
+							Language editor 
+							<ol>
+								<li>Add/remove/edit/search a key </li>
+								<li>Import/export of localization files </li>
+							</ol>
+						</li>
+						<li>					
+							LDAP: Add/remove/edit/search a record
+						</li>
+						<li>
+							Backup
+							<ol>
+								<li>System import </li>
+								<li>System backup </li>
+								<li>TBD – need to add tests for command line admin here </li>
+							</ol> 
+						</li>
+						<li>
+							Servers: Add/remove/edit/search a server
+						</li>						
+					</ol>
+				</li>
+				<li>
+					<b>SIP integration tests</b> (should be tested with at least 3 attendees in the room; for restricted and interview rooms)
+					<ol>
+						<li>Call from the room to the external phone number </li>
+						<li>Call from external phone number to the room </li>
+						<li>Call from the software phone to the room </li>
+						<li>Call from the software phone with video to the room </li>
+					</ol>
+				</li>
+				<li>
+					<b>Network testing script</b>
+				</li>
+				<li>
+					<b>Site integration tests</b>
+					<ol>
+						<li>Enter OpenMeetings room from Mooddle site </li>
+						<li>Check that recordings link are shown on the Moodle site </li>
+						<li>Enter OpenMeetings room from Joomla site </li>
+						<li>Check that recordings link are shown on the Joomla site </li>
+						<li>Enter OpenMeetings room from Drupal site </li>
+						<li>Check that recordings link are shown on the Drupal site </li>
+					</ol>
+				</li>
+			</ol>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                        </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr><td colspan="2">
+                    <hr noshade="noshade" size="1"/>
+                </td></tr>
+                <tr><td colspan="2">
+                    <div align="center"><font color="#123465" size="-1"><em>
+                    Copyright &#169; 2003-2013, The Apache Software Foundation
+                    </em></font></div>
+                </td></tr>
+            </table>
+            </div>
+            </div>
+        </body>
+    </html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

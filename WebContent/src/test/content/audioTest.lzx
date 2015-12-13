@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+<!--
+	exmple class definition
+	
+	as soon as you see possibility try to make usage of classes
+	
+	in general: 
+	usage of layout is nice but it needs more views just for layouting.
+	in a simple scenario thats okay,
+	but in the openmeetings app itself most of the views are set *absolute* by x and y
+	cause this reduces the total amount of views
+	instancing (=making views dynamically like we do) is time critical .. if you create or destroy too many
+	views at one time the browser hangs and cpu will be at 100%
+	so in the openmeetings app try to use as less views as possible
+	use at less constraints as possible
+	use $once{ .. } instead of ${ .. } or use setters and getters
+	don't use canvas.setAttribute('myvar','foo') just use canvas.myvar='foo' 
+	whenever it is not necessary (it will throw some 
+	events which are useless if you don't have any constraints pointing to 'myvar' and which will cost 
+	performance)
+	
+	 
+	
+ -->
+
+	<!-- define resources once at one place instead of
+		linking with the path every time you want it
+		-->
+<resource name="_btn_play_rsc" src="../resources/play.png" />
+<resource name="_btn_stop_rsc" src="../resources/stop.png" />
+<resource name="_btn_volume_rsc" src="../resources/mix_volume.png" />
+<resource name="_btn_audio_scrubtrack_rsc" src="../resources/audio_scrubtrack.png" />
+<resource name="_btn_audio_scrubber_rsc" src="../resources/audio_scrubber.png" />
+	
+<class name="audioTest" extends="view" play="false" y="40">
+	
+	<!-- please write layout definition always on 
+		top or on bottom of the view content
+		or write it directly into the view definition -->
+	<simplelayout axis="y" spacing="5"/>
+	
+	   <view id="audioplayer" play="false" y="40" resource="http:resources/Star_in_the_east_solfege.mp3" 
+		   oninit="this.stop();">
+		   
+		   <!-- follow a structure by defining view contents:
+			   1.) define attributes
+			   2.) define handlers (event handlers oninit for example if not already in view definition)
+			   3.) define methods
+			   4.) define layout (if not already in view definition)
+			   5.) define content 
+			   -->
+		   
+		   <!-- comment about this attribute and don't forget type definition in attribute's:
+			   this attribute is volume-level -->
+			<attribute name="vol" value="100" type="number" />
+		   
+		    <simplelayout axis="x" spacing="10"/>
+		   
+			<view>
+				<simplelayout axis="x" spacing="-1"/>
+				<button width="40" onclick="audioplayer.stop()">
+					<view resource="_btn_stop_rsc" y="6" align="center"/>
+				</button>
+				<button width="40" onclick="audioplayer.play()">
+					<view resource="_btn_play_rsc" y="5" align="center"/>
+				</button>
+			</view>	 
+		          
+			<view>
+				<simplelayout axis="x" spacing="-1"/>
+				<button width="40" text="-"
+					onclick="audioplayer.setVolume( audioplayer.getVolume() -10)">
+					<view resource="_btn_volume_rsc" y="5" align="right"/>
+				</button>
+				<button width="40" text="+" 
+					onclick="audioplayer.setVolume( audioplayer.getVolume() +10)">
+					<view resource="_btn_volume_rsc" y="5" align="right"/>
+				</button>
+			</view>
+					        
+			
+			<view name="background" bgcolor="black" width="202" height="15" 
+					y="50" options="ignorelayout;">
+				<view name="loadbar" resource="_btn_audio_scrubtrack_rsc" 
+						width="${audioplayer.loadperc * 200}">
+					<view name="playbar" resource="_btn_audio_scrubber_rsc" 
+							y="1" x="${Math.round(180 * audioplayer.frame/audioplayer.totalframes)}"/>
+				</view>
+			</view>
+		   
+		</view>
+		
+		<!--
+			think about contraints ... if they really need to be updated always
+			${ canvas.myvar } => value will be updated every time 
+								myvar changes by canvas.setAttribute('myvar','foo')
+								normally this is not needed
+								high performance/cpu usage
+			$once{ canvas.myvar } => value will be only set once .. oninit of this attribute/view
+									lower perfomance/cpu usage 
+			try to use $once whenever possible
+			-->
+		<text text="$once{mess.listen_sound}" multiline="true" width="${this.parent.width - 20}" />
+
+		<view>
+			
+			<simplelayout axis="x" spacing="10"/>
+			
+			<button text="$once{ mess.no }">					                
+			</button>
+			<button text="$once{ mess.yes }">					                
+			</button>
+			
+		</view>
+	
+	<nextButton nextTabpane="$once{ this.parent.parent.parent.microTab }" text="$once{mess.next}" />
+	
+</class>
+
+</library>
