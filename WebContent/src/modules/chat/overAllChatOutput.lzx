@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- chat output area. It shows chat history on-init.  -->
+<class name="overAllChatOutput" extends="view" height="${ parent.height-1 }" 
+            clip="true" bgcolor="0xFFFFFF" width="${ parent.width-1 }" >
+
+    <handler name="oninit">
+        if($debug) Debug.write("overAllChatOutput/oninit");
+        this.loadContent();
+    </handler>
+    
+    <method name="loadContent">
+        this._cbtext.clearChatOutput();
+        this.getOverallChatHistory.doCall();
+    </method>
+    
+    <method name="clear">
+    	this._cbtext.clearChatOutput();
+    </method>
+    
+    <netRemoteCallHib name="getOverallChatHistory" funcname="chatservice.getOverallChatHistory" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if($debug) Debug.write("overAllChatOutput/getRoomChatHistory: ",value);
+                for (var i=0;i<value.length;i++){
+                    if($debug) Debug.write("overAllChatOutput ",value[i].message,value[i].client);
+                    parent.addChatHistory(value[i].message,value[i].client);
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib>   
+    
+    <method name="getLog">
+    	<![CDATA[
+    		var tString = "";
+    		
+    		for (var i=0;i<this._cbtext.subviews.length;i++) {
+    			
+    			if (i!=0) {
+    				tString += "<br/>";
+    			}
+    			
+    			tString += this._cbtext.subviews[i].username + ': '
+    					+ this._cbtext.subviews[i].message;
+    			
+    		}
+    		
+    		return tString;
+    	
+    	]]>
+    </method>   
+    
+    <method name="addChatHistory" args="value,client">
+        <![CDATA[
+            //if($debug) Debug.write("overAllChatOutput/addChatHistory: ",value,client);
+            //is Right To Left ? not checked for the moment
+            if (value[7]){
+                var username = client.firstname+" "+client.lastname;
+            } else {
+                var username = client.firstname+" "+client.lastname;
+            }
+            var messageObj = value[9];
+            //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+            //if($debug) Debug.write("overAllChatOutput/messageObj: ",messageObj);
+            var usercolor = value[5];
+            
+            if($debug) Debug.write("overAllChatOutput/usercolor: ",usercolor);
+            
+            if ( usercolor==null || usercolor==0 || usercolor>0 || usercolor.length==0 )usercolor=0xCCCCCC;
+            
+            new lz.chatTabItemEmoticons(this._cbtext,{
+	                messageObj:messageObj,user_id:value[8],
+	                usercolor:usercolor,
+	                publicSID:value[6],
+	                picture_uri:client.picture_uri,
+	                message:value[4],
+	                username:username,
+	                usertime:value[1]
+                });
+                
+            this.setScrollToMax();              
+        ]]> 
+    </method>           
+    
+    <method name="setScrollToMax">
+        <![CDATA[
+        if(_cbtext.height>this.height){
+            myscrollbar.scrolltarget.setAttribute(myscrollbar.scrollattr,(this.height-_cbtext.height));
+        }
+        
+        ]]>
+    </method>
+    
+    <view name="_cbtext" width="$once{ parent.width }" layout="axis:y;spacing:0" >
+    	<method name="clearChatOutput">
+    		<![CDATA[
+    			if($debug) Debug.write("overAllChatOutput/clearChatOutput ",this.subviews.length);
+    			while (this.subviews.length>0){
+    				this.subviews[0].destroy();
+    			}
+    		]]>
+    	</method>
+    </view>
+    
+    <om_vscrollbar name="myscrollbar" />
+
+</class>
+    
+
+</library>

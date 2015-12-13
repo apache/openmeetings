@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="baseListPresentationItemExplorer" extends="view" height="110" width="$once{ parent.width }" 
+    bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" focusable="true">
+    
+    <attribute name="uploadmodul" value="" type="string"/>
+    <attribute name="selectable" value="true" type="boolean" />
+    <attribute name="isselected" value="false" type="boolean" />
+    <attribute name="isoriginal" value="false" type="boolean" />
+    
+    <attribute name="uploadmoduleimgfolder" value="$once{ canvas.uploadmoduleimgfolder }" type="string" />
+    
+    <method name="formatURL" args="filename">
+        <![CDATA[
+            var downloadurl = canvas.getUrl()+'DownloadHandler?' +
+                'fileName=' + encodeURIComponent(filename) +
+                '&moduleName=' + this.uploadmodul + 
+                '&parentPath=' + encodeURIComponent(this.uploadmoduleimgfolder + '/' )+
+                '&room_id=files'+
+                '&sid='+canvas.sessionId;
+            ////Debug.write("downloadurl: ",downloadurl);
+            return downloadurl;
+        ]]>
+    </method>    
+
+    <handler name="onmouseover">
+        setCurrentMouseWheelObject(this.parent.parent._scrollbar);
+        if (!this.isselected){
+            this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
+        }
+    </handler> 
+    <handler name="onmouseout">
+        disableCurrentMouseWheelObject();
+        if (!this.isselected){
+            this.setAttribute('bgcolor',canvas.getThemeColor('mainBackgroundColor'));
+        }
+    </handler>  
+       
+    <handler name="onfocus">
+        this.selectItem();
+    </handler>
+    <handler name="onblur">
+        this.disselectItem();
+    </handler>
+
+    <handler name="onkeyup" args="k"> 
+        //Debug.write("key " + k + " up");
+    </handler>
+    
+    <method name="selectItem">
+        //this.parent.selectItem(this);
+    </method>
+    <method name="disselectItem">
+        //this.parent.selectItem(this);
+    </method>
+    
+</class>
+
+</library>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- right block of the LanguageEditor. you can edit the label.-->
+<class name="fieldValueForm" extends="baseContentSaveView">
+	
+	<dataset name="fieldvalues" />
+	<attribute name="fieldvalues_id" value="0" type="number" />
+	<attribute name="fieldlanguagesvalues_id" value="0" type="number" />
+
+	<!-- handler -->
+	
+	<handler name="onsavecompleted" >
+		//this.getFieldvalueById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.fieldvalues_id!=0) {
+            this.getFieldvalueById.doCall();
+        }
+	</handler>	
+
+	<handler name="onnew">
+        this.initValueFieldsByObject(null);
+		this.setAttribute('fieldvalues_id',0);
+        this.fieldlanguagesvalues_id=0;   
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.fieldlanguagesvalues_id!=0){
+			this.deleteFieldlanguagesvaluesById.doCall();
+		} else {
+			new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-29});
+		}
+    </handler>	
+	
+	<!-- methods -->
+	
+    <method name="initValueFieldsByObject" args="obj">
+        if (obj != null) {
+			if (obj.fieldvalues_id!=null) {
+				this.setAttribute('fieldvalues_id',obj.fieldvalues_id);
+				this.onsavecompleted.sendEvent();
+			}
+	    	if (obj.fieldlanguagesvalue!=null) {
+	    		this.fieldlanguagesvalues_id = obj.fieldlanguagesvalue.fieldlanguagesvalues_id;
+	    	} else {
+	    		this.fieldlanguagesvalues_id = 0;
+	    	}
+            this._output.labelid.setAttribute("text",obj.fieldvalues_id);
+            this._output.fieldname.setAttribute("text",obj.name);
+            this._output.fieldvalue.setAttribute("text",obj.fieldlanguagesvalue.value);
+        } else {
+            this._output.labelid.setAttribute("text","");
+            this._output.fieldname.setAttribute("text","");
+            this._output.fieldvalue.setAttribute("text","");
+        }
+        
+    	//var element = LzDataElement.valueToElement(obj);
+		//this.fieldvalues.setData(element.childNodes);
+    </method>	
+
+  	<netRemoteCallHib name="getFieldvalueById" funcname="languageservice.getFieldvalueById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.fieldvalues_id;</method></netparam>
+    	<netparam><method name="getValue">return parent.parent.parent._turnoverlist.language_id;</method></netparam>
+    	<handler name="ondata" args="value">
+    		//if($debug) Debug.write("getFieldvalueById ",value);
+    		if($debug) Debug.write(parent.fieldvalues_id);
+    		if($debug) Debug.write(parent.parent._turnoverlist.language_id);
+    		parent.initValueFieldsByObject(value);
+    	</handler>
+  	</netRemoteCallHib>	
+
+	<netRemoteCallHib name="deleteFieldlanguagesvaluesById" activeErrorHandler="true"
+		funcname="languageservice.deleteFieldlanguagesvaluesById" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.fieldlanguagesvalues_id; </method></netparam>
+		<handler name="ondata" args="value">
+			//if($debug) Debug.write("deleteFieldlanguagesvaluesById ",value);
+			this.parent.parent._turnoverlist.oncallnext.sendEvent();
+			this.parent.getFieldvalueById.doCall();
+		</handler>
+	</netRemoteCallHib>	
+
+  	<netRemoteCallHib name="saveOrUpdateLabel" funcname="languageservice.saveOrUpdateLabel" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+  			this.sendObject["fieldvalues_id"] = this.parent.fieldvalues_id;
+  			this.sendObject["language_id"] = parent.parent._turnoverlist.language_id;
+  			this.sendObject["fieldlanguagesvalues_id"] = this.parent.fieldlanguagesvalues_id;
+  			this.sendObject["name"] = this.parent._output.fieldname.getText();
+  			this.sendObject["value"] = this.parent._output.fieldvalue.getText();
+
+  			if($debug) Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+	    		if($debug) Debug.write("saveOrUpdateOrganisation: ",val);
+				if (val>0){
+					if($debug) Debug.write("saveOrUpdateUser val greater 0: ",val);
+					parent.fieldvalues_id = val;
+					parent.getFieldvalueById.doCall();
+				}
+				parent.parent._turnoverlist.oncallnext.sendEvent();
+			]]>
+    	</handler>
+  	</netRemoteCallHib>		
+
+	<!-- content -->	
+    <view name="_output" datapath="local:classroot.fieldvalues:/">
+
+	    <labelText labelid="353" y="40" fontstyle="bold" />	
+	    
+	    <labelText labelid="356" width="200" y="70" resize="false" x="2"/>
+	        <labelText name="labelid" y="70" x="120" width="270" text="" />
+	        
+	    <labelText labelid="354" width="200" y="100" resize="false" x="2"/>
+	        <customEdittext name="fieldname" y="100" x="120" width="270" 
+	        				enabled="${ ((parent.parent.fieldvalues_id==0) ? true : false ) }" 
+	        				text="" />	
+		
+	    <labelText labelid="355" width="200" y="130" resize="false" x="2"/>
+	       <!--
+	    	<customEdittext name="fieldvalue" y="130" x="120" width="270" height="120"
+	        					  text="" multiline="true" /> -->
+	        <customScrollEdittext name="fieldvalue" y="130" x="120" width="270" height="120"
+	        					  text="" />	
+	        					  
+	</view>
+	
+</class>
+	
+</library>

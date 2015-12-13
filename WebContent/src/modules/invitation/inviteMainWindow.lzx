@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	<!---
+		This class shows a invitation window with clicking button which is located in video and audio panel.
+	-->
+	<!-- placeholder
+		label: send invitation
+	-->
+	<class name="inviteMainWindow" extends="labelExplorerBox" labelid="214" 
+			docking="true" closable="true" width="464" x="200" y="100" height="465">
+		
+		<attribute name="roomType" value="conference" type="string" />
+		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
+		<attribute name="currentHash" value="" type="string" />
+		<attribute name="display" value="false" type="boolean" />
+    	
+		<handler name="oninit">
+		<![CDATA[
+			lz.ModeManager.makeModal(this);
+			var pressEnter = new LzDelegate(this, "register");
+			lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
+			
+			getTimeZoneOffset(this);
+			
+			this.baseUrl = canvas.getAppBaseUrl();
+			if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
+			if (!canvas.isConference){
+				this.roomType = "restricted"; //FIXME
+			}
+		]]>
+		</handler>
+        
+        <method name="callback" args="returnValue">
+            if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
+                    
+            var std_time_offset = Number(returnValue);
+            
+            this.setOffset(std_time_offset);
+        </method>
+        
+        <method name="setOffset" args="std_time_offset">
+            <![CDATA[
+            std_time_offset = Math.round(std_time_offset);
+            var timeZoneJavaFormat = "Etc/GMT";
+            if (std_time_offset > 0) {
+                timeZoneJavaFormat += "+"+std_time_offset;
+            } else {
+                timeZoneJavaFormat += "-"+std_time_offset;
+            }
+            
+            if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
+            
+            var tItem =  this._timeZone.getItem(timeZoneJavaFormat);
+            
+            if (tItem != null) {
+            	this._timeZone.selectItem(timeZoneJavaFormat);
+            } else {
+            	this._timeZone.selectItemAt(0);
+            }
+            
+            ]]>
+        </method> 
+        
+    	<handler name="onclose">
+    		lz.ModeManager.release(this);
+    	</handler>	
+		
+		<!-- label: recipient -->
+		<labelText labelid="216" y="24" width="120" />
+		<customEdittext name="_recipient" width="340" regexpType="email" x="120" y="22" />
+		
+		<!-- label: subject -->
+		<labelText labelid="215" y="52" width="120" />
+		<customEdittext name="_subject" labelid="532" width="340" enabled="false" x="120" y="52" />	
+		
+		<!-- label: message -->
+		<labelText labelid="217" y="82" width="120" />
+		<!--
+		<customEdittext name="_message" width="340" x="120" y="82" height="100" 
+						multiline="true" />
+		 -->
+		<customScrollEdittext name="_message" width="340" x="120" y="82" height="100" />	
+		
+							  
+		<!-- label: password protected -->
+		<labelCheckbox name="_ispasswordProtected" y="192" fontsize="11" x="4" labelid="524"  />
+			
+		<!-- label: password -->
+		<labelText labelid="525" y="220" x="4" fgcolor="${ ((!parent._ispasswordProtected.value) ? 0xCCCCCC : 0x000000 ) }" />
+		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" password="true"
+						width="340" x="120" y="218" />
+		
+		<!-- label: validity period -->
+		<labelText labelid="526" y="252" width="120" />
+	
+		<radiogroup name="_valid" x="120" y="256" layout="class:simplelayout; axis:x">
+			<!-- label: endless -->
+	            <labelRadioButton value="1" labelid="527" fontsize="11" />
+			<!-- label: period -->
+	            <labelRadioButton value="2" labelid="528" fontsize="11" />
+			<!-- label: one-time -->
+	        	<labelRadioButton value="3" labelid="529" fontsize="11" />
+		</radiogroup>
+
+		<!-- label: valid from -->		
+		<labelText x="4" labelid="530" y="284" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }" />
+		<dateField x="120" y="282" name="_valid_from" setDefaultToday="true" enabled="${ ((parent._valid.value==2) ? true : false ) }" />
+		<customEdittext name="_timeFrom" enabled="${ ((parent._valid.value==2) ? true : false ) }"
+					width="50" x="232" y="282" text="$once{ getStringTime() }" regexpType="time" />	   
+		
+		<!-- label: valid to -->			
+		<labelText x="4" labelid="531" y="314" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }" />
+		<dateField x="120" y="314" name="_valid_to" setDefaultToday="true" additionalDay="1" enabled="${ ((parent._valid.value==2) ? true : false ) }" />		
+		<customEdittext name="_timeTo" enabled="${ ((parent._valid.value==2) ? true : false ) }"
+						width="50" x="232" y="314" text="$once{ getStringTime() }" regexpType="time" />				   
+
+        <labelText labelid="1143" width="200" y="344" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }"  x="4" />
+        <resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
+         			   enabled="${ ((parent._valid.value==2) ? true : false ) }"
+         			   fontsize="11" style="componentStyle">
+            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+        </resetCombobox>
+         
+		<labelText labelid="59" width="200" y="374" x="4" />
+        <resetCombobox name="_languages" editable="false" y="374" width="270" x="120"
+         			   fontsize="11" style="componentStyle">
+            <netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" remotecontext="$once{ canvas.thishib }" >
+                <handler name="oninit">
+                    this.doCall();
+                </handler>
+
+                <handler name="ondata" args="value">
+                    //The onResult-Handler will be called be the rtmpconnection
+                    <![CDATA[
+                        for (var i=0; i<value.length; i++) {
+                            parent.addItem(value[i].name,value[i].language_id);
+                        }
+                        parent.selectItem(canvas.language_id);
+                    ]]>
+                </handler>
+            </netRemoteCallHib>
+        </resetCombobox>
+
+		<customEdittext name="_url" enabled="false" width="$once{ parent.width - 10 }" x="5" y="405" text=""/>
+		
+		<simpleLabelButton name="generate" labelid="1526" x="$once{ parent.width-440 }" width="170" y="$once{ parent.height-26 }">
+			<handler name="onclick">
+			<![CDATA[
+        		parent.display = true;
+				parent.sendInvitationHash.doCall();
+			]]>
+			</handler>
+		</simpleLabelButton>
+		
+        <!-- label: send -->
+		<simpleLabelButton name="send" labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
+			<handler name="onclick">
+			<![CDATA[
+                for (var eg in this.parent.subviews){
+                    this.parent.subviews[eg].setAttribute('enabled', false);
+                }
+                if (parent.display) {
+                    parent.sendInvitationByHash.doCall();
+                } else {
+                    parent.sendInvitationHash.doCall();
+                }
+				]]>
+			</handler>
+		</simpleLabelButton>
+	
+		<!-- label: cancel -->
+		<simpleLabelButton labelid="219" x="$once{ parent.width-130 }" width="120" y="$once{ parent.height-26 }">
+			<handler name="onclick">
+				parent.close();
+			</handler>
+		</simpleLabelButton>
+	   
+		<netRemoteCallHib name="sendInvitationByHash" funcname="invitationservice.sendInvitationByHash" remotecontext="$once{ canvas.thishib }" >
+			<netparam name="SID"><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam name="invitationHash"><method name="getValue">return this.parent.parent.currentHash;</method></netparam>
+			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
+			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
+			<handler name="ondata" args="value">
+			<![CDATA[
+				if (value != null){
+					parent.close();
+				} else {
+					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
+				}
+			]]>
+			</handler>   
+		</netRemoteCallHib>
+			
+		<netRemoteCallHib name="sendInvitationHash" funcname="invitationservice.sendInvitationHash" remotecontext="$once{ canvas.thishib }" >
+			<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
+			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
+			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
+			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+			<netparam name="roomid"><method name="getValue">return hib.currentroomid;</method></netparam>
+			<netparam name="conferencedomain"><method name="getValue">return hib.conferencedomain;</method></netparam>
+			<netparam name="ispasswordProtected"><method name="getValue">return parent.parent._ispasswordProtected.value;</method></netparam>
+			<netparam name="password"><method name="getValue">return parent.parent._password.getText();</method></netparam>
+			<netparam name="valid"><method name="getValue">return parent.parent._valid.value;</method></netparam>
+			<netparam name="validFromDate"><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
+			<netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
+			<netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
+			<netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
+			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
+			<netparam name="jNameTimeZone"><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
+			<netparam name="sendMail"><method name="getValue">return !parent.parent.display;</method></netparam>
+			
+			<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("sendInvitationHash : ",value);
+				if ($debug) Debug.write("sendInvitationHash : ", (typeof value));
+				if (typeof value == "object"){
+					if (parent.display) {
+						parent.send.setAttribute('enabled', true);
+						parent._message.setAttribute('enabled', true);
+						parent._subject.setAttribute('enabled', true);
+						parent._languages.setAttribute('enabled', true);
+						parent.currentHash = value.hash;
+						parent._url.setAttribute('text', parent.baseUrl + "?invitationHash=" + parent.currentHash + "&language=" + parent._languages.getValue());
+					} else {
+						parent.close();
+					}
+				} else {
+					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
+				}
+			]]>
+			</handler>
+		</netRemoteCallHib>
+	</class>
+</library>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Using OpenMeetings with RTMPS and HTTPS</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Using OpenMeetings with RTMPS and HTTPS">
+
+			<p>There are 3 ways the client communicates with the server: </p>
+			<ul>
+				<li>The flash-client uses RTMP protocol to transfer Audio/Video and
+					to send and receive the user data (login et cetera) to the server
+					and back
+				</li>
+				<li>The browser uses HTTP protocol to load the SWF and to upload and
+					download the files (documents, pdfs, images) to the server and
+					back.
+				</li>
+				<li>The screensharing client uses RTMP protocol to transfer screen
+					data and remote control to the server and back
+				</li>
+			</ul>
+
+		</section>
+
+		<section name="Prerequisites">
+
+			<ul>
+				<li>You need OpenMeetings 1.9.x for this, OpenMeetings 1.8.x does
+					not
+					have those options.
+				</li>
+				<li>Install OpenMeetings according to the install instructions and
+					check that it runs without problems
+				</li>
+				<li>Rename the existing keystore file red5/conf/keystore to
+					keystore.bak
+				</li>
+			</ul>
+
+		</section>
+
+		<section name="Configuring RTMPS for the Flash Client">
+
+			<ol>
+				<li>
+					Create a new keystore and key, use the same password for both:<br/>
+					(copied from
+					<a
+						href="http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS%29:"
+						rel="nofollow">http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS):</a>
+					<div class="xmlcode">
+						keytool -keysize 2048 -genkey -alias red5 -keyalg RSA -keystore red5/conf/keystore<br/>
+						Enter keystore password:<br/>
+						Re-enter new password:<br/>
+						What is your first and last name?<br/>
+						[Unknown]:  &lt;your hostname, e.g demo.openmeetings.de&gt;<br/>
+						What is the name of your organizational unit?<br/>
+						[Unknown]:  Dev<br/>
+						What is the name of your organization?<br/>
+						[Unknown]:  OpenMeetings<br/>
+						What is the name of your City or Locality?<br/>
+						[Unknown]:  Henderson<br/>
+						What is the name of your State or Province?<br/>
+						[Unknown]:  Nevada<br/>
+						What is the two-letter country code for this unit?<br/>
+						[Unknown]:  US<br/>
+						Is CN=demo.openmeetings.de, OU=Dev, O=OpenMeetings, L=Henderson, ST=Nevada, C=US correct?<br/>
+						[no]:  yes<br/>
+						Enter key password for &lt;red5&gt;<br/>
+					</div>
+				</li>
+		
+				<li>Generate a CSR: keytool -certreq -keyalg RSA -alias red5 -file
+					red5.csr -keystore red5/conf/keystore
+				</li>
+				<li>Submit CSR to your CA of choice and receive a signed certificate
+				</li>
+				<li>Import your chosen CA's root certificate into the keystore (may
+					need to download it from their site - make sure to get the root CA and
+					not the intermediate one): keytool -import -alias root -keystore
+					red5/conf/keystore
+					-trustcacerts -file root.crt (note: you may receive a warning that
+					the certificate already exists in the system wide keystore - import
+					anyway)
+				</li>
+				<li>Import the intermediate certificate(s) you normally receive with
+					the certificate:
+					keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts
+					-file intermediate.crt
+				</li>
+				<li>Import the certificate you received: keytool -import -alias red5
+					-keystore red5/conf/keystore -trustcacerts -file
+					demo.openmeetings.de.crt
+				</li>
+                <li>
+                Create additional certificate as described above.
+                Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>.
+                </li>
+			</ol>
+
+		</section>
+		
+		<section name="Set up RTMPS">
+		
+		  <ol>
+		      <li>
+		      Uncomment <tt>&lt;!-- RTMPS --&gt;</tt> section in <tt>red5/conf/red5-core.xml</tt>
+		      </li>
+
+				<li>
+					Edit <tt>red5/conf/red5.properties</tt> and set
+					<tt>rtmps.port=5443</tt>
+					and
+					<tt>rtmps.keystorepass=password</tt>
+					(password = password you set on your new
+					keystore)
+				</li>
+			
+				<li>
+					Edit red5/webapps/openmeetings/config.xml and set
+					<tt>&lt;rtmpsslport&gt;5443&lt;/rtmpsslport&gt;</tt>
+					,
+					<tt>&lt;useSSL&gt;yes&lt;/useSSL&gt;</tt>
+					and
+					<tt>&lt;proxyType&gt;best&lt;/proxyType&gt;</tt>
+				</li>
+
+				<li>Restart red5 and try to connect - your connection should now be
+					made via RTMPS (close port 1935 to be sure)
+				</li>   
+					  
+		  </ol>
+		
+		</section>
+
+		<section name="SSL for the web interface">
+	
+			<p>If you want to use SSL for the web interface in addition to RTMPS,
+				you need to make some further modifications. This is mainly to secure
+				the server against MITM attacks, additionally some other features
+				like file uploads also use a plain HTTP connection if this is not
+				done. The following instructions assume that you have already set up
+				RTMPS successfully. </p>
+			<ol>
+				<li>
+					Copy this <tt>red5/conf/jee-container-ssl.xml</tt>
+					file to <tt>red5/conf/jee-container.xml</tt>
+				</li>
+				<li>
+					Edit red5/webapps/openmeetings/config.xml and set
+					<tt>&lt;protocol&gt;https&lt;/protocol&gt;</tt>
+				</li>
+				<li>
+					Edit red5/webapps/openmeetings/config.xml and set
+					<tt>red5httpport</tt> to <tt>https</tt> port
+				</li>
+				<li>In webapps/openmeetings/WEB-INF/conf/axis2.xml add (below the existing http transportReceiver (around line 225))
+					<div class="xmlcode">&lt;transportReceiver name="https" class="org.apache.axis2.transport.http.AxisServletListener"&gt;<br/>
+    &#160;&#160;&#160;&#160;&lt;parameter name="port"&gt;443&lt;/parameter&gt;<br/>
+&lt;/transportReceiver&gt;</div>
+				</li>
+				<li>Edit red5/conf/red5.properties and set <tt>https.port=443</tt> </li>
+				<li>
+					Restart red5 and try to connect to
+					<a href="https://your.server" rel="nofollow">https://your.server</a>
+					- you should be redirected to the OpenMeetings
+					app and all access should be via HTTPS or RTMPS (close port 5080 to
+					be sure).
+				</li>
+            </ol>
+            
+	   </section>
+
+		<section name="Credits">
+	
+			<p>Credits goto: Nexus and Holger Rabbach for their help and
+				contribution and configuration documention! </p>
+	
+		</section>
+	
+
+	</body>
+
+</document>
+

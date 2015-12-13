@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>How to configure Camera default resolutions </title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How to configure Camera default resolutions">
+
+			<p>When you choose the webcam you have different resolutions
+				available the user can choose from. </p>
+			<p>You can add/remove resolutions and also change the default
+				selection. In the config.xml there is a section: </p>
+			<div class="xmlcode">
+				&lt;availableCameraResolutions&gt;<br/>
+				<div style="margin-left:20px">
+				    &lt;resolution type="4:3 (~6 KByte/sec)" width="40" height="30" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="4:3 (~12 KByte/sec)" width="80" height="60" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="4:3 (~20 KByte/sec)" width="120" height="90" isDefault="true" /&gt;<br/>
+				    &lt;resolution type="QQVGA 4:3 (~36 KByte/sec)" width="160" height="120" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="4:3 (~40 KByte/sec)" width="240" height="180" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="HVGA 4:3 (~56 KByte/sec)" width="320" height="240" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="4:3  (~60 KByte/sec)" width="480" height="360" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="4:3 (~68 KByte/sec)" width="640" height="480" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="XGA 4:3" width="1024" height="768" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="16:9" width="256" height="150" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="WQVGA 9:5" width="432" height="240" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="pseudo 16:9" width="480" height="234" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="16:9" width="512" height="300" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="nHD 16:9" width="640" height="360" isDefault="false" /&gt;<br/>
+				    &lt;resolution type="16:9" width="1024" height="600" isDefault="false" /&gt;<br/>
+				    </div>
+				&lt;/availableCameraResolutions&gt;			 
+			</div>	
+		      
+		    <p>Tip: You might edit the config.xml with an XML aware editor that correctly 
+		    handles the XSD defintion to avoid misconfiguration. The openmeetings-config.xsd 
+		    is in the same folder like the config.xml. </p>
+		</section>
+
+	</body>
+
+</document>

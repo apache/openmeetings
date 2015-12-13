@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>SIP-Transport Integration</title>
+		<author email="timur@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="SIP-Transport Integration">
+			<p>
+				You need minimum version 2.0 of Apache OpenMeetings to apply this guide!
+			</p>
+			<p>
+				Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 10.04.
+			</p>
+		</section>
+
+        <section name="Setup Asterisk">
+			<div>
+                Run the commands
+                <blockquote>
+                    <i>
+                    sudo apt-get update<br/>
+                    sudo apt-get install asterisk asterisk-mysql
+                    </i>
+                </blockquote>
+            </div>
+            <div>
+                Ubuntu 10.04 has broken asterisk-mysql version. For other distribution next commands not needed:
+                <blockquote>
+                    <i>
+                        aptitude purge asterisk-mysql
+                        <br/>
+                        cd /tmp
+                        <br/>
+                        apt-get build-dep asterisk-mysql
+                        <br/>
+                        apt-get -b source asterisk-mysql
+                        <br/>
+                        dpkg -i asterisk-mysql_1.6.2.0-1_i386.deb
+                    </i>
+
+                </blockquote>
+            </div>
+            <div>
+                Enable asterisk mysql realtime module:<br/><br/>
+                Add string
+                <blockquote>
+                    <i>load => res_config_mysql.so</i>
+                </blockquote>
+                to the /etc/asterisk/modules.conf into the "modules" section.
+            </div>
+            <div>
+                Configure mysql realtime module:<br/><br/>
+
+                Create file /etc/asterisk/res_mysql.conf and add lines:
+                <blockquote>
+                    <i>[general]
+                        <br/>
+                        dbhost=127.0.0.1
+                        <br/>
+                        dbname=openmeetings
+                        <br/>
+                        dbuser=root
+                        <br/>
+                        dbpass=
+                        <br/>
+                        dbport=3306
+                    </i>
+
+                </blockquote>
+            </div>
+            <div>
+                Add next lines into the /etc/asterisk/extconfig.conf:
+                <blockquote>
+                    <i>[settings]
+                        <br/>
+                        sipusers => mysql,general,sipusers
+                        <br/>
+                        sippeers => mysql,general,sipusers
+                        <br/>
+                        extensions => mysql,general,extensions
+                        <br/>
+                        meetme => mysql,general,meetme
+                    </i>
+
+                </blockquote>
+            </div>
+            <div>
+                Add next lines into the /etc/asterisk/extensions.conf:
+                <blockquote>
+                    <i>[rooms]
+                        <br/>
+                        switch => Realtime/@
+                    </i>
+
+                </blockquote>
+            </div>
+
+            <div>
+                Restart asterisk:
+                <blockquote>
+                    <i>service asterisk restart</i>
+                </blockquote>
+                Insert, for example, SIP user with name 'test':
+                <blockquote>
+                    <i>
+                        INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
+                    </i>
+                </blockquote>
+            </div>
+		</section>
+
+        <section name="Setup red5sip transport">
+            <div>
+                Download red5sip from<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
+            </div>
+            <p>
+                Build with Apache Ant
+            </p>
+            <div>
+                Install jsvc:
+                <blockquote>
+                    <i>apt-get install jsvc</i>
+                </blockquote>
+            </div>
+            <div>
+                Insert proper values to the /opt/red5sip/settings.properties
+
+                <blockquote>
+                    <i>red5.host - red5 server address (127.0.0.1)
+                        <br/>
+                        sip.obproxy - asterisk adderss (127.0.0.1)
+                        <br/>
+                        sip.phone - sip phone number (test)
+                        <br/>
+                        sip.authid - sip auth id (test)
+                        <br/>
+                        sip.secret - sip password (12345)
+                        <br/>
+                        sip.realm - sip realm, "asterisk" by default
+                        <br/>
+                        sip.proxy -
+                        <br/>
+                        rooms - ids of openmeetings rooms, can be, for example, 2,3,5,6
+                    </i>
+
+                </blockquote>
+            </div>
+            <div>
+                Add red5sip to autostart:
+                <blockquote>
+                    <i>ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
+                        <br/>
+                        chmod a+x /etc/init.d/red5sip
+                        <br/>
+                        update-rc.d /etc/init.d/red5sip defaults
+                    </i>
+
+                </blockquote>
+            </div>
+            <div>
+                Start openmeetings
+                <blockquote>
+                    <i>service red5 start</i>
+                </blockquote>
+            </div>
+            <div>
+                Start red5sip
+                <blockquote>
+                    <i>service red5sip start</i>
+                </blockquote>
+            </div>
+        </section>
+	</body>
+
+</document>

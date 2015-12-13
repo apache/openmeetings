@@ -1,0 +1,17 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!---A tag that defines a media object that can be associated with a view. -->
+<class name="resource" extends="false">
+<!---	The name of a variable that will be set to this object when the application is started. If this element is directly within a canvas or library element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object.  -->
+    <attribute name="name" />
+    <!---	The x offset of a bitmap resource used for a custom cursor. -->
+    <attribute name="offsetx" type="number" />
+    <!---	The y offset of a bitmap resource used for a custom cursor. -->
+    <attribute name="offsety" type="number"/>
+    <!---	The path of a file that contains the source for this object. -->
+    <attribute name="src" />
+    
+</class>
+
+</library>

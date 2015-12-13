@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Language editor module. You can edit the label for your language. -->
+<class name="languagesEditor" extends="baseContentView">
+	
+    <method name="doDeleteEvent">
+    	new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});
+    </method> 
+    
+    <method name="confirmDelete">
+    	var langId = Number(this.languages.getValue());
+    	if (langId>0){
+    		this.deleteLanguage.language_id = langId;
+    		this.deleteLanguage.doCall();
+    	}
+    </method>
+
+    <netRemoteCallHib name="deleteLanguage" funcname="languageservice.deleteLanguage" 
+		remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >    
+		<attribute name="language_id" value="0" type="number" />  
+		<attribute name="tempValue" value="0" type="number" />
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam> 
+        <netparam><method name="getValue"> return parent.language_id;</method></netparam>  
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+			if($debug) Debug.write("deleteLanguage",value);
+			parent.languages.getLanguages.doCall();
+        </handler>  
+    </netRemoteCallHib>	         
+    
+    <method name="doAddEvent">
+    	new lz.addLanguage(canvas.main_content._content.inner,{refObj:this});
+    </method>
+    
+    <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
+        bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
+
+        <!-- 362:Add new language -->
+        <baseChooseIcon resourceN="edit_add_rsc" labelid="362" y="2" 
+        	onclick="this.parent.parent.doAddEvent()" />  
+
+        <!-- 363:delete language -->
+        <baseChooseIcon resourceN="button_cancel_rsc" labelid="363" y="2" 
+        	onclick="this.parent.parent.doDeleteEvent()" />
+	</view>
+	
+	<!-- 349:Language -->
+    <labelText name="n3" labelid="349" y="32" width="110" x="2"/>  
+        
+        <resetCombobox name="languages" width="170" y="32" x="120" editable="false" >
+        	<handler name="oninit">
+        		this.getLanguages.doCall();
+        	</handler>
+		    <netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" 
+		    		remotecontext="$once{ canvas.thishib }" >      
+		        <handler name="ondata" args="value">
+		        	<![CDATA[
+			            //The onResult-Handler will be called be the rtmpconnection
+			            //if($debug) Debug.write("getLanguages: ",value);
+			            this.parent.reset();
+		            	for (var i=0;i<value.length;i++){
+		            		this.parent.addItem(value[i].name,value[i].language_id);
+		            	}
+		            	this.parent.selectItem(String(value[0].language_id));
+		            ]]>
+		        </handler>  
+		    </netRemoteCallHib>          	
+            <handler name="onselect">
+                parent._turnoverlist.language_id = Number(this.value);
+                if (this.parent._turnoverlist.isinited)
+                	parent._turnoverlist.oncallnext.sendEvent();
+            </handler>
+        </resetCombobox>
+    
+    <!-- 360:export -->
+    <simpleLabelButton name="b2" labelid="360" width="75" x="300" y="32">
+    	<handler name="onclick">
+    		<![CDATA[
+	    		var exporturl = canvas.getUrl() + 'LangExport?language='+parent.languages.getValue()
+	    				+'&sid='+canvas.sessionId;
+	            lz.Browser.loadURL(exporturl,"_parent");
+            ]]>
+    	</handler>
+    	<labelTooltip multiline="true" labelid="388" />
+    </simpleLabelButton>      
+    
+    <!-- 387:import -->
+    <simpleLabelButton labelid="387" x="387" y="32" width="75">
+	    <handler name="onclick">
+	        //new lz.importWindow(canvas.main_content._content.inner,{x:60,secondid:parent.languages.getValue(),uploadmodule:'language'});
+        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                        x:300,
+                        uploadmodule:'language',
+                        secondid:parent.languages.getValue(),
+                        isOnlyXml:true,
+                        servletName:'import.upload'
+                    });
+	    </handler>
+	    <labelTooltip multiline="true" labelid="389" />
+    </simpleLabelButton>     
+    
+    <labelText x="2" y="64" labelid="714" />
+	
+	<customEdittext name="_search" y="60" x="120" width="200" height="24"/>
+	
+    <simpleLabelButton labelid="715" x="330" width="132" y="60">
+    	<handler name="onclick">
+    		parent._turnoverlist.getFieldsByLanguage.doCall();
+    	</handler>
+    </simpleLabelButton>  
+    
+	<turnOverList name="_turnoverlist" width="460" height="${ canvas.height - canvas.naviHeight-90 }" x="2" y="90" 
+		orderby="c.fieldvalues_id" step="25" asc="true">
+        
+        <attribute name="language_id" value="0" type="number" />
+
+		<handler name="oninit">
+			this.addHeaderItem(350,120);
+			this.addHeaderItem(351,124);
+			this.addHeaderItem(352,200);
+			this.getFieldsByLanguage.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getFieldsByLanguage.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getFieldsByLanguage.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//if($debug) Debug.write("onclickedItem",obj,obj.obj);
+            parent._fieldvalueform.hideNewRecordText();
+			parent._fieldvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<netRemoteCallHib name="getFieldsByLanguage" funcname="languageservice.getFieldsByLanguage" 
+						  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+            <netparam><method name="getValue"> return parent.parent.language_id; </method></netparam>
+            <netparam><method name="getValue"> return parent.parent.parent._search.getText(); </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		//if($debug) Debug.write("getFieldsByLanguage ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+                this.clearList();
+                for (var i=0;i<records.length;i++){
+                    new lz.fieldValuesListItem(this._innerlist._inn._inn,{
+	                        obj:records[i],
+	                        fieldvalues_id:records[i].fieldvalues_id,
+	                        fieldname:records[i].name,
+	                        fieldvalue:records[i].fieldlanguagesvalue.value
+                        });
+                }
+                this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+    <!-- 361:You need to logout to see any changes. -->
+	<labelText x="470" labelid="361" y="2" resize="true" />  
+	
+	<fieldValueForm name="_fieldvalueform" x="470" y="32" >
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </fieldValueForm>
+	
+</class>
+
+</library>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<library>
+
+<include href="tests/" />
+<resource name="log" src="resources/edit-copy.png" />
+
+<class name="TestsView" extends="view">
+
+    <attribute name="offset" type="number" value="20" />
+    <attribute name="smallOffset" type="number" value="5" />
+
+    <text name="label"
+        text="Click a play button to run a test"
+        x="${parent.offset}"
+        y="${parent.offset}"
+    />
+    <view name="logButton"
+        x="${parent.width - this.rsc.width - parent.offset}"
+        y="${parent.label.y + (parent.label.height - this.rsc.height)/2}"
+    >
+        <image name="rsc" resource="log" height="16" width="16"/>
+        <handler name="onclick">
+            lz.Browser.setClipboard(canvas.log);
+        </handler>
+    </view>
+
+    <text name="logLabel"
+        text="Copy the log to the clipboard:"
+        x="${parent.logButton.x - this.width - parent.smallOffset}"
+        y="${parent.label.y}"
+    />
+
+    <PingTest
+        name="pingTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
+        x="${parent.offset}"
+        y="${parent.label.y + parent.label.height + parent.offset/2}"
+    />
+    <PortAvailabilityTest
+        name="portTest" protocol="${canvas.rtmpProtocol}" host="${canvas.rtmpHost}" port="${canvas.rtmpPort}"
+        x="${parent.pingTest.x + parent.pingTest.width + parent.offset}"
+        y="${parent.pingTest.y}"
+     />
+    <JitterTest
+        name="jitterTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
+        x="${parent.portTest.x + parent.portTest.width + parent.offset}"
+        y="${parent.pingTest.y}"
+    />
+    <DownloadSpeedTest
+        name="downloadTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
+        x="${parent.jitterTest.x + parent.jitterTest.width + parent.offset}"
+        y="${parent.pingTest.y}"
+    />
+
+    <UploadSpeedTest
+        name="uploadTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
+        x="${parent.downloadTest.x + parent.downloadTest.width + parent.offset}"
+        y="${parent.pingTest.y}"
+    />
+
+    <attribute name="currentTestNumber" type="number" value="0" />
+    <method name="testAll">
+        var nextTest;
+        if (0 == currentTestNumber) {
+            nextTest = pingTest;
+        } else if (1 == currentTestNumber) {
+            nextTest = portTest;
+        } else if (2 == currentTestNumber) {
+            nextTest = jitterTest;
+        } else if (3 == currentTestNumber) {
+            nextTest = downloadTest;
+        } else if (4 == currentTestNumber) {
+            nextTest = uploadTest;
+        } else if (5 == currentTestNumber) {
+            nextTest = null;
+        }
+
+        if (null != nextTest) {
+            currentTestNumber++;
+            nextTest.startAllTestsMode();
+        }
+    </method>
+
+</class>
+
+</library>

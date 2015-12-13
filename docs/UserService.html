@@ -1,0 +1,2334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE TEMPLATE INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    
+     <html>
+        <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
+		<title>OpenMeetings API Methods</title>
+		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
+        </head>
+	<body>
+	
+		<h3>Available WebServices:</h3>
+	
+		<iframe src="WebserviceIndex.html" width="100%" height="210" name="WebserviceIndex.html"
+			scrolling="no" marginheight="0" marginwidth="0" frameborder="0">
+		  <p>Your Browser does not support frames ...</p>
+		</iframe>
+		
+		<hr />
+	
+	   <h3>WebService: UserService</h3>
+	   <p>The Service contains methods to login and create hash to directly enter
+ conference rooms, recordings or the application in general<p>
+	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/UserService?wsdl">http://localhost:5080/openmeetings/services/UserService?wsdl</a><p>
+	
+	<!-- Links to Methods -->
+	   <h3>Index of Methods available in UserService</h3>
+	   
+       <div class="navigation">
+	                               <div>
+                <a href="#getSession"><b>getSession</b></a><br/>
+                <div class="navigation_comment"><i >load this session id before doing anything else Returns an Object of Type
+ Sessiondata, this contains a sessionId, use that sessionId in all Methods</i></div>
+                </div>
+                                               <div>
+                <a href="#loginUser"><b>loginUser</b></a><br/>
+                <div class="navigation_comment"><i >uth function, use the SID you get by getSession, return positive means
+ logged-in, if negative its an ErrorCode, you have to invoke the Method
+ getErrorByCode to get the Text-Description of that ErrorCode</i></div>
+                </div>
+                                               <div>
+                <a href="#getErrorByCode"><b>getErrorByCode</b></a><br/>
+                <div class="navigation_comment"><i >loads an Error-Object. If a Method returns a negative Result, its an
+ Error-id, it needs a language_id to specify in which language you want to
+ display/read the error-message. English has the Language-ID one, for
+ different one see the list of languages</i></div>
+                </div>
+                                               <div>
+                <a href="#addNewUser"><b>addNewUser</b></a><br/>
+                <div class="navigation_comment"><i >Adds a new Usre like through the Frontend, but also does activates the
+ Account To do SSO see the methods to create a hash and use those ones!</i></div>
+                </div>
+                                               <div>
+                <a href="#addNewUserWithTimeZone"><b>addNewUserWithTimeZone</b></a><br/>
+                <div class="navigation_comment"><i >Adds a new User like through the Frontend, but also does activates the
+ Account</i></div>
+                </div>
+                                               <div>
+                <a href="#addNewUserWithExternalType"><b>addNewUserWithExternalType</b></a><br/>
+                <div class="navigation_comment"><i >Adds a new User like through the Frontend, but also does activates the
+ Account, sends NO email (no matter what you configured) and sets the
+ users external user id and type
+ 
+ Use the methods to create a hash for SSO, creating users is not required
+ for SSO</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteUserById"><b>deleteUserById</b></a><br/>
+                <div class="navigation_comment"><i >Delete a certain user by its id</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteUserByExternalUserIdAndType"><b>deleteUserByExternalUserIdAndType</b></a><br/>
+                <div class="navigation_comment"><i >Delete a certain user by its external user id</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObject"><b>setUserObject</b></a><br/>
+                <div class="navigation_comment"><i >deprecated use setUserObjectAndGenerateRoomHash
+ 
+ Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectWithExternalUser"><b>setUserObjectWithExternalUser</b></a><br/>
+                <div class="navigation_comment"><i >deprecated use setUserObjectAndGenerateRoomHash
+ 
+ Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectAndGenerateRoomHash"><b>setUserObjectAndGenerateRoomHash</b></a><br/>
+                <div class="navigation_comment"><i >Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room. ...
+ Session-Hashs are deleted 15 minutes after the creation if not used.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectAndGenerateRoomHashByURL"><b>setUserObjectAndGenerateRoomHashByURL</b></a><br/>
+                <div class="navigation_comment"><i >Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectAndGenerateRoomHashByURLAndRecFlag"><b>setUserObjectAndGenerateRoomHashByURLAndRecFlag</b></a><br/>
+                <div class="navigation_comment"><i >Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+ 
+ ++ sets the flag if the user can do recording in the conference room</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectMainLandingZone"><b>setUserObjectMainLandingZone</b></a><br/>
+                <div class="navigation_comment"><i >Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID and directly login into the dashboard
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserAndNickName"><b>setUserAndNickName</b></a><br/>
+                <div class="navigation_comment"><i >Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+ 
+ ++ Additionally you can set a param showNickNameDialogAsInt, the effect
+ if that param is 1 is, that the user gets a popup where he can enter his
+ nickname right before he enters the conference room. All nicknames and
+ emails users enter are logged in the conferencelog table.</i></div>
+                </div>
+                                               <div>
+                <a href="#setUserObjectAndGenerateRecordingHashByURL"><b>setUserObjectAndGenerateRecordingHashByURL</b></a><br/>
+                <div class="navigation_comment"><i >Use this method to access a Recording instead of Room</i></div>
+                </div>
+                                               <div>
+                <a href="#addUserToOrganisation"><b>addUserToOrganisation</b></a><br/>
+                <div class="navigation_comment"><i >Add a user to a certain organization</i></div>
+                </div>
+                                               <div>
+                <a href="#getUsersByOrganisation"><b>getUsersByOrganisation</b></a><br/>
+                <div class="navigation_comment"><i >Search users and return them</i></div>
+                </div>
+                                               <div>
+                <a href="#kickUserByPublicSID"><b>kickUserByPublicSID</b></a><br/>
+                <div class="navigation_comment"><i >Kick a user by its public SID</i></div>
+                </div>
+                                               <div>
+                <a href="#addOrganisation"><b>addOrganisation</b></a><br/>
+                <div class="navigation_comment"><i >add a new organisation</i></div>
+                </div>
+                           </div>
+	   
+	    <h3>Methods Details in UserService</h3>
+	
+				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getSession" ><b>getSession</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getSession (
+    			    			    			)
+    			</i><br/>
+    			<p>
+    			  load this session id before doing anything else Returns an Object of Type
+ Sessiondata, this contains a sessionId, use that sessionId in all Methods
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.basic.Sessiondata
+                </p>
+    			<p>Params:</p>
+    			    			
+    			    				<i>No Params</i>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    							<a href="http://localhost:5080/openmeetings/services/UserService/getSession">http://localhost:5080/openmeetings/services/UserService/getSession</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="loginUser" ><b>loginUser</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>loginUser (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String userpass
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  uth function, use the SID you get by getSession, return positive means
+ logged-in, if negative its an ErrorCode, you have to invoke the Method
+ getErrorByCode to get the Text-Description of that ErrorCode
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">Username from OpenMeetings, the user has to have Admin-rights</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">userpass</td>
+	                     <td valign="top">Userpass from OpenMeetings</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/loginUser?SID=VALUE&username=VALUE&userpass=VALUE">http://localhost:5080/openmeetings/services/UserService/loginUser?SID=VALUE&amp;username=VALUE&amp;userpass=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getErrorByCode" ><b>getErrorByCode</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getErrorByCode (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long errorid
+    			       			    			       			     , 
+    			       			   long language_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  loads an Error-Object. If a Method returns a negative Result, its an
+ Error-id, it needs a language_id to specify in which language you want to
+ display/read the error-message. English has the Language-ID one, for
+ different one see the list of languages
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.data.beans.basic.ErrorResult
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">errorid</td>
+	                     <td valign="top">the error id (negative Value here!)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">language_id</td>
+	                     <td valign="top">The id of the language</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/getErrorByCode?SID=VALUE&errorid=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/UserService/getErrorByCode?SID=VALUE&amp;errorid=VALUE&amp;language_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addNewUser" ><b>addNewUser</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addNewUser (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String userpass
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String additionalname
+    			       			    			       			     , 
+    			       			   String street
+    			       			    			       			     , 
+    			       			   String zip
+    			       			    			       			     , 
+    			       			   String fax
+    			       			    			       			     , 
+    			       			   long states_id
+    			       			    			       			     , 
+    			       			   String town
+    			       			    			       			     , 
+    			       			   long language_id
+    			       			    			       			     , 
+    			       			   String baseURL
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Adds a new Usre like through the Frontend, but also does activates the
+ Account To do SSO see the methods to create a hash and use those ones!
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">userpass</td>
+	                     <td valign="top">any userpass</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">additionalname</td>
+	                     <td valign="top">any additionalname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">street</td>
+	                     <td valign="top">any street</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">zip</td>
+	                     <td valign="top">any zip</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fax</td>
+	                     <td valign="top">any fax</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">states_id</td>
+	                     <td valign="top">a valid states_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">town</td>
+	                     <td valign="top">any town</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">language_id</td>
+	                     <td valign="top">the language_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">baseURL</td>
+	                     <td valign="top">the baseURL is needed to send the Initial Email correctly to
+            that User, otherwise the Link in the EMail that the new User
+            will reveive is not valid</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addNewUser?SID=VALUE&username=VALUE&userpass=VALUE&lastname=VALUE&firstname=VALUE&email=VALUE&additionalname=VALUE&street=VALUE&zip=VALUE&fax=VALUE&states_id=VALUE&town=VALUE&language_id=VALUE&baseURL=VALUE">http://localhost:5080/openmeetings/services/UserService/addNewUser?SID=VALUE&amp;username=VALUE&amp;userpass=VALUE&amp;lastname=VALUE&amp;firstname=VALUE&amp;email=VALUE&amp;additionalname=VALUE&amp;street=VALUE&amp;zip=VALUE&amp;fax=VALUE&amp;states_id=VALUE&amp;town=VALUE&amp;language_id=VALUE&amp;baseURL=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addNewUserWithTimeZone" ><b>addNewUserWithTimeZone</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addNewUserWithTimeZone (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String userpass
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String additionalname
+    			       			    			       			     , 
+    			       			   String street
+    			       			    			       			     , 
+    			       			   String zip
+    			       			    			       			     , 
+    			       			   String fax
+    			       			    			       			     , 
+    			       			   long states_id
+    			       			    			       			     , 
+    			       			   String town
+    			       			    			       			     , 
+    			       			   long language_id
+    			       			    			       			     , 
+    			       			   String baseURL
+    			       			    			       			     , 
+    			       			   String jNameTimeZone
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Adds a new User like through the Frontend, but also does activates the
+ Account
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">userpass</td>
+	                     <td valign="top">any userpass</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">additionalname</td>
+	                     <td valign="top">any additionalname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">street</td>
+	                     <td valign="top">any street</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">zip</td>
+	                     <td valign="top">any zip</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fax</td>
+	                     <td valign="top">any fax</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">states_id</td>
+	                     <td valign="top">a valid states_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">town</td>
+	                     <td valign="top">any town</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">language_id</td>
+	                     <td valign="top">the language_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">baseURL</td>
+	                     <td valign="top">the baseURL is needed to send the Initial Email correctly to
+            that User, otherwise the Link in the EMail that the new User
+            will reveive is not valid</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">jNameTimeZone</td>
+	                     <td valign="top">the name of the timezone for the user</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addNewUserWithTimeZone?SID=VALUE&username=VALUE&userpass=VALUE&lastname=VALUE&firstname=VALUE&email=VALUE&additionalname=VALUE&street=VALUE&zip=VALUE&fax=VALUE&states_id=VALUE&town=VALUE&language_id=VALUE&baseURL=VALUE&jNameTimeZone=VALUE">http://localhost:5080/openmeetings/services/UserService/addNewUserWithTimeZone?SID=VALUE&amp;username=VALUE&amp;userpass=VALUE&amp;lastname=VALUE&amp;firstname=VALUE&amp;email=VALUE&amp;additionalname=VALUE&amp;street=VALUE&amp;zip=VALUE&amp;fax=VALUE&amp;states_id=VALUE&amp;town=VALUE&amp;language_id=VALUE&amp;baseURL=VALUE&amp;jNameTimeZone=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addNewUserWithExternalType" ><b>addNewUserWithExternalType</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addNewUserWithExternalType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String userpass
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String additionalname
+    			       			    			       			     , 
+    			       			   String street
+    			       			    			       			     , 
+    			       			   String zip
+    			       			    			       			     , 
+    			       			   String fax
+    			       			    			       			     , 
+    			       			   long states_id
+    			       			    			       			     , 
+    			       			   String town
+    			       			    			       			     , 
+    			       			   long language_id
+    			       			    			       			     , 
+    			       			   String jNameTimeZone
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Adds a new User like through the Frontend, but also does activates the
+ Account, sends NO email (no matter what you configured) and sets the
+ users external user id and type
+ 
+ Use the methods to create a hash for SSO, creating users is not required
+ for SSO
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">userpass</td>
+	                     <td valign="top">any userpass</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">additionalname</td>
+	                     <td valign="top">any additionalname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">street</td>
+	                     <td valign="top">any street</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">zip</td>
+	                     <td valign="top">any zip</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fax</td>
+	                     <td valign="top">any fax</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">states_id</td>
+	                     <td valign="top">a valid states_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">town</td>
+	                     <td valign="top">any town</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">language_id</td>
+	                     <td valign="top">the language_id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">jNameTimeZone</td>
+	                     <td valign="top">the name of the timezone for the user</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">externalUserId</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">externalUserType</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addNewUserWithExternalType?SID=VALUE&username=VALUE&userpass=VALUE&lastname=VALUE&firstname=VALUE&email=VALUE&additionalname=VALUE&street=VALUE&zip=VALUE&fax=VALUE&states_id=VALUE&town=VALUE&language_id=VALUE&jNameTimeZone=VALUE&externalUserId=VALUE&externalUserType=VALUE">http://localhost:5080/openmeetings/services/UserService/addNewUserWithExternalType?SID=VALUE&amp;username=VALUE&amp;userpass=VALUE&amp;lastname=VALUE&amp;firstname=VALUE&amp;email=VALUE&amp;additionalname=VALUE&amp;street=VALUE&amp;zip=VALUE&amp;fax=VALUE&amp;states_id=VALUE&amp;town=VALUE&amp;language_id=VALUE&amp;jNameTimeZone=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteUserById" ><b>deleteUserById</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteUserById (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long userId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Delete a certain user by its id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">userId</td>
+	                     <td valign="top">the openmeetings user id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/deleteUserById?SID=VALUE&userId=VALUE">http://localhost:5080/openmeetings/services/UserService/deleteUserById?SID=VALUE&amp;userId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteUserByExternalUserIdAndType" ><b>deleteUserByExternalUserIdAndType</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteUserByExternalUserIdAndType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Delete a certain user by its external user id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">externalUserId</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">externalUserId</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/deleteUserByExternalUserIdAndType?SID=VALUE&externalUserId=VALUE&externalUserType=VALUE">http://localhost:5080/openmeetings/services/UserService/deleteUserByExternalUserIdAndType?SID=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObject" ><b>setUserObject</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObject (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  deprecated use setUserObjectAndGenerateRoomHash
+ 
+ Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObject?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObject?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectWithExternalUser" ><b>setUserObjectWithExternalUser</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectWithExternalUser (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  deprecated use setUserObjectAndGenerateRoomHash
+ 
+ Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectWithExternalUser?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectWithExternalUser?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectAndGenerateRoomHash" ><b>setUserObjectAndGenerateRoomHash</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectAndGenerateRoomHash (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   int becomeModeratorAsInt
+    			       			    			       			     , 
+    			       			   int showAudioVideoTestAsInt
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room. ...
+ Session-Hashs are deleted 15 minutes after the creation if not used.
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id the user should be logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">becomeModeratorAsInt</td>
+	                     <td valign="top">0 means no Moderator, 1 means Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">showAudioVideoTestAsInt</td>
+	                     <td valign="top">0 means don't show Audio/Video Test, 1 means show Audio/Video
+            Test Application before the user is logged into the room</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE&room_id=VALUE&becomeModeratorAsInt=VALUE&showAudioVideoTestAsInt=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE&amp;room_id=VALUE&amp;becomeModeratorAsInt=VALUE&amp;showAudioVideoTestAsInt=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectAndGenerateRoomHashByURL" ><b>setUserObjectAndGenerateRoomHashByURL</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectAndGenerateRoomHashByURL (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   int becomeModeratorAsInt
+    			       			    			       			     , 
+    			       			   int showAudioVideoTestAsInt
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id the user should be logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">becomeModeratorAsInt</td>
+	                     <td valign="top">0 means no Moderator, 1 means Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">showAudioVideoTestAsInt</td>
+	                     <td valign="top">0 means don't show Audio/Video Test, 1 means show Audio/Video
+            Test Application before the user is logged into the room</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHashByURL?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE&room_id=VALUE&becomeModeratorAsInt=VALUE&showAudioVideoTestAsInt=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHashByURL?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE&amp;room_id=VALUE&amp;becomeModeratorAsInt=VALUE&amp;showAudioVideoTestAsInt=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectAndGenerateRoomHashByURLAndRecFlag" ><b>setUserObjectAndGenerateRoomHashByURLAndRecFlag</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectAndGenerateRoomHashByURLAndRecFlag (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   int becomeModeratorAsInt
+    			       			    			       			     , 
+    			       			   int showAudioVideoTestAsInt
+    			       			    			       			     , 
+    			       			   int allowRecording
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+ 
+ ++ sets the flag if the user can do recording in the conference room
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id the user should be logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">becomeModeratorAsInt</td>
+	                     <td valign="top">0 means no Moderator, 1 means Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">showAudioVideoTestAsInt</td>
+	                     <td valign="top">0 means don't show Audio/Video Test, 1 means show Audio/Video
+            Test Application before the user is logged into the room</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">allowRecording</td>
+	                     <td valign="top">0 means don't allow Recording, 1 means allow Recording</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHashByURLAndRecFlag?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE&room_id=VALUE&becomeModeratorAsInt=VALUE&showAudioVideoTestAsInt=VALUE&allowRecording=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHashByURLAndRecFlag?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE&amp;room_id=VALUE&amp;becomeModeratorAsInt=VALUE&amp;showAudioVideoTestAsInt=VALUE&amp;allowRecording=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectMainLandingZone" ><b>setUserObjectMainLandingZone</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectMainLandingZone (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID and directly login into the dashboard
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any absolute profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectMainLandingZone?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectMainLandingZone?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserAndNickName" ><b>setUserAndNickName</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserAndNickName (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String profilePictureUrl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   int becomeModeratorAsInt
+    			       			    			       			     , 
+    			       			   int showAudioVideoTestAsInt
+    			       			    			       			     , 
+    			       			   int showNickNameDialogAsInt
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Description: sets the SessionObject for a certain SID, after setting this
+ Session-Object you can use the SID + a RoomId to enter any Room.
+ 
+ ++ the user can press f5 to reload the page / use the link several times,
+ the SOAP Gateway does remember the IP of the user and the will only the
+ first user that enters the room allow to re-enter. ... Session-Hashs are
+ deleted 15 minutes after the creation if not used.
+ 
+ ++ Additionally you can set a param showNickNameDialogAsInt, the effect
+ if that param is 1 is, that the user gets a popup where he can enter his
+ nickname right before he enters the conference room. All nicknames and
+ emails users enter are logged in the conferencelog table.
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">profilePictureUrl</td>
+	                     <td valign="top">any profilePictureUrl</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">email</td>
+	                     <td valign="top">any email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id the user should be logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">becomeModeratorAsInt</td>
+	                     <td valign="top">0 means no Moderator, 1 means Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">showAudioVideoTestAsInt</td>
+	                     <td valign="top">0 means don't show Audio/Video Test, 1 means show Audio/Video
+            Test Application before the user is logged into the room</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">showNickNameDialogAsInt</td>
+	                     <td valign="top">0 means do not show the popup to enter a nichname, 1 means
+            that there is a popup to enter the nickname for the conference</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserAndNickName?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&profilePictureUrl=VALUE&email=VALUE&externalUserId=VALUE&externalUserType=VALUE&room_id=VALUE&becomeModeratorAsInt=VALUE&showAudioVideoTestAsInt=VALUE&showNickNameDialogAsInt=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserAndNickName?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;profilePictureUrl=VALUE&amp;email=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE&amp;room_id=VALUE&amp;becomeModeratorAsInt=VALUE&amp;showAudioVideoTestAsInt=VALUE&amp;showNickNameDialogAsInt=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="setUserObjectAndGenerateRecordingHashByURL" ><b>setUserObjectAndGenerateRecordingHashByURL</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>setUserObjectAndGenerateRecordingHashByURL (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
+    			       			    			       			     , 
+    			       			   Long recording_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Use this method to access a Recording instead of Room
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">any username</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">any firstname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">any lastname</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">if you have any external user Id you may set it here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUserType</td>
+	                     <td valign="top">you can specify your system-name here, for example "moodle"</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">recording_id</td>
+	                     <td valign="top">the id of the recording, get a List of all Recordings with
+            RoomService::getFlvRecordingByExternalRoomType</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRecordingHashByURL?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&externalUserId=VALUE&externalUserType=VALUE&recording_id=VALUE">http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRecordingHashByURL?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE&amp;recording_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addUserToOrganisation" ><b>addUserToOrganisation</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addUserToOrganisation (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long user_id
+    			       			    			       			     , 
+    			       			   Long organisation_id
+    			       			    			       			     , 
+    			       			   Long insertedby
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Add a user to a certain organization
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">user_id</td>
+	                     <td valign="top">the user id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">organisation_id</td>
+	                     <td valign="top">the organization id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">insertedby</td>
+	                     <td valign="top">user id of the operating user</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addUserToOrganisation?SID=VALUE&user_id=VALUE&organisation_id=VALUE&insertedby=VALUE">http://localhost:5080/openmeetings/services/UserService/addUserToOrganisation?SID=VALUE&amp;user_id=VALUE&amp;organisation_id=VALUE&amp;insertedby=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getUsersByOrganisation" ><b>getUsersByOrganisation</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getUsersByOrganisation (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long organisation_id
+    			       			    			       			     , 
+    			       			   int start
+    			       			    			       			     , 
+    			       			   int max
+    			       			    			       			     , 
+    			       			   String orderby
+    			       			    			       			     , 
+    			       			   boolean asc
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Search users and return them
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.data.beans.basic.SearchResult
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">organisation_id</td>
+	                     <td valign="top">the organization id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">start</td>
+	                     <td valign="top">first record</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">max</td>
+	                     <td valign="top">max records</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">orderby</td>
+	                     <td valign="top">orderby clause</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">asc</td>
+	                     <td valign="top">asc or desc</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/getUsersByOrganisation?SID=VALUE&organisation_id=VALUE&start=VALUE&max=VALUE&orderby=VALUE&asc=VALUE">http://localhost:5080/openmeetings/services/UserService/getUsersByOrganisation?SID=VALUE&amp;organisation_id=VALUE&amp;start=VALUE&amp;max=VALUE&amp;orderby=VALUE&amp;asc=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="kickUserByPublicSID" ><b>kickUserByPublicSID</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>kickUserByPublicSID (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String publicSID
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Kick a user by its public SID
+    			</p>
+    			<p>
+                  Return Type: java.lang.Boolean
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">publicSID</td>
+	                     <td valign="top">the publicSID (you can get it from the call to get users in a
+            room)</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/kickUserByPublicSID?SID=VALUE&publicSID=VALUE">http://localhost:5080/openmeetings/services/UserService/kickUserByPublicSID?SID=VALUE&amp;publicSID=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addOrganisation" ><b>addOrganisation</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addOrganisation (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  add a new organisation
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">name</td>
+	                     <td valign="top">the name of the org</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addOrganisation?SID=VALUE&name=VALUE">http://localhost:5080/openmeetings/services/UserService/addOrganisation?SID=VALUE&amp;name=VALUE</a>
+    		  </div>
+    	   			
+	
+	</body>
+</html>
+

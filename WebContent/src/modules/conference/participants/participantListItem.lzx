@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<!-- 
+    The Width of each item is set in the participantList-Class
+ -->
+<class name="participantListItem" extends="view" bgcolor="0xDADADA" height="40" 
+       showhandcursor="false">
+    
+    <attribute name="connectedSince" value="" type="string" />
+    <attribute name="isMod" value="" type="string" />
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            //this._userpic.setAttribute('src',downloadurl); 
+            //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
+            lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
+                    
+            if (canvas.publicSID == this.refObj.publicSID) {
+                this._firstName.setAttribute("fontstyle","bold");
+                this._lastName.setAttribute("fontstyle","bold");
+            }
+            
+            this.updateIcons();
+        ]]>
+    </handler>
+    
+    <method name="fadeText" args="ignore=null"> 
+        <![CDATA[
+        
+        	if ($debug) Debug.write("fadeText :1: ",this.refObj);
+        	if ($debug) Debug.write("fadeText :2: ",this.refObj.picture_uri);
+        
+        	if (this.refObj.picture_uri.startsWith("http") || this.refObj.picture_uri.startsWith("https")) {
+        		var downloadurl = this.refObj.picture_uri;
+            //Do Load the Custom Moodle Profilee Picture
+        	} else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
+                
+                if (this.refObj.externalUserId == 1) {
+                    //Means it is a guest
+                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.png";
+                } else {
+                    var downloadurl = canvas.moodleWwwRoot+"/user/pix.php/"+ this.refObj.externalUserId +"/f2.jpg";
+                }
+                
+            } else {
+        
+                var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
+                        +'&moduleName=chat&parentPath=&room_id='
+                        +'&remoteUserid='+this.user_id
+                        +'&sid='+canvas.sessionId;
+                        
+            }
+            
+            if ($debug) Debug.warn("downloadurl :3: ",downloadurl);
+            
+            this._userpic.setAttribute('src',downloadurl); 
+            
+        ]]>          
+    </method>
+    
+    <handler name="onismoderator" reference="canvas" args="m">
+        if ($debug) Debug.write("###### ismoderator ",m);
+        <![CDATA[
+            this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+            this.updateIcons();
+        ]]>
+    </handler>
+    
+    <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+        <![CDATA[
+            if (this.refObj.publicSID == drawObject.publicSID) {
+                this.refObj.canDraw = drawObject.canDraw;
+                this.refObj.canShare = drawObject.canShare;
+                this.refObj.canRemote = drawObject.canRemote;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+
+    <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+        <![CDATA[
+            if (this.refObj.publicSID == rclObject.publicSID) {
+                this.refObj.canGiveAudio = rclObject.canGiveAudio;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+    
+    <handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
+    	<![CDATA[
+    	    if ($debug) Debug.write("onmicMutedStatusChangedItem :1: ",roomClientObj.publicSID);
+            if (this.refObj.publicSID == roomClientObj.publicSID) {
+            	if ($debug) Debug.write("onmicMutedStatusChangedItem :2: ",roomClientObj.micMuted);
+                this.refObj.micMuted = roomClientObj.micMuted;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(this.refObj.publicSID == event.publicSID) {
+                this.refObj.micMuted = event.mute;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+    
+    <!--
+        Set actions to update the User-Rights and Information what he can do
+     -->
+    <method name="updateIcons">
+        <![CDATA[
+        
+            if ($debug) Debug.write("updateByMod,",this.isMod,canvas.streamid);
+        
+            //If this is one Mod he can also draw on the Whitboard
+            if (this.isMod) {
+                
+                
+                this._miniIcons._isMod.setAttribute("visibility","visible");
+                this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
+                this._miniIcons._canDraw.setAttribute("visibility","visible");
+                //the moderator can never remove the right to draw on the whiteboard for himself
+                this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                this._miniIcons._canDraw._text.setAttribute("text","");
+                this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                
+                this._miniIcons._allowShare.setAttribute("visibility","visible");
+                this._miniIcons._allowShare.setAttribute("showhandcursor",false);
+                this._miniIcons._allowShare._text.setAttribute("text","");
+                this._miniIcons._denyShare.setAttribute("visibility","hidden");
+                
+                this._miniIcons._allowRemote.setAttribute("visibility","visible");
+                this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
+                this._miniIcons._allowRemote._text.setAttribute("text","");
+                this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+
+                this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",false);
+                this._miniIcons._allowExclusiveAudio._text.setAttribute("text","");
+                this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
+                
+                if (canvas.ismoderator) {
+                	this._x._kickUser.setAttribute("visibility","visible");
+                    if (canvas.ismoderator && canvas.publicSID != this.refObj.publicSID) {
+                        this._miniIcons._isMod.setAttribute("showhandcursor",true);
+                        this._miniIcons._isMod._text.setAttribute("text",canvas.getLabelName(675));
+                    } else {
+                        this._miniIcons._isMod._text.setAttribute("text","");
+                        this._miniIcons._isMod.setAttribute("showhandcursor",false);
+                    }
+                } else {
+                	this._x._kickUser.setAttribute("visibility","hidden");
+                    this._miniIcons._isMod._text.setAttribute("text","");
+                    this._miniIcons._isMod.setAttribute("showhandcursor",false);
+                }
+                
+            } else {
+                this._miniIcons._isMod.setAttribute("visibility","hidden");
+                    
+                //if this User is the Moderator he can grant access to whiteboard to anybody
+                if (canvas.ismoderator) {
+                	this._x._kickUser.setAttribute("visibility","visible");
+                    this._miniIcons._isModAddbutton.setAttribute("visibility","visible");
+                    
+                    
+                    this._miniIcons._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                    if (this.refObj.canDraw) {
+                        //Only in THIS case you can remove the Draw-to-whiteboard right 
+                        this._miniIcons._canDraw.setAttribute("visibility","visible");
+                        this._miniIcons._canDraw.setAttribute("showhandcursor",true);
+                        this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                    } else {
+                        this._miniIcons._canDraw.setAttribute("visibility","hidden");
+                        this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                        this._miniIcons._canDraw._text.setAttribute("text","");
+                        this._miniIcons._canDrawModerator.setAttribute("visibility","visible");
+                    }
+                    
+                  	this._miniIcons._allowShare._text.setAttribute("text",canvas.getLabelName(1068));
+                    if (this.refObj.canShare) {
+                    	this._miniIcons._allowShare.setAttribute("visibility","visible");
+                        this._miniIcons._allowShare.setAttribute("showhandcursor",true);
+                        this._miniIcons._denyShare.setAttribute("visibility","hidden");
+                    } else {
+                    	this._miniIcons._allowShare.setAttribute("visibility","hidden");
+                        this._miniIcons._allowShare.setAttribute("showhandcursor",false);
+                        this._miniIcons._denyShare.setAttribute("visibility","visible");
+                    }
+                    
+                    this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
+                    if (this.refObj.canRemote) {
+                    	this._miniIcons._allowRemote.setAttribute("visibility","visible");
+                        this._miniIcons._allowRemote.setAttribute("showhandcursor",true);
+                        this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+                    } else {
+                    	this._miniIcons._allowRemote.setAttribute("visibility","hidden");
+                        this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
+                        this._miniIcons._denyRemote.setAttribute("visibility","visible");
+                    }
+
+					this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
+                    if (this.refObj.canGiveAudio) {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                        this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",true);
+                        this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
+                    } else {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","hidden");
+                        this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",false);
+                        this._miniIcons._denyExclusiveAudio.setAttribute("visibility","visible");
+                    }
+                    
+                } else {
+                	this._x._kickUser.setAttribute("visibility","hidden");
+                    this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
+                    
+                    if (this.refObj.canDraw) {
+                        this._miniIcons._canDraw.setAttribute("visibility","visible");
+                    } else {
+                        this._miniIcons._canDraw.setAttribute("visibility","hidden");
+                    }
+                    
+                    if (this.refObj.canShare) {
+                        this._miniIcons._allowShare.setAttribute("visibility","visible");
+                    } else {
+                        this._miniIcons._allowShare.setAttribute("visibility","hidden");
+                    }
+                    
+                    if (this.refObj.canRemote) {
+                        this._miniIcons._allowRemote.setAttribute("visibility","visible");
+                    } else {
+                        this._miniIcons._allowRemote.setAttribute("visibility","hidden");
+                    }
+
+                    if (this.refObj.canGiveAudio) {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                    } else {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","hidden");
+                    }
+                    
+                    //No Update action available
+                    this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                    this._miniIcons._denyShare.setAttribute("visibility","hidden");
+                    this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+                    this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
+                    this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                    this._miniIcons._canDraw._text.setAttribute("text","");
+                    this._miniIcons._allowRemote._text.setAttribute("text","");
+                    this._miniIcons._allowExclusiveAudio._text.setAttribute("text","");
+                    this._miniIcons._allowShare._text.setAttribute("text","");
+                    
+                }
+                    
+            }
+            
+            if ($debug) Debug.write("onmicMutedStatusChangedItem :3: ",this.refObj.publicSID,this.refObj.micMuted);
+            
+            if (this.refObj.micMuted) {
+            	this._x._mute._text.setAttribute("labelid",1408);
+            	this._x._mute.setAttribute("frame",2);
+            } else {
+            	this._x._mute._text.setAttribute("labelid",1407);
+            	this._x._mute.setAttribute("frame",1);
+            }
+            
+            //this Icon is only available in case its the current User 
+            if (canvas.publicSID == this.refObj.publicSID) {
+                //if ($debug) Debug.write("IS SELF !!!!!!");
+                this._miniIcons._restartDevice.setAttribute("visibility","visible");
+            } else {
+                this._miniIcons._restartDevice.setAttribute("visibility","hidden");
+            }
+        ]]>
+    </method>
+    
+    <!--
+    public Boolean setCanDraw(String SID, String publicSID, boolean canDraw)
+     -->
+     
+    <netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
+                       remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canDraw;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("whiteboardservice.setCanDraw : ",value);
+            
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+            
+    <netRemoteCallHib name="setCanShare" funcname="whiteboardservice.setCanShare"
+                       remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canShare;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("whiteboardservice.setCanShare : ",value);
+            
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
+                   remotecontext="$once{ canvas.thishib }">
+        <attribute name="publicSID" value="" type="string" />
+        <attribute name="canRemote" value="true" type="boolean" />
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canRemote;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("whiteboardservice.setCanRemote : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+
+    <netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
+                   remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canGiveAudio;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("setCanGiveAudio : ",value);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+            
+    <handler name="onmouseover">
+        this.setAttribute('bgcolor',canvas.getThemeColor('baseMousecolorizer'));
+    </handler>
+    
+    <handler name="onmouseout">
+        this.setAttribute('bgcolor',0xDADADA);
+    </handler>
+    
+    <image name="_userpic" stretches="both" x="1">
+        <handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+                if (this.width > 38) {
+                    //If bigger then containter then scale it
+                    var height = this.height/(this.width/38);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',38);
+                }
+            ]]>
+        </handler>
+    </image>
+    
+    <labelText name="_firstName" fontsize="10" x="40" text="${ parent.firstname }" />
+    <labelText name="_lastName" fontsize="10" x="40" y="20" text="${ parent.lastname }" />
+    
+	<miniIcons name="_start_private_chat_rsc" x="114" y = "2" width="16" height="16"
+		resource="start_private_chat_rsc" showhandcursor="true"
+		visible="${ (canvas.currentRoomObj.hideChat == null || !canvas.currentRoomObj.hideChat) &amp;&amp; parent.refObj.publicSID != canvas.publicSID }">
+		
+		<handler name="onclick">
+			var refObj = parent.refObj;
+			if ($debug) Debug.write("Start Private Chat: ", refObj);
+			if (refObj.publicSID == canvas.publicSID) {
+				new lz.labelerrorPopup(canvas.main_content._content.inner
+					, {errorlabelid:1495});
+				return;
+			}
+			canvas._currentChatPanel.addChat(refObj);
+		</handler>
+		<labelTooltip labelid="1493" />
+	</miniIcons>
+    
+    <view name="_x" x="132" y="2">
+	     
+	    <miniIcons name="_mute" x="82" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >
+            <handler name="onclick">
+                <![CDATA[
+                    canvas._videocontainer._videoviewcontent.muteSound(parent.parent.refObj.publicSID, !parent.parent.refObj.micMuted);
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1407" />
+        </miniIcons>  
+        
+	    <miniIcons name="_kickUser" width="16" height="16" x="100"
+	               resource="kick_user_rsc" showhandcursor="true">
+	        <handler name="onclick">
+	        	
+	        	if (parent.parent.refObj.publicSID == canvas.publicSID) {
+	                new lz.labelerrorPopup(canvas.main_content._content.inner,{
+	                            errorlabelid:1214
+	                        });
+	                return;
+	            }
+	                
+	        	if (parent.isSuperModerator) {
+	                new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:1217});
+	                return;
+	            }
+	        	
+	            if ($debug) Debug.write("USER Kick: ",parent.parent.refObj.publicSID);
+	            new lz.confirmationSingle(canvas.main_content._content.inner,{
+	                                           labelid:1216,labeliderror:1215,
+	                                           refObj:this,showCheckBox:false});
+	            
+	        </handler>
+	        
+	        <method name="sendConfirmation" args="yesno" >
+	            this.kickUserByPublicSID.publicSID = parent.parent.refObj.publicSID;
+	            this.kickUserByPublicSID.doCall();
+	        </method>
+	        
+	        <netRemoteCallHib name="kickUserByPublicSID" funcname="userservice.kickUserByPublicSID" 
+	                          remotecontext="$once{ canvas.thishib }" >    
+	            <attribute name="publicSID" value="" type="string" />  
+	            <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	            <netparam><method name="getValue"> return parent.publicSID; </method></netparam>
+	            <handler name="ondata" args="value">
+	                if ($debug) Debug.write("kickUserByPublicSID: ",value);
+	                //this.parent.destroy();
+	            </handler>
+	        </netRemoteCallHib> 
+	        
+	        <labelTooltip labelid="1213" />
+	    </miniIcons>   
+    </view>
+    
+    <view name="_miniIcons" x="113" y="22" height="18" >
+        
+        <miniIcons name="_isMod" x="0" width="16" resource="right_isactive_rsc" 
+                   height="16" showhandcursor="false">
+            <handler name="onclick">
+                <![CDATA[
+                
+                    if (parent.parent.isSuperModerator) {
+                        new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:838});
+                        return;
+                    }
+                
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do Remove It");
+                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                        hib.removeModerator.doCall();
+                        //parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" />
+        </miniIcons>
+        
+        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="right_notactive_rsc" 
+                   height="16" showhandcursor="true">
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do Add It");
+                        hib.addModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                        hib.addModerator.doCall();
+                        //parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" labelid="676" />
+        </miniIcons>
+            
+        <miniIcons name="_canDraw" x="20" width="16" resource="right_isactive_rsc" 
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do add draw to it");
+                        parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" />
+        </miniIcons>
+        
+        <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
+            <handler name="onclick">
+                //Do it 
+                if ($debug) Debug.write("Do it");
+                parent.parent.setCanDraw.doCall();
+            </handler>
+            <labelTooltip labelid="611" />
+        </miniIcons>
+        
+        <miniIcons name="_allowShare" x="40" width="16" resource="right_isactive_rsc" 
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do add draw to it");
+                        parent.parent.setCanShare.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1068" />
+        </miniIcons>
+        
+        <miniIcons name="_denyShare" x="40" width="16" opacity="0.5"
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
+            <handler name="onclick">
+                //Do it 
+                if ($debug) Debug.write("Do it");
+                parent.parent.setCanShare.doCall();
+            </handler>
+            <labelTooltip labelid="1067" />
+        </miniIcons>
+        
+        
+        <miniIcons name="_allowRemote" x="60" width="16" resource="right_isactive_rsc" 
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do add draw to it");
+                        parent.parent.setCanRemote.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1079" />
+        </miniIcons>
+        
+        <miniIcons name="_denyRemote" x="60" width="16" opacity="0.5"
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
+            <handler name="onclick">
+                //Do it 
+                if ($debug) Debug.write("Do it");
+                parent.parent.setCanRemote.doCall();
+            </handler>
+            <labelTooltip labelid="1078" />
+        </miniIcons>
+
+        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="right_isactive_rsc"
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to give exclusive audio
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        if ($debug) Debug.write("Do it");
+                        parent.parent.setCanGiveAudio.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1425" />
+        </miniIcons>
+
+        <miniIcons name="_denyExclusiveAudio" x="80" width="16" opacity="0.5"
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
+            <handler name="onclick">
+                parent.parent.setCanGiveAudio.doCall();
+            </handler>
+            <labelTooltip labelid="1424" />
+        </miniIcons>
+        
+        
+        <miniIcons name="_restartDevice" x="100" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
+            <handler name="onclick">
+                //TODO: local connection call
+                if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
+                canvas._videocontainer._videoviewcontent.showDevicePopUp(true);
+            </handler>
+            <labelTooltip labelid="610" />
+        </miniIcons>
+        
+        <view name="_loudness" x="120" >
+            <view x="0" y="0" name="loudness" resource="speaking" opacity="0.2"
+                  onmouseover="" onmouseout="" >      
+			    <handler name="onclick">
+					<![CDATA[
+				      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+				            canvas.thishib.giveExclusiveAudio.setExclusiveAudio(parent.parent.parent.refObj.publicSID);
+				        } else {
+				        	new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:1478});    
+				        }
+					]]>
+				</handler> 
+                <labelTooltip inittwice="true" labelid="372" />
+            </view>
+        </view>    
+    </view>
+    
+    <view name="divisionLine" width="$once{ parent.width }" 
+          bgcolor="0xFFFFFF" height="1" y="39" />
+    
+</class>
+ 
+</library>

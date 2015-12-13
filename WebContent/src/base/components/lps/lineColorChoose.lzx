@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="lineColorChoose" extends="basePropertySelector"
+    bgcolor="white" width="80" height="24">
+    
+    <attribute name="isopen" value="false" type="boolean" />
+    
+    <attribute name="colorPickRef" value="null"/>
+    
+    <attribute name="selectedColor" type="number" value="0xFF6600" />
+    <attribute name="selectedColorDis" type="number" value="1" />
+    <attribute name="selectedColorTransformedString" type="string" value="0xFF6600"/>
+    <attribute name="colorIsEnabled" value="true" type="boolean" />
+    <attribute name="inInitColorSelection" value="true" type="boolean" />
+    
+    <handler name="oninit">
+    	if (this.selectedColorDis==-1){
+    		this._currentcolor.setAttribute('clickable',false);
+    		this._currentcolor.setAttribute('opacity',0.3);
+    		this.rgt.setAttribute('opacity',0.3);
+    		this.rgt.setAttribute('enabled',false);
+    		this.colorIsEnabled = false;
+    	}
+    </handler>
+        
+    <handler name="oninit">
+    	this.setTransformedStringColor();
+    </handler>
+    
+    <method name="setSelectedColor" args="c">
+    	this.setEnabled(true);
+		this.setAttribute('selectedColor',c);
+		this.setTransformedStringColor();
+    </method>
+    
+    <method name="setSelectedColorWithDis" args="c,d">
+    	this.setEnabled(true);
+		this.setAttribute('selectedColor',c);
+		this.setTransformedStringColor();
+		this.selectedColorDis = d;
+		if (this.selectedColorDis==-1){
+    		if ($debug) Debug.write("FillColor Disabled");
+    		this._currentcolor.setAttribute('clickable',false);
+    		this._currentcolor.setAttribute('opacity',0.3);
+    		this.rgt.setAttribute('opacity',0.3);
+    		this.rgt.setAttribute('enabled',false);
+    		this.colorIsEnabled = false;
+    		this.rgt_b._lock.setAttribute("visibility","visible");
+	    	this.rgt_b._lock_open.setAttribute("visibility","hidden");
+    	} else {
+			this._currentcolor.setAttribute('clickable',true);
+    		this._currentcolor.setAttribute('opacity',1);
+    		this.rgt.setAttribute('opacity',1);
+    		this.rgt.setAttribute('enabled',true);
+    		this.onselectedColor.sendEvent(this.selectedColor);
+    		this.colorIsEnabled = true;
+    		this.rgt_b._lock.setAttribute("visibility","hidden");
+	    	this.rgt_b._lock_open.setAttribute("visibility","visible");
+    	}
+    </method>
+    
+    <method name="getValue">
+        return this.selectedColor;
+    </method>    
+    
+    <method name="toggle">
+        var t = _root.createEmptyMovieClip('hans',10);
+        var myColor = new Color(t);
+        myColor.setRGB(selectedColor);
+        if (this.boxPosition=="up"){
+	        this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
+	        	x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
+	        	y:(this.getAttributeRelative('y',canvas)-154+this.height)});
+        } else {
+	        this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
+	        	x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
+	        	y:(this.getAttributeRelative('y',canvas))});
+        }
+
+        this.colorPickRef.doDefaultColor(myColor);
+        lz.ModeManager.makeModal( this.colorPickRef );
+    </method>
+    
+    <method name="setTransformedStringColor">
+        ////Debug.write("setTransformedStringColor: ",this,this.selectedColor);
+        var t = _root.createEmptyMovieClip('hans2',20);
+        var myColor = new Color(t);
+        myColor.setRGB(this.selectedColor);
+        //var a = myColor.getTransform();
+        ////Debug.write("a: ",a);
+        var col = this.numberToRGB(myColor);
+        ////Debug.write("col: ",col);
+        this.setAttribute('selectedColorTransformedString',col);
+    </method>
+    
+    <method name="numberToRGB" args="thisC">
+        <![CDATA[            
+            var c = thisC.getRGB();
+            var r = (c >> 16) & 0xff;
+            var g = (c >> 8) &  0xff;
+            var b = c & 0xff;
+            ////Debug.write("r g b: ",r,g,b);
+            
+            HEX_R = r.toString(16).toUpperCase();
+            HEX_G = g.toString(16).toUpperCase();
+            HEX_B = b.toString(16).toUpperCase();
+            
+            if (HEX_R.length < 2) {
+                HEX_R = "0"+HEX_R;
+            }
+            if (HEX_G.length < 2) {
+                HEX_G = "0"+HEX_G;
+            }
+            if (HEX_B.length < 2) {
+                HEX_B = "0"+HEX_B;
+            }
+            var hex = "0x"+HEX_R + HEX_G + HEX_B;
+
+            return hex;
+        ]]>
+    </method>    
+    
+    <method name="closedColorPicker">
+        lz.ModeManager.release( this.colorPickRef );
+    </method>
+    
+    <view name="_currentcolor" x="1" y="1" onclick="parent.toggle()" 
+        onmouseover="" onmouseout="" width="30" 
+        height="22" bgcolor="${ parent.selectedColor }" >
+        <labelTooltip text="${ parent.parent.selectedColorTransformedString }" />
+    </view>
+    
+    <button name="rgt" x="32" y="1" onclick="parent.toggle()" width="24" height="23" >
+    	<image x="4" y="3" src="$once{ canvas.getThemeImage('colorlinechoose_rsc') }"
+    			width="16" height="16" stretches="both" />
+        <labelTooltip labelid="424" />
+    </button>
+        
+    <button name="rgt_b" x="56" y="1" width="24" height="23" >
+    	<handler name="onclick">
+    		if (parent.colorIsEnabled){
+	    		parent._currentcolor.setAttribute('clickable',false);
+	    		parent._currentcolor.setAttribute('opacity',0.3);
+	    		parent.rgt.setAttribute('opacity',0.3);
+	    		parent.rgt.setAttribute('enabled',false);
+	    		parent.selectedColorDis = -1;
+	    		parent.onselectedColor.sendEvent(-1);
+	    		parent.colorIsEnabled = false;
+	    		this._lock.setAttribute("visibility","hidden");
+	    		this._lock_open.setAttribute("visibility","visible");
+    		} else {
+	    		parent._currentcolor.setAttribute('clickable',true);
+	    		parent._currentcolor.setAttribute('opacity',1);
+	    		parent.rgt.setAttribute('opacity',1);
+	    		parent.rgt.setAttribute('enabled',true);
+	    		parent.selectedColorDis = 1;
+	    		parent.onselectedColor.sendEvent(parent.selectedColor);
+	    		parent.colorIsEnabled = true;
+	    		this._lock.setAttribute("visibility","visible");
+	    		this._lock_open.setAttribute("visibility","hidden");
+    		}
+    	</handler>
+    	<image x="4" y="3" name="_lock" src="$once{ canvas.getThemeImage('color_lock_rsc') }"
+    			width="16" height="16" stretches="both" />
+ 	    <image x="4" y="3" name="_lock_open" src="$once{ canvas.getThemeImage('color_lock_open_rsc') }"
+    			width="16" height="16" stretches="both" visibility="hidden" />
+        <labelTooltip labelid="426" />
+    </button>
+    
+</class>  
+
+    
+</library>

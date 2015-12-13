@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:panel>
+		<script type="text/javascript">
+			function labelsInit() {
+				$('#addLanguage').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+				});
+				var documentHeight = $(document).height();
+                $('#adminForm').height(documentHeight-114);
+                $('#adminTable').height(documentHeight-164);
+			};
+		</script>
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<form wicket:id="langForm" class="addLanguagePanel">
+					<div class="formNewButton" wicket:ommessage="title:362" 
+						onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input type="button" title=""/></div>
+					<div wicket:id="deleteLangBtn" class="formCancelButton" wicket:ommessage="title:363"><input type="button" title=""/></div>
+					<select wicket:id="language"></select>
+				</form>
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<thead>
+						<tr>
+							<th class="three_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="350" /></th>
+							<th class="three_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="351" /></th>
+							<th class="three_column_layout_column3"><span wicket:id="orderByValue"></span><wicket:ommessage key="352" /></th>
+						</tr>
+					</thead>	
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">
+						<tbody wicket:id="listContainer" >
+				    		<tr wicket:id="langList">
+								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="lblId"></span></div></td>
+								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
+							</tr>
+						</tbody>	
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+						<fieldset>
+							<legend><wicket:ommessage key="353" /></legend>
+							<div class="formelement">
+	                             <label><wicket:ommessage key="356" /></label><span wicket:id="fieldvalues.fieldvalues_id"></span>
+							</div>
+	                         <div class="formelement">
+	                             <label><wicket:ommessage key="354" /></label><input type="text" wicket:id="fieldvalues.name"/>
+							</div>
+	                        <div class="formelement">
+	                             <label><wicket:ommessage key="355" /></label><textarea wicket:id="value"></textarea>
+	                        </div> 
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="addLanguage" wicket:ommessage="title:364" style="display: none;">
+			<form wicket:id="addLangForm">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="365" /></td>
+						<td><input type="text" wicket:id="name"/></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="1422" /></td>
+						<td><input type="text" wicket:id="iso"/></td>
+					</tr>
+					<tr>
+						<td align="right" colspan="2"><input type="submit" wicket:id="add"/></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</wicket:panel>
+</html>

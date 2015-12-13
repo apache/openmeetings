@@ -1,0 +1,13 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---Imports an audio file.
+[Warning]This tag is obsolete. Its functionality has been replaced by the <resource> tag. 
+ -->
+<class name="audio" extends="false">
+
+    <attribute name="src" />
+    
+</class>
+
+</library>

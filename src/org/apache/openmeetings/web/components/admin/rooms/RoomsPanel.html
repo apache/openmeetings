@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+	   <script type="text/javascript">
+           function omRoomPanelInit() {
+               var documentHeight = $(document).height();
+               $('#adminForm').height(documentHeight-114);
+               $('#adminTable').height(documentHeight-144);
+           }
+       </script>
+    </wicket:head>
+	<wicket:panel>
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<thead>
+						<tr>
+							<th class="three_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="188" /></th>
+							<th class="three_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="189" /></th>
+							<th class="three_column_layout_column3"><span wicket:id="orderByPublic"></span><wicket:ommessage key="190" /></th>
+						</tr>	
+					</thead>
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">
+						<tbody wicket:id="listContainer">		
+				    		<tr wicket:id="roomList">
+								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="rooms_id"></span></div></td>
+								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="ispublic"></span></div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+						
+						<!-- General -->
+						<fieldset>
+							<legend><wicket:ommessage key="187" /></legend>
+							<div class="formelement">
+                                <label><wicket:ommessage key="193" /></label><input type="text" wicket:id="name" />
+							</div>
+							<div class="formelement">
+                                <label><wicket:ommessage key="482" /></label><select wicket:id="numberOfPartizipants"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="194" /></label><select wicket:id="roomtype"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="196" /></label><textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="620" /></label><input type="checkbox" class="formcheckbox" wicket:id="appointment" />
+                            </div>
+				        </fieldset>
+				        
+				        <!-- Organisations -->
+						<fieldset>
+							<legend><wicket:ommessage key="191" /></legend>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="195" /></label><input type="checkbox" class="formcheckbox" wicket:id="ispublic" />
+				            </div>
+				            <div class="formelement">
+				                <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="828" /></span>
+                                <br/>
+                                <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="191" /></span>
+                                <br/>
+				                <label><wicket:ommessage key="191" /></label><select wicket:id="roomOrganisations" style="height: 80px"/>
+				            </div>
+				        </fieldset>
+				        
+				        <!-- Limitations -->
+						<fieldset>
+							<legend><wicket:ommessage key="830" /></legend>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="636" /></label><input type="checkbox" class="formcheckbox" wicket:id="isDemoRoom" />
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="637" /></label><input type="text" wicket:id="demoTime" />
+                            </div>
+						</fieldset>
+						
+						<!-- Rights -->
+						<fieldset>
+							<legend><wicket:ommessage key="881" /></legend>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="879" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowUserQuestions" />
+				            </div>
+				            <div class="formelement">
+                                <wicket:ommessage key="880" />
+				                <br/>
+				                <label><wicket:ommessage key="1076" /></label><input type="checkbox" class="formcheckbox" wicket:id="isAudioOnly" />
+				            </div>
+				            <div class="formelement">
+				                <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="1077" /></span>
+                                <br/>
+					            <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="1101" /></span>
+                                <br/>
+				                <label><wicket:ommessage key="1076" /></label><input type="checkbox" class="formcheckbox" wicket:id="isClosed" />
+				            </div>
+				            <div class="formelement">
+				                <label><wicket:ommessage key="1100" /></label><input type="text" wicket:id="redirectURL" />
+							</div>
+							<div class="formelement">
+							    <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="1102" /></span>
+                                <br/>
+				                <label><wicket:ommessage key="1076" /></label><input type="checkbox" class="formcheckbox" wicket:id="waitForRecording" />
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1076" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowRecording" />
+				            </div>
+						</fieldset>
+						
+						<!-- Room Layout options -->
+						<fieldset>
+							<legend><wicket:ommessage key="1443" /></legend>
+							<div class="formelement">
+                                <label><wicket:ommessage key="1357" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideTopBar" />
+				            </div>
+				            <div class="formelement">
+				                <label><wicket:ommessage key="1436" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideChat" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1437" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideActivitiesAndActions" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1438" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideFilesExplorer" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1439" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideActionsMenu" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1440" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideScreenSharing" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1441" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideWhiteboard" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1442" /></label><input type="checkbox" class="formcheckbox" wicket:id="showMicrophoneStatus" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1513" /></label><input type="checkbox" class="formcheckbox" wicket:id="chatModerated" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1515" /></label><input type="checkbox" class="formcheckbox" wicket:id="chatOpened" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1516" /></label><input type="checkbox" class="formcheckbox" wicket:id="filesOpened" />
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1526" /></label><input type="checkbox" class="formcheckbox" wicket:id="autoVideoSelect" />
+				            </div>
+                            <div class="formelement">
+				            <!-- 
+				            FIXME: add user moderator list
+				            <wicket:ommessage key="587" /> <select wicket:id="moderators"/>
+				            <br/>
+				             -->
+				                <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="823" /></span>
+                                <br/>
+				                <label><wicket:ommessage key="640" /></label><input type="checkbox" class="formcheckbox" wicket:id="isModeratedRoom" />
+				            </div>
+	                        <div class="formelement">
+					            <wicket:ommessage key="816" />
+				            </div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+	</wicket:panel>
+</html>

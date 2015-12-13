@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<style name="calendarButtonStyle" basecolor="0xFF3300" textcolor="0xFFFFFF" />
+
+<class name="lzCalendar" extends="baseContentView" 
+				height="${ canvas.height-canvas.naviHeight }" width="${ canvas.width }">
+				
+	<attribute name="currentDate" value="null" />
+	
+	<attribute name="lzViewCalendarEvent" value="null" />
+	
+	<attribute name="tStartDate" value="null" />
+	<attribute name="tEndDate" value="null" />
+	
+	<!---
+		The user id the calendar will load the events for
+	 -->
+	<attribute name="requestUserId" value="$once{ canvas.user_id }" type="number" />
+	
+	<handler name="oninit">
+		<![CDATA[
+			_mainScrollBar.setAttribute("visibility","hidden");
+			
+			var downloadurl = canvas.getUrl() + 'services/CalendarService/getAppointmentReminderTypList?'
+	                               +'SID='+canvas.sessionId;
+	               
+            this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
+            this.getAppointmentReminderTypList.doRequest();
+			
+			canvas.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
+								canvas.getLabelName(471),canvas.getLabelName(472),
+								canvas.getLabelName(473),canvas.getLabelName(474),
+								canvas.getLabelName(475),canvas.getLabelName(476),
+								canvas.getLabelName(477),canvas.getLabelName(478),
+								canvas.getLabelName(479),canvas.getLabelName(480)];
+								
+			canvas.dayShortNames = [canvas.getLabelName(459),
+								canvas.getLabelName(453),
+								canvas.getLabelName(454),
+								canvas.getLabelName(455),
+								canvas.getLabelName(456),
+								canvas.getLabelName(457),
+								canvas.getLabelName(458)];
+		]]>
+	</handler>
+	
+	<handler name="ontabcontentleave" args="tRef">
+		//Make sure any cursor status is reset
+		lz.Cursor.restoreCursor();
+		lz.Cursor.showHandCursor(true);
+        _mainScrollBar.setAttribute("visibility","visible");
+    </handler>
+    
+    <method name="clearWindows">
+    	if (this.lzViewCalendarEvent != null) {
+    		this.lzViewCalendarEvent.close();
+    	}
+    </method>
+
+	<method name="loadAppointments" args="tDate, dayIndex, weekIndex">
+		<![CDATA[
+			var tRelaodDataSet = false;
+			var tDateNow = new Date();
+			tDate.setHours(tDateNow.getHours());
+			tDate.setMinutes(tDateNow.getMinutes());
+			
+			if (this.currentDate == null) {
+				tRelaodDataSet = true;
+			}
+			if ($debug) Debug.write("loadAppointments ",dayIndex, weekIndex, tDate);
+			this.currentDate = tDate;
+			this.statusInfo.currentDate.setAttribute("text",parseDateToStringTime(this.currentDate));
+			this._lzCalendarGrid.checkAndShow(tDate,dayIndex,weekIndex);
+			
+			if (tRelaodDataSet) {
+				this.loadCalendarData();
+	        }
+		]]>
+	</method>
+	
+	<method name="loadCalendarData">
+		<![CDATA[
+			var tDay = this.currentDate.getDate();
+			if (tDay < 10) tDay = "0"+tDay;
+			
+			var tMonth = this.currentDate.getMonth() + 1;
+			if (tMonth < 10) tMonth = "0"+tMonth;
+		
+			var downloadurl = canvas.getServicesUrl() + 'CalendarService/getAppointmentsByWeekCalendar?'
+	                       +'SID='+canvas.sessionId
+	                       +'&firstDayInWeek='+canvas.firstdayinweek
+	                       +'&startDate='+this.currentDate.getFullYear()+"-"+tMonth+"-"+tDay
+	                       +'&requestUserId=' + this.requestUserId
+	                       +'&omTimeZoneId=' + canvas.timeZoneId
+	                       +'&javaTimeZoneName=';
+	       
+	        this.getAppointmentsByWeekCalendar.setAttribute("src",downloadurl);
+	        if ($debug) Debug.write("getAppointmentsByWeekCalendar doRequest 1 ",downloadurl);
+	        this.getAppointmentsByWeekCalendar.doRequest();
+        ]]>
+	</method>
+	
+	<method name="editCalendarEvent" args="appointment">
+		<![CDATA[
+			var dataElement = null;
+			if (appointment == null) {
+				if (this.requestUserId != canvas.user_id) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+					return;
+				}
+				appointment = this.generateBlankEvent();
+				dataElement = LzDataElement.valueToElement(appointment);
+			} else {
+				dataElement = appointment;
+			}
+			
+			new lz.lzEditCalendarEvent(canvas,{
+								dataElement:dataElement,
+								remindertypes:getAppointmentReminderTypList,
+								lzCalendarRef:this
+							});
+		]]>
+	</method>
+	
+	<method name="viewCalendarEvent" args="appointment,refCalendarEventView">
+		this.lzViewCalendarEvent = new lz.lzViewCalendarEvent(canvas,{
+					dataElement:appointment,
+					lzCalendarRef:this,
+					refCalendarEventView:refCalendarEventView
+				});
+	</method>
+	
+	<method name="generateBlankEvent">
+		<![CDATA[
+		
+			var newAppointment = new Object();
+			newAppointment.appointmentId = 0;
+			newAppointment.categoryId = 1;
+			newAppointment.title = canvas.getLabelName(1444);
+			
+			var tDate = new Date();
+			
+			//There seems to be a difference in the way OpenLaszlo makes a Date to a XML string:
+			//OpenLaszlo generates a time in UTC instead of the local time when converted to an XML String
+			var timeZoneOffSetInMilliSeconds = tDate.getTimezoneOffset()*60*1000;
+			
+			if (this.tStartDate == null) {
+				tDate.setTime(this.currentDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate.setMinutes(0);
+				tDate.setSeconds(0);
+				if (tDate.getHours() == 23) {
+					tDate.setHours(22);
+				}
+			} else {
+				tDate.setTime(this.tStartDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate.setSeconds(0);
+				this.tStartDate = null;
+			}
+			newAppointment.start = tDate;
+			
+			var tDate2 = new Date();
+			if (this.tEndDate == null) {
+				tDate2.setTime(tDate.getTime());
+				tDate2.setHours(tDate.getHours()+1);
+			} else {
+				tDate2.setTime(this.tEndDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate2.setSeconds(0);
+				this.tEndDate = null;
+			}
+			newAppointment.end = tDate2;
+			
+			newAppointment.comment = "";
+			newAppointment.reminderId = 3;
+			newAppointment.roomId = 0;
+			newAppointment.location = "";
+			newAppointment.isPasswordProtected = false;
+			newAppointment.roomTypeId = 1;
+			
+			return newAppointment;
+		]]>
+	</method>
+	
+	<method name="reload">
+		this.getAppointmentsByWeekCalendar.doRequest();
+	</method>
+	
+	<dataset name="getAppointmentsByWeekCalendar" type="http">
+		<handler name="ondata" args="d">
+			//Make sure any cursor status is reset
+			lz.Cursor.restoreCursor();
+			lz.Cursor.showHandCursor(true);
+			if ($debug) Debug.write("ondata",d);
+		</handler>
+	</dataset>
+	
+	<dataset name="getAppointmentReminderTypList" type="http" />
+	
+	<view name="statusInfo" width="204" y="4">
+		<labelText name="currentDate" align="center"
+			fontsize="12" resize="true" fontstyle="bold" />
+	</view>
+	
+	<!-- 176 pixels is the width of the mini calendar -->
+	<simpleLabelButton labelid="1444" height="24" 
+			width="176" x="12" y="26" style="calendarButtonStyle">
+        <handler name="onclick">
+            parent.editCalendarEvent(null);
+        </handler>
+    </simpleLabelButton>
+	
+	<dateSelector name="_calendar" y="54" x="12">
+		<handler name="onmonthSel" args="tMonth">
+			parent.currentDate = null;
+		</handler>
+		<handler name="onyearSel" args="tYear">
+			parent.currentDate = null;
+		</handler>
+		<handler name="onselect" args="sel">
+			if ($debug) Debug.write("onselect ",sel);
+			// check for saving
+			if (true) {
+ 				parent.loadAppointments(sel, this.dayIndexNumber, this.weekIndexNumber);
+			} else {
+				//Check Warning
+    			if ($debug) Debug.warn("Unsaved Item - Show warning");
+    			new lz.labelerrorPopup(canvas,{errorlabelid:794,makeModal:true});
+			}
+		</handler> 
+	</dateSelector> 
+	
+	<view resource="messagebox_info_rsc" x="4" y="198" />
+	
+	<labelText labelid="807" x="24" y="196" fontstyle="bold" />
+	
+	<labelText labelid="806" x="4" y="218" multiline="true" width="190" />
+	
+	<labelText labelid="1276" x="4" y="280" fontstyle="bold" />
+	
+	<view resource="messagebox_info_rsc" x="6" y="300" 
+		  width="16" height="16" stretches="both" />
+	
+	<labelText labelid="1277" x="24" y="296" multiline="true" width="166" />
+	
+    <miniIcons x="172" y="336" resource="calendar_revert_to_own_undo_rsc" width="16" height="16" 
+               showhandcursor="true">
+        <handler name="onclick">
+            parent.requestUserId = canvas.user_id;
+            parent.loadCalendarData();
+        </handler>
+        <labelTooltip labelid="1279" />
+    </miniIcons>
+	
+	<userContactsCalendar name="_userContacts" y="354" x="4" height="${ parent.height - 358 }" width="186">
+		<handler name="onselectedItem" args="sel">
+			if ($debug) Debug.write("onselectedItem ",sel.tUserId,sel);
+            parent.requestUserId = sel.tUserId;
+            parent.loadCalendarData();
+        </handler>
+        <handler name="onSaveNewMessage" args="roomBooked">
+        	if ($debug) Debug.write("onSaveNewMessage ",roomBooked);
+        	parent.reload();
+        </handler>
+	</userContactsCalendar>
+	
+	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="40">
+	
+		<view name="buttons" align="left" y="2">
+		
+			<method name="getCurrentViewState">
+				if (!this._showDay.enabled) {
+					return "day";
+				} else if (!this._showWeek.enabled) {
+					return "week";
+				} else if (!this._showMonth.enabled) {
+					return "month";
+				}
+			</method>
+		
+			<simpleLabelButton name="_showDay" labelid="799" height="22" >
+		        <handler name="onclick">
+		        	parent._showWeek.setAttribute("enabled",true);
+		        	parent._showMonth.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
+		            parent.parent.parent._lzCalendarGrid.showDay();
+		        </handler>
+		    </simpleLabelButton>
+		    
+		    <simpleLabelButton name="_showWeek" labelid="800" height="22" >
+		        <handler name="onclick">
+		        	parent._showDay.setAttribute("enabled",true);
+		        	parent._showMonth.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
+		            parent.parent.parent._lzCalendarGrid.showWeek();
+		        </handler>
+		    </simpleLabelButton>
+		    
+		    <simpleLabelButton name="_showMonth" labelid="801" height="22" enabled="false">
+		        <handler name="onclick">
+		        	parent._showDay.setAttribute("enabled",true);
+		        	parent._showWeek.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
+		            parent.parent.parent._lzCalendarGrid.showMonth();
+		        </handler>
+		    </simpleLabelButton>
+		    
+		    <labelText fgcolor="0x0000FF" y="2">
+		    	<handler name="oninit">
+		    		<![CDATA[
+		    			this.setAttribute("text","<u>"+canvas.jNameTimeZone+"</u>");
+		    		]]>
+		    	</handler>
+		    	<handler name="onclick">
+		    		canvas.userSettingsModuleOpt = "editUserProfile";
+            		quicklinkAct("userSettingsModule");
+		    	</handler>
+		    </labelText>
+		    
+		    
+		
+			<simplelayout axis="x" spacing="0" />
+		</view>
+		
+		<view align="right" y="2">
+		
+			<simpleLabelButton name="_nextBtn" height="22" width="20">
+				<view resource="calendar_resultset_previous_rsc" x="2" y="3" />
+		        <handler name="onclick">
+		        	var tDate = parent.parent.parent.currentDate;
+		        	if (parent.parent.buttons.getCurrentViewState() == "day") {
+		        		tDate.setTime(tDate.getTime() - 86400000);
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "month") {
+		        		if (tDate.getMonth() == 0) {
+		        			tDate.setMonth(11);
+		        			tDate.setFullYear(tDate.getFullYear()-1);
+		        		} else {
+		        			tDate.setMonth(tDate.getMonth()-1);
+		        		}
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "week") {
+		        		tDate.setTime(tDate.getTime() - (86400000*7));
+		        	}
+		        	parent.parent.parent.currentDate = null;
+		        	if ($debug) Debug.write("loadDate :: ",tDate);
+		        	parent.parent.parent._calendar.loadDate(tDate);
+		        </handler>
+		    </simpleLabelButton>
+		    
+		    <simpleLabelButton name="_preBtn" height="22" width="20">
+				<view resource="calendar_resultset_next_rsc" x="2" y="3" />
+		        <handler name="onclick">
+		            var tDate = parent.parent.parent.currentDate;
+		        	if (parent.parent.buttons.getCurrentViewState() == "day") {
+		        		tDate.setTime(tDate.getTime() + 86400000);
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "month") {
+		        		if (tDate.getMonth() == 11) {
+		        			tDate.setMonth(0);
+		        			tDate.setFullYear(tDate.getFullYear()+1);
+		        		} else {
+		        			tDate.setMonth(tDate.getMonth()+1);
+		        		}
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "week") {
+		        		tDate.setTime(tDate.getTime() + (86400000*7));
+		        	}
+		        	parent.parent.parent.currentDate = null;
+		        	if ($debug) Debug.write("loadDate :: ",tDate);
+		        	parent.parent.parent._calendar.loadDate(tDate);
+		        </handler>
+		    </simpleLabelButton>
+			
+			<simplelayout axis="x" spacing="0" />
+		</view>
+		
+	</view>
+	
+	<lzCalendarGrid name="_lzCalendarGrid" 
+		datapath="local:classroot.getAppointmentsByWeekCalendar:/">
+		<handler name="oncalendarEvent" args="sel">
+			parent.viewCalendarEvent(sel.datapath.data.cloneNode(true),sel);
+		</handler>	
+		<handler name="onScollContent" args="tRef">
+			parent.clearWindows();
+		</handler>
+		<handler name="onSelectDate" args="tDate">
+			parent._calendar.showDate(tDate);
+			parent._lzCalendarTobBar.buttons._showDay.onclick.sendEvent(null);
+		</handler>
+		<handler name="onNewEventDate" args="tDate">
+			parent.tStartDate = tDate;
+			//only use the date part here
+			parent.tStartDate.setHours(this.currentDate.getHours());
+			parent.tStartDate.setMinutes(0);
+			parent.tEndDate = null;
+			parent.editCalendarEvent();
+		</handler>
+		<handler name="onStartEndDate" args="tEmptyRef">
+			parent.tStartDate = this.tStartDate;
+			parent.tEndDate = this.tEndDate;
+			parent.editCalendarEvent();
+		</handler>
+	</lzCalendarGrid>
+	
+</class>
+
+</library>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Existing organization list. used by orgAdmin only -->
+<class name="orgUsersRecordValueList" extends="recordValueList" >
+        
+    <attribute name="usersId" value="0" type="number" />
+    
+    <handler name="oninit">
+        this.addHeaderItem(177,226);    
+        this.addHeaderItem(275,60);   
+    </handler>
+        
+    <handler name="deleteItem" args="obj">
+        if ($debug) Debug.write("deleteItem: ",obj.value);
+        this.usersId = Number(obj.value);
+        this.deleteUserFromOrganisation.doCall();
+    </handler>  
+
+    <netRemoteCallHib name="getUsersByOrganisation" funcname="organisationservice.getUsersByOrganisation" 
+          remotecontext="$once{ canvas.thishib }" > 
+          <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.parent.parent.organisation_id;</method></netparam>
+        <netparam><method name="getValue"> return 0; </method></netparam>
+        <netparam><method name="getValue"> return 200; </method></netparam>
+        <netparam><method name="getValue"> return "user_id"; </method></netparam>
+        <netparam><method name="getValue"> return true; </method></netparam>          
+        <handler name="ondata" args="value">
+            Debug.write("getUsersByorganisation ",value);
+            this.parent.initValues(value.records);
+            this.parent.renderContent(value.result);
+        </handler>
+    </netRemoteCallHib> 
+    
+    <method name="renderContent" args="records">
+        <![CDATA[
+        this.clearList();
+        for (var i=0;i<records.length;i++){
+            var v = records[i].login+' ['+records[i].lastname+', '+records[i].firstname+']';
+            new lz.recordListItem(this._innerlist._inn._inn,{valueName:v,value:records[i].user_id});
+        }
+        ]]>
+    </method>
+            
+    <netRemoteCallHib name="deleteUserFromOrganisation" remotecontext="$once{ canvas.thishib }" 
+        funcname="organisationservice.deleteUserFromOrganisation" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.parent.organisation_id; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.usersId; </method></netparam>
+        <netparam><method name="getValue"> return ''; </method></netparam>
+        <handler name="ondata" args="value">
+            Debug.write("deleteUserFromOrganisation ",value);
+            //this.parent.destroy();
+            if (value>0){
+                this.parent.parent.onreload.sendEvent();
+            } else {
+                new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:value});
+            }
+        </handler>
+    </netRemoteCallHib>       
+      
+</class> 
+
+
+</library>

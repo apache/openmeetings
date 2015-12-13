@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <context-param>
+        <param-name>globalScope</param-name>
+        <param-value>default</param-value>
+    </context-param>
+    
+	<welcome-file-list>
+		<welcome-file>sipindex.html</welcome-file>
+		<welcome-file>login.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>networktesting.swf10.swf</welcome-file>
+	</welcome-file-list>
+    
+    <!-- Custom logging like described in Paul Gregoire Patch: 
+    http://gregoire.org/2008/09/18/logging-work-around/
+    THIS WILL NOT WORK for us as we can hardly rewrite all logging statements of hibernate
+    
+    -->
+    <listener>
+        <listener-class>org.apache.openmeetings.utils.OMContextListener</listener-class>
+    </listener>
+    
+    <filter>
+        <filter-name>LoggerContextFilter</filter-name>
+        <filter-class>org.red5.logging.LoggerContextFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>LoggerContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>   
+    
+	<filter>
+		<filter-name>OpenmeetingsApplication</filter-name>
+		<filter-class>org.apache.wicket.protocol.ws.tomcat7.Tomcat7WebSocketFilter</filter-class>
+		<init-param>
+			<param-name>applicationClassName</param-name>
+			<param-value>org.apache.openmeetings.web.app.Application</param-value>
+		</init-param>
+		<init-param>
+			<param-name>configuration</param-name>
+			<param-value>@wicket.mode@</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>OpenmeetingsApplication</filter-name>
+		<url-pattern>/html/*</url-pattern>
+	</filter-mapping>
+	 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/red5-*.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>locatorFactorySelector</param-name>
+        <param-value>red5.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>parentContextKey</param-name>
+        <param-value>default.context</param-value>
+    </context-param>
+    
+    <!-- remove the following servlet tags if you want to disable remoting for this application -->
+	<servlet>
+		<servlet-name>spring-mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	</servlet>
+    <servlet>
+        <servlet-name>gateway</servlet-name>
+        <servlet-class>org.red5.server.net.servlet.AMFGatewayServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DownloadHandler</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Install</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Install</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LangExport</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.LangExport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Export</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Export</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExportToImage</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ActivateUser</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ActivateUser</servlet-class>
+    </servlet>
+    <!-- Axis2 Settings -->
+    <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+		<servlet-name>Calendar</servlet-name>
+		<servlet-class>org.apache.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
+	</servlet>
+    <servlet>
+        <description>DefaultIndex</description>
+        <display-name>DefaultIndex</display-name>
+        <servlet-name>DefaultIndex</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
+    </servlet> 
+    <servlet>
+        <description>BackupExport</description>
+        <display-name>BackupExport</display-name>
+        <servlet-name>BackupExport</servlet-name>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
+    </servlet>
+	
+	<servlet-mapping>
+		<servlet-name>spring-mvc</servlet-name>
+		<url-pattern>*.upload</url-pattern>
+	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadHandler</servlet-name>
+        <url-pattern>/DownloadHandler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Install</servlet-name>
+        <url-pattern>/Install</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Install</servlet-name>
+        <url-pattern>/install</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LangExport</servlet-name>
+        <url-pattern>/LangExport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Export</servlet-name>
+        <url-pattern>/Export</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportToImage</servlet-name>
+        <url-pattern>/ExportToImage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ActivateUser</servlet-name>
+        <url-pattern>/activateUser</url-pattern>
+    </servlet-mapping>
+    <!-- Axis2 -->
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Calendar</servlet-name>
+		<url-pattern>/Calendar</url-pattern>
+	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DefaultIndex</servlet-name>
+        <url-pattern>/sipindex.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BackupExport</servlet-name>
+        <url-pattern>/BackupExport</url-pattern>
+    </servlet-mapping>
+    <mime-mapping>
+        <extension>inc</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+     
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Forbidden</web-resource-name>
+            <url-pattern>/streams/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Forbidden</web-resource-name>
+            <url-pattern>/conf/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Forbidden</web-resource-name>
+            <url-pattern>/upload/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Forbidden</web-resource-name>
+            <url-pattern>/uploadtemp/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+</web-app>

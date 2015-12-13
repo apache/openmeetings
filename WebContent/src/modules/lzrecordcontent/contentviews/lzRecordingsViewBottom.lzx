@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+ 
+<class name="flvMetaInfoContentArea" extends="view" 
+       width="${ parent.width }" height="168" clip="true">
+	
+	<attribute name="baseWidthForPointer" value="0" type="number"/>
+	
+	<method name="showProgress" args="flvTime,deltaInSeconds">
+		<![CDATA[
+		
+            var tNewX = Math.round((this.baseWidthForPointer / deltaInSeconds) * flvTime);
+		
+            this.contentDevider._pointer.setAttribute("visibility","visible");
+            this.contentDevider._pointer.setAttribute("x",tNewX);
+            
+		]]>
+	</method>
+	
+	<method name="stopProgress">
+		this.contentDevider._pointer.setAttribute("x",0);
+	</method>
+    
+    <view name="content" width="${ parent.width }" height="168">
+        
+        <view name="content" layout="axis:y;spacing:2" />
+        
+        <om_vscrollbar />
+        <om_hscrollbar />
+        
+    </view>
+    
+    <view name="contentDevider" x="${ parent.content.content.x }"
+          width="${ parent.width }" height="168" >
+    	
+    	<view name="_pointer" resource="flv_progress_pointer_big_rsc" visibility="hidden" />
+    	
+    </view>
+    
+</class>
+
+
+<class name="userActivityItem" extends="view">
+    
+    <attribute name="userText" value="" type="string" />
+    
+    <handler name="onmouseover">
+    	this.setAttribute("opacity",0.5);
+    </handler>
+    
+    <handler name="onmouseout">
+        this.setAttribute("opacity",1);
+    </handler>
+    
+    <view name="_middleIcon" width="$once{ parent.width - 20 }" 
+          y="4" x="10" height="8" bgcolor="0x00CC00" />
+          
+    <view name="_startIcon" resource="icon_flv_recording_video_start_rsc" />
+    
+    <view name="_endIcon" align="right"
+          resource="icon_flv_recording_video_start_rsc" />
+    
+    <labelText x="14" text="$once{ parent.userText }" y="-2" />
+    
+    <labelTooltip labelid="877" />
+    
+</class>
+
+
+<class name="userActivityDevider" extends="view" >
+    
+    <attribute name="deviderText" value="" type="string"/>
+    
+    <view height="154" bgcolor="0x000000" width="1" />
+    
+    <labelText text="$once{ parent.deviderText }" y="134" />
+    
+</class>    
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordingsViewBottom" extends="basePropertyPanel" labelid="859" height="190" 
+                   y="${ canvas.height - canvas.naviHeightDelta - this.height }" 
+                   x="${ parent._navigationArea.width + parent._navigationArea.x }"
+                   width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
+        
+        <attribute name="pixelFactor" value="5" type="number"/>
+        
+        <attribute name="deltaInSeconds" value="0" type="number"/>
+        
+        <attribute name="currentRecording" value="null"/>
+        
+        <method name="showProgress" args="flvTime">
+        	this.content._content.showProgress(flvTime,this.deltaInSeconds);
+        </method>
+        
+        <method name="stopProgress">
+            this.content._content.stopProgress();
+        </method>
+        
+        <method name="showMetaData" args="rec">
+            <![CDATA[
+            
+                this.currentRecording = rec;
+            
+                if ($debug) Debug.write("showMetaData ");
+                
+                this.content.clearContent();
+                
+                parent._recordingsViewMain.setNewStream(rec);
+            
+                this.deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
+                
+                if ($debug) Debug.write("deltaInSeconds ",deltaInSeconds);
+                
+                this.pixelFactor = deltaInSeconds/(this.width-16);
+                
+                if ($debug) Debug.write("pixelFactor ",this.pixelFactor);
+                
+                var widthItem = Math.round(deltaInSeconds/this.pixelFactor);
+                
+                if ($debug) Debug.write("widthItem ",widthItem);
+                
+                if (rec.flvRecordingMetaData != null) {
+	                for (var i=0;i<rec.flvRecordingMetaData.length;i++) {
+	                    
+	                    if ($debug) Debug.write("isScreenData :: ",rec.flvRecordingMetaData[i].isScreenData);
+	                    
+	                    if (!rec.flvRecordingMetaData[i].isScreenData && 
+	                           ( rec.flvRecordingMetaData[i].isAudioOnly ||
+	                              ( !rec.flvRecordingMetaData[i].isAudioOnly && !rec.flvRecordingMetaData[i].isVideoOnly )
+	                           )
+	                        ) {
+		                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
+		                    var deltaInSecondsNew = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+		                    
+		                    var widthItem = Math.round(deltaInSecondsNew/this.pixelFactor);
+		                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
+		                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+		                    
+			                new lz.userActivityItem(this.content._content.content.content,{
+		                                                  x:xItem,width:widthItem,
+			                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
+			                                        });
+	                    }    
+	                    
+	                }
+	            }
+                
+                if ($debug) Debug.write("deltaInSeconds :: ",deltaInSeconds,(deltaInSeconds/60));
+                
+                var minutes = Math.floor(deltaInSeconds/60);
+                
+                if ($debug) Debug.write("minutes ",minutes);
+                
+                if (minutes < 60) {
+                    
+                    for (var i=0;i<=minutes;i++) {
+                        
+                        var xItem = Math.round((i*60)/this.pixelFactor);
+                        
+                        //if ($debug) Debug.write("devisior ",i,xItem);
+                        
+                        new lz.userActivityDevider(this.content._content.contentDevider,{
+						                          x:xItem,
+                                                  deviderText:i+" min"
+						                        });
+                        
+                    }
+                    
+                } else {
+                    
+                    var items = Math.floor(minutes/10);
+                    
+                    for (var i=0;i<=items;i++) {
+                        
+                        var xItem = Math.round(((i*10)*60)/this.pixelFactor);
+                        
+                        new lz.userActivityDevider(this.content._content.contentDevider,{
+                                                  x:xItem,
+                                                  deviderText:i+" min"
+                                                });
+                        
+                    }
+                    
+                }
+                
+                this.content._content.baseWidthForPointer = this.content._content.width;
+                
+            ]]>
+        </method>
+        
+        <view name="content" visibility="visible" y="22" bgcolor="0xFFFFFF"
+              width="${ parent.width }" height="168">
+            
+            <method name="clearContent">
+                this._content.destroy();
+                new lz.flvMetaInfoContentArea(this,{name:'_content'});
+            </method>
+            
+            <flvMetaInfoContentArea name="_content" />
+            
+        </view>
+        
+</class>
+
+
+
+</library>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Release Guide</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How to update Apache OpenMeetings website">
+
+			<subsection name="Required tools">
+				<div>
+					<ul>
+						<li>Sun JDK6</li>
+						<li>Apache ANT (1.8 or later)</li>
+					</ul>
+				</div>
+			</subsection>
+			
+			<subsection name="Introduction">
+				<div>
+					<p>
+						The Apache OpenMeetings HTML websites are generated from XML files. 
+						You edit the XML files, run the ANT command "ant anakia" that generates the HTML files 
+						and then you checkin to SVN both: XML and HTML files.
+					</p>
+					<p>
+						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
+					</p>
+				</div>
+			</subsection>
+
+			<subsection name="Editing the website">
+				<div>
+					<p>
+						OpenMeetings website (
+						<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>
+						) is a copy from the SVN repository.
+						<br />
+						The file in the SVN to be synced are at:
+						<br />
+						<a
+							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/
+						</a>
+						<br/>and<br/>
+						<a
+							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/
+						</a>
+					</p>
+					
+					<div>
+						To update the website you checkout trunk:
+						<br />
+						<a
+							href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
+						</a> <br/>
+						edit the files in the folder <tt>xdocs</tt><br/>
+						then you run the command:
+						<div class="xmlcode">
+							ant anakia
+						</div>
+						control the output locally in the folder <tt>docs</tt><br/>
+						And then checkin into the SVN <i>both</i> the edited xml and generated html files.
+					</div>
+					
+					<p>
+						The public website is automatically synced with the SVN repository.<br/>
+						Changes to the SVN should be immediately synced to the production website.<br/>
+						If not you might login to people.apache.org,<br/>
+						cd to <tt>/www/openmeetings.apache.org/content/</tt><br/>
+						and run the linux command "touch" on the files that need to be synced
+					</p>
+				</div>
+			</subsection>
+			
+			<subsection name="Adding a new menu entry">
+				<div>
+					To add a new menu entry in the left side panel you need to modify the file: 
+					<br/>
+					<tt>xdocs/stylesheets/project.xml</tt>
+				</div>
+			</subsection>
+			
+			<subsection name="Writing a new macro">
+				<div>
+					<p>
+						You can write macros in a template language to parse from the XML files certain aspects.
+					</p>
+					<p>
+						To add a new macro see the file:<br/>
+						<tt>xdocs/stylesheets/site.vsl</tt>
+					</p>
+				</div>
+				
+			</subsection>
+
+		</section>
+
+	</body>
+
+</document>

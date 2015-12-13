@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Organization administration module for ADMIN.-->
+<class name="orgAdmin" extends="baseContentView">
+	
+	<turnOverList name="_turnoverlist" width="320" height="${ canvas.height - canvas.naviHeight }" x="2" y="0" 
+		orderby="organisation_id" step="50" asc="true">
+
+		<handler name="oninit">
+			this.addHeaderItem(164,120);
+			this.addHeaderItem(165,184);
+			this.getOrganisations.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getOrganisations.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getOrganisations.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//Debug.write("onclickedItem",obj,obj.obj);
+            parent._orgadminvalueform.hideNewRecordText();
+			parent._orgadminvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<netRemoteCallHib name="getOrganisations" funcname="organisationservice.getOrganisations" remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		//Debug.write("getOrganisations ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+	    	this.clearList();
+	    	for (var i=0;i<records.length;i++){
+	    		new lz.orgAdminListItem(this._innerlist._inn._inn,{obj:records[i],organisation_id:records[i].organisation_id,orgname:records[i].name});
+	    	}
+            this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+	<orgAdminValueForm name="_orgadminvalueform" x="340">
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </orgAdminValueForm>
+	
+</class>
+
+</library>

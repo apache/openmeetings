@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>List of general configuration options</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="List of general configuration options">
+
+			<p>In Administration &gt; Configuration there are a number of
+				configuration values.
+			</p>
+			<p></p>
+			<table>
+				<tr>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> key </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> default </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> meaning </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> availabe since OpenMeetings version </th>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> user.login.minimum.length </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 4 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> minimum chars required for the login to create a
+						user
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> user.pass.minimum.length </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 4 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> minimum chars required for the password to create a
+						user
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> number.minutes.reminder.send </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 15 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> minutes the one-time reminder in the calender is
+						send, set to 0 to disable reminder
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.9.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> max_upload_size </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1073741824 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Maximum size of upload file (bytes) 1073741824 bytes
+						= 1GB
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> show.whiteboard.draw.status </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Display name of the user who draw the current object
+						(User Name auto-disapper after 3 seconds.
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> use.old.style.ffmpeg.map.option </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> If the system should "." (old ffmpeg) instead of ":"
+						(new ffmpeg) for the -map option in FFMPEG
+					</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.9.x </td>
+
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> inviter.email.as.replyto </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)	</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> office.path </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.0.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> default.landing.zone </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> dashboard.rooms </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Area to be shown to the user after login. Possible values are: dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> sms.provider </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> SMS service provider (bulksms.http.1) </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> sms.Username </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Login for SMS service provider </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> sms.Userpass </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Password for SMS service provider </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> sms.subject </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Subject of SMS reminder message </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
+			</table>
+		</section>
+
+	</body>
+
+</document>

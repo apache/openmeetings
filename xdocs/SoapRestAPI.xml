@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Available WebServices">
+
+			<div>
+				<div>
+					<a href="UserService.html" target="_BLANK">
+						<b>UserService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>The Service contains methods to login and create hash to
+							directly enter
+							conference rooms, recordings or the application in
+							general
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="RoomService.html" target="_BLANK">
+						<b>RoomService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>RoomService contains methods to manipulate rooms and create
+							invitation hash
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="FileService.html" target="_BLANK">
+						<b>FileService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>Contains methods to import and upload files into the Files
+							section of the
+							conference room and the personal drive of any user
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="CalendarService.html" target="_BLANK">
+						<b>CalendarService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>CalendarService contains methods to create, edit delete
+							calendar meetings
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="JabberService.html" target="_BLANK">
+						<b>JabberService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>The Service contains methods necessary for OM to Jabber integration.
+						All methods doesn't require admin privileges to get called.
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="ServerService.html" target="_BLANK">
+						<b>ServerService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>The Service contains methods necessary for OM to manage servers 
+						participating in cluster.
+						All methods does require admin privileges to get called.
+						</i>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+
+	</body>
+</document>

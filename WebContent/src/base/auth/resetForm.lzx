@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!DOCTYPE library SYSTEM "/project.dtd">
+<library>
+	
+<!-- Form shown in the Login Box -->
+    
+<class name="resetForm" extends="view" x="10" y="230" >
+    
+    <attribute name="baseUrl" value="" type="string" />
+    
+    <labelText name="resetLabel" labelid="312" width="200" />
+
+    <radiogroup name="chooseTextType" layout="class:simplelayout;axis:x;spacing:2" y="30" >
+        <labelRadioButton labelid="313" value="1" text="Mail" />
+        <labelRadioButton labelid="314" value="2" text="Login" />
+    </radiogroup>   
+    
+    <!-- reset Values Area -->
+    <labelText name="resetByMailLabel" 
+        visibility="${ ( (parent.chooseTextType.value==1) ? 'visible' : 'hidden' ) }"
+        labelid="315" y="60" x="2"/>
+    <customEdittext name="resetByMail" y="60" regexpType="email"
+        visibility="${ ( (parent.chooseTextType.value==1) ? 'visible' : 'hidden' ) }"
+        password="false" x="120" width="170" />
+    
+    <labelText name="resetByLoginLabel" 
+        visibility="${ ( (parent.chooseTextType.value==2) ? 'visible' : 'hidden' ) }"
+        labelid="316" y="60" x="2"/>
+    <customEdittext name="resetByLogin" y="60" 
+        visibility="${ ( (parent.chooseTextType.value==2) ? 'visible' : 'hidden' ) }"
+        password="false" x="120" width="170" />
+    
+    <simpleLabelButton name="sendBtn" labelid="317" x="120" y="90" >
+        <attribute name="showResetBox" value="false" type="boolean" />
+    	<handler name="onclick">
+    		<![CDATA[
+                if (parent.chooseTextType.value==1){
+                    parent.resetByLogin.setAttribute('text','');
+                } else {
+                    parent.resetByMail.setAttribute('text','');
+                }
+                parent.baseUrl = canvas.getAppBaseUrl();
+                
+    			parent.resetUserPwd.doCall();
+			]]>
+    	</handler>
+    </simpleLabelButton>   
+    
+    <netRemoteCallHib name="resetUserPwd" funcname="userservice.resetUserPwd" 
+        remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.resetByMail.getText(); </method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.resetByLogin.getText(); </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.baseUrl; </method></netparam>
+        <handler name="ondata" args="value">
+			<![CDATA[
+                if ($debug) Debug.write("onvalue",value);
+            ]]>
+        </handler>  
+    </netRemoteCallHib>    
+
+    <method name="reset">
+            this.sendBtn.onclick.sendEvent();
+    </method>
+    
+</class>    
+    
+
+</library>

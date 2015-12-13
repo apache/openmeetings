@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+	<properties>
+		<title>Command line admin</title>
+		<author email="solomax@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+	<body>
+		<section name="Usage">
+			<p>To avoid intensive traffic utilization and save your time you can
+				use command line admin to achieve following tasks:</p>
+			<div>
+				<div class="xmlcode">
+ -v,--verbose                        verbose error messages<br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -h,--help                           prints this message<br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -b,--backup                         Backups OM<br/>
+<span style="margin-left: 50px;">-file &lt;arg&gt;                       (optional) file used for backup/restore/install</span><br/>
+<span style="margin-left: 100px;">--exclude-files                (optional) should backup exclude files [default: include]</span><br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -r,--restore                        Restores OM<br/>
+<span style="margin-left: 50px;">-file &lt;arg&gt;                       file used for backup/restore/install</span><br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -l,--languages                      Reimport All language files into DB<br/>
+<span style="margin-left: 50px;">-lang,--language &lt;arg&gt;            (optional) Single language to be imported (id or name)</span><br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -i,--install                        Fill DB table, and make OM usable<br/>
+<span style="margin-left: 50px;">-user &lt;arg&gt;                       Login name of the default user, minimum 4 characters (mutually exclusive with 'file')</span><br/>
+<span style="margin-left: 50px;">-group &lt;arg&gt;                      The name of the default user group (mutually exclusive with 'file')</span><br/>
+<span style="margin-left: 50px;">-email &lt;arg&gt;                      Email of the default user (mutually exclusive with 'file')</span><br/>
+<span style="margin-left: 50px;">-tz &lt;arg&gt;                         Default server time zone, and time zone for the selected user (mutually exclusive with 'file') file used for backup/restore/install</span><br/>
+<span style="margin-left: 100px;">--email-auth-pass &lt;arg&gt;        (optional) Email auth password (anonymous connection will be used if not set)</span><br/>
+<span style="margin-left: 100px;">--db-host &lt;arg&gt;                (optional) DNS name or IP address of database</span><br/>
+<span style="margin-left: 100px;">--drop                         (optional) Drop database before installation</span><br/>
+<span style="margin-left: 100px;">--db-user &lt;arg&gt;                (optional) User with write access to the DB specified</span><br/>
+<span style="margin-left: 100px;">--system-email-address &lt;arg&gt;   (optional) System e-mail address [default: noreply@openmeetings.apache.org]</span><br/>
+<span style="margin-left: 100px;">--password &lt;arg&gt;               (optional) Password of the default user, minimum 4 characters (will be prompted if not set)</span><br/>
+<span style="margin-left: 100px;">--email-use-tls                (optional) Is secure e-mail connection [default: no]</span><br/>
+<span style="margin-left: 100px;">--email-auth-user &lt;arg&gt;        (optional) Email auth username (anonymous connection will be used if not set)</span><br/>
+<span style="margin-left: 100px;">--db-port &lt;arg&gt;                (optional) Database port</span><br/>
+<span style="margin-left: 100px;">--smtp-port &lt;arg&gt;              (optional) SMTP server for outgoing e-mails [default: 25]</span><br/>
+<span style="margin-left: 100px;">--db-name &lt;arg&gt;                (optional) The name of Openmeetings database</span><br/>
+<span style="margin-left: 100px;">--disable-frontend-register    (optional) Do not allow front end register [allowed by default]</span><br/>
+<span style="margin-left: 100px;">--db-type &lt;arg&gt;                (optional) The type of the DB to be used</span><br/>
+<span style="margin-left: 100px;">--skip-default-rooms           (optional) Do not create default rooms [created by default]</span><br/>
+<span style="margin-left: 100px;">--force                        (optional) Install without checking the existence of old data in the database.</span><br/>
+<span style="margin-left: 100px;">--smtp-server &lt;arg&gt;            (optional) SMTP server for outgoing e-mails [default: localhost]</span><br/>
+<span style="margin-left: 100px;">--db-pass &lt;arg&gt;                (optional) Password of the user with write access to the DB specified</span><br/>
+--------------------------------------------------------------------------------------------------<br/>
+ -f,--files                          File operations - statictics/cleanup<br/>
+<span style="margin-left: 100px;">--cleanup                      (optional) Should intermediate files be clean up</span><br/>
+--------------------------------------------------------------------------------------------------<br/>
+				</div>
+			</div>
+		</section>
+	</body>
+</document>

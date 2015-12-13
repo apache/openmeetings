@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Moodle Plugin</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Moodle Plugin for OpenMeetings">
+			<p>
+				You can get the latest Version of the Plugin for Moodle from the
+				<a href="downloads.html">downloads</a>
+				.
+				<br/>
+				You can find the OpenMeetings Plugin also in the
+				<a href="http://moodle.org/plugins/view.php?plugin=mod_openmeetings"
+					target="_BLANK" rel="nofollow">Moodle Plugin database</a>
+				.
+				<br/>
+				A demo version of the Moodle plugin is available at
+				<a href="http://moodle.openmeetings.de" target="_BLANK" rel="nofollow">moodle.openmeetings.de
+				</a>
+				.
+			</p>
+		</section>
+		
+		<section name="Installation of the Moodle Plugin for Apache OpenMeetings">
+			<p>
+				You simply download the ZIP or TAR package and unzip it to Moodle's "mod" directory.<br/>
+				Eventually you need to unzip the package into a folder called "openmeetings".
+				The folder structure is:<br/>
+				$MOODLE_HOME/mod/openmeetings/*.php
+				<br />
+				Then you visit the admin interface of Moodle, for example
+				<a href="http://$your_moodle_host/$MOODLE_WWW_ROOT/admin" target="_BLANK"
+					rel="nofollow">http://$your_moodle_host/$MOODLE_WWW_ROOT/admin</a> 
+					<br/>
+				Moodle will detect that there is a new plugin and will show the plugin installation screen:
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_install_plugin.png">
+				<img src="images/moodle_install_plugin.png" alt="" width="430"
+					height="220" />
+			</a>
+			<p>
+				After you have clicked on "Update database" Moodle will show you the plugin configuration screen:
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_configure_plugin.png">
+				<img src="images/moodle_configure_plugin.png" alt="" width="500"
+					height="300" />
+			</a>
+		</section>
+		
+		<section name="Adding a new conference room to a Moodle course">
+			
+			<p>
+				After installation of the plugin you can go to the course pages in Moodle and turn editing on.
+				Then you choose the activity "OpenMeetings", Moodle will then show you the conference room 
+				configuration with all the options:
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_add_activity_plugin.png">
+				<img src="images/moodle_add_activity_plugin.png" alt="" width="430"
+					height="360" />
+			</a>
+		</section>
+		
+	</body>
+
+</document>

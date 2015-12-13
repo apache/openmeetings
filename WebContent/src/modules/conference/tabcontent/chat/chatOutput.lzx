@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+
+<!--- chat output specialized for video-conference -->
+<class name="chatOutput" extends="view" height="${ parent.height-1 }" 
+            clip="true" width="${ parent.width-1 }" bgcolor="0xFFFFFF">
+
+    <attribute name="isAlreadyLoaded" value="false" type="boolean"/>
+<!---
+ Invoked from VideoContainer cause domain/room must be set first
+ -->
+    <method name="doInitByOpen">
+        <![CDATA[
+            if (!this.isAlreadyLoaded) {
+            	this.isAlreadyLoaded = true;
+            	this._cbtext.clearChatOutput();
+                this.getRoomChatHistory.doCall();
+            }
+        ]]>
+    </method>
+    
+    <method name="reload">
+        <![CDATA[
+        	this._cbtext.clearChatOutput();
+            this.getRoomChatHistory.doCall();
+        ]]>
+    </method>    
+    
+    <netRemoteCallHib name="getRoomChatHistory" funcname="chatservice.getRoomChatHistory" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if($debug) Debug.write("chatOutput/getRoomChatHistory: ",value);
+                for (var i=0;i<value.length;i++){
+                    if($debug) Debug.write(value[i].message,value[i].client);
+                    parent.addChatHistory(value[i].message,value[i].client);
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+    
+    <method name="getLog">
+    	<![CDATA[
+    		var tString = "";
+    		
+    		for (var i=0;i<this._cbtext.subviews.length;i++) {
+    			
+    			if (i!=0) {
+    				tString += "<br/>";
+    			}
+    			
+    			tString += this._cbtext.subviews[i].username + ': '
+    					+ this._cbtext.subviews[i].message;
+    			
+    		}
+    		
+    		return tString;
+    	
+    	]]>
+    </method>     
+    
+    <method name="addChatHistory" args="value,client">
+        <![CDATA[
+            //if($debug) Debug.write("chatOutput/addChatHistory: ",value,client);
+            canvas.currentBaseConferenceRoom._chatPanelStrict.startBlink();
+            //is Right To Left ? not checked for the moment
+            if (value[7]){
+                var username = client.firstname+" "+client.lastname;
+            } else {
+                var username = client.firstname+" "+client.lastname;
+            }
+            var messageObj = value[value.length - 1];
+            //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+            //Debug.write("newmessage: ",newmessage);
+            //this._cbtext.setAttribute('text',this._cbtext.text+newmessage);
+            var usercolor = value[5];
+            
+            var isDirectLink = null;
+            if (value[8] > 0) {
+            	isDirectLink = false;
+            } else {
+            	isDirectLink = true;
+            }
+            
+            if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
+                                || canvas.directUserLogin || canvas.secureRemoteUserLogin) {
+                isDirectLink = true;               	
+            }
+            if ( usercolor==null || usercolor==0 || (usercolor !=null && usercolor.length==0) )usercolor=0xCCCCCC;
+            
+            
+            
+            if ($debug) Debug.write("addChatHistory userID: ",value[8],isDirectLink);
+            
+            new lz.chatTabItemEmoticons(this._cbtext,{
+            			rawMessage: value,
+		                messageObj:messageObj,
+	                    user_id:value[8],
+	                    publicSID:value[6],
+	                    message:value[4],
+	                    picture_uri:client.picture_uri,
+		                usercolor:usercolor,
+		                username:username,
+		                isDirectLink:isDirectLink,
+		                usertime:value[1]
+	                });
+            
+            this.setScrollToMax();              
+        ]]>
+    </method>           
+    
+    <method name="setScrollToMax">
+        <![CDATA[
+        if(_cbtext.height>this.height){
+            myscrollbar.scrolltarget.setAttribute(myscrollbar.scrollattr,(this.height-_cbtext.height));
+        }
+        
+        ]]>
+    </method>
+    
+    <view name="_cbtext" width="${ parent.width }" layout="axis:y;spacing:0" >
+    	<method name="clearChatOutput">
+    		<![CDATA[
+    			while (this.subviews.length>0){
+    				this.subviews[0].destroy();
+    			}
+    		]]>
+    	</method>
+    </view>
+    
+    <om_vscrollbar name="myscrollbar" />
+
+</class>
+    
+
+</library>

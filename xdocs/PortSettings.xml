@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Port settings</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Default Configuration">
+
+			<ul>
+				<li>Port 5080: HTTP (For example for file upload and download) </li>
+				<li>Port 1935: RTMP (Flash Stream and Remoting/RPC) </li>
+				<li>Port 8088: RTMP over HTTP-Tunneling (rtmpT) </li>
+			</ul>
+			<p>Additionally red5 uses some ports internally. However those ports
+				are not in use by OpenMeetings by default.
+			</p>
+
+		</section>
+
+		<section name="Configure alternative ports">
+
+			<p>You need to change two files: </p>
+			<ul>
+				<li>Server-Side configuration: $RED5_HOME/conf/red5.properties, you
+					need to restart the red5-service so that changes are online.
+				</li>
+				<li>Client-Side configuration:
+					$RED5_HOME/webapps/openmeetings/config.xml, you need to clear your
+					browser cache after changing the file.
+				</li>
+				<li>
+					<blockquote>Every server side configuration has a client side
+						representative
+					</blockquote>
+				</li>
+			</ul>
+			<p></p>
+			<table>
+				<tr>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Config-Name </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Default-value </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in red5.properties </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in config.xml </th>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> HTTP </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 5080 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http.port </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> red5httpport </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> RTMP </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1935 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmp.port </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpport </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> RTMPT </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 8088 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpt.host </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpTunnelport </td>
+				</tr>
+			</table>
+
+		</section>
+
+		<section name="Preventing Firewall issues">
+
+			<p>A common way of bypassing the firewall is to change HTTP port to
+				80 and rtmpT to 443.
+			</p>
+			<p>A short description about the connection mechanism: The
+				application first tries connecting to rtmp 3 times, because rtmp is
+				the protocol that is less performance hungry. If that fails the
+				application will fallback to rtmpT.
+			</p>
+			<p>Most firewalls do allow traffic on port 443 and they normally do
+				not analyse the packets, because 443 is normally SSL encrypted, so
+				the firewall should not be able to read the packets at all.
+			</p>
+
+		</section>
+
+		<section name="OpenMeetings over SSL">
+
+			<p>
+				You can run OpenMeetings completely over SSL. See
+				<a href="RTMPSAndHTTPS.html">RTMPSAndHTTPS</a>
+				.
+			</p>
+
+		</section>
+
+	</body>
+
+</document>
