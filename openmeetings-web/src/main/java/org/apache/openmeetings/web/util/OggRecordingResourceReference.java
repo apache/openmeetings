@@ -29,11 +29,11 @@ public class OggRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public OggRecordingResourceReference() {
-		super(OggRecordingResourceReference.class);
+		super();
 	}
 	
 	@Override
-	public String getContentType() {
+	public String getMimeType() {
 		return "video/ogg";
 	}
 	

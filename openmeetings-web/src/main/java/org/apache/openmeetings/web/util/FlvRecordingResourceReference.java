@@ -28,11 +28,11 @@ public class FlvRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public FlvRecordingResourceReference() {
-		super(FlvRecordingResourceReference.class);
+		super();
 	}
 	
 	@Override
-	public String getContentType() {
+	public String getMimeType() {
 		return "video/flv";
 	}
 	
