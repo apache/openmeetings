@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="baseturnOverListPaged" extends="view">
+	
+	<attribute name="start" value="0" type="number" />
+    <attribute name="step" value="100" type="number" />
+    <attribute name="orderby" value="firstname" type="string" />
+    <attribute name="asc" value="true" type="boolean" />
+    <attribute name="records" value="0" type="number" />
+    
+    <attribute name="renderList" value="null"/>
+    
+    <attribute name="_selected" value="null" />
+    
+    <attribute name="_selectedRefObj" value="null" />
+    
+    <attribute name="multiselect" value="true" type="boolean" />
+    <attribute name="selected" value="null" />
+    
+    <attribute name="showTopBar" value="true" type="boolean" />
+    
+    <event name="oncallnext" />
+    <event name="oncallpre" />
+    
+    <!--- @keywords private -->
+    <event name="onload" />
+    
+    <event name="rerender" />
+    
+    <event name="onMoveList" />
+    
+    <event name="onScrollItem" />
+    <event name="onNextScrollItem" />
+    
+    <attribute name="listItemName" value="basePagingListItem" type="string" />
+    
+    <attribute name="itemHeight" value="20" type="number"/>
+    
+    <attribute name="menuBarXIndent" value="0" type="number"/>
+    
+    <attribute name="headerHeight" value="20" type="number" />
+    
+    <attribute name="listLabelId" value="0" type="number" />
+    
+    <attribute name="showHScrollbar" value="visible" type="string"/>
+     
+    <handler name="oninit">
+    	<![CDATA[
+            //this inits the items
+            this._innerlist._inn.initItems(this.listItemName);
+            
+            if (this["_menu"] && this["_menu"]["_pre1"]) {
+                this._menu._pre1.setAttribute('isEnabled',false);
+                this._menu._next2.setAttribute('isEnabled',false);
+                this._menu._next1.setAttribute('isEnabled',false);
+                this._menu._pre2.setAttribute('isEnabled',false);
+            }
+        ]]>
+    </handler>  
+    
+    <handler name="onclickedItem" args="obj" >
+        <![CDATA[
+            this.addToSelection(obj,false); 
+        ]]>
+    </handler>
+    
+    <method name="selectAll">
+        <![CDATA[
+        
+            if (!this.multiselect){
+                if ($debug) Debug.warn("Cannot selectAll when multiselect is FALSE");
+                return;
+            }
+            
+            this._selectedRefObj = new Array();
+            this._selected = new Array();
+            
+            for (var i=0;i<this.renderList.length;i++) {
+            	this.renderList[i].itemSelected = true;
+                this.renderList[i].isselected = true;
+                this._selectedRefObj.push(i);
+            }
+            
+            if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+        
+            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+            	if (this._innerlist._inn._inn.subviews[i].clickable) {
+	            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+		            this._innerlist._inn._inn.subviews[i].isselected = true;
+	                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+            	}
+	        }
+        
+        ]]>
+    </method>
+    
+    <method name="deleteSelected">
+        <![CDATA[
+        
+	        function sortTablePoints(a,b){
+	            var a1 = a;
+	            var b1 = b;
+	            //_root.//Debug.write("natcompare: ",a1,b1,natcompare(a1,b1));
+	            if(a1==b1){
+	                return 0;
+	            } else if(a1>b1){
+	                return 1;
+	            } else {
+	                return -1;
+	            }
+	        }
+            
+            this._selectedRefObj.sort(sortTablePoints);
+            
+            if ($debug) Debug.write("deleteSelected",this._selectedRefObj);
+            
+            if ($debug) Debug.write("-1- this.renderList ",this.renderList.length);
+        
+            for (var i=0;i<this._selectedRefObj.length;i++) {
+                this.renderList.splice(this._selectedRefObj[i],1);
+            }
+            
+            if ($debug) Debug.write("-2- this.renderList ",this.renderList.length);
+            
+            this.deselectAll();
+            
+            this.rerender.sendEvent(this);
+        ]]>
+    </method>
+    
+    <method name="deselectAll">
+        <![CDATA[
+        
+            if (!this.multiselect){
+                if ($debug) Debug.warn("Cannot deselectAll when multiselect is FALSE");
+                return;
+            }
+        
+            this._selectedRefObj = new Array();
+            this._selected = new Array();
+            
+            for (var i=0;i<this.renderList.length;i++) {
+            	this.renderList[i].itemSelected = false;
+                this.renderList[i].isselected = false;
+            }
+            
+            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
+                this._innerlist._inn._inn.subviews[i].isselected = false;
+                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+            }
+        
+        ]]>
+    </method>    
+    
+    <method name="addToSelection" args="obj,forceMultiAdd">
+        <![CDATA[
+        
+            if (this._selected!=null ||this._selectedRefObj!=null){
+                if (this.multiselect){
+                    if (lz.Keys.downKeysArray.length==0 || 
+                        (lz.Keys.downKeysArray[0]!=17 && lz.Keys.downKeysArray[0]!=16)){
+                        if (!forceMultiAdd) {
+
+                            if ($debug) Debug.write("onclickedItem Deselect ALL -1- ",this._selected.length);    
+                            if ($debug) Debug.write("onclickedItem Deselect ALL -2- ",this._selectedRefObj.length);    
+                            
+                            for (var i=0;i<this._selected.length;i++){
+                            	this._selected[i].setAttribute("itemSelected",false);
+                                this._selected[i].isselected = false;
+                                this._selected[i].doDeselect();
+                            }
+                            
+                            for (var i=0;i<this._selectedRefObj.length;i++){
+                                if ($debug) Debug.write("DESELECT ITEM ID ",this._selectedRefObj[i]);
+                                this.renderList[this._selectedRefObj[i]].itemSelected = false;
+                                this.renderList[this._selectedRefObj[i]].isselected = false;
+                            }
+                            
+                        }
+                    } else {
+                        //////if ($debug) //Debug.write("onclickedItem Key Hold IT");
+                        for (var i=0;i<this._selected.length;i++){
+                            if (this._selected[i] == obj) {
+                                //////if ($debug) //Debug.write("Found Object: ",obj);
+                                obj.isselected = false;
+                                if ($debug) Debug.write("DESELECT ITEM ID 2 ",this._selectedRefObj[i]);
+                                this.renderList[this._selectedRefObj[i]].isselected = false;
+                                ////if ($debug) //Debug.write("send onmouseout TO: ",obj);
+                                obj.doDeselect();
+                                this._selected.splice(i,1);
+                                this._selectedRefObj.splice(i,1);
+                                return;
+                            }
+                        }
+                    }
+                } else {
+                    this.renderList[this._selected.itemId].isselected = false;
+                    this._selected.isselected = false;
+                    this._selected.doDeselect();
+                }
+            }
+
+            //////if ($debug) //Debug.write("onclickedItem Set IT");
+            if ($debug) Debug.write("SELECT ITEM ID ",obj.itemId);
+            this.renderList[obj.itemId].isselected = true;
+            obj.isselected = true;
+            obj.onmouseout.sendEvent();
+            if (this.multiselect){
+                if (this._selected==null){
+                    this._selected = new Array();
+                    this._selectedRefObj = new Array();
+                }
+                if ((lz.Keys.downKeysArray.length==1 && 
+                    (lz.Keys.downKeysArray[0]==17 || lz.Keys.downKeysArray[0]==16))
+                    || forceMultiAdd){
+                    this._selected.push(obj);
+                    this._selectedRefObj.push(obj.itemId);
+                } else {
+                    this._selected = new Array();
+                    this._selectedRefObj = new Array();
+                    this._selected.push(obj);
+                    this._selectedRefObj.push(obj.itemId);
+                }
+            } else {
+                this._selected = obj;
+            }
+            
+        ]]>
+    </method>    
+    
+    <!--
+    <handler name="onclickedItem" args="obj" >
+        if (this.selected != null) {
+            this.selected.deselect();
+        }
+        this.selected = obj;
+        this.selected.select();
+    </handler>
+     -->
+    
+    <method name="callfirst">
+        this.start = 0;
+        this.oncallnext.sendEvent();
+        this.onload.sendEvent();
+    </method>
+    
+    <method name="reload">
+    	this.oncallnext.sendEvent();
+        this.onload.sendEvent();
+    </method>
+    
+    <method name="calllast">
+    	var newMaxPages = Math.floor(this.records/this.step);
+    	if ($debug) Debug.write("calllast 1 ",newMaxPages);
+        this.start = newMaxPages*this.step;
+        if ($debug) Debug.write("calllast 2 ",this.start);
+        if (this.start == this.records) {
+        	this.start = this.records-this.step;
+        }
+        if ($debug) Debug.write("calllast 3 ",this.start);
+        if ($debug) Debug.write("calllast 4 ",this.records);
+        this.oncallnext.sendEvent();
+        this.onload.sendEvent();
+        
+        //this.start = this.records-this.step;
+        //this.oncallnext.sendEvent();
+        //this.onload.sendEvent();
+    </method>
+    
+    <method name="callnext">
+        if (this.records>(this.start+this.step)){
+            this.start+=this.step;
+        }
+        this.oncallnext.sendEvent();
+        this.onload.sendEvent();
+    </method>
+    
+    <method name="callpre">
+        if (this.start>0){
+            this.start-=this.step;
+        }
+        this.oncallpre.sendEvent();
+        this.onload.sendEvent();
+    </method>
+    
+    <method name="initValues" args="rec">
+        <![CDATA[
+            this.records = rec;
+            
+            if (this.start == 0) {
+                this._menu._pre1.setAttribute('isEnabled',false);
+            } else {
+                this._menu._pre1.setAttribute('isEnabled',true);
+            }
+            
+            if ((this.start+this.step) >= this.records) {
+                this._menu._next2.setAttribute('isEnabled',false);
+            } else {
+                this._menu._next2.setAttribute('isEnabled',true);
+            }
+            
+            if (this.records>(this.start+this.step)){
+                if (this["_menu"]) this._menu._next1.setAttribute('isEnabled',true);
+            } else {
+                if (this["_menu"]) this._menu._next1.setAttribute('isEnabled',false);
+            }
+            if (this.start>0){
+                if (this["_menu"]) this._menu._pre2.setAttribute('isEnabled',true);
+            } else {
+                if (this["_menu"]) this._menu._pre2.setAttribute('isEnabled',false);
+            }
+            
+            if (this.showTopBar) {
+                
+                var maxRecord = this.start+this.step;
+                if ((this.start+this.step) > this.records) {
+                    maxRecord = this.records;
+                }
+                
+                this._records.setAttribute("text",(this.start+1) + ' - ' + maxRecord + ' von ' + this.records);
+                
+            } else {
+                
+                this._records.setAttribute("text",rec);
+            }
+        ]]>
+    </method>
+    
+    <method name="addHeaderItem" args="labelid,width" >
+        new lz.turnoverlistheaderitemResize(this._innerlisthead._inn,{
+                labelid:labelid,width:width,
+                subviewsid:this._innerlisthead._inn.subviews.length
+            });
+    </method>
+    
+    <method name="clearHead">
+        for (var eg in this._innerlisthead._inn.subviews) {
+            this._innerlisthead._inn.subviews[eg].destroy();
+        }
+    </method>
+    
+    <method name="addHeaderItemByText" args="zText,width" >
+        new lz.turnoverlistheaderitemResize(this._innerlisthead._inn,{
+                text:zText,width:width,
+                subviewsid:this._innerlisthead._inn.subviews.length
+            });
+    </method>
+    
+    <method name="addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected" >
+    	if ($debug) Debug.write("turnOverListHeaderItemOrdered ",labelid,width,orderBy,asc,isSelected);
+        new lz.turnOverListHeaderItemOrdered(this._innerlisthead._inn,{
+                labelid:labelid,width:width,
+                orderBy:orderBy,asc:asc,isSelected:isSelected,
+                subviewsid:this._innerlisthead._inn.subviews.length
+            });
+    </method> 
+    
+    <method name="setSelectionOrder" args="orderBy,asc">
+    	<![CDATA[
+    		
+    		for (var i=0;i<this._innerlisthead._inn.subviews.length;i++) {
+    			
+    			if (this._innerlisthead._inn.subviews[i]["orderBy"] && 
+    					this._innerlisthead._inn.subviews[i].orderBy == orderBy) {
+    				
+    				if (this.currentSelectedOrder != null) {
+    					this.currentSelectedOrder.isSelected = false;
+    				}
+    				
+					this._innerlisthead._inn.subviews[i].isSelected = true;
+    				this._innerlisthead._inn.subviews[i].asc = !asc;
+    				
+    				this._innerlisthead._inn.subviews[i].onclick.sendEvent();
+    				
+    				return;
+    				
+    			}
+    			
+    		}
+    	
+    	]]>
+    </method>
+    
+    <method name="sendInitialWidthUpdate">
+        for (var eg in this._innerlisthead._inn.subviews) {
+            this._innerlisthead._inn.subviews[eg].onwidth.sendEvent(this._innerlisthead._inn.subviews[eg].width);
+        }
+    </method> 
+    
+    <method name="sendWidthUpdate" args="w,subviewsid" >
+        <![CDATA[
+        ////Debug.write(w,subviewsid,this._innerlist._inn);
+        for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+            this._innerlist._inn._inn.subviews[i].subviews[subviewsid].setAttribute('width',w+1);
+        }
+        ]]>
+    </method>
+    
+    <method name="getListItemNumber">
+        return this._innerlist._inn._inn.subviews.length;
+    </method>
+    
+    <method name="getItemByNumber" args="itemNo">
+        <![CDATA[
+	        if ($debug) Debug.write("getItemByNumber",itemNo);
+	        for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+                if ($debug) Debug.write("getItemByNumber :: ",this._innerlist._inn._inn.subviews[i].itemId);
+	            if (this._innerlist._inn._inn.subviews[i].itemId == itemNo) {
+                    return this._innerlist._inn._inn.subviews[i];
+                }
+	        }
+        ]]>
+        return this._innerlist._inn._inn.subviews[itemNo];
+    </method>
+    
+    <method name="clearList">
+        this._innerlist._inn._inn.destroy();
+        new lz.innerListPagingContent(this._innerlist._inn,{name:'_inn'});
+    </method>
+    
+    <method name="initItemsBySubItemNo" args="itemName,noSubItems,subItemClassName">
+        this._innerlist.initItemsBySubItemNo(itemName,noSubItems,subItemClassName);
+    </method>
+
+    <labelText labelid="${ parent.listLabelId }" visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }"
+                       y="4" fontsize="10" x="2" />
+                       
+    <text fontsize="10" y="4" x="$once{ (!parent.showTopBar) ? 64+parent.menuBarXIndent : 2+parent.menuBarXIndent }"
+          name="_records" resize="true" visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }" />
+    
+    <!-- =========  List Header area  =========-->
+    <view name="_innerlisthead" height="${ parent.headerHeight }" width="${ parent.width }" y="$once{ parent.headerHeight + 2 }" clip="true">
+        <view name="_inn" x="${ parent.parent._innerlist._inn.x }" layout="axis:x;spacing:0" />
+    </view> 
+    
+    <!-- =========  List Contents area  =========-->   
+    <listPagedContent name="_innerlist" height="${ parent.height-22-parent.headerHeight }" bgcolor="0xFFFFFF"
+          width="${ parent.width }" y="$once{ parent.headerHeight + 22 }" showHScrollbar="$once{ parent.showHScrollbar }"
+          itemHeight="$once{ parent.itemHeight }" />
+</class>
+	
+<!--- common TurnOverList view class. -->
+<class name="turnOverListPaged" extends="baseturnOverListPaged">
+
+    <!-- =========  Control area  =========-->
+    <view name="_menu" align="right" y="2" width="180"
+          visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
+    	
+	    <!-- 368:goto first -->
+	    <blueButton name="_pre1" y="0" x="0" resourceItem="step_back_two_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
+			<handler name="onclick">
+				parent.parent.callfirst();
+	        </handler>
+	        <labelTooltip labelid="368" />
+	    </blueButton>
+	
+	    <!-- 369:goto previous -->
+	    <blueButton name="_pre2" y="0" x="20" resourceItem="step_back_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
+			<handler name="onclick">
+				parent.parent.callpre();
+	        </handler>
+	        <labelTooltip labelid="369" />
+	    </blueButton>
+    	<resetCombobox name="_step" width="100" x="40" editable="false" fontsize="10" height="20" >
+            <attribute name="sendEventToReload" value="false" type="boolean" />
+            <textlistitem value="10" text="10" />
+            <textlistitem value="25" text="25" />
+            <textlistitem value="50" text="50" />
+            <textlistitem value="75" text="75" />
+            <textlistitem value="100" text="100" />
+            <textlistitem value="200" text="200" />
+            <textlistitem value="500" text="500" />
+            <textlistitem value="1000" text="1000" />
+            <textlistitem value="2500" text="2500" />
+            <textlistitem value="5000" text="5000" />
+            <handler name="onselect">
+                if (this.sendEventToReload){ 
+                	parent.parent.start = 0;
+                    parent.parent.setAttribute('step',Number(this.getValue()));
+                    parent.parent.onload.sendEvent();
+                }
+            </handler>
+            <handler name="oninit">
+                this.selectItem(String(parent.parent.step));
+                this.sendEventToReload = true;
+            </handler>
+        </resetCombobox>
+        
+        <!-- 370:goto next -->
+        <blueButton name="_next1" y="0" x="140" resourceItem="step_fwd_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
+			<handler name="onclick">
+				parent.parent.callnext();
+	        </handler>
+	        <labelTooltip labelid="370" />
+	    </blueButton>
+		
+	    <!-- 371:goto last -->
+	    <blueButton name="_next2" y="0" x="160" resourceItem="step_fwd_two_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
+			<handler name="onclick">
+				parent.parent.calllast();
+	        </handler>
+	        <labelTooltip labelid="371" />
+	    </blueButton>
+		
+		<view width="2" />
+    </view>
+    
+</class>
+
+</library>

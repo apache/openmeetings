@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Empfehlung 
+					f&uuml;r Produktivumgebungen<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			Standardm&auml;&szlig;ig verwendet {0} die integrierte 
+			Apache Derby Datenbank. In Produktivumgebungen wird jedoch der Einsatz von 
+			<a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>, <a 
+				target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a> 
+			oder <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a> empfohlen.
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Import von Bildern auf 
+					das Whiteboard erm&ouml;glichen<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>ImageMagick</strong> auf dem Server. Weitere
+					Informationen unter <a target="_blank"
+					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>.
+					Anleitungen f&uuml;r die Installation finden Sie unter <a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>, in den
+					meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager
+					(z.B. apt-get) installieren.
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Import von PDF-Dateien auf das
+					Whiteboard erm&ouml;glichen<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>GhostScript</strong> auf dem Server. Weitere
+					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
+					In den meisten Linux-Distributionen l&auml;sst es sich bequem per Paketmanager
+					(z.B. apt-get) installieren.
+				</li>
+				<li>Installieren Sie <strong>SWFTools</strong> auf dem Server. Weitere 
+					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>. 
+					Einige Linux-Distributionen haben es bereits in ihre Paketquellen aufgenommen (siehe 
+					<a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>).
+					Die empfohlene Version von <strong>SWFTools</strong> ist 0.9 - fr&uuml;here Versionen
+					enthalten einen Bug, welcher zu falschen Objektausdehnungen auf dem Whiteboard 
+					f&uuml;hrt.
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Import von 
+					Office-Dokumenten (.doc, .docx, .ppt, .pptx, etc.) auf das Whiteboard erm&ouml;glichen
+					<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li><strong>OpenOffice-Service</strong> muss gestartet worden sein und auf Port 8100 lauschen, 
+					siehe <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>.</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Aufzeichnung und 
+					Import von Videos (.avi, .flv, .mov und .mp4) auf das Whiteboard erm&ouml;glichen<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>FFmpeg</strong>. Sie sollten die neueste Version verwenden! 
+					Windows-Binaries finden Sie z.B. unter 
+					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a>. Linux- oder OSx-Nutzer sollten 
+					eine der zahlreichen Installationsanleitungen im Web zu Rate ziehen. libmp3lame muss 
+					aktiviert sein!
+				</li>
+				<li>Installieren Sie <strong>SoX</strong> <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					Sie sollten die neueste Version verwenden! SoX 12.xx wird NICHT funktionieren!
+				</li>
+			</ul>
+		</li>
+	</ol>
+
+	<br />
+	<b> <span style="font-size: 1.2em">Falls Sie weitere Fragen haben oder Support bei Installation und Hosting 
+			ben&ouml;tigen:</span></b>
+	<br />
+	<br />
+    <br />
+	<br />
+	<b><span style="font-size: 1.2em">Support durch die OpenMeetings-Community:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Mailinglisten</a></span>
+	<br />
+	<br />
+    <br />
+	<b> <span style="font-size: 1.4em">Einige Unternehmen bieten kommerziellen Support
+    f&uuml;r Apache OpenMeetings an:</span></b>
+    <br />
+    <br />
+
+    <span style="font-size: 1.3em"><a
+        href="http://openmeetings.apache.org/commercial-support.html"
+        target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
+    <br />
+	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Nutzerdaten</entry>
+	<entry key="install.wizard.params.step1.username">Nutzername</entry>
+	<entry key="install.wizard.params.step1.username.title">Geben Sie einen Nutzernamen ein</entry>
+	<entry key="install.wizard.params.step1.password">Nutzerpasswort</entry>
+	<entry key="install.wizard.params.step1.password.title">Geben Sie ein Passwort ein</entry>
+	<entry key="install.wizard.params.step1.email">E-Mail</entry>
+	<entry key="install.wizard.params.step1.email.title">Geben Sie eine E-Mail-Adresse ein</entry>
+	<entry key="install.wizard.params.step1.tz">Zeitzone</entry>
+	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
+	<entry key="install.wizard.params.step1.group">Name</entry>
+	<entry key="install.wizard.params.step1.group.title">Geben Sie den Namen Ihrer Organisation ein</entry>
+
+	<entry key="install.wizard.params.step2.configuration">Konfiguration</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Neuen Nutzern erlauben, sich zu registrieren (allow_frontend_register)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">E-Mail an neu registrierte Nutzer senden (sendEmailAtRegister)</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Neu registrierte Nutzer m&uuml;ssen Ihre E-Mail-Adresse verifizieren (sendEmailWithVerficationCode)]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Beispielr&auml;ume aller Raumtypen erstellen]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer">Mail-Referer (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Enter a Referer</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP-Server (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Enter a SMTP-Server</entry>
+	<entry key="install.wizard.params.step2.smtpPort">SMTP-Server-Port(Standard ist 25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Enter a SMTP-Server.Port normally 25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Nutzername (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Enter the mail-username</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Nutzerpasswort (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Enter the mail-userpass</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">TLS zur Mailserver-Authentifizierung aktivieren</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">Die E-Mail-Adresse des Einladenden als 'ReplyTo'-Adresse
+					in E-Mail-Einladungen verwenden (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Voreingestellte Sprache</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Voreingestellte Schriftart beim Export [default_export_font]</entry>
+
+	<entry key="install.wizard.params.step3.converters">Konverter</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> Siehe</entry>
+	<entry key="install.wizard.params.step3.installation">Installation</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title"><![CDATA[Geben Sie an, wieviel dpi swftools f&uuml;r die 'PDF zu SWF'-Konvertierung nutzen soll.]]></entry>
+	<entry key="install.wizard.params.step3.swfZoom.text"><![CDATA[Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
+		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
+		und pdf2swf eingeben.
+		Geben Sie an, wieviel dpi swftools f&uuml;r die 'PDF zu SWF'-Konvertierung nutzen soll.
+		Voreingestellter Wert ist 100 dpi.]]></entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality"><![CDATA[SWFTools JPEG-Qualit&auml;t]]></entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title"><![CDATA[Geben Sie an, welche Qualit&auml;tsstufe f&uuml;r eingebettete JPEG-Bilder verwendet werden soll.]]></entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text"><![CDATA[Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
+		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
+		und pdf2swf eingeben.
+		Geben Sie an, welche Qualit&auml;tsstufe f&uuml;r eingebettete JPEG-Bilder 
+		verwendet werden soll. 0 bedeutet schlechteste Qualit&auml;t (kleinste 
+		Dateigr&ouml;&szlig;e), 100 bedeutet beste Qualit&auml;t (gr&ouml;&szlig;te 
+		Dateigr&ouml;&szlig;e) (Voreinstellung: 85)]]></entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools-Pfad</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Geben Sie den Pfad zu swftools an, z.B. C:/swftools (Windows), falls es sich nicht im Systempfad befindet.</entry>
+	<entry key="install.wizard.params.step3.swfPath.text"><![CDATA[
+		Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
+		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
+		und pdf2swf eingeben. Wenn daraufhin eine Liste mit Optionen angezeigt wird, 
+		k&ouml;nen Sie dieses Feld leer lassen. Ansonsten m&uuml;ssen Sie den Pfad 
+		zu pdf2swf hier eintragen.
+	]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick-Pfad</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">Geben Sie den Pfad zu ImageMagick an, falls es sich nicht im Systempfad befindet.</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG-Pfad</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">Geben Sie den Pfad zu FFMPEG an, falls es sich nicht im Systempfad befindet.</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath">SoX-Pfad</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Geben Sie den Pfad zu SoX an, falls es sich nicht im Systempfad befindet.</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath">JOD-Pfad</entry>
+	<entry key="install.wizard.params.step3.jodPath.title"><![CDATA[Der Pfad zur JOD-Bibliothek (http://code.google.com/p/jodconverter). Beachten Sie, dass der Pfad auf das lib-Verzeichnis zeigen muss, welches auch jodconverter-core-version.jar enth&auml;lt.]]></entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice-/LibreOffice-Pfad f&uuml;r jodconverter]]></entry>
+	<entry key="install.wizard.params.step3.officePath.title">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den echten Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.</entry>
+	<entry key="install.wizard.params.step3.officePath.text">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls 
+					jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.
+	</entry>
+
+	<entry key="install.wizard.params.step4.crypt">Krypto-Typ</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Krypto-Klasse</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Geben Sie den Klassennamen der Krypto-Klasse an. &Auml;NDERN SIE DIESEN WERT NICHT, WENN SIE SICH NICHT SICHER SIND!]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Sie k&ouml;nnen den voreingestellten Krypto-Typ (welcher der 
+		PHP-MD5-Funktion entspricht) benutzen, oder Sie geben 
+		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		ein, um BSD-artige Verschl&uuml;sselung zu benutzen. F&uuml;r 
+		weitergehende Informationen, auch zum Schreiben einer eigenen 
+		Krypto-Klasse, siehe <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Custom Crypt Mechanism</a>. Sie k&ouml;nnen diesen 
+		Wert sp&auml;ter ver&auml;ndern, ABER vorher erstellte Nutzer und 
+		Sitzungen k&ouml;nnten anschlie&szlig;end unbenutzbar sein. 
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP">red5SIP Configuration</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">SIP aktivieren</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">red5SIP-Integration aktivieren</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[Pr&auml;fix f&uuml;r SIP-R&auml;ume]]></entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Pr&auml;fix f&uuml;r Telefonnummer der Konferenzr&auml;ume]]></entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP-Erweiterungskontext</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Kontext f&uuml;r Asterisk-Erweiterungen]]></entry>
+
+	<entry key="install.wizard.install.desc">Bitte klicken Sie auf "Finish" um die Installation zu starten!</entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter"><![CDATA[&Ouml;ffnen der Anwendung]]></entry>
+	<entry key="install.wizard.congrats.port">Falls Ihr Red5-Server einen anderen Port oder eine andere Domain benutzt, sollten Sie</entry>
+	<entry key="install.wizard.congrats.config">die Konfiguration des Clients anpassen</entry>
+	<entry key="install.wizard.congrats.mail">Mailingliste</entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Einige Unternehmen bieten kommerziellen Support
+		f&uuml;r Apache OpenMeetings an:]]></entry>
+</properties>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+
+<canvas debug="true" width="100%" height="100%" fontsize="14" title="OpenMeetings - Computer testing">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+    
+    <!-- private class for conferenceMenubar class -->
+    <class name="_labelMenuItem" extends="menuitem" text="labelmenulabelmenulabelmenu">
+        <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+        <method name="setLabelId" args="_labelid" >
+            this.labelid = _labelid;
+            this.setAttribute('text',"text "+this.labelid);
+        </method>
+    </class>    
+        
+    <!-- private class for conferenceMenubar class -->
+    <class name="_labelMenu" extends="menu" text="labelmenulabelmenulabelmenu">
+        <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+        <method name="setLabelId" args="_labelid" >
+            this.labelid = _labelid;
+            this.setAttribute('text',"text "+this.labelid);
+        </method>
+    </class>  
+    
+    <class name="conferenceMenubar" extends="menubar" height="28" >
+       <!-- exit room -->
+        <_labelMenu labelid="308" width="250">
+            <_labelMenuItem labelid="309" />
+        </_labelMenu>
+        <!-- moderator menu -->
+        <_labelMenu labelid="301" width="250">
+            <_labelMenuItem labelid="302" />
+        </_labelMenu>
+        <!-- file menu -->
+        <_labelMenu labelid="245" width="250">
+            <_labelMenuItem labelid="15" />
+        </_labelMenu>    
+       <!-- setteings menu --> 
+        <_labelMenu labelid="305" width="250">
+            <_labelMenuItem labelid="306" />
+            <_labelMenuItem labelid="307" />
+        </_labelMenu>   
+        <!-- poll memu -->     
+        <_labelMenu labelid="303" width="250">
+            <_labelMenuItem width="250" labelid="24" />
+            <_labelMenuItem width="250" labelid="37" />
+            <_labelMenuItem width="250" labelid="42" />
+        </_labelMenu>    
+    </class>    
+    
+    
+    <handler name="oninit">
+        new lz.conferenceMenubar(canvas);
+    </handler>
+    
+</canvas>

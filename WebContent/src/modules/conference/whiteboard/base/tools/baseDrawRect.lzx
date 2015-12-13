@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawRect" extends="baseDrawSelect" >
+    
+    <!--  
+        for drawing rectangles the variable 
+        with *Dis* indicates if the line/fil-color is active (+1/-1)
+     -->
+    <attribute name="currentrectanglestroke" value="0xFF6600" />
+    <attribute name="currentrectanglestrokeDis" value="1" type="number" />
+    <attribute name="currentrectanglestrokeFill" value="0xFFFF33" />
+    <attribute name="currentrectanglestrokeFillDis" value="1" type="number" />
+    <attribute name="currentrectangleineWidth" value="4" type="number" />
+    <attribute name="currentrectangleOpacity" value="1" type="number" />
+      
+    <!-- ###########################
+        Rectangle
+     -->
+    
+    <method name="startRect" args="oid_name">
+        if (oid_name == null){
+            oid_name = 'rectangle'+this.getCounter();
+        }
+        //Debug.write("startRect");
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width,height:this.height,
+            opacity:this.currentrectangleOpacity});
+
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    </method>  
+
+    <method name="endRect">
+        <![CDATA[        
+        
+            ////Debug.write(" this.startx, this.starty , this.endx, this.endy ",this.startx, this.starty , this.endx, this.endy);
+            var tmpName = this.currentlayer.name;
+            this.currentlayer.destroy();
+            var x = this.startx;
+            var width = this.endx - this.startx;
+            if (this.endx<this.startx){
+                x = this.endx;
+                width = Math.abs(width);
+            }
+            var y = this.starty;
+            var height = this.endy - this.starty;
+            if (this.endy<this.starty){
+                y = this.endy;
+                height = Math.abs(height);
+            }
+            
+            if(this.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            } 
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                name:tmpName,x:x,y:y,width:width,height:height,
+                opacity:this.currentrectangleOpacity});
+                
+            new lz.drawViewInner(this.currentlayer,{
+                name:'_innerRect',x:0,y:0,width:width,height:height});
+                
+            this.drawrectangleHistory(this.currentlayer,0,0,width,height,
+                this.currentrectanglestroke,this.currentrectangleineWidth,
+                this.currentrectanglestrokeFill,this.currentrectanglestrokeDis,
+                this.currentrectanglestrokeFillDis);
+            //this.currentlayer.setAttribute('stretches','both');
+            this.drawrectregisterFinal(this.currentlayer.name,this.currentrectanglestroke,
+                this.currentrectangleineWidth,this.currentrectanglestrokeFill,
+                this.currentrectanglestrokeDis,this.currentrectanglestrokeFillDis,
+                x,y,width,height,this.getSWFDocumentStatus(),
+                this.getZIndex());
+            this.layers.push(this.currentlayer);
+            this.checkStepLayers();
+        ]]>
+    </method> 
+    
+    <!--
+        Terminate the usage of this function
+     --> 
+    <method name="drawrectangle" args="x1,y1,x2,y2">
+        <![CDATA[
+            
+            currentlayer.lineWidth = this.currentrectangleineWidth;
+            currentlayer.beginPath();
+            currentlayer.moveTo(x1,y1);
+            currentlayer.lineTo(x1,y2);
+            currentlayer.lineTo(x2,y2);
+            currentlayer.lineTo(x2,y1);
+            currentlayer.lineTo (x1,y1);
+            currentlayer.closePath();
+            
+            if (this.currentrectanglestrokeDis!=-1){
+                currentlayer.strokeStyle = this.currentrectanglestroke;
+                currentlayer.stroke();
+            }
+
+            if (this.currentrectanglestrokeFillDis!=-1){
+                currentlayer.fillStyle = this.currentrectanglestrokeFill;
+                currentlayer.fill();
+            }
+            
+        ]]>   
+    </method>   
+    
+    <method name="redrawRectItemByScaling" args="objRef">
+        //if ($debug) Debug.write("redrawRectItemByScaling: "+objRef);
+        this.currentlayer = objRef;
+        this.currentlayer._innerRect.destroy();
+        new lz.drawViewInner(this.currentlayer,{
+            name:'_innerRect',x:0,y:0,width:objRef.width,height:objRef.height});
+        this.drawrectangleHistory(this.currentlayer,0,0,
+            objRef.width,objRef.height,
+            this.currentrectanglestroke,this.currentrectangleineWidth,
+            this.currentrectanglestrokeFill,this.currentrectanglestrokeDis,
+            this.currentrectanglestrokeFillDis);
+    </method> 
+    
+    <method name="drawrectangleToHistory" args="lastActionObject,parentView">
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+            name:lastActionObject[lastActionObject.length-1],
+            x:lastActionObject[lastActionObject.length-5],
+            y:lastActionObject[lastActionObject.length-4],
+            width:lastActionObject[lastActionObject.length-3],
+            height:lastActionObject[lastActionObject.length-2],
+            opacity:lastActionObject[6]});
+        new lz.drawViewInner(tmpCurrentlayer,{
+                name:'_innerRect',x:0,y:0,
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2]});
+        this.drawrectangleHistory(tmpCurrentlayer,0,0,
+            lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
+            lastActionObject[1],lastActionObject[2],lastActionObject[3],lastActionObject[4],lastActionObject[5]);
+            
+        this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+    </method>
+    
+    <method name="drawrectangleHistory" args="parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis">
+        <![CDATA[
+            //Debug.write("drawrectangleHistory",parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis);
+            parentObj._innerRect.lineWidth = line;
+            parentObj._innerRect.beginPath();
+            parentObj._innerRect.moveTo(x1,y1);
+            parentObj._innerRect.lineTo(x1,y2);
+            parentObj._innerRect.lineTo(x2,y2);
+            parentObj._innerRect.lineTo(x2,y1);
+            parentObj._innerRect.lineTo (x1,y1);
+            
+            if (strokeDis!=-1){
+                parentObj._innerRect.strokeStyle = stroke;
+                parentObj._innerRect.stroke();
+            }
+            
+            if (fillDis!=-1){
+                parentObj._innerRect.fillStyle = fill;
+                parentObj._innerRect.fill();
+            }
+            
+        ]]>   
+    </method>  
+    
+    <method name="drawrectregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height,swfObj,zIndex" >
+        Debug.write("drawrectregisterFinal",newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height);
+        var actionObject = new Array();
+        actionObject[0] = 'rectangle';
+        actionObject[1] = stroke;
+        actionObject[2] = line;
+        actionObject[3] = fill;
+        actionObject[4] = strokeDis;
+        actionObject[5] = fillDis;
+        actionObject[6] = this.currentrectangleOpacity;
+        actionObject[7] = zIndex;//-8
+        actionObject[8] = swfObj;//-7
+        actionObject[9] = this.counter;//-6
+        actionObject[10] = x;//-5
+        actionObject[11] = y;//-4
+        actionObject[12] = width;//-3
+        actionObject[13] = height;//-2  
+        actionObject[14] = newName;//-1
+        this.baseactionobjectList.push(actionObject);
+        this.onsharedMessage('draw',actionObject);
+    </method>
+    
+</class>
+
+</library>

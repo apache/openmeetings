@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<ivysettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="ivysettings.xsd">
+	<settings defaultResolver="chain"/>
+	<resolvers>
+		<chain name="chain">
+			<ibiblio name="central" m2compatible="true"/>
+			<ibiblio name="apache-public" m2compatible="true" root="https://repository.apache.org/content/groups/public" />
+			<url name="mavencentral">
+				<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="sonatype" m2compatible="true">
+				<artifact pattern="https://oss.sonatype.org/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="svnkit" m2compatible="true">
+				<artifact pattern="http://maven.tmatesoft.com/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="googlecode">
+				<artifact pattern="https://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
+			</url>
+			<url name="smslib" m2compatible="true">
+				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<!--url name="wicket-jquery-ui" m2compatible="true">
+				<artifact pattern="https://oss.sonatype.org/content/repositories/snapshots/[organisation]/[artifact]/6.13.1-SNAPSHOT/[artifact]-[revision].[ext]" />
+			</url-->
+		</chain>
+	</resolvers>
+	<triggers>
+		<ant-call target="-extract-tgz" prefix="dep" event="post-download-artifact" filter="type=tgz"/>
+	</triggers>
+</ivysettings>
+

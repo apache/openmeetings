@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="labelTooltip" extends="view" visible="false" >
+
+	<attribute name="inittwice" value="false" type="boolean" />
+    <attribute name="multiline" value="false" type="boolean" />
+    <attribute name="ismenubuttonlabel" value="false" type="boolean" />
+    <attribute name="initByDataPathparent" value="false" type="boolean" />
+    
+    <attribute name="holder" value="null" />
+    
+    <event name="setContent" />
+        
+    <handler name="onmouseover" reference="this.parent">
+    	<![CDATA[
+            this.doonmouseover();
+        ]]>        
+    </handler>
+    <handler name="onmouseout" reference="this.parent">
+        this.cleanHolder();
+    </handler>
+    
+    <method name="doonmouseover">
+    	<![CDATA[
+            this.setContent.sendEvent();
+	    	if (this.ismenubuttonlabel){
+	    		this.parent.setLabel();
+	    	}
+	    	if (this.inittwice){
+	    		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	    	}
+	    	if (this.initByDataPathparent){
+                this.setAttribute('text',parent.text);
+            }
+	        var xVal = canvas.getMouse('x');
+	        var yVal = canvas.getMouse('y');
+			////Debug.write("mytext: ",this.mytext);
+			if (this.multiline && this.text.length!=0){
+				this.holder = new lz.xmlCrmTooltipMulti(canvas,{text:this.text,holder:this});
+			} else if (this.text.length!=0){
+				this.holder = new lz.xmlCrmTooltip(canvas,{text:this.text,holder:this});
+			}
+	        if (xVal<canvas.width/2){
+	            xVal += 0;
+	        } else {
+	            xVal -= this.holder.width-14;
+	        }
+	        if (yVal<canvas.height/2){
+	            yVal += 24;
+	        } else {
+	            yVal -= 24;
+	        }
+	        this.holder.setAttribute('x',xVal);
+	        this.holder.setAttribute('y',yVal);
+	        canvas.registerToolTip(this);
+        ]]>        
+    </method>
+    
+    <handler name="onmouseup" reference="this.parent">
+        this.cleanHolder();
+    </handler>
+    <handler name="onclick" reference="this.parent">
+        this.cleanHolder();
+    </handler>  
+    
+    <method name="cleanHolder">
+        if (this.holder!=null) {
+            this.holder.destroy();
+            this.holder = null; 
+            canvas.clearToolTip();
+        }
+    </method> 
+      
+    <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+    <attribute name="text" value="" type="string" />
+</class>
+
+<class name="xmlCrmTooltip" extends="view" bgcolor="0x000000"
+    width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+    <switch>
+	  <when property="$as3">
+		<passthrough>
+		  import flash.filters.DropShadowFilter;
+		</passthrough>
+	  </when>
+	</switch>
+    <attribute name="text" value="" type="string" />
+    <attribute name="holder" value="null" />
+    <text x="1" y="1" text="${ parent.text }" resize="true" 
+        fontsize="10" name="_text" bgcolor="0xFFFFFF" />
+    <handler name="onmouseout">
+        this.destroy();
+    </handler>
+    <handler name="oninit">
+        this.setShadow();
+    </handler>
+    <method name="setShadow" >
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getDisplayObject();
+           	this.displacementMap = new DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method> 
+</class>
+
+<class name="xmlCrmTooltipMulti" extends="view" bgcolor="0x000000" 
+    width="${ this._text.width+2 }" height="${ this._text.height+2 }" >
+    <switch>
+	  <when property="$as3">
+		<passthrough>
+		  import flash.filters.DropShadowFilter;
+		</passthrough>
+	  </when>
+	</switch>
+    <attribute name="text" value="" type="string" />
+    <attribute name="holder" value="null" />
+    <text x="1" y="1" text="${ parent.text }" resize="true" 
+        fontsize="10" name="_text" bgcolor="0xFFFFFF" multiline="true" />
+    <handler name="oninit">
+        this.setShadow();
+    </handler>
+    <method name="setShadow" >
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getDisplayObject();
+           	this.displacementMap = new DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method>	    
+    <handler name="onmouseout">
+        this.destroy();
+    </handler>
+</class>
+
+</library>
