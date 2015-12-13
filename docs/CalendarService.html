@@ -1,0 +1,1247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE TEMPLATE INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    
+     <html>
+        <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
+		<title>OpenMeetings API Methods</title>
+		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
+        </head>
+	<body>
+	
+		<h3>Available WebServices:</h3>
+	
+		<iframe src="WebserviceIndex.html" width="100%" height="210" name="WebserviceIndex.html"
+			scrolling="no" marginheight="0" marginwidth="0" frameborder="0">
+		  <p>Your Browser does not support frames ...</p>
+		</iframe>
+		
+		<hr />
+	
+	   <h3>WebService: CalendarService</h3>
+	   <p>CalendarService contains methods to create, edit delete calendar meetings<p>
+	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/CalendarService?wsdl">http://localhost:5080/openmeetings/services/CalendarService?wsdl</a><p>
+	
+	<!-- Links to Methods -->
+	   <h3>Index of Methods available in CalendarService</h3>
+	   
+       <div class="navigation">
+	                               <div>
+                <a href="#getAppointmentByRange"><b>getAppointmentByRange</b></a><br/>
+                <div class="navigation_comment"><i >Load appointments by a start / end range for the current SID</i></div>
+                </div>
+                                               <div>
+                <a href="#getAppointmentByRangeForUserId"><b>getAppointmentByRangeForUserId</b></a><br/>
+                <div class="navigation_comment"><i >Load appointments by a start / end range for the userId</i></div>
+                </div>
+                                               <div>
+                <a href="#getNextAppointment"><b>getNextAppointment</b></a><br/>
+                <div class="navigation_comment"><i >Get the next Calendar event for the current user of the SID</i></div>
+                </div>
+                                               <div>
+                <a href="#getNextAppointmentForUserId"><b>getNextAppointmentForUserId</b></a><br/>
+                <div class="navigation_comment"><i >Get the next Calendar event for userId</i></div>
+                </div>
+                                               <div>
+                <a href="#searchAppointmentByName"><b>searchAppointmentByName</b></a><br/>
+                <div class="navigation_comment"><i >Search a calendar event for the current SID</i></div>
+                </div>
+                                               <div>
+                <a href="#saveAppointment"><b>saveAppointment</b></a><br/>
+                <div class="navigation_comment"><i >Save an appointment</i></div>
+                </div>
+                                               <div>
+                <a href="#updateAppointmentTimeOnly"><b>updateAppointmentTimeOnly</b></a><br/>
+                <div class="navigation_comment"><i >Update an calendar event time only</i></div>
+                </div>
+                                               <div>
+                <a href="#updateAppointment"><b>updateAppointment</b></a><br/>
+                <div class="navigation_comment"><i >Save an appointment</i></div>
+                </div>
+                                               <div>
+                <a href="#deleteAppointment"><b>deleteAppointment</b></a><br/>
+                <div class="navigation_comment"><i >delete a calendar event
+ 
+ If the given SID is from an Administrator or Web-Service user, the user
+ can delete any appointment.<br/>
+ If the SID is assigned to a simple user, he can only delete appointments
+ where he is also the owner/creator of the appointment</i></div>
+                </div>
+                                               <div>
+                <a href="#getAppointmentByRoomId"><b>getAppointmentByRoomId</b></a><br/>
+                <div class="navigation_comment"><i >Load a calendar event by its room id</i></div>
+                </div>
+                                               <div>
+                <a href="#getAppointmentCategoryList"><b>getAppointmentCategoryList</b></a><br/>
+                <div class="navigation_comment"><i >Get all categories of calendar events</i></div>
+                </div>
+                                               <div>
+                <a href="#getAppointmentReminderTypList"><b>getAppointmentReminderTypList</b></a><br/>
+                <div class="navigation_comment"><i >Get all reminder types for calendar events</i></div>
+                </div>
+                                               <div>
+                <a href="#getAppointmentsByWeekCalendar"><b>getAppointmentsByWeekCalendar</b></a><br/>
+                <div class="navigation_comment"><i >Get the appointments (calendar events) for the given requestUserId <br/>
+ The TimeZone can be either given by the Id of the timezone in the table
+ "om_timezone" with the param timeZoneIdA <br/>
+ Or with the java name of the TimeZone in the param javaTimeZoneName</i></div>
+                </div>
+                           </div>
+	   
+	    <h3>Methods Details in CalendarService</h3>
+	
+				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentByRange" ><b>getAppointmentByRange</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentByRange (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Date starttime
+    			       			    			       			     , 
+    			       			   Date endtime
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Load appointments by a start / end range for the current SID
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">starttime</td>
+	                     <td valign="top">start time, yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">endtime</td>
+	                     <td valign="top">end time, yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?SID=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?SID=VALUE&amp;starttime=VALUE&amp;endtime=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentByRangeForUserId" ><b>getAppointmentByRangeForUserId</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentByRangeForUserId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long userId
+    			       			    			       			     , 
+    			       			   Date starttime
+    			       			    			       			     , 
+    			       			   Date endtime
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Load appointments by a start / end range for the userId
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		long
+	                     		                     </td>
+	                     <td valign="top">userId</td>
+	                     <td valign="top">the userId the calendar events should be loaded</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">starttime</td>
+	                     <td valign="top">start time, yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">endtime</td>
+	                     <td valign="top">end time, yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?SID=VALUE&userId=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?SID=VALUE&amp;userId=VALUE&amp;starttime=VALUE&amp;endtime=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getNextAppointment" ><b>getNextAppointment</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getNextAppointment (
+    			    			    			       			   String SID
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get the next Calendar event for the current user of the SID
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.calendar.Appointment
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?SID=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getNextAppointmentForUserId" ><b>getNextAppointmentForUserId</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getNextAppointmentForUserId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long userId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get the next Calendar event for userId
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.calendar.Appointment
+                </p>
+    			<p>Params:</p>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?SID=VALUE&userId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?SID=VALUE&amp;userId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="searchAppointmentByName" ><b>searchAppointmentByName</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>searchAppointmentByName (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String appointmentName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Search a calendar event for the current SID
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentName</td>
+	                     <td valign="top">the search string</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?SID=VALUE&appointmentName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?SID=VALUE&amp;appointmentName=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="saveAppointment" ><b>saveAppointment</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>saveAppointment (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String appointmentName
+    			       			    			       			     , 
+    			       			   String appointmentLocation
+    			       			    			       			     , 
+    			       			   String appointmentDescription
+    			       			    			       			     , 
+    			       			   Calendar appointmentstart
+    			       			    			       			     , 
+    			       			   Calendar appointmentend
+    			       			    			       			     , 
+    			       			   Boolean isDaily
+    			       			    			       			     , 
+    			       			   Boolean isWeekly
+    			       			    			       			     , 
+    			       			   Boolean isMonthly
+    			       			    			       			     , 
+    			       			   Boolean isYearly
+    			       			    			       			     , 
+    			       			   Long categoryId
+    			       			    			       			     , 
+    			       			   Long remind
+    			       			    			       			     , 
+    			       			   String mmClient
+    			       			    			       			     , 
+    			       			   Long roomType
+    			       			    			       			     , 
+    			       			   String baseUrl
+    			       			    			       			     , 
+    			       			   Long languageId
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String password
+    			       			    			       			     , 
+    			       			   long roomId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Save an appointment
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentName</td>
+	                     <td valign="top">name of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentLocation</td>
+	                     <td valign="top">location info text of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentDescription</td>
+	                     <td valign="top">description test of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Calendar
+	                     		                     </td>
+	                     <td valign="top">appointmentstart</td>
+	                     <td valign="top">start as Date yyyy-mm-ddThh:mm:ss</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Calendar
+	                     		                     </td>
+	                     <td valign="top">appointmentend</td>
+	                     <td valign="top">end as Date yyyy-mm-ddThh:mm:ss</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isDaily</td>
+	                     <td valign="top">if the calendar event should be repeated daily (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isWeekly</td>
+	                     <td valign="top">if the calendar event should be repeated weekly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isMonthly</td>
+	                     <td valign="top">if the calendar event should be repeated monthly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isYearly</td>
+	                     <td valign="top">if the calendar event should be repeated yearly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">categoryId</td>
+	                     <td valign="top">the category id of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">remind</td>
+	                     <td valign="top">the reminder type of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">mmClient</td>
+	                     <td valign="top">List of clients, comma separated string, <br/>
+            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+            to add multiple clients you can use the same GET parameter in
+            the URL multiple times, for example:
+            &amp;mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
+            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">roomType</td>
+	                     <td valign="top">the room type for the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">baseUrl</td>
+	                     <td valign="top">the base URL for the invitations</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">languageId</td>
+	                     <td valign="top">the language id of the calendar event, notification emails
+            will be send in this language</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isPasswordProtected</td>
+	                     <td valign="top">if the room is password protected</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">password</td>
+	                     <td valign="top">the password for the room</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE&roomId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&amp;appointmentName=VALUE&amp;appointmentLocation=VALUE&amp;appointmentDescription=VALUE&amp;appointmentstart=VALUE&amp;appointmentend=VALUE&amp;isDaily=VALUE&amp;isWeekly=VALUE&amp;isMonthly=VALUE&amp;isYearly=VALUE&amp;categoryId=VALUE&amp;remind=VALUE&amp;mmClient=VALUE&amp;roomType=VALUE&amp;baseUrl=VALUE&amp;languageId=VALUE&amp;isPasswordProtected=VALUE&amp;password=VALUE&amp;roomId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateAppointmentTimeOnly" ><b>updateAppointmentTimeOnly</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>updateAppointmentTimeOnly (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long appointmentId
+    			       			    			       			     , 
+    			       			   Date appointmentstart
+    			       			    			       			     , 
+    			       			   Date appointmentend
+    			       			    			       			     , 
+    			       			   String baseurl
+    			       			    			       			     , 
+    			       			   Long languageId
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Update an calendar event time only
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">appointmentId</td>
+	                     <td valign="top">the calendar event that should be updated</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">appointmentstart</td>
+	                     <td valign="top">start yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">appointmentend</td>
+	                     <td valign="top">end yyyy-mm-dd</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">baseurl</td>
+	                     <td valign="top">the base URL for the invitations that will be send by email</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">languageId</td>
+	                     <td valign="top">the language id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&amp;appointmentId=VALUE&amp;appointmentstart=VALUE&amp;appointmentend=VALUE&amp;baseurl=VALUE&amp;languageId=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateAppointment" ><b>updateAppointment</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>updateAppointment (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long appointmentId
+    			       			    			       			     , 
+    			       			   String appointmentName
+    			       			    			       			     , 
+    			       			   String appointmentLocation
+    			       			    			       			     , 
+    			       			   String appointmentDescription
+    			       			    			       			     , 
+    			       			   Calendar appointmentstart
+    			       			    			       			     , 
+    			       			   Calendar appointmentend
+    			       			    			       			     , 
+    			       			   Boolean isDaily
+    			       			    			       			     , 
+    			       			   Boolean isWeekly
+    			       			    			       			     , 
+    			       			   Boolean isMonthly
+    			       			    			       			     , 
+    			       			   Boolean isYearly
+    			       			    			       			     , 
+    			       			   Long categoryId
+    			       			    			       			     , 
+    			       			   Long remind
+    			       			    			       			     , 
+    			       			   String mmClient
+    			       			    			       			     , 
+    			       			   Long roomType
+    			       			    			       			     , 
+    			       			   String baseurl
+    			       			    			       			     , 
+    			       			   Long languageId
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String password
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Save an appointment
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">appointmentId</td>
+	                     <td valign="top">the id to update</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentName</td>
+	                     <td valign="top">name of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentLocation</td>
+	                     <td valign="top">location info text of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">appointmentDescription</td>
+	                     <td valign="top">description test of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Calendar
+	                     		                     </td>
+	                     <td valign="top">appointmentstart</td>
+	                     <td valign="top">start as Date yyyy-mm-ddThh:mm:ss</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Calendar
+	                     		                     </td>
+	                     <td valign="top">appointmentend</td>
+	                     <td valign="top">end as Date yyyy-mm-ddThh:mm:ss</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isDaily</td>
+	                     <td valign="top">if the calendar event should be repeated daily (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isWeekly</td>
+	                     <td valign="top">if the calendar event should be repeated weekly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isMonthly</td>
+	                     <td valign="top">if the calendar event should be repeated monthly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isYearly</td>
+	                     <td valign="top">if the calendar event should be repeated yearly (not
+            implemented)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">categoryId</td>
+	                     <td valign="top">the category id of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">remind</td>
+	                     <td valign="top">the reminder type of the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">mmClient</td>
+	                     <td valign="top">List of clients, comma separated string, <br/>
+            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+            to add multiple clients you can use the same GET parameter in
+            the URL multiple times, for example:
+            &amp;mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
+            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">roomType</td>
+	                     <td valign="top">the room type for the calendar event</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">baseUrl</td>
+	                     <td valign="top">the base URL for the invitations</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">languageId</td>
+	                     <td valign="top">the language id of the calendar event, notification emails
+            will be send in this language</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isPasswordProtected</td>
+	                     <td valign="top">if the room is password protected</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">password</td>
+	                     <td valign="top">the password for the room</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&amp;appointmentId=VALUE&amp;appointmentName=VALUE&amp;appointmentLocation=VALUE&amp;appointmentDescription=VALUE&amp;appointmentstart=VALUE&amp;appointmentend=VALUE&amp;isDaily=VALUE&amp;isWeekly=VALUE&amp;isMonthly=VALUE&amp;isYearly=VALUE&amp;categoryId=VALUE&amp;remind=VALUE&amp;mmClient=VALUE&amp;roomType=VALUE&amp;baseurl=VALUE&amp;languageId=VALUE&amp;isPasswordProtected=VALUE&amp;password=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteAppointment" ><b>deleteAppointment</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>deleteAppointment (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long appointmentId
+    			       			    			       			     , 
+    			       			   Long language_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  delete a calendar event
+ 
+ If the given SID is from an Administrator or Web-Service user, the user
+ can delete any appointment.<br/>
+ If the SID is assigned to a simple user, he can only delete appointments
+ where he is also the owner/creator of the appointment
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">an authenticated SID</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">appointmentId</td>
+	                     <td valign="top">the id to delete</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">language_id</td>
+	                     <td valign="top">the language id in which the notifications for the deleted
+            appointment are send</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?SID=VALUE&appointmentId=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?SID=VALUE&amp;appointmentId=VALUE&amp;language_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentByRoomId" ><b>getAppointmentByRoomId</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentByRoomId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Load a calendar event by its room id
+    			</p>
+    			<p>
+                  Return Type: org.apache.openmeetings.persistence.beans.calendar.Appointment
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?SID=VALUE&room_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?SID=VALUE&amp;room_id=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentCategoryList" ><b>getAppointmentCategoryList</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentCategoryList (
+    			    			    			       			   String SID
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get all categories of calendar events
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?SID=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentReminderTypList" ><b>getAppointmentReminderTypList</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentReminderTypList (
+    			    			    			       			   String SID
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get all reminder types for calendar events
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?SID=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getAppointmentsByWeekCalendar" ><b>getAppointmentsByWeekCalendar</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getAppointmentsByWeekCalendar (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int firstDayInWeek
+    			       			    			       			     , 
+    			       			   Date startDate
+    			       			    			       			     , 
+    			       			   Long requestUserId
+    			       			    			       			     , 
+    			       			   Long omTimeZoneId
+    			       			    			       			     , 
+    			       			   String javaTimeZoneName
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Get the appointments (calendar events) for the given requestUserId <br/>
+ The TimeZone can be either given by the Id of the timezone in the table
+ "om_timezone" with the param timeZoneIdA <br/>
+ Or with the java name of the TimeZone in the param javaTimeZoneName
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">a valid user id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">firstDayInWeek</td>
+	                     <td valign="top">the first dayin week, 0=Sunday, 1=Monday, ...</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">startDate</td>
+	                     <td valign="top">the date it should start with</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">requestUserId</td>
+	                     <td valign="top">the user id the calendar events are requested, if it is not
+            the user id of the SID then the SID's user needs to have the
+            right to watch those events</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">omTimeZoneId</td>
+	                     <td valign="top">the id of the timezone (alternativly use javaTimeZoneName)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">javaTimeZoneName</td>
+	                     <td valign="top">the name of the java time zone, see <a
+            href="http://en.wikipedia.org/wiki/Time_zone#Java"
+            target="_blank"
+            >http://en.wikipedia.org/wiki/Time_zone#Java</a></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&amp;firstDayInWeek=VALUE&amp;startDate=VALUE&amp;requestUserId=VALUE&amp;omTimeZoneId=VALUE&amp;javaTimeZoneName=VALUE</a>
+    		  </div>
+    	   			
+	
+	</body>
+</html>
+

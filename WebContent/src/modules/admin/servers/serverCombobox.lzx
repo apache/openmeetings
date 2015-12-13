@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+<class name="serverCombobox" extends="resetCombobox"  shownitems="15">
+	<attribute name="serverCount" type="number" value="0" />
+	<attribute name="firstItem" type="number" value="0" />
+	<attribute name="idToSelect" type="number" value="0" />
+
+	<handler name="oninit">
+		if ($debug) Debug.write("serverCombobox::oninit ");
+		var dh = new lz.datasetHelper(this);
+		dh.setServiceSource('ServerService/getServers', {start: 0, max: 9999});
+		dh.successHandler = processServers;
+		dh.call();
+	</handler>
+	
+	<method name="processServers" args="p,d">
+	<![CDATA[
+   		var dp = d.getPointer();
+		if ($debug) Debug.write("processServers: dp -> ", dp);
+		p.serverCount = dp.xpathQuery('/getServersResponse/return/last()');
+		p.serverCount = p.serverCount == null ? 0 : p.serverCount;
+		
+		var servers = new Array();
+    	if (p.serverCount > 1) {
+	    	//servers == Array in case > 1 or just server
+	    	for (var i = 1; i <= p.serverCount; ++i) {
+	    		p.addServer(dp, i, servers);
+	    	}
+	    } else if (p.serverCount > 0) {
+	    	p.addServer(dp, -1, servers);
+	    }
+		if ($debug) Debug.write("processServers: servers -> ", servers);
+		p.reset();
+    	for (var i = 0; i < servers.length; ++i) {
+    		p.addItem(servers[i].name, servers[i].value);
+    	}
+		
+		if (p.idToSelect != 0) {
+			p.selectItem(p.idToSelect);
+			p.idToSelect = 0;
+		} else {
+			p.selectItem(p.firstItem);
+		}
+		if ($debug) Debug.write("processServers: p -> ", p);
+	]]>
+	</method>
+
+	<method name="addServer" args="dp, i, servers">
+   	<![CDATA[
+		var basePath = '/getServersResponse/return' + (i > -1 ? '[' + i + ']' : '') + '/';
+		var sid = dp.xpathQuery(basePath + 'id/text()');
+		servers[servers.length] = {name: dp.xpathQuery(basePath + 'name/text()'), value: sid};
+		if (this.firstItem == 0) {
+			this.firstItem = sid;
+		}
+   	]]>
+	</method>
+</class>
+
+</library>

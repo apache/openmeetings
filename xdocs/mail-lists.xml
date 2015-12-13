@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Mailing Lists</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+		<section name="Apache OpenMeetings Mailing Lists">
+
+			<p>
+				There are currently 4 publicly available mailing lists for OpenMeetings.
+			</p>
+			<p>
+				The commits list is for notification of commits to the OpenMeetings
+				repository.
+			</p>
+			<p>
+				The dev list is for internal discussion among the OpenMeetings
+				developers. It is
+				open to the public if you are interested in seeing how the sausage is
+				made.
+			</p>
+			<p>
+				<b>Note: </b>If your email bounces with status messages like "Delivery Status Notification" it is 
+				likely that you have send your mail as HTML mail. Apache does not like sending HTML emails, see:
+				<br/> 
+				<a href="http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail" target="_BLANK" rel="nofollow">http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail</a>
+			</p>
+			
+			<p>
+				You can search the entire mailing list very easy by using markmail.com, by using the term 
+				"openmeetings" plus your search. Try yourself: <br/>
+				<a href="http://markmail.org/search/?q=openmeetings" target="_BLANK" rel="nofollow">http://markmail.org/search/?q=openmeetings</a>
+			</p>
+
+			<table>
+				<tr>
+					<td>
+						<p>
+							<strong>User List</strong>
+							:
+							<a href="mailto:user@openmeetings.apache.org">
+								user@openmeetings.apache.org
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:user-subscribe@openmeetings.apache.org">
+								Subscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:user-unsubscribe@openmeetings.apache.org">
+								Unsubscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a
+								href="http://mail-archives.apache.org/mod_mbox/openmeetings-user/">
+								Archive
+							</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>
+							<strong>Spanish User List</strong>
+							:
+							<a href="mailto:user-espanol@openmeetings.apache.org">
+								user-espanol@openmeetings.apache.org
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:user-espanol-subscribe@openmeetings.apache.org">
+								Subscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:user-espanol-unsubscribe@openmeetings.apache.org">
+								Unsubscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a
+								href="http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol/">
+								Archive
+							</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>
+							<strong>Commits List</strong>
+							:
+							<a href="mailto:commits@openmeetings.apache.org">
+								commits@openmeetings.apache.org
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:commits-subscribe@openmeetings.apache.org">
+								Subscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:commits-unsubscribe@openmeetings.apache.org">
+								Unsubscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a
+								href="http://mail-archives.apache.org/mod_mbox/openmeetings-commits/">
+								Archive
+							</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>
+							<strong>Developer List</strong>
+							:
+							<a href="mailto:dev@openmeetings.apache.org">
+								dev@openmeetings.apache.org
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:dev-subscribe@openmeetings.apache.org">
+								Subscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a class="external" rel="nofollow"
+								href="mailto:dev-unsubscribe@openmeetings.apache.org">
+								Unsubscribe
+							</a>
+						</p>
+					</td>
+					<td>
+						<p>
+							<a
+								href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev">
+								Archive
+							</a>
+						</p>
+					</td>
+				</tr>
+			</table>
+
+		</section>
+	</body>
+</document>
+

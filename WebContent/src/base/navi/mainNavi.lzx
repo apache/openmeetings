@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="textBoxSubBlank" extends="text" text="$once{ parent.text }"
+    fgcolor="0x000000" fontstyle="bold"
+        fontsize="14" y="6" x="10" />
+
+
+<class name="baseDropDownMenuListItem" extends="view" height="36">
+
+    <attribute name="action" value="" type="string" />
+    <attribute name="params" value="" type="string" />
+    <attribute name="isopen" value="false" type="boolean" />
+    <attribute name="isleaf" value="false" type="boolean" />
+    <attribute name="list" value="null" />
+    <attribute name="textvalue" value="" type="string" />
+    <attribute name="selected" value="false" type="boolean" />
+    <attribute name="textToolTip" value="" type="string" />
+    
+    <attribute name="isSpacer" value="false" type="boolean" />
+    <attribute name="text" value="" type="string" />
+    
+    <handler name="onmouseover">
+        this._bg.setAttribute("visibility","visible");
+    </handler>
+    
+    <handler name="onmouseout">
+        this._bg.setAttribute("visibility","hidden");
+    </handler>
+
+    <view name="_bg" visibility="hidden" width="${ parent.width-2 }" y="0" x="1"
+          bgcolor="0xFFFFFF" opacity="0.5" height="36" />
+    
+    <text text="$once{ parent.text }" name="_ctext" fontstyle="bold" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"
+        	fontsize="14" y="2" x="10" />
+        	
+    <text text="$once{ parent.textToolTip }" name="_ctextTooltip" fontstyle="plain" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"
+        	fontsize="10" y="20" x="10" />	
+   
+</class>
+
+<class name="dropDownMenuListItem" extends="baseDropDownMenuListItem" >
+
+    <handler name="onclick">
+        loadContent(this,null,null);
+        parent.parent.close();
+    </handler>
+    
+</class>
+
+<class name="horizontalDropDownSpacer" x="4" height="1" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
+	<attribute name="isSpacer" value="true" type="boolean" />
+</class>
+
+<class name="baseDropDownMenuList" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
+		
+	<attribute name="list" value="null" />
+	
+	<attribute name="btnRef" value="null" />
+	
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+	
+	<!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+           if ( eventStr == "onmousedown"  ){
+               if ( view != null ) {
+                  if ( !view.childOf(this) ) {
+                       this.close();
+                  }
+               } else {
+                   this.close();
+               }
+           }
+           if (view && view.childOf(this)) {
+               if (view[ eventStr ]) {
+                   view[ eventStr ].sendEvent( view );
+               }
+               return false;
+           }
+          return true;
+       ]]> 
+    </method>  
+    
+	<method name="close">
+		this.btnRef.setAttribute("selected",false);
+		lz.ModeManager.release(this);
+		this.destroy();
+	</method>
+	
+	<method name="fixWidth">
+		<![CDATA[
+            //the second round goes through the list of items, as 
+            //now the maxwidth is detected we adjust the rest to it
+            var maxWidth = 0;
+            for (var i=0;i<this._content.subviews.length;i++) {
+            	if (this._content.subviews[i].width > maxWidth) {
+            		maxWidth = this._content.subviews[i].width;
+            	}
+            }
+            //add a little bit of spacing at the end
+            maxWidth += 10;
+            
+            for (var i=0;i<this._content.subviews.length;i++) {
+            	if (this._content.subviews[i].isSpacer) {
+            		this._content.subviews[i].setAttribute("width",maxWidth-8);
+            	} else {
+            		this._content.subviews[i].setAttribute("width",maxWidth);
+            	}
+            }
+		]]>
+	</method>
+
+</class>
+
+<class name="dropDownMenuList" extends="baseDropDownMenuList"
+		height="${ this._content.height+2 }" width="${ this._content.width+2 }">
+		
+	<handler name="oninit">
+		<![CDATA[
+			if (this.list == null) {
+				return;
+			}
+			for (var i=0;i<this.list.length;i++) {
+				if (i!=0) {
+					new lz.horizontalDropDownSpacer(this._content);
+				}
+                new lz.dropDownMenuListItem(this._content,{
+                			textvalue:this.list[i].name,
+                			text:this.list[i].label.value,
+                			isopen:this.list[i].isopen,
+                			isleaf:this.list[i].isleaf,
+                			action:this.list[i].action,
+                			params:this.list[i].params,
+                			textToolTip:list[i].tooltip.value
+               			});
+            }
+            
+            this.fixWidth();
+		]]>
+	</handler>	
+	
+	<view name="_content" x="1" y="1" 
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" />
+		
+</class>
+
+<class name="baseMenuMeetingsItem" extends="view" height="34"
+    width="${ this._ctext.width+36 }" >
+
+    <attribute name="action" value="" type="string" />
+	<attribute name="text" value="" type="string" />
+    <attribute name="textToolTip" value="" type="string" />
+    <attribute name="_menuRef" value="null" />
+    <attribute name="isopen" value="false" type="boolean" />
+    <attribute name="isleaf" value="false" type="boolean" />
+    <attribute name="list" value="null" />
+    <attribute name="textvalue" value="null" />
+    <attribute name="selected" value="false" type="boolean" />
+    
+    <attribute name="text_y_inset" value="6" type="number" />
+    <attribute name="text_fontsize" value="14" type="number" />
+    
+    <attribute name="down_y_inset" value="10" type="number" />
+    
+    <handler name="onmouseover">
+        if (!this.selected){
+            this.bgc.setAttribute('visibility','visible');
+        }
+    </handler>
+    <handler name="onmouseout">
+        if (!this.selected){
+            this.bgc.setAttribute('visibility','hidden');
+        }
+    </handler>
+    
+    <handler name="onselected" args="tSelect">
+    	this.selected = tSelect;
+    	if (tSelect) {
+    		this._icon_down.setAttribute("frame",2);
+    		this.bga.setAttribute("visibility","visible");
+    		this._ctext.setAttribute("fgcolor",0x000088);
+    	} else {
+    		this._icon_down.setAttribute("frame",1);
+    		this.bgc.setAttribute("visibility","hidden");
+    		this.bga.setAttribute("visibility","hidden");
+    		this._ctext.setAttribute("fgcolor",0xFFFFFF);
+    	}
+    </handler>
+    
+    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
+        visibility="hidden" name="bgc"/>
+        
+    <view width="${ parent.width-1 }" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" height="$once{ parent.height }" 
+        visibility="hidden" name="bga">
+        <view width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
+    </view>
+    
+    <view name="_icon_down" x="${ parent.width-20 }" y="$once{ parent.down_y_inset }" 
+    			resource="bullet_arrow_down_rsc" frame="1" />  
+    
+    <view width="1" height="${ parent.height }" y="0" bgcolor="0xEEEEEE" x="${ parent.width-1 }" />
+    <text text="$once{ parent.text }" name="_ctext" fontstyle="plain" fgcolor="0xFFFFFF"
+        	fontsize="$once{ parent.text_fontsize }" y="$once{ parent.text_y_inset }" x="10" />
+
+    <labelTooltip name="_textToolTip" text="$once{ parent.textToolTip }" multiline="false" />
+    
+</class>
+
+<class name="mainMenuMeetingsItem" extends="baseMenuMeetingsItem" >
+
+    <handler name="onclick">
+    	new lz.dropDownMenuList(canvas,{
+    				x:this.getAttributeRelative("x",canvas),
+    				y:this.getAttributeRelative("y",canvas)+this.height,
+    				btnRef:this,
+    				list:this.list
+    			});
+        this.parent.parent.sendOpenMenu(this);
+    </handler>
+
+</class>
+
+<class name="mainNavi" extends="view" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" 
+	   width="${ canvas.width }" y="50" >
+
+    <attribute name="naviObject" value="null" />
+    
+    <attribute name="selected" value="null" />
+    
+    <method name="sendOpenMenu" args="menuref">
+    	if (this.selected != null) {
+    		this.selected.setAttribute("selected",false);
+    	}
+    	this.selected = menuref;
+    	this.selected.setAttribute("selected",true);
+    </method>
+    
+    <!---
+      Initialize Menu
+    -->
+	<handler name="oninit">
+		<![CDATA[
+	         var value = this.naviObject;
+	         for (var i = 0; i < value.length; ++i) {
+	             var t1 = new lz.mainMenuMeetingsItem(this.itemlist,{
+	                  textvalue:value[i].name,
+	                  list:value[i].mainnavi,
+	                  isleaf:value[i].isleaf,
+	                  text:value[i].label.value,
+	                  textToolTip:value[i].tooltip.value,
+	                  action:value[i].action
+	                 });
+	         }
+	         
+	         if (canvas.cuser == "") {
+	         	var opened = false;
+				for (var i = 0; i < canvas.thishib.dashboardConfig.length; ++i) {
+					var cfg = canvas.thishib.dashboardConfig[i];
+					if (cfg.conf_key == "default.landing.zone") {
+						switch (cfg.conf_value) {
+							case "dashboard.rooms":
+								loadContent({action: "dashboardModuleStartScreen", params: "myRoomsTabButton"});
+								opened = true;
+								break;
+							case "dashboard.chat":
+								loadContent({action: "dashboardModuleStartScreen", params: "chatTabButton"});
+								opened = true;
+								break;
+							case "calendar":
+								quicklinkAct("dashboardModuleCalendar");
+								opened = true;
+								break;
+							case "rooms.public":
+								loadContent({action: "conferenceModuleRoomList", params: "publicTabButton"});
+								opened = true;
+								break;
+							case "rooms.private":
+								loadContent({action: "conferenceModuleRoomList", params: "privateTabButton"});
+								opened = true;
+								break;
+							case "rooms.user":
+								loadContent({action: "conferenceModuleRoomList", params: "myTabButton"});
+								opened = true;
+								break;
+						}
+						break;
+					}
+				}
+				if (!opened && value.length) {
+					var navi = value[0].mainnavi[0];
+					loadContent({action: navi.action, params: navi.params});
+				}
+	         } else {
+	         	if (canvas.cuserStatus == "yes") {
+	         		this.changeUserContactByHash.pending = true;
+	         		this.changeUserContactByHash.doCall();
+	         	} else if (canvas.cuserStatus == "no") {
+	         		this.changeUserContactByHash.pending = false;
+	         		this.changeUserContactByHash.doCall();
+	         	} else {
+	         		canvas.userSettingsModuleOpt = "contactMessages";
+	         		quicklinkAct("userSettingsModule");
+	         	}
+			}
+	            
+      	]]>
+	</handler>
+    
+    <!--
+    	public Object changeUserContactByHash(String SID, String hash, Boolean status)
+     -->
+    <netRemoteCallHib name="changeUserContactByHash" funcname="userservice.changeUserContactByHash" 
+				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+		<attribute name="pending" value="true" type="boolean" />
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return canvas.cuser; </method></netparam>
+    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("changePendingStatusUserContacts 1: ",value);
+	    		if ($debug) Debug.write("changePendingStatusUserContacts 2: ",canvas.cuser);
+	    		
+	    		if (value > 0) {
+	    			if (this.pending) {
+	    				new lz.labelerrorPopup(canvas,{labelid:217,errorlabelid:1229});
+	    			} else {
+	    				new lz.labelerrorPopup(canvas,{labelid:217,errorlabelid:1230});
+	    			}
+	    		}
+	    		
+	    		quicklinkAct("userSettingsModule");
+    		]]>
+    	</handler>
+    </netRemoteCallHib>
+    
+    <view name="itemlist" layout="axis:x;spacing:0" />
+    
+</class>
+
+</library>

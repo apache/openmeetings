@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Build instructions</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Nightly Builds">
+
+			<p>
+				You can find Nightly Builds of the software at:
+				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/"
+					rel="nofollow" target="_BLANK">
+					https://builds.apache.org/view/M-R/view/OpenMeetings/
+				</a>
+			</p>
+
+		</section>
+
+		<section name="How to Build a Distribution">
+
+			<div>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+							rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+				</ul>
+			</div>
+
+			<p>Get the source: </p>
+			<div class="xmlcode">
+				svn checkout
+				https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
+			</div>
+			<p>Run the command: </p>
+			<div class="xmlcode">
+				ant
+			</div>
+			<p>There is no need to compile the client additionally! The ant task
+				does it all! You will find a directory dist that contains
+				OpenMeetings and a red5-server.
+			</p>
+			<p>To compile the client you can also use ant: </p>
+			<div class="xmlcode">
+				ant
+				<span style="margin-left: 200px;"># compiles a complete package into the folder dist
+				</span>
+				<br />
+				ant compile.laszlo.main
+				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and
+					main.swf8.swf</span>
+				<br />
+				ant compile.laszlo.main.debug
+				<span style="margin-left: 30px;"># compiles the debug-client into
+					maindebug.as3.swf10.swf and maindebug.swf8.swf
+				</span>
+				<br />
+				ant -Ddb=&lt;name of DB&gt;
+				<span style="margin-left: 50px;"># will copy &lt;name of DB&gt;_persistense.xml to
+					persistense.xml
+				</span>
+				<br />
+				<span style="margin-left: 230px;">#(for ex. ant -Ddb=mysql will set mysql as default
+					DB)
+				</span>
+			</div>
+			<p>To compile just the openmeetings JAR file: </p>
+			<div class="xmlcode">
+				ant jar.only
+			</div>
+			<p>
+				To run Junit tests using ANT see
+				<a href="JUnitTesting.html">JUnitTesting</a>
+			</p>
+		</section>
+
+		<section name="Run, Develop, Test">
+
+			<p>
+				To develop or build OpenMeetings you checkout the source as Eclipse
+				project. You need the Subclipse or Subversive Plugin for Eclipse. If
+				you just need to change 3 lines of code then your probably better
+				switch to
+				<a href="#How_to_build_a_distribution" rel="nofollow">How to build a
+					distribution
+				</a>
+				.
+			</p>
+
+			<subsection name="Step1 - Get required Software">
+
+				<p>To develop OpenMeetings you need at least: </p>
+				<ul>
+					<li>Eclipse in a up to date copy and Sun JDK6 </li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						Subclipse 1.8 (Subversion 1.7 required!)
+						<a href="http://subclipse.tigris.org/" target="_BLANK" rel="nofollow">http://subclipse.tigris.org/
+						</a>
+					</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+							rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+					<li>Spring IDE for Eclipse (installable via Help &gt; Eclipse
+						Marketplace)
+					</li>
+					<li>
+						Apache IvyDE&#8482; For Eclipse (installable via Help &gt; Install
+						New Software)
+						URL: http://www.apache.org/dist/ant/ivyde/updatesite
+						detailed steps can be found here:
+						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK"
+							rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
+					</li>
+					<li>MySQL (or Postgres, or other Databases supported by openJPA)
+						are optionally but handy to have them
+					</li>
+				</ul>
+
+			</subsection>
+
+			<subsection name="Step2 - Download the Source">
+
+				<p>Advanced Users: Check out the Code from the Repository as a
+					Java
+					project into Eclipse.
+				</p>
+				<p>
+					URL:
+					<a
+						href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">
+						https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
+					</a>
+				</p>
+				<p>To download the required JARs for building and developing
+					OpenMeetings you need to run the ANT comand:
+				</p>
+				<div class="xmlcode">
+					ant -Ddb=&lt;your_DB&gt; prepare-eclipse
+				</div>
+				<p>After the ANT command you need to press F5 and rebuild the
+					project from inside Eclipse
+				</p>
+				<p>Step-By-Step: </p>
+				<p>1) Start Eclipse </p>
+				<p>
+					2) Change Perspective to SVN Repository Exploring:
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_1.png">
+						<img src="images/checkout_1.png" alt="" width="400" height="289" />
+					</a>
+
+				</p>
+				<p>
+					3) Select SVN Repository Exploring and click ok.
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_2.png">
+						<img src="images/checkout_2.png" alt="" width="304" height="417" />
+					</a>
+				</p>
+				<p>
+					4) A new Dialog in Eclipse opens
+					<strong>SVN Repositories</strong>
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_3.png">
+						<img src="images/checkout_3.png" alt="" width="460" height="102" />
+					</a>
+				</p>
+				<p>
+					5) Click on the icon with the plus in the top right corner in the
+					SVN Repository Dialog
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_4.png">
+						<img src="images/checkout_4.png" alt="" width="57" height="38" />
+					</a>
+				</p>
+				<p>
+					6) Add the URL
+					<a
+						href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/"
+						rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
+					</a>
+					and click Finish
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_5.png">
+						<img src="images/checkout_5.png" alt="" width="455" height="272" />
+					</a>
+				</p>
+				<p>
+					7) After download is complete you see a new Source Repository in
+					the Repository Explorer. Right click on it and choose
+					<strong>checkout</strong>
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_6.png">
+						<img src="images/checkout_6.png" alt="" width="340" height="135" />
+					</a>
+				</p>
+				<p>
+					8) In the Dialog the opens now just click next
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_7.png">
+						<img src="images/checkout_7.png" alt="" width="390" height="338" />
+					</a>
+				</p>
+				<p>
+					9) In the next Dialog just click Finish, Eclipse will then download
+					the sources
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_8.png">
+						<img src="images/checkout_8.png" alt="" width="390" height="338" />
+					</a>
+				</p>
+				<p>
+					10) After the download is complete you will see a new Project in
+					the Package Explorer Dialog of Eclipse
+					<br />
+					<br />
+					<a class="fancybox-buttons" href="images/checkout_9.png">
+						<img src="images/checkout_9.png" alt="" width="310" height="297" />
+					</a>
+				</p>
+				<div>
+					11) Please run
+					<div class="xmlcode">
+						ant prepare-eclipse
+					</div>
+					to download all necessary jar files, and perform source
+					<tt>Refresh</tt>
+					to resolve all compilation issues.
+				</div>
+			</subsection>
+
+			<subsection name="Step3 - Deploy and Run">
+
+				<p>
+					see the first chapter about the ANT tasks to compile the code. You
+					will find a directory called
+					<strong>dist</strong>
+					which contains a regular openmeetings including red5. You can then
+					use the usual process like described at
+					<a href="installation.html">installation</a>
+					to run the code then.
+				</p>
+			</subsection>
+
+		</section>
+
+		<section name="Links">
+
+			<ul>
+				<li>
+					Getting Started with OpenLaszlo, checkout
+					<a
+						href="http://www.openlaszlo.org/lps4.2/laszlo-explorer/index.jsp?lzr=swf8"
+						target="_BLANK" rel="nofollow">Laszlo-in-10-Minutes</a>
+					and the
+					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_BLANK"
+						rel="nofollow">Application
+						Developer's Guide
+					</a>
+					or try the
+					<a href="http://www.openlaszlo.org/getstarted" target="_BLANK"
+						rel="nofollow">ScreenCast</a>
+				</li>
+				<li>
+					<a href="http://openmeetings.apache.org/svn.html">
+						browse SVN source
+					</a>
+				</li>
+			</ul>
+
+		</section>
+
+		<section name="Tipps and Gotchas">
+
+			<p>When you want to develop only client side there are handy ANT
+				tasks so that you only rebuild the SWFs, same for the Java side.
+			</p>
+			<p>
+				It
+				also takes much less time if you do use MySQL as database then
+				rebuilding the software and waiting for Apache Derby to set up the
+				database everytime you did rebuild.
+			</p>
+			<p>
+				<b>Working behind a proxy:</b>
+				If you are sitting behind a proxy you should add some proxy settings
+				before starting the build process.
+				<br />
+				For Apache Ivy see:
+				<a href="http://ant.apache.org/ivy/faq.html" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/faq.html
+				</a>
+				<br />
+				For SVN Command Line Client (From CollabNet 1.7) see:
+				<a
+					href="https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html"
+					target="_BLANK" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
+				</a>
+			</p>
+
+		</section>
+
+	</body>
+
+</document>

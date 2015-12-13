@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="registerNewUser" extends="labelExplorerBox" labelid="113"
+    docking="true" resizeable="false" closable="false" width="500" 
+    x="$once{ canvas.width/2 - this.width/2 }" y="-370" height="360">
+    
+    <attribute name="refObj" value="null" />
+    <attribute name="regObject" value="null" />
+    
+    <attribute name="user_login_minimum_length" type="number" value="4" />
+    <attribute name="user_pass_minimum_length" type="number" value="4" />
+    
+    <handler name="oninit">
+    	<![CDATA[
+            var pressEnter = new LzDelegate(this, "register");
+            lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
+            
+            getTimeZoneOffset(this);
+            
+        ]]>
+    </handler>
+    
+    <method name="callback" args="returnValue">
+    	if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
+                
+        var std_time_offset = Number(returnValue);
+        
+        this.setOffset(std_time_offset);
+    </method>
+    
+    <method name="setOffset" args="std_time_offset">
+        <![CDATA[
+        std_time_offset = Math.round(std_time_offset);
+        var timeZoneJavaFormat = "Etc/GMT";
+        if (std_time_offset > 0) {
+            timeZoneJavaFormat += "+"+std_time_offset;
+        } else {
+            timeZoneJavaFormat += "-"+std_time_offset;
+        }
+        
+        if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
+        
+        this._timeZone.selectItem(timeZoneJavaFormat);
+        ]]>
+    </method>    
+    
+    <handler name="onclose">
+    	this.refObj._register.setAttribute('visible',true);
+        lz.Keys.callOnKeyCombo(refObj.pressEnter, ["enter"]);
+    	this.refObj.doreset.setAttribute('started', true);
+    </handler>
+    
+
+    <method name="register" args="itemObj">
+        this.registerB.onclick.sendEvent();
+    </method>
+    
+    <labelText labelid="117" width="300" y="42" resize="false" x="2"/>
+        <customEdittext name="firstname" y="42" x="120" width="370" text="">
+        	<handler name="onvalue" args="txt">
+        		parent.username.setAttribute("text",txt+"."+parent.lastname.text);
+        	</handler>
+        </customEdittext>
+        
+    <labelText labelid="118" width="300" y="72" resize="false" x="2"/>
+        <customEdittext name="lastname" y="72" x="120" width="370" text="">
+        	<handler name="onvalue" args="txt">
+        		parent.username.setAttribute("text",parent.firstname.text+"."+txt);
+        	</handler>
+        </customEdittext>
+        
+    <labelText labelid="114" width="300" y="102" resize="false" x="2"/>
+        <customEdittext name="username" y="102" x="120" width="370" text="" />
+
+    <labelText labelid="115" width="300" y="132" resize="false" x="2"/>
+        <customEdittext name="userpass1" y="132" password="true" x="120" width="370" text="" />
+        
+    <labelText labelid="116" width="300" y="162" resize="false" x="2"/>
+        <customEdittext name="userpass2" y="162" password="true" x="120" width="370" text="" />
+                    
+
+    <labelText labelid="119" width="300" y="192" resize="false" x="2"/>
+        <customEdittext name="email" y="192" x="120" regexpType="email" 
+        				width="370" text="" />
+        				
+    <labelText labelid="1143" width="300" y="222" resize="false" x="2"/>
+         <resetCombobox name="_timeZone" editable="false" y="222" width="370" x="120"
+                       fontsize="11" style="componentStyle">
+            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+         </resetCombobox>         				
+         
+    <labelText labelid="120" width="300" y="252" resize="false" x="2"/>  
+
+		<dynamicCombobox name="_state" width="370" y="252" x="120" 
+						 text="Switzerland" value="204" />
+		
+		<!--
+		<validText name="state" width="370" y="222" x="120" fontsize="11" 
+            shownitems="7" validate_method="$once{ canvas.validateCountry }" 
+            resultId="state_id" resultName="name" />        
+             -->
+        
+    <labelText labelid="111" width="300" y="282" resize="false" x="2"/>  
+        
+        <resetCombobox name="languages" width="370" y="282" x="120" editable="false">
+            <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" 
+                value="$path{ 'language_id/text()' }" />
+                <handler name="oninit">
+                var g = canvas.getUserData();
+                if($debug) Debug.write("checkLoginData/g: ",g);
+                if (g["userlang"]!=null) {
+                    this.selectItem(g["userlang"]);
+                } else {
+                    this.selectItem(String(canvas.thishib.userlang));
+                }
+                </handler>  
+        </resetCombobox>       
+
+    <simpleLabelButton name="registerB" labelid="121" width="120" x="240" y="332">
+    	<handler name="onclick">
+            <![CDATA[
+                var pwd1 = strtrim(this.parent.userpass1.getText());
+                var pwd2 = strtrim(this.parent.userpass2.getText());   
+                var login = strtrim(this.parent.username.getText());     
+                var email = strtrim(this.parent.email.getText()); 
+                if (pwd1!=pwd2) {
+					new lz.rpcErrorDialog(canvas,{errorid:-6});
+				} else if(pwd1.length<parent.user_pass_minimum_length 
+						|| login<parent.user_login_minimum_length){
+				    var addInfo = "<br/> "
+				    					+ parent.user_pass_minimum_length + " / " 
+				    					+ parent.user_login_minimum_length;
+                    new lz.rpcErrorDialog(canvas,{errorid:-7,addInfo:addInfo});
+                } else if (email=="") {
+                    new lz.rpcErrorDialog(canvas,{errorid:-53});
+                } else {
+                    this.parent.regObject = new Array();
+                    this.parent.regObject["SID"]=canvas.sessionId;
+                    this.parent.regObject["Username"]=login;
+                    this.parent.regObject["Userpass"]=this.parent.userpass1.getText();
+                    this.parent.regObject["lastname"]=this.parent.lastname.getText();
+                    this.parent.regObject["firstname"]=this.parent.firstname.getText();
+                    this.parent.regObject["email"]=email;
+                    this.parent.regObject["jNameTimeZone"]=this.parent._timeZone.getValue();
+                    this.parent.regObject["age"]=0;
+                    this.parent.regObject["street"]='';
+                    this.parent.regObject["additionalname"]='';
+                    this.parent.regObject["fax"]='';
+                    this.parent.regObject["zip"]='';
+                    this.parent.regObject["states_id"]=Number(this.parent._state.getValue());
+                    this.parent.regObject["town"]='';
+                    this.parent.regObject["language_id"]=this.parent.languages.getValue();
+                    
+                    this.parent.regObject["domain"]=canvas.rtmphostlocal; 
+                    this.parent.regObject["port"]=canvas.red5httpport; 
+                    this.parent.regObject["webapp"]=canvas.httpRootKey; 
+                    
+                    if( $debug ) Debug.write("parent.regObject: ",parent.regObject);
+                    
+                    this.parent.registerUserByObject.doCall();
+                }
+            ]]>
+    	</handler>
+    </simpleLabelButton>   
+    
+    <simpleLabelButton labelid="122" width="120" x="370" y="332">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>   
+	
+     <netRemoteCallHib name="registerUserByObject" funcname="xmlcrm.registerUserByObject" 
+     	remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >     
+        <netparam>
+        	<method name="getValue"> 
+        		return this.parent.parent.regObject; 
+        	</method>
+        </netparam>           
+         <handler name="ondata" args="value">
+         	<![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("registerUserByObject: ",value);
+			if (!(value<0)){
+				//Debug.write("successfully registered");
+                 new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-18});
+                 this.parent.refObj.username.setAttribute('text',this.parent.username.getText());
+                 this.parent.refObj.userpass.setAttribute('text',this.parent.userpass1.getText());
+                 this.parent.close();
+			} else if (value == -40) {
+				this.parent.refObj.username.setAttribute('text',this.parent.username.getText());
+                this.parent.refObj.userpass.setAttribute('text',this.parent.userpass1.getText());
+                this.parent.close();
+			}
+			]]>
+         </handler>  
+     </netRemoteCallHib>	
+     
+     
+     <animator name="showRegForm" attribute="y" to="120" duration="1000" started="true" />
+	
+</class>
+
+</library>

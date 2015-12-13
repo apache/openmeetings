@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Performance Tuning</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Performance Tuning">
+
+			<p>To use the optimum of performance from your server there is a
+				start-script for red5 available that does some basic settings in the
+				JVM. It is called red5-highperf.sh. It is recommended to use that
+				script for production and high-load scenarios.
+			</p>
+			<div class="xmlcode">
+				#!/bin/bash
+				<br />
+				<br />
+				if [ -z "$RED5_HOME" ]; then export RED5_HOME=.; fi
+				<br />
+				<br />
+				# Previous option set
+				<br />
+				export JAVA_OPTS="-Xrs -Xms512M -Xmx1024M -Xss128K -XX:NewSize=256m
+				-XX:SurvivorRatio=16 -XX:MinHeapFreeRatio=20
+				-XX:+ExplicitGCInvokesConcurrent -Djava.net.preferIPv4Stack=true
+				-Xverify:none"
+				<br />
+				<br />
+				# start Red5
+				<br />
+				echo "Setting Hi Performance Options"
+				<br />
+				exec $RED5_HOME/red5.sh >> $RED5_HOME/log/jvm.stdout 2>&amp;1 &amp;
+				<br />
+			</div>
+
+			<p>You have to exclude the "-XX:+UseConcMarkSweepGC" param from the
+				default red5-highperf.sh to make it functional! However if you are a
+				performance expert you might also play with the values to find
+				perfect matches for your use-case.
+			</p>
+			<p>
+				For a complete overview about possible arguments and their meaning
+				see:
+				<a
+					href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning"
+					rel="nofollow">http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning
+				</a>
+			</p>
+
+		</section>
+
+	</body>
+
+</document>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!--- Popup view to input a new language name to be added. -->
+<class name="sessionDetails" extends="labelExplorerBox" labelid="1535" y="30" 
+    docking="true" resizeable="true" closable="true" width="460" x="$once{ parent.width - 470 }" height="360">
+	
+	<handler name="oninit">
+		<![CDATA[
+			this.getSessionStatistics.doCall();
+		]]>
+	</handler>
+	
+    <netRemoteCallHib name="getSessionStatistics" funcname="conferenceservice.getSessionStatistics" 
+			remotecontext="$once{ canvas.thishib }" activeErrorHandler="true"
+			isCallBackHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam> 
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+			if($debug) Debug.write("getSessionStatistics ",value);
+			parent.errorView.errorView.setAttribute("text",value);
+        </handler>  
+    </netRemoteCallHib>	      	
+   
+    <view y="24" width="${ parent.width - 4 }" height="${ parent.height - 30 }" x="2" clip="true" name="errorView">
+		<text y="30" fontsize="10" fontstyle="bold" name="errorView"
+			multiline="true" width="${ parent.width - 14 }" selectable="true" />
+		<om_vscrollbar />
+	</view>
+	
+</class>    
+
+</library>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Get Involved</title>
+		<author email="dev@openmeetings.apache.org">
+			OpenMeetings Documentation Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="How do I contribute, give feedback, fix bugs and so on?">
+
+			<p>
+				The Apache OpenMeetings project really needs and appreciates any
+				contributions,
+				including documentation help, source code and
+				feedback. Suggested
+				changes should come in the form of source code
+				and/or very detailed
+				and constructive feedback.
+			</p>
+
+			<ul>
+				<li>
+					Discussion occurs on the
+					<a href="mail-lists.html">OpenMeetings mailing lists</a>
+				</li>
+				<li>
+					Information on access to the project source code is
+					available
+					<a href="svn.html">here</a>
+					.
+				</li>
+				<li>
+					Bugs and other issues can be posted on the project
+					<a href="https://issues.apache.org/jira/browse/OPENMEETINGS">JIRA</a>
+					(
+					<a href="https://issues.apache.org/jira/secure/Signup!default.jspa">sign up</a>
+					).
+				</li>
+				<li>
+					Additional documentation and discussion can be contributed to the
+					project
+					<a href="https://cwiki.apache.org/OPENMEETINGS">Wiki</a>
+					(
+					<a href="https://cwiki.apache.org/confluence/signup.action">sign up</a>
+					).
+				</li>
+			</ul>
+
+		</section>
+
+		<section name="Which taks could I potentially work on?">
+
+			<p>
+				No matter if you want to share your experiences, improve
+				documentation, localization, code Java, ActionScript or PHP, there
+				are dozens of areas where you can find task to work on and share
+				with others.
+				<br />
+				<br />
+				We tried to collect a list of ideas in our wiki:
+				<br />
+				<a
+					href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list"
+					target="_BLANK">https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list
+				</a>
+			</p>
+
+		</section>
+
+		<section name="How do I become a committer?">
+			<p>If you're interested in committing to the project: </p>
+			<ul>
+				<li>
+					<p>
+						You'll need to fill out some legal paperwork and go through
+						a
+						process to get an apache foundation committer account: See
+						<a class="external" rel="nofollow"
+							href="http://apache.org/dev/new-committers-guide.html">
+							New Committers Guide
+						</a>
+						,
+						<a class="external" rel="nofollow"
+							href="http://apache.org/dev/contributors.html"> Contributors</a>
+						, and
+						<a class="external" rel="nofollow" href="http://apache.org/dev/committers.html"> Committers</a>
+						for more details.
+					</p>
+
+				</li>
+				<li>
+					<p>
+						After you've received an email from
+						<a href="mailto:root@apache.org">root@apache.org</a>
+						with your committer account information, change your initial
+						password:
+						Login by 'ssh -l &lt;username&gt; people.apache.org';
+						run
+						'passwd';
+						run 'svnpasswd'. See
+						<a class="external" rel="nofollow"
+							href="http://apache.org/dev/version-control.html">Committer Subversion Access
+						</a>
+						.
+					</p>
+				</li>
+				<li>
+					<p>
+						Check out the OpenMeetings sources and test your svn account:
+						<a href="http://svn.apache.org/viewvc/openmeetings/">
+							SubversionRepository
+						</a>
+						.
+					</p>
+
+				</li>
+
+			</ul>
+
+		</section>
+
+	</body>
+</document>

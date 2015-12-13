@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseDrawSelect" extends="baseDrawTriangle" >
+    
+    <!--  
+        for drawing rectangles the variable 
+        with *Dis* indicates if the line/fil-color is active (+1/-1)
+     -->
+    <attribute name="currentSelectanglestroke" value="0x8e8986" />
+    <attribute name="currentSelectanglestrokeDis" value="1" type="number" />
+    <attribute name="currentSelectanglestrokeFill" value="0x8e8986" />
+    <attribute name="currentSelectanglestrokeFillDis" value="1" type="number" />
+    <attribute name="currentSelectangleineWidth" value="4" type="number" />
+    <attribute name="currentSelectangleOpacity" value="0.2" type="number" />
+    
+    <method name="copyWhiteboardObjects">
+        this.doCopyWhiteboardObjects();
+    </method>
+    
+    <method name="cutWhiteboardObjects">
+    	<![CDATA[
+        	this.doCopyWhiteboardObjects();
+        	for (var eg=0;eg<this.copyObject.length;eg++){                
+                var itemToDelete = this.copyObject[eg][this.copyObject[eg].length-1];
+                this.deleteItemByName(itemToDelete);
+                
+                if ($debug) Debug.write("cut name ", this.copyObject[eg][this.copyObject[eg].length-1]);
+            }
+            
+            //if (this.boundingIsActive){
+            //    this.boundingref._innerDrag.onmouseup.sendEvent();
+            //}
+        ]]>
+    </method>
+    
+    <method name="doCopyWhiteboardObjects">
+        <![CDATA[  
+            if ($debug) Debug.write("tCopyObject :0: ",this.boundingIsActive);
+        
+            if (this.boundingIsActive) {
+            	
+            	this.copyObject = new Array();
+            	
+            	var tObject = new Array();
+                var tCopyObject = this.getBaseObjectByName(this.boundingref.objRef.name);
+                
+                if ($debug) Debug.write("tCopyObject :1: ",this.boundingref.objRef.name);
+                if ($debug) Debug.write("tCopyObject :2: ",tCopyObject);
+                
+                for (var i=0;i<tCopyObject.length;i++) {
+                    var tItemObject = tCopyObject[i];
+                    
+                    if (tItemObject instanceof Array) {
+                        
+                        var storingItemObject = new Array();
+                        
+                        for (var k=0;k<tItemObject.length;k++) {
+                            var kItemObject = tItemObject[k];
+                            
+                            if (kItemObject instanceof Array) {
+                                
+                                var subStoringItemObject = new Array();
+                                
+                                for (var l=0;l<kItemObject.length;l++) {
+                                    var lItemObject = kItemObject[l];
+                                    subStoringItemObject.push(lItemObject);
+                                }
+                                
+                                storingItemObject.push(subStoringItemObject);
+                            } else {
+                                storingItemObject.push(kItemObject);
+                            }
+                            
+                            
+                        }
+                        
+                        tObject[i] = storingItemObject;
+                        
+                    } else {
+                        tObject[i] = tItemObject;
+                    }
+                    
+                }
+                
+                this.copyObject.push(tObject);
+            	
+            } else {
+        
+            	this.copyObject = this.selectedObjects;
+            
+            }
+            
+            if ($debug) Debug.write("to this.copyObject ", this.copyObject);
+            
+        ]]>
+    </method>
+    
+    
+    
+    <method name="paste" args="paste_x, paste_y">
+        <![CDATA[       
+            //if ($debug) Debug.write("paste name ", this.copyObject[eg][this.copyObject[eg].length-1]);
+            if ($debug) Debug.write("paste copyObject", this.copyObject);
+            
+            if(this.isSnapToGrid){ 
+                paste_x = Math.round(paste_x/this.gridWidth)*this.gridWidth;
+                paste_y = Math.round(paste_y/this.gridWidth)*this.gridWidth;
+            }
+            
+            var shift_x = this.width+1;
+            var shift_y = this.height+1;
+            
+            for (var eg=0;eg<this.copyObject.length;eg++){
+            	
+            	var tx = this.copyObject[eg][this.copyObject[eg].length-5];
+            	var ty = this.copyObject[eg][this.copyObject[eg].length-4];  
+            	
+            	if (tx < shift_x) {
+            		shift_x = tx;
+            	}
+            	
+            	if (ty < shift_y) {
+                    shift_y = ty;
+                }
+            	
+            }
+            
+            if ($debug) Debug.write("paste_x,paste_y,shift_x,shift_y", paste_x,paste_y,shift_x,shift_y);
+            
+            for (var eg=0;eg<this.copyObject.length;eg++){
+                
+                //var itemToDelete = this.copyObject[eg][this.copyObject[eg].length-1];
+                //this.deleteItemByName(itemToDelete);
+                
+                //this.baseactionobjectList[eg][10] = this.baseactionobjectList[eg][10] + paste_x;
+                //this.baseactionobjectList[eg][11] = this.baseactionobjectList[eg][11] + paste_y;
+                
+                //this.copyObject[eg][10] = this.copyObject[eg][10] + paste_x -50;
+                //this.copyObject[eg][11] = this.copyObject[eg][11] + paste_y-50;
+                
+                var tempArr = this.copyObject[eg].slice(0);
+                
+                tempArr[tempArr.length-1] += tempArr[0]+this.getCounter(); //Math.round(Math.random()*10000);
+                
+                tempArr[tempArr.length-5] =  paste_x - shift_x + tempArr[tempArr.length-5];
+                tempArr[tempArr.length-4] = paste_y - shift_y + tempArr[tempArr.length-4];               
+                
+                //this.sendWatchObject("draw", this.copyObject[eg], false);
+                
+                if ($debug) Debug.write("paste tempArr :x,y: ", tempArr[tempArr.length-5],tempArr[tempArr.length-4]);
+                
+                this.sendWatchObject("draw", tempArr, false);
+                //this.sendRemoteWatchObject(tempArr);
+                
+                this.onsharedMessage('draw',tempArr);
+                
+                if ($debug) Debug.write("paste name ", this.copyObject[eg]);
+                
+                //if ($debug) Debug.write("paste this.copyObject[eg][10]", this.copyObject[eg][10]);
+                //if ($debug) Debug.write("paste this.copyObject[eg][11] ", this.copyObject[eg][11]);
+                //if ($debug) Debug.write("paste paste_x ", paste_x);
+                //if ($debug) Debug.write("paste paste_y ", paste_y);
+                
+            }
+        ]]>
+    </method>
+    
+      
+    <!-- ###########################
+        Select tool
+     -->
+    
+    <method name="startSelect" args="oid_name">
+        if (oid_name == null){
+            oid_name = 'select'+this.getCounter();
+        }
+        //Debug.write("startselect");
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:oid_name,width:this.width,height:this.height,
+            opacity:this.currentSelectangleOpacity});
+        this.currentlayer
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    </method>  
+
+    <method name="endSelect">
+        <![CDATA[        
+        
+            ////Debug.write(" this.startx, this.starty , this.endx, this.endy ",this.startx, this.starty , this.endx, this.endy);
+            var tmpName = this.currentlayer.name;
+            this.currentlayer.destroy();
+            var x = this.startx;
+            var width = this.endx - this.startx;
+            if (this.endx<this.startx){
+                x = this.endx;
+                width = Math.abs(width);
+            }
+            var y = this.starty;
+            var height = this.endy - this.starty;
+            if (this.endy<this.starty){
+                y = this.endy;
+                height = Math.abs(height);
+            }
+            
+            if (width < 2 && height < 2) {
+            	return;
+            }
+            
+            //if(this.isSnapToGrid){        		
+	    			        	   
+	          //  x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	//y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            //} 
+            
+            if(this.selectedObjects != null && this.selectedObjects.length > 0){
+                for (var eg=0;eg<this.selectedObjects.length;eg++){
+                        
+                    var  objectToUpdate = this.getObjectByName(this.selectedObjects[eg][this.selectedObjects[eg].length-1]);
+                    objectToUpdate.setAttribute('opacity', 1);
+                    
+                }
+            }
+            
+            this.selectedObjects = new Array();
+            
+            for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+                //Debug.write("this.baseactionobjectList[eg][0]==modi",this.baseactionobjectList[eg][0],modi);
+                //if ($debug) Debug.write("############## baseactionobjectList select : ", this.baseactionobjectList[eg]);
+                //if ($debug) Debug.write("############## baseactionobjectList select x: ", this.baseactionobjectList[eg][10]);
+                //if ($debug) Debug.write("############## baseactionobjectList select y: ", this.baseactionobjectList[eg][11]);
+                //if ($debug) Debug.write("############## baseactionobjectList select opacity: ", this.baseactionobjectList[eg][6]);
+                //if ($debug) Debug.write("############## baseactionobjectList select name: ", this.baseactionobjectList[eg][14]);
+                
+                //if ($debug) Debug.write("############## baseactionobjectList select this x: ", x);
+                //if ($debug) Debug.write("############## baseactionobjectList select this y: ", y);
+                
+                //if ($debug) Debug.write("############## baseactionobjectList select this x+width: ", x+width);
+                //if ($debug) Debug.write("############## baseactionobjectList select this y+height: ", y+height);
+                
+                //if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==bName) {
+                    //return this.baseactionobjectList[eg];
+                //}
+                
+                if (
+                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] > x && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] > y) &&
+                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] < x+width && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] < y+height)
+                   ) {
+                    //return this.baseactionobjectList[eg];
+                    //this.baseactionobjectList[eg][6] = 0.2;
+                    
+                   	var tObject = new Array();
+                   	var tCopyObject = this.baseactionobjectList[eg];
+                   	
+                   	for (var i=0;i<tCopyObject.length;i++) {
+                   		var tItemObject = tCopyObject[i];
+                   		
+                   		if (tItemObject instanceof Array) {
+                   			
+               			    var storingItemObject = new Array();
+                   			
+               			    for (var k=0;k<tItemObject.length;k++) {
+           				        var kItemObject = tItemObject[k];
+           				        
+           				        if (kItemObject instanceof Array) {
+           				        	
+           				        	var subStoringItemObject = new Array();
+           				        	
+           				        	for (var l=0;l<kItemObject.length;l++) {
+           				        		var lItemObject = kItemObject[l];
+           				        		subStoringItemObject.push(lItemObject);
+           				        	}
+           				        	
+           				        	storingItemObject.push(subStoringItemObject);
+           				        } else {
+           				        	storingItemObject.push(kItemObject);
+           				        }
+                   				
+                   				
+                   			}
+                   			
+                   			tObject[i] = storingItemObject;
+                   			
+                   		} else {
+                   			tObject[i] = tItemObject;
+                   		}
+                   		
+                   	}
+                   	
+                   	
+                   	
+                    this.selectedObjects.push(tObject);
+                    
+                    objectToUpdate = this.getObjectByName(this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]);
+                    objectToUpdate.setAttribute('opacity', 0.7);
+                    
+                    //this.baseactionobjectList[eg][14] += '_copy';
+                    //this.sendRemoteWatchObject(this.baseactionobjectList[eg]);
+                    //this.sendRemoteWatchObject(this.baseactionobjectList[eg]);                  
+                    
+                    if ($debug) Debug.write("############## objectToUpdate: ", objectToUpdate);
+                    if ($debug) Debug.write("############## baseactionobjectList select opacity if: ", this.baseactionobjectList[eg][6]);
+                }
+            }  
+            
+            /*
+            if(whiteboardObjects.length > 0){
+            	 = whiteboardObjects;
+            }
+            */
+            
+            if ($debug) Debug.write("############## endSelect this.selectedObjects: ",  this.selectedObjects);
+            
+            this.currentlayer = new lz.drawViewNew(this,{
+                name:tmpName,x:x,y:y,width:width,height:height,
+                opacity:this.currentSelectangleOpacity});
+                
+            new lz.drawViewInner(this.currentlayer,{
+                name:'_innerSelect',x:0,y:0,width:width,height:height});
+                
+            //this.drawSelectangleHistory(this.currentlayer,0,0,width,height,
+              //  this.currentSelectanglestroke,this.currentSelectangleineWidth,
+                //this.currentSelectanglestrokeFill,this.currentSelectanglestrokeDis,
+                //this.currentSelectanglestrokeFillDis);
+           
+            //this.drawSelectregisterFinal(this.currentlayer.name,this.currentSelectanglestroke,
+              //  this.currentSelectangleineWidth,this.currentSelectanglestrokeFill,
+                //this.currentSelectanglestrokeDis,this.currentSelectanglestrokeFillDis,
+                //x,y,width,height,this.getSWFDocumentStatus(),
+                //this.getZIndex());
+            //this.layers.push(this.currentlayer);
+            //this.checkStepLayers();
+        ]]>
+    </method> 
+    
+    <!--
+        Terminate the usage of this function
+     --> 
+     <!--
+    <method name="drawSelectangle" args="x1,y1,x2,y2">
+        <![CDATA[
+            
+            currentlayer.lineWidth = this.currentSelectangleineWidth;
+            currentlayer.beginPath();
+            currentlayer.moveTo(x1,y1);
+            currentlayer.lineTo(x1,y2);
+            currentlayer.lineTo(x2,y2);
+            currentlayer.lineTo(x2,y1);
+            currentlayer.lineTo (x1,y1);
+            this.closePath();
+            
+            if (this.currentSelectanglestrokeDis!=-1){
+                currentlayer.strokeStyle = this.currentSelectanglestroke;
+                currentlayer.stroke();
+            }
+
+            if (this.currentSelectanglestrokeFillDis!=-1){
+                currentlayer.fillStyle = this.currentSelectanglestrokeFill;
+                currentlayer.fill();
+            }
+            
+        ]]>   
+    </method>   
+    -->
+    <method name="redrawSelectItemByScaling" args="objRef">
+        //if ($debug) Debug.write("redrawSelectItemByScaling: "+objRef);
+        this.currentlayer = objRef;
+        this.currentlayer._innerSelect.destroy();
+        new lz.drawViewInner(this.currentlayer,{
+            name:'_innerSelect',x:0,y:0,width:objRef.width,height:objRef.height});
+        this.drawSelectangleHistory(this.currentlayer,0,0,
+            objRef.width,objRef.height,
+            this.currentSelectanglestroke,this.currentSelectangleineWidth,
+            this.currentSelectanglestrokeFill,this.currentSelectanglestrokeDis,
+            this.currentSelectanglestrokeFillDis);
+    </method> 
+    
+    <method name="drawSelectangleToHistory" args="lastActionObject,parentView">
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
+            name:lastActionObject[lastActionObject.length-1],
+            x:lastActionObject[lastActionObject.length-5],
+            y:lastActionObject[lastActionObject.length-4],
+            width:lastActionObject[lastActionObject.length-3],
+            height:lastActionObject[lastActionObject.length-2],
+            opacity:lastActionObject[6]});
+        new lz.drawViewInner(tmpCurrentlayer,{
+                name:'_innerSelect',x:0,y:0,
+                width:lastActionObject[lastActionObject.length-3],
+                height:lastActionObject[lastActionObject.length-2]});
+        this.drawSelectangleHistory(tmpCurrentlayer,0,0,
+            lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
+            lastActionObject[1],lastActionObject[2],lastActionObject[3],lastActionObject[4],lastActionObject[5]);
+            
+        this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
+    </method>
+    
+    <method name="drawSelectangleHistory" args="parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis">
+        <![CDATA[
+            //Debug.write("drawSelectangleHistory",parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis);
+            parentObj._innerSelect.lineWidth = line;
+            parentObj._innerSelect.beginPath();
+            parentObj._innerSelect.moveTo(x1,y1);
+            parentObj._innerSelect.lineTo(x1,y2);
+            parentObj._innerSelect.lineTo(x2,y2);
+            parentObj._innerSelect.lineTo(x2,y1);
+            parentObj._innerSelect.lineTo (x1,y1);
+            
+            if (strokeDis!=-1){
+                parentObj._innerSelect.strokeStyle = stroke;
+                parentObj._innerSelect.stroke();
+            }
+            
+            if (fillDis!=-1){
+                parentObj._innerSelect.fillStyle = fill;
+                parentObj._innerSelect.fill();
+            }
+            
+        ]]>   
+    </method>  
+    
+    <method name="drawSelectregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height,swfObj,zIndex" >
+        Debug.write("drawSelectregisterFinal",newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height);
+        var actionObject = new Array();
+        actionObject[0] = 'Selectangle';
+        actionObject[1] = stroke;
+        actionObject[2] = line;
+        actionObject[3] = fill;
+        actionObject[4] = strokeDis;
+        actionObject[5] = fillDis;
+        actionObject[6] = this.currentSelectangleOpacity;
+        actionObject[7] = zIndex;//-8
+        actionObject[8] = swfObj;//-7
+        actionObject[9] = this.counter;//-6
+        actionObject[10] = x;//-5
+        actionObject[11] = y;//-4
+        actionObject[12] = width;//-3
+        actionObject[13] = height;//-2  
+        actionObject[14] = newName;//-1
+        this.baseactionobjectList.push(actionObject);
+        this.onsharedMessage('draw',actionObject);
+    </method>
+    
+</class>
+
+</library>

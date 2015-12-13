@@ -1,0 +1,13 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- The <library> tag defines the root element of a library file. An application can use the <include> tag to include the code in a library file.
+
+See the Guide for a complete discussion. Also see the <include> tag. -->
+<class name="library" isRoot="true">
+	<attribute name="proxied" type="string" />
+	<!--- If false, disables validation against the schema during compilation. -->
+    <attribute name="validate" type="boolean" />
+</class>
+
+</library>

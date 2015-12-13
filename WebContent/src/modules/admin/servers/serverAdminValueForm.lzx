@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	<!--- User Profile edit panel in the useradmin leftblock. Private class only for useradmin -->
+	<class name="serverAdminValueForm" extends="baseContentSaveView">
+		<attribute name="server_id" value="0" type="number" />
+		
+		<handler name="onsavecompleted" >
+			//this.getUserById.doCall();
+		</handler>
+		
+		<handler name="onreload" >
+			if (this.server_id != 0) {
+				//this.getUserById.doCall();
+			}
+		</handler>	
+	
+		<handler name="onnew">
+			this.server_id = 0;
+			this.serverName.setAttribute('text', '');
+			this.ip.setAttribute('text', '');
+			this.lastPing.setAttribute('text','');
+			this.comment.setAttribute('text','');
+			this.port.setAttribute('text','');
+			this.user.setAttribute('text','');
+			this.pass.setAttribute('text','');
+			this.webapp.setAttribute('text','openmeetings');
+			this.protocol.setAttribute('text','http');
+			this.active.setValue(true);
+		</handler>
+		
+	    <handler name="ondelete" >
+		<![CDATA[
+			if (this.server_id != 0) {
+				var dh = new lz.datasetHelper(parent._turnoverlist);
+				dh.setServiceSource('ServerService/deleteServer', {id: this.server_id});
+				dh.successHandler = parent._turnoverlist.loadServersData;
+				dh.call();
+				
+				this.server_id = 0;
+			}
+		]]>
+	    </handler>
+	    
+	    <method name="initByObject" args="server">
+    		if ($debug) Debug.write("initByObject server ", server);
+			this.server_id = server.id;
+			this.serverName.setAttribute('text', server.name);
+			this.ip.setAttribute('text', server.address);
+			this.lastPing.setAttribute('text', server.lastPing);
+			this.comment.setAttribute('text', server.comment);
+			this.comment.setAttribute('text', server.comment);
+			this.port.setAttribute('text', server.port);
+			this.user.setAttribute('text', server.user);
+			this.pass.setAttribute('text', server.pass);
+			this.webapp.setAttribute('text', server.webapp);
+			this.protocol.setAttribute('text', server.protocol);
+			if (server.active == "true") {
+				this.active.setValue(true);
+			} else {
+				this.active.setValue(false);
+			}
+	    </method>
+	    
+	    <method name="doSaveEvent">
+		<![CDATA[
+			var dh = new lz.datasetHelper(this);
+			dh.setServiceSource('ServerService/saveServer', {
+									id: this.server_id, 
+									name: this.serverName.getText(), 
+									address: this.ip.getText(), 
+									port: this.port.getText(),
+									user: this.user.getText(),
+									pass: this.pass.getText(), 
+									webapp: this.webapp.getText(), 
+									protocol: this.protocol.getText(), 
+									active: this.active.getValue(),
+									comment: this.comment.getText() });
+			dh.successHandler = getSavedId;
+			dh.call();
+		]]>
+	    </method>
+	    
+		<method name="getSavedId" args="p,d">
+    	<![CDATA[
+    		var sid = d.getPointer().xpathQuery('/saveServerResponse/return/text()');
+			p.server_id = isNaN(Number(sid)) ? 0 : Number(sid);
+			
+			p.parent._turnoverlist.loadServersData(p.parent._turnoverlist);
+    	]]>
+		</method>
+		
+	    <!-- content -->
+	    <labelText labelid="1502" width="200" y="40" resize="false" fontstyle="bold" />
+	    
+	    <labelText labelid="1500" width="200" y="70" resize="false" x="2"/>
+        	<customEdittext name="serverName" y="70" x="120" width="270" />
+        	
+        <labelText labelid="1525" width="200" y="100" resize="false" x="2"/>
+        	<labelCheckbox name="active" width="270" y="100" x="120" fontsize="11" />  
+        
+        <labelText labelid="1501" width="200" y="130" resize="false" x="2"/>
+        	<customEdittext name="ip" y="130" x="120" width="270" />
+        	
+        <labelText labelid="1519" width="200" y="160" resize="false" x="2"/>
+        	<customEdittext name="port" regexpType="number" y="160" x="120" width="270" />
+        	
+        <labelText labelid="1520" width="200" y="190" resize="false" x="2"/>
+        	<customEdittext name="user" y="190" x="120" width="270" />
+        	
+        <labelText labelid="1521" width="200" y="220" resize="false" x="2"/>
+        	<customEdittext name="pass" password="true" y="220" x="120" width="270" />
+        	
+        <labelText labelid="1522" width="200" y="250" resize="false" x="2"/>
+        	<customEdittext name="webapp" y="250" x="120" width="270" />
+        	
+        <labelText labelid="1523" width="200" y="280" resize="false" x="2"/>
+        	<customEdittext name="protocol" y="280" x="120" width="270" />	
+        	
+	    <view resource="messagebox_info_rsc" x="2" y="310" />
+	    
+	    <labelText labelid="1518" x="24" y="310"  fontstyle="italic"
+	               multiline="true" width="370" />
+        	
+        <labelText labelid="1517" width="200" y="360" resize="false" x="2"/>
+        	<labelText name="lastPing" y="360" x="120" width="270" />
+        	
+	    <labelText labelid="270" width="200" y="380" resize="false" x="2"/>
+	        <customScrollEdittext name="comment" y="380" x="120" width="270" 
+	            height="100" text="" />    
+        	
+	</class>
+	
+</library>

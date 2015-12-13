@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+    targetNamespace="http://www.laszlosystems.com/2003/05/lzx" xmlns:lzx="http://www.laszlosystems.com/2003/05/lzx">
+  <xs:simpleType name="booleanLiteral">
+    <xs:restriction base="xs:boolean"/>
+  </xs:simpleType>
+  <xs:simpleType name="colorLiteral">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="numberLiteral">
+    <xs:restriction base="xs:double"/>
+  </xs:simpleType>
+  <xs:simpleType name="sizeLiteral">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="inheritableBooleanLiteral">
+    <xs:union memberTypes="lzx:booleanLiteral">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="inherit"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="constraint">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="$(style|path|immediately|once|always)?\{.*\}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="boolean">
+    <xs:union memberTypes="lzx:booleanLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="booleanOrNull">
+    <xs:union memberTypes="lzx:boolean">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="null"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="color">
+    <xs:union memberTypes="lzx:colorLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="script">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="expression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="reference">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="number">
+    <xs:union memberTypes="lzx:numberLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="size">
+    <xs:union memberTypes="lzx:sizeLiteral lzx:constraint"/>
+  </xs:simpleType>
+  <xs:simpleType name="numberExpression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="sizeExpression">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="css">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="opacity">
+    <xs:union memberTypes="lzx:constraint">
+      <xs:simpleType>
+        <xs:restriction base="xs:double">
+          <xs:minInclusive value="0.0"/>
+          <xs:maxInclusive value="1.0"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="percentage">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\d+(.\d?)|.\d+)%"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  #foreach( $node in $allNodes.getRootNodes() )
+    $allFonts.get($key1)
+  #end
+    
+</xs:schema>    

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	<class name="serversAdmin" extends="baseContentView">
+		<turnOverList name="_turnoverlist" width="440"
+			height="${ canvas.height - canvas.naviHeight - 30 }" x="2"
+			orderby="server_id" step="50" asc="true">
+			
+			<method name="getServerCount" args="p,d">
+	    	<![CDATA[
+	    		if ($debug) Debug.write("getServerCount::p ", p);
+				var records = d.getPointer().xpathQuery('getServerCountResponse/return/text()');
+				if ($debug) Debug.write("records ", records);
+				parent.initValues(records);
+
+				var dh = new lz.datasetHelper(p);
+				dh.setServiceSource('ServerService/getServers', {start: p.start, max: p.step});
+				dh.successHandler = p.renderContent;
+				dh.call();
+	    	]]>
+			</method>
+			
+			<method name="loadServersData" args="p">
+	    		if ($debug) Debug.write("loadServersData::p ", p);
+				var dh = new lz.datasetHelper(p);
+				dh.setServiceSource('ServerService/getServerCount');
+				dh.successHandler = p.getServerCount;
+				dh.call();
+			</method>
+		
+			<handler name="oninit">
+				this.addHeaderItem(188, 60);
+				this.addHeaderItem(1500, 132);
+				this.addHeaderItem(1501, 132);
+				this.addHeaderItem(1517, 100);
+				loadServersData(this);
+			</handler>
+
+			<handler name="oncallnext">
+				loadServersData(this);
+			</handler>
+
+			<handler name="oncallpre">
+				loadServersData(this);
+			</handler>
+
+			<handler name="onclickedItem" args="obj">
+				if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+				parent._serverAdminValueForm.hideNewRecordText();
+				parent._serverAdminValueForm.initByObject(obj.obj);
+			</handler>
+
+			<method name="addServer" args="dp,i">
+	    	<![CDATA[
+	    		var basePath = 'getServersResponse/return' + (i > -1 ? '[' + i + ']' : '') + '/';
+	    		var s = {id: dp.xpathQuery(basePath + 'id/text()')
+    				, name: dp.xpathQuery(basePath + 'name/text()')
+    				, address: dp.xpathQuery(basePath + 'address/text()')
+    				, port: dp.xpathQuery(basePath + 'port/text()')
+    				, user: dp.xpathQuery(basePath + 'user/text()')
+    				, pass: dp.xpathQuery(basePath + 'pass/text()')
+    				, webapp: dp.xpathQuery(basePath + 'webapp/text()')
+    				, protocol: dp.xpathQuery(basePath + 'protocol/text()')
+    				, pingRunning: dp.xpathQuery(basePath + 'pingRunning/text()')
+    				, lastPing: dp.xpathQuery(basePath + 'lastPing/text()')
+    				, active: dp.xpathQuery(basePath + 'active/text()')
+    				, comment: dp.xpathQuery(basePath + 'comment/text()')
+    				};
+	    		var li = new lz.serverAdminListItem(this._innerlist._inn._inn, {obj: s});
+		    	if (parent._serverAdminValueForm.server_id == 0) {
+    				parent._serverAdminValueForm.initByObject(s);
+		    	}
+	    	]]>
+			</method>
+			
+			<method name="renderContent" args="p,d">
+	    	<![CDATA[
+	    		var dp = d.getPointer();
+				if ($debug) Debug.write("dp ", dp);
+		    	p.clearList();
+		    	if (p.records > 1) {
+			    	//servers == Array in case > 1 or just server
+			    	for (var i = 1; i <= Math.min(p.records - p.start, p.step); ++i) {
+			    		p.addServer(dp, i);
+			    	}
+			    } else if (p.records > 0) {
+			    	p.addServer(dp, -1);
+			    }
+	            p.sendInitialWidthUpdate();
+	    	]]>
+			</method>
+		</turnOverList>
+
+		<serverAdminValueForm name="_serverAdminValueForm" x="460">
+			<handler name="onnew" args="refObj">
+				parent._turnoverlist.clearSelection();
+			</handler>
+		</serverAdminValueForm>
+	</class>
+
+</library>
