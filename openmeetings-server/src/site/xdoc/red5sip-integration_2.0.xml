@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>SIP-Transport Integration</title>
+		<author email="timur@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="SIP-Transport Integration">
+			<p>
+				You need minimum version 2.0 of Apache OpenMeetings to apply this guide!
+			</p>
+			<p>
+				Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 10.04.
+			</p>
+		</section>
+
+        <section name="Setup Asterisk">
+			<div>
+                Run the commands
+				<source>
+<![CDATA[
+sudo apt-get update
+sudo apt-get install asterisk asterisk-mysql
+]]>
+				</source>
+            </div>
+            <div>
+                Ubuntu 10.04 has broken asterisk-mysql version. For other distribution next commands not needed:
+				<source>
+<![CDATA[
+aptitude purge asterisk-mysql
+cd /tmp
+apt-get build-dep asterisk-mysql
+apt-get -b source asterisk-mysql
+dpkg -i asterisk-mysql_1.6.2.0-1_i386.deb
+]]>
+				</source>
+            </div>
+            <div>
+                Enable asterisk mysql realtime module:<br/><br/>
+                Add string
+				<source>
+<![CDATA[
+load => res_config_mysql.so
+]]>
+				</source>
+                to the /etc/asterisk/modules.conf into the "modules" section.
+            </div>
+            <div>
+                Configure mysql realtime module:<br/><br/>
+
+                Create file /etc/asterisk/res_mysql.conf and add lines:
+				<source>
+<![CDATA[
+[general]
+dbhost=127.0.0.1
+dbname=openmeetings
+dbuser=root
+dbpass=
+dbport=3306
+]]>
+				</source>
+            </div>
+            <div>
+                Add next lines into the /etc/asterisk/extconfig.conf:
+				<source>
+<![CDATA[
+[settings]
+sipusers => mysql,general,sipusers
+sippeers => mysql,general,sipusers
+extensions => mysql,general,extensions
+meetme => mysql,general,meetme
+]]>
+				</source>
+            </div>
+            <div>
+                Add next lines into the /etc/asterisk/extensions.conf:
+				<source>
+<![CDATA[
+[rooms]
+switch => Realtime/@
+]]>
+				</source>
+            </div>
+
+            <div>
+                Restart asterisk:
+				<source>
+<![CDATA[
+service asterisk restart
+]]>
+				</source>
+                Insert, for example, SIP user with name 'test':
+				<source>
+<![CDATA[
+INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
+]]>
+				</source>
+            </div>
+		</section>
+
+        <section name="Setup red5sip transport">
+            <div>
+                Download red5sip from<tt>http://red5phone.googlecode.com/svn/branches/red5sip</tt>
+            </div>
+            <p>
+                Build with Apache Ant
+            </p>
+            <div>
+                Install jsvc:
+				<source>
+<![CDATA[
+apt-get install jsvc
+]]>
+				</source>
+            </div>
+            <div>
+                Insert proper values to the /opt/red5sip/settings.properties
+
+				<source>
+<![CDATA[
+red5.host - red5 server address (127.0.0.1)
+sip.obproxy - asterisk adderss (127.0.0.1)
+sip.phone - sip phone number (test)
+sip.authid - sip auth id (test)
+sip.secret - sip password (12345)
+sip.realm - sip realm, "asterisk" by default
+sip.proxy -
+rooms - ids of openmeetings rooms, can be, for example, 2,3,5,6
+]]>
+				</source>
+            </div>
+            <div>
+                Add red5sip to autostart:
+				<source>
+<![CDATA[
+ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
+chmod a+x /etc/init.d/red5sip
+update-rc.d /etc/init.d/red5sip defaults
+]]>
+				</source>
+            </div>
+            <div>
+                Start openmeetings
+				<source>
+<![CDATA[
+service red5 start
+]]>
+				</source>
+            </div>
+            <div>
+                Start red5sip
+				<source>
+<![CDATA[
+service red5sip start
+]]>
+				</source>
+            </div>
+        </section>
+	</body>
+
+</document>

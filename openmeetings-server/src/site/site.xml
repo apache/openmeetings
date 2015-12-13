@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<project xmlns="http://maven.apache.org/DECORATION/1.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd"
+  name="Apache OpenMeetings Project">
+
+	<body>
+		<menu>
+			<item name="General" href="#general">
+				<item name="Home" href="/index.html"/>
+				<item name="Demo" href="/demo.html"/>
+				<item name="License" href="/license.html"/>
+				<item name="ASF" href="http://www.apache.org/"/>
+				<item name="Downloads" href="/downloads.html"/>
+				<item name="Call For Logo" href="/CallForLogo.html"/>
+				<item name="Commercial Support" href="/commercial-support.html"/>
+			</item>
+			<item name="Installation and Upgrade" href="#installation">
+				<item name="Installation" href="/installation.html" />
+				<item name="Upgrade" href="/Upgrade.html" />
+				<item name="Tutorials" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools" />
+				<item name="Command Line Admin" href="/CommandLineAdmin.html" />
+			</item>
+			<item name="Community" href="#community">
+				<item name="Get Involved" href="/get-involved.html" />
+				<item name="Committers" href="/team-list.html" />
+				<item name="Mailing Lists" href="/mail-lists.html" />
+				<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
+			</item>
+			<item name="Development" href="#dev">
+				<item name="Source Code" href="/source-repository.html" />
+				<item name="Bugs / Issues" href="/issue-tracking.html" />
+				<item name="Dependencies" href="/dependencies.html" />
+				<item name="Continuous Integration" href="/integration.html" />
+				<item name="Build Instructions 3.0.x" href="/BuildInstructions_3.0.x.html" />
+				<item name="Build Instructions" href="/BuildInstructions.html" />
+				<item name="JUnit Testing" href="/JUnitTesting.html" />
+				<item name="Manual Testing" href="/ManualTesting.html" />
+				<item name="Release Guide" href="/ReleaseGuide.html" />
+				<item name="Website Guide" href="/WebsiteGuide.html" />
+			</item>
+			<item name="Integration" href="#integration">
+				<item name="SOAP/REST API" href="/openmeetings-webservice/apidocs/index.html" target="_blank"/>
+				<item name="REST API Sample" href="/RestAPISample.html" />
+				<item name="Ldap and ADS" href="/LdapAndADS.html" />
+				<item name="OAuth2" href="/oauth2.html" />
+				<item name="VoIP and SIP" href="/voip-sip-integration.html" />
+				<item name="Errors table" href="/errorvalues.html" />
+			</item>
+			<item name="Plugins" href="#plugins">
+				<item name="Moodle Plugin" href="/MoodlePlugin.html" />
+				<item name="Sakai Plugin" href="/SakaiPlugin.html" />
+				<item name="Jira Plugin" href="/JiraPlugin.html" />
+				<item name="Joomla Plugin" href="/JoomlaPlugin.html" />
+				<item name="Drupal Plugin" href="/DrupalPlugin.html" />
+				<item name="Bitrix Plugin" href="/BitrixPlugin.html" />
+				<item name="Confluence Plugin" href="/ConfluencePlugin.html" />
+				<item name="SugarCRM Plugin" href="/SugarCRMPlugin.html" />
+				<item name="Redmine Plugin" href="/RedminePlugin.html" />
+			</item>
+			<item name="Configuration" href="#config">
+				<item name="DB Sample Configurations" href="#db">
+					<item name="Apache Derby" href="/ApacheDerbyConfig.html" />
+					<item name="IBM DB2" href="/IBMDB2Config.html" />
+					<item name="Oracle" href="/OracleConfig.html" />
+					<item name="MySQL" href="/MySQLConfig.html" />
+					<item name="Postgres" href="/PostgresConfig.html" />
+					<item name="MSSQL" href="/MSSQLConfig.html" />
+				</item>
+				<item name="Localization and languages" href="#localization">
+					<item name="Internationalisation" href="/Internationalisation.html" />
+					<item name="LanguageEditor" href="/LanguageEditor.html" />
+					<item name="TimeZoneHandling" href="/TimeZoneHandling.html" />
+					<item name="EditTemplates" href="/EditTemplates.html" />
+				</item>
+				<item name="NAT Port Settings" href="#port">
+					<item name="Port settings" href="/PortSettings.html" />
+				</item>
+				<item name="Performance" href="#performance">
+					<item name="JVM performance tuning" href="/JVMPerformanceTuning.html" />
+					<item name="Network bandwidth calculator" href="/NetworkCalculator.html" />
+				</item>
+				<item name="User Interface" href="#interface">
+					<item name="Themes" href="/themes-and-branding.html" />
+					<item name="Dashboard" href="/Dashboard.html" />
+					<item name="Webcam resolutions" href="/WebcamResolutions.html" />
+					<item name="Room layout options" href="/ConferenceRoomLayoutOptions.html" />
+					<item name="Hot Keys" href="/HotKeys.html" />
+				</item>
+				<item name="Customization" href="#customize">
+					<item name="Webapp name/path" href="/WebappNamePath.html" />
+					<item name="Navigation" href="/Navigation.html" />
+					<item name="Calendar and timezone" href="/CalendarAndTimezone.html" />
+					<item name="Custom room type" href="/CustomRoomTypeHowTo.html" />
+					<item name="Custom crypt mechanism" href="/CustomCryptMechanism.html" />
+					<item name="General Configuration" href="/GeneralConfiguration.html" />
+				</item>
+				<item name="Security" href="#security">
+					<item name="Restricted Access" href="/RestrictedAccess.html" />
+					<item name="RTMPS and HTTPS" href="/RTMPSAndHTTPS.html" />
+				</item>
+				<item name="Converters" href="#convert">
+					<item name="OpenOffice Converter" href="/OpenOfficeConverter.html" />
+					<item name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
+				</item>
+				<item name="Clustering" href="#cluster">
+					<item name="Clustering" href="/Clustering.html" />
+				</item>
+				<item name="Misc" href="#misc">
+					<item name="Get version info" href="/GetVersionInfo.html" />
+				</item>
+			</item>
+		</menu>
+	</body>
+</project>
