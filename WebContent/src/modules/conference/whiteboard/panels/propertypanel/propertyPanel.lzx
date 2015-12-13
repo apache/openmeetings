@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+    
+<class name="propertyPanel" extends="basePropertyPanel" 
+	   width="${ parent.parent.width-1 }" height="80" labelid="843" >
+	
+	<attribute name="ignoreUpdates" value="false" type="boolean" />
+    
+	<method name="setObjectBounds" args="x,y,width,height">
+		if ($debug) Debug.write("setObjectBounds: ",x,y,width,height);
+		this._content._xvalue.setAttribute('text',x);
+		this._content._yvalue.setAttribute('text',y);
+		this._content._widthvalue.setAttribute('text',width);
+		this._content._heightvalue.setAttribute('text',height);
+	</method>
+	
+	<method name="onUpdateBoundByText">
+		if (canvas._drawarea.boundingref!=null){
+			if ($debug) Debug.write("onUpdateBoundByText boundingref: ",canvas._drawarea.boundingref);
+			canvas._drawarea.boundingref.setAttribute('x',Number(this._content._xvalue.getText()));
+			canvas._drawarea.boundingref.setAttribute('y',Number(this._content._yvalue.getText()));
+			canvas._drawarea.boundingref.setAttribute('width',Number(this._content._widthvalue.getText()));
+			canvas._drawarea.boundingref.setAttribute('height',Number(this._content._heightvalue.getText()));
+		}
+	</method>
+	
+	<method name="loadPanelByModus" args="drawArea">
+		if ($debug) Debug.write("loadPanelByModus drawmodus: ",drawArea.drawmodus);
+		this.ignoreUpdates = true;
+		if (drawArea.drawmodus == 'paint') {
+			this._content.lineColorChoose.setSelectedColor(drawArea.currentlayerstroke);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentlayerlineWidth);
+			this._content.fillColorChoose.setEnabled(false);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentlayerOpacity*100);
+		} else if (drawArea.drawmodus == 'line') {
+			this._content.lineColorChoose.setSelectedColor(drawArea.currentlinestroke);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentlinelineWidth);
+			this._content.fillColorChoose.setEnabled(false);
+			this._content.changeOpacitySlider.setEnabled(false);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentlineOpacity*100);
+		} else if (drawArea.drawmodus == 'uline') {
+			this._content.lineColorChoose.setSelectedColor(drawArea.currentulinestroke);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentulinelineWidth);
+			this._content.fillColorChoose.setEnabled(false);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentulineOpacity*100);
+		} else if (drawArea.drawmodus == 'drawarrow') {
+			this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentdrawarrowlinestroke,
+                drawArea.currentdrawarrowlinestrokeDis);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentdrawarrowlinelineWidth);
+			this._content.fillColorChoose.setSelectedColorWithDis(drawArea.currentdrawarrowlinestrokeFill,
+                drawArea.currentdrawarrowlinestrokeFillDis);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentdrawarrowOpacity*100);
+		} else if (drawArea.drawmodus == 'rectangle') {
+			this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestroke,
+				drawArea.currentrectanglestrokeDis);
+			this._content.fillColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestrokeFill,
+				drawArea.currentrectanglestrokeFillDis);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentrectangleineWidth);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentrectangleOpacity*100);
+		} else if (drawArea.drawmodus == 'ellipse') {
+			this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentellipsestroke,
+				drawArea.currentellipsestrokeDis);
+			this._content.fillColorChoose.setSelectedColorWithDis(drawArea.currentellipsestrokeFill,
+				drawArea.currentellipsestrokeFillDis);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentellipselineWidth);
+			this._content.changeOpacitySlider.setSliderValue(drawArea.currentellipseOpacity*100);
+		} else if (drawArea.drawmodus == 'letter') {
+			this._content.lineColorChoose.setSelectedColor(drawArea.currentlayerletter);
+			this._content.fillColorChoose.setEnabled(false);
+			if ($debug) Debug.write("drawArea.currentlayersize ",drawArea.currentlayersize);
+			this._content.changeWidthSlider.setSliderValue(drawArea.currentlayersize);
+			this._content.changeOpacitySlider.setEnabled(false);
+			this._content._italic.setValue(canvas._drawarea.italic);
+			this._content._bold.setValue(canvas._drawarea.bold);
+		} else {
+			if ($debug) Debug.warn("Not known drawmodus",drawArea.drawmodus);
+			this._content.lineColorChoose.setEnabled(false);
+			this._content.changeWidthSlider.setEnabled(false);
+			this._content.fillColorChoose.setEnabled(false);
+			this._content.changeOpacitySlider.setEnabled(false);
+		}
+		
+		if (drawArea.drawmodus == 'letter'){
+            this._content._italic.setAttribute('enabled',true);
+            this._content._bold.setAttribute('enabled',true);           
+        } else {
+            this._content._italic.setAttribute('enabled',false);
+            this._content._bold.setAttribute('enabled',false);
+        }
+		
+		this.ignoreUpdates = false;
+	</method>
+	
+	<method name="loadPanelByBoundingBox" args="drawArea,objRef">
+		if ($debug) Debug.write("loadPanelByBoundingBox objRef: ",objRef);
+		
+        this.loadPanelByModus(drawArea);
+        
+        this.ignoreUpdates = true;
+        
+        if (objRef.name.indexOf('swf') >= 0) {
+            
+            this._content._documentsPanel._currentSlideNo.setAttribute("text",objRef.slideNumber);
+            //this._content._documentsPanel._zoom.setAttribute("text",objRef.currentzoomFactor);
+            //this._content._fullFit.setValue(objRef.fullFit);
+            
+        }
+		
+		this.ignoreUpdates = false;
+	</method>
+		
+	<method name="updateProperties">
+		if (!this.ignoreUpdates){
+			if (canvas._drawarea.drawmodus == 'paint'){
+				canvas._drawarea.currentlayerstroke = this._content.lineColorChoose.selectedColor;
+				canvas._drawarea.currentlayerlineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentlayerOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'line'){
+				canvas._drawarea.currentlinestroke = this._content.lineColorChoose.selectedColor;
+				canvas._drawarea.currentlinelineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentlineOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'uline'){
+				canvas._drawarea.currentulinestroke = this._content.lineColorChoose.selectedColor;
+				canvas._drawarea.currentulinelineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentulineOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'drawarrow'){
+				canvas._drawarea.currentdrawarrowlinestroke = this._content.lineColorChoose.selectedColor;
+                canvas._drawarea.currentdrawarrowlinestrokeDis = this._content.lineColorChoose.selectedColorDis;
+                canvas._drawarea.currentdrawarrowlinestrokeFill = this._content.fillColorChoose.selectedColor;
+                canvas._drawarea.currentdrawarrowlinestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
+                canvas._drawarea.currentdrawarrowlinelineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentdrawarrowOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'rectangle'){
+				canvas._drawarea.currentrectanglestroke = this._content.lineColorChoose.selectedColor;
+				canvas._drawarea.currentrectanglestrokeDis = this._content.lineColorChoose.selectedColorDis;
+				canvas._drawarea.currentrectanglestrokeFill = this._content.fillColorChoose.selectedColor;
+				canvas._drawarea.currentrectanglestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
+				canvas._drawarea.currentrectangleineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentrectangleOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'ellipse'){
+				canvas._drawarea.currentellipsestroke = this._content.lineColorChoose.selectedColor;
+				canvas._drawarea.currentellipsestrokeDis = this._content.lineColorChoose.selectedColorDis;
+				canvas._drawarea.currentellipsestrokeFill = this._content.fillColorChoose.selectedColor;
+				canvas._drawarea.currentellipsestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
+				canvas._drawarea.currentellipselineWidth = this._content.changeWidthSlider.initialNumber;
+				canvas._drawarea.currentellipseOpacity = this._content.changeOpacitySlider.initialNumber/100;
+			} else if (canvas._drawarea.drawmodus == 'letter'){
+				canvas._drawarea.setAttribute('currentlayerletter',this._content.lineColorChoose.selectedColor);
+				canvas._drawarea.setAttribute('currentlayersize',this._content.changeWidthSlider.initialNumber);
+				canvas._drawarea.italic = this._content._italic.getValue();
+				canvas._drawarea.bold = this._content._bold.getValue();
+				canvas._drawarea.doalterStyle();
+			} else {
+				if ($debug) Debug.warn("Not known drawmodus",canvas._drawarea.drawmodus);
+			}
+		}
+	</method>
+
+	<view name="_content" visible="${this.parent.isopen}" >
+		
+		<labelTextWidthTooltip name="_xvalueLabel" x="4" y="24"
+			labelid="545" labelLabelid="546"  /> 
+		<customEdittext name="_xvalue" x="24" y="24" regexpType="number" 
+			width="40" text="0" height="24"
+			onafterCheck="parent.parent.onUpdateBoundByText()" />
+		
+		<labelTextWidthTooltip name="_yvalueLabel" x="4" y="52"
+			labelid="547" labelLabelid="548"  /> 
+		<customEdittext name="_yvalue" x="24" y="52" regexpType="number"
+			width="40" text="0" height="24"
+			onafterCheck="parent.parent.onUpdateBoundByText()" />
+		
+		<labelTextWidthTooltip name="_widthvalueLabel" x="68" y="24"
+			labelid="549" labelLabelid="550" /> 
+		<customEdittext name="_widthvalue" x="88" y="24" regexpType="number" 
+			width="40" text="0" height="24"
+			onafterCheck="parent.parent.onUpdateBoundByText()" />
+		
+		<labelTextWidthTooltip name="_heightvalueLabel" x="68" y="52"
+			labelid="551" labelLabelid="552" /> 
+		<customEdittext name="_heightvalue" x="88" y="52" regexpType="number"
+			width="40" text="0" height="24"
+			onafterCheck="parent.parent.onUpdateBoundByText()" />
+			
+			
+		<lineColorChoose x="132" y="24" name="lineColorChoose" boxPosition="up" >
+			<handler name="onselectedColor" args="sel">
+				if ($debug) Debug.write("lineColorChoose sel: ",sel);
+				parent.parent.updateProperties();			
+			</handler>
+		</lineColorChoose>
+		
+		<fillColorChoose x="132" y="52" name="fillColorChoose" boxPosition="up" >
+			<handler name="onselectedColor" args="sel">
+				if ($debug) Debug.write("fillColorChoose sel: ",sel);
+				parent.parent.updateProperties();	
+			</handler>
+		</fillColorChoose>
+		
+		<changeWidthSlider x="222" y="24" name="changeWidthSlider" boxPosition="up" 
+			initialNumber="2" >
+			<handler name="oninitialNumber" args="i">
+				//this.parent.parent.parent._drawareaMask._drawarea.setAttribute('currentlayersize',i);
+				if ($debug) Debug.write("changeWidthSlider oninitialNumber sel: ",i);
+				parent.parent.updateProperties();	
+			</handler>
+		</changeWidthSlider> 
+		
+		<changeWidthSlider x="222" y="52" name="changeOpacitySlider" labelid="553" boxPosition="up"
+			initialNumber="100" >
+			<handler name="oninitialNumber" args="i">
+				//this.parent.parent.parent._drawareaMask._drawarea.setAttribute('currentlayersize',i);
+				if ($debug) Debug.write("changeOpacitySlider oninitialNumber sel: ",i);
+				parent.parent.updateProperties();	
+			</handler>
+		</changeWidthSlider> 
+
+	    <propertyPanelLetterButton name="_italic" x="286" y="24" labelid="86"
+                                   itemResourceName="italic" />
+	    
+	    <propertyPanelLetterButton name="_bold" x="312" y="24" labelid="87"
+                                   itemResourceName="bold" />
+		
+		<view name="_delemiter" width="2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" 
+			  height="$once{ parent.height - this.y - 4 }" y="20" x="338"/>
+		
+		<labelText labelid="721" y="26" x="344" />
+		
+		<resetCombobox name="currentDocument" width="300" height="24" fontsize="11"
+                           editable="false" shownitems="7" x="480" y="24">
+            <attribute name="sendSelection" value="true" type="boolean"/>
+            <handler name="onselect" args="sel">
+                if (this.sendSelection) {
+                    parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
+                }
+            </handler>
+        </resetCombobox>
+        <!--
+	    <labelCheckbox x="344" y="54" name="_fullFit" labelid="847" >
+            <handler name="onvalue" args="v">
+                if (parent.parent.ignoreUpdates) {
+                    return;
+                }
+                if ($debug) Debug.write("onvalue Full Fit ",v);
+                
+                parent.parent.parent._drawareaMask._drawarea.doFullFit(v);
+            </handler>
+            <labelTooltip labelid="1212" multiline="true" />
+	    </labelCheckbox> 
+	     -->       
+		
+		<view name="_documentsPanel" x="480" y="52" layout="axis:x;spacing:2">
+			
+			<handler name="oninit">
+                //if ($debug) Debug.write("oninit: ",this);
+                this._currentSlideNo.setAttribute('text',canvas.currentSlideNo);
+                this._totalSlideNo.setAttribute('text',canvas.currentSlideTotal);
+                //this._zoom.setAttribute('text',canvas.currentSlideZoom);
+            </handler>
+            <handler name="preclose">
+                //if ($debug) Debug.write("onclose: ",this);
+                canvas.currentSlideNo = Number(this._currentSlideNo.getText());
+                canvas.currentSlideTotal = Number(this._totalSlideNo.getText());
+                //canvas.currentSlideZoom = Number(this._zoom.getText());
+            </handler>
+			
+			<method name="addCurrentObject" args="itemObj">
+                //if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
+                var docName = itemObj.standardFileName;
+		        if (docName.length == 0) {
+		            docName = itemObj.fileName;
+		        }
+		        
+		        parent.currentDocument.addItem(docName,itemObj.name);
+                parent.currentDocument.sendSelection = false;
+                parent.currentDocument.selectItem(itemObj.name);
+                parent.currentDocument.sendSelection = true;
+                
+                parent._clickLayer.setAttribute("visibility","hidden");
+            </method>
+            
+            <method name="removeDocument" args="refItemName">
+            	
+            	if ($debug) Debug.warn("removeDocument ",refItemName);
+            	
+                parent.currentDocument.removeItem(refItemName);
+                if (parent.currentDocument.getNumItems() != 0) {
+                    parent.currentDocument.selectItemAt(0);
+                    parent._clickLayer.setAttribute("visibility","hidden");
+                } else {
+                	parent.currentDocument.clearSelection(); 
+                	parent._clickLayer.setAttribute("visibility","visible");
+                }
+            </method>
+            
+            <method name="clearDocumentsBar">
+                parent.currentDocument.reset();
+                parent._clickLayer.setAttribute("visibility","visible");
+            </method>
+            
+            <drawDocumentPanelItem name="b3" modi="doc_first" resourceItem="doc_first" 
+                labelid="255" />        
+            <drawDocumentPanelItem name="b4" modi="doc_pre" resourceItem="doc_pre" 
+                labelid="256" />            
+            <drawDocumentPanelItem name="b5" modi="doc_next" resourceItem="doc_next" 
+                labelid="257" />        
+            <drawDocumentPanelItem name="b6" modi="doc_last" resourceItem="doc_last" 
+                labelid="258" />        
+        
+            <customEdittext name="_currentSlideNo" width="40" height="24" regexpType="number" >
+                <handler name="onblur">
+                    if (parent.parent.parent.ignoreUpdates) {
+                    	if ($debug) Debug.write("ignoreUpdates -- ");
+                        return;
+                    }
+                    parent.parent.parent.parent._drawareaMask._drawarea.setCurrentDocumentByToolBar(parent.parent.currentDocument.getValue());
+                    parent.parent.parent.parent._drawareaMask._drawarea.newSlideNumber = Number(this.getText());
+                    parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction("setSlideNumber");         
+                </handler>
+            </customEdittext>    
+            <labelText y="6" labelid="254" />     
+            <labelText name="_totalSlideNo" y="6" width="40" />  
+            
+		</view>
+		
+		<!-- 340 -->
+		<view name="_clickLayer" clickable="true" opacity="0.75" x="340"
+			  width="460" height="$once{ parent.height - this.y }" 
+			  y="20" showhandcursor="false" bgcolor="0xFFFFFF" />
+		
+	</view>
+
+</class>
+     
+    
+</library>

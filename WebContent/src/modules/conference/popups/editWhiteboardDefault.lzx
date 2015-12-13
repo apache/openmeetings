@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="questionCheckbox" extends="view" width="$once{parent.width-4}" >
+	<attribute name="labelid" value="0" type="number" />
+	<attribute name="valBool"  value="false" type="boolean" />
+	<labelCheckbox name="holddatainSO" x="2" y="0" 
+		value="$once{parent.valBool}" text="" />
+    <labelText labelid="$once{ parent.labelid }" width="$once{parent.width-24}"
+    	x="18" multiline="true" resize="false">	
+    	<handler name="onclick">
+    		this.parent.holddatainSO.onclick.sendEvent();
+    	</handler>
+    </labelText>
+</class>
+
+<class name="editWhiteboardDefault" extends="labelExplorerBox" labelid="66"
+    docking="true" resizeable="false" closable="true" width="400" x="100" height="240">
+    
+    <attribute name="refObj" value="null" />
+    
+    <view name="_settings" width="$once{parent.width-4}" height="180" y="24" clip="true">
+		<view name="inner" width="$once{parent.width}" >
+			<simplelayout axis="y" spacing="2" />
+		</view>
+    	<om_vscrollbar />
+    </view>
+    <!-- 
+    63
+     -->
+    
+    <handler name="oninit" >
+		var g = canvas.getUserData();
+         if (g["image"]==null) {
+         	g["image"]=new Array();
+         	g["image"]["clearField"]=false;
+         	g["image"]["askagainclear"]=false;
+         	g["image"]["donotaskagainrdc"]=false;
+         }
+         var t = new lz.questionCheckbox(this._settings.inner,{name:"clearField",labelid:63,valBool:g["image"]["clearField"]});
+         //Debug.write("t: ",t);
+         t = new lz.questionCheckbox(this._settings.inner,{name:"askagainclear",labelid:67,valBool:g["image"]["askagainclear"]});
+		 //Debug.write("t: ",t);
+		
+         if (g["wmlfile"]==null) {
+         	g["wmlfile"]=new Array();
+         	g["wmlfile"]["clearField"]=false;
+         	g["wmlfile"]["askagainclear"]=false;
+         }
+         t = new lz.questionCheckbox(this._settings.inner,{name:"askagainclearwml",labelid:212,valBool:g["wmlfile"]["askagainclear"]});
+         
+         t = new lz.questionCheckbox(this._settings.inner,{name:"donotaskagainrdc",labelid:1127,valBool:g["image"]["donotaskagainrdc"]});
+		 
+         
+		 if (g["doShowUpdateProfileMessage"] == null) {
+		 	new lz.questionCheckbox(this._settings.inner,{name:"doShowUpdateProfileMessage",labelid:1299,valBool:false});
+		 } else {
+		 	new lz.questionCheckbox(this._settings.inner,{name:"doShowUpdateProfileMessage",labelid:1299,valBool:g["doShowUpdateProfileMessage"]});
+		 }
+         
+		 
+		 //Debug.write("t: ",t);
+    </handler>    
+    
+    <method name="storesettings" >
+		var g = canvas.getUserData();
+		
+         if (g["image"]==null) g["image"]=new Array();
+         g["image"]["clearField"]=this._settings.inner.clearField.holddatainSO.getValue();
+         g["image"]["askagainclear"]=this._settings.inner.askagainclear.holddatainSO.getValue();
+         g["image"]["donotaskagainrdc"]=this._settings.inner.donotaskagainrdc.holddatainSO.getValue();
+		
+         if (g["wmlfile"]==null) g["wmlfile"]=new Array();
+		//always true
+         g["wmlfile"]["clearField"]=true;
+         g["wmlfile"]["askagainclear"]=this._settings.inner.askagainclearwml.holddatainSO.getValue();
+		
+         g["doShowUpdateProfileMessage"] = this._settings.inner.doShowUpdateProfileMessage.holddatainSO.getValue();
+         
+	     canvas.setUserData(g);
+    </method>
+    
+    <simpleLabelButton labelid="61" width="100" x="290" y="216">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton> 
+       
+    <simpleLabelButton labelid="60" width="100" x="180" y="216">
+    	<handler name="onclick">
+    		parent.storesettings();
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>    
+    
+</class>
+
+</library>

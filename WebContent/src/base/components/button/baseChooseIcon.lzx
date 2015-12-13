@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<resource name="background_drawchoose_rsc">
+    <frame src="resources/menudraw_up.png" />
+    <frame src="resources/menudraw_over.png" />
+    <frame src="resources/menudraw_down.png" />
+</resource>
+
+<class name="baseChooseIcon" extends="view" width="24" height="24" 
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+    <attribute name="resourceN" value="" type="string" />
+    
+    <view name="_bg" x="1" y="1" height="$once{ parent.height - 2 }"
+    	  width="$once{ parent.width - 2 }" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" />
+    
+    <image name="_icon" src="$once{ canvas.getThemeImage(parent.resourceN) }" 
+    	  x="$once{ (parent.width-this.width) / 2 }"
+    	  y="$once{ (parent.height-this.height) / 2 }" 
+    	  width="18" height="18" stretches="both"/>
+    <attribute name="initX" value="0" type="number"/>
+    <attribute name="initY" value="0" type="number"/>
+    <attribute name="isselected" value="false" type="boolean" />
+	<!--
+    <attribute name="enabled" value="true" type="boolean" />
+	 -->
+    <attribute name="labelid" value="0" type="number" />
+    <handler name="onmouseover">
+    	this.isOut = false;
+    	this._bg.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
+    	this._icon.setAttribute("x",this._icon.x-1);
+    	this._icon.setAttribute("y",this._icon.y-1);
+    	this._icon.setAttribute("width",this._icon.width+2);
+    	this._icon.setAttribute("height",this._icon.height+2);
+    </handler>
+    <handler name="onmouseout">
+    	this._bg.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
+    	if (this.initX == this._icon.x) {
+    		return;
+    	}
+    	this.isOut = true;
+    	this._icon.setAttribute("x",this.initX);
+    	this._icon.setAttribute("y",this.initY);
+    	this._icon.setAttribute("width",this._icon.width-2);
+    	this._icon.setAttribute("height",this._icon.height-2);
+    </handler>
+    <handler name="onclick">
+    	this.onmouseout.sendEvent(null);
+    </handler>
+    <handler name="oninit">
+    	this.initX = this._icon.x;
+    	this.initY = this._icon.y;
+        if (this.isselected){
+            this.onclick.sendEvent();
+            this.setAttribute('frame',3);
+        }
+    </handler>          
+    <labelTooltip labelid="$once{ parent.labelid }" inittwice="true" />
+</class>
+
+
+</library>

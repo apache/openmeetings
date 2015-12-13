@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<library>
+
+<class name="VolumeSlider" extends="closableView" clickable="true" height="120">
+
+    <switch>
+    <when property="$as3">
+        <passthrough>
+            import flash.net.*;
+            import flash.media.*;
+        </passthrough>
+    </when>
+    </switch>
+
+    <attribute name="videoStream" value="null" />
+    <attribute name="ownStream" type="boolean" value="false" />
+    <attribute name="resizing" type="boolean" value="false" />
+
+    <attribute name="videoObject" value="null" />
+    <attribute name="initialNumber" value="50" type="number"/>
+    <attribute name="maxvalue" value="100" type="number" />
+
+    <dragHelper name="dragHelper"/>
+
+    <handler name="oninit">
+        dragHelper.create();
+    </handler>
+
+    <handler name="ondestroy">
+        dragHelper.remove();
+    </handler>
+
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" >
+        <![CDATA[
+        if (eventStr == "onmousedown") {
+            if (null != view) {
+                if (!view.childOf(this)) {
+                    this.close();
+                }
+            } else {
+                this.close();
+            }
+        }
+        if (view && view.childOf(this)) {
+            if (view[eventStr]) {
+                view[eventStr].sendEvent(view);
+            }
+            return false;
+        }
+        return true;
+        ]]>
+    </method>
+
+    <vslider name="_slider" height="$once{parent.height}" y="10" x="0" minvalue="0" maxvalue="100"
+        initvalue="$once{parent.initialNumber}" showrange="false" showvalue="false" switchaxis="true">
+        <handler name="onvalue" args="v">
+            if ($debug) Debug.write("onvalue", v);
+
+            parent.videoObject.setStreamVolume(Number(v));
+        </handler>
+        <handler name="onvalueChosenFinal">
+            parent.close();
+        </handler>
+    </vslider>
+
+</class>
+
+</library>
