@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Drupal Plugin</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Drupal Plugin for OpenMeetings">
+			<p>
+				You can get the latest Version of the Plugin for Drupal for OpenMeetings at  
+				<a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings">apache-extras.org</a>
+				. Just goto the Drupal plugin and navigate to the project.
+				<br/>
+				A demo version+video of the Drupal plugin is available at
+				<a href="http://drupal.openmeetings.de/" target="_BLANK" rel="nofollow">drupal.openmeetings.de
+				</a>
+				.
+				
+			</p>
+		</section>
+		
+		<section name="Installation of the Drupal Plugin for Apache OpenMeetings">
+			<p>
+				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
+				<br/>
+				For a detailed description on how to install plugins in Drupal please review their 
+				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" rel="nofollow">handbook</a>.
+				<br />
+				Then you visit the module interface of Drupal, where you will find the new module.
+				You should switch it to "enabled" to get the "Configure" and "Permissions" buttons.
+			</p>
+			<a class="fancybox-buttons" href="images/drupal_module_installation.png">
+				<img src="images/drupal_module_installation.png" alt="" width="600"
+					height="150" />
+			</a>
+			<p>
+				In the configuration you enter the auth data to access your Apache OpenMeetings server:
+			</p>
+			<a class="fancybox-buttons" href="images/drupal_module_configuration.png">
+				<img src="images/drupal_module_configuration.png" alt="" width="600"
+					height="340" />
+			</a>
+		</section>
+		
+		<section name="Adding a new conference room to Drupal">
+			
+			<p>
+				After installation of the plugin you can go to the front page in Drupal and add a new content item 
+				"OpenMeetings Rooms" => "Add New Room". You may find following configuration values for each 
+				conference room:
+			</p>
+			<a class="fancybox-buttons" href="images/drupal_room_configuration.png">
+				<img src="images/drupal_room_configuration.png" alt="" width="600"
+					height="400" />
+			</a>
+		</section>
+		
+	</body>
+
+</document>

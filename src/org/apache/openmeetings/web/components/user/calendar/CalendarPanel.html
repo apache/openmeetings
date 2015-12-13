@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link media="screen" type="text/css" rel="stylesheet" href='css/fullcalendar.css' />
+		<!-- link media="print" type="text/css" rel="stylesheet" href='css/fullcalendar.print.css' /--> <!-- FIXME incorrectly rendered -->
+		<script type="text/javascript">
+			function getCalendarHeight() {
+				return $(window).height() - $('#calendar').position().top - 20; //FIXME HACK
+			}
+			
+			function refetchEvents() {
+				$('#calendar').fullCalendar('refetchEvents');
+				window.setTimeout(refetchEvents, 10 * 1000);
+			}
+			
+			function calendarInit() {
+				$('#calendar').fullCalendar({
+					header: {
+						left: 'prev,next today',
+						center: 'title',
+						right: 'month,agendaWeek,agendaDay'
+					}
+					, editable: true
+					, allDaySlot: false
+					, axisFormat: 'HH(:mm)'
+					, selectable: true
+					, defaultEventMinutes: 60
+					, timeFormat: {
+						agenda: 'HH:mm{ - HH:mm}'
+						, '': 'HH(:mm)'
+					}
+					, height: getCalendarHeight()
+					, windowResize: function() {
+						//$('#calendar').data().fullCalendar.option('height', getCalendarHeight());
+						this.option('height', getCalendarHeight());
+					}
+					, eventDrop: dropEventFunc //TODO confirm ??
+					, eventResize: resizeEventFunc //TODO confirm ??
+					, eventClick: eventClickFunc
+					, select: selectFunc
+					, eventSources: [
+						{
+							events: fetchEventsFunc
+							//, color: '#4793E6'
+							//, textColor: 'black'
+						}
+					]
+				});
+				refetchEvents();
+				
+				$('#appointment').dialog({
+					closeOnEscape: true
+					, resizable: true
+					, width: 450
+					, autoOpen: false
+					, modal: true
+				});
+			}
+		</script>
+	</wicket:head>
+	<wicket:panel>
+		<script type="text/javascript" src="js/fullcalendar.min.js"></script>
+		<div wicket:id="calendar"></div>
+		<!-- bottom section -->
+		<div id="appointment" wicket:ommessage="title:815">
+			<form wicket:id="appointment">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="572" /></td>
+						<td><input type="text" wicket:id="appointmentName" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="570" /></td>
+						<td><span wicket:id="appointmentStarttime"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="571" /></td>
+						<td><span wicket:id="appointmentEndtime"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="565" /></td>
+						<td><select wicket:id="remind" ></select></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="checkbox" wicket:id="createRoom" /><wicket:ommessage key="1509" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="619" /></td>
+						<td><select wicket:id="room.roomtype" ></select></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="406" /></td>
+						<td><select wicket:id="room" ></select></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="checkbox" wicket:id="isPasswordProtected" /><wicket:ommessage key="524" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="525" /></td>
+						<td><input type="password" wicket:id="password" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><wicket:ommessage key="1445" /></td>
+					</tr>
+					<!-- 
+					<tr>
+						<td><wicket:ommessage key="803" /></td>
+						<td><select wicket:id="meetingMember" ></select></td>
+					</tr -->
+					<tr>
+						<td><wicket:ommessage key="569" /></td>
+						<td><input type="text" wicket:id="appointmentLocation" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="573" /></td>
+						<td><textarea wicket:id="appointmentDescription"></textarea></td>
+					</tr>
+					<!-- tr>
+						<td colspan="2" style="text-align: right"><input type="button" wicket:id="save" /><input type="button" wicket:id="cancel" /></td>
+					</tr -->
+				</table>
+			</form>
+		</div>
+	</wicket:panel>
+</html>

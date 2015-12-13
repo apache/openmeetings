@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<library>
+
+	<!--- Contains no microphone or camera Object, this view can only subscribe 
+		to a video or live-stream -->
+	<class name="videoObjectPlayBroadcast" extends="baseVideoObject"
+		isremote="true">
+		<attribute name="interviewPodId" value="-1" />
+		<attribute name="ratioW" value="1" />
+		<attribute name="ratioH" value="1" />
+
+		<attribute name="videoInsetX" value="2" type="number" />
+		<attribute name="videoInsetY" value="21" type="number" />
+		<attribute name="bottomBarHeight" value="0" type="number" />
+
+		<handler name="oninit">
+		<![CDATA[
+			if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.isremote,this.clientVars);
+			//Display widget defined in mother class
+			this._loudness.bringToFront();
+			this._resizeview.bringToFront();
+		]]>
+		</handler>
+
+		<!--- Change the video resolution by chaning pod size -->
+		<method name="setDefaultVideoSize" args="w,h">
+			this.initRatio = w / h;
+			this.setAttribute("width",w+this.videoInsetX);
+
+			if (canvas.currentRoomObject.showMicrophoneStatus) {
+				this.setAttribute("bottomBarHeight",this._innertop.height + 1);
+			}
+
+			this.setAttribute("height",h+this.videoInsetY+this.bottomBarHeight);
+		</method>
+
+		<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" y="$once{ parent.videoInsetY-1 }"
+			height="${parent.height-parent.videoInsetY-parent.bottomBarHeight}"
+			width="${parent.width-parent.videoInsetX}">
+
+			<attribute name="initH" />
+			<attribute name="initW" />
+
+			<handler name="oninit">
+				this.r.setAttribute('frame',5);
+				this.initH =
+				this.height;
+				this.initW = this.width;
+			</handler>
+
+			<view name="r"></view>
+
+			<baseVideoStreamDevice name="_videostream"
+				bgcolor="black" width="${parent.width}" height="${parent.height}">
+				<handler name="onlevel">
+					var fullLength = parent.height-24;
+					parent._activityLevel.setAttribute("height",-this.level*(fullLength/100));
+				</handler>
+			</baseVideoStreamDevice>
+
+			<view name="_activityLevel" width="6" x="2" y="${parent.height}"
+				opacity="0.5" bgcolor="0x00FF00" height="0" />
+		</view>
+	</class>
+</library>

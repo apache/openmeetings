@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="borderedInputtext" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
+	<attribute name="width" value="200" type="size" />
+	<attribute name="height" value="18" type="size" />
+    <attribute name="tvalue" type="string" value="default"/>
+    <attribute name="sendchange" value="false" type="boolean" />
+    <attribute name="multiline" value="false"/>
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+    <attribute name="checkIsNumber" value="false" type="boolean" />
+    <attribute name="checkIsDouble" value="false" type="boolean" />
+    <attribute name="editable" value="true" setter="setEditable(editable)" type="boolean" />
+    <method name="setEditable" args="value">
+        this.editable=value;
+    	this.field.setEnabled(value);
+    </method>
+    <event name="onblur" />
+    <method name="setItemEnabled" args="value">
+    	this.field.setEnabled(value);
+    </method>    
+    <attribute name="maxlength" value="null" type="number"/>         	
+	<attribute name="text" type="string" value="" />
+		<!-- -->
+  <inputtext name="field" fontsize="10" text="${ this.parent.text }" x="1" y="1" bgcolor="0xFFFFFF" 
+  	multiline="$once{parent.multiline}" width="${ this.parent.width-2 }" height="${ this.parent.height-2 }" >
+  		<attribute name="preText" value="" type="string" />
+  		<handler name="onfocus">
+  			this.preText = this.getText();
+  		</handler>
+      	<handler name="onblur">
+      		var t = this.getText();
+      		if (this.parent.checkIsNumber){
+      			if ( isNaN( Number(t) ) ){
+      				if (this.parent.checkIsDouble){
+      					t="0.00";
+      				} else {
+      					t=this.preText;
+      				}
+      				this.setAttribute('text',t);
+      			}
+      		}
+            if (this.parent.sendchange) this.parent.parent.sendchange(this.parent,this.parent.tvalue,this.getText());
+            if (this.parent.onblur) this.parent.onblur.sendEvent();
+      	</handler>
+        <handler name="oninit">
+            this.setEnabled(this.parent.editable);
+        </handler>       	           
+	</inputtext>	   
+	 
+	<method name="getText">
+		return this.field.getText();
+	</method>
+	<method name="setText" args="txt">
+		this.setAttribute('text',txt);
+	</method> 		
+</class>
+
+<class name="borderedMultiInputtext" extends="view">
+	<attribute name="width" value="200" type="size" />
+	<attribute name="height" value="18" type="size" />
+    <attribute name="tvalue" type="string" value="default"/>
+    <attribute name="sendchange" value="false" type="boolean" />
+    <attribute name="multiline" value="false"/>
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+    <attribute name="checkIsNumber" value="false" type="boolean" />
+    <attribute name="checkIsDouble" value="false" type="boolean" />
+    <attribute name="editable" value="true" setter="setEditable(editable)" type="boolean" />
+    <method name="setEditable" args="value">
+        this.editable=value;
+    	this.field.setEnabled(value);
+    </method>
+    <method name="setItemEnabled" args="value">
+    	this.field.setEnabled(value);
+    </method>    
+    <attribute name="maxlength" value="null" type="number"/>         	
+	<attribute name="bgcolor" value="0xA3B2CC" type="color" />
+	<attribute name="text" type="string" value="" />
+		<!-- -->
+  <inputtext name="field" fontsize="10" text="${ this.parent.text }" x="1" y="1" bgcolor="0xFFFFFF" 
+  	multiline="true" width="${ this.parent.width-2 }" height="${ this.parent.height-2 }" >
+      	<handler name="onblur">
+      		var t = this.getText();
+      		if (this.parent.checkIsNumber){
+      			if ( isNaN( Number(t) ) ){
+      				if (this.parent.checkIsDouble){
+      					t="0.00";
+      				} else {
+      					t="0";
+      				}
+      				this.setAttribute('text',t);
+      			}
+      		}
+            if (this.parent.sendchange) this.parent.parent.sendchange(this.parent,this.parent.tvalue,this.getText());
+      	</handler>   
+        <handler name="oninit">
+            this.setEnabled(this.parent.editable);
+            if(this.multiline) this.init();
+        </handler>       	           
+        <method name="init">
+            super.init();        
+        </method>
+	</inputtext>	   
+	 
+	<method name="getText">
+		return this.field.getText();
+	</method>
+	<method name="setText" args="txt">
+		this.setAttribute('text',txt);
+	</method> 		
+</class>
+
+<class name="borderedPasswordText" extends="view">
+	<attribute name="width" value="200" type="size" />
+	<attribute name="height" value="18" type="size" />
+    <attribute name="tvalue" type="string" value="default"/>
+    <attribute name="sendchange" value="false" type="boolean" />
+    <attribute name="multiline" value="false"/>
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+    <attribute name="checkIsNumber" value="false" type="boolean" />
+    <attribute name="checkIsDouble" value="false" type="boolean" />
+    <attribute name="editable" value="true" setter="setEditable(editable)" type="boolean" />
+    <method name="setEditable" args="value">
+        this.editable=value;
+    	this.field.setEnabled(value);
+    </method>
+    <method name="setItemEnabled" args="value">
+    	this.field.setEnabled(value);
+    </method>    
+    <attribute name="maxlength" value="null" type="number"/>         	
+	<attribute name="bgcolor" value="0xA3B2CC" type="color" />
+	<attribute name="text" type="string" value="" />
+		<!-- -->
+  <inputtext name="field" fontsize="10" text="${ this.parent.text }" x="1" y="1" bgcolor="0xFFFFFF" 
+  	multiline="$once{parent.multiline}" password="true" width="${ this.parent.width-2 }" height="${ this.parent.height-2 }" >
+      	<handler name="onblur">
+      		var t = this.getText();
+      		if (this.parent.checkIsNumber){
+      			if ( isNaN( Number(t) ) ){
+      				if (this.parent.checkIsDouble){
+      					t="0.00";
+      				} else {
+      					t="0";
+      				}
+      				this.setAttribute('text',t);
+      			}
+      		}
+            if (this.parent.sendchange) this.parent.parent.sendchange(this.parent,this.parent.tvalue,this.getText());
+      	</handler>   
+        <handler name="oninit">
+            this.setEnabled(this.parent.editable);
+        </handler>       	           
+	</inputtext>	   
+	 
+	<method name="getText">
+		return this.field.getText();
+	</method>
+	<method name="setText" args="txt">
+		this.setAttribute('text',txt);
+	</method> 		
+</class>
+
+</library>

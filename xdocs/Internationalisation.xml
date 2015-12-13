@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Upgrade</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Where to find language files">
+
+			<p>You can find all current language files here: </p>
+			<p>
+				<a
+					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/languages/"
+					rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/languages/
+				</a>
+			</p>
+			<p>Just take one file and translate it to your language. </p>
+		</section>
+
+		<section name="Import and export of Language Files">
+
+			<ul>
+				<li>
+					Use the
+					<a href="LanguageEditor.html">LanguageEditor</a>
+					for translation
+				</li>
+				<li>
+					with the
+					<a href="LanguageEditor.html">LanguageEditor</a>
+					you can import and export Language Files
+				</li>
+			</ul>
+		</section>
+
+		<section name="How to add it as installation option">
+			<p>
+				Once you have finished the translation you can add a new node to:
+				<a
+					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml"
+					rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml
+				</a>
+			</p>
+			<p>the name of the language should match the name of the file. Once
+				this is done the Language file will automatically be imported during
+				installation and will be an option at login.
+			</p>
+		</section>
+
+	</body>
+
+</document>

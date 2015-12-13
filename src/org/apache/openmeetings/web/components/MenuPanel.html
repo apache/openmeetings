@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery.ui.menubar.css"/>
+	</wicket:head>
+	<wicket:panel>
+		<script type="text/javascript" src="js/jquery.ui.menubar.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#jMenu").menubar({
+					autoExpand: true
+					, menuIcon: true
+					, buttons: true
+					, position: {
+						within: $("#menu").add(window).first()
+					}
+					//, select: select
+				});
+			});
+		</script>
+		<ul id="jMenu">
+			<li wicket:id="mainItem">
+				<a class="fNiv" href="#" onclick="return false;"><span wicket:id="label"></span></a>
+				<ul wicket:enclosure="childItem">
+					<li wicket:id="childItem">
+						<a wicket:id="link" href="#">
+							<span class="menuName" wicket:id="name"></span><br />
+							<span class="menuDesc" wicket:id="description"></span>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</wicket:panel>
+</html>

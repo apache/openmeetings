@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+       <script type="text/javascript">
+           function omServerPanelInit() {
+               var documentHeight = $(document).height();
+               $('#adminForm').height(documentHeight-114);
+               $('#adminTable').height(documentHeight-144);
+           }
+       </script>
+    </wicket:head>
+	<wicket:panel>
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<thead>
+						<tr>
+							<th class="three_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="188" /></th>
+							<th class="three_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="1500" /></th>
+							<th class="three_column_layout_column3"><span wicket:id="orderByAddress"></span><wicket:ommessage key="1501" /></th>
+						</tr>	
+					</thead>
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">
+						<tbody wicket:id="listContainer">	
+				    		<tr wicket:id="serverList">
+								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="id"></span></div></td>
+								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="address"></span></div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+						<fieldset>
+							<legend><wicket:ommessage key="1502" /></legend>
+							<div class="formelement">
+                                <label><wicket:ommessage key="1500" /></label><input type="text" wicket:id="name"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1525" /></label><input type="checkbox" class="formcheckbox" wicket:id="active" />
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1501" /></label><input type="text" wicket:id="address"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1519" /></label><input type="text" wicket:id="port"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1520" /></label><input type="text" wicket:id="user"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1521" /></label><input type="text" wicket:id="pass"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1522" /></label><input type="text" wicket:id="webapp"/>
+				            </div>
+				            <div class="formelement">
+                                <label><wicket:ommessage key="1523" /></label><input type="text" wicket:id="protocol"/>
+				            </div>
+				            <div class="formelement">
+					            <div class="info-icon" /><span style="font-style: italic;"><wicket:ommessage key="1518" /></span>
+	                                <br/>
+                                <label><wicket:ommessage key="1517" /></label><span wicket:id="lastPing"/>
+                                <!-- br/>
+                                <label><wicket:ommessage key="1524" /></label><span wicket:id="pingRunning"/-->
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1110" /></label><span wicket:id="inserted"/>
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1111" /></label><span wicket:id="insertedby.login"/>
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1112" /></label><span wicket:id="updated"/>
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="1113" /></label><span wicket:id="updatedby.login"/>
+				            </div>
+                            <div class="formelement">
+                                <label><wicket:ommessage key="270" /></label><textarea wicket:id="comment"/>
+				            </div>
+				        </fieldset>
+				    </div>
+				</form>
+			</div>
+		</div>
+	</wicket:panel>
+</html>

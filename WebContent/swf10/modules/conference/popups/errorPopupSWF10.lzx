@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="errorPopupSWF10" extends="labelExplorerBox" labelid="204"
+	docking="true" resizeable="false" closable="true" y="100"
+    x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
+
+	<attribute name="error" value="" type="string" />
+	
+	<attribute name="makeModal" value="false" type="boolean" />
+	
+	<handler name="oninit">
+	   if (this.makeModal) {
+	       lz.ModeManager.makeModal(this);
+	   }
+	</handler>
+	
+	<handler name="onclose">
+       if (this.makeModal) {
+           lz.ModeManager.releaseAll();
+       }
+    </handler>
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+		<text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+	</view>
+    
+    <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.close();" />
+
+</class>
+
+<class name="labelerrorPopupSWF10" extends="errorPopupSWF10">
+
+    <attribute name="errorlabelid" type="number" setter="setErrorLabelId(errorlabelid)" />
+    <method name="setErrorLabelId" args="errorlabelid" >
+        this.errorlabelid = errorlabelid;
+        this.setAttribute("error",canvas.getLabelName(this.errorlabelid));
+        if ($debug) Debug.write("labelerrorPopupSWF10: ",canvas.getLabelName(this.errorlabelid));
+    </method>
+    
+
+</class>
+
+<class name="singletonErrorPopupSWF10" extends="errorPopupSWF10">
+	<handler name="oninit">
+		lz.singletonErrorPopupHolderSWF10.dialogPresent = 1;
+		lz.singletonErrorPopupHolderSWF10.dialogObject = this;
+	</handler>
+	
+	<handler name="ondestroy">
+		lz.singletonErrorPopupHolderSWF10.dialogPresent = 0;
+		lz.singletonErrorPopupHolderSWF10.dialogObject = null;
+	</handler>
+</class>
+
+<class name="singletonErrorPopupHolderSWF10">
+	<attribute name="error" type="string" setter="setError(error)"/>
+	<attribute name="dialogPresent" allocation="class" value="0" />
+	<attribute name="dialogObject" allocation="class" />
+	
+	<method name="setError" args="error">
+	
+		if ( lz.singletonErrorPopupHolderSWF10.dialogPresent == 0 )
+		{
+			lz.singletonErrorPopupHolderSWF10.dialogPresent = 1;
+			lz.singletonErrorPopupHolderSWF10.dialogObject = new lz.singletonErrorPopupSWF10(canvas,{error:error});
+		}
+		else
+		{
+			lz.singletonErrorPopupHolderSWF10.dialogObject.error = error;
+		}
+	</method>
+</class>
+
+</library>

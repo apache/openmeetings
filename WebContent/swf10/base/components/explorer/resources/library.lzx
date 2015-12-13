@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<!-- APL author sebawagner -->
+<resource src="explorerbar.png" name="explorer_thumb_rsc" />
+
+<!-- APL author sebawagner -->
+<resource name="explorer_button_min_rsc" >
+	<frame src="explorbar_minimize_no.png" />
+	<frame src="explorbar_minimize_mo.png" />
+	<frame src="explorbar_minimize_dn.png" />
+</resource>
+
+<!-- APL author sebawagner -->
+<resource name="explorer_button_max_rsc" >
+	<frame src="explorbar_maximize_no.png" />
+	<frame src="explorbar_maximize_mo.png" />
+	<frame src="explorbar_maximize_dn.png" />
+</resource>
+
+<!-- APL author sebawagner -->
+<resource name="explorer_resize_rsc" src="resizer.swf" />
+
+<!-- APL author sebawagner -->
+<resource name="btn_presenter_minimize" src="minimize_up.png" />
+<!-- APL author sebawagner -->
+<resource name="btn_presenter_maximize" src="maximize_up.png" />
+<!-- APL author sebawagner -->
+<resource name="btn_presenter_maximize2" src="maximize2_up.png" />
+
+<!-- APL author sebawagner -->
+<resource name="btn_presenter_close">
+    <frame src="close_up.png" />
+    <frame src="close_mo.png" />
+    <frame src="close_dn.png" />
+</resource> 
+
+<!-- APL author sebawagner -->
+<resource name="explorer_resizemouse_rsc" src="resizemouse.png" />
+
+</library>

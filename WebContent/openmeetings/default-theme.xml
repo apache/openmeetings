@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="theme.xsd">
+
+	<!-- Colors -->
+
+	<color name="mainBackgroundColor" value="0xEEF0EB" 
+				description="main background color" />
+
+	<color name="basebgcolorizer" value="0xBDC0DB" 
+				description="Color for background" />
+				
+	<color name="baseMousecolorizer" value="0xBDC0DB" 
+				description="Color Mouseover color for list items" />
+	
+	<color name="baseMouseOvercolorizer" value="0xBDC0DB" 
+				description="Color Mouseover color for list items" />	
+	
+	<color name="styleMenuBarBaseColor" value="0x000088" 
+				description="menu bar background color" />				
+	
+	<color name="mainBorderColor" value="0xCCCCCC" 
+				description="main border color" />
+				
+	<color name="secondBorderColor" value="0xE0E0E0" 
+				description="main border color" />	
+		
+	<color name="menuBackgroundColor" value="0xEFEFEF" 
+				description="main border color" />
+				
+	<color name="menuTextColor" value="0x666666" 
+				description="color of text for menus" />
+	
+	<color name="menuTextDisabledColor" value="0xBBBBBB" 
+				description="color of text for menus" />		
+	
+	<!-- Icons -->
+	<resource name="logo_image" 
+				description="Logo to display on Main BG Navi" 
+				license="APL"
+				src="public/themes/basic-theme/general/logo.png" />
+	
+	<resource name="icon_facebook_rsc_png" 
+				description="Icon for facebook button in login" 
+				license="Unkown"
+				src="public/themes/basic-theme/auth/icon_facebook.png" />
+				
+	<resource name="warning_popup_icon_rsc" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/error.png" />	
+				
+	<resource name="info_text_icon_rsc" 
+				description="Info Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/information.png" />
+	
+	<!-- Save Toolbar (for example Admin section) -->
+	
+	<resource name="filesave_rsc" 
+				description="Save Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/disk.png" />
+
+	<resource name="edit_add_rsc" 
+				description="Save Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/plus_icon.png" />
+
+	<resource name="reload_rsc" 
+				description="Save Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/arrow_refresh_small.png" />
+	
+	<resource name="button_cancel_rsc" 
+				description="Save Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/cancel_icon.png" />
+
+	<resource name="add_rsc" 
+				description="Edit Add Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/add.png" />
+				
+	<resource name="date_icon_rsc" 
+				description="Edit Add Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/calendar_view_week.png" />
+				
+	<!-- Sorted list -->
+	
+	<resource name="step_back_two_arrow" 
+				description="Step to first" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_first.png" />
+				
+	<resource name="step_fwd_two_arrow" 
+				description="Step to last" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_last.png" />
+						
+    <resource name="step_back_arrow" 
+    			description="Step one back" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_previous.png" />
+    
+    <resource name="step_fwd_arrow" 
+    			description="Step one next" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_next.png" />
+				
+    <resource name="sort_up_rsc" 
+    			description="Sort up" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_up.png" />
+    
+    <resource name="sort_down_rsc" 
+    			description="Sort down" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_down.png" />
+    
+    <!-- Chat toolbar -->
+    
+    <resource name="font_style" 
+    			description="Change font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/style.png" />
+    
+    <resource name="font_bold" 
+    			description="Bold font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_bold.png" />
+    
+    <resource name="font_italic" 
+    			description="Italic font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_italic.png" />
+    
+    <resource name="font_underline" 
+    			description="Underline font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_underline.png" />
+    
+    <resource name="font_color" 
+    			description="Change font color button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/color_swatch.png" />
+    
+    <resource name="hyperlink" 
+    			description="Insert hyperlink button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/world_link.png" />
+				
+	<!-- Whiteboard Toolbar -->
+	
+	<resource name="plain" 
+				description="Toolbar Icon" 
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/whiteboard/delete_all.png" />
+	
+	<resource name="plainSlides" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/page_delete.png" />
+	
+	<resource name="arrow_draw_panel_tool_cursor" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/arrow_cursor_tool.png" />
+
+	<resource name="saveobj" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/disk.png" />
+
+	<resource name="revert" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/arrow_rotate_anticlockwise.png" />
+
+	<resource name="next" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/arrow_rotate_clockwise.png" />
+
+	<resource name="menupointer_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/menupointer.png" />
+				
+	<resource name="pointer_whiteboard_menu_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/pointerWhiteBoard_menu_rsc.png" />
+				
+	<resource name="letter" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/letter.png" />
+
+	<resource name="paint" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/pencil.png" />
+	
+	<resource name="line_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/line.png" />	
+	
+	<resource name="uline_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/uline.png" />	
+		
+	<resource name="rectangle" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/rectangle.png" />	
+
+	<resource name="ellipse" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/ellipse.png" />	
+				
+	<resource name="drawarrowicon_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/drawarrowicon.png" />			
+		
+	<!-- whiteboard general -->		
+				
+	<resource name="bounding_box_delete_item_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/cancel_icon_small.png" />	
+	
+	<resource name="bounding_box_textedit_item_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/text_signature.png" />				
+					
+	<!-- document Tools -->	
+	
+	<resource name="doc_next" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_next.png" />		
+				
+	<resource name="doc_pre" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_pre.png" />		
+				
+	<resource name="doc_first" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_first.png" />		
+				
+	<resource name="doc_last" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_last.png" />		
+				
+	<!-- property panel -->	
+	<resource name="colorlinechoose_rsc" 
+				description="Property bar icon line color" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/pencil.png" />
+	
+	<resource name="colorfillchoose_rsc" 
+				description="Property bar icon fill color" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/paintcan.png" />
+	
+	<resource name="color_lock_rsc" 
+				description="Property bar icon color lock" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/lock.png" />
+	
+	<resource name="color_lock_open_rsc" 
+				description="Property bar icon color lock open" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/lock_open.png" />	
+				
+	<!-- Dashboard -->
+	
+	<resource name="icon_btn_dashboard_1" 
+				description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_1.png" />
+				
+    <resource name="icon_btn_dashboard_2" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_2.png" />
+				
+    <resource name="icon_btn_dashboard_3" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_3.png" />
+				
+    <resource name="icon_btn_dashboard_4" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_4.png" />
+	
+	<resource name="icon_btn_rss_conference" 
+    			description="RSS Tab Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/dashboard/feed.png" />
+	
+	<resource name="icon_btn_chat_dashboard" 
+				description="Chat Tab Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/dashboard/comments.png" />
+	
+    <resource name="icon_btn_rooms_conference" 
+				description="Conference Room Tab Icon" 
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/dashboard/conference_icon_normal.png" />	
+				
+	<!-- Conference room -->	
+	<resource name="users_tab_btn" 
+				description="Conference Room Tab User" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/conference/group.png" />
+		
+	<resource name="files_tab_btn" 
+				description="Conference Room Tab Files" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/conference/folder_explore.png" />
+	
+	<resource name="exit_btn_rsc" 
+				description="Conference Room Tab Icon" 
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/conference/exit_button.png" />			
+	
+</theme>

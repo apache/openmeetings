@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!-- 
+	This list is complete and up-to-date as of 18 February 2007. 
+	from United Nations
+	United Nations Statistics Division- Standard Country and Area Codes Classifications (M49)
+	http://unstats.un.org/unsd/methods/m49/m49alpha.htm
+	
+	28.07.2007 add Taiwan, Republic of China country code 157, short ROC
+	 -->
+<countries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="countries.xsd">
+	<country code="004" name="Afghanistan" short="AFG" />
+	<country code="248" short="ALA" name="Åland Islands" />
+	<country code="008" short="ALB" name="Albania" />
+	<country code="012" short="DZA" name="Algeria" />
+	<country code="016" short="ASM" name="American Samoa"/>
+	<country code="020" short="AND" name="Andorra"/>
+	<country code="024" short="AGO" name="Angola"/>
+	<country code="660" short="AIA" name="Anguilla"/>
+	<country code="028" short="ATG" name="Antigua and Barbuda"/>
+	<country code="032" short="ARG" name="Argentina"/>
+	<country code="051" short="ARM" name="Armenia"/>
+	<country code="533" short="ABW" name="Aruba"/>
+	<country code="036" short="AUS" name="Australia"/>
+	<country code="040" short="AUT" name="Austria"/>
+	<country code="031" short="AZE" name="Azerbaijan"/>
+	<country code="044" short="BHS" name="Bahamas"/>
+	<country code="048" short="BHR" name="Bahrain"/>
+	<country code="050" short="BGD" name="Bangladesh"/>
+	<country code="052" short="BRB" name="Barbados"/>
+	<country code="112" short="BLR" name="Belarus"/>
+	<country code="056" short="BEL" name="Belgium"/>
+	<country code="084" short="BLZ" name="Belize"/>
+	<country code="204" short="BEN" name="Benin"/>
+	<country code="060" short="BMU" name="Bermuda"/>
+	<country code="064" short="BTN" name="Bhutan"/>
+	<country code="068" short="BOL" name="Bolivia"/>
+	<country code="070" short="BIH" name="Bosnia and Herzegovina"/>
+	<country code="072" short="BWA" name="Botswana"/>
+	<country code="076" short="BRA" name="Brazil"/>
+	<country code="092" short="VGB" name="British Virgin Islands"/>
+	<country code="096" short="BRN" name="Brunei Darussalam"/>
+	<country code="100" short="BGR" name="Bulgaria"/>
+	<country code="854" short="BFA" name="Burkina Faso"/>
+	<country code="108" short="BDI" name="Burundi"/>
+	<country code="116" short="KHM" name="Cambodia"/>
+	<country code="120" short="CMR" name="Cameroon"/>
+	<country code="124" short="CAN" name="Canada"/>
+	<country code="132" short="CPV" name="Cape Verde"/>
+	<country code="136" short="CYM" name="Cayman Islands"/>
+	<country code="140" short="CAF" name="Central African Republic"/>
+	<country code="148" short="TCD" name="Chad"/>
+	<country code="830" short="" name="Channel Islands"/>
+	<country code="152" short="CHL" name="Chile"/>
+	<country code="156" short="CHN" name="China"/>
+	<country code="344" short="HKG" name="Hong Kong Special Administrative Region of China"/>
+	<country code="446" short="MAC" name="Macao Special Administrative Region of China"/>
+	<country code="170" short="COL" name="Colombia"/>
+	<country code="174" short="COM" name="Comoros"/>
+	<country code="178" short="COG" name="Congo"/>
+	<country code="184" short="COK" name="Cook Islands"/>
+	<country code="188" short="CRI" name="Costa Rica"/>
+	<country code="384" short="CIV" name="Côte d'Ivoire"/>
+	<country code="191" short="HRV" name="Croatia"/>
+	<country code="192" short="CUB" name="Cuba"/>
+	<country code="196" short="CYP" name="Cyprus"/>
+	<country code="203" short="CZE" name="Czech Republic"/>
+	<country code="408" short="PRK" name="Democratic People's Republic of Korea"/>
+	<country code="180" short="COD" name="Democratic Republic of the Congo"/>
+	<country code="208" short="DNK" name="Denmark"/>
+	<country code="262" short="DJI" name="Djibouti"/>
+	<country code="212" short="DMA" name="Dominica"/>
+	<country code="214" short="DOM" name="Dominican Republic"/>
+	<country code="218" short="ECU" name="Ecuador"/>
+	<country code="818" short="EGY" name="Egypt"/>
+	<country code="222" short="SLV" name="El Salvador"/>
+	<country code="226" short="GNQ" name="Equatorial Guinea"/>
+	<country code="232" short="ERI" name="Eritrea"/>
+	<country code="233" short="EST" name="Estonia"/>
+	<country code="231" short="ETH" name="Ethiopia"/>
+	<country code="234" short="FRO" name="Faeroe Islands"/>
+	<country code="238" short="FLK" name="Falkland Islands (Malvinas)"/>
+	<country code="242" short="FJI" name="Fiji"/>
+	<country code="246" short="FIN" name="Finland"/>
+	<country code="250" short="FRA" name="France"/>
+	<country code="254" short="GUF" name="French Guiana"/>
+	<country code="258" short="PYF" name="French Polynesia"/>
+	<country code="266" short="GAB" name="Gabon"/>
+	<country code="270" short="GMB" name="Gambia"/>
+	<country code="268" short="GEO" name="Georgia"/>
+	<country code="276" short="DEU" name="Germany"/>
+	<country code="288" short="GHA" name="Ghana"/>
+	<country code="292" short="GIB" name="Gibraltar"/>
+	<country code="300" short="GRC" name="Greece"/>
+	<country code="304" short="GRL" name="Greenland"/>
+	<country code="308" short="GRD" name="Grenada"/>
+	<country code="312" short="GLP" name="Guadeloupe"/>
+	<country code="316" short="GUM" name="Guam"/>
+	<country code="320" short="GTM" name="Guatemala"/>
+	<country code="831" short="CGY" name="Guernsey"/>
+	<country code="324" short="GIN" name="Guinea"/>
+	<country code="624" short="GNB" name="Guinea-Bissau"/>
+	<country code="328" short="GUY" name="Guyana"/>
+	<country code="332" short="HTI" name="Haiti"/>
+	<country code="336" short="VAT" name="Holy See"/>
+	<country code="340" short="HND" name="Honduras"/>
+	<country code="348" short="HUN" name="Hungary"/>
+	<country code="352" short="ISL" name="Iceland"/>
+	<country code="356" short="IND" name="India"/>
+	<country code="360" short="IDN" name="Indonesia"/>
+	<country code="364" short="IRN" name="Iran, Islamic Republic of"/>
+	<country code="368" short="IRQ" name="Iraq"/>
+	<country code="372" short="IRL" name="Ireland"/>
+	<country code="833" short="IMN" name="Isle of Man"/>
+	<country code="376" short="ISR" name="Israel"/>
+	<country code="380" short="ITA" name="Italy"/>
+	<country code="388" short="JAM" name="Jamaica"/>
+	<country code="392" short="JPN" name="Japan"/>
+	<country code="832" short="JEY" name="Jersey"/>
+	<country code="400" short="JOR" name="Jordan"/>
+	<country code="398" short="KAZ" name="Kazakhstan"/>
+	<country code="404" short="KEN" name="Kenya"/>
+	<country code="296" short="KIR" name="Kiribati"/>
+	<country code="414" short="KWT" name="Kuwait"/>
+	<country code="417" short="KGZ" name="Kyrgyzstan"/>
+	<country code="418" short="LAO" name="Lao People's Democratic Republic"/>
+	<country code="428" short="LVA" name="Latvia"/>
+	<country code="422" short="LBN" name="Lebanon"/>
+	<country code="426" short="LSO" name="Lesotho"/>
+	<country code="430" short="LBR" name="Liberia"/>
+	<country code="434" short="LBY" name="Libyan Arab Jamahiriya"/>
+	<country code="438" short="LIE" name="Liechtenstein"/>
+	<country code="440" short="LTU" name="Lithuania"/>
+	<country code="442" short="LUX" name="Luxembourg"/>
+	<country code="450" short="MDG" name="Madagascar"/>
+	<country code="454" short="MWI" name="Malawi"/>
+	<country code="458" short="MYS" name="Malaysia"/>
+	<country code="462" short="MDV" name="Maldives"/>
+	<country code="466" short="MLI" name="Mali"/>
+	<country code="470" short="MLT" name="Malta"/>
+	<country code="584" short="MHL" name="Marshall Islands"/>
+	<country code="474" short="MTQ" name="Martinique"/>
+	<country code="478" short="MRT" name="Mauritania"/>
+	<country code="480" short="MUS" name="Mauritius"/>
+	<country code="175" short="MYT" name="Mayotte"/>
+	<country code="484" short="MEX" name="Mexico"/>
+	<country code="583" short="FSM" name="Micronesia, Federated States of"/>
+	<country code="492" short="MCO" name="Monaco"/>
+	<country code="496" short="MNG" name="Mongolia"/>
+	<country code="499" short="MNE" name="Montenegro"/>
+	<country code="500" short="MSR" name="Montserrat"/>
+	<country code="504" short="MAR" name="Morocco"/>
+	<country code="508" short="MOZ" name="Mozambique"/>
+	<country code="104" short="MMR" name="Myanmar"/>
+	<country code="516" short="NAM" name="Namibia"/>
+	<country code="520" short="NRU" name="Nauru"/>
+	<country code="524" short="NPL" name="Nepal"/>
+	<country code="528" short="NLD" name="Netherlands"/>
+	<country code="530" short="ANT" name="Netherlands Antilles"/>
+	<country code="540" short="NCL" name="New Caledonia"/>
+	<country code="554" short="NZL" name="New Zealand"/>
+	<country code="558" short="NIC" name="Nicaragua"/>
+	<country code="562" short="NER" name="Niger"/>
+	<country code="566" short="NGA" name="Nigeria"/>
+	<country code="570" short="NIU" name="Niue"/>
+	<country code="574" short="NFK" name="Norfolk Island"/>
+	<country code="580" short="MNP" name="Northern Mariana Islands"/>
+	<country code="578" short="NOR" name="Norway"/>
+	<country code="275" short="PSE" name="Occupied Palestinian Territory"/>
+	<country code="512" short="OMN" name="Oman"/>
+	<country code="586" short="PAK" name="Pakistan"/>
+	<country code="585" short="PLW" name="Palau"/>
+	<country code="591" short="PAN" name="Panama"/>
+	<country code="598" short="PNG" name="Papua New Guinea"/>
+	<country code="600" short="PRY" name="Paraguay"/>
+	<country code="604" short="PER" name="Peru"/>
+	<country code="608" short="PHL" name="Philippines"/>
+	<country code="612" short="PCN" name="Pitcairn"/>
+	<country code="616" short="POL" name="Poland"/>
+	<country code="620" short="PRT" name="Portugal"/>
+	<country code="630" short="PRI" name="Puerto Rico"/>
+	<country code="634" short="QAT" name="Qatar"/>
+	<country code="410" short="KOR" name="Republic of Korea"/>
+	<country code="498" short="MDA" name="Republic of Moldova"/>
+	<country code="638" short="REU" name="Réunion"/>
+	<country code="642" short="ROU" name="Romania"/>
+	<country code="643" short="RUS" name="Russian Federation"/>
+	<country code="646" short="RWA" name="Rwanda"/>
+	<country code="654" short="SHN" name="Saint Helena"/>
+	<country code="659" short="KNA" name="Saint Kitts and Nevis"/>
+	<country code="662" short="LCA" name="Saint Lucia"/>
+	<country code="666" short="SPM" name="Saint Pierre and Miquelon"/>
+	<country code="670" short="VCT" name="Saint Vincent and the Grenadines"/>
+	<country code="882" short="WSM" name="Samoa"/>
+	<country code="674" short="SMR" name="San Marino"/>
+	<country code="678" short="STP" name="Sao Tome and Principe"/>
+	<country code="682" short="SAU" name="Saudi Arabia"/>
+	<country code="686" short="SEN" name="Senegal"/>
+	<country code="688" short="SRB" name="Serbia"/>
+	<country code="690" short="SYC" name="Seychelles"/>
+	<country code="694" short="SLE" name="Sierra Leone"/>
+	<country code="702" short="SGP" name="Singapore"/>
+	<country code="703" short="SVK" name="Slovakia"/>
+	<country code="705" short="SVN" name="Slovenia"/>
+	<country code="090" short="SLB" name="Solomon Islands"/>
+	<country code="706" short="SOM" name="Somalia"/>
+	<country code="710" short="ZAF" name="South Africa"/>
+	<country code="724" short="ESP" name="Spain"/>
+	<country code="144" short="LKA" name="Sri Lanka"/>
+	<country code="736" short="SDN" name="Sudan"/>
+	<country code="740" short="SUR" name="Suriname"/>
+	<country code="744" short="SJM" name="Svalbard and Jan Mayen Islands"/>
+	<country code="748" short="SWZ" name="Swaziland"/>
+	<country code="752" short="SWE" name="Sweden"/>
+	<country code="756" short="CHE" name="Switzerland"/>
+	<country code="760" short="SYR" name="Syrian Arab Republic"/>
+	<country code="157" short="ROC" name="Taiwan, Republic of China"/>
+	<country code="762" short="TJK" name="Tajikistan"/>
+	<country code="764" short="THA" name="Thailand"/>
+	<country code="807" short="MKD" name="The former Yugoslav Republic of Macedonia"/>
+	<country code="626" short="TLS" name="Timor-Leste"/>
+	<country code="768" short="TGO" name="Togo"/>
+	<country code="772" short="TKL" name="Tokelau"/>
+	<country code="776" short="TON" name="Tonga"/>
+	<country code="780" short="TTO" name="Trinidad and Tobago"/>
+	<country code="788" short="TUN" name="Tunisia"/>
+	<country code="792" short="TUR" name="Turkey"/>
+	<country code="795" short="TKM" name="Turkmenistan"/>
+	<country code="796" short="TCA" name="Turks and Caicos Islands"/>
+	<country code="798" short="TUV" name="Tuvalu"/>
+	<country code="800" short="UGA" name="Uganda"/>
+	<country code="804" short="UKR" name="Ukraine"/>
+	<country code="784" short="ARE" name="United Arab Emirates"/>
+	<country code="826" short="GBR" name="United Kingdom of Great Britain and Northern Ireland"/>
+	<country code="834" short="TZA" name="United Republic of Tanzania"/>
+	<country code="840" short="USA" name="United States of America"/>
+	<country code="850" short="VIR" name="United States Virgin Islands"/>
+	<country code="858" short="URY" name="Uruguay"/>
+	<country code="860" short="UZB" name="Uzbekistan"/>
+	<country code="548" short="VUT" name="Vanuatu"/>
+	<country code="862" short="VEN" name="Venezuela (Bolivarian Republic of)"/>
+	<country code="704" short="VNM" name="Viet Nam"/>
+	<country code="876" short="WLF" name="Wallis and Futuna Islands"/>
+	<country code="732" short="ESH" name="Western Sahara"/>
+	<country code="887" short="YEM" name="Yemen"/>
+	<country code="894" short="ZMB" name="Zambia"/>
+	<country code="716" short="ZWE" name="Zimbabwe"/>
+</countries>

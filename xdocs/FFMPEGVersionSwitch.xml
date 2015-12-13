@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+	<properties>
+		<title>Howto switch between different versions of FFMPEG </title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Default Configuration">
+
+			<p>FFMPEG has a change in its API (possibly since GIT revision
+				88bfe4518)
+			</p>
+			<p>Since Version 1.9.x of OpenMeetings: By default OpenMeetings
+				expects you to have a new version of FFMPEG on your OpenMeetings
+				server installed and it will use the new API style to communicate
+				with FFMPEG.
+			</p>
+
+		</section>
+
+		<section name="Switching to old FFMPEG API">
+		
+			<p>
+				If you want to switch to the old style you can change that using the
+				config key:
+				<tt>use.old.style.ffmpeg.map.option</tt>
+			</p>
+			<p>
+				Set this value to
+				<tt>1</tt>
+				to have the old params in the API call to FFMPEG.
+			</p>
+			<p>References:  </p>
+			<ul>
+				<li>
+					<a
+						href="http://ffmpeg-users.933282.n4.nabble.com/Invalid-stream-specifier-0-Stream-map-0-0-matches-no-streams-Changes-in-FFMPEG-map-option-td4091165.html"
+						rel="nofollow">http://ffmpeg-users.933282.n4.nabble.com/Invalid-stream-specifier-0-Stream-map-0-0-matches-no-streams-Changes-in-FFMPEG-map-option-td4091165.html
+					</a>
+				</li>
+			</ul>
+
+		</section>
+
+	</body>
+
+</document>

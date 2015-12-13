@@ -1,0 +1,11 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- The <import> tag is used to import, at run time, source code contained in another (library) file. See the Guide for a complete discussion. Also see the <library> tag. -->
+<class name="import" extends="node">
+	<!---  A reference to a target file whose content is treated as a loadable module -->
+	<attribute name="href" type="string" />
+	<attribute name="proxied" type="string" />
+	<attribute name="stage" type="pattern" value="late|defer" />
+</class>
+</library>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<script type="text/javascript">
+			function groupsInit() {
+				$('#addUsers').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+					, width: 400
+					, modal: true
+				});
+				var documentHeight = $(document).height();
+                $('#adminForm').height(documentHeight-114);
+                $('#adminTable').height(documentHeight-144);
+			};
+			
+			function addUsers() {
+				$('#addUsers :text').val('');
+				$('#addUsers').dialog('open');
+			};
+		</script>
+	</wicket:head>
+	<wicket:panel>
+		<div class="adminPanel">
+			<div class="adminPanelColumnTable">
+				<span wicket:id="navigator">[dataview navigator]</span>
+				<table class="adminListTable">
+					<tr>
+						<th class="two_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="164" /></th>
+						<th class="two_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="165" /></th>
+					</tr>	
+				</table>
+				<div class="tableWrapper" id="adminTable">
+					<table class="adminListTable">	
+						<tbody wicket:id="listContainer">	
+				    		<tr wicket:id="groupList">
+								<td class="two_column_layout_column1"><div class="two_column_layout_divcolumn1"><span wicket:id="organisation_id"></span></div></td>
+								<td class="two_column_layout_column2"><div class="two_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="adminPanelColumnForm">
+				<form wicket:id="form" class="adminForm">
+					<div wicket:id="buttons"></div>
+					<div class="scrollcontent" id="adminForm">
+					    <fieldset>
+					        <legend><wicket:ommessage key="170" /></legend>
+                               <div class="formelement">
+                                   <label><wicket:ommessage key="171" /></label><input type="text" wicket:id="name" />
+                               </div>
+                               <div class="formelement">
+                                   <label style="font-weight: bold;"><wicket:ommessage key="273" /></label>
+                                   <div wicket:id="addUsersBtn" class="formNewButton disabled" wicket:ommessage="title:178"><input/></div>
+                               </div>
+                               <div class="formelement">
+                                   <div wicket:id="users"></div>
+                               </div>
+					    </fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="addUsers" wicket:ommessage="title:180" style="display: none;">
+			<form wicket:id="addUsers">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="181" /></td>
+						<td><input type="text" wicket:id="searchText" /></td>
+					</tr>
+					<tr>
+						<td style="text-align: right"><input type="button" wicket:id="search" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="183" /></td>
+						<td><select wicket:id="users" style="width: 200px; height: 300px;"></select></td>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align: right"><input type="button" wicket:id="add" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</wicket:panel>
+</html>

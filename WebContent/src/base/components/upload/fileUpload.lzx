@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+ 
+ 	<class name="fileUpload">
+ 	
+ 		<!--  Show all Documents in FileBrowser -->
+ 		<attribute name="isOnlyImage" value="false" type="boolean" />
+ 		
+ 		<!-- Show only PowerPoint Presentations in FileBrowser -->
+ 		<attribute name="isOnlyPpt" value="false" type="boolean" />
+ 		
+ 		<!-- Show only XML Files in FileBrowser -->
+ 		<attribute name="isOnlyXml" value="false" type="boolean" />
+ 		
+ 		<!-- Show only ZIP Files in FileBrowser -->
+ 		<attribute name="isOnlyZip" value="false" type="boolean" />
+ 		
+ 		<!-- Show only Images Files in FileBrowser -->
+ 		<attribute name="isOnlyProfile" value="false" type="boolean" />
+        
+        <attribute name="fr" value="null" />
+ 		 		
+		<handler name="oninit" args="invoker">
+		<![CDATA[
+			this.fr = new flash.net.FileReference();	
+    		this.fr.onHTTPError = function(fr, httpError){
+                var t = _root;
+            	if ($debug) t.Debug.write('onHTTPError function: ' + httpError);
+            	new lz.errorPopup(canvas,{error:'Err2: '+httpError});
+			}
+			this.fr.onIOError = function(fr){
+				var t = _root;
+                if ($debug) t.Debug.write.write('onIOError function');
+				new lz.errorPopup(canvas,{error:'onIOError invoked '});
+			}
+			function callbackFunction ( e ) {
+				var t = _root;
+                if ($debug) t.Debug.write( e.data );
+			}		
+			this.fr.onSecurityError = function(fr, errorString){
+				var t = _root;
+                if ($debug) t.Debug.write('onSecurityError function: ' + errorString);
+            	new lz.errorPopup(canvas,{error:'Err2: '+errorString});
+			}
+			this.fr.addListener(invoker, callbackFunction);
+		]]>
+		</handler>
+
+		<method name="browse">
+		<![CDATA[	
+			var zipExt = "*.zip"
+				, profileExt = "*.psd;*.tiff;*.bmp;*.svg;*.dpx;*.exr;*.jpg;*.jpeg;*.gif;*.png"
+				, pptExt = "*.ppt;*.odp;"
+				, docExt = pptExt + ";*.txt;*.pptx;*.odt;*.wpd;*.doc;*.docx;*.rtf;*.ods;*.sxc;*.xls;*.xlsx;*.sxi;*.pdf"
+				, vidExt = "*.avi;*.mov;*.flv;*.mp4"
+				, imgExt = profileExt + ";*.tga;*.xcf;*.wpg;*.ico;*.ttf;*.pcd;*.pcds;*.ps"
+				, allExt = docExt + ";" + vidExt + ";" + imgExt;
+
+			if (this.isOnlyZip) {
+				
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "ZIP (*.zip)";
+				imageTypes.extension = zipExt;
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+				
+			} else if(this.isOnlyProfile){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Allowed Files (" + profileExt + ")";
+				imageTypes.extension = profileExt;
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else if (this.isOnlyImage){
+				fr.browse([
+					{description: "Allowed Files", extension: allExt}
+					, {description: "Documents", extension: docExt}
+					, {description: "Videos", extension: vidExt}
+					, {description: "Pictures", extension: imgExt}
+				]);
+			} else if(this.isOnlyPpt){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Powerpoint (" + pptExt + ")";
+				imageTypes.extension = pptExt;
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else if(this.isOnlyXml){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "XML (*.xml)";
+				imageTypes.extension = "*.xml;";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else {	
+				fr.browse();
+			}
+		]]>
+		</method>
+
+		<method name="getName"><![CDATA[
+			return this.fr.name;
+		]]>
+		</method>
+
+		<method name="upload" args="url"><![CDATA[
+			if ($debug) Debug.write("url: ",url,this.fr);
+			this.fr.upload(url);
+		]]>
+		</method>
+		
+    <method name="onCancel" args="fr">
+        <![CDATA[
+            if ($debug) Debug.write('onCancel invoked');
+        ]]>
+    </method>
+    
+    <method name="onComplete" args="fr">
+        <![CDATA[
+            if ($debug) Debug.write('onComplete invoked');
+            canvas.filedialogRef.progressBar.setValue(100);
+            //canvas.filedialogRef.upload.setAttribute('enabled', false);
+            if (canvas.filedialogRef.sendCompleted)canvas.filedialogRef.sendCompleted.sendEvent();
+        ]]>
+    </method>
+    
+    <method name="onHTTPError" args="fr, httpError">
+        <![CDATA[
+            if ($debug) Debug.write('onHTTPError invoked: ' + httpError);
+        ]]>
+    </method>
+    
+    <method name="onIOError" args="fr">
+        <![CDATA[
+            if ($debug) Debug.write('onIOError invoked',fr);
+        ]]>
+    </method>
+    
+    <method name="onOpen" args="fr">
+        <![CDATA[
+            if ($debug) Debug.write('onOpen invoked',fr);
+        ]]>
+    </method>
+    
+    <method name="onSecurityError" args="fr, errorString">
+        <![CDATA[
+            if ($debug) Debug.write('onSecurityError invoked: ' + errorString);
+        ]]>
+    </method>
+		
+ 	</class>
+ 	
+ </library>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="styleableInput" extends="customInputtext" x="1" y="1" bgcolor="0xFFFFFF" multiline="true"
+		width="${ parent.width-2 }" height="${ parent.height-2 }" >
+
+	<attribute name="startAdjustHight" value="false" type="boolean" />
+	
+	<attribute name="setFocusOnInit" value="true" type="boolean" />
+	
+	<handler name="oninit">
+		if (this.setFocusOnInit) {
+		    lz.Focus.setFocus(this);	
+		}
+	</handler>
+	<handler name="ontext">
+	<![CDATA[
+		var gh = this.getTextHeight();
+		if (gh>20) {
+			if (gh+this.fontsize > this.height){
+				this.setAttribute("height",(gh+this.fontsize));
+			}
+		}
+	]]>
+	</handler>	
+	<handler name="onkeyup" args="key">
+       <![CDATA[
+       // 13 is return
+       if ((key==27) || (key==13)) {
+       		this.parent.parent.adjustHeight();
+       }
+       ]]>
+    </handler>	
+	<handler name="onheight">
+		if (this.startAdjustHight) this.parent.parent.adjustHeight();
+	</handler>
+	
+	<method name="getURLEncodedText">
+		<![CDATA[
+		
+		    var tString = this.getText();
+		    
+		    //tString = tString.replace("<","&#60;");
+		    //tString = tString.replace(">","&#62;");
+		    
+		    return tString;
+		
+		]]>
+	</method>
+	
+</class>
+
+<class name="baseDrawWords" extends="view" bgcolor="black" 
+	width="120" height="40">
+	
+	<attribute name="refObj" value="null" />
+	
+	<attribute name="inittext" value="" type="string" />
+	<attribute name="initTextName" value="" type="string" />
+
+	<method name="drawtoArray">
+		<![CDATA[
+		if ($debug) Debug.write("drawtoArray");
+		if (this._textview._textview.getURLEncodedText().length!=0 && this.inittext.length==0){
+            
+            //var scale = this.parent._drawarea.width / this.parent._drawarea.initW;
+		    var y = ( this.getAttributeRelative('y',this.refObj)-this.refObj.y+1 );
+            if ($debug) Debug.write("this.refObj.y ",this.refObj.y);
+			if ($debug) Debug.write("this.x-this.refObj.x-this.refObj.parent.x ",y);
+			var x = ( this.getAttributeRelative('x',this.refObj)-this.refObj.x+1 );
+			
+			if(canvas._drawarea.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+		    	y = Math.round(y/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+            
+            } 
+			
+        	this.refObj.drawTextField(this._textview._textview.getURLEncodedText(),
+                    this._textview._textview.width,
+                    this._textview._textview.height,x,y);
+                    
+        } else if (this._textview._textview.getURLEncodedText().length!=0 && this.inittext.length!=0){
+            
+        	if ($debug) Debug.write("edit modi ",this.initTextName);
+		    var y = (this.getAttributeRelative('y',this.refObj)-this.refObj.y+1);
+			if ($debug) Debug.write("this.x-this.refObj.x-this.refObj.parent.x ",y);
+			var x = (this.getAttributeRelative('x',this.refObj)-this.refObj.x+1);
+            
+			if(canvas._drawarea.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+		    	y = Math.round(y/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+            
+            } 
+			
+        	this.refObj.setTextFieldByName(this.initTextName,
+                this._textview._textview.getURLEncodedText(),
+                this._textview._textview.width,
+                x,y,this._textview._textview.height);
+                
+        } else {
+			if ($debug) Debug.write("text smaller then 0",this._textview._textview.getURLEncodedText());
+			
+			if ($debug) Debug.write("this.gridWidth",canvas._drawarea.gridWidth);
+			if ($debug) Debug.write("this.isSnapToGrid",canvas._drawarea.isSnapToGrid);
+		}
+        this.giveup();
+		]]>
+    </method>
+    
+	<method name="giveup">
+		this.refObj.letterObjectFree(this);
+		this.destroy();
+	</method>
+	    
+	<handler name="oninit">
+		//startAdjustHight is set to true later, cause otherwise update 
+		//Events would set the height to 
+		//text field default height
+		this.refObj.letterObjectClose(this);
+        var t = new lz.styleableInput(this._textview,{
+	                name:'_textview',text:this.inittext,
+	                fontstyle:this.refObj.currentlayerstyle,
+	                fontsize:this.refObj.currentlayersize,
+	                fgcolor:this.refObj.currentlayerletter
+                });
+        //if ( this.inittext.length==0 ) this.setAttribute('height',40);
+		if ( this.inittext.length!=0 ) {
+		    this.refObj.edittextLetterObject.setAttribute('visible',false);
+		    this.refObj.setModus('letter');
+	    }
+		t.startAdjustHight = true;
+	</handler>
+    
+    <handler name="newStyleEvent">
+        this.callNew(this._textview._textview.getText());
+    </handler>
+  
+	<method name="callNew" args="txxt">
+		//if ($debug) Debug.write("callNew height-2 ");
+		
+        var h = this.getHeight();
+        
+        //if ($debug) Debug.write("callNew height-3 ",this);
+        //if ($debug) Debug.write("callNew height-4 ",this.getHeight());
+        
+		this._textview._textview.destroy();
+		var t = new lz.styleableInput(this._textview,{
+			        setFocusOnInit:false,
+                    name:'_textview',text:txxt,
+                    fontstyle:this.refObj.currentlayerstyle,
+                    fontsize:this.refObj.currentlayersize,
+                    fgcolor:this.refObj.currentlayerletter
+                });
+        this.setAttribute("height",h);
+	</method>
+	<method name="adjustHeight">
+		if ($debug) Debug.write("+++ adjustHeight +++");
+		this.setAttribute('height',this._textview._textview.height+2);
+	</method>
+    
+    <method name="_removeResizestateFromThis">
+    	this.rs.remove();
+    </method>
+    
+    <view name="_textview" width="${ parent.width }" height="${ parent.height }" />
+    
+    <resizestate name="rs" >
+    	<text x="2" y="2" text="${ 'w: '+parent.width+' h: '+parent.height }" bgcolor="white"/>
+    </resizestate>
+	<view resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
+		onmousedown="parent.rs.apply()" onmouseup="parent._removeResizestateFromThis()" >
+		<labelTooltip text="Resize this Object" />
+	</view>    
+</class>
+
+</library>

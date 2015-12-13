@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document>
+
+    <properties>
+        <title>Layout options for a conference room in OpenMeetings</title>
+        <author email="sebawagner@apache.org">
+            OpenMeetings Team
+        </author>
+    </properties>
+
+    <body>
+
+        <section name="Layout options for conference rooms">
+
+            <p>Each room has a number of attributes to generate different layouts.
+            You can change those values individually for each room in Administration &gt; Rooms
+            </p>
+            <p></p>
+            <table>
+                <tr>
+                    <th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> key </th>
+                    <th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> default </th>
+                    <th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> meaning </th>
+                    <th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> availabe since OpenMeetings version </th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideTopBar </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the top bar with the menus and exit button </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideChat </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the chat tab and use space for whiteboard </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideActivitiesAndActions </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the activities window with the notofications aber user activities</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideFilesExplorer </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the file explorer</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideActionsMenu </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the menu with the actions</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideScreenSharing </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the button to start screensharing/recording</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> hideWhiteboard </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Hide the whiteboard, if this option is true, the videos will be in the area of the whiteboard</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> showMicrophoneStatus </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> false </td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Show the current status of the microphone (off/on) on the bottom of each video view</td>
+                    <td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.x </td>
+                </tr>
+            </table>
+
+        </section>
+        
+    </body>
+
+</document>

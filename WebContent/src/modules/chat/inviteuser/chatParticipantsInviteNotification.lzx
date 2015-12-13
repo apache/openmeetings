@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="chatParticipantsInviteNotification" extends="guiPresenter" labelid="1138"
+    docking="true" resizeable="false" closable="true" y="260"
+    width="400" x="300" height="240">
+	
+	<attribute name="refObj" value="null" />
+	
+	<attribute name="publicSID" value="" type="string" />
+	<attribute name="conferenceRoomName" value="" type="string" />
+	<attribute name="usermessage" value="" type="string" />
+	<attribute name="roomId" value="0" type="number" />
+	
+	<handler name="oninit">
+		<![CDATA[
+		  
+		  this.message.message.setAttribute("text",this.usermessage);
+		
+		]]>
+	</handler>
+	
+	<method name="accept">
+		canvas.roomJumpId = this.roomId;
+        quicklinkAct("jumpToRoom");
+		
+		this.close();
+	</method>
+	
+	<method name="deny">
+		
+		this.sendMessageWithClientByPublicSID.messageObject = new Object
+		this.sendMessageWithClientByPublicSID.messageObject["message"] = "inviteToRoomAnswer";
+		this.sendMessageWithClientByPublicSID.messageObject["action"] = "inviteToRoomAnswer";
+		this.sendMessageWithClientByPublicSID.messageObject["usermessage"] = canvas.firstName + ' ' + canvas.lastName + ' ' 
+                                                                                    + canvas.getLabelName(1140);
+		this.sendMessageWithClientByPublicSID.doCall();
+		
+	</method>
+	
+    <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <attribute name="messageObject" value="null" />
+        <netparam><method name="getValue">return parent.messageObject;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("+sendMessageWithClientByPublicSID : ",value);
+                parent.close();
+            ]]>
+        </handler>  
+    </netRemoteCallHib>	
+    
+    <labelText labelid="1136" x="2" y="22" fontstyle="bold" />
+    
+    <view y="42" x="2" name="message" width="$once{ parent.width - 4 }" clip="true">
+    	<text name="message"  width="$once{ parent.width - 16 }"
+            height="100" text="" multiline="true" />
+    </view>
+    
+    <simpleLabelButton labelid="1141" width="100" x="86" y="$once{ parent.height-22 }" 
+        onclick="this.parent.accept();" />
+        
+    <simpleLabelButton labelid="1142" width="100" x="188" y="$once{ parent.height-22 }" 
+        onclick="this.parent.deny();" />
+        
+    <simpleLabelButton labelid="25" width="100" x="290" y="$once{ parent.height-22 }" 
+        onclick="this.parent.close();" />
+
+</class>
+
+</library>

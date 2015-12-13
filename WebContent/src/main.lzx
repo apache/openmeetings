@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas width="100%" height="100%" title="OpenMeetings">
+<switch>
+	<when property="$debug">
+		<method name="doDebugInit">
+			canvas.setAttribute('debug', true);
+		</method>
+		<debug fontsize="11" oninit="Debug.showInternalProperties = true" width="40%" y="50%" x="0" height="50%" />
+	</when>
+	<otherwise>
+		<method name="doDebugInit">
+		</method>
+	</otherwise>
+</switch>    
+     
+<include href="incubator/lzcombobox.lzx" />
+<include href="incubator/shadowbox.lzx" />
+
+<include href="resources/" /> 
+<include href="base/" /><!-- attributes,methods,datasets,are moved into /base -->
+<include href="modules/" />
+<include href="plugins/" />  
+
+<silverstyle name="defaultstyle" isdefault="true" canvascolor="white" />
+
+<silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />
+
+<silverstyle name="itemStyle" textcolor="0xFFFFFF" />
+
+<whitestyle name="menuStyle" textcolor="0x000000" />
+             
+
+<!-- main colors: 264269 -->
+<handler name="oninit">
+	doDebugInit();
+    var cmenu = new LzContextMenu();
+    canvas.setDefaultContextMenu(cmenu);
+    cmenu.hideBuiltInItems();
+    if($debug) Debug.write("main.lzx/oninit:",this);
+    canvas.lc = new LocalConnection();
+</handler>
+
+
+<!-- View for Contents. All Windows will be loaded on this view. -->
+<view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
+			    height="${ canvas.height-canvas.naviHeightDelta }"
+			    visibility="hidden" showhandcursor="false">
+    
+    <handler name="onmouseover">
+        setCurrentMouseWheelObject(this._scrollbar);
+    </handler>
+    <handler name="onmouseout">
+        disableCurrentMouseWheelObject();
+    </handler>
+    
+    <view x="0" name="_content" >
+        <view name="inner" />
+        <method name="clearAll">
+            <![CDATA[
+                canvas.sendViaLocalConnection(canvas.vid_lc_name, "clearAll", null);
+                if($debug) Debug.write("main.lzx/main_content._content.inner.clearAll(): ",this.inner,this.inner.subviews.length);
+                var baseContent = this.inner.subviews[0].close();
+                for (var eg in this.inner.subviews) {
+                    if($debug) Debug.write("main.lzx/main_content._content.inner.clearAll()-subviews: ",this.inner.subviews[eg]);
+                    if (eg!=0) this.inner.subviews[eg].close();               
+                }
+                return baseContent;
+            ]]>
+        </method>
+    </view>
+    <om_hscrollbar name="_scrollbarH" id="_mainScrollHBar" visibility="hidden" />
+    <om_vscrollbar name="_scrollbar" id="_mainScrollBar" />
+</view>  
+  
+<!-- View for Navigation-bar and App-name -->
+<view name="_mainbgcontentNavi" x="0" y="0" clip="true"
+    width="100%" height="${ canvas.naviHeight }" visibility="hidden">
+    <image id="mainApplogo" visible="false" />
+    <text id="mainBaseText" visible="false"
+        fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
+        <method name="setShadow" >
+            <![CDATA[
+            if (this.isinited && false){
+                this.normalMC = this.getDisplayObject();
+                this.displacementMap = new flash.filters.DropShadowFilter();
+                this.normalMC.filters = [this.displacementMap];
+            }
+            ]]>              
+        </method> 
+        <handler name="onclick">
+            lz.Browser.loadURL(canvas.currentappnameurl,"_blank");
+        </handler>  
+        <labelTooltip id="mainBaseTextLabel" />      
+    </text>
+    <handler name="oninit">
+        var cmenu = new LzContextMenu();
+        this.setContextMenu(cmenu);
+        cmenu.hideBuiltInItems();
+    </handler>     
+</view>
+
+<!-- View for Conference menu bar at the top side. Visible on conference -->
+<view name="_conferencemenu" y="0" x="0" width="100%" height="20" visibility="hidden" > 
+    <method name="removeAll">
+        <![CDATA[
+            if($debug) Debug.write("main.lzx/_coferencemenu.removeAll(): ");
+            while (this.subviews.length > 0) {
+                this.subviews[0].destroy();
+            }
+            parent._moderatormenu.removeAll();
+        ]]>
+    </method>
+</view> 
+
+<view name="_moderatormenu" y="0" x="0" width="100%" height="20">
+    <method name="removeAll">
+        <![CDATA[
+            if($debug) Debug.write("main.lzx/_moderatormenu.removeAll(): ");
+            while (this.subviews.length > 0) {
+                this.subviews[0].destroy();
+            }
+        ]]>
+    </method>
+</view>  
+    
+<!-- View for "Loading" -->
+<view name="_loadingAll" visible="false" opacity="0.7" 
+    width="${ canvas.width }" height="${ canvas.height }" 
+    bgcolor="0xFFFFFF" clickable="true" showhandcursor="false">
+    <method name="hideContentOnly">
+    	this.showLoadingAnni.setAttribute('started', true);
+        this.setAttribute("visibility","visible");
+        this._text.setAttribute("visibility","hidden");
+    </method>
+    <method name="showLoading">
+    	this.showLoadingAnni.setAttribute('started', true);
+        this.setAttribute("visibility","visible");
+        this._text.setAttribute("visibility","visible");
+    </method>
+    <method name="hideLoading">
+        this.setAttribute("visibility","hidden");
+    </method>
+    <animator name="showLoadingAnni" attribute="opacity" 
+    		from="0" to="0.7" started="false" duration="250" />
+    <text name="_text" align="right" y="56" fontsize="14" fgcolor="red">Loading...</text>
+</view>
+
+</canvas>

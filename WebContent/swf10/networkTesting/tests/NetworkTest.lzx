@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<library>
+
+<class name="NetworkTest" extends="view">
+
+    <attribute name="testName" type="string" value="null" />
+    <attribute name="protocol" type="string" value="null" />
+    <attribute name="host" type="string" value="null" />
+    <attribute name="port" type="number" value="null" />
+    <attribute name="running" type="boolean" value="false" />
+    <attribute name="allTests" type="boolean" value="false" />
+    <attribute name="resultText" type="boolean" value="false" />
+
+    <method name="start" />
+    <method name="forcedStop" />
+
+    <method name="startAllTestsMode">
+        allTests = true;
+        this.setRunning();
+    </method>
+
+    <view name="picture">
+        <view name="rsc" resource="notrun" width="113" height="113" />
+    </view>
+    <text name="nameLabel"
+          text="${parent.testName}"
+          x="${(parent.picture.rsc.width - this.width)/2}"
+          y="$once{parent.picture.rsc.height}"
+    />
+    <text name="resultLabel"
+          visible="false"
+          fgcolor="white"
+          align="center"
+          fontsize="16"
+    />
+
+    <handler name="onclick">
+        if (running) {
+            this.setStopped();
+        } else {
+            allTests = false;
+            this.setRunning();
+        }
+    </handler>
+
+    <method name="handleAllTestsMode">
+        if (allTests) {
+            canvas.testsView.testAll();
+        }
+    </method>
+    
+    <method name="setPassed">
+        if (running) {
+            running=false;
+            if (resultText) {
+                picture.rsc.setAttribute("resource", "passed_result");
+                var x = (picture.rsc.width - resultLabel.width)/2;
+                var y = (picture.rsc.height - resultLabel.height)/2;
+                resultLabel.setAttribute("x", x);
+                resultLabel.setAttribute("y", y);
+                resultLabel.setAttribute("visible", true);
+            } else {
+                picture.rsc.setAttribute("resource", "passed");
+            }
+            canvas.setAttribute("busy", false);
+            this.handleAllTestsMode();
+        }
+    </method>
+
+    <method name="setFailed">
+        if (running) {
+            running=false;
+            picture.rsc.setAttribute("resource", "failed");
+            canvas.setAttribute("busy", false);
+            this.handleAllTestsMode();
+        }
+    </method>
+
+    <method name="setRunning">
+        if (canvas.busy) {
+            return;
+        }
+        canvas.setAttribute("busy", true);
+        this.start();
+        running=true;
+        resultLabel.setAttribute("visible", false);
+        picture.rsc.setAttribute("resource", "running");
+        picture.rsc.play();
+    </method>
+
+    <method name="setStopped">
+        this.forcedStop();
+        running=false;
+        picture.rsc.setAttribute("resource", "notrun");
+        canvas.setAttribute("busy", false);
+        this.handleAllTestsMode();
+    </method>
+
+    <method name="log" args="message">
+        var str = testName + ": " + message + "\n";
+        canvas.log += str;
+        if ($debug) Debug.write(str);
+    </method>
+
+</class>
+
+</library>
