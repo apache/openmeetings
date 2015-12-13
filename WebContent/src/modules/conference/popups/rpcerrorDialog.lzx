@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+	
+<class name="baseErrorDialog" extends="labelExplorerBox" labelid="204"
+    docking="true" resizeable="false" closable="true" width="300" 
+	x="$once{ canvas.width/2-this.width/2 }" height="130">
+	
+	<handler name="oninit">
+        this.bringToFront();
+        lz.Focus.setFocus(this);
+        if (errorid != 0) {
+			this.getErrorByCode.doCall();
+		}
+    </handler>
+	
+    <attribute name="errortext" value="" type="string" />
+    <attribute name="addInfo" value="" type="string" />
+	<attribute name="errorid" value="0" type="number" />
+
+	<netRemoteCallHib name="getErrorByCode" funcname="errorservice.getErrorByCode" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.errorid; </method></netparam>
+        <netparam><method name="getValue"> return canvas.thishib.userlang; </method></netparam>
+		<handler name="ondata" args="value">
+			<![CDATA[
+    			if ($debug) Debug.write("getErrorByCode ",value);
+    			//this.parent.destroy();
+    			this.parent.setAttribute('errortext',value.errmessage+" <br/><br/>"+parent.addInfo);
+    			this.parent.setAttribute('title',value.errortype);
+			]]>
+		</handler>
+	</netRemoteCallHib>		
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+		<text fontsize="10" fontstyle="bold" text="${ parent.parent.errortext }"
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+	</view>
+	
+</class>
+	
+<class name="errorDialog" extends="baseErrorDialog">
+
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+    <handler name="onclose">
+        lz.ModeManager.release(this);
+    </handler>
+	
+</class>
+	
+<class name="contentSaveWindow" extends="baseErrorDialog">
+	
+    <attribute name="saveObj" value="null" />
+    <attribute name="refObj" value="null" />
+    <attribute name="processNextIndex" value="0" type="number" />
+	<attribute name="errorid" value="0" type="number" />
+    
+    <handler name="oninit">
+        lz.ModeManager.makeModal(this);
+        if ($debug) Debug.write("contentsavewindow: ",errorid);
+        this.startSave();
+    </handler>
+    
+    <handler name="onclose">
+        lz.ModeManager.release(this);
+    </handler>
+    
+    <method name="startSave">
+    	<![CDATA[
+    	for (var i=0;i<this.saveObj.length;i++){
+    		this.saveObj[i].prepareCall();
+    	}
+    	this.processNext();
+    	]]>
+    </method>
+	
+	<method name="errorByCode" args="eCode">
+		this.errorid = eCode;
+		this.getErrorByCode.doCall();
+	</method>
+    
+    <method name="processNext">
+    	<![CDATA[
+    	//Debug.write("processNext: ",this.saveObj.length,this.processNextIndex);
+    	if (this.saveObj.length>this.processNextIndex){
+    		this.saveObj[this.processNextIndex].returnObj=this;
+    		this.saveObj[this.processNextIndex].doCall();
+    		this.processNextIndex++;
+    	} else {
+    		//Debug.write("update process complete");
+    		this.refObj.onsavecompleted.sendEvent();
+    		this.close();
+    	}
+    	]]>
+    </method>
+	
+	<method name="doCallBack">
+		this.close();
+	</method>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="100" x="$once{ parent.width-104 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+	
+<class name="rpcErrorDialog" extends="errorDialog" height="250">
+	
+	<method name="doCallBack">
+		this.close();
+	</method>
+	
+	<handler name="onclose">
+		if ( canvas.focusOnItem != null )
+		{
+			lz.Focus.setFocus( canvas.focusOnItem, true );
+		}
+	</handler>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-124 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+	
+<class name="callbackRpcErrorDialog" extends="errorDialog"
+	closable="false"  height="250">
+	
+	<attribute name="callBackObject" value="null" />
+	
+	<method name="doCallBack">
+		this.callBackObject.sendCallBack.sendEvent();
+		this.close();
+	</method>
+	
+	<handler name="onclose">
+		if ( canvas.focusOnItem != null )
+		{
+			lz.Focus.setFocus( canvas.focusOnItem, true );
+		}
+	</handler>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-124 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+   
+
+</library>

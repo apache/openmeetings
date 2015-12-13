@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<whiteboard>
+    <item>
+        <itemname>letter</itemname>
+        <textforfield>asdasdasd</textforfield>
+        <fgcolor>0</fgcolor>
+        <fontsize>15</fontsize>
+        <fontstyle>plain</fontstyle>
+        <x>69</x>
+        <y>98</y>
+        <width>118</width>
+        <height>22</height>
+        <layername>letter1</layername>
+    </item>
+    <item>
+        <itemname>paint</itemname>
+        <points>
+            <point val1="157" val2="35" val3="157" val4="35"/>
+            <point val1="157" val2="35" val3="88" val4="44"/>
+            <point val1="88" val2="44" val3="37" val4="61"/>
+            <point val1="37" val2="61" val3="27" val4="75"/>
+            <point val1="27" val2="75" val3="21" val4="101"/>
+            <point val1="21" val2="101" val3="25" val4="138"/>
+            <point val1="25" val2="138" val3="46" val4="172"/>
+            <point val1="46" val2="172" val3="108" val4="206"/>
+            <point val1="108" val2="206" val3="168" val4="222"/>
+            <point val1="168" val2="222" val3="239" val4="214"/>
+            <point val1="239" val2="214" val3="271" val4="184"/>
+            <point val1="271" val2="184" val3="285" val4="131"/>
+            <point val1="285" val2="131" val3="277" val4="98"/>
+            <point val1="277" val2="98" val3="265" val4="74"/>
+            <point val1="265" val2="74" val3="256" val4="58"/>
+        </points>
+        <fillstyle>0x000000</fillstyle>
+        <linewidth>5</linewidth>
+        <strokestyle>0</strokestyle>
+        <x>20</x>
+        <y>34</y>
+        <width>264</width>
+        <height>187</height>
+        <layername>paint2</layername>
+    </item>
+    <item>
+        <itemname>line</itemname>
+        <fillstyle>0x000000</fillstyle>
+        <linewidth>5</linewidth>
+        <strokestyle>255</strokestyle>
+        <startx>328</startx>
+        <starty>63</starty>
+        <endx>290</endx>
+        <endy>363</endy>
+        <x>286.5</x>
+        <y>59.5</y>
+        <width>43</width>
+        <height>305</height>
+        <layername>line8</layername>
+    </item>
+    <item>
+        <itemname>rectangle</itemname>
+        <stroke>0</stroke>
+        <line>5</line>
+        <x>100</x>
+        <y>277</y>
+        <width>109</width>
+        <height>168</height>
+        <layername>rectangle14</layername>
+    </item>
+    <item>
+        <itemname>uline</itemname>
+        <fillstyle>0x000000</fillstyle>
+        <linewidth>20</linewidth>
+        <strokestyle>16776960</strokestyle>
+        <startx>58</startx>
+        <starty>124</starty>
+        <endx>155</endx>
+        <endy>126</endy>
+        <x>47</x>
+        <y>113</y>
+        <width>117</width>
+        <height>22</height>
+        <layername>uline21</layername>
+    </item>
+</whiteboard>

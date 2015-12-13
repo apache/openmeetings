@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<canvas xmlns="http://localhost/openlaszlo/lzx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:project="http://localhost/openlaszlo/project"
+	xsi:schemaLocation="http://localhost/openlaszlo/lzx ../WebContent/lzx.xsd 
+	http://localhost/openlaszlo/project ../WebContent/project.xsd">
+	
+	<project:_recorderClickMask></project:_recorderClickMask>
+	<project:activityList x="123"></project:activityList>
+
+	<view name="asd"></view>
+    <view name="asdasd" />
+    <project:_chatInnerSmilyIcon name="asdasd" width="12" clickable="false"></project:_chatInnerSmilyIcon>
+    <include href="incubator/lzcombobox.lzx" />
+    <view bgcolor="asdawqe">
+<project:labelText name="asdasd" labelid="12"></project:labelText>
+    </view>
+    
+    <!-- 
+    If you use maindebug.lzx, main.lzx with debug=true is loaded. 
+    h.kuze 2008.3.26
+    I re-arranged it back to the old setup,
+    I see that this information is duplicated here, but I would like to 
+    distribute two versions of OpenMeetings in a binary release: 
+    the normal Client and the Client Including the OpenLaszlo-Debug-Player
+    -swagner 2008.3.28
+-->
+   
+<include href="incubator/lzcombobox.lzx" />
+
+<project:screenSharingContainer name="_screens" />
+<project:confmenucommand></project:confmenucommand>
+
+<project:simpleLabelButton ></project:simpleLabelButton>
+<node></node>
+<button></button>
+<view width="weqwe">
+</view>    
+</canvas>

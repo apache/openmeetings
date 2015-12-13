@@ -1,0 +1,84 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+body {
+	color: #000000;
+	margin: 0;
+	background: #fafafa;
+	font: 10pt Verdana, Arial, Helvetica, sans-serif;
+	  
+}
+.active {
+	font-style: italic;
+}
+
+.mainbody {
+	margin-left: 40px;
+	margin-right: 40px;
+	-moz-box-shadow: 4px 0px 5px #666666;
+	-webkit-box-shadow: 4px 0px 5px #666666;
+	box-shadow: 4px 0px 5px #666666;
+}
+.superbody {
+	background: #FFFFFF;
+	-moz-box-shadow: -4px 0px 5px #666666;
+	-webkit-box-shadow: -4px 0px 5px #666666;
+	box-shadow: -4px 0px 5px #666666;
+}
+
+/* Box CSS  */
+div {
+	margin: 0;
+}
+
+
+.ro {
+	background: url(2b.png) top right no-repeat;
+}
+
+.lo {
+	background: url(1b.png) top left no-repeat;
+}
+
+.ru {
+	background: url(3b.png) bottom right no-repeat;
+}
+
+.lu {
+	background: url(4b.png) bottom left no-repeat;
+}
+
+ul {
+	margin-top: 0em;
+	padding-left: 1.5em;
+}
+
+.inhalt {
+	margin: 0;
+	padding: 0.5em 2.0em 1.5em 1.0em;
+}
+
+.inhalt p {
+	margin: 0;
+	padding: 0;
+}
+.xmlcode {
+	margin-left: 20px;
+	background-color: #eeeeee;
+	color: #0000ff;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

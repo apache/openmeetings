@@ -1,0 +1,22 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---
+A frame of a multi-frame resource.
+
+The <frame> tag is used to define a single frame of a multi-frame <resource>. A multi-frame resource contains several images which can be toggled among by script commands.
+
+Multiple frame tags can be declared consecutively to produce a single resource constructed of an unlimited number of frames. Such composed resources are often used to conveniently implement mouse rollovers, button states, or other UI elements where alternate views of a resource are required. Once a multi-frame resource has been defined and presented within a <view>, the developer can designate which frame is actively visible through the use of the view's setResourceNumber method.
+
+Multi-frame resources can be used in conjunction with components such as <basebutton>, which pre-define complex button behavior using frames designated by the user. 
+
+ -->
+<class name="frame" extends="false">
+
+<!---	The name of a variable that will be set to this object when the application is started. If this element is directly within a <canvas> or <library> element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object.  -->
+    <attribute name="name" type="token" />
+    <!---	The path of a file that contains the source for this object. -->
+    <attribute name="src" type="src" />
+    
+</class>
+</library>

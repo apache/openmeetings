@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="ldapAdminValueForm" extends="baseContentSaveView">
+	
+	<!--- recordContent id -->
+	<attribute name="ldapConfigId" value="0" type="number" />	
+
+	<!-- handler -->
+	
+	<handler name="onsavecompleted" >
+		this.getLdapConfigById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.ldapConfigId!=0) {
+            this.getLdapConfigById.doCall();
+        }
+	</handler>	
+
+	<handler name="onnew">
+		this.ldapConfigId=0;
+        this.tName.setAttribute('text','');
+        this.configFileName.setAttribute('text','');
+        
+        this.addDomainToUserName.setValue(false);
+        this.domain.setAttribute('text','');
+        
+        this.isActive.setValue(false);
+        this.updated.setAttribute('text','');
+        this.updatedby.setAttribute('text','');
+        this.inserted.setAttribute('text','');
+        this.updatedby.setAttribute('text','');
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.ldapConfigId!=0){
+			this.deleteLdapConfigById.doCall();
+		}
+    </handler>	
+	
+	<!-- methods -->
+	
+    <method name="initValueFieldsByObject" args="obj">
+		this.ldapConfigId = obj.ldapConfigId;
+		if (this.ldapConfigId!=0){
+			this.getLdapConfigById.doCall();
+		}
+    </method>	
+	
+  	<netRemoteCallHib name="getLdapConfigById" funcname="ldapconfigservice.getLdapConfigById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.ldapConfigId;</method></netparam>
+    	<handler name="ondata" args="value">
+    		if ($debug) Debug.write("getLdapConfigById ",value);
+    		parent.initFields(value);
+    	</handler>
+  	</netRemoteCallHib>	
+	
+	
+    
+    <method name="initFields" args="obj">
+    	<![CDATA[
+    	if (obj == null) {
+    		return;
+    	}
+    	this.ldapConfigId = obj.ldapConfigId;
+        this.tName.setAttribute('text',obj.name);
+        this.configFileName.setAttribute('text',obj.configFileName);
+        
+        if (obj.addDomainToUserName) {
+        	this.addDomainToUserName.setValue(obj.addDomainToUserName);
+        } else {
+        	this.addDomainToUserName.setValue(false);
+        }
+        this.domain.setAttribute('text',obj.domain);
+        
+        if (obj.isActive) {
+            this.isActive.setValue(obj.isActive);
+        } else {
+            this.isActive.setValue(false);
+        }
+        
+        if (this.updated != null) {
+            this.updated.setAttribute('text',obj.updated);
+        } else {
+        	this.updated.setAttribute('text','');
+        }
+        if(obj.updatedby!=null){
+            this.updatedby.setAttribute('text',obj.updatedby.firstname+' '+obj.updatedby.lastname+'['+obj.updatedby.login+']');
+        } else {
+            this.updatedby.setAttribute('text','');
+        }
+        
+        if (this.inserted != null) {
+            this.inserted.setAttribute('text',obj.inserted);
+        } else {
+            this.inserted.setAttribute('text','');
+        }
+        if(obj.insertedby!=null){
+            this.insertedby.setAttribute('text',obj.insertedby.firstname+' '+obj.insertedby.lastname+'['+obj.insertedby.login+']');
+        } else {
+            this.insertedby.setAttribute('text','');
+        }
+        
+        ]]>
+    </method>
+	
+	<!-- remotecalls -->
+
+	<netRemoteCallHib name="deleteLdapConfigById" funcname="ldapconfigservice.deleteLdapConfigById" 
+			    remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.ldapConfigId; </method></netparam>
+		<handler name="ondata" args="value">
+			//Debug.write("deleteOrganisation ",value);
+			//this.parent.destroy();
+			if (value>0){
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				this.parent.onnew.sendEvent();
+			}
+		</handler>
+	</netRemoteCallHib>	
+	
+  	<netRemoteCallHib name="saveOrUpdateLdapConfig" funcname="ldapconfigservice.saveOrUpdateLdapConfig" 
+  		        remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer -->
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+  			this.sendObject["ldapConfigId"] = this.parent.ldapConfigId;
+  			this.sendObject["tName"] = this.parent.tName.getText();
+  			this.sendObject["configFileName"] = this.parent.configFileName.getText();
+  			this.sendObject["addDomainToUserName"] = this.parent.addDomainToUserName.getValue();
+            this.sendObject["isActive"] = this.parent.isActive.getValue();
+            this.sendObject["domain"] = this.parent.domain.getText();
+
+  			//Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+    		if ($debug) Debug.write("saveOrUpdateLdapConfig: ",val);
+			if (val>0){
+				//Debug.write("saveOrUpdateUser val greater 0: ",val);
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				var obj = new Array();
+				obj["ldapConfigId"] = val;
+				this.parent.initValueFieldsByObject(obj);
+			}
+			]]>
+    	</handler>
+  	</netRemoteCallHib>		
+	
+	<!-- content
+	
+	public String name;
+    public String configFileName;
+    public Boolean addDomainToUserName;
+    public String domain;
+    public Boolean isActive;
+    public Date inserted;
+    public Date updated;
+    public Users insertedby;
+    public Users updatedby;
+    
+	 -->	
+    
+    <labelText labelid="1107" width="200" y="40" resize="false" fontstyle="bold" />	
+	
+    <labelText labelid="1108" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="tName" y="70" x="120" width="270" text="" />	
+        
+    <labelText labelid="1109" width="200" y="100" resize="false" x="2"/>  
+        <labelCheckbox name="isActive" width="270" y="100" x="120" fontsize="11" />         
+        
+    <labelText labelid="1110" width="200" y="130" resize="false" x="2"/>
+        <labelText name="inserted" y="130" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
+ 
+    <labelText labelid="1111" width="200" y="150" resize="false" x="2"/>
+        <labelText name="insertedby" y="150" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
+        
+    <labelText labelid="1112" width="200" y="170" resize="false" x="2"/>
+        <labelText name="updated" y="170" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
+ 
+    <labelText labelid="1113" width="200" y="190" resize="false" x="2"/>
+        <labelText name="updatedby" y="190" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
+        
+    <view resource="messagebox_info_rsc" x="0" y="220" />
+    
+    <labelText labelid="1114" x="24" y="220" fontstyle="italic"
+               multiline="true" width="370" />   
+                        
+	<labelText labelid="1115" width="200" y="280" resize="false" x="2"/>
+        <customEdittext name="configFileName" y="280" x="120" width="270" text="" />  
+        
+    <view resource="messagebox_info_rsc" x="0" y="310" />
+    
+    <labelText labelid="1116" x="24" y="310" fontstyle="italic"
+               multiline="true" width="370" /> 
+               
+    <labelText labelid="1117" width="200" y="400" resize="false" x="2"/>  
+        <labelCheckbox name="addDomainToUserName" width="270" y="400" x="160" fontsize="11" />   
+
+    <labelText labelid="1118" width="200" y="430" resize="false" x="2"/>
+        <customEdittext name="domain" y="430" x="120" width="270" text="" /> 
+             
+</class>
+	
+</library>

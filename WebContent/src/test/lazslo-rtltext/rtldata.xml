@@ -1,0 +1,37 @@
+<!-- Persons Data -->
+<dataset name="personsData">
+	<myXML>
+    <person>
+        <name>אריאל שרון</name>
+        <title>ראש הממשלה</title>
+    </person>
+    <person>
+        <name>גל פרידמן</name>
+        <title>מדליסט אולימפי</title>
+    </person>
+     <person>
+        <name>פיני גרשון</name>
+        <title>מאמן מכבי תל-אביב</title>
+    </person>
+    <person>
+        <name>שרי אריסון</name>
+        <title>מיליארדרית</title>
+    </person>
+    <person>
+        <name>שלמה ארצי</name>
+        <title>זמר</title>
+    </person>
+    <person>
+        <name>מיקי ברקוביץ</name>
+        <title>כדורסלן עבר</title>
+    </person>
+    <person>
+        <name>יוסי בניון</name>
+        <title>שחקן כדורגל</title>
+    </person>
+   <person>
+        <name>ביל גייטס</name>
+        <title>בעל חברת מיקרוסופט</title>
+    </person>
+	</myXML>
+</dataset>

@@ -1,0 +1,11 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!--- The <include> tag is used to include source code contained in another file. See the Guide for a complete discussion. Also see the <library> tag. -->
+<class name="include" extends="false">
+	<!---  A reference to a target file whose content is included in the application that contains this include element. -->
+	<attribute name="href" type="string" />
+	<!---  If this attribute has the value text , the content of the target file is included as text. Otherwise, it is read as XML.  -->
+	<attribute name="type" type="pattern" value="text|xml" />
+</class>
+</library>

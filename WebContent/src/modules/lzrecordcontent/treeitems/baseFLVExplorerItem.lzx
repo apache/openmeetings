@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="baseFLVExplorerItem" extends="view">
+	
+	<attribute name="refObjListRoot" value="null"/>
+	
+	<attribute name="isRoot" value="false" type="boolean" />
+	
+	<attribute name="fileIcon" type="string" value="string" />
+	
+	<attribute name="open" value="false" type="boolean" />
+	
+	<attribute name="fileExplorerItemId" value="0" type="number" />
+	<attribute name="isOwner" value="false" type="boolean" />
+	
+	<attribute name="isFolder" value="true" type="boolean" />
+	<attribute name="isImage" value="false" type="boolean" />
+	<attribute name="isPresentation" value="false" type="boolean" />
+	
+	<attribute name="fileName" value="" type="string" />
+	<attribute name="fileHash" value="" type="string" />
+	
+	<attribute name="selected" value="false" type="boolean"/>
+	
+	<attribute name="singleClickDelegate" value="null" />
+	<attribute name="singleClickStarted" value="false" type="boolean" />
+	
+	<attribute name="isMouseDownDragAction" value="false" type="boolean"/>
+	
+	<!-- If this is true, then this item has been drag-n-droped and it makes no 
+	       sense to handle any single or double click event -->
+	<attribute name="mouseDownClickUsed" value="false" type="boolean" />
+	<attribute name="mouseDownClickDelegate" value="null" />
+	
+	<attribute name="isTrashCan" value="false" type="boolean" />
+	
+	<handler name="oninit">
+		this.singleClickDelegate = new LzDelegate( this, "doSingleClick" );
+		this.resetClickDelegate = new LzDelegate( this, "doResetSingleClick" );
+		this.mouseDownClickDelegate = new LzDelegate( this, "doMouseDownClick" );
+		if (this.isFolder) {
+		    lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
+		}
+	</handler>
+	
+	<method name="doOpen">
+		this.open = true;
+		if (this.isFolder) {
+    		this.icon_folder_pre.setAttribute("frame",2);
+    		this.content.setAttribute("visibility","visible");
+			this._folderIcon.setAttribute("frame",2);
+		    this.getFLVExplorerByParent.doCall();
+		}
+	</method>
+	
+	<method name="doClose">
+		this.open = false;
+		if (this.isFolder) {
+            this.icon_folder_pre.setAttribute("frame",1);
+            this.content.setAttribute("visibility","hidden");
+            this._folderIcon.setAttribute("frame",1);
+		}
+	</method>
+	
+    <method name="doMouseDownClick" args="itemObj">
+    	this.mouseDownClickUsed = true;
+    	if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
+    	new lz.dragItemFLVExplorer(canvas,{
+    		        dragItemResource:this.fileIcon,
+            	    refObj:this,
+                    x:canvas.getMouse('x'),
+                    y:canvas.getMouse('y')
+            	})
+    </method>
+    
+    <method name="deleteFile" args="labelid">
+    	new lz.confirmationSingle(canvas,{
+                           refObj:this,
+                           labelid:labelid,
+                           labeliderror:713,
+                           showCheckBox:false
+                        });
+    	//this.deleteFileOrFolder();
+    </method>
+    
+    <method name="sendConfirmation" args="bool,askAgain">
+        if (bool) {
+            this.deleteFLVOrFolder.doCall();
+        }
+    </method>
+    
+    <netRemoteCallHib name="deleteFLVOrFolder" funcname="flvrecorderservice.deleteFLVOrFolder" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam>
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("deleteFLVOrFolder: ",value);
+            parent.parent.parent.doOpen();
+            parent.refObjListRoot._selected = null;
+            parent.refObjListRoot.parentFolderId = -2;
+        </handler>
+    </netRemoteCallHib> 
+    
+	<method name="doSingleClick" args="itemObj">
+		this.singleClickStarted = false;
+		//Cannot change name for Root Icons
+		if (this.isRoot) {
+            return;
+        }
+		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+	</method>
+	
+	<!--
+        Check if this is the Owner
+     -->
+    <method name="checkForIsOwner">
+        if (this.isRoot) {
+            return this.isOwner;
+        } else {
+            return parent.parent.checkForIsOwner();
+        }
+    </method>
+    
+    <!--
+        Check if the user tries to move a file in its own tree,
+        see moveFile
+     -->
+    <method name="checkForIsChild" args="compareFileExplorerItemId">
+        if (this.isRoot) {
+            return false;
+        } else {
+            if (this.fileExplorerItemId == compareFileExplorerItemId) {
+                return true;
+            } else {
+                return parent.parent.checkForIsChild(compareFileExplorerItemId);
+            }
+        }
+    </method>
+	
+	<method name="doResetSingleClick" args="itmeObj">
+		this.singleClickStarted = false;
+	</method>
+	
+	<method name="addFile">
+		this.refObjListRoot.selectItem(this);
+		this.refObjListRoot.addFile();
+	</method>
+	
+	<method name="addFolder">
+		if (this.isFolder) {
+			if ($debug) Debug.write("NEW this.fileExplorerItemId INTO ",this);
+			if ($debug) Debug.write("NEW this.fileExplorerItemId ",this.fileExplorerItemId);
+			this.icon_folder_pre.setAttribute("frame",2);
+            this.content.setAttribute("visibility","visible");
+            this._folderIcon.setAttribute("frame",2);
+    		var t = new lz.folderFLVExplorerItem(this.content,{
+    			            isOwner:this.isOwner,
+    			            isFolder:true,
+                		    fileIcon:'icon_folder_rsc',
+                            refObjListRoot:this.refObjListRoot,
+                		    fileName:canvas.getLabelName(712)
+                		});
+            t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+		}
+	</method>
+	
+	<method name="refresh">
+		this.doOpen();
+	</method>
+	
+	<method name="editFolderName">
+		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+	</method>
+	
+	<method name="loadFLV">
+		this.refObjListRoot.loadFLV(this);
+	</method>
+	
+	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
+		<![CDATA[
+    		if ($debug) Debug.write("addOrUpdateFolderName ",fileExplorerItemId);
+    		var tWidth = this._fileName.width;
+    		if (tWidth < 160) {
+    			tWidth = 160;
+    		}
+    		
+    		var t = new lz.dynamicFLVName(canvas,{
+    			        parentFileExplorerItemId:fileExplorerItemId,
+    			        fileExplorerItemId:this.fileExplorerItemId, //Only used at update Name
+    			        isOwner:this.isOwner,
+    			        text:this.fileName,
+    			        isNew:isNew, //false means its a renaming
+    			        refObj:this,width:tWidth+10,
+            		    x:this._fileName.getAttributeRelative("x",canvas),
+            		    y:this._fileName.getAttributeRelative("y",canvas)
+            		});
+            		
+            lz.Focus.setFocus(t,true);
+            lz.ModeManager.makeModal(t);
+            
+        ]]>
+	</method>
+	
+	<method name="toggleOpen" args="setSelection">
+		if (this.mouseDownClickUsed) {
+			if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
+			this.mouseDownClickUsed = false;
+			return;
+		}
+		
+		if (this.singleClickStarted) {
+            if ($debug) Debug.write("Is this selected => Double Click !!!");
+            this.singleClickStarted = false;
+            lz.Timer.removeTimer( this.singleClickDelegate );
+            if (this.isFolder) {
+                this.doSingleClick(null);
+            } else {
+                this.loadFLV();
+            }
+        } else {
+        	
+        	if (this.isFolder){
+        		if (!this.open) {
+        			this.doOpen();
+        		} else {
+        			if (setSelection) {
+            			if (this.selected) {
+            				if ($debug) Debug.write("Is this selected => Do Edit !!!");
+            				this.singleClickStarted = true;
+            			    lz.Timer.addTimer( this.singleClickDelegate, 300 );
+            			} else {
+            				
+            				this.singleClickStarted = true;
+            				lz.Timer.addTimer( this.resetClickDelegate, 300 );
+            			}
+        			} else {
+        				this.doClose();
+        			}
+        		}
+        	} else {
+        		if (setSelection) {
+                    if (this.selected) {
+                        if ($debug) Debug.write("Is this selected => Do Edit !!!");
+                        this.singleClickStarted = true;
+                        lz.Timer.addTimer( this.singleClickDelegate, 300 );
+                    } else {
+                        this.singleClickStarted = true;
+                        lz.Timer.addTimer( this.resetClickDelegate, 300 );
+                    }
+                }
+        	}
+		}
+		
+		if (setSelection) this.refObjListRoot.selectItem(this);
+	</method>
+	
+	<method name="selectItem">
+		this.selected = true;
+		this._fileName.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
+	</method>
+	
+	<method name="deselectItem">
+		this.selected = false;
+        if ($debug) Debug.write(this._fileName);
+        this._fileName.setAttribute("bgcolor",0xFFFFFF);
+    </method>
+	
+	<method name="clearContent">
+        <![CDATA[
+            for (var eg in this.content.subviews) {
+                this.content.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+	
+	<!--
+	   public List<FileExplorerItem> getFileExplorerByParent(String SID, Long parentFileExplorerItemId, 
+	               Long room_id, Boolean isOwner) {
+     -->
+	<netRemoteCallHib name="getFLVExplorerByParent" funcname="flvrecorderservice.getFLVExplorerByParent" 
+        remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam>  
+        <netparam><method name="getValue">return parent.parent.isOwner;</method></netparam>         
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFLVExplorerByParent: ",value);
+            parent.renderFilesAndFolders(value);
+        </handler>
+    </netRemoteCallHib>  
+    
+    <method name="renderFilesAndFolders" args="roomHome">
+        <![CDATA[
+            this.clearContent();
+            
+            //Folder area
+            for (var i=0;i<roomHome.length;i++) {
+                var fileExplorerItem = roomHome[i];
+                
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFLVExplorerItem(this.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this.refObjListRoot
+                                        });
+                } else {
+                    new lz.flvExplorerItem(this.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_video_rsc',
+                                            refObjListRoot:this.refObjListRoot
+                                        });
+                }                
+                
+            }
+            
+        ]]>
+    </method>
+    
+	
+	<view name="icon_folder_pre" 
+		  visibility="$once{ (parent.isFolder) ? 'visible' : 'hidden' }"
+		  resource="icon_folder_pre_rsc" frame="1" >
+		<handler name="onclick">
+			parent.toggleOpen(false);
+		</handler>
+	</view>
+	
+	<view name="_folderIcon" resource="$once{ parent.fileIcon }" x="16" y="2" >
+		<handler name="onmousedown">
+			if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+        </handler>
+        <handler name="onmouseup">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+        </handler>
+		<handler name="onclick">
+			parent.toggleOpen(false);
+		</handler>
+	</view>
+	
+</class>
+
+
+</library>

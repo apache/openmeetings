@@ -1,0 +1,41 @@
+<library>
+
+<class name="om_vscrollbar" extends="basescrollbar" styleable="false"
+    axis="y">
+
+    <!--- @keywords private -->
+    <attribute name="width" value="10"/>
+    
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        <![CDATA[
+        if (!_enabled) {
+        	//this.scrolltrack.thumb.setAttribute('height', 0);
+            this.scrolltrack.thumb.setAttribute('visibility', 'hidden');
+        } else {
+            this.scrolltrack.thumb.setAttribute('visibility', 'visible');
+        }
+        super._showEnabled();
+    ]]>
+    </method>
+
+	<view name="toparrow" height="0" />
+    <view name="scrolltrack">
+    	 <basescrolltrack name="top"
+           resource="omscrolltrack_y_rsc" stretches="height">
+         	<attribute name="height" value="${parent.height}"/>
+            <attribute name="width" value="${parent.width}"/>  
+         </basescrolltrack>
+         <basescrollthumb name="thumb" x="1">
+             <view resource="omscrollbar_ythumbtop_rsc"/>
+             <view resource="omscrollbar_ythumbmiddle_rsc" stretches="both"/>
+             <view resource="omscrollbar_ythumbbottom_rsc"/>
+             <stableborderlayout axis="y"/>
+        </basescrollthumb>
+    </view>
+
+	<view height="0" name="bottomarrow" />
+    <stableborderlayout axis="y"/>
+
+</class>
+</library>

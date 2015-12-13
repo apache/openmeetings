@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="blueButton" extends="basecomponent" width="200" height="18" 
+	       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" focusable="true">
+	    
+	    <attribute name="resourceItem" value="" type="string" />
+	    
+	    <attribute name="x_insetResource" value="4" type="number" />
+	    <attribute name="y_insetResource" value="4" type="number" />
+	    
+	    <attribute name="width_insetResource" value="18" type="number" />
+	    <attribute name="height_insetResource" value="18" type="number" />
+	    
+		<method name="setText" args="txt">
+			this.setAttribute('text',txt);
+		</method>
+		<view name="_bg" x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }"
+				width="${ parent.width-2 }" height="${ parent.height-2 }" />
+		<view name="_bgOver" x="1" y="1" bgcolor="0xFFFFFF" opacity="0.5" visibility="hidden"
+				width="${ parent.width-2 }" height="${ parent.height-2 }" />
+		<view name="_bgDown" x="1" y="1" bgcolor="0x000000" opacity="0.5" visibility="hidden"
+				width="${ parent.width-2 }" height="${ parent.height-2 }" />
+		
+		<view name="disAbledView" visibility="${ ( parent.enabled ) ? 'hidden' : 'visible' }"
+	          bgcolor="white" opacity="1" x="1" y="1"
+	          width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" />
+		
+	    <image name="_rscIcon" stretches="both" 
+	    	  opacity="${ ( parent.enabled ) ? 1 : 0.4 }"
+		  	  x="$once{ parent.x_insetResource }" 
+	    	  y="$once{ parent.y_insetResource }" 
+	          width="$once{ parent.width_insetResource }" 
+	          height="$once{ parent.height_insetResource }" 
+	          src="$once{ canvas.getThemeImage(parent.resourceItem) }" />
+	          
+	    
+	     
+		<handler name="onmouseover">
+			this._rscIcon.setAttribute("x",this._rscIcon.x-1);
+			this._rscIcon.setAttribute("y",this._rscIcon.y-1);
+			this._rscIcon.setAttribute("width",this._rscIcon.width+2);
+			this._rscIcon.setAttribute("height",this._rscIcon.height+2);
+			this._bgOver.setAttribute('visibility','visible');
+		</handler>
+		<handler name="onmouseout">
+			this._rscIcon.setAttribute("x",this._rscIcon.x+1);
+			this._rscIcon.setAttribute("y",this._rscIcon.y+1);
+			this._rscIcon.setAttribute("width",this._rscIcon.width-2);
+			this._rscIcon.setAttribute("height",this._rscIcon.height-2);
+		</handler>
+		<handler name="onmousedown">
+			if (!this.enabled) {
+				return;
+			}
+			this._bgOver.setAttribute('visibility','hidden');
+			this._bgDown.setAttribute('visibility','visible');
+		</handler>
+		<handler name="onmouseup">
+			this._bgDown.setAttribute('visibility','hidden');
+		</handler>	
+			
+	</class>
+
+</library>

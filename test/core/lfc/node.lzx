@@ -1,0 +1,72 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+<!---The base class for all Laszlo classes.
+JavaScript: lz.node
+The lz.node class provides the basic interface for OpenLaszlo objects: parent/child hierarchy, setters, interaction with the instantiator, and reference resolution. New nodes (and subclasses thereof) can be created by new-ing the class, like this: var mynode= new LzNode( parent , args ); where parent is the parent for the new node, and args is an Object whose name/value pairs are attributes to be set on the new node.  -->
+<class name="node" >
+<!---	A reference to the node that is an instance of the <class> where this node is defined. Members of state subclasses do not define classroot. This is convenient to use when you want to access an attribute of the class in a method or event handler that is nested deep in the node hierarchy. For example, to set the bgcolor of the class object, instead of parent.parent.parent.setAttribute(bgcolor, 0xFFFFFF) you can simply use classroot.setAttribute(bgcolor, 0xFFFFFF).  -->
+	<attribute name="classroot" />
+	<!---	If this node is replicated due to data replication, the LzReplicationManager which controls this node.  -->
+	<attribute name="cloneManager" />
+	<!---	The data context for the node -->
+	<attribute name="data" />
+	<!---	A shorthand version of <datapath>, specifies the data source for this node and its children. You write a string to datapath; reading datapath will yield a lz.datapath. If the value begins with an identifier followed by a colon, the identifier names a dataset, and the portion of the string after the colon is an XPath description of a portion of the data. Otherwise the entire attribute value is an XPath description of the data, relative to the data source of this node's parent element. Examples: "mydata:", "mydata:/a/b", "/a/b".  -->
+	<attribute name="datapath" />
+	<!---	An attribute used in container classes. If set to a non-null value, this forces this node to run its determinePlacement method for any node whose parent is this node. If the subnode has its own placement attribute, determinePlacement will be called with that value, otherwise it will be called with this value. Note that a class's defaultplacement attribute only applies to children in subclasses or in instances, not to the children of the class itself. This means that if a class and its subclass both define a defaultplacement attribute, the attribute will be set to one value before the subclass children are created and to a different one after they are created. See the determinePlacement method.  -->
+	<attribute name="defaultplacement" />
+	<!---	A unique identifier for this element. Can be used as a global variable name in JavaScript code.  -->
+	<attribute name="id" type="token"/>
+	<!---	Overrides placement attribute (and defaultplacement in lexical parent). See the LzNode.determinePlacement method. Defaults to false.  -->
+	<attribute name="ignoreplacement" />
+	<!---	Reference to this nodes's parent in the node hierarchy. This will be different from "parent" when a class uses placement or defaultplacement to assign a subnode a specific place. For example, always use immediateparent to get a mouse position in your views coordinate system.  -->
+	<attribute name="immediateparent" />
+	<!--	Indicates that a node's init method has been called. True when init has been called and the oninit event has been sent. The execution of the init method is under control of the initstage attribute.  -->
+	<attribute name="inited" type="boolean"/>
+	<!---	The execution of a node's init method and sending of the oninit event is under the control of its initstage attribute, as follows:
+
+immediate
+    The init method is called immediately as the last stage of instantiation. 
+early
+    The init method is called immediately after the view and its children have been instantiated. 
+normal
+    The init method is called when the parent is initialized. 
+late
+    The init method is called during idle time. To check whether init has been called, check the inited property. Force calling init using the completeInstantiation method. 
+defer
+    The init method will not be called unless explicitly requested by the completeInstantiation method. 
+
+	 -->
+	<attribute name="initstage" value="normal"/>
+	<!---	The name for this subnode. If given, then this node's parent and immediate parent will store a pointer to this node as the given name value.  -->
+	<attribute name="name" type="token"/>
+	<!---	The depth of this node in the overall node hierarchy -->
+	<attribute name="nodeLevel" type="number"/>
+	<!---	A CSS declaration of property: value pairs that modify the interaction of this node with controllers such as replicators and layouts. For example, setting options="ignorelayout: true" on a view will cause the view to not be controlled by any layout.
+[Note] 	Note
+The options that affect particular controllers and replicators are documented with each controller and replicator.
+[Note] 	Note
+options should not be accessed directly. You must use getOption and setOption to get or set the value of an option.  -->
+	<attribute name="options" />
+	<!---	Reference to the node that was passed as this node's ancestor in the constructor. If this node was created by declaring it in a tag, the parent will be its lexical parent. Its lexical parent is the tag that encloses it. Allow a null parent so that nodes can be garbage collected when they are no longer needed. See also, immediateparent.  -->
+	<attribute name="parent" />
+	<!---	Instructions to this element's container about where it should go within its container's internal hierarchy. See the LzNode.determinePlacement method. Defaults to the container itself.  -->
+	<attribute name="placement" />
+	<!---	
+A space-separated list of CSS classes that can be used in a stylesheet to select this node.  -->
+	<attribute name="styleclass" />
+	<!---	An array of all of the LzNodes which consider this LzNode their parent. This list is similar to the subviews list, but it contains all the children of this node, not just the view children.  -->
+	<attribute name="subnodes" />
+	<!---	Allows node attributes to be automatically animated when set. A string of transitions, according to the css3 transition spec http://dev.w3.org/csswg/css3-transitions/#the-transition-shorthand-property- e.g. 'x 2s'. Note that transition-delay is not currently supported. [transition-property || transition-duration || transition-timing-function || transition-delay [, [transition-property || transition-duration || transition-timing-function || transition-delay]]*  -->
+	<attribute name="transition" />
+	
+	<!---This is the first event a node sends, right at the end of the instantiation process, but before any subnodes have been created or references resolved -->
+	<event name="onconstruct" />
+	<!---The ondata script is executed when the data selected by a view's datapath changes. -->
+    <event name="ondata" />
+    <!---This event is sent after the node's init method has been called. Simple actions that need to occur after the node's children have been initialized can be assigned to this event. For more complex initialization, see the init method. -->
+    <event name="oninit" /> 
+
+</class>
+
+</library>
