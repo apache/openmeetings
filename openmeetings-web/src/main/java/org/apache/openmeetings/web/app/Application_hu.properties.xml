@@ -1857,4 +1857,5 @@
   <entry key="error.type.info">Üzenet</entry>
   <entry key="poll.type.yesNo">Igen/Nem</entry>
   <entry key="poll.type.numeric">Szám 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>

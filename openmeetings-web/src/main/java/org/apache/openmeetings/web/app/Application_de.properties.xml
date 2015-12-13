@@ -1879,4 +1879,5 @@
   <entry key="error.type.info">Nachricht</entry>
   <entry key="poll.type.yesNo">Ja/Nein</entry>
   <entry key="poll.type.numeric">Numerisch 1-10</entry>
+  <entry key="wizard.button.finish">Finish</entry>
 </properties>
