@@ -19,8 +19,6 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PROTOCOL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
@@ -147,9 +145,9 @@ public class RoomPanel extends BasePanel {
 						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
 						.put("interview", Room.Type.interview == r.getType())
-						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
+						//.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
 						.put("host", url.getHost())
-						.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
+						//.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
 						.put("app", path + roomId)
 						.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
 						.toString()
