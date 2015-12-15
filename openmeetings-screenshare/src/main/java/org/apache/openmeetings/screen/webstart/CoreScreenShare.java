@@ -37,6 +37,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,21 +115,23 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 12) {
-				protocol = Protocol.valueOf(args[0]);
-				host = args[1];
-				port = Integer.parseInt(args[2]);
-				app = args[3];
-				userId = Long.parseLong(args[4]);
-				publishName = args[5];
-				String labelTexts = args[6];
-				defaultQuality = Integer.parseInt(args[7]);
-				defaultFPS = Integer.parseInt(args[8]);
-				showFPS = bool(args[9]);
-				allowRemote = bool(args[10]);
+			if (args.length > 9) {
+				String _url = args[0];
+				URI url = new URI(_url);
+				protocol = Protocol.valueOf(url.getScheme());
+				host = url.getHost();
+				port = url.getPort();
+				app = url.getPath();
+				userId = Long.parseLong(args[1]);
+				publishName = args[2];
+				String labelTexts = args[3];
+				defaultQuality = Integer.parseInt(args[4]);
+				defaultFPS = Integer.parseInt(args[5]);
+				showFPS = bool(args[6]);
+				allowRemote = bool(args[7]);
 				remoteEnabled = allowRemote;
-				allowRecording = bool(args[11]);
-				allowPublishing = bool(args[12]);
+				allowRecording = bool(args[8]);
+				allowPublishing = bool(args[9]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -150,8 +153,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						client.setKeystoreBytes(Hex.decodeHex(args[13].toCharArray()));
-						client.setKeyStorePassword(args[14]);
+						client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
+						client.setKeyStorePassword(args[11]);
 						instance = client;
 						break;
 					case rtmpe:

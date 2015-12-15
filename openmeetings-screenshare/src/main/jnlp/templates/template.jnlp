@@ -36,10 +36,7 @@
 		$dependencies
 	</resources>
 	<application-desc main-class='$mainClass'>
-		<argument>$protocol</argument>
-		<argument>$host</argument>
-		<argument>$port</argument>
-		<argument>$app</argument>
+		<argument>$url</argument>
 		<argument>$userId</argument>
 		<argument>$publicSid</argument>
 		<argument>$labels</argument>
