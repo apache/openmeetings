@@ -97,7 +97,7 @@
     
 	<method name="checkForApplyScreen" args="record">
 		//TODO check if host is required for rtmps
-		ExternalInterface.call("startSharing", canvas.publicSID, canvas.thishib.getProtocol(), canvas.thishib.getPort());
+		ExternalInterface.call("startSharing", canvas.publicSID, canvas.thishib.getUrl());
 	</method>  
     
     <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 

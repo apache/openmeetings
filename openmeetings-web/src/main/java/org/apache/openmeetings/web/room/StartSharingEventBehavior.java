@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PROTOCOL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -29,15 +27,14 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
-import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PORT;
-import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PROTOCOL;
 import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PUBLIC_SID;
+import static org.apache.openmeetings.web.room.RoomPanel.PARAM_URL;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Hex;
@@ -95,28 +92,21 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, "UTF-8");
 			String baseUrl = cfgDao.getBaseUrl();
-			URL url = new URL(baseUrl);
+			String _url = getParam(getComponent(), PARAM_URL).toString();
+			URI url = new URI(_url);
 			Room room = getBean(RoomDao.class).get(roomId);
 			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
 			Client rc = getClient(publicSid);
 			SessionManager sessionManager = getBean(SessionManager.class);
 			String path = url.getPath();
-			path = path.substring(1, path.indexOf('/', 2) + 1);
-			String port = getParam(getComponent(), PARAM_PORT).toString();
-			if (Strings.isEmpty(port)) {
-				cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, "");
+			path = path.substring(path.lastIndexOf('/') + 1);
+			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {
+				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
 			}
-			String _protocol = getParam(getComponent(), PARAM_PROTOCOL).toString();
-			if (Strings.isEmpty(_protocol)) {
-				_protocol = cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, "");
-			}
-			Protocol protocol = Protocol.valueOf(_protocol);
-			app = addKeystore(app).replace("$codebase", baseUrl + "screenshare")
+			Protocol protocol = Protocol.valueOf(url.getScheme());
+			app = addKeystore(app, protocol).replace("$codebase", baseUrl + "screenshare")
 					.replace("$applicationName", cfgDao.getAppName())
-					.replace("$protocol", protocol.name())
-					.replace("$port", port)
-					.replace("$host", url.getHost())
-					.replace("$app", path + roomId)
+					.replace("$url", _url)
 					.replace("$userId", "" + getUserId())
 					.replace("$publicSid", publicSid)
 					.replace("$labels", "<![CDATA[" + getLabels(730,  731,  732,  733,  734
@@ -155,40 +145,42 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		return result.toString();
 	}
 	
-	private String addKeystore(String app) {
+	private String addKeystore(String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
-		File conf = new File(OmFileHelper.getRootDir(), "conf");
-		File keyStore = new File(conf, "keystore.screen");
-		if (keyStore.exists()) {
-			try (FileInputStream fis = new FileInputStream(keyStore); FileInputStream ris = new FileInputStream(new File(conf, "red5.properties"))) {
-				Properties red5Props = new Properties();
-				red5Props.load(ris);
-				
-				byte keyBytes[] = new byte[(int)keyStore.length()];
-				fis.read(keyBytes);
-				
-				keystore = Hex.encodeHexString(keyBytes);
-				password = red5Props.getProperty("rtmps.screen.keystorepass");
-				
-				/*
-				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
-				ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
-				ByteArrayInputStream bin = new ByteArrayInputStream()
-				
-				byte fileContent[] = new byte[(int)file.length()];
-				sb = addArgument(sb, Object arg)
-				ctx.put("$KEYSTORE", users_id);
-				/*
-				KeyStore ksOut = KeyStore.getInstance(KeyStore.getDefaultType());
-				for (Certificate cert : ksIn.getCertificateChain("red5")) {
-					PublicKey pub = cert.getPublicKey();
-					TrustedCertificateEntry tce = new TrustedCertificateEntry(cert);
-					tce.
+		if (Protocol.rtmps == protocol) {
+			File conf = new File(OmFileHelper.getRootDir(), "conf");
+			File keyStore = new File(conf, "keystore.screen");
+			if (keyStore.exists()) {
+				try (FileInputStream fis = new FileInputStream(keyStore); FileInputStream ris = new FileInputStream(new File(conf, "red5.properties"))) {
+					Properties red5Props = new Properties();
+					red5Props.load(ris);
+					
+					byte keyBytes[] = new byte[(int)keyStore.length()];
+					fis.read(keyBytes);
+					
+					keystore = Hex.encodeHexString(keyBytes);
+					password = red5Props.getProperty("rtmps.screen.keystorepass");
+					
+					/*
+					KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
+					ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
+					ByteArrayInputStream bin = new ByteArrayInputStream()
+					
+					byte fileContent[] = new byte[(int)file.length()];
+					sb = addArgument(sb, Object arg)
+					ctx.put("$KEYSTORE", users_id);
+					/*
+					KeyStore ksOut = KeyStore.getInstance(KeyStore.getDefaultType());
+					for (Certificate cert : ksIn.getCertificateChain("red5")) {
+						PublicKey pub = cert.getPublicKey();
+						TrustedCertificateEntry tce = new TrustedCertificateEntry(cert);
+						tce.
+					}
+					*/
+				} catch (Exception e) {
+					//no op
 				}
-				*/
-			} catch (Exception e) {
-			//no op
 			}
 		}
 		return app.replace("$keystore", keystore).replace("$password", password);

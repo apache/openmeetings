@@ -296,18 +296,6 @@
 					<td> The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc. </td>
 					<td> 3.0.4 </td>
 				</tr>
-				<tr>
-					<td> flash.protocol </td>
-					<td> rtmp </td>
-					<td> Protocol for flash connections, can be rtmp, rtmpt, rtmpe, rtmps. <b>(will be used in case passed protocol is invalid)</b> </td>
-					<td> 3.1.0 </td>
-				</tr>
-				<tr>
-					<td> flash.port </td>
-					<td> 1935 </td>
-					<td> Port for flash connections. <b>(will be used in case passed port is invalid)</b> </td>
-					<td> 3.1.0 </td>
-				</tr>
 			</table>
 		</section>
 

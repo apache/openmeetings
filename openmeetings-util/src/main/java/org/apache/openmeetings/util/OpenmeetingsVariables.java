@@ -38,8 +38,6 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_APPOINTMENT_REMINDER_MINUTES = "number.minutes.reminder.send";
 	public static final String CONFIG_APPLICATION_NAME = "application.name";
 	public static final String CONFIG_APPLICATION_BASE_URL = "application.base.url";
-	public static final String CONFIG_FLASH_PROTOCOL = "flash.protocol";
-	public static final String CONFIG_FLASH_PORT = "flash.port";
 	public static final String CONFIG_SCREENSHARING_QUALITY = "default.quality.screensharing";
 	public static final String CONFIG_SCREENSHARING_FPS = "default.fps.screensharing";
 	public static final String CONFIG_SCREENSHARING_FPS_SHOW = "screensharing.fps.show";
