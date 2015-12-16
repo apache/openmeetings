@@ -35,48 +35,61 @@ public class RoomOptionsDTO implements Serializable {
 	private boolean showNickNameDialog;
 	private boolean allowSameURLMultipleTimes;
 	private boolean allowRecording;
-	
+
 	public RoomOptionsDTO() {}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
+
 	public Long getRecordingId() {
 		return recordingId;
 	}
+
 	public void setRecordingId(Long recordingId) {
 		this.recordingId = recordingId;
 	}
+
 	public boolean isModerator() {
 		return moderator;
 	}
+
 	public void setModerator(boolean moderator) {
 		this.moderator = moderator;
 	}
+
 	public boolean isShowAudioVideoTest() {
 		return showAudioVideoTest;
 	}
+
 	public void setShowAudioVideoTest(boolean showAudioVideoTest) {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
+
 	public boolean isShowNickNameDialog() {
 		return showNickNameDialog;
 	}
+
 	public void setShowNickNameDialog(boolean showNickNameDialog) {
 		this.showNickNameDialog = showNickNameDialog;
 	}
+
 	public boolean isAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
+
 	public void setAllowSameURLMultipleTimes(boolean allowSameURLMultipleTimes) {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
+
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}
+
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
