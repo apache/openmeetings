@@ -389,6 +389,20 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution><!-- FIXME should be refactored -->
+						<id>select-db</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
+									tofile="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/persistence.xml" 
+									overwrite="true" force="true"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution><!-- FIXME should be refactored -->
 						<id>move-openjpa-resources</id>
 						<phase>process-resources</phase>
 						<configuration>
@@ -396,12 +410,6 @@
 								<copy todir="${project.build.directory}/test-root">
 									<fileset dir="${project.basedir}/src/main/webapp"/>
 								</copy>
-								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
-									tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF/persistence.xml" 
-									overwrite="true"/>
-								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
-									tofile="${project.build.directory}/test-classes/META-INF/persistence.xml" 
-									overwrite="true"/>
 							</target>
 						</configuration>
 						<goals>
