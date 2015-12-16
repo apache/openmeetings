@@ -259,7 +259,7 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 					[ANNOUNCE] Apache OpenMeetings x.xx released
 				</p>
 				<p>
-					Update release section of DOAP file <tt>openmeetings-server/src/site/xdoc/doap.rdf</tt>
+					Update release section of DOAP file <tt>site/trunk/doap.rdf (https://svn.apache.org/repos/asf/openmeetings/site/trunk/doap.rdf)</tt>
 				</p>
 				<p>
 					Add a section to <a href="downloads.html">downloads</a> website.<br />
