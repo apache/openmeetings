@@ -129,22 +129,6 @@
 				<tt>Openmeetings</tt>
 			</i>
 			</p>
-			<p>
-				Please
-				<i>NOTE</i>
-				there are 3 additional properties in the public/config.xml file which
-				should be modified for
-				<strong>TOTAL</strong>
-				Openmeetings clean up:
-			</p>
-			<source>
-<![CDATA[
-<currentappname>OpenMeetings</currentappname>
-<currentappnameurl>http://openmeetings.apache.org</currentappnameurl>
-<currentappnamebugurl>https://issues.apache.org/jira/browse/OPENMEETINGS</currentappnamebugurl>
-]]>
-			</source>
-
 		</section>
 
 		<section name="Running multiple Openmeetings instances on the same server">

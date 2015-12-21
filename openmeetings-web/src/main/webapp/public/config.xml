@@ -81,24 +81,6 @@ of the red5-servlet
 <proxyType>none</proxyType>
 	
 <!--
-    Name of the Application
-    this is the Top-Icon Name of the Application
- -->    
-<currentappname>Apache OpenMeetings</currentappname>    
-    
-<!-- 
-    URL to the Home of the Application
-    this is the URL which is used if you click on the Top-icon
--->    
-<currentappnameurl>http://openmeetings.apache.org</currentappnameurl>        
-
-<!--
-    URL to Bugs/Support
-    this is the URL which is used if you click on *report a bug*
- -->
-<currentappnamebugurl>https://issues.apache.org/jira/browse/OPENMEETINGS</currentappnamebugurl>   
-        
-<!--
     Video-Settings
     
     Number that specifies the amount of sound required to activate the microphone 

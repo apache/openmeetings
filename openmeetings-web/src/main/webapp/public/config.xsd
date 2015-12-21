@@ -30,9 +30,6 @@
         <xs:element ref="red5httpport"/>
         <xs:element ref="protocol"/>
         <xs:element ref="proxyType"/>
-        <xs:element ref="currentappname"/>
-        <xs:element ref="currentappnameurl"/>
-        <xs:element ref="currentappnamebugurl"/>
         <xs:element ref="loudnessAcitviation"/>
         <xs:element ref="webAppRootKey"/>
         <xs:element ref="httpRootKey"/>
@@ -88,9 +85,6 @@
   <xs:element name="red5httpport" type="xs:integer"/>
   <xs:element name="protocol" type="xs:NCName"/>
   <xs:element name="proxyType" type="xs:NCName"/>
-  <xs:element name="currentappname" type="xs:string"/>
-  <xs:element name="currentappnameurl" type="xs:anyURI"/>
-  <xs:element name="currentappnamebugurl" type="xs:anyURI"/>
   <xs:element name="loudnessAcitviation" type="xs:integer"/>
   <xs:element name="webAppRootKey" type="xs:NCName"/>
   <xs:element name="httpRootKey" type="xs:string"/>

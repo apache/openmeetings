@@ -95,11 +95,6 @@ Attributes needed for clustering -->
  -->
 <attribute name="roomRecordingId" value="0" type="number" />
 
-<!--- Name of the Application -->
-<attribute name="currentappname" value="OpenMeetings" type="string" />   
-<attribute name="currentappnameurl" value="OpenMeetings" type="string" />   
-<attribute name="currentappnamebugurl" value="OpenMeetings" type="string" /> 
-
 <!--- Video Settings -->
 <attribute name="loudnessAcitviation" value="10" type="number" />
 <attribute name="showWindowEffect" value="y" type="string" /> 
