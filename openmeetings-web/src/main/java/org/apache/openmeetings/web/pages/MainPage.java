@@ -70,7 +70,6 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
@@ -149,7 +148,6 @@ public class MainPage extends BaseInitedPage {
 			dev = null;
 		    add(new EmptyPanel("dev").setVisible(false));
 		}		
-		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
 		add(chat = new ChatPanel("chatPanel"));
 		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
