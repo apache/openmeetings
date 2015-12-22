@@ -158,9 +158,8 @@
 			}
 			this.getPublicSID.doCall();
 		} else {
-			this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
-			//lz.Timer.addTimer( this.refreshDelegate, 60000 );
-			lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
+			this.refreshDelegate = new LzDelegate(this, "refreshSessionMeth");
+			lz.Timer.addTimer(this.refreshDelegate, canvas.refreshSession);
 			if (canvas.thishib.loaderVar != null) {
 				canvas.thishib.loaderVar.setProgress();
 			}
