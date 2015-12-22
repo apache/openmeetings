@@ -26,6 +26,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -292,8 +293,8 @@ public class UserWebService {
 	@Path("/hash")
 	public ServiceResult getRoomHash(
 			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="user") @QueryParam("user") ExternalUserDTO user
-			, @WebParam(name="options") @QueryParam("options") RoomOptionsDTO options
+			, @WebParam(name="user") @FormParam("user") ExternalUserDTO user
+			, @WebParam(name="options") @FormParam("options") RoomOptionsDTO options
 			) throws ServiceException
 	{
 		try {
@@ -328,7 +329,7 @@ public class UserWebService {
 				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
 		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
+			log.error("getRoomHash", err);
 			throw new ServiceException(err.getMessage());
 		}
 		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
