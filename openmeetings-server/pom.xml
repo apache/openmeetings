@@ -121,6 +121,7 @@
 				<maven.test.skip>true</maven.test.skip>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>unpacked</assembly.descriptor>
+				<src.pack.skip>true</src.pack.skip>
 			</properties>
 		</profile>
 		<profile>
@@ -212,18 +213,34 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>${project.basedir}/src/main/assembly/${assembly.descriptor}.xml</descriptor>
-					</descriptors>
-					<finalName>${assembly.finalName}</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-					<tarLongFileMode>gnu</tarLongFileMode>
-				</configuration>
 				<executions>
 					<execution>
 						<id>make-assembly</id>
 						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>${project.basedir}/src/main/assembly/${assembly.descriptor}.xml</descriptor>
+							</descriptors>
+							<finalName>${assembly.finalName}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<tarLongFileMode>gnu</tarLongFileMode>
+						</configuration>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>make-src</id>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>${project.basedir}/src/main/assembly/src.xml</descriptor>
+							</descriptors>
+							<finalName>${project.build.finalName}</finalName>
+							<appendAssemblyId>true</appendAssemblyId>
+							<tarLongFileMode>gnu</tarLongFileMode>
+							<skipAssembly>${src.pack.skip}</skipAssembly>
+						</configuration>
 						<goals>
 							<goal>single</goal>
 						</goals>
