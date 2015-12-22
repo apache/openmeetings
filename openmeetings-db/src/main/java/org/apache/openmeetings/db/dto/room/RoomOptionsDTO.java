@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.wicket.ajax.json.JSONObject;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoomOptionsDTO implements Serializable {
@@ -92,5 +94,27 @@ public class RoomOptionsDTO implements Serializable {
 
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
+	}
+
+	private static Long optLong(JSONObject o, String key) {
+		return o.has(key) ? o.getLong(key) : null;
+	}
+	
+	public static RoomOptionsDTO fromString(String s) {
+		JSONObject o = new JSONObject(s);
+		RoomOptionsDTO ro = new RoomOptionsDTO();
+		ro.allowRecording = o.optBoolean("allowRecording", false);
+		ro.allowSameURLMultipleTimes = o.optBoolean("allowSameURLMultipleTimes", false);
+		ro.moderator = o.optBoolean("moderator", false);
+		ro.recordingId = optLong(o, "recordingId");
+		ro.roomId = optLong(o, "roomId");
+		ro.showAudioVideoTest = o.optBoolean("showAudioVideoTest", false);
+		ro.showNickNameDialog = o.optBoolean("showNickNameDialog", false);
+		return ro;
+	}
+	
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 }
