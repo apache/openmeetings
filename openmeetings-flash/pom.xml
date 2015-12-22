@@ -31,7 +31,6 @@
 	<description>TODO</description>
 	<properties>
 		<openlaszlo>${project.basedir}/openlaszlo</openlaszlo>
-		<laszlo46.home>${openlaszlo}/openlaszlo46</laszlo46.home>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
@@ -76,7 +75,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>compile</phase>
 						<configuration>
 							<exportAntProperties>true</exportAntProperties>
 							<target>
