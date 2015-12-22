@@ -165,7 +165,7 @@
 			}
 			
 			//Load Session Data
-			this.getsessiondata.callRPC();	
+			this.getsessiondata.doCall();	
 		}
 		connected = true;
 		client.setNewBroadCastingFlag = this.setNewBroadCastingFlag;
@@ -284,7 +284,7 @@
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
 		<handler name="ondata" args="value">
 			//if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
-			lz.Timer.addTimer( parent.refreshDelegate, canvas.refreshSession );
+			lz.Timer.addTimer(parent.refreshDelegate, canvas.refreshSession);
 		</handler>
 	</netRemoteCallHib>
 	  
