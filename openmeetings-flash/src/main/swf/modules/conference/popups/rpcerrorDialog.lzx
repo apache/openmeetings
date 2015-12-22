@@ -44,8 +44,8 @@
 			<![CDATA[
     			if ($debug) Debug.write("getErrorByCode ",value);
     			//this.parent.destroy();
-    			this.parent.setAttribute('errortext',value.errmessage+" <br/><br/>"+parent.addInfo);
-    			this.parent.setAttribute('title',value.errortype);
+    			this.parent.setAttribute('errortext', value.message + " <br/><br/>" + parent.addInfo);
+    			this.parent.setAttribute('title', value.type);
 			]]>
 		</handler>
 	</netRemoteCallHib>		
