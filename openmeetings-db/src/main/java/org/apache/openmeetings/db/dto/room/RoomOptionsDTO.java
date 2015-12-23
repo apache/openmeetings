@@ -96,8 +96,12 @@ public class RoomOptionsDTO implements Serializable {
 		this.allowRecording = allowRecording;
 	}
 
-	private static Long optLong(JSONObject o, String key) {
-		return o.has(key) ? o.getLong(key) : null;
+	public static Integer optInt(JSONObject o, String key) {
+		return o.has(key) && !o.isNull(key) ? o.getInt(key) : null;
+	}
+	
+	public static Long optLong(JSONObject o, String key) {
+		return o.has(key) && !o.isNull(key) ? o.getLong(key) : null;
 	}
 	
 	public static RoomOptionsDTO fromString(String s) {

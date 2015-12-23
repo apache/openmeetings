@@ -29,6 +29,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -207,7 +208,7 @@ public class RoomWebService {
 	@WebMethod
 	@POST
 	@Path("/")
-	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
+	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -275,9 +276,13 @@ public class RoomWebService {
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-			roomDao.delete(roomDao.get(id), userId);
-
-			return new ServiceResult(id, "Deleted", Type.SUCCESS);
+			Room r = roomDao.get(id);
+			if (r != null) {
+				roomDao.delete(r, userId);
+				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+			} else {
+				return new ServiceResult(0, "Not found", Type.SUCCESS);
+			}
 		} else {
 			throw new ServiceException("Insufficient permissins"); //TODO code -26
 		}
