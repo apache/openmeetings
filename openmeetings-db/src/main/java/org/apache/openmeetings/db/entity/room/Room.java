@@ -173,7 +173,7 @@ public class Room implements IDataProviderEntity {
 	// Vars to simulate external Room
 	@Column(name = "external_id")
 	@Element(data = true, required = false)
-	private Long externalId;
+	private String externalId;
 
 	@Column(name = "external_type")
 	@Element(data = true, required = false)
@@ -415,11 +415,11 @@ public class Room implements IDataProviderEntity {
 		this.moderated = moderated;
 	}
 
-	public Long getExternalId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(Long externalId) {
+	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
 

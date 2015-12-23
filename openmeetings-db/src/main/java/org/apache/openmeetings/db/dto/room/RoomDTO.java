@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optInt;
+import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optLong;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.room.Room;
-
+import org.apache.wicket.ajax.json.JSONObject;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoomDTO implements Serializable {
@@ -43,7 +46,7 @@ public class RoomDTO implements Serializable {
 	private boolean demo;
 	private boolean closed;
 	private Integer demoTime;
-	private Long externalId;
+	private String externalId;
 	private String externalType;
 	private String redirectUrl;
 	private boolean moderated;
@@ -296,11 +299,11 @@ public class RoomDTO implements Serializable {
 		this.isPublic = isPublic;
 	}
 
-	public Long getExternalId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(Long externalId) {
+	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
 
@@ -336,5 +339,42 @@ public class RoomDTO implements Serializable {
 			}
 		}
 		return rList;
+	}
+	
+	public static RoomDTO fromString(String s) {
+		JSONObject o = new JSONObject(s);
+		RoomDTO r = new RoomDTO();
+		r.id = optLong(o, "id");
+		r.name = o.optString("name");
+		r.comment = o.optString("comment");
+		r.type = Room.Type.valueOf(o.getString("type"));
+		r.numberOfPartizipants = o.optLong("numberOfPartizipants", 4);
+		r.appointment = o.optBoolean("appointment", false);
+		r.confno = o.optString("confno");
+		r.isPublic = o.optBoolean("isPublic", false);
+		r.demo = o.optBoolean("demo", false);
+		r.closed = o.optBoolean("closed", false);
+		r.demoTime = optInt(o, "demoTime");
+		r.externalId = o.optString("externalId");
+		r.externalType = o.optString("externalType");
+		r.redirectUrl = o.optString("redirectUrl");
+		r.moderated = o.optBoolean("moderated", false);
+		r.allowUserQuestions = o.optBoolean("allowUserQuestions", false);
+		r.allowRecording = o.optBoolean("allowRecording", false);
+		r.waitForRecording = o.optBoolean("waitForRecording", false);
+		r.audioOnly = o.optBoolean("audioOnly", false);
+		r.topBarHidden = o.optBoolean("topBarHidden", false);
+		r.chatHidden = o.optBoolean("chatHidden", false);
+		r.activitiesHidden = o.optBoolean("activitiesHidden", false);
+		r.filesExplorerHidden = o.optBoolean("filesExplorerHidden", false);
+		r.actionsMenuHidden = o.optBoolean("actionsMenuHidden", false);
+		r.screenSharingHidden = o.optBoolean("screenSharingHidden", false);
+		r.whiteboardHidden = o.optBoolean("whiteboardHidden", false);
+		return r;
+	}
+	
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 }
