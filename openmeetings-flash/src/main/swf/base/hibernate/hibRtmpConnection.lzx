@@ -201,7 +201,6 @@
 	<method name="reconnectComplete">
 		if (this.reconnectionAction){
 			this.reconnectionAction = false;
-			this.reconnectObjRef.reconnectSuccess();
 		}
 		canvas.currentContentView.sendInit.sendEvent(this);
 	</method>

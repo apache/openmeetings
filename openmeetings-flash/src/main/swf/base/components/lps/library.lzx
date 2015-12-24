@@ -23,7 +23,7 @@
 	<!-- APL Author sebawagner -->
     <resource name="arrow_down_slider_rsc" src="resources/arrow_down_slider.png" /> 
 
-	<include href="vslider.lzx" /> 
+    <include href="incubator/vslider.lzx" />
 	<include href="basePropertySelector.lzx" />
 	<include href="colorpicker.lzx" />
     <include href="lineColorChoose.lzx" />

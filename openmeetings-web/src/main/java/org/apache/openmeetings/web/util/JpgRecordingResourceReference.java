@@ -28,11 +28,11 @@ public class JpgRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public JpgRecordingResourceReference() {
-		super(JpgRecordingResourceReference.class);
+		super();
 	}
 	
 	@Override
-	public String getContentType() {
+	public String getMimeType() {
 		return "image/jpeg";
 	}
 	

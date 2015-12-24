@@ -64,9 +64,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.TextChoiceProvider;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
@@ -187,16 +187,16 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(new CheckBox("forceTimeZoneCheck"));
 
-		add(new Select2MultiChoice<Right>("rights", null, new TextChoiceProvider<Right>() {
+		add(new Select2MultiChoice<Right>("rights", null, new ChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(Right choice) {
+			public String getDisplayValue(Right choice) {
 				return choice.name();
 			}
 
 			@Override
-			protected Object getId(Right choice) {
+			public String getIdValue(Right choice) {
 				return choice.name();
 			}
 

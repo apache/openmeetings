@@ -59,9 +59,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.threeten.bp.LocalDate;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.TextChoiceProvider;
 
 import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
 import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
@@ -134,17 +134,18 @@ public class GeneralUserForm extends Form<User> {
 		} else {
 			orgUsers = getModelObject().getGroupUsers();
 		}
-		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new TextChoiceProvider<GroupUser>() {
+		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new ChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(GroupUser choice) {
+			public String getDisplayValue(GroupUser choice) {
 				return choice.getGroup().getName();
 			}
 
 			@Override
-			protected Object getId(GroupUser choice) {
-				return choice.getGroup().getId();
+			public String getIdValue(GroupUser choice) {
+				Long id = choice.getGroup().getId();
+				return id == null ? null : "" + id;
 			}
 
 			@Override
