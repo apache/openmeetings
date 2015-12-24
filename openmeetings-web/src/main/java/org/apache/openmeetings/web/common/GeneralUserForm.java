@@ -151,7 +151,7 @@ public class GeneralUserForm extends Form<User> {
 			@Override
 			public void query(String term, int page, Response<GroupUser> response) {
 				for (GroupUser ou : orgUsers) {
-					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && ou.getGroup().getName().contains(term))) {
+					if (Strings.isEmpty(term) || ou.getGroup().getName().contains(term)) {
 						response.add(ou);
 					}
 				}

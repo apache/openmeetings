@@ -510,8 +510,6 @@ table.messages td.main {
 }
 input[type="text"].messages.text, .messages.text.to {
 	width: 100%;
-	max-height: 100px;
-	overflow-y: auto;
 }
 textarea.messages.body {
 	width: 100%;
@@ -624,10 +622,6 @@ form .input {
 	font-size: 12px;
 	padding-right: 0.2em;
 	padding-left: 0.2em;
-}
-.invitees.select2-container-multi .select2-choices {
-	max-height: 80px;
-	overflow-y: auto;
 }
 #contents .btn-file>input {
 	transform: translate(-30px, 0) scale(1);

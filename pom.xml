@@ -36,7 +36,7 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.2.3.RELEASE</spring.version>
+		<spring.version>4.1.7.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.18.1</maven.surefire.version>
@@ -44,8 +44,8 @@
 		<wicket.version>7.2.0-SNAPSHOT</wicket.version>
 		<wicketju.version>7.1.1-SNAPSHOT</wicketju.version>
 		<wickets.version>7.2.0-SNAPSHOT</wickets.version>
-		<red5-server.version>1.0.7-SNAPSHOT</red5-server.version>
-		<red5-client.version>1.0.7-SNAPSHOT</red5-client.version>
+		<red5-server.version>1.0.6-RELEASE</red5-server.version>
+		<red5-client.version>1.0.6-RELEASE</red5-client.version>
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
@@ -400,6 +400,10 @@
 				<version>${red5-server.version}</version>
 				<exclusions>
 					<exclusion>
+						<groupId>org</groupId>
+						<artifactId>jaudiotagger</artifactId>
+					</exclusion>
+					<exclusion>
 						<groupId>xerces</groupId>
 						<artifactId>xercesImpl</artifactId>
 					</exclusion>
@@ -427,6 +431,10 @@
 				<artifactId>red5-client</artifactId>
 				<version>${red5-client.version}</version>
 				<exclusions>
+					<exclusion>
+						<groupId>org</groupId>
+						<artifactId>jaudiotagger</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.apache.mina</groupId>
 						<artifactId>mina-core</artifactId>
@@ -610,7 +618,7 @@
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-servlet-api</artifactId>
-				<version>8.0.26</version>
+				<version>8.0.28</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>

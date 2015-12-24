@@ -20,32 +20,20 @@
 	vertical-align: top;
 }
 
-.appointmentPopUp input[name="appointmentName"] {
+.appointmentPopUp input[type="text"] {
 	width: 420px;
 }
 
-.appointmentPopUp input[name="password"] {
+.appointmentPopUp input[type="password"] {
 	width: 420px;
 }
 
-.appointmentPopUp input[name="appointmentLocation"] {
-	width: 420px;
-}
-
-.appointmentPopUp textarea[name="appointmentDescription"] {
+.appointmentPopUp textarea {
 	width: 424px;
 	height: 80px;
 }
 
-.appointmentPopUp select[name="reminder"] {
-	width: 426px;
-}
-
-.appointmentPopUp select[name="room.type"] {
-	width: 426px;
-}
-
-.appointmentPopUp select[name="room"] {
+.appointmentPopUp select {
 	width: 426px;
 }
 
@@ -63,12 +51,4 @@
 	height: 100px;
 	overflow-x: scroll;
 	float: left;
-}
-
-.appointment.attendees {
-	width: 100%;
-}
-.appointment.attendees.select2-container-multi .select2-choices {
-	max-height: 100px;
-	overflow-y: auto;
 }

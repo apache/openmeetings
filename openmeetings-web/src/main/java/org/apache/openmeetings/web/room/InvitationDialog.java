@@ -113,14 +113,14 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					if (WebSession.getRights().contains(User.Right.Admin)) {
 						List<Group> groups = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 						for (Group g : groups) {
-							if (g.getName().toLowerCase().contains(term.toLowerCase())) {
+							if (Strings.isEmpty(term) || g.getName().toLowerCase().contains(term.toLowerCase())) {
 								response.add(g);
 							}
 						}
 					} else {
 						User u = getBean(UserDao.class).get(getUserId());
 						for (GroupUser ou : u.getGroupUsers()) {
-							if (ou.getGroup().getName().toLowerCase().contains(term.toLowerCase())) {
+							if (Strings.isEmpty(term) || ou.getGroup().getName().toLowerCase().contains(term.toLowerCase())) {
 								response.add(ou.getGroup());
 							}
 						}
@@ -321,7 +321,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 			groupContainer.add(
 				groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 					private static final long serialVersionUID = 1L;
-				
+					
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						url.setModelObject(null);
