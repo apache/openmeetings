@@ -37,7 +37,7 @@ import org.apache.wicket.validation.Validatable;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
-public class UserChoiceProvider implements ChoiceProvider<User> {
+public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private final static int PAGE_SIZE = 10;
 	private Map<String, User> newContacts = new Hashtable<String, User>();
@@ -76,13 +76,19 @@ public class UserChoiceProvider implements ChoiceProvider<User> {
 		return u;
 	}
 
-	protected Object getId(User u) {
+	@Override
+	public String getIdValue(User u) {
 		String id = "" + u.getId();
 		if (u.getId() == null) {
 			newContacts.put(u.getLogin(), u);
 			id = u.getLogin();
 		}
 		return id;
+	}
+
+	@Override
+	public String getDisplayValue(User object) {
+		return FormatHelper.formatUser(object, true);
 	}
 
 	@Override
@@ -112,10 +118,8 @@ public class UserChoiceProvider implements ChoiceProvider<User> {
 
 	@Override
 	public void toJson(User choice, JSONWriter writer) throws JSONException {
-		writer
-			.key("id").value(getId(choice))
-			.key("text").value(FormatHelper.formatUser(choice, true))
-			.key("contact").value(choice.getType() == Type.contact);
+		super.toJson(choice, writer);
+		writer.key("contact").value(choice.getType() == Type.contact);
 	}
 
 	@Override
