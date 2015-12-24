@@ -39,6 +39,7 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 
 public abstract class RecordingResourceReference extends FileSystemResourceReference {
@@ -103,13 +104,19 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 	
 	private Recording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
-		Long id = params.get("id").toOptionalLong();
+		StringValue _id = params.get("id");
+		Long id = null;
+		try {
+			id = _id.toOptionalLong();
+		} catch (NumberFormatException e) {
+			//no-op expected
+		}
 		WebSession ws = WebSession.get();
 		if (id != null && ws.isSignedIn()) {
 			return getRecording(id);
 		} else {
 			ws.invalidate();
-			if (ws.signIn(params.get("id").toString())) {
+			if (ws.signIn(_id.toString())) {
 				return getRecording(getRecordingId());
 			}
 		}

@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -386,11 +387,11 @@ public class User implements IDataProviderEntity {
 		this.login = login;
 	}
 
-	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
+	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		updatePassword(configDao, pass, false);
 	}
 	
-	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
+	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		if (!empty) {
 			if (invalidPassword(pass, configDao)) {
 				throw new RuntimeException("Password of invalid length is provided");

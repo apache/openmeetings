@@ -66,8 +66,8 @@ public class TestHashMapSession extends AbstractJUnitDefaults {
 			rcm.setUserport(0);
 			rcm.setUserip("remoteAddress");
 			rcm.setSwfurl("swfUrl");
-			rcm.setIsMod(new Boolean(false));
-			rcm.setCanDraw(new Boolean(false));
+			rcm.setIsMod(false);
+			rcm.setCanDraw(false);
 
 			if (cache.containsKey(null, streamId)) {
 				log.error("Tried to add an existing Client " + streamId);

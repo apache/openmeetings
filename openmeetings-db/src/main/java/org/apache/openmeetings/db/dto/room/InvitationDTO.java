@@ -21,10 +21,10 @@ package org.apache.openmeetings.db.dto.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -35,7 +35,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -161,14 +160,7 @@ public class InvitationDTO implements Serializable {
 	
 	public Invitation get(Long userId, UserDao userDao, RoomDao roomDao) {
 		Invitation i = new Invitation();
-		String hashRaw = "HASH" + (System.currentTimeMillis());
-		try {
-			i.setHash(MD5.do_checksum(hashRaw));
-		} catch (NoSuchAlgorithmException e) {
-			//FIXME TODO need to throw other exception
-			log.error("Unexpected error while creating invitation", e);
-			throw new RuntimeException(e);
-		}
+		i.setHash(UUID.randomUUID().toString());
 		i.setPasswordProtected(passwordProtected);
 		if (passwordProtected) {
 			i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(password));
