@@ -128,7 +128,7 @@
 			<id>prepare-red5-server</id>
 			<activation>
 				<file>
-					<missing>red5-server/red5-server-1.0.7-SNAPSHOT-server.zip</missing> <!-- TODO should be in-sync with global property -->
+					<missing>red5-server/red5-server-1.0.6-RELEASE-server.tar.gz</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
@@ -145,7 +145,7 @@
 								</goals>
 								<configuration>
 									<url>https://github.com/Red5/red5-server/releases/download</url>
-									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.zip</fromFile>
+									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
 									<toDir>${red5-server-file.dir}</toDir>
 									<skip>${red5-server.dwnd.skip}</skip>
 								</configuration>
