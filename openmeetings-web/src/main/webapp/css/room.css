@@ -98,7 +98,7 @@
 	padding: 0;
 	overflow: hidden;
 }
-.input.select2-container-multi .select2-choices {
+.input .select2-container {
 	max-height: 100px;
 	overflow-y: auto;
 }

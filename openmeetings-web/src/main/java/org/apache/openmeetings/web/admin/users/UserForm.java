@@ -61,6 +61,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -203,7 +204,7 @@ public class UserForm extends AdminBaseForm<User> {
 			@Override
 			public void query(String term, int page, Response<Right> response) {
 				for (Right r : Right.values()) {
-					if (r.name().contains(term)) {
+					if (Strings.isEmpty(term) || r.name().contains(term)) {
 						response.add(r);
 					}
 				}

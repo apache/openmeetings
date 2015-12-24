@@ -133,7 +133,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			@Override
 			public void query(String term, int page, Response<RoomGroup> response) {
 				for (RoomGroup or : orgRooms) {
-					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getGroup().getName().contains(term))) {
+					if (Strings.isEmpty(term) || or.getGroup().getName().contains(term)) {
 						response.add(or);
 					}
 				}
