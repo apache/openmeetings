@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Date;
@@ -233,7 +234,7 @@ public class UserDao implements IDataProviderDao<User> {
 	// FetchType is Lazy, this extra hook here might be not needed with a
 	// different mechanism to protect the password from being read
 	// sebawagner, 01.10.2012
-	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException {
+	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		User u = update(user, updatedBy);
 		if (password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
@@ -633,7 +634,7 @@ public class UserDao implements IDataProviderDao<User> {
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException {
+			Boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		
 		User u = new User();
 		u.setFirstname(firstname);

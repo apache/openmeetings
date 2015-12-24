@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.Vector;
 
 import org.apache.openmeetings.IApplication;
@@ -51,7 +51,6 @@ import org.apache.openmeetings.service.mail.template.CreatedAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
 import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.CalendarHelper;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.wicket.Application;
@@ -316,13 +315,7 @@ public class InvitationManager implements IInvitationManager {
 		Invitation invitation = _invitation;
 		if (null == _invitation) {
 			invitation = new Invitation();
-			String hashRaw = "HASH" + (System.currentTimeMillis());
-			try {
-				invitation.setHash(MD5.do_checksum(hashRaw));
-			} catch (NoSuchAlgorithmException e) {
-				log.error("Unexpected error while creating invitation", e);
-				throw new RuntimeException(e);
-			}
+			invitation.setHash(UUID.randomUUID().toString());
 		}
 
 		invitation.setPasswordProtected(isPasswordProtected);

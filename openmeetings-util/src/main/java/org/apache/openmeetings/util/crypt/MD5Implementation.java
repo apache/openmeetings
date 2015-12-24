@@ -20,6 +20,7 @@ package org.apache.openmeetings.util.crypt;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import org.red5.logging.Red5LoggerFactory;
@@ -37,7 +38,7 @@ public class MD5Implementation implements ICryptString {
 		String passPhrase = null;
 		try {
 			passPhrase = MD5.do_checksum(userGivenPass);
-		} catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			log.error("Error", e);
 		}
 		return passPhrase;
