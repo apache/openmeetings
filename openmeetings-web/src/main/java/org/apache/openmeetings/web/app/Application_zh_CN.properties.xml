@@ -1515,10 +1515,10 @@
   <entry key="1502">服务器细节</entry>
   <entry key="1503">发送SMS</entry>
   <entry key="1504">发布. 用户:</entry>
-  <entry key="1505">为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: &lt;ol&gt; &lt;li&gt;到OM安装目录 (for ex. /opt/red5)&lt;/li&gt; &lt;li&gt;停止OM (for ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)&lt;/li&gt; &lt;li&gt;下载新OM的文件&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (移动OM的工作版本只是以防万一 :))&lt;/li&gt; &lt;li&gt;将下载的OM解压到 /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</entry>
-  <entry key="1506">Rooms common to all user</entry>
-  <entry key="1507">Rooms common to the current user group</entry>
-  <entry key="1508">Rooms of the current user</entry>
+  <entry key="1505">为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: &lt;ol&gt; &lt;li&gt;到OM安装目录 (for ex. /opt/red5)&lt;/li&gt; &lt;li&gt;停止OM (for ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)&lt;/li&gt; &lt;li&gt;下载新OM的文件&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (移动OM的工作版本只是以防万一 :))&lt;/li&gt; &lt;li&gt;将下载的OM解压到 /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )&lt;/li&gt; &lt;li&gt;启动OM&lt;/li&gt; &lt;/ol&gt;</entry>
+  <entry key="1506">所有用户共同的房间</entry>
+  <entry key="1507">当前用户群共同的房间</entry>
+  <entry key="1508">当前用户的房间</entry>
   <entry key="1509">创建/修改特别约见室</entry>
   <entry key="1510">您可以在格式中输入多个地址: 名1 姓1 &lt;email1&gt;,"名2 姓2" &lt;email2&gt;,'名3 姓3' &lt;email3&gt;, ...</entry>
   <entry key="1511">调整流体积</entry>
@@ -1576,22 +1576,22 @@
   <entry key="1566">十一月</entry>
   <entry key="1567">十二月</entry>
   <entry key="1571">OAuth2</entry>
-  <entry key="1572">Manage OAuth2 configurations</entry>
-  <entry key="1573">Name</entry>
-  <entry key="1574">Enabled</entry>
-  <entry key="1575">Icon URL</entry>
-  <entry key="1576">client_id</entry>
-  <entry key="1577">client_secret</entry>
-  <entry key="1578">Request key URL</entry>
-  <entry key="1579">Request token URL</entry>
-  <entry key="1580">Request info URL</entry>
-  <entry key="1581">OAuth2 config</entry>
-  <entry key="1582">Login param name</entry>
-  <entry key="1583">Email param name</entry>
-  <entry key="1584">Firstname param name</entry>
-  <entry key="1585">Lastname param name</entry>
-  <entry key="1586">Request token attributes</entry>
-  <entry key="1587">Redirect uri</entry>
+  <entry key="1572">oauth2配置管理</entry>
+  <entry key="1573">名称</entry>
+  <entry key="1574">启用</entry>
+  <entry key="1575">链接图标</entry>
+  <entry key="1576">_客户id</entry>
+  <entry key="1577">_客户密码</entry>
+  <entry key="1578">请求密钥网址</entry>
+  <entry key="1579">请求令牌网址</entry>
+  <entry key="1580">请求信息网址</entry>
+  <entry key="1581">OAuth2配置</entry>
+  <entry key="1582">登录参数名称</entry>
+  <entry key="1583">电子邮件参数名称</entry>
+  <entry key="1584">名参数名称</entry>
+  <entry key="1585">姓参数名称</entry>
+  <entry key="1586">请求令牌属性</entry>
+  <entry key="1587">重定向URL</entry>
   <entry key="1588">您可以按照此格式中输入邮件地址: 名1 姓1 &lt;email1&gt; 或 "名2 姓2 "  &lt;email2&gt; 或'名3 姓3 ' &lt;email3&gt; 或 email</entry>
   <entry key="1589">断开连接时通知</entry>
   <entry key="1590">显示</entry>
@@ -1605,135 +1605,114 @@
   <entry key="1598">安全</entry>
   <entry key="1599">拒绝访问。你无权进入这个房间.</entry>
   <entry key="1600">再转换</entry>
-  <entry key="1601">Apply for audio access</entry>
-  <entry key="1602">Ask moderator to share your micro</entry>
-  <entry key="1603">would like to share his audio</entry>
-  <entry key="1604">Allow this user to publish their audio</entry>
-  <entry key="1605">Remove audio of this user</entry>
-  <entry key="1606">I would like to share my audio</entry>
-  <entry key="1607">You are allowed to share your audio</entry>
+  <entry key="1601">申请音频访问</entry>
+  <entry key="1602">请主持人分享您的麦克风</entry>
+  <entry key="1603">想分享他的音频</entry>
+  <entry key="1604">允许该用户发布他们的音频</entry>
+  <entry key="1605">删除该用户的音频</entry>
+  <entry key="1606">我想分享我的音频</entry>
+  <entry key="1607">你可以分享你的声音</entry>
 	<entry key="install.wizard.install.header">Installation</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Enabling
-				Image Upload and import to whiteboard<a
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>使图像上传和导入到白板上<a
 					href="#Enabling_Image_Upload_and_import_to_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>ImageMagick</strong> on the server, you can
-					get more information on <a target="_blank"
+				<li>安装 <strong>ImageMagick</strong> 在服务器上，你可以得到更多的信息在 <a target="_blank"
 					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					regarding installation. The instructions for installation can be
-					found there <a target="_blank"
+					关于安装. 安装的说明可以在这里找到 <a target="_blank"
 					href="http://www.imagemagick.org/script/binary-releases.php"
 					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					however on most linux systems you can get it via your favorite
-					package managers (apt-get it)
+					然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)
 				</li>
 			</ul>
 		</li>
 		<li><h4>
-				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Enabling
-				import of PDFs into whiteboard<a
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>E使导入的PDF文件到白板<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>GhostScript</strong> on the server, you can
-					get more information on <a target="_blank"
+				<li>安装 <strong>GhostScript</strong> 在服务器上，你可以得到更多的信息在 <a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					regarding installation. The instructions for installation can be
-					found there, however on most linux systems you can get it via your
-					favorite package managers (apt-get it).
+					关于安装. 安装的说明可以在这里找到, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它 (apt-get it).
 				</li>
-				<li>Install <strong>SWFTools</strong> on the server, you can get
-					more information on <a target="_blank"
+				<li>安装 <strong>SWFTools</strong> 在服务器上, 你可以得到更多的信息在 <a target="_blank"
 					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					regarding installation. Some of the Linux distributions already have
-					it in there package manager see <a target="_blank"
+					关于安装. 一些Linux在软件包管理器中已经包含了 <a target="_blank"
 					href="http://packages.debian.org/unstable/utils/swftools"
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					the recommended version of <strong>SWFTools</strong> is 0.9 as prior
-					version have a bug that does lead to wrong object dimensions in the
-					Whiteboard
+					推荐的版本 <strong>SWFTools</strong> 是 0.9 因为之前的版本有一个错误，导致在白板上显示错误的对象尺寸
 				</li>
 		</ul>
 		</li>
 		<li><h4>
 				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Enabling
-				import of .doc, .docx, .ppt, .pptx, ... all Office Documents into
-				whitebaord<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>激活
+				导入.doc, .docx, .ppt, .pptx, ... 所有的MS Office文档到白板<a
 					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li><strong>OpenOffice-Service</strong> started and listening on
-					port 8100, see <a target="_blank"
+				<li><strong>OpenOffice-Service</strong> 已经启动并监听端口 8100, 参照 <a target="_blank"
 					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					for details</li>
+					查阅细节</li>
 			</ul>
 		</li>
 		<li><h4>
 				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Enabling
-				Recording and import of .avi, .flv, .mov and .mp4 into whiteboard<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>激活
+				记录和导入 .avi, .flv, .mov and .mp4 到白板上<a
 					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>FFMpeg</strong>. You should get FFMPEG in an
-					up to date copy! For Windows you can download a Build for example
-					from <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux or OSx
-					Users should be able to use one of the various Installation
-					Instructions on the Web. You need to enable libmp3lame!
+				<li>安装 <strong>FFMpeg</strong>. 你应该获得一个最新版本的FFMPEG!针对Windows你可以下载一个示例从
+					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux和OSX用户应该能够使用网上不同的安装说明，你需要激活libmp3lame！
 				</li>
-				<li>Install <strong>SoX</strong> <a
+				<li>安装 <strong>SoX</strong> <a
 					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					You should install SoX in a up to date copy! SoX 12.xx will NOT
-					work!
+					你应该安装一个最新版本的 SoX! SoX 12.xx 版本不支持!
 				</li>
 			</ul>
 		</li>
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">If you have further
-			questions or need support in installation or hosting:</span></b>
+	<b> <span style="font-size: 1.2em">如果您在安装或托管有进一步的问题或需要支持:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Community-Support:</span></b>
+	<b><span style="font-size: 1.2em">社区支持:</span></b>
 	<br />
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="http://openmeetings.apache.org/mail-lists.html"
-		target="_blank">Mailing lists</a></span>
+		target="_blank">邮件列表</a></span>
 	<br />
 	<br />
 
-	<b> <span style="font-size: 1.2em">Commercial-Support:</span></b>
+	<b> <span style="font-size: 1.2em">商业支持:</span></b>
 	<br />
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="http://openmeetings.apache.org/commercial-support.html"
-		target="_blank">Commercial-Support</a></span>
+		target="_blank">商业支持</a></span>
 
 	<br />
 	]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[
 		<h4>
-			<a id="Recommendation_for_production_environment"></a>Recommendation
-			for production environment<a target="_blank"
+			<a id="Recommendation_for_production_environment"></a>生产环境推荐<a target="_blank"
 				href="#Recommendation_for_production_environment"
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			By default {0} uses the integrated {1} database. For
-			production environment you should consider using {2}, {3}, {4}, {5} or {6}
+			默认{ 0 }使用集成{ 1 }数据库。对于生产环境，你应该考虑使用{ 2 }，{ 3 }，{ 4 }，{ 5 }或{ 6 }
 		</blockquote>
 	]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
@@ -1742,131 +1721,122 @@
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>
-	<entry key="install.wizard.db.step.field.title">DB configuration</entry>
-	<entry key="install.wizard.db.step.dbtype">Choose DB type</entry>
+	<entry key="install.wizard.db.step.field.title">数据库配置</entry>
+	<entry key="install.wizard.db.step.dbtype">选择数据库类型</entry>
 	<entry key="install.wizard.db.step.db2.name">IBM DB2</entry>
 	<entry key="install.wizard.db.step.derby.name">Apache Derby</entry>
 	<entry key="install.wizard.db.step.mssql.name">MSSQL</entry>
 	<entry key="install.wizard.db.step.mysql.name">MySQL</entry>
 	<entry key="install.wizard.db.step.oracle.name">Oracle</entry>
 	<entry key="install.wizard.db.step.postgresql.name">PostgreSql</entry>
-	<entry key="install.wizard.db.step.host">Specify DB host</entry>
-	<entry key="install.wizard.db.step.port">Specify DB port</entry>
-	<entry key="install.wizard.db.step.dbname">Specify the name of the database</entry>
-	<entry key="install.wizard.db.step.user">Specify DB user</entry>
-	<entry key="install.wizard.db.step.pass">Specify DB password</entry>
-	<entry key="install.wizard.db.step.check">Check</entry>
-	<entry key="install.wizard.db.step.errorprops">Unable to get the properties</entry>
-	<entry key="install.wizard.db.step.nodriver">Unable to load proper DB driver, please download appropriate jar file, and restart the OM. Instructions: {0}</entry>
-	<entry key="install.wizard.db.step.notvalid">Database check was unsuccessfull</entry>
-	<entry key="install.wizard.db.step.error.patch">Unexpected error while patching persistence file: {0}</entry>
-	<entry key="install.wizard.db.step.valid">Database check was successfull</entry>
-	<entry key="install.wizard.params.step1.userdata">Userdata</entry>
-	<entry key="install.wizard.params.step1.username">Username</entry>
-	<entry key="install.wizard.params.step1.username.title">Enter a username</entry>
-	<entry key="install.wizard.params.step1.password">Userpass</entry>
-	<entry key="install.wizard.params.step1.password.title">Enter a password</entry>
-	<entry key="install.wizard.params.step1.email">EMail</entry>
-	<entry key="install.wizard.params.step1.email.title">Enter a EMail</entry>
-	<entry key="install.wizard.params.step1.tz">User Time Zone</entry>
-	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
-	<entry key="install.wizard.params.step1.group">Name</entry>
-	<entry key="install.wizard.params.step1.group.title">Enter a default Organisation</entry>
+	<entry key="install.wizard.db.step.host">定义数据库主机</entry>
+	<entry key="install.wizard.db.step.port">定义数据库端口</entry>
+	<entry key="install.wizard.db.step.dbname">定义数据库名称</entry>
+	<entry key="install.wizard.db.step.user">定义数据库用户</entry>
+	<entry key="install.wizard.db.step.pass">定义数据库密码</entry>
+	<entry key="install.wizard.db.step.check">检查</entry>
+	<entry key="install.wizard.db.step.errorprops">无法获得属性</entry>
+	<entry key="install.wizard.db.step.nodriver">无法加载正确的数据库驱动程序，请下载适当的jar文件，并重新启动OM。指示: {0}</entry>
+	<entry key="install.wizard.db.step.notvalid">数据库检查不成功</entry>
+	<entry key="install.wizard.db.step.error.patch">意外错误，同时修补持久性文件：{ 0 }</entry>
+	<entry key="install.wizard.db.step.valid">数据库检查成功</entry>
+	<entry key="install.wizard.params.step1.userdata">用户数据</entry>
+	<entry key="install.wizard.params.step1.username">用户名称</entry>
+	<entry key="install.wizard.params.step1.username.title">输入用户名</entry>
+	<entry key="install.wizard.params.step1.password">用户密码</entry>
+	<entry key="install.wizard.params.step1.password.title">输入密码</entry>
+	<entry key="install.wizard.params.step1.email">电子邮件</entry>
+	<entry key="install.wizard.params.step1.email.title">输入电子邮件</entry>
+	<entry key="install.wizard.params.step1.tz">用户时区</entry>
+	<entry key="install.wizard.params.step1.groupdata">组织(域)</entry>
+	<entry key="install.wizard.params.step1.group">名称</entry>
+	<entry key="install.wizard.params.step1.group.title">输入默认组织</entry>
 
-	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister">Allow self-registering (allow_frontend_register)</entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister">Send Email to new registered Users (sendEmailAtRegister)</entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">New Users need to verify their EMail (sendEmailWithVerficationCode)</entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms">Default Rooms of all types will be created</entry>
-	<entry key="install.wizard.params.step2.mailReferer">Mail-Referer (system_email_addr)</entry>
-	<entry key="install.wizard.params.step2.mailReferer.title">Enter a Referer</entry>
-	<entry key="install.wizard.params.step2.smtpServer">SMTP-Server (smtp_server)</entry>
-	<entry key="install.wizard.params.step2.smtpServer.title">Enter a SMTP-Server</entry>
-	<entry key="install.wizard.params.step2.smtpPort">SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)</entry>
-	<entry key="install.wizard.params.step2.smtpPort.title">Enter a SMTP-Server.Port normally 25</entry>
-	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Username (email_username)</entry>
-	<entry key="install.wizard.params.step2.mailAuthName.title">Enter the mail-username</entry>
-	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Userpass (email_userpass)</entry>
-	<entry key="install.wizard.params.step2.mailAuthPass.title">Enter the mail-userpass</entry>
-	<entry key="install.wizard.params.step2.mailUseTls">Enable TLS in Mail Server Auth</entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer">Set inviter's email
-					address as ReplyTo in email invitations (inviter.email.as.replyto)</entry>
-	<entry key="install.wizard.params.step2.defaultLangId">Default Language</entry>
-	<entry key="install.wizard.params.step2.defaultExportFont">Default Font for Export [default_export_font]</entry>
+	<entry key="install.wizard.params.step2.configuration">配置</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">允许自我注册 (allow_frontend_register)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">发送电子邮件到新的注册用户 (sendEmailAtRegister)</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">新用户需要验证他们的电子邮件 (sendEmailWithVerficationCode)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">创建所有类型的默认房间</entry>
+	<entry key="install.wizard.params.step2.mailReferer">邮件地址 (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">输入一个邮件</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP-服务器 (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">输入一个SMTP-服务器</entry>
+	<entry key="install.wizard.params.step2.smtpPort">SMTP-服务器端口(默认Smtp-服务器端口25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">输入一个SMTP-Server.端口 一般是25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">SMTP-用户名 (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">输入邮件用户名</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-用户密码 (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">输入邮件密码</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">启用TLS邮件服务器认证</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">设置邀请人的电子邮件地址作为邮件邀请回复 (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">默认语言</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">导出的默认字体 [default_export_font]</entry>
 
-	<entry key="install.wizard.params.step3.converters">Converters</entry>
-	<entry key="install.wizard.params.step3.seeAlso"> see also</entry>
-	<entry key="install.wizard.params.step3.installation">Installation</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Enter the dpi that swftools will use for PDF to SWF conversion</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">DPI that swftools will use for PDF to SWF conversion (default is 100)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Quality</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small),
-				100 is best (big). (default:85)</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools Path</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path</entry>
+	<entry key="install.wizard.params.step3.converters">转换器</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> 见</entry>
+	<entry key="install.wizard.params.step3.installation">安装</entry>
+	<entry key="install.wizard.params.step3.swfZoom">swftools变焦</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">输入DPI，swftools将SWF转换为PDF</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">DPI，swftools将SWF转换为PDF (默认是 100)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">swftools JPEG质量</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">输入嵌入的JPEG图片的质量。0是最坏的（小），100是最好的（大）。（默认：85）</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">输入嵌入的JPEG图片的质量。0是最坏的（小），100是最好的（大）。（默认：85）</entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools 路径</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">输入swftools例如C:/swftools（Windows）或留有空白，如果swftools是已知的系统路径</entry>
 	<entry key="install.wizard.params.step3.swfPath.text">
-		You can test if swftools is installed into system path by
-		opening a shell or cmd-prompt and type pdf2swf If this shows
-		a list of options leave this field blank otherwise you have to
-		specify the path to pdf2swf on your system
+		你可以测试是否将swftools安装到系统路径，
+		打开shell或者cmd提示符下输入Pdf2swf，如果出现了一个列表，上有一些选项，就不用填写这个字段，否则否则你必须指定Pdf2swf在您的系统上的路径
 	</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Path</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.title">Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick 路径</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">输入ImageMagick的路径, 如果ImageMagick成功安装到系统路径，就不用填写这个字段</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Path</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.title">Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG 路径</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">输入FFMPEG的路径, 如果FFMPEG成功安装到系统路径，就不用填写这个字段</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
-	<entry key="install.wizard.params.step3.soxPath">SoX Path</entry>
-	<entry key="install.wizard.params.step3.soxPath.title">Enter the path to SoX, leave blank if SoX is successfully installed to system-path</entry>
+	<entry key="install.wizard.params.step3.soxPath">SoX 路径</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">输入SoX的路径, 如果SoX成功安装到系统路径，就不用填写这个字段</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>
-	<entry key="install.wizard.params.step3.jodPath">JOD Path</entry>
-	<entry key="install.wizard.params.step3.jodPath.title">The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar</entry>
+	<entry key="install.wizard.params.step3.jodPath">JOD 路径</entry>
+	<entry key="install.wizard.params.step3.jodPath.title">到JOD库的路径 (http://code.google.com/p/jodconverter), 配置路径指向JOD的lib目录， 它包含jodconverter-core-version.jar</entry>
 	<entry key="install.wizard.params.step3.jodPath.text"></entry>
-	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Path for jodconverter</entry>
-	<entry key="install.wizard.params.step3.officePath.title">The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically</entry>
-	<entry key="install.wizard.params.step3.officePath.text">The path to OpenOffice/LibreOffice (optional) please set this
-			to the real path in case jodconverter is unable to find
-			OpenOffice/LibreOffice installation
+	<entry key="install.wizard.params.step3.officePath">OpenOffice和LibreOffice使用jodconverter的路径</entry>
+	<entry key="install.wizard.params.step3.officePath.title">OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装</entry>
+	<entry key="install.wizard.params.step3.officePath.text">OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装
 	</entry>
 
-	<entry key="install.wizard.params.step4.crypt">Crypt Type</entry>
-	<entry key="install.wizard.params.step4.cryptClassName">Crypt Class</entry>
-	<entry key="install.wizard.params.step4.cryptClassName.title">Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE</entry>
+	<entry key="install.wizard.params.step4.crypt">加密类型</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">加密类</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">输入加密类的类名. 如果你不能肯定，就不要改变</entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		for more information or to write your own Crypt-Style see: <a
+		你可以使用这类加密类型，它等于
+		PHP-MD5 函数 或者BSD风格加密，通过运用:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		参照更多信息或者编写你自己的加密方式，请参见: <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-		target="_blank">Custom Crypt Mechanism</a> You can edit this
-		value later BUT previous created Users and Sessions might be not
-		usable anymore
+		target="_blank">个性化加密机制</a> 您可以稍后编辑此值，但以前创建的用户和会话可能不可用了
 	]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP">red5SIP Configuration</entry>
-	<entry key="install.wizard.params.step4.red5SipEnable">Enable SIP</entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text">Enable red5SIP integration</entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix">SIP rooms prefix</entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">Prefix for phone number of conference rooms</entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP extensions context</entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Context of Asterisk extensions</entry>
+	<entry key="install.wizard.params.step4.red5SIP">red5SIP 配置</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">激活 SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">激活 red5SIP 集成</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">SIP 会议室前缀</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">会议室电话号码前缀</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP 分机号码</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Asterisk分机</entry>
 
-	<entry key="install.wizard.install.desc">Please click "Finish" button to start installation!</entry>
-	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
-	<entry key="install.wizard.install.failed">Installation is failed</entry>
+	<entry key="install.wizard.install.desc">请按“完成”按钮开始安装！</entry>
+	<entry key="install.wizard.install.started">请等待，安装在进行中</entry>
+	<entry key="install.wizard.install.failed">安装失败</entry>
 
-	<entry key="install.wizard.congrats.enter">Enter the Application</entry>
-	<entry key="install.wizard.congrats.port">If your Red5-Server runs on a different Port or on a different domain</entry>
-	<entry key="install.wizard.congrats.config">alter the config values of the client</entry>
-	<entry key="install.wizard.congrats.mail">Mailing list</entry>
-	<entry key="install.wizard.congrats.commercial">There are some companies
-			that also offer commercial support for Apache OpenMeetings:</entry>
-  <entry key="room.type.conference">conference (1-25 users)</entry>
-  <entry key="room.type.restricted">restricted (1-150 users)</entry>
-  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
-  <entry key="appointment.reminder.none">do not send notification</entry>
-  <entry key="appointment.reminder.email">simple email</entry>
-  <entry key="appointment.reminder.ical">iCal email</entry>
+	<entry key="install.wizard.congrats.enter">输入应用程序</entry>
+	<entry key="install.wizard.congrats.port">如果你的Red5服务器运行在不同的端口或在不同的域</entry>
+	<entry key="install.wizard.congrats.config">改变客户端的配置值</entry>
+	<entry key="install.wizard.congrats.mail">邮件列表</entry>
+	<entry key="install.wizard.congrats.commercial">有一些公司也给Apache OpenMeetings提供商业支持：</entry>
+  <entry key="room.type.conference">会议室 (1-25 用户)</entry>
+  <entry key="room.type.restricted">限制性的 (1-150 用户)</entry>
+  <entry key="room.type.interview">约见 (1:1 会见并记录)</entry>
+  <entry key="appointment.reminder.none">不发送通知</entry>
+  <entry key="appointment.reminder.email">简单电子邮件</entry>
+  <entry key="appointment.reminder.ical">iCal电子邮件</entry>
   <entry key="user.salutation.mr">先生.</entry>
   <entry key="user.salutation.ms">女士.</entry>
   <entry key="user.salutation.mrs">女士</entry>
