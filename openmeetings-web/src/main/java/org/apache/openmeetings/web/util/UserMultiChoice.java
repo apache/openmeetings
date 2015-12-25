@@ -34,8 +34,8 @@ public class UserMultiChoice extends Select2MultiChoice<User> {
 
 	public UserMultiChoice(String id, IModel<Collection<User>> model) {
 		super(id, model, new UserChoiceProvider());
-		getSettings().setFormatResult("formatOmUser");
-		getSettings().setFormatSelection("formatOmUser");
+		getSettings().setTemplateResult("formatOmUser");
+		getSettings().setTemplateSelection("formatOmUser");
 		getSettings().setEscapeMarkup("escapeOmUserMarkup");
 	}
 	
