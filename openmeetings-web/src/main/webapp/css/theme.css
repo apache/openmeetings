@@ -508,7 +508,7 @@ table.messages td.main {
 	width: 20px;
 	min-height: inherit;
 }
-input[type="text"].messages.text, .messages.text.to {
+input[type="text"].messages.text {
 	width: 100%;
 }
 textarea.messages.body {
@@ -556,21 +556,24 @@ select.messages.selector {
 	background-color: rgb(248, 248, 248);
 	border-bottom: 5px solid white;
 }
-.select2-results .select2-result .select2-result-label .user.external
-, .select2-results .select2-result .select2-result-label .user.internal
-, .select2-choices .select2-search-choice .user.external
-, .select2-choices .select2-search-choice .user.internal {
+.select2-results .user.external, .select2-selection .user.external
+, .select2-results .user.internal, .select2-selection .user.internal {
 	padding-left: 18px;
 	background-repeat: no-repeat;
 	background-position: 0px 2px;
 }
-.select2-results .select2-result .select2-result-label .user.external
-, .select2-choices .select2-search-choice .user.external {
+.select2-results .user.external, .select2-selection .user.external {
 	background-image: url(images/user_go.png);
 }
-.select2-results .select2-result .select2-result-label .user.internal
-, .select2-choices .select2-search-choice .user.internal {
+.select2-results .user.internal, .select2-selection .user.internal {
 	background-image: url(images/user.png);
+}
+.om-select2 .select2.select2-container {
+	max-height: 80px;
+	overflow-y: auto;
+}
+.om-select2.full-width .select2.select2-container {
+	width: 100% !important;
 }
 .page.recording {
 	padding-top: 40px;
