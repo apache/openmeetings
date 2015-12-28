@@ -169,9 +169,9 @@ public class RecordingWebService {
 	 */
 	@WebMethod
 	@GET
-	@Path("/room/{id}")
+	@Path("/room/{roomid}")
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @PathParam("id") @WebParam(name="id") Long roomId) throws ServiceException {
+			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
