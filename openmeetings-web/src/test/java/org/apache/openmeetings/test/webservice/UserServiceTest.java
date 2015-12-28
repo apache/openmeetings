@@ -36,21 +36,25 @@ public class UserServiceTest extends AbstractJUnitDefaults {
 	public final static String BASE_SERVICES_URL = "http://localhost:5080/openmeetings/services";
 	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
 	
-	protected static WebClient getClient(String url) {
+	public static WebClient getClient(String url) {
 		return WebClient.create(url).accept("application/json").type("application/json");
+	}
+	
+	public static ServiceResult login() {
+		ServiceResult sr = getClient(USER_SERVICE_URL).path("/login").query("user", username).query("pass", userpass).get(ServiceResult.class);
+		assertEquals("Login should be successful", sr.getType(), Type.SUCCESS.name());
+		return sr;
 	}
 	
 	@Test
 	public void loginTest() {
-		ServiceResult r = getClient(USER_SERVICE_URL).path("/login").query("user", username).query("pass", userpass).get(ServiceResult.class);
+		ServiceResult r = login();
 		assertNotNull("Valid ServiceResult should be returned", r);
-		assertEquals("Login should be successful", r.getType(), Type.SUCCESS.name());
 	}
 
 	@Test
 	public void hashTest() {
-		ServiceResult r = getClient(USER_SERVICE_URL).path("/login").query("user", username).query("pass", userpass).get(ServiceResult.class);
-		assertEquals("Login should be successful", r.getType(), Type.SUCCESS.name());
+		ServiceResult r = login();
 		ExternalUserDTO user = new ExternalUserDTO();
 		user.setExternalId("1");
 		user.setExternalType("OmJunitTests");
