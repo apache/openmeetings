@@ -57,6 +57,7 @@ import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -147,6 +148,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					return id == null ? null : "" + id;
 				}
 			});
+	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 
 	public InvitationDialog(String id, long roomId) {
 		super(id, Application.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
@@ -164,6 +166,9 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		User u = getBean(UserDao.class).get(getUserId());
 		i.setInvitedBy(u);
 		i.setRoom(getBean(RoomDao.class).get(roomId));
+		if (i.getRoom() != null) {
+			target.add(sipContainer.replace(new Label("room.confno", i.getRoom().getConfno())).setVisible(i.getRoom().isSipEnabled()));
+		}
 		Calendar d = Calendar.getInstance();
 		i.setValidFrom(d.getTime());
 		d.add(Calendar.DATE, 1);
@@ -377,6 +382,8 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 				});
 			rdi.add(new LanguageDropDown("language", new PropertyModel<Long>(InvitationDialog.this, "lang")));
 			rdi.add(url.setOutputMarkupId(true));
+			rdi.add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 			add(feedback);
 		}
 		

@@ -52,6 +52,7 @@ import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -94,6 +95,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
 	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
+	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	
 	@Override
 	public int getWidth() {
@@ -112,6 +114,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		} else {
 			delete.setVisible(false, target);
 			enterRoom.setVisible(false, target);
+		}
+		if (a.getRoom() != null) {
+			target.add(sipContainer.replace(new Label("room.confno", a.getRoom().getConfno())).setVisible(a.getRoom().isSipEnabled()));
 		}
 		save.setVisible(isOwner(a), target);
 		super.setModelObject(a);
@@ -249,7 +254,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			if (a.getReminder() == null) {
 				a.setReminder(Reminder.none);
 			}
-			
 			if (a.getRoom() == null) {
 				Room r = new Room();
 				r.setAppointment(true);
@@ -339,6 +343,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					target.add(roomType.setEnabled(createRoom), room.setEnabled(!createRoom));
 				}
 			});
+			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 			add(new AjaxCheckBox("passwordProtected") {
 				private static final long serialVersionUID = 1L;
 
