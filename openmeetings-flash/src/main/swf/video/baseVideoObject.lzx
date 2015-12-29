@@ -603,7 +603,7 @@
 				}
 				if (canvas.ismoderator) {
 					canvas.thishib.switchMicMuted.publicSID = this.publicSID;
-					canvas.thishib.switchMicMuted.mute = true; 
+					canvas.thishib.switchMicMuted.mute = mute; 
 					canvas.thishib.switchMicMuted.doCall();
 				} else {
 					this._chatvideoinner._videostream.setSoundVolume(mute ? 0 : 100);
