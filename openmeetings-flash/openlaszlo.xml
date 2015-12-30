@@ -107,7 +107,7 @@
 		<get src="https://dl.bintray.com/openmeetings/maven/org/openlaszlo/openlaszlo/4.9.6/openlaszlo-4.9.6.tgz"
 			dest="${openlaszlo}" usetimestamp="true"/>
 		<untar src="${openlaszlo}/openlaszlo-4.9.6.tgz" dest="${openlaszlo}" compression="gzip" />
-		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="755" includes="**/mxmlc*" />
+		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="a+x" includes="**/mxmlc*" />
 		<delete>
 			<fileset dir="${openlaszlo}" includes="openlaszlo*.tgz"/>
 		</delete>
