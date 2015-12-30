@@ -351,6 +351,26 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>prepare-test-resources</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<outputDirectory>${project.build.directory}/test-root</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/webapp</directory>
+									<includes>
+										<include>**</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-web-templates</id>
 						<phase>process-resources</phase>
 						<goals>
@@ -402,20 +422,6 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
-					<execution><!-- FIXME should be refactored -->
-						<id>move-openjpa-resources</id>
-						<phase>process-resources</phase>
-						<configuration>
-							<target>
-								<copy todir="${project.build.directory}/test-root">
-									<fileset dir="${project.basedir}/src/main/webapp"/>
-								</copy>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -430,6 +436,8 @@
 						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
 						<red5.root>red5.root</red5.root>
 						<backups.dir>${old-backups.dir}</backups.dir>
+						<logback.ContextSelector>org.red5.logging.LoggingContextSelector</logback.ContextSelector>
+						<catalina.useNaming>true</catalina.useNaming>
 					</systemPropertyVariables>
 					<additionalClasspathElements>
 						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
@@ -675,8 +683,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<version>${tomcat.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-logging-juli</artifactId>
+			<version>${tomcat.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-websocket</artifactId>
-			<version>8.0.26</version>
+			<version>${tomcat.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.tomcat.embed</groupId>

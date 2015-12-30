@@ -96,7 +96,6 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", getLocale());
 		driver = new FirefoxDriver(profile);

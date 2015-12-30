@@ -73,11 +73,13 @@ public class ProfileImageResourceReference extends ResourceReference {
 		return new ByteArrayResource("image/jpeg") {
 			private static final long serialVersionUID = 1L;
 			private Long userId = null;
+			private String uri = null;
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
 				PageParameters params = attributes.getParameters();
 				userId = params.get("id").toOptionalLong();
+				uri = getBean(UserDao.class).get(userId).getPictureuri();
 				ResourceResponse rr = super.newResourceResponse(attributes);
 				rr.disableCaching();
 				return rr;
@@ -85,7 +87,6 @@ public class ProfileImageResourceReference extends ResourceReference {
 			
 			@Override
 			protected byte[] getData(Attributes attributes) {
-				String uri = getBean(UserDao.class).get(userId).getPictureuri();
 				if (!isAbsolute(uri)) {
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
 					try (InputStream is = new FileInputStream(img)) {

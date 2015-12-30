@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
-import java.util.Random;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -31,37 +30,42 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class RecordingServiceTest extends AbstractJUnitDefaults {
-	public final static String RECORD_SERVICE_URL = UserServiceTest.BASE_SERVICES_URL + "/record";
+public class TestRecordingService extends AbstractWebServiceTest {
+	public final static String RECORD_SERVICE_URL = BASE_SERVICES_URL + "/record";
 	private final static String UNIT_TEST_GROUP = "om_unit_tests";
-	private final Random rnd = new Random();
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
 	private UserDao userDao;
 
-	@Test
-	public void testExternal() throws Exception {
+	private User getExternalUser() throws Exception {
 		User u = getUser(rnd.nextInt());
 		u.setExternalType(UNIT_TEST_GROUP);
 		u.setExternalId("" + rnd.nextInt());
-		userDao.update(u, null);
+		u = userDao.update(u, null);
+		return u;
+	}
+	
+	@Test
+	public void testExternal() throws Exception {
+		User u = getExternalUser();
 		Recording r = new Recording();
-		r.setCreator(u);
+		r.setInsertedBy(u.getId());
 		r.setComment("Created by Unit Tests");
+		r.setRoomId(5L);
 		r = recordingDao.update(r);
-		ServiceResult sr = UserServiceTest.login();
-		Collection<? extends RecordingDTO> recs = UserServiceTest.getClient(RECORD_SERVICE_URL).path("/" + UNIT_TEST_GROUP).query("sid", sr.getMessage())
+		ServiceResult sr = login();
+		Collection<? extends RecordingDTO> recs = getClient(RECORD_SERVICE_URL).path("/" + UNIT_TEST_GROUP).query("sid", sr.getMessage())
 				.getCollection(RecordingDTO.class);
 		assertNotNull("Valid collection should be returned", recs);
-		assertFalse("Collection of the recordings shoould not be empty", recs.isEmpty());
+		assertFalse("Collection of the recordings should not be empty", recs.isEmpty());
 		boolean found = false;
 		for (RecordingDTO rdo : recs) {
 			if (r.getId().equals(rdo.getId())) {
+				//TODO check room, user
 				found = true;
 				break;
 			}
