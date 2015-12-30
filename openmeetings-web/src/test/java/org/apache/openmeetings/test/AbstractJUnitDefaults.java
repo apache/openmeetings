@@ -56,7 +56,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		configurationDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();

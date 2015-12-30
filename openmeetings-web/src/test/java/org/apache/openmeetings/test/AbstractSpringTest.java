@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -34,8 +34,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
 public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTests {
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void init() throws Exception {
 		setOmHome();
 		LabelDao.initLanguageMap();
 		if (LabelDao.languages.isEmpty()) {
@@ -43,7 +43,7 @@ public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTest
 		}
 	}
 	
-	protected void setOmHome() {
+	protected static void setOmHome() {
 		String webappsDir = System.getProperty("om.home", ".");
 		OmFileHelper.setOmHome(webappsDir);
 		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
