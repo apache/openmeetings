@@ -55,8 +55,8 @@
 			<tr>
 				<td>-<xsl:value-of select="field[@name='errorvalues_id']"/></td>
 				<td>
-					<xsl:variable name="type" select="field[@name='type']"/>
-					<xsl:value-of select="document($englishPath)/properties/entry[@key=error.type.$type]/text()" />
+					<xsl:variable name="type" select="concat('error.type.', field[@name='type'])"/>
+					<xsl:value-of select="document($englishPath)/properties/entry[@key=$type]/text()" />
 				</td>
 				<td>
 					<xsl:variable name="descId" select="field[@name='fieldvalues_id']"/>
