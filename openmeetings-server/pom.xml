@@ -31,6 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
+		<webapp.languages.dir>../openmeetings-web/src/main/webapp/languages</webapp.languages.dir>
 		<languages.dir>../openmeetings-web/src/main/java/org/apache/openmeetings/web/app</languages.dir>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
@@ -191,7 +192,7 @@
 						<configuration>
 							<transformationSets>
 								<transformationSet>
-									<dir>${languages.dir}</dir>
+									<dir>${webapp.languages.dir}</dir>
 									<includes>
 										<include>errorvalues.xml</include>
 									</includes>
