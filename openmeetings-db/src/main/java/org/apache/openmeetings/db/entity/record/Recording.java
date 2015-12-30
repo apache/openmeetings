@@ -42,8 +42,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -83,8 +81,6 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.metaData ORDER BY c.id")
 	, @NamedQuery(name = "getRecordingsByExternalTypeAndOwner", query = "SELECT c FROM Recording c, Room r WHERE c.roomId = r.id "
 			+ "AND r.externalType LIKE :externalType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
-	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT c FROM Recording c, Room r WHERE c.roomId = r.id "
-			+ "AND r.externalType LIKE :externalType AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM Recording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.inserted")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentId = :parentId "
@@ -170,12 +166,6 @@ public class Recording extends FileItem {
 	
 	// Not Mapped
 	@Transient
-	private User creator;
-
-	@Transient
-	private Room room;
-
-	@Transient
 	private List<RecordingLog> log;
 
 	public Long getId() {
@@ -240,22 +230,6 @@ public class Recording extends FileItem {
 
 	public void setMetaData(List<RecordingMetaData> metaData) {
 		this.metaData = metaData;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
-	}
-
-	public Room getRoom() {
-		return room;
-	}
-
-	public void setRoom(Room room) {
-		this.room = room;
 	}
 
 	public Integer getWidth() {

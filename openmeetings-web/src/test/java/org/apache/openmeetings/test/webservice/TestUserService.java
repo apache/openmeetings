@@ -24,28 +24,13 @@ import static org.junit.Assert.assertNotNull;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 
-public class UserServiceTest extends AbstractJUnitDefaults {
-	public final static String BASE_SERVICES_URL = "http://localhost:5080/openmeetings/services";
-	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
-	
-	public static WebClient getClient(String url) {
-		return WebClient.create(url).accept("application/json").type("application/json");
-	}
-	
-	public static ServiceResult login() {
-		ServiceResult sr = getClient(USER_SERVICE_URL).path("/login").query("user", username).query("pass", userpass).get(ServiceResult.class);
-		assertEquals("Login should be successful", sr.getType(), Type.SUCCESS.name());
-		return sr;
-	}
-	
+public class TestUserService extends AbstractWebServiceTest {
 	@Test
 	public void loginTest() {
 		ServiceResult r = login();

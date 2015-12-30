@@ -56,6 +56,7 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
+		<tomcat.version>8.0.28</tomcat.version>
 	</properties>
 	<modules>
 		<module>openmeetings-util</module>
@@ -618,7 +619,7 @@
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-servlet-api</artifactId>
-				<version>8.0.28</version>
+				<version>${tomcat.version}</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>
