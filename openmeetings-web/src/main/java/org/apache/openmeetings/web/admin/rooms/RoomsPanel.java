@@ -32,12 +32,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 public class RoomsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
+	private final static JavaScriptResourceReference ROOM_FUNCTIONS = new JavaScriptResourceReference(RoomsPanel.class, "room.js");
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
 	
@@ -92,5 +96,11 @@ public class RoomsPanel extends AdminPanel {
 		add(navigator);
 
         add(form = new RoomForm("form", listContainer, new Room()));
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forReference(ROOM_FUNCTIONS));
 	}
 }
