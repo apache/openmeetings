@@ -53,7 +53,9 @@ public class ProfileImageResourceReference extends ResourceReference {
 	public static String getUrl(RequestCycle rc, User u) {
 		String uri = u.getPictureuri();
 		if (!isAbsolute(uri)) {
-			uri = rc.urlFor(new ProfileImageResourceReference(), new PageParameters().add("id", u.getId())).toString();
+			File img = OmFileHelper.getUserProfilePicture(u.getId(), uri);
+			uri = rc.urlFor(new ProfileImageResourceReference()
+					, new PageParameters().add("id", u.getId()).add("anticache", img.lastModified())).toString();
 		}
 		return uri;
 	}
