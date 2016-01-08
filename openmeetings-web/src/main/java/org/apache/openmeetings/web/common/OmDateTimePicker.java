@@ -29,7 +29,7 @@ import org.threeten.bp.LocalTime;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
-import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
+import com.googlecode.wicket.kendo.ui.resource.KendoCultureResourceReference;
 
 public class OmDateTimePicker extends DateTimePicker {
 	private static final long serialVersionUID = 1L;
@@ -51,6 +51,6 @@ public class OmDateTimePicker extends DateTimePicker {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(new KendoGlobalizeResourceReference(WebSession.get().getLocale())));
+		response.render(JavaScriptHeaderItem.forReference(new KendoCultureResourceReference(WebSession.get().getLocale())));
 	}
 }
