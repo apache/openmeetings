@@ -64,7 +64,7 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
-import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
+import com.googlecode.wicket.kendo.ui.resource.KendoCultureResourceReference;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -201,6 +201,6 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(new KendoGlobalizeResourceReference(WebSession.get().getLocale())));
+		response.render(JavaScriptHeaderItem.forReference(new KendoCultureResourceReference(WebSession.get().getLocale())));
 	}
 }
