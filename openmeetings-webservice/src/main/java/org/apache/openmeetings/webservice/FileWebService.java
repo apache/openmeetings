@@ -116,7 +116,7 @@ public class FileWebService {
 				fileDao.delete(f);
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception e) {
 			log.error("[delete] ", e);
@@ -206,7 +206,7 @@ public class FileWebService {
 				}
 				return new FileExplorerItemDTO(f);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -299,7 +299,7 @@ public class FileWebService {
 
 				return fileExplorerObject;
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -348,7 +348,7 @@ public class FileWebService {
 				}
 				return FileExplorerItemDTO.list(list);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -388,7 +388,7 @@ public class FileWebService {
 
 				return new FileExplorerItemDTO(fileDao.rename(id, name));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -425,7 +425,7 @@ public class FileWebService {
 				log.debug("move " + id);
 				return new FileExplorerItemDTO(fileDao.move(id, parentId, userId, roomId));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;

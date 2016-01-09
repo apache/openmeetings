@@ -190,7 +190,7 @@ public class UserWebService {
 
 				return new UserDTO(u);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (Exception err) {
 			log.error("addNewUser", err);
@@ -224,7 +224,7 @@ public class UserWebService {
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("deleteUserById", err);
@@ -265,7 +265,7 @@ public class UserWebService {
 
 				return new ServiceResult(user.getId(), "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("deleteUserByExternalUserIdAndType", err);
@@ -326,7 +326,7 @@ public class UserWebService {
 					return new ServiceResult(0, hash, Type.SUCCESS);
 				}
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("getRoomHash", err);
@@ -356,7 +356,7 @@ public class UserWebService {
 	
 				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("[kick]", err);

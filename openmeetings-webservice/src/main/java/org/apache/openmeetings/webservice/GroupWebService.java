@@ -100,7 +100,7 @@ public class GroupWebService {
 			return new ServiceResult(groupDao.update(o, userId).getId(), "Success", Type.SUCCESS);
 		} else {
 			log.error("Could not create group");
-			return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+			return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class GroupWebService {
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("addUser", err);
@@ -181,7 +181,7 @@ public class GroupWebService {
 				}
 				return new ServiceResult(0L, "Not added", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("[addRoom]", err);

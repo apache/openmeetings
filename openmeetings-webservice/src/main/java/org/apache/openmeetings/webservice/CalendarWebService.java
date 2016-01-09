@@ -96,7 +96,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return AppointmentDTO.list(appointmentDao.getInRange(userId, start.getTime(), end.getTime()));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -136,7 +136,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				return AppointmentDTO.list(appointmentDao.getInRange(userid, start.getTime(), end.getTime()));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -162,7 +162,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return new AppointmentDTO(appointmentDao.getNext(userId, new Date()));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -191,7 +191,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				return new AppointmentDTO(appointmentDao.getNext(userid, new Date()));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -221,7 +221,7 @@ public class CalendarWebService {
 					return new AppointmentDTO(app);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -251,7 +251,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return AppointmentDTO.list(appointmentDao.searchAppointmentsByTitle(userId, title));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -287,7 +287,7 @@ public class CalendarWebService {
 				return new AppointmentDTO(appointmentDao.update(a, userId));
 			} else {
 				log.error("save : wrong user level");
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
