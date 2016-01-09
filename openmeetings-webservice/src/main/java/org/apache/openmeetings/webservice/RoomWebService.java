@@ -115,7 +115,7 @@ public class RoomWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return RoomDTO.list(roomDao.getPublicRooms(Room.Type.valueOf(type)));
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -140,7 +140,7 @@ public class RoomWebService {
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return new RoomDTO(roomDao.get(id));
 		} else {
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 
@@ -184,7 +184,7 @@ public class RoomWebService {
 					return new RoomDTO(r);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -216,7 +216,7 @@ public class RoomWebService {
 				r = roomDao.update(r, userId);
 				return new RoomDTO(r);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -252,7 +252,7 @@ public class RoomWebService {
 				r = roomDao.update(r, userId);
 				return new RoomDTO(r);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -284,7 +284,7 @@ public class RoomWebService {
 				return new ServiceResult(0, "Not found", Type.SUCCESS);
 			}
 		} else {
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 
@@ -323,7 +323,7 @@ public class RoomWebService {
 				
 				return new ServiceResult(1L, "Closed", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -364,7 +364,7 @@ public class RoomWebService {
 				
 				return new ServiceResult(1L, "Opened", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -396,7 +396,7 @@ public class RoomWebService {
 				Boolean result = userManager.kickUserByStreamId(sid, id);
 				return new ServiceResult(Boolean.TRUE.equals(result) ? 1L : 0L, "Kicked", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -434,7 +434,7 @@ public class RoomWebService {
 					roomBeans.add(rCountBean);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -477,7 +477,7 @@ public class RoomWebService {
 					return new ServiceResult(0L, "Sys - Error", Type.ERROR);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissins"); //TODO code -26
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 		} catch (ServiceException err) {
 			throw err;
