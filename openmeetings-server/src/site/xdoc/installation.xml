@@ -226,33 +226,27 @@
 		</section>
 
 		<section name="Debian, Links, Changelog, VoIP">
-
 			<ul>
+				<li>for VoIP and SIP Integration see also <a href="voip-sip-integration.html">VoIPAndSIP</a></li>
+				<li><a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/</a></li>
 				<li>
-					for VoIP and SIP Integration see also
-					<a href="voip-sip-integration.html">VoIPAndSIP</a>
+					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Installation of OM 2.0 for Windows XP, 7, 2003, 2008</a>
 				</li>
 				<li>
-					<a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/
-					</a>
+					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">
+						OpenMeetings Installation tutorials by Alvaro Bustos for: Ubuntu, Debian, MacOS X, CentOS, Fedora and PCLinux</a>
 				</li>
 				<li>
-					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Installation of OM 2.0 for Ubuntu 12.04 x64, Ubuntu 12.10 x64, Debian, Windows XP, 7, 2003, 2008</a>
+					<a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=27837303"
+						rel="nofollow">Tutoriales en español relacionados con OpenMeetings</a>
 				</li>
 				<li>
-					<a
-						href="http://liberamemoria.blogspot.com/2009/02/instalando-openmeetings-07-rc-2-en.html"
-						rel="nofollow">Espanol Version for Debian Installation</a>
-				</li>
-				<li>
-					<a
-						href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
+					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
 						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
 				<li>
 					French version of Installation Instructions:
-					<a
-						href="http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation"
+					<a href="http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation"
 						rel="nofollow">http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation
 					</a>
 				</li>
