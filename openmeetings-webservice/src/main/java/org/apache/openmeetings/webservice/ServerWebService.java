@@ -96,7 +96,7 @@ public class ServerWebService {
 			return ServerDTO.list(serverDao.get(start, max));
 		} else {
 			log.warn("Insuffisient permissions");
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 
@@ -118,7 +118,7 @@ public class ServerWebService {
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return serverDao.count();
 		} else {
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 
@@ -142,7 +142,7 @@ public class ServerWebService {
 			return new ServerDTO(serverDao.update(s, userId));
 		} else {
 			log.warn("Insuffisient permissions");
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 
@@ -171,7 +171,7 @@ public class ServerWebService {
 			return new ServiceResult(0L, "Not found", Type.SUCCESS);
 		} else {
 			log.warn("Insuffisient permissions");
-			throw new ServiceException("Insufficient permissins"); //TODO code -26
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
 }
