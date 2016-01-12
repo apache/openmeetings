@@ -72,7 +72,6 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -98,6 +97,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private final IDynamicWizardStep paramsStep4;
 	private final InstallStep installStep;
 	private Throwable th = null;
+	private DbType initDbType = null;
+	private DbType dbType = null;
 	
 	public void initTzDropDown() {
 		paramsStep1.tzDropDown.setOption();
@@ -278,24 +279,24 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				if (valid) {
 					form.success(getString("install.wizard.db.step.valid"));
 				}
-        	}
-        	
-        	@Override
-        	protected void onSubmit() {
-        		try {
-        			ConnectionPropertiesPatcher.patch(getModelObject());
-        			XmlWebApplicationContext ctx = (XmlWebApplicationContext)getWebApplicationContext(Application.get().getServletContext());
-        			AutowireCapableBeanFactory f = ctx.getBeanFactory();
-        			LocalEntityManagerFactoryBean emb = f.getBean(LocalEntityManagerFactoryBean.class);
-        			emb.afterPropertiesSet();
-        		} catch (Exception e) {
+		}
+		
+		@Override
+		protected void onSubmit() {
+			try {
+				ConnectionPropertiesPatcher.patch(getModelObject());
+				XmlWebApplicationContext ctx = (XmlWebApplicationContext)getWebApplicationContext(Application.get().getServletContext());
+				LocalEntityManagerFactoryBean emb = ctx.getBeanFactory().getBean(LocalEntityManagerFactoryBean.class);
+				emb.afterPropertiesSet();
+				dbType = getModelObject().getDbType();
+			} catch (Exception e) {
 					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
 					log.error("error while patching", e);
-        		}
-        	}
-        };
-        
-        private ConnectionProperties getProps(DbType type) {
+			}
+		}
+	};
+		
+	private ConnectionProperties getProps(DbType type) {
 			ConnectionProperties props = new ConnectionProperties();
 			try {
 				File conf = OmFileHelper.getPersistence(type);
@@ -303,9 +304,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			} catch (Exception e) {
 				form.warn(getString("install.wizard.db.step.errorprops"));
 			}
-        	return props;
-        }
-        
+		return props;
+	}
+		
 		private void initForm(boolean getProps, AjaxRequestTarget target) {
 			ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
 			form.setModelObject(props);
@@ -355,6 +356,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public DbStep() {
 			super(welcomeStep);
 			add(form.setOutputMarkupId(true));
+			initDbType = form.getModelObject().getDbType();
 			initForm(false, null);
 		}
 
@@ -586,7 +588,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				protected void onComplete(AjaxRequestTarget target) {
 					timer.stop(target);
 					progressBar.setVisible(false);
-					congrat.setVisible(true);
+					congrat.show(initDbType != dbType);
 					target.add(container, desc.setVisible(false));
 				}
 			});
