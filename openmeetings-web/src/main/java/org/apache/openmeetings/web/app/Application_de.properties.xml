@@ -1866,6 +1866,7 @@
 	<entry key="install.wizard.install.failed">Installation is failed</entry>
 
 	<entry key="install.wizard.congrats.enter"><![CDATA[&Ouml;ffnen der Anwendung]]></entry>
+	<entry key="install.wizard.congrats.restart">Database was changed, please restart application to avoid possible issues</entry>
 	<entry key="install.wizard.congrats.port">Falls Ihr Red5-Server einen anderen Port oder eine andere Domain benutzt, sollten Sie</entry>
 	<entry key="install.wizard.congrats.config">die Konfiguration des Clients anpassen</entry>
 	<entry key="install.wizard.congrats.mail">Mailingliste</entry>

@@ -1822,6 +1822,7 @@
 	<entry key="install.wizard.install.failed">Installation is failed</entry>
 
 	<entry key="install.wizard.congrats.enter">Entrer dans l'application</entry>
+	<entry key="install.wizard.congrats.restart">Database was changed, please restart application to avoid possible issues</entry>
 	<entry key="install.wizard.congrats.port">Si votre serveur Red5 tourne sur un port différent ou sur un domaine différent</entry>
 	<entry key="install.wizard.congrats.config">modifiez la config du client</entry>
 	<entry key="install.wizard.congrats.mail">Liste de diffusion</entry>
