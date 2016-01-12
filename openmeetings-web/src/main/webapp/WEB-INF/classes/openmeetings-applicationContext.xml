@@ -268,7 +268,7 @@
 		<property name="queueCapacity" value="25" />
 	</bean>
 
-	<!-- Axis2 Service Proxy's -->
+	<!-- CXF beans -->
 	<bean id="calendarWebService" class="org.apache.openmeetings.webservice.CalendarWebService" />
 	<bean id="errorWebService" class="org.apache.openmeetings.webservice.ErrorWebService" />
 	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />

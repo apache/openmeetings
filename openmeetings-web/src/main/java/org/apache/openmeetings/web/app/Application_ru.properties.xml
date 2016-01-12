@@ -1862,6 +1862,7 @@
 	<entry key="install.wizard.install.failed">Ошибка установки</entry>
 
 	<entry key="install.wizard.congrats.enter">Вход в приложение</entry>
+	<entry key="install.wizard.congrats.restart">База данных была изменена, пожалуйста перезапустите прложение чтобы избежать возможных проблем</entry>
 	<entry key="install.wizard.congrats.port">Если Ваш Red5-сервер запущен на другом порту или на другом домене</entry>
 	<entry key="install.wizard.congrats.config">измените конфигурацию клиента</entry>
 	<entry key="install.wizard.congrats.mail">Список рассылки</entry>

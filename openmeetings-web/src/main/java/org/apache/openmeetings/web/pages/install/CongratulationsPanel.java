@@ -19,11 +19,13 @@
 package org.apache.openmeetings.web.pages.install;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class CongratulationsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private final WebMarkupContainer restartPanel = new WebMarkupContainer("restartPanel");
 
 	public CongratulationsPanel(String id) {
 		super(id);
@@ -36,5 +38,11 @@ public class CongratulationsPanel extends Panel {
 				setResponsePage(Application.get().getHomePage());
 			}
 		});
+		add(restartPanel.setOutputMarkupId(true).setVisible(false));
+	}
+
+	public void show(boolean showRestart) {
+		setVisible(true);
+		restartPanel.setVisible(showRestart);
 	}
 }
