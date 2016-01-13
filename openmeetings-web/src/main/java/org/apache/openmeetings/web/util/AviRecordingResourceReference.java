@@ -28,7 +28,7 @@ public class AviRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public AviRecordingResourceReference() {
-		super();
+		super("avi-recording");
 	}
 	
 	@Override
