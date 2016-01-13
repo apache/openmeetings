@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
@@ -52,6 +51,7 @@ import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
+import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -94,7 +94,7 @@ public class Admin {
 			.addOption(new OmOption("b", 1, "b", "backup", false, "Backups OM"))
 			.addOption(new OmOption("r", 2, "r", "restore", false, "Restores OM"))
 			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
-			.addOption(new OmOption("l", 3, "l", "languages", false, "Reimport All language files into DB"))
+			.addOption(new OmOption("l", 3, "l", "LDAP", false, "Import LDAP users into DB"))
 			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
 		group.setRequired(true); 
 		options.addOptionGroup(group);
@@ -128,7 +128,9 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
 		//files
 		options.addOption(new OmOption("f", null, "cleanup", false, "Should intermediate files be clean up", true));
-		
+		//ldap
+		options.addOption(new OmOption("l", "d", "domain-id", true, "LDAP domain Id", false));
+		options.addOption(new OmOption("l", null, "print-only", false, "Print users found instead of importing", true));
 		return options;
 	}
 	
@@ -137,6 +139,7 @@ public class Admin {
 		, backup
 		, restore
 		, files
+		, ldap
 		, usage
 	}
 	
@@ -208,6 +211,8 @@ public class Admin {
 			cmd = Command.restore;
 		} else if (cmdl.hasOption('f')) {
 			cmd = Command.files;
+		} else if (cmdl.hasOption('l')) {
+			cmd = Command.ldap;
 		}
 
 		String file = cmdl.getOptionValue("file", "");
@@ -442,6 +447,18 @@ public class Admin {
 					handleError("Files failed", e);
 				}
 				break;
+			case ldap:
+				if (!cmdl.hasOption("d")) {
+					System.out.println("Please specify LDAP domain Id.");
+					System.exit(1);
+				}
+				Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
+				try {
+					getApplicationContext(ctxName).getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
+				} catch (Exception e) {
+					handleError("LDAP import failed", e);
+				}
+				break;
 			case usage:
 			default:
 				usage();
@@ -571,20 +588,20 @@ public class Admin {
 			ctx.destroy();
 			ctx = null;
 		}
-    	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
-        try {
-        	conf.setPropertiesFile(OmFileHelper.getPersistence());
-        	conf.setConnectionDriverName(props.getDriver());
-        	conf.setConnectionURL(props.getURL());
-        	conf.setConnectionUserName(props.getLogin());
-        	conf.setConnectionPassword(props.getPassword());
-    		//HACK to suppress all warnings
-    		getLogImpl(conf).setLevel(Log.INFO);
-    		runSchemaTool(conf, SchemaTool.ACTION_DROPDB);
-    		runSchemaTool(conf, SchemaTool.ACTION_CREATEDB);
-        } finally {
-            conf.close();
-        }
+		JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
+		try {
+			conf.setPropertiesFile(OmFileHelper.getPersistence());
+			conf.setConnectionDriverName(props.getDriver());
+			conf.setConnectionURL(props.getURL());
+			conf.setConnectionUserName(props.getLogin());
+			conf.setConnectionPassword(props.getPassword());
+			//HACK to suppress all warnings
+			getLogImpl(conf).setLevel(Log.INFO);
+			runSchemaTool(conf, SchemaTool.ACTION_DROPDB);
+			runSchemaTool(conf, SchemaTool.ACTION_CREATEDB);
+		} finally {
+			conf.close();
+		}
 	}
 
 	private File checkRestoreFile(String file) {
@@ -599,21 +616,11 @@ public class Admin {
 	}
 	
 	private void restoreOm(String ctxName, File backup) {
-		InputStream is = null;
-		try {
+		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext(ctxName).getBean(BackupImport.class);
-			is = new FileInputStream(backup);
 			importCtrl.performImport(is);
 		} catch (Exception e) {
 			handleError("Restore failed", e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					throw new RuntimeException("Error while closing ldap config file", e);
-				}
-			}
 		}
 	}
 	

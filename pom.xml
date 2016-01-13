@@ -57,6 +57,7 @@
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
 		<tomcat.version>8.0.28</tomcat.version>
+		<derby.version>10.12.1.1</derby.version>
 	</properties>
 	<modules>
 		<module>openmeetings-util</module>

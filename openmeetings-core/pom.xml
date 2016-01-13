@@ -30,9 +30,7 @@
 	<name>Openmeetings Core</name>
 	<description>TODO</description>
 	<properties>
-		<velocity.version>1.7</velocity.version>
 		<smslib.version>3.5.4</smslib.version>
-		<derby.version>10.10.1.1</derby.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
@@ -71,11 +69,6 @@
 			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>${velocity.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 			<version>1.4.2</version>
@@ -98,29 +91,6 @@
 			<artifactId>smslib</artifactId>
 			<version>${smslib.version}</version>
 		</dependency>
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-install</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.red5</groupId>
-			<artifactId>red5-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbynet</artifactId>
-			<version>${derby.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.thaiopensource</groupId>
-			<artifactId>trang</artifactId>
-			<version>20091111</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
@@ -130,6 +100,18 @@
 			<groupId>org.apache.directory.api</groupId>
 			<artifactId>api-all</artifactId>
 			<version>1.0.0-M33</version>
+		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.red5</groupId>
+			<artifactId>red5-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.thaiopensource</groupId>
+			<artifactId>trang</artifactId>
+			<version>20091111</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
