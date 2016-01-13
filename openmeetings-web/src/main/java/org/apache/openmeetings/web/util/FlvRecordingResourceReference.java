@@ -28,7 +28,7 @@ public class FlvRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public FlvRecordingResourceReference() {
-		super();
+		super("flv-recording");
 	}
 	
 	@Override

@@ -48,8 +48,8 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = getLogger(RecordingResourceReference.class, webAppRootKey);
 
-	public RecordingResourceReference() {
-		super("recordings");
+	public RecordingResourceReference(String name) {
+		super(name);
 	}
 
 	@Override
