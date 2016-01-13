@@ -29,7 +29,7 @@ public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public Mp4RecordingResourceReference() {
-		super();
+		super("mp4-recording");
 	}
 	
 	@Override
