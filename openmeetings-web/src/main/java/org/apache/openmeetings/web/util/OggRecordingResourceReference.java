@@ -29,7 +29,7 @@ public class OggRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public OggRecordingResourceReference() {
-		super();
+		super("ogg-recording");
 	}
 	
 	@Override

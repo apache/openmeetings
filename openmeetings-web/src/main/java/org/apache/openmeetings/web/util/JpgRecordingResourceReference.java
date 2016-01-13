@@ -28,7 +28,7 @@ public class JpgRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
 	public JpgRecordingResourceReference() {
-		super();
+		super("jpg-recording-cover");
 	}
 	
 	@Override
