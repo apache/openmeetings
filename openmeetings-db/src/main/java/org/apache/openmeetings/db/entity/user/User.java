@@ -398,20 +398,20 @@ public class User implements IDataProviderEntity {
 			}
 		}
 		String sipEnabled = configDao.getConfValue("red5sip.enable", String.class, "no");
-        if("yes".equals(sipEnabled)) {
-        	if (getSipUser() == null) {
-        		setSipUser(new AsteriskSipUser());
-        	}
-        	AsteriskSipUser u = getSipUser();
-        	String defaultRoomContext = configDao.getConfValue("red5sip.exten_context", String.class, "rooms");
-        	u.setName(login);
-        	u.setDefaultuser(login);
-        	u.setMd5secret(MD5.do_checksum(login + ":asterisk:" + pass));
-        	u.setContext(defaultRoomContext);
-        	u.setHost("dynamic");
-        } else {
-        	setSipUser(null);
-        }
+		if("yes".equals(sipEnabled)) {
+			AsteriskSipUser u = getSipUser();
+			if (u == null) {
+				setSipUser(u = new AsteriskSipUser());
+			}
+			String defaultRoomContext = configDao.getConfValue("red5sip.exten_context", String.class, "rooms");
+			u.setName(login);
+			u.setDefaultuser(login);
+			u.setMd5secret(MD5.do_checksum(login + ":asterisk:" + pass));
+			u.setContext(defaultRoomContext);
+			u.setHost("dynamic");
+		} else {
+			setSipUser(null);
+		}
 		password = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(pass);
 	}
 	

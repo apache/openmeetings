@@ -21,15 +21,18 @@ package org.apache.openmeetings.core.ldap;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.directory.api.ldap.model.cursor.CursorException;
 import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
@@ -37,12 +40,10 @@ import org.apache.directory.api.ldap.model.entry.Entry;
 import org.apache.directory.api.ldap.model.exception.LdapAuthenticationException;
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
-import org.apache.directory.api.ldap.model.exception.LdapInvalidDnException;
 import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.api.ldap.model.name.Dn;
-import org.apache.directory.api.ldap.model.name.Rdn;
 import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
@@ -52,6 +53,7 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -73,28 +75,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
-	// Config constants
-	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
-	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
-	private static final String CONFIGKEY_LDAP_SECURE = "ldap_conn_secure";
-	private static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
-	private static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
-	private static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
-	private static final String CONFIGKEY_LDAP_PROV_TYPE = "ldap_provisionning";
-
-	private static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'true' or 'false'
-	private static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
-	private static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
-	private static final String CONFIGKEY_LDAP_SEARCH_BASE = "ldap_search_base";
-	private static final String CONFIGKEY_LDAP_SEARCH_QUERY = "ldap_search_query";
-	private static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_scope";
-	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
-	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
-	private static final String CONFIGKEY_LDAP_DEREF_MODE = "ldap_deref_mode";
-	private static final String CONFIGKEY_LDAP_GROUP_MODE = "ldap_group_mode";
-	private static final String CONFIGKEY_LDAP_GROUP_QUERY = "ldap_group_query";
-	
 	// LDAP custom attribute mapping keys
+	private static final String CONFIGKEY_LDAP_KEY_LOGIN = "ldap_user_attr_login";
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
 	private static final String CONFIGKEY_LDAP_KEY_FIRSTNAME = "ldap_user_attr_firstname";
 	private static final String CONFIGKEY_LDAP_KEY_MAIL = "ldap_user_attr_mail";
@@ -105,10 +87,11 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-	private static final String CONFIGKEY_LDAP_KEY_PICTURE_URI = "ldap_user_picture_uri";
+	static final String CONFIGKEY_LDAP_KEY_PICTURE_URI = "ldap_user_picture_uri";
 	private static final String CONFIGKEY_LDAP_KEY_GROUP = "ldap_group_attr";
 
 	// LDAP default attributes mapping
+	private static final String LDAP_KEY_LOGIN = "uid";
 	private static final String LDAP_KEY_LASTNAME = "sn";
 	private static final String LDAP_KEY_FIRSTNAME = "givenName";
 	private static final String LDAP_KEY_MAIL = "mail";
@@ -153,13 +136,9 @@ public class LdapLoginManagement {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
-	private Dn getUserDn(Properties config, String user) throws LdapInvalidDnException {
-		return new Dn(String.format(config.getProperty(CONFIGKEY_LDAP_USERDN_FORMAT, "%s"), user));
-	}
-	
-	private void bindAdmin(LdapConnection conn, String admin, String pass) throws LdapException {
-		if (!Strings.isEmpty(admin)) {
-			conn.bind(admin, pass);
+	private void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {
+		if (!Strings.isEmpty(options.adminDn)) {
+			conn.bind(options.adminDn, options.adminPasswd);
 		} else {
 			conn.bind();
 		}
@@ -170,13 +149,17 @@ public class LdapLoginManagement {
 		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
 		return a == null ? null : a.getString();
 	}
+	
+	private String getLogin(Properties config, Entry entry) throws LdapInvalidAttributeValueException {
+		return getAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
+	}
+	
 	/**
 	 * Ldap Login
 	 * 
 	 * Connection Data is retrieved from ConfigurationFile
 	 * 
 	 */
-	// ----------------------------------------------------------------------------------------
 	public User login(String login, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 		if (!userDao.validLogin(login)) {
@@ -184,113 +167,29 @@ public class LdapLoginManagement {
 			return null;
 		}
 
-		Properties config = new Properties();
-		Reader r = null;
-		try {
-			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
-			r = new InputStreamReader(new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName())), "UTF-8");
-			config.load(r);
-		} catch (Exception e) {
-			log.error("Error on LdapLogin : Configurationdata couldn't be retrieved!");
-			return null;
-		} finally {
-			if (r != null) {
-				try {
-					r.close();
-				} catch (IOException e) {
-					log.error("Error while closing ldap config file");
-					return null;
-				}
-			}
-		}
-		if (config.isEmpty()) {
-			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
-			return null;
-		}
-
-		String ldap_use_lower_case = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
-		if ("true".equals(ldap_use_lower_case)) {
+		User u = null;
+		try (LdapWorker w = new LdapWorker(domainId)) {
+			if (w.options.useLowerCase) {
 			login = login.toLowerCase();
 		}
 
-		String ldap_auth_type = config.getProperty(CONFIGKEY_LDAP_AUTH_TYPE, "");
-		AuthType type = AuthType.SIMPLEBIND;
-		try {
-			type = AuthType.valueOf(ldap_auth_type);
-		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid auth type : '%s' -> Defaulting to %s", ldap_auth_type, type));
-		}
-		
-		String ldap_prov_type = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
-		Provisionning prov = Provisionning.AUTOCREATE;
-		try {
-			prov = Provisionning.valueOf(ldap_prov_type);
-		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid provisionning type : '%s' -> Defaulting to %s", ldap_prov_type, prov));
-		}
-		
-		String ldap_deref_mode = config.getProperty(CONFIGKEY_LDAP_DEREF_MODE, "");
-		AliasDerefMode derefMode = AliasDerefMode.DEREF_ALWAYS;
-		try {
-			derefMode = AliasDerefMode.getDerefMode(ldap_deref_mode);
-		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid deref mode : '%s' -> Defaulting to %s", ldap_deref_mode, derefMode));
-		}
-		
-		if (AuthType.NONE == type && Provisionning.NONE == prov) {
-			log.error("Both AuthType and Provisionning are NONE!");
-			return null;
-		}
-		boolean useAdminForAttrs = true;
-		try {
-			useAdminForAttrs = "true".equals(config.getProperty(CONFIGKEY_LDAP_USE_ADMIN_4ATTRS, ""));
-		} catch (Exception e) {
-			//no-op
-		}
-		GroupMode groupMode = GroupMode.NONE;
-		try {
-			groupMode = GroupMode.valueOf(config.getProperty(CONFIGKEY_LDAP_GROUP_MODE, "NONE"));
-		} catch (Exception e) {
-			//no-op
-		}
-		if (AuthType.NONE == type && !useAdminForAttrs) {
-			log.error("Unable to get Attributes, please change Auth type and/or Use Admin to get attributes");
-			return null;
-		}
-
-		// Connection URL
-		String ldap_host = config.getProperty(CONFIGKEY_LDAP_HOST);
-		int ldap_port = Integer.parseInt(config.getProperty(CONFIGKEY_LDAP_PORT, "389"));
-		boolean ldap_secure = "true".equals(config.getProperty(CONFIGKEY_LDAP_SECURE, "false"));
-
-		// Username for LDAP SERVER himself
-		String ldap_admin_dn = config.getProperty(CONFIGKEY_LDAP_ADMIN_DN);
-
-		// Password for LDAP SERVER himself
-		String ldap_admin_passwd = config.getProperty(CONFIGKEY_LDAP_ADMIN_PASSWD);
-
-		User u = null;
-		LdapConnection conn = null;
-		try {
 			boolean authenticated = true;
-			conn = new LdapNetworkConnection(ldap_host, ldap_port, ldap_secure);
 			Dn userDn = null;
 			Entry entry = null;
-			switch (type) {
+			switch (w.options.type) {
 				case SEARCHANDBIND:
 				{
-					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
-					Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
-					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), login);
-					SearchScope scope = SearchScope.valueOf(config.getProperty(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.ONELEVEL.name()));
+					bindAdmin(w.conn, w.options);
+					Dn baseDn = new Dn(w.options.searchBase);
+					String searchQ = String.format(w.options.searchQuery, login);
 			        
-					EntryCursor cursor = new EntryCursorImpl(conn.search(
+					EntryCursor cursor = new EntryCursorImpl(w.conn.search(
 							new SearchRequestImpl()
 								.setBase(baseDn)
 								.setFilter(searchQ)
-								.setScope(scope)
+								.setScope(w.options.scope)
 								.addAttributes("*")
-								.setDerefAliases(derefMode)));
+								.setDerefAliases(w.options.derefMode)));
 					while (cursor.next()) {
 						try {
 							Entry e = cursor.get();
@@ -299,7 +198,7 @@ public class LdapLoginManagement {
 								throw new OmException(-1L);
 							}
 							userDn = e.getDn();
-							if (useAdminForAttrs) {
+							if (w.options.useAdminForAttrs) {
 								entry = e;
 							}
 						} catch (CursorLdapReferralException cle) {
@@ -311,13 +210,13 @@ public class LdapLoginManagement {
 						log.error("NONE users found in LDAP");
 						throw new OmException(-11L);
 					}
-					conn.bind(userDn, passwd);
+					w.conn.bind(userDn, passwd);
 				}
 					break;
 				case SIMPLEBIND:
 				{
-					userDn = getUserDn(config, login);
-					conn.bind(userDn, passwd);
+					userDn = new Dn(String.format(w.options.userDn, login));
+					w.conn.bind(userDn, passwd);
 				}
 					break;
 				case NONE:
@@ -326,110 +225,24 @@ public class LdapLoginManagement {
 					break;
 			}
 			u = authenticated ? userDao.getByLogin(login, Type.ldap, domainId) : userDao.login(login, passwd);
-			if (u == null && Provisionning.AUTOCREATE != prov) {
+			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
 				throw new OmException(-11L);
 			}
 			if (authenticated && entry == null) {
-				if (useAdminForAttrs) {
-					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
+				if (w.options.useAdminForAttrs) {
+					bindAdmin(w.conn, w.options);
 				}
-				entry = conn.lookup(userDn);
+				entry = w.conn.lookup(userDn);
 			}
-			switch (prov) {
+			switch (w.options.prov) {
 				case AUTOUPDATE:
 				case AUTOCREATE:
-					if (entry == null) {
-						log.error("LDAP entry is null, search or lookup by Dn failed");
-						throw new OmException(-11L);
-					}
-					if (u == null) {
-						u = userDao.getNewUserInstance(null);
-						u.setType(Type.ldap);
-						u.getRights().remove(Right.Login);
-						u.setDomainId(domainId);
-						u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
-						u.setLogin(login);
-						u.setShowContactDataToContacts(true);
-					}
-					if ("true".equals(config.getProperty(CONFIGKEY_LDAP_SYNC_PASSWD_OM, ""))) {
+					u = w.getUser(entry, u);
+					if (w.options.syncPasswd) {
 						u.updatePassword(cfgDao, passwd);
 					}
-					u.setLastname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
-					u.setFirstname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
-					u.getAddress().setEmail(getAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
-					u.getAddress().setStreet(getAttr(config, entry, CONFIGKEY_LDAP_KEY_STREET, LDAP_KEY_STREET));
-					u.getAddress().setAdditionalname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
-					u.getAddress().setFax(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
-					u.getAddress().setZip(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
-					u.getAddress().setState(stateDao.get(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
-					u.getAddress().setTown(getAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
-					u.getAddress().setPhone(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
-					String tz = getAttr(config, entry, CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
-					if (tz == null) {
-						tz = config.getProperty(CONFIGKEY_LDAP_TIMEZONE_NAME, null);
-					}
-					u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
-					String picture = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
-					if (picture == null) {
-						picture = config.getProperty(CONFIGKEY_LDAP_KEY_PICTURE_URI, null);
-					}
-					u.setPictureuri(picture);
-					
 					u = userDao.update(u, null);
-					List<Dn> groups = new ArrayList<>();
-					if (GroupMode.ATTRIBUTE == groupMode) {
-						Attribute a = entry.get(config.getProperty(CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP));
-						String attr = a == null ? "" : a.getString();
-						for (String g : attr.split("|")) {
-							groups.add(new Dn(g));
-						}
-					} else if (GroupMode.QUERY == groupMode) {
-						Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
-						String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_GROUP_QUERY, "%s"), login);
-				        
-						EntryCursor cursor = new EntryCursorImpl(conn.search(
-								new SearchRequestImpl()
-									.setBase(baseDn)
-									.setFilter(searchQ)
-									.setScope(SearchScope.SUBTREE)
-									.addAttributes("*")
-									.setDerefAliases(AliasDerefMode.DEREF_ALWAYS)));
-						while (cursor.next()) {
-							try {
-								Entry e = cursor.get();
-								groups.add(e.getDn());
-							} catch (CursorLdapReferralException cle) {
-								log.warn("Referral LDAP entry found, ignore it");
-							}
-						}
-						cursor.close();
-					}
-					for (Dn g : groups) {
-						Rdn namer = g.getRdn();
-						String name = namer.getValue().toString();
-						if (!Strings.isEmpty(name)) {
-							Group o = groupDao.get(name);
-							boolean found = false;
-							if (o == null) {
-								o = new Group();
-								o.setName(name);
-								o = groupDao.update(o, u.getId());
-							} else {
-								for (GroupUser ou : u.getGroupUsers()) {
-									if (ou.getGroup().getName().equals(name)) {
-										found = true;
-										break;
-									}
-								}
-							}
-							if (!found) {
-								u.getGroupUsers().add(new GroupUser(o));
-								userDao.update(u, u.getId());
-								log.debug("Going to add user to group:: " + name);
-							}
-						}
-					}
 					break;
 				case NONE:
 				default:
@@ -443,17 +256,173 @@ public class LdapLoginManagement {
 		} catch (Exception e) {
 			log.error("Unexpected exception.", e);
 			throw new OmException(e);
-		} finally {
-			if (conn != null) {
-				try {
-					conn.unBind();
-					conn.close();
-				} catch (Exception e) {
-					log.error("Unexpected exception.", e);
-					throw new OmException(e);
-				}
-			}
 		}
 		return u;
+	}
+	
+	public void importUsers(Long domainId, boolean print) throws OmException {
+		try (LdapWorker w = new LdapWorker(domainId)) {
+			bindAdmin(w.conn, w.options);
+			Dn baseDn = new Dn(w.options.searchBase);
+	
+			EntryCursor cursor = new EntryCursorImpl(w.conn.search(
+					new SearchRequestImpl()
+						.setBase(baseDn)
+						.setFilter(w.options.importQuery)
+						.setScope(w.options.scope)
+						.addAttributes("*")
+						.setDerefAliases(w.options.derefMode)));
+			while (cursor.next()) {
+				try {
+					Entry e = cursor.get();
+					User u = userDao.getByLogin(getLogin(w.config, e), Type.ldap, domainId);
+					u = w.getUser(e, u);
+					if (print) {
+						log.info("Going to import user: {}", u);
+					} else {
+						userDao.update(u, null);
+						log.info("User {}, was imported", u);
+					}
+				} catch (CursorLdapReferralException cle) {
+					log.warn("Referral LDAP entry found, ignore it");
+				}
+			}
+			cursor.close();
+		} catch (LdapAuthenticationException ae) {
+			log.error("Not authenticated.", ae);
+			throw new OmException(-11L);
+		} catch (OmException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("Unexpected exception.", e);
+			throw new OmException(e);
+		}
+	}
+	
+	private class LdapWorker implements Closeable {
+		LdapConnection conn = null;
+		Properties config = new Properties();
+		LdapOptions options = null;
+		Long domainId = null;
+		
+		public LdapWorker(Long domainId) throws Exception {
+			this.domainId = domainId;
+			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
+			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
+					Reader r = new InputStreamReader(is, "UTF-8"))
+			{
+				config.load(r);
+				if (config.isEmpty()) {
+					throw new RuntimeException("Error on LdapLogin : Configurationdata couldnt be retrieved!");
+				}
+				options = new LdapOptions(config);
+			} catch (Exception e) {
+				log.error("Error on LdapLogin : Configurationdata couldn't be retrieved!");
+				throw e;
+			}
+
+			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
+		}
+		
+		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException {
+			if (entry == null) {
+				log.error("LDAP entry is null, search or lookup by Dn failed");
+				throw new OmException(-11L);
+			}
+			if (u == null) {
+				u = userDao.getNewUserInstance(null);
+				u.setType(Type.ldap);
+				u.getRights().remove(Right.Login);
+				u.setDomainId(domainId);
+				Group g = groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"));
+				if (g != null) {
+					u.getGroupUsers().add(new GroupUser(g));
+				}
+				u.setLogin(getLogin(config, entry));
+				u.setShowContactDataToContacts(true);
+				u.setAddress(new Address());
+			}
+			u.setLastname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
+			u.setFirstname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
+			u.getAddress().setEmail(getAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
+			u.getAddress().setStreet(getAttr(config, entry, CONFIGKEY_LDAP_KEY_STREET, LDAP_KEY_STREET));
+			u.getAddress().setAdditionalname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
+			u.getAddress().setFax(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
+			u.getAddress().setZip(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
+			u.getAddress().setState(stateDao.get(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
+			u.getAddress().setTown(getAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
+			u.getAddress().setPhone(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
+			String tz = getAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
+			if (tz == null) {
+				tz = options.tz;
+			}
+			u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
+			String picture = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
+			if (picture == null) {
+				picture = options.pictureUri;
+			}
+			u.setPictureuri(picture);
+			
+			List<Dn> groups = new ArrayList<>();
+			if (GroupMode.ATTRIBUTE == options.groupMode) {
+				String attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
+				if (!Strings.isEmpty(attr)) {
+					for (String g : attr.split("|")) {
+						groups.add(new Dn(g));
+					}
+				}
+			} else if (GroupMode.QUERY == options.groupMode) {
+				Dn baseDn = new Dn(options.searchBase);
+				String searchQ = String.format(options.groupQuery, u.getLogin());
+		
+				EntryCursor cursor = new EntryCursorImpl(conn.search(
+						new SearchRequestImpl()
+							.setBase(baseDn)
+							.setFilter(searchQ)
+							.setScope(SearchScope.SUBTREE)
+							.addAttributes("*")
+							.setDerefAliases(AliasDerefMode.DEREF_ALWAYS)));
+				while (cursor.next()) {
+					try {
+						Entry e = cursor.get();
+						groups.add(e.getDn());
+					} catch (CursorLdapReferralException cle) {
+						log.warn("Referral LDAP entry found, ignore it");
+					}
+				}
+				cursor.close();
+			}
+			for (Dn g : groups) {
+				String name = g.getRdn().getValue();
+				if (!Strings.isEmpty(name)) {
+					Group o = groupDao.get(name);
+					boolean found = false;
+					if (o == null) {
+						o = new Group();
+						o.setName(name);
+						o = groupDao.update(o, u.getId());
+					} else {
+						for (GroupUser ou : u.getGroupUsers()) {
+							if (ou.getGroup().getName().equals(name)) {
+								found = true;
+								break;
+							}
+						}
+					}
+					if (!found) {
+						u.getGroupUsers().add(new GroupUser(o));
+						log.debug("Going to add user to group:: " + name);
+					}
+				}
+			}
+			return u;
+		}
+		
+		@Override
+		public void close() throws IOException {
+			if (conn != null) {
+				conn.close();
+			}
+		}
 	}
 }
