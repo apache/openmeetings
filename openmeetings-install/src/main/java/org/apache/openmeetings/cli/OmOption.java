@@ -39,7 +39,7 @@ public class OmOption extends Option {
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
 			String description, String optional) throws IllegalArgumentException {
 		this(group, 0, opt, longOpt, hasArg, description);
-		setOptional(optional);
+		setOptional(optional, true);
 	}
 
 	public OmOption(String group, int order, String opt, String longOpt, boolean hasArg,
@@ -74,14 +74,14 @@ public class OmOption extends Option {
 	}
 
 	public void setOptional(boolean val) {
-		setOptional(group);
+		setOptional(group, val);
 	}
 	
-	public void setOptional(String group) {
+	public void setOptional(String group, boolean val) {
 		String[] grps = group.split(",");
 		optional = new HashMap<String, Boolean>(grps.length);
 		for(String g : grps) {
-			optional.put(g, true);
+			optional.put(g, val);
 		}
 	}
 
