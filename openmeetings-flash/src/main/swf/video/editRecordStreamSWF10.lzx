@@ -566,8 +566,8 @@
 			    if ($debug) Debug.write("Return, video video not yet ready");
                 return;
 			}
-			_video.content._publisher.setAttribute("visibility", "visible");
-			_video.content._viewer.setAttribute("visibility", "hidden");
+			_video.content._publisher.setAttribute("visible", true);
+			_video.content._viewer.setAttribute("visible", false);
 			var videoview = this._video.content._publisher._chatvideoinner._videostream;
 			var _camera = getCam(availableCams.getValue(), videoview);
 			if (_camera != null) {

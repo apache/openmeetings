@@ -29,12 +29,11 @@
  -->
 
 <class name="baseVideoView" width="${parent.width}" height="${parent.height}">
-
-    <passthrough when="$as3">
-        import flash.media.*;
-        import flash.net.NetConnection;
-        import flash.net.NetStream;
-    </passthrough>
+	<passthrough when="$as3">
+		import flash.media.*;
+		import flash.net.NetConnection;
+		import flash.net.NetStream;
+	</passthrough>
 
     <attribute name="_sound" value="null"/>
     <attribute name="__LZvideo" value="null"/>
@@ -76,10 +75,11 @@
 	]]>
 	</method>
 
-    <method name="attachCamera" args="camera">
-        var vid = this._getflashvideo();
-    	vid.attachCamera(camera);
-    </method>
+	<method name="attachCamera" args="camera">
+    	var vid = this._getflashvideo();
+		vid.attachCamera(camera);
+		//if ($debug) Debug.write("Attaching video :: ", this, vid, camera);
+	</method>
 
     <!--- shows the Video (NetStream) in the View -->
     <method name="attachVideo" args="video">
