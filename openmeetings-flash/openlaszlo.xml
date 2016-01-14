@@ -32,7 +32,7 @@
 		<fileset dir="${laszlo46.home}/WEB-INF/lib" includes="*.jar" />
 	</path>
 
-	<target name="client.only" depends="compile.laszlo.main,compile.laszlo.networktesting" unless="client-already-built">
+	<target name="client.only" depends="compile.laszlo.main,compile.laszlo.networktesting,compile.permission" unless="client-already-built">
 		<property name="client-already-built" value="true"/>
 	</target>
 
@@ -95,6 +95,18 @@
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
+			<param name="flash.debug" value="--debug" />
+		</antcall>
+	</target>
+
+	<target name="compile.permission" depends="-retrieve-openlaszlo46">
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo46.lib" />
+			<param name="flash.src.dir" value="${src.dir}/permissionChecker" />
+			<param name="flash.lps.home" value="${laszlo46.home}" />
+			<param name="flash.runtime" value="swf11" />
+			<param name="flash.main.file" value="checker.lzx" />
+			<param name="flash.out.file" value="permissionChecker.swf11.swf" />
 			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
