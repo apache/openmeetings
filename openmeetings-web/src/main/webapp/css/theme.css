@@ -635,3 +635,6 @@ form .input {
 	overflow-y: auto;
 	border: 1px solid #cccccc;
 }
+.no-close .ui-dialog-titlebar-close {
+	display: none;
+}
