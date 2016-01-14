@@ -23,8 +23,6 @@ import org.apache.openmeetings.web.pages.BaseNotInitedPage;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.CssContentHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
@@ -47,11 +45,5 @@ public class InstallWizardPage extends BaseNotInitedPage {
 				wizard.open(target);
 			}
 		});
-	}
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
 	}
 }

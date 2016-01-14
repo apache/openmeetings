@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+	  http://www.apache.org/licenses/LICENSE-2.0
+		  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<canvas width="220" height="140" title="Permission checker" debug="true">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.media.Microphone;
+				import flash.events.*;
+				import flash.system.Security;
+				import flash.system.SecurityPanel;
+			</passthrough>
+		</when>
+	</switch>
+	<switch>
+		<when property="$debug">
+			<method name="doDebugInit">
+				canvas.setAttribute('debug', true);
+			</method>
+			<debug fontsize="11" oninit="Debug.showInternalProperties = true" width="80%" y="50%" x="0" height="50%" />
+		</when>
+		<otherwise>
+			<method name="doDebugInit"/>
+		</otherwise>
+	</switch>
+	<attribute name="mic" />
+	
+	<handler name="oninit"><![CDATA[
+		if ($debug) Debug.info("oninit");
+		doDebugInit();
+		mic = Microphone.getMicrophone();
+		if (mic && mic.muted) {
+			mic.addEventListener(StatusEvent.STATUS, statusHandler);
+			Security.showSettings(SecurityPanel.PRIVACY);
+		}
+	]]></handler>
+	
+	<handler name="onmouseover">
+		if ($debug) Debug.write("Panel closed");
+	</handler>
+	
+	<method name="statusHandler" args="event"><![CDATA[
+		if ($debug) Debug.write(event);
+		mic.removeEventListener(StatusEvent.STATUS, statusHandler);
+		if (mic && !mic.muted) {
+			if ($debug) Debug.write("Mic unmuted");
+		}
+		/*
+$(document.body).append($('<div id="swf-permission" style="display: none;padding: 0;"><embed height="100%" src="public/permissionChecker.swf11.swf"/></div>'));
+$('#swf-permission').dialog({title: "Dialog Title", dialogClass: 'no-close', closeOnEscape: false, modal: true, width: 300, resizable: false});
+		*/
+	]]></method>
+</canvas>

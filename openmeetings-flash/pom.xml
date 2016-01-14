@@ -70,6 +70,18 @@
 				<ant.target>compile.laszlo.main.debug</ant.target>
 			</properties>
 		</profile>
+		<profile>
+			<id>checker-only-target</id>
+			<activation>
+				<property>
+					<name>checker-only</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<ant.target>compile.permission</ant.target>
+			</properties>
+		</profile>
 	</profiles>
 	<build>
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
