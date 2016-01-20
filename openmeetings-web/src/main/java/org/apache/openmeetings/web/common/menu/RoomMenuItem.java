@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-
 public class RoomMenuItem extends MenuItem {
 	private static final long serialVersionUID = 1L;
 
@@ -32,17 +29,8 @@ public class RoomMenuItem extends MenuItem {
 		this(name, desc, true);
 	}
 	
-	public RoomMenuItem(String name, String desc, boolean active) {
+	public RoomMenuItem(String name, String desc, boolean enabled) {
 		super(name, desc);
-		this.active = active;
-	}
-	
-	public RoomMenuItem(String name, String desc, String cssClass) {
-		super(name, desc);
-		this.cssClass = cssClass;
-	}
-	
-	@Override
-	public void onClick(MainPage page, AjaxRequestTarget target) {
+		setEnabled(enabled);
 	}
 }

@@ -42,7 +42,7 @@
 		<maven.surefire.version>2.18.1</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.2.0-SNAPSHOT</wicket.version>
-		<wicketju.version>7.1.1-SNAPSHOT</wicketju.version>
+		<wicketju.version>7.2.0-SNAPSHOT</wicketju.version>
 		<wickets.version>7.2.0-SNAPSHOT</wickets.version>
 		<red5-server.version>1.0.6-RELEASE</red5-server.version>
 		<red5-client.version>1.0.6-RELEASE</red5-client.version>
@@ -876,14 +876,6 @@
 						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 						<licenses>
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>MIT+GPL</licenseFamilyCategory>
-								<licenseFamilyName>MIT and GPL v2</licenseFamilyName>
-								<notes></notes>
-								<patterns>
-									<pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
-								</patterns>
-							</license>
-							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 								<licenseFamilyCategory>MIT</licenseFamilyCategory>
 								<licenseFamilyName>MIT</licenseFamilyName>
 								<notes></notes>
@@ -893,9 +885,6 @@
 							</license>
 						</licenses>
 						<licenseFamilies>
-							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>MIT and GPL v2</familyName>
-							</licenseFamily>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>MIT</familyName>
 							</licenseFamily>

@@ -18,39 +18,25 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-import java.io.Serializable;
 import java.util.List;
 
-import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
-public abstract class MenuItem implements Serializable {
+public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuItem {
 	private static final long serialVersionUID = 1L;
-	protected String name;
 	protected String desc;
-	protected String cssClass;
-	protected boolean active = true;
-	protected List<MenuItem> children = null;
 	
-	public MenuItem() {}
-	
-	public MenuItem(String name) {
-		this(name, null);
+	public MenuItem(String title) {
+		super(title);
 	}
 	
-	public MenuItem(String name, String desc) {
-		this.name = name;
+	public MenuItem(String title, List<IMenuItem> items) {
+		super(title, items);
+	}
+	
+	public MenuItem(String title, String desc) {
+		super(title);
 		this.desc = desc;
-	}
-	
-	public abstract void onClick(MainPage page, AjaxRequestTarget target);
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDesc() {
@@ -59,29 +45,5 @@ public abstract class MenuItem implements Serializable {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public List<MenuItem> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<MenuItem> children) {
-		this.children = children;
-	}
-
-	public String getCssClass() {
-		return cssClass;
-	}
-
-	public void setCssClass(String cssClass) {
-		this.cssClass = cssClass;
 	}
 }
