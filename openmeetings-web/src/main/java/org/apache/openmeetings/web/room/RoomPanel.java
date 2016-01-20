@@ -277,6 +277,10 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/history.js")));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
 		response.render(new PriorityHeaderItem(CssHeaderItem.forUrl("css/history.css")));
+		//FIXME TODO ugly HACK
+		if (WebSession.get().getClientInfo().getProperties().isBrowserMozillaFirefox() && ("" + WebSession.get().getClientInfo().getUserAgent()).indexOf("Linux") > -1) {
+			response.render(new PriorityHeaderItem(CssHeaderItem.forCSS(".ui-widget-overlay{opacity: 1 !important;}", "linux-ff-veil-hack")));
+		}
 	}
 	
 	private String getPublicSid() {
