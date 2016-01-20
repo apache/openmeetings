@@ -83,6 +83,7 @@ import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
@@ -256,23 +257,21 @@ public class MainPage extends BaseInitedPage {
 		});
 	}
 	
-	private List<MenuItem> getMainMenu() {
-		List<MenuItem> menu = new ArrayList<MenuItem>();
+	private List<IMenuItem> getMainMenu() {
+		List<IMenuItem> menu = new ArrayList<>();
 		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()))) {
-			MenuItem g = new MenuItem(Application.getString(gl.getLabelId())) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick(MainPage page, AjaxRequestTarget terget) {}
-			};
-			List<MenuItem> l = new ArrayList<MenuItem>();
+			List<IMenuItem> l = new ArrayList<>();
 			for (Navimain nm : gl.getMainnavi()) {
-				l.add(new MainMenuItem(nm)); 
+				l.add(new MainMenuItem(nm) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						onClick(MainPage.this, target);
+					}
+				}); 
 			}
-			if (!l.isEmpty()) {
-				g.setChildren(l);
-			}
-			menu.add(g);
+			menu.add(new MenuItem(Application.getString(gl.getLabelId()), l));
 		}
 		return menu;
 	}

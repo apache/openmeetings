@@ -35,7 +35,8 @@
 	border-left: none;
 }
 #busy_indicator {
-	float: left !important;
+	right: initial !important;
+	left: 0 !important;
 }
 #chatPanel {
 	right: initial !important;
