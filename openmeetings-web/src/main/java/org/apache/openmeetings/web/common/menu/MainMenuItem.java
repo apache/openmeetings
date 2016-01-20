@@ -37,7 +37,6 @@ public class MainMenuItem extends MenuItem {
 		params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
 	}
 	
-	@Override
 	public void onClick(MainPage page, AjaxRequestTarget target) {
 		page.updateContents(new OmUrlFragment(action, params), target);
 	}
