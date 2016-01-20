@@ -192,6 +192,7 @@
 		client.newScreenSharing = this.newScreenSharing;
 		client.stopScreenSharingMessage = this.stopScreenSharingMessage;
 		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
+		client.nickNameSet = this.nickNameSet;
 	</handler>
 	
 	<handler name="ondisconnect">
@@ -1496,19 +1497,18 @@
 				'',value.formatedDate,value.userpos,value.usercolor,value);
 	</method>
 	
-	<netRemoteCallHib name="nickNameSet" funcname="nickNameSet" >
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("nickNameSet: ", value);
-			canvas.setAttribute('mail', value.email);
-			canvas.setAttribute('firstName', value.firstname);
-			canvas.setAttribute('lastName', value.lastname);
-			
+	<method name="nickNameSet" args="value">
+		if ($debug) Debug.write("nickNameSet: ", value);
+		canvas.setAttribute('mail', value.email);
+		canvas.setAttribute('firstName', value.firstname);
+		canvas.setAttribute('lastName', value.lastname);
+		if (canvas._videocontainer) {
 			var vo = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
 			if (vo != null) {
 				vo.update(value);
 			}
-		</handler>
-	</netRemoteCallHib>
+		}
+	</method>
 	
 	<!-- Whiteboard sync Events -->
 	<method name="sendSyncFlag" args="value">
