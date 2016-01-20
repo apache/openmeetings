@@ -46,33 +46,8 @@ html, body {
 #topLinks span:last-child {
 	border-right: none;
 }
-
-#menu, #roomMenu {
-	background-color: #AFCBFB;
-	max-height: 30px;
-	overflow-y: hidden;
-}
-#menu .ui-menubar.ui-widget-header.ui-helper-clearfix, #roomMenu .ui-menubar.ui-widget-header.ui-helper-clearfix {
-	border-right: 0;
-}
-.ui-menubar .ui-menu {
-	width: 250px;
-}
-.ui-menu .ui-menu-item a {
-	line-height: 1.2em !important;
-	padding-bottom: 5px !important;
-}
-.menuName {
-	font-weight: bold;
-}
-.menuDesc {
-	font-size: smaller;
-	line-height: 1em !important;
-}
-
 #busy_indicator {
 	display: none;
-	float: right;
 	z-index: 1000;
 	width: 200px;
 	font-weight: bold;
@@ -81,6 +56,9 @@ html, body {
 	color: #FF0000;
 	height: 30px;
 	border: 0;
+	position: absolute;
+	right: 0;
+	margin: 2px;
 }
 #busy_indicator span {
 	vertical-align: sub;

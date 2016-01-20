@@ -218,10 +218,9 @@ webapps/openmeetings/css/admin-rtl.css
 webapps/openmeetings/css/calendar.css
 webapps/openmeetings/css/forms.css
 webapps/openmeetings/css/history.css
-webapps/openmeetings/css/jquery.ui.menubar.css
-webapps/openmeetings/css/jquery.ui.menubar-rtl.css
 webapps/openmeetings/css/theme.css
 webapps/openmeetings/css/theme-rtl.css
+webapps/openmeetings/css/menu.css
 
 webapps/openmeetings/docs/*
 webapps/openmeetings/js/openmeetings_functions.js
@@ -1679,8 +1678,6 @@ For components:
 
 coin-slider-styles.css
 colorbox.css
-jquery.ui.menubar.js
-jquery.ui.menubar.css
 
 coin-slider.min.js	
 jquery.colorbox.js

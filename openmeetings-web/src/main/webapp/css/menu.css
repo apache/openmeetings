@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function initMenu(menuContainerId, menuId) {
-	$("#" + menuContainerId).menubar({
-		autoExpand: true
-		, menuIcon: true
-		, buttons: true
-		, position: {
-			my: "left top",
-			at: "left bottom",
-			collision: "none"
-		}
-		//, select: select
-	});
+.ui-menu:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+.ui-menu .ui-menu-item {
+    display: inline-block;
+    margin: 0;
+	line-height: 1.2em !important;
+    padding: .4em 2.1em .4em 1em;
+	font-weight: normal;
+}
+.ui-menu .ui-menu-item.sub {
+	width: 250px;
+	font-weight: bold;
+}
+.ui-menu .ui-menu-item.top {
+	border: 0 !important;
+}
+.ui-menu.ui-widget.ui-widget-content.ui-menu-icons {
+	border: 0;
+}
+#menu.ui-menu, #roomMenu.ui-menu {
+	max-height: 30px;
+	min-height: 30px;
 }
