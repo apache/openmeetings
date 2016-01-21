@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenerateImage extends BaseConverter {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(GenerateImage.class, webAppRootKey);
 
 	@Autowired
@@ -140,5 +139,4 @@ public class GenerateImage extends BaseConverter {
 				inputFile, outputfile };
 		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
 	}
-
 }
