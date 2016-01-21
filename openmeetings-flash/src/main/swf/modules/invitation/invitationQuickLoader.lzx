@@ -133,8 +133,6 @@
 			hib.userobject.lastname = lName;
 			
 			hib.userlang = Number(this.userlang);
-			canvas.thishib.loaderVar = new lz.autoloaderBarOnly(canvas);
-			canvas.thishib.loaderVar.setProgress();
 			this.close();
 			//if (canvas.language == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) { TODO  canvas.language seems to be dropped
 			if (canvas.language_id == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) {
