@@ -96,10 +96,7 @@
     	</netRemoteCallHib>  	
 	    
 		<method name="setRoomValues">
-			canvas.isConference = canvas.thishib.currentInvitation.room.type == 'conference';
-	    	var roomObj = canvas.thishib.currentInvitation.room;
-        	hib.currentroomid = roomObj.id;
-        	
+			canvas.setRoomValues(canvas.thishib.currentInvitation.room);
 		</method>
 		
 		<method name="login">
@@ -168,7 +165,7 @@
                   	<![CDATA[
                         var selVal = canvas.language_id;
                         var found = false;
-                  		for (var i=0;i<value.length;i++){
+                  		for (var i = 0; i < value.length; ++i){
 	                  		this.parent.addItem(value[i].name,value[i].language_id);
                             if (value[i].language_id == selVal) {
                                 found = true;

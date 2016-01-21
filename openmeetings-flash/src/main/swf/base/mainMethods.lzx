@@ -291,69 +291,20 @@
 		
 		if ($debug) Debug.info("###################### -2 ");
 		
-		//sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
-		var sid = lz.Browser.getInitArg('sid');
-		var initroomid = lz.Browser.getInitArg('roomid');
-		if (sid != undefined && initroomid != undefined){
-			canvas.remoteUserLogin = true;
-			canvas.initroomid = initroomid;
-			canvas.remoteUserSid = sid;
-		}
-		
-		var directRoomId = lz.Browser.getInitArg('directRoomId');
-		if (directRoomId != undefined) {
-			canvas.directUserLogin = true;
-			canvas.directRoomId = directRoomId;
-		}
-		
 		var language = lz.Browser.getInitArg('language');
 		if (language != undefined) {
 			canvas.language_id = Number(language);
 		}
 	
-		//check for reset password
-		var hash = lz.Browser.getInitArg('hash');
-		if (hash!=undefined){
-			canvas.isResetUsername = true;
-			canvas.resetHash = hash;		
+		var wicketroomid = lz.Browser.getInitArg('wicketroomid');
+		if (wicketroomid != undefined && !isNaN(wicketroomid)) {
+			canvas.setAttribute('wicketroomid', Number(wicketroomid));
+			hib.userScope = canvas.wicketroomid;
 		}
-		
-		var cuserItem = lz.Browser.getInitArg('cuser');
-		if (cuserItem!=undefined){
-			canvas.cuser = cuserItem;  
-			
-			//Lookup additional actions
-			var tAccept = lz.Browser.getInitArg('tAccept');
-			if (tAccept != undefined) {
-				canvas.cuserStatus = tAccept;
-			} else {
-				canvas.cuserStatus = "none";
-			}
-			
-		}
-		
-		var becomemoderator = lz.Browser.getInitArg('becomemoderator');
-		
-		if (becomemoderator != undefined) {
-			if (becomemoderator == "2"){
-				canvas.becomemoderator = true;
-			} else {
-				canvas.becomemoderator = false;
-			}
-		}
-		
-		var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');
-		if (scopeRoomId != undefined){
-			hib.userScope = scopeRoomId;
-		}
-		
 	   	canvas.setAttribute('wicketsid', null);
 		var wicketsid = lz.Browser.getInitArg('wicketsid');
-		var wicketroomid = lz.Browser.getInitArg('wicketroomid');
-		if (wicketsid != undefined && wicketroomid != undefined && !isNaN(wicketroomid)) {
+		if (wicketsid != undefined) {
 			canvas.setAttribute('wicketsid', wicketsid);
-			canvas.setAttribute('wicketroomid', Number(wicketroomid));
-			hib.userScope = wicketroomid;
 		}
 		this.setBaseColors();
 	
