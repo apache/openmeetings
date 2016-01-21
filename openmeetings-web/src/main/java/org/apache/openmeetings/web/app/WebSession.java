@@ -193,7 +193,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return userId > -1;
 	}
 
-	public boolean signIn(String secureHash) {
+	public boolean signIn(String secureHash, boolean markUsed) {
 		//FIXME code is duplicated from MainService, need to be unified
 		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
@@ -221,12 +221,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user.setPictureuri(remoteUser.getPictureUrl());
 					}
 					user = userDao.update(user, null);
-
-					soapLogin.setUsed(true);
-					soapLogin.setUseDate(new Date());
-					//soapLogin.setClientURL(clientURL); //FIXME
-					soapDao.update(soapLogin);
-
+					if (markUsed) {
+						soapLogin.setUsed(true);
+						soapLogin.setUseDate(new Date());
+						//soapLogin.setClientURL(clientURL); //FIXME
+						soapDao.update(soapLogin);
+					}
 					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
 					recordingId = soapLogin.getRecordingId();

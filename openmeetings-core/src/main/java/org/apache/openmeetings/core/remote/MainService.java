@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLO
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +62,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class MainService implements IPendingServiceCallback {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
@@ -136,7 +134,6 @@ public class MainService implements IPendingServiceCallback {
 
 	public Object secureLoginByRemote(String SID, String secureHash) {
 		try {
-
 			log.debug("############### secureLoginByRemote " + secureHash);
 
 			String clientURL = Red5.getConnectionLocal().getRemoteAddress();
@@ -146,14 +143,11 @@ public class MainService implements IPendingServiceCallback {
 			SOAPLogin soapLogin = soapLoginDao.get(secureHash);
 
 			if (soapLogin.isUsed()) {
-
 				if (soapLogin.getAllowSameURLMultipleTimes()) {
-
 					if (!soapLogin.getClientURL().equals(clientURL)) {
 						log.debug("does not equal " + clientURL);
 						return -42L;
 					}
-
 				} else {
 					log.debug("Already used " + secureHash);
 					return -42L;
@@ -330,33 +324,6 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * this function returns a user object with group objects set only
-	 * the group is not available for users that are using a HASH mechanism
-	 * cause the SOAP/REST API does not guarantee that the user connected to the HASH
-	 * has a valid user object set
-	 * 
-	 * @param SID
-	 */
-	public User markSessionAsLogedIn(String SID) {
-		try {
-			sessiondataDao.updateUserWithoutSession(SID, -1L);
-			
-			Long defaultRpcUserid = configurationDao.getConfValue(
-					"default.rpc.userid", Long.class, "-1");
-			User defaultRpcUser = userDao.get(defaultRpcUserid);
-			
-			User user = new User();
-			user.setGroupUsers(defaultRpcUser.getGroupUsers());
-			
-			return user;
-			
-		} catch (Exception err) {
-			log.error("[markSessionAsLogedIn]", err);
-		}
-		return null;
-	}
-
-	/**
 	 * clear this session id
 	 * 
 	 * @param SID
@@ -366,8 +333,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			
 			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
 			
@@ -395,35 +361,6 @@ public class MainService implements IPendingServiceCallback {
 			return userManager.getUserdataDashBoard(users_id);
 		}
 		return null;
-	}
-
-	/**
-	 * TODO: Is this function in usage?
-	 * 
-	 * @deprecated
-	 * @param SID
-	 * @param domain
-	 * @return - empty map
-	 */
-	@Deprecated
-	public LinkedHashMap<Integer, Client> getUsersByDomain(String SID,
-			String domain) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
-			// Integer counter = 0;
-			// for (Iterator<String> it =
-			// Application.getClientList().keySet().iterator();it.hasNext();) {
-			// RoomClient rc = Application.getClientList().get(it.next());
-			// //if (rc.getDomain().equals(domain)) {
-			// lMap.put(counter, rc);
-			// counter++;
-			// //}
-			// }
-			return lMap;
-		} else {
-			return null;
-		}
 	}
 
 	public void resultReceived(IPendingServiceCall arg0) {
