@@ -24,8 +24,10 @@ import java.util.Date;
 
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -33,6 +35,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IConnection;
+import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
@@ -41,6 +45,8 @@ import org.threeten.bp.LocalDateTime;
 
 public class InvitationService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, webAppRootKey);
+	@Autowired
+	private ISessionManager sessionManager;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -134,8 +140,7 @@ public class InvitationService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject
-			, Long languageId) throws Exception {
+	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject, Long languageId) throws Exception {
 		Long userId = sessiondataDao.checkSession(SID);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
@@ -148,8 +153,32 @@ public class InvitationService implements IPendingServiceCallback {
 		return "Success";
 	}
 	
-	public Object getInvitationByHash(String hashCode) {
-		return invitationManager.getInvitationByHashCode(hashCode, true);
+	public Object getInvitationByHash(String SID, String hashCode) {
+		Object o = invitationManager.getInvitationByHashCode(hashCode, true);
+		if (o instanceof Invitation) {
+			Invitation i = (Invitation)o;
+			if (i.isAllowEntry()) {
+				User u = i.getInvitee();
+				Long userId = -u.getId(); //TODO check this, extremely weird
+				sessiondataDao.updateUser(SID, userId);
+				IConnection current = Red5.getConnectionLocal();
+				String streamId = current.getClient().getId();
+				Client client = sessionManager.getClientByStreamId(streamId, null);
+
+				client.setFirstname(u.getFirstname());
+				client.setLastname(u.getLastname());
+				client.setUserId(userId);
+				client.setUsername(u.getLogin());
+				client.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
+				client.setPicture_uri(u.getPictureuri());
+				client.setLanguage("" + u.getLanguageId());
+				client.setExternalUserId(u.getExternalId());
+				client.setExternalUserType(u.getExternalType());
+
+				sessionManager.updateClientByStreamId(streamId, client, false, null);
+			}
+		}
+		return o;
 	}
 
 	public Object checkInvitationPass(String hashCode, String pass) {

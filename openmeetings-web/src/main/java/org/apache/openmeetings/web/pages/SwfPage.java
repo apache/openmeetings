@@ -19,14 +19,10 @@
 package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.SECURE_HASH;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
-import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
 
 public class SwfPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
@@ -36,14 +32,6 @@ public class SwfPage extends BaseNotInitedPage {
 	}
 
 	public SwfPage(PageParameters pp) {
-		StringValue shash = pp.get(SECURE_HASH);
-		if (!shash.isEmpty()) {
-			SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(shash.toString());
-			Long roomId = soapLogin.getRoomId();
-			if (roomId != null) {
-				pp = pp.mergeWith(RoomPanel.addServer(roomId, false));
-			}
-		}
 		add(new RoomPanel("room", pp));
 	}
 

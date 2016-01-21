@@ -42,7 +42,7 @@
 	
 	<method name="update" args="obj, full=true">
 	<![CDATA[
-		if ($debug) Debug.write("!!!! update ", this.userId);
+		if ($debug) Debug.write("!!!! update ", obj, this.userId);
 		setAttribute('firstname', obj.firstname);
 		setAttribute('lastname', obj.lastname);
 		if (full) {
@@ -66,6 +66,7 @@
 		this.isMod = refObj.isMod;
 		updateUserStatus();
 		this._content._iconsModerator.oninit.sendEvent();
+		this._content._userName.setAttribute('text', getUName());
 	]]>
 	</method>
 	
@@ -133,10 +134,30 @@
 	<method name="userTyping" args="v">
 		this._content._user_typing.setAttribute("visible", v);
 	</method>
+	
+	<method name="getUName">
+	<![CDATA[
+		var n = "", delim = "";
+		if (!!firstname) {
+			n = firstname;
+			delim = " ";
+		}
+		if (!!lastname) {
+			n += delim + lastname;
+		}
+		if ($debug) Debug.write(" :: getUName :: ", !n, !!refObj, refObj);
+		if (!n && !!refObj && !!refObj.email) {
+			n = refObj.email;
+		}
+		if ($debug) Debug.write(" :: getUName :: ", n);
+		return n;
+	]]>
+	</method>
+	
 	<view name="_content" width="254">
 		<view name="_contentIsCurrent" visible="${ parent.parent.refObj != null &amp;&amp; canvas.publicSID == parent.parent.refObj.publicSID }" width="254" height="40" bgcolor="0x7CFC00"/>
 		  
-		<labelText name="_userName" x="2" y="2" text="${ (parent.parent.firstname == null ? '' : parent.parent.firstname) + ' ' + (parent.parent.lastname == null ? '' : parent.parent.lastname) }" />
+		<labelText name="_userName" x="2" y="2" text="$once{ parent.parent.getUName() }" />
 			   
 		<typingIcon name="_user_typing" x="132" y="2" width="30" height="16" visible="false"/>
 		<miniIcons name="_restartDevice" x="220" y="0" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true"

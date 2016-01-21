@@ -35,7 +35,7 @@
 	
 	<method name="initialAddItem" args="object">
 	<![CDATA[
-		if ($debug) Debug.write("restrictedUserListInner::initialAddItem : ",object.publicSID);
+		if ($debug) Debug.write("restrictedUserListInner::initialAddItem : ", object);
 		
 		object.firstname = object.firstname == null ? "" : object.firstname;
 		object.lastname = object.lastname == null ? "" : object.lastname;
@@ -276,7 +276,7 @@
 				if (records.length > i) {
 					
 					list.subviews[i].setAttribute("clickable",true);
-					list.subviews[i].setAttribute("refObj", records[i]);
+					list.subviews[i].update(records[i]);
 					
 					if (records[i]["isselected"] && records[i].isselected) {
 						list.subviews[i].isselected = true;
