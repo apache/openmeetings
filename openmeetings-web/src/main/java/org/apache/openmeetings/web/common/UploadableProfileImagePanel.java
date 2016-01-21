@@ -85,6 +85,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 						//TODO display error
 					}
 				}
+				update();
 				target.add(profile, form);
 			}
 		});
