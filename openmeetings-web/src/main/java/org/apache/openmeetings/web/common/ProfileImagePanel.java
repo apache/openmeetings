@@ -27,15 +27,19 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public class ProfileImagePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	protected final WebMarkupContainer profile;
+	protected final WebMarkupContainer profile = new TransparentWebMarkupContainer("profile");
+	private final long userId;
 	
 	public ProfileImagePanel(String id, final long userId) {
 		super(id);
+		this.userId = userId;
+		add(profile.setOutputMarkupId(true));
+		update();
+	}
 		
-		profile = new TransparentWebMarkupContainer("profile");
-		profile.add(new WebMarkupContainer("img").add(
+	public void update() {
+		profile.addOrReplace(new WebMarkupContainer("img").add(
 				AttributeModifier.append("alt", Application.getString(5L))
 				, AttributeModifier.append("src", getUrl(getRequestCycle(), userId))));
-		add(profile.setOutputMarkupId(true));
 	}
 }
