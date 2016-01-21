@@ -59,9 +59,8 @@
 			this.checkInvitationPass.doCall();
 		</method>
 		
-		<netRemoteCallHib name="isRoomFull" funcname="conferenceservice.isRoomFull" 
-							remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
-        	<netparam name="pass"><method name="getValue">return canvas.thishib.currentInvitation.room.id;</method></netparam>
+		<netRemoteCallHib name="isRoomFull" funcname="conferenceservice.isRoomFull" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
+        	<netparam name="roomId"><method name="getValue">return canvas.thishib.currentInvitation.room.id;</method></netparam>
         	<handler name="ondata" args="value">
         		<![CDATA[
             		//The onResult-Handler will be called be the rtmpconnection
@@ -78,8 +77,7 @@
         	</handler>   
     	</netRemoteCallHib> 
 		
-		<netRemoteCallHib name="checkInvitationPass" funcname="invitationservice.checkInvitationPass" 
-							remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
+		<netRemoteCallHib name="checkInvitationPass" funcname="invitationservice.checkInvitationPass" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
 	      	<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
         	<netparam name="pass"><method name="getValue">return parent.parent._password.getText();</method></netparam>
 	        	
@@ -96,6 +94,7 @@
     	</netRemoteCallHib>  	
 	    
 		<method name="setRoomValues">
+			canvas.thishib.setUser(canvas.thishib.currentInvitation.invitee);
 			canvas.setRoomValues(canvas.thishib.currentInvitation.room);
 		</method>
 		

@@ -360,6 +360,7 @@
 	</netRemoteCallHib>	  
 	
 	<netRemoteCallHib name="getInvitationByHash" activeErrorHandler="true" funcname="invitationservice.getInvitationByHash">
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
 		<handler name="ondata" args="value">
 		<![CDATA[
@@ -400,7 +401,7 @@
 				}
 				
 				canvas.showNickNameDialog = value.showNickNameDialog;
-				if ($debug) Debug.write("markSessionAsLogedIn9 ",canvas.showNickNameDialog);
+				if ($debug) Debug.write("secureLoginByRemote1: ",canvas.showNickNameDialog);
 				
 				canvas.initroomid = value.roomId;
 				canvas.becomemoderator = value.becomemoderator;
@@ -465,6 +466,7 @@
 					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.address.email);
 					new lz.chooseNickName(canvas);
 				}
+				hib.userobject.id = value.userId;
 				hib.userobject.firstname = fName;
 				hib.userobject.lastname = lName;
 				
@@ -547,55 +549,13 @@
 		</handler>  
 	</netRemoteCallHib>
 		
-	<!--
-		There must be a temporary SIP-Account created at this moment
-	 -->  
-	<netRemoteCallHib name="markSessionAsLogedIn" funcname="xmlcrm.markSessionAsLogedIn" >
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<handler name="ondata" args="value">
-		<![CDATA[
-			//The onResult-Handler will be called be the rtmpconnection
-						
-			if (value == null) {
-				new lz.errorPopup(canvas,{error:"Missing User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
-			}
-			
-			if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
-			 
-			hib.userobject = value;
-			 
-			canvas.userId = hib.userobject.id;
-			
-			if (value.groupUsers.length == 0 && !canvas.isRemoteUser()) {
-				new lz.errorPopup(canvas,{error:"Missing Group in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
-			}
-			
-			if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
-			if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
-			if ($debug) Debug.write("markSessionAsLogedIn4 ",canvas.isinitRoomDirect);
-			if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
-			if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
-			if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
-			if ($debug) Debug.write("markSessionAsLogedIn8 ",canvas.secureRemoteUserLogin);
-			
-			if (canvas.secureRemoteUserLogin) {
-				
-				if ($debug) Debug.write("markSessionAsLogedIn == CALL ",canvas.secureHash);
-			 
-				parent.secureLoginByRemote.doCall();
-				
-			} else if (canvas.isinitRoomDirect){
-				parent.getInvitationByHash.doCall();   
-			} else if (canvas.remoteUserLogin) {
-				parent.loginUserByRemote.doCall();   
-			} else if (canvas.directUserLogin) {
-				//show Nick Name or Password Protection Dialog
-				canvas.initroomid = Number(canvas.directRoomId);
-				parent.getRoomById.doCall();
-			}
-		]]>
-		</handler>  
-	</netRemoteCallHib> 
+	<method name="setUser" args="user">
+		if (!user) {
+			new lz.errorPopup(canvas,{error:"Missing User Object"});
+		}
+		hib.userobject = user;
+		canvas.userId = hib.userobject.id;
+	</method>
 	
 	<netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions">
 		<handler name="ondata" args="value">
@@ -632,19 +592,17 @@
 				parent.loginWicket.doCall();
 			} else { 
 				if (canvas.thishib.loaderVar != null) {
-				   canvas.thishib.loaderVar.close();
+					canvas.thishib.loaderVar.close();
 				}
 				//do not show loggin-PopUp for the test-Application
 				if (parent.testAppLoading){ 
 					canvas.loadNextStepTestApp();
-				} else {
-					if (canvas.isRemoteUser()){
-						if (canvas.thishib.loaderVar != null) {
-						  canvas.thishib.loaderVar.setProgress();
-						}
-						if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
-						parent.markSessionAsLogedIn.doCall();
-					}
+				} else if (!!canvas.invitationHash) {
+					parent.getInvitationByHash.doCall();   
+				} else if (canvas.secureRemoteUserLogin) {
+					if ($debug) Debug.write("secureLoginByRemote:: ",canvas.secureHash);
+					hib.userobject = {};
+					parent.secureLoginByRemote.doCall();
 				}
 			}
 		]]>

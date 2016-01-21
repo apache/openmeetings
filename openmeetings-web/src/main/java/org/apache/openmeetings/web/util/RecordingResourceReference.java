@@ -121,7 +121,7 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 			return getRecording(id);
 		} else {
 			ws.invalidate();
-			if (ws.signIn(_id.toString())) {
+			if (ws.signIn(_id.toString(), true)) {
 				return getRecording(getRecordingId());
 			}
 		}

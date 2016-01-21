@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -138,7 +139,12 @@ public class RoomPanel extends BasePanel {
 			if (!room.isEmpty()) {
 				roomId = room.toLong();
 			} else if (!secureHash.isEmpty()) {
-				roomId = getBean(SOAPLoginDao.class).get(secureHash.toString()).getRoomId();
+				SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(secureHash.toString());
+				if (WebSession.get().signIn(secureHash.toString(), false)) {
+					roomId = soapLogin.getRoomId();
+					pp = pp.mergeWith(RoomPanel.addServer(roomId, false));
+				}
+				//TODO access denied
 			} else if (!invitationHash.isEmpty()) {
 				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getId();
 			}
