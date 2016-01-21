@@ -130,19 +130,6 @@ public class RoomPanel extends BasePanel {
 	
 	public RoomPanel(String id, PageParameters pp) {
 		super(id);
-
-		StringValue swfVal = pp.get("swf");
-		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
-				+ new PageParametersEncoder().encodePageParameters(pp);
-		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
-		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onTimer(AjaxRequestTarget target) {
-				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
-			}
-		});
 		//OK let's find the room
 		try {
 			StringValue room = pp.get(WICKET_ROOM_ID);
@@ -158,6 +145,19 @@ public class RoomPanel extends BasePanel {
 		} catch (Exception e) {
 			//no-op
 		}
+		StringValue swfVal = pp.get("swf");
+		PageParameters spp = new PageParameters(pp).mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
+		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
+				+ new PageParametersEncoder().encodePageParameters(spp);
+		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
+		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target) {
+				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
+			}
+		});
 		add(invite = new InvitationDialog("invite", roomId));
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
 		add(vote = new VoteDialog("vote", roomId));
