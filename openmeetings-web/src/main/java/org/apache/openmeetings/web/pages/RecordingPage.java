@@ -36,7 +36,7 @@ public class RecordingPage extends BaseInitedPage {
 	public RecordingPage(PageParameters p) {
 		String hash = p.get("hash").toString();
 		Recording r = null;
-		if (WebSession.get().signIn(hash)) {
+		if (WebSession.get().signIn(hash, true)) {
 			Long recId = getRecordingId();
 			if (recId != null) {
 				r = getBean(RecordingDao.class).get(recId);

@@ -325,8 +325,6 @@ public class ImportInitvalues {
 				"The Name of the Font used for exporting/render Images from Whiteboard"
 					+ "The Font has to exist on the Server which runs Red5");
 
-		cfgDao.add("default.rpc.userid", "" + 1, null, "The User-Id of the Control User in OpenMeetings");
-
 		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
 		
 		// ***************************************

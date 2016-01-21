@@ -144,7 +144,6 @@ public class ConferenceService {
 
 	public List<Room> getRoomsPublicWithoutType(String SID) {
 		try {
-
 			Long userId = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 	
@@ -255,8 +254,7 @@ public class ConferenceService {
 	 * @param asc
 	 * @return - list of rooms being searched
 	 */
-	public SearchResult<Room> getRooms(String SID, int start, int max,
-			String orderby, boolean asc, String search) {
+	public SearchResult<Room> getRooms(String SID, int start, int max, String orderby, boolean asc, String search) {
 		log.debug("getRooms");
 
 		Long userId = sessiondataDao.checkSession(SID);
@@ -266,8 +264,7 @@ public class ConferenceService {
 		return null;
 	}
 
-	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
-			int max, String orderby, boolean asc) {
+	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start, int max, String orderby, boolean asc) {
 		log.debug("getRooms");
 
 		Long userId = sessiondataDao.checkSession(SID);
@@ -277,22 +274,15 @@ public class ConferenceService {
 		return null;
 	}
 
-	public List<RoomModerator> getRoomModeratorsByRoomId(String SID,
-			Long roomId) {
+	public List<RoomModerator> getRoomModeratorsByRoomId(String SID, Long roomId) {
 		try {
-
 			Long userId = sessiondataDao.checkSession(SID);
-
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-
 				return roomModeratorDao.getByRoomId(roomId);
-
 			}
-
 		} catch (Exception err) {
 			log.error("[getRoomModeratorsByRoomId]", err);
 		}
-
 		return null;
 	}
 
@@ -306,12 +296,7 @@ public class ConferenceService {
 		try {
 			Room room = roomDao.get(roomId);
 			
-			if (room.getNumberOfPartizipants() <= this.sessionManager
-					.getClientListByRoom(roomId).size()) {
-				return true;
-			}
-			
-			return false;
+			return room.getNumberOfPartizipants() <= sessionManager.getClientListByRoom(roomId).size();
 		} catch (Exception err) {
 			log.error("[isRoomFull]", err);
 		}
