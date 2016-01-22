@@ -16,29 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.pages;
+(function(i,s,o,g,r,a,m){
+	i['GoogleAnalyticsObject']=r;
+	i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)
+	},i[r].l=1*new Date();
+	a=s.createElement(o),m=s.getElementsByTagName(o)[0];
+	a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+function initGA(code) {
+	ga('create', code, 'auto');
+}
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.util.FormatHelper;
-import org.apache.openmeetings.web.app.WebSession;
+function init() {
+    ga('send', 'pageview');
+}
 
-public abstract class BaseInitedPage extends BasePage {
-	private static final long serialVersionUID = 1L;
+function initHash() {
+    ga('send', 'pageview', window.location.hash);
 
-	@Override
-	protected String getApplicationName() {
-		return getBean(ConfigurationDao.class).getAppName();
-	}
-	
-	@Override
-	protected String getLanguageCode() {
-		return WebSession.get().getLocale().toLanguageTag();
-	}
-	
-	@Override
-	protected boolean isRtl() {
-		return FormatHelper.isRtlLanguage(getLanguageCode());
-	}
+    $(window).bind( 'hashchange', function( e ) {
+            ga('send', 'pageview', window.location.hash);
+    });
 }
