@@ -296,6 +296,12 @@
 					<td> The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc. </td>
 					<td> 3.0.4 </td>
 				</tr>
+				<tr>
+					<td> google.analytics.code </td>
+					<td> </td>
+					<td> Code for Google Analytics. </td>
+					<td> 3.1.0 </td>
+				</tr>
 			</table>
 		</section>
 
