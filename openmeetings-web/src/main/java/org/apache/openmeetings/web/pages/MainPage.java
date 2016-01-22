@@ -324,4 +324,9 @@ public class MainPage extends BaseInitedPage {
 	public ChatPanel getChat() {
 		return chat;
 	}
+	
+	@Override
+	protected boolean isMainPage() {
+		return true;
+	}
 }
