@@ -17,13 +17,10 @@
 
 	<properties>
 		<title>Confluence Plugin</title>
-		<author email="eschwert@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
-
 		<section name="Confluence Plugin for OpenMeetings">
 			<p>
 				Current Development Snapshots for testing can be downloaded from:
@@ -50,7 +47,5 @@
 			<p>The demo video of Confluence plugin show you the plugin in action </p>
 			<iframe width="640" height="390" src="http://www.youtube.com/embed/YFKlXggtld0" frameborder="0" allowfullscreen=""></iframe>
 		</section>
-
 	</body>
-
 </document>
