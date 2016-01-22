@@ -298,7 +298,7 @@ public class Room implements IDataProviderEntity {
 	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
-	private List<RoomGroup> roomGroups = new ArrayList<RoomGroup>();
+	private List<RoomGroup> roomGroups = new ArrayList<>();
 
 	@Transient
 	private List<Client> currentusers;
