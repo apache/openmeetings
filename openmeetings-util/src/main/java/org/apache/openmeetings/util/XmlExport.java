@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -65,7 +66,7 @@ public class XmlExport {
 
 	public static Document createDocument() {
 		Document document = DocumentHelper.createDocument();
-		document.setXMLEncoding("UTF-8");
+		document.setXMLEncoding(StandardCharsets.UTF_8.name());
 		document.addComment(XmlExport.FILE_COMMENT);
 		return document;
 	}
@@ -83,7 +84,7 @@ public class XmlExport {
 	
 	public static void toXml(Writer out, Document doc) throws Exception {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
-		outformat.setEncoding("UTF-8");
+		outformat.setEncoding(StandardCharsets.UTF_8.name());
 		XMLWriter writer = new XMLWriter(out, outformat);
 		writer.write(doc);
 		writer.flush();

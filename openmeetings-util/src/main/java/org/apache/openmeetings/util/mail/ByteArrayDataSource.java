@@ -19,6 +19,8 @@
 package org.apache.openmeetings.util.mail;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import javax.activation.*;
 
 public class ByteArrayDataSource implements DataSource {
@@ -49,13 +51,7 @@ public class ByteArrayDataSource implements DataSource {
 
 	/* Create a DataSource from a String */
 	public ByteArrayDataSource(String data, String type) {
-		try {
-			// Assumption that the string contains only ASCII
-			// characters! Otherwise just pass a charset into this
-			// constructor and use it in getBytes()
-			this.data = data.getBytes("utf-8");
-		} catch (UnsupportedEncodingException uex) {
-		}
+		this.data = data.getBytes(StandardCharsets.UTF_8);
 		this.type = type;
 	}
 
