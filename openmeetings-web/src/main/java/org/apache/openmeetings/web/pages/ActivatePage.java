@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -34,14 +36,14 @@ public class ActivatePage extends BaseNotInitedPage {
 	public ActivatePage(PageParameters pp) {
 		String userHash = pp.get(ACTIVATION_PARAM).toString();
 		if (userHash != null) {
-			User user = Application.getBean(UserDao.class).getUserByActivationHash(userHash);
+			User user = getBean(UserDao.class).getUserByActivationHash(userHash);
 
 			if (user != null && !AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
 				user.getRights().add(Right.Login);
 				user.setUpdated(new Date());
 
-				Application.getBean(UserDao.class).update(user, null);
+				getBean(UserDao.class).update(user, null);
 			}
 		}
 		setResponsePage(Application.get().getSignInPageClass());
