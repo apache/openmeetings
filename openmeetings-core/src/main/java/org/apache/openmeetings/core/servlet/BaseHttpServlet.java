@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.servlet;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +39,7 @@ public abstract class BaseHttpServlet extends HttpServlet {
 
 		String msg = "Server is not booted yet";
 
-		out.write(msg.getBytes());
+		out.write(msg.getBytes(StandardCharsets.UTF_8));
 
 		out.flush();
 		out.close();

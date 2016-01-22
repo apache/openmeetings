@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -77,7 +78,7 @@ public class DownloadHandler extends BaseHttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			request.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 			log.debug("\nquery = " + request.getQueryString());
 			log.debug("\n\nfileName = " + request.getParameter("fileName"));
@@ -264,10 +265,10 @@ public class DownloadHandler extends BaseHttpServlet {
 						}
 						
 						if (browserType == 0) {
-							response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, "UTF-8"));
+							response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
 						} else {
 							response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
-											+ URLEncoder.encode(fileNameResult, "UTF-8"));
+											+ URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
 						}
 
 						response.setHeader("Content-Length", "" + full_path.length());

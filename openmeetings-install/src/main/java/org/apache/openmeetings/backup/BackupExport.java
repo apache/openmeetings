@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -426,7 +427,7 @@ public class BackupExport {
 	
 	private <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
 		Format format = new Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, "UTF-8"), format);
+		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, StandardCharsets.UTF_8), format);
 		OutputNode root = doc.getChild("root");
 		root.setComment(BACKUP_COMMENT);
 		OutputNode listNode = root.getChild(listElement);

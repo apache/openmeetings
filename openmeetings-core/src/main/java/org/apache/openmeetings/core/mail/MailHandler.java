@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -182,7 +183,7 @@ public class MailHandler {
 		log.debug("getMimeMessage");
 		// Building MimeMessage
 		MimeMessage msg = getBasicMimeMessage();
-		msg.setSubject(m.getSubject(), "UTF-8");
+		msg.setSubject(m.getSubject(), StandardCharsets.UTF_8.name());
 		String replyTo = m.getReplyTo();
 		if (replyTo != null && mailAddReplyTo) {
 			log.debug("setReplyTo " + replyTo);
