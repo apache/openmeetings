@@ -117,10 +117,6 @@
 			canvas.setAttribute('currentuser', email);
 			canvas.setAttribute('userId', -invitee.id);
 			canvas.setAttribute('mail', email);
-			if (!invitee.firstname && !invitee.lastname) {
-				if ($debug) Debug.write("!!!!!!!!!!! Nickname invitation ", email);
-				new lz.chooseNickName(canvas);
-			}
 			canvas.setAttribute('firstName', fName);
 			canvas.setAttribute('lastName', lName);
 			canvas.setAttribute('lastLogin', invitee.lastlogin);
@@ -133,6 +129,7 @@
 			hib.userobject.lastname = lName;
 			
 			hib.userlang = Number(this.userlang);
+			hib.getCurrentRoomClient.doCall();
 			this.close();
 			//if (canvas.language == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) { TODO  canvas.language seems to be dropped
 			if (canvas.language_id == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) {

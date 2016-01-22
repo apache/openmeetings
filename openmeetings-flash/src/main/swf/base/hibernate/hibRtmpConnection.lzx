@@ -449,12 +449,12 @@
 			if ($debug) Debug.write("getCurrentRoomClient: ", value);
 			if (value != null) {
 				canvas.currentClient = value;
-				canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
+				canvas.setAttribute('currentuser', value.firstname+" "+value.lastname);
 				
 				//Somehow this leads to a bug in the implementation of the secure User Login
-				canvas.setAttribute('userId',value.userId);
+				canvas.setAttribute('userId', value.userId);
 				
-				canvas.setAttribute('allowRecording',value.allowRecording);
+				canvas.setAttribute('allowRecording', value.allowRecording);
 				
 				var fName = value.firstname == null ? "" : value.firstname;
 				var lName = value.lastname == null ? "" : value.lastname;
@@ -462,8 +462,8 @@
 				canvas.setAttribute('lastName', lName);
 				canvas.setAttribute('mail', value.email);
 				
-				if (canvas.isRemoteUser() && fName == '' && lName == '') {
-					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.address.email);
+				if (canvas.isRemoteUser() && !fName && !lName) {
+					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.email);
 					new lz.chooseNickName(canvas);
 				}
 				hib.userobject.id = value.userId;
@@ -947,7 +947,9 @@
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ", value);
 			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
-			u.update(value);
+			if (u != null) {
+				u.update(value);
+			}
 			if (canvas.publicSID == value.publicSID) {
 				canvas.commonVideoViewContent.toggleVideo(value.canVideo);
 				canvas.setAttribute("isBroadCasting", value.isBroadcasting);

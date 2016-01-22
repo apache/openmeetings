@@ -42,7 +42,8 @@
 		//this._userpic.setAttribute('src',downloadurl); 
 		//This is a workaround cause in LPS-4.2.x immediatelly loading does not work
 		lz.Timer.addTimer(new LzDelegate(this, "fadeText"), 1000);
-				
+		
+		checkName();
 		if (canvas.publicSID == this.refObj.publicSID) {
 			this._firstName.setAttribute("fontstyle","bold");
 			this._lastName.setAttribute("fontstyle","bold");
@@ -52,11 +53,23 @@
 	]]>
 	</handler>
 	
+	<method name="checkName">
+	<![CDATA[
+		if ($debug) Debug.write("participantListItem::checkName: ", firstname, lastname, !firstname, !lastname, !!refObj, !!refObj.email);
+		if (!firstname && !lastname && !!refObj && !!refObj.email) {
+			if ($debug) Debug.write("participantListItem::oninit: SET FIRST NAME");
+			this.setAttribute('firstname', refObj.email);
+			if ($debug) Debug.write("participantListItem::oninit: ", this._firstName.text);
+		}
+	]]>
+	</method>
+	
 	<method name="update" args="obj, full=true">
 		setAttribute('firstname', obj.firstname);
 		setAttribute('lastname', obj.lastname);
 		refObj = obj;
 		this.isMod = refObj.isMod;
+		checkName();
 		this.updateIcons();
 	</method>
 	 
