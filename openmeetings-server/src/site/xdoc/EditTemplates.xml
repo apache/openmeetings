@@ -18,9 +18,7 @@
 
 	<properties>
 		<title>Edit Templates</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
@@ -48,22 +46,14 @@
 				example some footer in every email you have to change the email
 				templates.
 			</p>
-			<p>To do that: Stop the Red5/OpenMeetings-Service Goto:
-				$Red5_HOME/webapps/openmeetings/WEB-INF/lib/openmeetings-templates.jar
-				Unzip: openmeetings-templates.jar (this is a usual ZIP file, you can
-				rename it to openmeetings-templates.zip unzip, edit the files, zip
-				it again and rename it to openmeetings-templates.jar)
+			<p>To do that:
+				<ul>
+					<li>Stop the Red5/OpenMeetings service</li>
+					<li>Goto: <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/</tt></li>
+					<li>Change HTML file(s) according to your needs, BUT do not remove elements with <tt>wicket:id</tt> attributes</li>
+					<li>Start the Red5/OpenMeetings service</li>
+				</ul>
 			</p>
-			<p>
-				In openmeetings-templates.jar there are all template files. They
-				have the file extension .vm (VM stands for velocity-template). After
-				you have done your changes you need to (re)start the
-				Red5/OpenMeetings
-				-Service so that changes are online.
-			</p>
-
 		</section>
-
 	</body>
-
 </document>

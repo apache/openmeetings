@@ -18,9 +18,7 @@
 
 	<properties>
 		<title>Drupal Plugin</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>

@@ -17,9 +17,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Change main navigation</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
@@ -31,7 +29,6 @@
 			<ul>
 				<li>navimain </li>
 				<li>naviglobal </li>
-				<li>navisub (currently not in use) </li>
 			</ul>
 			<p></p>
 			<p>
