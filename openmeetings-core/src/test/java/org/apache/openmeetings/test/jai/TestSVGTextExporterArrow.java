@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import junit.framework.TestCase;
 
@@ -86,12 +87,11 @@ public class TestSVGTextExporterArrow extends TestCase {
 	        // Finally, stream out SVG to the standard output using
 	        // UTF-8 encoding.
 	        boolean useCSS = true; // we want to use CSS style attributes
-	        //Writer out = new OutputStreamWriter(System.out, "UTF-8");
 	        
 	        //OutputStream out = httpServletResponse.getOutputStream();
 			//httpServletResponse.setContentType("APPLICATION/OCTET-STREAM");
 			//httpServletResponse.setHeader("Content-Disposition","attachment; filename=\"" + requestedFile + "\"");
-	        Writer out = new OutputStreamWriter(System.out, "UTF-8");
+	        Writer out = new OutputStreamWriter(System.out, StandardCharsets.UTF_8);
 
 	        //StringWriter out = new StringWriter();
 	        

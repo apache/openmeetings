@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -172,7 +173,7 @@ public class SignInPage extends BaseInitedPage {
 			result = result.replace("{$access_token}", clientToken);
 		}
 		if (redirectUri != null) {
-			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, "UTF-8"));
+			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.name()));
 		}
 		if (code != null) {
 			result = result.replace("{$code}", code);
@@ -236,7 +237,7 @@ public class SignInPage extends BaseInitedPage {
 		prepareConnection(urlConnection);
 		urlConnection.setRequestMethod("POST");
 		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		urlConnection.setRequestProperty("charset", "utf-8");
+		urlConnection.setRequestProperty("charset", StandardCharsets.UTF_8.name());
 		urlConnection.setRequestProperty("Content-Length", String.valueOf(requestTokenParams.length()));
 		urlConnection.setDoInput(true);
 		urlConnection.setDoOutput(true);
@@ -244,7 +245,7 @@ public class SignInPage extends BaseInitedPage {
 		DataOutputStream paramsOutputStream = new DataOutputStream(urlConnection.getOutputStream());
 		paramsOutputStream.writeBytes(requestTokenParams);
 		paramsOutputStream.flush();
-		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), "utf-8");
+		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), StandardCharsets.UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
 		try {
@@ -304,7 +305,7 @@ public class SignInPage extends BaseInitedPage {
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
 		prepareConnection(connection);
-		String sourceResponse = IOUtils.toString(connection.getInputStream(), "utf-8");
+		String sourceResponse = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
         // parse json result
         Map<String, String> result = new HashMap<String, String>();
         try {

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -267,17 +268,16 @@ public final class MD5Crypt {
 
 		ctx = MessageDigest.getInstance("MD5");
 
-		ctx.update(password.getBytes()); // The password first, since that is
-											// what is most unknown
-		ctx.update(magic.getBytes()); // Then our magic string
-		ctx.update(salt.getBytes()); // Then the raw salt
+		ctx.update(password.getBytes(StandardCharsets.UTF_8)); // The password first, since that is what is most unknown
+		ctx.update(magic.getBytes(StandardCharsets.UTF_8)); // Then our magic string
+		ctx.update(salt.getBytes(StandardCharsets.UTF_8)); // Then the raw salt
 
 		/* Then just as many characters of the MD5(pw,salt,pw) */
 
 		ctx1 = MessageDigest.getInstance("MD5");
-		ctx1.update(password.getBytes());
-		ctx1.update(salt.getBytes());
-		ctx1.update(password.getBytes());
+		ctx1.update(password.getBytes(StandardCharsets.UTF_8));
+		ctx1.update(salt.getBytes(StandardCharsets.UTF_8));
+		ctx1.update(password.getBytes(StandardCharsets.UTF_8));
 		finalState = ctx1.digest();
 
 		for (int pl = password.length(); pl > 0; pl -= 16) {
@@ -299,7 +299,7 @@ public final class MD5Crypt {
 			if ((i & 1) != 0) {
 				ctx.update(finalState[0]);
 			} else {
-				ctx.update(password.getBytes()[0]);
+				ctx.update(password.getBytes(StandardCharsets.UTF_8)[0]);
 			}
 		}
 
@@ -317,25 +317,25 @@ public final class MD5Crypt {
 			ctx1 = MessageDigest.getInstance("MD5");
 
 			if ((i & 1) != 0) {
-				ctx1.update(password.getBytes());
+				ctx1.update(password.getBytes(StandardCharsets.UTF_8));
 			} else {
 				for (int c = 0; c < 16; c++)
 					ctx1.update(finalState[c]);
 			}
 
 			if ((i % 3) != 0) {
-				ctx1.update(salt.getBytes());
+				ctx1.update(salt.getBytes(StandardCharsets.UTF_8));
 			}
 
 			if ((i % 7) != 0) {
-				ctx1.update(password.getBytes());
+				ctx1.update(password.getBytes(StandardCharsets.UTF_8));
 			}
 
 			if ((i & 1) != 0) {
 				for (int c = 0; c < 16; c++)
 					ctx1.update(finalState[c]);
 			} else {
-				ctx1.update(password.getBytes());
+				ctx1.update(password.getBytes(StandardCharsets.UTF_8));
 			}
 
 			finalState = ctx1.digest();
