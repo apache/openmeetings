@@ -18,9 +18,7 @@
 
 	<properties>
 		<title>Downloads</title>
-		<author email="sebawagner@apache.org">
-			Podling Documentation Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
