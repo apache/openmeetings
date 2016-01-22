@@ -60,6 +60,7 @@
     	setAttribute('firstname', obj.firstname);
     	setAttribute('lastname', obj.lastname);
     	refObj = obj;
+		_userName.setAttribute('text', getUName());
     </method>
      
     <method name="updateIconByMod">
@@ -125,8 +126,26 @@
     <view name="userStatus" align="right" frame="1" 
     	  resource="userstatus_multiframe_rsc" />
     
-    <labelText name="_userName" x="41" y="2"
-    		   text="$once{ (parent.firstname == null ? '' : parent.firstname) + ' ' + (parent.lastname == null ? '' : parent.lastname) }" />
+	<method name="getUName">
+	<![CDATA[
+		var n = "", delim = "";
+		if (!!firstname) {
+			n = firstname;
+			delim = " ";
+		}
+		if (!!lastname) {
+			n += delim + lastname;
+		}
+		if ($debug) Debug.write(" :: getUName :: ", !n, !!refObj, refObj);
+		if (!n && !!refObj && !!refObj.email) {
+			n = refObj.email;
+		}
+		if ($debug) Debug.write(" :: getUName :: ", n);
+		return n;
+	]]>
+	</method>
+	
+    <labelText name="_userName" x="41" y="2" text="$once{ parent.getUName() }" />
      
     <animatorgroup name="showItem" started="false" process="simultaneous">
     	<animator attribute="height" to="62" duration="750" />

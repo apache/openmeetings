@@ -510,9 +510,11 @@
 		for (var i = 0; i < canvas.currentModeratorList.length; ++i) {
 			var item = canvas.currentModeratorList[i];
 			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(item.publicSID);
-			u.update(item);
-			if (canvas.publicSID == item.publicSID) {
-				isCurrentModerator = true;
+			if (u != null) {
+				u.update(item);
+				if (canvas.publicSID == item.publicSID) {
+					isCurrentModerator = true;
+				}
 			}
 		}
 		
