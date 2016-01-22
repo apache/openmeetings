@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Hex;
@@ -89,7 +90,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		String app = "";
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			app = IOUtils.toString(jnlp, "UTF-8");
+			app = IOUtils.toString(jnlp, StandardCharsets.UTF_8);
 			String baseUrl = cfgDao.getBaseUrl();
 			String _url = getParam(getComponent(), PARAM_URL).toString();
 			URI url = new URI(_url);

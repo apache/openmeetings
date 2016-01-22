@@ -28,6 +28,7 @@ import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -129,7 +130,7 @@ public class AsfCopyRightReplace {
 			System.out.println("Processing " + javaFile.getCanonicalPath());
 
 			BufferedReader is = new BufferedReader(new InputStreamReader(
-					new FileInputStream(javaFile), "UTF-8"));
+					new FileInputStream(javaFile), StandardCharsets.UTF_8));
 
 			String line;
 			String firstline = "";
@@ -165,7 +166,7 @@ public class AsfCopyRightReplace {
 			is.close();
 
 			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getCanonicalPath()), "UTF-8");
+					new FileOutputStream(javaFile.getCanonicalPath()), StandardCharsets.UTF_8);
 
 			out.write(strWriter.toString());
 			out.flush();
@@ -181,7 +182,7 @@ public class AsfCopyRightReplace {
 			System.out.println("Processing " + javaFile.getCanonicalPath());
 
 			BufferedReader is = new BufferedReader(new InputStreamReader(
-					new FileInputStream(javaFile), "UTF-8"));
+					new FileInputStream(javaFile), StandardCharsets.UTF_8));
 
 			String line;
 			StringWriter strWriter = new StringWriter();
@@ -202,7 +203,7 @@ public class AsfCopyRightReplace {
 			is.close();
 			
 			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getCanonicalPath()), "UTF-8");
+					new FileOutputStream(javaFile.getCanonicalPath()), StandardCharsets.UTF_8);
 
 			out.write(strWriter.toString());
 			out.flush();

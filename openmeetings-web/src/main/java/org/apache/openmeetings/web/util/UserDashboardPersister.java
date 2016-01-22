@@ -26,6 +26,7 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class UserDashboardPersister implements DashboardPersister {
 		public XStreamDashboardPersister() {
 			this.file = getUserDashboard(getUserId());
 			
-	        xstream = new XStream(new DomDriver("UTF-8"));
+	        xstream = new XStream(new DomDriver(StandardCharsets.UTF_8.name()));
 	        xstream.setMode(XStream.NO_REFERENCES);
 	        xstream.alias("dashboard", UserDashboard.class);
 		}

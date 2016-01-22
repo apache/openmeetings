@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -309,7 +310,7 @@ public class LdapLoginManagement {
 			this.domainId = domainId;
 			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
 			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
-					Reader r = new InputStreamReader(is, "UTF-8"))
+					Reader r = new InputStreamReader(is, StandardCharsets.UTF_8))
 			{
 				config.load(r);
 				if (config.isEmpty()) {

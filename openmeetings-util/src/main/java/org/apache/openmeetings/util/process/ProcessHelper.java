@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -60,7 +61,7 @@ public class ProcessHelper {
 		private StreamWatcher(Process process, boolean isError) throws UnsupportedEncodingException {
 			output = new StringBuilder();
 			is = isError ? process.getErrorStream() : process.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		}
 	
 		@Override
