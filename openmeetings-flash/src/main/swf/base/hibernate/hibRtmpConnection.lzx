@@ -191,6 +191,8 @@
 		client.setNewModeratorByList = this.setNewModeratorByList;
 		client.newScreenSharing = this.newScreenSharing;
 		client.stopScreenSharingMessage = this.stopScreenSharingMessage;
+		client.stopRecordingMessage = this.stopRecordingMessage;
+		client.stopPublishingMessage = this.stopPublishingMessage;
 		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
 		client.nickNameSet = this.nickNameSet;
 	</handler>
@@ -804,21 +806,17 @@
 		]]>
 		</method>
 		
-		<netRemoteCallHib name="stopRecordingMessage" funcname="stopRecordingMessage">
-			<handler name="ondata" args="value">
-				//The onResult-Handler will be called be the rtmpconnection
-				canvas._mymod.recordingUser = null;
-				canvas._mymod.setMessage();				 
-			</handler>   
-		</netRemoteCallHib>
+		<method name="stopRecordingMessage" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			canvas._mymod.recordingUser = null;
+			canvas._mymod.setMessage();				 
+		</method>
 		
-		<netRemoteCallHib name="stopPublishingMessage" funcname="stopPublishingMessage">
-			<handler name="ondata" args="value">
-				//The onResult-Handler will be called be the rtmpconnection
-				canvas._mymod.publishingObj = null;
-				canvas._mymod.setMessage();				 
-			</handler>   
-		</netRemoteCallHib>
+		<method name="stopPublishingMessage" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			canvas._mymod.publishingObj = null;
+			canvas._mymod.setMessage();				 
+		</method>
 		
 		<netRemoteCallHib name="setSyncFlag" funcname="setSyncFlag" >	  
 			<handler name="ondata" args="value">
