@@ -18,9 +18,7 @@
 
 	<properties>
 		<title>Apache Derby Configuration</title>
-		<author email="sebawagner@apache.org">
-			Apache OpenMeetings Documentation Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>

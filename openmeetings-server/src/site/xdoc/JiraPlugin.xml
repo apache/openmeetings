@@ -16,18 +16,15 @@
 	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Jira Plugin</title>
-		<author email="eschwert@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
 
 		<section name="Jira Plugin for OpenMeetings">
+			<p>Sources are available at <a href="https://svn.apache.org/repos/asf/openmeetings/plugin/trunk/jira">https://svn.apache.org/repos/asf/openmeetings/plugin/trunk/jira</a></p>
 			<p>
-				Current Development Snapshots for testing can be downloaded from:
-				<a href="https://svn.apache.org/repos/asf/openmeetings/branches/jira-plugin/target/openmeetings-1.0-SNAPSHOT.jar">here</a>
-				.
+				To get SNAPSHOTS for testing please contact <a href="/mail-lists.html">Mailing lists</a>
 			</p>
 		</section>
 

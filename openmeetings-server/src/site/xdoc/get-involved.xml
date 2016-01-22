@@ -18,9 +18,7 @@
 
 	<properties>
 		<title>Get Involved</title>
-		<author email="dev@openmeetings.apache.org">
-			OpenMeetings Documentation Team
-		</author>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
