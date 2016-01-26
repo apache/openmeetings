@@ -208,9 +208,10 @@ public class FileExplorerItemDao {
 		log.debug("rename started");
 
 		FileExplorerItem f = get(id);
-
+		if (f == null) {
+			return null;
+		}
 		f.setName(name);
-
 		return update(f);
 	}
 
@@ -245,6 +246,9 @@ public class FileExplorerItemDao {
 		log.debug(".move() started");
 
 		FileExplorerItem f = get(id);
+		if (f == null) {
+			return null;
+		}
 
 		if (parentId < 0) {
 			if (parentId == -1) {

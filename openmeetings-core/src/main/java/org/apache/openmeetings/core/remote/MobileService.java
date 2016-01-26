@@ -206,23 +206,27 @@ public class MobileService {
 					c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
 						conn.getRemoteAddress(), "", null);
 				}
-				
-				SessionVariablesUtil.initClient(conn.getClient(), c.getPublicSID());
-				c.setUserId(u.getId());
-				c.setFirstname(u.getFirstname());
-				c.setLastname(u.getLastname());
-				c.setMobile(true);
-				sessionManager.updateClientByStreamId(streamId, c, false, null);
-
-				add(result, "sid", sd.getSessionId());
-				add(result, "publicSid", c.getPublicSID());
-				add(result, "status", 0);
-				add(result, "userId", u.getId());
-				add(result, "firstname", u.getFirstname());
-				add(result, "lastname", u.getLastname());
-				add(result, "login", u.getLogin());
-				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
-				add(result, "language", u.getLanguageId()); //TODO rights
+				if (c == null) {
+					// Failed to create client
+					result.put("status", -1);
+				} else {
+					SessionVariablesUtil.initClient(conn.getClient(), c.getPublicSID());
+					c.setUserId(u.getId());
+					c.setFirstname(u.getFirstname());
+					c.setLastname(u.getLastname());
+					c.setMobile(true);
+					sessionManager.updateClientByStreamId(streamId, c, false, null);
+	
+					add(result, "sid", sd.getSessionId());
+					add(result, "publicSid", c.getPublicSID());
+					add(result, "status", 0);
+					add(result, "userId", u.getId());
+					add(result, "firstname", u.getFirstname());
+					add(result, "lastname", u.getLastname());
+					add(result, "login", u.getLogin());
+					add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
+					add(result, "language", u.getLanguageId()); //TODO rights
+				}
 			}
 		}
 		return result;
