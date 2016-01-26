@@ -98,6 +98,9 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
 			SessionManager sessionManager = getBean(SessionManager.class);
 			Client rc = sessionManager.getClientByPublicSID(publicSid, null);//TODO not necessary
+			if (rc == null) {
+				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
+			}
 			String path = url.getPath();
 			path = path.substring(path.lastIndexOf('/') + 1);
 			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {

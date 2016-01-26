@@ -59,20 +59,17 @@ public class FlvExplorerConverter extends BaseConverter {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 			FileExplorerItem fileExplorerItem = fileDao.get(fileId);
-
-			log.debug("fileExplorerItem " + fileExplorerItem.getId());
-
-			//  Convert to FLV
-			return convertToFLV(fileExplorerItem, moviePath);
-
-			// Add empty pieces at the beginning and end of the wav
-			// FIXME: Is this really needed anymore?!
-
+			if (fileExplorerItem == null) {
+				returnLog.add(new ConverterProcessResult("startConversion", "Unable to get FileExplorerItem by ID: " + fileId, null));
+			} else {
+				log.debug("fileExplorerItem " + fileExplorerItem.getId());
+				//  Convert to FLV
+				return convertToFLV(fileExplorerItem, moviePath);
+			}
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			returnLog.add(new ConverterProcessResult("startConversion", err.getMessage(), err));
 		}
-
 		return returnLog;
 	}
 

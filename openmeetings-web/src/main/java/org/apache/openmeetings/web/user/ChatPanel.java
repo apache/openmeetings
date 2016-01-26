@@ -217,7 +217,10 @@ public class ChatPanel extends BasePanel {
 		for (Client c : getRoomUsers(m.getToRoom().getId())) {
 			try {
 				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Client.Right.moderator))) {
-					reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
+					IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
+					if (con != null) {
+						con.sendMessage(msg);
+					}
 				}
 			} catch (Exception e) {
 				log.error("Error while sending message to room", e);
@@ -276,7 +279,10 @@ public class ChatPanel extends BasePanel {
 							IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 							for (Client c : Application.getClients(getUserId())) {
 								try {
-									reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
+									IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
+									if (con != null) {
+										con.sendMessage(msg);
+									}
 								} catch (Exception e) {
 									log.error("Error while sending message to room", e);
 								}
@@ -284,7 +290,10 @@ public class ChatPanel extends BasePanel {
 							msg = getMessage(m.getToUser().getId(), Arrays.asList(m)).toString();
 							for (Client c : Application.getClients(m.getToUser().getId())) {
 								try {
-									reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
+									IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
+									if (con != null) {
+										con.sendMessage(msg);
+									}
 								} catch (Exception e) {
 									log.error("Error while sending message to room", e);
 								}
