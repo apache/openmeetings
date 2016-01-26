@@ -108,7 +108,7 @@ public class ErrorWebService {
     	if (sid != null && message != null) {
 	    	Long userId = sessionDao.checkSession(sid);
 	    	if (userId != null && userId != 0) {
-	    		log.debug("[CLIENT MESSAGE] " + message);
+	    		log.error("[CLIENT MESSAGE] " + message);
 	    	}
     	}
 	}
