@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +41,6 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -56,9 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class ConferenceLibrary implements IPendingServiceCallback {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, webAppRootKey);
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -73,17 +72,13 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private WhiteboardManager whiteboardManagement;
 
-	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
-			String parentFolder) {
-
+	public LibraryPresentation getPresentationPreviewFileExplorer(String SID, String parentFolder) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			log.debug("#############users_id : " + users_id);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
 
@@ -92,18 +87,14 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				if (!file.exists()) {
 					throw new Exception(file.getCanonicalPath() + ": does not exist");
 				}
-
 				return LoadLibraryPresentation.parseLibraryFileToObject(file);
-
 			} else {
 				throw new Exception("not Authenticated");
 			}
-
 		} catch (Exception e) {
 			log.error("[getListOfFilesByAbsolutePath]", e);
 			return null;
 		}
-
 	}
 
 	/**
@@ -116,8 +107,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param tObjectRef
 	 * @return - file-explorer Id in case of success, -1 otherwise
 	 */
-	public Long saveAsObject(String SID, Long room_id, String fileName,
-			Object tObjectRef) {
+	public Long saveAsObject(String SID, Long room_id, String fileName, Object tObjectRef) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
@@ -171,16 +161,18 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				IConnection current = Red5.getConnectionLocal();
-				Client currentClient = this.sessionManager
-						.getClientByStreamId(current.getClient().getId(), null);
+				Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 				if (currentClient == null) {
 					return;
 				}
 
 				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
+				if (fileExplorerItem == null) {
+					log.warn("[loadWmlObject] Unable to load Wml file by Id {}", fileId);
+					return;
+				}
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 
@@ -188,20 +180,16 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				whiteboardObjClear.put(2, "clear");
 				whiteboardObjClear.put(3, null);
 
-				whiteboardManagement.addWhiteBoardObjectById(
-						room_id, whiteboardObjClear, whiteboardId);
+				whiteboardManagement.addWhiteBoardObjectById(room_id, whiteboardObjClear, whiteboardId);
 
 				for (int k = 0; k < roomItems.size(); k++) {
-
-					ArrayList actionObject = (ArrayList) roomItems.get(k);
+					ArrayList actionObject = (ArrayList)roomItems.get(k);
 
 					Map whiteboardObj = new HashMap();
 					whiteboardObj.put(2, "draw");
 					whiteboardObj.put(3, actionObject);
 
-					whiteboardManagement.addWhiteBoardObjectById(
-							room_id, whiteboardObj, whiteboardId);
-
+					whiteboardManagement.addWhiteBoardObjectById(room_id, whiteboardObj, whiteboardId);
 				}
 
 				Map<String, Object> sendObject = new HashMap<String, Object>();
@@ -212,9 +200,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				for (IConnection conn : current.getScope().getClientConnections()) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							Client rcl = this.sessionManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
+							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 							if ((rcl == null) || rcl.isScreenClient()) {
 								continue;
 							} else {
@@ -243,8 +229,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()),
-						fileName);
+				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()), fileName);
 			}
 		} catch (Exception err) {
 			log.error("[loadChartObject] ", err);
@@ -259,7 +244,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 */
 	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
@@ -267,28 +251,22 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();
 
-				Client currentClient = this.sessionManager
-						.getClientByStreamId(streamid, null);
+				Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 				Long room_id = currentClient.getRoomId();
 
 				if (room_id != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir()
-						, "UPLOADFLV_" + flvFileExplorerId + ".flv");
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + ".flv");
 
 					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
 
-					File targetFullFlvFile = new File(targetFolder
-						, "UPLOADFLV_" + flvFileExplorerId + ".flv");
+					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + ".flv");
 					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
 						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}
-
 					return 1L;
 				}
-
 			}
-
 		} catch (Exception err) {
 			log.error("[copyFileToCurrentRoom] ", err);
 		}
@@ -297,7 +275,5 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

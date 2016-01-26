@@ -139,8 +139,8 @@ public class RoomPanel extends BasePanel {
 			if (!room.isEmpty()) {
 				roomId = room.toLong();
 			} else if (!secureHash.isEmpty()) {
-				SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(secureHash.toString());
 				if (WebSession.get().signIn(secureHash.toString(), false)) {
+					SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(secureHash.toString());
 					roomId = soapLogin.getRoomId();
 					pp = pp.mergeWith(RoomPanel.addServer(roomId, false));
 				}

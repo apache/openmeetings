@@ -80,7 +80,7 @@ public class UserContactDao {
 				.setParameter("userId", userId)
 				.setParameter("ownerId", ownerId)
 				.getResultList();
-		log.info("number of contacts:: " + ll.size());
+		log.info("number of contacts:: " + (ll == null ? null : ll.size()));
 		return ll != null && ll.size() == 1 ? ll.get(0) : null;
 	}
 	

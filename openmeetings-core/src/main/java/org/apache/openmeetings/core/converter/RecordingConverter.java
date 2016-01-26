@@ -59,6 +59,10 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			String finalNamePrefix = "flvRecording_" + recordingId;
 			recording = recordingDao.get(recordingId);
+			if (recording == null) {
+				log.warn("Conversion is NOT started. Recording with ID {} is not found", recordingId);
+				return;
+			}
 			log.debug("recording " + recording.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
@@ -195,8 +199,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			log.error("[startConversion]", err);
 			recording.setStatus(Recording.Status.ERROR);
 		}
-		if (recording != null) {
-			recordingDao.update(recording);
-		}
+		recordingDao.update(recording);
 	}
 }

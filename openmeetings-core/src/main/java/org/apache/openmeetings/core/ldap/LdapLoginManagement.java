@@ -368,7 +368,7 @@ public class LdapLoginManagement {
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
 				String attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
 				if (!Strings.isEmpty(attr)) {
-					for (String g : attr.split("|")) {
+					for (String g : attr.split("\\|")) {
 						groups.add(new Dn(g));
 					}
 				}

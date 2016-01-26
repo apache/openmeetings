@@ -201,8 +201,12 @@ public class ChatService implements IPendingServiceCallback {
 	@SuppressWarnings("unchecked")
 	public int sendMessageWithClientByPublicSID(Object newMessage, String publicSID) {
 		try {
+			if (publicSID == null) {
+				log.warn("Null publicSID was passed");
+				return -1;
+			}
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoomId();
 			Room room = roomDao.get(room_id);
 			log.debug("room_id: " + room_id);
@@ -229,13 +233,16 @@ public class ChatService implements IPendingServiceCallback {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
+						String clientPublicSid = SessionVariablesUtil.getPublicSID(client);
 						if (SessionVariablesUtil.isScreenClient(client)) {
 							// screen sharing clients do not receive events
 							continue;
 						}
+						if (clientPublicSid == null) {
+							continue;
+						}
 
-						if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)
-								|| SessionVariablesUtil.getPublicSID(client).equals(currentClient.getPublicSID())) {
+						if (publicSID.equals(clientPublicSid) || clientPublicSid.equals(currentClient.getPublicSID())) {
 							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 						}
 					}

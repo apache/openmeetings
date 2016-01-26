@@ -31,6 +31,7 @@ import org.apache.openmeetings.core.remote.UserService;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
@@ -152,7 +153,8 @@ public class ConnectionsPanel extends AdminPanel {
 			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
 				org.apache.openmeetings.web.app.Client c = item.getModelObject();
 				item.add(new Label("id", c.getUserId()));
-				item.add(new Label("login", getBean(UserService.class).getUserById(getSid(), c.getUserId()).getLogin()));
+				User u = getBean(UserService.class).getUserById(getSid(), c.getUserId());
+				item.add(new Label("login", u == null ? null : u.getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", "hibernate"));
 				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
@@ -161,8 +163,7 @@ public class ConnectionsPanel extends AdminPanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						org.apache.openmeetings.web.app.Client c = item.getModelObject();
-						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId()
-								, c.getSessionId());
+						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId(), c.getSessionId());
 						target.add(containerWeb, details.setVisible(false));
 					}
 				}.setEnabled(!c.getSessionId().equals(WebSession.get().getId())));

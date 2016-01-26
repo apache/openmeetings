@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -267,7 +268,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 							sql = "SELECT 1";
 							break;
 					}
-					valid &= conn.prepareStatement(sql).execute();
+					try (PreparedStatement ps = conn.prepareStatement(sql)) {
+						valid &= ps.execute();
+					}
 					if (!valid) {
 						form.error(getString("install.wizard.db.step.notvalid") + "<br/>" + getString("install.wizard.db.step.instructions." + props.getDbType().name()));
 					}
@@ -286,12 +289,17 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			try {
 				ConnectionPropertiesPatcher.patch(getModelObject());
 				XmlWebApplicationContext ctx = (XmlWebApplicationContext)getWebApplicationContext(Application.get().getServletContext());
+				if (ctx == null) {
+					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters("Web context is NULL").getObject());
+					log.error("Web context is NULL");
+					return;
+				}
 				LocalEntityManagerFactoryBean emb = ctx.getBeanFactory().getBean(LocalEntityManagerFactoryBean.class);
 				emb.afterPropertiesSet();
 				dbType = getModelObject().getDbType();
 			} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
-					log.error("error while patching", e);
+				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
+				log.error("error while patching", e);
 			}
 		}
 	};

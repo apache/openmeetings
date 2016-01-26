@@ -35,6 +35,9 @@ public class RoomBroadcaster {
 	
 	public static void broadcast(String publicSid, String method, Object obj) {
 		Client rc = getClient(publicSid);
+		if (rc == null) {
+			return;
+		}
 		final Long roomId = rc.getRoomId();
 		final SessionManager sessionMgr = getBean(SessionManager.class);
 		final UserDao userDao = getBean(UserDao.class);

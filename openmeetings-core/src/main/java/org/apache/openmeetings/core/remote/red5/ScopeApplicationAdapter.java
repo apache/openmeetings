@@ -1225,54 +1225,52 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			} else {
 				// If this is an Appointment then the Moderator will be set to the Invitor
-
 				Appointment ment = appointmentDao.getByRoom(roomId);
-
 				Long userIdInRoomClient = currentClient.getUserId();
-
 				boolean found = false;
 				boolean moderator_set = false;
-				// First check owner who is not in the members list
-				if (ment.getOwner().getId().equals(userIdInRoomClient)) {
-					found = true;
-					log.debug("User "
-							+ userIdInRoomClient
-							+ " is moderator due to flag in MeetingMember record");
-					currentClient.setIsMod(true);
-					moderator_set = true;
-
-					// Update the Client List
-					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-					List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-					// There is a need to send an extra Event here, cause at this moment 
-					// there could be already somebody in the Room waiting
-
-					//Sync message to everybody
-					sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-				}
-				if (!found) {
-					// Check if current user is set to moderator
-					for (MeetingMember member : ment.getMeetingMembers()) {
-						// only persistent users can schedule a meeting
-						// user-id is only set for registered users
-						if (member.getUser() != null) {
-							log.debug("checking user " + member.getUser().getFirstname()
-									+ " for moderator role - ID : "
-									+ member.getUser().getId());
+				if (ment != null) {
+					// First check owner who is not in the members list
+					if (ment.getOwner().getId().equals(userIdInRoomClient)) {
+						found = true;
+						log.debug("User "
+								+ userIdInRoomClient
+								+ " is moderator due to flag in MeetingMember record");
+						currentClient.setIsMod(true);
+						moderator_set = true;
 	
-							if (member.getUser().getId().equals(userIdInRoomClient)) {
-								found = true;
-								log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
-								currentClient.setIsMod(false);
-								sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-								break;
+						// Update the Client List
+						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+	
+						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
+	
+						// There is a need to send an extra Event here, cause at this moment 
+						// there could be already somebody in the Room waiting
+	
+						//Sync message to everybody
+						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+					}
+					if (!found) {
+						// Check if current user is set to moderator
+						for (MeetingMember member : ment.getMeetingMembers()) {
+							// only persistent users can schedule a meeting
+							// user-id is only set for registered users
+							if (member.getUser() != null) {
+								log.debug("checking user " + member.getUser().getFirstname()
+										+ " for moderator role - ID : "
+										+ member.getUser().getId());
+		
+								if (member.getUser().getId().equals(userIdInRoomClient)) {
+									found = true;
+									log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
+									currentClient.setIsMod(false);
+									sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+									break;
+								}
 							}
 						}
 					}
 				}
-
 				if (!found) {
 					log.debug("User "
 							+ userIdInRoomClient

@@ -292,10 +292,12 @@ public class DownloadHandler extends BaseHttpServlet {
 	private String getChatUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
-			for (int i = 0; i < filesString.length; i++) {
-				String fileName = filesString[i];
-				if (fileName.startsWith(chatImagePrefix))
-					return fileName;
+			if (filesString != null) {
+				for (String fileName : filesString) {
+					if (fileName.startsWith(chatImagePrefix)) {
+						return fileName;
+					}
+				}
 			}
 		}
 		return "_no.jpg";
@@ -304,10 +306,12 @@ public class DownloadHandler extends BaseHttpServlet {
 	private String getBigProfileUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
-			for (int i = 0; i < filesString.length; i++) {
-				String fileName = filesString[i];
-				if (fileName.startsWith(bigImagePrefix))
-					return fileName;
+			if (filesString != null) {
+				for (String fileName : filesString) {
+					if (fileName.startsWith(bigImagePrefix)) {
+						return fileName;
+					}
+				}
 			}
 		}
 		return "_no.jpg";

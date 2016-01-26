@@ -160,7 +160,8 @@ public class CalendarWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return new AppointmentDTO(appointmentDao.getNext(userId, new Date()));
+				Appointment a = appointmentDao.getNext(userId, new Date());
+				return a == null ? null : new AppointmentDTO(a);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -189,7 +190,8 @@ public class CalendarWebService {
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				return new AppointmentDTO(appointmentDao.getNext(userid, new Date()));
+				Appointment a = appointmentDao.getNext(userid, new Date());
+				return a == null ? null : new AppointmentDTO(a);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
