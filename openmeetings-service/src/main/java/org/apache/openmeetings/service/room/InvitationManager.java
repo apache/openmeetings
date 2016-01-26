@@ -23,7 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.Vector;
@@ -125,22 +125,20 @@ public class InvitationManager implements IInvitationManager {
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
 			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
-			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
+			Map<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
 
-			Vector<HashMap<String, String>> atts = new Vector<HashMap<String, String>>();
+			Vector<Map<String, String>> atts = new Vector<Map<String, String>>();
 			atts.add(attendeeList);
 
 			// Defining Organizer
 
-			HashMap<String, String> organizerAttendee = handler.getAttendeeData(email, username, isOwner);
+			Map<String, String> organizerAttendee = handler.getAttendeeData(email, username, isOwner);
 			organizerAttendee = handler.getAttendeeData(replyToEmail, owner.getLogin(), isOwner);
 
 			Appointment a = i.getAppointment();
 			// Create ICal Message
-			//FIXME should be checked to generate valid time
-			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(),
-					a.getTitle(), atts, invitation_link,
-					organizerAttendee, a.getIcalId(), timezoneUtil.getTimeZone(owner));
+			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(), a.getTitle(), atts, invitation_link,
+					organizerAttendee, a.getIcalId(), timezoneUtil.getTimeZone(owner).getID());
 
 			// Writing back meetingUid
 			if (Strings.isEmpty(a.getIcalId())) {
