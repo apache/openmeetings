@@ -496,6 +496,7 @@
 	 -->
 	<method name="updateModerationFlag">
 	<![CDATA[
+		var isCurrentModerator = false;
 		if ($debug) Debug.write("updateModerationFlag", canvas.removeModeratorList);
 		for (var i = 0; i < canvas.removeModeratorList.length; ++i) {
 			var item = canvas.removeModeratorList[i];
@@ -505,7 +506,6 @@
 				u.update(item, false);
 			}
 		}
-		var isCurrentModerator = false;
 		if ($debug) Debug.write("updateModerationFlag", canvas.currentModeratorList);
 		for (var i = 0; i < canvas.currentModeratorList.length; ++i) {
 			var item = canvas.currentModeratorList[i];
@@ -520,7 +520,11 @@
 		
 		// do always spread this event, we need to broadcast the "onismoderator" event
 		// so that we can update the status of other users in the user list
-		this.setAttribute('ismoderator', isCurrentModerator);
+		try {
+			canvas.setAttribute('ismoderator', isCurrentModerator);
+		} catch (e:Error) {
+			if ($debug) Debug.error("updateModerationFlag::error ", e);
+		}
 	]]>
 	</method> 
 	

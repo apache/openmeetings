@@ -145,11 +145,11 @@
 		if (!!lastname) {
 			n += delim + lastname;
 		}
-		if ($debug) Debug.write(" :: getUName :: ", !n, !!refObj, refObj);
+		//if ($debug) Debug.write(" :: getUName :: ", !n, !!refObj, refObj);
 		if (!n && !!refObj && !!refObj.email) {
 			n = refObj.email;
 		}
-		if ($debug) Debug.write(" :: getUName :: ", n);
+		//if ($debug) Debug.write(" :: getUName :: ", n);
 		return n;
 	]]>
 	</method>

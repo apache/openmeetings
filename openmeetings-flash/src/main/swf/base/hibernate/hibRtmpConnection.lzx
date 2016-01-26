@@ -1457,9 +1457,14 @@
 	
 	<method name="nickNameSet" args="value">
 		if ($debug) Debug.write("nickNameSet: ", value);
+		canvas.currentClient = value;
 		canvas.setAttribute('mail', value.email);
 		canvas.setAttribute('firstName', value.firstname);
 		canvas.setAttribute('lastName', value.lastname);
+		var v = canvas.commonVideoViewContent.getVideoObjectByPublicSID(value.publicSID);
+		if (v != null) {
+			v.setAttribute('chatpartnername', canvas.currentClient.firstname + ' ' + canvas.currentClient.lastname);
+		}
 		if (canvas._videocontainer) {
 			var vo = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
 			if (vo != null) {
