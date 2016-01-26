@@ -25,9 +25,11 @@ import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
@@ -58,13 +60,12 @@ import org.slf4j.Logger;
  */
 public class IcalHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(IcalHandler.class, webAppRootKey);
+	static {
+		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
+	}
 
 	/** ICal instance */
-	private final net.fortuna.ical4j.model.Calendar icsCalendar;
-
-	/** TimeZone */
-	// private TimeZone timeZone;
-	// private TimeZoneRegistry timeRegistry;
+	private final Calendar icsCalendar;
 
 	/** Creation of a new Event */
 	public final static Method ICAL_METHOD_REQUEST = Method.REQUEST;
@@ -72,7 +73,7 @@ public class IcalHandler {
 	public final static Method ICAL_METHOD_REFRESH = Method.REFRESH;
 
 	/**
-	 * Constructor with DefaultTimeZone
+	 * Constructor
 	 * 
 	 * @param method
 	 *            (@see IcalHandler Constants)
@@ -81,14 +82,10 @@ public class IcalHandler {
 	public IcalHandler(Method method) {
 		log.debug("Icalhandler method type : " + method);
 		
-		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
-		
-		icsCalendar = new net.fortuna.ical4j.model.Calendar();
-
+		icsCalendar = new Calendar();
 		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
-		
 		icsCalendar.getProperties().add(method);
 	}
 
@@ -101,24 +98,25 @@ public class IcalHandler {
 	 * @param name
 	 *            meeting name
 	 * @param attendees
-	 *            List of attendees (use getAttendeeData to retrieve valid
-	 *            records)
+	 *            List of attendees (use getAttendeeData to retrieve valid records)
 	 * @param description
 	 *            containing the meeting description
+	 * @param organizer
+	 *            organizer
 	 * @param uid
 	 *            (maybe null)
+	 * @param javaTzId ID of owner's java time zone
 	 * @return UID of Meeting
 	 */
 	// ---------------------------------------------------------------------------------------
-	public String addNewMeeting(Date startDate,
-			Date endDate, String name,
-			Vector<HashMap<String, String>> attendees, String description,
-			HashMap<String, String> organizer, String uid, java.util.TimeZone normalTimeZone)
-			throws Exception {
+	public String addNewMeeting(Date startDate, Date endDate, String name,
+			Vector<Map<String, String>> attendees, String description,
+			Map<String, String> organizer, String uid, String javaTzId) throws Exception
+	{
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		
-		TimeZone timeZone = registry.getTimeZone(normalTimeZone.getID());
+		TimeZone timeZone = registry.getTimeZone(javaTzId);
 
 		DateTime start = new DateTime(startDate);
 		start.setTimeZone(timeZone);
@@ -144,19 +142,11 @@ public class IcalHandler {
 
 		meeting.getProperties().add(ui);
 
-		for (int i = 0; i < attendees.size(); i++) {
-			HashMap<String, String> oneAtt = attendees.get(i);
-
-			Attendee uno = new Attendee(URI.create(oneAtt.get("uri")));
-
-			String chair = oneAtt.get("chair");
-
-			if (chair.equals("0"))
-				uno.getParameters().add(Role.REQ_PARTICIPANT);
-			else
-				uno.getParameters().add(Role.CHAIR);
-
-			uno.getParameters().add(new Cn(oneAtt.get("cn")));
+		for (Map<String, String> att : attendees) {
+			Attendee uno = new Attendee(URI.create(att.get("uri")));
+			String chair = att.get("chair");
+			uno.getParameters().add("0".equals(chair) ? Role.REQ_PARTICIPANT : Role.CHAIR);
+			uno.getParameters().add(new Cn(att.get("cn")));
 			meeting.getProperties().add(uno);
 		}
 
@@ -169,36 +159,25 @@ public class IcalHandler {
 		icsCalendar.getComponents().add(meeting);
 
 		return ui.getValue();
-
 	}
-
-	// ---------------------------------------------------------------------------------------
 
 	/**
 	 * Use this function to build a valid record for the AttendeeList for
 	 * addMeetings Generate a Attendee
 	 */
-	// ------------------------------------------------------------------------------------------
-	public HashMap<String, String> getAttendeeData(String emailAdress,
-			String displayName, Boolean chair) {
-
-		HashMap<String, String> oneRecord = new HashMap<String, String>();
+	public Map<String, String> getAttendeeData(String emailAdress, String displayName, boolean chair) {
+		Map<String, String> oneRecord = new HashMap<String, String>();
 		oneRecord.put("uri", "mailto:" + emailAdress);
 		oneRecord.put("cn", displayName);
 		oneRecord.put("chair", chair ? "1" : "0");
 
 		return oneRecord;
-
 	}
-
-	// ------------------------------------------------------------------------------------------
 
 	/**
 	 * Write iCal to File
 	 */
-	// ------------------------------------------------------------------------------------------
 	public void writeDataToFile(String filerPath) throws Exception {
-
 		if (!filerPath.endsWith(".ics")) {
 			filerPath = filerPath + ".ics";
 		}
@@ -209,30 +188,20 @@ public class IcalHandler {
 		}
 	}
 
-	// ------------------------------------------------------------------------------------------
-
 	/**
 	 * Get IcalBody as ByteArray
 	 */
-	// ------------------------------------------------------------------------------------------
 	public byte[] getIcalAsByteArray() throws Exception {
-
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(icsCalendar, bout);
 		return bout.toByteArray();
-
 	}
-
-	// ------------------------------------------------------------------------------------------
 
 	/**
 	 * Retrieving Data as String
 	 */
-	// ------------------------------------------------------------------------------------------
 	public String getICalDataAsString() {
 		return icsCalendar.toString();
 	}
-	// ------------------------------------------------------------------------------------------
-
 }

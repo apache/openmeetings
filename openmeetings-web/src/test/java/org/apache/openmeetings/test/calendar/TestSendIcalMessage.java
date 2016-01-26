@@ -22,13 +22,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -43,12 +42,22 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.util.mail.ByteArrayDataSource;
+import org.apache.openmeetings.util.mail.IcalHandler;
+import org.apache.openmeetings.util.mail.SmtpAuthenticator;
+import org.apache.wicket.util.string.Strings;
+import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -61,16 +70,6 @@ import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
-
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.mail.ByteArrayDataSource;
-import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.openmeetings.util.mail.SmtpAuthenticator;
-import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestSendIcalMessage.class, webAppRootKey);
@@ -87,8 +86,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	
 	public void simpleInvitionIcalLink() {
 		// Create a TimeZone
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance()
-				.createRegistry();
+		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		TimeZone timezone = registry.getTimeZone("America/Mexico_City");
 		VTimeZone tz = timezone.getVTimeZone();
 
@@ -160,11 +158,8 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 		
 		icsCalendar.getProperties().add(Method.REQUEST);
 		
-		System.out.println(icsCalendar);
+		log.debug(icsCalendar.toString());
 		
-		
-		
-
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		try {
@@ -172,10 +167,6 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 			iCalMimeBody = bout.toByteArray();
 			
 			sendIcalMessage();
-		} catch (IOException e) {
-			log.error("Error", e);
-		} catch (ValidationException e) {
-			log.error("Error", e);
 		} catch (Exception e) {
 			log.error("Error", e);
 		}
@@ -185,33 +176,26 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	@Test
 	public void sendInvitionIcalLink() {
 		try {
-
 			String email = "hans@webbase-design.de";
 			String username = "shans";
 			boolean invitor = false;
 
 			Calendar start = Calendar.getInstance();
-
 			Calendar end = Calendar.getInstance();
-
-			IcalHandler handler = new IcalHandler(
-					IcalHandler.ICAL_METHOD_REQUEST);
+			IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
 			// Transforming Meeting Members
 
-			HashMap<String, String> attendeeList = handler.getAttendeeData(
-					email, username, invitor);
+			Map<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
+			Map<String, String> organizerAttendee = handler.getAttendeeData(recipients, "seba-test", true);
 
-			HashMap<String, String> organizerAttendee = handler
-					.getAttendeeData(recipients, "seba-test", true);
-
-			Vector<HashMap<String, String>> atts = new Vector<HashMap<String, String>>();
+			Vector<Map<String, String>> atts = new Vector<Map<String, String>>();
 			atts.add(attendeeList);
 
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(start.getTime(), end.getTime(), "test event",
 					atts, "localhost:5080/link_openmeetings",
-					organizerAttendee, "", TimeZone.getDefault());
+					organizerAttendee, "", TimeZone.getDefault().getID());
 
 			log.debug("meetingId " + meetingId);
 
@@ -227,7 +211,6 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	}
 
 	private void sendIcalMessage() throws Exception {
-
 		log.debug("sendIcalMessage");
 
 		// Evaluating Configuration Data
@@ -249,12 +232,10 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 		// Check for Authentification
 		Session session = null;
-		if (emailUsername != null && emailUsername.length() > 0
-				&& emailUserpass != null && emailUserpass.length() > 0) {
+		if (!Strings.isEmpty(emailUsername) && !Strings.isEmpty(emailUserpass)) {
 			// use SMTP Authentication
 			props.put("mail.smtp.auth", "true");
-			session = Session.getDefaultInstance(props, new SmtpAuthenticator(
-					emailUsername, emailUserpass));
+			session = Session.getDefaultInstance(props, new SmtpAuthenticator(emailUsername, emailUserpass));
 		} else {
 			// not use SMTP Authentication
 			session = Session.getDefaultInstance(props, null);
@@ -264,8 +245,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 		MimeMessage mimeMessage = new MimeMessage(session);
 		mimeMessage.setSubject(subject);
 		mimeMessage.setFrom(new InternetAddress(from));
-		mimeMessage.addRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(recipients, false));
+		mimeMessage.addRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients, false));
 
 		// -- Create a new message --
 		BodyPart msg = new MimeBodyPart();
@@ -293,6 +273,5 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 		// Transport trans = session.getTransport("smtp");
 		Transport.send(mimeMessage);
-
 	}
 }
