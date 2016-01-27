@@ -137,9 +137,8 @@ public class FlvExplorerConverter extends BaseConverter {
 			String[] resultions = foundResolution.split("x");
 			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
-	    }
+		}
 		
-		return null;
+		throw new Exception("Failed to get FLV dimension: " + txt);
 	}
-	
 }

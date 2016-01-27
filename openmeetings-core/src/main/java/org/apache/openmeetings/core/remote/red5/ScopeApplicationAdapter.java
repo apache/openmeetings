@@ -1008,6 +1008,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setUserAVSettings {} {} {}", new Object[] {streamid, publicSID, avsettings, newMessage});
 			Client parentClient = sessionManager.getClientByPublicSID(publicSID, null);
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			if (parentClient == null || currentClient == null) {
+				log.warn("Failed to find appropriate clients");
+				return null;
+			}
 			currentClient.setAvsettings(avsettings);
 			currentClient.setRoomId(roomId);
 			currentClient.setPublicSID(publicSID);
@@ -1835,7 +1839,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
 
-			// log.debug("webAppKeyScope "+webAppKeyScope);
+			if (publicSID == null) {
+				log.warn("'null' publicSID was passed to sendMessageWithClientByPublicSID");
+				return;
+			}
 
 			// Get Room Id to send it to the correct Scope
 			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
@@ -1863,7 +1870,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						continue;
 					}
 					
-					if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
+					if (publicSID.equals(SessionVariablesUtil.getPublicSID(client))) {
 						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
 					}
 				}

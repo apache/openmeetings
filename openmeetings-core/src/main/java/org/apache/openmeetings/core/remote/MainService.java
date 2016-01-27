@@ -254,9 +254,13 @@ public class MainService implements IPendingServiceCallback {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
 				if (sd == null || sd.getXml() == null) {
-					return new Long(-37);
+					return -37L;
 				} else {
 					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getXml());
+					if (userObject == null) {
+						log.warn("Failed to get user object by XML");
+						return -1L;
+					}
 
 					log.debug(userObject.toString());
 
@@ -314,13 +318,13 @@ public class MainService implements IPendingServiceCallback {
 
 					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 
-					return new Long(1);
+					return 1L;
 				}
 			}
 		} catch (Exception err) {
 			log.error("[loginUserByRemote] ", err);
 		}
-		return new Long(-1);
+		return -1L;
 	}
 
 	/**

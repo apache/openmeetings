@@ -385,8 +385,8 @@ public class FileWebService {
 				// FIXME TODO: check if this user is allowed to change this file
 
 				log.debug("rename " + id);
-
-				return new FileExplorerItemDTO(fileDao.rename(id, name));
+				FileExplorerItem f = fileDao.rename(id, name);
+				return f == null ? null : new FileExplorerItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -423,7 +423,8 @@ public class FileWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				// FIXME TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);
-				return new FileExplorerItemDTO(fileDao.move(id, parentId, userId, roomId));
+				FileExplorerItem f = fileDao.move(id, parentId, userId, roomId);
+				return f == null ? null : new FileExplorerItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
