@@ -88,7 +88,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public Boolean deleteWhiteboard(Long whiteBoardId) {
+	public boolean deleteWhiteboard(Long whiteBoardId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -104,13 +104,11 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			if (returnValue != null) {
 				return true;
-			} else {
-				return false;
 			}
 		} catch (Exception err) {
 			log.error("[deleteWhiteboard]", err);
 		}
-		return null;
+		return false;
 	}
 
 	public WhiteboardObjectList getRoomItemsBy() {

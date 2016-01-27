@@ -280,37 +280,15 @@ public class RoomManager {
 		return null;
 	}
 
-	public List<Room> getRoomsByIds(List<Integer> roomIds) {
+	public List<Room> getRoomsByIds(List<Long> roomIds) {
 		try {
-			if (roomIds == null || roomIds.size() == 0) {
-				return new LinkedList<Room>();
+			if (roomIds != null && !roomIds.isEmpty()) {
+				return roomDao.get(roomIds);
 			}
-
-			String queryString = "SELECT r from Room r " + "WHERE ";
-
-			queryString += "(";
-
-			int i = 0;
-			for (Integer roomId : roomIds) {
-				if (i != 0) {
-					queryString += " OR ";
-				}
-				queryString += " r.id = " + roomId;
-				i++;
-			}
-
-			queryString += ")";
-
-			TypedQuery<Room> q = em.createQuery(queryString, Room.class);
-
-			List<Room> ll = q.getResultList();
-
-			return ll;
-
 		} catch (Exception ex2) {
 			log.error("[getRoomsByIds] ", ex2);
 		}
-		return null;
+		return new LinkedList<Room>();
 	}
 
 	// ---------------------------------------------------------------------------------------------

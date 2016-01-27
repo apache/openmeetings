@@ -55,9 +55,9 @@ public interface IUserManager {
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	/** TODO FIXME seems to be unused **/
-	Boolean kickUserByStreamId(String SID, Long roomId);
+	boolean kickUserByStreamId(String SID, Long roomId);
 	
-	Boolean kickUserByPublicSID(String SID, String publicSID);
+	boolean kickUserByPublicSID(String SID, String publicSID);
 	
 	Long logout(String SID, long userId);
 	
