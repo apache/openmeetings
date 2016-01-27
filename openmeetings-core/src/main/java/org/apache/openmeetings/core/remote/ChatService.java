@@ -21,18 +21,18 @@ package org.apache.openmeetings.core.remote;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.openmeetings.core.data.whiteboard.EmoticonsManager;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
@@ -65,7 +65,7 @@ public class ChatService implements IPendingServiceCallback {
 	//number of items in the chat room history
 	private static final int chatRoomHistory = 50;
 	
-	private static LinkedHashMap<Long,List<HashMap<String,Object>>> myChats = new LinkedHashMap<Long,List<HashMap<String,Object>>>();
+	private static Map<Long,List<Map<String,Object>>> myChats = new LinkedHashMap<Long,List<Map<String,Object>>>();
 	
 	private String parseDateAsTimeString() {
 		Calendar cal=Calendar.getInstance();
@@ -130,15 +130,15 @@ public class ChatService implements IPendingServiceCallback {
 			// adding delimiter space, cause otherwise an emoticon in the last
 			// string would not be found
 			String messageText = messageMap.get(4) + " ";
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
+			List<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
 			// log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
 			newMessage = messageMap;			
 
 			boolean needModeration = Boolean.valueOf("" + messageMap.get(9));
-			List<HashMap<String, Object>> myChatList = myChats.get(roomId);
-			if (myChatList == null) myChatList = new LinkedList<HashMap<String, Object>>();
+			List<Map<String, Object>> myChatList = myChats.get(roomId);
+			if (myChatList == null) myChatList = new LinkedList<Map<String, Object>>();
 			
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("message", newMessage);
@@ -183,7 +183,7 @@ public class ChatService implements IPendingServiceCallback {
 						if (rcl.isScreenClient()) {
     						continue;
     					}
-						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
+						if (needModeration && !rcl.getIsMod() && !Boolean.TRUE.equals(rcl.getIsSuperModerator())) {
 							continue;
 						}
 						((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
@@ -218,7 +218,7 @@ public class ChatService implements IPendingServiceCallback {
 			String messageText = messageMap.get(4).toString() + " ";
 			// add server time
 			messageMap.set(1, parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
+			List<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
 			// log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
@@ -255,7 +255,7 @@ public class ChatService implements IPendingServiceCallback {
 		return 1;
 	}
 
-	public List<HashMap<String,Object>> clearChat() {
+	public List<Map<String,Object>> clearChat() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -264,8 +264,8 @@ public class ChatService implements IPendingServiceCallback {
 			Long chatroom = room_id;
 			log.debug("### GET CHATROOM: "+chatroom);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(chatroom);
-			myChatList = new LinkedList<HashMap<String,Object>>();
+			List<Map<String,Object>> myChatList = myChats.get(chatroom);
+			myChatList = new LinkedList<Map<String,Object>>();
 			
 			myChats.put(chatroom,myChatList);
 			
@@ -281,7 +281,7 @@ public class ChatService implements IPendingServiceCallback {
 		}
 	}
 	
-	public List<HashMap<String,Object>> getRoomChatHistory() {
+	public List<Map<String,Object>> getRoomChatHistory() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -289,12 +289,12 @@ public class ChatService implements IPendingServiceCallback {
 			
 			log.debug("GET CHATROOM: " + roomId);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(roomId);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
+			List<Map<String,Object>> myChatList = myChats.get(roomId);
+			if (myChatList==null) myChatList = new LinkedList<Map<String,Object>>();
 			
 			if (!currentClient.getIsMod() && !currentClient.getIsSuperModerator()) {
 				//current user is not moderator, chat history need to be filtered
-				List<HashMap<String,Object>> tmpChatList = new LinkedList<HashMap<String,Object>>(myChatList);
+				List<Map<String,Object>> tmpChatList = new LinkedList<Map<String,Object>>(myChatList);
 				for (int i = tmpChatList.size() - 1; i > -1; --i) {
 					@SuppressWarnings("rawtypes")
 					List msgList = (List)tmpChatList.get(i).get("message");
@@ -318,14 +318,13 @@ public class ChatService implements IPendingServiceCallback {
 	 * @param room_id
 	 * @return - chat history of the room given, null in case of exception
 	 */
-	public List<HashMap<String,Object>> getRoomChatHistoryByString(Long room_id) {
+	public List<Map<String,Object>> getRoomChatHistoryByString(Long room_id) {
 		try {
-			
 			Long chatroom = room_id;
 			log.debug("GET CHATROOM: "+chatroom);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(chatroom);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();	
+			List<Map<String,Object>> myChatList = myChats.get(chatroom);
+			if (myChatList==null) myChatList = new LinkedList<Map<String,Object>>();	
 			
 			return myChatList;
 		} catch (Exception err) {
@@ -339,13 +338,12 @@ public class ChatService implements IPendingServiceCallback {
 		log.error("resultReceived ChatService "+arg0);
 	}
 	
-	public LinkedList<LinkedList<String>> getAllPublicEmoticons(){
+	public List<List<String>> getAllPublicEmoticons(){
 		try {
-			LinkedList<LinkedList<String>> publicemotes = new LinkedList<LinkedList<String>>();
-			LinkedList<LinkedList<String>> allEmotes = emoticonsManager.getEmotfilesList();
-			for (Iterator<LinkedList<String>> iter = allEmotes.iterator();iter.hasNext();){
-				LinkedList<String> emot = iter.next();
-				LinkedList<String> emotPub = new LinkedList<String>();
+			List<List<String>> publicemotes = new LinkedList<List<String>>();
+			List<List<String>> allEmotes = emoticonsManager.getEmotfilesList();
+			for (List<String> emot : allEmotes){
+				List<String> emotPub = new LinkedList<>();
 				if (emot.get((emot.size()-1)).equals("y")){
 					emotPub.add(emot.get(0));
 					emotPub.add(emot.get(1).replace("\\", ""));

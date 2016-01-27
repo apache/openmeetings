@@ -20,8 +20,8 @@ package org.apache.openmeetings.util.stringhandlers;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,9 +41,9 @@ public class ChatString {
 		return result;
 	}
 	
-	public static LinkedList<String[]> parseChatString(String message, LinkedList<LinkedList<String>> emotFiles, boolean allowHTML) {
+	public static List<String[]> parseChatString(String message, List<List<String>> emotFiles, boolean allowHTML) {
 		try {
-			LinkedList<String[]> list = new LinkedList<String[]>();
+			List<String[]> list = new LinkedList<>();
 
 			// log.debug("this.link(message) "+this.link(message));
 
@@ -53,17 +53,15 @@ public class ChatString {
 			String[] messageStr = { "text", message };
 			list.add(messageStr);
 
-			for (LinkedList<String> emot : emotFiles) {
+			for (List<String> emot : emotFiles) {
 				// log.error("CHECK EMOT: "+ emot.get(0) + emot.get(1) +
 				// emot.size());
-				list = splitStr(list, emot.get(0), emot.get(1),
-						emot.get(emot.size() - 2));
+				list = splitStr(list, emot.get(0), emot.get(1), emot.get(emot.size() - 2));
 
 				if (emot.size() > 4) {
 					// log.error("CHECK EMOT ASIAN: "+ emot.get(0) + emot.get(2)
 					// + emot.size());
-					list = splitStr(list, emot.get(0), emot.get(2),
-							emot.get(emot.size() - 2));
+					list = splitStr(list, emot.get(0), emot.get(2), emot.get(emot.size() - 2));
 				}
 			}
 
@@ -82,14 +80,10 @@ public class ChatString {
 		return null;
 	}
 
-	private static LinkedList<String[]> splitStr(LinkedList<String[]> list,
-			String image, String regexp, String spaces) {
+	private static List<String[]> splitStr(List<String[]> list, String image, String regexp, String spaces) {
+		List<String[]> newList = new LinkedList<>();
 
-		LinkedList<String[]> newList = new LinkedList<String[]>();
-
-		for (Iterator<String[]> iter = list.iterator(); iter.hasNext();) {
-
-			String[] messageObj = iter.next();
+		for (String[] messageObj : list) {
 			String messageTye = messageObj[0];
 
 			if (messageTye.equals("text")) {
@@ -101,8 +95,7 @@ public class ChatString {
 					String[] textA = { "text", newStr[k] };
 					newList.add(textA);
 					if (k + 1 != newStr.length) {
-						String[] imageA = { "image", image, spaces,
-								regexp.replace("\\", "") };
+						String[] imageA = { "image", image, spaces, regexp.replace("\\", "") };
 						newList.add(imageA);
 					}
 				}
@@ -116,10 +109,10 @@ public class ChatString {
 		return newList;
 	}
 
-	public static LinkedList<LinkedList<String>> replaceAllRegExp(LinkedList<LinkedList<String>> emotFiles) {
-		LinkedList<LinkedList<String>> emotfilesListNew = new LinkedList<LinkedList<String>>();
+	public static List<List<String>> replaceAllRegExp(List<List<String>> emotFiles) {
+		List<List<String>> emotfilesListNew = new LinkedList<List<String>>();
 		try {
-			for (LinkedList<String> emot : emotFiles) {
+			for (List<String> emot : emotFiles) {
 				// log.error("FILE: "+emot.get(0));
 				String westernMeaning = checkforRegex(emot.get(1));
 				emot.set(1, westernMeaning);

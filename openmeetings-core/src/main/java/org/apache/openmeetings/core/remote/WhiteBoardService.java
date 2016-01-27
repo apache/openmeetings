@@ -149,7 +149,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * @param canDraw
 	 * @return null in case of success, false otherwise
 	 */
-	public Boolean setCanDraw(String SID, String publicSID, boolean canDraw) {
+	public boolean setCanDraw(String SID, String publicSID, boolean canDraw) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -158,7 +158,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				if (currentClient.getIsMod()) {
 					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
@@ -170,20 +169,17 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
-					} else {
-						return false;
+						return true;
 					}
-				} else {
-					return false;
 				}
 			}
 		} catch (Exception err) {
 			log.error("[setCanDraw]", err);
 		}
-		return null;
+		return false;
 	}
 
-	public Boolean setCanShare(String SID, String publicSID, boolean canShare) {
+	public boolean setCanShare(String SID, String publicSID, boolean canShare) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -203,20 +199,17 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
-					} else {
-						return false;
+						return true;
 					}
-				} else {
-					return false;
 				}
 			}
 		} catch (Exception err) {
 			log.error("[setCanShare]", err);
 		}
-		return null;
+		return false;
 	}
 
-	public Boolean setCanRemote(String SID, String publicSID, boolean canRemote) {
+	public boolean setCanRemote(String SID, String publicSID, boolean canRemote) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -236,20 +229,17 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
-					} else {
-						return false;
+						return true;
 					}
-				} else {
-					return false;
 				}
 			}
 		} catch (Exception err) {
 			log.error("[setCanDraw]", err);
 		}
-		return null;
+		return false;
 	}
 
-    public Boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
+    public boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
 		try {
             log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
@@ -270,17 +260,14 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				        newMessage.put(0, "updateGiveAudioStatus");
 				        newMessage.put(1, rcl);
 				        scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
-					} else {
-						return false;
+						return true;
 					}
-				} else {
-					return false;
 				}
 			}
 		} catch (Exception err) {
 			log.error("[setCanGiveAudio]", err);
 		}
-		return null;
+		return false;
 	}
 
 	public WhiteboardSyncLockObject startNewSyncprocess() {
@@ -503,26 +490,29 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Cliparts cl = new Cliparts();
 			cl.setFolderName("general");
 
-			String[] files_general = clipart_dir.list(getFilesOnly);
 			Comparator<String> comparator = ComparatorUtils.naturalComparator();
-			Arrays.sort(files_general, comparator);
-
-			cl.setGeneralList(files_general);
+			String[] files_general = clipart_dir.list(getFilesOnly);
+			if (files_general != null) {
+				Arrays.sort(files_general, comparator);
+				cl.setGeneralList(files_general);
+			}
 			cl.setSubCategories(new LinkedList<Cliparts>());
 
-			for (File dir : clipart_dir.listFiles(getDirectoriesOnly)) {
-				Cliparts cl_sub = new Cliparts();
-				cl_sub.setFolderName("math");
-				String[] files = dir.list(getFilesOnly);
-				if (files != null) {
-					Arrays.sort(files, comparator);
-					cl_sub.setGeneralList(files);
-					cl.getSubCategories().add(cl_sub);
+			File[] dirs = clipart_dir.listFiles(getDirectoriesOnly);
+			if (dirs != null) {
+				for (File dir : dirs) {
+					Cliparts cl_sub = new Cliparts();
+					cl_sub.setFolderName("math");
+					String[] files = dir.list(getFilesOnly);
+					if (files != null) {
+						Arrays.sort(files, comparator);
+						cl_sub.setGeneralList(files);
+						cl.getSubCategories().add(cl_sub);
+					}
 				}
 			}
 
 			return cl;
-
 		} catch (Exception err) {
 			log.error("[getClipArtIcons]", err);
 		}

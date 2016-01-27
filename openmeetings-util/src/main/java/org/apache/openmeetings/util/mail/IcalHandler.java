@@ -117,6 +117,9 @@ public class IcalHandler {
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		
 		TimeZone timeZone = registry.getTimeZone(javaTzId);
+		if (timeZone == null) {
+			throw new Exception("Unable to get time zone by id provided: " + javaTzId);
+		}
 
 		DateTime start = new DateTime(startDate);
 		start.setTimeZone(timeZone);

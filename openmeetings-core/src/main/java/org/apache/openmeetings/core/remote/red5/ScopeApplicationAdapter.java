@@ -172,6 +172,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Client rcm = sessionManager.addClientListItem(conn.getClient().getId(),
 				conn.getScope().getName(), conn.getRemotePort(),
 				conn.getRemoteAddress(), swfURL, null);
+		if (rcm == null) {
+			log.warn("Failed to create Client on room connect");
+			return false;
+		}
 		
 		SessionVariablesUtil.initClient(conn.getClient(), rcm.getPublicSID());
 		//TODO add similar code for other connections, merge with above block
@@ -182,14 +186,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			rcm.setScreenClient(true);
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
-			rcm.setUserId(((Integer)map.get("userId")).longValue());
+			rcm.setUserId((Long)map.get("userId"));
 			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUserId());
 
 			rcm.setStreamPublishName(parentSid);
-			User u = userDao.get(rcm.getUserId() < 0 ? -rcm.getUserId() : rcm.getUserId());
-			rcm.setUsername(u.getLogin());
-			rcm.setFirstname(u.getFirstname());
-			rcm.setLastname(u.getLastname());
+			User u = userDao.get(rcm.getUserId() != null && rcm.getUserId() < 0 ? -rcm.getUserId() : rcm.getUserId());
+			if (u != null) {
+				rcm.setUsername(u.getLogin());
+				rcm.setFirstname(u.getFirstname());
+				rcm.setLastname(u.getLastname());
+			}
 			log.debug("publishName :: " + rcm.getStreamPublishName());
 			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
 		}
@@ -950,8 +956,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	public synchronized Long applyForModeration(String publicSID) {
 		try {
-
 			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			if (currentClient == null) {
+				log.warn("Unable to find client by publicSID: {}", publicSID);
+				return -1L;
+			}
 
 			List<Client> currentModList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
 
@@ -963,7 +972,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				return room.isModerated() ? 3L : 1L;
 			}
-
 		} catch (Exception err) {
 			log.error("[applyForModeration]", err);
 		}
