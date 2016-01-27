@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.dao.user;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserService {
-	Boolean kickUserByStreamId(String sid, String streamid, long serverId);
+	boolean kickUserByStreamId(String sid, String streamid, long serverId);
 
-	Boolean kickUserBySessionId(String sid, long userId, String sessionId);
+	boolean kickUserBySessionId(String sid, long userId, String sessionId);
 }
