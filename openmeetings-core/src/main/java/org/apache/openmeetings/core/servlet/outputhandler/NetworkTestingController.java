@@ -67,7 +67,7 @@ public class NetworkTestingController {
         TestType testType = this.getTypeByString(typeStr);
 
         // choose data to send
-        byte[] data = null;
+        byte[] data = new byte[0];
         switch (testType) {
             case UNKNOWN:
                 return;

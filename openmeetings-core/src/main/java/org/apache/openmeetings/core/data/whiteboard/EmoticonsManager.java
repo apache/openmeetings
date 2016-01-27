@@ -18,13 +18,18 @@
  */
 package org.apache.openmeetings.core.data.whiteboard;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.util.LinkedList;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -41,36 +46,31 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
  * 
  */
 public class EmoticonsManager {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, OpenmeetingsVariables.webAppRootKey);
-	
-	private LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();
+	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, webAppRootKey);
+	private List<List<String>> emotfilesList = new CopyOnWriteArrayList<>();
 
 	@SuppressWarnings("unchecked")
 	public void loadEmot(){
 		try {
+		    StringBuilder xmlString = new StringBuilder();
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
-			BufferedReader reader = new BufferedReader(new FileReader(new File(OmFileHelper.getPublicEmotionsDir(), "emotes.xml")));
-		    String xmlString = "";
-		    while (reader.ready()) {
-		    	xmlString += reader.readLine();
-		    }
-		    reader.close();
-		    emotfilesList = ChatString.replaceAllRegExp((LinkedList<LinkedList<String>>) xStream.fromXML(xmlString));
+			try (InputStream is = new FileInputStream(new File(OmFileHelper.getPublicEmotionsDir(), "emotes.xml"));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+			{
+			    while (reader.ready()) {
+			    	xmlString.append(reader.readLine());
+			    }
+			}
+		    emotfilesList = new CopyOnWriteArrayList<>(ChatString.replaceAllRegExp((List<List<String>>) xStream.fromXML(xmlString.toString())));
 		    
 		    log.debug("##### loadEmot completed");
-		    
 		} catch (Exception err) {
 			log.error("[loadEmot]",err);
 		}
 	}
 	
-	public synchronized LinkedList<LinkedList<String>> getEmotfilesList() {
+	public List<List<String>> getEmotfilesList() {
 		return emotfilesList;
-	}
-	
-	public synchronized void setEmotfilesList(LinkedList<LinkedList<String>> emotfilesListNew) {
-		emotfilesList = emotfilesListNew;
 	}
 }
