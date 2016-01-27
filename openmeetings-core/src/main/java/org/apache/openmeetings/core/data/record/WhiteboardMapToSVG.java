@@ -160,9 +160,9 @@ public class WhiteboardMapToSVG extends BatikMethods {
 				Integer fontSize = Integer.valueOf(graphObject.get(3).toString());
 				
 				String fontStyle = graphObject.get(4).toString();
-				Integer style = null;
+				Integer style = Font.PLAIN;
 				if (fontStyle.equals("plain")) {
-					style = Font.PLAIN;
+					//empty by design
 				} else if (fontStyle.equals("bold")) {
 					style = Font.BOLD;
 				} else if (fontStyle.equals("italic")) {
