@@ -25,6 +25,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuItem {
 	private static final long serialVersionUID = 1L;
 	protected String desc;
+	private String cssClass;
 	
 	public MenuItem(String title) {
 		super(title);
@@ -38,12 +39,20 @@ public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuIt
 		super(title);
 		this.desc = desc;
 	}
-	
+
 	public String getDesc() {
 		return desc;
 	}
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public String getCssClass() {
+		return cssClass;
+	}
+
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
 	}
 }

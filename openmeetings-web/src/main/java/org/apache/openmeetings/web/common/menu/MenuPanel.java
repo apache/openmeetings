@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.util.string.Strings;
 
@@ -57,7 +58,14 @@ public class MenuPanel extends BasePanel {
 					item.add(AttributeAppender.append("class", "sub"));
 					item.add(AttributeAppender.append("title", m.getDesc()));
 				}
+				if (!Strings.isEmpty(m.getCssClass())) {
+					item.add(AttributeAppender.append("class", m.getCssClass()));
+				}
 			}
 		});
+	}
+
+	public void update(IPartialPageRequestHandler target) {
+		target.add(this);
 	}
 }
