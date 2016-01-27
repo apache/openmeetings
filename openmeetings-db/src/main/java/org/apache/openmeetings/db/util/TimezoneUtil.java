@@ -21,12 +21,10 @@ package org.apache.openmeetings.db.util;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +50,6 @@ public class TimezoneUtil {
 	 */
 
 	public TimeZone getTimeZone(String timeZoneId) {
-
 		if (timeZoneId == null || timeZoneId.equals("")) {
 			return getDefaultTimeZone();
 		}
@@ -66,7 +63,6 @@ public class TimezoneUtil {
 	 * @return The current server configured time zone in the table configuration key: "default.timezone"
 	 */
 	public TimeZone getDefaultTimeZone() {
-
 		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
 		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(defaultTzName);
@@ -88,7 +84,6 @@ public class TimezoneUtil {
 	 * @return
 	 */
 	public TimeZone getTimeZone(User user) {
-
 		if (user != null && user.getTimeZoneId() != null) {
 
 			TimeZone timeZone = TimeZone.getTimeZone(user.getTimeZoneId());
@@ -98,37 +93,8 @@ public class TimezoneUtil {
 			}
 
 		}
-
 		// if user has not time zone get one from the server configuration
 		return getDefaultTimeZone();
-	}
-
-	/**
-	 * We ignore the fact that a Date Object is always in UTC internally and treat it as if it contains only dd.mm.yyyy
-	 * HH:mm:ss. We need to do this cause we cannot trust the Date Object send from the client. We have the timeZone
-	 * information additional to the Date, so we use it to transform it now to a Calendar Object.
-	 * 
-	 * @param dateTime
-	 * @param timezone
-	 * @return
-	 */
-	public static Calendar getCalendarInTimezone(String dateTimeStr, TimeZone timezone) {
-
-		Date dateTime = CalendarPatterns.parseImportDate(dateTimeStr);
-
-		Calendar calOrig = Calendar.getInstance();
-		calOrig.setTime(dateTime);
-
-		Calendar cal = Calendar.getInstance(timezone);
-		cal.set(Calendar.YEAR, calOrig.get(Calendar.YEAR));
-		cal.set(Calendar.MONTH, calOrig.get(Calendar.MONTH));
-		cal.set(Calendar.DATE, calOrig.get(Calendar.DATE));
-		cal.set(Calendar.HOUR_OF_DAY, calOrig.get(Calendar.HOUR_OF_DAY));
-		cal.set(Calendar.MINUTE, calOrig.get(Calendar.MINUTE));
-		cal.set(Calendar.SECOND, calOrig.get(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND, 0);
-
-		return cal;
 	}
 
 	public static long _getOffset(TimeZone timezone) {
@@ -136,5 +102,4 @@ public class TimezoneUtil {
 		cal.setTimeZone(timezone);
 		return cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 	}
-
 }

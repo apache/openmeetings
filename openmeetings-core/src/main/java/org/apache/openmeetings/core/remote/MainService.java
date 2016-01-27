@@ -141,6 +141,10 @@ public class MainService implements IPendingServiceCallback {
 			log.debug("swfURL " + clientURL);
 
 			SOAPLogin soapLogin = soapLoginDao.get(secureHash);
+			if (soapLogin == null) {
+				log.warn("Unable to find login by hash: {}" + secureHash);
+				return -1L;
+			}
 
 			if (soapLogin.isUsed()) {
 				if (soapLogin.getAllowSameURLMultipleTimes()) {

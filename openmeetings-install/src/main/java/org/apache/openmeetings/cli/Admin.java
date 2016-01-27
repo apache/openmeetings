@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -533,7 +534,7 @@ public class Admin {
 		ConfigurationDao cfgDao = getApplicationContext(ctxName).getBean(ConfigurationDao.class);
 		if (invalidPassword(cfg.password, cfgDao)) {
 			System.out.print("Please enter password for the user '" + cfg.username + "':");
-			cfg.password = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			cfg.password = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)).readLine();
 			if (invalidPassword(cfg.password, cfgDao)) {
 				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);

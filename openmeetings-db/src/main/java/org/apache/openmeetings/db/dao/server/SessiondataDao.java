@@ -58,7 +58,6 @@ public class SessiondataDao {
 	 */
 	public Sessiondata startsession() {
 		try {
-
 			log.debug("startsession :: startsession");
 
 			long thistime = new Date().getTime();
@@ -139,7 +138,7 @@ public class SessiondataDao {
 	 * @param SID
 	 * @param userId
 	 */
-	public Boolean updateUser(String SID, long userId) {
+	public boolean updateUser(String SID, long userId) {
 		try {
 			log.debug("updateUser User: " + userId + " || " + SID);
 
@@ -172,7 +171,7 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
 		}
-		return null;
+		return false;
 	}
 
 	public boolean updateUser(String SID, long userId, boolean permanent, Long languageId) {
@@ -212,7 +211,7 @@ public class SessiondataDao {
 		return false;
 	}
 
-	public Boolean updateUserGroup(String SID, Long groupId) {
+	public boolean updateUserGroup(String SID, Long groupId) {
 		try {
 			log.debug("updateUserGroup User: " + groupId + " || " + SID);
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
@@ -244,10 +243,10 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
 		}
-		return null;
+		return false;
 	}
 
-	public Boolean updateUserWithoutSession(String SID, Long userId) {
+	public boolean updateUserWithoutSession(String SID, Long userId) {
 		try {
 			log.debug("updateUser User: " + userId + " || " + SID);
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
@@ -279,10 +278,10 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
 		}
-		return null;
+		return false;
 	}
 
-	public Boolean updateUserRemoteSession(String SID, String sessionXml) {
+	public boolean updateUserRemoteSession(String SID, String sessionXml) {
 		try {
 			log.debug("updateUser User SID: " + SID);
 
@@ -310,7 +309,7 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[updateUserRemoteSession]: ", ex2);
 		}
-		return null;
+		return false;
 	}
 
 	/**
@@ -387,18 +386,19 @@ public class SessiondataDao {
 			for (Client rcl : sessionManager.getClientListByRoom(roomId)) {
 				String aux = rcl.getSwfurl();
 
+				//FIXME TODO this need to be refactored !
 				int init_pos = aux.indexOf("sid=") + 4;
 				int end_pos = init_pos + 32;
-				if (end_pos > aux.length())
+				if (end_pos > aux.length()) {
 					end_pos = aux.length();
+				}
 				String SID = aux.substring(init_pos, end_pos);
 
 				Sessiondata sData = getSessionByHash(SID);
-
-				sData = em.find(Sessiondata.class, sData.getId());
-				em.remove(sData);
+				if (sData != null) {
+					em.remove(sData);
+				}
 			}
-
 		} catch (Exception err) {
 			log.error("clearSessionByRoomId", err);
 		}
