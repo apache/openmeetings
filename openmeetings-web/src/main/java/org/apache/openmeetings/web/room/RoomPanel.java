@@ -49,8 +49,8 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -60,14 +60,12 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
 import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
-import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.message.RoomMessage;
@@ -118,6 +116,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -168,7 +167,7 @@ public class RoomPanel extends BasePanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		public void onClick(AjaxRequestTarget target) {
 			exit(target);
 		}
 	};
@@ -178,7 +177,7 @@ public class RoomPanel extends BasePanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		public void onClick(AjaxRequestTarget target) {
 			invite.updateModel(target);
 			invite.open(target);
 		}
@@ -187,7 +186,7 @@ public class RoomPanel extends BasePanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		public void onClick(AjaxRequestTarget target) {
 			startSharing.respond(target);
 		}
 	};
@@ -198,7 +197,7 @@ public class RoomPanel extends BasePanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		public void onClick(AjaxRequestTarget target) {
 			createPoll.updateModel(target);
 			createPoll.open(target);
 		}
@@ -206,7 +205,8 @@ public class RoomPanel extends BasePanel {
 	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString(42), Application.getString(1485), false) {
 		private static final long serialVersionUID = 1L;
 
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		@Override
+		public void onClick(AjaxRequestTarget target) {
 			vote.updateModel(target);
 			vote.open(target);
 		}
@@ -214,7 +214,8 @@ public class RoomPanel extends BasePanel {
 	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString(37), Application.getString(1484), false) {
 		private static final long serialVersionUID = 1L;
 
-		public void onClick(MainPage page, AjaxRequestTarget target) {
+		@Override
+		public void onClick(AjaxRequestTarget target) {
 			pollResults.updateModel(target, c.hasRight(Client.Right.moderator));
 			pollResults.open(target);
 		}
@@ -506,49 +507,45 @@ public class RoomPanel extends BasePanel {
 		boolean pollExists = getBean(PollDao.class).hasPoll(roomId);
 		User u = getBean(UserDao.class).get(getUserId());
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
-		exitMenuItem.setActive(notExternalUser);//TODO check this
-		filesMenu.setActive(showFiles);
+		exitMenuItem.setEnabled(notExternalUser);//TODO check this
+		filesMenu.setEnabled(showFiles);
 		Room r = getBean(RoomDao.class).get(roomId);
-		actionsMenu.setActive(!r.getHideActionsMenu());
+		actionsMenu.setEnabled(!r.getHideActionsMenu());
 		boolean moder = c.hasRight(Client.Right.moderator);
-		inviteMenuItem.setActive(notExternalUser && moder);
+		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
 		boolean shareVisible = Room.Type.interview != r.getType() && moder;
-		shareMenuItem.setActive(shareVisible);
-		shareBtn.setVisible(shareMenuItem.isActive());
-		applyModerMenuItem.setActive(!moder);
-		applyWbMenuItem.setActive(!moder);
-		applyAvMenuItem.setActive(!moder);
-		pollCreateMenuItem.setActive(moder);
-		pollVoteMenuItem.setActive(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(roomId, getUserId()));
-		pollResultMenuItem.setActive(pollExists || getBean(PollDao.class).getArchived(roomId).size() > 0);
+		shareMenuItem.setEnabled(shareVisible);
+		shareBtn.setVisible(shareMenuItem.isEnabled());
+		applyModerMenuItem.setEnabled(!moder);
+		applyWbMenuItem.setEnabled(!moder);
+		applyAvMenuItem.setEnabled(!moder);
+		pollCreateMenuItem.setEnabled(moder);
+		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(roomId, getUserId()));
+		pollResultMenuItem.setEnabled(pollExists || getBean(PollDao.class).getArchived(roomId).size() > 0);
 		//TODO sip menus
 		menuPanel.update(handler);
 		handler.add(askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
 	}
 	
-	private List<MenuItem> getMenu() {
-		List<MenuItem> menu = new ArrayList<MenuItem>();
-		exitMenuItem.setActive(false);
+	private List<IMenuItem> getMenu() {
+		List<IMenuItem> menu = new ArrayList<>();
+		exitMenuItem.setEnabled(false);
 		menu.add(exitMenuItem);
 		
-		List<MenuItem> fileItems = new ArrayList<MenuItem>();
-		fileItems.add(new RoomMenuItem(Application.getString(15), Application.getString(1479)));
-		filesMenu.setChildren(fileItems);
+		filesMenu.getItems().add(new RoomMenuItem(Application.getString(15), Application.getString(1479)));
 		menu.add(filesMenu);
 		
-		List<MenuItem> actionItems = new ArrayList<MenuItem>();
-		actionItems.add(inviteMenuItem);
-		actionItems.add(shareMenuItem); //FIXME enable/disable
-		actionItems.add(applyModerMenuItem); //FIXME enable/disable
-		actionItems.add(applyWbMenuItem); //FIXME enable/disable
-		actionItems.add(applyAvMenuItem); //FIXME enable/disable
-		actionItems.add(pollCreateMenuItem);
-		actionItems.add(pollResultMenuItem); //FIXME enable/disable
-		actionItems.add(pollVoteMenuItem); //FIXME enable/disable
-		actionItems.add(sipDialerMenuItem);
-		actionItems.add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
-		actionsMenu.setChildren(actionItems);
+		actionsMenu.getItems().add(inviteMenuItem);
+		actionsMenu.getItems().add(shareMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(applyModerMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(applyWbMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(applyAvMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(pollCreateMenuItem);
+		actionsMenu.getItems().add(pollResultMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(pollVoteMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(sipDialerMenuItem);
+		actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
 		menu.add(actionsMenu);
 		return menu;
 	}
