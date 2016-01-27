@@ -90,7 +90,7 @@ public class SessionManager implements ISessionManager {
 				rcm.setUserport(remotePort);
 				rcm.setUserip(remoteAddress);
 				rcm.setSwfurl(swfUrl);
-				rcm.setIsMod(new Boolean(false));
+				rcm.setIsMod(false);
 				rcm.setCanDraw(new Boolean(false));
 
 				if (cache.containsKey(null, streamId)) {

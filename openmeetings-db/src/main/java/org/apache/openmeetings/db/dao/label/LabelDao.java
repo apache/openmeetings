@@ -40,8 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
@@ -293,11 +293,10 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		List<StringLabel> result = new ArrayList<StringLabel>(labelCache.get(l));
 		if (!Strings.isEmpty(search)) {
-			CollectionUtils.filter(result, new Predicate() {
+			CollectionUtils.filter(result, new Predicate<StringLabel>() {
 				@Override
-				public boolean evaluate(Object o) {
-					StringLabel sl = (StringLabel)o;
-					return o != null && (sl.getKey().contains(search) || sl.getValue().contains(search));
+				public boolean evaluate(StringLabel o) {
+					return o != null && (o.getKey().contains(search) || o.getValue().contains(search));
 				}
 			});
 		}

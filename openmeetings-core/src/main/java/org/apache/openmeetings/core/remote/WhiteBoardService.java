@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -504,7 +504,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			cl.setFolderName("general");
 
 			String[] files_general = clipart_dir.list(getFilesOnly);
-			@SuppressWarnings("unchecked")
 			Comparator<String> comparator = ComparatorUtils.naturalComparator();
 			Arrays.sort(files_general, comparator);
 
@@ -515,9 +514,11 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				Cliparts cl_sub = new Cliparts();
 				cl_sub.setFolderName("math");
 				String[] files = dir.list(getFilesOnly);
-				Arrays.sort(files, comparator);
-				cl_sub.setGeneralList(files);
-				cl.getSubCategories().add(cl_sub);
+				if (files != null) {
+					Arrays.sort(files, comparator);
+					cl_sub.setGeneralList(files);
+					cl.getSubCategories().add(cl_sub);
+				}
 			}
 
 			return cl;

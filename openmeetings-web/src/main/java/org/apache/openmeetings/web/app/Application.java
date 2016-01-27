@@ -40,9 +40,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.collections.MapIterator;
-import org.apache.commons.collections.keyvalue.MultiKey;
-import org.apache.commons.collections.map.MultiKeyMap;
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -102,7 +102,7 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static MultiKeyMap ONLINE_USERS = new MultiKeyMap(); 
+	private static MultiKeyMap<String, org.apache.openmeetings.web.app.Client> ONLINE_USERS = new MultiKeyMap<>(); 
 	private static Map<String, org.apache.openmeetings.web.app.Client> INVALID_SESSIONS = new ConcurrentHashMap<String, org.apache.openmeetings.web.app.Client>();
 	private static Map<Long, Set<Client>> ROOMS = new ConcurrentHashMap<Long, Set<Client>>();
 	//additional maps for faster searching should be created
@@ -209,7 +209,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	public synchronized static void addOnlineUser(org.apache.openmeetings.web.app.Client client) {
 		try {
-			ONLINE_USERS.put(client.getUserId(), client.getSessionId(), client);
+			ONLINE_USERS.put("" + client.getUserId(), client.getSessionId(), client);
 		} catch (Exception err) {
 			log.error("[addOnlineUser]", err);
 		}
@@ -218,7 +218,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public synchronized static void removeOnlineUser(org.apache.openmeetings.web.app.Client c) {
 		try {
 			if (c != null) {
-				ONLINE_USERS.remove(c.getUserId(), c.getSessionId());
+				ONLINE_USERS.removeAll("" + c.getUserId(), c.getSessionId());
 			}
 		} catch (Exception err) {
 			log.error("[removeOnlineUser]", err);
@@ -226,10 +226,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static boolean isUserOnline(Long userId) {
-		MapIterator it = ONLINE_USERS.mapIterator();
+		MapIterator<MultiKey<? extends String>, org.apache.openmeetings.web.app.Client> it = ONLINE_USERS.mapIterator();
 		boolean isUserOnline = false;
 		while (it.hasNext()) {
-			MultiKey multi = (MultiKey) it.next();
+			MultiKey<? extends String> multi = it.next();
 			if (multi.size() > 0 && userId.equals(multi.getKey(0))) {
 				isUserOnline = true;
 				break;
@@ -238,16 +238,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return isUserOnline;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<org.apache.openmeetings.web.app.Client> getClients() {
 		return new ArrayList<org.apache.openmeetings.web.app.Client>(ONLINE_USERS.values());
 	}
 
 	public static List<org.apache.openmeetings.web.app.Client> getClients(Long userId) {
 		List<org.apache.openmeetings.web.app.Client> result =  new ArrayList<org.apache.openmeetings.web.app.Client>();
-		MapIterator it = ONLINE_USERS.mapIterator();
+		MapIterator<MultiKey<? extends String>, org.apache.openmeetings.web.app.Client> it = ONLINE_USERS.mapIterator();
 		while (it.hasNext()) {
-			MultiKey multi = (MultiKey) it.next();
+			MultiKey<? extends String> multi = it.next();
 			if (multi.size() > 1 && userId.equals(multi.getKey(0))) {
 				result.add(getClientByKeys(userId, (String)(multi.getKey(1))));
 				break;
