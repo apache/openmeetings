@@ -99,13 +99,6 @@ Attributes needed for clustering -->
 <attribute name="loudnessAcitviation" value="10" type="number" />
 <attribute name="showWindowEffect" value="y" type="string" /> 
 
-<!--- Calendar Settings -->
-<attribute name="firstdayinweek" value="1" type="number" />
-
-<attribute name="showmodernWhiteBoard" value="y" type="string" />
-
-<attribute name="showRecording" value="visible" type="string" />
-
 <attribute name="defaultWhiteboardWidth" value="2400" type="number" />
 <attribute name="defaultWhiteboardHeight" value="1200" type="number" />
 

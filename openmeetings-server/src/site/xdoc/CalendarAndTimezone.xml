@@ -47,19 +47,11 @@
 
 		<section
 			name="Changing first day in week for calendar from Sunday to Monday">
-
-			<p>in the public/config.xml change the key: </p>
-			<source>
-<![CDATA[
-<!--
-First day in the Week used by the Calendar
-0 means Sunday
-1 means Monday
-this is the way how the Celendar inits a week
--->
-<firstdayinweek>0</firstdayinweek>
-]]>
-			</source>
+			<p>
+				Goto Administration &gt; Configuration and change the config-key:
+				<tt>calendar.firstday</tt>
+			</p>
+			<p>The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.</p>
 		</section>
 
 		<section

@@ -213,11 +213,6 @@
 		this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
 		this.setAttribute('webAppRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'));
 		this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
-		this.setAttribute('firstdayinweek',canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()'));
-		this.setAttribute('showRecording',canvas.myConfigSet.getPointer().xpathQuery('config/showRecording/text()'));
-		
-		//old menubar is not active anymore
-		//this.setAttribute('showmodernWhiteBoard',canvas.myConfigSet.getPointer().xpathQuery('config/showmodernWhiteBoard/text()'));
 		
 		//Audio-Video-Settings
 		this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));

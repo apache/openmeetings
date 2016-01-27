@@ -123,22 +123,6 @@ of the red5-servlet
 <showWindowEffect>n</showWindowEffect> 
 
 <!--
-    Show the recorder buttons in the Conference Rooms
-    visible = yes
-    hidden = no
- -->	
-<showRecording>hidden</showRecording>
-
-<!--
-	First day in the Week used by the Calendar
-	0 means Sunday
-	1 means Monday
-	this is the way how the calendar UI shows a week
--->
-<firstdayinweek>0</firstdayinweek>	
-    
-    
-<!--
     #############################################################################
     Audio and Video Settings
     Before you change settings here,
