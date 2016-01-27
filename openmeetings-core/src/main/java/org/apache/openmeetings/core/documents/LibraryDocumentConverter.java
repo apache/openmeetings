@@ -18,13 +18,17 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -33,13 +37,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryDocumentConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, webAppRootKey);
 	
 	private static final String fileExt = ".wml";
 	
 	public static String writeToLocalFolder(String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
 		try {
-			
 			log.debug("filePath: " + OmFileHelper.getUploadWmlDir().getCanonicalPath());
 			
 			String fileNameExtName = fileName.substring(fileName.length()-4,fileName.length());
@@ -49,14 +52,14 @@ public class LibraryDocumentConverter {
 				fileName = StringComparer.getInstance().compareForRealPaths(fileName.substring(0, fileName.length()));
 			}
 			
-			if (fileName.length()<=0){
+			if (fileName.length() <= 0){
 				//return new Long(-21);
 				return "-20";
 			}
 			//Add the Folder for the wmlFiles if it does not exist yet
-			File filePathComplete = new File(OmFileHelper.getUploadWmlDir(), fileName + fileExt);
+			File file = new File(OmFileHelper.getUploadWmlDir(), fileName + fileExt);
 			
-			if (filePathComplete.exists()){
+			if (file.exists()){
 				return "-20";
 			}		
 			
@@ -64,16 +67,18 @@ public class LibraryDocumentConverter {
 			xStream.setMode(XStream.NO_REFERENCES);
 			String xmlString = xStream.toXML(objList);	
 			
-			log.debug("Write to "+filePathComplete);
+			log.debug("Write to " + file);
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(filePathComplete));
-			pw.println(xmlString);
-			pw.flush();
-			pw.close();
+			try (OutputStream os = new FileOutputStream(file);
+					Writer out = new OutputStreamWriter(os, StandardCharsets.UTF_8))
+			{
+				out.write(xmlString);
+				out.flush();
+			}
 	    
 		    //return new Long(1);
 		    
-			return filePathComplete.getCanonicalPath();
+			return file.getCanonicalPath();
 		} catch (Exception err){
 			log.error("writeToLocalFolder",err);
 		}

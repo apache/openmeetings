@@ -422,7 +422,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @param newPublicSID
 	 */
-	public Boolean overwritePublicSID(String newPublicSID) {
+	public boolean overwritePublicSID(String newPublicSID) {
 		try {
 			log.debug("-----------  overwritePublicSID");
 			IConnection current = Red5.getConnectionLocal();
@@ -438,7 +438,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		} catch (Exception err) {
 			log.error("[overwritePublicSID]", err);
 		}
-		return null;
+		return false;
 	}
 
 	/**
@@ -1905,7 +1905,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 *             recording instead of iterating through connections!
 	 * @return true in case there is recording session, false otherwise, null if any exception happend
 	 */
-	public Boolean getInterviewRecordingStatus() {
+	public boolean getInterviewRecordingStatus() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 
@@ -1918,19 +1918,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 			}
-			return false;
 		} catch (Exception err) {
 			log.error("[getInterviewRecordingStatus]", err);
 		}
-
-		return null;
+		return false;
 	}
 
 	/**
 	 * @deprecated @see {@link ScopeApplicationAdapter#getInterviewRecordingStatus()}
 	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
 	 */
-	public Boolean startInterviewRecording() {
+	public boolean startInterviewRecording() {
 		try {
 			log.debug("-----------  startInterviewRecording");
 			IConnection current = Red5.getConnectionLocal();
@@ -1974,11 +1972,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		} catch (Exception err) {
 			log.debug("[startInterviewRecording]", err);
 		}
-		return null;
+		return false;
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public Boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
+	public boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
 		new MessageSender("sendRemoteCursorEvent", messageObj) {
 			
 			@Override
@@ -1987,7 +1985,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return !SessionVariablesUtil.isScreenClient(client) || !conn.getClient().getId().equals(streamid);
 			}
 		}.start();
-		return null;
+		return true;
 	}
 
 	private Long checkRecordingClient(IConnection conn) {
@@ -2023,7 +2021,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return true if interview was found
 	 */
-	private Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
+	private boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
 		try {
 			log.debug("-----------  stopInterviewRecording");
 			Long clientRecordingId = currentClient.getRecordingId();
@@ -2051,7 +2049,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		} catch (Exception err) {
 			log.debug("[stopInterviewRecording]", err);
 		}
-		return null;
+		return false;
 	}
 
 	/**

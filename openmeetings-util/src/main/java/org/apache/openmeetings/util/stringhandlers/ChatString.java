@@ -187,17 +187,14 @@ public class ChatString {
 	}
 
 	public static String link(String input) {
+		StringBuilder tReturn = new StringBuilder();
 		try {
-
-			String tReturn = "";
-
 			String parts[] = input.split(" ");
 
 			for (int t = 0; t < parts.length; t++) {
-
 				String text = parts[t];
 
-				// System.out.println("Part 1 "+text);
+				// log.debug("Part 1 "+text);
 
 				Matcher matcher = Pattern
 						.compile(
@@ -205,27 +202,19 @@ public class ChatString {
 						.matcher(text);
 
 				if (matcher.find()) {
-					text = matcher
-							.replaceFirst("<u><FONT color=\"#0000CC\"><a href='"
-									+ text + "'>" + text + "</a></FONT></u>");
-
+					text = matcher.replaceFirst("<u><FONT color=\"#0000CC\"><a href='" + text + "'>" + text + "</a></FONT></u>");
 				}
 
-				// System.out.println("Part 2 "+text);
+				// log.debug("Part 2 "+text);
 
 				if (t != 0) {
-					tReturn += " ";
+					tReturn.append(" ");
 				}
-
-				tReturn += text;
-
+				tReturn.append(text);
 			}
-
-			return tReturn;
-
 		} catch (Exception e) {
 			log.error("[link]", e);
 		}
-		return "";
+		return tReturn.toString();
 	}
 }
