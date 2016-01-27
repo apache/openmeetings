@@ -236,11 +236,11 @@ public class UserDao implements IDataProviderDao<User> {
 	// sebawagner, 01.10.2012
 	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		User u = update(user, updatedBy);
-		if (password != null && !password.isEmpty()) {
+		if (u != null && password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
 			User u1 = get(u.getId(), true);
 			u1.updatePassword(cfgDao, password);
-			update(u1, updatedBy);
+			u = update(u1, updatedBy);
 		}
 		return u;
 	}
@@ -365,7 +365,7 @@ public class UserDao implements IDataProviderDao<User> {
 			u = em.createNamedQuery("getUserByLogin", User.class)
 					.setParameter("login", login)
 					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? 0 : domainId)
+					.setParameter("domainId", domainId == null ? 0L : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
@@ -382,7 +382,7 @@ public class UserDao implements IDataProviderDao<User> {
 			u = em.createNamedQuery("getUserByEmail", User.class)
 					.setParameter("email", email)
 					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? 0 : domainId)
+					.setParameter("domainId", domainId == null ? 0L : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}

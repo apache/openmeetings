@@ -18,7 +18,10 @@
  */
 package org.apache.openmeetings.installation;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.openmeetings.util.OmFileHelper;
 import org.dom4j.Document;
@@ -38,9 +41,11 @@ public class InstallationDocumentHandler {
 		step.addElement("stepnumber").addText(stepNo.toString());
 		step.addElement("stepname").addText("Step " + stepNo);
 
-		XMLWriter writer = new XMLWriter(new FileWriter(OmFileHelper.getInstallFile()));
-		writer.write(document);
-		writer.close();
+		try (OutputStream os = new FileOutputStream(OmFileHelper.getInstallFile())) {
+			XMLWriter writer = new XMLWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
+			writer.write(document);
+			writer.close();
+		}
 	}
 
 	public static int getCurrentStepNumber() throws Exception {

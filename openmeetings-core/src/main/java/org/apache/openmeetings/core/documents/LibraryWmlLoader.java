@@ -18,16 +18,19 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -36,41 +39,34 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryWmlLoader {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, OpenmeetingsVariables.webAppRootKey);
-	
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
 	private static final String fileExt = ".wml";
 	
 	@SuppressWarnings({ "rawtypes" })
 	public ArrayList loadWmlFile(String fileName){
-		BufferedReader reader = null;
 		try {
 			String name = fileName;
 			if (!name.endsWith(fileExt)) {
 				name += fileExt;
 			}
-			File filepathComplete = new File(OmFileHelper.getUploadWmlDir(), name);
-			log.debug("filepathComplete: "+filepathComplete);
+			File file = new File(OmFileHelper.getUploadWmlDir(), name);
+			log.debug("filepathComplete: " + file);
 			
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
 			
-			reader = new BufferedReader(new FileReader(filepathComplete));
-		    ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
-			
-			return lMapList;
+			try (InputStream is = new FileInputStream(file);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+			{
+				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
+				
+				return lMapList;
+			}
 		} catch (Exception err){
 			log.error("loadWmlFile",err);
-		} finally {
-			if (reader != null) {
-			    try {
-					reader.close();
-				} catch (IOException e) {}
-			}
 		}
 		
 		return null;
-		
 	}
 	
 	/**

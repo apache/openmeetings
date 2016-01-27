@@ -21,12 +21,17 @@ package org.apache.openmeetings.core.servlet;
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.util.InitializationContainer;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class BeanUtil {
 	public <T> T getBean(Class<T> beanClass, ServletContext ctx) throws ServerNotInitializedException {
 		if (InitializationContainer.initComplete) {
-			return WebApplicationContextUtils.getWebApplicationContext(ctx).getBean(beanClass);
+			WebApplicationContext wc = WebApplicationContextUtils.getWebApplicationContext(ctx);
+			if (wc == null) {
+				throw new ServerNotInitializedException("Server not yet initialized (context is null), retry in couple of seconds");
+			}
+			return wc.getBean(beanClass);
 		} else {
 			throw new ServerNotInitializedException("Server not yet initialized, retry in couple of seconds");
 		}
