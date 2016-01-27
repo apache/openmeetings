@@ -26,11 +26,20 @@ public class RoomMenuItem extends MenuItem {
 	}
 	
 	public RoomMenuItem(String name, String desc) {
-		this(name, desc, true);
+		this(name, desc, true, null);
+	}
+	
+	public RoomMenuItem(String name, String desc, String cssClass) {
+		this(name, desc, true, cssClass);
 	}
 	
 	public RoomMenuItem(String name, String desc, boolean enabled) {
+		this(name, desc, enabled, null);
+	}
+	
+	public RoomMenuItem(String name, String desc, boolean enabled, String cssClass) {
 		super(name, desc);
+		setCssClass(cssClass);
 		setEnabled(enabled);
 	}
 }
