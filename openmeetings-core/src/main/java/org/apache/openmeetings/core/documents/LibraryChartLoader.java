@@ -18,20 +18,24 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import org.apache.openmeetings.util.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryChartLoader {
-
-    private static final Logger log = new Logger();
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
 
     private static final String fileExt = ".xchart";
 
@@ -49,7 +53,6 @@ public class LibraryChartLoader {
 
     @SuppressWarnings("rawtypes")
 	public ArrayList loadChart(File dir, String fileName) {
-    	BufferedReader reader = null;
         try {
             File file = new File(dir, fileName + fileExt);
 
@@ -58,18 +61,14 @@ public class LibraryChartLoader {
             XStream xStream = new XStream(new XppDriver());
             xStream.setMode(XStream.NO_REFERENCES);
 
-            reader = new BufferedReader(new FileReader(file));
-            ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
-
-            return lMapList;
-        } catch (Exception err) {
-            log.error(err);
-        } finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {}
+			try (InputStream is = new FileInputStream(file);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+			{
+				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
+				return lMapList;
 			}
+        } catch (Exception err) {
+            log.error("Unexpected error while loading chart", err);
         }
 
         return null;

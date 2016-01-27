@@ -426,7 +426,7 @@ public class UserManager implements IUserManager {
 	 * @param room_id
 	 * @return
 	 */
-	public Boolean kickUserByStreamId(String SID, Long room_id) {
+	public boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
@@ -455,10 +455,10 @@ public class UserManager implements IUserManager {
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}
-		return null;
+		return false;
 	}
 
-	public Boolean kickUserByPublicSID(String SID, String publicSID) {
+	public boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
 
@@ -487,7 +487,7 @@ public class UserManager implements IUserManager {
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}
-		return null;
+		return false;
 	}
 	
 	public Long getLanguage(Locale loc) {

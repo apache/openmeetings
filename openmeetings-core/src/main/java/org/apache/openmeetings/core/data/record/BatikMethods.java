@@ -290,16 +290,16 @@ public class BatikMethods {
 		// log.debug("TEXT: "+stringsText);
 		// log.debug("TEXT: "+stringsText.length);
 
-		String newText = "";
+		StringBuilder newText = new StringBuilder();
 
 		for (int i = 0; i < stringsText.length; i++) {
-			newText += stringsText[i];
+			newText.append(stringsText[i]);
 			if (i + 1 < stringsText.length) {
-				newText += "\n";
+				newText.append("\n");
 			}
 		}
 
-		JTextArea n = new JTextArea(newText);
+		JTextArea n = new JTextArea(newText.toString());
 		n.setFont(font);
 		n.setWrapStyleWord(true);
 		n.setLineWrap(true);

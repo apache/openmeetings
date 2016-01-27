@@ -167,7 +167,7 @@ public class SessionManager implements ISessionManager {
 			return null;
 		}
 
-		public synchronized Boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
+		public synchronized boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
 			try {
 				// get the corresponding user session object and update the settings
 				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
@@ -187,13 +187,14 @@ public class SessionManager implements ISessionManager {
 				}
 
 				updateClientByStreamId(streamId, rcm, false, server);
+				return true;
 			} catch (Exception err) {
 				log.error("[updateAVClientByStreamId]", err);
 			}
-			return null;
+			return false;
 		}
 
-		public synchronized Boolean updateClientByStreamId(String streamId,
+		public synchronized boolean updateClientByStreamId(String streamId,
 				Client rcm, boolean updateRoomCount, Server server) {
 			try {
 				
@@ -204,27 +205,25 @@ public class SessionManager implements ISessionManager {
 					return true;
 				} else {
 					log.debug("Tried to update a non existing Client " + streamId);
-					return false;
 				}
 			} catch (Exception err) {
 				log.error("[updateClientByStreamId]", err);
 			}
-			return null;
+			return false;
 		}
 
-		public synchronized Boolean removeClient(String streamId, Server server) {
+		public synchronized boolean removeClient(String streamId, Server server) {
 			try {
 				if (cache.containsKey(server,streamId)) {
 					cache.remove(server,streamId);
 					return true;
 				} else {
 					log.debug("Tried to remove a non existing Client " + streamId);
-					return false;
 				}
 			} catch (Exception err) {
 				log.error("[removeClient]", err);
 			}
-			return null;
+			return false;
 		}
 
 		public synchronized ArrayList<Client> getClientListByRoom(Long roomId) {
@@ -355,14 +354,14 @@ public class SessionManager implements ISessionManager {
 		return sessionManager.getClientByUserId(userId);
 	}
 
-	public Boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
+	public boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
 		return sessionManager.updateAVClientByStreamId(streamId, rcm, server);
 	}
 
-	public Boolean updateClientByStreamId(String streamId, Client rcm,
+	public boolean updateClientByStreamId(String streamId, Client rcm,
 			boolean updateRoomCount, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -371,7 +370,7 @@ public class SessionManager implements ISessionManager {
 				updateRoomCount, server);
 	}
 
-	public Boolean removeClient(String streamId, Server server) {
+	public boolean removeClient(String streamId, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}

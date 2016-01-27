@@ -20,9 +20,11 @@ package org.apache.openmeetings.core.servlet.outputhandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -132,8 +134,7 @@ public class ExportToImage extends BaseHttpServlet {
 				// Create an instance of the SVG Generator.
 				SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 
-				svgGenerator = WhiteboardMapToSVG.getInstance()
-						.convertMapToSVG(svgGenerator, whiteBoardMap);
+				svgGenerator = WhiteboardMapToSVG.getInstance().convertMapToSVG(svgGenerator, whiteBoardMap);
 
 				// Finally, stream out SVG to the standard output using
 				// UTF-8 encoding.
@@ -144,10 +145,12 @@ public class ExportToImage extends BaseHttpServlet {
 				String reqFilePrefix = fileName + "_" + CalendarPatterns.getTimeForStreamId(new Date());
 				File svgFile = new File(uploadTempDir, reqFilePrefix + ".svg");
 				log.debug("exported svg file: " + svgFile.getCanonicalPath());
-				FileWriter out = new FileWriter(svgFile);
-				svgGenerator.stream(out, useCSS);
-				out.flush();
-				out.close();
+				try (OutputStream os = new FileOutputStream(svgFile);
+						Writer out = new OutputStreamWriter(os, StandardCharsets.UTF_8))
+				{
+					svgGenerator.stream(out, useCSS);
+					out.flush();
+				}
 				File expFile = new File(uploadTempDir, reqFilePrefix + "." + exportType);
 				log.debug("exported file: " + expFile.getCanonicalPath());
 				if ("svg".equals(exportType)) {

@@ -106,7 +106,7 @@ public class UserService implements IUserService {
 	 *            REST call
 	 * @return - true if user has sufficient permissions, false otherwise
 	 */
-	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
+	public boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
 			// admins only
@@ -160,7 +160,7 @@ public class UserService implements IUserService {
 	 * @param publicSID
 	 * @return - true in case user have sufficient permissions, null otherwise
 	 */
-	public Boolean kickUserByPublicSID(String SID, String publicSID) {
+	public boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
 			// users only
@@ -188,20 +188,21 @@ public class UserService implements IUserService {
 		} catch (Exception err) {
 			log.error("[kickUserByPublicSID]", err);
 		}
-		return null;
+		return false;
 	}
 
 	@Override
-	public Boolean kickUserBySessionId(String SID, long userId, String sessionId) {
+	public boolean kickUserBySessionId(String SID, long userId, String sessionId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// admin only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 				((IApplication)Application.get(wicketApplicationName)).invalidateClient(userId, sessionId);
+				return true;
 			}
 		} catch (Exception err) {
 			log.error("[kickUserBySessionId]", err);
 		}
-		return null;
+		return false;
 	}
 }
