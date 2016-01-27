@@ -78,12 +78,15 @@ public class GenerateImage extends BaseConverter {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 		
 		// User Profile Update
-		for (File f : getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
+		File[] files = getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.getName().endsWith(JPG_EXTENTION);
 			}
-		})) {
-			FileHelper.removeRec(f);
+		});
+		if (files != null) {
+			for (File f : files) {
+				FileHelper.removeRec(f);
+			}
 		}
 		
 		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, JPG_EXTENTION);

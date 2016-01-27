@@ -42,16 +42,18 @@ public class TestSetupCleanupJob {
 			if (folders != null) {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
-						//TODO need to rework this and remove hardcodings
-						for (File file : folder.listFiles(new FileFilter() {
+						File[] files = folder.listFiles(new FileFilter() {
 							public boolean accept(File file) {
 								return file.getName().startsWith("TEST_SETUP_");
 							}
-						}))
-						{
-							if (file.isFile() && file.lastModified() + expirationInterval < System.currentTimeMillis()) {
-								log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
-								file.delete();
+						});
+						//TODO need to rework this and remove hardcodings
+						if (files != null) {
+							for (File file : files) {
+								if (file.isFile() && file.lastModified() + expirationInterval < System.currentTimeMillis()) {
+									log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
+									file.delete();
+								}
 							}
 						}
 					}

@@ -131,15 +131,14 @@ public class FlvExplorerConverter extends BaseConverter {
 		
 		Matcher matcher = p.matcher(txt);
 		
-		while ( matcher.find() ) {
+		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
 			
 			String[] resultions = foundResolution.split("x");
 			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
-	    }
+		}
 		
-		return null;
+		throw new Exception("Failed to get FLV dimension: " + txt);
 	}
-	
 }
