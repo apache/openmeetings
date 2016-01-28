@@ -1478,7 +1478,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param whiteboardId - id of whiteboard parameters will be send to
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
+	public int sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
 		try {
 			Map whiteboardObj = new HashMap();
 			int i = 0;
@@ -1491,7 +1491,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			if (currentClient == null) {
-				return;
+				return -1;
 			}
 
 			Long roomId = currentClient.getRoomId();
@@ -1540,6 +1540,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		} catch (Exception err) {
 			log.error("[sendVarsByWhiteboardId]", err);
 		}
+		return 1;
 	}
 
 	public int sendVarsModeratorGeneral(Object vars) {
