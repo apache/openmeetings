@@ -114,6 +114,8 @@
 		for (var i = 0; i < this._table.renderList.length; ++i) {
 			if (this._table.renderList[i].publicSID == publicSID) {
 				this._table.renderList.splice(i,1);
+				var item = this._table._innerlist._inn._inn.subviews[i];
+				item.destroy();
 				break;
 			}
 		}
