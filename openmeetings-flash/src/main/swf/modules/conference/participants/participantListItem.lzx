@@ -65,11 +65,13 @@
 	</method>
 	
 	<method name="update" args="obj, full=true">
-		setAttribute('firstname', obj.firstname);
-		setAttribute('lastname', obj.lastname);
-		refObj = obj;
-		this.isMod = refObj.isMod;
-		checkName();
+		if (!!obj.scope) {
+			setAttribute('firstname', obj.firstname);
+			setAttribute('lastname', obj.lastname);
+			refObj = obj;
+			this.isMod = refObj.isMod;
+			checkName();
+		}
 		this.updateIcons();
 	</method>
 	 

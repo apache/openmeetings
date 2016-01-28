@@ -32,7 +32,7 @@
         </when>
     </switch>
 
-    <rtmpConnection name="rtmp" autoconnect="false" debug="true" />
+    <rtmpConnection name="rtmp" debug="true" />
 
     <handler name="oninit">
         this.setAttribute("testName", "Port");
