@@ -75,8 +75,8 @@
 	</handler>
 	
 	<!-- View for Contents. All Windows will be loaded on this view. -->
-	<view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
-					height="${ canvas.height-canvas.naviHeightDelta }"
+	<view name="main_content" y="0" width="${canvas.width}" 
+					height="${ canvas.height }"
 					visibility="hidden" showhandcursor="false">
 		
 		<handler name="onmouseover">
@@ -109,39 +109,6 @@
 		<om_vscrollbar name="_scrollbar" id="_mainScrollBar" />
 	</view>  
 	  
-	<!-- View for Navigation-bar and App-name -->
-	<view name="_mainbgcontentNavi" x="0" y="0" clip="true" width="100%" height="${ canvas.naviHeight }" visibility="hidden">
-		<image id="mainApplogo" visible="false" />
-		<text id="mainBaseText" visible="false" fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
-			<switch>
-				<when property="$as3">
-					<passthrough>
-						import flash.filters.DropShadowFilter;
-					</passthrough>
-				</when>
-			</switch>
-			<method name="setShadow" >
-			<![CDATA[
-				if (this.isinited && false){
-					this.normalMC = this.getDisplayObject();
-					this.displacementMap = new DropShadowFilter();
-					this.normalMC.filters = [this.displacementMap];
-				}
-			]]>
-			</method>
-			<handler name="onclick">
-				lz.Browser.loadURL(canvas.currentappnameurl,"_blank");
-			</handler>
-			<labelTooltip id="mainBaseTextLabel" />
-		</text>
-		<handler name="oninit">
-			var cmenu = new LzContextMenu();
-			//if($debug) Debug.write("cmenu: ", cmenu, this);
-			this.contextmenu = cmenu;
-			cmenu.hideBuiltInItems();
-		</handler>	 
-	</view>
-	
 	<!-- View for Conference menu bar at the top side. Visible on conference -->
 	<view name="_conferencemenu" y="0" x="0" width="100%" height="20" visible="false" > 
 		<method name="removeAll">

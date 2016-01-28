@@ -57,10 +57,12 @@
     </handler>
     
     <method name="update" args="obj, full=true">
-    	setAttribute('firstname', obj.firstname);
-    	setAttribute('lastname', obj.lastname);
-    	refObj = obj;
-		_userName.setAttribute('text', getUName());
+    	if (!!obj.scope) {
+	    	setAttribute('firstname', obj.firstname);
+	    	setAttribute('lastname', obj.lastname);
+	    	refObj = obj;
+			_userName.setAttribute('text', getUName());
+		}
     </method>
      
     <method name="updateIconByMod">

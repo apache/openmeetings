@@ -79,9 +79,6 @@
 			new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
 		}
 		
-		canvas._mainbgcontentNavi.setAttribute('height',0);
-		canvas.setAttribute('naviHeightDelta',28);
-		
 		if (this._chatPanelStrict) {
 			var chatHidden = this.roomobj.chatHidden;
 			this._chatPanelStrict.setAttribute('visible', !chatHidden);
@@ -92,11 +89,8 @@
 		
 		canvas.currentBaseConferenceRoom = this;
 		if (!this.roomobj.hideTopBar) {
+			canvas.main_content.setAttribute('y', 28);
 			canvas.currentBaseConferenceRoom.createMenu();
-		} else {
-			canvas.setAttribute('naviHeight', 0);
-			canvas.setAttribute('naviHeightDelta', 0);
-			canvas._mainbgcontentNavi.setAttribute('visible', false);
 		}
 		canvas._conferencemenu.setAttribute('visible', !this.roomobj.hideTopBar);
 		
@@ -209,8 +203,6 @@
 			var src = hib.getUrl();
 			canvas.thishib.setAttribute('src',src);
 			canvas.thishib.disconnect();
-			canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
-			canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
 			canvas._conferencemenu.removeAll();
 			canvas._conferencemenu.setAttribute('visibility','hidden');
 		</handler>

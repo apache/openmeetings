@@ -59,6 +59,18 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>client-target</id>
+			<activation>
+				<property>
+					<name>client</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<ant.target>compile.laszlo.main</ant.target>
+			</properties>
+		</profile>
+		<profile>
 			<id>client-debug-target</id>
 			<activation>
 				<property>

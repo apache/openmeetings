@@ -43,30 +43,32 @@
 	<method name="update" args="obj, full=true">
 	<![CDATA[
 		if ($debug) Debug.write("!!!! update ", obj, this.userId);
-		setAttribute('firstname', obj.firstname);
-		setAttribute('lastname', obj.lastname);
-		if (full) {
-			setAttribute('refObj', obj);
-		} else {
-			this.refObj.isMod = obj.isMod;
-		}
-		var renderList = parent.parent.parent.parent.renderList;
-		//if ($debug) Debug.write("!!!! update renderList", renderList);
-		for (var i = 0; i < renderList.length; ++i) {
-			if (renderList[i].publicSID == refObj.publicSID) {
-				if (full) {
-					renderList[i] = this.refObj;
-				} else {
-					renderList[i].isMod = obj.isMod;
-				}
-				break;
+		if (!!obj.scope) {
+			setAttribute('firstname', obj.firstname);
+			setAttribute('lastname', obj.lastname);
+			if (full) {
+				setAttribute('refObj', obj);
+			} else {
+				this.refObj.isMod = obj.isMod;
 			}
+			var renderList = parent.parent.parent.parent.renderList;
+			//if ($debug) Debug.write("!!!! update renderList", renderList);
+			for (var i = 0; i < renderList.length; ++i) {
+				if (renderList[i].publicSID == refObj.publicSID) {
+					if (full) {
+						renderList[i] = this.refObj;
+					} else {
+						renderList[i].isMod = obj.isMod;
+					}
+					break;
+				}
+			}
+			
+			this.isMod = refObj.isMod;
+			this._content._userName.setAttribute('text', getUName());
 		}
-		
-		this.isMod = refObj.isMod;
 		updateUserStatus();
 		this._content._iconsModerator.oninit.sendEvent();
-		this._content._userName.setAttribute('text', getUName());
 	]]>
 	</method>
 	

@@ -238,7 +238,6 @@
 		//set user color
 		canvas.currentusercolor = canvas.getColorForUser();
 
-		mainBaseText.setAttribute('text',canvas.currentappname);
 		var _url = this.getDisplayObject().loaderInfo.url;
 		if($debug) Debug.write("_url: ",_url);
 		var cleanUrl = _url;
@@ -518,6 +517,7 @@
 		try {
 			canvas.setAttribute('ismoderator', isCurrentModerator);
 		} catch (e:Error) {
+			new lz.errorPopup(canvas, {error: "update moder "+e});
 			if ($debug) Debug.error("updateModerationFlag::error ", e);
 		}
 	]]>
@@ -545,7 +545,9 @@
 	<method name="setDrawAllowStatus" args="roomClientObj">
 	<![CDATA[
 		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		u.update(roomClientObj);
+		if (!!u && !!roomClientObj) {
+			u.update(roomClientObj);
+		}
 		if ($debug) Debug.write("drawAllowStatus changes ###### ");
 		if (roomClientObj.publicSID == canvas.publicSID) {
 			canvas.setAttribute("isAllowedToDraw", roomClientObj.canDraw);
@@ -562,7 +564,9 @@
 	<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
 	<![CDATA[
 		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		u.update(roomClientObj);
+		if (!!u && !!roomClientObj) {
+			u.update(roomClientObj);
+		}
 		if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
 		if (roomClientObj.publicSID==canvas.publicSID) {
 			canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
@@ -573,8 +577,11 @@
 	
 	<method name="setMuteStatus" args="roomClientObj">
 	<![CDATA[
+		if ($debug) Debug.write("setMuteStatus ###### ", roomClientObj);
 		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		u.update(roomClientObj);
+		if (!!u && !!roomClientObj) {
+			u.update(roomClientObj);
+		}
 		if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
 		//Check for self status
 		if (roomClientObj.publicSID == canvas.publicSID) {
@@ -719,7 +726,6 @@
 		itemStyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
 		menuStyle.setAttribute("basecolor",canvas.getThemeColor('styleMenuBarBaseColor'));
 		_conferencemenu.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
-		_mainbgcontentNavi.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
 		main_content.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
 	</method>
 

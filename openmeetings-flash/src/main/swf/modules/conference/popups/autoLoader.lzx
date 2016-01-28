@@ -35,7 +35,6 @@
 	
 	<method name="close">
 		canvas.main_content.setAttribute('visibility','visible');
-		canvas._mainbgcontentNavi.setAttribute('visibility','visible');
 		canvas.thishib.loaderVar = null;
 		this.destroy();
 	</method>
