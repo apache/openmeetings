@@ -107,6 +107,9 @@ iframe {
 	top: 10px;
 	right: 20px;
 }
+#bannerRight img, #bannerLeft img {
+	height: 80px !important;
+}
 
 /* Call for logo, need to be removed*/
 .powered-preview {

@@ -18,9 +18,14 @@
 
     <bannerLeft>
     	<name>Apache OpenMeetings</name>
-    	<src>http://openmeetings.apache.org/images/logo-2.jpg</src>
+    	<src>http://openmeetings.apache.org/images/logo.png</src>
     	<href>http://openmeetings.apache.org/index.html</href>
     </bannerLeft>
+    <bannerRight>
+    	<name>Apache</name>
+    	<src>http://apache.org/img/asf_logo.png</src>
+    	<href>http://apache.org</href>
+    </bannerRight>
 
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>

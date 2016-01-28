@@ -65,7 +65,7 @@
 				<li>
 					<table>
 						<tr>
-							<td><img class="logo-big" src="images/logo-2.jpg" alt="Apache OpenMeetings"/></td>
+							<td><img class="logo-big" src="images/logo.png" alt="Apache OpenMeetings"/></td>
 							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
 						</tr>
 						<tr>
@@ -119,18 +119,6 @@
 						<tr>
 							<td>Author</td>
 							<td>Vital Trizna</td>
-						</tr>
-					</table>
-				</li>
-				<li>
-					<table>
-						<tr>
-							<td><img class="logo-big" src="images/logos/logo_om_big6.png" alt="Apache OpenMeetings"/></td>
-							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
-						</tr>
-						<tr>
-							<td>Author</td>
-							<td>Alvaro Bustos</td>
 						</tr>
 					</table>
 				</li>
