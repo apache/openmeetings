@@ -27,8 +27,9 @@ html, body {
 	font-weight: bold;
 	background-image: url(images/logo.png);
 	background-repeat: no-repeat;
-	padding-left: 150px;
+	padding-left: 80px;
 	margin-bottom: 10px;
+	margin-left: 20px;
 }
 #topLinks {
 	position: absolute;

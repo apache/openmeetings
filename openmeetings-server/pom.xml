@@ -33,7 +33,7 @@
 		<server.dir>${project.build.directory}/red5-server</server.dir>
 		<webapp.languages.dir>../openmeetings-web/src/main/webapp/languages</webapp.languages.dir>
 		<languages.dir>../openmeetings-web/src/main/java/org/apache/openmeetings/web/app</languages.dir>
-		<assembly.finalName>${project.build.finalName}</assembly.finalName>
+		<assembly.finalName>apache-openmeetings-${project.version}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
 		<dist.dir>${project.build.directory}/${assembly.finalName}</dist.dir>
 		<dist.webapps>${dist.dir}/webapps</dist.webapps>
@@ -237,7 +237,7 @@
 							<descriptors>
 								<descriptor>${project.basedir}/src/main/assembly/src.xml</descriptor>
 							</descriptors>
-							<finalName>${project.build.finalName}</finalName>
+							<finalName>${assembly.finalName}</finalName>
 							<appendAssemblyId>true</appendAssemblyId>
 							<tarLongFileMode>gnu</tarLongFileMode>
 							<skipAssembly>${src.pack.skip}</skipAssembly>
