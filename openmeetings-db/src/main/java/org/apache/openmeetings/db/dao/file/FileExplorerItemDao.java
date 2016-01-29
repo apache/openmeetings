@@ -46,8 +46,7 @@ public class FileExplorerItemDao {
 	private EntityManager em;
 
 	public Long add(String fileName, String fileHash, Long parentId, Long ownerId, Long roomId, Long insertedBy,
-			Boolean isFolder, Boolean isImage, Boolean isPresentation, String wmlFilePath, Boolean isStoredWmlFile,
-			Boolean isChart, String externalId, String externalType) {
+			Type type, String wmlFilePath, String externalId, String externalType) {
 		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
 		try {
 			FileExplorerItem fileItem = new FileExplorerItem();
@@ -59,23 +58,7 @@ public class FileExplorerItemDao {
 			fileItem.setRoomId(roomId);
 			fileItem.setInserted(new Date());
 			fileItem.setInsertedBy(insertedBy);
-			Type t = null;
-			if (isStoredWmlFile) {
-				t = Type.WmlFile;
-			}
-			if (isChart) {
-				t = Type.PollChart;
-			}
-			if (isImage) {
-				t = Type.Image;
-			}
-			if (isPresentation) {
-				t = Type.Presentation;
-			}
-			if (isFolder) {
-				t = Type.Folder;
-			}
-			fileItem.setType(t);
+			fileItem.setType(type);
 			fileItem.setUpdated(new Date());
 			fileItem.setWmlFilePath(wmlFilePath);
 			fileItem.setExternalId(externalId);
