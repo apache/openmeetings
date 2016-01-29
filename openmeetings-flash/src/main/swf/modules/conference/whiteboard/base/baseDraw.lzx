@@ -981,6 +981,7 @@
     		        }
 		        }
 				////Debug.write("found obj: ",this.baseactionobjectList[eg]);
+				break;
 			}
 		}		
 		return tempList;
