@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -129,13 +130,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				// String wmlPath = current_dir + File.separatorChar+fileName
 				// +".xml";
 				// OwnerID == null
-				Long fileExplorerId = fileDao.add(fileName, "", 0L,
+				Long fileExplorerId = fileDao.add(fileName, "", null,
 						null, room_id, users_id, false, // isFolder
-						false, // isImage
-						false, // isPresentation
+						Type.WmlFile,
 						localFileName, // WML localFileName
-						true, // isStoredWML file
-						true, "", "");
+						"", "");
 
 				return fileExplorerId;
 			}

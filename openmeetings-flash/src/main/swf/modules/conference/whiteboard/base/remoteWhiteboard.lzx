@@ -118,7 +118,7 @@
 	<method name="prepareLoadWMLFile" args="itemObj">
 		if ($debug) Debug.write("loadWMLFile: ",itemObj);
 		
-		this.loadWMLFile.setAttribute('fileEId', itemObj.fileId);
+		this.loadWMLFile.setAttribute('fileId', itemObj.fileId);
 				  
 		if ($debug) Debug.write("prepareLoadWMLFile 1: ",parent.parent.whiteboardId);
 		
