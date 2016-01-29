@@ -46,7 +46,7 @@ public class FileExplorerItemDao {
 	private EntityManager em;
 
 	public Long add(String fileName, String fileHash, Long parentId, Long ownerId, Long roomId, Long insertedBy,
-			Boolean isFolder, Type type, String wmlFilePath, String externalId, String externalType) {
+			Type type, String wmlFilePath, String externalId, String externalType) {
 		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
 		try {
 			FileExplorerItem fileItem = new FileExplorerItem();
