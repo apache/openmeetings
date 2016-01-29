@@ -131,9 +131,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				// +".xml";
 				// OwnerID == null
 				Long fileExplorerId = fileDao.add(fileName, "", null,
-						null, room_id, users_id, false, // isFolder
-						Type.WmlFile,
-						localFileName, // WML localFileName
+						null, room_id, users_id, Type.WmlFile, localFileName, // WML localFileName
 						"", "");
 
 				return fileExplorerId;
