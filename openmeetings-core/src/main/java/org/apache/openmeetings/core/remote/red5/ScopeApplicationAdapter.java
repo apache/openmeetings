@@ -182,11 +182,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
 			String parentSid = (String)map.get("parentSid");
-			rcm.setRoomId(Long.parseLong(conn.getScope().getName()));
+			rcm.setRoomId(Long.valueOf(conn.getScope().getName()));
 			rcm.setScreenClient(true);
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
-			rcm.setUserId((Long)map.get("userId"));
+			rcm.setUserId(new Long((Integer)map.get("userId")));
 			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUserId());
 
 			rcm.setStreamPublishName(parentSid);
