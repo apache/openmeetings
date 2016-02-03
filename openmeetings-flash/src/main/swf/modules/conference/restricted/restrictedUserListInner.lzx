@@ -436,23 +436,25 @@
 			if (!userObject) return;
 			
 			var vList = parent._table.renderList;
-			for (var i = 0; i < vList.length; ++i) {
-				if (vList[i].publicSID == userObject.publicSID) {
-					if ($debug) Debug.write(" :: updateIcons :: item1 found: ", vList[i]);
-					vList[i].isBroadcasting = userObject.isBroadcasting;
-					vList[i].canDraw = userObject.canDraw;
-					vList[i].canShare = userObject.canShare;
-					vList[i].canRemote = userObject.canRemote;
-					vList[i].canGiveAudio = userObject.canGiveAudio;
-					vList[i].micMuted = userObject.micMuted;
-					break;
+			if (!!vList) {
+				for (var i = 0; i < vList.length; ++i) {
+					if (vList[i].publicSID == userObject.publicSID) {
+						if ($debug) Debug.write(" :: updateIcons :: item1 found: ", vList[i]);
+						vList[i].isBroadcasting = userObject.isBroadcasting;
+						vList[i].canDraw = userObject.canDraw;
+						vList[i].canShare = userObject.canShare;
+						vList[i].canRemote = userObject.canRemote;
+						vList[i].canGiveAudio = userObject.canGiveAudio;
+						vList[i].micMuted = userObject.micMuted;
+						break;
+					}
 				}
 			}
 			
 			//search for the user and update its drawStatusIcon
 			var vList = parent._table._innerlist._inn._inn.subviews;
 			for (var i = 0; i < vList.length; ++i) {
-				if (vList[i].refObj.publicSID == userObject.publicSID) {
+				if (!!vList[i].refObj && vList[i].refObj.publicSID == userObject.publicSID) {
 					if ($debug) Debug.write(" :: updateIcons :: item2 found: ", vList[i]);
 					vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
 					vList[i].isBroadcasting = userObject.isBroadcasting;

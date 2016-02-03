@@ -19,10 +19,8 @@
   
 -->
 <library>
-	
+    <include href="baseRoomSidebar.lzx" />
     <include href="conferenceRoomSidebar.lzx" />
     <include href="interviewRoomSidebar.lzx" />
     <include href="restrictedRoomSidebar.lzx" />
-    <include href="conferenceRoomSidebarTabButton.lzx" />
-    
 </library>
