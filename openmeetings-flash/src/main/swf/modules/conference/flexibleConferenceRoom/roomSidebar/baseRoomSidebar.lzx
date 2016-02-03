@@ -28,16 +28,17 @@
 	<attribute name="listType" value="eventUserListTable" type="string" />
 	
 	<method name="toggleStatus">
+		this._minimizeSidebar.bringToFront();
 		if (this.isOpen) {
 			this._doClose.setAttribute('started', true);
 			this.isOpen = false;
-			this._minimizeSidebar._icon.setAttribute("frame",2);
-			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",857);
+			this._minimizeSidebar._icon.setAttribute("frame", 2);
+			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid", 857);
 		} else {
 			this._doOpen.setAttribute('started', true);
 			this.isOpen = true;
-			this._minimizeSidebar._icon.setAttribute("frame",1);
-			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",856);
+			this._minimizeSidebar._icon.setAttribute("frame", 1);
+			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid", 856);
 		}
 	</method>
 	
@@ -47,9 +48,7 @@
 	<view name="borderBarBottom" y="34"
 			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" /> 
 	
-	<view name="_head" y="1" width="${ parent.width-10 }" height="32"
-				layout="axis:x;spacing:2;inset:2" >
-	
+	<view name="_head" y="1" width="${ parent.width-10 }" height="32" layout="axis:x;spacing:2;inset:2" >
 		<handler name="oninit">
 		<![CDATA[
 			for (var eg in this.subviews) {
@@ -69,29 +68,27 @@
 		<tabButtonMain name="filesTabButton" currentIconRsc="files_tab_btn" height="$once{ parent.height }" 
 				labelid="614" width="$once{ (parent.width-6)/2 }"
 				visible="${ !canvas.isInterview &amp;&amp; !canvas.currentRoomObj.hideFilesExplorer }"/>
-		
 	</view>
 	
-	<fileExplorer name="_files" y="22" width="$once{ parent.width-12 }"
-				height="${ parent.height-222 }" visible="false" />
+	<fileExplorer name="_files" y="22" width="$once{ parent.width-12 }" height="${ parent.height-222 }" visible="false" />
 	
 	<activityList name="_activityList" />
 	
-	<view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
-						bgcolor="0xE0E1EB" height="${ parent.height-1 }">
+	<view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1" bgcolor="0xE0E1EB" height="${ parent.height-1 }">
 		<handler name="onclick">
-			parent.toggleStatus();
+			if (!canvas.isInterview) {
+				parent.toggleStatus();
+			}
 		</handler>
 		
 		<view width="${ parent.width }" height="$once{ parent.height }" bgcolor="0xE0E1EB" />
 			
-		<view name="_icon" resource="sidebar_tab_btn" y="0">
+		<view name="_icon" resource="sidebar_tab_btn" y="0" visible="${ !canvas.isInterview }">
 			<handler name="onclick">
 				parent.parent.toggleStatus();
 			</handler>
 			<labelTooltip name="_labelTooltip" labelid="856" />
 		</view>
-		
 	</view>
 	
 	<animator name="_doOpen" attribute="width" to="$once{ parent.width }" duration="750" started="false" />
