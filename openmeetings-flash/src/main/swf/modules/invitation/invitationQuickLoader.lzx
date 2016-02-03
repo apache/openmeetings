@@ -131,10 +131,9 @@
 			hib.userlang = Number(this.userlang);
 			hib.getCurrentRoomClient.doCall();
 			this.close();
-			//if (canvas.language == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) { TODO  canvas.language seems to be dropped
-			if (canvas.language_id == canvas.thishib.userlang && canvas.thishib.initlanguageLoaded) {
+			if (canvas.language_id == hib.userlang && hib.initlanguageLoaded) {
 			} else {
-				canvas.thishib.loaderVar.getLanguageByIdAndMax.doCall();
+				hib.getLanguageByIdAndMax.doCall();
 			}
 		]]>         
 		</method>
