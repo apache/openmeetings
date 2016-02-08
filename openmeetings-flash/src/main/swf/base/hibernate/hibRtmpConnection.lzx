@@ -195,6 +195,9 @@
 		client.stopPublishingMessage = this.stopPublishingMessage;
 		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
 		client.nickNameSet = this.nickNameSet;
+		client.clearChatContent = this.clearChatContent;
+		client.startedPublishing = this.startedPublishing;
+		client.newPoll = this.newPoll;
 	</handler>
 	
 	<handler name="ondisconnect">
@@ -1383,24 +1386,15 @@
 		]]>
 		</method>	  
 			   
-		<netRemoteCallHib name="newPoll" funcname="newPoll">
-			<switch>
-				<when property="$as3">
-					<passthrough>
-						import flash.external.ExternalInterface;
-					</passthrough>
-				</when>
-			</switch>
-			<handler name="ondata" args="value">
-			<![CDATA[
-				//The onResult-Handler will be called by the rtmpconnection
-				if ($debug) Debug.write("newPoll : ", value);
-				if (canvas.userId != value.createdBy.id) {
-					ExternalInterface.call("vote", canvas.publicSID);
-				}
-			]]>
-			</handler>
-		</netRemoteCallHib>					
+	<method name="newPoll" args="value">
+	<![CDATA[
+		//The onResult-Handler will be called by the rtmpconnection
+		if ($debug) Debug.write("newPoll : ", value);
+		if (canvas.userId != value.createdBy.id) {
+			ExternalInterface.call("vote", canvas.publicSID);
+		}
+	]]>
+	</method>					
 								
 		<method name="sendVarsToModeratorGeneral" args="value">
 		<![CDATA[
@@ -1415,15 +1409,6 @@
 		]]>
 		</method>	   
 		
-   <!-- recordContentings Notifications -->
-	<netRemoteCallHib name="stopedRecording" funcname="stopedRecording" >	  
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("stopedRecording: ",value);
-			canvas._mymod.recordingUser = null;
-			canvas._mymod.setMessage();
-		</handler>
-	</netRemoteCallHib>
-	
 	<method name="startedRecording" args="value">
 		if ($debug) Debug.write("startedRecording: ",value);
 		canvas._mymod.recordingUser = value;
@@ -1441,13 +1426,11 @@
 		</handler>
 	</netRemoteCallHib>
 	
-	<netRemoteCallHib name="startedPublishing" funcname="startedPublishing" >	  
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("startedPublishing: ", value);
-			canvas._mymod.publishingObj = {user: value[0], url: value[1]};
-			canvas._mymod.setMessage();
-		</handler>
-	</netRemoteCallHib>
+	<method name="startedPublishing" args="value">
+		if ($debug) Debug.write("startedPublishing: ", value);
+		canvas._mymod.publishingObj = {user: value[0], url: value[1]};
+		canvas._mymod.setMessage();
+	</method>
 	
 	<method name="roomConnect" args="value">
 		if ($debug) Debug.write("roomConnect: ",value);
@@ -1526,14 +1509,12 @@
 	]]>
 	</method>  
 	
-	<netRemoteCallHib name="clearChatContent" funcname="clearChatContent">
-		<handler name="ondata" args="value">
-			<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				canvas._chatcontent.reload();
-			]]>
-		</handler>   
-	</netRemoteCallHib> 
+	<method name="clearChatContent" args="value">
+	<![CDATA[
+		//The onResult-Handler will be called be the rtmpconnection
+		canvas._chatcontent.reload();
+	]]>
+	</method> 
 	
 	<netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
 				   remotecontext="$once{ canvas.thishib }">
