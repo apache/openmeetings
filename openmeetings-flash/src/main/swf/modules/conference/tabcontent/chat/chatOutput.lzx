@@ -26,25 +26,25 @@
             clip="true" width="${ parent.width-1 }" bgcolor="0xFFFFFF">
 
     <attribute name="isAlreadyLoaded" value="false" type="boolean"/>
-<!---
- Invoked from VideoContainer cause domain/room must be set first
- -->
-    <method name="doInitByOpen">
-        <![CDATA[
-            if (!this.isAlreadyLoaded) {
-            	this.isAlreadyLoaded = true;
-            	this._cbtext.clearChatOutput();
-                this.getRoomChatHistory.doCall();
-            }
-        ]]>
-    </method>
-    
-    <method name="reload">
-        <![CDATA[
-        	this._cbtext.clearChatOutput();
-            this.getRoomChatHistory.doCall();
-        ]]>
-    </method>    
+	<!---
+	 Invoked from VideoContainer cause domain/room must be set first
+	 -->
+	<method name="doInitByOpen">
+	<![CDATA[
+		if (!this.isAlreadyLoaded) {
+			this.isAlreadyLoaded = true;
+			this._cbtext.clearChatOutput();
+			this.getRoomChatHistory.doCall();
+		}
+	]]>
+	</method>
+	
+	<method name="reload">
+	<![CDATA[
+		this._cbtext.clearChatOutput();
+		this.getRoomChatHistory.doCall();
+	]]>
+	</method>    
     
     <netRemoteCallHib name="getRoomChatHistory" funcname="chatservice.getRoomChatHistory" 
         remotecontext="$once{ canvas.thishib }" > 

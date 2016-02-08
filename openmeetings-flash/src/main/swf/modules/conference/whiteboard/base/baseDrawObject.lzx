@@ -119,15 +119,15 @@
 	
 	<method name="doFullFit" args="v">
 	<![CDATA[
-		if ($debug) Debug.write("Do Full Fit ? doFullFit: ", v);
-		if ($debug) Debug.write(this.ObjectByName);
+		if ($debug) Debug.write("Do Full Fit ? doFullFit: ", v, this.ObjectByName);
 	
 		this.fullFit = v;
-		
-		if (this.ObjectByName && this.ObjectByName.typeOfObject=="swf") {	
+		if (!!this.ObjectByName && this.ObjectByName.typeOfObject == "swf") {	
 			if (v) {
-				if ($debug) Debug.write("Do Full Fit !");
-				this.ObjectByName._swfView.initialLoadFullFit();
+				if ($debug) Debug.write("Do Full Fit ! ", (!!this.ObjectByName._swfView));
+				if (!!this.ObjectByName._swfView) {
+					this.ObjectByName._swfView.initialLoadFullFit();
+				}
 			}
 		}
 	]]>

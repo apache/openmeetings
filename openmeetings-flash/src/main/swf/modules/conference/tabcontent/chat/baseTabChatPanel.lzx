@@ -129,13 +129,13 @@
         
         <handler name="onisopen" args="o"><![CDATA[
 			if ($debug) Debug.write("onisopen", o, canvas._chatcontent);
-			canvas.chatHeight = o ? 200 : 222;  
+			canvas.chatHeight = !!o ? 200 : 222;  
 			canvas.commonVideoViewContent.hideChatContent(!o);
 			if (o) {
-				if (canvas._chatcontent != null && 'doInitByOpen' in canvas._chatcontent) {
+				if (!!canvas._chatcontent && !!canvas._chatcontent.doInitByOpen) {
 					canvas._chatcontent.doInitByOpen();
 				}
-				if (canvas.currentRoomObj != null) {
+				if (!!canvas.currentRoomObj) {
 					content._content1._chattabbottom.updatefontbuttonvisible();
 				}
 				this.doBlink = false;
