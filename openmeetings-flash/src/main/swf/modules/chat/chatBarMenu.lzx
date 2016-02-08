@@ -96,11 +96,13 @@
             this.currentBtn = btn;
             this.currentBtn.objRef.setAttribute("visibility","visible");
         	this.currentBtn.objRef.bringToFront();
-            if ($debug)  //Debug.write("sendActiveWindow2: ",this.currentBtn);
+            //if ($debug) Debug.write("sendActiveWindow2: ",this.currentBtn);
             this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
             this.currentBtn._minimizebtn_dn.setAttribute('visibility','visible');
             this.currentBtn.isactive=true;
-	       	this.currentBtn.objRef.sendActiveWindow();
+            if (!!this.currentBtn.objRef.sendActiveWindow) {
+	       		this.currentBtn.objRef.sendActiveWindow();
+	       	}
         ]]>
     </method>
     
