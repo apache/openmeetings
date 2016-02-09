@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,6 +36,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({ 
 	@NamedQuery(name = "getRecordingLogsByRecording", query = "SELECT fl FROM RecordingLog fl WHERE fl.recording.id = :recId")
@@ -60,8 +63,8 @@ public class RecordingLog implements IDataProviderEntity {
 	private String msgType;
 	
 	@Lob
-	@Column(name="ful_message", length = MAX_LOG_SIZE)
-	private String fullMessage;
+	@Column(name="full_message", length = MAX_LOG_SIZE)
+	private byte[] fullMessageArray;
 	
 	@Column(name="exit_value")
 	private String exitValue;
@@ -95,10 +98,11 @@ public class RecordingLog implements IDataProviderEntity {
 	}
 	
 	public String getFullMessage() {
-		return fullMessage;
+		return fullMessageArray == null ? null : new String(fullMessageArray, StandardCharsets.UTF_8);
 	}
+	
 	public void setFullMessage(String fullMessage) {
-		this.fullMessage = fullMessage == null || fullMessage.length() < MAX_LOG_SIZE ? fullMessage : fullMessage.substring(0,  MAX_LOG_SIZE);
+		setFullMessageArray(fullMessage.getBytes(StandardCharsets.UTF_8));
 	}
 	
 	public String getExitValue() {
@@ -106,5 +110,11 @@ public class RecordingLog implements IDataProviderEntity {
 	}
 	public void setExitValue(String exitValue) {
 		this.exitValue = exitValue;
+	}
+	public byte[] getFullMessageArray() {
+		return fullMessageArray;
+	}
+	public void setFullMessageArray(byte[] a) {
+		this.fullMessageArray = a == null || a.length < MAX_LOG_SIZE ? a : Arrays.copyOf(a, MAX_LOG_SIZE);
 	}
 }
