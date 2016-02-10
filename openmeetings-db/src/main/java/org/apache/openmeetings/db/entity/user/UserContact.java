@@ -42,8 +42,6 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.id = :id"),
 	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId"),
 	@NamedQuery(name = "getContactByUserOwner", query = "SELECT c FROM UserContact c WHERE c.contact.id = :userId AND c.owner.id = :ownerId AND c.contact.deleted = false"),
-	@NamedQuery(name = "getContactsByHash", query = "select c from UserContact c " +
-			"where c.hash like :hash "),
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
 			"where c.owner.id = :ownerId " +
 			"AND c.pending = :pending " +
@@ -95,10 +93,6 @@ public class UserContact implements Serializable {
 	@Element(data=true)
 	private boolean pending;
 	
-	@Column(name="hash")
-	@Element(data=true, required = false)
-	private String hash;
-	
 	@Column(name="inserted")
 	private Date inserted;
 	
@@ -149,13 +143,6 @@ public class UserContact implements Serializable {
 	}
 	public void setUpdated(Date updated) {
 		this.updated = updated;
-	}
-	
-	public String getHash() {
-		return hash;
-	}
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 	
 	public boolean getShareCalendar() {

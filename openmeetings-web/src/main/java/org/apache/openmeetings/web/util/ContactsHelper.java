@@ -21,46 +21,38 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Date;
-
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.service.mail.template.RequestContactConfirmTemplate;
 import org.apache.openmeetings.service.mail.template.RequestContactTemplate;
-import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
-	public static long addUserToContactList(long userIdToAdd) {
+	public static Long addUserToContactList(long userIdToAdd) {
 		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 
 		if (isContact) {
 			return -45L;
 		}
-		String hash = ManageCryptStyle.getInstanceOfCrypt()
-			.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+		UserContact contact = getBean(UserContactDao.class).add(userIdToAdd, getUserId(), true);
 
-		Long userContactId = getBean(UserContactDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);
-
-		User user = getBean(UserDao.class).get(getUserId());
-		User userToAdd = getBean(UserDao.class).get(userIdToAdd);
+		User user = contact.getOwner();
+		User userToAdd = contact.getContact();
 
 		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString(1193);
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
 		getBean(PrivateMessageDao.class).addPrivateMessage(
-			subj, message, 0L, user, userToAdd, userToAdd, false, null, true, userContactId);
+			subj, message, 0L, user, userToAdd, userToAdd, false, null, true, contact.getId());
 
 		if (userToAdd.getAddress() != null) {
 			getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
 		}
 
-		return userContactId;
+		return contact.getId();
 	}
 
 	public static Long acceptUserContact(long userContactId) {
@@ -80,7 +72,7 @@ public class ContactsHelper {
 		contact = dao.get(userContactId);
 		User user = contact.getOwner();
 
-		dao.addUserContact(user.getId(), getUserId(), false, "");
+		dao.add(user.getId(), getUserId(), false);
 
 		if (user.getAddress() != null) {
 			String message = RequestContactConfirmTemplate.getEmail(contact);
