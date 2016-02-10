@@ -42,18 +42,17 @@ public class UserContactDao {
 	@Autowired
 	private UserDao userDao;
 
-	public Long addUserContact(Long userId, Long ownerId, Boolean pending, String hash) {
+	public UserContact add(Long userId, Long ownerId, boolean pending) {
 		try {
 			UserContact userContact = new UserContact();
 			userContact.setInserted(new Date());
 			userContact.setOwner(userDao.get(ownerId));
 			userContact.setContact(userDao.get(userId));
 			userContact.setPending(pending);
-			userContact.setHash(hash);
 			
 			userContact = update(userContact);
 			
-			return userContact.getId();
+			return userContact;
 		} catch (Exception e) {
 			log.error("[addUserContact]",e);
 		}
@@ -103,7 +102,7 @@ public class UserContactDao {
 		return q.getSingleResult();
 	}
 	
-	public List<UserContact> getContactsByUserAndStatus(Long ownerId, Boolean pending) {
+	public List<UserContact> getContactsByUserAndStatus(Long ownerId, boolean pending) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByUserAndStatus", UserContact.class);
 			query.setParameter("ownerId", ownerId);
@@ -145,7 +144,7 @@ public class UserContactDao {
 		return null;
 	}
 	
-	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, Boolean pending) {
+	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, boolean pending) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class); 
 			query.setParameter("userId", userId);
@@ -177,7 +176,7 @@ public class UserContactDao {
 		return em.createNamedQuery("getUserContacts", UserContact.class).getResultList();
 	}
 	
-	public Long updateContactStatus(Long id, Boolean pending) {
+	public Long updateContactStatus(Long id, boolean pending) {
 		try {
 			UserContact uc = get(id);
 			uc.setPending(pending);
