@@ -29,30 +29,29 @@
 		<attribute name="userlang" value="1" type="number" />
 		
 		<handler name="oninit">
-			this.setRoomValues();
 			if (canvas.thishib.currentInvitation.passwordProtected){
 				if ($debug) Debug.write("Is Password Protected");
-				this.pass_label.setAttribute('visibility','visible');
-				this._password.setAttribute('visibility','visible');
-				this.invitation_pass.setAttribute('visibility','visible');
+				this.pass_label.setAttribute('visible', true);
+				this._password.setAttribute('visible', true);
+				this.invitation_pass.setAttribute('visible', true);
 			} else {
-				this.showLoginStep();
-                if ($debug) Debug.write("invitationQuickLoader:oninit userlang = [",userlang,"]; canvas.lang = [",canvas.language_id,"]");
-                if (canvas.language_id > 0) {
-                    this.isRoomFull.doCall();
-                } else {
-                    this.showLoginStep();
-                }
+				this.selectLanguage();
 			}
 		</handler>
 		
-		<method name="showLoginStep">
-			this.pass_label.setAttribute('visibility','hidden');
-			this._password.setAttribute('visibility','hidden');
-			this.invitation_pass.setAttribute('visibility','hidden');		
-			this.labellanguages.setAttribute('visibility','visible');
-			this.languages.setAttribute('visibility','visible');
-			this.connect.setAttribute('visibility','visible');
+		<method name="selectLanguage">
+			if ($debug) Debug.write("invitationQuickLoader:oninit userlang = [",userlang,"]; canvas.lang = [",canvas.language_id,"]");
+			this.setRoomValues();
+			if (canvas.language_id > 0) {
+				this.isRoomFull.doCall();
+			} else {
+				this.pass_label.setAttribute('visible', false);
+				this._password.setAttribute('visible', false);
+				this.invitation_pass.setAttribute('visible', false);		
+				this.labellanguages.setAttribute('visible', true);
+				this.languages.setAttribute('visible', true);
+				this.connect.setAttribute('visible', true);
+			}
 		</method>
 		
 		<method name="checkPWD">
@@ -77,21 +76,21 @@
         	</handler>   
     	</netRemoteCallHib> 
 		
-		<netRemoteCallHib name="checkInvitationPass" funcname="invitationservice.checkInvitationPass" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
-	      	<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
-        	<netparam name="pass"><method name="getValue">return parent.parent._password.getText();</method></netparam>
-	        	
-        	<handler name="ondata" args="value">
-        		<![CDATA[
-            		//The onResult-Handler will be called be the rtmpconnection
+		<netRemoteCallHib name="checkInvitationPass" funcname="invitationservice.checkInvitationPass" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >
+			<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
+			<netparam name="pass"><method name="getValue">return parent.parent._password.getText();</method></netparam>
+			
+			<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
 				if ($debug) Debug.write("checkInvitationPass : ",value);
-				if (value<0){
+				if (value < 0) {
 				} else {
-					parent.showLoginStep();
+					parent.selectLanguage();
 				}
-            ]]>
-        	</handler>   
-    	</netRemoteCallHib>  	
+			]]>
+			</handler>
+		</netRemoteCallHib>  	
 	    
 		<method name="setRoomValues">
 			canvas.thishib.setUser(canvas.thishib.currentInvitation.invitee);
