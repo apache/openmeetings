@@ -1388,7 +1388,7 @@
 	<![CDATA[
 		//The onResult-Handler will be called by the rtmpconnection
 		if ($debug) Debug.write("newPoll : ", value);
-		if (canvas.userId != value.createdBy.id) {
+		if (canvas.userId != value.creator.id) {
 			ExternalInterface.call("vote", canvas.publicSID);
 		}
 	]]>

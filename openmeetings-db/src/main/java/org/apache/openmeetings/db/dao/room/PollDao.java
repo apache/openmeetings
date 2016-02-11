@@ -137,12 +137,12 @@ public class PollDao {
 		return false;
 	}
 	
-	public boolean hasVoted(Long roomId, Long userid) {
+	public boolean hasVoted(Long roomId, Long userId) {
 		try {
-			log.debug(" :: hasVoted :: " + roomId + ", " + userid);
+			log.debug(" :: hasVoted :: " + roomId + ", " + userId);
 			TypedQuery<RoomPollAnswer> q = em.createNamedQuery("hasVoted", RoomPollAnswer.class);
 			q.setParameter("roomId", roomId);
-			q.setParameter("userid", userid);
+			q.setParameter("userId", userId);
 			q.getSingleResult();
 			return true;
 		} catch (NoResultException nre) {
