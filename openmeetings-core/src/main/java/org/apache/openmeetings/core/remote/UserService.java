@@ -190,8 +190,7 @@ public class UserService implements IUserService {
 				if (rcl.getRoomId() != null) {
 					scopeName = rcl.getRoomId().toString();
 				}
-				IScope currentScope = this.scopeApplicationAdapter
-						.getRoomScope(scopeName);
+				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");

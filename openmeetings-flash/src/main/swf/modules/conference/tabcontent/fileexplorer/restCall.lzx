@@ -209,9 +209,13 @@
 				requestor.dataFormat = dataFormat;
 				
 				//Initiate the transaction
-				requestor.addEventListener(Event.COMPLETE, successCallback);
-				requestor.addEventListener("ioError", errorCallback); //IOErrorEvent.IOERROR
-				requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorCallback);
+				if (!!this.successCallback) {
+					requestor.addEventListener(Event.COMPLETE, successCallback);
+				}
+				if (!!this.errorCallback) {
+					requestor.addEventListener("ioError", errorCallback); //IOErrorEvent.IOERROR
+					requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorCallback);
+				}
 			}
 			
 			public function load(vars):void {
