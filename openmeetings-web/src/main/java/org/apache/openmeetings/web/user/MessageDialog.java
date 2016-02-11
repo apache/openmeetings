@@ -256,8 +256,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 					}
 				}
 				
+				String subj = p.getSubject() == null ? "" : p.getSubject();
 				getBean(MailHandler.class).send(to.getAddress().getEmail(),
-						Application.getString(1301, to.getLanguageId()) + p.getSubject(),
+						Application.getString(1301, to.getLanguageId()) + subj,
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}
