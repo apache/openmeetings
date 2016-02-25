@@ -54,6 +54,8 @@ import org.slf4j.Logger;
 public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingEventBehavior.class, webAppRootKey);
+	private static final String CDATA_BEGIN = "<![CDATA[";
+	private static final String CDATA_END = "]]>";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
 	private final AjaxDownload download;
@@ -110,14 +112,14 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
-					.replace("$labels", "<![CDATA[" + getLabels(730,  731,  732,  733,  734
+					.replace("$labels", CDATA_BEGIN + getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
 							,  741,  742,  844,  869,  870
 							,  871,  872,  878, 1089, 1090
 							, 1091, 1092, 1093, 1465, 1466
 							, 1467, 1468, 1469, 1470, 1471
 							, 1472, 1473, 1474, 1475, 1476
-							, 1477, 1589, 1598, 1078) + "]]>")
+							, 1477, 1589, 1598, 1078) + CDATA_END)
 					.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
@@ -184,6 +186,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 				}
 			}
 		}
-		return app.replace("$keystore", keystore).replace("$password", password);
+		return app.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
+				.replace("$password", CDATA_BEGIN + password + CDATA_END);
 	}
 }
