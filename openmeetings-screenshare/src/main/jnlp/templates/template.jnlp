@@ -22,8 +22,8 @@
 		<title>$informationTitle</title>
 		<vendor>$applicationName</vendor>
 		<homepage>$informationHomepage</homepage>
-		<icon href="icon.jpg" />
-		<icon kind="splash" href="splashicon.jpg" />
+		<icon href="icon.png" />
+		<icon kind="splash" href="splashicon.png" />
 		<description>$informationTitle</description>
 		<description kind="short">$informationDescription</description>
 		<offline-allowed/>
