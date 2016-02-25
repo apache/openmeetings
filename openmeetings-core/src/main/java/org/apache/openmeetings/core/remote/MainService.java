@@ -28,6 +28,7 @@ import java.util.Set;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -35,12 +36,17 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
@@ -78,6 +84,8 @@ public class MainService implements IPendingServiceCallback {
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
@@ -130,6 +138,54 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[setCurrentUserGroup]", err);
 		}
 		return -1L;
+	}
+
+	public boolean isRoomAllowedToUser(Room r, User u) {
+		boolean allowed = false;
+		if (r != null) {
+			if (r.isAppointment()) {
+				Appointment a = appointmentDao.getByRoom(r.getId());
+				if (a != null && !a.isDeleted()) {
+					allowed = a.getOwner().getId().equals(u.getId());
+					log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
+					if (!allowed) {
+						for (MeetingMember mm : a.getMeetingMembers()) {
+							if (mm.getUser().getId().equals(u.getId())) {
+								allowed = true;
+								break;
+							}
+						}
+					}
+					/*
+					TODO need to be reviewed
+					Calendar c = WebSession.getCalendar();
+					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						allowed = true;
+					} else {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
+						deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					}
+					*/
+				}
+			} else {
+				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()));
+				log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
+				if (!allowed && null != r.getRoomGroups()) {
+					for (RoomGroup ro : r.getRoomGroups()) {
+						for (GroupUser ou : u.getGroupUsers()) {
+							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+								allowed = true;
+								break;
+							}
+						}
+						if (allowed) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		return allowed;
 	}
 
 	public Object secureLoginByRemote(String SID, String secureHash) {
