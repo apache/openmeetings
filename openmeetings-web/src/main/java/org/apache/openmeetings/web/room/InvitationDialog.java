@@ -278,10 +278,10 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setValidFrom(d.getTime());
 		
 		i.setInvitee(u);
+		i.setHash(UUID.randomUUID().toString());
 		if (Type.contact == u.getType()) {
 			//TODO not sure it is right
 			u.setLanguageId(lang);
-			i.setHash(UUID.randomUUID().toString());
 		}
 		return getBean(InvitationDao.class).update(i);
 	}
