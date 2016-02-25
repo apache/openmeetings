@@ -152,58 +152,61 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
+	public boolean isRoomAllowedToUser(Room r, User u) {
+		boolean allowed = false;
+		if (r != null) {
+			if (r.isAppointment()) {
+				Appointment a = appointmentDao.getByRoom(r.getId());
+				if (a != null && !a.isDeleted()) {
+					allowed = a.getOwner().getId().equals(u.getId());
+					log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
+					if (!allowed) {
+						for (MeetingMember mm : a.getMeetingMembers()) {
+							if (mm.getUser().getId().equals(u.getId())) {
+								allowed = true;
+								break;
+							}
+						}
+					}
+					/*
+					TODO need to be reviewed
+					Calendar c = WebSession.getCalendar();
+					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						allowed = true;
+					} else {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
+						deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					}
+					*/
+				}
+			} else {
+				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()));
+				log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
+				if (!allowed && null != r.getRoomGroups()) {
+					for (RoomGroup ro : r.getRoomGroups()) {
+						for (GroupUser ou : u.getGroupUsers()) {
+							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+								allowed = true;
+								break;
+							}
+						}
+						if (allowed) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		return allowed;
+	}
+	
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
 		log.debug("[loginWicket] SID: '{}'; wicketSID: '{}'; wicketroomid: '{}'", SID, wicketSID, wicketroomid);
 		Long userId = sessiondataDao.checkSession(wicketSID);
 		User u = userId == null ? null : userDao.get(userId);
 		if (u != null && wicketroomid != null) {
 			log.debug("[loginWicket] user and roomid are not empty: " + userId + ", " + wicketroomid);
-			boolean allowed = false;
-			Room r = roomDao.get(wicketroomid);
-			if (r != null) {
-				if (r.isAppointment()) {
-					Appointment a = appointmentDao.getByRoom(wicketroomid);
-					if (a != null && !a.isDeleted()) {
-						allowed = a.getOwner().getId().equals(userId);
-						log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
-						if (!allowed) {
-							for (MeetingMember mm : a.getMeetingMembers()) {
-								if (mm.getUser().getId().equals(userId)) {
-									allowed = true;
-									break;
-								}
-							}
-						}
-						/*
-						TODO need to be reviewed
-						Calendar c = WebSession.getCalendar();
-						if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
-							allowed = true;
-						} else {
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-							deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
-						}
-						*/
-					}
-				} else {
-					allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(userId));
-					log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
-					if (!allowed && null != r.getRoomGroups()) {
-						for (RoomGroup ro : r.getRoomGroups()) {
-							for (GroupUser ou : u.getGroupUsers()) {
-								if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-									allowed = true;
-									break;
-								}
-							}
-							if (allowed) {
-								break;
-							}
-						}
-					}
-				}
-			}
-			if (allowed) {
+			if (isRoomAllowedToUser(roomDao.get(wicketroomid), u)) {
 				IConnection current = Red5.getConnectionLocal();
 				String streamId = current.getClient().getId();
 				Client currentClient = sessionManager.getClientByStreamId(streamId, null);

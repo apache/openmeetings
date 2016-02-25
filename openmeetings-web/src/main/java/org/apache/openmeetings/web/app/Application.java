@@ -44,10 +44,13 @@ import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.pages.ActivatePage;
@@ -470,15 +473,21 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (link == null) {
 			return null;
 		}
-		if (i.getRoom() != null) {
-			if (i.getInvitee().getType() == Type.contact) {
+		Room r = i.getRoom();
+		User u = i.getInvitee();
+		if (r != null) {
+			boolean allowed = u.getType() != Type.contact;
+			if (allowed) {
+				allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
+			}
+			if (!allowed) {
 				link += "?invitationHash=" + i.getHash();
 		
-				if (i.getInvitee().getLanguageId() > 0) {
-					link += "&language=" + i.getInvitee().getLanguageId().toString();
+				if (u.getLanguageId() > 0) {
+					link += "&language=" + u.getLanguageId().toString();
 				}
 			} else {
-				link = getRoomUrlFragment(i.getRoom().getId()).getLink();
+				link = getRoomUrlFragment(r.getId()).getLink();
 			}
 		}
 		return link;
