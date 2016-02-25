@@ -81,7 +81,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public boolean showFPS = true;
 	public boolean allowRemote = true;
 
-	public Long userId = null;
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
 
@@ -115,23 +114,22 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 9) {
+			if (args.length > 8) {
 				String _url = args[0];
 				URI url = new URI(_url);
 				protocol = Protocol.valueOf(url.getScheme());
 				host = url.getHost();
 				port = url.getPort();
 				app = url.getPath();
-				userId = Long.parseLong(args[1]);
-				publishName = args[2];
-				String labelTexts = args[3];
-				defaultQuality = Integer.parseInt(args[4]);
-				defaultFPS = Integer.parseInt(args[5]);
-				showFPS = bool(args[6]);
-				allowRemote = bool(args[7]);
+				publishName = args[1];
+				String labelTexts = args[2];
+				defaultQuality = Integer.parseInt(args[3]);
+				defaultFPS = Integer.parseInt(args[4]);
+				showFPS = bool(args[5]);
+				allowRemote = bool(args[6]);
 				remoteEnabled = allowRemote;
-				allowRecording = bool(args[8]);
-				allowPublishing = bool(args[9]);
+				allowRecording = bool(args[7]);
+				allowPublishing = bool(args[8]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -153,8 +151,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
-						client.setKeyStorePassword(args[11]);
+						client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
+						client.setKeyStorePassword(args[10]);
 						instance = client;
 						break;
 					case rtmpe:
@@ -273,7 +271,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private void connect(String parentSid) {
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
-		map.put("userId", userId);
 		map.put("parentSid", parentSid);
 		instance.connect(host, port, map, this);
 	}
@@ -677,11 +674,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					Object modus = returnMap.get("modus");
 					if ("startStreaming".equals(modus)) {
 						frame.setSharingStatus(true, false);
-					}
-					if ("startRecording".equals(modus)) {
+					} else if ("startRecording".equals(modus)) {
 						frame.setRecordingStatus(true, false);
-					}
-					if ("startPublishing".equals(modus)) {
+					} else if ("startPublishing".equals(modus)) {
 						frame.setPublishingStatus(true, false);
 						publishClient = new RTMPClientPublish(
 							this
@@ -691,9 +686,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						publishClient.connect();
 					}
 				} else {
-					throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
+					String err = "Could not aquire modus for event setConnectionAsSharingClient";
+					frame.setStatus(String.format("Error: %s", err));
+					return;
 				}
-
 			} else if ("createStream".equals(method)) {
 				if (startRecording || startStreaming) {
 					if (call.getResult() != null) {

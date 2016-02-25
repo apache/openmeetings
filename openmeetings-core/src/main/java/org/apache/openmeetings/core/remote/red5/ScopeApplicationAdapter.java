@@ -152,10 +152,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Map<String, Object> map = conn.getConnectParams();
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
 
+		Client parentClient = null;
 		//TODO add similar code for other connections
 		if (map.containsKey("screenClient")) {
 			String parentSid = (String)map.get("parentSid");
-			Client parentClient = sessionManager.getClientByPublicSID(parentSid, null);
+			parentClient = sessionManager.getClientByPublicSID(parentSid, null);
 			if (parentClient == null) {
 				rejectClient();
 			}
@@ -172,12 +173,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		//TODO add similar code for other connections, merge with above block
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
-			String parentSid = (String)map.get("parentSid");
+			String parentSid = parentClient.getPublicSID();
 			rcm.setRoomId(Long.valueOf(conn.getScope().getName()));
 			rcm.setScreenClient(true);
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
-			rcm.setUserId(new Long((Integer)map.get("userId")));
+			rcm.setUserId(parentClient.getUserId());
 			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUserId());
 
 			rcm.setStreamPublishName(parentSid);
@@ -353,11 +354,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					returnMap.put("modus", "startPublishing");
 				}
 				return returnMap;
-
 			} else {
-				throw new Exception("Could not find Screen Sharing Client " + current.getClient().getId());
+				log.error("[setConnectionAsSharingClient] Could not find Screen Sharing Client " + current.getClient().getId());
 			}
-
 		} catch (Exception err) {
 			log.error("[setConnectionAsSharingClient]", err);
 		}
