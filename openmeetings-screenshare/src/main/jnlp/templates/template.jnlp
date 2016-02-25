@@ -37,7 +37,6 @@
 	</resources>
 	<application-desc main-class='$mainClass'>
 		<argument>$url</argument>
-		<argument>$userId</argument>
 		<argument>$publicSid</argument>
 		<argument>$labels</argument>
 		<argument>$defaultQuality</argument>
