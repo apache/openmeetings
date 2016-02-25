@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
 import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PUBLIC_SID;
 import static org.apache.openmeetings.web.room.RoomPanel.PARAM_URL;
@@ -111,7 +110,6 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			app = addKeystore(app, protocol).replace("$codebase", baseUrl + "screenshare")
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
-					.replace("$userId", "" + getUserId())
 					.replace("$publicSid", publicSid)
 					.replace("$labels", "<![CDATA[" + getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
@@ -125,7 +123,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
 					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
-					.replace("$allowRecording", "" + (room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
+					.replace("$allowRecording", "" + (rc.getUserId() > 0 && room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;
 		} catch (Exception e) {
