@@ -54,7 +54,7 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "users_id")
+	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
 	@Element(name="voteduserid", data=false, required=false)
 	private User votedUser;
