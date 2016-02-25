@@ -378,7 +378,7 @@
 					ExternalInterface.call("pollResults", canvas.publicSID);
 					break;
 				case 'checkPollVoted':
-					ExternalInterface.call("vote");
+					ExternalInterface.call("vote", canvas.publicSID);
 					break;
 				case 'importFile':
 					new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x: 60});
