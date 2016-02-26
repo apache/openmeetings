@@ -255,20 +255,23 @@ public class UserDao implements IDataProviderDao<User> {
 		if (id != null && id > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
-			TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", id);
-			@SuppressWarnings("unchecked")
-			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroup("groupUsers");
-			if (force) {
-				kq.getFetchPlan().addFetchGroup("backupexport");
-			}
 			try {
-				u = kq.getSingleResult();
-			} catch (NoResultException ne) {
-				//no-op
+				oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+				TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", id);
+				@SuppressWarnings("unchecked")
+				OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
+				kq.getFetchPlan().addFetchGroup("groupUsers");
+				if (force) {
+					kq.getFetchPlan().addFetchGroup("backupexport");
+				}
+				try {
+					u = kq.getSingleResult();
+				} catch (NoResultException ne) {
+					//no-op
+				}
+			} finally {
+				oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 			}
-			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 		} else {
 			log.info("[get] " + "Info: No user id given");
 		}
@@ -304,16 +307,18 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public List<User> getAllBackupUsers() {
+		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
+		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 		try {
-			TypedQuery<User> q = em.createNamedQuery("getAllUsers", User.class);
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+			TypedQuery<User> q = oem.createNamedQuery("getAllUsers", User.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
 			kq.getFetchPlan().addFetchGroups("backupexport", "groupUsers");
 			return kq.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getAllUsersDeleted] ", ex2);
+		} finally {
+			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 		}
-		return null;
 	}
 
 	/**
