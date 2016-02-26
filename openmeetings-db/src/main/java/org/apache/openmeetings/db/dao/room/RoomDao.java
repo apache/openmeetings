@@ -29,6 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openjpa.persistence.OpenJPAEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
@@ -61,21 +62,41 @@ public class RoomDao implements IDataProviderDao<Room> {
 
 	@Override
 	public Room get(Long id) {
-		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
-		q.setParameter("id", id);
-		@SuppressWarnings("unchecked")
-		OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-		kq.getFetchPlan().addFetchGroup("roomModerators");
-		List<Room> l = kq.getResultList();
-		return l.isEmpty() ? null : l.get(0);
+		Room r = null;
+		if (id != null && id > 0) {
+			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
+			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
+			try {
+				oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+				TypedQuery<Room> q = oem.createNamedQuery("getRoomById", Room.class);
+				q.setParameter("id", id);
+				@SuppressWarnings("unchecked")
+				OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
+				kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups");
+				List<Room> l = kq.getResultList();
+				r = l.isEmpty() ? r : l.get(0);
+			} finally {
+				oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
+			}
+		} else {
+			log.info("[get] " + "Info: No room id given");
+		}
+		return r;
 	}
 
 	public List<Room> get() {
-		TypedQuery<Room> q = em.createNamedQuery("getBackupRooms", Room.class);
-		@SuppressWarnings("unchecked")
-		OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-		kq.getFetchPlan().addFetchGroup("roomModerators");
-		return kq.getResultList();
+		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
+		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
+		try {
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+			TypedQuery<Room> q = oem.createNamedQuery("getBackupRooms", Room.class);
+			@SuppressWarnings("unchecked")
+			OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
+			kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups");
+			return kq.getResultList();
+		} finally {
+			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
+		}
 	}
 	
 	public List<Room> get(List<Long> ids) {
