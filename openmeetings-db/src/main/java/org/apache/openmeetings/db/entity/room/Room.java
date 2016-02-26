@@ -54,7 +54,8 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @FetchGroups({
-	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators"), @FetchAttribute(name = "roomGroups") })
+	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators") })
+	, @FetchGroup(name = "roomGroups", attributes = { @FetchAttribute(name = "roomGroups") })
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
