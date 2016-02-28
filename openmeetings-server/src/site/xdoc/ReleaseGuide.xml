@@ -115,7 +115,7 @@
 				<source>
 svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/application/trunk \
 	https://svn.apache.org/repos/asf/openmeetings/application/tags/3.1.0RC1 \
-	-m "Release candidate 1"
+	-m "3.1.0 Release candidate 1"
 				</source>
 				
 
@@ -123,25 +123,23 @@ svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/application/tru
 				<source>svn checkout https://svn.apache.org/repos/asf/openmeetings/application/tags/$BRANCHORTAG/</source>
 				<p>$BRANCHORTAG should be replaced with your new TAG</p>
 
-				<p>Edit the file build.properties change</p>
-				<source>project.status=SNAPSHOT</source>
-				<p>to</p>
-				<source>project.status=RELEASE</source>
+				<p>Update versions of all modules</p>
+				<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=3.1.0</source>
 				<p>Run the command: </p>
-				<source>ant dist-release</source>
+				<source>mvn clean install</source>
 				<p>Test building the source on windows and OSx or Linux</p>
 				<p>Test running the binary's</p>
 				<p>Create sha256sum checksums</p>
 				<source>
-#On OSX you might use this command to make a MD5 checksum and store it to a file
-shasum -a 256 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.md5
+#On OSX you might use this command to make a SHA checksum and store it to a file
+shasum -a 256 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.sha
 				</source>
 				<source>
 <![CDATA[
-#To create MD5 hashes On Ubuntu:
+#To create SHA hashes On Ubuntu:
 for f in `ls -1 *.tar.gz *.zip`; do sha256sum $f > $f.sha; done
 
-#To check MD5 hashes On Ubuntu:
+#To check SHA hashes On Ubuntu:
 for f in `ls -1 *.tar.gz *.zip`; do sha256sum -c $f.sha; done
 ]]>
 				</source>
@@ -164,27 +162,27 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 				<p>
 					Commit artifacts you have created with KEYS file to the
 					<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
-					Proposed file structure for "Release Candidate 1" of 2.1 will be:
+					Proposed file structure for "Release Candidate 1" of 3.1.0 will be:
 				</p>
 				<source>
-2.1
-2.1/rc1
-2.1/rc1/src
-2.1/rc1/src/apache-openmeetings-2.1.0-src.zip
-2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz
-2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.md5
-2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.asc
-2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.md5
-2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.asc
-2.1/rc1/bin
-2.1/rc1/bin/apache-openmeetings-2.1.0.zip
-2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz
-2.1/rc1/bin/apache-openmeetings-2.1.0.zip.md5
-2.1/rc1/bin/apache-openmeetings-2.1.0.zip.asc
-2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5
-2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc
-2.1/rc1/CHANGELOG
-2.1/rc1/KEYS
+3.1.0
+3.1.0/rc1
+3.1.0/rc1/src
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip.sha
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip.asc
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz.sha
+3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz.asc
+3.1.0/rc1/bin
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip.sha
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip.asc
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz.sha
+3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz.asc
+3.1.0/rc1/CHANGELOG
+3.1.0/rc1/KEYS
 				</source>
 			</subsection>
 
