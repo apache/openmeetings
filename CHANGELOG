@@ -2,6 +2,95 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.1.0
+================================================================================================================
+
+** Sub-task
+    * [OPENMEETINGS-1118] - SOAP/REST methods need to be implemented using CXF
+    * [OPENMEETINGS-1277] - roomtype in laszlo code need to be changed
+    * [OPENMEETINGS-1278] - newmessage and some other dialogs need to be replaced with HTML5 dialogs
+    * [OPENMEETINGS-1285] - Number of servlets need to be reduced
+    * [OPENMEETINGS-1286] - Srceensharing is not started
+
+** Bug
+    * [OPENMEETINGS-570] - Some issues with device settings and attach Camera
+    * [OPENMEETINGS-823] - Images are not dragged on whiteboard correctly if user re-enter to the room
+    * [OPENMEETINGS-887] - Global chat is not implemented completly for OM 3.0
+    * [OPENMEETINGS-992] - upload image in profile
+    * [OPENMEETINGS-1237] - Desktop-sharing: keyboard input gets duplicated or triplicated.
+    * [OPENMEETINGS-1252] - Allow/deny screen sharing and remote control does not work as expected
+    * [OPENMEETINGS-1255] - Incorrect work of "Show contact data to contacts only"
+    * [OPENMEETINGS-1258] - The latest chat messeages are not shown in the global chat
+    * [OPENMEETINGS-1260] - Period invitation created from room is shifted one month
+    * [OPENMEETINGS-1261] - docs folder should removed from 3.0.x sources
+    * [OPENMEETINGS-1263] - component.getString() should not be called from constructor
+    * [OPENMEETINGS-1264] - "Old style" confirm dialogs should be replaced with jquery-ui confirmations
+    * [OPENMEETINGS-1266] - Width/height parameters are missing in RecordingDTO
+    * [OPENMEETINGS-1268] - Error while use wsdl service
+    * [OPENMEETINGS-1269] - 'Internal Error' Message on Deleting / Selecting a User in Admin/User Panel
+    * [OPENMEETINGS-1271] - Maximum number of users in restricted room need to be enlarged
+    * [OPENMEETINGS-1272] - Exception and Internal Errror When "To complete your registration please click on the following link"
+    * [OPENMEETINGS-1273] - Poll error
+    * [OPENMEETINGS-1274] - After registration I don't see confirmation
+    * [OPENMEETINGS-1275] - Invalid invitation generates for contact if creat few invitations
+    * [OPENMEETINGS-1276] - Trunk should be merged with 3.1.x
+    * [OPENMEETINGS-1281] - Bad URL to download language files to translate in OpenMeetings website
+    * [OPENMEETINGS-1283] - It is impossible to remove moderator permissions given to a user
+    * [OPENMEETINGS-1284] - Incorrect display of a video player
+    * [OPENMEETINGS-1287] - Mail templates are excluded from the build artefact
+    * [OPENMEETINGS-1288] - Search User page is broken
+    * [OPENMEETINGS-1292] - OM 3.1 When clic on Upload file picture button profile, nothings happens
+    * [OPENMEETINGS-1293] - OM 3.1 When clic on Conference Room button, show turning circle and nothing happens
+    * [OPENMEETINGS-1295] - OM 3.0.7 - No upload image for widget user 
+    * [OPENMEETINGS-1296] - Unable to upload image to profile
+    * [OPENMEETINGS-1297] - svn tree need to be restructured
+    * [OPENMEETINGS-1299] - In Application_zh_CN.properties file, from entry 1465 to entry 1600, we should have Chinese entries, but there are still English entries.
+    * [OPENMEETINGS-1303] - Report a bug URL
+    * [OPENMEETINGS-1308] - "File tree" is broken in room after installation
+    * [OPENMEETINGS-1309] -  Issue with playing the recordings in OM 3.1.0
+    * [OPENMEETINGS-1310] - Flash permission dialog is not displayed
+    * [OPENMEETINGS-1312] - "User recording" message is not removed on recording stop
+    * [OPENMEETINGS-1314] - A no user receive an invitation  and he tries to send an invitation 
+    * [OPENMEETINGS-1316] - Older timezone's in OM
+    * [OPENMEETINGS-1317] - Whiteboard is not displayed for guests in the restricted moderated rooms
+    * [OPENMEETINGS-1318] - Firstname and lastname are shown in the userlist when last user exit from the restricted room
+    * [OPENMEETINGS-1320] - Whiteboard is not saved
+    * [OPENMEETINGS-1321] - Files are not shown correctly when contact enter to the restricted room as moderator
+    * [OPENMEETINGS-1322] - Chat is not shown in the room when document loads on whiteborad
+    * [OPENMEETINGS-1323] - Error is thrown to the log file during conversion recording
+    * [OPENMEETINGS-1326] - Password is not verified when owner send invitation with password
+    * [OPENMEETINGS-1329] - "null" adds to the Subject when user send private masage to contact
+    * [OPENMEETINGS-1331] - Openmeeting is not responsed when moderator kick user from the room
+    * [OPENMEETINGS-1332] - Vote is not work correctly
+    * [OPENMEETINGS-1333] - Recording and sharing is not started when contact try to start recording or sharing 
+    * [OPENMEETINGS-1334] - It's impossible to invite om user to the my rooms
+    * [OPENMEETINGS-1335] - Screen sharing icons and favicon need to be updated
+    * [OPENMEETINGS-1336] - User can not enter to group room
+
+** Improvement
+    * [OPENMEETINGS-794] - Add a possibility to enter brief name for users with same invitation url (grouped mail)
+    * [OPENMEETINGS-846] - Invitation of a complete usergroup as a one-click operation
+    * [OPENMEETINGS-1245] - Offer drop-down list for inviting users when in conference room
+    * [OPENMEETINGS-1256] - Fetch users from AD into contacts
+    * [OPENMEETINGS-1259] - Library versions should be updated (3.1.0)
+    * [OPENMEETINGS-1262] - Install wizard need to be updated to use wicket-jquery-ui
+    * [OPENMEETINGS-1270] - Outdated documentation
+    * [OPENMEETINGS-1279] - swf8 code need to be converted to swf11
+    * [OPENMEETINGS-1290] - Room SIP# should be displayed as a hint
+    * [OPENMEETINGS-1294] - OM 3.1.0 spanish translation attached
+    * [OPENMEETINGS-1304] - CLONE - In the general interface, provide a way to access links to recordings, which can be shared with others (both registered users and external people).
+    * [OPENMEETINGS-1306] - modifica dei campi e grafica
+    * [OPENMEETINGS-1313] - Support for Google Analytics scripts should be added
+
+** Task
+    * [OPENMEETINGS-1302] - Current maven build doesn't create source artifact
+    * [OPENMEETINGS-1305] - REST/SOAP should be tested
+    * [OPENMEETINGS-1311] - Outdated jquery.ui.menubar should be replaced with jqueryui menu component
+
+** Test
+    * [OPENMEETINGS-1315] - build code sucess, but run red5.bat happen error
+
+
 Release Notes - Openmeetings - Version 3.0.7
 ================================================================================================================
 
