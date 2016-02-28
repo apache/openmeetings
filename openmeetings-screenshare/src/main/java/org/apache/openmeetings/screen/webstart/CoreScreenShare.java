@@ -120,7 +120,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				protocol = Protocol.valueOf(url.getScheme());
 				host = url.getHost();
 				port = url.getPort();
-				app = url.getPath();
+				app = url.getPath().substring(1);
 				publishName = args[1];
 				String labelTexts = args[2];
 				defaultQuality = Integer.parseInt(args[3]);
