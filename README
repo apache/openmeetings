@@ -8,6 +8,26 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 3.1.0
+=============
+see CHANGELOG file for detailed log
+
+SOAP/REST API was implemented using CXF (Axis2 was removed from the stack)
+Build system is now maven (not ant), SWF client is improved
+
+SOAP/REST:
+* CXF is now used instead of Axis2
+* API was improved: methods are simplified, API is more powerful now
+* junit tests are added
+
+Room client: 
+* swf8 client is removed
+* calls via LocalConnection are removed 
+* room dialogs are based on wicket-jquery-ui dialogs
+
+Other fixes in admin, localization, installer, invitations, room etc.
+
+
 Release Notes 3.0.7
 =============
 see CHANGELOG file for detailed log
