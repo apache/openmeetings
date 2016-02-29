@@ -24,10 +24,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import junit.framework.TestCase;
-
+import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,7 +34,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class TestSVGTextExporterArrow extends TestCase {
+public class TestSVGTextExporterArrow {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestSVGTextExporterArrow.class, webAppRootKey);
 	
 	@Test

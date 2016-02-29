@@ -31,8 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<dom4j.version>1.6.1</dom4j.version>
-		<mail.version>1.4.7</mail.version>
-		<commons-codec.version>1.8</commons-codec.version>
+		<commons-codec.version>1.9</commons-codec.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
@@ -61,11 +60,6 @@
 		<dependency>
 			<groupId>org.mnode.ical4j</groupId>
 			<artifactId>ical4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${mail.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
