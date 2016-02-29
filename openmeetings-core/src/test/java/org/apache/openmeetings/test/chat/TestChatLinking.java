@@ -23,13 +23,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class TestChatLinking extends TestCase {
+public class TestChatLinking {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestChatLinking.class, webAppRootKey);
 	
 	@Test

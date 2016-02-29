@@ -18,14 +18,12 @@
  */
 package org.apache.openmeetings.test.userdata;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
-public class TestMD5 extends TestCase {
+public class TestMD5 {
 	
 	@Test
-	public void testTestMD5(){
+	public void testTestMD5() {
 		
 	}
 

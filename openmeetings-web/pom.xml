@@ -32,7 +32,7 @@
 	<properties>
 		<wicket-dashboard.version>0.13.0+wicket-7</wicket-dashboard.version>
 		<commons-io.version>2.4</commons-io.version>
-		<commons-fileupload.version>1.3</commons-fileupload.version>
+		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<mysql.version>5.1.38</mysql.version>
 		<old-backups.dir>${project.basedir}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>

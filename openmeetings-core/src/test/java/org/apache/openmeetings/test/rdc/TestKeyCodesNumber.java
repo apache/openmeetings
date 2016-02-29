@@ -22,13 +22,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.awt.event.KeyEvent;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class TestKeyCodesNumber extends TestCase {
+public class TestKeyCodesNumber {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestKeyCodesNumber.class, webAppRootKey);
 
 	@Test
