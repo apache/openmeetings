@@ -28,26 +28,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Multipart;
-import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.openmeetings.util.mail.SmtpAuthenticator;
-import org.apache.wicket.util.string.Strings;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -75,7 +71,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestSendIcalMessage.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private MailHandler mailHandler;
 
 	private byte[] iCalMimeBody;
 
@@ -213,38 +209,9 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private void sendIcalMessage() throws Exception {
 		log.debug("sendIcalMessage");
 
-		// Evaluating Configuration Data
-		String smtpServer = configurationDao.getConfValue("smtp_server", String.class, "");
-		String smtpPort = configurationDao.getConfValue("smtp_port", String.class, "");
-		String from = configurationDao.getConfValue("system_email_addr", String.class, "");
-		String emailUsername = configurationDao.getConfValue("email_username", String.class, "");
-		String emailUserpass = configurationDao.getConfValue("email_userpass", String.class, "");
-
-		Properties props = System.getProperties();
-
-		props.put("mail.smtp.host", smtpServer);
-		props.put("mail.smtp.port", smtpPort);
-
-		boolean isTls = (1 == configurationDao.getConfValue("mail.smtp.starttls.enable", Integer.class, "0"));
-		if (isTls) {
-			props.put("mail.smtp.starttls.enable", "true");
-		}
-
-		// Check for Authentification
-		Session session = null;
-		if (!Strings.isEmpty(emailUsername) && !Strings.isEmpty(emailUserpass)) {
-			// use SMTP Authentication
-			props.put("mail.smtp.auth", "true");
-			session = Session.getDefaultInstance(props, new SmtpAuthenticator(emailUsername, emailUserpass));
-		} else {
-			// not use SMTP Authentication
-			session = Session.getDefaultInstance(props, null);
-		}
-
 		// Building MimeMessage
-		MimeMessage mimeMessage = new MimeMessage(session);
+		MimeMessage mimeMessage = mailHandler.getBasicMimeMessage();
 		mimeMessage.setSubject(subject);
-		mimeMessage.setFrom(new InternetAddress(from));
 		mimeMessage.addRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients, false));
 
 		// -- Create a new message --

@@ -20,10 +20,8 @@ package org.apache.openmeetings.test.gui;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
 
-
-public class TestGui  extends TestCase {
+public class TestGui {
 
 	@Test
 	public void testNoop() {
