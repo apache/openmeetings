@@ -25,7 +25,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-flash</artifactId>
-	<!-- packaging>swf</packaging-->
 	<packaging>jar</packaging>
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
@@ -96,28 +95,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- plugin>
-				<groupId>net.flexmojos.oss</groupId>
-				<artifactId>flexmojos-maven-plugin</artifactId>
-				<version>7.1.0-SNAPSHOT</version>
-				<extensions>true</extensions>
-				<configuration>
-					<sourceFile>main.mxml</sourceFile>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>net.flexmojos.oss</groupId>
-						<artifactId>flexmojos-threadlocaltoolkit-wrapper</artifactId>
-						<version>7.1.0-SNAPSHOT</version>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.flex</groupId>
-						<artifactId>compiler</artifactId>
-						<version>4.12.1.20140427</version>
-						<type>pom</type>
-					</dependency>
-				</dependencies>
-			</plugin-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -173,18 +150,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<!-- dependencies>
-		<dependency>
-			<groupId>org.apache.flex</groupId>
-			<artifactId>framework</artifactId>
-			<version>4.12.1.20140427</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>com.adobe.flash.framework</groupId>
-			<artifactId>playerglobal</artifactId>
-			<version>11.9</version>
-			<type>swc</type>
-		</dependency>
-	</dependencies-->
 </project>

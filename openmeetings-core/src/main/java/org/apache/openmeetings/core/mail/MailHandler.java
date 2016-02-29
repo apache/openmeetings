@@ -31,10 +31,12 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -48,13 +50,11 @@ import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
 import org.apache.openmeetings.util.mail.MailUtil;
-import org.apache.openmeetings.util.mail.SmtpAuthenticator;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
-
-import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * 
@@ -75,6 +75,7 @@ public class MailHandler {
 	private TaskExecutor taskExecutor;
 	@Autowired
 	private MailMessageDao mailMessageDao;
+	
 	private String smtpServer;
 	private String smtpPort;
 	private String from;
@@ -95,6 +96,16 @@ public class MailHandler {
 		mailAddReplyTo = "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"));
 		smtpConnectionTimeOut = cfgDao.getConfValue("mail.smtp.connection.timeout", Integer.class, "30000");
 		smtpTimeOut = cfgDao.getConfValue("mail.smtp.timeout", Integer.class, "30000");
+	}
+	
+	public void init(String smtpServer, String smtpPort, String from, String mailAuthUser, String mailAuthPass, boolean mailTls, boolean mailAddReplyTo) {
+		this.smtpServer = smtpServer;
+		this.smtpPort = smtpPort;
+		this.from = from;
+		this.mailAuthUser = mailAuthUser;
+		this.mailAuthPass = mailAuthPass;
+		this.mailTls = mailTls;
+		this.mailAddReplyTo = mailAddReplyTo;
 	}
 	
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {
@@ -131,8 +142,12 @@ public class MailHandler {
 	}
 	
 	private MimeMessage appendBody(MimeMessage msg, MailMessage m) throws MessagingException, IOException {
+		return appendBody(msg, m.getBody());
+	}
+	
+	public MimeMessage appendBody(MimeMessage msg, String body) throws MessagingException, IOException {
 		// -- Set the subject and body text --
-		msg.setDataHandler(new DataHandler(new ByteArrayDataSource(m.getBody(), "text/html; charset=\"utf-8\"")));
+		msg.setDataHandler(new DataHandler(new ByteArrayDataSource(body, "text/html; charset=\"utf-8\"")));
 
 		// -- Set some other header information --
 		msg.setHeader("X-Mailer", "XML-Mail");
@@ -141,7 +156,7 @@ public class MailHandler {
 		return msg;
 	}
 	
-	private MimeMessage getBasicMimeMessage() throws Exception {
+	public MimeMessage getBasicMimeMessage() throws Exception {
 		log.debug("getBasicMimeMessage");
 		if (smtpServer == null) {
 			init();
@@ -150,24 +165,23 @@ public class MailHandler {
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
-		
+		if (mailTls) {
+			props.put("mail.smtp.starttls.enable", "true");
+		}
 		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut); 
 		props.put("mail.smtp.timeout", smtpTimeOut);
 
-		if (mailTls) {
-			props.put("mail.smtp.starttls.enable", "true");
-			MailSSLSocketFactory sf = new MailSSLSocketFactory();
-		    sf.setTrustAllHosts(true);
-		    props.put("mail.smtp.ssl.socketFactory", sf);
-		}
-
 		// Check for Authentication
 		Session session = null;
-		if (mailAuthUser != null && mailAuthUser.length() > 0
-				&& mailAuthPass != null && mailAuthPass.length() > 0) {
+		if (!Strings.isEmpty(mailAuthUser) && !Strings.isEmpty(mailAuthPass)) {
 			// use SMTP Authentication
 			props.put("mail.smtp.auth", "true");
-			session = Session.getInstance(props, new SmtpAuthenticator(mailAuthUser, mailAuthPass));
+			session = Session.getDefaultInstance(props, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(mailAuthUser, mailAuthPass);
+				}
+			});
 		} else {
 			// not use SMTP Authentication
 			session = Session.getInstance(props, null);

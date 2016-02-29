@@ -39,20 +39,20 @@
 		<spring.version>4.1.7.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
-		<maven.surefire.version>2.18.1</maven.surefire.version>
+		<maven.surefire.version>2.19.1</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.2.0</wicket.version>
 		<wicketju.version>7.2.0</wicketju.version>
 		<wickets.version>7.2.0</wickets.version>
 		<red5-server.version>1.0.6-RELEASE</red5-server.version>
 		<red5-client.version>1.0.6-RELEASE</red5-client.version>
-		<batik.version>1.7</batik.version>
+		<batik.version>1.8</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
-		<cxf.version>3.1.4</cxf.version>
+		<cxf.version>3.1.5</cxf.version>
 		<selenium.version>2.52.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
-		<jettison.version>1.3.5</jettison.version>
+		<jettison.version>1.3.7</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
@@ -325,10 +325,6 @@
 	</mailingLists>
 	<repositories>
 		<repository>
-			<id>flex-mojos-repository</id>
-			<url>https://oss.sonatype.org/content/groups/staging</url>
-		</repository>
-		<repository>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -340,10 +336,6 @@
 		</repository>
 	</repositories>
 	<pluginRepositories>
-		<pluginRepository>
-			<id>flex-mojos-plugin-repository</id>
-			<url>https://oss.sonatype.org/content/groups/staging</url>
-		</pluginRepository>
 		<pluginRepository>
 			<id>apache-snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots</url>
@@ -976,7 +968,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.8.1</version>
 				<configuration>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<showAvatarImages>true</showAvatarImages>
