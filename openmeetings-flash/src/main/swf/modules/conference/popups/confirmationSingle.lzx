@@ -104,6 +104,9 @@
     <simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
     	<handler name="onclick">
     		var t = parent.holddatainSO.getValue();
+    		//if ($debug) Debug.write("t ", t);
+    		//if ($debug) Debug.write("parent ", this.parent);
+    		//if ($debug) Debug.write("refObj ", this.parent.refObj);
     		this.parent.close();
     		if (parent.refReturnMethod == null) {
     		    this.parent.refObj.sendConfirmation(true,t);
