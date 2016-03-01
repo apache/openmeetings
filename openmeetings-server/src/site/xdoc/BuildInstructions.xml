@@ -56,7 +56,11 @@
 				<img src="images/eclipse-import-maven-project.png" alt="Import OM into Eclipse" width="526" height="394" />
 			</p>
 		</section>
-
+		<section name="Check for updates">
+			<source>mvn versions:display-dependency-updates</source>
+			<source>mvn versions:display-plugin-updates</source>
+			<source>mvn versions:display-property-updates</source>
+		</section>
 		<section name="Tips and Gotchas">
 			<p>To compile only client you can run following command: </p>
 			<source>
@@ -92,7 +96,6 @@ mvn install -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl 
 					target="_blank" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
 				</a>
 			</p>
-
 		</section>
 
 	</body>

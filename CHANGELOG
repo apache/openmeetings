@@ -66,6 +66,8 @@ Release Notes - Openmeetings - Version 3.1.0
     * [OPENMEETINGS-1334] - It's impossible to invite om user to the my rooms
     * [OPENMEETINGS-1335] - Screen sharing icons and favicon need to be updated
     * [OPENMEETINGS-1336] - User can not enter to group room
+    * [OPENMEETINGS-1338] - Screen sharing application failed to connect to the server
+    * [OPENMEETINGS-1340] - Moderator can't kick user from the conference room
 
 ** Improvement
     * [OPENMEETINGS-794] - Add a possibility to enter brief name for users with same invitation url (grouped mail)

@@ -31,6 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<smslib.version>3.5.4</smslib.version>
+		<mail.version>1.5.5</mail.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
@@ -105,6 +106,11 @@
 			<groupId>org.apache.directory.api</groupId>
 			<artifactId>api-all</artifactId>
 			<version>1.0.0-M33</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${mail.version}</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>

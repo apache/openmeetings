@@ -446,13 +446,13 @@
 				
 			</handler>
 			
-			<method name="sendConfirmation" args="yesno" >
+			<method name="sendConfirmation" args="yesno, none" >
 				this.kickUserByPublicSID.publicSID = parent.parent.refObj.publicSID;
 				this.kickUserByPublicSID.doCall();
 			</method>
 			
-			<netRemoteCallHib name="kickUserByPublicSID" funcname="userservice.kickUserByPublicSID" 
-							  remotecontext="$once{ canvas.thishib }" >	
+			<netRemoteCallHib name="kickUserByPublicSID" funcname="userservice.kickUserByPublicSID" showLoading="false"
+				remotecontext="$once{ canvas.thishib }" >	
 				<attribute name="publicSID" value="" type="string" />  
 				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
 				<netparam><method name="getValue"> return parent.publicSID; </method></netparam>
