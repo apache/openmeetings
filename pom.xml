@@ -270,9 +270,9 @@
 		</contributor>
 	</contributors>
 	<scm>
-		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
-		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</developerConnection>
-		<url>https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp</url>
+		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</developerConnection>
+		<url>https://svn.apache.org/repos/asf/openmeetings/application/trunk</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
