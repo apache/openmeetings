@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -62,6 +63,12 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				ConfirmableAjaxBorder.this.updateAjaxAttributes(attributes);
+			}
+			
+			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				dialog.open(target);
 			}
@@ -69,6 +76,14 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		addToBorder(form.add(dialog));
 	}
 
+	/**
+	 * Gives a chance to the specializations to modify the attributes.
+	 * 
+	 * @param attributes attributes
+	 */
+	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+	}
+	
 	/**
 	 * Triggered when the form is submitted, but the validation failed
 	 *
