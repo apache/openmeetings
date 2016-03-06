@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -58,6 +59,7 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -68,6 +70,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -80,8 +83,6 @@ import org.apache.wicket.model.util.ListModel;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
-
-import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -314,24 +315,23 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(final ListItem<PrivateMessageFolder> item) {
 				item.add(new Label("name", item.getModelObject().getFolderName()));
-				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
+				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
-
+					
 					@Override
-					protected void onEvent(AjaxRequestTarget target) {
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
+					}
+					
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 						fDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
 						updateMoveModel();
 						target.add(folders, moveDropDown);
 					}
-					
-					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						super.updateAjaxAttributes(attributes);
-						attributes.getAjaxCallListeners().add(new ConfirmAjaxCallListener(Application.getString(713)));
-					}
-				}));
+				});
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
