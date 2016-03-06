@@ -72,7 +72,7 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	private Date voteDate;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "room_poll_id")
+	@JoinColumn(name = "poll_id")
 	private RoomPoll roomPoll;
 	
 	public Long getId() {
