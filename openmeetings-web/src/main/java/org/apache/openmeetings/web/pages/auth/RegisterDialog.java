@@ -169,9 +169,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		target.add(form);
 	}
 
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (!registerBtn.equals(button)) {
-			s.open(target);
+			s.open(handler);
 		}
 	}
 
