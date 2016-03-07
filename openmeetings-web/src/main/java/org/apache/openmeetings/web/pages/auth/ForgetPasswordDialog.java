@@ -160,11 +160,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return true;
 	}
 	
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (send.equals(button)){
-			confirmDialog.open(target);
+			confirmDialog.open(handler);
 		} else {
-			s.open(target);
+			s.open(handler);
 		}
 	}
 
