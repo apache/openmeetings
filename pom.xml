@@ -359,6 +359,10 @@
 			<unsubscribe>commits-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
 		</mailingList>
+		<mailingList>
+			<name>Security List</name>
+			<post>security@openmeetings.apache.org</post>
+		</mailingList>
 	</mailingLists>
 	<repositories>
 		<repository>
