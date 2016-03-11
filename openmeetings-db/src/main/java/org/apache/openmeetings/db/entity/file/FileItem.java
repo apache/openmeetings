@@ -62,7 +62,7 @@ public abstract class FileItem implements IDataProviderEntity {
 	private Long ownerId;
 
 	@Column(name = "inserted_by")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Long insertedBy;
 
 	@Column(name = "inserted")
