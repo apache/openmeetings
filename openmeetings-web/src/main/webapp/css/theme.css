@@ -168,13 +168,13 @@ html, body {
 }
 
 .goto.icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: none;
-    margin: 0px;
-    padding: 0px;
-    zoom: 1.2;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: none;
+	margin: 0px;
+	padding: 0px;
+	zoom: 1.2;
 }
 
 .ui-dialog {
@@ -188,12 +188,14 @@ html, body {
 		Color='#000000' );
 	box-shadow: 3px 3px 4px #000;
 }
-
-.sort-icon {
+.sort-icon, .sort-icon a {
 	display: inline-block !important;
 	text-indent: 0px !important;
 }
-
+.sort-icon a {
+	width: inherit;
+	height: inherit;
+}	
 .start_step1, .start_step2, .start_step3, .start_step4  {
 	padding-left: 30px;
 	background-position: left top;
