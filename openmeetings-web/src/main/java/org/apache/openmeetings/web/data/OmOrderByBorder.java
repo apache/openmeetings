@@ -25,16 +25,16 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFall
 public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallbackOrderByBorder<String> {
 	private static final long serialVersionUID = 1L;
 	private DataViewContainer<T> container;
-	
+
 	public OmOrderByBorder(final String id, final String property, DataViewContainer<T> container) {
 		super(id, property, container.view.getDataProvider());
 		this.container = container;
 		setOutputMarkupId(true);
 	}
-	
-    protected void onSortChanged() {
-    	container.view.setCurrentPage(0);
-    }
+
+	protected void onSortChanged() {
+		container.view.setCurrentPage(0);
+	}
 
 	@Override
 	protected void onAjaxClick(AjaxRequestTarget target) {
