@@ -387,6 +387,7 @@
 										<include>**/*.css</include>
 										<include>**/*.js</include>
 										<include>**/*.xml</include>
+										<include>**/*.properties</include>
 									</includes>
 								</resource>
 								<resource>
@@ -396,6 +397,7 @@
 										<include>**/*.css</include>
 										<include>**/*.js</include>
 										<include>**/*.xml</include>
+										<include>**/*.properties</include>
 									</includes>
 								</resource>
 							</resources>
