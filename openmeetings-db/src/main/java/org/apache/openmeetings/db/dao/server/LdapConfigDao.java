@@ -57,98 +57,6 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	@Autowired
 	private UserDao userDao;
 
-	public Long addLdapConfig(String name, Boolean addDomainToUserName,
-			String configFileName, String domain, Long insertedby,
-			Boolean isActive) {
-		try {
-
-			LdapConfig ldapConfig = new LdapConfig();
-			ldapConfig.setAddDomainToUserName(addDomainToUserName);
-			ldapConfig.setConfigFileName(configFileName);
-			ldapConfig.setDeleted(false);
-			ldapConfig.setDomain(domain);
-			ldapConfig.setActive(isActive);
-			ldapConfig.setName(name);
-			ldapConfig.setInserted(new Date());
-			if (insertedby != null) {
-				log.debug("addLdapConfig :1: " + userDao.get(insertedby));
-				ldapConfig.setInsertedby(userDao.get(insertedby));
-			}
-
-			log.debug("addLdapConfig :2: " + insertedby);
-
-			ldapConfig = em.merge(ldapConfig);
-			Long id = ldapConfig.getId();
-
-			if (id != null) {
-				return id;
-			} else {
-				throw new Exception("Could not store SOAPLogin");
-			}
-
-		} catch (Exception ex2) {
-			log.error("[addLdapConfig]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long addLdapConfigByObject(LdapConfig ldapConfig) {
-		try {
-
-			ldapConfig.setDeleted(false);
-			ldapConfig.setInserted(new Date());
-
-			ldapConfig = em.merge(ldapConfig);
-			Long id = ldapConfig.getId();
-
-			if (id != null) {
-				return id;
-			} else {
-				throw new Exception("Could not store SOAPLogin");
-			}
-
-		} catch (Exception ex2) {
-			log.error("[addLdapConfig]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long updateLdapConfig(Long id, String name,
-			Boolean addDomainToUserName, String configFileName, String domain,
-			Long updatedby, Boolean isActive) {
-		try {
-
-			LdapConfig ldapConfig = get(id);
-
-			if (ldapConfig == null) {
-				return -1L;
-			}
-
-			ldapConfig.setAddDomainToUserName(addDomainToUserName);
-			ldapConfig.setConfigFileName(configFileName);
-			ldapConfig.setDeleted(false);
-			ldapConfig.setDomain(domain);
-			ldapConfig.setActive(isActive);
-			ldapConfig.setName(name);
-			ldapConfig.setUpdated(new Date());
-			if (updatedby != null) {
-				log.debug("updateLdapConfig :1: " + userDao.get(updatedby));
-				ldapConfig.setUpdatedby(userDao.get(updatedby));
-			}
-
-			log.debug("updateLdapConfig :2: " + updatedby);
-
-			ldapConfig = em.merge(ldapConfig);
-			id = ldapConfig.getId();
-
-			return id;
-
-		} catch (Exception ex2) {
-			log.error("[updateLdapConfig]: ", ex2);
-		}
-		return -1L;
-	}
-
 	@Override
 	public LdapConfig get(Long id) {
 		try {
@@ -231,20 +139,19 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	@Override
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
+			entity.setDeleted(false);
 			if (entity.getId() == null) {
 				entity.setInserted(new Date());
 				if (userId != null) {
 					entity.setInsertedby(userDao.get(userId));
 				}
-				entity.setDeleted(false);
 				em.persist(entity);
 			} else {
 				entity.setUpdated(new Date());
 				if (userId != null) {
 					entity.setUpdatedby(userDao.get(userId));
 				}
-				entity.setDeleted(false);
-				em.merge(entity);
+				entity = em.merge(entity);
 			}
 		} catch (PersistenceException ex) {
 			log.error("[update LdapConfig]", ex);

@@ -30,6 +30,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -121,6 +122,7 @@ import org.xml.sax.InputSource;
 
 public class BackupImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
+	private static final String LDAP_EXT_TYPE = "LDAP";
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -201,8 +203,10 @@ public class BackupImport {
 			}
 			// for each entry to be extracted
 			File fentry = new File(f, fName);
-			File dir = fentry.isDirectory() ? fentry : fentry.getParentFile();
-			dir.mkdirs();
+			File dir = zipentry.isDirectory() ? fentry : fentry.getParentFile();
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
 			if (fentry.isDirectory()) {
 				zipentry = zipinputstream.getNextEntry();
 				continue;
@@ -267,7 +271,35 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Groups import complete, starting user import");
+		log.info("Groups import complete, starting LDAP config import");
+		/*
+		 * ##################### Import LDAP Configs
+		 */
+		Long defaultLdapId = configurationDao.getConfValue(CONFIG_DEFAULT_LDAP_ID, Long.class, null);
+		{
+			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
+			for (LdapConfig c : list) {
+				if (!"local DB [internal]".equals(c.getName())) {
+					c = ldapConfigDao.update(c, null);
+					if (defaultLdapId == null) {
+						defaultLdapId = c.getId();
+					}
+				}
+			}
+		}
+
+		log.info("Ldap config import complete, starting OAuth2 server import");
+		/*
+		 * ##################### OAuth2 servers
+		 */
+		{
+			List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
+			for (OAuthServer s : list) {
+				auth2Dao.update(s, null);
+			}
+		}
+
+		log.info("OAuth2 servers import complete, starting user import");
 		/*
 		 * ##################### Import Users
 		 */
@@ -298,6 +330,14 @@ public class BackupImport {
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
+				}
+				if (LDAP_EXT_TYPE.equals(u.getExternalType()) && User.Type.external != u.getType()) {
+					log.warn("Found LDAP user in 'old' format, external_type == 'LDAP':: " + u);
+					u.setType(User.Type.ldap);
+					u.setExternalType(null);
+					if (u.getDomainId() == null) {
+						u.setDomainId(defaultLdapId); //domainId was not supported in old versions of OM
+					}
 				}
 				if (!Strings.isEmpty(u.getExternalType())) {
 					u.setType(User.Type.external);
@@ -426,20 +466,7 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Meeting members import complete, starting ldap config import");
-		/*
-		 * ##################### Import LDAP Configs
-		 */
-		{
-			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
-			for (LdapConfig c : list) {
-				if (!"local DB [internal]".equals(c.getName())) {
-					ldapConfigDao.addLdapConfigByObject(c);
-				}
-			}
-		}
-
-		log.info("Ldap config import complete, starting cluster servers import");
+		log.info("Meeting members import complete, starting cluster server import");
 		/*
 		 * ##################### Cluster servers
 		 */
@@ -450,18 +477,7 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Cluster servers import complete, starting OAuth2 servers import");
-		/*
-		 * ##################### OAuth2 servers
-		 */
-		{
-			List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
-			for (OAuthServer s : list) {
-				auth2Dao.update(s, null);
-			}
-		}
-
-		log.info("OAuth2 servers import complete, starting recordings import");
+		log.info("Cluster servers import complete, starting recordings import");
 		/*
 		 * ##################### Import Recordings
 		 */
