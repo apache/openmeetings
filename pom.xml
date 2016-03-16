@@ -218,6 +218,16 @@
 				<role>pmc</role>
 			</roles>
 		</developer>
+    <developer>
+			<id>susheeljalali</id>
+      <name>Susheel Jalali</name>
+      <organization>Coscend Communications</organization>
+      <organizationUrl>http://www.Coscend.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+        <role>pmc</role>
+      </roles>
+    </developer>
 		<developer>
 			<id>dkandrov</id>
 			<name>Denis Kandrov</name>
