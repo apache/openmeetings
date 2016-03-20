@@ -22,6 +22,29 @@ function getMenu(a) {
 }
 
 $(document).ready(function() {
+
+	console.log($(".example-image-link"));
+
+	$(".example-image-link").click(
+		function(e) {
+			e.preventDefault();
+			var addressValue = $(this).attr("href");
+			console.log("addressValue="+addressValue);
+
+			var overLay = '<div id="overlay"><div class="bg"></div><img src="'+addressValue+'"></div>';
+
+			var overlay = jQuery(overLay);
+			overlay.appendTo(document.body);
+
+			$("#overlay").click(
+				function(e) {
+					$("#overlay").remove();
+				}
+			);
+
+		}
+	);
+
 	$('ul.nav.nav-list > li a').each(function() {
 		var a = $(this);
 		var m = getMenu(a);
