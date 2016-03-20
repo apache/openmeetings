@@ -151,56 +151,86 @@
 
 			<div class="feature clearfix">
 				<span class="feature title">Audio and Video Conferencing</span>
-
-				<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room" width="250"
-					height="175" />
-				<span class="desc">
-					<span class="p">There are four options to use OpenMeetings audio/video functions,
+				<span class="desc_image">
+					<a href="images/Features_Screen_Conference_Room_Thumb.png" class="example-image-link"
+					   title="OpenMeetings Conference Room" style="float:none; display: block; width:250px;height:175px;border:0;">
+						<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
+							 width="250px" height="175px"  alt="" />
+					</a>
+				</span>
+				<span class="desc" >
+					<span class="p_content">There are four options to use OpenMeetings audio/video functions,
 						which you can select during a conference session.
 					</span>
+
 					<ul>
+
 						<li>audio + video</li>
+
 						<li>audio only</li>
+
 						<li>video only</li>
+
 						<li>picture only</li>
 					</ul>
-					<span class="p">Additional you can change video-/audio-quality, choose multiple
+					<span class="p_content">Additional you can change video-/audio-quality, choose multiple
 						camera resolutions (4:3, 16:9 or 3:2) and choose your input devices.
 					</span>
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Meeting recording and Screen sharing</span>
 
-				<span class="desc" style="float: left;">
-					<img src="images/desktopsharing.png" title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px" />
-					<img src="images/recordings_timeleine.png" title="Device" style="float:none; display: block; width: 200px; height: 115px" />
+				<span class="desc_image" >
+					<a href="images/desktopsharing.png" class="example-image-link"
+					   title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px">
+						<img src="images/desktopsharing.png" title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px" alt="" />
+					</a>
+					<a href="images/recordings_timeleine.png" class="example-image-link"
+					   title="Device" style="float:none; display: block; width: 200px; height: 115px">
+						<img src="images/recordings_timeleine.png" title="Device" style="float:none; display: block; width: 200px; height: 115px" alt="" />
+					</a>
 				</span>
 				<span class="desc" style="margin-top: 50px;">
+
 					<ul>
+
 						<li>Recorded sessions contain everything including sound recorded
 							from all audio streams in exactly the way you've seen it in the conference.
 						</li>
+
 						<li>Recorded sessions can be downloaded as AVI/FLV files.</li>
+
 						<li>Possibility to select a screen area for sharing.</li>
+
 						<li>Different quality steps for Screensharing.</li>
+
 						<li>Watch and organize recordings in an integrated Drag and Drop File-Explorer</li>
 					</ul>
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">File Explorer</span>
 
-				<img src="images/file_smal.png" title="File Explorer" width="135" height="200" />
+				<span class="desc_image">
+					<a href="images/file_smal.png" class="example-image-link"
+					   title="File Explorer" style="float:none; display: block; width:135px;height:200px;border:0;">
+
+						<img src="images/file_smal.png" title="File Explorer" width="135px" height="200px" alt=""
+							 style="float:none; display: block; width:135px;height:200px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">Advanced File-Explorer in every conference room, Drag and Drop
+					<span class="p_content">Advanced File-Explorer in every conference room, Drag and Drop
 						interface for managing uploaded files, including the possibility to
 						create a document tree with folders.
 					</span>
 					<br />
-					<span class="p">
+					<span class="p_content">
 						Private and Public Drive in File-Explorer. The File-Explorer has two different views, one is the
 						<b>Private Drive</b> and the other the <b>Public Drive</b>. The Private Drive always contains the same files.
 						Those files are visible only to the user currently loggedin. The Public Drive is not
@@ -210,51 +240,73 @@
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Moderating System</span>
-
-				<img src="images/right_management.png" title="Right management" width="135" height="216" />
+				<span class="desc_image">
+					<a href="images/right_management.png" class="example-image-link"
+					   title="Right management" style="float:none; display: block; width:135px;height:216px;border:0;">
+						<img src="images/right_management.png" title="Right management" width="135px" height="216px" alt=""
+							 style="float:none; display: block; width:135px;height:216px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">During a conference, the moderator can adjust the user permission to every user individually.
+					<span class="p_content">During a conference, the moderator can adjust the user permission to every user individually.
 					</span>
+
 					<ul>
+
 						<li>
-							<img class="alignnone" title="Allow modaration" src="images/user_add.png" alt="" />
+							<img src="images/user_add.png" class="alignnone" title="Allow modaration" alt="" />
 							Allow/Deny moderation
 						</li>
+
 						<li>
-							<img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png" alt="" />
+							<img src="images/pencil_add.png" class="alignnone" title="Whiteboard Access" alt="" />
 							Allow/Deny to draw on white board
 						</li>
+
 						<li>
-							<img class="alignnone" title="Screenshare" src="images/monitor_add.png" alt="" />
+							<img src="images/monitor_add.png" class="alignnone" title="Screenshare" alt="" />
 							Allow/Deny screen-sharing/record screen
 						</li>
+
 						<li>
-							<img class="alignnone" title="Remote control" src="images/mouse_add.png" alt="" />
+							<img src="images/mouse_add.png" class="alignnone" title="Remote control" alt="" />
 							Allow/Deny Remote Control Screen
 						</li>
+
 						<li>
-							<img class="alignnone" title="Remote control" src="images/micro_small.png" alt="" />
+							<img src="images/micro_small.png" class="alignnone" title="Remote control" alt="" />
 							Give exclusive audio to others or self
 						</li>
+
 						<li>
-							<img class="alignnone" title="Video Audio" src="images/audio_and_video.png" alt="" />
+							<img src="images/audio_and_video.png" class="alignnone" title="Video Audio" alt="" />
 							(Re-) Start Audio, Video or Device settings
 						</li>
 					</ul>
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Multi-Whiteboard and Chat</span>
 
-				<span class="desc" style="float: left;">
-					<img src="images/whiteboard.png" title="Whiteboard" style="float:none; display: block; width: 240px; height: 165px" />
-					<img src="images/chat.png" title="Chat in Conference Room" style="float:none; display: block; width: 240px; height: 68px" />
+				<span class="desc_image" >
+					<a href="images/whiteboard.png" class="example-image-link"
+					   title="Whiteboard" style="float:none; display: block; width:240px;height:165px;border:0;">
+						<img src="images/whiteboard.png" title="Whiteboard"
+							 style="float:none; display: block; width: 240px; height: 165px" alt="" />
+					</a>
+					<a href="images/chat.png" class="example-image-link"
+					   title="Chat in Conference Room" style="float:none; display: block; width:240px;height:68px;border:0;">
+						<img src="images/chat.png" title="Chat in Conference Room"
+							 style="float:none; display: block; width: 240px; height: 68px" alt="" />
+					</a>
 				</span>
-				<span class="desc" style="margin-top: 50px;">
-					<span class="p">
+				<span class="desc">
+					<span class="p_content" style="width: 450px">
 						Multi-Whiteboard, you can add new whiteboard instances, each
 						white board can have the full range of tools and
 						documents inside.
@@ -282,12 +334,18 @@
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">User and room management</span>
-
-				<img src="images/dashboard.png" title="Dashboard with MyRooms" width="250" height="130" />
+				<span class="desc_image">
+					<a href="images/dashboard.png" class="example-image-link"
+					   title="Dashboard with MyRooms" style="float:none; display: block; width:250px;height:130px;border:0;">
+						<img src="images/dashboard.png" title="Dashboard with MyRooms" width="250px" height="130px" alt=""
+							 style="float:none; display: block; width:250px;height:130px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">
+					<span class="p_content" >
 						You can manage users and multiple organizations in a single
 						OpenMeetings instance. You can also create users that only have
 						access via the SOAP-API.
@@ -304,12 +362,19 @@
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Private message center</span>
-
-				<img src="images/privat_messages.png" title="Private Messages and Contact Search" width="230" height="125" />
+				<span class="desc_image" >
+					<a href="images/privat_messages.png" class="example-image-link"
+					   title="Private Messages and Contact Search" style="float:none; display: block; width:230px;height:125px;border:0;">
+						<img src="images/privat_messages.png" title="Private Messages and Contact Search"
+							 width="230px" height="125px" alt=""
+							 style="float:none; display: block; width:230px;height:125px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">
+					<span class="p_content">
 						Send users messages and organize them in folders. You can book
 						conference rooms by sending private messages. The booked event
 						automatically is in your and the participants calendar, changes to
@@ -322,27 +387,43 @@
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Plan meetings with integrated calendar</span>
-
-				<img src="images/calendar.png" title="Calendar" width="200" height="115" />
+				<span class="desc_image" >
+					<a href="images/calendar.png" class="example-image-link"
+					   title="Calendar" style="float:none; display: block; width:200px;height:115px;border:0;">
+						<img src="images/calendar.png" title="Calendar" width="200px" height="115px" alt=""
+							 style="float:none; display: block; width:200px;height:115px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
+
 					<ul>
+
 						<li>Plan your conferencing and invite attendees from OpenMeetings or External.</li>
+
 						<li>The invited attendees will recieve an E-mail with details to the meetings and a link with a
 							secure hash to the conference room.
 						</li>
+
 						<li>Share your calendar with your contacts.</li>
 					</ul>
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Polls and Votes</span>
-
-				<img src="images/poll.png" title="Create a poll" width="250" height="250" />
+				<span class="desc_image" >
+					<a href="images/poll.png" class="example-image-link"
+					   title="Create a poll" style="float:none; display: block; width:250px;height:250px;border:0;">
+						<img src="images/poll.png" title="Create a poll" width="250px" height="250px" alt=""
+							 style="float:none; display: block; width:250px;height:250px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">
+					<span class="p_content">
 						You can create a poll with yes/no or 1-10 questions, let the
 						user vote and see the voting results.
 						<br />
@@ -352,17 +433,27 @@
 				</span>
 			</div>
 
+
 			<div class="feature clearfix">
 				<span class="feature title">Backup</span>
-
-				<img src="images/backup.png" title="Backup" width="250" />
+				<span class="desc_image" >
+					<a href="images/backup.png" class="example-image-link"
+					   title="Backup" style="float:none; display: block; width:240px;height:135px;border:0;">
+						<img src="images/backup.png" title="Backup" width="250px" alt=""
+							 style="float:none; display: block; width:250px;height:135px;border:0;"/>
+					</a>
+				</span>
 				<span class="desc">
-					<span class="p">You can backup all user-generated data including files
+					<span class="p_content">You can backup all user-generated data including files
 						uploaded by the users in a single ZIP file and import that ZIP into
 						a new installation of OpenMeetings again.
 					</span>
 				</span>
 			</div>
+
+
+
 		</section>
+
 	</body>
 </document>
