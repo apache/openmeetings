@@ -201,6 +201,30 @@
 						</tr>
 					</table>
 				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-square" src="images/logos/logo_om_small6.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Johan Strombom</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-square" src="images/logos/logo_om_small7.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Amir Januzaj</td>
+						</tr>
+					</table>
+				</li>
 			</ol>
 		</section>
 	</body>
