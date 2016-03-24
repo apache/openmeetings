@@ -30,16 +30,13 @@
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
 						<li>Sun JDK7</li>
-						<li>Apache ANT (minimum) 1.8.3</li>
+						<li>Apache Maven 3.3.9</li>
 						<li>
 							SVN Command line client (Subversion 1.7 required!)
-							<a href="http://subversion.apache.org/packages.html" target="_blank"
-								rel="nofollow">http://subversion.apache.org/packages.html</a>
+							<a href="http://subversion.apache.org/packages.html" target="_blank" rel="nofollow">http://subversion.apache.org/packages.html</a>
 						</li>
 						<li>A text editor</li>
-						<li>You need to be online! The build process actively downloads
-							needed libraries and dependencies.
-						</li>
+						<li>You need to be online! The build process actively downloads needed libraries and dependencies.</li>
 						<li>Valid certficate to be able to enter <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a>
 							Please ask INFRA in case you need one.
 						</li>
