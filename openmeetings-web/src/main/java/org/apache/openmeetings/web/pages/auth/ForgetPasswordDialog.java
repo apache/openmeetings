@@ -22,15 +22,14 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -239,9 +238,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	private void sendHashByUser(User us, String appLink, UserDao userDao) throws Exception {
-		String loginData = us.getLogin() + new Date();
 		log.debug("User: " + us.getLogin());
-		us.setResethash(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(loginData));
+		us.setResethash(UUID.randomUUID().toString());
 		userDao.update(us, -1L);
 		String reset_link = appLink + "?hash=" + us.getResethash();
 
