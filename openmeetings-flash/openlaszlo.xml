@@ -24,7 +24,7 @@
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	xmlns:artifact="antlib:org.apache.maven.artifact.ant"
 	>
-	<property name="laszlo46.home" value="${basedir}/openlaszlo/openlaszlo46" />
+	<property name="laszlo46.home" value="${openlaszlo}/openlaszlo46" />
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value="${dist.webapps.dir}/public" />
 	<property name="flex.src.dir" value="${webcontent.base.dir}/flex" />
@@ -73,7 +73,7 @@
 		</antcall>
 	</target>
 
-	<target name="compile.laszlo.networktesting.debug" depends="-retrieve-openlaszlo46">
+	<target name="compile.laszlo.networktesting.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
@@ -113,21 +113,7 @@
 		<antcall target="-compile.flex" inheritAll="true" inheritRefs="true"/>
 	</target>
 	
-	<target name="compile.flex.debug" depends="-retrieve-openlaszlo46">
+	<target name="compile.flex.debug">
 		<!--antcall target="-compile.flex" inheritAll="true" inheritRefs="true"/-->
-	</target>
-	
-	<target name="-availability-check" description="Check which libraries need to be retrieved">
-		<available file="${laszlo46.home}/WEB-INF/lib" type="dir" property="laszlo46.installed" />
-	</target>
-	<target name="-retrieve-openlaszlo46" unless="laszlo46.installed" description="Retrieves the libraries if needed" depends="-availability-check">
-		<mkdir dir="${openlaszlo}"/>
-		<get src="https://dl.bintray.com/openmeetings/maven/org/openlaszlo/openlaszlo/4.9.6/openlaszlo-4.9.6.tgz"
-			dest="${openlaszlo}" usetimestamp="true"/>
-		<untar src="${openlaszlo}/openlaszlo-4.9.6.tgz" dest="${openlaszlo}" compression="gzip" />
-		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="a+x" includes="**/mxmlc*" />
-		<delete>
-			<fileset dir="${openlaszlo}" includes="openlaszlo*.tgz"/>
-		</delete>
 	</target>
 </project>
