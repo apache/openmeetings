@@ -211,7 +211,7 @@
 						<id>generate-jnlp-and-sign-libs</id>
 						<phase>package</phase>
 						<goals>
-							<goal>jnlp</goal>
+							<goal>jnlp-inline</goal>
 						</goals>
 						<configuration>
 							<excludeTransitive>false</excludeTransitive>
