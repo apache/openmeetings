@@ -63,7 +63,7 @@
 		</antcall>
 	</target>
 
-	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo46">
+	<target name="compile.laszlo.main.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${src.dir}" />
@@ -87,7 +87,7 @@
 		</antcall>
 	</target>
 
-	<target name="compile.laszlo.networktesting.debug" depends="-retrieve-openlaszlo46">
+	<target name="compile.laszlo.networktesting.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${src.dir}/networkTesting" />
@@ -97,19 +97,5 @@
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
 			<param name="flash.debug" value="--debug" />
 		</antcall>
-	</target>
-
-	<target name="-availability-check" description="Check which libraries need to be retrieved">
-		<available file="${laszlo46.home}/WEB-INF/lib" type="dir" property="laszlo46.installed" />
-	</target>
-	<target name="-retrieve-openlaszlo46" unless="laszlo46.installed" description="Retrieves the libraries if needed" depends="-availability-check">
-		<mkdir dir="${openlaszlo}"/>
-		<get src="https://dl.bintray.com/openmeetings/maven/org/openlaszlo/openlaszlo/4.9.6/openlaszlo-4.9.6.tgz"
-			dest="${openlaszlo}" usetimestamp="true"/>
-		<untar src="${openlaszlo}/openlaszlo-4.9.6.tgz" dest="${openlaszlo}" compression="gzip" />
-		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="a+x" includes="**/mxmlc*" />
-		<delete>
-			<fileset dir="${openlaszlo}" includes="openlaszlo*.tgz"/>
-		</delete>
 	</target>
 </project>
