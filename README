@@ -8,6 +8,21 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 3.1.1
+=============
+see CHANGELOG file for detailed log
+
+Service release 1 for 3.1.0, provides security fixes:
+* CVE-2016-0783 - Predictable password reset token
+* CVE-2016-0784 - ZIP file path traversal
+* CVE-2016-2164 - Arbitrary file read via SOAP API
+* CVE-2016-2163 - Stored Cross Site Scripting in Event description
+
+Please update to this release from any previous OpenMeetings release
+
+Other minor fixes.
+
+
 Release Notes 3.1.0
 =============
 see CHANGELOG file for detailed log
