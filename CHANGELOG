@@ -1,6 +1,31 @@
 Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
+See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
+
+Release Notes - Openmeetings - Version 3.1.1
+================================================================================================================
+** Vulnerability
+    * CVE-2016-0783 - Predictable password reset token
+    * CVE-2016-0784 - ZIP file path traversal
+    * CVE-2016-2164 - Arbitrary file read via SOAP API
+    * CVE-2016-2163 - Stored Cross Site Scripting in Event description
+    
+** Bug
+    * [OPENMEETINGS-1328] - ConfirmAjaxCallListener should be changed on standard wicket dialog in the MessagesContactsPanel
+    * [OPENMEETINGS-1339] - Poll results shows uncorrectly
+    * [OPENMEETINGS-1341] - White page is shown when user try to reset password
+    * [OPENMEETINGS-1343] - Release signatures should be created automatically
+    * [OPENMEETINGS-1346] - Error while import a backup from OM version 3.0.2
+    * [OPENMEETINGS-1347] - missing sort functionality in administration view
+    * [OPENMEETINGS-1348] - Backup import with LDAP users from 2.1.0 fails
+    * [OPENMEETINGS-1351] - Call for Logo page does not say where to send contributions
+    * [OPENMEETINGS-1354] - Backup zip is being extracted without necessary checks
+    * [OPENMEETINGS-1355] - random UUID should be user to generate password reset hash
+
+** Improvement
+    * [OPENMEETINGS-1337] - Library versions should be updated (3.1.1)
+
 
 Release Notes - Openmeetings - Version 3.1.0
 ================================================================================================================
