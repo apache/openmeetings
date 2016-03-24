@@ -93,43 +93,39 @@
 				<a class="carousel-control right" href="#slider">&rsaquo;</a>
 			</div>
 
-
 			<p> Openmeetings provides video conferencing, instant messaging,
 				white board, collaborative document editing and other groupware
 				tools using API functions of the Red5 Streaming Server for Remoting
 				and Streaming.
 			</p>
-
 			<p>
 				OpenMeetings is a project of the Apache, the old project
 				website at <a href="http://code.google.com/p/openmeetings/" target="_blank">GoogleCode</a>
 				will receive no updates anymore. The website at Apache is the only place that receives updates.
 			</p>
-
 		</section>
-
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.0.7 released!</b>
-				<span>Service release 7 for 3.0.0 contains following improvements and bug fixes:<br/>
+				<b>Version 3.1.1 released!</b>
+				<div>Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
-					<ul>
-						<li>Clustering was tested and fixed, now it works as expected both in OM and plugins</li>
-						<li>Moderator able to restrict video in restricted room from now on</li>
-						<li>Private messages with room booking are now works as expected</li>
-						<li>Crashes in admin are fixed</li>
-						<li>LDAP: group import</li>
-					</ul><br/>
+					<span class="bs-callout bs-callout-danger">
+						Multiple security vulnerabilities (CVE-2016-0783, CVE-2016-0784, CVE-2016-2163, CVE-2016-2164) were fixed,
+						please check <a href="security.html">Security Page</a><br/>
+					</span>
 					<br/>
 					Other fixes<br/>
-				</span>
+				</div>
 				<span>
-					20 issues are fixed please check 
-					<a href="https://www.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12332443">Detailed list</a>
+					8 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
+				</span>
+				<span class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2015-09-29)</span>
+				<span class="date">(2016-03-24)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
