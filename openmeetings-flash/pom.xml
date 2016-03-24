@@ -29,16 +29,46 @@
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
 	<properties>
-		<openlaszlo>${project.basedir}/openlaszlo</openlaszlo>
+		<openlaszlo>${project.build.directory}</openlaszlo>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
+	<repositories>
+		<repository>
+			<id>openmeetings-bintray</id>
+			<url>https://dl.bintray.com/openmeetings/maven</url>
+		</repository>
+	</repositories>
 	<build>
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
 		
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.openlaszlo</groupId>
+									<artifactId>openlaszlo</artifactId>
+									<version>4.9.7</version>
+									<type>tgz</type>
+									<outputDirectory>${openlaszlo}</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
