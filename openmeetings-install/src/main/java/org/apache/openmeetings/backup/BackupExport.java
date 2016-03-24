@@ -27,16 +27,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -51,10 +44,9 @@ import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -69,10 +61,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
@@ -102,8 +91,6 @@ public class BackupExport {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private SessiondataDao sessiondataDao;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -464,106 +451,10 @@ public class BackupExport {
 		
 		writeList(serializer, os, "users", list);
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest
-	 * , javax.servlet.http.HttpServletResponse)
-	 */
-	public void service(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws ServletException, IOException {
-		String sid = request.getParameter("sid");
-		if (sid == null) {
-			sid = "default";
-		}
-		log.debug("sid: " + sid);
-
-		Long userId = sessiondataDao.checkSession(sid);
-		Set<Right> rights = userDao.get(userId).getRights();
-
-		log.debug("userId: " + userId);
-		log.debug("user level: " + rights);
-
-		if (AuthLevelUtil.hasAdminLevel(rights)) {
-			// if (true) {
-
-			String includeFileOption = request.getParameter("includeFileOption");
-			boolean includeFiles = includeFileOption == null || "yes".equals(includeFileOption);
-
-			String moduleName = request.getParameter("moduleName");
-			if (moduleName == null) {
-				moduleName = "moduleName";
-			}
-			log.debug("moduleName: " + moduleName);
-
-			if (moduleName.equals("backup")) {
-
-				/*
-				 * ##################### Create Base Folder structure
-				 */
-
-				File working_dir = OmFileHelper.getUploadBackupDir();
-
-				String dateString = "backup_"
-						+ CalendarPatterns.getTimeForStreamId(new Date());
-
-				File backup_dir = new File(working_dir, dateString);
-				String requestedFile = dateString + ".zip";
-				File backupFile = new File(backup_dir, requestedFile);
-
-				try {
-					performExport(backupFile, backup_dir, includeFiles, new ProgressHolder());
-
-					response.reset();
-					response.resetBuffer();
-					response.setContentType("APPLICATION/OCTET-STREAM");
-					response.setHeader("Content-Disposition", "attachment; filename=\"" + requestedFile + "\"");
-					response.setHeader("Content-Length", "" + backupFile.length());
-
-					OutputStream out = response.getOutputStream();
-					OmFileHelper.copyFile(backupFile, out);
-
-					out.flush();
-					out.close();
-				} catch (Exception er) {
-					log.error("Error exporting: ", er);
-				}
-
-				if (backupFile.exists()) {
-					// log.debug("DELETE :1: "+backupFile.getCanonicalPath());
-					backupFile.delete();
-				}
-
-				FileHelper.removeRec(backup_dir);
-			}
-		} else {
-			log.error("BackupExport: not authorized FileDownload ");
-		}
-	}
 
 	private void writeZipDir(File directoryToZip, File zipFile) throws IOException {
-		FileOutputStream fos = null;
-		ZipOutputStream zos = null;
-		try {
-			fos = new FileOutputStream(zipFile);
-			zos = new ZipOutputStream(fos);
-			
+		try (FileOutputStream fos = new FileOutputStream(zipFile); ZipOutputStream zos = new ZipOutputStream(fos)) {
 			writeZipDir(directoryToZip.toURI(), directoryToZip, zos, zipFile);
-		} finally {
-			if (zos != null) {
-				try {
-					zos.close();
-				} catch (IOException e) {
-					log.debug("Enexpected error while closing ZipOutputStream", e);
-				}
-			}
-			if (fos != null) {
-				try {
-					fos.close();
-				} catch (IOException e) {
-					log.debug("Enexpected error while closing FileOutputStream", e);
-				}
-			}
 		}
 	}
 	

@@ -175,11 +175,47 @@ public class BackupImport {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
 	};
 
-	public void performImport(InputStream is) throws Exception {
-		File working_dir = OmFileHelper.getUploadImportDir();
-		if (!working_dir.exists()) {
-			working_dir.mkdir();
+	private File validate(String zipname, File intended) throws IOException {
+		final String intendedPath = intended.getCanonicalPath();
+		if (File.pathSeparatorChar != '\\' && zipname.indexOf('\\') > -1) {
+			zipname = zipname.replace('\\', '/');
 		}
+		// for each entry to be extracted
+		File fentry = new File(intended, zipname);
+		final String canonicalPath = fentry.getCanonicalPath();
+
+		if (canonicalPath.startsWith(intendedPath)) {
+			return fentry;
+		} else {
+			throw new IllegalStateException("File is outside extraction target directory.");
+		}
+	}
+
+	private File unzip(InputStream is) throws IOException  {
+		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
+		log.debug("##### EXTRACTING BACKUP TO: " + f);
+		
+		try (ZipInputStream zis = new ZipInputStream(is)) {
+			ZipEntry zipentry = null;
+			while ((zipentry = zis.getNextEntry()) != null) {
+				// for each entry to be extracted
+				File fentry = validate(zipentry.getName(), f);
+				File dir = zipentry.isDirectory() ? fentry : fentry.getParentFile();
+				if (!dir.exists()) {
+					if (!dir.mkdirs()) {
+						log.warn("Failed to create folders: " + dir);
+					}
+				}
+				if (!fentry.isDirectory()) {
+					FileHelper.copy(zis, fentry);
+					zis.closeEntry();
+				}
+			}
+		}
+		return f;
+	}
+	
+	public void performImport(InputStream is) throws Exception {
 		usersMap.clear();
 		groupMap.clear();
 		appointmentsMap.clear();
@@ -190,34 +226,8 @@ public class BackupImport {
 		messageFoldersMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 		messageFoldersMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
 		messageFoldersMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
-		File f = OmFileHelper.getNewDir(working_dir, "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
 
-		log.debug("##### WRITE FILE TO: " + f);
-		
-		ZipInputStream zipinputstream = new ZipInputStream(is);
-		ZipEntry zipentry = zipinputstream.getNextEntry();
-		while (zipentry != null) {
-			String fName = zipentry.getName();
-			if (File.pathSeparatorChar != '\\' && fName.indexOf('\\') > -1) {
-				fName = fName.replace('\\', '/');
-			}
-			// for each entry to be extracted
-			File fentry = new File(f, fName);
-			File dir = zipentry.isDirectory() ? fentry : fentry.getParentFile();
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
-			if (fentry.isDirectory()) {
-				zipentry = zipinputstream.getNextEntry();
-				continue;
-			}
-
-			FileHelper.copy(zipinputstream, fentry);
-			zipinputstream.closeEntry();
-			zipentry = zipinputstream.getNextEntry();
-
-		}
-		zipinputstream.close();
+		File f = unzip(is);
 
 		/*
 		 * ##################### Import Configs
