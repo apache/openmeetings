@@ -129,7 +129,7 @@
 			<id>prepare-red5-server</id>
 			<activation>
 				<file>
-					<missing>red5-server/red5-server-1.0.6-RELEASE-server.zip</missing> <!-- TODO should be in-sync with global property -->
+					<missing>red5-server/red5-server-1.0.7-M10.zip</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
@@ -146,7 +146,7 @@
 								</goals>
 								<configuration>
 									<url>https://github.com/Red5/red5-server/releases/download</url>
-									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.zip</fromFile>
+									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}.zip</fromFile>
 									<toDir>${red5-server-file.dir}</toDir>
 									<skip>${red5-server.dwnd.skip}</skip>
 								</configuration>
@@ -168,10 +168,10 @@
 						<goals>
 							<goal>copy</goal>
 						</goals>
-						<phase>process-resources</phase>
+						<phase>prepare-package</phase>
 						<configuration>
 							<fileset>
-								<directory>${red5-server-file.dir}/red5-server-${red5-server.version}-server.zip/red5-server-${red5-server.version}</directory>
+								<directory>${red5-server-file.dir}/red5-server-${red5-server.version}.zip/red5-server</directory>
 								<outputDirectory>${server.dir}</outputDirectory>
 							</fileset>
 							<skip>${om.quick.build}</skip>

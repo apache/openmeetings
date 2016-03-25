@@ -71,7 +71,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private int port;
 	
 	public String publishName;
-	private CaptureScreen capture = null;
+	private CaptureScreen _capture = null;
 	private RTMPClientPublish publishClient = null;
 
 	private ScreenSharerFrame frame;
@@ -96,10 +96,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
 
 	private CaptureScreen getCapture() {
-		if (capture == null) {
-			capture = new CaptureScreen(this, instance, host, app, port);
+		if (_capture == null) {
+			_capture = new CaptureScreen(this, instance, host, app, port);
 		}
-		return capture;
+		return _capture;
 	}
 	// ------------------------------------------------------------------------
 	//
@@ -387,12 +387,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			setReadyToRecord(false);
 			getCapture().setStartPublish(false);
 			getCapture().release();
-			capture = null;
+			_capture = null;
 		} catch (Exception e) {
 			log.error("ScreenShare stopStream exception " + e);
 		}
 	}
 
+	@Override
 	public void onStreamEvent(Notify notify) {
 		log.debug( "onStreamEvent " + notify );
 
@@ -639,6 +640,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
+	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		try {
 
@@ -693,7 +695,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else if ("createStream".equals(method)) {
 				if (startRecording || startStreaming) {
 					if (call.getResult() != null) {
-						getCapture().setStreamId((Integer)call.getResult());
+						getCapture().setStreamId((Number)call.getResult());
 					}
 					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
