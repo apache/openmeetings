@@ -72,9 +72,9 @@ class CaptureScreen extends Thread {
 	private String host = null;
 	private String app = null;
 	private int port = -1;
-	private int streamId;
+	private Number streamId;
 	private boolean startPublish = false;
-	private Scheduler scheduler;
+	private Scheduler _scheduler;
 
 	public CaptureScreen(CoreScreenShare coreScreenShare, IScreenShare client, String host, String app, int port) {
 		core = coreScreenShare;
@@ -82,22 +82,28 @@ class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		final Properties p = new Properties();
-		p.put(PROP_SCHED_SKIP_UPDATE_CHECK, "true");
-		p.put("org.quartz.threadPool.threadCount", "10");
-		try {
-			SchedulerFactory sf = new StdSchedulerFactory(p);
-			scheduler = sf.getScheduler();
-		} catch (SchedulerException e) {
-			log.error("Unexpected error while creating scheduler", e);
+	}
+
+	private Scheduler getScheduler() {
+		if (_scheduler == null) {
+			final Properties p = new Properties();
+			p.put(PROP_SCHED_SKIP_UPDATE_CHECK, "true");
+			p.put("org.quartz.threadPool.threadCount", "10");
+			try {
+				SchedulerFactory sf = new StdSchedulerFactory(p);
+				_scheduler = sf.getScheduler();
+			} catch (SchedulerException e) {
+				log.error("Unexpected error while creating scheduler", e);
+			}
 		}
+		return _scheduler;
 	}
 
 	public void release() {
 		try {
-			if (scheduler != null) {
-				scheduler.shutdown(true);
-				scheduler = null;
+			if (_scheduler != null) {
+				_scheduler.shutdown(true);
+				_scheduler = null;
 			}
 		} catch (Exception e) {
 			log.error("Unexpected error while shutting down scheduler", e);
@@ -130,9 +136,10 @@ class CaptureScreen extends Thread {
 					.build();
 			sendJob.getJobDataMap().put(SendJob.CAPTURE_KEY, this);
 
-			scheduler.scheduleJob(encodeJob, encodeTrigger);
-			scheduler.scheduleJob(sendJob, sendTrigger);
-			scheduler.start();
+			Scheduler s = getScheduler();
+			s.scheduleJob(encodeJob, encodeTrigger);
+			s.scheduleJob(sendJob, sendTrigger);
+			s.start();
 		} catch (Exception e) {
 			log.error("Error while running: ", e);
 		}
@@ -275,11 +282,11 @@ class CaptureScreen extends Thread {
 		return port;
 	}
 
-	public int getStreamId() {
+	public Number getStreamId() {
 		return streamId;
 	}
 
-	public void setStreamId(int streamId) {
+	public void setStreamId(Number streamId) {
 		this.streamId = streamId;
 	}
 
@@ -289,6 +296,7 @@ class CaptureScreen extends Thread {
 
 	public void setSendCursor(boolean sendCursor) {
 		try {
+			Scheduler s = getScheduler();
 			if (sendCursor) {
 				JobDetail cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
 				Trigger cursorTrigger = TriggerBuilder.newTrigger()
@@ -296,9 +304,9 @@ class CaptureScreen extends Thread {
 						.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, FPS)).repeatForever())
 						.build();
 				cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
-				scheduler.scheduleJob(cursorJob, cursorTrigger);
+				s.scheduleJob(cursorJob, cursorTrigger);
 			} else {
-				scheduler.deleteJob(JobKey.jobKey(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME));
+				s.deleteJob(JobKey.jobKey(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME));
 			}
 		} catch (SchedulerException e) {
 			log.error("Unexpected Error schedule/unschedule cursor job", e);

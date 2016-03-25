@@ -307,11 +307,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					client.setStreamPublishStarted(true);
 				}
 
-				client.setVX(Integer.parseInt(map.get("screenX").toString()));
-				client.setVY(Integer.parseInt(map.get("screenY").toString()));
-				client.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
-				client.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
-				client.setStreamPublishName(map.get("publishName").toString());
+				client.setVX(Double.valueOf("" + map.get("screenX")).intValue());
+				client.setVY(Double.valueOf("" + map.get("screenY")).intValue());
+				client.setVWidth(Double.valueOf("" + map.get("screenWidth")).intValue());
+				client.setVHeight(Double.valueOf("" + map.get("screenHeight")).intValue());
+				client.setStreamPublishName("" + map.get("publishName"));
 				sessionManager.updateClientByStreamId(current.getClient().getId(), client, false, null);
 
 				Map<String, Object> returnMap = new HashMap<String, Object>();
