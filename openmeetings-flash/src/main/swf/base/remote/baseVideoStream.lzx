@@ -82,7 +82,7 @@
 	<event name="onIoError" />
 
 	<!-- save value for restart -->
-        <attribute name="streamName" />
+        <attribute name="streamName" type="string"/>
         <attribute name="delay" />
 	<!--- @keywords private -->
 	<method name="createStream">
@@ -168,9 +168,9 @@
 		@param string streamName the streamname to play
 		@param number delay The time it should seek, for Live-Streams this value should be -1
 	 -->
-	<method name="playStream" args="streamName,delay">
+	<method name="playStream" args="_streamName, delay">
 		<![CDATA[
-			this.streamName=streamName;
+			this.streamName = "" + _streamName;
 			this.delay=delay;
 			if (this._ns!=null){
 				this._stop();
@@ -182,6 +182,7 @@
 			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
 			//after re-syncing the stream
 			//this.setBuffer(0.1);
+			if ($debug) Debug.write("Play Stream "+streamName);
 			if (delay == 0) {
 			    this._ns.play(streamName);
 			} else {
@@ -190,9 +191,9 @@
 		]]>
 	</method>
 
-	<method name="justPlayStream" args="streamName,delay">
+	<method name="justPlayStream" args="_streamName, delay">
         <![CDATA[
-            this.streamName=streamName;
+            this.streamName = "" + _streamName;
             this.delay=delay;
             if (this._ns!=null){
             	if ($debug) Debug.write("STOP NS is NOT null ")
@@ -207,13 +208,13 @@
 
             this.setBuffer(6);
 
-            if ($debug) Debug.write("Play Stream "+streamName);
+            if ($debug) Debug.write("Just Play Stream "+streamName);
 
             this._ns.play(streamName,delay);
         ]]>
     </method>
 
-	<method name="prepare" args="mode,streamName,camReference,micReference">
+	<method name="prepare" args="mode, streamName, camReference, micReference">
 		if (this._ns != null){
 			this._stop();
 		}
@@ -246,7 +247,7 @@
 			muteMicro(this.micMuted);
 		}
 		
-		this._ns.publish(streamName, (mode == "broadcast") ? "live" : mode);
+		this._ns.publish("" + streamName, (mode == "broadcast") ? "live" : mode);
 	</method>
 	<!---
 		BroadCasts a Stream
