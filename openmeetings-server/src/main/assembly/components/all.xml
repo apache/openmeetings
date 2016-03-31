@@ -99,7 +99,6 @@
 				<exclude>WEB-INF/lib/commons-codec*</exclude>
 				<exclude>WEB-INF/lib/commons-collections-*</exclude>
 				<exclude>WEB-INF/lib/commons-lang3*</exclude>
-				<exclude>WEB-INF/lib/commons-pool-*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
