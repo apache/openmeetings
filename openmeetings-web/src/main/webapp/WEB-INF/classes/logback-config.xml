@@ -51,12 +51,10 @@
 			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [%t] - %m%n</pattern>
 		</layout>
 	</appender>
-	<logger name="org.apache.axis2" level="ERROR" />
 	<logger name="com.mchange.v2" level="ERROR" />
 	<logger name="org.apache.axiom" level="ERROR" />
 	<logger name="org.apache.commons.httpclient" level="ERROR" />
 	<logger name="de.hunsicker.jalopy.io" level="ERROR" />
-	<logger name="org.apache.axis2.enterprise" level="ERROR" />
 	<logger name="httpclient.wire.header" level="ERROR" />
 	<logger name="org.apache.directory" level="INFO" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
