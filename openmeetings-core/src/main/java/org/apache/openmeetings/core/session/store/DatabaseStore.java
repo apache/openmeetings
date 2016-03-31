@@ -34,11 +34,8 @@ public class DatabaseStore implements IClientPersistenceStore {
 	@Autowired
 	private ClientDao clientDao;
 	
-	public void clearCache() {
-		
-		//List<Server> serverList = serverDao.getActiveServers();
-		
-		//clientDao.cleanUpClientsWithoutReference();
+	public void clear() {
+		clientDao.cleanAllClients();
 	}
 	
 	public void put(String streamId, Client rcl) {

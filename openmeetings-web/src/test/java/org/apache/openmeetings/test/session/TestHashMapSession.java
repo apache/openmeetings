@@ -48,7 +48,7 @@ public class TestHashMapSession extends AbstractJUnitDefaults {
 	public void testHashMapSession() {
 		
 		//make sure the cache is empty before starting the test
-		cache.clearCache();
+		cache.clear();
 		
 		for (int i=0;i<20;i++) {
 			

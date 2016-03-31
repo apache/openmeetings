@@ -34,14 +34,14 @@ public interface IClientPersistenceStore {
 	/**
 	 * called upon start of the session cache
 	 */
-	public abstract void clearCache();
+	void clear();
 
 	/**
 	 * 
 	 * @param streamId
 	 * @param rcl
 	 */
-	public abstract void put(String streamId, Client rcl);
+	void put(String streamId, Client rcl);
 	
 	/**
 	 * 
@@ -49,7 +49,7 @@ public interface IClientPersistenceStore {
 	 * @param streamId
 	 * @return
 	 */
-	public boolean containsKey(Server server, String streamId);
+	boolean containsKey(Server server, String streamId);
 
 	/**
 	 * by server and publicSID
@@ -58,7 +58,7 @@ public interface IClientPersistenceStore {
 	 * @param streamId
 	 * @return will return null if the client does not exist in the list
 	 */
-	public abstract Client get(Server server, String streamId);
+	Client get(Server server, String streamId);
 
 	/**
 	 * 
@@ -66,8 +66,7 @@ public interface IClientPersistenceStore {
 	 * @param publicSID
 	 * @return will return an empty list if nothing available
 	 */
-	public abstract List<Client> getClientsByPublicSID(Server server,
-			String publicSID);
+	List<Client> getClientsByPublicSID(Server server, String publicSID);
 
 	/**
 	 * Searches for the publicSID across all servers
@@ -75,10 +74,9 @@ public interface IClientPersistenceStore {
 	 * @param publicSID
 	 * @return will return a map with the serverId as key and the RoomClients as list in the value
 	 */
-	public abstract Map<Long, List<Client>> getClientsByPublicSID(
-			String publicSID);
+	Map<Long, List<Client>> getClientsByPublicSID(String publicSID);
 
-	public abstract Collection<Client> getClients();
+	Collection<Client> getClients();
 	
 	/**
 	 * get all clients by a specific {@link Server}
@@ -86,7 +84,7 @@ public interface IClientPersistenceStore {
 	 * @param server
 	 * @return will return an empty map if nothing available
 	 */
-	public abstract Collection<Client> getClientsByServer(Server server);
+	Collection<Client> getClientsByServer(Server server);
 
 	/**
 	 * 
@@ -94,7 +92,7 @@ public interface IClientPersistenceStore {
 	 * @param userId
 	 * @return will return an empty list if nothing available
 	 */
-	public abstract Collection<Client> getClientsByUserId(Server server, Long userId);
+	Collection<Client> getClientsByUserId(Server server, Long userId);
 
 	/**
 	 * 
@@ -103,15 +101,15 @@ public interface IClientPersistenceStore {
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	public abstract List<Client> getClientsByRoomId(Long roomId);
+	List<Client> getClientsByRoomId(Long roomId);
 
-	public abstract void remove(Server server, String streamId);
+	void remove(Server server, String streamId);
 
-	public abstract int size();
+	int size();
 
-	public abstract int sizeByServer(Server server);
+	int sizeByServer(Server server);
 
-	public abstract Collection<Client> values();
+	Collection<Client> values();
 	
 	/**
 	 * Get some session statistics
@@ -119,7 +117,7 @@ public interface IClientPersistenceStore {
 	 * @param detailLevel
 	 * @return
 	 */
-	public abstract String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
+	String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
 
 	/**
 	 * returns a list of roomIds (unique) that are currently active on the given server
@@ -129,7 +127,7 @@ public interface IClientPersistenceStore {
 	 * @param server
 	 * @return
 	 */
-	public abstract List<Long> getRoomsIdsByServer(Server server);
+	List<Long> getRoomsIdsByServer(Server server);
 
 	/**
 	 * if database cache + cluster is enabled, the server object will be loaded 
@@ -137,6 +135,5 @@ public interface IClientPersistenceStore {
 	 * 
 	 * @return
 	 */
-	public abstract Collection<Client> getClientsWithServer();
-
+	Collection<Client> getClientsWithServer();
 }

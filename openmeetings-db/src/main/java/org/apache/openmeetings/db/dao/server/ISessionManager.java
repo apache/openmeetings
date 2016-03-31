@@ -34,12 +34,13 @@ import org.apache.openmeetings.db.entity.server.Server;
  *
  */
 public interface ISessionManager {
+	void clearCache();
 	
 	/**
 	 * Notified on server start, when the session manager should be started and
 	 * eventually caches cleared/setup
 	 */
-	public abstract void sessionStart();
+	void sessionStart();
 
 	/**
 	 * add a new client item
@@ -52,18 +53,16 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	public abstract Client addClientListItem(String streamId,
-			String scopeName, Integer remotePort, String remoteAddress,
-			String swfUrl, Server server);
+	Client addClientListItem(String streamId, String scopeName, Integer remotePort, String remoteAddress, String swfUrl, Server server);
 
-	public abstract Collection<Client> getClients();
+	Collection<Client> getClients();
 	
 	/**
 	 * loads the server into the client (only if database cache is used)
 	 * 
 	 * @return
 	 */
-	public abstract Collection<Client> getClientsWithServer();
+	Collection<Client> getClientsWithServer();
 
 	/**
 	 * Get a client by its streamId
@@ -72,8 +71,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	public abstract Client getClientByStreamId(String streamId,
-			Server server);
+	Client getClientByStreamId(String streamId, Server server);
 
 	/**
 	 * get a client by its publicSID and the server, 
@@ -82,7 +80,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	public abstract Client getClientByPublicSID(String publicSID, Server server);
+	Client getClientByPublicSID(String publicSID, Server server);
 	
 	/**
 	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores 
@@ -95,7 +93,7 @@ public interface ISessionManager {
 	 * @param publicSID
 	 * @return
 	 */
-	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
+	ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
 
 	/**
 	 * 
@@ -105,7 +103,7 @@ public interface ISessionManager {
 	 * @deprecated There could be multiple users logged in with the same userid,
 	 *             then this call would return a list not a single user
 	 */
-	public abstract Client getClientByUserId(Long userId);
+	Client getClientByUserId(Long userId);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
@@ -116,7 +114,7 @@ public interface ISessionManager {
 	 * @param rcm
 	 * @return
 	 */
-	public abstract boolean updateAVClientByStreamId(String streamId, Client rcm, Server server);
+	boolean updateAVClientByStreamId(String streamId, Client rcm, Server server);
 
 	/**
 	 * Update the session object
@@ -131,8 +129,7 @@ public interface ISessionManager {
 	 *            true means the count for the room has to be updated
 	 * @return
 	 */
-	public abstract boolean updateClientByStreamId(String streamId,
-			Client rcm, boolean updateRoomCount, Server server);
+	boolean updateClientByStreamId(String streamId, Client rcm, boolean updateRoomCount, Server server);
 
 	/**
 	 * Remove a client from the session store
@@ -140,7 +137,7 @@ public interface ISessionManager {
 	 * @param streamId
 	 * @return
 	 */
-	public abstract boolean removeClient(String streamId, Server server);
+	boolean removeClient(String streamId, Server server);
 
 	/**
 	 * Get all ClientList Objects of that room and domain This Function is
@@ -150,9 +147,9 @@ public interface ISessionManager {
 	 * @param roomId 
 	 * @return
 	 */
-	public abstract List<Client> getClientListByRoom(Long roomId);
+	List<Client> getClientListByRoom(Long roomId);
 	
-	public abstract Collection<Client> getClientListByRoomAll(Long roomId);
+	Collection<Client> getClientListByRoomAll(Long roomId);
 
 	/**
 	 * get the current Moderator in this room
@@ -160,7 +157,7 @@ public interface ISessionManager {
 	 * @param roomname
 	 * @return
 	 */
-	public abstract List<Client> getCurrentModeratorByRoom(Long roomId);
+	List<Client> getCurrentModeratorByRoom(Long roomId);
 
 	/**
 	 * Get list of current client sessions
@@ -171,8 +168,7 @@ public interface ISessionManager {
 	 * @param asc
 	 * @return
 	 */
-	public abstract SearchResult<Client> getListByStartAndMax(int start,
-			int max, String orderby, boolean asc);
+	SearchResult<Client> getListByStartAndMax(int start, int max, String orderby, boolean asc);
 
 	/**
 	 * returns number of current users recording
@@ -180,7 +176,7 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	public abstract long getRecordingCount(long roomId);
+	long getRecordingCount(long roomId);
 
 	/**
 	 * returns a number of current users publishing screensharing
@@ -188,7 +184,7 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	public abstract long getPublishingCount(long roomId);
+	long getPublishingCount(long roomId);
 	
 	/**
 	 * Get a list of all servers of all rooms on that server, serverId = null 
@@ -197,13 +193,12 @@ public interface ISessionManager {
 	 * @param server
 	 * @return a set, a roomId can be only one time in this list
 	 */
-	public abstract List<Long> getActiveRoomIdsByServer(Server server);
+	List<Long> getActiveRoomIdsByServer(Server server);
 
 	/**
 	 * Get some statistics about the current sessions
 	 * 
 	 * @return
 	 */
-	public abstract String getSessionStatistics();
-
+	String getSessionStatistics();
 }
