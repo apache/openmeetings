@@ -42,7 +42,7 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 	
 	public void put(String streamId, Client rcl) {
-		if (rcl.getId() > 0) {
+		if (rcl.getId() != null) {
 			clientDao.update(rcl);
 		} else {
 			clientDao.add(rcl);
@@ -65,7 +65,6 @@ public class DatabaseStore implements IClientPersistenceStore {
 		Map<Long, List<Client>> returnMap = new HashMap<Long, List<Client>>();
 		List<Client> clientList = clientDao.getClientsByPublicSID(publicSID);
 		for (Client cl : clientList) {
-			
 			if (cl.getServer() == null) {
 				List<Client> clList = returnMap.get(null);
 				if (clList == null) {
