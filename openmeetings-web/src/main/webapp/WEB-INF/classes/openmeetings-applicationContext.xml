@@ -66,22 +66,21 @@
 	</bean>
 	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.core.data.whiteboard.EmoticonsManager" />
 
-	<!-- Singletons for memory based cache -->
+	<!-- Singleton for memory based cache -->
 	<bean id="openmeetings.HashMapStore" scope="singleton" class="org.apache.openmeetings.core.session.store.HashMapStore" />
+	<!-- Database cache -->
+	<bean id="openmeetings.DatabaseStore" class="org.apache.openmeetings.core.session.store.DatabaseStore" />
+	
 	<bean id="whiteBoardObjectListManagerById" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById" />
 	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
 	<bean id="whiteBoardObjectSyncManager" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager" />
 
-	<!-- Database cache -->
-	<bean id="openmeetings.DatabaseStore" class="org.apache.openmeetings.core.session.store.DatabaseStore" />
-
+	<!-- Cluster related config start -->
 	<bean id="openmeetings.ServerUtil" scope="singleton" class="org.apache.openmeetings.core.session.ServerUtil">
 		<!-- Need to be uncommented and set to the real ID if in cluster mode
 		<property name="serverId" value="1" />
 		-->
 	</bean>
-
-	<!-- Cluster related config start -->
 
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
