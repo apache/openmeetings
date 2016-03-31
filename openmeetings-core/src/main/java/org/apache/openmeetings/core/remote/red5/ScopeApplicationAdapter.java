@@ -131,6 +131,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			InitializationContainer.initComplete = true;
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+			sessionManager.clearCache(); // 'sticky' clients should be cleaned up from DB 
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}

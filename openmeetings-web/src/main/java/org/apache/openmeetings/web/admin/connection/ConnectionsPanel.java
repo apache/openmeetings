@@ -152,7 +152,7 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
 				org.apache.openmeetings.web.app.Client c = item.getModelObject();
-				item.add(new Label("id", c.getUserId()));
+				item.add(new Label("id", ""));
 				User u = getBean(UserService.class).getUserById(getSid(), c.getUserId());
 				item.add(new Label("login", u == null ? null : u.getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
