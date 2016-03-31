@@ -23,7 +23,7 @@
 		<section name="OpenMeetings Plugin for Redmine">
 			<p>
 				Current Development Snapshots for testing can be created from the sources:
-				<a href="https://svn.codespot.com/a/apache-extras.org/openmeetings-redmine-plugin/trunk">here</a>.<br/>
+				<a href="https://github.com/openmeetings/openmeetings-redmine-plugin">here</a>.<br/>
 				The page at redmine site is <a href="http://www.redmine.org/plugins/redmine-openmeetings">here</a>
 			</p>			
 		</section>
