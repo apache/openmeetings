@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,11 +178,12 @@ public class UserWebService {
 				User u = userDao.get(userId);
 
 				u.getRights().add(Right.Room);
-				if (user.getExternalId() == null && user.getExternalType() == null) {
+				if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
 					// activate the User
 					u.getRights().add(Right.Login);
 					u.getRights().add(Right.Dashboard);
 				} else {
+					u.setType(User.Type.external);
 					u.setExternalId(user.getExternalId());
 					u.setExternalType(user.getExternalType());
 				}
