@@ -386,15 +386,15 @@ html, body {
 	height: 16px;
 	background-repeat: no-repeat;
 }
-.file.tree .dialog.errors {
+.dialog.errors {
 	width: 600px;
 	height: 500px;
 	font-size: small;
 }
-.file.tree .dialog.errors .alert {
+.dialog.errors .alert {
 	color: red;
 }
-.file.tree .dialog.errors .message {
+.dialog.errors .message {
 	display: block;
 	unicode-bidi: embed;
 	font-family: monospace;
