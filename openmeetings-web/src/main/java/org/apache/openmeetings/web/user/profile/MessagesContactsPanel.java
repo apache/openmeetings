@@ -572,15 +572,20 @@ public class MessagesContactsPanel extends UserPanel {
 				}).setVisible(uc.isPending()));
 				item.add(new WebMarkupContainer("view").add(AttributeAppender.append("onclick", String.format("showUserInfo(%s);", userId))));
 				item.add(new WebMarkupContainer("message").add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
-				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
+				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
-
+					
 					@Override
-					protected void onEvent(AjaxRequestTarget target) {
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
+					}
+					
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						getBean(UserContactDao.class).delete(contactId);
 						updateContacts(target);
 					}
-				}).setVisible(!uc.isPending()));
+				}.setVisible(!uc.isPending()));
 			}
 		};
 		updateContacts(null);
