@@ -96,8 +96,12 @@
 		
 		if ($debug) Debug.write("this.roomobj ",this.roomobj);
 
-		new lz.moderationPanel(canvas._moderatormenu,{
-				name:'_moderationPanel',align:'right',
+		if (!!canvas._mymod) {
+			canvas._mymod.destroy();
+			canvas._mymod = null;
+		}
+		new lz.moderationPanel(canvas._moderatormenu, {
+				name:'_moderationPanel', align:'right',
 				allowUserQuestions:this.roomobj.allowUserQuestions,
 				roomName:this.roomobj.name
 			});
