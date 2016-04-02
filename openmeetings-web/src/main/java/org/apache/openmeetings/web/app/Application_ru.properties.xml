@@ -1895,4 +1895,5 @@
 	<entry key="admin.email.body">Текст</entry>
 	<entry key="admin.email.errorCount">Количество ошибок</entry>
 	<entry key="admin.email.lastError">Последняя ошибка</entry>
+	<entry key="admin.email.reset.status">Сбросить статус</entry>
 </properties>
