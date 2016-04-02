@@ -48,12 +48,6 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "icon")
 	private String icon;
 
-	@Column(name = "isleaf")
-	private Boolean isleaf;
-
-	@Column(name = "isopen")
-	private Boolean isopen;
-
 	@Column(name = "action")
 	private String action;
 
@@ -76,13 +70,13 @@ public class Navimain implements IDataProviderEntity {
 	private Long levelId;
 
 	@Column(name = "label_id")
-	private Long labelId;
+	private String labelId;
 
 	@Column(name = "deleted")
 	private boolean deleted;
 
 	@Column(name = "tooltip_label_id")
-	private Long tooltipLabelId;
+	private String tooltipLabelId;
 
 	public Long getId() {
 		return id;
@@ -132,22 +126,6 @@ public class Navimain implements IDataProviderEntity {
 		this.icon = icon;
 	}
 
-	public Boolean getIsleaf() {
-		return isleaf;
-	}
-
-	public void setIsleaf(Boolean isleaf) {
-		this.isleaf = isleaf;
-	}
-
-	public Boolean getIsopen() {
-		return isopen;
-	}
-
-	public void setIsopen(Boolean isopen) {
-		this.isopen = isopen;
-	}
-
 	public Date getInserted() {
 		return inserted;
 	}
@@ -188,19 +166,19 @@ public class Navimain implements IDataProviderEntity {
 		this.naviorder = naviorder;
 	}
 
-	public Long getLabelId() {
+	public String getLabelId() {
 		return labelId;
 	}
 
-	public void setLabelId(Long labelId) {
+	public void setLabelId(String labelId) {
 		this.labelId = labelId;
 	}
 
-	public Long getTooltipLabelId() {
+	public String getTooltipLabelId() {
 		return tooltipLabelId;
 	}
 
-	public void setTooltipLabelId(Long tooltipLabelId) {
+	public void setTooltipLabelId(String tooltipLabelId) {
 		this.tooltipLabelId = tooltipLabelId;
 	}
 

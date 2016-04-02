@@ -60,9 +60,9 @@ public class LdapsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
 				final LdapConfig lc = item.getModelObject();
-				item.add(new Label("id", "" + lc.getId()));
-				item.add(new Label("name", "" + lc.getName()));
-				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
+				item.add(new Label("id"));
+				item.add(new Label("name"));
+				item.add(new Label("configFileName"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -73,8 +73,7 @@ public class LdapsPanel extends AdminPanel {
 						target.appendJavaScript("omLdapPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (lc.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.replace("class", getRowClass(lc.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
@@ -95,7 +94,7 @@ public class LdapsPanel extends AdminPanel {
 		
 		form = new LdapForm("form", listContainer, new LdapConfig());
 		form.showNewRecord();
-        add(form);
+		add(form);
 		
 	}
 }

@@ -80,10 +80,10 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Client> item) {
 				Client c = item.getModelObject();
-				item.add(new Label("id", c.getStreamid()));
-				item.add(new Label("login", c.getUsername()));
-				item.add(new Label("since", c.getConnectedSince()));
-				item.add(new Label("scope", c.getScope()));
+				item.add(new Label("streamid"));
+				item.add(new Label("username"));
+				item.add(new Label("connectedSince"));
+				item.add(new Label("scope"));
 				item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
 				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
@@ -125,7 +125,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(details.setVisible(true));
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
+				item.add(AttributeModifier.append("class", ROW_CLASS));
 			}
 		};
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
@@ -195,7 +195,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(details.setVisible(true));
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
+				item.add(AttributeModifier.append("class", ROW_CLASS));
 			}
 		};
 		

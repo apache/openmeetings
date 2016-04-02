@@ -60,9 +60,9 @@ public class ServersPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Server> item) {
 				final Server server = item.getModelObject();
-				item.add(new Label("id", "" + server.getId()));
-				item.add(new Label("name", "" + server.getName()));
-				item.add(new Label("address", "" + server.getAddress()));
+				item.add(new Label("id"));
+				item.add(new Label("name"));
+				item.add(new Label("address"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -73,8 +73,7 @@ public class ServersPanel extends AdminPanel {
 						target.appendJavaScript("omServerPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (server.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));
 			}
 		};
 		
@@ -96,7 +95,7 @@ public class ServersPanel extends AdminPanel {
 		
 		form = new ServerForm("form", listContainer, new Server());
 		form.showNewRecord();
-        add(form);
+		add(form);
 		
 	}
 }

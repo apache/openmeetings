@@ -298,8 +298,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				emb.afterPropertiesSet();
 				dbType = getModelObject().getDbType();
 			} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
-					log.error("error while patching", e);
+				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
+				log.error("error while patching", e);
 			}
 		}
 	};

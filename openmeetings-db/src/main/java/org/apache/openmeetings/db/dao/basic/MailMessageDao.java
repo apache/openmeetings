@@ -41,10 +41,15 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 
 	@Override
 	public List<MailMessage> get(int start, int count) {
-		return em.createNamedQuery("getMailMessages", MailMessage.class).setParameter("status", Status.NONE)
+		return em.createNamedQuery("getMailMessages", MailMessage.class)
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 
+	public List<MailMessage> get(int start, int count, Status status) {
+		return em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter("status", status)
+				.setFirstResult(start).setMaxResults(count).getResultList();
+	}
+	
 	@Override
 	public List<MailMessage> get(String search, int start, int count, String order) {
 		return get(start, count);
@@ -52,8 +57,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 
 	@Override
 	public long count() {
-		return em.createNamedQuery("countMailMessages", Long.class).setParameter("status", Status.NONE)
-				.getSingleResult();
+		return em.createNamedQuery("countMailMessages", Long.class).getSingleResult();
 	}
 
 	@Override

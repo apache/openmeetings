@@ -1884,4 +1884,15 @@
   <entry key="poll.type.yesNo">Да/Нет</entry>
   <entry key="poll.type.numeric">Число 1 - 10</entry>
   <entry key="wizard.button.finish">Закончить</entry>
+	<entry key="main.menu.admin.email">Управление письмами</entry>
+	<entry key="main.menu.admin.email.desc">Проверка статуса отосланных писем</entry>
+	<entry key="admin.email.group.label">Почтовое сообщение</entry>
+	<entry key="admin.email.status.NONE">Нет</entry>
+	<entry key="admin.email.status.SENDING">Посылается</entry>
+	<entry key="admin.email.status.ERROR">Ошибка</entry>
+	<entry key="admin.email.status.DONE">Готово</entry>
+	<entry key="admin.email.recipients">Получатели</entry>
+	<entry key="admin.email.body">Текст</entry>
+	<entry key="admin.email.errorCount">Количество ошибок</entry>
+	<entry key="admin.email.lastError">Последняя ошибка</entry>
 </properties>

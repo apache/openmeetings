@@ -1878,4 +1878,15 @@
   <entry key="poll.type.yesNo">Ano/Ne</entry>
   <entry key="poll.type.numeric">Čísla 1-10</entry>
   <entry key="wizard.button.finish">Finish</entry>
+	<entry key="main.menu.admin.email">Email management</entry>
+	<entry key="main.menu.admin.email.desc">Check e-mails processing by the system</entry>
+	<entry key="admin.email.group.label">Email message</entry>
+	<entry key="admin.email.status.NONE">None</entry>
+	<entry key="admin.email.status.SENDING">Sending</entry>
+	<entry key="admin.email.status.ERROR">Error</entry>
+	<entry key="admin.email.status.DONE">Done</entry>
+	<entry key="admin.email.recipients">Recipients</entry>
+	<entry key="admin.email.body">Body</entry>
+	<entry key="admin.email.errorCount">Error Count</entry>
+	<entry key="admin.email.lastError">Last Error</entry>
 </properties>
