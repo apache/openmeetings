@@ -72,10 +72,10 @@ public class UsersPanel extends AdminPanel {
 			protected void populateItem(Item<User> item) {
 				User u = item.getModelObject();
 				final long userId = u.getId();
-				item.add(new Label("userId", "" + u.getId()));
-				item.add(new Label("login", u.getLogin()));
-				item.add(new Label("firstName", u.getFirstname()));
-				item.add(new Label("lastName", u.getLastname()));
+				item.add(new Label("id"));
+				item.add(new Label("login"));
+				item.add(new Label("firstname"));
+				item.add(new Label("lastname"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -85,8 +85,7 @@ public class UsersPanel extends AdminPanel {
 						form.update(target);
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (u.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.append("class", getRowClass(u.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

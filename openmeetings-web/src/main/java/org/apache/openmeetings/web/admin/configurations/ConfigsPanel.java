@@ -61,9 +61,9 @@ public class ConfigsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
 				final Configuration c = item.getModelObject();
-				item.add(new Label("id", c.getId()));
-				item.add(new Label("key", c.getKey()));
-				item.add(new Label("value", c.getValue()));
+				item.add(new Label("id"));
+				item.add(new Label("key"));
+				item.add(new Label("value"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -74,8 +74,7 @@ public class ConfigsPanel extends AdminPanel {
 						target.appendJavaScript("omConfigPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (c.getId().equals(form.getModelObject().getId()) ? " ui-state-default" : "")));
+				item.add(AttributeModifier.replace("class", getRowClass(c.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
@@ -96,7 +95,7 @@ public class ConfigsPanel extends AdminPanel {
 		
 		form = new ConfigForm("form", listContainer, new Configuration());
 		form.showNewRecord();
-        add(form);
+		add(form);
 		
 	}
 }

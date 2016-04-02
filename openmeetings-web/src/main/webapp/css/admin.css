@@ -264,28 +264,32 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 .adminForm .btn {
 	width: 280px;
 }
-.adminForm input {
+.adminForm .input, .adminForm input, .adminForm input.formcheckbox
+ ,.adminForm textarea, .adminForm select, .adminForm label
+ {
 	display: block;
 	float: left;
 	font-size: 14px;
 	padding: 0px 0px;
+	margin: 2px 2px;
+}
+.adminForm .input {
+	border: solid 1px #aacfe4;
+	width: 280px;
+	min-height: 20px;
+}
+.adminForm input {
 	border: solid 1px #aacfe4;
 	width: 280px;
 	height: 20px;
-	margin: 2px 2px;
 }
 .adminForm input[type=checkbox], .adminForm input[type=radio] {
 	width: auto;
 }
 .adminForm input.formcheckbox {
-	display: block;
-	float: left;
-	font-size: 14px;
-	padding: 0px 0px;
 	border: none;
 	width: 20px;
 	height: 20px;
-	margin: 2px 2px;
 }
 
 .adminForm fieldset {
@@ -301,14 +305,9 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 }
 
 .adminForm textarea {
-	display: block;
-	float: left;
-	font-size: 14px;
-	padding: 0px 0px;
 	border: solid 1px #aacfe4;
 	width: 280px;
 	height: 60px;
-	margin: 2px 2px;
 }
 
 .adminForm div.formelement {
@@ -318,23 +317,15 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 }
 
 .adminForm select {
-	float: left;
 	height: 20px;
-	font-size: 14px;
-	padding: 0px 0px;
 	border: solid 1px #aacfe4;
 	width: 282px;
-	margin: 2px 2px 2px;
 }
 
 .adminForm label {
-	display: block;
-	font-size: 14px;
 	font-weight: bold;
 	text-align: right;
 	width: 180px;
-	float: left;
-	margin: 4px 2px 2px;
 }
 
 .adminBackupForm div.formelement {

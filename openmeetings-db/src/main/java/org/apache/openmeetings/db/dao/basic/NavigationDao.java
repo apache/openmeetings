@@ -59,17 +59,13 @@ public class NavigationDao {
 				.getResultList();
 	}
 
-	public void addGlobalStructure(String action, int naviorder, long labelId, boolean isleaf, boolean isopen, long levelId,
-			String name, boolean deleted, Long tooltipLabelId) {
+	public void addGlobalStructure(int naviorder, String labelId, long levelId, String name, String tooltipLabelId) {
 		Naviglobal ng = new Naviglobal();
-		ng.setAction(action);
 		ng.setComment("");
 		ng.setIcon("");
 		ng.setNaviorder(naviorder);
 		ng.setLabelId(labelId);
-		ng.setIsleaf(isleaf);
-		ng.setIsopen(isopen);
-		ng.setDeleted(deleted);
+		ng.setDeleted(false);
 		ng.setLevelId(levelId);
 		ng.setName(name);
 		ng.setInserted(new Date());
@@ -79,8 +75,8 @@ public class NavigationDao {
 		em.persist(ng);
 	}
 
-	public void addMainStructure(String action, String params, int naviorder, long labelId, boolean isleaf, boolean isopen,
-			long levelId, String name, long globalId, boolean deleted, Long tooltipLabelId) {
+	public void addMainStructure(String action, String params, int naviorder, String labelId,
+			long levelId, String name, long globalId, String tooltipLabelId) {
 		Naviglobal ng = getGlobalMenuEntry(globalId);
 		List<Navimain> mainEntries = ng.getMainnavi();
 		mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
@@ -91,12 +87,10 @@ public class NavigationDao {
 		nm.setComment("");
 		nm.setIcon("");
 		nm.setLabelId(labelId);
-		nm.setIsleaf(isleaf);
 		nm.setNaviorder(naviorder);
-		nm.setIsopen(isopen);
 		nm.setLevelId(levelId);
 		nm.setName(name);
-		nm.setDeleted(deleted);
+		nm.setDeleted(false);
 		nm.setGlobalId(globalId);
 		nm.setInserted(new Date());
 		nm.setTooltipLabelId(tooltipLabelId);

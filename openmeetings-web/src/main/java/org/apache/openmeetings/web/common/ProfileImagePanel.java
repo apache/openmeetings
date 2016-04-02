@@ -36,7 +36,7 @@ public class ProfileImagePanel extends BasePanel {
 		add(profile.setOutputMarkupId(true));
 		update();
 	}
-		
+	
 	public void update() {
 		profile.addOrReplace(new WebMarkupContainer("img").add(
 				AttributeModifier.append("alt", Application.getString(5L))

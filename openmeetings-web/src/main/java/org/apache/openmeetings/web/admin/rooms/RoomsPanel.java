@@ -60,9 +60,9 @@ public class RoomsPanel extends AdminPanel {
 			protected void populateItem(final Item<Room> item) {
 				Room room = item.getModelObject();
 				final long roomId = room.getId();
-				item.add(new Label("id", "" + room.getId()));
-				item.add(new Label("name", "" + room.getName()));
-				item.add(new Label("ispublic", "" + room.getIspublic()));
+				item.add(new Label("id"));
+				item.add(new Label("name"));
+				item.add(new Label("ispublic"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -74,8 +74,7 @@ public class RoomsPanel extends AdminPanel {
 						target.appendJavaScript("omRoomPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (room.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.replace("class", getRowClass(room.getId(), form.getModelObject().getId())));
 			}
 		};
 		
@@ -95,7 +94,7 @@ public class RoomsPanel extends AdminPanel {
 		add(container.getLinks());
 		add(navigator);
 
-        add(form = new RoomForm("form", listContainer, new Room()));
+		add(form = new RoomForm("form", listContainer, new Room()));
 	}
 	
 	@Override
