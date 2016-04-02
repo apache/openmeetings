@@ -64,6 +64,7 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
+import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -113,39 +114,39 @@ public class ImportInitvalues {
 		/*
 		 * ######################## Dashboard Menu Points
 		 */
-		navimanagement.addGlobalStructure(1, "124", 1, "home", "582");
-		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1, "290", 1, "Dashboard", 1, "1450");
-		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2, "291", 1, "Calendar", 1, "1451");
+		Naviglobal home = navimanagement.addGlobalStructure(1, "124", 1, "home", "582");
+		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1, "290", 1, "Dashboard", home.getId(), "1450");
+		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2, "291", 1, "Calendar", home.getId(), "1451");
 
 		/*
 		 * ######################## Conference Menu Points
 		 */
-		navimanagement.addGlobalStructure(2, "792", 1, "Conference Rooms", "793");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, "777", 1, "Public Rooms", 2, "1506");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, "779", 1, "Private Rooms", 2, "1507");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, "781", 1, "My Rooms", 2, "1508");
+		Naviglobal rooms = navimanagement.addGlobalStructure(2, "792", 1, "Conference Rooms", "793");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, "777", 1, "Public Rooms", rooms.getId(), "1506");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, "779", 1, "Private Rooms", rooms.getId(), "1507");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, "781", 1, "My Rooms", rooms.getId(), "1508");
 
 		/*
 		 * ######################## Recording Menu Points
 		 */
-		navimanagement.addGlobalStructure(3, "395", 1, "record", "583");
-		navimanagement.addMainStructure("recordModule", null, 1, "395", 1, "Recordings", 3, "1452");
+		Naviglobal rec = navimanagement.addGlobalStructure(3, "395", 1, "record", "583");
+		navimanagement.addMainStructure("recordModule", null, 1, "395", 1, "Recordings", rec.getId(), "1452");
 
 		/*
 		 * ######################## Administration Menu Points
 		 */
-		navimanagement.addGlobalStructure(6, "6", 3, "Administration Menu", "586");
-		navimanagement.addMainStructure("adminModuleUser", null, 14, "125", 2, "Administration of Users", 6, "1454");
-		navimanagement.addMainStructure("adminModuleConnections", null, 15, "597", 3, "Aministration of Connections", 6, "1455");
-		navimanagement.addMainStructure("adminModuleOrg", null, 16, "127", 3, "Administration of Groups", 6, "1456");
-		navimanagement.addMainStructure("adminModuleRoom", null, 17, "186", 3, "Administration of Rooms", 6, "1457");
-		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, "263", 3, "Administration of Configuration", 6, "1458");
-		navimanagement.addMainStructure("adminModuleLanguages", null, 19, "348", 3, "Administration of Languages", 6, "1459");
-		navimanagement.addMainStructure("adminModuleLDAP", null, 20, "1103", 3, "Administration of LDAP Configs", 6, "1460");
-		navimanagement.addMainStructure("adminModuleOAuth", null, 21, "1571", 3, "Administration of OAuth2 servers", 6, "1572");
-		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", 3, "Administration of Backups", 6, "1461");
-		navimanagement.addMainStructure("adminModuleServers", null, 23, "1498", 3, "Administration of Servers", 6, "1499");
-		navimanagement.addMainStructure("adminModuleEmail", null, 24, "main.menu.admin.email", 3, "Administration of Emails", 6, "main.menu.admin.email.desc");
+		Naviglobal admin = navimanagement.addGlobalStructure(6, "6", 3, "Administration Menu", "586");
+		navimanagement.addMainStructure("adminModuleUser", null, 14, "125", 2, "Administration of Users", admin.getId(), "1454");
+		navimanagement.addMainStructure("adminModuleConnections", null, 15, "597", 3, "Aministration of Connections", admin.getId(), "1455");
+		navimanagement.addMainStructure("adminModuleOrg", null, 16, "127", 3, "Administration of Groups", admin.getId(), "1456");
+		navimanagement.addMainStructure("adminModuleRoom", null, 17, "186", 3, "Administration of Rooms", admin.getId(), "1457");
+		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, "263", 3, "Administration of Configuration", admin.getId(), "1458");
+		navimanagement.addMainStructure("adminModuleLanguages", null, 19, "348", 3, "Administration of Languages", admin.getId(), "1459");
+		navimanagement.addMainStructure("adminModuleLDAP", null, 20, "1103", 3, "Administration of LDAP Configs", admin.getId(), "1460");
+		navimanagement.addMainStructure("adminModuleOAuth", null, 21, "1571", 3, "Administration of OAuth2 servers", admin.getId(), "1572");
+		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", 3, "Administration of Backups", admin.getId(), "1461");
+		navimanagement.addMainStructure("adminModuleServers", null, 23, "1498", 3, "Administration of Servers", admin.getId(), "1499");
+		navimanagement.addMainStructure("adminModuleEmail", null, 24, "main.menu.admin.email", 3, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
 		log.debug("MainMenu ADDED");
 	}
 	
