@@ -22,6 +22,8 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
+import java.util.List;
+
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.FormParam;
@@ -48,6 +50,17 @@ public interface UserService {
 	 */
 	ServiceResult login(@WebParam(name="user") @QueryParam("user") String user, @WebParam(name="pass") @QueryParam("pass") String pass);
 
+	/**
+	 * Lists all users in the system!
+	 * 
+	 * @param sid
+	 *            The SID from getSession
+	 *            
+	 * @return - list of users
+	 * @throws ServiceException
+	 */
+	List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException;
+	
 	/**
 	 * Adds a new User like through the Frontend, but also does activates the
 	 * Account To do SSO see the methods to create a hash and use those ones!
