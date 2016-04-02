@@ -19,6 +19,9 @@
 package org.apache.openmeetings.webservice.cluster;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
+import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
+import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
 import java.net.URL;
 
@@ -27,7 +30,6 @@ import javax.xml.ws.Service;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.webservice.UserWebService;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -41,6 +43,8 @@ import org.slf4j.Logger;
  */
 public class RestClient {
 	private static final Logger log = Red5LoggerFactory.getLogger(RestClient.class, webAppRootKey);
+	private final static QName USER_SERVICE_QNAME = new QName(TNS, USER_SERVICE_NAME);
+	private final static QName USER_SERVICE_PORT_QNAME = new QName(TNS, USER_SERVICE_PORT_NAME);
 	
 	private enum Action {
 		//kick the user from the server
@@ -60,8 +64,7 @@ public class RestClient {
 	private String publicSID;
 
 	private String getUserServiceWsdl() {
-		return protocol + "://" + host + ":" + port + "/" + webapp
-				+ "/services/UserService?wsdl";
+		return String.format("%s://%s:%s/%s/services/UserService?wsdl", protocol, host, port, webapp);
 	}
 
 	/**
@@ -76,7 +79,6 @@ public class RestClient {
 	 * @param pass
 	 */
 	public RestClient(Server server) {
-		//this.server = server;
 		this.host = server.getAddress();
 		this.port = server.getPort();
 		this.protocol = server.getProtocol();
@@ -91,8 +93,7 @@ public class RestClient {
 	 * @param strings
 	 */
 	public static void main(String... strings) {
-		RestClient rClient = new RestClient("127.0.0.1", 5080, "http",
-				"openmeetings", "swagner", "qweqwe");
+		RestClient rClient = new RestClient("127.0.0.1", 5080, "http", "openmeetings", "admin", "12345");
 		try {
 			rClient.loginUser(Action.KICK_USER);
 		} catch (Exception e) {
@@ -114,8 +115,7 @@ public class RestClient {
 	 * @param user
 	 * @param pass
 	 */
-	private RestClient(String host, int port, String protocol, String webapp,
-			String user, String pass) {
+	private RestClient(String host, int port, String protocol, String webapp, String user, String pass) {
 		this.host = host;
 		this.port = port;
 		this.protocol = protocol;
@@ -131,46 +131,27 @@ public class RestClient {
 	 * @return
 	 */
 	public boolean hasServerDetailsChanged(Server server2) {
-
-		if (!host.equals(server2.getAddress())) {
-			return true;
-		}
-		if (port != server2.getPort()) {
-			return true;
-		}
-		if (!user.equals(server2.getUser())) {
-			return true;
-		}
-		if (!pass.equals(server2.getPass())) {
-			return true;
-		}
-		if (!webapp.equals(server2.getWebapp())) {
-			return true;
-		}
-		if (!protocol.equals(server2.getProtocol())) {
-			return true;
-		}
-
-		return false;
+		return !host.equals(server2.getAddress()) 
+				|| port != server2.getPort() 
+				|| !user.equals(server2.getUser())
+				|| !pass.equals(server2.getPass())
+				|| !webapp.equals(server2.getWebapp())
+				|| !protocol.equals(server2.getProtocol());
 	}
-
-	/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 * TODO double check this 
-	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 */
-	private UserWebService getUserClient() throws Exception {
+	
+	private UserService getUserClient() throws Exception {
 		URL wsdlURL = new URL(getUserServiceWsdl());
-		QName SERVICE_NAME = new QName("UserService");
-		Service service = Service.create(wsdlURL, SERVICE_NAME);
-		return service.getPort(UserWebService.class);
+		Service service = Service.create(wsdlURL, USER_SERVICE_QNAME);
+		return service.getPort(USER_SERVICE_PORT_QNAME, UserService.class);
 	}
+	
 	/**
 	 * Login the user via REST
 	 * 
 	 * @throws Exception
 	 */
 	public void loginUser(Action action) throws Exception {
-		UserWebService client = getUserClient();
+		UserService client = getUserClient();
 		
 		ServiceResult result = client.login(user, pass);
 
@@ -201,7 +182,7 @@ public class RestClient {
 				loginUser(Action.KICK_USER);
 			}
 
-			UserWebService client = getUserClient();
+			UserService client = getUserClient();
 			ServiceResult result = client.kick(sessionId, publicSID);
 
 			if (result.getCode() == 0) {
