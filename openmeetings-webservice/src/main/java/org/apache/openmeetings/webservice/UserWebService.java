@@ -24,6 +24,7 @@ import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -119,6 +120,28 @@ public class UserWebService implements UserService {
 		} catch (Exception err) {
 			log.error("[login]", err);
 			return new ServiceResult(-1L, err.getMessage(), Type.ERROR);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#get(java.lang.String)
+	 */
+	@Override
+	@WebMethod
+	@GET
+	@Path("/")
+	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException {
+		try {
+			Long authUserId = sessionDao.checkSession(sid);
+	
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+				return UserDTO.list(userDao.getAllUsers());
+			} else {
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
+			}
+		} catch (Exception err) {
+			log.error("addNewUser", err);
+			throw new ServiceException(err.getMessage());
 		}
 	}
 

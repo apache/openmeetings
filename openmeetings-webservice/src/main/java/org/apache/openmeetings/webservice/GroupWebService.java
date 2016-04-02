@@ -22,9 +22,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -86,8 +90,8 @@ public class GroupWebService {
 	 * @param sid
 	 *            The SID from getSession
 	 * @param name
-	 *            the name of the org
-	 * @return the new id of the org or -1 in case an error happened
+	 *            the name of the group
+	 * @return the new id of the group or -1 in case an error happened
 	 * @throws ServiceException
 	 */
 	@POST
@@ -105,8 +109,28 @@ public class GroupWebService {
 	}
 	
 	/**
+	 * Get the list of all groups
 	 * 
-	 * Add a user to a certain group
+	 * @param sid
+	 *            The SID from getSession
+	 * @return list of all groups
+	 * @throws ServiceException
+	 */
+	@GET
+	@Path("/")
+	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
+		Long userId = sessionDao.checkSession(sid);
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			return groupDao.get(0, Integer.MAX_VALUE);
+		} else {
+			log.error("Insufficient permissions");
+			throw new ServiceException("Insufficient permissions"); //TODO code -26
+		}
+	}
+	
+	/**
+	 * 
+	 * Add user to a certain group
 	 * 
 	 * @param sid
 	 *            The SID from getSession
@@ -117,7 +141,7 @@ public class GroupWebService {
 	 * @return - id of the user added, or error id in case of the error
 	 */
 	@POST
-	@Path("/{id}/users/add/{userid}")
+	@Path("/{id}/users/{userid}")
 	public ServiceResult addUser(
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
@@ -130,6 +154,49 @@ public class GroupWebService {
 				if (!groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
 					u.getGroupUsers().add(new GroupUser(groupDao.get(id)));
+					userDao.update(u, authUserId);
+				}
+				return new ServiceResult(userid, "Success", Type.SUCCESS);
+			} else {
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+			}
+		} catch (Exception err) {
+			log.error("addUser", err);
+			throw new ServiceException(err.getMessage());
+		}
+	}
+
+	/**
+	 * 
+	 * Remove user from a certain group
+	 * 
+	 * @param sid
+	 *            The SID from getSession
+	 * @param userid
+	 *            the user id
+	 * @param id
+	 *            the group id
+	 * @return - id of the user added, or error id in case of the error
+	 */
+	@DELETE
+	@Path("/{id}/users/{userid}")
+	public ServiceResult removeUser(
+			@QueryParam("sid") @WebParam(name="sid") String sid
+			, @PathParam("id") @WebParam(name="id") Long id
+			, @PathParam("userid") @WebParam(name="userid") Long userid
+			) throws ServiceException
+	{
+		try {
+			Long authUserId = sessionDao.checkSession(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+				if (groupUserDao.isUserInGroup(id, userid)) {
+					User u = userDao.get(userid);
+					for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
+						GroupUser gu = iter.next();
+						if (id.equals(gu.getGroup().getId())) {
+							iter.remove();
+						}
+					}
 					userDao.update(u, authUserId);
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
@@ -234,6 +301,36 @@ public class GroupWebService {
 			return new UserSearchResult(result);
 		} catch (Exception err) {
 			log.error("getUsers", err);
+			throw new ServiceException(err.getMessage());
+		}
+	}
+
+	/**
+	 * Deletes a group
+	 * 
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param id
+	 *            the id of the group
+	 *            
+	 * @throws {@link ServiceException} in case of any error
+	 */
+	@WebMethod
+	@DELETE
+	@Path("/{id}")
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
+		try {
+			Long authUserId = sessionDao.checkSession(sid);
+
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
+				groupDao.delete(groupDao.get(id), authUserId);
+
+				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+			} else {
+				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+			}
+		} catch (Exception err) {
+			log.error("deleteUserById", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
