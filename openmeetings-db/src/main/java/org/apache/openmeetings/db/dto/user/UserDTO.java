@@ -19,6 +19,8 @@
 package org.apache.openmeetings.db.dto.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -73,6 +75,16 @@ public class UserDTO implements Serializable {
 		u.setExternalType(externalType);
 		u.setType(type);
 		return u;
+	}
+	
+	public static List<UserDTO> list(List<User> l) {
+		List<UserDTO> uList = new ArrayList<>();
+		if (l != null) {
+			for (User u : l) {
+				uList.add(new UserDTO(u));
+			}
+		}
+		return uList;
 	}
 	
 	public Long getId() {
