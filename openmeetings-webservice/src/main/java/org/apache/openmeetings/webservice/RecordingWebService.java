@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.List;
 
@@ -49,10 +50,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * The Service contains methods to work with recordings
  * 
  * @author solomax
- * @webservice RecordingService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.RecordingWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.RecordingWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/record")
