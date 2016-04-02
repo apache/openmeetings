@@ -80,7 +80,7 @@ public class EmailPanel extends AdminPanel {
 		add(container.getLinks());
 		add(navigator);
 		
-		form = new EmailForm("form", new MailMessage());
+		form = new EmailForm("form", list, new MailMessage());
 		add(form);
 	}
 	

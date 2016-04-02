@@ -23,10 +23,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
+import org.apache.wicket.util.string.Strings;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -50,9 +52,26 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 	
+	private <T> TypedQuery<T> getQuery(boolean isCount, String search, String order, Class<T> clazz) {
+		StringBuilder sb = new StringBuilder("SELECT ");
+		sb.append(isCount ? "COUNT(m)" : "m")
+			.append(" FROM MailMessage m");
+		if (!Strings.isEmpty(search)) {
+			sb.append(" WHERE m.recipients LIKE :search OR m.subject LIKE :search OR m.body LIKE :search OR m.lastError LIKE :search");
+		}
+		if (!Strings.isEmpty(order)) {
+			sb.append(" ORDER BY m.").append(order);
+		}
+		TypedQuery<T> q = em.createQuery(sb.toString(), clazz);
+		if (!Strings.isEmpty(search)) {
+			q.setParameter("search", String.format("%%%s%%", search));
+		}
+		return q;
+	}
+	
 	@Override
 	public List<MailMessage> get(String search, int start, int count, String order) {
-		return get(start, count);
+		return getQuery(false, search, order, MailMessage.class).setFirstResult(start).setMaxResults(count).getResultList();
 	}
 
 	@Override
@@ -62,15 +81,21 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 
 	@Override
 	public long count(String search) {
-		return count();
+		return getQuery(true, search, null, Long.class).getSingleResult();
 	}
 
 	public void resetSendingStatus(Calendar date) {
-		em.createQuery("UPDATE MailMessage m SET m.status = :noneStatus WHERE m.status = :sendingStatus " +
-				"	AND m.updated < :date")
+		em.createNamedQuery("resetMailStatusByDate")
 			.setParameter("noneStatus", Status.NONE)
 			.setParameter("sendingStatus", Status.SENDING)
 			.setParameter("date", date)
+			.executeUpdate();
+	}
+	
+	public void resetSendingStatus(Long id) {
+		em.createNamedQuery("resetMailStatusById")
+			.setParameter("noneStatus", Status.NONE)
+			.setParameter("id", id)
 			.executeUpdate();
 	}
 	
