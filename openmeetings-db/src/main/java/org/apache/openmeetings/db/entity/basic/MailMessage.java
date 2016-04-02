@@ -40,6 +40,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	, @NamedQuery(name = "getMailMessages", query = "SELECT m FROM MailMessage m ORDER BY m.updated, m.inserted")
 	, @NamedQuery(name = "getMailMessagesByStatus", query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
 	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m")
+	, @NamedQuery(name = "resetMailStatusByDate", query = "UPDATE MailMessage m SET m.status = :noneStatus WHERE m.status = :sendingStatus AND m.updated < :date")
+	, @NamedQuery(name = "resetMailStatusById", query = "UPDATE MailMessage m SET m.errorCount = 0, m.status = :noneStatus WHERE m.id = :id")
 })
 @Table(name = "email_queue")
 public class MailMessage implements IDataProviderEntity {

@@ -1889,4 +1889,5 @@
 	<entry key="admin.email.body">Body</entry>
 	<entry key="admin.email.errorCount">Error Count</entry>
 	<entry key="admin.email.lastError">Last Error</entry>
+	<entry key="admin.email.reset.status">Reset Status</entry>
 </properties>

@@ -147,6 +147,10 @@ html, body {
 	padding: 1px 6px;
 	font-size: 12px;
 }
+.searchForm input[type="button"] {
+	padding: .2em .5em;
+	font-size: smaller;
+}
 .pagedEntityListPanel input, .adminForm .pagedEntityListPanel input {
 	font-size: 14px;
 	padding: 0px 0px;

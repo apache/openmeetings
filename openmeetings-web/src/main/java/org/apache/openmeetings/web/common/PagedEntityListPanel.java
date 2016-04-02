@@ -25,10 +25,11 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
+
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 public abstract class PagedEntityListPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
@@ -50,7 +51,7 @@ public abstract class PagedEntityListPanel extends BasePanel {
 		Form<Void> searchForm = new Form<Void>("searchForm");
 		add(searchForm.setOutputMarkupId(true));
 		searchForm.add(new TextField<String>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
-		searchForm.add(new AjaxButton("search", searchForm) {
+		AjaxButton b = new AjaxButton("search", searchForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -58,7 +59,9 @@ public abstract class PagedEntityListPanel extends BasePanel {
 				target.add(navPanel);
 				PagedEntityListPanel.this.onEvent(target);
 			}
-		});
+		};
+		searchForm.add(b);
+		searchForm.setDefaultButton(b);
 		add(navPanel);
 	}
 
