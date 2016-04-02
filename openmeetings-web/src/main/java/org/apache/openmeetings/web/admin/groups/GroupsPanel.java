@@ -55,20 +55,20 @@ public class GroupsPanel extends AdminPanel {
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-        
+	
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Group());
-        add(form);
+		add(form);
 
-        //List view
-        SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableDataProvider<Group>(GroupDao.class)) {
+		//List view
+		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableDataProvider<Group>(GroupDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<Group> item) {
 				final Group o = item.getModelObject();
-				item.add(new Label("id", "" + o.getId()));
-				item.add(new Label("name", "" + o.getName()));
+				item.add(new Label("id"));
+				item.add(new Label("name"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -80,8 +80,7 @@ public class GroupsPanel extends AdminPanel {
 						target.appendJavaScript("groupsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (o.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.append("class", getRowClass(o.getId(), form.getModelObject().getId())));
 			}
 		};
 

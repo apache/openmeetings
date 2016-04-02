@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin.oauth;
+package org.apache.openmeetings.web.admin.email;
 
-import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.dao.basic.MailMessageDao;
+import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -33,57 +33,62 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
-public class OAuthPanel extends AdminPanel {
-	private static final long serialVersionUID = -1L;
-	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	private OAuthForm form;
+public class EmailPanel extends AdminPanel {
+	private static final long serialVersionUID = 1L;
+	private final WebMarkupContainer list = new WebMarkupContainer("list");
+	private final EmailForm form;
 
-	public OAuthPanel(String id) {
+	public EmailPanel(String id) {
 		super(id);
-		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
-				new SearchableDataProvider<OAuthServer>(OAuth2Dao.class))
+		SearchableDataView<MailMessage> dataView = new SearchableDataView<MailMessage>("email",
+				new SearchableDataProvider<MailMessage>(MailMessageDao.class))
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<OAuthServer> item) {
-				final OAuthServer server = item.getModelObject();
+			protected void populateItem(Item<MailMessage> item) {
+				final MailMessage m = item.getModelObject();
 				item.add(new Label("id"));
-				item.add(new Label("name"));
+				item.add(new Label("status", getString("admin.email.status." + m.getStatus().name())));
+				item.add(new Label("subject"));
+				//TODO color for Error
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(server);
-						form.hideNewRecord();
-						target.add(form, listContainer);
-						target.appendJavaScript("oauthPanelInit();");
+						form.setModelObject(m);
+						target.add(form, list);
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.replace("class", getRowClass(m)));
 			}
-			
 		};
-		
-		add(listContainer.add(dataView).setOutputMarkupId(true));
-		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
+		add(list.add(dataView).setOutputMarkupId(true));
+		final PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(listContainer);
+				target.add(list);
 			}
 		};
-		DataViewContainer<OAuthServer> container = new DataViewContainer<OAuthServer>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<OAuthServer>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
+		DataViewContainer<MailMessage> container = new DataViewContainer<MailMessage>(list, dataView, navigator);
+		container.addLink(new OmOrderByBorder<MailMessage>("orderById", "id", container))
+				.addLink(new OmOrderByBorder<MailMessage>("orderBySubject", "subject", container))
+				.addLink(new OmOrderByBorder<MailMessage>("orderByStatus", "status", container));
 		add(container.getLinks());
 		add(navigator);
 		
-		form = new OAuthForm("form", listContainer, new OAuthServer());
-		form.showNewRecord();
+		form = new EmailForm("form", new MailMessage());
 		add(form);
 	}
-
+	
+	private StringBuilder getRowClass(final MailMessage m) {
+		StringBuilder sb = getRowClass(m.getId(), form.getModelObject().getId());
+		if (MailMessage.Status.ERROR == m.getStatus()) {
+			sb.append(" ui-state-error");
+		}
+		return sb;
+	}
 }

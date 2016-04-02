@@ -365,6 +365,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return getString(id, WebSession.getLanguage());
 	}
 
+	public static String getString(String id) {
+		return getString(id, WebSession.getLanguage());
+	}
+
 	public static Locale getLocale(final long languageId) {
 		Locale loc = LabelDao.languages.get(languageId);
 		if (loc == null) {
@@ -429,19 +433,19 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	public static WicketTester getWicketTester(long langId) {
 		Application app = new Application();
-        
+		
 		WicketTester tester = new WicketTester(app);
 		ServletContext sc = app.getServletContext();
-        XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
-        xmlContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
-        xmlContext.setServletContext(sc);
-        xmlContext.refresh();
-        sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
-        if (langId > 0) {
-        	WebSession.get().setLanguage(langId);
-        }
-        InitializationContainer.initComplete = true;
-        return tester;
+		XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
+		xmlContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
+		xmlContext.setServletContext(sc);
+		xmlContext.refresh();
+		sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
+		if (langId > 0) {
+			WebSession.get().setLanguage(langId);
+		}
+		InitializationContainer.initComplete = true;
+		return tester;
 	}
 	
 	public static void destroy(WicketTester tester) {
