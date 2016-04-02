@@ -19,24 +19,31 @@
 package org.apache.openmeetings.web.admin.email;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import java.util.Date;
 
+import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 public class EmailForm extends Form<MailMessage> {
 	private static final long serialVersionUID = 1L;
 	private final DateLabel inserted;
 	private final DateLabel updated;
 	private final Label status;
+	private final AjaxButton reset;
 
-	public EmailForm(String id, MailMessage m) {
+	public EmailForm(String id, final WebMarkupContainer list, MailMessage m) {
 		super(id, new CompoundPropertyModel<>(m));
 		add(status = new Label("status", Model.of("")));
 		add(new Label("subject"));
@@ -46,6 +53,16 @@ public class EmailForm extends Form<MailMessage> {
 		add(updated = forDatePattern("updated", Model.of((Date)null), WEB_DATE_PATTERN));
 		add(new Label("errorCount"));
 		add(new Label("lastError"));
+		add(reset = new AjaxButton("reset") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				getBean(MailMessageDao.class).resetSendingStatus(EmailForm.this.getModelObject().getId());
+				target.add(list);
+			}
+		});
+		reset.setEnabled(false);
 	}
 
 	@Override
@@ -55,5 +72,6 @@ public class EmailForm extends Form<MailMessage> {
 		status.setDefaultModelObject(getString("admin.email.status." + m.getStatus().name()));
 		inserted.setModelObject(m.getInserted().getTime());
 		updated.setModelObject(m.getInserted().getTime());
+		reset.setEnabled(m.getId() != null && MailMessage.Status.ERROR == m.getStatus());
 	}
 }
