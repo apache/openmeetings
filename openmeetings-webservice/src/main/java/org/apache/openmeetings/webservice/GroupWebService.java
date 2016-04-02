@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
 
@@ -59,10 +60,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * conference rooms, recordings or the application in general
  * 
  * @author sebawagner
- * @webservice GroupService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/group")

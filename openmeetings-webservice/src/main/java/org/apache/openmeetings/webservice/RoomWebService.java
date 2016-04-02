@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,10 +66,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * RoomService contains methods to manipulate rooms and create invitation hash
  * 
  * @author sebawagner
- * @webservice RoomService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/room")

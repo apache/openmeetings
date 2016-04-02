@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.io.File;
 import java.io.InputStream;
@@ -68,10 +69,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * conference room and the personal drive of any user
  * 
  * @author sebawagner
- * @webservice FileService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.FileWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.FileWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/file")
