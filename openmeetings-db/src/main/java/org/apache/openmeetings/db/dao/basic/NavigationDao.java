@@ -59,7 +59,7 @@ public class NavigationDao {
 				.getResultList();
 	}
 
-	public void addGlobalStructure(int naviorder, String labelId, long levelId, String name, String tooltipLabelId) {
+	public Naviglobal addGlobalStructure(int naviorder, String labelId, long levelId, String name, String tooltipLabelId) {
 		Naviglobal ng = new Naviglobal();
 		ng.setComment("");
 		ng.setIcon("");
@@ -73,6 +73,7 @@ public class NavigationDao {
 		// CriteriaBuilder crit = em.getCriteriaBuilder();
 
 		em.persist(ng);
+		return ng;
 	}
 
 	public void addMainStructure(String action, String params, int naviorder, String labelId,
