@@ -20,14 +20,14 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:head>
-       <script type="text/javascript">
-           function omConfigPanelInit() {
-               var documentHeight = $(document).height();
-               $('#adminForm').height(documentHeight-114);
-               $('#adminTable').height(documentHeight-144);
-           }
-       </script>
-    </wicket:head>
+		<script type="text/javascript">
+			function omConfigPanelInit() {
+				var documentHeight = $(document).height();
+				$('#adminForm').height(documentHeight-114);
+				$('#adminTable').height(documentHeight-144);
+			}
+		</script>
+	</wicket:head>
 	<wicket:panel>	
 		<div class="adminPanel">
 			<div class="adminPanelColumnTable">
@@ -44,7 +44,7 @@
 				<div class="tableWrapper" id="adminTable">
 					<table class="adminListTable">
 						<tbody wicket:id="listContainer" >	
-				    		<tr wicket:id="configList">
+							<tr wicket:id="configList">
 								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="id"></span></div></td>
 								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="key"></span></div></td>
 								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
@@ -60,20 +60,20 @@
 						<fieldset class="ui-widget-content">
 							<legend class="ui-widget-header"><wicket:message key="266" /></legend>
 							<div class="formelement">
-							    <label><wicket:message key="267" /></label><input type="text" wicket:id="key"/>
-				            </div>
-				            <div class="formelement">
-                                   <label><wicket:message key="271" /></label><input type="text" wicket:id="value"/>
-				            </div>
-                               <div class="formelement">
-                                   <label><wicket:message key="268" /></label><span wicket:id="updated"/>
-				            </div>
-                               <div class="formelement">
-                                   <label><wicket:message key="269" /></label><span wicket:id="user.login"/>
-				            </div>
-                               <div class="formelement">
-                                   <label><wicket:message key="270" /></label><textarea wicket:id="comment"/>
-				            </div>
+								<label><wicket:message key="267" /></label><input type="text" wicket:id="key"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:message key="271" /></label><input type="text" wicket:id="value"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:message key="268" /></label><span wicket:id="updated"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:message key="269" /></label><span wicket:id="user.login"/>
+							</div>
+							<div class="formelement">
+								<label><wicket:message key="270" /></label><textarea wicket:id="comment"/>
+							</div>
 						</fieldset>
 					</div>
 				</form>

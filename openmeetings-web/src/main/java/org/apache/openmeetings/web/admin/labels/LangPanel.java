@@ -117,8 +117,8 @@ public class LangPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<StringLabel> item) {
 				final StringLabel fv = item.getModelObject();
-				item.add(new Label("name", fv.getKey()));
-				item.add(new Label("value", fv.getValue()));
+				item.add(new Label("key"));
+				item.add(new Label("value"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -129,7 +129,7 @@ public class LangPanel extends AdminPanel {
 						target.appendJavaScript("labelsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content" + (fv.getKey().equals(form.getModelObject().getKey()) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.append("class", getRowClass(fv.getId(), form.getModelObject().getId())));
 			}
 		};
 

@@ -103,7 +103,6 @@ public class ImportInitvalues {
 	@Autowired
 	private RoomDao roomDao;
 	
-	
 	private int progress = 0;
 
 	public int getProgress() {
@@ -114,104 +113,39 @@ public class ImportInitvalues {
 		/*
 		 * ######################## Dashboard Menu Points
 		 */
-		navimanagement.addGlobalStructure("home", 1, 124, false, true, 1,
-				"home", false, 582L);
-		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1,
-				290, true, false, 1, "Dashboard Module", 1, false, 1450L);
-		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2,
-				291, true, false, 1, "Module Calendar", 1, false, 1451L);
+		navimanagement.addGlobalStructure(1, "124", 1, "home", "582");
+		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1, "290", 1, "Dashboard", 1, "1450");
+		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2, "291", 1, "Calendar", 1, "1451");
 
 		/*
 		 * ######################## Conference Menu Points
 		 */
-
-		navimanagement.addGlobalStructure("meetings", 2, 792, false, true, 1,
-				"List of Conference Rooms Global Navi", false, 793L);
-
-		navimanagement.addMainStructure("conferenceModuleRoomList",
-				"publicTabButton", 1, 777, true, false, 1,
-				"List of Conference Rooms Main Navi", 2, false, 1506L);
-
-		navimanagement.addMainStructure("conferenceModuleRoomList",
-				"privateTabButton", 2, 779, true, false, 1,
-				"List of Conference Rooms Main Navi", 2, false, 1507L);
-
-		navimanagement.addMainStructure("conferenceModuleRoomList",
-				"myTabButton", 3, 781, true, false, 1,
-				"List of Conference Rooms Main Navi", 2, false, 1508L);
+		navimanagement.addGlobalStructure(2, "792", 1, "Conference Rooms", "793");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, "777", 1, "Public Rooms", 2, "1506");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, "779", 1, "Private Rooms", 2, "1507");
+		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, "781", 1, "My Rooms", 2, "1508");
 
 		/*
-		 * ######################## Recording Menu Points - disabled by default
+		 * ######################## Recording Menu Points
 		 */
-
-		navimanagement.addGlobalStructure("record", 3, 395, false, true, 1,
-				"record", false, 583L);
-		navimanagement.addMainStructure("recordModule", null, 1, 395, true,
-				false, 1, "Module Recording Player", 3, false, 1452L);
-
-		/*
-		 * ######################## Event Menu Points
-		 */
-
-		navimanagement.addGlobalStructure("events", 4, 3, false, true, 1,
-				"List of Event Rooms Global Navi", true, 585L);
-
-		navimanagement
-				.addMainStructure("eventModuleRoomList", null, 1, 3, true,
-						false, 1, "List of Event Rooms Main Navi", 4, false,
-						null);
-
-		/*
-		 * ######################## Moderation Menu Points - disabled by default
-		 */
-		navimanagement.addGlobalStructure("moderate", 5, 649L, false, true, 2,
-				"Moderation Menu", true, 660L);
-
-		navimanagement.addMainStructure("moderatorModuleUser", null, 1, 650,
-				true, false, 1, "Moderate Users", 5, false, null);
-
-		navimanagement.addMainStructure("moderatorModuleRoom", null, 1, 651,
-				true, false, 1, "Moderate Rooms", 5, false, null);
+		navimanagement.addGlobalStructure(3, "395", 1, "record", "583");
+		navimanagement.addMainStructure("recordModule", null, 1, "395", 1, "Recordings", 3, "1452");
 
 		/*
 		 * ######################## Administration Menu Points
 		 */
-
-		navimanagement.addGlobalStructure("admin", 6, 6, false, true, 3,
-				"Administration Menu", false, 586L);
-
-		navimanagement.addMainStructure("adminModuleUser", null, 14, 125, true,
-				false, 2, "Administration of Users", 6, false, 1454L);
-
-		navimanagement.addMainStructure("adminModuleConnections", null, 15,
-				597, true, false, 3, "Aministration of Connections", 6, false,
-				1455L);
-
-		navimanagement.addMainStructure("adminModuleOrg", null, 16, 127, true,
-				false, 3, "Administration of Groups", 6, false, 1456L);
-
-		navimanagement.addMainStructure("adminModuleRoom", null, 17, 186, true,
-				false, 3, "Administration of Rooms", 6, false, 1457L);
-
-		navimanagement.addMainStructure("adminModuleConfiguration", null, 18,
-				263, true, false, 3, "Administration of Configuration", 6,
-				false, 1458L);
-
-		navimanagement.addMainStructure("adminModuleLanguages", null, 19, 348,
-				true, false, 3, "Administration of Languages", 6, false, 1459L);
-
-		navimanagement.addMainStructure("adminModuleLDAP", null, 20, 1103,
-				true, false, 3, "Administration of LDAP Configs", 6, false,
-				1460L);
-
-		navimanagement.addMainStructure("adminModuleOAuth", null, 21, 1571, 
-				true, false, 3, "Administration of OAuth2 servers", 6, false, 1572L);
-
-		navimanagement.addMainStructure("adminModuleBackup", null, 22, 367,
-				true, false, 3, "Administration of Backups", 6, false, 1461L);
-
-		navimanagement.addMainStructure("adminModuleServers", null, 23, 1498,
-				true, false, 3, "Administration of Servers", 6, false, 1499L);
+		navimanagement.addGlobalStructure(6, "6", 3, "Administration Menu", "586");
+		navimanagement.addMainStructure("adminModuleUser", null, 14, "125", 2, "Administration of Users", 6, "1454");
+		navimanagement.addMainStructure("adminModuleConnections", null, 15, "597", 3, "Aministration of Connections", 6, "1455");
+		navimanagement.addMainStructure("adminModuleOrg", null, 16, "127", 3, "Administration of Groups", 6, "1456");
+		navimanagement.addMainStructure("adminModuleRoom", null, 17, "186", 3, "Administration of Rooms", 6, "1457");
+		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, "263", 3, "Administration of Configuration", 6, "1458");
+		navimanagement.addMainStructure("adminModuleLanguages", null, 19, "348", 3, "Administration of Languages", 6, "1459");
+		navimanagement.addMainStructure("adminModuleLDAP", null, 20, "1103", 3, "Administration of LDAP Configs", 6, "1460");
+		navimanagement.addMainStructure("adminModuleOAuth", null, 21, "1571", 3, "Administration of OAuth2 servers", 6, "1572");
+		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", 3, "Administration of Backups", 6, "1461");
+		navimanagement.addMainStructure("adminModuleServers", null, 23, "1498", 3, "Administration of Servers", 6, "1499");
+		navimanagement.addMainStructure("adminModuleEmail", null, 24, "main.menu.admin.email", 3, "Administration of Emails", 6, "main.menu.admin.email.desc");
 		log.debug("MainMenu ADDED");
 	}
 	

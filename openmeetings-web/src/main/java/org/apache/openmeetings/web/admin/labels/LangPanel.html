@@ -29,8 +29,8 @@
 					, resizable: false
 				});
 				var documentHeight = $(document).height();
-                $('#adminForm').height(documentHeight - 114);
-                $('#adminTable').height(documentHeight - 172);
+				$('#adminForm').height(documentHeight - 114);
+				$('#adminTable').height(documentHeight - 172);
 			};
 		</script>
 		<div class="adminPanel">
@@ -72,8 +72,8 @@
 				<div class="tableWrapper" id="adminTable">
 					<table class="adminListTable">
 						<tbody wicket:id="listContainer" >
-				    		<tr wicket:id="langList">
-								<td class="two_column_layout_column1"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+						<tr wicket:id="langList">
+								<td class="two_column_layout_column1"><div class="three_column_layout_divcolumn2"><span wicket:id="key"></span></div></td>
 								<td class="two_column_layout_column2"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
 							</tr>
 						</tbody>	
@@ -86,12 +86,12 @@
 					<div class="scrollcontent" id="adminForm">
 						<fieldset class="ui-widget-content">
 							<legend class="ui-widget-header"><wicket:message key="353" /></legend>
-	                         <div class="formelement">
-	                             <label><wicket:message key="354" /></label><input type="text" wicket:id="key"/>
+							<div class="formelement">
+								<label><wicket:message key="354" /></label><input type="text" wicket:id="key"/>
 							</div>
-	                        <div class="formelement">
-	                             <label><wicket:message key="355" /></label><textarea wicket:id="value"></textarea>
-	                        </div> 
+							<div class="formelement">
+								<label><wicket:message key="355" /></label><textarea wicket:id="value"></textarea>
+							</div> 
 						</fieldset>
 					</div>
 				</form>

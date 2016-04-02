@@ -270,11 +270,11 @@ public class MailHandler {
 	public void sendMails() throws Exception {
 		init();
 		log.debug("sendMails enter ...");
-		List<MailMessage> list = mailMessageDao.get(0, 1);
+		List<MailMessage> list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
 		log.debug("Number of emails in init queue " + list.size());
 		while (!list.isEmpty()) {
 			send(list.get(0), true);
-			list = mailMessageDao.get(0, 1);
+			list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
 		}
 		log.debug("... sendMails done.");
 	}

@@ -59,15 +59,6 @@ public class Naviglobal implements IDataProviderEntity {
 	@Column(name = "icon")
 	private String icon;
 
-	@Column(name = "isleaf")
-	private Boolean isleaf;
-
-	@Column(name = "isopen")
-	private Boolean isopen;
-
-	@Column(name = "action")
-	private String action;
-
 	@Column(name = "updated")
 	private Date updated;
 
@@ -87,10 +78,10 @@ public class Naviglobal implements IDataProviderEntity {
 	private boolean deleted;
 
 	@Column(name = "label_id")
-	private Long labelId;
+	private String labelId;
 
 	@Column(name = "tooltip_label_id")
-	private Long tooltipLabelId;
+	private String tooltipLabelId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
@@ -104,14 +95,6 @@ public class Naviglobal implements IDataProviderEntity {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
 	}
 
 	public String getComment() {
@@ -128,22 +111,6 @@ public class Naviglobal implements IDataProviderEntity {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
-	}
-
-	public Boolean getIsleaf() {
-		return isleaf;
-	}
-
-	public void setIsleaf(Boolean isleaf) {
-		this.isleaf = isleaf;
-	}
-
-	public Boolean getIsopen() {
-		return isopen;
-	}
-
-	public void setIsopen(Boolean isopen) {
-		this.isopen = isopen;
 	}
 
 	public Date getInserted() {
@@ -202,25 +169,25 @@ public class Naviglobal implements IDataProviderEntity {
 		this.mainnavi = mainnavi;
 	}
 
-	public Long getLabelId() {
+	public String getLabelId() {
 		return labelId;
 	}
 
-	public void setLabelId(Long labelId) {
+	public void setLabelId(String labelId) {
 		this.labelId = labelId;
 	}
 
-	public Long getTooltipLabelId() {
+	public String getTooltipLabelId() {
 		return tooltipLabelId;
 	}
 
-	public void setTooltipLabelId(Long tooltipLabelId) {
+	public void setTooltipLabelId(String tooltipLabelId) {
 		this.tooltipLabelId = tooltipLabelId;
 	}
 
 	@Override
 	public String toString() {
-		return "Naviglobal [id=" + id + ", name=" + name + ", action=" + action + ", naviorder=" + naviorder + ", deleted="
+		return "Naviglobal [id=" + id + ", name=" + name + ", naviorder=" + naviorder + ", deleted="
 				+ deleted + ", labelId=" + labelId + ", tooltipLabelId=" + tooltipLabelId + "]";
 	}
 
