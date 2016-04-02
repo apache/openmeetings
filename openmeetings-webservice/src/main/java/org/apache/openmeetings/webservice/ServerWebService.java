@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.List;
 
@@ -53,10 +54,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * participating in cluster.
  * 
  * @author solomax, sebawagner
- * @webservice ServerService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.ServerWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.ServerWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/server")

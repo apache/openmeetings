@@ -19,6 +19,9 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
+import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
+import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
 import java.util.Date;
 
@@ -55,6 +58,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.webservice.cluster.UserService;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -67,14 +71,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * conference rooms, recordings or the application in general
  * 
  * @author sebawagner
- * @webservice UserService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.UserWebService")
+@WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
-public class UserWebService {
+public class UserWebService implements UserService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 	@Autowired
 	private ConfigurationDao cfgDao;
@@ -89,12 +92,10 @@ public class UserWebService {
 	@Autowired
 	private ConferenceService conferenceService;
 
-	/**
-	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
-	 * @param pass - password
-	 *            
-	 * @return - {@link ServiceResult} with error code or SID and userId
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
 	 */
+	@Override
 	@WebMethod
 	@GET
 	@Path("/login")
@@ -121,20 +122,10 @@ public class UserWebService {
 		}
 	}
 
-	/**
-	 * Adds a new User like through the Frontend, but also does activates the
-	 * Account To do SSO see the methods to create a hash and use those ones!
-	 * 
-	 * @param sid
-	 *            The SID from getSession
-	 * @param user
-	 *            user object
-	 * @param confirm
-	 *            whatever or not to send email, leave empty for auto-send
-	 *            
-	 * @return - id of the user added or error code
-	 * @throws ServiceException
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#add(java.lang.String, org.apache.openmeetings.db.dto.user.UserDTO, java.lang.Boolean)
 	 */
+	@Override
 	@WebMethod
 	@POST
 	@Path("/")
@@ -202,18 +193,10 @@ public class UserWebService {
 
 	//FIXME no update
 	
-	/**
-	 * 
-	 * Delete a certain user by its id
-	 * 
-	 * @param sid
-	 *            The SID from getSession
-	 * @param id
-	 *            the openmeetings user id
-	 *            
-	 * @return - id of the user deleted, error code otherwise
-	 * @throws ServiceException
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#delete(java.lang.String, long)
 	 */
+	@Override
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
@@ -234,20 +217,10 @@ public class UserWebService {
 		}
 	}
 
-	/**
-	 * 
-	 * Delete a certain user by its external user id
-	 * 
-	 * @param sid
-	 *            The SID from getSession
-	 * @param externalId
-	 *            externalUserId
-	 * @param externalType
-	 *            externalUserId
-	 *            
-	 * @return - id of user deleted, or error code
-	 * @throws ServiceException
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#deleteExternal(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
 	public ServiceResult deleteExternal(
@@ -275,21 +248,10 @@ public class UserWebService {
 		}
 	}
 
-	/**
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
-	 * Session-Hashs are deleted 15 minutes after the creation if not used.
-	 * 
-	 * @param sid
-	 *            The SID from getSession
-	 * @param user
-	 *            user details to set
-	 * @param options
-	 *            room options to set
-	 *            
-	 * @return - secure hash or error code
-	 * @throws ServiceException
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#getRoomHash(java.lang.String, org.apache.openmeetings.db.dto.user.ExternalUserDTO, org.apache.openmeetings.db.dto.room.RoomOptionsDTO)
 	 */
+	@Override
 	@WebMethod
 	@POST
 	@Path("/hash")
@@ -337,16 +299,10 @@ public class UserWebService {
 		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
 	}
 
-	/**
-	 * Kick a user by its public SID
-	 * 
-	 * @param sid
-	 *            The SID from getSession
-	 * @param publicSID
-	 *            the publicSID (you can get it from the call to get users in a
-	 *            room)
-	 * @return - <code>true</code> if user was kicked
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#kick(java.lang.String, java.lang.String)
 	 */
+	@Override
 	@WebMethod
 	@POST
 	@Path("/kick/{publicsid}")
@@ -366,14 +322,10 @@ public class UserWebService {
 		}
 	}
 
-	/**
-	 * Returns the count of users currently in the Room with given id
-	 * No admin rights are necessary for this call
-	 * 
-	 * @param sid The SID from UserService.getSession
-	 * @param roomId id of the room to get users
-	 * @return number of users as int
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.webservice.cluster.UserService#count(java.lang.String, java.lang.Long)
 	 */
+	@Override
 	@WebMethod
 	@GET
 	@Path("/count/{roomid}")

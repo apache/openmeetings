@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,10 +54,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * CalendarService contains methods to create, edit delete calendar meetings
  * 
  * @author sebawagner
- * @webservice CalendarService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/calendar")

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -46,10 +47,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * The Service contains methods to get localized errors
  * 
  * @author solomax
- * @webservice ErrorService
  * 
  */
-@WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService")
+@WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/error")
