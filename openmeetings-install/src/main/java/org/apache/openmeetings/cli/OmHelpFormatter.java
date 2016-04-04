@@ -38,7 +38,7 @@ public class OmHelpFormatter extends HelpFormatter {
 	private int maxPrefixLength = 0;
 	
 	@SuppressWarnings("unchecked")
-	private List<OmOption> getReqOptions(Options opts) {
+	private static List<OmOption> getReqOptions(Options opts) {
 		//suppose we have only 1 group (for now)
 		OptionGroup g = ((List<OptionGroup>)opts.getRequiredOptions()).get(0);
 		List<OmOption> result = new ArrayList<OmOption>();
@@ -46,6 +46,7 @@ public class OmHelpFormatter extends HelpFormatter {
 			result.add((OmOption)o);
 		}
 		Collections.sort(result, new Comparator<OmOption>() {
+			@Override
 			public int compare(OmOption o1, OmOption o2) {
 				return o1.getOrder() - o2.getOrder();
 			}
@@ -118,6 +119,7 @@ public class OmHelpFormatter extends HelpFormatter {
 			final String key = me.getKey();
 			List<OmOption> options = me.getValue();
 			Collections.sort(options, new Comparator<OmOption>(){
+				@Override
 				public int compare(OmOption o1, OmOption o2) {
 					boolean o1opt = !o1.isOptional(key);
 					boolean o2opt = !o2.isOptional(key);
@@ -132,7 +134,7 @@ public class OmHelpFormatter extends HelpFormatter {
 		return map;
 	}
 	
-	private StringBuilder getReqOptionsString(Options opts) {
+	private static StringBuilder getReqOptionsString(Options opts) {
 		String delim = "";
 		StringBuilder result = new StringBuilder();
 		for (Option o : getReqOptions(opts)) {
@@ -203,7 +205,8 @@ public class OmHelpFormatter extends HelpFormatter {
 			printWrapped(pw, width, footer);
 		}
 	}
-    
+
+	@Override
 	public void printUsage(PrintWriter pw, int width, String app, Options opts) {
 		pw.println(String.format("usage: %1$s [%2$s] [options]", app, getReqOptionsString(opts)));
 	}

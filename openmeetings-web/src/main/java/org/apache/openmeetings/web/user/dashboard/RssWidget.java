@@ -43,6 +43,7 @@ public class RssWidget extends AbstractWidget {
 		id = WIDGET_ID_RSS;
 	}
 	
+	@Override
 	public WidgetView createView(String viewId) {
 		return new RssWidgetView(viewId, new Model<Widget>(this));
 	}

@@ -59,13 +59,14 @@ public class RoomsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Room> item) {
 				Room room = item.getModelObject();
-				final long roomId = room.getId();
+				final Long roomId = room.getId();
 				item.add(new Label("id"));
 				item.add(new Label("name"));
 				item.add(new Label("ispublic"));
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
 						form.setModelObject(getBean(RoomDao.class).get(roomId));

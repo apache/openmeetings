@@ -124,11 +124,11 @@ public class UserDao implements IDataProviderDao<User> {
 		return q.getResultList();
 	}
 	
-	private String getAdditionalJoin(boolean filterContacts) {
+	private static String getAdditionalJoin(boolean filterContacts) {
 		return filterContacts ? "LEFT JOIN u.groupUsers ou" : null;
 	}
 	
-	private String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
+	private static String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
 		if (excludeContacts) {
 			params.put("contact", Type.contact);
 			return "u.type <> :contact";
@@ -136,7 +136,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return null;
 	}
 	
-	private String getAdditionalWhere(boolean filterContacts, Long ownerId, Map<String, Object> params) {
+	private static String getAdditionalWhere(boolean filterContacts, Long ownerId, Map<String, Object> params) {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
 			params.put("contact", Type.contact);
@@ -146,13 +146,13 @@ public class UserDao implements IDataProviderDao<User> {
 		return null;
 	}
 	
-	private void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
+	private static void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
 		for (Map.Entry<String, Object> me: params.entrySet()) {
 			q.setParameter(me.getKey(), me.getValue());
 		}
 	}
 
-	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, long currentUserId) {
+	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
 				, getAdditionalWhere(filterContacts, currentUserId, params), sort, searchFields), User.class);
@@ -171,14 +171,14 @@ public class UserDao implements IDataProviderDao<User> {
 
 	@Override
 	public long count(String search) {
-		return count(search, false, -1);
+		return count(search, false, Long.valueOf(-1));
 	}
 	
-	public long count(String search, long currentUserId) {
+	public long count(String search, Long currentUserId) {
 		return count(search, false, currentUserId);
 	}
 	
-	public long count(String search, boolean filterContacts, long currentUserId) {
+	public long count(String search, boolean filterContacts, Long currentUserId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, true
 				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
@@ -197,7 +197,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return q.getResultList();
 	}
 
-	public List<User> get(String search, boolean filterContacts, long currentUserId) {
+	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
 				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), User.class);
@@ -233,7 +233,7 @@ public class UserDao implements IDataProviderDao<User> {
 	// FetchType is Lazy, this extra hook here might be not needed with a
 	// different mechanism to protect the password from being read
 	// sebawagner, 01.10.2012
-	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		User u = update(user, updatedBy);
 		if (u != null && password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
@@ -251,7 +251,7 @@ public class UserDao implements IDataProviderDao<User> {
 	
 	private User get(Long id, boolean force) {
 		User u = null;
-		if (id != null && id > 0) {
+		if (id != null && id.longValue() > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 			try {
@@ -369,7 +369,7 @@ public class UserDao implements IDataProviderDao<User> {
 			u = em.createNamedQuery("getUserByLogin", User.class)
 					.setParameter("login", login)
 					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? 0L : domainId)
+					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
@@ -386,7 +386,7 @@ public class UserDao implements IDataProviderDao<User> {
 			u = em.createNamedQuery("getUserByEmail", User.class)
 					.setParameter("email", email)
 					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? 0L : domainId)
+					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
@@ -455,11 +455,11 @@ public class UserDao implements IDataProviderDao<User> {
 		return getContact(email, "", "", null, null, owner);
 	}
 	
-	public User getContact(String email, String firstName, String lastName, long ownerId) {
+	public User getContact(String email, String firstName, String lastName, Long ownerId) {
 		return getContact(email, firstName, lastName, null, null, get(ownerId));
 	}
 	
-	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, long ownerId) {
+	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, Long ownerId) {
 		return getContact(email, firstName, lastName, langId, tzId, get(ownerId));
 	}
 	
@@ -504,7 +504,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 
-	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, long userId, String text, String offers, String search, String orderBy, boolean asc) {
+	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, Long userId, String text, String offers, String search, String orderBy, boolean asc) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		boolean filterContacts = true;
 		boolean count = clazz.isAssignableFrom(Long.class);
@@ -537,15 +537,15 @@ public class UserDao implements IDataProviderDao<User> {
 		return query;
 	}
 	
-	private String getStringParam(String param) {
+	private static String getStringParam(String param) {
 		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
 	}
 	
-	public List<User> searchUserProfile(long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
+	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
 		return getUserProfileQuery(User.class, userId, text, offers, search, orderBy, asc).setFirstResult(start).setMaxResults(max).getResultList();
 	}
 
-	public Long searchCountUserProfile(long userId, String text, String offers, String search) {
+	public Long searchCountUserProfile(Long userId, String text, String offers, String search) {
 		return getUserProfileQuery(Long.class, userId, text, offers, search, null, false).getSingleResult();
 	}
 
@@ -561,8 +561,9 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 
+	@Override
 	public List<User> get(String search, int start, int count, String order) {
-		return get(search, start, count, order, false, -1);
+		return get(search, start, count, order, false, -1L);
 	}
 	
 	public Set<Right> getRights(Long id) {
@@ -637,8 +638,8 @@ public class UserDao implements IDataProviderDao<User> {
 	
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
-			Boolean forceTimeZoneCheck, String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+			boolean forceTimeZoneCheck, String userOffers, String userSearchs, boolean showContactData,
+			boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		
 		User u = new User();
 		u.setFirstname(firstname);

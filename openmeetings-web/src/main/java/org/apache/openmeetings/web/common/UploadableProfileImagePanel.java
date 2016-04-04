@@ -53,12 +53,15 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 			private static final long serialVersionUID = 1L;
 
 			//FIXME this need to be eliminated
+			@Override
 			public void detach() {
 			}
 			
+			@Override
 			public void setObject(List<FileUpload> object) {
 			}
 			
+			@Override
 			public List<FileUpload> getObject() {
 				return null;
 			}

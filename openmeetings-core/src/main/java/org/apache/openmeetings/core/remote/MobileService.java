@@ -79,7 +79,7 @@ public class MobileService {
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
-	private void add(Map<String, Object> m, String key, Object v) {
+	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
 	}
 	
@@ -182,7 +182,7 @@ public class MobileService {
 		return result;
 	}
 	
-	private Map<String, Object> getResult() {
+	private static Map<String, Object> getResult() {
 		Map<String, Object> result = new Hashtable<>();
 		result.put("status", -1);
 		return result;

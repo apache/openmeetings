@@ -138,7 +138,7 @@ public class SessiondataDao {
 	 * @param SID
 	 * @param userId
 	 */
-	public boolean updateUser(String SID, long userId) {
+	public boolean updateUser(String SID, Long userId) {
 		try {
 			log.debug("updateUser User: " + userId + " || " + SID);
 
@@ -174,7 +174,7 @@ public class SessiondataDao {
 		return false;
 	}
 
-	public boolean updateUser(String SID, long userId, boolean permanent, Long languageId) {
+	public boolean updateUser(String SID, Long userId, boolean permanent, long languageId) {
 		try {
 			log.debug("updateUser User: " + userId + " || " + SID);
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);

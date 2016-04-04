@@ -32,23 +32,28 @@ public class ScreenWidthMouseListener extends MouseInputAdapter {
 		this.frame = frame;
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		frame.setShowWarning(false);
 		this.x = e.getX();
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		frame.setShowWarning(true);
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;

@@ -79,6 +79,7 @@ public class GenerateImage extends BaseConverter {
 		
 		// User Profile Update
 		File[] files = getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
+			@Override
 			public boolean accept(File pathname) {
 				return pathname.getName().endsWith(JPG_EXTENTION);
 			}

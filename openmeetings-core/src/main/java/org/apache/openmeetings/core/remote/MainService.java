@@ -428,6 +428,7 @@ public class MainService implements IPendingServiceCallback {
 		return null;
 	}
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		log.debug("[resultReceived]" + arg0);
 	}

@@ -26,7 +26,7 @@ public class RoomStatus {
 	
 	List<Client> clientList;
 	BrowserStatus browserStatus;
-	Boolean roomFull = false;
+	boolean roomFull = false;
 	
 	public RoomStatus() {}
 	
@@ -42,10 +42,10 @@ public class RoomStatus {
 	public void setBrowserStatus(BrowserStatus browserStatus) {
 		this.browserStatus = browserStatus;
 	}
-	public Boolean getRoomFull() {
+	public boolean getRoomFull() {
 		return roomFull;
 	}
-	public void setRoomFull(Boolean roomFull) {
+	public void setRoomFull(boolean roomFull) {
 		this.roomFull = roomFull;
 	}
 	

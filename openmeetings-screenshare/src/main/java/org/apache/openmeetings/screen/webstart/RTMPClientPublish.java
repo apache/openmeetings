@@ -78,6 +78,7 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 		super.onCommand(conn, channel, source, command);
 	}
 	
+	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();
 		logger.trace("call ### get Method Name " + method);
@@ -95,6 +96,8 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 		}
 	}
 
+	@Override
 	public void onStreamEvent(Notify notify) {
+		//no-op
 	}
 }

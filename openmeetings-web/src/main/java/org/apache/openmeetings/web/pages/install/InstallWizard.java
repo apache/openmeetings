@@ -636,6 +636,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			th = null;
 		}
 		
+		@Override
 		public void run() {
 			try {
 				installer.loadAll(getModelObject(), true);
@@ -693,9 +694,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			setChoiceRenderer(new ChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
 				
+				@Override
 				public Object getDisplayValue(String object) {
     				return object.toString();
     			}
+				@Override
 				public String getIdValue(String object, int index) {
 					return object.toString();
 				}

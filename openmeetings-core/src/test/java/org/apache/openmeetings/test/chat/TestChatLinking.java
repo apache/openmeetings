@@ -44,7 +44,7 @@ public class TestChatLinking {
 	}
 	
 	
-	private String link(String input) {
+	private static String link(String input) {
 		try {
 			
 			String tReturn = "";

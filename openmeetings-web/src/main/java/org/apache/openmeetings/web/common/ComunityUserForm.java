@@ -37,6 +37,7 @@ public class ComunityUserForm extends Form<User> {
 		RadioGroup<Long> rg = new RadioGroup<Long>("community_settings", new IModel<Long>() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public Long getObject() {
 				User u = ComunityUserForm.this.getModelObject();
 				if (u.isShowContactData()) {
@@ -47,6 +48,7 @@ public class ComunityUserForm extends Form<User> {
 				return 3L;
 			}
 
+			@Override
 			public void setObject(Long choice) {
 				User u = ComunityUserForm.this.getModelObject();
 				if (choice.equals(1L)) {
@@ -61,6 +63,7 @@ public class ComunityUserForm extends Form<User> {
 				}
 			}
 
+			@Override
 			public void detach() {
 			}
 		});

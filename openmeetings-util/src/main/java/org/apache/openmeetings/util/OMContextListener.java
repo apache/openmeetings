@@ -24,10 +24,12 @@ import org.red5.logging.ContextLoggingListener;
 
 public class OMContextListener extends ContextLoggingListener {
 	
+	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		super.contextDestroyed(event);
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		OpenmeetingsVariables.webAppRootKey = pathToName(event);
 		OpenmeetingsVariables.webAppRootPath = "/" + OpenmeetingsVariables.webAppRootKey;
@@ -37,7 +39,7 @@ public class OMContextListener extends ContextLoggingListener {
 		super.contextInitialized(event);
 	}
 
-	private String pathToName(ServletContextEvent event) {
+	private static String pathToName(ServletContextEvent event) {
 		String contextName = event.getServletContext().getContextPath().replaceAll("/", "");
 		if ("".equals(contextName)) {
 			contextName = "root";

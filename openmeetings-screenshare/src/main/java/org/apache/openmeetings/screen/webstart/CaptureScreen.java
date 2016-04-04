@@ -113,6 +113,7 @@ class CaptureScreen extends Thread {
 		timeCaptureStarted = 0;
 	}
 
+	@Override
 	public void run() {
 		try {
 			while (active && !core.isReadyToRecord()) {

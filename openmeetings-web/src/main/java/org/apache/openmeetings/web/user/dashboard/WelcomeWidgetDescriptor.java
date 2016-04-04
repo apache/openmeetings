@@ -25,22 +25,27 @@ import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 public class WelcomeWidgetDescriptor implements WidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public String getName() {
 		return Application.getString(1546L);
 	}
 
+	@Override
 	public String getProvider() {
 		return "Apache Openmeetings";
 	}
 
+	@Override
 	public String getDescription() {
 		return Application.getString(1547L);
 	}
 
+	@Override
 	public String getWidgetClassName() {
 		return WelcomeWidget.class.getName();
 	}
 
+	@Override
 	public String getTypeName() {
 		return "om.widget.welcome";
 	}

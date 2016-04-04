@@ -98,7 +98,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 	
 	public static void add(Locale l) throws Exception {
-		Long id = 0L;
+		long id = 0L;
 		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
 			id = e.getKey();
 		}
@@ -182,7 +182,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 	
 	public static void upload(Locale l, InputStream is) throws Exception {
-		List<StringLabel> labels = getLabels(l, is);
+		List<StringLabel> labels = getLabels(is);
 		URL u = APP.getResource(getLabelFileName(Locale.ENGLISH)); //get the URL of existing resource
 		File el = new File(u.toURI());
 		File f = new File(el.getParentFile(), getLabelFileName(l));
@@ -196,23 +196,23 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static List<StringLabel> getLabels(Locale l) {
 		List<StringLabel> labels = new ArrayList<StringLabel>();
 		try (InputStream is = APP.getResourceAsStream(getLabelFileName(l))) {
-			labels = getLabels(l, is);
+			labels = getLabels(is);
 		} catch (Exception e) {
 			log.error("Error reading resources document", e);
 		}
 		return labels;
 	}
 	
-	private static List<StringLabel> getLabels(Locale l, InputStream is) throws Exception {
+	private static List<StringLabel> getLabels(InputStream is) throws Exception {
 		final List<StringLabel> labels = new ArrayList<StringLabel>();
 		SAXParserFactory spf = SAXParserFactory.newInstance();
-	    spf.setNamespaceAware(true);
+		spf.setNamespaceAware(true);
 		try {
-		    SAXParser parser = spf.newSAXParser();
-		    XMLReader xr = parser.getXMLReader();
-		    xr.setContentHandler(new ContentHandler() {
-		    	StringLabel label = null;
-		    	
+			SAXParser parser = spf.newSAXParser();
+			XMLReader xr = parser.getXMLReader();
+			xr.setContentHandler(new ContentHandler() {
+				StringLabel label = null;
+				
 				@Override
 				public void startPrefixMapping(String prefix, String uri) throws SAXException {}
 				
@@ -265,7 +265,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return labels;
 	}
 	
-	private List<StringLabel> getLabels(Locale l, final String search) {
+	private static List<StringLabel> getLabels(Locale l, final String search) {
 		if (labelCache.get(l) == null) {
 			labelCache.put(l, getLabels(l));
 		}

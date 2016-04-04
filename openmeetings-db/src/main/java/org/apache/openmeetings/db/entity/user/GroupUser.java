@@ -93,10 +93,12 @@ public class GroupUser implements IDataProviderEntity {
 		this.group = group;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

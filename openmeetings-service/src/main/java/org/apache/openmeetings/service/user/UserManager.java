@@ -163,11 +163,13 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
+	@Override
 	public Long logout(String SID, long userId) {
-		sessiondataDao.updateUser(SID, 0, false, null);
+		sessiondataDao.updateUser(SID, null, false, 0);
 		return -12L;
 	}
 
+	@Override
 	public List<Userdata> getUserdataDashBoard(Long userId) {
 		if (userId != null && userId.longValue() > 0) {
 			try {
@@ -557,7 +559,7 @@ public class UserManager implements IUserManager {
 		}
 		//TODO FIXME should we update fields on login ????
 		u.setLastlogin(new Date());
-		u = userDao.update(u, pass, -1);
+		u = userDao.update(u, pass, Long.valueOf(-1));
 		
 		return u;
 	}

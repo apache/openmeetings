@@ -95,9 +95,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
 				new ChoiceRenderer<Long>() {
 					private static final long serialVersionUID = 1L;
+					@Override
 					public Object getDisplayValue(Long id) {
 						return id;
 					}
+					@Override
 					public String getIdValue(Long id, int index) {
 						return "" + id;
 					}
@@ -143,7 +145,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			public Collection<RoomGroup> toChoices(Collection<String> _ids) {
 				List<Long> ids = new ArrayList<Long>();
 				for (String id : _ids) {
-					ids.add(Long.parseLong(id));
+					ids.add(Long.valueOf(id));
 				}
 				List<RoomGroup> list = new ArrayList<RoomGroup>();
 				for (Group o : getBean(GroupDao.class).get(ids)) {

@@ -20,8 +20,8 @@ package org.apache.openmeetings.webservice.cluster;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.remote.ISlaveHTTPConnectionManager;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -47,7 +47,7 @@ public class SlaveHTTPConnectionManager implements ISlaveHTTPConnectionManager {
 	 * There can be only one RestClient per server, so we use the primary key of
 	 * the server to store the RestClient.
 	 */
-	private static Map<Long, RestClient> restClientsSessionStore = new HashMap<Long, RestClient>();
+	private static Map<Long, RestClient> restClientsSessionStore = new ConcurrentHashMap<>();
 
 	/**
 	 * Synchronized, cause nobody should manipulate the object while another
@@ -57,7 +57,7 @@ public class SlaveHTTPConnectionManager implements ISlaveHTTPConnectionManager {
 	 * 
 	 * @param server
 	 */
-	private synchronized RestClient getRestClient(Server server) {
+	private static RestClient getRestClient(Server server) {
 		RestClient restClient = restClientsSessionStore.get(server.getId());
 
 		// check if any values of the server have been changed,
@@ -86,8 +86,8 @@ public class SlaveHTTPConnectionManager implements ISlaveHTTPConnectionManager {
 	 * @param serverId
 	 * @param publicSID
 	 */
+	@Override
 	public void kickSlaveUser(Server server, String publicSID) throws Exception {
-		
 		RestClient rClient = getRestClient(server);
 		
 		if (rClient == null) {
@@ -95,7 +95,5 @@ public class SlaveHTTPConnectionManager implements ISlaveHTTPConnectionManager {
 		}
 		
 		rClient.kickUser(publicSID);
-		
 	}
-	
 }

@@ -35,21 +35,25 @@ public class CalendarPatterns {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, webAppRootKey);
 
 	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyyHHmmss = new ThreadLocal<SimpleDateFormat>() {
+		@Override
 		protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		};
 	};
 	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyy = new ThreadLocal<SimpleDateFormat>() {
+		@Override
 		protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat("dd.MM.yyyy");
 		};
 	};
 	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyyBySeparator = new ThreadLocal<SimpleDateFormat>() {
+		@Override
 		protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat("dd-MM-yyyy");
 		};
 	};
 	public static ThreadLocal<SimpleDateFormat> dateFormat__yyyyMMddHHmmss = new ThreadLocal<SimpleDateFormat>() {
+		@Override
 		protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		};

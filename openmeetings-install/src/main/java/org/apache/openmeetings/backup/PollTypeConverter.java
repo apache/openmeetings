@@ -25,10 +25,12 @@ import org.simpleframework.xml.stream.OutputNode;
 public class PollTypeConverter extends OmConverter<RoomPoll.Type> {
 	public PollTypeConverter() {}
 	
+	@Override
 	public RoomPoll.Type read(InputNode node) throws Exception {
 		return RoomPoll.Type.get(getLong(node));
 	}
 
+	@Override
 	public void write(OutputNode node, RoomPoll.Type value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

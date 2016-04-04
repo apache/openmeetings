@@ -32,6 +32,7 @@ public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallback
 		setOutputMarkupId(true);
 	}
 
+	@Override
 	protected void onSortChanged() {
 		container.view.setCurrentPage(0);
 	}

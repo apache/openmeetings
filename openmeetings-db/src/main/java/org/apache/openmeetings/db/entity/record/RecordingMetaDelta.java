@@ -94,9 +94,11 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	@Column(name="debug_status")
 	private String debugStatus;
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

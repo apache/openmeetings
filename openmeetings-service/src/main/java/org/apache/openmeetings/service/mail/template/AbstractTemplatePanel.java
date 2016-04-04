@@ -103,6 +103,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 		private static final long serialVersionUID = 1L;
 		public static final String COMP_ID = "template";
 
+		@Override
 		public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
 			return new StringResourceStream("<wicket:container wicket:id='" + COMP_ID + "'></wicket:container>");
 		}

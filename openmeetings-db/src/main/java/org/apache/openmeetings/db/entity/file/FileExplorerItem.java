@@ -69,10 +69,12 @@ public class FileExplorerItem extends FileItem {
 	@Column(name = "external_type")
 	private String externalType;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

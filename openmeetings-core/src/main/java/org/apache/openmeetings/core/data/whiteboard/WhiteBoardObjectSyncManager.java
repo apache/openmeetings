@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -37,9 +37,7 @@ public class WhiteBoardObjectSyncManager {
 	private Map<Long, Map<String, WhiteboardSyncLockObject>> whiteBoardSyncList = new ConcurrentHashMap<Long, Map<String, WhiteboardSyncLockObject>>();
 	private Map<Long, Map<String, Map<String, WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new ConcurrentHashMap<Long, Map<String, Map<String, WhiteboardSyncLockObject>>>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			WhiteBoardObjectSyncManager.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectSyncManager.class, webAppRootKey);
 
 	/*
 	 * Initial Sync Process
@@ -48,7 +46,7 @@ public class WhiteBoardObjectSyncManager {
 		whiteBoardSyncList.put(roomId, mapObject);
 	}
 
-	public synchronized Map<String, WhiteboardSyncLockObject> getWhiteBoardSyncListByRoomid(Long roomId) {
+	public Map<String, WhiteboardSyncLockObject> getWhiteBoardSyncListByRoomid(Long roomId) {
 		Map<String, WhiteboardSyncLockObject> roomList = whiteBoardSyncList.get(roomId);
 		if (roomList == null) {
 			roomList = new HashMap<String, WhiteboardSyncLockObject>();

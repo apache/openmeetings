@@ -122,10 +122,12 @@ public class MessagesContactsPanel extends UserPanel {
 		, new ChoiceRenderer<Integer>() {
 			private static final long serialVersionUID = 1L;
 	
+			@Override
 			public Object getDisplayValue(Integer object) {
 				return Application.getString(object);
 			}
 			
+			@Override
 			public String getIdValue(Integer object, int index) {
 				return "" + object;
 			}
@@ -136,10 +138,12 @@ public class MessagesContactsPanel extends UserPanel {
 		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public Object getDisplayValue(PrivateMessageFolder object) {
 				return object.getFolderName();
 			}
 
+			@Override
 			public String getIdValue(PrivateMessageFolder object, int index) {
 				return "" + object.getId();
 			}
@@ -152,7 +156,7 @@ public class MessagesContactsPanel extends UserPanel {
 		trash.add(AttributeAppender.replace("class", "email trash clickable"));
 	}
 	
-	private void selectFolder(WebMarkupContainer folder) {
+	private static void selectFolder(WebMarkupContainer folder) {
 		folder.add(AttributeAppender.append("class", "ui-widget-header ui-corner-all"));
 	}
 	
@@ -171,7 +175,7 @@ public class MessagesContactsPanel extends UserPanel {
 		target.add(buttons);
 	}
 	
-	private String getEmail(User u) {
+	private static String getEmail(User u) {
 		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
 	}
 	
@@ -233,7 +237,7 @@ public class MessagesContactsPanel extends UserPanel {
 		}
 	}
 	
-	private String getDisplayName(User u) {
+	private static String getDisplayName(User u) {
 		return new StringBuilder().append(u.getFirstname()).append(" ")
 				.append(u.getLastname()).append(" ")
 				.append("<").append(getEmail(u)).append(">")
@@ -521,17 +525,21 @@ public class MessagesContactsPanel extends UserPanel {
 		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void detach() {
 			}
 
+			@Override
 			public Iterator<? extends UserContact> iterator(long first, long count) {
 				return getBean(UserContactDao.class).get(getUserId(), (int)first, (int)count).iterator();
 			}
 
+			@Override
 			public long size() {
 				return getBean(UserContactDao.class).count(getUserId());
 			}
 
+			@Override
 			public IModel<UserContact> model(UserContact object) {
 				return Model.of(object);
 			}

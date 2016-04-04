@@ -119,6 +119,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 		add(confirmReset);
 	}
 	
+	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
         behavior.setOption("dialogClass", Options.asString("no-close"));

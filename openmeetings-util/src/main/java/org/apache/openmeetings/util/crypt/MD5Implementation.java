@@ -48,7 +48,7 @@ public class MD5Implementation implements ICryptString {
 	 * @see org.apache.openmeetings.utils.crypt.ICryptString#verifyPassword(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Boolean verifyPassword(String passGiven, String passwdFromDb) {
+	public boolean verifyPassword(String passGiven, String passwdFromDb) {
 		return (passwdFromDb.equals(createPassPhrase(passGiven)));
 	}
 	

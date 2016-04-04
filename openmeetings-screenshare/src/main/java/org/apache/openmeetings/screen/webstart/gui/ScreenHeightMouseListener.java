@@ -32,23 +32,28 @@ public class ScreenHeightMouseListener extends MouseInputAdapter  {
 		this.frame = frame;
 	}
 	
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		frame.setShowWarning(false);
 		y = e.getY();
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		frame.setShowWarning(true);
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;

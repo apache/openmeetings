@@ -46,7 +46,7 @@ public class LangForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
 	private DropDownChoice<Map.Entry<Long, Locale>> languages;
 
-	private List<Map.Entry<Long, Locale>> getLanguages() {
+	private static List<Map.Entry<Long, Locale>> getLanguages() {
 		List<Map.Entry<Long, Locale>> list = new ArrayList<Map.Entry<Long, Locale>>();
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
 			list.add(new AbstractMap.SimpleEntry<Long,Locale>(e.getKey(), e.getValue()));

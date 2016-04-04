@@ -134,7 +134,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		download.initiate(target);
 	}
 
-	private String getLabels(int ... ids) {
+	private static String getLabels(int ... ids) {
 		StringBuilder result = new StringBuilder();
 		boolean delim = false;
 		LabelDao labelDao = getBean(LabelDao.class);
