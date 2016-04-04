@@ -126,7 +126,7 @@ public class FlvExplorerConverter extends BaseConverter {
 		return returnLog;
 	}
 	
-	private FlvDimension getFlvDimension(String txt) throws Exception {
+	private static FlvDimension getFlvDimension(String txt) throws Exception {
 		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 		
 		Matcher matcher = p.matcher(txt);

@@ -43,6 +43,6 @@ public interface ICryptString {
 	 * @param passwdFromDb
 	 * @return
 	 */
-	public Boolean verifyPassword(String passGiven, String passwdFromDb);
+	public boolean verifyPassword(String passGiven, String passwdFromDb);
 
 }

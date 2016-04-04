@@ -29,7 +29,7 @@ public class Logger {
         		OpenmeetingsVariables.webAppRootKey);
     }
     
-    private String getMethodMessage() {
+    private static String getMethodMessage() {
         StackTraceElement ste = Thread.currentThread().getStackTrace()[2];
         return "In the method " + ste.getMethodName();
     }

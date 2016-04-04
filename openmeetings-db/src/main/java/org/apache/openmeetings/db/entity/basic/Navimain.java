@@ -64,10 +64,10 @@ public class Navimain implements IDataProviderEntity {
 	private String comment;
 
 	@Column(name = "naviorder")
-	private Integer naviorder;
+	private int naviorder;
 
 	@Column(name = "level_id")
-	private Long levelId;
+	private int levelId;
 
 	@Column(name = "label_id")
 	private String labelId;
@@ -78,10 +78,12 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "tooltip_label_id")
 	private String tooltipLabelId;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -94,11 +96,11 @@ public class Navimain implements IDataProviderEntity {
 		this.action = action;
 	}
 
-	public Long getLevelId() {
+	public int getLevelId() {
 		return levelId;
 	}
 
-	public void setLevelId(Long levelId) {
+	public void setLevelId(int levelId) {
 		this.levelId = levelId;
 	}
 
@@ -158,11 +160,11 @@ public class Navimain implements IDataProviderEntity {
 		this.name = name;
 	}
 
-	public Integer getNaviorder() {
+	public int getNaviorder() {
 		return naviorder;
 	}
 
-	public void setNaviorder(Integer naviorder) {
+	public void setNaviorder(int naviorder) {
 		this.naviorder = naviorder;
 	}
 

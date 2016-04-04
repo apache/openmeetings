@@ -38,6 +38,7 @@ public class RoomConverter extends OmConverter<Room> {
 		this.idMap = idMap;
 	}
 	
+	@Override
 	public Room read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
@@ -46,6 +47,7 @@ public class RoomConverter extends OmConverter<Room> {
 		return r == null ? new Room() : r;
 	}
 
+	@Override
 	public void write(OutputNode node, Room value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

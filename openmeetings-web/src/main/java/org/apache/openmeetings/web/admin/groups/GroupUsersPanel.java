@@ -120,14 +120,17 @@ public class GroupUsersPanel extends Panel {
 			super(GroupUserDao.class);
 		}
 		
+		@Override
 		protected GroupUserDao getDao() {
 			return (GroupUserDao)super.getDao();
 		}
 		
+		@Override
 		public long size() {
 			return users2add.size() + (search == null ? getDao().count(groupId) : getDao().count(groupId, search));
 		}
 		
+		@Override
 		public java.util.Iterator<? extends GroupUser> iterator(long first, long count) {
 			List<GroupUser> list = new ArrayList<GroupUser>();
 			list.addAll(users2add);

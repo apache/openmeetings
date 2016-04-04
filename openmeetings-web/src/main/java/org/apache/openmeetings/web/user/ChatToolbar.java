@@ -62,6 +62,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 	}
 
+	@Override
 	public void attachToEditor(Component editor) {
 		toolbar.add(AttributeModifier.replace("data-target", JQueryWidget.getSelector(editor)));
 	}

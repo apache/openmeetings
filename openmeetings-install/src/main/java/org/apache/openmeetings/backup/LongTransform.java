@@ -21,12 +21,13 @@ package org.apache.openmeetings.backup;
 import org.simpleframework.xml.transform.Transform;
 
 public class LongTransform implements Transform<Long>{
+	@Override
 	public Long read(String value) throws Exception {
 		return OmConverter.getLong(value);
 	}
 
+	@Override
 	public String write(Long value) throws Exception {
 		return "" + value;
 	}
-
 }

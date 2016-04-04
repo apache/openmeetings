@@ -272,7 +272,7 @@ public class RoomPanel extends BasePanel {
 		//handler.appendJavaScript("roomLoad();");
 	}
 	
-	private ResourceReference newResourceReference() {
+	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(RoomPanel.class, "swf-functions.js");
 	}
 	

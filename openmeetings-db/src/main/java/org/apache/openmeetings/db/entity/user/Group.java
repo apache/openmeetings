@@ -89,9 +89,11 @@ public class Group implements IDataProviderEntity {
 		this.name = name;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

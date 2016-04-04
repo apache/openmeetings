@@ -29,26 +29,17 @@ public class AudioTone {
 	public static void play() {
 		byte[] buf = new byte[1];
 		
-		SourceDataLine sdl = null;
-		try {
 		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8, 1, true, false);
-		sdl = AudioSystem.getSourceDataLine(af);
-		sdl = AudioSystem.getSourceDataLine(af);
-		sdl.open(af);
-		sdl.start();
-		for (int i = 0; i < (int)SAMPLE_RATE; ++i) {
-			double angle = i / (SAMPLE_RATE / 440) * 2.0 * Math.PI;
-			buf[0] = (byte) (Math.sin(angle) * 128);
-			sdl.write(buf, 0, 1);
-		}
+		try (SourceDataLine sdl = AudioSystem.getSourceDataLine(af)) {
+			sdl.open(af);
+			sdl.start();
+			for (int i = 0; i < (int)SAMPLE_RATE; ++i) {
+				double angle = i / (SAMPLE_RATE / 440) * 2.0 * Math.PI;
+				buf[0] = (byte) (Math.sin(angle) * 128);
+				sdl.write(buf, 0, 1);
+			}
 		} catch (LineUnavailableException e) {
 			//no-op
-		} finally {
-			if (sdl != null) {
-				sdl.drain();
-				sdl.stop();
-				sdl.close();
-			}
 		}
 	}
 }

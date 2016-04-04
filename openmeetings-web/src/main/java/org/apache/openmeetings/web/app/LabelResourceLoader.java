@@ -42,20 +42,23 @@ public class LabelResourceLoader implements IStringResourceLoader {
 		STRING_LABEL_MAPPING.put("PagingNavigator.last", 371L);
 	}
 
+	@Override
 	public String loadStringResource(Class<?> clazz, String key, Locale locale,
 			String style, String variation) {
 		return getStringByPropertyKey(key);
 	}
 
+	@Override
 	public String loadStringResource(Component component, String key,
 			Locale locale, String style, String variation) {
 		return getStringByPropertyKey(key);
 	}
 	
-	private String getStringByPropertyKey(String key) {
+	private static String getStringByPropertyKey(String key) {
 		Long labelId = STRING_LABEL_MAPPING.get(key);
-		if (labelId == null) 
+		if (labelId == null) {
 			return null;
+		}
 		return Application.getString(labelId);
 	}
 

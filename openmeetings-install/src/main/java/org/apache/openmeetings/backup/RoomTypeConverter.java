@@ -25,10 +25,12 @@ import org.simpleframework.xml.stream.OutputNode;
 public class RoomTypeConverter extends OmConverter<Type> {
 	public RoomTypeConverter() {}
 	
+	@Override
 	public Type read(InputNode node) throws Exception {
 		return Type.get(getInt(node));
 	}
 
+	@Override
 	public void write(OutputNode node, Type value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

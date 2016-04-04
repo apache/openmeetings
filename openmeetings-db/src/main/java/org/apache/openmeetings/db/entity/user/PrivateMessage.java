@@ -53,9 +53,9 @@ import org.simpleframework.xml.Root;
 @Root(name = "privatemessage")
 public class PrivateMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-	public final static long INBOX_FOLDER_ID = 0;
-	public final static long SENT_FOLDER_ID = -1;
-	public final static long TRASH_FOLDER_ID = -2;
+	public final static Long INBOX_FOLDER_ID = Long.valueOf(0);
+	public final static Long SENT_FOLDER_ID = Long.valueOf(-1);
+	public final static Long TRASH_FOLDER_ID = Long.valueOf(-2);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,11 +144,13 @@ public class PrivateMessage implements IDataProviderEntity {
 		isContactRequest = copy.isContactRequest;
 		userContactId = copy.userContactId;
 	}
-	
+
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -245,19 +247,19 @@ public class PrivateMessage implements IDataProviderEntity {
 		this.folderId = folderId;
 	}
 
-	public Boolean getIsRead() {
+	public boolean getIsRead() {
 		return isRead;
 	}
 
-	public void setIsRead(Boolean isRead) {
+	public void setIsRead(boolean isRead) {
 		this.isRead = isRead;
 	}
 
-	public Boolean getIsContactRequest() {
+	public boolean getIsContactRequest() {
 		return isContactRequest;
 	}
 
-	public void setIsContactRequest(Boolean isContactRequest) {
+	public void setIsContactRequest(boolean isContactRequest) {
 		this.isContactRequest = isContactRequest;
 	}
 

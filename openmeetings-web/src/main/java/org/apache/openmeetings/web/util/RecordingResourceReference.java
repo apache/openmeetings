@@ -83,7 +83,7 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 	abstract String getFileName(Recording r);
 	abstract File getFile(Recording r);
 	
-	private Recording getRecording(Long id) {
+	private static Recording getRecording(Long id) {
 		Recording r = getBean(RecordingDao.class).get(id);
 		// TODO should we process public?
 		// || r.getOwnerId() == 0 || r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
@@ -107,7 +107,7 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 		return null;
 	}
 	
-	private Recording getRecording(Attributes attributes) {
+	private static Recording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue _id = params.get("id");
 		Long id = null;

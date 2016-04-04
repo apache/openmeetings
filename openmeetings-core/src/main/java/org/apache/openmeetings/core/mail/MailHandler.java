@@ -229,6 +229,7 @@ public class MailHandler {
 				mailMessageDao.update(m, null);
 			}
 			taskExecutor.execute(new Runnable() {
+				@Override
 				public void run() {
 					log.debug("Message sending in progress");
 					log.debug("  To: " + m.getRecipients());

@@ -67,11 +67,13 @@ public class RssWidgetView extends WidgetView {
 			this.url = url;
 		}
 		
+		@Override
 		public void onRequest() {
 			ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(new AbstractResourceStream() {
 				private static final long serialVersionUID = 1L;
 				transient HttpURLConnection con;
 				
+				@Override
 				public InputStream getInputStream() throws ResourceStreamNotFoundException {
 					try {
 						con = getFeedConnection(url);
@@ -82,6 +84,7 @@ public class RssWidgetView extends WidgetView {
 					}
 				}
 
+				@Override
 				public void close() throws IOException {
 					if (con != null) {
 						con.disconnect();

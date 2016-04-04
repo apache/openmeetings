@@ -51,31 +51,32 @@ public class CreateLibraryPresentation {
 				.addAttribute("lastmod", (new Long(file.lastModified())).toString())
 				.addAttribute("size", (new Long(file.length())).toString())	        
 				.addText(originalDocument);
-	        
-	        if (pdfDocument!=null){
-	        	File pdfDocumentFile = new File(targetDirectory, pdfDocument);
-		        root.addElement("pdfDocument")
+
+			if (pdfDocument!=null){
+				File pdfDocumentFile = new File(targetDirectory, pdfDocument);
+				root.addElement("pdfDocument")
 					.addAttribute("lastmod", (new Long(pdfDocumentFile.lastModified())).toString())
 					.addAttribute("size", (new Long(pdfDocumentFile.length())).toString())	   		        
 					.addText(pdfDocument);
-	        }
-	        
-	        if (swfDocument!=null){
-	        	File swfDocumentFile = new File(targetDirectory, originalDocument);
-		        root.addElement("swfDocument")
+			}
+
+			if (swfDocument!=null){
+				File swfDocumentFile = new File(targetDirectory, originalDocument);
+				root.addElement("swfDocument")
 					.addAttribute("lastmod", (new Long(swfDocumentFile.lastModified())).toString())
 					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())
 					.addText(swfDocument);
-	        }
-	        
-	        Element thumbs = root.addElement( "thumbs" );
-	        
-			//Secoond get all Files of this Folder
+			}
+
+			Element thumbs = root.addElement( "thumbs" );
+
+			//Second get all Files of this Folder
 			FilenameFilter ff = new FilenameFilter() {
-			     public boolean accept(File b, String name) {
-			    	  File f = new File(b, name);
-			          return f.isFile();
-			     }
+				@Override
+				public boolean accept(File b, String name) {
+					File f = new File(b, name);
+					return f.isFile();
+				}
 			};	
 			
 			String[] allfiles = targetDirectory.list(ff);			
@@ -107,6 +108,4 @@ public class CreateLibraryPresentation {
 			return returnMap;
 		}
 	}
-	
-	
 }

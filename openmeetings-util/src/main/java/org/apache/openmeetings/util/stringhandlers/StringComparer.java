@@ -44,7 +44,7 @@ public class StringComparer {
 		return t.toString();
 	}
 	
-	private boolean compareChars(char inputChar){		
+	private static boolean compareChars(char inputChar){		
 		return Character.isLetterOrDigit(inputChar);
 	}
 }

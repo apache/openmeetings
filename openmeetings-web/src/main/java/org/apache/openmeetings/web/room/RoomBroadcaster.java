@@ -43,6 +43,7 @@ public class RoomBroadcaster {
 		final UserDao userDao = getBean(UserDao.class);
 		ScopeApplicationAdapter sa = getBean(ScopeApplicationAdapter.class);
 		sa.new MessageSender(sa.getRoomScope("" + roomId), method, obj) {
+			@Override
 			public boolean filter(IConnection conn) {
 				Client rcl = sessionMgr.getClientByStreamId(conn.getClient().getId(), null);
 				return rcl.isScreenClient()

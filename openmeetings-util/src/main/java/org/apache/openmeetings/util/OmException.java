@@ -26,8 +26,8 @@ public class OmException extends Exception {
 		super(msg);
 	}
 	
-	public OmException(Long code) {
-		this.code = code;
+	public OmException(long code) {
+		this.code = Long.valueOf(code);
 	}
 
 	public OmException(Throwable cause) {

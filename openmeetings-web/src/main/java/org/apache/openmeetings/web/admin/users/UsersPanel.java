@@ -71,7 +71,7 @@ public class UsersPanel extends AdminPanel {
 			@Override
 			protected void populateItem(Item<User> item) {
 				User u = item.getModelObject();
-				final long userId = u.getId();
+				final Long userId = u.getId();
 				item.add(new Label("id"));
 				item.add(new Label("login"));
 				item.add(new Label("firstname"));
@@ -79,6 +79,7 @@ public class UsersPanel extends AdminPanel {
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(getBean(UserDao.class).get(userId));
 						form.hideNewRecord();

@@ -168,10 +168,12 @@ public class Recording extends FileItem {
 	@Transient
 	private List<RecordingLog> log;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

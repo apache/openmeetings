@@ -118,6 +118,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 		return averageTime;
 	}
 	
+	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();
 		System.err.println("method "+method);
@@ -158,6 +159,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 	}
 
 
+	@Override
 	public void onStreamEvent(Notify notify) {
 		// TODO Auto-generated method stub
 		

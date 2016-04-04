@@ -25,22 +25,27 @@ import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 public class RssWidgetDescriptor implements WidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public String getName() {
 		return Application.getString(277L);
 	}
 
+	@Override
 	public String getProvider() {
 		return "Apache Openmeetings";
 	}
 
+	@Override
 	public String getDescription() {
 		return Application.getString(277L);
 	}
 
+	@Override
 	public String getWidgetClassName() {
 		return RssWidget.class.getName();
 	}
 
+	@Override
 	public String getTypeName() {
 		return "om.widget.rss";
 	}

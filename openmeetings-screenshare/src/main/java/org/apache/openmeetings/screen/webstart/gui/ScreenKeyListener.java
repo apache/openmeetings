@@ -27,14 +27,17 @@ import org.slf4j.LoggerFactory;
 public class ScreenKeyListener implements KeyListener {
 	private static final Logger logger = LoggerFactory.getLogger(ScreenKeyListener.class);
 
+	@Override
 	public void keyPressed(KeyEvent kEvent) {
 		logger.debug("keyPressed :Code: " + kEvent.getKeyCode());
 	}
 
+	@Override
 	public void keyReleased(KeyEvent kEvent) {
 		logger.debug("keyReleased :Code: " + kEvent.getKeyCode());
 	}
 
+	@Override
 	public void keyTyped(KeyEvent arg0) {
 	}
 }

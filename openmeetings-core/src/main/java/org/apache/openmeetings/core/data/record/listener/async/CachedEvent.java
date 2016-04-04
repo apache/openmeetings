@@ -51,14 +51,17 @@ public class CachedEvent implements IStreamPacket {
 		this.data = data;
 	}
 
+	@Override
 	public byte getDataType() {
 		return dataType;
 	}
 
+	@Override
 	public int getTimestamp() {
 		return timestamp;
 	}
 
+	@Override
 	public IoBuffer getData() {
 		return data;
 	}

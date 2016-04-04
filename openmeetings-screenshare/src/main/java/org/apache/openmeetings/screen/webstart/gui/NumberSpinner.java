@@ -28,6 +28,7 @@ public class NumberSpinner extends JSpinner {
 		super(new SpinnerNumberModel(value, min, max, step));
 	}
 	
+	@Override
 	public Integer getValue() {
 		return (Integer)super.getValue();
 	}

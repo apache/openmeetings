@@ -75,8 +75,9 @@ public class SessionManager implements ISessionManager {
 		cache.clear();
 	}
 	
+	@Override
 	public Client addClientListItem(String streamId, String scopeName,
-			Integer remotePort, String remoteAddress, String swfUrl, Server server) {
+			int remotePort, String remoteAddress, String swfUrl, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
@@ -97,7 +98,7 @@ public class SessionManager implements ISessionManager {
 			rcm.setUserip(remoteAddress);
 			rcm.setSwfurl(swfUrl);
 			rcm.setIsMod(false);
-			rcm.setCanDraw(new Boolean(false));
+			rcm.setCanDraw(false);
 
 			if (cache.containsKey(null, streamId)) {
 				log.error("Tried to add an existing Client " + streamId);
@@ -113,14 +114,17 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public Collection<Client> getClients() {
 		return cache.getClients();
 	}
 	
+	@Override
 	public Collection<Client> getClientsWithServer() {
 		return cache.getClientsWithServer();
 	}
 
+	@Override
 	public Client getClientByStreamId(String streamId, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -137,6 +141,7 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public Client getClientByPublicSID(String publicSID, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -150,6 +155,7 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID) {
 		try {
 			for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
@@ -163,6 +169,7 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public Client getClientByUserId(Long userId) {
 		try {
 			for (Client rcl : cache.getClientsByUserId(null, userId)) {
@@ -178,6 +185,7 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -208,6 +216,7 @@ public class SessionManager implements ISessionManager {
 		return false;
 	}
 
+	@Override
 	public boolean updateClientByStreamId(String streamId, Client rcm, boolean updateRoomCount, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -227,6 +236,7 @@ public class SessionManager implements ISessionManager {
 		return false;
 	}
 
+	@Override
 	public boolean removeClient(String streamId, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -244,6 +254,7 @@ public class SessionManager implements ISessionManager {
 		return false;
 	}
 
+	@Override
 	public List<Client> getClientListByRoom(Long roomId) {
 		List<Client> roomClientList = new ArrayList<>();
 		try {
@@ -263,6 +274,7 @@ public class SessionManager implements ISessionManager {
 		return roomClientList;
 	}
 
+	@Override
 	public Collection<Client> getClientListByRoomAll(Long roomId) {
 		try {
 			return cache.getClientsByRoomId(roomId);
@@ -272,6 +284,7 @@ public class SessionManager implements ISessionManager {
 		return null;
 	}
 
+	@Override
 	public List<Client> getCurrentModeratorByRoom(Long roomId) {
 		List<Client> rclList = new LinkedList<>();
 		List<Client> currentClients = this.getClientListByRoom(roomId);
@@ -283,6 +296,7 @@ public class SessionManager implements ISessionManager {
 		return rclList;
 	}
 
+	@Override
 	public SearchResult<Client> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
 		SearchResult<Client> sResult = new SearchResult<>();
 		sResult.setObjectName(Client.class.getName());
@@ -291,6 +305,7 @@ public class SessionManager implements ISessionManager {
 		return sResult;
 	}
 
+	@Override
 	public long getRecordingCount(long roomId) {
 		List<Client> currentClients = this.getClientListByRoom(roomId);
 		int numberOfRecordingUsers = 0;
@@ -302,6 +317,7 @@ public class SessionManager implements ISessionManager {
 		return numberOfRecordingUsers;
 	}
 
+	@Override
 	public long getPublishingCount(long roomId) {
 		List<Client> currentClients = this.getClientListByRoom(roomId);
 		int numberOfPublishingUsers = 0;
@@ -313,14 +329,17 @@ public class SessionManager implements ISessionManager {
 		return numberOfPublishingUsers;
 	}
 
+	@Override
 	public List<Long> getActiveRoomIdsByServer(Server server) {
 		return cache.getRoomsIdsByServer(server == null ? serverUtil.getCurrentServer() : server);
 	}
 
+	@Override
 	public String getSessionStatistics() {
 		return cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE));
 	}
 
+	@Override
 	public void sessionStart() {
 		// TODO Auto-generated method stub
 	}

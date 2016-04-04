@@ -85,7 +85,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		assertTrue("Saved appointment should have valid id: " + a.getId(), a.getId() != null && a.getId() > 0);
 	}
 
-	private String createClientObj(String firstname, String lastname, String email, String jNameTimeZone) {
+	private static String createClientObj(String firstname, String lastname, String email, String jNameTimeZone) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(",") //memberId
 			.append(firstname).append(",")

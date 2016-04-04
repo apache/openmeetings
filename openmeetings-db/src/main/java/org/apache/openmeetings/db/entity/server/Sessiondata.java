@@ -68,7 +68,7 @@ public class Sessiondata implements Serializable {
 	private boolean permanent;
 
 	@Column(name = "language_id")
-	private Long languageId;
+	private long languageId;
 
 	@Column(name = "group_id")
 	private Long groupId;
@@ -132,11 +132,11 @@ public class Sessiondata implements Serializable {
 		this.permanent = permanent;
 	}
 
-	public Long getLanguageId() {
+	public long getLanguageId() {
 		return languageId;
 	}
 
-	public void setLanguageId(Long languageId) {
+	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
 	}
 

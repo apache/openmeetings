@@ -134,7 +134,7 @@ public class LdapLoginManagement {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
-	private void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {
+	private static void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {
 		if (!Strings.isEmpty(options.adminDn)) {
 			conn.bind(options.adminDn, options.adminPasswd);
 		} else {
@@ -142,13 +142,13 @@ public class LdapLoginManagement {
 		}
 	}
 	
-	private String getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
+	private static String getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
 		String alias = config.getProperty(aliasCode, "");
 		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
 		return a == null ? null : a.getString();
 	}
 	
-	private String getLogin(Properties config, Entry entry) throws LdapInvalidAttributeValueException {
+	private static String getLogin(Properties config, Entry entry) throws LdapInvalidAttributeValueException {
 		return getAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
 	}
 	

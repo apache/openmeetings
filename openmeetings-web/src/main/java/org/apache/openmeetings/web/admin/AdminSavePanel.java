@@ -89,6 +89,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	/**
 	 * Hide the new record text
 	 */
+	@Override
 	public void hideNewRecord() {
 		newRecord.setVisible(false);
 	}

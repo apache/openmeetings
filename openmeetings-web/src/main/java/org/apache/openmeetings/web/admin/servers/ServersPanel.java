@@ -66,6 +66,7 @@ public class ServersPanel extends AdminPanel {
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(server);
 						form.hideNewRecord();

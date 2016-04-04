@@ -38,6 +38,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 		this.name = name;
 	}
 	
+	@Override
 	public Iterator<? extends Recording> getRoots() {
 		Recording r = new Recording();
 		r.setId(groupId == null ? -1 : -groupId);
@@ -49,6 +50,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 		return Arrays.asList(r).iterator();
 	}
 	
+	@Override
 	public Iterator<? extends Recording> getChildren(Recording node) {
 		if (node.getId() < 0) {
 			return getBean(RecordingDao.class).getRootByPublic(groupId).iterator();
