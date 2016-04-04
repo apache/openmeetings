@@ -61,7 +61,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
@@ -89,8 +88,6 @@ public class ImportInitvalues {
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private StateDao statemanagement;
 	@Autowired
 	private NavigationDao navimanagement;
 	@Autowired
@@ -446,33 +443,6 @@ public class ImportInitvalues {
 		}
 	}
 
-	/**
-	 * import all language Names from the xml file
-	 * 
-	 * @param filePath
-	 * @throws Exception
-	 */
-	private void loadCountriesFiles() throws Exception {
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(
-				OmFileHelper.getLanguagesDir(),
-				OmFileHelper.nameOfCountriesFile));
-
-		Element root = document.getRootElement();
-
-		for (@SuppressWarnings("rawtypes")
-		Iterator it = root.elementIterator("country"); it.hasNext();) {
-			Element item = (Element) it.next();
-
-			statemanagement.add(item.attributeValue("name"),
-					item.attributeValue("short"),
-					Integer.parseInt(item.attributeValue("code")));
-		}
-		log.debug("Countries ADDED");
-	}
-
-	// ------------------------------------------------------------------------------
-
 	public void loadInitialOAuthServers() throws Exception {
 		// Yandex
 		OAuthServer yandexServer = new OAuthServer();
@@ -543,9 +513,6 @@ public class ImportInitvalues {
 		progress = 32;
 		loadErrorMappingsFromXML();
 		progress = 48;
-		loadCountriesFiles();
-		progress = 64;
-
 		loadConfiguration(cfg);
 		progress = 80;
 		loadInitialOAuthServers();

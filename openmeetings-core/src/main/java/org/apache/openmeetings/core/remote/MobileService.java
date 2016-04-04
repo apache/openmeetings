@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -41,14 +42,12 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmException;
@@ -67,8 +66,6 @@ public class MobileService {
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private StateDao stateDao;
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
@@ -94,10 +91,10 @@ public class MobileService {
 		return result;
 	}
 	
-	public Map<Long, String> getStates() {
-		Map<Long, String> result = new Hashtable<>();
-		for (State s : stateDao.get()) {
-			result.put(s.getId(), s.getName());
+	public Map<String, String> getStates() {
+		Map<String, String> result = new Hashtable<>();
+		for (String code : Locale.getISOCountries()) {
+			result.put(code, new Locale.Builder().setRegion(code).build().getDisplayCountry());
 		}
 		return result;
 	}
@@ -135,7 +132,7 @@ public class MobileService {
 				}
 				String password = umap.get("password");
 				String tzId = umap.get("tzId");
-				Long stateId = Long.valueOf(umap.get("stateId"));
+				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
 				
 				//FIXME TODO unify with Register dialog
@@ -147,7 +144,7 @@ public class MobileService {
 						&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 				Long userId = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
 						, firstname, email, null /* age/birthday */, "" /* street */
-						, "" /* additionalname */, "" /* fax */, "" /* zip */, stateId
+						, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 						, "" /* town */, langId, true /* sendWelcomeMessage */
 						, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
 						"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzId),

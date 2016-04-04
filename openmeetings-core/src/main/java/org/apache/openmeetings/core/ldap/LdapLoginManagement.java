@@ -51,7 +51,6 @@ import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -126,8 +125,6 @@ public class LdapLoginManagement {
 	}
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private StateDao stateDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
@@ -350,7 +347,7 @@ public class LdapLoginManagement {
 			u.getAddress().setAdditionalname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
 			u.getAddress().setFax(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
 			u.getAddress().setZip(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
-			u.getAddress().setState(stateDao.get(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
+			u.getAddress().setCountry(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY));
 			u.getAddress().setTown(getAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
 			u.getAddress().setPhone(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
 			String tz = getAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);

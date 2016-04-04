@@ -62,7 +62,6 @@ public class OmFileHelper {
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
 	public static final String nameOfLanguageFile = "languages.xml";
-	public static final String nameOfCountriesFile = "countries.xml";
 	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile_pic.jpg";
@@ -333,17 +332,11 @@ public class OmFileHelper {
 	}
 	
 	public static void copyFile(File f1, OutputStream out) throws IOException {
-		InputStream in = null;
-		try {
-			in = new FileInputStream(f1);
+		try (InputStream in = new FileInputStream(f1)) {
 			FileHelper.copy(in, out);
 			log.debug("File copied.");
 		} catch (Exception e) {
 			log.error("[copyfile(File, File)]", e);
-		} finally {
-			if (in != null) {
-				in.close();
-			}
 		}
 	}
 }

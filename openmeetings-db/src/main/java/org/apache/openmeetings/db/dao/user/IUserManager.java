@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
@@ -37,13 +36,13 @@ public interface IUserManager {
 	
 	Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long stateId,
+			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
 	
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long stateId,
+			String additionalname, String fax, String zip, String country,
 			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
@@ -51,7 +50,6 @@ public interface IUserManager {
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
 
 	Long getLanguage(Locale loc);
-	State getCountry(Locale loc);
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	/** TODO FIXME seems to be unused **/

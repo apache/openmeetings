@@ -52,7 +52,6 @@
 		<class>org.apache.openmeetings.db.entity.room.WhiteboardItem</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomGroup</class>
 		<class>org.apache.openmeetings.db.entity.user.Address</class>
-		<class>org.apache.openmeetings.db.entity.user.State</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessageFolder</class>
 		<class>org.apache.openmeetings.db.entity.user.UserContact</class>
