@@ -25,6 +25,7 @@ import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAM
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -54,7 +55,6 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -171,16 +171,14 @@ public class UserWebService implements UserService {
 				String jName_timeZone = cfgDao.getConfValue("default.timezone", String.class, "");
 				if (user.getAddress() == null) {
 					user.setAddress(new Address());
-					State s = new State();
-					s.setId(1L);
-					user.getAddress().setState(s);
+					user.getAddress().setCountry(Locale.getDefault().getCountry());
 				}
 				if (user.getLanguageId() == null) {
 					user.setLanguageId(1L);
 				}
 				Long userId = userManagement.registerUser(user.getLogin(), user.getPassword(),
 						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
-						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getState().getId()
+						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
 						, user.getAddress().getTown(), user.getLanguageId(),
 						"", false, true, // generate SIP Data if the config is enabled
 						jName_timeZone, confirm);

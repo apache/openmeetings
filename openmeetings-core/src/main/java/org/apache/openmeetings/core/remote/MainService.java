@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -340,7 +341,7 @@ public class MainService implements IPendingServiceCallback {
 						if (user == null) {
 							String iCalTz = configurationDao.getConfValue("default.timezone", String.class, "");
 
-							Address a = userDao.getAddress(null, null, null, 1L, null, null, null, userObject.getEmail());
+							Address a = userDao.getAddress(null, null, null, Locale.getDefault().getCountry(), null, null, null, userObject.getEmail());
 
 							Set<Right> rights = UserDao.getDefaultRights();
 							rights.remove(Right.Login);

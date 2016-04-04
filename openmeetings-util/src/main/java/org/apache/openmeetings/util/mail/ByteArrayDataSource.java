@@ -31,14 +31,13 @@ public class ByteArrayDataSource implements DataSource {
 	/* Create a DataSource from an input stream */
 	public ByteArrayDataSource(InputStream is, String type) {
 		this.type = type;
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			int ch;
 
-			while ((ch = is.read()) != -1)
+			while ((ch = is.read()) != -1) {
 				os.write(ch);
+			}
 			data = os.toByteArray();
-			os.close();
 		} catch (IOException ioex) {
 		}
 	}
@@ -55,20 +54,24 @@ public class ByteArrayDataSource implements DataSource {
 		this.type = type;
 	}
 
+	@Override
 	public InputStream getInputStream() throws IOException {
 		if (data == null)
 			throw new IOException("no data");
 		return new ByteArrayInputStream(data);
 	}
 
+	@Override
 	public OutputStream getOutputStream() throws IOException {
 		throw new IOException("cannot do this");
 	}
 
+	@Override
 	public String getContentType() {
 		return type;
 	}
 
+	@Override
 	public String getName() {
 		return "dummy";
 	}
