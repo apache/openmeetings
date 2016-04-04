@@ -48,16 +48,14 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -91,8 +89,6 @@ public class UserManager implements IUserManager {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private StateDao stateDao;
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
@@ -287,9 +283,10 @@ public class UserManager implements IUserManager {
 	 * @param sendConfirmation
 	 * @return
 	 */
+	@Override
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long stateId,
+			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
@@ -305,7 +302,7 @@ public class UserManager implements IUserManager {
 
 				Long userId = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
-						additionalname, fax, zip, stateId, town, languageId,
+						additionalname, fax, zip, country, town, languageId,
 						true, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
@@ -354,9 +351,10 @@ public class UserManager implements IUserManager {
 	 *         or mail is empty
 	 * @throws Exception
 	 */
+	@Override
 	public Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long stateId,
+			String additionalname, String fax, String zip, String country,
 			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
@@ -384,7 +382,7 @@ public class UserManager implements IUserManager {
 						return -19L;
 					}
 				}
-				Address adr =  userDao.getAddress(street, zip, town, stateId, additionalname, fax, phone, email);
+				Address adr =  userDao.getAddress(street, zip, town, country, additionalname, fax, phone, email);
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
@@ -426,6 +424,7 @@ public class UserManager implements IUserManager {
 	 * @param room_id
 	 * @return
 	 */
+	@Override
 	public boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -458,6 +457,7 @@ public class UserManager implements IUserManager {
 		return false;
 	}
 
+	@Override
 	public boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
@@ -490,6 +490,7 @@ public class UserManager implements IUserManager {
 		return false;
 	}
 	
+	@Override
 	public Long getLanguage(Locale loc) {
 		if (loc != null) {
 			for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
@@ -501,19 +502,7 @@ public class UserManager implements IUserManager {
 		return cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
 	}
 
-	public State getCountry(Locale loc) {
-		List<State> states = stateDao.get();
-		if (loc != null) {
-			String code = loc.getISO3Country().toUpperCase();
-			for (State s : states) {
-				if (s.getShortName().toUpperCase().equals(code)) {
-					return s;
-				}
-			}
-		}
-		return states.get(0);
-	}
-
+	@Override
 	public User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
 		String login = params.get("login");
 		String email = params.get("email");
@@ -562,7 +551,7 @@ public class UserManager implements IUserManager {
 				Locale loc = Locale.forLanguageTag(locale);
 				if (loc != null) {
 					u.setLanguageId(getLanguage(loc));
-					u.getAddress().setState(getCountry(loc));
+					u.getAddress().setCountry(loc.getCountry());
 				}
 			}
 		}

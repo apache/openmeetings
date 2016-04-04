@@ -29,8 +29,8 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -71,7 +72,6 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -94,7 +94,6 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -123,11 +122,10 @@ import org.xml.sax.InputSource;
 public class BackupImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
 	private static final String LDAP_EXT_TYPE = "LDAP";
+	private static final Properties countries = new Properties();
 
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private StateDao statemanagement;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -930,7 +928,6 @@ public class BackupImport {
 		Serializer ser = new Persister(strategy);
 
 		registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
-		registry.bind(State.class, new StateConverter(statemanagement));
 		registry.bind(Salutation.class, SalutationConverter.class);
 		registry.bind(Date.class, DateConverter.class);
 
@@ -996,7 +993,7 @@ public class BackupImport {
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
 					} while (item1 != null && !"user".equals(item1.getName()));
 				}
-				String levelId = null, status = null;
+				String levelId = null, status = null, stateId = null;
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
@@ -1007,6 +1004,9 @@ public class BackupImport {
 					}
 					if ("status".equals(item2.getName())) {
 						status = item2.getValue();
+					}
+					if ("state_id".equals(item2.getName())) {
+						stateId = item2.getValue();
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone, level_id, status
 				} while (item2 != null && !"user".equals(item2.getName()));
@@ -1032,6 +1032,16 @@ public class BackupImport {
 						u.getAddress().setEmail(updateEmail);
 					}
 					userEmailMap.put(u.getAddress().getEmail(), userEmailMap.size());
+				}
+				// check old stateId
+				if (!Strings.isEmpty(stateId)) {
+					String country = getCountry(stateId);
+					if (!Strings.isEmpty(country)) {
+						if (u.getAddress() == null) {
+							u.setAddress(new Address());
+						}
+						u.getAddress().setCountry(country);
+					}
 				}
 				list.add(u);
 				item = listNode.getNext();
@@ -1141,5 +1151,16 @@ public class BackupImport {
 				break;
 		}
 		return newId;
+	}
+	
+	private static String getCountry(String countryId) {
+		if (countries.isEmpty()) {
+			try (InputStream is = BackupImport.class.getResourceAsStream("countries.properties")) {
+				countries.load(is);
+			} catch (IOException e) {
+				log.error("Unexpected exception during countries import", e);
+			}
+		}
+		return countries.getProperty(String.format("country.%s", countryId));
 	}
 }

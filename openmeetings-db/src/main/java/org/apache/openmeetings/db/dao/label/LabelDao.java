@@ -207,20 +207,10 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	
 	private static List<StringLabel> getLabels(Locale l) {
 		List<StringLabel> labels = new ArrayList<StringLabel>();
-		InputStream is = null;
-		try {
-			is = APP.getResourceAsStream(getLabelFileName(l));
+		try (InputStream is = APP.getResourceAsStream(getLabelFileName(l))) {
 			labels = getLabels(l, is);
 		} catch (Exception e) {
 			log.error("Error reading resources document", e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (Exception e) {
-					//no-op
-				}
-			}
 		}
 		return labels;
 	}

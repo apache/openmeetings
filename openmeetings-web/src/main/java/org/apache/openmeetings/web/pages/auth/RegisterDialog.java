@@ -35,18 +35,16 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
+import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -83,7 +81,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private String login;
 	private String password;
 	private String email;
-	private State state;
+	private String country;
 	private Long lang;
 
 	final MessageDialog confirmRegistration;
@@ -149,7 +147,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		form.confirmPassword.setModelObject(null);
 		email = null;
 		lang = WebSession.get().getLanguageByBrowserLocale();
-		state = WebSession.get().getCountryByBrowserLocale();
+		country = WebSession.get().getBrowserLocale().getCountry();
 	}
 
 	public void onOpen(AjaxRequestTarget target) {
@@ -198,7 +196,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		try {
 			getBean(IUserManager.class).registerUserInit(UserDao.getDefaultRights(), login, password, lastName
 					, firstName, email, null /* age/birthday */, "" /* street */
-					, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getId()
+					, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 					, "" /* town */, lang, true /* sendWelcomeMessage */
 					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
@@ -227,7 +225,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		private RequiredTextField<String> firstNameField;
 		private RequiredTextField<String> lastNameField;
 		private LanguageDropDown langField;
-		private DropDownChoice<State> stateField;
+		private CountryDropDown countryField;
 
 		public RegisterForm(String id) {
 			super(id);
@@ -256,9 +254,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			add(langField = new LanguageDropDown("lang", new PropertyModel<Long>(RegisterDialog.this, "lang")));
 			langField.setRequired(true).setLabel(Model.of(Application.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(Application.getString(1143))));
-			add(stateField = new DropDownChoice<State>("state", new PropertyModel<State>(RegisterDialog.this, "state"),
-					getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "id")));
-			stateField.setRequired(true).setLabel(Model.of(Application.getString(120)));
+			add(countryField = new CountryDropDown("country", new PropertyModel<String>(RegisterDialog.this, "country")));
+			countryField.setRequired(true).setLabel(Model.of(Application.getString(120)));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 

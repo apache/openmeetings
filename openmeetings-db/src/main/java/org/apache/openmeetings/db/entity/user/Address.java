@@ -22,13 +22,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -63,10 +60,9 @@ public class Address implements IDataProviderEntity {
 	@Element(name = "starttime",data=true, required=false)
 	private Date inserted;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "state_id")
-	@Element(name="state_id", data=true, required=false)
-	private State state;
+	@Column(name = "country")
+	@Element(name="country", data=true, required=false)
+	private String country;
 	
 	@Column(name = "street")
 	@Element(data=true, required=false)
@@ -134,12 +130,12 @@ public class Address implements IDataProviderEntity {
 		this.inserted = inserted;
 	}
 
-	public State getState() {
-		return state;
+	public String getCountry() {
+		return country;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getStreet() {
@@ -200,7 +196,7 @@ public class Address implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + id + ", state=" + state
+		return "Address [id=" + id + ", country=" + country
 				+ ", street=" + street + ", town=" + town + ", zip=" + zip
 				+ ", deleted=" + deleted + ", email=" + email + ", phone="
 				+ phone + "]";

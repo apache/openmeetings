@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -81,8 +82,6 @@ public class UserDao implements IDataProviderDao<User> {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private StateDao stateDao;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
 
 	public static Set<Right> getDefaultRights() {
@@ -109,7 +108,7 @@ public class UserDao implements IDataProviderDao<User> {
 		user.setSendSMS(false);
 		user.setAge(new Date());
 		Address address = new Address();
-		address.setState(stateDao.get(1L));
+		address.setCountry(Locale.getDefault().getCountry());
 		user.setAddress(address);
 		user.setShowContactData(false);
 		user.setShowContactDataToContacts(false);
@@ -622,12 +621,12 @@ public class UserDao implements IDataProviderDao<User> {
 		return update(u, u.getId());
 	}
 	
-	public Address getAddress(String street, String zip, String town, long stateId, String additionalname, String fax, String phone, String email) {
+	public Address getAddress(String street, String zip, String town, String country, String additionalname, String fax, String phone, String email) {
 		Address a =  new Address();
 		a.setStreet(street);
 		a.setZip(zip);
 		a.setTown(town);
-		a.setState(stateDao.get(stateId));
+		a.setCountry(country);
 		a.setAdditionalname(additionalname);
 		a.setComment("");
 		a.setFax(fax);

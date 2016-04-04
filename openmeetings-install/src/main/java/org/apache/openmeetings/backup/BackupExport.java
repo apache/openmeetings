@@ -59,7 +59,6 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -333,7 +332,6 @@ public class BackupExport {
 		{
 			List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.id", true);
 			Registry registry = new Registry();
-			registry.bind(State.class, StateConverter.class);
 			registry.bind(User.class, UserConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -407,12 +405,12 @@ public class BackupExport {
 		log.debug("---Done");
 	}
 	
-	private <T> void writeList(Serializer ser, File backup_dir, String fileName, String listElement, List<T> list) throws Exception {
+	private static <T> void writeList(Serializer ser, File backup_dir, String fileName, String listElement, List<T> list) throws Exception {
 		FileOutputStream fos = new FileOutputStream(new File(backup_dir, fileName));
 		writeList(ser, fos, listElement, list);
 	}
 	
-	private <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
+	private static <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
 		Format format = new Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, StandardCharsets.UTF_8), format);
 		OutputNode root = doc.getChild("root");
@@ -442,7 +440,6 @@ public class BackupExport {
 		Serializer serializer = new Persister(strategy);
 
 		registry.bind(Group.class, GroupConverter.class);
-		registry.bind(State.class, StateConverter.class);
 		registry.bind(Salutation.class, SalutationConverter.class);
 		if (list != null && list.size() > 0) {
 			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
