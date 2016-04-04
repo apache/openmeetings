@@ -70,7 +70,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		zipBuf = new byte[3 * blockSize * blockSize];
 	}
 
-	private VideoData getData(byte[] data) {
+	private static VideoData getData(byte[] data) {
 		IoBuffer buf = IoBuffer.allocate(data.length);
 		buf.clear();
 		buf.put(data);
@@ -78,6 +78,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return new VideoData(buf);
 	}
 	
+	@Override
 	public void createUnalteredFrame() throws IOException {
 		if (last == null) {
 			return;
@@ -99,6 +100,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		}
 	}
 	
+	@Override
 	public VideoData getUnalteredFrame() {
 		if (unalteredFrame != null && (frameCount % keyFrameIndex) != 0) {
 			frameCount++;
@@ -106,6 +108,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return unalteredFrame;
 	}
 	
+	@Override
 	public synchronized VideoData encode(int[][] img) throws IOException {
 		ba.reset();
 		Rectangle imgArea = new Rectangle(img.length, img[0].length);
@@ -125,6 +128,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return getData(ba.toByteArray());
 	}
 	
+	@Override
 	public void reset() {
 		last = null;
 		unalteredFrame = null;
@@ -180,7 +184,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
 	}
 	
-	private void writeShort(OutputStream os, final int n) throws IOException {
+	private static void writeShort(OutputStream os, final int n) throws IOException {
 		os.write((n >> 8) & 0xFF);
 		os.write((n >> 0) & 0xFF);
 	}

@@ -44,6 +44,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.IWebSession;
+import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -53,13 +55,10 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.IWebSession;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
@@ -408,10 +407,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public Long getLanguageByBrowserLocale() {
 		return getBean(IUserManager.class).getLanguage(getBrowserLocale());
-	}
-
-	public State getCountryByBrowserLocale() {
-		return getBean(IUserManager.class).getCountry(getBrowserLocale());
 	}
 
 	public String getClientTZCode() {

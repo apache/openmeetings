@@ -100,6 +100,7 @@ public class AsfCopyRightReplace {
 	private void scanFolder(File folder) {
 
 		for (File javaFile : folder.listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File b, String name) {
 				return name.endsWith(".java") || name.endsWith(".vm");
 			}
@@ -108,6 +109,7 @@ public class AsfCopyRightReplace {
 		}
 
 		for (File javaFile : folder.listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File b, String name) {
 				return name.endsWith(".xml") || name.endsWith(".lzx");
 			}
@@ -116,6 +118,7 @@ public class AsfCopyRightReplace {
 		}
 
 		for (File folderFile : folder.listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File b, String name) {
 				File f = new File(b, name);
 				return f.isDirectory();
@@ -126,15 +129,12 @@ public class AsfCopyRightReplace {
 	}
 
 	private void scanAndWriteXMLFile(File javaFile) {
-		try {
-			System.out.println("Processing " + javaFile.getCanonicalPath());
-
-			BufferedReader is = new BufferedReader(new InputStreamReader(
-					new FileInputStream(javaFile), StandardCharsets.UTF_8));
+		StringWriter strWriter = new StringWriter();
+		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), StandardCharsets.UTF_8))) {
+			log.debug("Processing " + javaFile.getCanonicalPath());
 
 			String line;
 			String firstline = "";
-			StringWriter strWriter = new StringWriter();
 			int i = 0;
 
 			while ((line = is.readLine()) != null) {
@@ -146,8 +146,6 @@ public class AsfCopyRightReplace {
 					} else if (firstline.startsWith("<library")) {
 						strWriter.append(asf_xml_copyright);
 					}
-							
-					
 				} else if (i == 1) {
 					if (firstline.startsWith("<?xml ")
 							&& !line.startsWith("<!--")) {
@@ -163,29 +161,24 @@ public class AsfCopyRightReplace {
 				strWriter.append(line + "\n");
 				i++;
 			}
-			is.close();
 
-			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getCanonicalPath()), StandardCharsets.UTF_8);
-
+		} catch (Exception err) {
+			log.error("Error while scanAndWriteXMLFile", err);
+		}
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), StandardCharsets.UTF_8)) {
 			out.write(strWriter.toString());
 			out.flush();
-			out.close();
-
 		} catch (Exception err) {
 			log.error("Error while scanAndWriteXMLFile", err);
 		}
 	}
 
 	private void scanAndWriteJavaFile(File javaFile) {
-		try {
-			System.out.println("Processing " + javaFile.getCanonicalPath());
-
-			BufferedReader is = new BufferedReader(new InputStreamReader(
-					new FileInputStream(javaFile), StandardCharsets.UTF_8));
+		StringWriter strWriter = new StringWriter();
+		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), StandardCharsets.UTF_8))) {
+			log.debug("Processing " + javaFile.getCanonicalPath());
 
 			String line;
-			StringWriter strWriter = new StringWriter();
 			int i = 0;
 
 			while ((line = is.readLine()) != null) {
@@ -200,18 +193,14 @@ public class AsfCopyRightReplace {
 				strWriter.append(line + "\n");
 				i++;
 			}
-			is.close();
-			
-			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getCanonicalPath()), StandardCharsets.UTF_8);
-
+		} catch (Exception err) {
+			log.error("Error while scanAndWriteJavaFile", err);
+		}
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), StandardCharsets.UTF_8)) {
 			out.write(strWriter.toString());
 			out.flush();
-			out.close();
-
 		} catch (Exception err) {
 			log.error("Error while scanAndWriteJavaFile", err);
 		}
 	}
-
 }

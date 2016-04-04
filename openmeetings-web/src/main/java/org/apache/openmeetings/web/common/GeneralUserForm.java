@@ -30,16 +30,15 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -121,7 +120,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("address.additionalname"));
 		add(new TextField<String>("address.zip"));
 		add(new TextField<String>("address.town"));
-		add(new DropDownChoice<State>("address.state", getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "id")));
+		add(new CountryDropDown("address.country"));
 		add(new TextArea<String>("address.comment"));
 
 		final List<GroupUser> orgUsers;
