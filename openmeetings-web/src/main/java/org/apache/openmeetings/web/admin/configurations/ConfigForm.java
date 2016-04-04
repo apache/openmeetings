@@ -63,6 +63,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
 				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {

@@ -38,6 +38,7 @@ public class GroupConverter extends OmConverter<Group> {
 		this.idMap = idMap;
 	}
 	
+	@Override
 	public Group read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
@@ -46,6 +47,7 @@ public class GroupConverter extends OmConverter<Group> {
 		return o == null ? new Group() : o;
 	}
 
+	@Override
 	public void write(OutputNode node, Group value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

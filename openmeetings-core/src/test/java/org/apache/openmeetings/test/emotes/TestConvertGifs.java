@@ -50,9 +50,9 @@ public class TestConvertGifs {
 			String batString = "";
 			
 			String[] allfiles = baseDir.list();			
-			if(allfiles!=null){
-				for(int i=0; i<allfiles.length; i++){
-					File file = new File(basePath+File.separatorChar+allfiles[i]);
+			if (allfiles != null){
+				for(int i = 0; i < allfiles.length; ++i) {
+					File file = new File(basePath + File.separatorChar + allfiles[i]);
 					String fileName = file.getName();
 					System.out.println("file "+file.getName());
 					String fileNamePure = fileName.substring(0, fileName.length()-4);
@@ -61,13 +61,12 @@ public class TestConvertGifs {
 				}
 			}
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(basePath+batfilePath));
-		    pw.println(batString);
-		    pw.flush();
-		    pw.close();
+			try (PrintWriter pw = new PrintWriter(new FileWriter(basePath+batfilePath))) {
+			    pw.println(batString);
+			    pw.flush();
+			}
 		    
 			System.out.println("batString "+batString);
-			
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
@@ -109,10 +108,10 @@ public class TestConvertGifs {
 
 			log.error(xmlString);
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(basePath+batfilePath));
-		    pw.println(xmlString);
-		    pw.flush();
-		    pw.close();
+			try (PrintWriter pw = new PrintWriter(new FileWriter(basePath+batfilePath))) {
+			    pw.println(xmlString);
+			    pw.flush();
+			}
 		    
 			System.out.println("batString "+batString);
 			

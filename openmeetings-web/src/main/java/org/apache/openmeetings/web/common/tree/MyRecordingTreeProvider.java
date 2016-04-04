@@ -32,6 +32,7 @@ import org.apache.openmeetings.web.app.Application;
 public class MyRecordingTreeProvider extends RecordingTreeProvider {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public Iterator<? extends Recording> getRoots() {
 		Recording r = new Recording();
 		r.setId(0L);
@@ -41,6 +42,7 @@ public class MyRecordingTreeProvider extends RecordingTreeProvider {
 		return Arrays.asList(r).iterator();
 	}
 	
+	@Override
 	public Iterator<? extends Recording> getChildren(Recording node) {
 		if (node.getId() == 0) {
 			return getBean(RecordingDao.class).getRootByOwner(getUserId()).iterator();

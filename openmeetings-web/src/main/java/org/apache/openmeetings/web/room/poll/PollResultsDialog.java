@@ -166,7 +166,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		}
 	}
 	
-    private String removeMinified(String name_) {
+    private static String removeMinified(String name_) {
         String name = name_;
         int idxOfExtension = name.lastIndexOf('.');
         if (idxOfExtension > -1) {
@@ -195,13 +195,13 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
     }
     
-    private String[] getTicks(RoomPoll p) {
+    private static String[] getTicks(RoomPoll p) {
 		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 				: new String[] {Application.getString(34), Application.getString(35)};
     }
     
-	private Integer[] initValues(int size) {
+	private static Integer[] initValues(int size) {
 		Integer[] values = new Integer[size];
 		for (int i = 0; i < size; ++i) {
 			values[i] = 0;
@@ -209,7 +209,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		return values;
 	}
 	
-	private Integer[] getValues(RoomPoll p) {
+	private static Integer[] getValues(RoomPoll p) {
 		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
 		if (p != null && RoomPoll.Type.numeric == p.getType()) {
 			for (RoomPollAnswer a : p.getAnswers()) {
@@ -223,7 +223,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		return values;
 	}
 	
-	private PieChart<Integer> pieChart(RoomPoll p) {
+	private static PieChart<Integer> pieChart(RoomPoll p) {
         PieChart<Integer> pieChart = new PieChart<Integer>(null);
 		String[] ticks = getTicks(p);
 		Integer[] values = getValues(p);
@@ -246,7 +246,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
         return pieChart;
 	}
 	
-	private BarChart<Integer> barChart(RoomPoll p) {
+	private static BarChart<Integer> barChart(RoomPoll p) {
 		String[] ticks = getTicks(p);
 		BarChart<Integer> barChart = new BarChart<Integer>(null);
 		barChart.addValue(Arrays.asList(getValues(p)));

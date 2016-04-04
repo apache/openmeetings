@@ -157,16 +157,16 @@ public class ExportToImage extends BaseHttpServlet {
 					outFile(response, expFile);
 				} else if ("jpg".equals(exportType)) {
 					JPEGTranscoder t = new JPEGTranscoder();
-			        t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, 1f);
-			        
-			        OutputStream ostream = new FileOutputStream(expFile);
-			        TranscoderOutput output = new TranscoderOutput(new FileOutputStream(expFile));
-
-			        // Perform the transcoding.
-			        t.transcode(new TranscoderInput(svgFile.toURI().toString()), output);
-			        ostream.flush();
-			        ostream.close();
-			        
+					t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, 1f);
+					
+					try (OutputStream ostream = new FileOutputStream(expFile)) {
+						TranscoderOutput output = new TranscoderOutput(new FileOutputStream(expFile));
+	
+						// Perform the transcoding.
+						t.transcode(new TranscoderInput(svgFile.toURI().toString()), output);
+						ostream.flush();
+					}
+					
 					outFile(response, expFile);
 				} else if (exportType.equals("png")
 						|| exportType.equals("gif") || exportType.equals("tif")
@@ -181,16 +181,15 @@ public class ExportToImage extends BaseHttpServlet {
 		}
 	}
 	
-	private void outFile(HttpServletResponse response, File f) throws IOException {
+	private static void outFile(HttpServletResponse response, File f) throws IOException {
 		response.reset();
 		response.resetBuffer();
-		OutputStream outStream = response.getOutputStream();
-		response.setContentType("APPLICATION/OCTET-STREAM");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + f.getName() + "\"");
-		response.setHeader("Content-Length", "" + f.length());
-
-		OmFileHelper.copyFile(f, outStream);
-		outStream.close();
-	}
+		try (OutputStream outStream = response.getOutputStream()) {
+			response.setContentType("APPLICATION/OCTET-STREAM");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + f.getName() + "\"");
+			response.setHeader("Content-Length", "" + f.length());
 	
+			OmFileHelper.copyFile(f, outStream);
+		}
+	}
 }

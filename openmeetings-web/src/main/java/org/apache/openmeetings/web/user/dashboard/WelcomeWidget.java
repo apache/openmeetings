@@ -42,6 +42,7 @@ public class WelcomeWidget extends AbstractWidget {
 		id = "WelcomeWidget";
 	}
 	
+	@Override
 	public WidgetView createView(String viewId) {
 		return new WelcomeWidgetView(viewId, new Model<Widget>(this));
 	}

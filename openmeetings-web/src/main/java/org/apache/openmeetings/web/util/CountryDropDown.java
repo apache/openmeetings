@@ -44,6 +44,7 @@ public class CountryDropDown extends DropDownChoice<String>  {
 				return code;
 			}
 			
+			@Override
 			public Object getDisplayValue(String code) {
 				return new Locale.Builder().setRegion(code).build().getDisplayCountry(WebSession.get().getLocale());
 			}

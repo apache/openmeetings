@@ -81,7 +81,7 @@ public class CalendarPanel extends UserPanel {
 		refreshTimer.stop(handler);
 	}
 	
-	private AppointmentDao getDao() {
+	private static AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);
 	}
 	
@@ -260,7 +260,7 @@ public class CalendarPanel extends UserPanel {
 		add(refreshTimer);
 	}
 	
-	private Appointment getDefault() {
+	private static Appointment getDefault() {
 		Appointment a = new Appointment();
 		a.setReminder(Reminder.ical); //TODO: Make configurable
 		a.setOwner(getBean(UserDao.class).get(getUserId()));

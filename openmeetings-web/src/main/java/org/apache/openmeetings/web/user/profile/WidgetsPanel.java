@@ -46,7 +46,7 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 public class WidgetsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	private Widget isDisplayed(WidgetDescriptor wd) {
+	private static Widget isDisplayed(WidgetDescriptor wd) {
 		for (Widget w : getDashboard().getWidgets()) {
 			if (w.getClass().getName().equals(wd.getWidgetClassName())) {
 				return w;

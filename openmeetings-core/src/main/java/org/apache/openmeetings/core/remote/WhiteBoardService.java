@@ -334,7 +334,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return;
 	}
 
-	private int getNumberOfInitialLoaders(Map<String, WhiteboardSyncLockObject> syncListRoom) throws Exception {
+	private static int getNumberOfInitialLoaders(Map<String, WhiteboardSyncLockObject> syncListRoom) throws Exception {
 		int number = 0;
 		for (Map.Entry<String, WhiteboardSyncLockObject> e : syncListRoom.entrySet()) {
 			if (e.getValue().isInitialLoaded()) {
@@ -472,6 +472,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			File clipart_dir = OmFileHelper.getPublicClipartsDir();
 
 			FilenameFilter getFilesOnly = new FilenameFilter() {
+				@Override
 				public boolean accept(File b, String name) {
 					File f = new File(b, name);
 					return !f.isDirectory();
@@ -479,6 +480,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			};
 
 			FilenameFilter getDirectoriesOnly = new FilenameFilter() {
+				@Override
 				public boolean accept(File b, String name) {
 					File f = new File(b, name);
 					return f.isDirectory() && !f.getName().equals("thumb");
@@ -517,6 +519,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		log.debug("resultReceived: " + arg0);
 	}

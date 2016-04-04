@@ -26,10 +26,12 @@ public class AppointmentReminderTypeConverter extends OmConverter<Reminder> {
 	public AppointmentReminderTypeConverter() {
 	}
 	
+	@Override
 	public Reminder read(InputNode node) throws Exception {
 		return Reminder.get(getInt(node));
 	}
 
+	@Override
 	public void write(OutputNode node, Reminder value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

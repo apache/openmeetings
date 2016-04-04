@@ -253,10 +253,12 @@ public class Appointment implements IDataProviderEntity {
 	@Column(name = "is_reminder_email_send")
 	private boolean reminderEmailSend;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

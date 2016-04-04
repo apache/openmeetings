@@ -99,10 +99,12 @@ public class LdapConfig implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

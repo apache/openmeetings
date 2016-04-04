@@ -120,14 +120,17 @@ public class ScreenSharerFrame extends JFrame {
 		PublishTextField() {
 			getDocument().addDocumentListener(
 				new DocumentListener() {
+					@Override
 					public void changedUpdate(DocumentEvent e) {
 						updatePublishURL();
 					}
 
+					@Override
 					public void removeUpdate(DocumentEvent e) {
 						updatePublishURL();
 					}
 
+					@Override
 					public void insertUpdate(DocumentEvent e) {
 						updatePublishURL();
 					}
@@ -216,7 +219,7 @@ public class ScreenSharerFrame extends JFrame {
 		}
 	}
 	
-	private String getTextLabel(String[] textLabels, int idx) {
+	private static String getTextLabel(String[] textLabels, int idx) {
 		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
 	}
 	
@@ -265,6 +268,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopSharing.setIcon(startIcon);
 		btnStartStopSharing.setSize(200, 32);
 		btnStartStopSharing.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
@@ -290,6 +294,7 @@ public class ScreenSharerFrame extends JFrame {
 		audioNotify.setBackground(Color.WHITE);
 		audioNotify.setSelected(core.isAudioNotify());
 		audioNotify.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				core.setAudioNotify(audioNotify.isSelected());
 			}
@@ -384,6 +389,7 @@ public class ScreenSharerFrame extends JFrame {
 		spinnerWidth = new NumberSpinner(ScreenDimensions.spinnerWidth, 0, ScreenDimensions.widthMax, 1);
 		spinnerWidth.setBounds(400, 20, 60, 24);
 		spinnerWidth.addChangeListener( new ChangeListener(){
+			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueWidthSpin();
 			}
@@ -399,6 +405,7 @@ public class ScreenSharerFrame extends JFrame {
 		spinnerHeight = new NumberSpinner(ScreenDimensions.spinnerHeight, 0, ScreenDimensions.heightMax, 1);
 		spinnerHeight.setBounds(400, 50, 60, 24);
 		spinnerHeight.addChangeListener( new ChangeListener(){
+			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueHeightSpin();
 			}
@@ -414,6 +421,7 @@ public class ScreenSharerFrame extends JFrame {
 		spinnerX = new NumberSpinner(ScreenDimensions.spinnerX, 0, ScreenDimensions.widthMax, 1);
 		spinnerX.setBounds(400, 80, 60, 24);
 		spinnerX.addChangeListener( new ChangeListener(){
+			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueXSpin();
 			}
@@ -429,6 +437,7 @@ public class ScreenSharerFrame extends JFrame {
 		spinnerY = new NumberSpinner(ScreenDimensions.spinnerY, 0, ScreenDimensions.heightMax, 1);
 		spinnerY.setBounds(400, 110, 60, 24);
 		spinnerY.addChangeListener( new ChangeListener(){
+			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueYSpin();
 			}
@@ -448,6 +457,7 @@ public class ScreenSharerFrame extends JFrame {
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 22), ScreenQuality.Low)); //#id 1093
 		comboQuality.setBounds(250, 170, 130, 24);
 		comboQuality.addActionListener(new ActionListener() {
+			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 		        ScreenDimensions.quality = ((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue();
@@ -465,6 +475,7 @@ public class ScreenSharerFrame extends JFrame {
 		comboFPS.addItem(new KeyValue<Integer>("25 FPS", 25));
 		comboFPS.addItem(new KeyValue<Integer>("30 FPS", 30));
 		comboFPS.addActionListener(new ActionListener() {
+			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 		        ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
@@ -504,6 +515,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopRecording.setIcon(startIcon);
 		btnStartStopRecording.setBounds(10, 82, 200, 32);
 		btnStartStopRecording.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (recordingStarted) {
 					if (!recordingActionRequested) {
@@ -571,6 +583,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopPublish.setIcon(startIcon);
 		btnStartStopPublish.setBounds(10, 86, 200, 32);
 		btnStartStopPublish.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (publishStarted) {
 					if (!publishingActionRequested) {
@@ -602,6 +615,7 @@ public class ScreenSharerFrame extends JFrame {
 		remoteEnabled.setBounds(10, 10, 450, 24);
 		remoteEnabled.setEnabled(core.allowRemote);
 		remoteEnabled.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				core.setRemoteEnabled(remoteEnabled.isSelected());
 			}

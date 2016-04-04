@@ -42,6 +42,7 @@ public class StartWidget extends AbstractWidget {
 		id = "StartWidget";
 	}
 	
+	@Override
 	public WidgetView createView(String viewId) {
 		return new StartWidgetView(viewId, new Model<Widget>(this));
 	}

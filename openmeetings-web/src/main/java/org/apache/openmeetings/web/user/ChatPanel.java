@@ -212,7 +212,7 @@ public class ChatPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID)), "acceptMessage")));
 	}
 	
-	private void sendRoom(ChatMessage m, String msg) {
+	private static void sendRoom(ChatMessage m, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 		for (Client c : getRoomUsers(m.getToRoom().getId())) {
 			try {

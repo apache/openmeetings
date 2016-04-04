@@ -44,6 +44,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 		this.clazz = c;
 	}
 	
+	@Override
 	public void detach() {
 		// does nothing
 	}
@@ -60,16 +61,19 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 		return result;
 	}
 	
+	@Override
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (search == null && getSort() == null
 			? getDao().get((int)first, (int)count)
 			: getDao().get(search, (int)first, (int)count, getSortStr())).iterator();
 	}
 
+	@Override
 	public long size() {
 		return search == null ? getDao().count() : getDao().count(search);
 	}
 
+	@Override
 	public IModel<T> model(T object) {
 		return new CompoundPropertyModel<T>(object);
 	}

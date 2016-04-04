@@ -67,7 +67,7 @@ public class ChatService implements IPendingServiceCallback {
 	
 	private static Map<Long,List<Map<String,Object>>> myChats = new LinkedHashMap<Long,List<Map<String,Object>>>();
 	
-	private String parseDateAsTimeString() {
+	private static String parseDateAsTimeString() {
 		Calendar cal=Calendar.getInstance();
 		
 		int h = cal.get(Calendar.HOUR_OF_DAY);
@@ -333,6 +333,7 @@ public class ChatService implements IPendingServiceCallback {
 		}
 	}	
 	
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 		log.error("resultReceived ChatService "+arg0);

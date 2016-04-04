@@ -242,10 +242,12 @@ public class UserForm extends AdminBaseForm<User> {
 		domainId.setChoiceRenderer(new ChoiceRenderer<Long>() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public Object getDisplayValue(Long object) {
 				return values.get(object);
 			}
 
+			@Override
 			public String getIdValue(Long object, int index) {
 				return "" + object;
 			}

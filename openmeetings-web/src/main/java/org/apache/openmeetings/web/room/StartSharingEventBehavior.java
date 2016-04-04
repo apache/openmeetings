@@ -135,7 +135,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		download.initiate(target);
 	}
 
-	private String getLabels(int ... ids) {
+	private static String getLabels(int ... ids) {
 		StringBuilder result = new StringBuilder();
 		boolean delim = false;
 		LabelDao labelDao = getBean(LabelDao.class);
@@ -149,7 +149,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		return result.toString();
 	}
 	
-	private String addKeystore(String app, Protocol protocol) {
+	private static String addKeystore(String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
 		if (Protocol.rtmps == protocol) {

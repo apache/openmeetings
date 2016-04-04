@@ -32,21 +32,24 @@ import org.apache.wicket.model.Model;
 public abstract class RecordingTreeProvider implements ITreeProvider<Recording> {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public void detach() {
 		// TODO LDM should be used
 	}
 
+	@Override
 	public boolean hasChildren(Recording node) {
 		return node.getId() <= 0 || Type.Folder == node.getType();
 	}
 
+	@Override
 	public Iterator<? extends Recording> getChildren(Recording node) {
 		return getBean(RecordingDao.class).getByParent(node.getId()).iterator();
 	}
 
+	@Override
 	public IModel<Recording> model(Recording object) {
 		// TODO LDM should be used
 		return Model.of(object);
 	}
-	
 }

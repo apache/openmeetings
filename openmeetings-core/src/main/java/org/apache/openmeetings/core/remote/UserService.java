@@ -122,6 +122,7 @@ public class UserService implements IUserService {
 	 *            REST call
 	 * @return - true if user has sufficient permissions, false otherwise
 	 */
+	@Override
 	public boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);

@@ -81,6 +81,7 @@ public class RecordingService implements IPendingServiceCallback {
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
 

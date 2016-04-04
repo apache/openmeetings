@@ -27,16 +27,14 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
-
-	protected static final Logger log = Red5LoggerFactory.getLogger(
-			TestDbSessionGetRoomIds.class, OpenmeetingsVariables.webAppRootKey);
+	protected static final Logger log = Red5LoggerFactory.getLogger(TestDbSessionGetRoomIds.class, webAppRootKey);
 
 	@Autowired
 	private ServerDao serverDao;
@@ -46,7 +44,6 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 
 	@Test
 	public void testDbSessionFunctions() {
-
 		clientDao.cleanAllClients();
 		
 		List<Server> serverList = serverDao.getActiveServers();
@@ -95,5 +92,4 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 		int countAll = clientDao.countClients();
 		assertEquals(0, countAll);
 	}
-
 }

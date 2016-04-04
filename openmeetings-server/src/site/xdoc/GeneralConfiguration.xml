@@ -65,6 +65,12 @@
 					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
 				</tr>
 				<tr>
+					<td> ldap_default_id </td>
+					<td> 0 </td>
+					<td> Ldap domain selected by default in the login screen </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
 					<td> user.login.minimum.length </td>
 					<td> 4 </td>
 					<td> minimum chars required for the login to create a user </td>

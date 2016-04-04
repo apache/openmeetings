@@ -40,6 +40,7 @@ public class RoomTypeDropDown extends DropDownChoice<Type> {
 				return rt.name();
 			}
 			
+			@Override
 			public Object getDisplayValue(Type rt) {
 				return getString("room.type." + rt.name());
 			}

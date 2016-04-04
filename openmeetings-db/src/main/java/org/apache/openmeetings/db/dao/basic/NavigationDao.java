@@ -41,7 +41,7 @@ public class NavigationDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Naviglobal getGlobalMenuEntry(long globalId) {
+	public Naviglobal getGlobalMenuEntry(Long globalId) {
 		try {
 			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigationById", Naviglobal.class);
 			query.setParameter("id", globalId);
@@ -59,7 +59,7 @@ public class NavigationDao {
 				.getResultList();
 	}
 
-	public Naviglobal addGlobalStructure(int naviorder, String labelId, long levelId, String name, String tooltipLabelId) {
+	public Naviglobal addGlobalStructure(int naviorder, String labelId, int levelId, String name, String tooltipLabelId) {
 		Naviglobal ng = new Naviglobal();
 		ng.setComment("");
 		ng.setIcon("");
@@ -77,7 +77,7 @@ public class NavigationDao {
 	}
 
 	public void addMainStructure(String action, String params, int naviorder, String labelId,
-			long levelId, String name, long globalId, String tooltipLabelId) {
+			int levelId, String name, Long globalId, String tooltipLabelId) {
 		Naviglobal ng = getGlobalMenuEntry(globalId);
 		List<Navimain> mainEntries = ng.getMainnavi();
 		mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;

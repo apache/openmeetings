@@ -148,10 +148,12 @@ public class RecordingMetaData implements IDataProviderEntity {
 	@Enumerated(EnumType.STRING)
 	private Status streamStatus = Status.NONE;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

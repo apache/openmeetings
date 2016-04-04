@@ -47,6 +47,7 @@ public class GenerateWebsiteXsd {
 
 			// Get all XML Files of this Folder
 			FilenameFilter ff = new FilenameFilter() {
+				@Override
 				public boolean accept(File b, String name) {
 					File f = new File(b, name);
 					return f.getName().contains(".xml");

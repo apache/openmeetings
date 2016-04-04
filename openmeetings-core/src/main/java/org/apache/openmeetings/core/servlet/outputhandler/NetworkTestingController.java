@@ -64,7 +64,7 @@ public class NetworkTestingController {
 	public void serviceGet(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws ServletException, IOException {
         String typeStr = request.getParameter("testType");
-        TestType testType = this.getTypeByString(typeStr);
+        TestType testType = getTypeByString(typeStr);
 
         // choose data to send
         byte[] data = new byte[0];
@@ -102,7 +102,7 @@ public class NetworkTestingController {
     }
 
 
-    private TestType getTypeByString(String typeString) {
+    private static TestType getTypeByString(String typeString) {
         if ("ping".equals(typeString)) {
             return TestType.PING;
         } else if ("jitter".equals(typeString)) {

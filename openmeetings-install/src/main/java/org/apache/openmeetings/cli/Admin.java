@@ -470,7 +470,7 @@ public class Admin {
 		System.exit(0);
 	}
 	
-	private long cleanUpFile(long invalid, boolean cleanup, File f) {
+	private static long cleanUpFile(long invalid, boolean cleanup, File f) {
 		if (f.exists()) {
 			if (cleanup) {
 				FileHelper.removeRec(f);
@@ -480,7 +480,7 @@ public class Admin {
 		}
 		return invalid;
 	}
-	private void checkRecordingFile(File hibernateDir, String name, boolean deleted, long[] params, boolean cleanup) {
+	private static void checkRecordingFile(File hibernateDir, String name, boolean deleted, long[] params, boolean cleanup) {
 		File flv = name != null ? new File(hibernateDir, name) : null;
 		if (flv != null) {
 			if (flv.exists() && flv.isFile()) {
@@ -496,7 +496,7 @@ public class Admin {
 		}
 	}
 	
-	private long getUserIdByProfile(String name) {
+	private static long getUserIdByProfile(String name) {
 		long result = -1;
 		if (name.startsWith(OmFileHelper.profilesPrefix)) {
 			try {

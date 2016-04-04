@@ -195,15 +195,18 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 		
-	private void prepareConnection(URLConnection connection) {
+	private static void prepareConnection(URLConnection connection) {
 		if (!(connection instanceof HttpsURLConnection)) return;
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
 		Boolean ignoreBadSSL = configurationDao.getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no").equals("yes");
 		if (!ignoreBadSSL) return;
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+			@Override
 			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+			@Override
 			public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
 
+			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
@@ -216,6 +219,7 @@ public class SignInPage extends BaseInitedPage {
 			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
 			((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
 					
+				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
@@ -280,7 +284,7 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 	
-	private Map<String, String> parseCanonicalResponse(String response) {
+	private static Map<String, String> parseCanonicalResponse(String response) {
 		String[] parts = response.split("&");
 		Map<String, String> result = new HashMap<String, String>();
 		for (String part: parts) {

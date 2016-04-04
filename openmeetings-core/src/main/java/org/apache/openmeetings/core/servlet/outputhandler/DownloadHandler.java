@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 
 public class DownloadHandler extends BaseHttpServlet {
 	
-	private static final long serialVersionUID = 7243653203578587544L;
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DownloadHandler.class, OpenmeetingsVariables.webAppRootKey);
@@ -59,7 +59,7 @@ public class DownloadHandler extends BaseHttpServlet {
 	private static final String defaultChatImageName = chatImagePrefix + defaultProfileImageName;
 	private static final String defaultSWFName = "deleted.swf";
 
-	private void logNonExistentFolder(File f) {
+	private static void logNonExistentFolder(File f) {
 		if (!f.exists()) {
 			boolean c = f.mkdir();
 			if (!c) {
@@ -123,7 +123,7 @@ public class DownloadHandler extends BaseHttpServlet {
 				String fileIdParam = request.getParameter("fileId");
 				Long fileId = null;
 				if (fileIdParam != null) {
-					fileId = Long.parseLong(fileIdParam);
+					fileId = Long.valueOf(fileIdParam);
 				}
 				
 				
@@ -237,42 +237,41 @@ public class DownloadHandler extends BaseHttpServlet {
 
 					response.reset();
 					response.resetBuffer();
-					OutputStream out = response.getOutputStream();
-
-					if (requestedFile.endsWith(".swf")) {
-						// trigger download to SWF => THIS is a workaround for
-						// Flash Player 10, FP 10 does not seem
-						// to accept SWF-Downloads with the Content-Disposition
-						// in the Header
-						response.setContentType("application/x-shockwave-flash");
-						response.setHeader("Content-Length", "" + full_path.length());
-					} else {
-						response.setContentType("APPLICATION/OCTET-STREAM");
-						
-						String fileNameResult = requestedFile;
-						if (fileId != null && fileId > 0) {
-							FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileId);
-							if (fileExplorerItem != null) {
-								
-								fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)
-													+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
-								
-							}
-						}
-						
-						if (browserType == 0) {
-							response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+					try (OutputStream out = response.getOutputStream()) {
+						if (requestedFile.endsWith(".swf")) {
+							// trigger download to SWF => THIS is a workaround for
+							// Flash Player 10, FP 10 does not seem
+							// to accept SWF-Downloads with the Content-Disposition
+							// in the Header
+							response.setContentType("application/x-shockwave-flash");
+							response.setHeader("Content-Length", "" + full_path.length());
 						} else {
-							response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
-											+ URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+							response.setContentType("APPLICATION/OCTET-STREAM");
+							
+							String fileNameResult = requestedFile;
+							if (fileId != null && fileId > 0) {
+								FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileId);
+								if (fileExplorerItem != null) {
+									
+									fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)
+														+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
+									
+								}
+							}
+							
+							if (browserType == 0) {
+								response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+							} else {
+								response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
+												+ URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+							}
+	
+							response.setHeader("Content-Length", "" + full_path.length());
 						}
-
-						response.setHeader("Content-Length", "" + full_path.length());
+	
+						OmFileHelper.copyFile(full_path, out);
+						out.flush();
 					}
-
-					OmFileHelper.copyFile(full_path, out);
-					out.flush();
-					out.close();
 				}
 			} else {
 				log.error("ERROR DownloadHandler: not authorized FileDownload ");
@@ -285,7 +284,7 @@ public class DownloadHandler extends BaseHttpServlet {
 		}
 	}
 
-	private String getChatUserName(File f) throws Exception {
+	private static String getChatUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
 			if (filesString != null) {
@@ -299,7 +298,7 @@ public class DownloadHandler extends BaseHttpServlet {
 		return "_no.jpg";
 	}
 
-	private String getBigProfileUserName(File f) throws Exception {
+	private static String getBigProfileUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
 			if (filesString != null) {

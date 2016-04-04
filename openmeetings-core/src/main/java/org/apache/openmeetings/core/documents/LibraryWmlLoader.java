@@ -75,7 +75,7 @@ public class LibraryWmlLoader {
 	 * @param subMap
 	 */
 	@SuppressWarnings({ "unused", "rawtypes" })
-	private void createListObjectPaintByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
+	private static void createListObjectPaintByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
 		try {
 			
 			LinkedHashMap<Integer,LinkedHashMap> pointMap = new LinkedHashMap<Integer,LinkedHashMap>();

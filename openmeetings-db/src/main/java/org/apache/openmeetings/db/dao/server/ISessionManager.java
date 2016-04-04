@@ -53,7 +53,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	Client addClientListItem(String streamId, String scopeName, Integer remotePort, String remoteAddress, String swfUrl, Server server);
+	Client addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
 
 	Collection<Client> getClients();
 	

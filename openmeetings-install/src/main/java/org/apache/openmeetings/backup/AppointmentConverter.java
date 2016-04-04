@@ -38,14 +38,16 @@ public class AppointmentConverter extends OmConverter<Appointment> {
 		this.idMap = idMap;
 	}
 	
+	@Override
 	public Appointment read(InputNode node) throws Exception {
 		long oldId = getLong(node);
-		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
+		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
 		Appointment a = appointmentDao.getAny(newId);
 		return a == null ? new Appointment() : a;
 	}
 
+	@Override
 	public void write(OutputNode node, Appointment value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

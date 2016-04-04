@@ -66,6 +66,7 @@ public class SimulateLoad extends Thread {
 				loadTestRtmpClient);
 	}
 
+	@Override
 	public void run() {
 		try {
 

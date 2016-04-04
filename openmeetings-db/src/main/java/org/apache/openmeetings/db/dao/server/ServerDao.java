@@ -166,18 +166,18 @@ public class ServerDao implements IDataProviderDao<Server> {
 	@Override
 	public Server update(Server entity, Long userId) {
 		entity.setDeleted(false);
-		if (entity.getId() > 0) {
-			entity.setUpdated(new Date());
-			if (userId != null) {
-				entity.setUpdatedby(userDao.get(userId));
-			}
-			em.merge(entity);
-		} else {
+		if (entity.getId() == null) {
 			entity.setInserted(new Date());
 			if (userId != null) {
 				entity.setInsertedby(userDao.get(userId));
 			}
 			em.persist(entity);
+		} else {
+			entity.setUpdated(new Date());
+			if (userId != null) {
+				entity.setUpdatedby(userDao.get(userId));
+			}
+			em.merge(entity);
 		}
 		return entity;
 	}
@@ -191,7 +191,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 */
 	@Override
 	public void delete(Server entity, Long userId) {
-		if (entity.getId() > 0) {
+		if (entity.getId() != null) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
 				entity.setUpdatedby(userDao.get(userId));

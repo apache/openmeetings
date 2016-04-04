@@ -23,10 +23,12 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class SalutationConverter extends OmConverter<Salutation> {
+	@Override
 	public Salutation read(InputNode node) throws Exception {
 		return Salutation.get(getInt(node));
 	}
 
+	@Override
 	public void write(OutputNode node, Salutation value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

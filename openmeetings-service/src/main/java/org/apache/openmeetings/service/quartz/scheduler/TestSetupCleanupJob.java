@@ -43,6 +43,7 @@ public class TestSetupCleanupJob {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
 						File[] files = folder.listFiles(new FileFilter() {
+							@Override
 							public boolean accept(File file) {
 								return file.getName().startsWith("TEST_SETUP_");
 							}

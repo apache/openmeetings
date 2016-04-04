@@ -108,6 +108,7 @@ public class LangPanel extends AdminPanel {
 						return getDao().count(language.getValue(), search);
 					}
 					
+					@Override
 					public Iterator<? extends StringLabel> iterator(long first, long count) {
 						return getDao().get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
 					}
@@ -122,6 +123,7 @@ public class LangPanel extends AdminPanel {
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(fv);
 						form.hideNewRecord();
@@ -182,6 +184,7 @@ public class LangPanel extends AdminPanel {
 		langForm.add(new AjaxButton("export"){
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				final String name = LabelDao.getLabelFileName(language.getValue());
 				download.setFileName(name);
@@ -189,6 +192,7 @@ public class LangPanel extends AdminPanel {
 					private static final long serialVersionUID = 1L;
 					private transient InputStream is;
 					
+					@Override
 					public InputStream getInputStream() throws ResourceStreamNotFoundException {
 						try {
 							is = Application.class.getResourceAsStream(name);
@@ -198,6 +202,7 @@ public class LangPanel extends AdminPanel {
 						}
 					}
 					
+					@Override
 					public void close() throws IOException {
 						if (is != null) {
 							is.close();

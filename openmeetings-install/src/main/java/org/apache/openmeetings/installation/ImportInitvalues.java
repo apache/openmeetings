@@ -434,7 +434,7 @@ public class ImportInitvalues {
 		u.getAddress().setEmail(cfg.email);
 		u.getGroupUsers().add(new GroupUser(org));
 
-		u = userDao.update(u, cfg.password, -1);
+		u = userDao.update(u, cfg.password, -1L);
 
 		log.debug("Installation - User Added user-Id " + u.getId());
 

@@ -66,7 +66,7 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		add(inviteMsg);
 	}
 	
-	private List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {
+	private static List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {
 		List<Long> orgIds = new ArrayList<>();
 		List<Long> orgIds2 = new ArrayList<>();
 		UserDao userDao = getBean(UserDao.class);
