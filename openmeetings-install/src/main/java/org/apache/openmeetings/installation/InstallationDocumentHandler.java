@@ -32,13 +32,13 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 public class InstallationDocumentHandler {
-	public static void createDocument(Integer stepNo) throws Exception {
+	public static void createDocument(int stepNo) throws Exception {
 		Document document = DocumentHelper.createDocument();
 
 		Element root = document.addElement("install");
 		Element step = root.addElement("step");
 
-		step.addElement("stepnumber").addText(stepNo.toString());
+		step.addElement("stepnumber").addText("" + stepNo);
 		step.addElement("stepname").addText("Step " + stepNo);
 
 		try (OutputStream os = new FileOutputStream(OmFileHelper.getInstallFile())) {

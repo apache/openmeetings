@@ -59,14 +59,13 @@ import org.simpleframework.xml.Root;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Server implements IDataProviderEntity {
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true)
-	private long id = 0;
+	private Long id;
 
 	@Column(name = "name")
 	@Element(data = true)
@@ -129,10 +128,12 @@ public class Server implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean deleted = false;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

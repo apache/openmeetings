@@ -233,7 +233,7 @@ public class User implements IDataProviderEntity {
 
 	@Column(name = "language_id")
 	@Element(name = "language_id", data = true, required = false)
-	private Long languageId;
+	private long languageId;
 
 	@Column(name = "resethash")
 	@Element(data = true, required = false)
@@ -281,7 +281,7 @@ public class User implements IDataProviderEntity {
 
 	@Column(name = "forceTimeZoneCheck")
 	@Element(data = true, required = false)
-	private Boolean forceTimeZoneCheck;
+	private boolean forceTimeZoneCheck;
 
 	@Column(name = "sendSMS")
 	@Element(data = false, required = false)
@@ -323,10 +323,12 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -472,11 +474,11 @@ public class User implements IDataProviderEntity {
 		this.pictureuri = pictureuri;
 	}
 
-	public Long getLanguageId() {
+	public long getLanguageId() {
 		return languageId;
 	}
 
-	public void setLanguageId(Long languageId) {
+	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
 	}
 
@@ -548,11 +550,11 @@ public class User implements IDataProviderEntity {
 		this.timeZoneId = timeZoneId;
 	}
 
-	public Boolean getForceTimeZoneCheck() {
+	public boolean getForceTimeZoneCheck() {
 		return forceTimeZoneCheck;
 	}
 
-	public void setForceTimeZoneCheck(Boolean forceTimeZoneCheck) {
+	public void setForceTimeZoneCheck(boolean forceTimeZoneCheck) {
 		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 

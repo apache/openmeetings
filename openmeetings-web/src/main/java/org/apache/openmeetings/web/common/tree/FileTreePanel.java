@@ -125,6 +125,7 @@ public abstract class FileTreePanel extends Panel {
 		sizes.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(30)) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onPostProcessTarget(AjaxRequestTarget target) {
 				updateSizes();
 			}

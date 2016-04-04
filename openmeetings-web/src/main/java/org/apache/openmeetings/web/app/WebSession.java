@@ -90,7 +90,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public static int MILLIS_IN_MINUTE = 60000;
 	public static final String SECURE_HASH = "secureHash";
 	public static final String INVITATION_HASH = "invitationHash";
-	private long userId = -1;
+	private Long userId = null;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
 	private String SID = null;
@@ -118,7 +118,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public void invalidate() {
 		removeOnlineUser(getClientByKeys(getUserId(), get().getId()));
 		super.invalidate();
-		userId = -1;
+		userId = null;
 		rights = new HashSet<User.Right>();
 		SID = null;
 		sdf = null;
@@ -171,14 +171,14 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public boolean isSignedIn() {
-		if (userId < 1) {
+		if (userId == null) {
 			IAuthenticationStrategy strategy = getAuthenticationStrategy();
 			// get username and password from persistence store
 			String[] data = strategy.load();
 			if (data != null && data.length > 3 && data[2] != null) {
 				Long domainId = null;
 				try {
-					domainId = Long.parseLong(data[3]);
+					domainId = Long.valueOf(data[3]);
 				} catch (Exception e) {
 					//no-op
 				}
@@ -189,7 +189,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				}
 			}
 		}
-		return userId > -1;
+		return userId != null && userId.longValue() > 0;
 	}
 
 	public boolean signIn(String secureHash, boolean markUsed) {
@@ -275,7 +275,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			signIn(u);
 			return true;
 		} catch (OmException oe) {
-			loginError = oe.getCode() == null ? -1L : oe.getCode();
+			loginError = oe.getCode() == null ? Long.valueOf(-1) : oe.getCode();
 		}
 		return false;
 	}
@@ -298,6 +298,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return (WebSession)AbstractAuthenticatedWebSession.get();
 	}
 	
+	@Override
 	public void setLanguage(long languageId) {
 		this.languageId = languageId;
 	}
@@ -337,7 +338,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return get().getValidatedSid();
 	}
 
-	public static long getUserId() {
+	public static Long getUserId() {
 		checkIsInvalid();
 		return get().userId;
 	}
@@ -494,6 +495,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 	}
 
+	@Override
 	public long getOmLanguage() {
 		return getLanguage();
 	}

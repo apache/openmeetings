@@ -81,6 +81,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		setDocument(doc);
 
 		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
 			public void mouseMoved(MouseEvent e) {
 
 				AccessibleJTextComponent context = (AccessibleJTextComponent) getAccessibleContext()
@@ -108,6 +109,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		});
 
 		addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
@@ -122,6 +124,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 
 			}
 
+			@Override
 			public void keyReleased(KeyEvent e) {
 				
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
@@ -296,6 +299,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 			}
 		}
 
+		@Override
 		public void remove(int offs, int len) throws BadLocationException {
 
 			super.remove(offs, len);
@@ -303,6 +307,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 			computeLinks(e);
 		}
 
+		@Override
 		public void insertString(int offs, String str, AttributeSet a)
 				throws BadLocationException {
 

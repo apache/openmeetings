@@ -50,6 +50,7 @@ public class GeomPoint extends Point {
 		return gPoint;
 	}
 	
+	@Override
 	public GeomPoint clone() {
 		GeomPoint p = new GeomPoint();
 		p.setLocation(this.getX(), this.getY());
@@ -80,6 +81,7 @@ public class GeomPoint extends Point {
 		return Math.sqrt( this.getX()*this.getX() + this.getY()*this.getY() );
 	}
 	
+	@Override
 	public String toString() {
 		return getClass().getName() + "[x=" + this.getX() + ",y=" + this.getY() + "]";
     }

@@ -108,6 +108,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 	}
@@ -916,7 +917,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return 0L;
 	}
 
-	public Boolean getMicMutedByPublicSID(String publicSID) {
+	public boolean getMicMutedByPublicSID(String publicSID) {
 		try {
 			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
 			if (currentClient == null) {
@@ -924,12 +925,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			//Put the mod-flag to true for this client
-			Boolean muted = currentClient.getMicMuted();
-			if (null == muted) {
-				muted = true;
-			}
-
-			return muted;
+			return currentClient.getMicMuted();
 		} catch (Exception err) {
 			log.error("[getMicMutedByPublicSID]",err);
 		}
@@ -1153,7 +1149,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
 			// appointed meeting or moderated Room? => Check Max Users first
-			if (room.getNumberOfPartizipants() != null && clientListRoom.size() > room.getNumberOfPartizipants()) {
+			if (clientListRoom.size() > room.getNumberOfPartizipants()) {
 				roomStatus.setRoomFull(true);
 				return roomStatus;
 			}
@@ -1674,6 +1670,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	public void sendMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
 		new MessageSender(remoteMethodName, newMessage) {
+			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
 				return (!sendScreen && SessionVariablesUtil.isScreenClient(client))
@@ -1905,7 +1902,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (conn != null) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
-					if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+					if (rcl.getIsRecording()) {
 						return true;
 					}
 				}
@@ -1929,7 +1926,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (conn != null) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
-					if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
+					if (rcl != null && rcl.getIsRecording()) {
 						return false;
 					}
 				}
@@ -1984,7 +1981,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Long recordingId = null;
 		if (conn != null) {
 			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-			if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
+			if (rcl != null && rcl.getIsRecording()) {
 				rcl.setIsRecording(false);
 				recordingId = rcl.getRecordingId();
 				rcl.setRecordingId(null);
@@ -2120,7 +2117,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return getSipTransportLastname(roomId, roomManager.getSipConferenceMembersNumber(roomId));
 	}
 	
-	private String getSipTransportLastname(Long roomId, Integer c) {
+	private static String getSipTransportLastname(Long roomId, Integer c) {
 		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
 	}
 	

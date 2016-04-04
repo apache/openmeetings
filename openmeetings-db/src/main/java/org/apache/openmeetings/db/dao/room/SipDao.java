@@ -100,7 +100,7 @@ public class SipDao {
 		return null;
 	}
 
-	private String getKey(String confno) {
+	private static String getKey(String confno) {
 		return ASTERISK_OM_KEY + "/" + confno;
 	}
 

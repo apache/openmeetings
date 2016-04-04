@@ -38,14 +38,16 @@ public class UserConverter extends OmConverter<User> {
 		this.idMap = idMap;
 	}
 	
+	@Override
 	public User read(InputNode node) throws Exception {
 		long oldId = getLong(node);
-		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
+		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
 		User u = userDao.get(newId);
 		return u == null ? new User() : u;
 	}
 
+	@Override
 	public void write(OutputNode node, User value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());

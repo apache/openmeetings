@@ -41,10 +41,12 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class UserDashboardPersister implements DashboardPersister {
 	private static final Logger log = getLogger(UserDashboardPersister.class, webAppRootKey);
 	
+	@Override
 	public Dashboard load() {
 		return new XStreamDashboardPersister().load();
 	}
 
+	@Override
 	public void save(Dashboard dashboard) {
 		new XStreamDashboardPersister().save(dashboard);
 	}

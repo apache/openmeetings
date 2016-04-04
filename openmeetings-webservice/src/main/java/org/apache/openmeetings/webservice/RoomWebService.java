@@ -393,8 +393,8 @@ public class RoomWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Boolean result = userManager.kickUserByStreamId(sid, id);
-				return new ServiceResult(Boolean.TRUE.equals(result) ? 1L : 0L, "Kicked", Type.SUCCESS);
+				boolean result = userManager.kickUserByStreamId(sid, id);
+				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -428,7 +428,7 @@ public class RoomWebService {
 					RoomCountBean rCountBean = new RoomCountBean();
 					rCountBean.setRoomId(room.getId());
 					rCountBean.setRoomName(room.getName());
-					rCountBean.setMaxUser(room.getNumberOfPartizipants().intValue());
+					rCountBean.setMaxUser(room.getNumberOfPartizipants());
 					rCountBean.setRoomCount(sessionManager.getClientListByRoom(room.getId()).size());
 
 					roomBeans.add(rCountBean);

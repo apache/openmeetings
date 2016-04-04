@@ -111,6 +111,7 @@ public class InvitationManager implements IInvitationManager {
 		sendInvitionLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
 	}
 	
+	@Override
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
 		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
@@ -159,6 +160,7 @@ public class InvitationManager implements IInvitationManager {
 	 * @param subject 
 	 * @return
 	 */
+	@Override
 	public boolean sendInvitationReminderSMS(String phone, String subject, long languageId) {
 		if (!Strings.isEmpty(phone)) {
 			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
@@ -177,6 +179,7 @@ public class InvitationManager implements IInvitationManager {
 	 * @param hidePass
 	 * @return
 	 */
+	@Override
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
 			log.debug("Invitation was requested by hashcode: " + hashCode);
@@ -249,6 +252,7 @@ public class InvitationManager implements IInvitationManager {
 	 * @param pass
 	 * @return
 	 */
+	@Override
 	public Object checkInvitationPass(String hashCode, String pass) {
 		try {
 			Object obj = getInvitationByHashCode(hashCode, false);
@@ -276,10 +280,12 @@ public class InvitationManager implements IInvitationManager {
 	 * @param member
 	 * @param a
 	 */
+	@Override
 	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {
 		processInvitation(a, member, type, true);
 	}
 
+	@Override
 	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
 		Reminder reminder = a.getReminder();
 		if (reminder == null) {
@@ -305,6 +311,7 @@ public class InvitationManager implements IInvitationManager {
 		}
 	}
 
+	@Override
 	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
@@ -350,6 +357,7 @@ public class InvitationManager implements IInvitationManager {
 		return invitation;
 	}
 
+	@Override
 	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{

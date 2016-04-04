@@ -165,7 +165,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "numberOfPartizipants")
 	@Element(data = true, required = false)
-	private Long numberOfPartizipants = new Long(4);
+	private long numberOfPartizipants = 4L;
 
 	@Column(name = "appointment")
 	@Element(data = true, required = false)
@@ -320,10 +320,12 @@ public class Room implements IDataProviderEntity {
 		this.name = name;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -376,11 +378,11 @@ public class Room implements IDataProviderEntity {
 		this.currentusers = currentusers;
 	}
 
-	public Long getNumberOfPartizipants() {
+	public long getNumberOfPartizipants() {
 		return numberOfPartizipants;
 	}
 
-	public void setNumberOfPartizipants(Long numberOfPartizipants) {
+	public void setNumberOfPartizipants(long numberOfPartizipants) {
 		this.numberOfPartizipants = numberOfPartizipants;
 	}
 

@@ -75,10 +75,12 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	@JoinColumn(name = "poll_id")
 	private RoomPoll roomPoll;
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

@@ -138,31 +138,31 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsSuperModerator()
 	 */
 	@Column(name = "is_supermoderator")
-	private Boolean isSuperModerator = false;
+	private boolean isSuperModerator = false;
 	
 	/**
 	 * @see Client#getCanDraw()
 	 */
 	@Column(name = "can_draw")
-	private Boolean canDraw = false;
+	private boolean canDraw = false;
 	
 	/**
 	 * @see Client#getCanShare()
 	 */
 	@Column(name = "can_share")
-	private Boolean canShare = false;
+	private boolean canShare = false;
 	
 	/**
 	 * @see Client#getCanRemote()
 	 */
 	@Column(name = "can_remote")
-	private Boolean canRemote = false;
+	private boolean canRemote = false;
 	
 	/**
 	 * @see Client#getCanGiveAudio()
 	 */
 	@Column(name = "can_giveaudio")
-	private Boolean canGiveAudio = false;
+	private boolean canGiveAudio = false;
 
 	@Column(name = "can_video")
 	private boolean canVideo = false;
@@ -292,7 +292,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsRecording()
 	 */
 	@Column(name = "is_recording")
-	private Boolean isRecording = false;
+	private boolean isRecording = false;
 	
 	/**
 	 * @see Client#getRoomRecordingName()
@@ -340,7 +340,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsBroadcasting()
 	 */
 	@Column(name = "is_broadcasting")
-	private Boolean isBroadcasting = false;
+	private boolean isBroadcasting = false;
 	
 	/**
 	 * @see Client#getExternalUserId()
@@ -370,13 +370,13 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getZombieCheckFlag()
 	 */
 	@Column(name = "zombie_check_flag")
-	private Boolean zombieCheckFlag = false;
+	private boolean zombieCheckFlag = false;
 	
 	/**
 	 * @see Client#getMicMuted()
 	 */
 	@Column(name = "mic_muted")
-	private Boolean micMuted = false;
+	private boolean micMuted = false;
 	
 	/**
 	 * @see Client#isSipTransport()
@@ -421,10 +421,12 @@ public class Client implements IDataProviderEntity {
 		this.lastname = lastname;
 	}
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -597,11 +599,11 @@ public class Client implements IDataProviderEntity {
 		this.roomEnter = roomEnter;
 	}
 
-	public Boolean getIsRecording() {
+	public boolean getIsRecording() {
 		return isRecording;
 	}
 
-	public void setIsRecording(Boolean isRecording) {
+	public void setIsRecording(boolean isRecording) {
 		this.isRecording = isRecording;
 	}
 
@@ -637,43 +639,43 @@ public class Client implements IDataProviderEntity {
 		this.publicSID = publicSID;
 	}
 
-	public Boolean getZombieCheckFlag() {
+	public boolean getZombieCheckFlag() {
 		return zombieCheckFlag;
 	}
 	
-	public void setZombieCheckFlag(Boolean zombieCheckFlag) {
+	public void setZombieCheckFlag(boolean zombieCheckFlag) {
 		this.zombieCheckFlag = zombieCheckFlag;
 	}
 
-	public Boolean getMicMuted() {
+	public boolean getMicMuted() {
 		return micMuted;
 	}
 
-	public void setMicMuted(Boolean micMuted) {
+	public void setMicMuted(boolean micMuted) {
 		this.micMuted = micMuted;
 	}
 
-	public Boolean getCanDraw() {
+	public boolean getCanDraw() {
 		return canDraw;
 	}
 
-	public void setCanDraw(Boolean canDraw) {
+	public void setCanDraw(boolean canDraw) {
 		this.canDraw = canDraw;
 	}
 
-	public Boolean getIsBroadcasting() {
+	public boolean getIsBroadcasting() {
 		return isBroadcasting;
 	}
 
-	public void setIsBroadcasting(Boolean isBroadcasting) {
+	public void setIsBroadcasting(boolean isBroadcasting) {
 		this.isBroadcasting = isBroadcasting;
 	}
 
-	public Boolean getCanShare() {
+	public boolean getCanShare() {
 		return canShare;
 	}
 
-	public void setCanShare(Boolean canShare) {
+	public void setCanShare(boolean canShare) {
 		this.canShare = canShare;
 	}
 
@@ -693,11 +695,11 @@ public class Client implements IDataProviderEntity {
 		this.externalUserType = externalUserType;
 	}
 
-	public Boolean getIsSuperModerator() {
+	public boolean getIsSuperModerator() {
 		return isSuperModerator;
 	}
 
-	public void setIsSuperModerator(Boolean isSuperModerator) {
+	public void setIsSuperModerator(boolean isSuperModerator) {
 		this.isSuperModerator = isSuperModerator;
 	}
 
@@ -797,19 +799,19 @@ public class Client implements IDataProviderEntity {
 		this.interviewPodId = interviewPodId;
 	}
 
-	public Boolean getCanRemote() {
+	public boolean getCanRemote() {
 		return canRemote;
 	}
 
-	public void setCanRemote(Boolean canRemote) {
+	public void setCanRemote(boolean canRemote) {
 		this.canRemote = canRemote;
 	}
 
-	public Boolean getCanGiveAudio() {
+	public boolean getCanGiveAudio() {
 		return canGiveAudio;
 	}
 
-	public void setCanGiveAudio(Boolean canGiveAudio) {
+	public void setCanGiveAudio(boolean canGiveAudio) {
 		this.canGiveAudio = canGiveAudio;
 	}
 

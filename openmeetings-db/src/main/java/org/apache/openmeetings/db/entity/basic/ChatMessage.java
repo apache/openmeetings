@@ -93,10 +93,12 @@ public class ChatMessage implements IDataProviderEntity {
 	@Element(name = "needModeration", data = true, required = false)
 	private boolean needModeration;
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

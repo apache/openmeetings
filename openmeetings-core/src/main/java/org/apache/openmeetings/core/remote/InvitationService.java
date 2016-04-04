@@ -56,11 +56,12 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private RoomDao roomDao;
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 
-	private Date getDate(String date, String time, String tzId) {
+	private static Date getDate(String date, String time, String tzId) {
 		LocalDateTime d = LocalDateTime.of(
 				Integer.parseInt(date.substring(6)) //year
 				, Integer.parseInt(date.substring(3, 5)) //month

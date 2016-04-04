@@ -173,7 +173,7 @@ public class BackupImport {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
 	};
 
-	private File validate(String zipname, File intended) throws IOException {
+	private static File validate(String zipname, File intended) throws IOException {
 		final String intendedPath = intended.getCanonicalPath();
 		if (File.pathSeparatorChar != '\\' && zipname.indexOf('\\') > -1) {
 			zipname = zipname.replace('\\', '/');
@@ -189,7 +189,7 @@ public class BackupImport {
 		}
 	}
 
-	private File unzip(InputStream is) throws IOException  {
+	private static File unzip(InputStream is) throws IOException  {
 		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
 		log.debug("##### EXTRACTING BACKUP TO: " + f);
 		
@@ -272,7 +272,7 @@ public class BackupImport {
 		{
 			List<Group> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Group.class);
 			for (Group o : list) {
-				long oldId = o.getId();
+				Long oldId = o.getId();
 				o.setId(null);
 				o = groupDao.update(o, null);
 				groupMap.put(oldId, o.getId());
@@ -334,7 +334,7 @@ public class BackupImport {
 				}
 				
 				u.setInserted(new Date());
-				long userId = u.getId();
+				Long userId = u.getId();
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
@@ -350,7 +350,7 @@ public class BackupImport {
 				if (!Strings.isEmpty(u.getExternalType())) {
 					u.setType(User.Type.external);
 				}
-				userDao.update(u, -1L);
+				userDao.update(u, Long.valueOf(-1));
 				usersMap.put(userId, u.getId());
 			}
 		}
@@ -570,7 +570,7 @@ public class BackupImport {
 			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
 			boolean oldBackup = true;
 			for (PrivateMessage p : list) {
-				if (p.getFolderId() < 0) {
+				if (p.getFolderId() == null || p.getFolderId().longValue() < 0) {
 					oldBackup = false;
 					break;
 				}
@@ -616,7 +616,7 @@ public class BackupImport {
 				if (file.getOwnerId() != null) {
 					file.setOwnerId(usersMap.get(file.getOwnerId()));
 				}
-				if (file.getParentId() != null && file.getParentId() <= 0L) {
+				if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 					file.setParentId(null);
 				}
 				fileExplorerItemDao.update(file);
@@ -669,11 +669,11 @@ public class BackupImport {
 		FileHelper.removeRec(f);
 	}
 	
-	private <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {
+	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {
 		return readList(ser, baseDir, fileName, listNodeName, clazz, false);
 	}
 	
-	private <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
+	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
 		List<T> list = new ArrayList<T>();
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
@@ -698,7 +698,7 @@ public class BackupImport {
 		return list;
 	}
 	
-	private Node getNode(Node doc, String name) {
+	private static Node getNode(Node doc, String name) {
 		if (doc != null) {
 			NodeList nl = doc.getChildNodes();
 			for (int i = 0; i < nl.getLength(); ++i) {
@@ -940,7 +940,7 @@ public class BackupImport {
 			if (u.getAddress() == null || u.getAddress().getEmail() == null || User.Type.user != u.getType()) {
 				continue;
 			}
-			userEmailMap.put(u.getAddress().getEmail(), -1);
+			userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(-1));
 		}
 		Node nList = getNode(getNode(doc, "root"), listNodeName);
 		if (nList != null) {
@@ -1031,7 +1031,7 @@ public class BackupImport {
 						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAddress().getEmail();
 						u.getAddress().setEmail(updateEmail);
 					}
-					userEmailMap.put(u.getAddress().getEmail(), userEmailMap.size());
+					userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 				}
 				// check old stateId
 				if (!Strings.isEmpty(stateId)) {
@@ -1050,7 +1050,7 @@ public class BackupImport {
 		return list;
 	}
 	
-	private Long getProfileId(File f) {
+	private static Long getProfileId(File f) {
 		String n = f.getName();
 		if (n.indexOf(profilesPrefix) > -1) {
 			return importLongType(n.substring(profilesPrefix.length()));
@@ -1104,7 +1104,7 @@ public class BackupImport {
 		}
 	}
 
-	private Long importLongType(String value) {
+	private static Long importLongType(String value) {
 		Long val = null;
 		try {
 			val = Long.valueOf(value);

@@ -61,6 +61,7 @@ public class AjaxDownload extends AbstractAjaxBehavior {
 		target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");
 	}
 
+	@Override
 	public void onRequest() {
 		ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(getResourceStream(), getFileName());
 		handler.setContentDisposition(getContentDisposition());

@@ -207,7 +207,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 * @param appLink
 	 * @return
 	 */
-	private Long resetUser(String email, String username, String appLink) {
+	private static Long resetUser(String email, String username, String appLink) {
 		try {
 			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
@@ -237,7 +237,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return new Long(-2);
 	}
 
-	private void sendHashByUser(User us, String appLink, UserDao userDao) throws Exception {
+	private static void sendHashByUser(User us, String appLink, UserDao userDao) throws Exception {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
 		userDao.update(us, -1L);

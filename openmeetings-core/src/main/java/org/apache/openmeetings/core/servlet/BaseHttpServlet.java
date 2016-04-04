@@ -35,13 +35,10 @@ public abstract class BaseHttpServlet extends HttpServlet {
 	}
 	
 	protected void handleNotBooted(HttpServletResponse response) throws IOException {
-		OutputStream out = response.getOutputStream();
-
-		String msg = "Server is not booted yet";
-
-		out.write(msg.getBytes(StandardCharsets.UTF_8));
-
-		out.flush();
-		out.close();
+		try (OutputStream out = response.getOutputStream()) {
+			String msg = "Server is not booted yet";
+			out.write(msg.getBytes(StandardCharsets.UTF_8));
+			out.flush();
+		}
 	}
 }

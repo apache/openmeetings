@@ -270,6 +270,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		return -1L;
 	}
 
+	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 	}

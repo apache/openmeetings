@@ -221,6 +221,7 @@ public class BackupPanel extends AdminPanel {
 				th = null;
 			}
 			
+			@Override
 			public void run() {
 				try {
 					backup.performExport(backupFile, backupDir, includeFiles, progressHolder);

@@ -19,17 +19,17 @@
 package org.apache.openmeetings.db.dto.room;
 
 public class RoomCountBean {
-	private long roomId;
+	private Long roomId;
 	private String roomName;
-	private Integer roomCount;
-	private Integer maxUser;
+	private int roomCount;
+	private long maxUser;
 	
 	public RoomCountBean() {}
 	
-	public long getRoomId() {
+	public Long getRoomId() {
 		return roomId;
 	}
-	public void setRoomId(long roomId) {
+	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
 	public String getRoomName() {
@@ -38,16 +38,16 @@ public class RoomCountBean {
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
 	}
-	public Integer getRoomCount() {
+	public int getRoomCount() {
 		return roomCount;
 	}
-	public void setRoomCount(Integer roomCount) {
+	public void setRoomCount(int roomCount) {
 		this.roomCount = roomCount;
 	}
-	public Integer getMaxUser() {
+	public long getMaxUser() {
 		return maxUser;
 	}
-	public void setMaxUser(Integer maxUser) {
+	public void setMaxUser(long maxUser) {
 		this.maxUser = maxUser;
 	}
 }

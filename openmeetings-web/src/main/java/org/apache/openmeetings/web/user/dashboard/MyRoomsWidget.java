@@ -43,6 +43,7 @@ public class MyRoomsWidget extends AbstractWidget {
 		id = WIDGET_ID_MY_ROOMS;
 	}
 	
+	@Override
 	public WidgetView createView(String viewId) {
 		return new MyRoomsWidgetView(viewId, new Model<Widget>(this));
 	}

@@ -408,15 +408,15 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	private boolean bool(Object b) {
+	private static boolean bool(Object b) {
 		return TRUE.equals(Boolean.valueOf("" + b));
 	}
 	
-	private int getInt(Map<String, Object> returnMap, String key) {
+	private static int getInt(Map<String, Object> returnMap, String key) {
 		return Integer.valueOf(returnMap.get(key).toString()).intValue();
 	}
 	
-	private float getFloat(Map<String, Object> returnMap, String key) {
+	private static float getFloat(Map<String, Object> returnMap, String key) {
 		return Float.valueOf(returnMap.get(key).toString()).floatValue();
 	}
 	
@@ -595,7 +595,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		return "";
 	}
 
-	private void pressSequence(Robot robot, long delay, int... codes) throws InterruptedException {
+	private static void pressSequence(Robot robot, long delay, int... codes) throws InterruptedException {
 		for (int i = 0; i < codes.length; ++i) {
 			robot.keyPress(codes[i]);
 			Thread.sleep(delay);
@@ -622,7 +622,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		return "";
 	}
 
-	private void pressSpecialSign(String charValue, Robot robot) {
+	private static void pressSpecialSign(String charValue, Robot robot) {
 		Clipboard clippy = getDefaultToolkit().getSystemClipboard();
 		try {
 			Transferable transferableText = new StringSelection(charValue);

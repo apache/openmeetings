@@ -40,6 +40,7 @@ public class ReadKeyCodesTest extends Frame implements KeyListener {
 		setVisible(true);
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		if (msg1.length() > 0) {
 			draw3DRect(g, 20, 50, 250, 30);
@@ -62,6 +63,7 @@ public class ReadKeyCodesTest extends Frame implements KeyListener {
 		g.drawLine(x + width, y + height, x + width, y);
 	}
 
+	@Override
 	public void keyPressed(KeyEvent event) {
 		msg1 = "";
 		System.out.println("keyPressed "+event.getKeyCode());
@@ -91,11 +93,13 @@ public class ReadKeyCodesTest extends Frame implements KeyListener {
 		repaint();
 	}
 
+	@Override
 	public void keyReleased(KeyEvent event) {
 		msg1 = "";
 		repaint();
 	}
 
+	@Override
 	public void keyTyped(KeyEvent event) {
 		char key = event.getKeyChar();
 		

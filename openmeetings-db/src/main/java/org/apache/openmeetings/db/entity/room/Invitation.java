@@ -150,10 +150,12 @@ public class Invitation implements IDataProviderEntity {
 		appointment = i.appointment;
 	}
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

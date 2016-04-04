@@ -73,9 +73,11 @@ public class ConferenceLog implements IDataProviderEntity {
 	@Column(name="scopename")
 	private String scopeName;
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

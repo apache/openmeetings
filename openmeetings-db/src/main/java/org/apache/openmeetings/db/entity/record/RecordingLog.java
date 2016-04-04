@@ -69,9 +69,11 @@ public class RecordingLog implements IDataProviderEntity {
 	@Column(name="exit_value")
 	private String exitValue;
 	
+	@Override
 	public Long getId() {
 		return id;
 	}
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

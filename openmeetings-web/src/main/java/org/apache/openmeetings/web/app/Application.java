@@ -460,6 +460,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 	
+	@Override
 	public <T> T getOmBean(Class<T> clazz) { //FIXME hack for email templates support (should be in separate module for now
 		return Application.getBean(clazz);
 	}
@@ -468,6 +469,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return PROFILE_MESSAGES.getLink();
 	}
 
+	@Override
 	public String getOmContactsLink() { //FIXME hack for email templates support (should be in separate module for now
 		return getContactsLink();
 	}
@@ -488,7 +490,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				link += "?invitationHash=" + i.getHash();
 		
 				if (u.getLanguageId() > 0) {
-					link += "&language=" + u.getLanguageId().toString();
+					link += "&language=" + u.getLanguageId();
 				}
 			} else {
 				link = getRoomUrlFragment(r.getId()).getLink();
@@ -497,6 +499,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return link;
 	}
 	
+	@Override
 	public String getOmInvitationLink(String baseUrl, Invitation i) { //FIXME hack for email templates support (should be in separate module for now
 		return getInvitationLink(baseUrl, i);
 	}
@@ -506,18 +509,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(getBean(ConfigurationDao.class).getBaseUrl() + rc.urlFor(clazz, pp)));
 	}
 
+	@Override
 	public String urlForActivatePage(PageParameters pp) { //FIXME hack for email templates support (should be in separate module for now
 		return urlForPage(ActivatePage.class, pp);
 	}
 
+	@Override
 	public String getOmString(long id) {
 		return getString(id);
 	}
 	
+	@Override
 	public String getOmString(long id, long languageId) {
 		return getString(id, languageId);
 	}
 
+	@Override
 	public String getOmString(String key, long languageId) {
 		return getString(key, languageId);
 	}

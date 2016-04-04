@@ -38,7 +38,7 @@ public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
 	@Test
 	public void testAddingGroup(){
 		try {
-			 List<User> users = userDao.get("first", 0, 10, "lastname", false, 1);
+			 List<User> users = userDao.get("first", 0, 10, "lastname", false, 1L);
 			 log.debug("[result]" + users.size());
 			 log.debug("[records]"+ users);
 		} catch (Exception err) {

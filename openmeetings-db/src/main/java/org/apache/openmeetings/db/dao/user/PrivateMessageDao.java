@@ -48,7 +48,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
 			User from, User to, User owner, Boolean bookedRoom, Room room,
-			Boolean isContactRequest, Long userContactId) {
+			boolean isContactRequest, Long userContactId) {
 		try {
 			PrivateMessage privateMessage = new PrivateMessage();
 			privateMessage.setInserted(new Date());
@@ -105,7 +105,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return entity;
 	}
 	
-	private String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
+	private static String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
 		StringBuilder hql = new StringBuilder("SELECT ");
 		hql.append(isCount ? "COUNT(" : "").append("m").append(isCount ? ")" : "")
 			.append(" FROM PrivateMessage m WHERE m.owner.id = :ownerId ")
@@ -157,7 +157,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return query.executeUpdate();
 	}
 
-	public Integer moveMailsToFolder(Collection<Long> ids, Long folderId) {
+	public int moveMailsToFolder(Collection<Long> ids, Long folderId) {
 		Query query = em.createNamedQuery("moveMailsToFolder"); 
 		query.setParameter("folderId", folderId);
 		query.setParameter("ids", ids);

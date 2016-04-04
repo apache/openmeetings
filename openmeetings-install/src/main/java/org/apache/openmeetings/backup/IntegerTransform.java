@@ -21,10 +21,12 @@ package org.apache.openmeetings.backup;
 import org.simpleframework.xml.transform.Transform;
 
 public class IntegerTransform implements Transform<Integer>{
+	@Override
 	public Integer read(String value) throws Exception {
 		return OmConverter.getInt(value, 0);
 	}
 
+	@Override
 	public String write(Integer value) throws Exception {
 		return "" + value;
 	}
