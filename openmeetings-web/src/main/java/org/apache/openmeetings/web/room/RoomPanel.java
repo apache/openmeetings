@@ -78,7 +78,7 @@ public class RoomPanel extends BasePanel {
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
 	private final StartSharingEventBehavior startSharing;
-	private long roomId = 0;
+	private Long roomId = null;
 	
 	public RoomPanel(String id) {
 		this(id, new PageParameters());
@@ -93,7 +93,7 @@ public class RoomPanel extends BasePanel {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
 	}
 	
-	public static PageParameters addServer(long roomId, boolean addBasic) {
+	public static PageParameters addServer(Long roomId, boolean addBasic) {
 		PageParameters pp = new PageParameters();
 		if (addBasic) {
 			pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
@@ -114,7 +114,7 @@ public class RoomPanel extends BasePanel {
 		}
 		for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
 			List<Long> roomIds = entry.getValue();
-			Long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
+			long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
 			if (minimum < 0 || capacity < minimum) {
 				minimum = capacity;
 				result = entry.getKey();
@@ -125,7 +125,7 @@ public class RoomPanel extends BasePanel {
 		return result == null ? pp : addServer(pp, result);
 	}
 
-	public RoomPanel(String id, long roomId) {
+	public RoomPanel(String id, Long roomId) {
 		this(id, addServer(roomId, true));
 	}
 	
@@ -137,7 +137,7 @@ public class RoomPanel extends BasePanel {
 			StringValue secureHash = pp.get(WebSession.SECURE_HASH);
 			StringValue invitationHash = pp.get(WebSession.INVITATION_HASH);
 			if (!room.isEmpty()) {
-				roomId = room.toLong();
+				roomId = room.toLongObject();
 			} else if (!secureHash.isEmpty()) {
 				if (WebSession.get().signIn(secureHash.toString(), false)) {
 					SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(secureHash.toString());
@@ -169,7 +169,7 @@ public class RoomPanel extends BasePanel {
 		add(vote = new VoteDialog("vote", roomId));
 		add(pollResults = new PollResultsDialog("pollResults", roomId));
 		add(startSharing = new StartSharingEventBehavior(roomId));
-		if (roomId > 0) {
+		if (roomId.longValue() > 0) {
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
 	

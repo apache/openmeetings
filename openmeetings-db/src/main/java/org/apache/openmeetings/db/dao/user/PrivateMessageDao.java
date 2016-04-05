@@ -182,24 +182,21 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 
 	@Override
 	public List<PrivateMessage> get(String search, int start, int count, String order) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Should not be used");
 	}
 
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("Should not be used");
 	}
 
 	@Override
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("Should not be used");
 	}
 
 	@Override
 	public void delete(PrivateMessage entity, Long userId) {
-		// TODO Auto-generated method stub
+		throw new RuntimeException("Should not be used");
 	}
 }
