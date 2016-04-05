@@ -1890,4 +1890,6 @@
 	<entry key="admin.email.errorCount">Error Count</entry>
 	<entry key="admin.email.lastError">Last Error</entry>
 	<entry key="admin.email.reset.status">Reset Status</entry>
+	<entry key="dashboard.widget.admin.title">Admin functions</entry>
+	<entry key="dashboard.widget.admin.desc">General Admin functions</entry>
 </properties>

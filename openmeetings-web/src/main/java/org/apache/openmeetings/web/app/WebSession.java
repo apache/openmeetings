@@ -61,6 +61,8 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.user.dashboard.AdminWidget;
+import org.apache.openmeetings.web.user.dashboard.AdminWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
@@ -243,7 +245,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
-		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId)); //FIXME hack
+		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId));
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {
@@ -440,10 +442,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
-		boolean existMyRoomWidget = false, existRssWidget = false;
+		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
 		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
+		boolean showAdminWidget = getRights().contains(User.Right.Admin);
 		boolean save = false;
 
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
@@ -458,6 +461,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			}
 			if (showRssConfValue) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
+			}
+			if (showAdminWidget) {
+				dashboard.addWidget(widgetFactory.createWidget(new AdminWidgetDescriptor()));
 			}
 			save = true;
 		} else {
@@ -475,6 +481,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					if (!showRssConfValue) {
 						iter.remove();
 					}
+				} else if ((w.getClass().equals(AdminWidget.class))) {
+					// AdminWidget is stored in the profile of user. check if user is admin.
+					existAdminWidget = true;
+					if (!showAdminWidget) {
+						iter.remove();
+					}
 				} else {
 					w.init();
 				}
@@ -487,6 +499,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			// RssWidget was deleted from profile and now it's enabled. It's added again to dashboard.
 			if (!existRssWidget && showRssConfValue && !dashboard.isWidgetRssDeleted()) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
+				save = true;
+			}
+			// user had no admin rights, now he/she has.
+			if (!existAdminWidget && showAdminWidget && !dashboard.isWidgetAdminDeleted()) {
+				dashboard.addWidget(widgetFactory.createWidget(new AdminWidgetDescriptor()));
 				save = true;
 			}
 		}

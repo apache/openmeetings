@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.user.dashboard.MyRoomsWidget.WIDGET_ID_MY_ROOMS;
 import static org.apache.openmeetings.web.user.dashboard.RssWidget.WIDGET_ID_RSS;
+import static org.apache.openmeetings.web.user.dashboard.AdminWidget.WIDGET_ID_ADMIN;
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
 import ro.fortsoft.wicket.dashboard.Widget;
 
@@ -27,6 +28,7 @@ public class UserDashboard extends DefaultDashboard {
 	private static final long serialVersionUID = 1L;
 	private boolean widgetRssDeleted = false;
 	private boolean widgetMyRoomsDeleted = false;
+	private boolean widgetAdminDeleted = false;
 	
 	public UserDashboard(String id, String title) {
 		super(id, title);
@@ -47,6 +49,14 @@ public class UserDashboard extends DefaultDashboard {
 	public void setWidgetMyRoomsDeleted(boolean widgetMyRoomsDeleted) {
 		this.widgetMyRoomsDeleted = widgetMyRoomsDeleted;
 	}
+
+	public boolean isWidgetAdminDeleted() {
+		return widgetAdminDeleted;
+	}
+
+	public void setWidgetAdminDeleted(boolean widgetAdminDeleted) {
+		this.widgetAdminDeleted = widgetAdminDeleted;
+	}
 	
 	@Override
 	public void deleteWidget(String widgetId) {
@@ -56,6 +66,9 @@ public class UserDashboard extends DefaultDashboard {
 				break;
 			case WIDGET_ID_MY_ROOMS:
 				widgetMyRoomsDeleted = true;
+				break;
+			case WIDGET_ID_ADMIN:
+				widgetAdminDeleted = true;
 				break;
 			default:
 				break;
@@ -71,6 +84,9 @@ public class UserDashboard extends DefaultDashboard {
 				break;
 			case WIDGET_ID_MY_ROOMS:
 				widgetMyRoomsDeleted = false;
+				break;
+			case WIDGET_ID_ADMIN:
+				widgetAdminDeleted = false;
 				break;
 			default:
 				break;
