@@ -68,10 +68,10 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 
 	@Override
 	public List<OAuthServer> get(String search, int start, int count, String order) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, false, null, searchFields), Long.class);
+		TypedQuery<OAuthServer> q = em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, false, null, searchFields), OAuthServer.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
-		return null;
+		return q.getResultList();
 	}
 
 	@Override

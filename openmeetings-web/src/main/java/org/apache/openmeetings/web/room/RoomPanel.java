@@ -122,7 +122,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
-	private long roomId;
+	private Long roomId;
 	private Client c;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final StartSharingEventBehavior startSharing;

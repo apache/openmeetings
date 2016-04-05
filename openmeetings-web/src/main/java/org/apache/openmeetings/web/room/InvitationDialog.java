@@ -92,12 +92,12 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final InvitationForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final long roomId;
+	private final Long roomId;
 	private final IModel<String> subject = Model.of((String)null);
 	private final IModel<String> message = Model.of((String)null);
 	private final IModel<String> tzId = Model.of((String)null);
 	private final IModel<InviteeType> inviteeType = Model.of(InviteeType.user);
-	private Long lang;
+	private long lang;
 	private final TextField<String> url = new TextField<String>("url", Model.of((String)null));
 	enum InviteeType {
 		user
@@ -150,7 +150,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 			});
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 
-	public InvitationDialog(String id, long roomId) {
+	public InvitationDialog(String id, Long roomId) {
 		super(id, Application.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
 		this.roomId = roomId;
 		add(form = new InvitationForm("form", getModel()));

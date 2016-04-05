@@ -126,20 +126,16 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 
 	@Override
 	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Should not be used");
 	}
 
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("Should not be used");
 	}
 
 	@Override
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("Should not be used");
 	}
-
 }
