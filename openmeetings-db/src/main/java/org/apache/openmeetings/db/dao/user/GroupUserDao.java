@@ -41,6 +41,11 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
 	@Override
+	public GroupUser get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public GroupUser get(Long id) {
 		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
 		q.setParameter("id", id);

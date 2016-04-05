@@ -43,6 +43,11 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	}
 	
 	@Override
+	public OAuthServer get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public OAuthServer get(Long id) {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getOAuthServerById", OAuthServer.class);
 		query.setParameter("id", id);

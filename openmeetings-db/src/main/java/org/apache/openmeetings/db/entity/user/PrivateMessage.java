@@ -227,18 +227,6 @@ public class PrivateMessage implements IDataProviderEntity {
 		this.parentMessage = parentMessage;
 	}
 
-	@Deprecated
-	public boolean getIsTrash() {
-		return TRASH_FOLDER_ID == folderId;
-	}
-
-	@Deprecated
-	public void setIsTrash(boolean isTrash) {
-		if (isTrash) {
-			folderId = TRASH_FOLDER_ID;
-		}
-	}
-
 	public Long getFolderId() {
 		return folderId;
 	}

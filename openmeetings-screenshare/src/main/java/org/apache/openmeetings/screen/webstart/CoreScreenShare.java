@@ -643,11 +643,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		try {
-
 			log.trace("service call result: " + call);
+			if (call == null) {
+				return;
+			}
 
-			String method = call == null ? null : call.getServiceMethodName();
-			Object o = call == null ? null : call.getResult();
+			String method = call.getServiceMethodName();
+			Object o = call.getResult();
 			log.trace("call ### get Method Name " + method);
 			if ("connect".equals(method)) {
 				if (o instanceof Map) {

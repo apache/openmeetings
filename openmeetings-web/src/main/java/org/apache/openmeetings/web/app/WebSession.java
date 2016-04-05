@@ -321,7 +321,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public String getValidatedSid() {
 		SessiondataDao sessionDao = getBean(SessiondataDao.class);
 		Long _userId = sessionDao.checkSession(SID);
-		if (_userId == null || userId != _userId) {
+		if (_userId == null || !_userId.equals(userId)) {
 			Sessiondata sessionData = sessionDao.getSessionByHash(SID);
 			if (sessionData == null) {
 				sessionData = sessionDao.startsession();

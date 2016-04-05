@@ -224,7 +224,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	public static boolean isOwner(Appointment object) {
-		return object.getOwner() != null && getUserId() == object.getOwner().getId();
+		return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
 	}
 	
 	@Override
