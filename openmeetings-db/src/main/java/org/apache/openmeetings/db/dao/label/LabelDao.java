@@ -278,7 +278,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 	
 	private static List<StringLabel> getLabels(Locale l, final String search) {
-		if (labelCache.get(l) == null) {
+		if (!labelCache.containsKey(l)) {
 			labelCache.put(l, getLabels(l));
 		}
 		List<StringLabel> result = new ArrayList<StringLabel>(labelCache.get(l));
@@ -293,6 +293,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return result;
 	}
 	
+	@Override
+	public StringLabel get(long id) {
+		return null;
+	}
+
 	@Override
 	public StringLabel get(Long id) {
 		return null;

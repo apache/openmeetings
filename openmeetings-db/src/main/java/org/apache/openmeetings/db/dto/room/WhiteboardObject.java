@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class WhiteboardObject {
 
-	private Long whiteBoardId;
+	private long whiteBoardId;
 	private Integer x = 0;
 	private Integer y = 0;
 	private Integer zoom = 100;
@@ -36,11 +36,11 @@ public class WhiteboardObject {
 
 	public WhiteboardObject() {}
 	
-	public Long getWhiteBoardId() {
+	public long getWhiteBoardId() {
 		return whiteBoardId;
 	}
 
-	public void setWhiteBoardId(Long whiteBoardId) {
+	public void setWhiteBoardId(long whiteBoardId) {
 		this.whiteBoardId = whiteBoardId;
 	}
 

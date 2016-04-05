@@ -83,6 +83,11 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	}
 	
 	@Override
+	public PrivateMessage get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public PrivateMessage get(Long id) {
 		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class); 
 		query.setParameter("id", id);

@@ -86,7 +86,7 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
-	private final static long MOVE_CHOOSE = -1;
+	private final static Long MOVE_CHOOSE = Long.valueOf(-1);
 	private final static int SELECT_CHOOSE = 1252;
 	private final static int SELECT_ALL = 1239;
 	private final static int SELECT_NONE = 1240;
@@ -169,9 +169,10 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	private void updateControls(AjaxRequestTarget target) {
 		deleteBtn.setEnabled(!selectedMessages.isEmpty());
-		readBtn.setEnabled(TRASH_FOLDER_ID != selectedFolderModel.getObject() && !selectedMessages.isEmpty());
-		unreadBtn.setEnabled(TRASH_FOLDER_ID != selectedFolderModel.getObject() && !selectedMessages.isEmpty());
-		toInboxBtn.setVisible(INBOX_FOLDER_ID != selectedFolderModel.getObject() && SENT_FOLDER_ID != selectedFolderModel.getObject() && !selectedMessages.isEmpty());
+		Long selFldr = selectedFolderModel.getObject();
+		readBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
+		unreadBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
+		toInboxBtn.setVisible(!INBOX_FOLDER_ID.equals(selFldr) && !SENT_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
 		target.add(buttons);
 	}
 	
@@ -209,7 +210,7 @@ public class MessagesContactsPanel extends UserPanel {
 		}
 	}
 	
-	private void selectFolder(WebMarkupContainer folder, long id, AjaxRequestTarget target) {
+	private void selectFolder(WebMarkupContainer folder, Long id, AjaxRequestTarget target) {
 		selectedFolder = folder;
 		selectedFolderModel.setObject(id);
 		setDefaultFolderClass();
@@ -217,7 +218,7 @@ public class MessagesContactsPanel extends UserPanel {
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
 		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
-		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
+		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
 		if (target != null) {
@@ -377,7 +378,7 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(Item<PrivateMessage> item) {
 				PrivateMessage m = item.getModelObject();
-				final long id = m.getId();
+				final Long id = m.getId();
 				allMessages.add(id);
 				if (m.getIsRead()) {
 					readMessages.add(id);
@@ -404,7 +405,7 @@ public class MessagesContactsPanel extends UserPanel {
 						target.add(container);
 					}
 				});
-				StringBuilder cssClass = new StringBuilder(Boolean.FALSE.equals(m.getIsRead()) ? "unread" : "");
+				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "unread" : "");
 				if (selectedMessages.contains(id)) {
 					if (cssClass.length() > 0) {
 						cssClass.append(" ");
@@ -448,7 +449,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					if (TRASH_FOLDER_ID == selectedFolderModel.getObject()) {
+					if (TRASH_FOLDER_ID.equals(selectedFolderModel.getObject())) {
 						getBean(PrivateMessageDao.class).delete(selectedMessages);
 					} else {
 						getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, TRASH_FOLDER_ID);
@@ -509,8 +510,8 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				long folderId = moveDropDown.getModelObject().getId();
-				if (folderId != MOVE_CHOOSE) {
+				Long folderId = moveDropDown.getModelObject().getId();
+				if (!MOVE_CHOOSE.equals(folderId)) {
 					getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, folderId);
 				}
 				selectFolder(selectedFolder, selectedFolderModel.getObject(), target);
@@ -554,8 +555,8 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
-				final long contactId = uc.getId();
-				final long userId = uc.getOwner().getId();
+				final Long contactId = uc.getId();
+				final Long userId = uc.getOwner().getId();
 				if (uc.isPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
 				}

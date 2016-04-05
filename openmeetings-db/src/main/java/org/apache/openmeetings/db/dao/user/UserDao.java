@@ -249,6 +249,11 @@ public class UserDao implements IDataProviderDao<User> {
 		return get(id, false);
 	}
 	
+	@Override
+	public User get(long id) {
+		return get(Long.valueOf(id), false);
+	}
+	
 	private User get(Long id, boolean force) {
 		User u = null;
 		if (id != null && id.longValue() > 0) {
@@ -443,11 +448,11 @@ public class UserDao implements IDataProviderDao<User> {
 		TypedQuery<Long> query = em.createNamedQuery("checkPassword", Long.class);
 		query.setParameter("userId", userId);
 		query.setParameter("password", ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(password));
-		return query.getResultList().get(0) == 1;
+		return Long.valueOf(1).equals(query.getResultList().get(0));
 
 	}
 
-	public User getContact(String email, long ownerId) {
+	public User getContact(String email, Long ownerId) {
 		return getContact(email, "", "", ownerId);
 	}
 	
@@ -478,7 +483,7 @@ public class UserDao implements IDataProviderDao<User> {
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
-			to.setLanguageId(null == langId ? owner.getLanguageId() : langId);
+			to.setLanguageId(null == langId ? owner.getLanguageId() : langId.longValue());
 			to.setOwnerId(owner.getId());
 			to.setAddress(new Address());
 			to.getAddress().setEmail(email);
@@ -563,7 +568,7 @@ public class UserDao implements IDataProviderDao<User> {
 
 	@Override
 	public List<User> get(String search, int start, int count, String order) {
-		return get(search, start, count, order, false, -1L);
+		return get(search, start, count, order, false, Long.valueOf(-1));
 	}
 	
 	public Set<Right> getRights(Long id) {
@@ -573,7 +578,7 @@ public class UserDao implements IDataProviderDao<User> {
 			return rights;
 		}
 		// For direct access of linked users
-		if (id < 0) {
+		if (id.longValue() < 0) {
 			rights.add(Right.Room);
 			return rights;
 		}
@@ -668,7 +673,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setShowContactDataToContacts(showContactDataToContacts);
 
 		// this is needed cause the language is not a needed data at registering
-		u.setLanguageId(languageId != 0 ? languageId : null);
+		u.setLanguageId(languageId != 0 ? languageId : 1);
 		if (!Strings.isEmpty(userpass)) {
 			u.updatePassword(cfgDao, userpass);
 		}

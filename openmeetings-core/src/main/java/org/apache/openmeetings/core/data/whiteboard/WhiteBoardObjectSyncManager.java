@@ -47,11 +47,11 @@ public class WhiteBoardObjectSyncManager {
 	}
 
 	public Map<String, WhiteboardSyncLockObject> getWhiteBoardSyncListByRoomid(Long roomId) {
-		Map<String, WhiteboardSyncLockObject> roomList = whiteBoardSyncList.get(roomId);
-		if (roomList == null) {
-			roomList = new HashMap<String, WhiteboardSyncLockObject>();
+		if (whiteBoardSyncList.containsKey(roomId)) {
+			return whiteBoardSyncList.get(roomId);
+		} else {
+			return new HashMap<String, WhiteboardSyncLockObject>();
 		}
-		return roomList;
 	}
 
 	/*
@@ -62,11 +62,8 @@ public class WhiteBoardObjectSyncManager {
 	}
 
 	public synchronized void setWhiteBoardImagesSyncListByRoomAndObjectId(Long roomId, String objectId, Map<String, WhiteboardSyncLockObject> imageSyncList) {
-		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = whiteBoardObjectSyncList.get(roomId);
-		if (roomList == null) {
-			roomList = new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
-		}
-		if (imageSyncList.size() == 0) {
+		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = getWhiteBoardObjectSyncListByRoomid(roomId);
+		if (imageSyncList.isEmpty()) {
 			roomList.remove(objectId);
 		} else {
 			roomList.put(objectId, imageSyncList);
@@ -75,23 +72,22 @@ public class WhiteBoardObjectSyncManager {
 	}
 
 	public synchronized Map<String, Map<String, WhiteboardSyncLockObject>> getWhiteBoardObjectSyncListByRoomid(Long roomId) {
-		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = whiteBoardObjectSyncList.get(roomId);
-		if (roomList == null) {
-			roomList = new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
+		if (whiteBoardObjectSyncList.containsKey(roomId)) {
+			return whiteBoardObjectSyncList.get(roomId);
+		} else {
+			return new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
 		}
-		return roomList;
 	}
 
 	public synchronized Map<String, WhiteboardSyncLockObject> getWhiteBoardObjectSyncListByRoomAndObjectId(Long roomId, String objectId) {
 		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomId: " + roomId);
-		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = whiteBoardObjectSyncList.get(roomId);
-		if (roomList == null) {
-			roomList = new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
-		}
-		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomList: " + roomList);
-		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid objectId: " + objectId);
-		if (roomList.size() == 1) {
-			log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomList Key imageId: " + roomList.keySet().iterator().next());
+		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = getWhiteBoardObjectSyncListByRoomid(roomId);
+		if (log.isDebugEnabled()) {
+			log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomList: " + roomList);
+			log.debug("getWhiteBoardImagesSyncListByRoomAndImageid objectId: " + objectId);
+			if (roomList.size() == 1) {
+				log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomList Key imageId: " + roomList.keySet().iterator().next());
+			}
 		}
 		Map<String, WhiteboardSyncLockObject> imageSyncList = roomList.get(objectId);
 		if (imageSyncList == null) {
