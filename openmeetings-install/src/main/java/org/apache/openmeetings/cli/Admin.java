@@ -59,7 +59,6 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.installation.InstallationDocumentHandler;
@@ -320,47 +319,24 @@ public class Admin {
 						System.out.println("WARNING: all intermadiate files will be clean up!");
 					}
 					StringBuilder report = new StringBuilder();
-					report.append("Temporary files allocates: ").append(OmFileHelper.getHumanSize(OmFileHelper.getUploadTempDir())).append("\n");
+					CleanupUnit temp = CleanupHelper.getTempUnit();
+					report.append("Temporary files allocates: ").append(temp.getHumanTotal()).append("\n");
 					{ //UPLOAD
 						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
 						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
 						//Profiles
-						File profiles = OmFileHelper.getUploadProfilesDir();
-						long invalid = 0;
-						long deleted = 0;
 						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
 						UserDao udao = ctx.getBean(UserDao.class);
-						for (File profile : profiles.listFiles()) {
-							long pSize = OmFileHelper.getSize(profile);
-							long userId = getUserIdByProfile(profile.getName());
-							User u = udao.get(userId);
-							if (profile.isFile() || userId < 0 || u == null) {
-								if (cleanup) {
-									FileHelper.removeRec(profile);
-								} else {
-									invalid += pSize;
-								}
-							} else if (u.isDeleted()) {
-								if (cleanup) {
-									FileHelper.removeRec(profile);
-								} else {
-									deleted += pSize;
-								}
-							}
+						CleanupEntityUnit profileUnit = CleanupHelper.getProfileUnit(udao);
+						long restSize = sectionSize - profileUnit.getSizeTotal();
+						report.append("\t\tprofiles: ").append(profileUnit.getHumanTotal()).append("\n");
+						report.append("\t\t\tinvalid: ").append(profileUnit.getHumanInvalid()).append("\n");
+						report.append("\t\t\tdeleted: ").append(profileUnit.getHumanDeleted()).append("\n");
+						report.append("\t\t\tmissing count: ").append(profileUnit.getMissing()).append("\n");
+						if (cleanup) {
+							profileUnit.cleanup();
 						}
-						long missing = 0;
-						for (User u : udao.getAllBackupUsers()) {
-							if (!u.isDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
-								missing++;
-							}
-						}
-						long size = OmFileHelper.getSize(profiles);
-						long restSize = sectionSize - size;
-						report.append("\t\tprofiles: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
-						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(deleted)).append("\n");
-						report.append("\t\t\tmissing count: ").append(missing).append("\n");
-						size = OmFileHelper.getSize(OmFileHelper.getUploadImportDir());
+						long size = OmFileHelper.getSize(OmFileHelper.getUploadImportDir());
 						restSize -= size;
 						report.append("\t\timport: ").append(OmFileHelper.getHumanSize(size)).append("\n");
 						size = OmFileHelper.getSize(OmFileHelper.getUploadBackupDir());
@@ -371,8 +347,8 @@ public class Admin {
 						size = OmFileHelper.getSize(files);
 						restSize -= size;
 						FileExplorerItemDao fileDao = ctx.getBean(FileExplorerItemDao.class);
-						invalid = 0;
-						deleted = 0;
+						long invalid = 0;
+						long deleted = 0;
 						for (File f : files.listFiles()) {
 							long fSize = OmFileHelper.getSize(f);
 							FileExplorerItem item = fileDao.getByHash(f.getName());
@@ -390,7 +366,7 @@ public class Admin {
 								}
 							}
 						}
-						missing = 0;
+						int missing = 0;
 						for (FileExplorerItem item : fileDao.get()) {
 							if (!item.isDeleted() && item.getHash() != null && !new File(files, item.getHash()).exists()) {
 								missing++;
@@ -494,18 +470,6 @@ public class Admin {
 				params[1]++;
 			}
 		}
-	}
-	
-	private static long getUserIdByProfile(String name) {
-		long result = -1;
-		if (name.startsWith(OmFileHelper.profilesPrefix)) {
-			try {
-				result = Long.parseLong(name.substring(OmFileHelper.profilesPrefix.length()));
-			} catch (Exception e) {
-				//noop
-			}
-		}
-		return result;
 	}
 	
 	private void checkAdminDetails(String ctxName) throws Exception {
