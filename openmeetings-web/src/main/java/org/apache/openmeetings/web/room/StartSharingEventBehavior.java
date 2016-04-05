@@ -59,7 +59,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
 	private final AjaxDownload download;
-	private final long roomId;
+	private final Long roomId;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -67,7 +67,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		, rtmpt
 	}
 
-	public StartSharingEventBehavior(long _roomId) {
+	public StartSharingEventBehavior(Long _roomId) {
 		this.roomId = _roomId;
 		download = new AjaxDownload(true) {
 			private static final long serialVersionUID = 1L;
@@ -148,7 +148,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		return result.toString();
 	}
 	
-	private String addKeystore(String app, Protocol protocol) {
+	private static String addKeystore(String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
 		if (Protocol.rtmps == protocol) {

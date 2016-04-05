@@ -161,7 +161,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			String parentSid = (String)map.get("parentSid");
 			parentClient = sessionManager.getClientByPublicSID(parentSid, null);
 			if (parentClient == null) {
-				rejectClient();
+				return rejectClient();
 			}
 		}
 		Client rcm = sessionManager.addClientListItem(conn.getClient().getId(),
