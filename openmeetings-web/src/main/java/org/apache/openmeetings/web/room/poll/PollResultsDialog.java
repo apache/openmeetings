@@ -69,7 +69,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer chartDiv = new WebMarkupContainer("chart");
-	private final long roomId;
+	private final Long roomId;
 	private final PollSelectForm selForm;
 	private final PollResultsForm dispForm;
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
@@ -79,7 +79,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private final MessageDialog closeConfirm;
 	private final MessageDialog deleteConfirm;
 
-	public PollResultsDialog(String id, long _roomId) {
+	public PollResultsDialog(String id, Long _roomId) {
 		super(id, Application.getString(37));
 		this.roomId = _roomId;
 		add(selForm = new PollSelectForm("selForm"));

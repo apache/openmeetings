@@ -60,7 +60,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
-	private final long roomId;
+	private final Long roomId;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -68,7 +68,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		, rtmpt
 	}
 
-	public StartSharingEventBehavior(long _roomId) {
+	public StartSharingEventBehavior(Long _roomId) {
 		this.roomId = _roomId;
 		download = new AjaxDownload(true) {
 			private static final long serialVersionUID = 1L;
