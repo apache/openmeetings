@@ -172,5 +172,4 @@ public class GroupUser implements IDataProviderEntity {
 	public String toString() {
 		return "GroupUser [id=" + id + ", group=" + group + ", user=" + user + ", deleted=" + deleted + "]";
 	}
-	
 }

@@ -58,6 +58,11 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private UserDao userDao;
 
 	@Override
+	public LdapConfig get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public LdapConfig get(Long id) {
 		try {
 

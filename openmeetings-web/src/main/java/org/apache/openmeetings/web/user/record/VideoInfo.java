@@ -113,7 +113,7 @@ public class VideoInfo extends Panel {
 		}
 		
 		boolean reConvEnabled = false;
-		if (r.getOwnerId() != null && getUserId() == r.getOwnerId() && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
+		if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
 			List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
 			reconvLabel:
 			if (!metas.isEmpty()) {

@@ -39,6 +39,11 @@ public class GroupDao implements IDataProviderDao<Group> {
 	private EntityManager em;
 
 	@Override
+	public Group get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public Group get(Long id) {
 		TypedQuery<Group> query = em.createNamedQuery("getGroupById", Group.class);
 		query.setParameter("id", id);

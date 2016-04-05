@@ -121,6 +121,11 @@ public class ServerDao implements IDataProviderDao<Server> {
 		return q.getSingleResult();
 	}
 
+	@Override
+	public Server get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

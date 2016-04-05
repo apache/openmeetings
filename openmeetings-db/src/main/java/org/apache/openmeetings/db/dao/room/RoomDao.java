@@ -61,9 +61,14 @@ public class RoomDao implements IDataProviderDao<Room> {
 	private TimezoneUtil timezoneUtil;
 
 	@Override
+	public Room get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public Room get(Long id) {
 		Room r = null;
-		if (id != null && id > 0) {
+		if (id != null && id.longValue() > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 			try {

@@ -39,6 +39,8 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 */
 	T get(Long id);
 
+	T get(long id);
+	
 	/**
 	 * Get a list of instances of {@link T}
 	 * 

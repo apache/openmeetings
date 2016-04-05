@@ -90,7 +90,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(IConnection current, Client client, String roomRecordingName, String comment, Boolean isInterview) {
+	public String recordMeetingStream(IConnection current, Client client, String roomRecordingName, String comment, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
@@ -206,7 +206,7 @@ public class RecordingService implements IPendingServiceCallback {
 	 * @param metaId
 	 * @throws Exception
 	 */
-	private void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, Boolean isInterview) throws Exception {
+	private void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, boolean isInterview) throws Exception {
 		try {
 			log.debug("Recording show for: " + conn.getScope().getContextPath());
 			log.debug("Name of CLient and Stream to be recorded: " + broadcastid);
@@ -244,7 +244,7 @@ public class RecordingService implements IPendingServiceCallback {
 	 * 
 	 * @param conn
 	 */
-	public synchronized void stopRecordingShow(IConnection conn, String broadcastId, Long metaId) {
+	public void stopRecordingShow(IConnection conn, String broadcastId, Long metaId) {
 		try {
 			if (metaId == null) {
 				// this should be fixed, can be useful for debugging, after all this is an error
@@ -447,8 +447,7 @@ public class RecordingService implements IPendingServiceCallback {
 							+ " " + rcl.getLastname(), now, false, false, true, streamName_Screen, rcl.getInterviewPodId());
 
 					// Start FLV Recording
-					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true,
-							recording.isInterview());
+					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true, recording.isInterview());
 
 					// Add Meta Data
 					rcl.setRecordingMetaDataId(metaDataId);
@@ -475,8 +474,7 @@ public class RecordingService implements IPendingServiceCallback {
 						+ rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName, rcl.getInterviewPodId());
 
 				// Start FLV recording
-				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaDataId, false,
-						recording.isInterview());
+				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaDataId, false, recording.isInterview());
 
 				rcl.setRecordingMetaDataId(metaDataId);
 
