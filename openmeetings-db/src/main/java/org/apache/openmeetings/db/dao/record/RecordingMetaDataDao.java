@@ -94,8 +94,8 @@ public class RecordingMetaDataDao {
 		return null;
 	}
 
-	public Long add(Long recordingId, String freeTextUserName, Date recordStart, Boolean isAudioOnly,
-			Boolean isVideoOnly, Boolean isScreenData, String streamName, Integer interiewPodId) {
+	public Long add(Long recordingId, String freeTextUserName, Date recordStart, boolean isAudioOnly,
+			boolean isVideoOnly, boolean isScreenData, String streamName, Integer interiewPodId) {
 		try {
 
 			RecordingMetaData metaData = new RecordingMetaData();

@@ -37,6 +37,11 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 	private EntityManager em;
 	
 	@Override
+	public MailMessage get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public MailMessage get(Long id) {
 		return em.createNamedQuery("getMailMessageById", MailMessage.class).setParameter("id", id).getSingleResult();
 	}

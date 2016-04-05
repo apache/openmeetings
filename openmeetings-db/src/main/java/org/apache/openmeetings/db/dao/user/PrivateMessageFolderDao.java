@@ -67,6 +67,11 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 	
 	@Override
+	public PrivateMessageFolder get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public PrivateMessageFolder get(Long id) {
 		String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 

@@ -26,6 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAME;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -69,12 +70,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	@Autowired
 	private UserDao userDao;
-
-	/**
-	 * @deprecated Dao's are not the place to store session variables
-	 */
-	@Deprecated
-	private String appName = null;
 
 	/**
 	 * Retrieves Configuration regardless of its deleted status
@@ -178,10 +173,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public String getAppName() {
-		if (appName == null) {
-			appName = getConfValue(CONFIG_APPLICATION_NAME, String.class, DEFAULT_APP_NAME);
+		if (APPLICATION_NAME == null) {
+			APPLICATION_NAME = getConfValue(CONFIG_APPLICATION_NAME, String.class, DEFAULT_APP_NAME);
 		}
-		return appName;
+		return APPLICATION_NAME;
 	}
 
 	public String getBaseUrl() {
@@ -193,8 +188,13 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
+	public Configuration get(long id) {
+		return get(Long.valueOf(id));
+	}
+	
+	@Override
 	public Configuration get(Long id) {
-		if (id <= 0) {
+		if (id == null) {
 			return null;
 		}
 		return em.createNamedQuery("getConfigurationById", Configuration.class)
@@ -234,7 +234,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getKey();
 		String value = entity.getValue();
-		if (entity.getId() == null || entity.getId() <= 0) {
+		if (entity.getId() == null || entity.getId().longValue() <= 0) {
 			entity.setInserted(new Date());
 			entity.setDeleted(deleted);
 			em.persist(entity);
@@ -249,9 +249,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		if (CONFIG_CRYPT_KEY.equals(key)) {
 			configKeyCryptClassName = value;
 		} else if ("show.whiteboard.draw.status".equals(key)) {
-			whiteboardDrawStatus = "1".equals(value);
+			whiteboardDrawStatus = Boolean.valueOf("1".equals(value));
 		} else if (CONFIG_APPLICATION_NAME.equals(key)) {
-			appName = value;
+			APPLICATION_NAME = value;
 		}
 		//TODO ensure entity returned is updated
 		return entity;
@@ -292,8 +292,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public boolean getWhiteboardDrawStatus() {
 		if (whiteboardDrawStatus == null) {
 			String drawStatus = getConfValue("show.whiteboard.draw.status", String.class, "0");
-			whiteboardDrawStatus = "1".equals(drawStatus);
+			whiteboardDrawStatus = Boolean.valueOf("1".equals(drawStatus));
 		}
-		return whiteboardDrawStatus;
+		return whiteboardDrawStatus.booleanValue();
 	}
 }

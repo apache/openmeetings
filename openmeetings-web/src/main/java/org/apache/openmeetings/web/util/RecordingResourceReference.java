@@ -90,7 +90,7 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 		if (r == null) {
 			return r;
 		}
-		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
+		if (r.getOwnerId() == null || getUserId().equals(r.getOwnerId())) {
 			return r;
 		}
 		if (r.getGroupId() == null || getBean(GroupUserDao.class).isUserInGroup(r.getGroupId(), getUserId())) {
