@@ -16,17 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.dashboard;
+package org.apache.openmeetings.web.user.dashboard.admin;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
+	private final AdminCleanupInfoDialog cleanupDialog;
 
 	public AdminWidgetView(String id, Model<Widget> model) {
 		super(id, model);
+		final Form<Void> form = new Form<>("form");
+		add(form);
+		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
+		form.add(new AjaxButton("show-cleanup-dialog") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				cleanupDialog.open(target);
+			}
+		});
 	}
 }
