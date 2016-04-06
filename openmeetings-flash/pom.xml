@@ -35,12 +35,6 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
-	<repositories>
-		<repository>
-			<id>openmeetings-bintray</id>
-			<url>https://dl.bintray.com/openmeetings/maven</url>
-		</repository>
-	</repositories>
 	<profiles>
 		<profile>
 			<id>default-target</id>
