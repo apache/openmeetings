@@ -19,10 +19,14 @@
 package org.apache.openmeetings.cli;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 
-public abstract class CleanupUnit {
+public class CleanupUnit implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private final File parent;
 	private final long sizeTotal;
 	
@@ -34,7 +38,11 @@ public abstract class CleanupUnit {
 		sizeTotal = OmFileHelper.getSize(parent);
 	}
 	
-	public abstract void cleanup();
+	public void cleanup() throws IOException {
+		for (File f : getParent().listFiles()) {
+			FileHelper.removeRec(f);
+		}
+	}
 	
 	public File getParent() {
 		return parent;

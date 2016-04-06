@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -191,7 +193,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
 							
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
-							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + ".flv");
+							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + FLV_EXTENSION);
 							String podP = podF.getCanonicalPath();
 							String[] argsPod = new String[] { getPathToFFMPEG(), "-y"//
 									, "-i", podPB //
@@ -252,7 +254,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
 			args.add("-y");
-			String hashFileFullNameFlv = "flvRecording_" + recording.getId() + ".flv";
+			String hashFileFullNameFlv = recordingFileName + recording.getId() + FLV_EXTENSION;
 			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
 			args.add(outputFullFlv);
 			// TODO additional flag to 'quiet' output should be added
@@ -267,7 +269,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			String hashFileFullNameJPEG = "flvRecording_" + recording.getId() + ".jpg";
+			String hashFileFullNameJPEG = recordingFileName + recording.getId() + ".jpg";
 			String outPutJpeg = new File(streamFolderGeneral, hashFileFullNameJPEG).getCanonicalPath();
 			deleteFileIfExists(outPutJpeg);
 
@@ -284,7 +286,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = "flvRecording_" + recording.getId() + ".avi";
+			String alternateDownloadName = recordingFileName + recording.getId() + ".avi";
 			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
 			deleteFileIfExists(alternateDownloadFullName);
 

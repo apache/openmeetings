@@ -19,12 +19,15 @@
 package org.apache.openmeetings.cli;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 
 public abstract class CleanupEntityUnit extends CleanupUnit {
+	private static final long serialVersionUID = 1L;
 	protected List<File> invalid = new ArrayList<>();
 	protected List<File> deleted = new ArrayList<>();
 	private long sizeInvalid = 0;
@@ -39,6 +42,16 @@ public abstract class CleanupEntityUnit extends CleanupUnit {
 		}
 		for (File i : deleted) {
 			sizeDeleted += OmFileHelper.getSize(i);
+		}
+	}
+	
+	@Override
+	public void cleanup() throws IOException {
+		for (File i : invalid) {
+			FileHelper.removeRec(i);
+		}
+		for (File i : deleted) {
+			FileHelper.removeRec(i);
 		}
 	}
 	
