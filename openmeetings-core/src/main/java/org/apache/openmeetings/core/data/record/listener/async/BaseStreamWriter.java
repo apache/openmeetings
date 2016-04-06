@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -97,7 +98,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	 *             I/O exception
 	 */
 	private void init() throws IOException {
-		file = new File(OmFileHelper.getStreamsSubDir(scope.getName()), streamName + ".flv");
+		file = new File(OmFileHelper.getStreamsSubDir(scope.getName()), streamName + FLV_EXTENSION);
 
 		IStreamableFileFactory factory = (IStreamableFileFactory) ScopeUtils.getScopeService(scope, IStreamableFileFactory.class,
 				StreamableFileFactory.class);

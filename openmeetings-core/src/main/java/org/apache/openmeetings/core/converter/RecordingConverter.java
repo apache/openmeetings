@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -52,18 +54,17 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 	@Override
 	public void startConversion(Long recordingId) {
-		Recording recording = null;
+		Recording recording = recordingDao.get(recordingId);
+		if (recording == null) {
+			log.warn("Conversion is NOT started. Recording with ID {} is not found", recordingId);
+			return;
+		}
 		try {
 			if (isUseOldStyleFfmpegMap()) {
 				FFMPEG_MAP_PARAM = ".";
 			}
 
-			String finalNamePrefix = "flvRecording_" + recordingId;
-			recording = recordingDao.get(recordingId);
-			if (recording == null) {
-				log.warn("Conversion is NOT started. Recording with ID {} is not found", recordingId);
-				return;
-			}
+			String finalNamePrefix = recordingFileName + recordingId;
 			log.debug("recording " + recording.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
@@ -112,9 +113,9 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			// Merge Audio with Video / Calculate resulting FLV
 
-			String inputScreenFullFlv = new File(streamFolder, screenMetaData.getStreamName() + ".flv").getCanonicalPath();
+			String inputScreenFullFlv = new File(streamFolder, screenMetaData.getStreamName() + FLV_EXTENSION).getCanonicalPath();
 
-			File outputFullFlv = new File(getStreamsHibernateDir(), finalNamePrefix + ".flv");
+			File outputFullFlv = new File(getStreamsHibernateDir(), finalNamePrefix + FLV_EXTENSION);
 
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17_FINAL_WAVE.wav
