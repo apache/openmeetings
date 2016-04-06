@@ -57,8 +57,6 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.installation.InstallationDocumentHandler;
@@ -320,6 +318,9 @@ public class Admin {
 					}
 					StringBuilder report = new StringBuilder();
 					CleanupUnit temp = CleanupHelper.getTempUnit();
+					if (cleanup) {
+						temp.cleanup();
+					}
 					report.append("Temporary files allocates: ").append(temp.getHumanTotal()).append("\n");
 					{ //UPLOAD
 						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
@@ -327,97 +328,55 @@ public class Admin {
 						//Profiles
 						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
 						UserDao udao = ctx.getBean(UserDao.class);
-						CleanupEntityUnit profileUnit = CleanupHelper.getProfileUnit(udao);
-						long restSize = sectionSize - profileUnit.getSizeTotal();
-						report.append("\t\tprofiles: ").append(profileUnit.getHumanTotal()).append("\n");
-						report.append("\t\t\tinvalid: ").append(profileUnit.getHumanInvalid()).append("\n");
-						report.append("\t\t\tdeleted: ").append(profileUnit.getHumanDeleted()).append("\n");
-						report.append("\t\t\tmissing count: ").append(profileUnit.getMissing()).append("\n");
+						CleanupEntityUnit profile = CleanupHelper.getProfileUnit(udao);
+						long restSize = sectionSize - profile.getSizeTotal();
+						report.append("\t\tprofiles: ").append(profile.getHumanTotal()).append("\n");
+						report.append("\t\t\tinvalid: ").append(profile.getHumanInvalid()).append("\n");
+						report.append("\t\t\tdeleted: ").append(profile.getHumanDeleted()).append("\n");
+						report.append("\t\t\tmissing count: ").append(profile.getMissing()).append("\n");
 						if (cleanup) {
-							profileUnit.cleanup();
+							profile.cleanup();
 						}
-						long size = OmFileHelper.getSize(OmFileHelper.getUploadImportDir());
-						restSize -= size;
-						report.append("\t\timport: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						size = OmFileHelper.getSize(OmFileHelper.getUploadBackupDir());
-						restSize -= size;
-						report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						CleanupUnit imp = CleanupHelper.getImportUnit();
+						restSize -= imp.getSizeTotal();
+						report.append("\t\timport: ").append(OmFileHelper.getHumanSize(imp.getSizeTotal())).append("\n");
+						if (cleanup) {
+							imp.cleanup();
+						}
+						CleanupUnit back = CleanupHelper.getBackupUnit();
+						restSize -= back.getSizeTotal();
+						report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(back.getSizeTotal())).append("\n");
+						if (cleanup) {
+							back.cleanup();
+						}
 						//Files
-						File files = OmFileHelper.getUploadFilesDir();
-						size = OmFileHelper.getSize(files);
-						restSize -= size;
 						FileExplorerItemDao fileDao = ctx.getBean(FileExplorerItemDao.class);
-						long invalid = 0;
-						long deleted = 0;
-						for (File f : files.listFiles()) {
-							long fSize = OmFileHelper.getSize(f);
-							FileExplorerItem item = fileDao.getByHash(f.getName());
-							if (item == null) {
-								if (cleanup) {
-									FileHelper.removeRec(f);
-								} else {
-									invalid += fSize;
-								}
-							} else if (item.isDeleted()) {
-								if (cleanup) {
-									FileHelper.removeRec(f);
-								} else {
-									deleted += fSize;
-								}
-							}
-						}
-						int missing = 0;
-						for (FileExplorerItem item : fileDao.get()) {
-							if (!item.isDeleted() && item.getHash() != null && !new File(files, item.getHash()).exists()) {
-								missing++;
-							}
-						}
-						report.append("\t\tfiles: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
-						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(deleted)).append("\n");
-						report.append("\t\t\tmissing count: ").append(missing).append("\n");
+						CleanupEntityUnit files = CleanupHelper.getFileUnit(fileDao);
+						restSize -= files.getSizeTotal();
+						report.append("\t\tfiles: ").append(files.getHumanTotal()).append("\n");
+						report.append("\t\t\tinvalid: ").append(files.getHumanInvalid()).append("\n");
+						report.append("\t\t\tdeleted: ").append(files.getHumanDeleted()).append("\n");
+						report.append("\t\t\tmissing count: ").append(files.getMissing()).append("\n");
 						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
+						if (cleanup) {
+							files.cleanup();
+						}
 					}
 					{ //STREAMS
-						File streamsDir = OmFileHelper.getStreamsDir();
-						File hibernateDir = OmFileHelper.getStreamsHibernateDir();
-						if (cleanup) {
-							String hiberPath = hibernateDir.getCanonicalPath();
-							for (File f : streamsDir.listFiles()) {
-								if (!f.getCanonicalPath().equals(hiberPath)) {
-									FileHelper.removeRec(f);
-								}
-							}
-						}
-						long sectionSize = OmFileHelper.getSize(streamsDir);
-						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
-						long size = OmFileHelper.getSize(hibernateDir);
-						long restSize = sectionSize - size;
 						RecordingDao recordDao = getApplicationContext(ctxName).getBean(RecordingDao.class);
-						long[] params = {0, 0}; // [0] == deleted [1] == missing
-						for (Recording rec : recordDao.get()) {
-							checkRecordingFile(hibernateDir, rec.getHash(), rec.isDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.isDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.isDeleted(), params, cleanup);
-						}
-						long invalid = 0;
-						for (File f : hibernateDir.listFiles()) {
-							if (f.isFile() && f.getName().endsWith(".flv")) {
-								Recording rec = recordDao.getByHash(f.getName());
-								if (rec == null) {
-									cleanUpFile(invalid, cleanup, f);
-									String name = f.getName().substring(0, f.getName().length() - 5);
-									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".avi"));
-									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".jpg"));
-									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".flv.meta"));
-								}
-							}
-						}
+						CleanupEntityUnit rec = CleanupHelper.getRecUnit(recordDao);
+						File hibernateDir = OmFileHelper.getStreamsHibernateDir();
+						report.append("Recordings allocates: ").append(rec.getHumanTotal()).append("\n");
+						long size = OmFileHelper.getSize(hibernateDir);
+						long restSize = rec.getSizeTotal() - size;
 						report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
-						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(params[0])).append("\n");
-						report.append("\t\t\tmissing count: ").append(params[1]).append("\n");
+						report.append("\t\t\tinvalid: ").append(rec.getHumanInvalid()).append("\n");
+						report.append("\t\t\tdeleted: ").append(rec.getHumanDeleted()).append("\n");
+						report.append("\t\t\tmissing count: ").append(rec.getMissing()).append("\n");
 						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
+						if (cleanup) {
+							rec.cleanup();
+						}
 					}
 					System.out.println(report);
 				} catch (Exception e) {
@@ -444,32 +403,6 @@ public class Admin {
 		
 		System.out.println("... Done");
 		System.exit(0);
-	}
-	
-	private static long cleanUpFile(long invalid, boolean cleanup, File f) {
-		if (f.exists()) {
-			if (cleanup) {
-				FileHelper.removeRec(f);
-			} else {
-				invalid += f.length();
-			}
-		}
-		return invalid;
-	}
-	private static void checkRecordingFile(File hibernateDir, String name, boolean deleted, long[] params, boolean cleanup) {
-		File flv = name != null ? new File(hibernateDir, name) : null;
-		if (flv != null) {
-			if (flv.exists() && flv.isFile()) {
-				if (deleted) {
-					params[0] += flv.length();
-					if (cleanup) {
-						FileHelper.removeRec(flv);
-					}
-				}
-			} else {
-				params[1]++;
-			}
-		}
 	}
 	
 	private void checkAdminDetails(String ctxName) throws Exception {

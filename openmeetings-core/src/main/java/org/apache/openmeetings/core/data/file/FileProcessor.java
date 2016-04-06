@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.data.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadTempFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -103,7 +104,7 @@ public class FileProcessor {
 			hash = newName + ".jpg";
 			f.setType(Type.Image);
 		} else if (isVideo) {
-			hash = newName + ".flv";
+			hash = newName + FLV_EXTENSION;
 			f.setType(Type.Video);
 		} else if (isChart) {
 			f.setType(Type.PollChart);

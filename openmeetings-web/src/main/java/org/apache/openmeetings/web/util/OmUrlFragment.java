@@ -266,12 +266,10 @@ public class OmUrlFragment implements Serializable {
 				break;
 			case room:
 				try {
-					Long roomId = Long.parseLong(type);
-					if (roomId != null) {
-						Room r = getBean(RoomDao.class).get(roomId);
-						if (r != null) {
-							basePanel = new RoomPanel(CHILD_ID, roomId);
-						}
+					Long roomId = Long.valueOf(type);
+					Room r = getBean(RoomDao.class).get(roomId);
+					if (r != null) {
+						basePanel = new RoomPanel(CHILD_ID, roomId);
 					}
 				} catch(NumberFormatException ne) {
 					//skip it, bad roomid passed

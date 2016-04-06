@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.converter;
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
@@ -245,7 +246,7 @@ public abstract class BaseConverter {
 				
 				metaData = waitForTheStream(metaId);
 	
-				File inputFlvFile = new File(streamFolder, metaData.getStreamName() + ".flv");
+				File inputFlvFile = new File(streamFolder, metaData.getStreamName() + FLV_EXTENSION);
 	
 				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
 	

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -77,7 +78,7 @@ public class FlvExplorerConverter extends BaseConverter {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 			String name = "UPLOADFLV_" + fileExplorerItem.getId();
-			File outputFullFlv = new File(getStreamsHibernateDir(), name + ".flv");
+			File outputFullFlv = new File(getStreamsHibernateDir(), name + FLV_EXTENSION);
 
 			fileExplorerItem.setType(Type.Video);
 
