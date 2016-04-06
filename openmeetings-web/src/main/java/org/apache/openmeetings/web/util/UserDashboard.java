@@ -20,7 +20,8 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.user.dashboard.MyRoomsWidget.WIDGET_ID_MY_ROOMS;
 import static org.apache.openmeetings.web.user.dashboard.RssWidget.WIDGET_ID_RSS;
-import static org.apache.openmeetings.web.user.dashboard.AdminWidget.WIDGET_ID_ADMIN;
+import static org.apache.openmeetings.web.user.dashboard.admin.AdminWidget.WIDGET_ID_ADMIN;
+
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
 import ro.fortsoft.wicket.dashboard.Widget;
 
