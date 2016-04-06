@@ -66,11 +66,13 @@ public class OmFileHelper {
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile_pic.jpg";
 	public static final String profileFileName = "profile";
+	public static final String recordingFileName = "flvRecording_";
 	public static final String profileImagePrefix = "_profile_";
 	public static final String chatImagePrefix = "_chat_";
 	public static final String bigImagePrefix = "_big_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
+	public static final String FLV_EXTENSION = ".flv";
 	public static final String MP4_EXTENSION = ".mp4";
 	public static final String OGG_EXTENSION = ".ogg";
 	public static final String JPG_EXTENTION = ".jpg";
@@ -173,7 +175,7 @@ public class OmFileHelper {
 	}
 	
 	public static File getStreamsDir() {
-		return new File(OmFileHelper.OM_HOME, STREAMS_DIR);
+		return getDir(OmFileHelper.OM_HOME, STREAMS_DIR);
 	}
 	
 	public static File getStreamsHibernateDir() {
@@ -211,7 +213,7 @@ public class OmFileHelper {
 	}
 	
 	public static File getRecordingMetaData(Long roomId, String name) {
-		return new File(getStreamsSubDir(roomId), name + ".flv");
+		return new File(getStreamsSubDir(roomId), name + FLV_EXTENSION);
 	}
 	
 	public static File getLanguagesDir() {
