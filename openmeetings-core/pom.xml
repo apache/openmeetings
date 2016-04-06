@@ -35,12 +35,6 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
-	<repositories>
-		<repository>
-			<id>smslib</id>
-			<url>http://smslib.org/maven2/v3</url>
-		</repository>
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>

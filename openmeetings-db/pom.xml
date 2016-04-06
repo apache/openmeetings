@@ -104,12 +104,6 @@
 			<version>${postgresql.version}</version>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>openmeetings-bintray</id>
-			<url>https://dl.bintray.com/openmeetings/maven</url>
-		</repository>
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>
