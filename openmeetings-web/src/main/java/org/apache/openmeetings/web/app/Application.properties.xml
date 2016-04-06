@@ -1892,4 +1892,17 @@
 	<entry key="admin.email.reset.status">Reset Status</entry>
 	<entry key="dashboard.widget.admin.title">Admin functions</entry>
 	<entry key="dashboard.widget.admin.desc">General Admin functions</entry>
+	<entry key="dashboard.widget.admin.cleanup.title">Cleanup report</entry>
+	<entry key="dashboard.widget.admin.cleanup.show">Show cleanup report</entry>
+	<entry key="dashboard.widget.admin.cleanup.temp">Temporary files:</entry>
+	<entry key="dashboard.widget.admin.cleanup.upload">Upload folder:</entry>
+	<entry key="dashboard.widget.admin.cleanup.profiles">profiles:</entry>
+	<entry key="dashboard.widget.admin.cleanup.invalid">invalid:</entry>
+	<entry key="dashboard.widget.admin.cleanup.deleted">deleted:</entry>
+	<entry key="dashboard.widget.admin.cleanup.missing">missing count:</entry>
+	<entry key="dashboard.widget.admin.cleanup.import">import:</entry>
+	<entry key="dashboard.widget.admin.cleanup.backup">backup:</entry>
+	<entry key="dashboard.widget.admin.cleanup.files">files:</entry>
+	<entry key="dashboard.widget.admin.cleanup.streams">Streams folder:</entry>
+	<entry key="dashboard.widget.admin.cleanup.final">final:</entry>
 </properties>

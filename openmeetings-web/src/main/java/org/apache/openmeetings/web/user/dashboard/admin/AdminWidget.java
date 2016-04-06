@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.dashboard;
+package org.apache.openmeetings.web.user.dashboard.admin;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.model.Model;
