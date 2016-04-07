@@ -22,7 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
 
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
@@ -36,7 +36,7 @@ public class AdminWidgetView extends WidgetView {
 		final Form<Void> form = new Form<>("form");
 		add(form);
 		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
-		form.add(new AjaxButton("show-cleanup-dialog") {
+		form.add(new IndicatingAjaxButton("show-cleanup-dialog") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
