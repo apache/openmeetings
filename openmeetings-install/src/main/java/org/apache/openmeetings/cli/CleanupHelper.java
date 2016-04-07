@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.transaction.util.FileHelper;
@@ -39,33 +40,32 @@ import org.slf4j.Logger;
 
 public class CleanupHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(CleanupHelper.class);
+	private static File hibernateDir = OmFileHelper.getStreamsHibernateDir();
 	
 	public static CleanupUnit getTempUnit() {
 		return new CleanupUnit(OmFileHelper.getUploadTempDir());
 	}
 
 	public static CleanupEntityUnit getProfileUnit(final UserDao udao) {
-		return new CleanupEntityUnit(OmFileHelper.getUploadProfilesDir()) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void fill() {
-				for (File profile : getParent().listFiles()) {
-					long userId = getUserIdByProfile(profile.getName());
-					User u = udao.get(userId);
-					if (profile.isFile() || userId < 0 || u == null) {
-						invalid.add(profile);
-					} else if (u.isDeleted()) {
-						deleted.add(profile);
-					}
-				}
-				for (User u : udao.getAllBackupUsers()) {
-					if (!u.isDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
-						missing++;
-					}
-				}
+		File parent = OmFileHelper.getUploadProfilesDir();
+		List<File> invalid = new ArrayList<>();
+		List<File> deleted = new ArrayList<>();
+		int missing = 0;
+		for (File profile : parent.listFiles()) {
+			long userId = getUserIdByProfile(profile.getName());
+			User u = udao.get(userId);
+			if (profile.isFile() || userId < 0 || u == null) {
+				invalid.add(profile);
+			} else if (u.isDeleted()) {
+				deleted.add(profile);
 			}
-		};
+		}
+		for (User u : udao.getAllBackupUsers()) {
+			if (!u.isDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
+				missing++;
+			}
+		}
+		return new CleanupEntityUnit(parent, invalid, deleted, missing);
 	}
 
 	public static CleanupUnit getImportUnit() {
@@ -77,34 +77,58 @@ public class CleanupHelper {
 	}
 
 	public static CleanupEntityUnit getFileUnit(final FileExplorerItemDao fileDao) {
-		return new CleanupEntityUnit(OmFileHelper.getUploadFilesDir()) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void fill() {
-				for (File f : getParent().listFiles()) {
-					FileExplorerItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
-					if (item == null) {
-						invalid.add(f);
-					} else if (item.isDeleted()) {
-						deleted.add(f);
-					}
-				}
-				//TODO WML_DIR should also be checked
-				for (FileExplorerItem item : fileDao.get()) {
-					if (!item.isDeleted() && item.getHash() != null && !new File(getParent(), item.getHash()).exists()) {
-						missing++;
-					}
-				}
+		File parent = OmFileHelper.getUploadFilesDir();
+		List<File> invalid = new ArrayList<>();
+		List<File> deleted = new ArrayList<>();
+		int missing = 0;
+		for (File f : parent.listFiles()) {
+			FileExplorerItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
+			if (item == null) {
+				invalid.add(f);
+			} else if (item.isDeleted()) {
+				deleted.add(f);
 			}
-		};
+		}
+		//TODO WML_DIR should also be checked
+		for (FileExplorerItem item : fileDao.get()) {
+			if (!item.isDeleted() && item.getHash() != null && !new File(parent, item.getHash()).exists()) {
+				missing++;
+			}
+		}
+		return new CleanupEntityUnit(parent, invalid, deleted, missing);
 	}
 
 	public static CleanupEntityUnit getRecUnit(final RecordingDao recordDao) {
-		return new CleanupEntityUnit(OmFileHelper.getStreamsDir()) {
+		File parent = OmFileHelper.getStreamsDir();
+		List<File> invalid = new ArrayList<>();
+		List<File> deleted = new ArrayList<>();
+		int missing = 0;
+		for (File f : hibernateDir.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.startsWith(recordingFileName) && name.endsWith(FLV_EXTENSION);
+			}
+		})) {
+			if (!f.isFile()) {
+				log.warn("Recording found is not a file: " + f);
+				continue;
+			}
+			Long id = Long.valueOf(f.getName().substring(recordingFileName.length(), f.getName().length() - FLV_EXTENSION.length()));
+			Recording item = recordDao.get(id);
+			if (item == null) {
+				add(invalid, id);
+			} else if (item.isDeleted()) {
+				add(deleted, id);
+			}
+		}
+		for (Recording item : recordDao.get()) {
+			if (!item.isDeleted() && item.getHash() != null && list(item.getId()).length == 0) {
+				missing++;
+			}
+		}
+		return new CleanupEntityUnit(parent, invalid, deleted, missing) {
 			private static final long serialVersionUID = 1L;
-			private File hibernateDir;
-
+			
 			@Override
 			public void cleanup() throws IOException {
 				String hiberPath = hibernateDir.getCanonicalPath();
@@ -115,50 +139,22 @@ public class CleanupHelper {
 				}
 				super.cleanup();
 			}
-			
-			@Override
-			public void fill() {
-				hibernateDir = OmFileHelper.getStreamsHibernateDir();
-				for (File f : hibernateDir.listFiles(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.startsWith(recordingFileName) && name.endsWith(FLV_EXTENSION);
-					}
-				})) {
-					if (!f.isFile()) {
-						log.warn("Recording found is not a file: " + f);
-						continue;
-					}
-					Long id = Long.valueOf(f.getName().substring(recordingFileName.length(), f.getName().length() - FLV_EXTENSION.length()));
-					Recording item = recordDao.get(id);
-					if (item == null) {
-						add(invalid, id);
-					} else if (item.isDeleted()) {
-						add(deleted, id);
-					}
-				}
-				for (Recording item : recordDao.get()) {
-					if (!item.isDeleted() && item.getHash() != null && list(item.getId()).length == 0) {
-						missing++;
-					}
-				}
-			}
-			
-			private File[] list(final Long id) {
-				return hibernateDir.listFiles(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.startsWith(recordingFileName + id);
-					}
-				});
-			}
-			
-			private void add(List<File> list, final Long id) {
-				for (File f : list(id)) {
-					list.add(f);
-				}
-			}
 		};
+	}
+
+	private static File[] list(final Long id) {
+		return hibernateDir.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.startsWith(recordingFileName + id);
+			}
+		});
+	}
+	
+	private static void add(List<File> list, final Long id) {
+		for (File f : list(id)) {
+			list.add(f);
+		}
 	}
 
 	private static long getUserIdByProfile(String name) {

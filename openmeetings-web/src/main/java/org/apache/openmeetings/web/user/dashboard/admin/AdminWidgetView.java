@@ -41,7 +41,7 @@ public class AdminWidgetView extends WidgetView {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				cleanupDialog.open(target);
+				cleanupDialog.show(target);
 			}
 		});
 	}

@@ -26,17 +26,25 @@ import java.util.List;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 
-public abstract class CleanupEntityUnit extends CleanupUnit {
+public class CleanupEntityUnit extends CleanupUnit {
 	private static final long serialVersionUID = 1L;
-	protected List<File> invalid = new ArrayList<>();
-	protected List<File> deleted = new ArrayList<>();
+	private final List<File> invalid;
+	private final List<File> deleted;
 	private long sizeInvalid = 0;
 	private long sizeDeleted = 0;
-	protected int missing = 0;
+	protected final int missing;
 	
-	public CleanupEntityUnit(File parent) {
+	public CleanupEntityUnit() {
+		invalid = new ArrayList<>();
+		deleted = new ArrayList<>();
+		missing = 0;
+	}
+	
+	public CleanupEntityUnit(File parent, List<File> invalid, List<File> deleted, int missing) {
 		super(parent);
-		fill();
+		this.invalid = invalid;
+		this.deleted = deleted;
+		this.missing = missing;
 		for (File i : invalid) {
 			sizeInvalid += OmFileHelper.getSize(i);
 		}
@@ -55,8 +63,6 @@ public abstract class CleanupEntityUnit extends CleanupUnit {
 		}
 	}
 	
-	public abstract void fill();
-
 	public long getSizeInvalid() {
 		return sizeInvalid;
 	}
