@@ -1896,4 +1896,21 @@
 	<entry key="admin.email.errorCount">Количество ошибок</entry>
 	<entry key="admin.email.lastError">Последняя ошибка</entry>
 	<entry key="admin.email.reset.status">Сбросить статус</entry>
+	<entry key="dashboard.widget.admin.title">Административные функции</entry>
+	<entry key="dashboard.widget.admin.desc">Основные административные фукции</entry>
+	<entry key="dashboard.widget.admin.cleanup.title">Отчёт о файлах</entry>
+	<entry key="dashboard.widget.admin.cleanup.show">Показать отчёт о файлах</entry>
+	<entry key="dashboard.widget.admin.cleanup.temp">Временные файлы:</entry>
+	<entry key="dashboard.widget.admin.cleanup.upload">Папка upload:</entry>
+	<entry key="dashboard.widget.admin.cleanup.profiles">профили:</entry>
+	<entry key="dashboard.widget.admin.cleanup.invalid">не валидные:</entry>
+	<entry key="dashboard.widget.admin.cleanup.deleted">удалённые:</entry>
+	<entry key="dashboard.widget.admin.cleanup.missing">количество отсутствующих:</entry>
+	<entry key="dashboard.widget.admin.cleanup.import">import:</entry>
+	<entry key="dashboard.widget.admin.cleanup.backup">backup:</entry>
+	<entry key="dashboard.widget.admin.cleanup.files">files:</entry>
+	<entry key="dashboard.widget.admin.cleanup.streams">Папка streams:</entry>
+	<entry key="dashboard.widget.admin.cleanup.final">преобразованные:</entry>
+	<entry key="dashboard.widget.admin.cleanup.cleanup">Очистить</entry>
+	<entry key="dashboard.widget.admin.cleanup.error">Неизвестная ошибка при попытке очистить</entry>
 </properties>
