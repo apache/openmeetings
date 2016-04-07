@@ -61,7 +61,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -74,20 +73,21 @@ import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton("login", Application.getString(112));
 	private DialogButton registerBtn = new DialogButton("register", Application.getString(123));
-    private String password;
-    private String login;
-    private boolean rememberMe = false;
-    private RegisterDialog r;
-    private ForgetPasswordDialog f;
-    private LdapConfig domain;
-    private FeedbackPanel feedback = new FeedbackPanel("feedback");
-    
+	private String password;
+	private String login;
+	private boolean rememberMe = false;
+	private RegisterDialog r;
+	private ForgetPasswordDialog f;
+	private LdapConfig domain;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+
 	public SignInDialog(String id) {
 		super(id, Application.getString(108));
 		add(form = new SignInForm("signin"));
