@@ -38,10 +38,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +58,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private final Label streamsSize;
 	private final CleanupEntityUnitPanel fin;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public AdminCleanupInfoDialog(String id) {
 		super(id, "");
@@ -66,7 +71,15 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		streamsSize = new Label("streams-size", "");
 		fin = new CleanupEntityUnitPanel("final", "dashboard.widget.admin.cleanup.final", new CleanupEntityUnit());
 		
+		add(feedback);
 		add(container.add(temp, uploadSize, profile, imp, backup, files, streamsSize, fin).setOutputMarkupId(true));
+		add(new Form<Void>("form").add(new IndicatingAjaxButton("cleanup") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}			
+		}));
 	}
 
 	@Override
@@ -77,10 +90,9 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		// TODO Auto-generated method stub
 	}
 	
-	public void show(AjaxRequestTarget target) {
+	private void update(AjaxRequestTarget target) {
 		temp.setDefaultModelObject(getTempUnit());
 		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
 		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
@@ -90,6 +102,24 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		streamsSize.setDefaultModelObject(getHumanSize(getStreamsDir()));
 		fin.setDefaultModelObject(getRecUnit(getBean(RecordingDao.class)));
 		target.add(container);
+	}
+	
+	public void show(AjaxRequestTarget target) {
+		update(target);
 		open(target);
+	}
+
+	public void cleanup(AjaxRequestTarget target) {
+		try {
+			((CleanupUnit)temp.getDefaultModelObject()).cleanup();
+			((CleanupEntityUnit)profile.getDefaultModelObject()).cleanup();
+			((CleanupUnit)imp.getDefaultModelObject()).cleanup();;
+			((CleanupUnit)backup.getDefaultModelObject()).cleanup();
+			((CleanupEntityUnit)files.getDefaultModelObject()).cleanup();;
+			((CleanupEntityUnit)fin.getDefaultModelObject()).cleanup();
+			update(target);
+		} catch (Exception e) {
+			error(getString("dashboard.widget.admin.cleanup.error"));
+		}
 	}
 }

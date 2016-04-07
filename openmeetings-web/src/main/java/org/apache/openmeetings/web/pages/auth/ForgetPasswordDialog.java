@@ -41,7 +41,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -56,19 +55,20 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 	private DialogButton send = new DialogButton("send", Application.getString(317));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString(122));
-	private FeedbackPanel feedback = new FeedbackPanel("feedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private RequiredTextField<String> nameField;
 	private Form<String> form;
 	private SignInDialog s;
 	private String name;
 	private Type type = Type.email;
-    final MessageDialog confirmDialog;
+	final MessageDialog confirmDialog;
 	
 	enum Type {
 		email

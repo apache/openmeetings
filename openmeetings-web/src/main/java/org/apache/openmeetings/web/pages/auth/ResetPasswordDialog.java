@@ -35,7 +35,6 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -45,15 +44,16 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private DialogButton resetBtn = new DialogButton("reset", Application.getString(327));
 	private Form<String> form;
-	private FeedbackPanel feedback = new FeedbackPanel("feedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private PasswordTextField password;
 	private final User user;
-    final MessageDialog confirmReset;
+	final MessageDialog confirmReset;
 
 	public ResetPasswordDialog(String id, final User user) {
 		super(id, Application.getString(325));
