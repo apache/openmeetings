@@ -29,10 +29,14 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
+import org.apache.openmeetings.cli.CleanupEntityUnit;
+import org.apache.openmeetings.cli.CleanupUnit;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -41,17 +45,28 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
+	private final CleanupUnitPanel temp;
+	private final Label uploadSize;
+	private final CleanupEntityUnitPanel profile;
+	private final CleanupUnitPanel imp;
+	private final CleanupUnitPanel backup;
+	private final CleanupEntityUnitPanel files;
+	private final Label streamsSize;
+	private final CleanupEntityUnitPanel fin;
+	private final WebMarkupContainer container = new WebMarkupContainer("container");
 
 	public AdminCleanupInfoDialog(String id) {
 		super(id, "");
-		add(new CleanupUnitPanel("temp", "dashboard.widget.admin.cleanup.temp", getTempUnit()));
-		add(new Label("upload-size", getHumanSize(getUploadDir())));
-		add(new CleanupEntityUnitPanel("profile", "dashboard.widget.admin.cleanup.profiles", getProfileUnit(getBean(UserDao.class))));
-		add(new CleanupUnitPanel("import", "dashboard.widget.admin.cleanup.import", getImportUnit()));
-		add(new CleanupUnitPanel("backup", "dashboard.widget.admin.cleanup.backup", getBackupUnit()));
-		add(new CleanupEntityUnitPanel("files", "dashboard.widget.admin.cleanup.files", getFileUnit(getBean(FileExplorerItemDao.class))));
-		add(new Label("streams-size", getHumanSize(getStreamsDir())));
-		add(new CleanupEntityUnitPanel("final", "dashboard.widget.admin.cleanup.final", getRecUnit(getBean(RecordingDao.class))));
+		temp = new CleanupUnitPanel("temp", "dashboard.widget.admin.cleanup.temp", new CleanupUnit());
+		uploadSize = new Label("upload-size", "");
+		profile = new CleanupEntityUnitPanel("profile", "dashboard.widget.admin.cleanup.profiles", new CleanupEntityUnit());
+		imp = new CleanupUnitPanel("import", "dashboard.widget.admin.cleanup.import", new CleanupUnit());
+		backup = new CleanupUnitPanel("backup", "dashboard.widget.admin.cleanup.backup", new CleanupUnit());
+		files = new CleanupEntityUnitPanel("files", "dashboard.widget.admin.cleanup.files", new CleanupEntityUnit());
+		streamsSize = new Label("streams-size", "");
+		fin = new CleanupEntityUnitPanel("final", "dashboard.widget.admin.cleanup.final", new CleanupEntityUnit());
+		
+		add(container.add(temp, uploadSize, profile, imp, backup, files, streamsSize, fin).setOutputMarkupId(true));
 	}
 
 	@Override
@@ -63,6 +78,18 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		// TODO Auto-generated method stub
-
+	}
+	
+	public void show(AjaxRequestTarget target) {
+		temp.setDefaultModelObject(getTempUnit());
+		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
+		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
+		imp.setDefaultModelObject(getImportUnit());
+		backup.setDefaultModelObject(getBackupUnit());
+		files.setDefaultModelObject(getFileUnit(getBean(FileExplorerItemDao.class)));
+		streamsSize.setDefaultModelObject(getHumanSize(getStreamsDir()));
+		fin.setDefaultModelObject(getRecUnit(getBean(RecordingDao.class)));
+		target.add(container);
+		open(target);
 	}
 }
