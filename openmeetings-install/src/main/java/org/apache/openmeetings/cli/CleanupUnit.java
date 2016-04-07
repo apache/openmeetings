@@ -30,6 +30,11 @@ public class CleanupUnit implements Serializable {
 	private final File parent;
 	private final long sizeTotal;
 	
+	public CleanupUnit() {
+		parent = new File(".");
+		sizeTotal = 0;
+	}
+	
 	public CleanupUnit(File parent) {
 		this.parent = parent;
 		if (!parent.isDirectory() || !parent.exists()) {
