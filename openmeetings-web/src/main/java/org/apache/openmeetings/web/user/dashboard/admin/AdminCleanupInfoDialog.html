@@ -22,6 +22,7 @@
 <wicket:panel>
 	<div class="ui-widget">
 		<div class="ui-widget-content ui-corner-all">
+			<div wicket:id="feedback"></div>
 			<ul wicket:id="container">
 				<li><div wicket:id="temp"></div></li>
 				<li><span><wicket:message key="dashboard.widget.admin.cleanup.upload"/></span>&nbsp;&nbsp;<span wicket:id="upload-size"></span>
@@ -38,6 +39,7 @@
 					</ul>
 				</li>
 			</ul>
+			<form wicket:id="form"><button wicket:id="cleanup"><wicket:message key="dashboard.widget.admin.cleanup.cleanup"/></button></form>
 		</div>
 	</div>
 </wicket:panel>
