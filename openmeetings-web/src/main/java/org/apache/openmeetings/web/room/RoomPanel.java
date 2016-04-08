@@ -152,7 +152,10 @@ public class RoomPanel extends BasePanel {
 			//no-op
 		}
 		StringValue swfVal = pp.get("swf");
-		PageParameters spp = new PageParameters(pp).mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
+		PageParameters spp = new PageParameters(pp);
+		if (roomId != null) {
+			spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
+		}
 		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
 				+ new PageParametersEncoder().encodePageParameters(spp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
@@ -169,7 +172,7 @@ public class RoomPanel extends BasePanel {
 		add(vote = new VoteDialog("vote", roomId));
 		add(pollResults = new PollResultsDialog("pollResults", roomId));
 		add(startSharing = new StartSharingEventBehavior(roomId));
-		if (roomId.longValue() > 0) {
+		if (roomId != null && roomId.longValue() > 0) {
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
 	
