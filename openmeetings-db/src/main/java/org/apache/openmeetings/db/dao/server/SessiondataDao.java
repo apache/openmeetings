@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +30,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +60,8 @@ public class SessiondataDao {
 		try {
 			log.debug("startsession :: startsession");
 
-			long thistime = new Date().getTime();
 			Sessiondata sessiondata = new Sessiondata();
-			sessiondata.setSessionId(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(String.valueOf(thistime).toString()));
+			sessiondata.setSessionId(UUID.randomUUID().toString());
 			sessiondata.setRefreshed(new Date());
 			sessiondata.setCreated(new Date());
 			sessiondata.setUserId(null);

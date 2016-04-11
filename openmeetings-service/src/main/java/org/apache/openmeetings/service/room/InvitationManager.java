@@ -51,7 +51,7 @@ import org.apache.openmeetings.service.mail.template.CreatedAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
 import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.CalendarHelper;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
@@ -260,7 +260,7 @@ public class InvitationManager implements IInvitationManager {
 			if (obj instanceof Invitation) {
 				Invitation invitation = (Invitation) obj;
 
-				if (ManageCryptStyle.getInstanceOfCrypt().verifyPassword(pass, invitation.getPassword())) {
+				if (CryptProvider.get().verify(pass, invitation.getPassword())) {
 					return new Long(1);
 				} else {
 					return new Long(-34);
@@ -325,7 +325,7 @@ public class InvitationManager implements IInvitationManager {
 
 		invitation.setPasswordProtected(isPasswordProtected);
 		if (isPasswordProtected) {
-			invitation.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(invitationpass));
+			invitation.setPassword(CryptProvider.get().hash(invitationpass));
 		}
 
 		invitation.setUsed(false);

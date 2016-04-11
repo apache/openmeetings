@@ -25,18 +25,18 @@ import java.security.NoSuchAlgorithmException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class MD5Implementation implements ICryptString {
+public class MD5Implementation implements ICrypt {
 	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, webAppRootKey);
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICryptString#createPassPhrase(java.lang.String)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#hash(java.lang.String)
 	 */
 	@Override
-	public String createPassPhrase(String userGivenPass) {
+	public String hash(String str) {
 		String passPhrase = null;
 		try {
-			passPhrase = MD5.do_checksum(userGivenPass);
+			passPhrase = MD5.checksum(str);
 		} catch (NoSuchAlgorithmException e) {
 			log.error("Error", e);
 		}
@@ -45,11 +45,10 @@ public class MD5Implementation implements ICryptString {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICryptString#verifyPassword(java.lang.String, java.lang.String)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#verify(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean verifyPassword(String passGiven, String passwdFromDb) {
-		return (passwdFromDb.equals(createPassPhrase(passGiven)));
+	public boolean verify(String str, String hash) {
+		return hash != null && hash.equals(hash(str));
 	}
-	
 }

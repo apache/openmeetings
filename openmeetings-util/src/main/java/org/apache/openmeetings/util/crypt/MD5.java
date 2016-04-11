@@ -25,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
 public class MD5 {
-	public static String do_checksum(String data) throws NoSuchAlgorithmException {
+	public static String checksum(String data) throws NoSuchAlgorithmException {
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
 		byte[] b = data == null ? new byte[0] : data.getBytes(StandardCharsets.UTF_8);
 		md5.update(b, 0, b.length);
