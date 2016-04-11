@@ -68,7 +68,7 @@ public class FileProcessor {
 
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
-		String newName = MD5.do_checksum("FILE_" + new Date().getTime());
+		String newName = MD5.checksum("FILE_" + new Date().getTime());
 
 		String extDot = f.getName().substring(dotidx, f.getName().length()).toLowerCase();
 		String ext = extDot.substring(1);

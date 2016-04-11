@@ -124,7 +124,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				log.debug("saveAsObject" + tObject.size());
 
-				String localFileName = MD5.do_checksum(new Date().toString()) + ".wml";
+				String localFileName = MD5.checksum(new Date().toString()) + ".wml";
 
 				LibraryDocumentConverter.writeToLocalFolder(localFileName, tObject);
 

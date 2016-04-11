@@ -22,13 +22,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,16 +46,12 @@ public class SOAPLoginDao {
 			boolean showNickNameDialog, String landingZone,
 			boolean allowRecording) {
 		try {
-			String thistime = "TIME_" + (new Date().getTime());
-
-			String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(thistime);
-
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
 			soapLogin.setUsed(false);
 			soapLogin.setRoomId(roomId);
 			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
-			soapLogin.setHash(hash);
+			soapLogin.setHash(UUID.randomUUID().toString());
 			soapLogin.setRecordingId(recordingId);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
@@ -67,8 +63,8 @@ public class SOAPLoginDao {
 			soapLogin = em.merge(soapLogin);
 			Long soapLoginId = soapLogin.getId();
 
-			if (soapLoginId > 0) {
-				return hash;
+			if (soapLoginId != null) {
+				return soapLogin.getHash();
 			} else {
 				throw new Exception("Could not store SOAPLogin");
 			}

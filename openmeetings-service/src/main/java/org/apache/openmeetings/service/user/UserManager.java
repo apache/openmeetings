@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,7 +66,7 @@ import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.DaoHelper;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -371,11 +372,7 @@ public class UserManager implements IUserManager {
 			if (checkName && checkEmail) {
 
 				String link = cfgDao.getBaseUrl();
-				String hash = activatedHash;
-				if (hash == null){
-					hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
-							+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-				}
+				String hash = Strings.isEmpty(activatedHash) ? UUID.randomUUID().toString() : activatedHash;
 				link += "activate?u=" + hash;
 
 				if (sendWelcomeMessage && email.length() != 0) {

@@ -149,7 +149,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UserDao.class).update(user, password.getConvertedInput(), user.getId());
+			getBean(UserDao.class).resetPassword(user, password.getConvertedInput());
 		} catch (Exception e) {
 			error(e.getMessage());
 		}
@@ -171,10 +171,9 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-            protected String $()
-            {
-                return this.$(Options.asString("open"));
-            }
-        });
+			protected String $() {
+				return this.$(Options.asString("open"));
+			}
+		});
 	}
 }

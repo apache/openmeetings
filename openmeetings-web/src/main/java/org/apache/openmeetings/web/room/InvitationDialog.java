@@ -47,7 +47,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
@@ -270,7 +270,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setUpdated(null);
 		i.setUsed(false);
 		
-		i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(i.getPassword())); //FIXME should be hidden
+		i.setPassword(CryptProvider.get().hash(i.getPassword())); //FIXME should be hidden
 		//FIXME another HACK
 		Calendar d = Calendar.getInstance();
 		d.setTime(i.getValidFrom());

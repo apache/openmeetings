@@ -57,7 +57,7 @@ import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -229,13 +229,22 @@ public class UserDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
+	//this method is required to be able to drop reset hash
+	public User resetPassword(User u, String password) throws NoSuchAlgorithmException {
+		if (u != null) {
+			u.setResethash(null);
+			u = update(u, password, u.getId());
+		}
+		return u;
+	}
+	
 	// TODO: Why the password field is not set via the Model is because its
 	// FetchType is Lazy, this extra hook here might be not needed with a
 	// different mechanism to protect the password from being read
 	// sebawagner, 01.10.2012
-	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException {
 		User u = update(user, updatedBy);
-		if (u != null && password != null && !password.isEmpty()) {
+		if (u != null && !Strings.isEmpty(password)) {
 			//OpenJPA is not allowing to set fields not being fetched before
 			User u1 = get(u.getId(), true);
 			u1.updatePassword(cfgDao, password);
@@ -445,11 +454,12 @@ public class UserDao implements IDataProviderDao<User> {
 	 * @return
 	 */
 	public boolean verifyPassword(Long userId, String password) {
-		TypedQuery<Long> query = em.createNamedQuery("checkPassword", Long.class);
-		query.setParameter("userId", userId);
-		query.setParameter("password", ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(password));
-		return Long.valueOf(1).equals(query.getResultList().get(0));
-
+		List<String> l = em.createNamedQuery("getPassword", String.class)
+			.setParameter("userId", userId).getResultList();
+		if (l == null || l.size() != 1) {
+			return false;
+		}
+		return CryptProvider.get().verify(password, l.get(0));
 	}
 
 	public User getContact(String email, Long ownerId) {

@@ -18,23 +18,33 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+/**
+ * Interface for Encryption-Class see:
+ * http://openmeetings.apache.org/CustomCryptMechanism.html see:
+ * https://crackstation.net/hashing-security.htm
+ * 
+ * @author sebastianwagner, solomax
+ *
+ */
 
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+public interface ICrypt {
+	/**
+	 * Creates hash of given string
+	 * 
+	 * @param str
+	 *            - string to calculate hash for
+	 * @return hash of passed string
+	 */
+	String hash(String str);
 
-public class ManageCryptStyle {
-	private static final Logger log = Red5LoggerFactory.getLogger(ManageCryptStyle.class, webAppRootKey);
-
-	public static ICryptString getInstanceOfCrypt() {
-		try {
-			log.debug("getInstanceOfCrypt:: configKeyCryptClassName: " + configKeyCryptClassName);
-
-			return configKeyCryptClassName == null ? null : (ICryptString) Class.forName(configKeyCryptClassName).newInstance();
-		} catch (Exception err) {
-			log.error("[getInstanceOfCrypt]", err);
-		}
-		return null;
-	}
+	/**
+	 * Verify string passed is matches given hash
+	 * 
+	 * @param str
+	 *            - string to check hash for
+	 * @param hash
+	 *            - hash to compare
+	 * @return <code>true</code> in case string matches hash, <code>false</code> otherwise
+	 */
+	boolean verify(String str, String hash);
 }
