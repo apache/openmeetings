@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
@@ -51,7 +52,7 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -136,8 +137,7 @@ public class MobileService {
 				Long langId = Long.valueOf(umap.get("langId"));
 				
 				//FIXME TODO unify with Register dialog
-				String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(
-						login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+				String hash = UUID.randomUUID().toString();
 
 				String baseURL = cfgDao.getBaseUrl();
 				boolean sendConfirmation = !Strings.isEmpty(baseURL)

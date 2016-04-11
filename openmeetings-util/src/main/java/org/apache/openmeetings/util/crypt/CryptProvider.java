@@ -18,31 +18,23 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-/**
- * interface for Encryption-Class
- * see: http://openmeetings.apache.org/CustomCryptMechanism.html
- * 
- * @author sebastianwagner
- *
- */
+import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-public interface ICryptString {
-	
-	/**
-	 * create a pass phrase
-	 * 
-	 * @param userGivenPass
-	 * @return
-	 */
-	public String createPassPhrase(String userGivenPass);
-	
-	/**
-	 * verify a password
-	 * 
-	 * @param passGiven
-	 * @param passwdFromDb
-	 * @return
-	 */
-	public boolean verifyPassword(String passGiven, String passwdFromDb);
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
+public class CryptProvider {
+	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, webAppRootKey);
+
+	public static ICrypt get() {
+		try {
+			log.debug("getInstanceOfCrypt:: configKeyCryptClassName: " + configKeyCryptClassName);
+
+			return configKeyCryptClassName == null ? null : (ICrypt) Class.forName(configKeyCryptClassName).newInstance();
+		} catch (Exception err) {
+			log.error("[getInstanceOfCrypt]", err);
+		}
+		return null;
+	}
 }

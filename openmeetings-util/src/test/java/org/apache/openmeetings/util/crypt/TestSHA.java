@@ -16,29 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.userdata;
+package org.apache.openmeetings.util.crypt;
 
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.BeforeClass;
 
-public class TestAuth extends AbstractJUnitDefaults {
-	@Autowired
-	private SessiondataDao sessionDao;
-
-	@Test
-	public void testTestAuth() {
-		Sessiondata sessionData = sessionDao.startsession();
-
-		System.out.println("sessionData: " + sessionData.getSessionId());
-
-		String tTemp = CryptProvider.get().hash("test");
-
-		System.out.println("tTemp: " + tTemp);
-
+public class TestSHA extends AbstractCryptTest {
+	@BeforeClass
+	public static void setup() {
+		crypt = new SHA256Implementation();
 	}
-
 }

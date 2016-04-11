@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.session;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +27,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.util.UUID;
 
 import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -36,7 +35,6 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +72,7 @@ public class SessionManager implements ISessionManager {
 	public void clearCache() {
 		cache.clear();
 	}
-		
+	
 	@Override
 	public Client addClientListItem(String streamId, String scopeName,
 			int remotePort, String remoteAddress, String swfUrl, Server server) {
@@ -88,11 +86,7 @@ public class SessionManager implements ISessionManager {
 			rcm.setConnectedSince(new Date());
 			rcm.setStreamid(streamId);
 			rcm.setScope(scopeName);
-			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
-			
-			rcm.setPublicSID(ManageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(String.valueOf(random).toString()));
-
+			rcm.setPublicSID(UUID.randomUUID().toString());
 			rcm.setServer(server);
 			rcm.setUserport(remotePort);
 			rcm.setUserip(remoteAddress);

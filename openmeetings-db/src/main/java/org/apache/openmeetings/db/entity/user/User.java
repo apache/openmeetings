@@ -60,7 +60,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.util.crypt.MD5;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -408,13 +408,13 @@ public class User implements IDataProviderEntity {
 			String defaultRoomContext = configDao.getConfValue("red5sip.exten_context", String.class, "rooms");
 			u.setName(login);
 			u.setDefaultuser(login);
-			u.setMd5secret(MD5.do_checksum(login + ":asterisk:" + pass));
+			u.setMd5secret(MD5.checksum(login + ":asterisk:" + pass));
 			u.setContext(defaultRoomContext);
 			u.setHost("dynamic");
 		} else {
 			setSipUser(null);
 		}
-		password = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(pass);
+		password = CryptProvider.get().hash(pass);
 	}
 	
 	public String getPassword() {

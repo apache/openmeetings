@@ -16,29 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.userdata;
+package org.apache.openmeetings.util.crypt;
 
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-public class TestAuth extends AbstractJUnitDefaults {
-	@Autowired
-	private SessiondataDao sessionDao;
+import org.apache.commons.codec.binary.Hex;
 
-	@Test
-	public void testTestAuth() {
-		Sessiondata sessionData = sessionDao.startsession();
-
-		System.out.println("sessionData: " + sessionData.getSessionId());
-
-		String tTemp = CryptProvider.get().hash("test");
-
-		System.out.println("tTemp: " + tTemp);
-
+public class SHA256 {
+	public static String checksum(String data) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		byte[] b = data == null ? new byte[0] : data.getBytes(StandardCharsets.UTF_8);
+		md.update(b);
+		return Hex.encodeHexString(md.digest());
 	}
-
 }
