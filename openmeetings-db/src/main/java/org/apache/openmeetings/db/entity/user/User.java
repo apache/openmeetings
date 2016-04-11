@@ -90,8 +90,7 @@ import org.simpleframework.xml.Root;
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
 	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id"),
-	@NamedQuery(name = "checkPassword", query = "select count(c) from User c where c.deleted = false AND c.id = :userId " //
-			+ "AND c.password LIKE :password"), //
+	@NamedQuery(name = "getPassword", query = "SELECT u.password FROM User u WHERE u.deleted = false AND u.id = :userId "),
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
@@ -203,7 +202,7 @@ public class User implements IDataProviderEntity {
 	private String login;
 
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "password")
+	@Column(name = "password", length = 1024)
 	@LoadFetchGroup("backupexport")
 	@Element(name = "pass", data = true, required = false)
 	private String password;
@@ -389,11 +388,11 @@ public class User implements IDataProviderEntity {
 		this.login = login;
 	}
 
-	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
 		updatePassword(configDao, pass, false);
 	}
 	
-	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
 		if (!empty) {
 			if (invalidPassword(pass, configDao)) {
 				throw new RuntimeException("Password of invalid length is provided");
