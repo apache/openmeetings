@@ -45,7 +45,7 @@
 		<section name="Configuration of Custom Crypt-Style">
 			<p>
 				To add your own crypt style you need to write a class which
-				implements the interface: org.apache.openmeetings.util.crypt.ICryptString
+				implements the interface: org.apache.openmeetings.util.crypt.ICrypt
 				<br />
 				Example of an Implementation:
 			</p>
@@ -53,24 +53,39 @@
 <![CDATA[
 package org.apache.openmeetings.util.crypt;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Implementation implements ICryptString {
-    @Override
-    public String createPassPhrase(String userGivenPass) {
-        String passPhrase = null;
-        try {
-            passPhrase = MD5.do_checksum(userGivenPass);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return passPhrase;
-    }
-    
-    @Override
-    public Boolean verifyPassword(String passGiven, String passwdFromDb) {
-        return (passwdFromDb.equals(createPassPhrase(passGiven)));
-    }
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
+public class MD5Implementation implements ICrypt {
+	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, webAppRootKey);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#hash(java.lang.String)
+	 */
+	@Override
+	public String hash(String str) {
+		String passPhrase = null;
+		try {
+			passPhrase = MD5.checksum(str);
+		} catch (NoSuchAlgorithmException e) {
+			log.error("Error", e);
+		}
+		return passPhrase;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#verify(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean verify(String str, String hash) {
+		return hash != null && hash.equals(hash(str));
+	}
 }
 ]]>
 			</source>

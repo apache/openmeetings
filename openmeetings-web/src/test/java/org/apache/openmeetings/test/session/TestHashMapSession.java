@@ -30,7 +30,7 @@ import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -60,8 +60,7 @@ public class TestHashMapSession extends AbstractJUnitDefaults {
 			rcm.setScope("scopeName");
 			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
 			
-			rcm.setPublicSID(ManageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(String.valueOf(random).toString()));
+			rcm.setPublicSID(CryptProvider.get().hash(String.valueOf(random).toString()));
 
 			rcm.setUserport(0);
 			rcm.setUserip("remoteAddress");

@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -164,7 +164,7 @@ public class InvitationDTO implements Serializable {
 		i.setHash(UUID.randomUUID().toString());
 		i.setPasswordProtected(passwordProtected);
 		if (passwordProtected) {
-			i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(password));
+			i.setPassword(CryptProvider.get().hash(password));
 		}
 
 		i.setUsed(false);

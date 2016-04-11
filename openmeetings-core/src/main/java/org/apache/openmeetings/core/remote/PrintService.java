@@ -52,7 +52,7 @@ public class PrintService {
 			Long users_id = sessiondataDao.checkSession(SID);
 	        if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 	        	String hashRaw = ""+new Date();
-	        	String hash = MD5.do_checksum(hashRaw);
+	        	String hash = MD5.checksum(hashRaw);
 	        	PrintService.addPrintItembyMap(hash, map, width, height);
 	        	return hash;
 	        }

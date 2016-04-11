@@ -25,18 +25,18 @@ import java.security.NoSuchAlgorithmException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class MD5CryptImplementation implements ICryptString {
+public class MD5CryptImplementation implements ICrypt {
 	private static final Logger log = Red5LoggerFactory.getLogger(MD5CryptImplementation.class, webAppRootKey);
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICryptString#createPassPhrase(java.lang.String)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#hash(java.lang.String)
 	 */
 	@Override
-	public String createPassPhrase(String userGivenPass) {
+	public String hash(String str) {
 		String passPhrase = null;
 		try {
-			passPhrase = MD5Crypt.crypt(userGivenPass);
+			passPhrase = MD5Crypt.crypt(str);
 		} catch (NoSuchAlgorithmException e) {
 			log.error("Error", e);
 		} 
@@ -45,19 +45,18 @@ public class MD5CryptImplementation implements ICryptString {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICryptString#verifyPassword(java.lang.String, java.lang.String)
+	 * @see org.apache.openmeetings.utils.crypt.ICrypt#verify(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean verifyPassword(String passGiven, String passwdFromDb) {
+	public boolean verify(String str, String hash) {
 		boolean validPassword = false;
-		String salt = passwdFromDb.split("\\$")[2];
+		String salt = hash.split("\\$")[2];
 	
 		try {
-			validPassword = passwdFromDb.equals(MD5Crypt.crypt(passGiven, salt));
+			validPassword = hash.equals(MD5Crypt.crypt(str, salt));
 		} catch (NoSuchAlgorithmException e) {
 			log.error("Error", e);
 		}
 		return validPassword;
 	}
-
 }
