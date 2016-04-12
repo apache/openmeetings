@@ -57,7 +57,6 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		String appointmentLocation = "office";
 		Boolean isMonthly = false;
 		Boolean isDaily = false;
-		Long categoryId = 1L;
 		Boolean isWeekly = false;
 		String remind = Appointment.Reminder.ical.name();
 		Boolean isYearly = false;
@@ -72,7 +71,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		Appointment a = appointmentLogic.getAppointment(appointmentName,
 				appointmentLocation, appointmentDescription,
 				start, end, isDaily, isWeekly,
-				isMonthly, isYearly, categoryId, remind, mmClient,
+				isMonthly, isYearly, remind, mmClient,
 				roomType, languageId, false, "", -1, userId);
 		a = appointmentDao.update(a, userId);
 		

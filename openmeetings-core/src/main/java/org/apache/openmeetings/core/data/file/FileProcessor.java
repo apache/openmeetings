@@ -129,7 +129,7 @@ public class FileProcessor {
 		} else if (isImage && !isAsIs) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(newName, extDot, "files", newName, false);
+			returnError = generateImage.convertImage(newName, extDot, "files");
 		} else if (isAsIs) {
 			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
 			returnError.addItem("processThumb", processThumb);
