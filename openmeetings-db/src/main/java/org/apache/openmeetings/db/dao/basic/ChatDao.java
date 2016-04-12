@@ -89,7 +89,5 @@ public class ChatDao {
 
 	public void delete(ChatMessage entity, long userId) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

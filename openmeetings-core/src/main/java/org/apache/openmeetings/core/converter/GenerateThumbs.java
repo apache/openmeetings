@@ -40,7 +40,7 @@ public class GenerateThumbs extends BaseConverter {
 		String[] argv = new String[] {
 			getPathToImageMagick()
 			, "-thumbnail"
-			, Integer.toString(thumbSize) + "x" + Integer.toString(thumbSize)
+			, thumbSize + "x" + thumbSize
 			, f.getCanonicalPath()
 			, new File(parent, pre + name).getCanonicalPath()
 			};
@@ -60,23 +60,11 @@ public class GenerateThumbs extends BaseConverter {
 		String[] argv = new String[] {
 			getPathToImageMagick()
 			, "-thumbnail" // FIXME
-			, Integer.toString(thumbSize)
+			, "" + thumbSize
 			, inputfile.getCanonicalPath()
 			, new File(outputpath, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
 			};
 
 		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-	}
-
-	public ConverterProcessResult generateImageBatchByWidth(
-			String current_dir, String inputfile, String outputpath,
-			Integer thumbWidth, String pre) {
-		log.debug("generateImageBatchByWidth");
-
-		String[] argv = new String[] { getPathToImageMagick(),
-				"-resize", Integer.toString(thumbWidth), inputfile,
-				outputpath + "_" + pre + "_page.png" };
-
-		return ProcessHelper.executeScript("generateImageBatchByWidth", argv);
 	}
 }

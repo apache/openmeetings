@@ -190,9 +190,9 @@ public class AppointmentLogic {
 			String appointmentLocation, String appointmentDescription,
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, Long categoryId, String remind, String[] mmClient,
+			Boolean isYearly, String remind, String[] mmClient,
 			Long roomType, Long languageId,
-			Boolean isPasswordProtected, String password, long roomId, Long userId) {
+			boolean isPasswordProtected, String password, long roomId, Long userId) {
 		Appointment a = new Appointment();
 		a.setTitle(appointmentName);
 		a.setLocation(appointmentLocation);

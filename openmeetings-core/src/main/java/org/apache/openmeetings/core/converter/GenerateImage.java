@@ -50,10 +50,7 @@ public class GenerateImage extends BaseConverter {
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
-	public ConverterProcessResultList convertImage(String fileName, String fileExt,
-			String roomName, String fileNameShort, boolean fullProcessing)
-			throws Exception {
-
+	public ConverterProcessResultList convertImage(String fileName, String fileExt, String roomName) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), fileName + fileExt);
