@@ -205,7 +205,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	}
 
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return send;
 	}
 

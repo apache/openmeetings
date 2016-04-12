@@ -92,7 +92,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return add;
 	}
 

@@ -51,7 +51,7 @@ public class CleanupHelper {
 		List<File> invalid = new ArrayList<>();
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
-		for (File profile : parent.listFiles()) {
+		for (File profile : list(parent, null)) {
 			long userId = getUserIdByProfile(profile.getName());
 			User u = udao.get(userId);
 			if (profile.isFile() || userId < 0 || u == null) {
@@ -81,7 +81,7 @@ public class CleanupHelper {
 		List<File> invalid = new ArrayList<>();
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
-		for (File f : parent.listFiles()) {
+		for (File f : list(parent, null)) {
 			FileExplorerItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
 			if (item == null) {
 				invalid.add(f);
@@ -103,7 +103,7 @@ public class CleanupHelper {
 		List<File> invalid = new ArrayList<>();
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
-		for (File f : hibernateDir.listFiles(new FilenameFilter() {
+		for (File f : list(hibernateDir, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.startsWith(recordingFileName) && name.endsWith(FLV_EXTENSION);
@@ -132,7 +132,7 @@ public class CleanupHelper {
 			@Override
 			public void cleanup() throws IOException {
 				String hiberPath = hibernateDir.getCanonicalPath();
-				for (File f : getParent().listFiles()) {
+				for (File f : list(getParent(), null)) {
 					if (!f.getCanonicalPath().equals(hiberPath)) {
 						FileHelper.removeRec(f);
 					}
@@ -142,8 +142,13 @@ public class CleanupHelper {
 		};
 	}
 
+	private static File[] list(File f, FilenameFilter ff) {
+		File[] l = ff == null ? f.listFiles() : f.listFiles(ff);
+		return l == null ? new File[0] : l;
+	}
+	
 	private static File[] list(final Long id) {
-		return hibernateDir.listFiles(new FilenameFilter() {
+		return list(hibernateDir, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.startsWith(recordingFileName + id);

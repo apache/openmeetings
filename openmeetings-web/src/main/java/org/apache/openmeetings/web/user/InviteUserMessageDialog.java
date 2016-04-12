@@ -49,7 +49,7 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
 	
 	public InviteUserMessageDialog(String id) {
 		super(id, Application.getString(1138));
-		add(form.add(message.setRequired(true), enterRoom).setOutputMarkupId(true));
+		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
 	}
 
 	public void open(IPartialPageRequestHandler handler, Long roomId, Long userId) {
@@ -67,7 +67,7 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return send;
 	}
 

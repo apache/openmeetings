@@ -117,7 +117,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected DialogButton getSubmitButton() {
+			public DialogButton getSubmitButton() {
 				return this.findButton(OK);
 			}
 

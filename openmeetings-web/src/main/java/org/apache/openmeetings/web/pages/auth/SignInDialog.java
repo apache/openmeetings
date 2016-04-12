@@ -140,7 +140,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return loginBtn;
 	}
 

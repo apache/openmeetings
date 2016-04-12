@@ -78,7 +78,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return create;
 	}
 

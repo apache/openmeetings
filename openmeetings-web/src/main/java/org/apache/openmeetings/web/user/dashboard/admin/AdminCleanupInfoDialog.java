@@ -42,7 +42,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
+import com.googlecode.wicket.jquery.ui.form.button.ConfirmAjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
@@ -71,15 +71,37 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		streamsSize = new Label("streams-size", "");
 		fin = new CleanupEntityUnitPanel("final", "dashboard.widget.admin.cleanup.final", new CleanupEntityUnit());
 
-		add(feedback);
+		add(feedback.setOutputMarkupId(true));
 		add(container.add(temp, uploadSize, profile, imp, backup, files, streamsSize, fin).setOutputMarkupId(true));
-		add(new Form<Void>("form").add(new IndicatingAjaxButton("cleanup") {
+		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			}			
-		}));
+			protected void onInitialize() {
+				super.onInitialize();
+				add(new ConfirmAjaxButton("cleanup", getString("dashboard.widget.admin.cleanup.cleanup")
+						, getString("dashboard.widget.admin.cleanup.cleanup")
+						, getString("dashboard.widget.admin.cleanup.warn"))
+				{
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected boolean isIndicating() {
+						return true;
+					}
+					
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+						cleanup(target);
+					}
+
+					@Override
+					protected void onError(AjaxRequestTarget target, Form<?> form) {
+						target.add(feedback);
+					}			
+				});
+			}
+		});
 	}
 
 	@Override
