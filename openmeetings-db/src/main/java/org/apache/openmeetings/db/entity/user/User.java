@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,8 +58,8 @@ import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.CryptProvider;
+import org.apache.openmeetings.util.crypt.MD5;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
