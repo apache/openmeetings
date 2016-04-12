@@ -16,28 +16,28 @@
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd"
   name="Apache OpenMeetings Project">
 
-    <bannerLeft>
-    	<name>Apache OpenMeetings</name>
-    	<src>http://openmeetings.apache.org/images/logo.png</src>
-    	<href>http://openmeetings.apache.org/index.html</href>
-    </bannerLeft>
-    <bannerRight>
-    	<name>Apache</name>
-    	<src>http://apache.org/img/asf_logo.png</src>
-    	<href>http://apache.org</href>
-    </bannerRight>
+	<bannerLeft>
+		<name>Apache OpenMeetings</name>
+		<src>http://openmeetings.apache.org/images/logo.png</src>
+		<href>http://openmeetings.apache.org/index.html</href>
+	</bannerLeft>
+	<bannerRight>
+		<name>Apache</name>
+		<src>http://apache.org/img/asf_logo.png</src>
+		<href>http://apache.org</href>
+	</bannerRight>
 
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-fluido-skin</artifactId>
-		<version>1.4</version>
+		<version>1.5</version>
 	</skin>
 	
 	<version position="none"/>
 	
 	<body>
 		<head>
-			<script type="text/javascript" src="http://openmeetings.apache.org/js/site.js"></script>
+			<![CDATA[<script type="text/javascript" src="http://openmeetings.apache.org/js/site.js"></script>]]>
 		</head>
 		
 		<links>
