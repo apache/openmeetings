@@ -169,7 +169,7 @@ public class WhiteboardManager {
 
 									if (swfObj != null) {
 										if (swfObj.get("name").equals(baseObjectName)) {
-											swfObj.put("isVisible", Integer.valueOf(swfObj.get("slide").toString()).intValue() == slidesNumber);
+											swfObj.put("isVisible", Integer.parseInt(swfObj.get("slide").toString()) == slidesNumber);
 											actionObjectStored.set(actionObjectStored.size() - 7, swfObj);
 										}
 									}

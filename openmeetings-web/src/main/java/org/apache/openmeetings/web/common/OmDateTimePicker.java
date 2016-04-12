@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import java.util.Locale;
+
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -26,6 +28,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
@@ -39,12 +42,12 @@ public class OmDateTimePicker extends DateTimePicker {
 	}
 	
 	@Override
-	protected DatePicker newDatePicker(String id, IModel<LocalDate> model, String datePattern) {
+	protected DatePicker newDatePicker(String id, IModel<LocalDate> model, Locale locale, String datePattern, Options options) {
 		return new DatePicker(id, model, WebSession.get().getLocale());
 	}
 	
 	@Override
-	protected TimePicker newTimePicker(String id, IModel<LocalTime> model, String timePattern) {
+	protected TimePicker newTimePicker(String id, IModel<LocalTime> model, Locale locale, String timePattern, Options options) {
 		return new TimePicker(id, model, WebSession.get().getLocale());
 	}
 

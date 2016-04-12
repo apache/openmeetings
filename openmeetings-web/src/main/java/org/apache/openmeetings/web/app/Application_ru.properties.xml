@@ -1912,5 +1912,6 @@
 	<entry key="dashboard.widget.admin.cleanup.streams">Папка streams:</entry>
 	<entry key="dashboard.widget.admin.cleanup.final">преобразованные:</entry>
 	<entry key="dashboard.widget.admin.cleanup.cleanup">Очистить</entry>
+	<entry key="dashboard.widget.admin.cleanup.warn">Вы уверены что хотите удалить все временные файлы? Эту операцию нельзя будет отменить.</entry>
 	<entry key="dashboard.widget.admin.cleanup.error">Неизвестная ошибка при попытке очистить</entry>
 </properties>

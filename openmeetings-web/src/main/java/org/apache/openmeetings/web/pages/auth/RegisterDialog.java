@@ -176,7 +176,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return registerBtn;
 	}
 
