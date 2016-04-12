@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
  *
  */
 public class WhiteBoardObjectListManagerById {
-	private Map<Long,WhiteboardObjectList> whiteBoardObjectList = new ConcurrentHashMap<Long, WhiteboardObjectList>();
+	private Map<Long, WhiteboardObjectList> whiteBoardObjectList = new ConcurrentHashMap<>();
 	
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
 	
@@ -45,7 +45,7 @@ public class WhiteBoardObjectListManagerById {
 	/*
 	 * Room items a Whiteboard
 	 */
-	public synchronized WhiteboardObjectList getWhiteBoardObjectListByRoomId(Long roomId){
+	public WhiteboardObjectList getWhiteBoardObjectListByRoomId(Long roomId) {
 		if (whiteBoardObjectList.containsKey(roomId)) {
 			return whiteBoardObjectList.get(roomId);
 		} else {
@@ -55,7 +55,7 @@ public class WhiteBoardObjectListManagerById {
 		}
 	}
 	
-	public synchronized WhiteboardObject getWhiteBoardObjectListByRoomIdAndWhiteboard(Long roomId, Long whiteBoardId){
+	public WhiteboardObject getWhiteBoardObjectListByRoomIdAndWhiteboard(Long roomId, Long whiteBoardId){
 		WhiteboardObjectList whiteboardObjectList = getWhiteBoardObjectListByRoomId(roomId);
 		WhiteboardObject whiteboardObjects = whiteboardObjectList.getWhiteboardObjects().get(whiteBoardId);
 		if (whiteboardObjects == null) {
@@ -69,11 +69,11 @@ public class WhiteBoardObjectListManagerById {
 	 * 
 	 */
 	
-	public synchronized void setWhiteBoardObjectListRoomObj(Long roomId, WhiteboardObjectList whiteboardObjectList){
+	public void setWhiteBoardObjectListRoomObj(Long roomId, WhiteboardObjectList whiteboardObjectList){
 		whiteBoardObjectList.put(roomId, whiteboardObjectList);
 	}
 	
-	public synchronized void setWhiteBoardObjectListRoomObjAndWhiteboardId(Long roomId, WhiteboardObject whiteboardObjects, long whiteBoardId) {
+	public void setWhiteBoardObjectListRoomObjAndWhiteboardId(Long roomId, WhiteboardObject whiteboardObjects, long whiteBoardId) {
 		WhiteboardObjectList whiteboardObjectList = getWhiteBoardObjectListByRoomId(roomId);
 		whiteboardObjects.setWhiteBoardId(whiteBoardId);
 		whiteboardObjectList.getWhiteboardObjects().put(whiteBoardId, whiteboardObjects);

@@ -102,7 +102,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
 			id = e.getKey();
 		}
-		languages.put(++id,  l);
+		languages.put(id + 1, l);
 		storeLanguages();
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}

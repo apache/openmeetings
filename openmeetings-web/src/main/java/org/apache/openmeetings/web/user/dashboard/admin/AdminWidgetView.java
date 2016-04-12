@@ -30,18 +30,23 @@ import ro.fortsoft.wicket.dashboard.web.WidgetView;
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
 	private final AdminCleanupInfoDialog cleanupDialog;
+	final Form<Void> form = new Form<>("form");
 
 	public AdminWidgetView(String id, Model<Widget> model) {
 		super(id, model);
-		final Form<Void> form = new Form<>("form");
 		add(form);
 		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
 		form.add(new IndicatingAjaxButton("show-cleanup-dialog") {
 			private static final long serialVersionUID = 1L;
-
+			
+			@Override
+			protected boolean isDisabledOnClick() {
+				return true;
+			}
+			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				cleanupDialog.cleanup(target);
+				cleanupDialog.show(target);
 			}
 		});
 	}

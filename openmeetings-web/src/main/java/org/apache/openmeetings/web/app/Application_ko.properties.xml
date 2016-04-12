@@ -1908,5 +1908,6 @@
 	<entry key="dashboard.widget.admin.cleanup.streams">Streams folder:</entry>
 	<entry key="dashboard.widget.admin.cleanup.final">final:</entry>
 	<entry key="dashboard.widget.admin.cleanup.cleanup">Cleanup</entry>
+	<entry key="dashboard.widget.admin.cleanup.warn">Are you sure you want to delete all temporary files? This operation cannot be undone.</entry>
 	<entry key="dashboard.widget.admin.cleanup.error">Unexpected error while performing cleanup</entry>
 </properties>
