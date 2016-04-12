@@ -153,7 +153,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return save;
 	}
 

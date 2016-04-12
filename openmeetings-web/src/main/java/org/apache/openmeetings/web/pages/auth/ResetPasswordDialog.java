@@ -132,7 +132,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return resetBtn;
 	}
 

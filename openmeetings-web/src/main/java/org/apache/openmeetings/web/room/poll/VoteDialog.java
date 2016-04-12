@@ -94,7 +94,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#getSubmitButton()
 	 */
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return vote;
 	}
 

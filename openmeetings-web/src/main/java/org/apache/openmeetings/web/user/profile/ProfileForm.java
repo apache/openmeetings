@@ -34,13 +34,18 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
 
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+
 public class ProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private final UserForm userForm;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public ProfileForm(String id) {
 		super(id, new CompoundPropertyModel<User>(getBean(UserDao.class).get(getUserId())));
 		
+		add(feedback.setOutputMarkupId(true));
 		add(new FormSaveRefreshPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
@@ -50,7 +55,7 @@ public class ProfileForm extends Form<User> {
 				try {
 					u = getBean(UserDao.class).update(u, userForm.getPasswordField().getConvertedInput(), getUserId());
 				} catch (Exception e) {
-					// FIXME update feedback with the error details
+					error(e.getMessage());
 				}
 				setModelObject(u);
 				target.add(ProfileForm.this);

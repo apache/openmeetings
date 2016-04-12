@@ -42,7 +42,7 @@ public class WhiteBoardObjectSyncManager {
 	/*
 	 * Initial Sync Process
 	 */
-	public synchronized void setWhiteBoardSyncListByRoomid(Long roomId, Map<String, WhiteboardSyncLockObject> mapObject) {
+	public void setWhiteBoardSyncListByRoomid(Long roomId, Map<String, WhiteboardSyncLockObject> mapObject) {
 		whiteBoardSyncList.put(roomId, mapObject);
 	}
 
@@ -57,11 +57,11 @@ public class WhiteBoardObjectSyncManager {
 	/*
 	 * Image Sync Process
 	 */
-	public synchronized void setWhiteBoardImagesSyncListByRoomid(Long roomId, Map<String, Map<String, WhiteboardSyncLockObject>> mapObject) {
+	public void setWhiteBoardImagesSyncListByRoomid(Long roomId, Map<String, Map<String, WhiteboardSyncLockObject>> mapObject) {
 		whiteBoardObjectSyncList.put(roomId, mapObject);
 	}
 
-	public synchronized void setWhiteBoardImagesSyncListByRoomAndObjectId(Long roomId, String objectId, Map<String, WhiteboardSyncLockObject> imageSyncList) {
+	public void setWhiteBoardImagesSyncListByRoomAndObjectId(Long roomId, String objectId, Map<String, WhiteboardSyncLockObject> imageSyncList) {
 		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = getWhiteBoardObjectSyncListByRoomid(roomId);
 		if (imageSyncList.isEmpty()) {
 			roomList.remove(objectId);
@@ -71,7 +71,7 @@ public class WhiteBoardObjectSyncManager {
 		setWhiteBoardImagesSyncListByRoomid(roomId, roomList);
 	}
 
-	public synchronized Map<String, Map<String, WhiteboardSyncLockObject>> getWhiteBoardObjectSyncListByRoomid(Long roomId) {
+	public Map<String, Map<String, WhiteboardSyncLockObject>> getWhiteBoardObjectSyncListByRoomid(Long roomId) {
 		if (whiteBoardObjectSyncList.containsKey(roomId)) {
 			return whiteBoardObjectSyncList.get(roomId);
 		} else {
@@ -79,7 +79,7 @@ public class WhiteBoardObjectSyncManager {
 		}
 	}
 
-	public synchronized Map<String, WhiteboardSyncLockObject> getWhiteBoardObjectSyncListByRoomAndObjectId(Long roomId, String objectId) {
+	public Map<String, WhiteboardSyncLockObject> getWhiteBoardObjectSyncListByRoomAndObjectId(Long roomId, String objectId) {
 		log.debug("getWhiteBoardImagesSyncListByRoomAndImageid roomId: " + roomId);
 		Map<String, Map<String, WhiteboardSyncLockObject>> roomList = getWhiteBoardObjectSyncListByRoomid(roomId);
 		if (log.isDebugEnabled()) {
@@ -95,5 +95,4 @@ public class WhiteBoardObjectSyncManager {
 		}
 		return imageSyncList;
 	}
-
 }

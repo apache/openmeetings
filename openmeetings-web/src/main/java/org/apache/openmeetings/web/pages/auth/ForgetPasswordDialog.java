@@ -178,7 +178,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected DialogButton getSubmitButton() {
+	public DialogButton getSubmitButton() {
 		return send;
 	}
 
