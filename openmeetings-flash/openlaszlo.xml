@@ -80,7 +80,7 @@
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf10" />
+			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktesting.swf10.swf" />
 			<param name="flash.debug" value="" />
@@ -92,7 +92,7 @@
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf10" />
+			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
 			<param name="flash.debug" value="--debug" />
