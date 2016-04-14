@@ -42,6 +42,7 @@ import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
+import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
@@ -71,7 +72,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			RoomPanel.broadcast(new RoomMessage(room.getRoom().getId(), RoomMessage.Type.requestRightModerator));
+			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.requestRightModerator, room.getClient().getUid()));
 		}
 	};
 	private final RoomPanel room;

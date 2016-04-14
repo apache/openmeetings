@@ -28,9 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -60,6 +60,15 @@ public class RoomSidebar extends Panel {
 		protected void populateItem(ListItem<RoomClient> item) {
 			RoomClient rc = item.getModelObject();
 			item.setMarkupId(String.format("user%s", rc.c.getUid()));
+			WebMarkupContainer status = new WebMarkupContainer("status");
+			if (rc.c.hasRight(Right.moderator)) {
+				status.add(AttributeAppender.append("class", "status-mod"), AttributeAppender.replace("title", getString("679")));
+			} else if (rc.c.hasRight(Right.whiteBoard)) {
+				status.add(AttributeAppender.append("class", "status-wb"), AttributeAppender.replace("title", getString("678")));
+			} else {
+				status.add(AttributeAppender.append("class", "status-user"), AttributeAppender.replace("title", getString("677")));
+			}
+			item.add(status);
 			item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
 			item.add(AttributeAppender.append("data-userid", rc.u.getId()));
 			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isChatHidden() && getUserId() != rc.u.getId()));
@@ -72,8 +81,7 @@ public class RoomSidebar extends Panel {
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
-		Room r = room.getRoom();
-		showFiles = !r.getHideFilesExplorer();//TODO add moderation check
+		updateShowFiles();
 		
 		userTab = new ITab() {
 			private static final long serialVersionUID = 1L;
@@ -111,15 +119,15 @@ public class RoomSidebar extends Panel {
 				return new FileFragment(containerId, "file-panel");
 			}
 		};
-		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(r.isFilesOpened() ? 1 : 0));
+		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(room.getRoom().isFilesOpened() ? 1 : 0));
 	}
 	
 	public class UserFragment extends Fragment {
 		private static final long serialVersionUID = 1L;
 
 		public UserFragment(String id, String markupId) {
-            super(id, markupId, RoomSidebar.this);
-            add(users.setList(getUsers()));
+			super(id, markupId, RoomSidebar.this);
+			add(users.setList(getUsers()));
 		}
 	}
 	
@@ -127,9 +135,9 @@ public class RoomSidebar extends Panel {
 		private static final long serialVersionUID = 1L;
 
 		public FileFragment(String id, String markupId) {
-            super(id, markupId, RoomSidebar.this);
-            add(new RoomFilePanel("tree", room.getRoom().getId()));
-        }
+			super(id, markupId, RoomSidebar.this);
+			add(new RoomFilePanel("tree", room.getRoom().getId()));
+		}
 	}
 
 	private List<RoomClient> getUsers() {
@@ -151,7 +159,12 @@ public class RoomSidebar extends Panel {
 		}
 	}
 	
+	private void updateShowFiles() {
+		showFiles = !room.getRoom().getHideFilesExplorer() && room.getClient().hasRight(Right.whiteBoard);
+	}
+	
 	public void updateUsers(IPartialPageRequestHandler handler) {
+		updateShowFiles();
 		users.setList(getUsers());
 		handler.add(tabs);
 	}

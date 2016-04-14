@@ -91,6 +91,7 @@ public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final static String PARAM_USER_ID = "userId";
+	private Client client;
 	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
@@ -104,6 +105,7 @@ public class MainPage extends BaseInitedPage {
 	
 	public MainPage() {
 		super();
+		client = new Client(getSession().getId(), getUserId());
 		getHeader().setVisible(false);
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
@@ -215,7 +217,7 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				addOnlineUser(new Client(message.getSessionId(), message.getKey(), getUserId()));
+				addOnlineUser(client.setPageId(message.getKey()));
 				log.debug(String.format("WebSocketBehavior::onConnect [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 			}
 			
@@ -232,13 +234,12 @@ public class MainPage extends BaseInitedPage {
 			}
 			
 			private void closeHandler(AbstractClientMessage message) {
-				Client _c = new Client(message.getSessionId(), message.getKey(), getUserId());
-				removeOnlineUser(_c);
 				log.debug(String.format("WebSocketBehavior::onClose [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 				if (MainPage.this.getCurrentPanel() instanceof RoomPanel) {
 					RoomPanel rp = (RoomPanel)MainPage.this.getCurrentPanel();
 					RoomMenuPanel.roomExit(rp);
 				}
+				removeOnlineUser(client);
 			}
 		});
 		add(new AbstractDefaultAjaxBehavior() {
@@ -350,5 +351,9 @@ public class MainPage extends BaseInitedPage {
 	@Override
 	protected boolean isMainPage() {
 		return true;
+	}
+	
+	public Client getClient() {
+		return client;
 	}
 }
