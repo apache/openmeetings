@@ -79,32 +79,9 @@
 			new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
 		}
 		
-		if (this._chatPanelStrict) {
-			var chatHidden = this.roomobj.chatHidden;
-			this._chatPanelStrict.setAttribute('visible', !chatHidden);
-			if (chatHidden) {
-				this._chatPanelStrict.setAttribute('height', 28);
-			}
-		}
-		
 		canvas.currentBaseConferenceRoom = this;
-		if (!this.roomobj.hideTopBar) {
-			canvas.main_content.setAttribute('y', 28);
-			canvas.currentBaseConferenceRoom.createMenu();
-		}
-		canvas._conferencemenu.setAttribute('visible', !this.roomobj.hideTopBar);
 		
 		if ($debug) Debug.write("this.roomobj ",this.roomobj);
-
-		if (!!canvas._mymod) {
-			canvas._mymod.destroy();
-			canvas._mymod = null;
-		}
-		new lz.moderationPanel(canvas._moderatormenu, {
-				name:'_moderationPanel', align:'right',
-				allowUserQuestions:this.roomobj.allowUserQuestions,
-				roomName:this.roomobj.name
-			});
 		if (roomobj.appointment) {
 			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
 		} else {
@@ -143,74 +120,6 @@
 		}
 	]]>
 	</handler>
-
-    <baseTabChatPanel name="_chatPanelStrict" labelid="616"
-       height="200" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0 : 28) }" 
-       width="${ canvas.width - parent._sidePanel.width }" isopen="${ !canvas.currentRoomObj.chatOpened }" />
-       <!-- isopen need to be reverted, will be toggled -->
-       
-	<handler name="ontabcontentleave">
-		if ($debug) Debug.write("################# ontabcontentleave:",this);
-		
-		canvas.commonVideoViewContent.closeAllScreenSharings();
-		
-		canvas.currentBaseConferenceRoom = null;
-		
-		//reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
-		//on server-Side the canDraw status will be false again when you relogin the same room
-		canvas.isAllowedToDraw = true;
-		
-		_mainScrollBar.setAttribute("visibility","visible");
-		
-		//reset rights
-		canvas.isAllowedToGiveExclusiveAudio = false;
-		
-		canvas.commonVideoViewContent.resetAllValues();
-		if (canvas._chatcontent!=null) {
-			canvas._chatcontent = null;
-		}
-		if (canvas._mymod!=null) {
-			canvas._mymod = null;
-		}
-		
-		if (this.meetingTimer != null) {
-			this.meetingTimer.close();
-		}
-		
-		if (canvas._drawarea.letterObjectIsActive) {
-			canvas._drawarea.currentletterObj.destroy();
-		}
-		
-		if (canvas.currentFileExplorer != null) {
-			canvas.currentFileExplorer = null;
-		}
-		
-		if (canvas.currentActivityList != null) {
-			canvas.currentActivityList = null;
-		}
-		
-		//@deprecated we will not use old screen sharing implementation
-		//canvas._screens.clearAllSessions();
-		this.logicalRoomLeave.doCall();
-		if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
-	</handler>
-
-	<netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
-			//this.parent.destroy();
-			canvas.thishib.reconnectedRoomInstance = this.parent;
-			
-			// Reconnect User to default Scope
-			canvas.thishib.userScope = "hibernate";
-			var src = hib.getUrl();
-			canvas.thishib.setAttribute('src',src);
-			canvas.thishib.disconnect();
-			canvas._conferencemenu.removeAll();
-			canvas._conferencemenu.setAttribute('visibility','hidden');
-		</handler>
-	</netRemoteCallHib>
 </class>
 
 </library>

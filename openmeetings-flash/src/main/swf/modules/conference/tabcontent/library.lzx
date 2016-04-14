@@ -28,6 +28,5 @@
 	<resource name="_filesave_icon_original_rsc" src="resources/download.png" />
 
 	<include href="fileexplorer/"/>
-	<include href="chat/" />
     
 </library>

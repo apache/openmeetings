@@ -21,7 +21,6 @@
 <library>
 	
 	<include href="conference/" />
-	<include href="chat/" />
 	<include href="invitation/" />
 	<include href="dashboard/" />
     <include href="sipintegration/" />

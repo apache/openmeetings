@@ -26,8 +26,6 @@
 		<frame src="resources/bullet_ball_glass_red.png"/> <!-- whiteboard allow -->
 	</resource>
 	
-	<resource name="chat_message_incoming_rsc" src="resources/ledlightgreen.png" />
-	
 	<!-- FamFam Icon Set -->
 	<resource name="screen_allow_rsc" src="resources/monitor_add.png" />
 	<!-- FamFam Icon Set -->
@@ -45,8 +43,6 @@
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
-	<!-- FamFam Icon Set -->
-	<resource name="start_private_chat_rsc" src="resources/page_edit.png" />
 	
 	<!-- APL author sebawagner -->
 	<resource name="kick_user_rsc" src="resources/cancel_icon.png" />

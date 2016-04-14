@@ -51,7 +51,7 @@
 	<filter-mapping>
 		<filter-name>LoggerContextFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>   
+	</filter-mapping>
 	
 	<filter>
 		<filter-name>OpenmeetingsApplication</filter-name>
@@ -66,7 +66,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
-			<param-value>conf,css,default,docs,images,js,persistence,public,screenshare,streams,upload,uploadtemp,services,networktest.,DownloadHandler</param-value>
+			<param-value>conf,css,default,docs,images,js,persistence,public,screenshare,streams,upload,uploadtemp,services,networktest.</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -97,10 +97,6 @@
 		<servlet-class>org.red5.server.net.servlet.AMFGatewayServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>DownloadHandler</servlet-name>
-		<servlet-class>org.apache.openmeetings.core.servlet.outputhandler.DownloadHandler</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>ExportToImage</servlet-name>
 		<servlet-class>org.apache.openmeetings.core.servlet.outputhandler.ExportToImage</servlet-class>
 	</servlet>
@@ -108,10 +104,6 @@
 	<servlet-mapping>
 		<servlet-name>spring-mvc</servlet-name>
 		<url-pattern>*.upload</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DownloadHandler</servlet-name>
-		<url-pattern>/DownloadHandler</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ExportToImage</servlet-name>

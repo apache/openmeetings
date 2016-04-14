@@ -54,16 +54,6 @@
 				description="color of text for menus" />		
 	
 	<!-- Icons -->
-	<resource name="logo_image" 
-				description="Logo to display on Main BG Navi" 
-				license="APL"
-				src="themes/basic-theme/general/logo.png" />
-	
-	<resource name="icon_facebook_rsc_png" 
-				description="Icon for facebook button in login" 
-				license="Unkown"
-				src="themes/basic-theme/auth/icon_facebook.png" />
-				
 	<resource name="warning_popup_icon_rsc" 
 				description="Toolbar Icon" 
 				license="FamFam Icon Set"
@@ -339,20 +329,4 @@
 				license="APL author sebawagner"
 				src="themes/basic-theme/dashboard/conference_icon_normal.png" />	
 				
-	<!-- Conference room -->	
-	<resource name="users_tab_btn" 
-				description="Conference Room Tab User" 
-				license="FamFam Icon Set"
-				src="themes/basic-theme/conference/group.png" />
-		
-	<resource name="files_tab_btn" 
-				description="Conference Room Tab Files" 
-				license="FamFam Icon Set"
-				src="themes/basic-theme/conference/folder_explore.png" />
-	
-	<resource name="exit_btn_rsc" 
-				description="Conference Room Tab Icon" 
-				license="APL author sebawagner"
-				src="themes/basic-theme/conference/exit_button.png" />			
-	
 </theme>

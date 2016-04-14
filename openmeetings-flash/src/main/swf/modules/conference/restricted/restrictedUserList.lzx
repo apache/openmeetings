@@ -162,10 +162,6 @@
             
             //Render and Show User-List
             parent._participants.sortAndRenderList();
-            
-            if (canvas._currentChatPanel.visible) {
-				canvas._currentChatPanel.toggleopen();
-			}
 		]]>
         </handler>  
     </netRemoteCallHib>

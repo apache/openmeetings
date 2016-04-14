@@ -21,10 +21,6 @@
 <library>
 
 <class name="interviewConferenceRoom" extends="baseConferenceRoom">
-	<method name="createMenu">
-		new lz.interviewConferenceMenubar(canvas._conferencemenu);
-	</method>
-	
 	<handler name="oninit">
 		canvas.currentRoomObj.hideScreenSharing = true;
 	</handler>

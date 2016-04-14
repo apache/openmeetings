@@ -42,6 +42,7 @@ public interface ISessionManager {
 	 */
 	void sessionStart();
 
+	Client add(Client c, Server server);
 	/**
 	 * add a new client item
 	 * 
