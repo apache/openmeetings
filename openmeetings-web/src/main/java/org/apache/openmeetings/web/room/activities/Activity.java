@@ -20,56 +20,39 @@ package org.apache.openmeetings.web.room.activities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public enum Type { //TODO maybe additional type is not necessary
+	public enum Type {
 		roomEnter
 		, roomExit
-		, askModeration //TODO check
+		, requestRightModerator
 	}
-	private String uid;
-	private Long sender;
-	private Date created;
-	private Type type;
+	private final String uid;
+	private final Long sender;
+	private final Date created;
+	private final Type type;
 	
-	public Activity(Long sender, Type type) {
-		this.uid = UUID.randomUUID().toString();
+	public Activity(String uid, Long sender, Type type) {
+		this.uid = uid;
 		this.sender = sender;
 		this.type = type;
-		this.created = new Date(); //TODO timezone
+		this.created = new Date();
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
 	public Long getSender() {
 		return sender;
-	}
-
-	public void setSender(Long sender) {
-		this.sender = sender;
 	}
 
 	public Type getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
-	}
-
 	public Date getCreated() {
 		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
 	}
 }

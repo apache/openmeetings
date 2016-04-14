@@ -56,7 +56,7 @@ public class TestMailSending {
 	 */
 	@Test
 	public void doTestSendEmail() {
-		try{
+		try {
 			Transport.send(getMimeMessage());
 		} catch (Exception err) {
 			log.error("Error", err);

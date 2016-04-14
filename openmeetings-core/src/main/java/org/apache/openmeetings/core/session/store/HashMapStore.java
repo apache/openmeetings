@@ -53,7 +53,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	protected static final Logger log = Red5LoggerFactory.getLogger(HashMapStore.class, webAppRootKey);
 	
 	private Map<String, Client> clientsByStreamId = new ConcurrentHashMap<>();
-	
+
 	@Override
 	public void clear() {
 		clientsByStreamId = new ConcurrentHashMap<>();

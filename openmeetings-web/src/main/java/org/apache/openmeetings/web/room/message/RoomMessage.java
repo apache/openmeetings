@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.message;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
@@ -34,27 +35,28 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		, pollDeleted
 		, voted
 		, rightUpdated
+		, requestRightModerator
 	}
 	private final Date timestamp;
-	private final Long sentUserId;
+	private final String uid;
 	private final Long roomId;
 	private final Long userId;
 	private final Type type;
 
+	public RoomMessage(Long roomId, Type type) {
+		this(roomId, WebSession.getUserId(), type);
+	}
+	
 	public RoomMessage(Long roomId, Long userId, Type type) {
 		this.timestamp = new Date();
-		this.sentUserId = WebSession.getUserId();
 		this.roomId = roomId;
 		this.userId = userId;
 		this.type = type;
+		this.uid = UUID.randomUUID().toString();
 	}
 	
 	public Date getTimestamp() {
 		return timestamp;
-	}
-
-	public Long getSentUserId() {
-		return sentUserId;
 	}
 
 	public Long getRoomId() {
@@ -67,5 +69,9 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 
 	public Type getType() {
 		return type;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 }

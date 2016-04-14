@@ -31,6 +31,7 @@ import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -86,6 +87,8 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
+	private RoomDao roomDao;
+	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
@@ -129,6 +132,15 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[getCurrentRoomClient]", err);
 		}
 		return null;
+	}
+
+	/**
+	 * load this session id before doing anything else
+	 * 
+	 * @return a unique session identifier
+	 */
+	public Sessiondata getsessiondata() {
+		return sessiondataDao.startsession();
 	}
 
 	public Long setCurrentUserGroup(String SID, Long groupId) {
@@ -188,7 +200,40 @@ public class MainService implements IPendingServiceCallback {
 		}
 		return allowed;
 	}
-
+	
+	public User loginWicket(String wicketSID, Long wicketroomid) {
+		log.debug("[loginWicket] wicketSID: '{}'; wicketroomid: '{}'", wicketSID, wicketroomid);
+		Long userId = sessiondataDao.checkSession(wicketSID);
+		User u = userId == null ? null : userDao.get(userId);
+		if (u != null && wicketroomid != null) {
+			log.debug("[loginWicket] user and roomid are not empty: " + userId + ", " + wicketroomid);
+			if (isRoomAllowedToUser(roomDao.get(wicketroomid), u)) {
+				IConnection current = Red5.getConnectionLocal();
+				String streamId = current.getClient().getId();
+				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
+				
+				if (!u.getGroupUsers().isEmpty()) {
+					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
+					currentClient.setUserId(u.getId());
+					currentClient.setRoomId(wicketroomid);
+					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
+				
+					currentClient.setUsername(u.getLogin());
+					currentClient.setFirstname(u.getFirstname());
+					currentClient.setLastname(u.getLastname());
+					currentClient.setPicture_uri(u.getPictureuri());
+					currentClient.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
+					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+					
+					scopeApplicationAdapter.sendMessageToCurrentScope("roomConnect", currentClient, false);
+					
+					return u;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public Object secureLoginByRemote(String SID, String secureHash) {
 		try {
 			log.debug("############### secureLoginByRemote " + secureHash);

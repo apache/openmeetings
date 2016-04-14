@@ -132,7 +132,7 @@ public class FlvExplorerConverter extends BaseConverter {
 		
 		Matcher matcher = p.matcher(txt);
 		
-		while ( matcher.find() ) {
+		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
 			
 			String[] resultions = foundResolution.split("x");

@@ -35,7 +35,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
@@ -289,23 +288,26 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 	
-	public static Client addUserToRoom(long roomId, int pageId) {
+	public static Client addUserToRoom(Client c, int pageId) {
+		long roomId = c.getRoomId();
 		if (!ROOMS.containsKey(roomId)) {
 			ROOMS.put(roomId, new ConcurrentHashSet<Client>());
 		}
-		Client c = new Client(WebSession.get().getId(), pageId, WebSession.getUserId());
-		c.setUid(UUID.randomUUID().toString());
+		c.setSessionId(WebSession.get().getId());
+		c.setPageId(pageId);
 		ROOMS.get(roomId).add(c);
 		return c;
 	}
 	
 	public static void removeUserFromRoom(long roomId, int pageId) {
-		removeUserFromRoom(roomId, new Client(WebSession.get().getId(), pageId, WebSession.getUserId()));
+		Client c = new Client(WebSession.get().getId(), pageId, WebSession.getUserId());
+		c.setRoomId(roomId);
+		removeUserFromRoom(c);
 	}
 	
-	public static Client removeUserFromRoom(long roomId, Client _c) {
-		if (ROOMS.containsKey(roomId)) {
-			Set<Client> clients = ROOMS.get(roomId);
+	public static Client removeUserFromRoom(Client _c) {
+		if (ROOMS.containsKey(_c.getRoomId())) {
+			Set<Client> clients = ROOMS.get(_c.getRoomId());
 			for (Client c : clients) {
 				if (c.equals(_c)) {
 					clients.remove(c);
@@ -313,20 +315,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 			if (clients.isEmpty()) {
-				ROOMS.remove(roomId);
+				ROOMS.remove(_c.getRoomId());
 			}
 		}
 		return _c;
-	}
-	
-	public static long getRoom(Client c) {
-		for (Entry<Long, Set<Client>> me : ROOMS.entrySet()) {
-			Set<Client> clients = me.getValue();
-			if (clients.contains(c)) {
-				return me.getKey();
-			}
-		}
-		return -1;
 	}
 	
 	public static Set<Client> getRoomUsers(long roomId) {

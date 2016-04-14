@@ -22,19 +22,23 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.Activity.Type;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -58,25 +62,17 @@ public class ActivitiesPanel extends BasePanel {
 		accept, decline, close
 	};
 	private static ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() {
+		@Override
 		protected DateFormat initialValue() {
 			return new SimpleDateFormat("HH:mm:ss");
 		};
 	};
-	private final List<Activity> activities = new ArrayList<Activity>();
+	private final Map<String, Activity> activities = new LinkedHashMap<>();
 	private final long roomId;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
-		private Activity get(String uid) {
-			for (Activity a : activities) {
-				if (a.getUid().equals(uid)) {
-					return a;
-				}
-			}
-			return null;
-		}
-		
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
@@ -84,13 +80,14 @@ public class ActivitiesPanel extends BasePanel {
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				assert(ActivitiesPanel.this.roomId == roomId);
 				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
-				Activity a = get(uid);
+				Activity a = activities.get(uid);
 				if (a != null) {
 					if (action == Action.close && (a.getType() == Type.roomEnter || a.getType() == Type.roomExit)) {
-						activities.remove(a);
+						activities.remove(uid);
+						update(target);
 					} else if (isModerator(getUserId(), roomId)) {
 						switch (a.getType()) {
-							case askModeration:
+							case requestRightModerator:
 								break;
 							default:
 								break;	
@@ -103,8 +100,14 @@ public class ActivitiesPanel extends BasePanel {
 				log.error("Unexpected exception while processing activity action", e);
 			}
 		}
+		
+		@Override
+		public void renderHead(Component component, IHeaderResponse response) {
+			super.renderHead(component, response);
+			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_UID)), "activityAction")));
+		}
 	};
-	private ListView<Activity> lv = new ListView<Activity>("activities", activities) {
+	private ListView<Activity> lv = new ListView<Activity>("activities", new ArrayList<Activity>()) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -119,21 +122,44 @@ public class ActivitiesPanel extends BasePanel {
 				case roomExit:
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), Application.getString(1367), df.get().format(a.getCreated()));
+					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("1367"), df.get().format(a.getCreated()));
 				}
 					break;
-				case askModeration:
+				case requestRightModerator:
+				{
+					User u = getBean(UserDao.class).get(a.getSender());
+					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
+					//FIXME TODO actions
+				}
+				//ask question 693
 					break;
 			}
+			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getUid()))));
 			item.add(new Label("text", text));
+			item.add(AttributeAppender.append("class", getClass(a)));
+		}
+		
+		private String getClass(Activity a) {
+			switch (a.getType()) {
+				case requestRightModerator:
+					return "ui-state-highlight";
+				case roomEnter:
+				case roomExit:
+			}
+			return "ui-state-default";
 		}
 	};
 
-	public void addActivity(Long userId, Activity.Type type, IPartialPageRequestHandler target) {
+	public void addActivity(String uid, Long userId, Activity.Type type, IPartialPageRequestHandler handler) {
 		//if (getUserId() != userId) {//FIXME should be replaced with client-id
-			activities.add(new Activity(userId,  type));
-			target.add(container);
+			activities.put(uid, new Activity(uid, userId,  type));
+			update(handler);
 		//}
+	}
+
+	public void update(IPartialPageRequestHandler handler) {
+		lv.setList(new ArrayList<>(activities.values()));
+		handler.add(container);
 	}
 	
 	public ActivitiesPanel(String id, long roomId) {

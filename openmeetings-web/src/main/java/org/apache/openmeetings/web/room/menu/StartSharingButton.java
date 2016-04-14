@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room;
+package org.apache.openmeetings.web.room.menu;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
+import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,23 +43,23 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.util.AjaxDownload;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
+public class StartSharingButton extends OmButton {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingEventBehavior.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingButton.class, webAppRootKey);
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
-	public static final String PARAM_PUBLIC_SID = "publicSid";
-	public static final String PARAM_URL = "url";
 	private final AjaxDownload download;
-	private final Long roomId;
+	private final org.apache.openmeetings.web.app.Client c;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -67,41 +67,40 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		, rtmpt
 	}
 
-	public StartSharingEventBehavior(Long _roomId) {
-		this.roomId = _roomId;
-		download = new AjaxDownload(true) {
+	public StartSharingButton(String id, org.apache.openmeetings.web.app.Client c) {
+		super(id);
+		this.c = c;
+		setOutputMarkupPlaceholderTag(true);
+		setVisible(false);
+		add(new AttributeAppender("title", Application.getString(1480)));
+		add(download = new AjaxDownload(true) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected String getFileName() {
-				return "public_" + roomId + ".jnlp";
+				return String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId());
 			}
-		};
+		});
 	}
 	
 	@Override
-	protected void onBind() {
-		super.onBind();
-		getComponent().add(download);
-	}
-	
-	@Override
-	protected void respond(AjaxRequestTarget target) {
+	protected void onClick(AjaxRequestTarget target) {
 		//TODO deny download in case other screen sharing is in progress
 		String app = "";
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, StandardCharsets.UTF_8);
 			String baseUrl = cfgDao.getBaseUrl();
-			String _url = getParam(getComponent(), PARAM_URL).toString();
-			URI url = new URI(_url);
-			Room room = getBean(RoomDao.class).get(roomId);
-			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
-			SessionManager sessionManager = getBean(SessionManager.class);
-			Client rc = sessionManager.getClientByPublicSID(publicSid, null);//TODO not necessary
+			String publicSid = c.getUid();
+			Client rc = getClient(publicSid);
 			if (rc == null) {
 				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
 			}
+			String _url = rc.getTcUrl();
+			URI url = new URI(_url);
+			long roomId = c.getRoomId();
+			Room room = getBean(RoomDao.class).get(roomId);
+			SessionManager sessionManager = getBean(SessionManager.class);
 			String path = url.getPath();
 			path = path.substring(path.lastIndexOf('/') + 1);
 			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {

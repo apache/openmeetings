@@ -24,12 +24,9 @@
 		<div onclick="toggleActivities();" class="clickable control block ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:message key="1363"/></div></div>
 	</div>
 	<div wicket:id="container" class="area ui-widget-content">
-		<div wicket:id="activities" class="activity item">
+		<div wicket:id="activities" class="activity item ui-helper-clearfix ui-corner-all">
+			<span wicket:id="close" class="ui-icon ui-icon-close ui-corner-all align-right clickable" wicket:message="title:85"></span>
 			<div wicket:id="text"></div>
-			<button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" title="Close">
-				<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
-				<span class="ui-button-text">Close</span>
-			</button>
 		</div>
 	</div>
 </wicket:panel>

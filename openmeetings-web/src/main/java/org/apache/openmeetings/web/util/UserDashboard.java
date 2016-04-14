@@ -50,7 +50,7 @@ public class UserDashboard extends DefaultDashboard {
 	public void setWidgetMyRoomsDeleted(boolean widgetMyRoomsDeleted) {
 		this.widgetMyRoomsDeleted = widgetMyRoomsDeleted;
 	}
-	
+
 	public boolean isWidgetAdminDeleted() {
 		return widgetAdminDeleted;
 	}

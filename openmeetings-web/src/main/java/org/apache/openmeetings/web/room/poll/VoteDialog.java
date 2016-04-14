@@ -31,8 +31,6 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -125,7 +123,6 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		a.setVoteDate(new Date());
 		a.getRoomPoll().getAnswers().add(a);
 		getBean(PollDao.class).update(a.getRoomPoll());
-		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.voted));
 	}
 	
 	@Override

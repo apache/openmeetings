@@ -144,7 +144,7 @@ public class PrivateMessage implements IDataProviderEntity {
 		isContactRequest = copy.isContactRequest;
 		userContactId = copy.userContactId;
 	}
-	
+
 	@Override
 	public Long getId() {
 		return id;

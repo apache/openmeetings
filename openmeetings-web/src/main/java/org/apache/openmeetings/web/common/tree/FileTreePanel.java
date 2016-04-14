@@ -63,6 +63,11 @@ public abstract class FileTreePanel extends Panel {
 
 	public FileTreePanel(String id) {
 		super(id);
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		defineTrees();
 		selectedFile.getObject().setId(Long.MIN_VALUE);
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
@@ -94,6 +99,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		};
 		add(trashToolbar);
+		trashToolbar.add(getUpload("upload"));
 		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
@@ -131,6 +137,10 @@ public abstract class FileTreePanel extends Panel {
 			}
 		});
 		add(errorsDialog);
+	}
+	
+	protected Component getUpload(String id) {
+		return new WebMarkupContainer(id).setVisible(false);
 	}
 	
 	void delete(FileItem f, AjaxRequestTarget target) {

@@ -40,17 +40,6 @@
 	<target name="client.debug.only" depends="compile.flex.debug,compile.laszlo.networktesting.debug" />
 
 	<target name="-compile.flash" description="compile flash application">
-		<!-- commented for now
-		<echo message="flash.src.dir == '${flash.src.dir}'" />
-		<echo message="classpathref == '${flash.classpath.ref}'" />
-		<echo message="laszlo.home == '${flash.lps.home}'" />
-		<echo message="flash.debug == '${flash.debug}'" />
-		<echo message="laszlo.proxied == '${laszlo.proxied}'" />
-		<echo message="flash.runtime == '${flash.runtime}'" />
-		<echo message="out.dir.swf == '${out.dir.swf}'" />
-		<echo message="flash.main.file == '${flash.main.file}'" />
-		<echo message="flash.out.file == '${flash.out.file}'" />
-		-->
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="${flash.classpath.ref}">
 			<jvmarg value="-DLPS_HOME=${flash.lps.home}" />
 			<jvmarg value="-Dlzdebug=false" />
@@ -66,7 +55,7 @@
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf10" />
+			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktesting.swf10.swf" />
 			<param name="flash.debug" value="" />
@@ -78,7 +67,7 @@
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf10" />
+			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
 			<param name="flash.debug" value="--debug" />
@@ -94,7 +83,7 @@
 	</condition>
 	
 	<target name="if_windows" if="isWindows">
-		<property name="mxmlc_bin" value="mxmlc.exe" />
+		<property name="mxmlc_bin" value="mxmlc.bat" />
 	</target>
 	
 	<target name="if_unix" if="isUnix">
@@ -102,10 +91,10 @@
 	</target>
 	
 	<target name="-compile.flex" description="compile flash application" depends="if_windows, if_unix">
-		<exec dir="${flex.src.dir}" executable="${laszlo46.home}/WEB-INF/flexsdk/4.6.0/bin/${mxmlc_bin}">
+		<exec dir="${flex.src.dir}" executable="${laszlo46.home}/WEB-INF/flexsdk/4.15.0/bin/${mxmlc_bin}">
 			<arg value="main.mxml"/>
 			<arg line="-output ${out.dir.swf}/main.swf"/>
-			<env key="PLAYERGLOBAL_HOME" value="${laszlo46.home}/WEB-INF/flexsdk/4.6.0/frameworks/libs/player"/>
+			<env key="PLAYERGLOBAL_HOME" value="${laszlo46.home}/WEB-INF/flexsdk/4.15.0/frameworks/libs/player"/>
 		</exec>
 	</target>
 	

@@ -16,32 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#activitiesPanel {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	left: 10px;
-	width: 600px;
-	height: 20px;
-}
-#activitiesPanel .control.block .ui-icon {
-	text-align: center;
-}
-#activitiesPanel .control.block .label {
-	display: inline-block;
-	padding-left: 20px;
-}
-#activitiesPanel .area {
-	height: 319px;
-	overflow-y: auto;
-}
-.activity.item {
-	position: relative;
-	background: 0;
-	padding: 5px;
-	margin-bottom: 3px
-}
-.activity.item .ui-icon-close {
-	border-width: 1px;
-	border-style: solid;
+package org.apache.openmeetings.web.common;
+
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import com.googlecode.wicket.jquery.ui.form.button.Button;
+
+public abstract class OmButton extends Button {
+	private static final long serialVersionUID = 1L;
+
+	public OmButton(String id) {
+		super(id);
+		add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				OmButton.this.onClick(target);
+			}
+		});
+	}
+	
+	protected abstract void onClick(AjaxRequestTarget target); 
 }

@@ -191,7 +191,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration get(long id) {
 		return get(Long.valueOf(id));
 	}
-
+	
 	@Override
 	public Configuration get(Long id) {
 		if (id == null) {
