@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -88,6 +89,17 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	public static final Set<String> keys = new HashSet<String>();
 	private static Class<?> APP = null;
 
+	public List<Map<String, Object>> getStrings(Long language_id, int start, int count) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < count; ++i) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", start + i);
+			map.put("value", getString(start + i, language_id));
+			result.add(map);
+		}
+		return result;
+	}
+	
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");
@@ -287,7 +299,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	public StringLabel get(long id) {
 		throw new RuntimeException("Should not be used");
 	}
-	
+
 	@Override
 	public StringLabel get(Long id) {
 		throw new RuntimeException("Should not be used");

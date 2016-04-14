@@ -37,6 +37,9 @@ $(function() {
 			}
 		}
 	});
+	reinit();
+});
+function reinit() {
 	chatTabs = $("#chatTabs").tabs({
 		activate: function(event, ui) {
 			$('#activeChatTab').val(ui.newPanel[0].id);
@@ -48,7 +51,7 @@ $(function() {
 		$("#" + panelId).remove();
 		chatTabs.tabs("refresh");
 	});
-});
+}
 function openChat() {
 	if ($('#chatPanel').height() < 24) {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
@@ -74,7 +77,10 @@ function activateTab(id) {
 	chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
 }
 function addChatTab(id, label) {
-	if ($('#chat').length < 1 || $('#' + id).length > 0) {
+	if (!$("#chatTabs").data("ui-tabs")) {
+		reinit();
+	}
+	if ($('#chat').length < 1 || $('#' + id).length) {
 		return;
 	}
 	var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
@@ -85,6 +91,11 @@ function addChatTab(id, label) {
 	chatTabs.append("<div class='messageArea' id='" + id + "'></div>");
 	chatTabs.tabs("refresh");
 	activateTab(id);
+}
+function removeChatTab(id) {
+	$('li[aria-controls="' + id + '"]').remove();
+	$('#' + id).remove();
+	chatTabs.tabs("refresh");
 }
 function addChatMessage(m) {
 	if ($('#chat').length > 0 && m && m.type == "chat") {

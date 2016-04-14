@@ -126,6 +126,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			getCryptKey();
 
 			// init your handler here
+
 			for (String scopeName : scope.getScopeNames()) {
 				log.debug("scopeName :: " + scopeName);
 			}
@@ -154,6 +155,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 		Map<String, Object> map = conn.getConnectParams();
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
+		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
+		String uid = params != null && params.length > 0 ? (String)params[0] : "";
 
 		Client parentClient = null;
 		//TODO add similar code for other connections
@@ -164,9 +167,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return rejectClient();
 			}
 		}
-		Client rcm = sessionManager.addClientListItem(conn.getClient().getId(),
-				conn.getScope().getName(), conn.getRemotePort(),
-				conn.getRemoteAddress(), swfURL, null);
+		Client rcm = new Client();
+		rcm.setStreamid(conn.getClient().getId());
+		rcm.setScope(conn.getScope().getName());
+		rcm.setUserport(conn.getRemotePort());
+		rcm.setUserip(conn.getRemoteAddress());
+		rcm.setSwfurl(swfURL);
+		rcm.setTcUrl(tcUrl);
+		rcm.setPublicSID(uid);
+		rcm = sessionManager.add(rcm, null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
 			return false;
@@ -182,13 +191,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
 			rcm.setUserId(parentClient.getUserId());
-			Long uid = rcm.getUserId();
-			SessionVariablesUtil.setUserId(conn.getClient(), uid);
+			Long userId = rcm.getUserId();
+			SessionVariablesUtil.setUserId(conn.getClient(), userId);
 
 			rcm.setStreamPublishName(parentSid);
 			User u = null;
-			if (uid != null) {
-				long _uid = uid.longValue();
+			if (userId != null) {
+				long _uid = userId.longValue();
 				u = userDao.get(_uid < 0 ? -_uid : _uid);
 			}
 			if (u != null) {

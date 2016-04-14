@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +28,6 @@ import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -101,7 +98,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 					RoomPoll p = getBean(PollDao.class).get(id);
 					selForm.select.setModelObject(p);
 					dispForm.updateModel(p, false, handler);
-					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollClosed));
 					//TODO result dialogs of other users should also be updated
 				}
 			}
@@ -116,7 +112,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(handler);
 					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
-					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollDeleted));
 					//TODO result dialogs of other users should also be updated
 				}
 			}

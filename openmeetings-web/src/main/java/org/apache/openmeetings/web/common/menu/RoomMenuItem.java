@@ -21,25 +21,17 @@ package org.apache.openmeetings.web.common.menu;
 public class RoomMenuItem extends MenuItem {
 	private static final long serialVersionUID = 1L;
 
-	public RoomMenuItem(String name) {
-		this(name, null);
-	}
-	
 	public RoomMenuItem(String name, String desc) {
-		this(name, desc, true, null);
+		super(name, desc);
 	}
 	
-	public RoomMenuItem(String name, String desc, String cssClass) {
-		this(name, desc, true, cssClass);
+	public RoomMenuItem(String name, String desc, String icon) {
+		super(name, desc);
+		setIcon(icon);
 	}
 	
 	public RoomMenuItem(String name, String desc, boolean enabled) {
-		this(name, desc, enabled, null);
-	}
-	
-	public RoomMenuItem(String name, String desc, boolean enabled, String cssClass) {
 		super(name, desc);
-		setCssClass(cssClass);
 		setEnabled(enabled);
 	}
 }

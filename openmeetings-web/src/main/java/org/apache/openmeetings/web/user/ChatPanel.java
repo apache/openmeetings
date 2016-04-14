@@ -55,6 +55,7 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -189,7 +190,7 @@ public class ChatPanel extends BasePanel {
 
 	public void roomEnter(Room r, AjaxRequestTarget target) {
 		if (r.isChatHidden()) {
-			target.add(setVisible(false));
+			toggle(target, false);
 			return;
 		}
 		StringBuilder sb = new StringBuilder();
@@ -202,6 +203,18 @@ public class ChatPanel extends BasePanel {
 		}
 		sb.append("});");
 		target.appendJavaScript(sb);
+	}
+	
+	public void roomExit(Room r, IPartialPageRequestHandler handler) {
+		if (r.isChatHidden()) {
+			return;
+		}
+		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));
+	}
+	
+	public void toggle(IPartialPageRequestHandler handler, boolean visible) {
+		handler.add(setVisible(visible));
+		handler.appendJavaScript("reinit();");
 	}
 	
 	@Override

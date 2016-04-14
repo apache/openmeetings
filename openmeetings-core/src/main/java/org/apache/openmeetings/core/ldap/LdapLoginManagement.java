@@ -168,9 +168,9 @@ public class LdapLoginManagement {
 		User u = null;
 		try (LdapWorker w = new LdapWorker(domainId)) {
 			if (w.options.useLowerCase) {
-			login = login.toLowerCase();
-		}
-
+				login = login.toLowerCase();
+			}
+			
 			boolean authenticated = true;
 			Dn userDn = null;
 			Entry entry = null;

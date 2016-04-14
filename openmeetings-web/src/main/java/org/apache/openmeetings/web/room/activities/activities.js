@@ -16,18 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
-	, closedHeight = "20px", openedHeight = "345px";
+var closedHeight = "20px", openedHeight = "345px";
 function openActivities() {
-	if ($('#activitiesPanel').height() < 24) {
-		$('#activitiesPanel .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
-		$('#activitiesPanel').animate({height: openedHeight}, 1000);
+	var activities = $('#activitiesPanel');
+	if (activities.height() < 24) {
+		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		activities.animate({height: openedHeight}, 1000);
 	}
 }
 function closeActivities() {
 	var activities = $('#activitiesPanel');
-	if ($('#activitiesPanel').height() > 24) {
-		$('#activitiesPanel .control.block .ui-icon').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
+	if (activities.height() > 24) {
+		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
 		activities.animate({height: closedHeight}, 1000);
 	}
 }

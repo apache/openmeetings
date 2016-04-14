@@ -117,7 +117,7 @@ Enter key password for <red5>
 		</section>
 		
 		<section name="Set up RTMPS">
-		  <ol>
+			<ol>
 				<li> Default RTMPS port is 8443, you can change it by editing <tt>red5/conf/red5.properties</tt> and change the port here: <tt>rtmps.port=8443</tt><br/>
 					Please set <tt>rtmps.keystorepass=password</tt> and <tt>rtmps.truststorepass=password</tt>
 					(password = password you set on your new keystore(s))<br/>
@@ -135,7 +135,7 @@ Enter key password for <red5>
 				<li>Restart red5 and try to connect - your connection should now be
 					made via RTMPS (close port 1935 to be sure)
 				</li>   
-		  </ol>
+			</ol>
 		</section>
 		<section name="SSL for the web interface">
 			<p>If you want to use SSL for the web interface in addition to RTMPS,

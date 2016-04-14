@@ -146,7 +146,7 @@ public class CleanupHelper {
 		File[] l = ff == null ? f.listFiles() : f.listFiles(ff);
 		return l == null ? new File[0] : l;
 	}
-
+	
 	private static File[] list(final Long id) {
 		return list(hibernateDir, new FilenameFilter() {
 			@Override

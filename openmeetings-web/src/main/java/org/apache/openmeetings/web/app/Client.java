@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.app;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
@@ -39,12 +40,20 @@ public class Client implements IDataProviderEntity {
 	private String sessionId;
 	private int pageId;
 	private long userId;
+	private long roomId;
 	private String uid;
 	private Set<Right> rights = new HashSet<Right>();
 	private Date connectedSince;
 
 	public Client() {
 		this.connectedSince = new Date();
+	}
+	
+	public Client(long roomId) {
+		this.connectedSince = new Date();
+		this.roomId = roomId;
+		this.userId = WebSession.getUserId();
+		uid = UUID.randomUUID().toString();
 	}
 	
 	public Client(String sessionId, IKey key, long userId) {
@@ -90,36 +99,6 @@ public class Client implements IDataProviderEntity {
 		this.uid = uid;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + pageId;
-		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
-		result = prime * result + (int) (userId ^ (userId >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Client other = (Client) obj;
-		if (pageId != other.pageId)
-			return false;
-		if (sessionId == null) {
-			if (other.sessionId != null)
-				return false;
-		} else if (!sessionId.equals(other.sessionId))
-			return false;
-		if (userId != other.userId)
-			return false;
-		return true;
-	}
 
 	public Set<Right> getRights() {
 		return rights;
@@ -144,5 +123,53 @@ public class Client implements IDataProviderEntity {
 
 	@Override
 	public void setId(Long id) {
+	}
+
+	public long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(long roomId) {
+		this.roomId = roomId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + pageId;
+		result = prime * result + (int) (roomId ^ (roomId >>> 32));
+		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		result = prime * result + (int) (userId ^ (userId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Client other = (Client) obj;
+		if (pageId != other.pageId)
+			return false;
+		if (roomId != other.roomId)
+			return false;
+		if (sessionId == null) {
+			if (other.sessionId != null)
+				return false;
+		} else if (!sessionId.equals(other.sessionId))
+			return false;
+		if (uid == null) {
+			if (other.uid != null)
+				return false;
+		} else if (!uid.equals(other.uid))
+			return false;
+		if (userId != other.userId)
+			return false;
+		return true;
 	}
 }

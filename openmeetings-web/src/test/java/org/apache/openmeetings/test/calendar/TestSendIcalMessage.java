@@ -155,7 +155,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 		icsCalendar.getProperties().add(Method.REQUEST);
 		
 		log.debug(icsCalendar.toString());
-
+		
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		try {

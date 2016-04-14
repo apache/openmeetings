@@ -54,7 +54,7 @@
 								<artifactItem>
 									<groupId>org.openlaszlo</groupId>
 									<artifactId>openlaszlo</artifactId>
-									<version>4.9.7</version>
+									<version>4.9.8</version>
 									<type>tgz</type>
 									<outputDirectory>${openlaszlo}</outputDirectory>
 								</artifactItem>
