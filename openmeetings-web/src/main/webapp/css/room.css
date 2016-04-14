@@ -25,6 +25,15 @@
 	background-size: 16px 16px;
 	margin-left: 5px;
 }
+.ui-icon.status-user {
+	background-image: url(images/status-user.png);
+}
+.ui-icon.status-wb {
+	background-image: url(images/status-wb.png);
+}
+.ui-icon.status-mod {
+	background-image: url(images/status-mod.png);
+}
 .top.room.menu.exit {
 	padding-left: 30px;
 }
