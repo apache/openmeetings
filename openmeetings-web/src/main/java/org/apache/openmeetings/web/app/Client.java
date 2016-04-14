@@ -35,85 +35,71 @@ public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Right {
-		moderator
+		superModerator
+		, moderator
+		, whiteBoard
+		, share
+		, remoteControl
+		, audio
+		, video
+		, mute
+		, exclusive
 	}
-	private String sessionId;
+	private final String sessionId;
 	private int pageId;
-	private long userId;
-	private long roomId;
-	private String uid;
-	private Set<Right> rights = new HashSet<Right>();
-	private Date connectedSince;
+	private final Long userId;
+	private Long roomId;
+	private final String uid;
+	private final Set<Right> rights = new HashSet<Right>();
+	private final Date connectedSince;
 
-	public Client() {
-		this.connectedSince = new Date();
+	public Client(String sessionId, Long userId) {
+		this(sessionId, 0, userId);
 	}
 	
-	public Client(long roomId) {
-		this.connectedSince = new Date();
-		this.roomId = roomId;
-		this.userId = WebSession.getUserId();
-		uid = UUID.randomUUID().toString();
-	}
-	
-	public Client(String sessionId, IKey key, long userId) {
-		this(sessionId, key.hashCode(), userId);
-	}
-	
-	public Client(String sessionId, int pageId, long userId) {
+	public Client(String sessionId, int pageId, Long userId) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
 		this.userId = userId;
 		this.connectedSince = new Date();
+		uid = UUID.randomUUID().toString();
 	}
 
 	public String getSessionId() {
 		return sessionId;
 	}
 
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
-
 	public int getPageId() {
 		return pageId;
+	}
+
+	public Client setPageId(IKey key) {
+		this.pageId = key.hashCode();
+		return this;
 	}
 
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getUid() {
 		return uid;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-
 	public Set<Right> getRights() {
 		return rights;
 	}
 
 	public boolean hasRight(Right right) {
-		return rights.contains(Right.moderator) ? true : rights.contains(right);
+		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
 	}
 
 	public Date getConnectedSince() {
 		return connectedSince;
-	}
-
-	public void setConnectedSince(Date connectedSince) {
-		this.connectedSince = connectedSince;
 	}
 
 	@Override
@@ -125,12 +111,13 @@ public class Client implements IDataProviderEntity {
 	public void setId(Long id) {
 	}
 
-	public long getRoomId() {
+	public Long getRoomId() {
 		return roomId;
 	}
 
-	public void setRoomId(long roomId) {
+	public Client setRoomId(Long roomId) {
 		this.roomId = roomId;
+		return this;
 	}
 
 	@Override
@@ -138,10 +125,8 @@ public class Client implements IDataProviderEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pageId;
-		result = prime * result + (int) (roomId ^ (roomId >>> 32));
 		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
 		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
-		result = prime * result + (int) (userId ^ (userId >>> 32));
 		return result;
 	}
 
@@ -156,8 +141,6 @@ public class Client implements IDataProviderEntity {
 		Client other = (Client) obj;
 		if (pageId != other.pageId)
 			return false;
-		if (roomId != other.roomId)
-			return false;
 		if (sessionId == null) {
 			if (other.sessionId != null)
 				return false;
@@ -167,8 +150,6 @@ public class Client implements IDataProviderEntity {
 			if (other.uid != null)
 				return false;
 		} else if (!uid.equals(other.uid))
-			return false;
-		if (userId != other.userId)
 			return false;
 		return true;
 	}

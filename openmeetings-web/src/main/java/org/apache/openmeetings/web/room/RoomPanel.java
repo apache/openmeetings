@@ -46,6 +46,7 @@ import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
+import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -85,9 +86,6 @@ public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final Room r;
-	private final Client client;
-	private final RoomMenuPanel menu;
-	private final RoomSidebar sidebar;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior aab = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -102,7 +100,7 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
-						.put("uid", client.getUid())
+						.put("uid", getClient().getUid())
 						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
 						.put("interview", Room.Type.interview == r.getType())
@@ -120,11 +118,19 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	};
-	private final ActivitiesPanel activities;
+	private RoomMenuPanel menu;
+	private RoomSidebar sidebar;
+	private ActivitiesPanel activities;
 	
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
+	}
+
+	@Override
+	protected void onInitialize() {
+		getClient().setRoomId(r.getId());
+		super.onInitialize();
 		Component accessDenied = new WebMarkupContainer("accessDenied").setVisible(false);
 		boolean allowed = false;
 		String deniedMessage = null;
@@ -177,17 +183,16 @@ public class RoomPanel extends BasePanel {
 			accessDenied = new ExpiredMessageDialog("accessDenied", deniedMessage);
 			room.setVisible(false);
 		}
-		client = new Client(r.getId());
 		room.add((menu = new RoomMenuPanel("roomMenu", this)).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		room.add(wb.setOutputMarkupId(true));
 		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		room.add(aab);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
-		room.add((activities = new ActivitiesPanel("activitiesPanel", r.getId())).setVisible(!r.isActivitiesHidden()));
+		room.add((activities = new ActivitiesPanel("activitiesPanel", this)).setVisible(!r.isActivitiesHidden()));
 		add(room, accessDenied);
 	}
-
+	
 	@Override
 	public void onEvent(IEvent<?> event) {
 		if (event.getPayload() instanceof WebSocketPushPayload) {
@@ -200,28 +205,31 @@ public class RoomPanel extends BasePanel {
 						if (getUserId() != m.getUserId()) {
 							menu.pollCreated(handler);
 						}
-					case pollClosed:
-					case pollDeleted:
-					case voted:
 					case rightUpdated:
+						sidebar.updateUsers(handler);
 						menu.update(handler);
 						break;
 					case roomEnter:
-						menu.update(handler);
 						sidebar.updateUsers(handler);
+						menu.update(handler);
 						//activities.addActivity(m.getUid(), m.getSentUserId(), Activity.Type.roomEnter, handler);
 						break;
 					case roomExit:
 						//TODO check user/remove tab
 						sidebar.updateUsers(handler);
-						activities.addActivity(m.getUid(), m.getUserId(), Activity.Type.roomExit, handler);
+						activities.add(new Activity(m.getUid(), m.getUserId(), Activity.Type.roomExit), handler);
 						break;
 					case requestRightModerator:
 						if (isModerator(getUserId(), r.getId())) {
-							activities.addActivity(m.getUid(), m.getUserId(), Activity.Type.requestRightModerator, handler);
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightModerator), handler);
 						}
 						break;
-					default:
+					case activityRemove:
+					{
+						TextRoomMessage tm = (TextRoomMessage)m;
+						activities.remove(tm.getText(), handler);
+					}
 						break;
 				}
 			}
@@ -245,19 +253,19 @@ public class RoomPanel extends BasePanel {
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 		if (room.isVisible()) {
-			addUserToRoom(client, getPage().getPageId());
+			addUserToRoom(getClient().setRoomId(getRoom().getId()));
 			User u = getBean(UserDao.class).get(getUserId());
 			//TODO do we need to check GroupModerationRights ????
 			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
-				client.getRights().add(Client.Right.moderator);
+				getClient().getRights().add(Client.Right.moderator);
 			} else {
 				if (!r.isModerated() && 1 == getRoomUsers(r.getId()).size()) {
-					client.getRights().add(Client.Right.moderator);
+					getClient().getRights().add(Client.Right.moderator);
 				} else if (r.isModerated()) {
 					//TODO why do we need supermoderator ????
 					for (RoomModerator rm : r.getModerators()) {
 						if (getUserId() == rm.getUser().getId()) {
-							client.getRights().add(Client.Right.moderator);
+							getClient().getRights().add(Client.Right.moderator);
 							break;
 						}
 					}
@@ -371,7 +379,7 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	public Client getClient() {
-		return client;
+		return getMainPage().getClient();
 	}
 	
 	public RoomSidebar getSidebar() {

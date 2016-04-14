@@ -16,32 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#activitiesPanel {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	left: 10px;
-	width: 600px;
-	height: 20px;
-}
-#activitiesPanel .control.block .ui-icon {
-	text-align: center;
-}
-#activitiesPanel .control.block .label {
-	display: inline-block;
-	padding-left: 20px;
-}
-#activitiesPanel .area {
-	height: 319px;
-	overflow-y: auto;
-}
-.activity.item {
-	position: relative;
-	padding: 5px;
-	margin-bottom: 3px
-}
-.activity.item .ui-icon {
-	border-width: 1px;
-	border-style: solid;
-	margin-left: 2px;
+package org.apache.openmeetings.web.room.message;
+
+public class TextRoomMessage extends RoomMessage {
+	private static final long serialVersionUID = 1L;
+	private final String text;
+
+	public TextRoomMessage(Long roomId, Type type, String text) {
+		super(roomId, type);
+		this.text = text;
+	}
+	
+	public String getText() {
+		return text;
+	}
 }
