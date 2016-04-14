@@ -20,10 +20,12 @@ package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+import static org.apache.openmeetings.web.room.RoomPanel.broadcast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,8 +35,12 @@ import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.room.activities.Activity.Type;
+import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.message.RoomMessage;
+import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -68,7 +74,7 @@ public class ActivitiesPanel extends BasePanel {
 		};
 	};
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
-	private final long roomId;
+	private final RoomPanel room;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -78,20 +84,41 @@ public class ActivitiesPanel extends BasePanel {
 			try {
 				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
-				assert(ActivitiesPanel.this.roomId == roomId);
+				assert(room.getRoom().getId().equals(roomId));
 				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
 				Activity a = activities.get(uid);
 				if (a != null) {
-					if (action == Action.close && (a.getType() == Type.roomEnter || a.getType() == Type.roomExit)) {
-						activities.remove(uid);
-						update(target);
-					} else if (isModerator(getUserId(), roomId)) {
-						switch (a.getType()) {
-							case requestRightModerator:
-								break;
-							default:
-								break;	
-						}
+					switch (action) {
+						case close:
+							remove(uid, target);
+							break;
+						case decline:
+							if (isModerator(getUserId(), roomId)) {
+								broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.activityRemove, uid));
+							}
+							break;
+						case accept:
+							if (isModerator(getUserId(), roomId)) {
+								switch (a.getType()) {
+									case requestRightModerator:
+										Client client = null;
+										for (Client c : getRoomUsers(room.getRoom().getId())) { //FIXME TODO add Map somewhere
+											if (c.getUid().equals(uid)) {
+												client = c;
+												break;
+											}
+										}
+										if (client != null) {
+											client.getRights().add(Right.moderator);
+											broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.activityRemove, uid));
+											broadcast(new RoomMessage(room.getRoom().getId(), RoomMessage.Type.rightUpdated));
+										}
+										break;
+									default:
+										break;	
+								}
+							}
+							break;
 					}
 				} else {
 					log.error("It seems like we are being hacked!!!!");
@@ -114,6 +141,9 @@ public class ActivitiesPanel extends BasePanel {
 		protected void populateItem(ListItem<Activity> item) {
 			Activity a = item.getModelObject();
 			String text = "";
+			Long roomId = room.getRoom().getId();
+			Component accept = new WebMarkupContainer("accept").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getUid()))).setVisible(false);
+			Component decline = new WebMarkupContainer("decline").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getUid()))).setVisible(false);
 			switch (a.getType()) {
 				case roomEnter:
 					text = ""; // TODO should this be fixed?
@@ -129,13 +159,14 @@ public class ActivitiesPanel extends BasePanel {
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
-					//FIXME TODO actions
+					accept.setVisible(true);
+					decline.setVisible(true);
 				}
 				//ask question 693
 					break;
 			}
 			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getUid()))));
-			item.add(new Label("text", text));
+			item.add(accept, decline, new Label("text", text));
 			item.add(AttributeAppender.append("class", getClass(a)));
 		}
 		
@@ -150,11 +181,14 @@ public class ActivitiesPanel extends BasePanel {
 		}
 	};
 
-	public void addActivity(String uid, Long userId, Activity.Type type, IPartialPageRequestHandler handler) {
-		//if (getUserId() != userId) {//FIXME should be replaced with client-id
-			activities.put(uid, new Activity(uid, userId,  type));
-			update(handler);
-		//}
+	public void add(Activity a, IPartialPageRequestHandler handler) {
+		activities.put(a.getUid(), a);
+		update(handler);
+	}
+
+	public void remove(String uid, IPartialPageRequestHandler handler) {
+		activities.remove(uid);
+		update(handler);
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
@@ -162,9 +196,9 @@ public class ActivitiesPanel extends BasePanel {
 		handler.add(container);
 	}
 	
-	public ActivitiesPanel(String id, long roomId) {
+	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);
-		this.roomId = roomId;
+		this.room = room;
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 		add(container.add(lv).setOutputMarkupId(true));
