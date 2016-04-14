@@ -39,7 +39,7 @@ public abstract class BasePanel extends Panel {
 		setOutputMarkupId(true);
 	}
 
-	protected MainPage getMainPage() {
+	public MainPage getMainPage() {
 		return (MainPage)super.getPage();
 	}
 	

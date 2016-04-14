@@ -427,38 +427,6 @@
 		]]>
 	</method>
 
-	<!---
-		Shows the exit dialog
-	-->
-	<method name="exitRoom">
-		if ($debug) Debug.write("exitRoom");
-		new lz.confirmationSingle(canvas,{
-				refObj:this,
-				labelid:791,
-				labeliderror:790,
-				refReturnMethod:'immediateExitRoom',
-				showCheckBox:false
-			});
-		return;
-	</method>
-
-	<method name="immediateExitRoom" args="bool,ctx">
-	<![CDATA[
-		if($debug) Debug.write("0", bool,ctx);
-		if (bool) {
-			if (canvas.wicketsid != null) {
-				if($debug) Debug.write("1");
-				clearAll();
-			}
-			if (canvas.thishib.connected) {
-				canvas.logicalRoomLeave.doCall();
-			} else {
-				canvas.doActionmenu('quit');
-			}
-		}
-	]]>
-	</method>
-
 	<method name="updateFirstLastName" args="publicSID,first,last">
 		var v = getVideoObjectByPublicSID(publicSID);
 		if (v != null) {

@@ -33,104 +33,6 @@
 		</when>
 	</switch>
 
-	<class name="baseconfmenucommand" extends="command" >
-		<attribute name="enabled" value="true" type="boolean" />
-		<attribute name="tipLabelId" value="0" type="number" />
-	</class>
-	
-	<class name="confmenucommand" extends="baseconfmenucommand" >
-		<attribute name="actionCommand" value="" type="string" />
-		<handler name="onselect" args="sel">
-			if (!this.enabled) {
-				return;
-			}
-			canvas.doActionmenu(this.actionCommand);
-		</handler>
-	</class>
-		
-	<baseconfmenucommand id="cmd_shareDesktop" tipLabelId="1480" >
-		<handler name="onselect" args="sel">
-			if (!this.enabled) {
-				return;
-			}
-			canvas._mymod.checkForApplyScreen("no");
-		</handler>
-	</baseconfmenucommand>
-	
-	<confmenucommand id="cmd_applyforMod" tipLabelId="1481" actionCommand="applyForMod" />
-	
-	<confmenucommand id="cmd_applyforWhiteBoard" tipLabelId="1492" key="['control','shift','2']">
-		<handler name="onselect" args="tSel">
-			if (!this.enabled) {
-				return;
-			}
-			if ($debug) Debug.write("cmd_applyforWhiteBoard onselect",tSel);
-			//Ask for Right to Draw on Whiteboard
-			var tDate = new Date();
-			canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
-		</handler>
-	</confmenucommand>
-	
-	<baseconfmenucommand id="cmd_applyforA" tipLabelId="1602">
-		<handler name="onselect" args="tSel">
-			if (!this.enabled) {
-				return;
-			}
-			if ($debug) Debug.write("cmd_applyforA onselect",canvas.ismoderator,tSel);
-			if (canvas.ismoderator) {
-				//Do directly send confirmation to share Audio/Video to SELF! so that all users get
-				//the notification and the broadcasting Bit is set for this User
-				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-				canvas.thishib.setBroadCastingFlag.canVideo = false;
-				canvas.thishib.setBroadCastingFlag.doCall();
-			} else {
-				//Apply for Right to Share Audio/Video
-				var tDate = new Date();
-				canvas.thishib.sendMessageWithClient.sendMessage("applyForA",tDate.getTime());
-			}
-		</handler>
-	</baseconfmenucommand>
-	<baseconfmenucommand id="cmd_applyforAV" tipLabelId="1482">
-		<handler name="onselect" args="tSel">
-			if (!this.enabled) {
-				return;
-			}
-			if ($debug) Debug.write("cmd_applyforAV onselect",canvas.ismoderator,tSel);
-			if (canvas.ismoderator) {
-				//Do directly send confirmation to share Audio/Video to SELF! so that all users get
-				//the notification and the broadcasting Bit is set for this User
-				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-				canvas.thishib.setBroadCastingFlag.canVideo = true;
-				canvas.thishib.setBroadCastingFlag.doCall();
-			} else {
-				//Apply for Right to Share Audio/Video
-				var tDate = new Date();
-				canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
-			}
-		</handler>
-	</baseconfmenucommand>
-	
-	<confmenucommand id="cmd_createPoll" tipLabelId="1483" actionCommand="createPoll" />
-	<confmenucommand id="cmd_pollResults" tipLabelId="1484" actionCommand="pollResults" />
-	<confmenucommand id="cmd_checkPollVoted" tipLabelId="1485" actionCommand="checkPollVoted" />
-	<confmenucommand id="cmd_importFile" tipLabelId="1479" actionCommand="importFile" />
-	<confmenucommand id="cmd_editCamMicSettings" actionCommand="editCamMicSettings" tipLabelId="1486" /> 
-	<confmenucommand id="cmd_quit" actionCommand="quit" tipLabelId="1487" />
-	<confmenucommand id="cmd_showSipDialer" actionCommand="showSipDialer" tipLabelId="1488" />
-	
-	<confmenucommand id="cmd_invitation" actionCommand="invitation" tipLabelId="1489" /> 
-	<confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" tipLabelId="1490" /> 
-	
-	<confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" tipLabelId="1489" />
-	<confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" tipLabelId="1489" />
-	<confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" tipLabelId="1489" />
-	<!-- 
-	<confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" tipLabelId="1489" />
-	<confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" tipLabelId="1489" />
-	 -->
-	
 	<attribute name="colorArray" value="null" />
 	<attribute name="errorLoader" />
 	
@@ -300,6 +202,10 @@
 		if (wicketsid != undefined) {
 			canvas.setAttribute('wicketsid', wicketsid);
 		}
+		var uid = lz.Browser.getInitArg('uid');
+		if (!!uid) {
+			canvas.setAttribute('publicSID', uid);
+		}
 		this.setBaseColors();
 	
 		//Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost); 
@@ -311,17 +217,6 @@
 		canvas.thishib.connect();
 		]]>
 	</method>
-	
-	<netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
-			canvas.commonVideoViewContent.closeAllScreenSharings();
-			if (canvas.appointmentNotificationPopUp != null) {
-				canvas.appointmentNotificationPopUp.destroy();
-			}
-			canvas.doActionmenu('quit');
-		</handler>
-	</netRemoteCallHib>
 	
 	<method name="getLabelName" args="id">
 		//if($debug) Debug.write("main.lzx/getLabelName()",id);
@@ -356,51 +251,6 @@
 		}
 		ExternalInterface.call("roomExit");
 	</method>
-	
-	<!---
-		Actions connected to the shortcuts
-	 -->
-	<method name="doActionmenu" args="stringSub">
-	<![CDATA[
-		if($debug) Debug.write("doActionmenu: ",stringSub);
-		if (canvas._conferencemenu.visible) {
-			switch (stringSub) {
-				case "invitation":
-					ExternalInterface.call("openInvitation");
-					break;
-				case 'editWhiteboardDefault':
-					new lz.editWhiteboardDefault(canvas.main_content._content.inner);
-					break;
-				case 'createPoll':
-					ExternalInterface.call("createPoll", canvas.publicSID);
-					break;
-				case 'pollResults':
-					ExternalInterface.call("pollResults", canvas.publicSID);
-					break;
-				case 'checkPollVoted':
-					ExternalInterface.call("vote", canvas.publicSID);
-					break;
-				case 'importFile':
-					new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x: 60});
-					break;
-				case 'applyForMod':
-					if ($debug) Debug.info("Apply For Mod through doActionmenu");
-					//new lz.applyForModeration(canvas.main_content._content.inner);
-					canvas.thishib.applyForModeration.doCall();
-					break;
-				case 'editCamMicSettings':
-					canvas.commonVideoViewContent.changeDevice();
-					break;
-				case 'showSipDialer':
-					new lz.sipDialer(canvas.main_content._content.inner);
-					break;
-				case 'quit':
-					canvas.quit();
-					break;
-			}
-		}
-	]]>
-	</method> 
 	
 	<method name="setRoomValues" args="roomObj">
 		if ($debug) Debug.warn("setRoomValues ",roomObj);

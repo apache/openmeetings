@@ -27,7 +27,6 @@ function initSwf(swfurl) {
 			__lzminimumversion : 8
 		};
 	var options = $.extend({}, general, {allowfullscreen : 'true'});
-	$('#header, #topControls, #chatPanel').hide();
 	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
 	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
 		.attr('src', "public/" + options.url)
@@ -39,10 +38,4 @@ function initSwf(swfurl) {
 		.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
-}
-function roomExit() {
-	$('#header, #topControls, #chatPanel').show();
-	$('div[id="contents"], div[id="contents"] > div').css('height', 'auto');
-	window.location.hash = "#rooms/public";
-	$('#lzappContainer').remove();
 }

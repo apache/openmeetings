@@ -144,19 +144,19 @@
 	 <handler name="onconnect">
 		if($debug) Debug.write("hibRtmpConnection/onconnect");
 		if (this.reconnectionAction){
-			if (canvas.wicketsid == null) {
-				this.overwritePublicSID.doCall();
-				this.setUsernameReconnect.doCall();
-			} else {
+			if (!!canvas.wicketsid) {
 				canvas.sessionId = canvas.wicketsid;
-				this.getPublicSID.doCall();
+				getDefaultLanguage.doCall();
+			} else {
+				this.overwritePublicSID.doCall(); //FIXME investigate
+				this.setUsernameReconnect.doCall();
 			}
-		} else if (canvas.wicketsid != null) {
+		} else if (!!canvas.wicketsid) {
 			canvas.sessionId = canvas.wicketsid;
 			if (canvas.thishib.loaderVar != null) {
 				canvas.thishib.loaderVar.setProgress();
 			}
-			this.getPublicSID.doCall();
+			getDefaultLanguage.doCall();
 		} else {
 			this.refreshDelegate = new LzDelegate(this, "refreshSessionMeth");
 			lz.Timer.addTimer(this.refreshDelegate, canvas.refreshSession);
@@ -195,7 +195,6 @@
 		client.stopPublishingMessage = this.stopPublishingMessage;
 		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
 		client.nickNameSet = this.nickNameSet;
-		client.clearChatContent = this.clearChatContent;
 		client.startedPublishing = this.startedPublishing;
 		client.newPoll = this.newPoll;
 	</handler>
@@ -225,7 +224,6 @@
 						   lz.ModeManager.releaseAll();
 					   }
 					   if ($debug) Debug.write("Error dialog is being closed, calling QUIT");
-					   canvas.commonVideoViewContent.immediateExitRoom(true,null);
 					}
 				});
 			this.showFullMessage = false;
@@ -615,7 +613,6 @@
 	</netRemoteCallHib>
 	
 	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam><method name="getValue">return canvas.wicketsid;</method></netparam>
 		<netparam><method name="getValue">return canvas.wicketroomid;</method></netparam>
 		<handler name="ondata" args="value">
@@ -798,10 +795,6 @@
 			if (value == null || value.screenClient) {
 				return;
 			}
-			if (canvas.currentBaseConferenceRoom != null && canvas.currentBaseConferenceRoom._chatPanelStrict != null) {
-				if ($debug) Debug.write("canvas.currentBaseConferenceRoom._chatPanelStrict: ", canvas.currentBaseConferenceRoom._chatPanelStrict);
-				canvas.currentBaseConferenceRoom._chatPanelStrict.closeprivatechat(["close", value.publicSID]);
-			}
 			if (canvas.currentActivityList != null) {
 				canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
 			}
@@ -827,13 +820,6 @@
 			</handler>
 		</netRemoteCallHib>   
 			 
-		<netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >	  
-			<handler name="ondata" args="value">
-				if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
-				parent.roomDisconnectUser(value, value.broadCastID);
-			</handler>
-		</netRemoteCallHib>			 
-  
 		<method name="setUserStatus" args="ctx,user,o">
 			<![CDATA[
 				if (!o || !user) return;
@@ -1154,10 +1140,6 @@
 			} else if (value[0]=='typingActivity'){
 				if ($debug) Debug.write("!!!typingActivity ::", value[1], canvas._videocontainer._participants.getUserListItemByPublicSID(value[2]));
 				canvas._videocontainer._participants.getUserListItemByPublicSID(value[2]).userTyping(value[1]);
-			} else if (value[0]=='chat'){
-				// Not Used
-				//Debug.warn("Not Used");
-				canvas.addChatHistory(value);
 			} else if (value[0]=='activateWhiteboard'){
 				// Not Used
 				//Debug.warn("Not Used");
@@ -1187,23 +1169,6 @@
 			</handler>   
 		</netRemoteCallHib>  
 
-		<netRemoteCallHib name="sendChatMessageWithClient"
-			funcname="chatservice.sendMessageWithClient" remotecontext="$once{ canvas.thishib }">
-			<attribute name="messageObj" value="null" />
-			<netparam><method name="getValue">return parent.messageObj;</method></netparam>
-
-			<method name="sendMessage" args="messageObject">
-				this.messageObj = messageObject;
-				this.doCall();
-			</method>
-			<handler name="ondata" args="value">
-				<![CDATA[
-					//The onResult-Handler will be called be the rtmpconnection
-					if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
-				]]>
-			</handler>
-		</netRemoteCallHib>
-		
 		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
 						  remotecontext="$once{ canvas.thishib }" >  
 			
@@ -1259,11 +1224,6 @@
 				}
 			} else if (value.message[0]=='applyModAnswer'){
 				canvas.currentModApply.setUserAnswer(value);
-			} else if (value.message[0]=='privatechat'){
-				if ($debug) Debug.write("privatechat",value.message,value.client);
-				canvas._currentChatPanel.privatechat(value.message,value.client);
-			} else if (value.message[0]=='chat'){
-				if (canvas._chatcontent) canvas._chatcontent.addChatHistory(value.message,value.client);
 			} else if (value.message[0]=='avsettings'){
 				canvas.commonVideoViewContent.setAVSettingsToClient(value.client);
 			} else if (value.message[0]=='whiteboard'){
@@ -1359,13 +1319,7 @@
 	
 		<method name="newMessageByRoomAndDomain" args="value">
 		<![CDATA[
-			if (value[0]=='closeprivatechat'){
-				if ($debug) Debug.write("closeprivatechat",value);
-				canvas._currentChatPanel.closeprivatechat(value);
-			} else if (value[0]=='newprivatechat'){
-				if ($debug) Debug.write("newprivatechat",value);
-				canvas._currentChatPanel.newprivatechat(value);
-			} else if (value.message=='desktop'){
+			if (value.message=='desktop'){
 				canvas._drawarea.incomingScreenSharing(value);
 			} else if (value.message=='library'){
 				if (value.action == 'import') {
@@ -1506,13 +1460,6 @@
 		canvas._drawarea.reloadStatus();
 	]]>
 	</method>  
-	
-	<method name="clearChatContent" args="value">
-	<![CDATA[
-		//The onResult-Handler will be called be the rtmpconnection
-		canvas._chatcontent.reload();
-	]]>
-	</method> 
 	
 	<netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
 				   remotecontext="$once{ canvas.thishib }">

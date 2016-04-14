@@ -19,16 +19,22 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script type="text/javascript">
+		Wicket.Event.subscribe("/websocket/closed", function(jqEvent, msg) {
+			//FIXME add Error dialog should be displayed 
+		});
+	</script>
+</wicket:head>
 <wicket:panel>
-	<div id="swfloading"
-		style="z-index: 666666; position: absolute; top: 50%; left: 50%;">
-		<img src="images/ajax-loader.gif" />
+	<div wicket:id="roomContainer" style="height: 100%">
+		<div class="room menu" wicket:id="roomMenu"></div>
+		<div class="room sidebar left" wicket:id="sidebar"></div>
+		<div class="room wb area">
+			<div class="wb" wicket:id="whiteboard"></div>
+		</div>
+		<div wicket:id="activitiesPanel"></div>
 	</div>
-	<noscript>Please enable JavaScript in order to use this application.</noscript>
-	<script type="text/javascript" wicket:id="init"></script>
-	<div wicket:id="invite"></div>
-	<div wicket:id="createPoll"></div>
-	<div wicket:id="vote"></div>
-	<div wicket:id="pollResults"></div>
+	<div wicket:id="accessDenied"></div>
 </wicket:panel>
 </html>

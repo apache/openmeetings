@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -48,6 +47,8 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
+import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.user.InviteUserToRoomDialog;
@@ -72,10 +73,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
+import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -90,6 +92,7 @@ public class MainPage extends BaseInitedPage {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final static String PARAM_USER_ID = "userId";
 	private final MenuPanel menu;
+	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
@@ -99,13 +102,14 @@ public class MainPage extends BaseInitedPage {
 	private final UserInfoDialog userInfo;
 	private final InviteUserToRoomDialog inviteUser;
 	
-	public MainPage(PageParameters pp) {
+	public MainPage() {
 		super();
 		getHeader().setVisible(false);
+		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
-		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
+		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
 
@@ -142,11 +146,11 @@ public class MainPage extends BaseInitedPage {
 		});
 		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-		    add(dev = new DebugBar("dev"));
+			add(dev = new DebugBar("dev"));
 		    dev.setOutputMarkupId(true);
 		} else {
 			dev = null;
-		    add(new EmptyPanel("dev").setVisible(false));
+			add(new EmptyPanel("dev").setVisible(false));
 		}		
 		
 		add(chat = new ChatPanel("chatPanel"));
@@ -216,11 +220,25 @@ public class MainPage extends BaseInitedPage {
 			}
 			
 			@Override
+			protected void onAbort(AbortedMessage message) {
+				super.onAbort(message);
+				closeHandler(message);
+			}
+			
+			@Override
 			protected void onClose(ClosedMessage message) {
-				Client client = getClientByKeys(getUserId(), WebSession.get().getId());
-				removeOnlineUser(client);
 				super.onClose(message);
-				log.debug("WebSocketBehavior::onClose");
+				closeHandler(message);
+			}
+			
+			private void closeHandler(AbstractClientMessage message) {
+				Client _c = new Client(message.getSessionId(), message.getKey(), getUserId());
+				removeOnlineUser(_c);
+				log.debug(String.format("WebSocketBehavior::onClose [session: %s, key: %s]", message.getSessionId(), message.getKey()));
+				if (MainPage.this.getCurrentPanel() instanceof RoomPanel) {
+					RoomPanel rp = (RoomPanel)MainPage.this.getCurrentPanel();
+					RoomMenuPanel.roomExit(rp);
+				}
 			}
 		});
 		add(new AbstractDefaultAjaxBehavior() {
@@ -319,6 +337,10 @@ public class MainPage extends BaseInitedPage {
 
 	public WebMarkupContainer getTopLinks() {
 		return topLinks;
+	}
+
+	public WebMarkupContainer getTopControls() {
+		return topControls;
 	}
 
 	public ChatPanel getChat() {

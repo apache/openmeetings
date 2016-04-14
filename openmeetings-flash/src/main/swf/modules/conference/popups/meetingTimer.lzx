@@ -20,6 +20,7 @@
 -->
 <library>
 
+<!-- TODO move to HTML5 -->
 <class name="meetingTimer" extends="labelExplorerBox" labelid="638"
         docking="true" resizeable="false" closable="false" width="260"
         x="$once{ canvas.width - this.width - 10 }" y="10" height="160">

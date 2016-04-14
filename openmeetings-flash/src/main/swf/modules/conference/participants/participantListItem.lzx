@@ -395,23 +395,6 @@
 		_user_typing.setAttribute("visible", v);
 	</method>
 		
-	<miniIcons name="_start_private_chat_rsc" x="114" y = "2" width="16" height="16"
-		resource="start_private_chat_rsc" showhandcursor="true"
-		visible="${ (!canvas.currentRoomObj.chatHidden) &amp;&amp; parent.refObj.publicSID != canvas.publicSID }">
-		
-		<handler name="onclick">
-			var refObj = parent.refObj;
-			if ($debug) Debug.write("Start Private Chat: ", refObj);
-			if (refObj.publicSID == canvas.publicSID) {
-				new lz.labelerrorPopup(canvas.main_content._content.inner
-					, {errorlabelid:1495});
-				return;
-			}
-			canvas._currentChatPanel.addChat(refObj);
-		</handler>
-		<labelTooltip labelid="1493" />
-	</miniIcons>
-	
 	<view name="_x" x="132" y="2">
 		 
 		<miniIcons name="_mute" x="82" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >

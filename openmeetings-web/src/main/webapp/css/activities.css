@@ -32,7 +32,16 @@
 	padding-left: 20px;
 }
 #activitiesPanel .area {
-	height: 310px;
+	height: 319px;
 	overflow-y: auto;
+}
+.activity.item {
+	position: relative;
+	background: 0;
 	padding: 5px;
+	margin-bottom: 3px
+}
+.activity.item .ui-icon-close {
+	border-width: 1px;
+	border-style: solid;
 }

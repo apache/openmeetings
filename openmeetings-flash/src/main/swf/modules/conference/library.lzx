@@ -45,8 +45,6 @@
    	<include href="popups/" />
    	<include href="moderation/" />
    	
-   	<include href="conference/" />
-   	
     <include href="participants/" /> 
     <include href="interviewuserlist/" /> 
     
