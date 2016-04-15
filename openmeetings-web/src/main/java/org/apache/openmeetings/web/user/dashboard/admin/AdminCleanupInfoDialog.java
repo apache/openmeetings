@@ -86,11 +86,6 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected boolean isIndicating() {
-						return true;
-					}
-					
-					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						cleanup(target);
 					}
