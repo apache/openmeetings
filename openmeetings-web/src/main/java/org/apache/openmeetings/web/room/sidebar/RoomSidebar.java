@@ -71,7 +71,7 @@ public class RoomSidebar extends Panel {
 			item.add(status);
 			item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
 			item.add(AttributeAppender.append("data-userid", rc.u.getId()));
-			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isChatHidden() && getUserId() != rc.u.getId()));
+			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isChatHidden() && !getUserId().equals(rc.u.getId())));
 			if (room.getClient() != null && rc.c.getUid().equals(room.getClient().getUid())) {
 				item.add(AttributeAppender.append("class", "current"));
 			}

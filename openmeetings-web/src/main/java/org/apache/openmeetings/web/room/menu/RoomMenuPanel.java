@@ -140,9 +140,10 @@ public class RoomMenuPanel extends Panel {
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
+		setOutputMarkupPlaceholderTag(true);
 		this.room = room;
 		Room r = room.getRoom();
-		add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
+		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(!r.getHideTopBar()));
 		add(askBtn);
 		add(new Label("roomName", r.getName()));
 		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
@@ -230,19 +231,21 @@ public class RoomMenuPanel extends Panel {
 	}
 	
 	public void update(IPartialPageRequestHandler handler) {
-		boolean pollExists = getBean(PollDao.class).hasPoll(room.getRoom().getId());
+		if (!isVisible()) {
+			return;
+		}
+		Room r = room.getRoom();
+		boolean pollExists = getBean(PollDao.class).hasPoll(r.getId());
 		User u = getBean(UserDao.class).get(getUserId());
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
-		actionsMenu.setEnabled(!room.getRoom().getHideActionsMenu());
+		actionsMenu.setEnabled(!r.getHideActionsMenu() && r.getAllowUserQuestions());
 		boolean moder = room.getClient().hasRight(Client.Right.moderator);
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
-		Room r = room.getRoom();
 		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHideScreenSharing() && r.isAllowRecording() && moder;
 		shareMenuItem.setEnabled(shareVisible);
-		shareBtn.setVisible(shareMenuItem.isEnabled());
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
 		applyWbMenuItem.setEnabled(!moder);
@@ -252,9 +255,9 @@ public class RoomMenuPanel extends Panel {
 		pollResultMenuItem.setEnabled(pollExists || getBean(PollDao.class).getArchived(r.getId()).size() > 0);
 		//TODO sip menus
 		menuPanel.update(handler);
-		//FIXME TODO add ask question button
 		//FIXME TODO askBtn should be visible if moder is in room
-		handler.add(askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
+		handler.add(askBtn.setVisible(!moder && r.getAllowUserQuestions()));
+		handler.add(shareBtn.setVisible(shareVisible));
 	}
 
 	public void pollCreated(IPartialPageRequestHandler handler) {
