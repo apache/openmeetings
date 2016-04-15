@@ -52,6 +52,8 @@
 .room.menu.right .room.name {
 	font-weight: bold;
 }
+.room.menu.right .room.demo {
+}
 .room.menu.right .room.recording {
 	color: red;
 }

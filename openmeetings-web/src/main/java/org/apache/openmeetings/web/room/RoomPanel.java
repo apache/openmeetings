@@ -77,7 +77,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
-	//TODO demoTime - demo timer
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final Room r;
@@ -137,7 +136,7 @@ public class RoomPanel extends BasePanel {
 					allowed = true;
 				} else {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-					deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					deniedMessage = getString("1271") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
 				}
 				*/
 			}
@@ -161,7 +160,7 @@ public class RoomPanel extends BasePanel {
 		}
 		if (!allowed) {
 			if (deniedMessage == null) {
-				deniedMessage = Application.getString(1599);
+				deniedMessage = getString("1599");
 			}
 			accessDenied = new ExpiredMessageDialog("accessDenied", deniedMessage);
 			room.setVisible(false);

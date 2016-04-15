@@ -102,9 +102,9 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static Map<String, Client> ONLINE_USERS = new ConcurrentHashMap<>(); 
-	private static Map<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
-	private static Map<Long, Set<Client>> ROOMS = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>(); 
+	private static ConcurrentHashMap<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<Long, Set<Client>> ROOMS = new ConcurrentHashMap<>();
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -282,11 +282,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static Client addUserToRoom(Client c) {
-		Long roomId = c.getRoomId();
-		if (!ROOMS.containsKey(roomId)) {
-			ROOMS.put(roomId, new ConcurrentHashSet<Client>());
-		}
-		ROOMS.get(roomId).add(c);
+		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<Client>());
+		ROOMS.get(c.getRoomId()).add(c);
 		return c;
 	}
 	
@@ -296,20 +293,18 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		removeUserFromRoom(c);
 	}
 	
-	public static Client removeUserFromRoom(Client _c) {
-		if (ROOMS.containsKey(_c.getRoomId())) {
-			Set<Client> clients = ROOMS.get(_c.getRoomId());
-			for (Client c : clients) {
-				if (c.equals(_c)) {
-					clients.remove(c);
-					return c;
+	public static Client removeUserFromRoom(Client c) {
+		if (c.getRoomId() != null) {
+			Set<Client> clients = ROOMS.get(c.getRoomId());
+			if (clients != null) {
+				clients.remove(c);
+				if (clients.isEmpty()) {
+					ROOMS.remove(c.getRoomId());
 				}
-			}
-			if (clients.isEmpty()) {
-				ROOMS.remove(_c.getRoomId());
+				c.setRoomId(null);
 			}
 		}
-		return _c;
+		return c;
 	}
 	
 	public static Set<Client> getRoomUsers(long roomId) {

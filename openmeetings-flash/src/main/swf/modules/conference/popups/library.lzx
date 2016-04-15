@@ -37,7 +37,6 @@
     <include href="converterPopup.lzx" />
     <include href="errorModeratorPopup.lzx" />
     <include href="syncWin.lzx" />
-    <include href="meetingTimer.lzx" />
     <include href="incomingScreenSharing.lzx" />
     <include href="redirectBox.lzx" />
     <include href="chooseNickName.lzx" />
