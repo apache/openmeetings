@@ -52,22 +52,25 @@ function reinit() {
 		chatTabs.tabs("refresh");
 	});
 }
+function chatClosed() {
+	return $('#chatPanel').height() < 24;
+}
 function openChat() {
-	if ($('#chatPanel').height() < 24) {
+	if (chatClosed()) {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('#chat .control.block').removeClass('ui-state-highlight');
 		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
 	}
 }
 function closeChat() {
-	var chat = $('#chatPanel');
-	if ($('#chatPanel').height() > 24) {
+	if (!chatClosed()) {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
-		chat.animate({height: closedHeight}, 1000);
+		$('#chatPanel').animate({height: closedHeight}, 1000);
 		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
 	}
 }
 function toggleChat() {
-	if ($('#chatPanel').height() < 24) {
+	if (chatClosed()) {
 		openChat();
 	} else {
 		closeChat();
@@ -99,6 +102,9 @@ function removeChatTab(id) {
 }
 function addChatMessage(m) {
 	if ($('#chat').length > 0 && m && m.type == "chat") {
+		if (chatClosed()) {
+			$('#chat .control.block').addClass('ui-state-highlight');
+		}
 		var msg;
 		for (var i = 0; i < m.msg.length; ++i) {
 			var cm = m.msg[i];

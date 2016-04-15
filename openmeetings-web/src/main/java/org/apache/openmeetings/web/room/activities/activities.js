@@ -17,24 +17,34 @@
  * under the License.
  */
 var closedHeight = "20px", openedHeight = "345px";
+function activitiesClosed(activities) {
+	return activities.height() < 24;
+}
 function openActivities() {
 	var activities = $('#activitiesPanel');
-	if (activities.height() < 24) {
+	if (activitiesClosed(activities)) {
 		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('.control.block', activities).removeClass('ui-state-highlight');
 		activities.animate({height: openedHeight}, 1000);
 	}
 }
 function closeActivities() {
 	var activities = $('#activitiesPanel');
-	if (activities.height() > 24) {
+	if (!activitiesClosed(activities)) {
 		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
 		activities.animate({height: closedHeight}, 1000);
 	}
 }
 function toggleActivities() {
-	if ($('#activitiesPanel').height() < 24) {
+	if (activitiesClosed($('#activitiesPanel'))) {
 		openActivities();
 	} else {
 		closeActivities();
+	}
+}
+function hightlightActivities() {
+	var activities = $('#activitiesPanel');
+	if (activitiesClosed(activities)) {
+		$('.control.block', activities).addClass('ui-state-highlight');
 	}
 }
