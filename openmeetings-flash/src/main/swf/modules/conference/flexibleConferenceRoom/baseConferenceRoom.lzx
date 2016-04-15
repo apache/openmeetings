@@ -59,8 +59,6 @@
     
     <attribute name="roomobj" value="null" />
     
-    <attribute name="meetingTimer" value="null" />
-    
 	<handler name="oninit">
 	<![CDATA[
     	if ($debug) Debug.write("baseConferenceRoom:: oninit");
@@ -86,11 +84,6 @@
 			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
 		} else {
 			if ($debug) Debug.write("no appointed meeting");
-		}
-		
-		if (this.roomobj.demoRoom && this.roomobj.demoTime != null) {
-			if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
-			this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this, roomobj:this.roomobj});
 		}
 		
 		if ($debug) Debug.write("canvas._videocontainer ", canvas._videocontainer);
