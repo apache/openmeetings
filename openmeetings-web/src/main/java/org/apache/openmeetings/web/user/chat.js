@@ -37,6 +37,9 @@ $(function() {
 			}
 		}
 	});
+	reinit();
+});
+function reinit() {
 	chatTabs = $("#chatTabs").tabs({
 		activate: function(event, ui) {
 			$('#activeChatTab').val(ui.newPanel[0].id);
@@ -48,23 +51,26 @@ $(function() {
 		$("#" + panelId).remove();
 		chatTabs.tabs("refresh");
 	});
-});
+}
+function chatClosed() {
+	return $('#chatPanel').height() < 24;
+}
 function openChat() {
-	if ($('#chatPanel').height() < 24) {
+	if (chatClosed()) {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('#chat .control.block').removeClass('ui-state-highlight');
 		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
 	}
 }
 function closeChat() {
-	var chat = $('#chatPanel');
-	if ($('#chatPanel').height() > 24) {
+	if (!chatClosed()) {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
-		chat.animate({height: closedHeight}, 1000);
+		$('#chatPanel').animate({height: closedHeight}, 1000);
 		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
 	}
 }
 function toggleChat() {
-	if ($('#chatPanel').height() < 24) {
+	if (chatClosed()) {
 		openChat();
 	} else {
 		closeChat();
@@ -74,7 +80,10 @@ function activateTab(id) {
 	chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
 }
 function addChatTab(id, label) {
-	if ($('#chat').length < 1 || $('#' + id).length > 0) {
+	if (!$("#chatTabs").data("ui-tabs")) {
+		reinit();
+	}
+	if ($('#chat').length < 1 || $('#' + id).length) {
 		return;
 	}
 	var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
@@ -86,8 +95,16 @@ function addChatTab(id, label) {
 	chatTabs.tabs("refresh");
 	activateTab(id);
 }
+function removeChatTab(id) {
+	$('li[aria-controls="' + id + '"]').remove();
+	$('#' + id).remove();
+	chatTabs.tabs("refresh");
+}
 function addChatMessage(m) {
 	if ($('#chat').length > 0 && m && m.type == "chat") {
+		if (chatClosed()) {
+			$('#chat .control.block').addClass('ui-state-highlight');
+		}
 		var msg;
 		for (var i = 0; i < m.msg.length; ++i) {
 			var cm = m.msg[i];
