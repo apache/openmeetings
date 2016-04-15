@@ -405,7 +405,7 @@ public class MessagesContactsPanel extends UserPanel {
 						target.add(container);
 					}
 				});
-				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "unread" : "");
+				StringBuilder cssClass = new StringBuilder(m.getIsRead() ? "" : "unread");
 				if (selectedMessages.contains(id)) {
 					if (cssClass.length() > 0) {
 						cssClass.append(" ");
