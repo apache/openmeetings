@@ -46,13 +46,16 @@ import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
@@ -150,10 +153,55 @@ public class RoomMenuPanel extends Panel {
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
 	}
 	
+	
+	private static String getDemoTime(int remain) {
+		return Duration.seconds(remain).toString(WebSession.get().getLocale());
+	}
+	
+	private String getDemoText(int remain) {
+		return String.format("%s: %s", getString("637"), getDemoTime(remain));
+	}
+	
+	private String getDemoTitle(int remain) {
+		return String.format("%s: %s", getString("639"), getDemoTime(remain));
+	}
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		askBtn.add(new AttributeAppender("title", getString("906")));
+		Label demo = new Label("demo", Model.of(""));
+		Room r = room.getRoom();
+		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
+		if (demo.isVisible()) {
+			demo.setOutputMarkupId(true);
+			demo.setDefaultModelObject(getDemoText(r.getDemoTime().intValue()));
+			demo.add(AttributeAppender.replace("title", getDemoTitle(r.getDemoTime().intValue())));
+			demo.add(new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+				private static final long serialVersionUID = 1L;
+				private final long clock;
+				{
+					clock = System.currentTimeMillis();
+				}
+
+				private int remain(long now) {
+					return (int)(room.getRoom().getDemoTime().longValue() - (now - clock) / 1000);
+				}
+
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					int remain = remain(System.currentTimeMillis());
+					if (remain > -1) {
+						getComponent().setDefaultModelObject(getDemoText(remain));
+						getComponent().add(AttributeAppender.replace("title", getDemoTitle(remain)));
+						target.add(getComponent());
+					} else {
+						stop(target);
+						exit(target);
+					}
+				}
+			});
+		}
 	}
 	
 	private List<IMenuItem> getMenu() {
@@ -192,7 +240,7 @@ public class RoomMenuPanel extends Panel {
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
 		Room r = room.getRoom();
-		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHideScreenSharing() && moder;
+		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHideScreenSharing() && r.isAllowRecording() && moder;
 		shareMenuItem.setEnabled(shareVisible);
 		shareBtn.setVisible(shareMenuItem.isEnabled());
 		//FIXME TODO apply* should be enabled if moder is in room
@@ -216,8 +264,8 @@ public class RoomMenuPanel extends Panel {
 	
 	public void exit(IPartialPageRequestHandler handler) {
 		if (WebSession.getRights().contains(Right.Dashboard)) {
-			room.getMainPage().updateContents(ROOMS_PUBLIC, handler);
 			roomExit(room, false);
+			room.getMainPage().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
 			if (Strings.isEmpty(url)) {
@@ -235,7 +283,7 @@ public class RoomMenuPanel extends Panel {
 		Client c = room.getClient();
 		removeUserFromRoom(c);
 		if (broadcast) {
-			RoomMessage m = new RoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.roomExit);
+			RoomMessage m = new RoomMessage(room.getRoom().getId(), c.getUserId(), RoomMessage.Type.roomExit);
 			RoomPanel.broadcast(m);
 		}
 	}
