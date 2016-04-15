@@ -40,7 +40,7 @@
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.19.1</maven.surefire.version>
-		<maven-site.version>3.5</maven-site.version>
+		<maven-site.version>3.5.1</maven-site.version>
 		<wicket.version>7.2.0</wicket.version>
 		<wicketju.version>7.2.2-SNAPSHOT</wicketju.version>
 		<wickets.version>7.2.0</wickets.version>
