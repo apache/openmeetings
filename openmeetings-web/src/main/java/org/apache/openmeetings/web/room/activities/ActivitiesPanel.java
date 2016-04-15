@@ -184,6 +184,7 @@ public class ActivitiesPanel extends BasePanel {
 	public void add(Activity a, IPartialPageRequestHandler handler) {
 		activities.put(a.getUid(), a);
 		update(handler);
+		handler.appendJavaScript("hightlightActivities();");
 	}
 
 	public void remove(String uid, IPartialPageRequestHandler handler) {
