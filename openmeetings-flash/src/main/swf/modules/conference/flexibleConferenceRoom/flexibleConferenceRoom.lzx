@@ -24,8 +24,7 @@
     <conferenceRoomSidebar name="_sidePanel" />
     
     <view name="_videoviewcontent_hideWhiteboard" y="0" x="${ parent._sidePanel.width }"
-		  width="${canvas.width-parent._sidePanel.width}" height="${ canvas.height - 5 + 28 }" clip="true" 
-		  visibility="${((canvas.currentRoomObj.hideWhiteboard) ? 'visible':'hidden')}">
+		  width="${canvas.width-parent._sidePanel.width}" height="${ canvas.height - 5 + 28 }" clip="true">
 			<view name="_inn" width="${parent.width-10}">				
 				<wrappinglayout axis="x" spacing="10"/>
 			</view>

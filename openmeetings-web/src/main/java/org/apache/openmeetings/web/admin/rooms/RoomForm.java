@@ -34,6 +34,7 @@ import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -167,14 +168,37 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("allowRecording"));
 		add(new CheckBox("chatModerated"));
 
-		add(new CheckBox("hideTopBar"));
-		add(new CheckBox("chatHidden"));
-		add(new CheckBox("activitiesHidden"));
-		add(new CheckBox("hideFilesExplorer"));
-		add(new CheckBox("hideActionsMenu"));
-		add(new CheckBox("hideScreenSharing"));
-		add(new CheckBox("hideWhiteboard"));
-		add(new CheckBox("showMicrophoneStatus"));
+		add(new Select2MultiChoice<RoomElement>("hiddenElements", null, new ChoiceProvider<RoomElement>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getDisplayValue(RoomElement choice) {
+				return choice.name();
+			}
+
+			@Override
+			public String getIdValue(RoomElement choice) {
+				return choice.name();
+			}
+
+			@Override
+			public void query(String term, int page, Response<RoomElement> response) {
+				for (RoomElement r : RoomElement.values()) {
+					if (Strings.isEmpty(term) || r.name().contains(term)) {
+						response.add(r);
+					}
+				}
+			}
+
+			@Override
+			public Collection<RoomElement> toChoices(Collection<String> ids) {
+				Collection<RoomElement> rights = new ArrayList<>(ids.size());
+				for (String id : ids) {
+					rights.add(RoomElement.valueOf(id));
+				}
+				return rights;
+			}
+		}));
 		add(new CheckBox("chatOpened"));
 		add(new CheckBox("filesOpened"));
 		add(new CheckBox("autoVideoSelect"));	

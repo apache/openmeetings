@@ -78,7 +78,7 @@
 </class>
     
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" allowToggle="false"
-	   labelid="615" visible="${ !canvas.currentRoomObj.hideWhiteboard }">
+	   labelid="615" visible="${ canvas.currentRoomObj.hiddenElements.indexOf('Whiteboard') &lt; 0 }">
 	<attribute name="whiteboardCount" value="0" type="number" />	
 	<!--
 	
