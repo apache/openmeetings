@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.message.RoomMessage;
@@ -142,7 +143,7 @@ public class RoomMenuPanel extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		this.room = room;
 		Room r = room.getRoom();
-		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(!r.getHideTopBar()));
+		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(!r.getHiddenElements().contains(RoomElement.TopBar)));
 		add(askBtn);
 		add(new Label("roomName", r.getName()));
 		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
@@ -213,11 +214,11 @@ public class RoomMenuPanel extends Panel {
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
-		actionsMenu.setEnabled(!r.getHideActionsMenu() && r.getAllowUserQuestions());
+		actionsMenu.setEnabled(!r.getHiddenElements().contains(RoomElement.ActionsMenu) && r.isAllowUserQuestions());
 		boolean moder = room.getClient().hasRight(Client.Right.moderator);
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHideScreenSharing() && r.isAllowRecording() && moder;
+		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHiddenElements().contains(RoomElement.ScreenSharing) && r.isAllowRecording() && moder;
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
@@ -229,7 +230,7 @@ public class RoomMenuPanel extends Panel {
 		//TODO sip menus
 		menuPanel.update(handler);
 		//FIXME TODO askBtn should be visible if moder is in room
-		handler.add(askBtn.setVisible(!moder && r.getAllowUserQuestions()));
+		handler.add(askBtn.setVisible(!moder && r.isAllowUserQuestions()));
 		handler.add(shareBtn.setVisible(shareVisible));
 	}
 

@@ -23,13 +23,17 @@ import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optLong;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONObject;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -54,13 +58,7 @@ public class RoomDTO implements Serializable {
 	private boolean allowRecording;
 	private boolean waitForRecording;
 	private boolean audioOnly;
-	private boolean topBarHidden;
-	private boolean chatHidden;
-	private boolean activitiesHidden;
-	private boolean filesExplorerHidden;
-	private boolean actionsMenuHidden;
-	private boolean screenSharingHidden;
-	private boolean whiteboardHidden;
+	private Set<RoomElement> hiddenElements;
 
 	public RoomDTO() {}
 	
@@ -80,17 +78,11 @@ public class RoomDTO implements Serializable {
 		externalType = r.getExternalType();
 		redirectUrl = r.getRedirectURL();
 		moderated = r.isModerated();
-		allowUserQuestions = r.getAllowUserQuestions();
+		allowUserQuestions = r.isAllowUserQuestions();
 		allowRecording = r.isAllowRecording();
-		waitForRecording = r.getWaitForRecording();
+		waitForRecording = r.isWaitForRecording();
 		audioOnly = r.isAudioOnly();
-		topBarHidden = r.getHideTopBar();
-		chatHidden = r.isChatHidden();
-		activitiesHidden = r.isActivitiesHidden();
-		filesExplorerHidden = r.getHideFilesExplorer();
-		actionsMenuHidden = r.getHideActionsMenu();
-		screenSharingHidden = r.getHideScreenSharing();
-		whiteboardHidden = r.getHideWhiteboard();
+		hiddenElements = r.getHiddenElements();
 	}
 
 	public Room get() {
@@ -113,13 +105,7 @@ public class RoomDTO implements Serializable {
 		r.setAllowRecording(allowRecording);
 		r.setWaitForRecording(waitForRecording);
 		r.setAudioOnly(audioOnly);
-		r.setHideTopBar(topBarHidden);
-		r.setChatHidden(chatHidden);
-		r.setActivitiesHidden(activitiesHidden);
-		r.setHideFilesExplorer(filesExplorerHidden);
-		r.setHideActionsMenu(actionsMenuHidden);
-		r.setHideScreenSharing(screenSharingHidden);
-		r.setHideWhiteboard(whiteboardHidden);
+		r.setHiddenElements(hiddenElements);
 		return r;
 	}
 	
@@ -235,60 +221,12 @@ public class RoomDTO implements Serializable {
 		this.audioOnly = audioOnly;
 	}
 
-	public boolean isTopBarHidden() {
-		return topBarHidden;
+	public Set<RoomElement> getHiddenElements() {
+		return hiddenElements;
 	}
 
-	public void setTopBarHidden(boolean topBarHidden) {
-		this.topBarHidden = topBarHidden;
-	}
-
-	public boolean isChatHidden() {
-		return chatHidden;
-	}
-
-	public void setChatHidden(boolean chatHidden) {
-		this.chatHidden = chatHidden;
-	}
-
-	public boolean isActivitiesHidden() {
-		return activitiesHidden;
-	}
-
-	public void setActivitiesHidden(boolean activitiesHidden) {
-		this.activitiesHidden = activitiesHidden;
-	}
-
-	public boolean isFilesExplorerHidden() {
-		return filesExplorerHidden;
-	}
-
-	public void setFilesExplorerHidden(boolean filesExplorerHidden) {
-		this.filesExplorerHidden = filesExplorerHidden;
-	}
-
-	public boolean isActionsMenuHidden() {
-		return actionsMenuHidden;
-	}
-
-	public void setActionsMenuHidden(boolean actionsMenuHidden) {
-		this.actionsMenuHidden = actionsMenuHidden;
-	}
-
-	public boolean isScreenSharingHidden() {
-		return screenSharingHidden;
-	}
-
-	public void setScreenSharingHidden(boolean screenSharingHidden) {
-		this.screenSharingHidden = screenSharingHidden;
-	}
-
-	public boolean isWhiteboardHidden() {
-		return whiteboardHidden;
-	}
-
-	public void setWhiteboardHidden(boolean whiteboardHidden) {
-		this.whiteboardHidden = whiteboardHidden;
+	public void setHiddenElements(Set<RoomElement> hiddenElements) {
+		this.hiddenElements = hiddenElements;
 	}
 
 	public boolean isPublic() {
@@ -363,13 +301,13 @@ public class RoomDTO implements Serializable {
 		r.allowRecording = o.optBoolean("allowRecording", false);
 		r.waitForRecording = o.optBoolean("waitForRecording", false);
 		r.audioOnly = o.optBoolean("audioOnly", false);
-		r.topBarHidden = o.optBoolean("topBarHidden", false);
-		r.chatHidden = o.optBoolean("chatHidden", false);
-		r.activitiesHidden = o.optBoolean("activitiesHidden", false);
-		r.filesExplorerHidden = o.optBoolean("filesExplorerHidden", false);
-		r.actionsMenuHidden = o.optBoolean("actionsMenuHidden", false);
-		r.screenSharingHidden = o.optBoolean("screenSharingHidden", false);
-		r.whiteboardHidden = o.optBoolean("whiteboardHidden", false);
+		r.setHiddenElements(new HashSet<RoomElement>());
+		JSONArray hidden = o.optJSONArray("hiddenElements");
+		if (hidden != null) {
+			for (int i = 0; i < hidden.length(); ++i) {
+				r.getHiddenElements().add(RoomElement.valueOf(hidden.getString(i)));
+			}
+		}
 		return r;
 	}
 	

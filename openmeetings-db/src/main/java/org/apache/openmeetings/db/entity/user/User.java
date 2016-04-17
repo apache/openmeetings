@@ -315,7 +315,7 @@ public class User implements IDataProviderEntity {
 	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
 	@ElementList(name="rights", data = true, required = false)
-	private Set<Right> rights = new HashSet<User.Right>();
+	private Set<Right> rights = new HashSet<>();
 	
 	@Column(name = "domain_id")
 	@Element(data = true, required = false)

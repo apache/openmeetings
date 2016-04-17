@@ -617,11 +617,7 @@
 					canvas.timeZoneId = value.timeZoneId;
 				}
 				if (value.rights != null) {
-					for (var i = 0; i < value.rights.length; ++i) {
-						if ('Admin' == value.rights[i]) {
-							canvas.becomemoderator = true;
-						}
-					}
+					canvas.becomemoderator = value.rights.indexOf('Admin') > -1;
 				}
 				if ($debug) Debug.write("hibRtmpConnection::loginWicket -> canvas.becomemoderator", canvas.becomemoderator);
 				if (value.sessionData == null) {
