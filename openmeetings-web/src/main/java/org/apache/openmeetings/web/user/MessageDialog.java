@@ -193,7 +193,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			r.setNumberOfPartizipants(100L);
 			r.setAppointment(true);
 			r.setAllowUserQuestions(true);
-			r.setAllowFontStyles(true);
 			r = getBean(RoomDao.class).update(r, getUserId());
 			Appointment a = new Appointment();
 			a.setTitle(m.getSubject());

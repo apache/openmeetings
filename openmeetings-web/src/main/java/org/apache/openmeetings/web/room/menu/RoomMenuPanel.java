@@ -34,19 +34,19 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.room.OmRedirectTimerBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.message.RoomMessage;
-import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -55,7 +55,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
@@ -75,7 +74,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.requestRightModerator, room.getClient().getUid()));
+			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightModerator, room.getClient().getUid()));
 		}
 	};
 	private final RoomPanel room;
@@ -155,18 +154,6 @@ public class RoomMenuPanel extends Panel {
 	}
 	
 	
-	private static String getDemoTime(int remain) {
-		return Duration.seconds(remain).toString(WebSession.get().getLocale());
-	}
-	
-	private String getDemoText(int remain) {
-		return String.format("%s: %s", getString("637"), getDemoTime(remain));
-	}
-	
-	private String getDemoTitle(int remain) {
-		return String.format("%s: %s", getString("639"), getDemoTime(remain));
-	}
-	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -175,31 +162,17 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
 		if (demo.isVisible()) {
-			demo.setOutputMarkupId(true);
-			demo.setDefaultModelObject(getDemoText(r.getDemoTime().intValue()));
-			demo.add(AttributeAppender.replace("title", getDemoTitle(r.getDemoTime().intValue())));
-			demo.add(new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+			demo.add(new OmRedirectTimerBehavior(room.getRoom().getDemoTime().intValue(), "637") {
 				private static final long serialVersionUID = 1L;
-				private final long clock;
-				{
-					clock = System.currentTimeMillis();
-				}
-
-				private int remain(long now) {
-					return (int)(room.getRoom().getDemoTime().longValue() - (now - clock) / 1000);
-				}
 
 				@Override
-				protected void onTimer(AjaxRequestTarget target) {
-					int remain = remain(System.currentTimeMillis());
-					if (remain > -1) {
-						getComponent().setDefaultModelObject(getDemoText(remain));
-						getComponent().add(AttributeAppender.replace("title", getDemoTitle(remain)));
-						target.add(getComponent());
-					} else {
-						stop(target);
-						exit(target);
-					}
+				protected void onTimer(int remain) {
+					getComponent().add(AttributeAppender.replace("title", getText("639", remain)));
+				}
+				
+				@Override
+				protected void onFinish(AjaxRequestTarget target) {
+					exit(target);
 				}
 			});
 		}

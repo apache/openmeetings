@@ -273,13 +273,6 @@
 		}
 	</method>
 
-	<method name="roomClosed">
-		<![CDATA[
-			if ($debug) Debug.write("canvas.currentRoomObj ",canvas.currentRoomObj);
-			new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObj.redirectURL});
-		]]>
-	</method>
-
 	<method name="parseLanugageObject" args="obj">
 	
 		////Debug.write('parseLanugageObject: ',obj);

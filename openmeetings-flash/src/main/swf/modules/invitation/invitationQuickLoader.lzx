@@ -43,7 +43,6 @@
 			if ($debug) Debug.write("invitationQuickLoader:oninit userlang = [",userlang,"]; canvas.lang = [",canvas.language_id,"]");
 			this.setRoomValues();
 			if (canvas.language_id > 0) {
-				this.isRoomFull.doCall();
 			} else {
 				this.pass_label.setAttribute('visible', false);
 				this._password.setAttribute('visible', false);
@@ -57,24 +56,6 @@
 		<method name="checkPWD">
 			this.checkInvitationPass.doCall();
 		</method>
-		
-		<netRemoteCallHib name="isRoomFull" funcname="conferenceservice.isRoomFull" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
-        	<netparam name="roomId"><method name="getValue">return canvas.thishib.currentInvitation.room.id;</method></netparam>
-        	<handler name="ondata" args="value">
-        		<![CDATA[
-            		//The onResult-Handler will be called be the rtmpconnection
-            		if ($debug) Debug.write(canvas.thishib.currentInvitation.room.id);
-					if ($debug) Debug.write("isRoomFull: ",value);
-					
-					if (value) {
-						new lz.labelerrorPopup(canvas,{errorlabelid:618});
-						parent.close();
-					} else {
-						parent.login();
-					}
-            	]]>
-        	</handler>   
-    	</netRemoteCallHib> 
 		
 		<netRemoteCallHib name="checkInvitationPass" funcname="invitationservice.checkInvitationPass" remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >
 			<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
@@ -171,10 +152,5 @@
 
 		<!-- label: loading -->	
 		<labelText name="labelloading" y="30" x="10" fontstyle="bold" labelid="229" visibility="hidden" />
-		
-		<!-- label: enter -->
-		<simpleLabelButton name="connect" y="80" x="120" text="start" 
-						   visibility="hidden" labelid="228" width="170" height="20" 
-						   onclick="parent.isRoomFull.doCall();" />
 	</class>
 </library>

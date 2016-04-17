@@ -69,14 +69,6 @@
 		var r = this.roomobj;
 		r.currentusers = ''; //this might be huge list
 		
-		if (this.roomobj.closed) {
-			canvas.roomClosed();
-		}
-		
-		if (this.roomobj.waitForRecording) {
-			new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
-		}
-		
 		canvas.currentBaseConferenceRoom = this;
 		
 		if ($debug) Debug.write("this.roomobj ",this.roomobj);
