@@ -20,10 +20,14 @@ package org.apache.openmeetings.db.entity.room;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,6 +45,7 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openjpa.persistence.FetchAttribute;
@@ -88,6 +93,18 @@ public class Room implements IDataProviderEntity {
 	public static final int CONFERENCE_TYPE_ID = 1;
 	public static final int RESTRICTED_TYPE_ID = 3;
 	public static final int INTERVIEW_TYPE_ID = 4;
+	
+	@XmlType(namespace="org.apache.openmeetings.room.element")
+	public enum RoomElement {
+		TopBar
+		, Chat
+		, Activities
+		, Files
+		, ActionsMenu
+		, ScreenSharing
+		, Whiteboard
+		, MicrophoneStatus
+	}
 	
 	public enum Type {
 		conference(CONFERENCE_TYPE_ID)
@@ -222,45 +239,21 @@ public class Room implements IDataProviderEntity {
 	@Column(name = "allow_recording")
 	@Element(name = "allowRecording", data = true, required = false)
 	private boolean allowRecording = true; // Show or show not the recording option in a conference room
-	/**
-	 * Layout of Room
-	 */
-	@Column(name = "hide_top_bar")
-	@Element(data = true, required = false)
-	private boolean hideTopBar;
-
-	@Column(name = "hide_chat")
-	@Element(name = "hideChat", data = true, required = false)
-	private boolean chatHidden;
-
-	@Column(name = "hide_activities_and_actions")
-	@Element(name = "hideActivitiesAndActions", data = true, required = false)
-	private boolean activitiesHidden;
-
-	@Column(name = "hide_files_explorer")
-	@Element(data = true, required = false)
-	private boolean hideFilesExplorer;
-
-	@Column(name = "hide_actions_menu")
-	@Element(data = true, required = false)
-	private boolean hideActionsMenu;
-
-	@Column(name = "hide_screen_sharing")
-	@Element(data = true, required = false)
-	private boolean hideScreenSharing;
-
-	@Column(name = "hide_whiteboard")
-	@Element(data = true, required = false)
-	private boolean hideWhiteboard;
-
-	@Column(name = "show_microphone_status")
-	@Element(data = true, required = false)
-	private boolean showMicrophoneStatus;
-
+	
 	@Column(name = "chat_moderated")
 	@Element(data = true, required = false)
 	private boolean chatModerated;
 
+	/**
+	 * Layout of Room
+	 */
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "hide_element")
+	@CollectionTable(name = "room_hide_element", joinColumns = @JoinColumn(name = "room_id"))
+	@Enumerated(EnumType.STRING)
+	@ElementList(name="hide_element", data = true, required = false)
+	private Set<RoomElement> hiddenElements = new HashSet<>();
+	
 	@Column(name = "chat_opened")
 	@Element(data = true, required = false)
 	private boolean chatOpened;
@@ -430,7 +423,7 @@ public class Room implements IDataProviderEntity {
 		this.externalType = externalType;
 	}
 
-	public boolean getAllowUserQuestions() {
+	public boolean isAllowUserQuestions() {
 		return allowUserQuestions;
 	}
 
@@ -470,7 +463,7 @@ public class Room implements IDataProviderEntity {
 		this.ownerId = ownerId;
 	}
 
-	public boolean getWaitForRecording() {
+	public boolean isWaitForRecording() {
 		return waitForRecording;
 	}
 
@@ -484,70 +477,6 @@ public class Room implements IDataProviderEntity {
 
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
-	}
-
-	public boolean getHideTopBar() {
-		return hideTopBar;
-	}
-
-	public void setHideTopBar(boolean hideTopBar) {
-		this.hideTopBar = hideTopBar;
-	}
-
-	public boolean isChatHidden() {
-		return chatHidden;
-	}
-
-	public void setChatHidden(boolean chatHidden) {
-		this.chatHidden = chatHidden;
-	}
-
-	public boolean isActivitiesHidden() {
-		return activitiesHidden;
-	}
-
-	public void setActivitiesHidden(boolean activitiesHidden) {
-		this.activitiesHidden = activitiesHidden;
-	}
-
-	public boolean getHideFilesExplorer() {
-		return hideFilesExplorer;
-	}
-
-	public void setHideFilesExplorer(boolean hideFilesExplorer) {
-		this.hideFilesExplorer = hideFilesExplorer;
-	}
-
-	public boolean getHideActionsMenu() {
-		return hideActionsMenu;
-	}
-
-	public void setHideActionsMenu(boolean hideActionsMenu) {
-		this.hideActionsMenu = hideActionsMenu;
-	}
-
-	public boolean getHideScreenSharing() {
-		return hideScreenSharing;
-	}
-
-	public void setHideScreenSharing(boolean hideScreenSharing) {
-		this.hideScreenSharing = hideScreenSharing;
-	}
-
-	public boolean getHideWhiteboard() {
-		return hideWhiteboard;
-	}
-
-	public void setHideWhiteboard(boolean hideWhiteboard) {
-		this.hideWhiteboard = hideWhiteboard;
-	}
-
-	public boolean getShowMicrophoneStatus() {
-		return showMicrophoneStatus;
-	}
-
-	public void setShowMicrophoneStatus(boolean showMicrophoneStatus) {
-		this.showMicrophoneStatus = showMicrophoneStatus;
 	}
 
 	public List<RoomModerator> getModerators() {
@@ -566,6 +495,14 @@ public class Room implements IDataProviderEntity {
 
 	public void setChatModerated(boolean chatModerated) {
 		this.chatModerated = chatModerated;
+	}
+
+	public Set<RoomElement> getHiddenElements() {
+		return hiddenElements;
+	}
+
+	public void setHiddenElements(Set<RoomElement> hiddenElements) {
+		this.hiddenElements = hiddenElements;
 	}
 
 	public List<RoomGroup> getRoomGroups() {

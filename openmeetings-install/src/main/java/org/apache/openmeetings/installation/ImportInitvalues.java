@@ -51,7 +51,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -65,6 +67,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -364,8 +367,8 @@ public class ImportInitvalues {
 		r.setDemoRoom(false);
 		r.setDemoTime(null);
 
+		r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.MicrophoneStatus)));
 		r.setModerated(false);
-		r.setHideTopBar(false);
 
 		r.setDeleted(false);
 
@@ -377,12 +380,6 @@ public class ImportInitvalues {
 		r.setWaitForRecording(false);
 		r.setAllowRecording(true);
 		
-		r.setChatHidden(false);
-		r.setActivitiesHidden(false);
-		r.setHideActionsMenu(false);
-		r.setHideFilesExplorer(false);
-		r.setHideScreenSharing(false);	
-		r.setHideWhiteboard(false);
 		if (groupId != null) {
 			RoomGroup ro = new RoomGroup();
 			ro.setRoom(r);
@@ -398,16 +395,16 @@ public class ImportInitvalues {
 			createRoom("public Interview Room", Type.interview, 16L, true, null);
 			createRoom("public Conference Room", Type.conference, 32L, true, null);
 			Room r = createRoom("public Video Only Room", Type.conference, 32L, true, null);
-			r.setHideWhiteboard(true);
+			r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.Whiteboard)));
 			roomDao.update(r, null);
 			createRoom("public Video And Whiteboard Room", Type.conference, 32L, true, null);
 			createRoom("public Restricted Room", Type.restricted, 100L, true, null);
 			r = createRoom("restricted room with micro option set", Type.restricted, 100L, true, null);
-			r.setShowMicrophoneStatus(true);
+			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
 			r = createRoom("conference room with micro option set", Type.conference, 32L, true, null);
-			r.setShowMicrophoneStatus(true);
+			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
 			createRoom("private Conference Room", Type.conference, 32L, false, 1L);
