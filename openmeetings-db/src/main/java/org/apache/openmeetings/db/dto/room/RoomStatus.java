@@ -23,10 +23,8 @@ import java.util.List;
 import org.apache.openmeetings.db.entity.room.Client;
 
 public class RoomStatus {
-	
 	List<Client> clientList;
 	BrowserStatus browserStatus;
-	boolean roomFull = false;
 	
 	public RoomStatus() {}
 	
@@ -42,11 +40,4 @@ public class RoomStatus {
 	public void setBrowserStatus(BrowserStatus browserStatus) {
 		this.browserStatus = browserStatus;
 	}
-	public boolean getRoomFull() {
-		return roomFull;
-	}
-	public void setRoomFull(boolean roomFull) {
-		this.roomFull = roomFull;
-	}
-	
 }

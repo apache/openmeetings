@@ -58,7 +58,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	public ResetPasswordDialog(String id, final User user) {
 		super(id, Application.getString(325));
 		this.user = user;
-		add(form = new Form<String>("form"){
+		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
 			private TextField<String> login;
 			private PasswordTextField confirmPassword;
@@ -76,14 +76,14 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 				confirmPassword.setLabel(Model.of(Application.getString(329)));
 				confirmPassword.setRequired(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 
-				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+				add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ResetPasswordDialog.this.onSubmit(target);
 					}
-					
+
 					@Override
 					protected void onError(AjaxRequestTarget target, Form<?> form) {
 						ResetPasswordDialog.this.onError(target);
@@ -99,18 +99,19 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 				}
 				super.onValidate();
 			}
-			
+
 		});
-		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332), DialogButtons.OK, DialogIcon.INFO){
+		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332), 
+				DialogButtons.OK, DialogIcon.INFO) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
-		        behavior.setOption("dialogClass", Options.asString("no-close"));
+				behavior.setOption("dialogClass", Options.asString("no-close"));
 				behavior.setOption("closeOnEscape", false);
 			}
-			
+
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				setResponsePage(Application.get().getSignInPageClass());
@@ -118,11 +119,12 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 		};
 		add(confirmReset);
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-        behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("autoOpen", true);
+		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("closeOnEscape", false);
 	}
 
@@ -130,7 +132,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(resetBtn);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return resetBtn;
@@ -154,26 +156,13 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			error(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-		if (resetBtn.equals(button)){
+		if (resetBtn.equals(button)) {
 			confirmReset.open(handler);
 		} else {
 			setResponsePage(Application.get().getSignInPageClass());
 		}
-	}
-	
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String $() {
-				return this.$(Options.asString("open"));
-			}
-		});
 	}
 }

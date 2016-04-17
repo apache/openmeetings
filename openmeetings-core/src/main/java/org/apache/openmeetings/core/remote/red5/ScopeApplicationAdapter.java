@@ -1163,10 +1163,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
 			// appointed meeting or moderated Room? => Check Max Users first
-			if (clientListRoom.size() > room.getNumberOfPartizipants()) {
-				roomStatus.setRoomFull(true);
-				return roomStatus;
-			}
 
 			// default logic for non regular rooms
 			if (!room.isAppointment()) {

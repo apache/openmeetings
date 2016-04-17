@@ -202,10 +202,6 @@ public class Room implements IDataProviderEntity {
 	@Element(name = "isAudioOnly", data = true, required = false)
 	private boolean audioOnly;
 	
-	@Column(name = "allow_font_styles", nullable = false)
-	@Element(data = true, required = false)
-	private boolean allowFontStyles = false;
-
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
 	private boolean closed;
@@ -448,14 +444,6 @@ public class Room implements IDataProviderEntity {
 
 	public void setAudioOnly(boolean audioOnly) {
 		this.audioOnly = audioOnly;
-	}
-
-	public boolean getAllowFontStyles() {
-		return allowFontStyles;
-	}
-
-	public void setAllowFontStyles(boolean allowFontStyles) {
-		this.allowFontStyles = allowFontStyles;
 	}
 
 	public boolean isClosed() {

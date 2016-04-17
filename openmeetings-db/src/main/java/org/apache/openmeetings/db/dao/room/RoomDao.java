@@ -242,7 +242,6 @@ public class RoomDao implements IDataProviderDao<Room> {
 			room.setComment("My Rooms of ownerId " + ownerId);
 			room.setNumberOfPartizipants(Room.Type.conference == type ? 25L : 150L);
 			room.setAllowUserQuestions(true);
-			room.setAllowFontStyles(true);
 			room.setOwnerId(ownerId);
 			room.setAllowRecording(true);
 

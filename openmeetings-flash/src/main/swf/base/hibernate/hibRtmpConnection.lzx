@@ -92,7 +92,6 @@
 	<attribute name="modus" value="" type="string" />
 	
 	<attribute name="showKickMessage" value="false" type="boolean"/>
-	<attribute name="showFullMessage" value="false" type="boolean"/>
 		 
 	<attribute name="useRTMPT" value="false" type="boolean" />
 	<attribute name="connected" value="false" type="boolean" />
@@ -213,22 +212,8 @@
 	<handler name="onerror" >
 	<![CDATA[
 		canvas.remoteLogWrite("error status='" + this.status + "'; src='" + this.src + "'; lastCalled='" + this.lastCalled
-			+ "'; showKickMessage='" + this.showKickMessage + "'; showFullMessage='" + this.showFullMessage
-			+ "'; reconnectionAction='" + this.reconnectionAction + "'");
-		if (this.showFullMessage) {
-			new lz.labelerrorPopup(canvas,
-				{
-					errorlabelid: 99
-					, closeFunc: function() {
-					   if (this.makeModal) {
-						   lz.ModeManager.releaseAll();
-					   }
-					   if ($debug) Debug.write("Error dialog is being closed, calling QUIT");
-					}
-				});
-			this.showFullMessage = false;
-			return;
-		} else if (this.showKickMessage) {
+			+ "'; showKickMessage='" + this.showKickMessage + "'; reconnectionAction='" + this.reconnectionAction + "'");
+		if (this.showKickMessage) {
 			new lz.labelerrorPopup(canvas,{
 				errorlabelid:606
 				, closeFunc: function() {
@@ -1330,8 +1315,6 @@
 				canvas._drawarea.startStreaming(value);
 			} else if (value.message=='stopStreaming'){
 				canvas._drawarea.stopStreaming(value);
-			} else if (value.message=='roomClosed'){
-				canvas.roomClosed();
 			} else {
 				if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
 			}

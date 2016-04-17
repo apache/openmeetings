@@ -358,7 +358,6 @@ public class ImportInitvalues {
 		r.setIspublic(isPublic);
 		r.setAllowUserQuestions(true);
 		r.setAudioOnly(false);
-		r.setAllowFontStyles(true);
 
 		r.setAppointment(false);
 
