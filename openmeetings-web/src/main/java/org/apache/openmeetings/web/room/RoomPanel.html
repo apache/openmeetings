@@ -28,13 +28,15 @@
 </wicket:head>
 <wicket:panel>
 	<div wicket:id="roomContainer" style="height: 100%">
-		<div class="room menu" wicket:id="roomMenu"></div>
+		<div class="room menu" wicket:id="menu"></div>
 		<div class="room sidebar left" wicket:id="sidebar"></div>
 		<div class="room wb area">
 			<div class="wb" wicket:id="whiteboard"></div>
 		</div>
-		<div wicket:id="activitiesPanel"></div>
+		<div wicket:id="activities"></div>
 	</div>
-	<div wicket:id="accessDenied"></div>
+	<div wicket:id="access-denied"></div>
+	<div wicket:id="room-closed"></div>
+	<div wicket:id="wait-for-recording"></div>
 </wicket:panel>
 </html>
