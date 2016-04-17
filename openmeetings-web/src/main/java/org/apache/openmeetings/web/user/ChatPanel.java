@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
@@ -189,7 +190,7 @@ public class ChatPanel extends BasePanel {
 	}
 
 	public void roomEnter(Room r, AjaxRequestTarget target) {
-		if (r.isChatHidden()) {
+		if (r.getHiddenElements().contains(RoomElement.Chat)) {
 			toggle(target, false);
 			return;
 		}
@@ -206,7 +207,7 @@ public class ChatPanel extends BasePanel {
 	}
 	
 	public void roomExit(Room r, IPartialPageRequestHandler handler) {
-		if (r.isChatHidden()) {
+		if (r.getHiddenElements().contains(RoomElement.Chat)) {
 			return;
 		}
 		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));

@@ -54,6 +54,7 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -1148,7 +1149,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
 
 			Room room = roomDao.get(roomId);
-			if (room.getShowMicrophoneStatus()) {
+			if (!room.getHiddenElements().contains(RoomElement.MicrophoneStatus)) {
 				currentClient.setCanGiveAudio(true);
 			}
 

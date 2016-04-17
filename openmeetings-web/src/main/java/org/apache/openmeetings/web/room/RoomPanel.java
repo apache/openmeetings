@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -133,10 +134,17 @@ public class RoomPanel extends BasePanel {
 		getClient().setRoomId(r.getId());
 		super.onInitialize();
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
+		room.add((menu = new RoomMenuPanel("menu", this)).setVisible(!r.getHiddenElements().contains(RoomElement.TopBar)));
+		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
+		room.add(wb.setOutputMarkupId(true));
+		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
+		room.add(aab);
+		room.add(sidebar = new RoomSidebar("sidebar", this));
+		room.add((activities = new ActivitiesPanel("activities", this)).setVisible(!r.getHiddenElements().contains(RoomElement.Activities)));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
-		} else if (r.getNumberOfPartizipants() >= getRoomUsers(r.getId()).size()) {
+		} else if (getRoomUsers(r.getId()).size() >= r.getNumberOfPartizipants()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
 		} else {
@@ -192,15 +200,8 @@ public class RoomPanel extends BasePanel {
 				room.setVisible(false);
 			}
 		}
-		room.add((menu = new RoomMenuPanel("menu", this)).setVisible(!r.getHideTopBar()));
-		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
-		room.add(wb.setOutputMarkupId(true));
-		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
-		room.add(aab);
-		room.add(sidebar = new RoomSidebar("sidebar", this));
-		room.add((activities = new ActivitiesPanel("activities", this)).setVisible(!r.isActivitiesHidden()));
 		add(room, accessDenied);
-		if (r.getWaitForRecording()) {
+		if (r.isWaitForRecording()) {
 			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.INFO) {//DialogIcon.LIGHT
 				private static final long serialVersionUID = 1L;
 	
@@ -349,7 +350,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getTopControls().setVisible(false));
-		if (r.isChatHidden()) {
+		if (r.getHiddenElements().contains(RoomElement.Chat)) {
 			getMainPage().getChat().toggle(handler, false);
 		}
 		handler.appendJavaScript("roomLoad();");
@@ -358,7 +359,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
 		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getTopControls().setVisible(true));
-		if (r.isChatHidden()) {
+		if (r.getHiddenElements().contains(RoomElement.Chat)) {
 			getMainPage().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("$(window).off('resize.openmeetings');");
