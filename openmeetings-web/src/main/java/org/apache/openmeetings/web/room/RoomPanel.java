@@ -38,6 +38,8 @@ import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
@@ -45,8 +47,6 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
-import org.apache.openmeetings.web.room.message.RoomMessage;
-import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -84,6 +84,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
+	private static final String ACCESS_DENIED_ID = "access-denied";
 	private final Room r;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior aab = new AbstractDefaultAjaxBehavior() {
@@ -110,13 +111,14 @@ public class RoomPanel extends BasePanel {
 						.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
 						.toString()
 						));
-				broadcast(new RoomMessage(r.getId(), RoomMessage.Type.roomEnter));
+				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 				getMainPage().getChat().roomEnter(r, target);
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
 		}
 	};
+	private RedirectMessageDialog roomClosed;
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
@@ -130,66 +132,92 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		getClient().setRoomId(r.getId());
 		super.onInitialize();
-		Component accessDenied = new WebMarkupContainer("accessDenied").setVisible(false);
-		boolean allowed = false;
-		String deniedMessage = null;
-		if (r.isAppointment()) {
-			Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
-			if (a != null && !a.isDeleted()) {
-				allowed = a.getOwner().getId().equals(getUserId());
-				log.debug("appointed room, isOwner ? " + allowed);
-				if (!allowed) {
-					for (MeetingMember mm : a.getMeetingMembers()) {
-						if (mm.getUser().getId() == getUserId()) {
-							allowed = true;
-							break;
-						}
-					}
-				}
-				/*
-				TODO need to be reviewed
-				Calendar c = WebSession.getCalendar();
-				if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
-					allowed = true;
-				} else {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-					deniedMessage = getString("1271") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
-				}
-				*/
-			}
-		} else {
-			allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
-			log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
-			if (!allowed) {
-				User u = getBean(UserDao.class).get(getUserId());
-				for (RoomGroup ro : r.getRoomGroups()) {
-					for (GroupUser ou : u.getGroupUsers()) {
-						if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-							allowed = true;
-							break;
-						}
-					}
-					if (allowed) {
-						break;
-					}
-				}
-			}
-		}
-		if (!allowed) {
-			if (deniedMessage == null) {
-				deniedMessage = getString("1599");
-			}
-			accessDenied = new ExpiredMessageDialog("accessDenied", deniedMessage);
+		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
+		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
+		if (r.isClosed()) {
 			room.setVisible(false);
+		} else if (r.getNumberOfPartizipants() >= getRoomUsers(r.getId()).size()) {
+			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
+			room.setVisible(false);
+		} else {
+			boolean allowed = false;
+			String deniedMessage = null;
+			if (r.isAppointment()) {
+				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
+				if (a != null && !a.isDeleted()) {
+					allowed = a.getOwner().getId().equals(getUserId());
+					log.debug("appointed room, isOwner ? " + allowed);
+					if (!allowed) {
+						for (MeetingMember mm : a.getMeetingMembers()) {
+							if (mm.getUser().getId() == getUserId()) {
+								allowed = true;
+								break;
+							}
+						}
+					}
+					/*
+					TODO need to be reviewed
+					Calendar c = WebSession.getCalendar();
+					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						allowed = true;
+					} else {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
+						deniedMessage = getString("1271") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					}
+					*/
+				}
+			} else {
+				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
+				log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
+				if (!allowed) {
+					User u = getBean(UserDao.class).get(getUserId());
+					for (RoomGroup ro : r.getRoomGroups()) {
+						for (GroupUser ou : u.getGroupUsers()) {
+							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+								allowed = true;
+								break;
+							}
+						}
+						if (allowed) {
+							break;
+						}
+					}
+				}
+			}
+			if (!allowed) {
+				if (deniedMessage == null) {
+					deniedMessage = getString("1599");
+				}
+				accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, deniedMessage, menu);
+				room.setVisible(false);
+			}
 		}
-		room.add((menu = new RoomMenuPanel("roomMenu", this)).setVisible(!r.getHideTopBar()));
+		room.add((menu = new RoomMenuPanel("menu", this)).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		room.add(wb.setOutputMarkupId(true));
 		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		room.add(aab);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
-		room.add((activities = new ActivitiesPanel("activitiesPanel", this)).setVisible(!r.isActivitiesHidden()));
+		room.add((activities = new ActivitiesPanel("activities", this)).setVisible(!r.isActivitiesHidden()));
 		add(room, accessDenied);
+		if (r.getWaitForRecording()) {
+			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.INFO) {//DialogIcon.LIGHT
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				public void onConfigure(JQueryBehavior behavior) {
+					super.onConfigure(behavior);
+					behavior.setOption("autoOpen", true);
+					behavior.setOption("resizable", false);
+				}
+				
+				@Override
+				public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				}
+			});
+		} else {
+			add(new WebMarkupContainer("wait-for-recording").setVisible(false));
+		}
 	}
 	
 	@Override
@@ -217,6 +245,10 @@ public class RoomPanel extends BasePanel {
 						//TODO check user/remove tab
 						sidebar.updateUsers(handler);
 						activities.add(new Activity(m.getUid(), m.getUserId(), Activity.Type.roomExit), handler);
+						break;
+					case roomClosed:
+						handler.add(room.setVisible(false));
+						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
 						if (isModerator(getUserId(), r.getId())) {
@@ -347,32 +379,6 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	class ExpiredMessageDialog extends MessageDialog {
-		private static final long serialVersionUID = 1L;
-		public boolean autoOpen = false;
-		
-		public ExpiredMessageDialog(String id, String message) {
-			super(id, Application.getString(204), message, DialogButtons.OK, DialogIcon.ERROR);
-			autoOpen = true;
-		}
-		
-		@Override
-		public boolean isModal() {
-			return true;
-		}
-		
-		@Override
-		public void onConfigure(JQueryBehavior behavior) {
-			super.onConfigure(behavior);
-			behavior.setOption("autoOpen", autoOpen);
-		}
-		
-		@Override
-		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-			menu.exit(handler);
-		}
-	}
-	
 	public Room getRoom() {
 		return r;
 	}

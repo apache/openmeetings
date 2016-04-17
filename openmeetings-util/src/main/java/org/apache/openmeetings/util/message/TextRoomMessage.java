@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.message;
+package org.apache.openmeetings.util.message;
 
 public class TextRoomMessage extends RoomMessage {
 	private static final long serialVersionUID = 1L;
 	private final String text;
 
-	public TextRoomMessage(Long roomId, Type type, String text) {
-		super(roomId, type);
+	public TextRoomMessage(Long roomId, Long userId, Type type, String text) {
+		super(roomId, userId, type);
 		this.text = text;
 	}
 	

@@ -161,11 +161,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("audioOnly"));
-		add(new CheckBox("allowFontStyles"));
 		add(new CheckBox("closed"));
 		add(new TextField<String>("redirectURL"));
 		add(new CheckBox("waitForRecording"));
 		add(new CheckBox("allowRecording"));
+		add(new CheckBox("chatModerated"));
 
 		add(new CheckBox("hideTopBar"));
 		add(new CheckBox("chatHidden"));
@@ -175,7 +175,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("hideScreenSharing"));
 		add(new CheckBox("hideWhiteboard"));
 		add(new CheckBox("showMicrophoneStatus"));
-		add(new CheckBox("chatModerated"));
 		add(new CheckBox("chatOpened"));
 		add(new CheckBox("filesOpened"));
 		add(new CheckBox("autoVideoSelect"));	

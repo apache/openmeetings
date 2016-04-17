@@ -35,12 +35,12 @@ import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.message.RoomMessage;
-import org.apache.openmeetings.web.room.message.TextRoomMessage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -94,7 +94,7 @@ public class ActivitiesPanel extends BasePanel {
 							break;
 						case decline:
 							if (isModerator(getUserId(), roomId)) {
-								broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.activityRemove, uid));
+								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
 							}
 							break;
 						case accept:
@@ -110,8 +110,8 @@ public class ActivitiesPanel extends BasePanel {
 										}
 										if (client != null) {
 											client.getRights().add(Right.moderator);
-											broadcast(new TextRoomMessage(room.getRoom().getId(), RoomMessage.Type.activityRemove, uid));
-											broadcast(new RoomMessage(room.getRoom().getId(), RoomMessage.Type.rightUpdated));
+											broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+											broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 										}
 										break;
 									default:

@@ -290,23 +290,6 @@ public class ConferenceService {
 	 * return all participants of a room
 	 * 
 	 * @param roomId
-	 * @return - true if room is full, false otherwise
-	 */
-	public boolean isRoomFull(Long roomId) {
-		try {
-			Room room = roomDao.get(roomId);
-			
-			return room.getNumberOfPartizipants() <= sessionManager.getClientListByRoom(roomId).size();
-		} catch (Exception err) {
-			log.error("[isRoomFull]", err);
-		}
-		return true;
-	}
-
-	/**
-	 * return all participants of a room
-	 * 
-	 * @param roomId
 	 * @return - all participants of a room
 	 */
 	public List<Client> getRoomClientsListByRoomId(Long roomId) {

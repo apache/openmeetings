@@ -33,32 +33,21 @@ public class KickMessageDialog extends AbstractDialog<String> {
 
 	public KickMessageDialog(String id) {
 		super(id, "");
-		add(new Label("message", Application.getString(606)));
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            protected String $()  {
-                return this.$(Options.asString("open"));
-            }
-        });
+		add(new Label("message", getString("606")));
 	};
 	
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
+		behavior.setOption("autoOpen", true);
 		behavior.setOption("closeOnEscape", false);
-        behavior.setOption("dialogClass", Options.asString("no-close"));
-        behavior.setOption("resizable", false);
-	}
-
-	public String getOnClickJavaScript() {
-		return "$('#" + getButtons().get(0).getMarkupId() +"').click(function(e){$('#" + getMarkupId() +"').close(); })";
+		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("resizable", false);
 	}
 
 	@Override
