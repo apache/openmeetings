@@ -143,7 +143,8 @@ public class RoomMenuPanel extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		this.room = room;
 		Room r = room.getRoom();
-		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(!r.getHiddenElements().contains(RoomElement.TopBar)));
+		setVisible(!r.isHidden(RoomElement.TopBar));
+		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
 		add(askBtn);
 		add(new Label("roomName", r.getName()));
 		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
@@ -214,11 +215,11 @@ public class RoomMenuPanel extends Panel {
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
-		actionsMenu.setEnabled(!r.getHiddenElements().contains(RoomElement.ActionsMenu) && r.isAllowUserQuestions());
+		actionsMenu.setEnabled(!r.isHidden(RoomElement.ActionMenu) && r.isAllowUserQuestions());
 		boolean moder = room.getClient().hasRight(Client.Right.moderator);
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = Room.Type.interview != r.getType() && !r.getHiddenElements().contains(RoomElement.ScreenSharing) && r.isAllowRecording() && moder;
+		boolean shareVisible = Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing) && r.isAllowRecording() && moder;
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);

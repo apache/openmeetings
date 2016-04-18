@@ -190,7 +190,7 @@ public class ChatPanel extends BasePanel {
 	}
 
 	public void roomEnter(Room r, AjaxRequestTarget target) {
-		if (r.getHiddenElements().contains(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.Chat)) {
 			toggle(target, false);
 			return;
 		}
@@ -207,7 +207,7 @@ public class ChatPanel extends BasePanel {
 	}
 	
 	public void roomExit(Room r, IPartialPageRequestHandler handler) {
-		if (r.getHiddenElements().contains(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
 		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));
