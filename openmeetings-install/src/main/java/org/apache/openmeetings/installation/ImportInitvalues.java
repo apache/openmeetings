@@ -51,9 +51,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -367,7 +365,7 @@ public class ImportInitvalues {
 		r.setDemoRoom(false);
 		r.setDemoTime(null);
 
-		r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.MicrophoneStatus)));
+		r.hide(RoomElement.MicrophoneStatus);
 		r.setModerated(false);
 
 		r.setDeleted(false);
@@ -395,7 +393,7 @@ public class ImportInitvalues {
 			createRoom("public Interview Room", Type.interview, 16L, true, null);
 			createRoom("public Conference Room", Type.conference, 32L, true, null);
 			Room r = createRoom("public Video Only Room", Type.conference, 32L, true, null);
-			r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.Whiteboard)));
+			r.hide(RoomElement.Whiteboard);
 			roomDao.update(r, null);
 			createRoom("public Video And Whiteboard Room", Type.conference, 32L, true, null);
 			createRoom("public Restricted Room", Type.restricted, 100L, true, null);

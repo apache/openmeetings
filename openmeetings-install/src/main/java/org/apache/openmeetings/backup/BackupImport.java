@@ -83,6 +83,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -360,17 +361,7 @@ public class BackupImport {
 		 * ##################### Import Rooms
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.Type.class, RoomTypeConverter.class);
-			
-			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
+			List<Room> list = readRoomList(f, "rooms.xml", "rooms");
 			for (Room r : list) {
 				Long roomId = r.getId();
 
@@ -674,7 +665,7 @@ public class BackupImport {
 	}
 	
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
-		List<T> list = new ArrayList<T>();
+		List<T> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
 			final String msg = fileName + " missing";
@@ -711,8 +702,9 @@ public class BackupImport {
 		return null;
 	}
 	
+	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
-		List<FileExplorerItem> list = new ArrayList<FileExplorerItem>();
+		List<FileExplorerItem> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
@@ -790,8 +782,9 @@ public class BackupImport {
 		return list;
 	}
 	
+	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
-		List<Recording> list = new ArrayList<Recording>();
+		List<Recording> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
@@ -865,9 +858,9 @@ public class BackupImport {
 		
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
-        xformer.transform(new DOMSource(doc), new StreamResult(sw));
-        
-		List<MeetingMember> list = new ArrayList<MeetingMember>();
+		xformer.transform(new DOMSource(doc), new StreamResult(sw));
+
+		List<MeetingMember> list = new ArrayList<>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle external attendee's firstname, lastname, email
 		InputNode listNode = root.getNext();
@@ -967,7 +960,7 @@ public class BackupImport {
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
 		xformer.transform(new DOMSource(doc), new StreamResult(sw));
 
-		List<User> list = new ArrayList<User>();
+		List<User> list = new ArrayList<>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
 		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle old om_time_zone, level_id, status
@@ -1045,6 +1038,72 @@ public class BackupImport {
 				}
 				list.add(u);
 				item = listNode.getNext();
+			}
+		}
+		return list;
+	}
+	
+	//FIXME (need to be removed in later versions) HACK to fix old properties
+	private List<Room> readRoomList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<Room> list = new ArrayList<>();
+		File xml = new File(baseDir, fileName);
+		if (xml.exists()) {
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer ser = new Persister(strategy, matcher);
+
+			matcher.bind(Long.class, LongTransform.class);
+			matcher.bind(Integer.class, IntegerTransform.class);
+			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(Room.Type.class, RoomTypeConverter.class);
+			
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+			InputNode listNode = root.getNext();
+			InputNode listNode1 = root1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				InputNode item1 = listNode1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+				while (item != null) {
+					Room r = ser.read(Room.class, item, false);
+					
+					Boolean showMicrophoneStatus = null;
+					//HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+					do {
+						if ("hideTopBar".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.TopBar);
+						}
+						if ("hideChat".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.Chat);
+						}
+						if ("hideActivitiesAndActions".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.Activities);
+						}
+						if ("hideFilesExplorer".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.Files);
+						}
+						if ("hideActionsMenu".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.ActionMenu);
+						}
+						if ("hideScreenSharing".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.ScreenSharing);
+						}
+						if ("hideWhiteboard".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							r.hide(RoomElement.Whiteboard);
+						}
+						if ("showMicrophoneStatus".equals(item1.getName())) {
+							showMicrophoneStatus = Boolean.valueOf(item1.getValue());
+						}
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"room".equals(item1.getName()));
+					
+					if (Boolean.FALSE.equals(showMicrophoneStatus)) {
+						r.hide(RoomElement.MicrophoneStatus);
+					}
+					list.add(r);
+					item = listNode.getNext();
+				}
 			}
 		}
 		return list;

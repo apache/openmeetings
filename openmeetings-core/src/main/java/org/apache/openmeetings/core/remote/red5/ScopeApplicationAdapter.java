@@ -1149,7 +1149,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
 
 			Room room = roomDao.get(roomId);
-			if (!room.getHiddenElements().contains(RoomElement.MicrophoneStatus)) {
+			if (!room.isHidden(RoomElement.MicrophoneStatus)) {
 				currentClient.setCanGiveAudio(true);
 			}
 
