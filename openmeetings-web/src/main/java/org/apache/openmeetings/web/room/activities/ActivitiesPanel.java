@@ -34,6 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -200,6 +201,7 @@ public class ActivitiesPanel extends BasePanel {
 	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);
 		this.room = room;
+		setVisible(!room.getRoom().isHidden(RoomElement.Activities));
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 		add(container.add(lv).setOutputMarkupId(true));
@@ -210,6 +212,6 @@ public class ActivitiesPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ActivitiesPanel.class, "activities.js"))));
-		response.render(CssHeaderItem.forUrl("css/activities.css"));
+		response.render(CssHeaderItem.forUrl("css/activities.css", "screen"));
 	}
 }

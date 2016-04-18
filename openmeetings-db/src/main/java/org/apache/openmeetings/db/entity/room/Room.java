@@ -100,7 +100,7 @@ public class Room implements IDataProviderEntity {
 		, Chat
 		, Activities
 		, Files
-		, ActionsMenu
+		, ActionMenu
 		, ScreenSharing
 		, Whiteboard
 		, MicrophoneStatus
@@ -503,6 +503,17 @@ public class Room implements IDataProviderEntity {
 
 	public void setHiddenElements(Set<RoomElement> hiddenElements) {
 		this.hiddenElements = hiddenElements;
+	}
+
+	public boolean isHidden(RoomElement e) {
+		return hiddenElements != null && hiddenElements.contains(e);
+	}
+	
+	public boolean hide(RoomElement e) {
+		if (hiddenElements == null) {
+			hiddenElements = new HashSet<>();
+		}
+		return hiddenElements.add(e);
 	}
 
 	public List<RoomGroup> getRoomGroups() {

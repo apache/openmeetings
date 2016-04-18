@@ -134,13 +134,13 @@ public class RoomPanel extends BasePanel {
 		getClient().setRoomId(r.getId());
 		super.onInitialize();
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
-		room.add((menu = new RoomMenuPanel("menu", this)).setVisible(!r.getHiddenElements().contains(RoomElement.TopBar)));
+		room.add(menu = new RoomMenuPanel("menu", this));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		room.add(wb.setOutputMarkupId(true));
 		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		room.add(aab);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
-		room.add((activities = new ActivitiesPanel("activities", this)).setVisible(!r.getHiddenElements().contains(RoomElement.Activities)));
+		room.add(activities = new ActivitiesPanel("activities", this));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
@@ -202,7 +202,7 @@ public class RoomPanel extends BasePanel {
 		}
 		add(room, accessDenied);
 		if (r.isWaitForRecording()) {
-			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.INFO) {//DialogIcon.LIGHT
+			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;
 	
 				@Override
@@ -350,7 +350,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getTopControls().setVisible(false));
-		if (r.getHiddenElements().contains(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.Chat)) {
 			getMainPage().getChat().toggle(handler, false);
 		}
 		handler.appendJavaScript("roomLoad();");
@@ -359,7 +359,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
 		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getTopControls().setVisible(true));
-		if (r.getHiddenElements().contains(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.Chat)) {
 			getMainPage().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("$(window).off('resize.openmeetings');");

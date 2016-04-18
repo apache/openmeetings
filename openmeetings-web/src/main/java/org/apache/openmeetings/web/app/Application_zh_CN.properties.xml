@@ -1878,4 +1878,6 @@
 	<entry key="dashboard.widget.admin.cleanup.cleanup">Cleanup</entry>
 	<entry key="dashboard.widget.admin.cleanup.warn">Are you sure you want to delete all temporary files? This operation cannot be undone.</entry>
 	<entry key="dashboard.widget.admin.cleanup.error">Unexpected error while performing cleanup</entry>
+	<entry key="room.action.request.right.moderator">would like to be moderator of this room.</entry>
+	<entry key="admin.room.hidden.elements">Hidden room elements</entry>
 </properties>
