@@ -72,7 +72,7 @@ public class RoomSidebar extends Panel {
 			item.add(status);
 			item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
 			item.add(AttributeAppender.append("data-userid", rc.u.getId()));
-			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().getHiddenElements().contains(RoomElement.Chat) && !getUserId().equals(rc.u.getId())));
+			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(rc.u.getId())));
 			if (room.getClient() != null && rc.c.getUid().equals(room.getClient().getUid())) {
 				item.add(AttributeAppender.append("class", "current"));
 			}
@@ -161,7 +161,7 @@ public class RoomSidebar extends Panel {
 	}
 	
 	private void updateShowFiles() {
-		showFiles = !room.getRoom().getHiddenElements().contains(RoomElement.Files) && room.getClient().hasRight(Right.whiteBoard);
+		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.whiteBoard);
 	}
 	
 	public void updateUsers(IPartialPageRequestHandler handler) {
