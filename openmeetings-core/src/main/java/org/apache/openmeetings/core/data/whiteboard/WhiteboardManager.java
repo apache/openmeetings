@@ -20,10 +20,10 @@ package org.apache.openmeetings.core.data.whiteboard;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.red5.logging.Red5LoggerFactory;
@@ -70,7 +70,7 @@ public class WhiteboardManager {
 				}
 			} else if (action.equals("clear")) {
 				WhiteboardObject whiteboardObject = wbListManagerById.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId, whiteBoardId);
-				whiteboardObject.setRoomItems(new HashMap<String, List>());
+				whiteboardObject.setRoomItems(new ConcurrentHashMap<String, List>());
 				wbListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, whiteboardObject, whiteBoardId);
 			} else if (action.equals("delete") || action.equals("undo")) {
 				WhiteboardObject whiteboardObject = wbListManagerById.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId, whiteBoardId);
