@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 
@@ -37,12 +37,12 @@ public class AviRecordingResourceReference extends RecordingResourceReference {
 	}
 	
 	@Override
-	String getFileName(Recording r) {
+	protected String getFileName(Recording r) {
 		return r.getAlternateDownload();
 	}
 	
 	@Override
-	File getFile(Recording r) {
+	protected File getFile(Recording r) {
 		return getRecording(r.getAlternateDownload());
 	}
 }

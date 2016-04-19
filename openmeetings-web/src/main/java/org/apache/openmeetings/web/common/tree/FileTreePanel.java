@@ -179,6 +179,10 @@ public abstract class FileTreePanel extends Panel {
 
 	public abstract void updateSizes();
 	
+	public FileItem getSelectedFile() {
+		return selectedFile.getObject();
+	}
+	
 	@Override
 	protected void onDetach() {
 		selectedFile.detach();

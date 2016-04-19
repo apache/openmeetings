@@ -16,34 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
 import java.io.File;
 
 import org.apache.openmeetings.db.entity.record.Recording;
 
-public class OggRecordingResourceReference extends RecordingResourceReference {
+public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	public OggRecordingResourceReference() {
-		super("ogg-recording");
+	public Mp4RecordingResourceReference() {
+		super("mp4-recording");
 	}
 	
 	@Override
 	public String getMimeType() {
-		return "video/ogg";
+		return "video/mp4";
 	}
 	
 	@Override
-	String getFileName(Recording r) {
-		return r.getHash() + OGG_EXTENSION;
+	protected String getFileName(Recording r) {
+		return r.getHash() + MP4_EXTENSION;
 	}
 	
 	@Override
-	File getFile(Recording r) {
-		return getOggRecording(r.getHash());
+	protected File getFile(Recording r) {
+		return getMp4Recording(r.getHash());
 	}
 }

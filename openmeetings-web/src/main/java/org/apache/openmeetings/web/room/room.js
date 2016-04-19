@@ -17,7 +17,7 @@
  * under the License.
  */
 function setHeight() {
-	var h = $(window).height() - $('#roomMenu').height();
+	var h = $(window).height() - $('#menu').height();
 	$(".room.sidebar.left").height(h);
 	var p = $(".room.sidebar.left .tabs");
 	p.height(h - 5); //FIXME hacks

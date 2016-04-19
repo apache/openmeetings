@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.core.data.whiteboard;
 
-import java.util.HashMap;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -50,7 +50,7 @@ public class WhiteBoardObjectSyncManager {
 		if (whiteBoardSyncList.containsKey(roomId)) {
 			return whiteBoardSyncList.get(roomId);
 		} else {
-			return new HashMap<String, WhiteboardSyncLockObject>();
+			return new ConcurrentHashMap<>();
 		}
 	}
 
@@ -75,7 +75,7 @@ public class WhiteBoardObjectSyncManager {
 		if (whiteBoardObjectSyncList.containsKey(roomId)) {
 			return whiteBoardObjectSyncList.get(roomId);
 		} else {
-			return new HashMap<String, Map<String, WhiteboardSyncLockObject>>();
+			return new ConcurrentHashMap<>();
 		}
 	}
 
@@ -91,7 +91,7 @@ public class WhiteBoardObjectSyncManager {
 		}
 		Map<String, WhiteboardSyncLockObject> imageSyncList = roomList.get(objectId);
 		if (imageSyncList == null) {
-			imageSyncList = new HashMap<String, WhiteboardSyncLockObject>();
+			imageSyncList = new ConcurrentHashMap<>();
 		}
 		return imageSyncList;
 	}
