@@ -57,16 +57,17 @@ import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
+import org.apache.openmeetings.web.room.RoomSwfResourceReference;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
-import org.apache.openmeetings.web.util.AviRecordingResourceReference;
-import org.apache.openmeetings.web.util.FlvRecordingResourceReference;
-import org.apache.openmeetings.web.util.JpgRecordingResourceReference;
-import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
-import org.apache.openmeetings.web.util.OggRecordingResourceReference;
+import org.apache.openmeetings.web.user.record.AviRecordingResourceReference;
+import org.apache.openmeetings.web.user.record.FlvRecordingResourceReference;
+import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
+import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
+import org.apache.openmeetings.web.user.record.OggRecordingResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.Localizer;
@@ -154,7 +155,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
-		mountResource("/profile/${id}", new ProfileImageResourceReference()); //should be in sync with VideoPlayer
+		mountResource("/room/swf/${id}", new RoomSwfResourceReference());
+		mountResource("/profile/${id}", new ProfileImageResourceReference());
 	}
 
 	private static class NoVersionMapper extends MountedMapper {
@@ -216,6 +218,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (c != null) {
 			ONLINE_USERS.remove(c.getUid());
 		}
+	}
+	
+	public static boolean isUserOnline(String uid) {
+		return ONLINE_USERS.containsKey(uid);
 	}
 	
 	public static boolean isUserOnline(Long userId) {

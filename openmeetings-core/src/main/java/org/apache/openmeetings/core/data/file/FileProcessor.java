@@ -26,8 +26,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,18 +59,21 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
+	public static String getExt(FileExplorerItem f) {
+		int dotidx = f.getName().lastIndexOf('.');
+		return dotidx < 0 ? "" : f.getName().substring(dotidx + 1).toLowerCase();
+	}
+	
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(Long userId, FileExplorerItem f, InputStream is) throws Exception {
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
 		
-		int dotidx = f.getName().lastIndexOf('.');
-
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
-		String newName = MD5.checksum("FILE_" + new Date().getTime());
+		String newName = UUID.randomUUID().toString();
 
-		String extDot = f.getName().substring(dotidx, f.getName().length()).toLowerCase();
-		String ext = extDot.substring(1);
+		String ext = getExt(f);
+		String extDot = String.format(".%s", ext);
 		log.debug("file extension: " + ext);
 		StoredFile storedFile = new StoredFile(newName, ext); 
 
@@ -145,7 +147,7 @@ public class FileProcessor {
 		// has to happen at the end, otherwise it will be overwritten
 		//cause the variable is new initialized
 		returnError.setCompleteName(completeName.getName());
-		returnError.setFileExplorerItemId(f.getId());
+		returnError.setFileItemId(f.getId());
 		
 		return returnError;
 	}

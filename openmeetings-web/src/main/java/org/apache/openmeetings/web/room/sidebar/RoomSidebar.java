@@ -53,6 +53,8 @@ public class RoomSidebar extends Panel {
 	private final TabbedPanel tabs;
 	private final ITab userTab;
 	private final ITab fileTab;
+	private final UploadDialog upload;
+	private final RoomFilePanel roomFiles;
 	private boolean showFiles;
 	private final ListView<RoomClient> users = new ListView<RoomClient>("user", new ArrayList<RoomClient>()) {
 		private static final long serialVersionUID = 1L;
@@ -121,6 +123,8 @@ public class RoomSidebar extends Panel {
 			}
 		};
 		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(room.getRoom().isFilesOpened() ? 1 : 0));
+		roomFiles = new RoomFilePanel("tree", room);
+		add(upload = new UploadDialog("upload", room, roomFiles));
 	}
 	
 	public class UserFragment extends Fragment {
@@ -137,7 +141,7 @@ public class RoomSidebar extends Panel {
 
 		public FileFragment(String id, String markupId) {
 			super(id, markupId, RoomSidebar.this);
-			add(new RoomFilePanel("tree", room.getRoom().getId()));
+			add(roomFiles);
 		}
 	}
 
@@ -172,5 +176,9 @@ public class RoomSidebar extends Panel {
 
 	public boolean isShowFiles() {
 		return showFiles;
+	}
+	
+	public void showUpload(IPartialPageRequestHandler handler) {
+		upload.open(handler);
 	}
 }

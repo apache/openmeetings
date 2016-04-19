@@ -21,7 +21,7 @@ package org.apache.openmeetings.util.process;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,17 +37,17 @@ import org.slf4j.Logger;
 public class ConverterProcessResultList {
 	private static final Logger log = getLogger(ConverterProcessResultList.class, webAppRootKey);
 
-	private Map<String, ConverterProcessResult> jobslist = new HashMap<String, ConverterProcessResult>();
+	private Map<String, ConverterProcessResult> jobslist = new LinkedHashMap<>();
 
-	private Long fileExplorerItemId;
+	private Long fileItemId;
 	private String completeName;
 
-	public Long getFileExplorerItemId() {
-		return fileExplorerItemId;
+	public Long getFileItemId() {
+		return fileItemId;
 	}
 
-	public void setFileExplorerItemId(Long fileExplorerItemId) {
-		this.fileExplorerItemId = fileExplorerItemId;
+	public void setFileItemId(Long fileItemId) {
+		this.fileItemId = fileItemId;
 	}
 
 	public String getCompleteName() {
@@ -58,8 +58,7 @@ public class ConverterProcessResultList {
 		this.completeName = completeName;
 	}
 
-	public ConverterProcessResult addItem(String name,
-			ConverterProcessResult processResult) {
+	public ConverterProcessResult addItem(String name, ConverterProcessResult processResult) {
 		if (jobslist.containsKey(name)) {
 			log.error("Duplicate key in jobslist");
 			return null;
@@ -74,7 +73,7 @@ public class ConverterProcessResultList {
 	 */
 	public boolean hasError() {
 		for (Entry<String, ConverterProcessResult> entry : jobslist.entrySet()) {
-			if (entry.getValue().getExitValue().equals("-1")) {
+			if ("-1".equals(entry.getValue().getExitValue())) {
 				return true;
 			}
 		}
@@ -95,32 +94,6 @@ public class ConverterProcessResultList {
 			logMessage.append(entry.getValue().buildLogMessage());
 		}
 		return logMessage.toString();
-	}
-
-	/**
-	 * Axis need Objects or array of objects, Map won't work
-	 * 
-	 * @return
-	 */
-	public FileImportError[] convertToFileImportErrors() {
-		FileImportError[] errors = new FileImportError[jobslist.size()];
-
-		int i = 0;
-		// Axis need Objects or array of objects, Map won't work
-		for (Map.Entry<String, ConverterProcessResult> me : jobslist.entrySet()) {
-
-			ConverterProcessResult result = me.getValue();
-
-			errors[i] = new FileImportError();
-			errors[i].setCommand((result.getCommand() != null) ? result.getCommand().toString() : "");
-			errors[i].setError((result.getError() != null) ? result.getError().toString() : "");
-			errors[i].setExitValue((result.getExitValue() != null) ? Integer.valueOf(result.getExitValue().toString()) : 0);
-			errors[i].setProcess((result.getProcess() != null) ? result.getProcess().toString() : "");
-
-			i++;
-		}
-		
-		return errors;
 	}
 
 	public int size() {

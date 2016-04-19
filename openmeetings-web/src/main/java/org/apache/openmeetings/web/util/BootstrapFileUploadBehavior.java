@@ -25,13 +25,14 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 public class BootstrapFileUploadBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
-	private final static JavaScriptResourceReference BOOTSTRAP_FILEUPLOAD_JS_REFERENCE
-			= new JavaScriptResourceReference(BootstrapFileUploadBehavior.class, "bootstrap-fileupload.js");
-	private final static CssResourceReference BOOTSTRAP_FILEUPLOAD_CSS_REFERENCE
-			= new CssResourceReference(BootstrapFileUploadBehavior.class, "bootstrap-fileupload.css");
+	private final static ResourceReference BOOTSTRAP_FILEINPUT_JS_REFERENCE
+			= new JavaScriptResourceReference(BootstrapFileUploadBehavior.class, "fileinput.js");
+	private final static ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
+			= new CssResourceReference(BootstrapFileUploadBehavior.class, "fileinput.css");
 	public final static BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior(); 
 	
 	private BootstrapFileUploadBehavior() {
@@ -40,7 +41,7 @@ public class BootstrapFileUploadBehavior extends Behavior {
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-        response.render(JavaScriptHeaderItem.forReference(BOOTSTRAP_FILEUPLOAD_JS_REFERENCE));
-        response.render(CssHeaderItem.forReference(BOOTSTRAP_FILEUPLOAD_CSS_REFERENCE));
+		response.render(JavaScriptHeaderItem.forReference(BOOTSTRAP_FILEINPUT_JS_REFERENCE));
+		response.render(CssHeaderItem.forReference(BOOTSTRAP_FILEINPUT_CSS_REFERENCE));
 	}
 }
