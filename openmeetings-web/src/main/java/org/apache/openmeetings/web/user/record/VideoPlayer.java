@@ -21,8 +21,6 @@ package org.apache.openmeetings.web.user.record;
 import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
-import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.media.Source;

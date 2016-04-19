@@ -186,7 +186,14 @@ public class RoomMenuPanel extends Panel {
 		exitMenuItem.setTop(true);
 		menu.add(exitMenuItem);
 		
-		filesMenu.getItems().add(new RoomMenuItem(Application.getString(15), Application.getString(1479)));
+		filesMenu.getItems().add(new RoomMenuItem(Application.getString(15), Application.getString(1479)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				room.getSidebar().showUpload(target);
+			}
+		});
 		filesMenu.setTop(true);
 		menu.add(filesMenu);
 		

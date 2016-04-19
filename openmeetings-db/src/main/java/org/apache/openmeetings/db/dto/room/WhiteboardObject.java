@@ -19,9 +19,9 @@
 package org.apache.openmeetings.db.dto.room;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WhiteboardObject {
 
@@ -31,7 +31,7 @@ public class WhiteboardObject {
 	private Integer zoom = 100;
 	private Boolean fullFit = true;
 	@SuppressWarnings("rawtypes")
-	private Map<String, List> roomItems = new HashMap<String, List>();
+	private Map<String, List> roomItems = new ConcurrentHashMap<>();
 	private Date created = new Date();
 
 	public WhiteboardObject() {}

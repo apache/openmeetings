@@ -22,30 +22,10 @@
 
  
 <class name="documentFileExplorerItem" extends="baseFileExplorerItem" type="Presentation">
-	
-	<method name="formatURL" args="filename">
-        <![CDATA[
-            var uploadmoduleimgfolderVar = '/' + this.fileHash;
-            var downloadurl = canvas.getUrl()+'DownloadHandler?' +
-                'fileName=' + encodeURIComponent(this.fileHash + ".swf") +
-                '&moduleName=' + 'videoconf1' + 
-                '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/' )+
-                '&room_id=files'+ 
-                '&sid='+canvas.sessionId;
-            ////Debug.write("downloadurl: ",downloadurl);
-            return downloadurl;
-        ]]>
-    </method>    
-    
 	<method name="loadDocumentToWhiteboard">
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
-    		var uploadmoduleimgfolderVar = '/' + this.fileHash;
-            
-            if ($debug) Debug.write("loadDocumentToWhiteboard ",this.fileName);
-            
-    		canvas._drawarea.loadSWFPresentationSynced(this.formatURL(this.fileHash),this.fileHash + ".swf",
-    		              "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
-                          this.fileName);
+    		canvas._drawarea.loadSWFPresentationSynced("room/swf/" + fileId, this.fileHash + ".swf",
+    		              "videoconf1", "", "files", hib.conferencedomain, 1, this.fileName);
 		} else {
 			new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(721)});
 		}

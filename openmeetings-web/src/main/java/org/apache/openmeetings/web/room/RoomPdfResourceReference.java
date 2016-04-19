@@ -16,34 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
-
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
+package org.apache.openmeetings.web.room;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 
-public class Mp4RecordingResourceReference extends RecordingResourceReference {
+public class RoomPdfResourceReference extends RoomResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	public Mp4RecordingResourceReference() {
-		super("mp4-recording");
+	public RoomPdfResourceReference() {
+		super("pdf-room-file");
 	}
-	
+
 	@Override
-	public String getMimeType() {
-		return "video/mp4";
+	protected String getMimeType() {
+		return "application/pdf";
 	}
-	
+
 	@Override
-	String getFileName(Recording r) {
-		return r.getHash() + MP4_EXTENSION;
+	protected String getFileName(FileExplorerItem r) {
+		return r.getName();
 	}
-	
+
 	@Override
-	File getFile(Recording r) {
-		return getMp4Recording(r.getHash());
+	protected File getFile(FileExplorerItem r) {
+		return getFile(r, "pdf");
 	}
 }

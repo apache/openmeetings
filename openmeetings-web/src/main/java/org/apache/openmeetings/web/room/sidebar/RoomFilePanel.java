@@ -39,7 +39,9 @@ import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
@@ -47,11 +49,11 @@ import org.apache.wicket.model.Model;
 
 public class RoomFilePanel extends FileTreePanel {
 	private static final long serialVersionUID = 1L;
-	private final long roomId;
+	private final RoomPanel room;
 
-	public RoomFilePanel(String id, final long roomId) {
+	public RoomFilePanel(String id, RoomPanel room) {
 		super(id);
-		this.roomId = roomId;
+		this.room = room;
 	}
 	
 	@Override
@@ -70,6 +72,14 @@ public class RoomFilePanel extends FileTreePanel {
 	protected Component getUpload(String id) {
 		Component u = super.getUpload(id);
 		u.setVisible(true);
+		u.add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				room.getSidebar().showUpload(target);
+			}
+		});
 		return u;
 	}
 	
@@ -79,7 +89,7 @@ public class RoomFilePanel extends FileTreePanel {
 		f.setOwnerId(getUserId());
 		selectedFile.setObject(f);
 		treesView.add(selected = new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(null)));
-		treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(roomId)));
+		treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(room.getRoom().getId())));
 		treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
 		treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
 		for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {

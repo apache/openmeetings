@@ -157,14 +157,10 @@
 	 -->
   	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName,fullFit">
 	<![CDATA[
-		if ($debug) Debug.write("addPresentationToLayer",standardFileName);
+		if ($debug) Debug.write("addPresentationToLayer", standardFileName);
 		
-		var downloadurl = canvas.getUrl() + 'DownloadHandler?' +
-				'fileName=' + encodeURIComponent(fileName) +
-				'&moduleName=' + moduleName + 
-				'&parentPath=' + encodeURIComponent(parentPath + '/') +
-				'&room_id='+room + 
-				'&sid='+canvas.sessionId;
+		var downloadurl = canvas.getUrl() + urlName + "?uid=" + canvas.publicSID;
+		if ($debug) Debug.write("addPresentationToLayer:: downloadurl=", downloadurl);
 		
 		this.currentlayer = new lz.swfResourceView(obj,{refObj:this,name:nameing,
 			x:posx,y:posy,alterModus:alterModus,
@@ -178,8 +174,6 @@
 			, swfUrl: downloadurl
 			});
 
-		//this.currentlayer._swfView.setSource(downloadurl);
-		
 		this.addItemToDocumentToolBar();
 		this.doUpdateDocumentToolBar();
 	]]>
