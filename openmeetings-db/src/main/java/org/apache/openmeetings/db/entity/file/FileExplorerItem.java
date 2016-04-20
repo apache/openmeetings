@@ -59,10 +59,6 @@ public class FileExplorerItem extends FileItem {
 	@Element(data = true, required = false)
 	private Long size;
 
-	@Column(name = "wml_file_path")
-	@Element(data = true, required = false)
-	private String wmlFilePath;
-
 	@Column(name = "external_id")
 	private String externalId;
 
@@ -87,14 +83,6 @@ public class FileExplorerItem extends FileItem {
 		this.size = fileSize;
 	}
 
-	public String getWmlFilePath() {
-		return wmlFilePath;
-	}
-
-	public void setWmlFilePath(String wmlFilePath) {
-		this.wmlFilePath = wmlFilePath;
-	}
-
 	public String getExternalId() {
 		return externalId;
 	}
@@ -110,5 +98,4 @@ public class FileExplorerItem extends FileItem {
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
-
 }
