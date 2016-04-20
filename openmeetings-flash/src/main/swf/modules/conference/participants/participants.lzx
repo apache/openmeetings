@@ -201,14 +201,6 @@
         ]]>
     </method>
 
-    <method name="setSpeakingByPos" args="publicSID,bool">
-    	var tObj = this._participants.getUserListItemByPublicSID(publicSID);
-    	if (tObj != null) {
-    		tObj._miniIcons._loudness.loudness.setAttribute('opacity', bool ? 1 : 0.2);
-        }
-        canvas.commonVideoViewContent.setSpeakingByPos(publicSID, bool);
-    </method>
-
     <method name="closeStreamClient" args="publicSID">
         canvas.commonVideoViewContent.closeStreamClient(publicSID);
     </method>

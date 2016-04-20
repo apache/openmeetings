@@ -234,10 +234,6 @@
         canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
     </method>
 
-    <method name="setSpeakingByPos" args="publicSID,bool">
-        canvas.commonVideoViewContent.setSpeakingByPos(publicSID, bool);
-    </method>
-
     <method name="closeStreamClient" args="publicSID">
         canvas.commonVideoViewContent.closeStreamClient(publicSID);
     </method>
