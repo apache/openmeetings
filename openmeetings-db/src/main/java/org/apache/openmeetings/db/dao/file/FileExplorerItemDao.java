@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -44,13 +45,13 @@ public class FileExplorerItemDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long add(String fileName, String fileHash, Long parentId, Long ownerId, Long roomId, Long insertedBy,
-			Type type, String wmlFilePath, String externalId, String externalType) {
+	public FileExplorerItem add(String fileName, Long parentId, Long ownerId, Long roomId, Long insertedBy,
+			Type type, String externalId, String externalType) {
 		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
 		try {
 			FileExplorerItem fileItem = new FileExplorerItem();
 			fileItem.setName(fileName);
-			fileItem.setHash(fileHash);
+			fileItem.setHash(UUID.randomUUID().toString());
 			fileItem.setDeleted(false);
 			fileItem.setParentId(parentId);
 			fileItem.setOwnerId(ownerId);
@@ -59,15 +60,13 @@ public class FileExplorerItemDao {
 			fileItem.setInsertedBy(insertedBy);
 			fileItem.setType(type);
 			fileItem.setUpdated(new Date());
-			fileItem.setWmlFilePath(wmlFilePath);
 			fileItem.setExternalId(externalId);
 			fileItem.setExternalType(externalType);
 
 			fileItem = em.merge(fileItem);
-			Long fileItemId = fileItem.getId();
 
-			log.debug(".add(): file " + fileName + " added as " + fileItemId);
-			return fileItemId;
+			log.debug(".add(): file " + fileName + " added as " + fileItem.getId());
+			return fileItem;
 		} catch (Exception ex2) {
 			log.error(".add(): ", ex2);
 		}
