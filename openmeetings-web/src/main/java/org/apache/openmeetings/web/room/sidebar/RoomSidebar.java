@@ -63,21 +63,31 @@ public class RoomSidebar extends Panel {
 		protected void populateItem(ListItem<RoomClient> item) {
 			RoomClient rc = item.getModelObject();
 			item.setMarkupId(String.format("user%s", rc.c.getUid()));
-			WebMarkupContainer status = new WebMarkupContainer("status");
+			String status = null, statusTitle = null;
 			if (rc.c.hasRight(Right.moderator)) {
-				status.add(AttributeAppender.append("class", "status-mod"), AttributeAppender.replace("title", getString("679")));
+				status = "status-mod";
+				statusTitle = "679";
 			} else if (rc.c.hasRight(Right.whiteBoard)) {
-				status.add(AttributeAppender.append("class", "status-wb"), AttributeAppender.replace("title", getString("678")));
+				status = "status-wb";
+				statusTitle = "678";
 			} else {
-				status.add(AttributeAppender.append("class", "status-user"), AttributeAppender.replace("title", getString("677")));
+				status = "status-user";
+				statusTitle = "677";
 			}
-			item.add(status);
+			item.add(new WebMarkupContainer("status").add(AttributeAppender.append("class", status), AttributeAppender.replace("title", getString(statusTitle))));
 			item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
 			item.add(AttributeAppender.append("data-userid", rc.u.getId()));
-			item.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(rc.u.getId())));
-			if (room.getClient() != null && rc.c.getUid().equals(room.getClient().getUid())) {
-				item.add(AttributeAppender.append("class", "current"));
+			WebMarkupContainer actions = new WebMarkupContainer("actions");
+			actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(rc.u.getId())));
+			if (room.getClient() != null) {
+				actions.setVisible(room.getClient().hasRight(Right.moderator));
+				if (rc.c.getUid().equals(room.getClient().getUid())) {
+					item.add(AttributeAppender.append("class", "current"));
+				}
+			} else {
+				actions.setVisible(false);
 			}
+			item.add(actions);
 		}
 	};
 	
