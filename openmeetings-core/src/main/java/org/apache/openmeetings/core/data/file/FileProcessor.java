@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.data.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadTempFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -70,12 +69,12 @@ public class FileProcessor {
 		
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
-		String newName = UUID.randomUUID().toString();
+		String hash = UUID.randomUUID().toString();
 
 		String ext = getExt(f);
 		String extDot = String.format(".%s", ext);
 		log.debug("file extension: " + ext);
-		StoredFile storedFile = new StoredFile(newName, ext); 
+		StoredFile storedFile = new StoredFile(hash, ext); 
 
 		// Check variable to see if this file is a presentation
 		// check if this is a a file that can be converted by
@@ -96,22 +95,18 @@ public class FileProcessor {
 			return returnError;
 		}
 
-		File completeName = new File(isAsIs ? getUploadFilesDir() : getUploadTempFilesDir(), newName + extDot);
+		File completeName = new File(isAsIs ? getUploadFilesDir() : getUploadTempFilesDir(), hash + extDot);
 		log.debug("writing file to: " + completeName);
 		FileHelper.copy(is, completeName);
 		is.close();
 
-		String hash = newName + extDot;
 		if (isImage) {
-			hash = newName + ".jpg";
 			f.setType(Type.Image);
 		} else if (isVideo) {
-			hash = newName + FLV_EXTENSION;
 			f.setType(Type.Video);
 		} else if (isChart) {
 			f.setType(Type.PollChart);
 		} else if (isPdf || canBeConverted) {
-			hash = newName;
 			f.setType(Type.Presentation);
 		}
 		f.setHash(hash);
@@ -122,16 +117,16 @@ public class FileProcessor {
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(newName, "files", true, completeName);
+			returnError = generatePDF.convertPDF(hash, "files", true, completeName);
 		} else if (isPdf) {
 			// convert to thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(newName, "files", false, completeName);
+			returnError = generatePDF.convertPDF(hash, "files", false, completeName);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
 		} else if (isImage && !isAsIs) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(newName, extDot, "files");
+			returnError = generateImage.convertImage(hash, extDot, "files");
 		} else if (isAsIs) {
 			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
 			returnError.addItem("processThumb", processThumb);

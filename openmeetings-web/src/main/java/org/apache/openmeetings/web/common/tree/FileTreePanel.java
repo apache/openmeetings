@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common.tree;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -36,11 +37,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -59,7 +62,19 @@ public abstract class FileTreePanel extends Panel {
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
 	protected FileItemTree<? extends FileItem> selected;
-	protected RepeatingView treesView = new RepeatingView("tree");
+	protected ListView<ITreeProvider<? extends FileItem>> treesView = new ListView<ITreeProvider<? extends FileItem>>("tree", new ArrayList<ITreeProvider<? extends FileItem>>()) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void populateItem(ListItem<ITreeProvider<? extends FileItem>> item) {
+			@SuppressWarnings({ "unchecked", "rawtypes" }) //TODO investigate this
+			FileItemTree<? extends FileItem> fit = new FileItemTree("item", FileTreePanel.this, item.getModelObject());
+			if (selected == null) {
+				selected = fit;
+			}
+			item.add(fit);
+		}
+	};
 
 	public FileTreePanel(String id) {
 		super(id);

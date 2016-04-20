@@ -29,7 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -45,18 +44,6 @@ public class LibraryDocumentConverter {
 		try {
 			log.debug("filePath: " + OmFileHelper.getUploadWmlDir().getCanonicalPath());
 			
-			String fileNameExtName = fileName.substring(fileName.length()-4,fileName.length());
-			if (fileNameExtName.equals(fileExt)){
-				fileName = StringComparer.getInstance().compareForRealPaths(fileName.substring(0, fileName.length()-4));
-			} else {
-				fileName = StringComparer.getInstance().compareForRealPaths(fileName.substring(0, fileName.length()));
-			}
-			
-			if (fileName.length() <= 0){
-				//return new Long(-21);
-				return "-20";
-			}
-			//Add the Folder for the wmlFiles if it does not exist yet
 			File file = new File(OmFileHelper.getUploadWmlDir(), fileName + fileExt);
 			
 			if (file.exists()){
@@ -75,9 +62,6 @@ public class LibraryDocumentConverter {
 				out.write(xmlString);
 				out.flush();
 			}
-	    
-		    //return new Long(1);
-		    
 			return file.getCanonicalPath();
 		} catch (Exception err){
 			log.error("writeToLocalFolder",err);

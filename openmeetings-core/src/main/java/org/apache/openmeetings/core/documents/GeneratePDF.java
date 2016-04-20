@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.documents;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.core.documents.CreateLibraryPresentation.generateXMLDocument;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -46,37 +47,28 @@ public class GeneratePDF {
 	@Autowired
 	private ConfigurationDao configurationDao;
 
-	public ConverterProcessResultList convertPDF(String fileName,
-			String roomName, boolean fullProcessing, File inFile)
-			throws Exception {
-
+	public ConverterProcessResultList convertPDF(String hash, String roomName, boolean fullProcessing, File inFile) throws Exception {
 		String inFileName = inFile.getName();
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
 
 		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), inFileName);
-		File destinationFolder = OmFileHelper.getNewDir(OmFileHelper.getUploadRoomDir(roomName), fileName);
+		File destinationFolder = OmFileHelper.getNewDir(OmFileHelper.getUploadRoomDir(roomName), hash);
 
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
-			ConverterProcessResult processOpenOffice = doJodConvert(
-					fileFullPath, destinationFolder, fileName);
+			ConverterProcessResult processOpenOffice = doJodConvert(fileFullPath, destinationFolder, hash);
 			returnError.addItem("processOpenOffice", processOpenOffice);
-			ConverterProcessResult processThumb = generateThumbs
-					.generateBatchThumb(new File(destinationFolder, fileName + ".pdf"), destinationFolder, 80, "thumb");
+			ConverterProcessResult processThumb = generateThumbs.generateBatchThumb(new File(destinationFolder, hash + ".pdf"), destinationFolder, 80, "thumb");
 			returnError.addItem("processThumb", processThumb);
-			ConverterProcessResult processSWF = generateSWF
-					.generateSwf(destinationFolder, destinationFolder, fileName);
+			ConverterProcessResult processSWF = generateSWF.generateSwf(destinationFolder, destinationFolder, hash);
 			returnError.addItem("processSWF", processSWF);
 		} else {
-
 			log.debug("-- generateBatchThumb --");
 
-			ConverterProcessResult processThumb = generateThumbs
-					.generateBatchThumb(fileFullPath, destinationFolder, 80, "thumb");
+			ConverterProcessResult processThumb = generateThumbs.generateBatchThumb(fileFullPath, destinationFolder, 80, "thumb");
 			returnError.addItem("processThumb", processThumb);
 
-			ConverterProcessResult processSWF = generateSWF.generateSwf(
-					fileFullPath.getParentFile(), destinationFolder, fileName);
+			ConverterProcessResult processSWF = generateSWF.generateSwf(fileFullPath.getParentFile(), destinationFolder, hash);
 			returnError.addItem("processSWF", processSWF);
 		}
 
@@ -86,15 +78,10 @@ public class GeneratePDF {
 		FileHelper.moveRec(inFile, fileWhereToMove);
 
 		if (fullProcessing) {
-			ConverterProcessResult processXML = CreateLibraryPresentation
-					.generateXMLDocument(destinationFolder,
-							inFileName, fileName + ".pdf",
-							fileName + ".swf");
+			ConverterProcessResult processXML = generateXMLDocument(destinationFolder, inFileName, hash + ".pdf", hash + ".swf");
 			returnError.addItem("processXML", processXML);
 		} else {
-			ConverterProcessResult processXML = CreateLibraryPresentation
-					.generateXMLDocument(destinationFolder,
-							inFileName, null, fileName + ".swf");
+			ConverterProcessResult processXML = generateXMLDocument(destinationFolder, inFileName, null, hash + ".swf");
 			returnError.addItem("processXML", processXML);
 		}
 
@@ -146,15 +133,11 @@ public class GeneratePDF {
 			argv.add(fileFullPath.getCanonicalPath());
 			argv.add(new File(destinationFolder, outputfile + ".pdf").getCanonicalPath());
 
-			return ProcessHelper.executeScript("doJodConvert",
-					argv.toArray(new String[argv.size()]));
+			return ProcessHelper.executeScript("doJodConvert", argv.toArray(new String[argv.size()]));
 
 		} catch (Exception ex) {
 			log.error("doJodConvert", ex);
 			return new ConverterProcessResult("doJodConvert", ex.getMessage(), ex);
 		}
 	}
-
-	
-
 }
