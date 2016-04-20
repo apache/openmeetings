@@ -57,7 +57,7 @@ function initVideo(_options) {
 }
 
 function setHeight() {
-	var h = $(window).height() - $('#roomMenu').height();
+	var h = $(window).height() - $('#menu').height();
 	$(".room.sidebar.left").height(h);
 	var p = $(".room.sidebar.left .tabs");
 	p.height(h - 5); //FIXME hacks
@@ -84,9 +84,20 @@ function roomLoad() {
 			$(".room.wb.area .wb").width(w);
 		}
 	});
+	setHeight();
 }
 function startPrivateChat(el) {
 	addChatTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
 	openChat();
 	$('#chatMessage .wysiwyg-editor').click();
+}
+
+/***** functions required by SWF   ******/
+function audioActivity(uid, active) {
+	var u = $('#user' + uid + ' .user.actions .audio.activity.ui-icon');
+	if (active) {
+		u.addClass("speaking");
+	} else {
+		u.removeClass("speaking");
+	}
 }
