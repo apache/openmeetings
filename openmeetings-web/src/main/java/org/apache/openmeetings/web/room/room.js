@@ -51,3 +51,13 @@ function startPrivateChat(el) {
 	openChat();
 	$('#chatMessage .wysiwyg-editor').click();
 }
+
+/***** functions required by SWF   ******/
+function audioActivity(uid, active) {
+	var u = $('#user' + uid + ' .user.actions .audio.activity.ui-icon');
+	if (active) {
+		u.addClass("speaking");
+	} else {
+		u.removeClass("speaking");
+	}
+}

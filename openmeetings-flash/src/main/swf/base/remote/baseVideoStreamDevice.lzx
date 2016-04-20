@@ -15,12 +15,12 @@
 		which are thrown, once a device was set -->
 
 	<class name="baseVideoStreamDevice" extends="baseVideoStream">
-
 		<switch>
 			<when property="$as3">
 				<passthrough>
 					import flash.events.StatusEvent;
 					import flash.events.ActivityEvent;
+					import flash.external.ExternalInterface;
 				</passthrough>
 			</when>
 		</switch>
@@ -159,6 +159,7 @@
 			this.objMessage[0] = 'audioActivity';
 			this.objMessage[1] = this.isgreater;
 			this.objMessage[2] = parent.parent.publicSID;
+			ExternalInterface.call("audioActivity", parent.parent.publicSID, this.isgreater);
 			//if ($debug) Debug.write("Level sendNotification ",this.objMessage);
 			this.sendMessage.doCall();
 		</method>

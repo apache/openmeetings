@@ -101,7 +101,16 @@
 	height: 18px;
 	padding: 0;
 }
-.private-chat.om-icon {
+.audio.activity.ui-icon, .audio.activity.ui-icon.speaking {
+	background-image: url(images/speaking.png);
+}
+.user .user.actions .audio.activity.ui-icon {
+	opacity: 0.2;
+}
+.user .user.actions .audio.activity.ui-icon.speaking {
+	opacity: 1;
+}
+.private-chat.ui-icon {
 	background-image: url(images/page_edit.png);
 }
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
