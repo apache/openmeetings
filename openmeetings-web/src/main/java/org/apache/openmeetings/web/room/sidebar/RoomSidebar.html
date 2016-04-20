@@ -26,11 +26,20 @@
 		<div class="user list">
 			<div wicket:id="user" class="user ui-corner-all ui-widget-content">
 				<span wicket:id="status" class="ui-icon align-right"></span>
+				<span class="ui-icon align-right clickable restart" wicket:message="title:610"></span>
 				<div wicket:id="name" class="user name"></div>
+				<span class="ui-icon align-right clickable audio-activity" wicket:message="title:372"></span>
 				<div class="user actions">
-					<span class="ui-icon ask align-left clickable" wicket:message="title:675" ></span>
-					<span class="ui-icon align-right audio activity clickable" wicket:message="title:372" ></span> <!-- TODO exclusive audio onclick="startPrivateChat($(this));" -->
-					<span wicket:id="privateChat" class="private-chat ui-icon align-right clickable" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
+					<span class="ui-icon align-left clickable moderator-right" wicket:message="title:676"></span>
+					<span class="ui-icon align-left clickable wb-right" wicket:message="title:611"></span>
+					<span class="ui-icon align-left clickable screen-share-right" wicket:message="title:1067"></span>
+					<span class="ui-icon align-left clickable remote-control-right" wicket:message="title:1078"></span>
+					<span class="ui-icon align-left clickable audio-right" wicket:message="title:1604"></span>
+					<span class="ui-icon align-left clickable camera-right" wicket:message="title:683"></span>
+					<span class="ui-icon align-left clickable global-mute" wicket:message="title:1384"></span>
+					<span class="ui-icon align-left clickable exclsv-audio" wicket:message="title:1424"></span>
+					<span class="ui-icon align-left clickable kick" wicket:message="title:1213"></span>
+					<span wicket:id="privateChat" class="ui-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
 					<div class="clear"></div>
 				</div>
 			</div>

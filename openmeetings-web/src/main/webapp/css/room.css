@@ -67,7 +67,7 @@
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
-.ui-icon.ask, .room.menu.right .icon.ask {
+.ui-icon.moderator-right, .room.menu.right .icon.ask {
 	background-image: url(images/user_add.png);
 }
 .room.sidebar.left {
@@ -105,17 +105,66 @@
 .room.sidebar.left .user.list .user:hover .user.actions {
 	visibility: visible;
 }
-.audio.activity.ui-icon, .audio.activity.ui-icon.speaking {
-	background-image: url(images/speaking.png);
+.room.sidebar.left .user.list .user .user.actions .ui-icon {
+	margin-right: 2px;
 }
-.user .user.actions .audio.activity.ui-icon {
+.audio-activity.ui-icon.speaking, .ui-icon.moderator-right.granted, .wb-right.ui-icon.granted
+, .screen-share-right.ui-icon.granted, .remote-control-right.ui-icon.granted, .exclsv-audio.ui-icon.granted
+{
+	opacity: 1;
+}
+.ui-icon.moderator-right {
 	opacity: 0.2;
 }
-.user .user.actions .audio.activity.ui-icon.speaking {
-	opacity: 1;
+.audio-activity.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/speaking.png);
 }
 .private-chat.ui-icon {
 	background-image: url(images/page_edit.png);
+}
+.wb-right.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/pencil_add.png);
+}
+.screen-share-right.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/monitor_add.png);
+}
+.remote-control-right.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/mouse_add.png);
+}
+.audio-right.ui-icon {
+	opacity: 1;
+	background-image: url(images/micro_small_add.png);
+}
+.audio-right.ui-icon.granted {
+	opacity: 0.2;
+	background-image: url(images/micro_small_no.png);
+}
+.camera-right.ui-icon {
+	opacity: 1;
+	background-image: url(images/camera_small_add.png);
+}
+.camera-right.ui-icon.granted {
+	opacity: 0.2;
+	background-image: url(images/camera_small_no.png);
+}
+.global-mute.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/sound.png);
+}
+.exclsv-audio.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/micro_small.png);
+}
+.kick.ui-icon {
+	background-image: url(images/cancel_icon.png);
+	background-size: 16px;
+}
+.restart.ui-icon {
+	background-image: url(images/arrow_refresh_small.png);
 }
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
