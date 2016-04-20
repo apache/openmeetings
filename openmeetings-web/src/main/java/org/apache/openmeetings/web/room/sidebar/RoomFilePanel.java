@@ -35,7 +35,6 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
@@ -88,13 +87,13 @@ public class RoomFilePanel extends FileTreePanel {
 		FileExplorerItem f = new FileExplorerItem();
 		f.setOwnerId(getUserId());
 		selectedFile.setObject(f);
-		treesView.add(selected = new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(null)));
-		treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(room.getRoom().getId())));
-		treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
-		treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
+		treesView.getList().add(new FilesTreeProvider(null));
+		treesView.getList().add(new FilesTreeProvider(room.getRoom().getId()));
+		treesView.getList().add(new MyRecordingTreeProvider());
+		treesView.getList().add(new PublicRecordingTreeProvider(null, null));
 		for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
 			Group o = ou.getGroup();
-			treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
+			treesView.getList().add(new PublicRecordingTreeProvider(o.getId(), o.getName()));
 		}
 	}
 	

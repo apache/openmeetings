@@ -726,53 +726,43 @@ public class BackupImport {
 				while (item != null) {
 					FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
 					
-					boolean isFolder = false, isImage = false, isVideo = false, isPresentation = false, isStoredWmlFile = false, isChart = false;
-					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 					do {
-						if ("isChart".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isChart = true;
+						String name = item1.getName();
+						String val = item1.getValue();
+						if ("wmlFilePath".equals(name) && !Strings.isEmpty(val)) {
+							f.setType(FileItem.Type.WmlFile);
+							f.setHash(val);
 						}
-						if ("isImage".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isImage = true;
-						}
-						if ("isVideo".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isVideo = true;
-						}
-						if ("isRecording".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							log.warn("Recording is stored in FileExplorer Items");
-							isVideo = true;
-						}
-						if ("isPresentation".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isPresentation = true;
-						}
-						if ("isStoredWmlFile".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isStoredWmlFile = true;
-						}
-						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isFolder = true;
-						}
-						item1 = listNode1.getNext(); //HACK to handle Address inside user
-					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
-					
-					if (f.getType() == null) {
-						if (isChart) {
+						if ("isChart".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.PollChart);
 						}
-						if (isImage) {
+						if ("isImage".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.Image);
 						}
-						if (isVideo) {
+						if ("isVideo".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.Video);
 						}
-						if (isPresentation) {
+						if ("isRecording".equals(name) && "true".equals(val)) {
+							log.warn("Recording is stored in FileExplorer Items");
+							f.setType(FileItem.Type.Video);
+						}
+						if ("isPresentation".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.Presentation);
 						}
-						if (isStoredWmlFile) {
+						if ("isStoredWmlFile".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.WmlFile);
 						}
-						if (isFolder) {
+						if ("isFolder".equals(name) && "true".equals(val)) {
 							f.setType(FileItem.Type.Folder);
 						}
+						item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
+					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
+					
+					//Some hashes were stored with file extension
+					int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
+					if (idx > -1) {
+						f.setHash(f.getHash().substring(0, idx));
 					}
 					list.add(f);
 					item = listNode.getNext();
@@ -809,7 +799,9 @@ public class BackupImport {
 					boolean isFolder = false;
 					//HACK to handle old isFolder
 					do {
-						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						String name = item1.getName();
+						String val = item1.getValue();
+						if ("isFolder".equals(name) && "true".equals(val)) {
 							isFolder = true;
 						}
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
@@ -879,16 +871,17 @@ public class BackupImport {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {
-						if (User.Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
-							mm.getUser().setFirstname(item1.getValue());
+						String name = item1.getName();
+						String val = item1.getValue();
+						if (User.Type.contact == mm.getUser().getType() && "firstname".equals(name)) {
+							mm.getUser().setFirstname(val);
 						}
-						if (User.Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
-							mm.getUser().setLastname(item1.getValue());
+						if (User.Type.contact == mm.getUser().getType() && "lastname".equals(name)) {
+							mm.getUser().setLastname(val);
 						}
-						if ("email".equals(item1.getName())) {
-							String email = item1.getValue();
+						if ("email".equals(name)) {
 							if (mm.getAppointment() != null && mm.getAppointment().getOwner() != null) {
-								mm.setUser(userDao.getContact(email, mm.getAppointment().getOwner()));
+								mm.setUser(userDao.getContact(val, mm.getAppointment().getOwner()));
 							}
 							contactValid = true;
 						}
@@ -988,18 +981,19 @@ public class BackupImport {
 				}
 				String levelId = null, status = null, stateId = null;
 				do {
-					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
-						String jName = item2.getValue();
-						u.setTimeZoneId(jName == null ? null : tzUtil.getTimeZone(jName).getID());
+					String name = item2.getName();
+					String val = item2.getValue();
+					if (u.getTimeZoneId() == null && "omTimeZone".equals(name)) {
+						u.setTimeZoneId(val == null ? null : tzUtil.getTimeZone(val).getID());
 					}
-					if ("level_id".equals(item2.getName())) {
-						levelId = item2.getValue();
+					if ("level_id".equals(name)) {
+						levelId = val;
 					}
-					if ("status".equals(item2.getName())) {
-						status = item2.getValue();
+					if ("status".equals(name)) {
+						status = val;
 					}
-					if ("state_id".equals(item2.getName())) {
-						stateId = item2.getValue();
+					if ("state_id".equals(name)) {
+						stateId = val;
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone, level_id, status
 				} while (item2 != null && !"user".equals(item2.getName()));
@@ -1071,29 +1065,31 @@ public class BackupImport {
 					Boolean showMicrophoneStatus = null;
 					//HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
 					do {
-						if ("hideTopBar".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						String name = item1.getName();
+						String val = item1.getValue();
+						if ("hideTopBar".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.TopBar);
 						}
-						if ("hideChat".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideChat".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.Chat);
 						}
-						if ("hideActivitiesAndActions".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideActivitiesAndActions".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.Activities);
 						}
-						if ("hideFilesExplorer".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideFilesExplorer".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.Files);
 						}
-						if ("hideActionsMenu".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideActionsMenu".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.ActionMenu);
 						}
-						if ("hideScreenSharing".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideScreenSharing".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.ScreenSharing);
 						}
-						if ("hideWhiteboard".equals(item1.getName()) && "true".equals(item1.getValue())) {
+						if ("hideWhiteboard".equals(name) && "true".equals(val)) {
 							r.hide(RoomElement.Whiteboard);
 						}
-						if ("showMicrophoneStatus".equals(item1.getName())) {
-							showMicrophoneStatus = Boolean.valueOf(item1.getValue());
+						if ("showMicrophoneStatus".equals(name)) {
+							showMicrophoneStatus = Boolean.valueOf(val);
 						}
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
 					} while (item1 != null && !"room".equals(item1.getName()));
