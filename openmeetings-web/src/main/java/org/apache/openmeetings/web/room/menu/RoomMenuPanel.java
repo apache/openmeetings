@@ -25,11 +25,14 @@ import static org.apache.openmeetings.web.app.Application.removeUserFromRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -67,6 +70,13 @@ public class RoomMenuPanel extends Panel {
 	private final PollResultsDialog pollResults;
 	private final MenuPanel menuPanel;
 	private final StartSharingButton shareBtn;
+	private final Label roomName;
+	private static ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() {
+		@Override
+		protected DateFormat initialValue() {
+			return new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		};
+	};
 	private final OmButton askBtn = new OmButton("ask") {
 		private static final long serialVersionUID = 1L;
 		{
@@ -74,7 +84,7 @@ public class RoomMenuPanel extends Panel {
 			setVisible(false);
 		}
 		@Override
-		protected void onClick(AjaxRequestTarget target) {
+		public void onClick(AjaxRequestTarget target) {
 			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightModerator, room.getClient().getUid()));
 		}
 	};
@@ -106,9 +116,30 @@ public class RoomMenuPanel extends Panel {
 			shareBtn.onClick(target);
 		}
 	};
-	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString(784), Application.getString(1481), false);
-	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString(785), Application.getString(1492), false);
-	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false);
+	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString(784), Application.getString(1481), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			askBtn.onClick(target);
+		}
+	};
+	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString(785), Application.getString(1492), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightWb, room.getClient().getUid()));
+		}
+	};
+	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightAv, room.getClient().getUid()));
+		}
+	};
 	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString(24), Application.getString(1483), false) {
 		private static final long serialVersionUID = 1L;
 
@@ -146,8 +177,7 @@ public class RoomMenuPanel extends Panel {
 		setVisible(!r.isHidden(RoomElement.TopBar));
 		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
 		add(askBtn);
-		add(new Label("roomName", r.getName()));
-		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
+		add((roomName = new Label("roomName", r.getName())).setOutputMarkupId(true));
 		add(shareBtn = new StartSharingButton("share", room.getClient()));
 		add(invite = new InvitationDialog("invite", room.getRoom().getId()));
 		add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
@@ -207,7 +237,7 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(pollResultMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(pollVoteMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(sipDialerMenuItem);
-		actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
+		//TODO seems need to be removed actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
 		menu.add(actionsMenu);
 		return menu;
 	}
@@ -226,7 +256,8 @@ public class RoomMenuPanel extends Panel {
 		boolean moder = room.getClient().hasRight(Client.Right.moderator);
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing) && r.isAllowRecording() && moder;
+		boolean shareVisible = Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
+				&& r.isAllowRecording() && room.getClient().hasRight(Client.Right.share) && room.getSharingUser() == null;
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
@@ -238,6 +269,26 @@ public class RoomMenuPanel extends Panel {
 		//TODO sip menus
 		menuPanel.update(handler);
 		//FIXME TODO askBtn should be visible if moder is in room
+		StringBuilder roomClass = new StringBuilder("room name");
+		StringBuilder roomTitle = new StringBuilder();
+		if (room.getRecordingUser() != null) {
+			org.apache.openmeetings.db.entity.room.Client recUser = getBean(ISessionManager.class).getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
+			if (recUser != null) {
+				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
+						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.get().format(recUser.getConnectedSince())));
+				roomClass.append(" screen");
+			}
+			org.apache.openmeetings.db.entity.room.Client pubUser = getBean(ISessionManager.class).getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
+			if (pubUser != null) {
+				if (recUser != null) {
+					roomTitle.append('\n');
+				}
+				roomTitle.append(String.format("%s %s %s %s %s", getString("1504")
+						, recUser.getUsername(), pubUser.getFirstname(), pubUser.getLastname(), "URL")); //TODO add URL
+				roomClass.append(" screen");
+			}
+		}
+		handler.add(roomName.add(AttributeAppender.replace("class", roomClass), AttributeAppender.replace("title", roomTitle)));
 		handler.add(askBtn.setVisible(!moder && r.isAllowUserQuestions()));
 		handler.add(shareBtn.setVisible(shareVisible));
 	}
@@ -245,6 +296,7 @@ public class RoomMenuPanel extends Panel {
 	public void pollCreated(IPartialPageRequestHandler handler) {
 		vote.updateModel(handler);
 		vote.open(handler);
+		update(handler);
 	}
 	
 	public void exit(IPartialPageRequestHandler handler) {
