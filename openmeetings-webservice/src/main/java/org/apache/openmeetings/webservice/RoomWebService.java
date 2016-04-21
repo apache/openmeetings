@@ -38,6 +38,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -54,13 +55,8 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.apache.wicket.Application;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
-import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +88,8 @@ public class RoomWebService {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
+	@Autowired
+	private ScopeApplicationAdapter appAdapter;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -318,15 +316,7 @@ public class RoomWebService {
 
 				roomDao.update(room, userId);
 
-				Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
-				WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-				IWebSocketConnectionRegistry registry = settings.getConnectionRegistry();
-				RoomMessage cm = new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed);
-				for (IWebSocketConnection wc : registry.getConnections(app)) {
-					if (wc != null && wc.isOpen()) {
-						wc.sendMessage(cm);
-					}
-				}
+				appAdapter.broadcastRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
 
 				return new ServiceResult(1L, "Closed", Type.SUCCESS);
 			} else {

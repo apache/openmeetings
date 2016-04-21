@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<span wicket:id="status" class="ui-icon align-right"></span>
+	<span class="ui-icon align-right clickable restart" wicket:message="title:610"></span>
+	<div wicket:id="name" class="user name"></div>
+	<span class="ui-icon align-right clickable audio-activity" wicket:message="title:372"></span>
+	<div wicket:id="actions" class="user actions">
+		<span class="ui-icon align-left clickable moderator-right" wicket:message="title:676"></span>
+		<span class="ui-icon align-left clickable wb-right" wicket:message="title:611"></span>
+		<span class="ui-icon align-left clickable screen-share-right" wicket:message="title:1067"></span>
+		<span class="ui-icon align-left clickable remote-control-right" wicket:message="title:1078"></span>
+		<span class="ui-icon align-left clickable audio-right" wicket:message="title:1604"></span>
+		<span class="ui-icon align-left clickable camera-right" wicket:message="title:683"></span>
+		<span class="ui-icon align-left clickable global-mute" wicket:message="title:1384"></span>
+		<span class="ui-icon align-left clickable exclsv-audio" wicket:message="title:1424"></span>
+		<span class="ui-icon align-left clickable kick" wicket:message="title:1213"></span>
+		<span wicket:id="privateChat" class="ui-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
+		<div class="clear"></div>
+	</div>
+</wicket:panel>
+</html>

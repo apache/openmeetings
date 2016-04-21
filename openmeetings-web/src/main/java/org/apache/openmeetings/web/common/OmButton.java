@@ -38,5 +38,5 @@ public abstract class OmButton extends Button {
 		});
 	}
 	
-	protected abstract void onClick(AjaxRequestTarget target); 
+	public abstract void onClick(AjaxRequestTarget target); 
 }
