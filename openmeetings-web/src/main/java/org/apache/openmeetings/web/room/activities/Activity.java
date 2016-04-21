@@ -27,6 +27,8 @@ public class Activity implements Serializable {
 		roomEnter
 		, roomExit
 		, requestRightModerator
+		, requestRightAv
+		, requestRightWb
 	}
 	private final String uid;
 	private final Long sender;

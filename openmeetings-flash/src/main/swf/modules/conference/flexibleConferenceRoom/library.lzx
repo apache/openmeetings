@@ -66,7 +66,6 @@
 	
 	<include href="innerlistViewEventUserListTable.lzx" />
 	<include href="moderationMiniIconsEventUserList.lzx" />
-	<include href="activitylist/" />
 	<include href="roomSidebar/" />
 	<include href="appointmentNotificationPopUp.lzx" />
 	<include href="baseRoomInnerList.lzx" />

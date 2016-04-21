@@ -382,25 +382,6 @@
 	</method>
 	 
 	<!---
-		Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
-		and broadcasts the three rights to SWF10 container
-	 -->
-	<method name="setDrawAllowStatus" args="roomClientObj">
-	<![CDATA[
-		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		if (!!u && !!roomClientObj) {
-			u.update(roomClientObj);
-		}
-		if ($debug) Debug.write("drawAllowStatus changes ###### ");
-		if (roomClientObj.publicSID == canvas.publicSID) {
-			canvas.setAttribute("isAllowedToDraw", roomClientObj.canDraw);
-			canvas.setAttribute("isAllowedToScreenShare", roomClientObj.canShare);
-			canvas.setAttribute("isAllowedToRemoteControl", roomClientObj.canRemote);
-		}
-	]]>
-	</method>
-	
-	<!---
 		Sets the flag for the isAllowedToGiveExclusiveAudio status and broadcasts it to the 
 		SWF10 container
 	 -->

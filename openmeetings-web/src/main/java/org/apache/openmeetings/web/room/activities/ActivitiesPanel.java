@@ -20,12 +20,11 @@ package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.openmeetings.web.room.RoomPanel.broadcast;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-import static org.apache.openmeetings.web.room.RoomPanel.broadcast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +40,7 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -94,29 +94,35 @@ public class ActivitiesPanel extends BasePanel {
 							remove(uid, target);
 							break;
 						case decline:
-							if (isModerator(getUserId(), roomId)) {
+							if (room.getClient().hasRight(Client.Right.moderator)) {
 								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
 							}
 							break;
 						case accept:
-							if (isModerator(getUserId(), roomId)) {
+							Client client = getOnlineClient(uid);
+							if (room.getClient().hasRight(Client.Right.moderator) && client != null && roomId == client.getRoomId()) {
 								switch (a.getType()) {
 									case requestRightModerator:
-										Client client = null;
-										for (Client c : getRoomUsers(room.getRoom().getId())) { //FIXME TODO add Map somewhere
-											if (c.getUid().equals(uid)) {
-												client = c;
-												break;
-											}
-										}
-										if (client != null) {
-											client.getRights().add(Right.moderator);
-											broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
-											broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
-										}
+										client.getRights().add(Right.moderator);
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+										RoomBroadcaster.sendUpdatedClient(client);
+										break;
+									case requestRightAv:
+										client.getRights().add(Right.audio);
+										client.getRights().add(Right.video);
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+										RoomBroadcaster.sendUpdatedClient(client);
+										break;
+									case requestRightWb:
+										client.getRights().add(Right.whiteBoard);
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+										RoomBroadcaster.sendUpdatedClient(client);
 										break;
 									default:
-										break;	
+										break;
 								}
 							}
 							break;
@@ -165,6 +171,22 @@ public class ActivitiesPanel extends BasePanel {
 				}
 				//ask question 693
 					break;
+				case requestRightAv:
+				{
+					User u = getBean(UserDao.class).get(a.getSender());
+					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("695"), df.get().format(a.getCreated()));
+					accept.setVisible(true);
+					decline.setVisible(true);
+				}
+					break;
+				case requestRightWb:
+				{
+					User u = getBean(UserDao.class).get(a.getSender());
+					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("694"), df.get().format(a.getCreated()));
+					accept.setVisible(true);
+					decline.setVisible(true);
+				}
+					break;
 			}
 			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getUid()))));
 			item.add(accept, decline, new Label("text", text));
@@ -174,6 +196,10 @@ public class ActivitiesPanel extends BasePanel {
 		private String getClass(Activity a) {
 			switch (a.getType()) {
 				case requestRightModerator:
+					return "ui-state-highlight";
+				case requestRightAv:
+					return "ui-state-highlight";
+				case requestRightWb:
 					return "ui-state-highlight";
 				case roomEnter:
 				case roomExit:

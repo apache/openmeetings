@@ -72,8 +72,6 @@
 	
 	<fileExplorer name="_files" y="22" width="$once{ parent.width-12 }" height="${ parent.height-222 }" visible="false" />
 	
-	<activityList name="_activityList" />
-	
 	<view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1" bgcolor="0xE0E1EB" height="${ parent.height-1 }">
 		<handler name="onclick">
 			if (!canvas.isInterview) {

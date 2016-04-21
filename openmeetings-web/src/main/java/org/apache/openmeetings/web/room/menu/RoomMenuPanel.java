@@ -261,8 +261,8 @@ public class RoomMenuPanel extends Panel {
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
-		applyWbMenuItem.setEnabled(!moder);
-		applyAvMenuItem.setEnabled(!moder);
+		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.whiteBoard));
+		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.audio) || !room.getClient().hasRight(Client.Right.video));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || getBean(PollDao.class).getArchived(r.getId()).size() > 0);
