@@ -167,7 +167,6 @@
 			this.getsessiondata.doCall();	
 		}
 		connected = true;
-		client.setNewBroadCastingFlag = this.setNewBroadCastingFlag;
 		client.roomConnect = this.roomConnect;
 		client.roomDisconnect = this.roomDisconnect;
 		client.addNewUser = this.addNewUser;
@@ -854,32 +853,6 @@
 		]]>
 		</method>
 		
-		<method name="setNewBroadCastingFlag" args="value">
-		<![CDATA[
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ", value);
-			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID);
-			if (u != null) {
-				u.update(value);
-			}
-			if (canvas.publicSID == value.publicSID) {
-				canvas.commonVideoViewContent.toggleVideo(value.canVideo);
-				canvas.setAttribute("isBroadCasting", value.isBroadcasting);
-				canvas.setAttribute("canVideo", value.canVideo);
-				
-				if ($debug) Debug.write("Its about You ", value);
-				if (value.isBroadcasting) {
-					if (canvas.thishib.modus == "interview") {
-						canvas._drawarea.newInterviewStarting(value);
-					} else {
-						canvas.commonVideoViewContent.createEditRecordStream(false, false, -1);
-					}
-				}
-			}
-			canvas.setAttribute("lastBroadCastingUser",value);
-		]]>
-		</method>
-
 		<netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
 			<attribute name="publicSID" value="0" type="string" />
 			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
@@ -1037,11 +1010,25 @@
 			}
 			if ($debug) Debug.write("drawAllowStatus changes ###### ");
 			if (client.publicSID == canvas.publicSID) {
+				if ($debug) Debug.write("Its about You ", value);
 				canvas.setAttribute("isAllowedToDraw", client.canDraw);
 				canvas.setAttribute("isAllowedToScreenShare", client.canShare);
 				canvas.setAttribute("isAllowedToRemoteControl", client.canRemote);
 				canvas.setAttribute("ismoderator", client.isMod);
+				
+				canvas.commonVideoViewContent.toggleVideo(value.canVideo);
+				canvas.setAttribute("isBroadCasting", value.isBroadcasting);
+				canvas.setAttribute("canVideo", value.canVideo);
+				
+				if (value.isBroadcasting) {
+					if (canvas.thishib.modus == "interview") {
+						canvas._drawarea.newInterviewStarting(value);
+					} else {
+						canvas.commonVideoViewContent.createEditRecordStream(false, false, -1);
+					}
+				}
 			}
+			canvas.setAttribute("lastBroadCastingUser",value);
 		]]>
 		</method>
 		
