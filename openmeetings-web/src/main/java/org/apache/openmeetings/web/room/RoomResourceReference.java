@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.isUserOnline;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 
 import java.io.File;
 
@@ -52,7 +52,7 @@ public abstract class RoomResourceReference extends FileItemResourceReference<Fi
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		if (id != null && ws.isSignedIn() && !Strings.isEmpty(uid) && isUserOnline(uid)) {
+		if (id != null && ws.isSignedIn() && !Strings.isEmpty(uid) && getOnlineClient(uid) != null) {
 			//TODO ADDITIONALLY CHECK Rights !! and room !!
 			return getBean(FileExplorerItemDao.class).get(id);
 		}
