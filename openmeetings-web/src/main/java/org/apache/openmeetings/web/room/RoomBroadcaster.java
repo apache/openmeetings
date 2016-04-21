@@ -18,16 +18,20 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.session.SessionManager;
-import org.red5.server.api.IConnection;
+import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.web.app.Client.Right;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class RoomBroadcaster {
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, webAppRootKey);
+	
 	public static Client getClient(String publicSid) {
 		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid);
 		return csi == null ? null : csi.getRcl();
@@ -38,17 +42,30 @@ public class RoomBroadcaster {
 		if (rc == null) {
 			return;
 		}
-		final Long roomId = rc.getRoomId();
-		final SessionManager sessionMgr = getBean(SessionManager.class);
-		final UserDao userDao = getBean(UserDao.class);
+		broadcast(rc.getRoomId(), method, obj);
+	}
+
+	public static void broadcast(Long roomId, String method, Object obj) {
 		ScopeApplicationAdapter sa = getBean(ScopeApplicationAdapter.class);
-		sa.new MessageSender(sa.getRoomScope("" + roomId), method, obj) {
-			@Override
-			public boolean filter(IConnection conn) {
-				Client rcl = sessionMgr.getClientByStreamId(conn.getClient().getId(), null);
-				return rcl.isScreenClient()
-						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
-			}
-		}.start();
+		sa.sendToScope(roomId, method, obj);
+	}
+
+	public static void sendUpdatedClient(org.apache.openmeetings.web.app.Client client) {
+		org.apache.openmeetings.db.entity.room.Client rcl = getClient(client.getUid());
+		log.debug("-----------  sendUpdatedClient ");
+
+		if (rcl == null) {
+			return;
+		}
+		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
+		rcl.setIsMod(client.hasRight(Right.moderator));
+		rcl.setIsBroadcasting(client.hasRight(Right.audio));
+		rcl.setCanVideo(client.hasRight(Right.video));
+		rcl.setCanDraw(client.hasRight(Right.whiteBoard));
+
+		// Put the mod-flag to true for this client
+		getBean(SessionManager.class).updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+		// Notify all clients of the same scope (room)
+		broadcast(client.getRoomId(), "clientUpdated", rcl);
 	}
 }

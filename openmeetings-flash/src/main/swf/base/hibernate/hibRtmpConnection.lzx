@@ -194,6 +194,7 @@
 		client.nickNameSet = this.nickNameSet;
 		client.startedPublishing = this.startedPublishing;
 		client.newPoll = this.newPoll;
+		client.clientUpdated = clientUpdated;
 	</handler>
 	
 	<handler name="ondisconnect">
@@ -774,9 +775,6 @@
 			if (value == null || value.screenClient) {
 				return;
 			}
-			if (canvas.currentActivityList != null) {
-				canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
-			}
 			this.roomDisconnectUser(value, value.publicSID);
 		]]>
 		</method>
@@ -855,52 +853,6 @@
 			canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
 		]]>
 		</method>
-		
-		<!--
-			Adds this User to the List of current Moderators
-		 -->
-		<netRemoteCallHib name="addModerator" funcname="addModerator">
-			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
-			<netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-			<handler name="ondata" args="value">
-				<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write(" addModerator : ",value);				   
-				]]>
-			</handler>   
-		</netRemoteCallHib>
-		
-		<netRemoteCallHib name="removeModerator" funcname="removeModerator">
-			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
-			<netparam name="vars"><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-			<handler name="ondata" args="value">
-				<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				//Debug.write(" onResult setModerator : ",value);				   
-				]]>
-			</handler>   
-		</netRemoteCallHib>
-		
-		<!--
-		public synchronized Long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer podId) 
-		 -->
-		<netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
-			<attribute name="publicSIDOfNewModerator" value="0" type="string" />
-			<attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
-			<attribute name="canVideo" value="false" type="boolean" />
-			<attribute name="avsettings" value="av" type="string" />
-			<attribute name="interviewPodId" value="0" type="number" />
-			<netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
-			<netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
-			<netparam><method name="getValue">return parent.canVideo;</method></netparam>
-			<netparam><method name="getValue">return parent.interviewPodId;</method></netparam>
-			<handler name="ondata" args="value">
-				<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				//Debug.write(" onResult setModerator : ",value);				   
-				]]>
-			</handler>   
-		</netRemoteCallHib>
 		
 		<method name="setNewBroadCastingFlag" args="value">
 		<![CDATA[
@@ -999,31 +951,6 @@
 			</handler>   
 		</netRemoteCallHib>
 		
-		<!--
-		public synchronized Long applyForModeration(String publicSID)
-		 -->
-		<netRemoteCallHib name="applyForModeration" funcname="applyForModeration"
-					   remotecontext="$once{ canvas.thishib }">
-			<netparam><method name="getValue">return canvas.publicSID;</method></netparam>
-			<handler name="ondata" args="value">
-				<![CDATA[
-					//The onResult-Handler will be called be the rtmpconnection
-					if ($debug) Debug.write("applyForModeration : ",value);
-					if (value == 1) {
-						//Do add direct
-						parent.addModerator.publicSIDOfNewModerator = canvas.publicSID;
-						parent.addModerator.doCall();
-					} else if (value == 2) {
-						//Ask the Moderator
-						var tDate = new Date();
-						parent.sendMessageWithClient.sendMessage("applyForModeration",tDate.getTime());
-					} else if (value == 3) {
-						new lz.labelerrorPopup(canvas,{errorlabelid:696});
-					}
-				]]>
-			</handler>
-		</netRemoteCallHib>
-		
 		<netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
 					   remotecontext="$once{ canvas.thishib }">
 			<attribute name="publicSID" value="" type="string" />
@@ -1101,6 +1028,22 @@
 				]]>
 			</handler>   
 		</netRemoteCallHib> 
+		
+		<method name="clientUpdated" args="client">
+		<![CDATA[
+			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(client.publicSID);
+			if (!!u && !!client) {
+				u.update(client);
+			}
+			if ($debug) Debug.write("drawAllowStatus changes ###### ");
+			if (client.publicSID == canvas.publicSID) {
+				canvas.setAttribute("isAllowedToDraw", client.canDraw);
+				canvas.setAttribute("isAllowedToScreenShare", client.canShare);
+				canvas.setAttribute("isAllowedToRemoteControl", client.canRemote);
+				canvas.setAttribute("ismoderator", client.isMod);
+			}
+		]]>
+		</method>
 		
 		<method name="sendVarsToMessage" args="value">
 		<![CDATA[
@@ -1250,33 +1193,6 @@
 			} else if (value.message[0]=='updateGiveAudioStatus') {
 				canvas.setExclusiveAudioAllowStatus(value.message[1]);
 				canvas.setAttribute("exclusiveAudioAllowStatus",value.message[1]);
-			} else if (value.message[0]=='applyForModeration'){
-				if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
-				canvas.currentActivityList.addModerationRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForScreen'){
-				if ($debug) Debug.write("Somebody wants to share/record Screen ",value.client);
-				canvas.currentActivityList.addScreenRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForRemote'){
-				if ($debug) Debug.write("Somebody wants to remote control screen ",value.client);
-				canvas.currentActivityList.addRemoteRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForWhiteboard'){
-				if ($debug) Debug.write("Somebody wants to draw on Whiteboard ",value.client);
-				canvas.currentActivityList.addWhiteboardRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForA'){
-				if ($debug) Debug.write("Somebody wants to share A ",value.client);
-				canvas.currentActivityList.addAudioRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForAV'){
-				if ($debug) Debug.write("Somebody wants to share AV ",value.client);
-				canvas.currentActivityList.addAudioAndVideoRequest(value.client,value.message[1]);
-			} else if (value.message[0]=='hideActivityObj'){
-				if ($debug) Debug.write("Somebody wants to hideActivityObj ",value.client);
-				canvas.currentActivityList.hideActivityObj(value);
-			} else if (value.message[0]=='applyForMuteOn'){
-				canvas.currentActivityList.applyForMuteOn(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForMuteOff'){
-				canvas.currentActivityList.applyForMuteOff(value.client,value.message[1]);
-			} else if (value.message[0]=='applyForGiveExclusiveAudioOn'){
-				canvas.currentActivityList.applyForGiveExclusiveAudioOn(value.client,value.message[1]);
 			} else if (value.message[0] == 'personal') {
 				var pSID = value.client.publicSID;
 				var vo = canvas._videocontainer._participants.getUserListItemByPublicSID(pSID);
