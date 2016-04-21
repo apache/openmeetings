@@ -62,6 +62,12 @@ import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
+import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.wicket.Application;
+import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
+import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -232,6 +238,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					client.setStartStreaming(false);
 					//Send message to all users
 					sendMessageToCurrentScope("stopScreenSharingMessage", client, false);
+					broadcastRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
 					
 					returnMap.put("result", "stopSharingOnly");
 				}
@@ -241,8 +248,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					client.setIsRecording(false);
 					
 					returnMap.put("result", "stopRecordingOnly");
-					//Send message to all users
-					sendMessageToCurrentScope("stopRecordingMessage", client, false);
 
 					recordingService.stopRecordAndSave(current.getScope(), client, null);
 				}
@@ -351,6 +356,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						
 						//Send message to all users
 						sendMessageToCurrentScope("newScreenSharing", client, false);
+						broadcastRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStarted, client.getStreamPublishName()));
 					} else {
 						log.warn("Streaming is already started for the client id=" + client.getId() + ". Second request is ignored.");
 					}
@@ -503,50 +509,55 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * This function is kind of private/protected as the client won't be able 
 	 * to call it with proper values.
 	 * 
-	 * @param currentClient
-	 * @param currentScope
+	 * @param client
+	 * @param scope
 	 */
-	public void roomLeaveByScope(Client currentClient, IScope currentScope, boolean removeUserFromSessionList) {
+	public void roomLeaveByScope(Client client, IScope scope, boolean removeUserFromSessionList) {
 		try {
-			log.debug("currentClient " + currentClient);
-			Long roomId = currentClient.getRoomId();
+			log.debug("currentClient " + client);
+			Long roomId = client.getRoomId();
+			
+			if (client.isScreenClient() && client.isStartStreaming()) {
+				//TODO check others/find better way
+				broadcastRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
+			}
 
 			// Log the User
 			conferenceLogDao.add(ConferenceLog.Type.roomLeave,
-					currentClient.getUserId(), currentClient.getStreamid(),
-					roomId, currentClient.getUserip(), "");
+					client.getUserId(), client.getStreamid(),
+					roomId, client.getUserip(), "");
 
 			// Remove User from Sync List's
 			if (roomId != null) {
-				whiteBoardService.removeUserFromAllLists(currentScope, currentClient);
+				whiteBoardService.removeUserFromAllLists(scope, client);
 			}
 
-			log.debug("removing Username " + currentClient.getUsername() + " "
-					+ currentClient.getConnectedSince() + " streamid: "
-					+ currentClient.getStreamid());
+			log.debug("removing Username " + client.getUsername() + " "
+					+ client.getConnectedSince() + " streamid: "
+					+ client.getStreamid());
 
 			// stop and save any recordings
-			if (currentClient.getIsRecording()) {
+			if (client.getIsRecording()) {
 				log.debug("*** roomLeave Current Client is Recording - stop that");
-				if (currentClient.getInterviewPodId() != null) {
+				if (client.getInterviewPodId() != null) {
 					//interview, TODO need better check
-					_stopInterviewRecording(currentClient, currentScope);
+					_stopInterviewRecording(client, scope);
 				} else {
-					recordingService.stopRecordAndSave(currentScope, currentClient, null);
+					recordingService.stopRecordAndSave(scope, client, null);
 
 					// set to true and overwrite the default one cause otherwise no
 					// notification is send
-					currentClient.setIsRecording(true);
+					client.setIsRecording(true);
 				}
 			}
 
 			// Notify all clients of the same currentScope (room) with domain
 			// and room except the current disconnected cause it could throw an exception
-			log.debug("currentScope " + currentScope);
+			log.debug("currentScope " + scope);
 
-			if (currentScope != null && currentScope.getClientConnections() != null) {
+			if (scope != null && scope.getClientConnections() != null) {
 				// Notify Users of the current Scope
-				for (IConnection cons : currentScope.getClientConnections()) {
+				for (IConnection cons : scope.getClientConnections()) {
 					if (cons != null && cons instanceof IServiceCapableConnection) {
 						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
 
@@ -559,16 +570,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 						
 						//Do not send back to sender, but actually all other clients should receive this message swagner 01.10.2009
-						if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+						if (!client.getStreamid().equals(rcl.getStreamid())) {
 							// add Notification if another user isrecording
-							log.debug("###########[roomLeave]");
+							log.debug("###########[roomLeaveByScope]");
 							if (rcl.getIsRecording()) {
 								log.debug("*** roomLeave Any Client is Recording - stop that");
-								recordingService.stopRecordingShowForClient(cons, currentClient);
+								recordingService.stopRecordingShowForClient(cons, client);
 							}
 							
 							boolean isScreen = rcl.isScreenClient();
-							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
+							if (isScreen && client.getPublicSID().equals(rcl.getStreamPublishName())) {
 								//going to terminate screen sharing started by this client
 								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
 								continue;
@@ -578,7 +589,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							}
 							
 							// Send to all connected users
-							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { currentClient },this);
+							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { client },this);
 							log.debug("sending roomDisconnect to " + cons);
 						}
 					}
@@ -586,7 +597,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			if (removeUserFromSessionList) {
-				sessionManager.removeClient(currentClient.getStreamid(), null);
+				sessionManager.removeClient(client.getStreamid(), null);
 			}
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
@@ -2043,7 +2054,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			interviewStatus.put("action", "stop");
 
 			sendMessageToCurrentScope("interviewStatus", interviewStatus, true);
-			sendMessageToCurrentScope("stopRecordingMessage", currentClient, true);
 			return true;
 
 		} catch (Exception err) {
@@ -2199,5 +2209,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		SessionVariablesUtil.initClient(c, publicSID);
 
 		sendMessageToCurrentScope("addNewUser", currentClient, false);
+	}
+	
+	public void broadcastRoom(RoomMessage msg) {
+		log.debug("Sending WebSocket message: {} {}", msg.getType(), msg instanceof TextRoomMessage ? ((TextRoomMessage)msg).getText() : "");
+		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
+		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+		IWebSocketConnectionRegistry registry = settings.getConnectionRegistry();
+		for (IWebSocketConnection wc : registry.getConnections(app)) {
+			if (wc != null && wc.isOpen()) {
+				wc.sendMessage(msg);
+			}
+		}
 	}
 }

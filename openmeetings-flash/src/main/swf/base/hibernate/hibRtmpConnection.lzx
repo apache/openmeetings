@@ -179,7 +179,6 @@
 		client.sendSyncCompleteFlag = this.sendSyncCompleteFlag;
 		client.sendObjectSyncFlag = this.sendObjectSyncFlag;
 		client.sendObjectSyncCompleteFlag = this.sendObjectSyncCompleteFlag;
-		client.startedRecording = this.startedRecording;
 		client.loadWmlToWhiteboardById = this.loadWmlToWhiteboardById;
 		client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
 		client.interviewStatus = this.interviewStatus;
@@ -190,7 +189,6 @@
 		client.setNewModeratorByList = this.setNewModeratorByList;
 		client.newScreenSharing = this.newScreenSharing;
 		client.stopScreenSharingMessage = this.stopScreenSharingMessage;
-		client.stopRecordingMessage = this.stopRecordingMessage;
 		client.stopPublishingMessage = this.stopPublishingMessage;
 		client.newRed5ScreenCursor = this.newRed5ScreenCursor;
 		client.nickNameSet = this.nickNameSet;
@@ -783,12 +781,6 @@
 		]]>
 		</method>
 		
-		<method name="stopRecordingMessage" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			canvas._mymod.recordingUser = null;
-			canvas._mymod.setMessage();				 
-		</method>
-		
 		<method name="stopPublishingMessage" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			canvas._mymod.publishingObj = null;
@@ -1331,12 +1323,6 @@
 		]]>
 		</method>	   
 		
-	<method name="startedRecording" args="value">
-		if ($debug) Debug.write("startedRecording: ",value);
-		canvas._mymod.recordingUser = value;
-		canvas._mymod.setMessage();
-	</method>
-	
 	<netRemoteCallHib name="checkLzRecording" funcname="recordingservice.checkLzRecording" >	  
 		<handler name="ondata" args="value">
 			if ($debug) Debug.write("checkLzRecording: ",value);

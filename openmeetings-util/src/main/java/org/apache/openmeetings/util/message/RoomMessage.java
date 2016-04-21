@@ -31,9 +31,15 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		, roomExit
 		, roomClosed
 		, pollCreated
+		, recordingStarted
+		, recordingStoped
+		, sharingStarted
+		, sharingStoped
 		, rightUpdated
 		, activityRemove
 		, requestRightModerator
+		, requestRightWb
+		, requestRightAv
 	}
 	private final Date timestamp;
 	private final String uid;
