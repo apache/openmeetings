@@ -123,10 +123,17 @@ public class RoomPanel extends BasePanel {
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
+	private String sharingUser = null;
+	private String recordingUser = null;
+	private String publishingUser = null; //TODO add
 	
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
+		//TODO check here and set 
+		//private String recordingUser = null;
+		//private String sharingUser = null;
+		//private String publishingUser = null;
 	}
 
 	@Override
@@ -233,6 +240,29 @@ public class RoomPanel extends BasePanel {
 						if (getUserId() != m.getUserId()) {
 							menu.pollCreated(handler);
 						}
+						break;
+					case recordingStoped:
+						//TODO check recordingUser == ((TextRoomMessage)m).getText();
+						recordingUser = null;
+						menu.update(handler);
+						break;
+					case recordingStarted:
+					{
+						recordingUser = ((TextRoomMessage)m).getText();
+						menu.update(handler);
+					}
+						break;
+					case sharingStoped:
+						//TODO check sharingUser == ((TextRoomMessage)m).getText();
+						sharingUser = null;
+						menu.update(handler);
+						break;
+					case sharingStarted:
+					{
+						sharingUser = ((TextRoomMessage)m).getText();
+						menu.update(handler);
+					}
+						break;
 					case rightUpdated:
 						sidebar.updateUsers(handler);
 						menu.update(handler);
@@ -252,7 +282,7 @@ public class RoomPanel extends BasePanel {
 						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
-						if (isModerator(getUserId(), r.getId())) {
+						if (isModerator(getUserId(), r.getId()) && !isModerator(m.getUserId(), r.getId())) {
 							TextRoomMessage tm = (TextRoomMessage)m;
 							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightModerator), handler);
 						}
@@ -262,6 +292,12 @@ public class RoomPanel extends BasePanel {
 						TextRoomMessage tm = (TextRoomMessage)m;
 						activities.remove(tm.getText(), handler);
 					}
+						break;
+					case requestRightAv:
+						break;
+					case requestRightWb:
+						break;
+					default:
 						break;
 				}
 			}
@@ -394,5 +430,17 @@ public class RoomPanel extends BasePanel {
 
 	public ActivitiesPanel getActivities() {
 		return activities;
+	}
+	
+	public String getSharingUser() {
+		return sharingUser;
+	}
+
+	public String getRecordingUser() {
+		return recordingUser;
+	}
+
+	public String getPublishingUser() {
+		return publishingUser;
 	}
 }

@@ -41,6 +41,8 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -94,7 +96,7 @@ public class RecordingService implements IPendingServiceCallback {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
-			Long room_id = client.getRoomId();
+			Long roomId = client.getRoomId();
 
 			Date now = new Date();
 
@@ -114,7 +116,7 @@ public class RecordingService implements IPendingServiceCallback {
 			recording.setComment(comment);
 			recording.setInterview(isInterview);
 
-			recording.setRoomId(room_id);
+			recording.setRoomId(roomId);
 			recording.setRecordStart(now);
 
 			recording.setWidth(client.getVWidth());
@@ -139,7 +141,7 @@ public class RecordingService implements IPendingServiceCallback {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
 						// Send every user a notification that the recording did start
-						((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { client }, this);
+						scopeApplicationAdapter.broadcastRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
 
 						// If its the recording client we need another type of Meta Data
 						if (rcl.isScreenClient()) {
@@ -304,9 +306,10 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public Long stopRecordAndSave(IScope scope, Client currentClient, Long storedRecordingId) {
+	public Long stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
 		try {
-			log.debug("stopRecordAndSave " + currentClient.getUsername() + "," + currentClient.getUserip());
+			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
+			scopeApplicationAdapter.broadcastRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
 
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
@@ -338,7 +341,7 @@ public class RecordingService implements IPendingServiceCallback {
 				}
 			}
 			// Store to database
-			Long recordingId = currentClient.getRecordingId();
+			Long recordingId = client.getRecordingId();
 
 			// In the Case of an Interview the stopping client does not mean
 			// that its actually the recording client
@@ -350,10 +353,10 @@ public class RecordingService implements IPendingServiceCallback {
 				recordingDao.updateEndTime(recordingId, new Date());
 
 				// Reset values
-				currentClient.setRecordingId(null);
-				currentClient.setIsRecording(false);
+				client.setRecordingId(null);
+				client.setIsRecording(false);
 
-				sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
+				sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
 				log.debug("recordingConverterTask ", recordingConverterTask);
 
 				Recording recording = recordingDao.get(recordingId);

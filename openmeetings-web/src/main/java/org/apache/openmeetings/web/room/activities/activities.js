@@ -21,7 +21,7 @@ function activitiesClosed(activities) {
 	return activities.height() < 24;
 }
 function openActivities() {
-	var activities = $('#activitiesPanel');
+	var activities = $('#activities');
 	if (activitiesClosed(activities)) {
 		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
 		$('.control.block', activities).removeClass('ui-state-highlight');
@@ -29,21 +29,21 @@ function openActivities() {
 	}
 }
 function closeActivities() {
-	var activities = $('#activitiesPanel');
+	var activities = $('#activities');
 	if (!activitiesClosed(activities)) {
 		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
 		activities.animate({height: closedHeight}, 1000);
 	}
 }
 function toggleActivities() {
-	if (activitiesClosed($('#activitiesPanel'))) {
+	if (activitiesClosed($('#activities'))) {
 		openActivities();
 	} else {
 		closeActivities();
 	}
 }
 function hightlightActivities() {
-	var activities = $('#activitiesPanel');
+	var activities = $('#activities');
 	if (activitiesClosed(activities)) {
 		$('.control.block', activities).addClass('ui-state-highlight');
 	}
