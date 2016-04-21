@@ -43,6 +43,7 @@ import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
@@ -134,6 +135,8 @@ public class RoomPanel extends BasePanel {
 		//private String recordingUser = null;
 		//private String sharingUser = null;
 		//private String publishingUser = null;
+		
+		//TODO FIXME conference room should send setBroadCastingFlag(String uid, boolean isBroadcasting, boolean canVideo, Integer interviewPodId) on enter !!!!!!!!!!
 	}
 
 	@Override
@@ -282,9 +285,21 @@ public class RoomPanel extends BasePanel {
 						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
-						if (isModerator(getUserId(), r.getId()) && !isModerator(m.getUserId(), r.getId())) {
+						if (getClient().hasRight(Right.moderator) && !isModerator(m.getUserId(), r.getId())) {
 							TextRoomMessage tm = (TextRoomMessage)m;
 							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightModerator), handler);
+						}
+						break;
+					case requestRightAv:
+						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.audio) && !hasRight(m.getUserId(), r.getId(), Right.video)) {
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightAv), handler);
+						}
+						break;
+					case requestRightWb:
+						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.whiteBoard)) {
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightWb), handler);
 						}
 						break;
 					case activityRemove:
@@ -292,12 +307,6 @@ public class RoomPanel extends BasePanel {
 						TextRoomMessage tm = (TextRoomMessage)m;
 						activities.remove(tm.getText(), handler);
 					}
-						break;
-					case requestRightAv:
-						break;
-					case requestRightWb:
-						break;
-					default:
 						break;
 				}
 			}
@@ -364,8 +373,12 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	public static boolean isModerator(long userId, long roomId) {
+		return hasRight(userId, roomId, Right.moderator);
+	}
+	
+	public static boolean hasRight(long userId, long roomId, Client.Right r) {
 		for (Client c : getRoomUsers(roomId)) {
-			if (c.getUserId() == userId && c.hasRight(Client.Right.moderator)) {
+			if (c.getUserId() == userId && c.hasRight(r)) {
 				return true;
 			}
 		}

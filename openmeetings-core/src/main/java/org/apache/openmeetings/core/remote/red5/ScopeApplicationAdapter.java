@@ -68,6 +68,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -783,39 +784,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 	}
 
-
-	/**
-	 * Adds a Moderator by its publicSID
-	 * 
-	 * @param publicSID
-	 * @return -1
-	 */
-	public long addModerator(String publicSID) {
-		try {
-			log.debug("-----------  addModerator: " + publicSID);
-
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-
-			if (currentClient == null) {
-				return -1L;
-			}
-			Long roomId = currentClient.getRoomId();
-
-			currentClient.setIsMod(true);
-			// Put the mod-flag to true for this client
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
-
-			List<Client> currentMods = sessionManager.getCurrentModeratorByRoom(roomId);
-			
-			//Send message to all users
-			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
-
-		} catch (Exception err) {
-			log.error("[addModerator]", err);
-		}
-		return -1L;
-	}
-
 	@SuppressWarnings("unchecked")
 	public void setNewCursorPosition(Object item) {
 		try {
@@ -851,32 +819,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
 		} catch (Exception err) {
-			log.error("[addModerator]", err);
-		}
-		return -1L;
-	}
-
-	public long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer interviewPodId) {
-		try {
-			log.debug("-----------  setBroadCastingFlag: " + publicSID);
-
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-
-			if (currentClient == null) {
-				return -1L;
-			}
-
-			currentClient.setIsBroadcasting(value);
-			currentClient.setCanVideo(value && canVideo); //set to false in case NOT broadcasting
-			currentClient.setInterviewPodId(interviewPodId);
-
-			// Put the mod-flag to true for this client
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
-		    
-			// Notify all clients of the same scope (room)
-			sendMessageToCurrentScope("setNewBroadCastingFlag", currentClient, true);
-		} catch (Exception err) {
-			log.error("[setBroadCastingFlag]", err);
+			log.error("[removeModerator]", err);
 		}
 		return -1L;
 	}
@@ -1457,14 +1400,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			log.debug("sendMessageByRoomAndDomain " + roomId);
 
-			IScope globalScope = getContext().getGlobalScope();
-			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
+			IScope scope = getRoomScope(roomId.toString());
 
-			log.debug("webAppKeyScope " + webAppKeyScope);
-
-			IScope scopeHibernate = webAppKeyScope.getScope(roomId.toString());
-
-			new MessageSender(scopeHibernate, "newMessageByRoomAndDomain", message) {
+			new MessageSender(scope, "newMessageByRoomAndDomain", message) {
 				@Override
 				public boolean filter(IConnection conn) {
 					IClient client = conn.getClient();
@@ -1658,6 +1596,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	public void sendMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
 		sendMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
+	}
+	
+	public void sendToScope(final Long roomId, String method, Object obj) {
+		new MessageSender(getRoomScope("" + roomId), method, obj) {
+			@Override
+			public boolean filter(IConnection conn) {
+				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				return rcl.isScreenClient()
+						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
+			}
+		}.start();
 	}
 	
 	/**
@@ -1862,11 +1811,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 	public void sendMessageWithClientByPublicSID(Object message, String publicSID) {
 		try {
-			// ApplicationContext appCtx = getContext().getApplicationContext();
-			IScope globalScope = getContext().getGlobalScope();
-
-			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
-
 			if (publicSID == null) {
 				log.warn("'null' publicSID was passed to sendMessageWithClientByPublicSID");
 				return;
@@ -1878,20 +1822,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (currentClient == null) {
 				throw new Exception("Could not Find RoomClient on List publicSID: " + publicSID);
 			}
-			// default Scope Name
-			String scopeName = "hibernate";
-			if (currentClient.getRoomId() != null) {
-				scopeName = currentClient.getRoomId().toString();
-			}
-
-			IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
+			IScope scope = getRoomScope("" + currentClient.getRoomId());
 
 			// log.debug("scopeHibernate "+scopeHibernate);
 
-			if (scopeHibernate != null) {
+			if (scope != null) {
 				// Notify the clients of the same scope (room) with userId
 
-				for (IConnection conn : webAppKeyScope.getScope(scopeName).getClientConnections()) {
+				for (IConnection conn : scope.getClientConnections()) {
 					IClient client = conn.getClient();
 					if (SessionVariablesUtil.isScreenClient(client)) {
 						// screen sharing clients do not receive events
@@ -2089,24 +2027,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	public IScope getRoomScope(String room) {
-		try {
-
+		if (Strings.isEmpty(room)) {
+			return null;
+		} else {
 			IScope globalScope = getContext().getGlobalScope();
 			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
 
-			String scopeName = "hibernate";
-			// If set then its a NON default Scope
-			if (room.length() != 0) {
-				scopeName = room;
-			}
-
-			IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
-
-			return scopeHibernate;
-		} catch (Exception err) {
-			log.error("[getRoomScope]", err);
+			return webAppKeyScope.getScope(room);
 		}
-		return null;
 	}
 
     /*

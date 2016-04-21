@@ -220,8 +220,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 	
-	public static boolean isUserOnline(String uid) {
-		return ONLINE_USERS.containsKey(uid);
+	public static Client getOnlineClient(String uid) {
+		return uid == null ? null : ONLINE_USERS.get(uid);
 	}
 	
 	public static boolean isUserOnline(Long userId) {
