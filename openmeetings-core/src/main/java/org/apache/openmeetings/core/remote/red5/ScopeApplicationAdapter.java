@@ -68,6 +68,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
@@ -177,7 +178,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 		Client rcm = new Client();
 		rcm.setStreamid(conn.getClient().getId());
-		rcm.setScope(conn.getScope().getName());
+		StringValue scn = StringValue.valueOf(conn.getScope().getName());
+		rcm.setScope(scn.toString());
+		rcm.setRoomId(scn.toOptionalLong());
 		rcm.setUserport(conn.getRemotePort());
 		rcm.setUserip(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
