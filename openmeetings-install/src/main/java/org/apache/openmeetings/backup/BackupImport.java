@@ -453,8 +453,9 @@ public class BackupImport {
 				if (a.getOwner() != null && a.getOwner().getId() == null) {
 					a.setOwner(null);
 				}
-				if (a.getRoom() != null && a.getRoom().getId() == null) {
-					a.setRoom(null);
+				if (a.getRoom() == null || a.getRoom().getId() == null) {
+					log.warn("Appointment without room was found, skipping: {}", a);
+					continue;
 				}
 				a = appointmentDao.update(a, null, false);
 				appointmentsMap.put(appId, a.getId());
@@ -481,6 +482,7 @@ public class BackupImport {
 		{
 			List<Server> list = readList(simpleSerializer, f, "servers.xml", "servers", Server.class, true);
 			for (Server s : list) {
+				s.setId(null);
 				serverDao.update(s, null);
 			}
 		}
@@ -674,7 +676,7 @@ public class BackupImport {
 	}
 	
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
-		List<T> list = new ArrayList<T>();
+		List<T> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
 			final String msg = fileName + " missing";
@@ -711,8 +713,9 @@ public class BackupImport {
 		return null;
 	}
 	
+	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
-		List<FileExplorerItem> list = new ArrayList<FileExplorerItem>();
+		List<FileExplorerItem> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
@@ -790,8 +793,9 @@ public class BackupImport {
 		return list;
 	}
 	
+	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
-		List<Recording> list = new ArrayList<Recording>();
+		List<Recording> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
@@ -865,9 +869,9 @@ public class BackupImport {
 		
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
-        xformer.transform(new DOMSource(doc), new StreamResult(sw));
-        
-		List<MeetingMember> list = new ArrayList<MeetingMember>();
+		xformer.transform(new DOMSource(doc), new StreamResult(sw));
+
+		List<MeetingMember> list = new ArrayList<>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle external attendee's firstname, lastname, email
 		InputNode listNode = root.getNext();
@@ -967,7 +971,7 @@ public class BackupImport {
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
 		xformer.transform(new DOMSource(doc), new StreamResult(sw));
 
-		List<User> list = new ArrayList<User>();
+		List<User> list = new ArrayList<>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
 		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle old om_time_zone, level_id, status
