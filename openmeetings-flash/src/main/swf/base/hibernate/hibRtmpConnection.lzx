@@ -1010,25 +1010,25 @@
 			}
 			if ($debug) Debug.write("drawAllowStatus changes ###### ");
 			if (client.publicSID == canvas.publicSID) {
-				if ($debug) Debug.write("Its about You ", value);
+				if ($debug) Debug.write("Its about You ", client);
 				canvas.setAttribute("isAllowedToDraw", client.canDraw);
 				canvas.setAttribute("isAllowedToScreenShare", client.canShare);
 				canvas.setAttribute("isAllowedToRemoteControl", client.canRemote);
 				canvas.setAttribute("ismoderator", client.isMod);
 				
-				canvas.commonVideoViewContent.toggleVideo(value.canVideo);
-				canvas.setAttribute("isBroadCasting", value.isBroadcasting);
-				canvas.setAttribute("canVideo", value.canVideo);
+				canvas.commonVideoViewContent.toggleVideo(client.canVideo);
+				canvas.setAttribute("isBroadCasting", client.isBroadcasting);
+				canvas.setAttribute("canVideo", client.canVideo);
 				
-				if (value.isBroadcasting) {
+				if (client.isBroadcasting) {
 					if (canvas.thishib.modus == "interview") {
-						canvas._drawarea.newInterviewStarting(value);
+						canvas._drawarea.newInterviewStarting(client);
 					} else {
 						canvas.commonVideoViewContent.createEditRecordStream(false, false, -1);
 					}
 				}
 			}
-			canvas.setAttribute("lastBroadCastingUser",value);
+			canvas.setAttribute("lastBroadCastingUser", client);
 		]]>
 		</method>
 		
