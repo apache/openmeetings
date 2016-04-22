@@ -41,7 +41,6 @@
     <include href="turnoverlist/" />
     <include href="turnoverlistpaged/" />
     <include href="simplevaluelist/" />
-    <include href="upload/" /> 
     <include href="presenter/" />
     <include href="lps/" />
     <include href="conferencebox/" />

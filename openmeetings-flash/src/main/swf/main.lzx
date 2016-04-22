@@ -43,7 +43,6 @@
 	<include href="base/" /><!-- attributes,methods,datasets,are moved into /base -->
 	<include href="resources/" /> 
 	<include href="modules/" />
-	<include href="testVideoObject.lzx" />
 	<include href="video/" />
 	<include href="screensharing/" />
 	<include href="audioVideoTest/" />

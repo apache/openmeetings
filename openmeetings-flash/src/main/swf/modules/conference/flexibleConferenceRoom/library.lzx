@@ -19,7 +19,6 @@
   
 -->
 <library>
-
 	<resource name="userstatus_multiframe_rsc">
 		<frame src="resources/bullet_ball_glass_green.png"/> <!-- user -->
 		<frame src="resources/bullet_ball_glass_yellow.png"/> <!-- mod -->
@@ -64,15 +63,10 @@
 		<frame src="resources/sidebar_open.png" />
 	</resource>
 	
-	<include href="innerlistViewEventUserListTable.lzx" />
-	<include href="moderationMiniIconsEventUserList.lzx" />
 	<include href="roomSidebar/" />
 	<include href="appointmentNotificationPopUp.lzx" />
-	<include href="baseRoomInnerList.lzx" />
     <include href="baseConferenceRoom.lzx" />
     <include href="flexibleConferenceRoom.lzx" />
     <include href="restrictedConferenceRoom.lzx" />
     <include href="interviewConferenceRoom.lzx" />
-    
-    
 </library>

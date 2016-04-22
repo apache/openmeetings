@@ -45,6 +45,8 @@
 	
 	<include href="panels/" />
 	
+	<include href="interviewVideoBox.lzx" />
+	<include href="interviewWhiteboard.lzx" />
 	<include href="basePropertyPanelWhiteboard.lzx" />
     <include href="fixedFileExplorerWhiteBoard.lzx" />
     <include href="fixedFileExplorerWhiteboardPanel.lzx" />
