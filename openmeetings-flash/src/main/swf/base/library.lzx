@@ -23,7 +23,6 @@
     <include href="components/" /> 
     <include href="hibernate/" />
     <include href="contentviews/" />
-    <include href="navi/" />
 
 	<!-- for main.lzx -->
 	<include href="externalJavaScript.lzx" />

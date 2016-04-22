@@ -28,8 +28,7 @@
     <!--
         User Panel and Participants List
      -->
-    <interviewRoomSidebar name="_sidePanel" 
-                      listType="eventUserListTableWithNames" />
+    <baseRoomSidebar name="_sidePanel"/>
     
     <!--
         Whiteboard in Interview Room Type those are the Video Pods

@@ -21,7 +21,7 @@
 <library>
 
 <class name="flexibleConferenceRoom" extends="baseConferenceRoom">
-    <conferenceRoomSidebar name="_sidePanel" />
+    <baseRoomSidebar name="_sidePanel" />
     
     <view name="_videoviewcontent_hideWhiteboard" y="0" x="${ parent._sidePanel.width }"
 		  width="${canvas.width-parent._sidePanel.width}" height="${ canvas.height - 5 + 28 }" clip="true">

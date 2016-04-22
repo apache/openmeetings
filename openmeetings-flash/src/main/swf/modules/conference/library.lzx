@@ -41,14 +41,9 @@
 
 	<include href="whiteboard/" /> 
  	
-   	<include href="tabcontent/" />
    	<include href="popups/" />
    	<include href="moderation/" />
    	
-    <include href="participants/" /> 
-    <include href="interviewuserlist/" /> 
-    
-    <include href="restricted/" />
     <include href="sip/" />
     
     <include href="flexibleConferenceRoom/" />

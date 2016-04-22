@@ -8,7 +8,7 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-      http://www.apache.org/licenses/LICENSE-2.0
+	  http://www.apache.org/licenses/LICENSE-2.0
   
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
@@ -20,77 +20,189 @@
 -->
 <library>
 
-<class name="baseRoomSidebar" extends="view" width="280" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" 
-		height="${ canvas.height }" y="0" clip="true">
+<class name="baseRoomSidebar" extends="view" width="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" 
+		height="${ canvas.height }" y="0">
 	
-	<attribute name="selected" value="null" />
-	<attribute name="isOpen" value="true" type="boolean"/>
-	<attribute name="listType" value="eventUserListTable" type="string" />
-	
-	<method name="toggleStatus">
-		this._minimizeSidebar.bringToFront();
-		if (this.isOpen) {
-			this._doClose.setAttribute('started', true);
-			this.isOpen = false;
-			this._minimizeSidebar._icon.setAttribute("frame", 2);
-			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid", 857);
-		} else {
-			this._doOpen.setAttribute('started', true);
-			this.isOpen = true;
-			this._minimizeSidebar._icon.setAttribute("frame", 1);
-			this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid", 856);
-		}
-	</method>
-	
-	<view name="borderBarTop" y="0"
-				width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
-	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
-	<view name="borderBarBottom" y="34"
-			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" /> 
-	
-	<view name="_head" y="1" width="${ parent.width-10 }" height="32" layout="axis:x;spacing:2;inset:2" >
+	<handler name="oninit">
+		//set modus
+		canvas.thishib.modus = canvas.currentRoomObj.type;
+		
+		//set reference, this reference will be cleared at *ontabcontenctleave* event
+		canvas._videocontainer = this;
+		
+		this.getRoomModeratorsByRoomId.doCall();
+	</handler>
+
+	<view name="_filearea" x="0" y="0" height="${ parent.height }" width="1">
+		<attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
+		<attribute name="currentDragItem" value="null" />
 		<handler name="oninit">
+			canvas.currentImagesListdraw = this;
+		</handler>
+	</view>
+
+	<netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId"
+					  remotecontext="$once{ canvas.thishib }" >  
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>	
+		<netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+		<handler name="ondata" args="value">
 		<![CDATA[
-			for (var eg in this.subviews) {
-				this.subviews[eg].deselect();
+			if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+			canvas.becomeSuperModerator = false;
+			
+			parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
+			canvas.becomeSuperModerator = canvas.becomemoderator;
+			
+			if (!canvas.becomeSuperModerator) {
+				for (var i=0;i<value.length;i++) {
+					
+					if (value[i].user.userId == canvas.userId) {
+						parent.setRoomValues.applyDefaultModeration = true;
+						canvas.becomeSuperModerator = value[i].isSuperModerator;
+						if ($debug) Debug.info("Make this User to an Moderator");
+						break;
+					}
+					
+				}
 			}
-			if (!canvas.isInterview && !canvas.currentRoomObj.hideFilesExplorer && canvas.currentRoomObj.filesOpened) {
-				this.filesTabButton.doSelection();
-			} else {
-				this.userTabButton.doSelection();
-			}
+			
+			if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
+			if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
+			
+			canvas.currentusercolor = canvas.getColorForUser();
+			
+			if ($debug) Debug.write(hib.userobject); 
+			this.parent.setRoomValues.doCall();
 		]]>
 		</handler>
+	</netRemoteCallHib>	 
 
-		<tabButtonMain name="userTabButton" height="$once{ parent.height }" width="$once{ (parent.width-6)/2 }"
-				currentIconRsc="users_tab_btn" labelid="613" />
-		
-		<tabButtonMain name="filesTabButton" currentIconRsc="files_tab_btn" height="$once{ parent.height }" 
-				labelid="614" width="$once{ (parent.width-6)/2 }"
-				visible="${ !canvas.isInterview &amp;&amp; !canvas.currentRoomObj.hideFilesExplorer }"/>
-	</view>
-	
-	<fileExplorer name="_files" y="22" width="$once{ parent.width-12 }" height="${ parent.height-222 }" visible="false" />
-	
-	<view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1" bgcolor="0xE0E1EB" height="${ parent.height-1 }">
-		<handler name="onclick">
-			if (!canvas.isInterview) {
-				parent.toggleStatus();
-			}
-		</handler>
-		
-		<view width="${ parent.width }" height="$once{ parent.height }" bgcolor="0xE0E1EB" />
+	<netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+		<attribute name="applyDefaultModeration" value="false" type="boolean" />
+		<attribute name="groupId" value="0" type="number" />
+		<netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+		<netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
+		<netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
+		<netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
+		<handler name="ondata" args="roomStatus">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("setRoomValues1: ",value);
+			//if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
 			
-		<view name="_icon" resource="sidebar_tab_btn" y="0" visible="${ !canvas.isInterview }">
-			<handler name="onclick">
-				parent.parent.toggleStatus();
-			</handler>
-			<labelTooltip name="_labelTooltip" labelid="856" />
-		</view>
-	</view>
+			//if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+			
+			if (roomStatus.browserStatus.browserInited) {
+				var tObj = new Object();
+				tObj[0] = "newBrowserURL";
+				tObj[1] = roomStatus.browserStatus.currentURL;
+				canvas.startBrowser(tObj);
+			}
+			
+			var value = roomStatus.clientList;
+			
+			for (var i = 0; i < value.length; ++i){
+				if ( value[i].streamid == canvas.streamid ) {
+					canvas.isAllowedToDraw = value[i].canDraw;
+				}
+				parent.addItemInitial(value[i]);
+			}
+			parent.batchCreateVideo(value);
+		]]>
+		</handler>  
+	</netRemoteCallHib>
+
+	<method name="batchCreateVideo" args="clients">
+	<![CDATA[
+		if ($debug) Debug.write("interval 0 :: ", clients.length);
+		canvas.commonVideoViewContent.batchCreateVideo(canvas.streamid, clients);
+			
+		//this content must be inited _after_ setting the default values
+		canvas.thishib.getCurrentModeratorList.doCall();
+		//FIXME Issue-1076
+		canvas.thishib.checkLzRecording.doCall();
+	]]>
+	</method>
+
+	<!-- invoked if another client logs into the room 
+	after choosing devices -->	 
+	<method name="setAVSettingsToClient" args="rcl">
+		canvas.commonVideoViewContent.setAVSettingsToClient(rcl);
+	</method> 
+
+	<method name="addItemInitial" args="object">
+	<![CDATA[
+		//if ($debug) Debug.write("initializeStreams addItem: ", object);
+	]]>
+	</method>
+
+	<method name="receiveExclusiveAudioFlag" args="publicSID">
+	<![CDATA[
+		var vList = this._participants._table.renderList;
+		for (var i = 0;i < vList.length; ++i) {
+			var item = vList[i];
+			var rcl = new Object();
+
+			rcl.publicSID = item.publicSID;
+			rcl.micMuted = !(publicSID == item.publicSID);
+			canvas.setMuteStatus(rcl);
+		}
+	]]>
+	</method>
+
+
+	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+	<![CDATA[
+		if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+		
+		//Do init only in case this stream is NOT the same as we are
+		if (streamid != canvas.streamid) {
+			canvas.commonVideoViewContent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
+		}
+	]]>
+	</method>
 	
-	<animator name="_doOpen" attribute="width" to="$once{ parent.width }" duration="750" started="false" />
-	<animator name="_doClose" attribute="width" to="10" duration="750" started="false" />
+	<method name="addClientItem" args="connectedSince,isMod,streamid,username,roomId,formatedDate,position,color,object">
+	<![CDATA[
+		if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,roomId,formatedDate);
+
+		if (canvas.publicSID != object.publicSID){
+			canvas.commonVideoViewContent.createVideoObject(object.publicSID, false, -1, object);
+		}
+	]]>
+	</method>
+		
+	<!--
+		invoked whenever a User starts to Stream Video in this Room, 
+		interviewPodId has only a meaning in the Room Type Interview
+	 -->		
+	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight">
+		canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
+	</method>
+
+	<method name="closeStreamClient" args="publicSID">
+		canvas.commonVideoViewContent.closeStreamClient(publicSID);
+	</method>
+
+	<method name="resetAllValues">
+		canvas.commonVideoViewContent.resetAllValues();
+	</method>
+	
+	<method name="removeVideoByUser" args="userObject">
+		canvas.commonVideoViewContent.removeVideoByUser(userObject.publicSID);
+	</method>
+	
+	<!--- 
+		stops the streaming but and destroys the view
+		@param int broadcastId broadcastId
+	 -->
+	<method name="disconnectclient" args="publicSID">
+		canvas.commonVideoViewContent.disconnectclient(publicSID);
+	</method>
+
+	<method name="updateMuteStatusVideoView" args="roomClient">
+		canvas.commonVideoViewContent.updateMuteStatusVideoView(roomClient);
+	</method>
 </class>
 
 </library>

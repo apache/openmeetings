@@ -82,6 +82,14 @@
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
 }
+.room.sidebar.left .user.header {
+	height: 30px;
+	padding-left: 15px;
+}
+.room.sidebar.left .user.header .ui-icon {
+	margin-top: 5px;
+	margin-left: 5px;
+}
 .room.sidebar.left .user.list {
 	height: 100%;
 	overflow-y: auto;

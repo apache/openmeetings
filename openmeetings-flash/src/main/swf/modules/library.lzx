@@ -22,7 +22,6 @@
 	
 	<include href="conference/" />
 	<include href="invitation/" />
-	<include href="dashboard/" />
     <include href="sipintegration/" />
 	<include href="lzrecordcontent" />
 </library>

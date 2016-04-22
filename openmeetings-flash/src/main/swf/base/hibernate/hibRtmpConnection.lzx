@@ -1004,10 +1004,6 @@
 		
 		<method name="clientUpdated" args="client">
 		<![CDATA[
-			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(client.publicSID);
-			if (!!u && !!client) {
-				u.update(client);
-			}
 			if ($debug) Debug.write("drawAllowStatus changes ###### ");
 			if (client.publicSID == canvas.publicSID) {
 				if ($debug) Debug.write("Its about You ", client);

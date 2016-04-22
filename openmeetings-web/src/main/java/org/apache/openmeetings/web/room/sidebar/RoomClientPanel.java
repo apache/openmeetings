@@ -52,11 +52,14 @@ public class RoomClientPanel extends Panel {
 			status = "status-user";
 			statusTitle = "677";
 		}
+		//FIXME TODO add 'typingActivity'
+		//FIXME TODO add ability to change 'first/last name'
 		add(new WebMarkupContainer("status").add(AttributeAppender.append("class", status), AttributeAppender.replace("title", getString(statusTitle))));
 		User u = getBean(UserDao.class).get(c.getUserId());
 		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
+		actions.add(new RoomRightPanel("rights"));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		if (room.getClient() != null) {
 			actions.setVisible(room.getClient().hasRight(Right.moderator));
