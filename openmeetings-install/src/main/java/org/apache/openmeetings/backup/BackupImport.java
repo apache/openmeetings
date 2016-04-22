@@ -444,8 +444,9 @@ public class BackupImport {
 				if (a.getOwner() != null && a.getOwner().getId() == null) {
 					a.setOwner(null);
 				}
-				if (a.getRoom() != null && a.getRoom().getId() == null) {
-					a.setRoom(null);
+				if (a.getRoom() == null || a.getRoom().getId() == null) {
+					log.warn("Appointment without room was found, skipping: {}", a);
+					continue;
 				}
 				a = appointmentDao.update(a, null, false);
 				appointmentsMap.put(appId, a.getId());
@@ -472,6 +473,7 @@ public class BackupImport {
 		{
 			List<Server> list = readList(simpleSerializer, f, "servers.xml", "servers", Server.class, true);
 			for (Server s : list) {
+				s.setId(null);
 				serverDao.update(s, null);
 			}
 		}
