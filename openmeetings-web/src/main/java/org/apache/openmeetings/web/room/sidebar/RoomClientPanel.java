@@ -59,7 +59,7 @@ public class RoomClientPanel extends Panel {
 		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
-		actions.add(new RoomRightPanel("rights"));
+		actions.add(new RoomRightPanel("rights", c, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		if (room.getClient() != null) {
 			actions.setVisible(room.getClient().hasRight(Right.moderator));
