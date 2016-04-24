@@ -16,45 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.activities;
+package org.apache.openmeetings.web.room.sidebar.icon;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Right;
+import org.apache.openmeetings.web.room.RoomPanel;
 
-public class Activity implements Serializable {
+public class ScreenShareRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	public enum Type {
-		roomEnter
-		, roomExit
-		, reqRightModerator
-		, reqRightAv
-		, reqRightWb
-	}
-	private final String uid;
-	private final Long sender;
-	private final Date created;
-	private final Type type;
 	
-	public Activity(String uid, Long sender, Type type) {
-		this.uid = uid;
-		this.sender = sender;
-		this.type = type;
-		this.created = new Date();
+	public ScreenShareRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.share, room);
+		mainCssClass = "screen-share-right ";
+		Room r = room.getRoom();
+		setVisible(Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing));
 	}
 
-	public String getUid() {
-		return uid;
-	}
-
-	public Long getSender() {
-		return sender;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public Date getCreated() {
-		return created;
+	@Override
+	protected String getTitle() {
+		String title;
+		if (client.hasRight(right)) {
+			title = self ? "1071" : "1068";
+		} else {
+			title = "1072";
+		}
+		return getString(title);
 	}
 }
