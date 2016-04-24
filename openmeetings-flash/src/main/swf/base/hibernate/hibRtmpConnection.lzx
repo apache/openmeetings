@@ -1004,7 +1004,7 @@
 		
 		<method name="clientUpdated" args="client">
 		<![CDATA[
-			if ($debug) Debug.write("drawAllowStatus changes ###### ");
+			if ($debug) Debug.write("clientUpdated changes ###### ");
 			if (client.publicSID == canvas.publicSID) {
 				if ($debug) Debug.write("Its about You ", client);
 				canvas.setAttribute("isAllowedToDraw", client.canDraw);
@@ -1022,9 +1022,13 @@
 					} else {
 						canvas.commonVideoViewContent.createEditRecordStream(false, false, -1);
 					}
+					canvas.setAttribute("lastBroadCastingUser", client);
+				} else {
+					if (canvas.inner.editRecordStream != null) {
+						canvas.inner.editRecordStream.destroy();
+					}
 				}
 			}
-			canvas.setAttribute("lastBroadCastingUser", client);
 		]]>
 		</method>
 		

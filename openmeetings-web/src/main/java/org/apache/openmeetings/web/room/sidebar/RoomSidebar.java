@@ -46,6 +46,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -54,7 +55,7 @@ import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, webAppRootKey);
-	public static final String FUNC_REQUEST_RIGHT = "requestRight";
+	public static final String FUNC_CHANGE_RIGHT = "changeRight";
 	public static final String PARAM_RIGHT = "right";
 	public static final String PARAM_UID = "uid";
 	private final RoomPanel room;
@@ -80,10 +81,28 @@ public class RoomSidebar extends Panel {
 		protected void respond(AjaxRequestTarget target) {
 			try {
 				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				if (Strings.isEmpty(uid)) {
+					return;
+				}
 				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString()); 
 				if (room.getClient().hasRight(Right.moderator)) {
 					Client client = getOnlineClient(uid);
-					room.allowRight(target, client, right);
+					if (client == null) {
+						return;
+					}
+					if (client.hasRight(right)) {
+						if (Right.audio == right) {
+							room.denyRight(target, client, right, Right.video);
+						} else {
+							room.denyRight(target, client, right);
+						}
+					} else {
+						if (Right.video == right) {
+							room.allowRight(target, client, Right.audio, right);
+						} else {
+							room.allowRight(target, client, right);
+						}
+					}
 				} else {
 					room.requestRight(target, RoomMessage.Type.requestRightModerator);
 				}
@@ -144,7 +163,7 @@ public class RoomSidebar extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_REQUEST_RIGHT, requestRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_REQUEST_RIGHT)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_CHANGE_RIGHT, requestRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_CHANGE_RIGHT)));
 	}
 	
 	private ListView<Client> updateUsers() {

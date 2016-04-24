@@ -216,6 +216,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	public static void removeOnlineUser(Client c) {
 		if (c != null) {
+			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
 			ONLINE_USERS.remove(c.getUid());
 		}
 	}
@@ -300,6 +301,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static Client removeUserFromRoom(Client c) {
+		log.debug("Removing room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {
 			Set<Client> clients = ROOMS.get(c.getRoomId());
 			if (clients != null) {

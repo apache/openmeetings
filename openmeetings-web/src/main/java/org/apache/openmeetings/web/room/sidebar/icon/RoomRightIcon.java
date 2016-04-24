@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_REQUEST_RIGHT;
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_CHANGE_RIGHT;
 
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
@@ -32,6 +32,7 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 	private static final String CLS_CLICKABLE = "clickable ";
 	private static final String CLS_GRANTED = "granted ";
 	private static final String ICON_CLASS = "ui-icon align-left ";
+	private final RoomPanel room;
 	protected final Right right;
 	protected final boolean self;
 	protected final Client client;
@@ -39,6 +40,7 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 	
 	public RoomRightIcon(String id, Client client, Right right, RoomPanel room) {
 		super(id);
+		this.room = room;
 		this.client = client;
 		this.right = right;
 		self = room.getClient().getUid().equals(client.getUid());
@@ -62,9 +64,11 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 		cls.append(mainCssClass);
 		if (hasRight()) {
 			cls.append(CLS_GRANTED);
-		} else {
+		}
+		if (!self && room.getClient().hasRight(Right.moderator)) {
+			//request/remove
 			cls.append(CLS_CLICKABLE);
-			add(AttributeAppender.replace("onclick", String.format("%s('%s', '%s');", FUNC_REQUEST_RIGHT, right.name(), client.getUid())));
+			add(AttributeAppender.replace("onclick", String.format("%s('%s', '%s');", FUNC_CHANGE_RIGHT, right.name(), client.getUid())));
 		}
 		add(AttributeAppender.replace("title", getTitle()));
 		add(AttributeAppender.replace("class", cls));
