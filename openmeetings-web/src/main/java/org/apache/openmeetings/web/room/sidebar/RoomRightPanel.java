@@ -18,14 +18,50 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.sidebar.icon.AudioRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.ModeratorRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.RemoteControlRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.ScreenShareRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.VideoRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.WhiteboardRightIcon;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class RoomRightPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private final ModeratorRightIcon rightModer;
+	private final WhiteboardRightIcon rightWb;
+	private final ScreenShareRightIcon rightScreen;
+	private final RemoteControlRightIcon rightRemote;
+	private final AudioRightIcon rightAudio;
+	private final VideoRightIcon rightVideo;
 
-	public RoomRightPanel(String id) {
+	public RoomRightPanel(String id, Client client, RoomPanel room) {
 		super(id);
 		setRenderBodyOnly(true);
 		setOutputMarkupId(true);
+		add(rightModer = new ModeratorRightIcon("right-moder", client, room));
+		add(rightWb = new WhiteboardRightIcon("right-wb", client, room));
+		add(rightScreen = new ScreenShareRightIcon("right-screen-share", client, room));
+		add(rightRemote = new RemoteControlRightIcon("right-remote-control", client, room));
+		add(rightAudio = new AudioRightIcon("right-audio", client, room));
+		add(rightVideo = new VideoRightIcon("right-video", client, room));
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		update(null);
+	}
+	
+	public void update(IPartialPageRequestHandler handler) {
+		rightModer.update(handler);
+		rightWb.update(handler);
+		rightScreen.update(handler);
+		rightRemote.update(handler);
+		rightAudio.update(handler);
+		rightVideo.update(handler);
 	}
 }
