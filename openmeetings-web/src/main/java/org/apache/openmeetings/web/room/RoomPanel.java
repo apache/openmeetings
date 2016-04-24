@@ -437,6 +437,17 @@ public class RoomPanel extends BasePanel {
 		for (Right right : rights) {
 			client.getRights().add(right);
 		}
+		broadcast(target, client);
+	}
+
+	public void denyRight(AjaxRequestTarget target, Client client, Right... rights) {
+		for (Right right : rights) {
+			client.getRights().remove(right);
+		}
+		broadcast(target, client);
+	}
+
+	public void broadcast(AjaxRequestTarget target, Client client) {
 		broadcast(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);
 	}
