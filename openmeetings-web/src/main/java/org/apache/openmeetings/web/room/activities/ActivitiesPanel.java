@@ -40,7 +40,6 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -102,24 +101,17 @@ public class ActivitiesPanel extends BasePanel {
 							Client client = getOnlineClient(uid);
 							if (room.getClient().hasRight(Client.Right.moderator) && client != null && roomId == client.getRoomId()) {
 								switch (a.getType()) {
-									case requestRightModerator:
-										client.getRights().add(Right.moderator);
+									case reqRightModerator:
 										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
-										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
-										RoomBroadcaster.sendUpdatedClient(client);
+										room.allowRight(target, client, Right.moderator);
 										break;
-									case requestRightAv:
-										client.getRights().add(Right.audio);
-										client.getRights().add(Right.video);
+									case reqRightAv:
 										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
-										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
-										RoomBroadcaster.sendUpdatedClient(client);
+										room.allowRight(target, client, Right.audio, Right.video);
 										break;
-									case requestRightWb:
-										client.getRights().add(Right.whiteBoard);
+									case reqRightWb:
 										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
-										broadcast(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
-										RoomBroadcaster.sendUpdatedClient(client);
+										room.allowRight(target, client, Right.whiteBoard);
 										break;
 									default:
 										break;
@@ -162,7 +154,7 @@ public class ActivitiesPanel extends BasePanel {
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("1367"), df.get().format(a.getCreated()));
 				}
 					break;
-				case requestRightModerator:
+				case reqRightModerator:
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
@@ -171,7 +163,7 @@ public class ActivitiesPanel extends BasePanel {
 				}
 				//ask question 693
 					break;
-				case requestRightAv:
+				case reqRightAv:
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("695"), df.get().format(a.getCreated()));
@@ -179,7 +171,7 @@ public class ActivitiesPanel extends BasePanel {
 					decline.setVisible(true);
 				}
 					break;
-				case requestRightWb:
+				case reqRightWb:
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("694"), df.get().format(a.getCreated()));
@@ -195,11 +187,11 @@ public class ActivitiesPanel extends BasePanel {
 		
 		private String getClass(Activity a) {
 			switch (a.getType()) {
-				case requestRightModerator:
+				case reqRightModerator:
 					return "ui-state-highlight";
-				case requestRightAv:
+				case reqRightAv:
 					return "ui-state-highlight";
-				case requestRightWb:
+				case reqRightWb:
 					return "ui-state-highlight";
 				case roomEnter:
 				case roomExit:

@@ -268,19 +268,19 @@ public class RoomPanel extends BasePanel {
 					case requestRightModerator:
 						if (getClient().hasRight(Right.moderator) && !isModerator(m.getUserId(), r.getId())) {
 							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightModerator), handler);
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightModerator), handler);
 						}
 						break;
 					case requestRightAv:
 						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.audio) && !hasRight(m.getUserId(), r.getId(), Right.video)) {
 							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightAv), handler);
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightAv), handler);
 						}
 						break;
 					case requestRightWb:
 						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.whiteBoard)) {
 							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.requestRightWb), handler);
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightWb), handler);
 						}
 						break;
 					case activityRemove:
@@ -398,6 +398,18 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
+	public void requestRight(AjaxRequestTarget target, RoomMessage.Type right) {
+		RoomPanel.broadcast(new TextRoomMessage(getRoom().getId(), getUserId(), right, getClient().getUid()));
+	}
+	
+	public void allowRight(AjaxRequestTarget target, Client client, Right... rights) {
+		for (Right right : rights) {
+			client.getRights().add(right);
+		}
+		broadcast(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+		RoomBroadcaster.sendUpdatedClient(client);
+	}
+	
 	public Room getRoom() {
 		return r;
 	}

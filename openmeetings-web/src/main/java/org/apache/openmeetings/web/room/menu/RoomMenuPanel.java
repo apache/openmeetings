@@ -85,7 +85,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightModerator, room.getClient().getUid()));
+			room.requestRight(target, RoomMessage.Type.requestRightModerator);
 		}
 	};
 	private final RoomPanel room;

@@ -16,45 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.activities;
+package org.apache.openmeetings.web.room.sidebar.icon;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Right;
+import org.apache.openmeetings.web.room.RoomPanel;
 
-public class Activity implements Serializable {
+public class VideoRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	public enum Type {
-		roomEnter
-		, roomExit
-		, reqRightModerator
-		, reqRightAv
-		, reqRightWb
-	}
-	private final String uid;
-	private final Long sender;
-	private final Date created;
-	private final Type type;
 	
-	public Activity(String uid, Long sender, Type type) {
-		this.uid = uid;
-		this.sender = sender;
-		this.type = type;
-		this.created = new Date();
+	public VideoRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.video, room);
+		mainCssClass = "camera-right ";
+		setVisible(!room.getRoom().isAudioOnly());
 	}
 
-	public String getUid() {
-		return uid;
+	@Override
+	protected boolean hasRight() {
+		return false; //FIXME TODO need some flag
 	}
-
-	public Long getSender() {
-		return sender;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public Date getCreated() {
-		return created;
+	
+	@Override
+	protected String getTitle() {
+		return getString(self ? "687" : "683");
 	}
 }
