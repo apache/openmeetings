@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.activities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,21 +28,32 @@ public class Activity implements Serializable {
 		roomEnter
 		, roomExit
 		, reqRightModerator
-		, reqRightAv
 		, reqRightWb
+		, reqRightShare
+		, reqRightRemote
+		, reqRightA
+		, reqRightAv
+		, reqRightMute
+		, reqRightExclusive
 	}
+	private final String id;
 	private final String uid;
 	private final Long sender;
 	private final Date created;
 	private final Type type;
 	
 	public Activity(String uid, Long sender, Type type) {
+		this.id = UUID.randomUUID().toString();
 		this.uid = uid;
 		this.sender = sender;
 		this.type = type;
 		this.created = new Date();
 	}
 
+	public String getId() {
+		return id;
+	}
+	
 	public String getUid() {
 		return uid;
 	}

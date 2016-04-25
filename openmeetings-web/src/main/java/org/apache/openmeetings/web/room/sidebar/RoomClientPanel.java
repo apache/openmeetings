@@ -27,6 +27,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.sidebar.icon.KickRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,10 +44,12 @@ public class RoomClientPanel extends Panel {
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
 		User u = getBean(UserDao.class).get(c.getUserId());
+		add(new RefreshIcon("refresh", c, room));
 		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new RoomRightPanel("rights", c, room));
+		actions.add(new KickRightIcon("kick", c, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		if (room.getClient() != null) {
 			actions.setVisible(room.getClient().hasRight(Right.moderator));

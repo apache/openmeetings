@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.RoomMessage.Type;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
@@ -82,6 +83,10 @@ public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private static final String ACCESS_DENIED_ID = "access-denied";
+	public enum Action {
+		kick
+		, refresh
+	}
 	private final Room r;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior aab = new AbstractDefaultAjaxBehavior() {
@@ -229,10 +234,10 @@ public class RoomPanel extends BasePanel {
 						menu.update(handler);
 						break;
 					case recordingStarted:
-					{
-						recordingUser = ((TextRoomMessage)m).getText();
-						menu.update(handler);
-					}
+						{
+							recordingUser = ((TextRoomMessage)m).getText();
+							menu.update(handler);
+						}
 						break;
 					case sharingStoped:
 						//TODO check sharingUser == ((TextRoomMessage)m).getText();
@@ -240,10 +245,10 @@ public class RoomPanel extends BasePanel {
 						menu.update(handler);
 						break;
 					case sharingStarted:
-					{
-						sharingUser = ((TextRoomMessage)m).getText();
-						menu.update(handler);
-					}
+						{
+							sharingUser = ((TextRoomMessage)m).getText();
+							menu.update(handler);
+						}
 						break;
 					case rightUpdated:
 						sidebar.updateUsers(handler);
@@ -252,6 +257,7 @@ public class RoomPanel extends BasePanel {
 					case roomEnter:
 						sidebar.updateUsers(handler);
 						menu.update(handler);
+						// TODO should this be fixed?
 						//activities.addActivity(m.getUid(), m.getSentUserId(), Activity.Type.roomEnter, handler);
 						break;
 					case roomExit:
@@ -264,28 +270,58 @@ public class RoomPanel extends BasePanel {
 						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
-						if (getClient().hasRight(Right.moderator) && !isModerator(m.getUserId(), r.getId())) {
+						{
 							TextRoomMessage tm = (TextRoomMessage)m;
 							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightModerator), handler);
 						}
 						break;
-					case requestRightAv:
-						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.audio) && !hasRight(m.getUserId(), r.getId(), Right.video)) {
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightAv), handler);
-						}
-						break;
 					case requestRightWb:
-						if (getClient().hasRight(Right.moderator) && !hasRight(m.getUserId(), r.getId(), Right.whiteBoard)) {
+						{
 							TextRoomMessage tm = (TextRoomMessage)m;
 							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightWb), handler);
 						}
 						break;
+					case requestRightShare:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightShare), handler);
+						}
+						break;
+					case requestRightRemote:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightRemote), handler);
+						}
+						break;
+					case requestRightA:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightA), handler);
+						}
+						break;
+					case requestRightAv:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightAv), handler);
+						}
+						break;
+					case requestRightMute:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightMute), handler);
+						}
+						break;
+					case requestRightExclusive:
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightExclusive), handler);
+						}
+						break;
 					case activityRemove:
-					{
-						TextRoomMessage tm = (TextRoomMessage)m;
-						activities.remove(tm.getText(), handler);
-					}
+						{
+							TextRoomMessage tm = (TextRoomMessage)m;
+							activities.remove(tm.getText(), handler);
+						}
 						break;
 				}
 			}
@@ -396,8 +432,39 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public void requestRight(AjaxRequestTarget target, RoomMessage.Type right) {
-		RoomPanel.broadcast(new TextRoomMessage(getRoom().getId(), getUserId(), right, getClient().getUid()));
+	public void requestRight(AjaxRequestTarget target, Client.Right right) {
+		RoomMessage.Type reqType = null;
+		switch (right) {
+			case moderator:
+				reqType = Type.requestRightModerator;
+				break;
+			case whiteBoard:
+				reqType = Type.requestRightWb;
+				break;
+			case share:
+				reqType = Type.requestRightWb;
+				break;
+			case audio:
+				reqType = Type.requestRightA;
+				break;
+			case exclusive:
+				reqType = Type.requestRightExclusive;
+				break;
+			case mute:
+				reqType = Type.requestRightMute;
+				break;
+			case remoteControl:
+				reqType = Type.requestRightRemote;
+				break;
+			case video:
+				reqType = Type.requestRightAv;
+				break;
+			default:
+				break;
+		}
+		if (reqType != null) {
+			RoomPanel.broadcast(new TextRoomMessage(getRoom().getId(), getUserId(), reqType, getClient().getUid()));
+		}
 	}
 	
 	public void allowRight(AjaxRequestTarget target, Client client, Right... rights) {
