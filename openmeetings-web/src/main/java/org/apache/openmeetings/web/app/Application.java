@@ -210,8 +210,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return get().dashboardContext;
 	}
 	
-	public static void addOnlineUser(Client client) {
-		ONLINE_USERS.put(client.getUid(), client);
+	public static void addOnlineUser(Client c) {
+		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoomId());
+		ONLINE_USERS.put(c.getUid(), c);
 	}
 	
 	public static void removeOnlineUser(Client c) {
@@ -289,6 +290,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static Client addUserToRoom(Client c) {
+		log.debug("Adding online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<Client>());
 		ROOMS.get(c.getRoomId()).add(c);
 		return c;
@@ -301,7 +303,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static Client removeUserFromRoom(Client c) {
-		log.debug("Removing room client: {}, room: {}", c.getUid(), c.getRoomId());
+		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {
 			Set<Client> clients = ROOMS.get(c.getRoomId());
 			if (clients != null) {

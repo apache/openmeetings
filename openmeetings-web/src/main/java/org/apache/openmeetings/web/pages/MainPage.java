@@ -218,7 +218,7 @@ public class MainPage extends BaseInitedPage {
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
 				addOnlineUser(client.setPageId(message.getKey()));
-				log.debug(String.format("WebSocketBehavior::onConnect [session: %s, key: %s]", message.getSessionId(), message.getKey()));
+				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), message.getSessionId(), message.getKey());
 			}
 			
 			@Override
@@ -234,12 +234,12 @@ public class MainPage extends BaseInitedPage {
 			}
 			
 			private void closeHandler(AbstractClientMessage message) {
-				log.debug(String.format("WebSocketBehavior::onClose [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 				if (MainPage.this.getCurrentPanel() instanceof RoomPanel) {
 					RoomPanel rp = (RoomPanel)MainPage.this.getCurrentPanel();
 					RoomMenuPanel.roomExit(rp);
 				}
 				removeOnlineUser(client);
+				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), message.getSessionId(), message.getKey());
 			}
 		});
 		add(new AbstractDefaultAjaxBehavior() {

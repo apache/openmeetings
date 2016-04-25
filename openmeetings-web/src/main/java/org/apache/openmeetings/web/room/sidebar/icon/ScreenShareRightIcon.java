@@ -18,11 +18,10 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
 public class ScreenShareRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
@@ -30,8 +29,6 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 	public ScreenShareRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.share, room);
 		mainCssClass = "screen-share-right ";
-		Room r = room.getRoom();
-		setVisible(Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing));
 	}
 
 	@Override
@@ -43,5 +40,11 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 			title = "1072";
 		}
 		return getString(title);
+	}
+	
+	@Override
+	public void update(IPartialPageRequestHandler handler) {
+		setVisible(room.screenShareAllowed());
+		super.update(handler);
 	}
 }
