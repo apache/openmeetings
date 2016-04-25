@@ -40,7 +40,6 @@ public class RoomRightPanel extends Panel {
 
 	public RoomRightPanel(String id, Client client, RoomPanel room) {
 		super(id);
-		setRenderBodyOnly(true);
 		setOutputMarkupId(true);
 		add(rightModer = new ModeratorRightIcon("right-moder", client, room));
 		add(rightWb = new WhiteboardRightIcon("right-wb", client, room));
