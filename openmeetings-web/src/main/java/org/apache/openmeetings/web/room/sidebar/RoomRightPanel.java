@@ -21,7 +21,9 @@ package org.apache.openmeetings.web.room.sidebar;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.AudioRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.ExclusiveRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.ModeratorRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.MuteRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RemoteControlRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.ScreenShareRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.VideoRightIcon;
@@ -37,6 +39,8 @@ public class RoomRightPanel extends Panel {
 	private final RemoteControlRightIcon rightRemote;
 	private final AudioRightIcon rightAudio;
 	private final VideoRightIcon rightVideo;
+	private final MuteRightIcon rightMute;
+	private final ExclusiveRightIcon rightExclsv;
 
 	public RoomRightPanel(String id, Client client, RoomPanel room) {
 		super(id);
@@ -47,6 +51,8 @@ public class RoomRightPanel extends Panel {
 		add(rightRemote = new RemoteControlRightIcon("right-remote-control", client, room));
 		add(rightAudio = new AudioRightIcon("right-audio", client, room));
 		add(rightVideo = new VideoRightIcon("right-video", client, room));
+		add(rightMute = new MuteRightIcon("right-mute", client, room));
+		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", client, room));
 	}
 
 	@Override
@@ -62,5 +68,7 @@ public class RoomRightPanel extends Panel {
 		rightRemote.update(handler);
 		rightAudio.update(handler);
 		rightVideo.update(handler);
+		rightMute.update(handler);
+		rightExclsv.update(handler);
 	}
 }

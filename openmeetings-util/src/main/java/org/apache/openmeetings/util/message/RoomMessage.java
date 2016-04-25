@@ -39,7 +39,12 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		, activityRemove
 		, requestRightModerator
 		, requestRightWb
+		, requestRightShare
+		, requestRightRemote
+		, requestRightA
 		, requestRightAv
+		, requestRightMute
+		, requestRightExclusive
 	}
 	private final Date timestamp;
 	private final String uid;

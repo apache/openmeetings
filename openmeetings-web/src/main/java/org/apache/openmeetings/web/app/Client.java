@@ -45,12 +45,21 @@ public class Client implements IDataProviderEntity {
 		, mute
 		, exclusive
 	}
+	public enum Activity {
+		broadcast
+		, share
+		, record
+		, publish
+		, muted
+		, exclusive
+	}
 	private final String sessionId;
 	private int pageId;
 	private final Long userId;
 	private Long roomId;
 	private final String uid;
-	private final Set<Right> rights = new HashSet<Right>();
+	private final Set<Right> rights = new HashSet<>();
+	private final Set<Activity> activities = new HashSet<>();
 	private final Date connectedSince;
 
 	public Client(String sessionId, Long userId) {
@@ -96,6 +105,14 @@ public class Client implements IDataProviderEntity {
 
 	public boolean hasRight(Right right) {
 		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
+	}
+
+	public Set<Activity> getActivities() {
+		return activities;
+	}
+
+	public boolean hasActivity(Activity activity) {
+		return activities.contains(activity);
 	}
 
 	public Date getConnectedSince() {

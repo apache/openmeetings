@@ -21,12 +21,12 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<span wicket:id="status" class="ui-icon align-right"></span>
-	<span class="ui-icon align-right clickable restart" wicket:message="title:610"></span>
+	<span wicket:id="refresh"></span>
 	<div wicket:id="name" class="user name"></div>
 	<span class="ui-icon align-right clickable audio-activity" wicket:message="title:372"></span>
 	<div wicket:id="actions" class="user actions">
 		<span wicket:id="rights"></span>
-		<span class="ui-icon align-left clickable kick" wicket:message="title:1213"></span>
+		<span wicket:id="kick"></span>
 		<span wicket:id="privateChat" class="ui-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
 		<div class="clear"></div>
 	</div>
