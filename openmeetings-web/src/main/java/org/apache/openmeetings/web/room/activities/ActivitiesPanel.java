@@ -226,7 +226,9 @@ public class ActivitiesPanel extends BasePanel {
 	public void add(Activity a, IPartialPageRequestHandler handler) {
 		activities.put(a.getId(), a);
 		update(handler);
-		handler.appendJavaScript("hightlightActivities();");
+		if (isVisible()) {
+			handler.appendJavaScript("hightlightActivities();");
+		}
 	}
 
 	public void remove(String uid, IPartialPageRequestHandler handler) {
@@ -235,8 +237,10 @@ public class ActivitiesPanel extends BasePanel {
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
-		lv.setList(new ArrayList<>(activities.values()));
-		handler.add(container);
+		if (isVisible()) {
+			lv.setList(new ArrayList<>(activities.values()));
+			handler.add(container);
+		}
 	}
 	
 	public ActivitiesPanel(String id, RoomPanel room) {
@@ -245,7 +249,7 @@ public class ActivitiesPanel extends BasePanel {
 		setVisible(!room.getRoom().isHidden(RoomElement.Activities));
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
-		add(container.add(lv).setOutputMarkupId(true));
+		add(container.add(lv).setOutputMarkupPlaceholderTag(true));
 		add(action);
 	}
 	
