@@ -31,6 +31,11 @@ public class AudioRightIcon extends RoomRightIcon {
 	}
 
 	@Override
+	protected boolean isClickable() {
+		return self || room.getClient().hasRight(Right.moderator);
+	}
+	
+	@Override
 	protected boolean hasRight() {
 		return false; //FIXME TODO need some flag
 	}

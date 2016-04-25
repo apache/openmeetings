@@ -1421,9 +1421,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized List<Client> getCurrentModeratorList() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long roomId = currentClient.getRoomId();
-			return sessionManager.getCurrentModeratorByRoom(roomId);
+			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Long roomId = client.getRoomId();
+			Room r = roomDao.get(roomId);
+			if (r != null) {
+				if (Room.Type.conference == r.getType()) {
+					client.setCanVideo(!r.isAudioOnly());
+					client.setIsBroadcasting(true);
+					sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
+					sendToScope(roomId, "clientUpdated", client);
+				}
+				return sessionManager.getCurrentModeratorByRoom(roomId);
+			}
 		} catch (Exception err) {
 			log.error("[getCurrentModerator]", err);
 		}

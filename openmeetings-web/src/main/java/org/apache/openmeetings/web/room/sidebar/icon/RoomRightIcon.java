@@ -32,7 +32,7 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 	private static final String CLS_CLICKABLE = "clickable ";
 	private static final String CLS_GRANTED = "granted ";
 	private static final String ICON_CLASS = "ui-icon align-left ";
-	private final RoomPanel room;
+	protected final RoomPanel room;
 	protected final Right right;
 	protected final boolean self;
 	protected final Client client;
@@ -55,6 +55,10 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 	
 	protected abstract String getTitle();
 	
+	protected boolean isClickable() {
+		return !self && room.getClient().hasRight(Right.moderator);
+	}
+	
 	protected boolean hasRight() {
 		return client.hasRight(right);
 	}
@@ -65,7 +69,7 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 		if (hasRight()) {
 			cls.append(CLS_GRANTED);
 		}
-		if (!self && room.getClient().hasRight(Right.moderator)) {
+		if (isClickable()) {
 			//request/remove
 			cls.append(CLS_CLICKABLE);
 			add(AttributeAppender.replace("onclick", String.format("%s('%s', '%s');", FUNC_CHANGE_RIGHT, right.name(), client.getUid())));

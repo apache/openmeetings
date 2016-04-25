@@ -680,13 +680,6 @@
 					
 					//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
 					
-					if (this.parent.modus == "conference") {
-						if ($debug) Debug.write("############## start broadcasting ");
-						parent.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-						parent.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.audioOnly;
-						parent.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-						parent.setBroadCastingFlag.doCall();
-					}
 					canvas._drawarea.onopenWhiteBoard.sendEvent();
 					
 					if ($debug) Debug.write("room ", canvas.currentRoomObj);
