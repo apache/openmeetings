@@ -61,7 +61,7 @@ import org.slf4j.Logger;
 public class ActivitiesPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(ActivitiesPanel.class, webAppRootKey);
-	private static final String PARAM_UID = "uid";
+	private static final String PARAM_ID = "id";
 	private static final String ACTION = "action";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private enum Action {
@@ -82,35 +82,35 @@ public class ActivitiesPanel extends BasePanel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString(); 
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				assert(room.getRoom().getId().equals(roomId));
 				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
-				Activity a = activities.get(uid);
+				Activity a = activities.get(id);
 				if (a != null) {
 					switch (action) {
 						case close:
-							remove(uid, target);
+							remove(id, target);
 							break;
 						case decline:
 							if (room.getClient().hasRight(Client.Right.moderator)) {
-								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 							}
 							break;
 						case accept:
-							Client client = getOnlineClient(uid);
+							Client client = getOnlineClient(a.getUid());
 							if (room.getClient().hasRight(Client.Right.moderator) && client != null && roomId == client.getRoomId()) {
 								switch (a.getType()) {
 									case reqRightModerator:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.moderator);
 										break;
 									case reqRightAv:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.audio, Right.video);
 										break;
 									case reqRightWb:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, uid));
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.whiteBoard);
 										break;
 									default:
@@ -130,7 +130,7 @@ public class ActivitiesPanel extends BasePanel {
 		@Override
 		public void renderHead(Component component, IHeaderResponse response) {
 			super.renderHead(component, response);
-			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_UID)), "activityAction")));
+			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_ID)), "activityAction")));
 		}
 	};
 	private ListView<Activity> lv = new ListView<Activity>("activities", new ArrayList<Activity>()) {
@@ -141,67 +141,90 @@ public class ActivitiesPanel extends BasePanel {
 			Activity a = item.getModelObject();
 			String text = "";
 			Long roomId = room.getRoom().getId();
-			Component accept = new WebMarkupContainer("accept").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getUid()))).setVisible(false);
-			Component decline = new WebMarkupContainer("decline").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getUid()))).setVisible(false);
+			Component accept = new WebMarkupContainer("accept").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getId())));
+			Component decline = new WebMarkupContainer("decline").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getId())));
+			switch (a.getType()) {
+				case reqRightModerator:
+				case reqRightWb:
+				case reqRightShare:
+				case reqRightRemote:
+				case reqRightA:
+				case reqRightAv:
+				case reqRightMute:
+				case reqRightExclusive:
+					if (room.getClient().hasRight(Client.Right.moderator)) {
+						accept.setVisible(true);
+						decline.setVisible(true);
+						break;
+					}
+				case roomEnter:
+				case roomExit:
+					accept.setVisible(false);
+					decline.setVisible(false);
+					break;
+			}
+			User u = getBean(UserDao.class).get(a.getSender());
+			String name = getUserId().equals(a.getSender()) ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());
 			switch (a.getType()) {
 				case roomEnter:
 					text = ""; // TODO should this be fixed?
 					item.setVisible(false);
 					break;
 				case roomExit:
-				{
-					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("1367"), df.get().format(a.getCreated()));
-				}
+					text = String.format("%s %s [%s]", name, getString("1367"), df.get().format(a.getCreated()));
 					break;
 				case reqRightModerator:
-				{
-					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
-					accept.setVisible(true);
-					decline.setVisible(true);
-				}
-				//ask question 693
-					break;
-				case reqRightAv:
-				{
-					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("695"), df.get().format(a.getCreated()));
-					accept.setVisible(true);
-					decline.setVisible(true);
-				}
+					text = String.format("%s %s [%s]", name, getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
 					break;
 				case reqRightWb:
-				{
-					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), getString("694"), df.get().format(a.getCreated()));
-					accept.setVisible(true);
-					decline.setVisible(true);
-				}
+					text = String.format("%s %s [%s]", name, getString("694"), df.get().format(a.getCreated()));
+					break;
+				case reqRightShare:
+					text = String.format("%s %s [%s]", name, getString("1070"), df.get().format(a.getCreated()));
+					break;
+				case reqRightRemote:
+					text = String.format("%s %s [%s]", name, getString("1082"), df.get().format(a.getCreated()));
+					break;
+				case reqRightA:
+					text = String.format("%s %s [%s]", name, getString("1603"), df.get().format(a.getCreated()));
+					break;
+				case reqRightAv:
+					text = String.format("%s %s [%s]", name, getString("695"), df.get().format(a.getCreated()));
+					break;
+				case reqRightMute:
+					text = String.format("%s %s [%s]", name, getString("1399"), df.get().format(a.getCreated()));//TODO un-mute 1398
+					break;
+				case reqRightExclusive:
+					text = String.format("%s %s [%s]", name, getString("1427"), df.get().format(a.getCreated()));
 					break;
 			}
-			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getUid()))));
+			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
 			item.add(accept, decline, new Label("text", text));
 			item.add(AttributeAppender.append("class", getClass(a)));
 		}
 		
 		private String getClass(Activity a) {
+			String cls = "ui-state-default";
 			switch (a.getType()) {
 				case reqRightModerator:
-					return "ui-state-highlight";
-				case reqRightAv:
-					return "ui-state-highlight";
 				case reqRightWb:
-					return "ui-state-highlight";
+				case reqRightShare:
+				case reqRightRemote:
+				case reqRightA:
+				case reqRightAv:
+				case reqRightMute:
+				case reqRightExclusive:
+					cls = "ui-state-highlight";
+					break;
 				case roomEnter:
 				case roomExit:
 			}
-			return "ui-state-default";
+			return cls;
 		}
 	};
 
 	public void add(Activity a, IPartialPageRequestHandler handler) {
-		activities.put(a.getUid(), a);
+		activities.put(a.getId(), a);
 		update(handler);
 		handler.appendJavaScript("hightlightActivities();");
 	}
