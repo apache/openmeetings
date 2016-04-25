@@ -135,8 +135,6 @@ public class RoomPanel extends BasePanel {
 		//private String recordingUser = null;
 		//private String sharingUser = null;
 		//private String publishingUser = null;
-		
-		//TODO FIXME conference room should send setBroadCastingFlag(String uid, boolean isBroadcasting, boolean canVideo, Integer interviewPodId) on enter !!!!!!!!!!
 	}
 
 	@Override
@@ -458,6 +456,12 @@ public class RoomPanel extends BasePanel {
 	
 	public Client getClient() {
 		return getMainPage().getClient();
+	}
+
+	public boolean screenShareAllowed() {
+		Room r = getRoom();
+		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
+				&& r.isAllowRecording() && getClient().hasRight(Client.Right.share) && getSharingUser() == null;
 	}
 	
 	public RoomSidebar getSidebar() {

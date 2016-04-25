@@ -37,24 +37,10 @@ public class RoomClientPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	public RoomClientPanel(String id, ListItem<Client> item, final RoomPanel room) {
-		super(id);
+		super(id, item.getModel());
 		setRenderBodyOnly(true);
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
-		String status = null, statusTitle = null;
-		if (c.hasRight(Right.moderator)) {
-			status = "status-mod";
-			statusTitle = "679";
-		} else if (c.hasRight(Right.whiteBoard)) {
-			status = "status-wb";
-			statusTitle = "678";
-		} else {
-			status = "status-user";
-			statusTitle = "677";
-		}
-		//FIXME TODO add 'typingActivity'
-		//FIXME TODO add ability to change 'first/last name'
-		add(new WebMarkupContainer("status").add(AttributeAppender.append("class", status), AttributeAppender.replace("title", getString(statusTitle))));
 		User u = getBean(UserDao.class).get(c.getUserId());
 		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
@@ -70,5 +56,25 @@ public class RoomClientPanel extends Panel {
 			actions.setVisible(false);
 		}
 		add(actions);
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		Client c = (Client)getDefaultModelObject();
+		String status = null, statusTitle = null;
+		if (c.hasRight(Right.moderator)) {
+			status = "status-mod";
+			statusTitle = "679";
+		} else if (c.hasRight(Right.whiteBoard)) {
+			status = "status-wb";
+			statusTitle = "678";
+		} else {
+			status = "status-user";
+			statusTitle = "677";
+		}
+		//FIXME TODO add 'typingActivity'
+		//FIXME TODO add ability to change 'first/last name'
+		add(new WebMarkupContainer("status").add(AttributeAppender.append("class", status), AttributeAppender.replace("title", getString(statusTitle))));
 	}
 }

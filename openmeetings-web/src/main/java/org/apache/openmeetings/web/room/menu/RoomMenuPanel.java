@@ -256,8 +256,7 @@ public class RoomMenuPanel extends Panel {
 		boolean moder = room.getClient().hasRight(Client.Right.moderator);
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && room.getClient().hasRight(Client.Right.share) && room.getSharingUser() == null;
+		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
