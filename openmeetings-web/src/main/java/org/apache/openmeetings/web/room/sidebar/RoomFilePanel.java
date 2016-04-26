@@ -68,6 +68,11 @@ public class RoomFilePanel extends FileTreePanel {
 	}
 	
 	@Override
+	protected String getContainment() {
+		return "";
+	}
+	
+	@Override
 	protected Component getUpload(String id) {
 		Component u = super.getUpload(id);
 		u.setVisible(true);
