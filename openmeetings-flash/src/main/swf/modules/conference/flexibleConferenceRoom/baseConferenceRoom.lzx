@@ -71,13 +71,6 @@
 		
 		canvas.currentBaseConferenceRoom = this;
 		
-		if ($debug) Debug.write("this.roomobj ",this.roomobj);
-		if (roomobj.appointment) {
-			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
-		} else {
-			if ($debug) Debug.write("no appointed meeting");
-		}
-		
 		if ($debug) Debug.write("canvas._videocontainer ", canvas._videocontainer);
 		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
 	]]>

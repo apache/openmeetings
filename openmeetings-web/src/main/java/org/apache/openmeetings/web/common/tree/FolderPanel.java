@@ -88,7 +88,7 @@ public class FolderPanel extends Panel {
 		if (r.getId() < 1) {
 			drag = new WebMarkupContainer("drag");
 		} else {
-			Draggable<? extends FileItem> d = new Draggable<FileItem>("drag", Model.of(r)) {
+			drag = new Draggable<FileItem>("drag", Model.of(r)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -97,10 +97,8 @@ public class FolderPanel extends Panel {
 					behavior.setOption("revert", "treeRevert");
 					behavior.setOption("cursor", Options.asString("move"));
 				}
-			};
-			d.setContainment(".file.tree");
-			d.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
-			drag = d;
+			}.setContainment(treePanel.getContainment());
+			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 		}
 		drag.add(r.getId() < 1 ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;

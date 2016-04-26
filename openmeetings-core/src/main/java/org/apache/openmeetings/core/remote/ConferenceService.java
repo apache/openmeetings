@@ -176,34 +176,6 @@ public class ConferenceService {
 
 	// --------------------------------------------------------------------------------------------
 
-	/**
-	 * 
-	 * retrieving Appointment for Room
-	 * 
-	 * @param roomId
-	 * @return - Appointment in case the room is appointment, null otherwise
-	 */
-	public Appointment getAppointMentDataForRoom(Long roomId) {
-		log.debug("getAppointMentDataForRoom");
-
-		Room room = roomDao.get(roomId);
-
-		if (room.isAppointment() == false)
-			return null;
-
-		try {
-			Appointment ment = appointmentDao.getByRoom(roomId);
-
-			return ment;
-		} catch (Exception e) {
-			log.error("getAppointMentDataForRoom " + e.getMessage());
-			return null;
-		}
-
-	}
-
-	// --------------------------------------------------------------------------------------------
-
 	public List<Room> getAppointedMeetingRoomsWithoutType(String SID) {
 		log.debug("ConferenceService.getAppointedMeetings");
 		try {

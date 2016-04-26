@@ -19,25 +19,32 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<script type="text/javascript">
-		Wicket.Event.subscribe("/websocket/closed", function(jqEvent, msg) {
-			//FIXME add Error dialog should be displayed 
-		});
-	</script>
-</wicket:head>
 <wicket:panel>
-	<div wicket:id="roomContainer" style="height: 100%">
-		<div class="room menu" wicket:id="menu"></div>
-		<div class="room sidebar left" wicket:id="sidebar"></div>
-		<div wicket:id="wb-area" class="room wb area">
-			<div class="wb" wicket:id="whiteboard"></div>
-		</div>
-		<div wicket:id="activities"></div>
-	</div>
-	<div wicket:id="event-details"></div>
-	<div wicket:id="access-denied"></div>
-	<div wicket:id="room-closed"></div>
-	<div wicket:id="wait-for-recording"></div>
+	<table style="width: 100%">
+		<tr>
+			<td><wicket:message key="1145"/></td>
+			<td wicket:id="title"></td>
+		</tr>
+		<tr>
+			<td><wicket:message key="1146"/></td>
+			<td wicket:id="description"></td>
+		</tr>
+		<tr>
+			<td><wicket:message key="1143"/></td>
+			<td wicket:id="owner.timeZoneId"></td>
+		</tr>
+		<tr>
+			<td><wicket:message key="570"/></td>
+			<td wicket:id="start"></td>
+		</tr>
+		<tr>
+			<td><wicket:message key="571"/></td>
+			<td wicket:id="end"></td>
+		</tr>
+		<tr>
+			<td><wicket:message key="1147"/></td>
+			<td><span wicket:id="owner.firstname"></span>&nbsp;<span wicket:id="owner.lastname"></span></td>
+		</tr>
+	</table>
 </wicket:panel>
 </html>
