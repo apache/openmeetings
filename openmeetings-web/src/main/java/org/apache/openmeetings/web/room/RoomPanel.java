@@ -277,64 +277,40 @@ public class RoomPanel extends BasePanel {
 						sidebar.updateUsers(handler);
 						menu.update(handler);
 						// TODO should this be fixed?
-						//activities.addActivity(m.getUid(), m.getSentUserId(), Activity.Type.roomEnter, handler);
+						//activities.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
 					case roomExit:
 						//TODO check user/remove tab
 						sidebar.updateUsers(handler);
-						activities.add(new Activity(m.getUid(), m.getUserId(), Activity.Type.roomExit), handler);
+						activities.add(new Activity(m, Activity.Type.roomExit), handler);
 						break;
 					case roomClosed:
 						handler.add(room.setVisible(false));
 						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightModerator), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);
 						break;
 					case requestRightWb:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightWb), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightWb), handler);
 						break;
 					case requestRightShare:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightShare), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightShare), handler);
 						break;
 					case requestRightRemote:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightRemote), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightRemote), handler);
 						break;
 					case requestRightA:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightA), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightA), handler);
 						break;
 					case requestRightAv:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightAv), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
 						break;
 					case requestRightMute:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightMute), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightMute), handler);
 						break;
 					case requestRightExclusive:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.add(new Activity(tm.getText(), m.getUserId(), Activity.Type.reqRightExclusive), handler);
-						}
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
 						break;
 					case activityRemove:
 						{
