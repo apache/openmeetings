@@ -62,7 +62,7 @@ public abstract class RoomRightIcon extends WebMarkupContainer {
 	}
 	
 	protected boolean isClickable() {
-		return self || (!self && room.getClient().hasRight(Right.moderator));
+		return (self && !hasRight()) || (!self && room.getClient().hasRight(Right.moderator));
 	}
 	
 	protected boolean hasRight() {
