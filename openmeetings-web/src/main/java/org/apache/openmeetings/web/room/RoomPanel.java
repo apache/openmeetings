@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -78,6 +79,8 @@ import org.slf4j.Logger;
 import org.wicketstuff.whiteboard.WhiteboardBehavior;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
@@ -88,6 +91,7 @@ public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private static final String ACCESS_DENIED_ID = "access-denied";
+	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {
 		kick
 		, refresh
@@ -147,9 +151,28 @@ public class RoomPanel extends BasePanel {
 		getClient().setRoomId(r.getId());
 		super.onInitialize();
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
+		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
+
 		room.add(menu = new RoomMenuPanel("menu", this));
+		Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
+				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+			}
+			
+			@Override
+			public void onDrop(AjaxRequestTarget target, Component component) {
+				Object o = component.getDefaultModelObject();
+				if (o instanceof FileItem) {
+				}
+			}
+		};
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
-		room.add(wb.setOutputMarkupId(true));
+		room.add(wbArea.add(wb.setOutputMarkupId(true)));
 		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		room.add(aab);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
@@ -165,6 +188,7 @@ public class RoomPanel extends BasePanel {
 			String deniedMessage = null;
 			if (r.isAppointment()) {
 				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
+				eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 				if (a != null && !a.isDeleted()) {
 					allowed = a.getOwner().getId().equals(getUserId());
 					log.debug("appointed room, isOwner ? " + allowed);
@@ -213,7 +237,7 @@ public class RoomPanel extends BasePanel {
 				room.setVisible(false);
 			}
 		}
-		add(room, accessDenied);
+		add(room, accessDenied, eventDetail);
 		if (r.isWaitForRecording()) {
 			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;

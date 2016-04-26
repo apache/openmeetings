@@ -154,6 +154,10 @@ public abstract class FileTreePanel extends Panel {
 		add(errorsDialog);
 	}
 	
+	protected String getContainment() {
+		return ".file.item.drop.area";
+	}
+	
 	protected Component getUpload(String id) {
 		return new WebMarkupContainer(id).setVisible(false);
 	}
