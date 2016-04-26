@@ -68,7 +68,7 @@
 			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp2.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=com.mysql.jdbc.Driver
-					, Url=jdbc:mysql://localhost:3306/openmeetings?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;connectionCollation=utf8_general_ci&amp;cachePrepStmts=true&amp;cacheCallableStatements=true&amp;cacheServerConfiguration=true&amp;useLocalSessionState=true&amp;elideSetAutoCommits=true&amp;alwaysSendSetIsolation=false&amp;enableQueryTimeouts=false&amp;prepStmtCacheSize=3000&amp;prepStmtCacheSqlLimit=1000
+					, Url=jdbc:mysql://localhost:3306/openmeetings_3_1?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;connectionCollation=utf8_general_ci&amp;cachePrepStmts=true&amp;cacheCallableStatements=true&amp;cacheServerConfiguration=true&amp;useLocalSessionState=true&amp;elideSetAutoCommits=true&amp;alwaysSendSetIsolation=false&amp;enableQueryTimeouts=false&amp;prepStmtCacheSize=3000&amp;prepStmtCacheSqlLimit=1000
 					, MaxActive=100
 					, MaxWait=10000
 					, TestOnBorrow=true

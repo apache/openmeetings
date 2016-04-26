@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
@@ -246,7 +245,7 @@ public class ChatPanel extends BasePanel {
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
-						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
+						m.setMessage(chatMessage.getDefaultModelObjectAsString());
 						m.setSent(new Date());
 						m.setFromUser(getBean(UserDao.class).get(getUserId()));
 						try {
