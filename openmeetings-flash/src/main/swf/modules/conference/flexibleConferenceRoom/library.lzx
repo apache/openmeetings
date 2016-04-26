@@ -64,7 +64,6 @@
 	</resource>
 	
 	<include href="roomSidebar/" />
-	<include href="appointmentNotificationPopUp.lzx" />
     <include href="baseConferenceRoom.lzx" />
     <include href="flexibleConferenceRoom.lzx" />
     <include href="restrictedConferenceRoom.lzx" />
