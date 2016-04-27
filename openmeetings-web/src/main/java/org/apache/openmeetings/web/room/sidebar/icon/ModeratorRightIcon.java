@@ -31,6 +31,11 @@ public class ModeratorRightIcon extends RoomRightIcon {
 	}
 
 	@Override
+	protected boolean isClickable() {
+		return super.isClickable() && !client.hasRight(Right.superModerator);
+	}
+	
+	@Override
 	protected String getTitle() {
 		String title;
 		if (client.hasRight(right)) {

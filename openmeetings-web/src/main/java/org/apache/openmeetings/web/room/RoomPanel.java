@@ -22,10 +22,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -188,28 +190,26 @@ public class RoomPanel extends BasePanel {
 			String deniedMessage = null;
 			if (r.isAppointment()) {
 				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
-				eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 				if (a != null && !a.isDeleted()) {
 					allowed = a.getOwner().getId().equals(getUserId());
 					log.debug("appointed room, isOwner ? " + allowed);
 					if (!allowed) {
 						for (MeetingMember mm : a.getMeetingMembers()) {
-							if (mm.getUser().getId() == getUserId()) {
+							if (getUserId().equals(mm.getUser().getId())) {
 								allowed = true;
 								break;
 							}
 						}
 					}
-					/*
-					TODO need to be reviewed
-					Calendar c = WebSession.getCalendar();
-					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
-						allowed = true;
-					} else {
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-						deniedMessage = getString("1271") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					if (allowed) {
+						Calendar c = WebSession.getCalendar();
+						if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
+						} else {
+							allowed = false;
+							deniedMessage = getString("1271") + String.format(" %s - %s", getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
+						}
 					}
-					*/
 				}
 			} else {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
