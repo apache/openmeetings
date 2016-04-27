@@ -79,6 +79,23 @@
 	width: 80%;
 	float: left;
 }
+.room.wb.area.ui-state-hover {
+	border: 0;
+}
+.room.wb.area.ui-state-hover .wb {
+	visibility: hidden;
+	height: 1px !important;
+}
+.room.wb.area .wb-drop-area {
+	display: none;
+}
+.room.wb.area.ui-state-hover .wb-drop-area {
+	background-image: url(images/drop.png);
+	display: block;
+	background-repeat: no-repeat;
+	height: inherit;
+	background-position: center;
+}
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
 }
