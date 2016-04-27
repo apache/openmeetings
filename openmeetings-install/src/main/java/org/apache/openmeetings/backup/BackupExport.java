@@ -348,13 +348,13 @@ public class BackupExport {
 		 * ##################### Chat
 		 */
 		{
+			List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
 			Registry registry = new Registry();
+			registry.bind(User.class, UserConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, UserConverter.class);
-			registry.bind(Room.class, RoomConverter.class);
-			List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
 			}

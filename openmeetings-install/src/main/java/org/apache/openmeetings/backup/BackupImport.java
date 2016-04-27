@@ -288,6 +288,7 @@ public class BackupImport {
 			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
 			for (LdapConfig c : list) {
 				if (!"local DB [internal]".equals(c.getName())) {
+					c.setId(null);
 					c = ldapConfigDao.update(c, null);
 					if (defaultLdapId == null) {
 						defaultLdapId = c.getId();
@@ -303,6 +304,7 @@ public class BackupImport {
 		{
 			List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
 			for (OAuthServer s : list) {
+				s.setId(null);
 				auth2Dao.update(s, null);
 			}
 		}
@@ -426,6 +428,10 @@ public class BackupImport {
 			
 			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
 			for (ChatMessage m : list) {
+				m.setId(null);
+				if (m.getFromUser() == null || m.getFromUser().getId() == null) {
+					continue;
+				}
 				chatDao.update(m);
 			}
 		}
@@ -471,6 +477,7 @@ public class BackupImport {
 		{
 			List<MeetingMember> list = readMeetingMemberList(f, "meetingmembers.xml", "meetingmembers");
 			for (MeetingMember ma : list) {
+				ma.setId(null);
 				meetingMemberDao.update(ma);
 			}
 		}
