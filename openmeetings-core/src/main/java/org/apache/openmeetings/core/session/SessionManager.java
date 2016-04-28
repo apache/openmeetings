@@ -80,12 +80,11 @@ public class SessionManager implements ISessionManager {
 			server = serverUtil.getCurrentServer();
 		}
 		c.setConnectedSince(new Date());
+		c.setRoomEnter(new Date());
 		if (Strings.isEmpty(c.getPublicSID())) {
 			c.setPublicSID(UUID.randomUUID().toString());
 		}
 		c.setServer(server);
-		c.setIsMod(false);
-		c.setCanDraw(false);
 
 		if (cache.containsKey(null, c.getStreamid())) {
 			log.error("Tried to add an existing Client " + c.getStreamid());

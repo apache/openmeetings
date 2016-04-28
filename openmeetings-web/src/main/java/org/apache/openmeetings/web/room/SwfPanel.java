@@ -35,7 +35,6 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.RuntimeConfigurationType;
@@ -67,8 +66,8 @@ public class SwfPanel extends BasePanel {
 		this(id, new PageParameters());
 	}
 	
-	public SwfPanel(String id, Client c) {
-		this(id, addServer(c.getRoomId(), true).add("uid", c.getUid()));
+	public SwfPanel(String id, Long roomId, String uid) {
+		this(id, addServer(roomId, true).add("uid", uid));
 	}
 	
 	public SwfPanel(String id, PageParameters pp) {
