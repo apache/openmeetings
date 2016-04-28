@@ -25,7 +25,7 @@ import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.web.app.Client.Right;
+import org.apache.openmeetings.web.app.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -51,17 +51,12 @@ public class RoomBroadcaster {
 	}
 
 	public static void sendUpdatedClient(org.apache.openmeetings.web.app.Client client) {
-		org.apache.openmeetings.db.entity.room.Client rcl = getClient(client.getUid());
+		org.apache.openmeetings.db.entity.room.Client rcl = Application.get().updateClient(getClient(client.getUid()));
 		log.debug("-----------  sendUpdatedClient ");
 
 		if (rcl == null) {
 			return;
 		}
-		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
-		rcl.setIsMod(client.hasRight(Right.moderator));
-		rcl.setIsBroadcasting(client.hasRight(Right.audio));
-		rcl.setCanVideo(client.hasRight(Right.video));
-		rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 
 		// Put the mod-flag to true for this client
 		getBean(SessionManager.class).updateClientByStreamId(rcl.getStreamid(), rcl, false, null);

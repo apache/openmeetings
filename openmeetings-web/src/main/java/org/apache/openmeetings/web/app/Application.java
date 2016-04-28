@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
@@ -105,7 +106,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static boolean isInstalled;
 	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>(); 
 	private static ConcurrentHashMap<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
-	private static ConcurrentHashMap<Long, Set<Client>> ROOMS = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<Long, Set<String>> ROOMS = new ConcurrentHashMap<>();
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -222,6 +223,20 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 	
+	@Override
+	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl) {
+		Client client = getOnlineClient(rcl.getPublicSID());
+		if (rcl == null || client == null) {
+			return rcl;
+		}
+		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
+		rcl.setIsMod(client.hasRight(Right.moderator));
+		rcl.setIsBroadcasting(client.hasRight(Right.audio));
+		rcl.setCanVideo(client.hasRight(Right.video));
+		rcl.setCanDraw(client.hasRight(Right.whiteBoard));
+		return rcl;
+	}
+	
 	public static Client getOnlineClient(String uid) {
 		return uid == null ? null : ONLINE_USERS.get(uid);
 	}
@@ -284,15 +299,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static void removeInvalidSession(String sessionId) {
-		if (INVALID_SESSIONS.containsKey(sessionId)){
+		if (sessionId != null){
 			INVALID_SESSIONS.remove(sessionId);
 		}
 	}
 	
 	public static Client addUserToRoom(Client c) {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), c.getRoomId());
-		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<Client>());
-		ROOMS.get(c.getRoomId()).add(c);
+		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<String>());
+		ROOMS.get(c.getRoomId()).add(c.getUid());
 		return c;
 	}
 	
@@ -305,27 +320,35 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static Client removeUserFromRoom(Client c) {
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {
-			Set<Client> clients = ROOMS.get(c.getRoomId());
+			Set<String> clients = ROOMS.get(c.getRoomId());
 			if (clients != null) {
-				clients.remove(c);
-				if (clients.isEmpty()) {
-					ROOMS.remove(c.getRoomId());
-				}
+				clients.remove(c.getUid());
 				c.setRoomId(null);
 			}
 		}
 		return c;
 	}
 	
-	public static Set<Client> getRoomUsers(long roomId) {
-		return ROOMS.containsKey(roomId) ? ROOMS.get(roomId) : new HashSet<Client>();
+	public static List<Client> getRoomClients(long roomId) {
+		List<Client> clients = new ArrayList<>();
+		Set<String> uids = ROOMS.get(roomId);
+		if (uids != null) {
+			for (String uid : uids) {
+				Client c = getOnlineClient(uid);
+				if (c != null) {
+					clients.add(c);
+				}
+			}
+		}
+		return clients;
 	}
 	
 	public static Set<Long> getUserRooms(long userId) {
-		Set<Long> result = new HashSet<Long>();
-		for (Entry<Long, Set<Client>> me : ROOMS.entrySet()) {
-			for (Client c : me.getValue()) {
-				if (c.getUserId() == userId) {
+		Set<Long> result = new HashSet<>();
+		for (Entry<Long, Set<String>> me : ROOMS.entrySet()) {
+			for (String uid : me.getValue()) {
+				Client c = getOnlineClient(uid);
+				if (c != null && c.getUserId().equals(userId)) {
 					result.add(me.getKey());
 				}
 			}
@@ -334,10 +357,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static boolean isUserInRoom(long roomId, long userId) {
-		if (ROOMS.containsKey(roomId)) {
-			Set<Client> clients = ROOMS.get(roomId);
-			for (Client c : clients) {
-				if (c.getUserId() == userId) {
+		Set<String> clients = ROOMS.get(roomId);
+		if (clients != null) {
+			for (String uid : clients) {
+				if (getOnlineClient(uid).getUserId().equals(userId)) {
 					return true;
 				}
 			}

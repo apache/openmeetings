@@ -36,7 +36,6 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -47,7 +46,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -143,14 +141,6 @@ public abstract class FileTreePanel extends Panel {
 		add(trees.add(treesView).setOutputMarkupId(true));
 		updateSizes();
 		add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
-		sizes.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(30)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target) {
-				updateSizes();
-			}
-		});
 		add(errorsDialog);
 	}
 	
