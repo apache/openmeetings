@@ -20,6 +20,7 @@ package org.apache.openmeetings;
 
 import javax.servlet.ServletContext;
 
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
@@ -34,6 +35,7 @@ public interface IApplication {
 	String getOmString(long id);
 	String getOmString(long id, long languageId);
 	String getOmString(String key, long languageId);
+	Client updateClient(Client rcl);
 	String getOmContactsLink();
 	String getOmInvitationLink(String baseUrl, Invitation i);
 	String urlForActivatePage(PageParameters pp);

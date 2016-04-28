@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -227,7 +227,7 @@ public class ChatPanel extends BasePanel {
 	
 	private static void sendRoom(ChatMessage m, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
-		for (Client c : getRoomUsers(m.getToRoom().getId())) {
+		for (Client c : getRoomClients(m.getToRoom().getId())) {
 			try {
 				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Client.Right.moderator))) {
 					IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
