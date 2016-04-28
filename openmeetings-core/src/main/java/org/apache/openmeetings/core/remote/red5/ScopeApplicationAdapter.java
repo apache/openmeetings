@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.RecordingService;
@@ -186,7 +187,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
 		rcm.setPublicSID(uid);
-		rcm = sessionManager.add(rcm, null);
+		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
 			return false;
@@ -1418,7 +1419,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return roomClientList;
 	}
 
-	public synchronized List<Client> getCurrentModeratorList() {
+	public List<Client> getCurrentModeratorList() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);

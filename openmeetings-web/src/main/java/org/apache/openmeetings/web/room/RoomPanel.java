@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -31,6 +31,7 @@ import java.util.Calendar;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -150,7 +151,6 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	protected void onInitialize() {
-		getClient().setRoomId(r.getId());
 		super.onInitialize();
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
@@ -182,7 +182,7 @@ public class RoomPanel extends BasePanel {
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
-		} else if (getRoomUsers(r.getId()).size() >= r.getNumberOfPartizipants()) {
+		} else if (getRoomClients(r.getId()).size() >= r.getNumberOfPartizipants()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
 		} else {
@@ -364,19 +364,31 @@ public class RoomPanel extends BasePanel {
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 		if (room.isVisible()) {
-			addUserToRoom(getClient().setRoomId(getRoom().getId()));
+			//We are setting initial rights here
+			Client c = getClient();
+			addUserToRoom(c.setRoomId(getRoom().getId()));
 			User u = getBean(UserDao.class).get(getUserId());
-			//TODO do we need to check GroupModerationRights ????
 			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
-				getClient().getRights().add(Client.Right.moderator);
+				//admin user get superModerator level, no-one can kick him/her
+				c.getRights().add(Right.superModerator);
 			} else {
-				if (!r.isModerated() && 1 == getRoomUsers(r.getId()).size()) {
-					getClient().getRights().add(Client.Right.moderator);
-				} else if (r.isModerated()) {
-					//TODO why do we need supermoderator ????
-					for (RoomModerator rm : r.getModerators()) {
-						if (getUserId() == rm.getUser().getId()) {
-							getClient().getRights().add(Client.Right.moderator);
+				if (!r.isModerated() && 1 == getRoomClients(r.getId()).size()) {
+					//room is not moderated, first user is moderator!
+					c.getRights().add(Right.moderator);
+				}
+				//performing loop here to set possible 'superModerator' right
+				for (RoomModerator rm : r.getModerators()) {
+					if (getUserId().equals(rm.getUser().getId())) {
+						c.getRights().add(rm.isSuperModerator() ? Right.superModerator : Right.moderator);
+						break;
+					}
+				}
+				//no need to loop if client is moderator
+				if (!c.hasRight(Right.moderator) && !r.getRoomGroups().isEmpty()) {
+					for (RoomGroup rg : r.getRoomGroups()) {
+						GroupUser gu = getBean(GroupUserDao.class).getByGroupAndUser(rg.getGroup().getId(), getUserId());
+						if (gu.isModerator()) {
+							c.getRights().add(Right.moderator);
 							break;
 						}
 					}
@@ -389,7 +401,7 @@ public class RoomPanel extends BasePanel {
 		WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 		Executor executor = settings.getWebSocketPushMessageExecutor();
-		for (Client c : getRoomUsers(m.getRoomId())) {
+		for (Client c : getRoomClients(m.getRoomId())) {
 			try {
 				final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
 				if (wsConnection != null) {
@@ -411,8 +423,8 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	public static boolean hasRight(long userId, long roomId, Client.Right r) {
-		for (Client c : getRoomUsers(roomId)) {
-			if (c.getUserId() == userId && c.hasRight(r)) {
+		for (Client c : getRoomClients(roomId)) {
+			if (c.getUserId().equals(userId) && c.hasRight(r)) {
 				return true;
 			}
 		}
@@ -421,7 +433,7 @@ public class RoomPanel extends BasePanel {
 	
 	public static void sendRoom(long roomId, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
-		for (Client c : getRoomUsers(roomId)) {
+		for (Client c : getRoomClients(roomId)) {
 			try {
 				reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
 			} catch (Exception e) {

@@ -319,8 +319,7 @@ public class RoomMenuPanel extends Panel {
 		Client c = room.getClient();
 		removeUserFromRoom(c);
 		if (broadcast) {
-			RoomMessage m = new RoomMessage(room.getRoom().getId(), c.getUserId(), RoomMessage.Type.roomExit);
-			RoomPanel.broadcast(m);
+			RoomPanel.broadcast(new RoomMessage(room.getRoom().getId(), c.getUserId(), RoomMessage.Type.roomExit));
 		}
 	}
 }

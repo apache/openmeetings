@@ -104,6 +104,9 @@ public class Client implements IDataProviderEntity {
 	}
 
 	public boolean hasRight(Right right) {
+		if (Right.superModerator == right) {
+			return rights.contains(right);
+		}
 		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
 	}
 
@@ -169,5 +172,11 @@ public class Client implements IDataProviderEntity {
 		} else if (!uid.equals(other.uid))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + userId + ", roomId=" + roomId
+				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 }

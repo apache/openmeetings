@@ -57,7 +57,7 @@ public class SwfPanel extends BasePanel {
 		add(new Label("init", getInitFunction(pp)).setEscapeModelStrings(false));
 	}
 
-	private ResourceReference newResourceReference() {
+	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	}
 	
