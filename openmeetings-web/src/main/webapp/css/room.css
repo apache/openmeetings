@@ -206,3 +206,17 @@
 	max-height: 100px;
 	overflow-y: auto;
 }
+.sip .button-row {
+	text-align: center;
+	margin: 5px;
+}
+.sip .button-row input.sip-number {
+	width: 130px;
+}
+.sip .button-row #sip-dialer-btn-erase {
+	margin-left: 5px;
+}
+.sip .button-row #sip-dialer-btn-erase .ui-button-text {
+	padding: .1em .7em;
+	font-weight: bolder;
+}

@@ -44,8 +44,6 @@
    	<include href="popups/" />
    	<include href="moderation/" />
    	
-    <include href="sip/" />
-    
     <include href="flexibleConferenceRoom/" />
     
 </library>

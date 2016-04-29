@@ -69,6 +69,7 @@ public class RoomMenuPanel extends Panel {
 	private final CreatePollDialog createPoll;
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
+	private final SipDialerDialog sipDialer;
 	private final MenuPanel menuPanel;
 	private final StartSharingButton shareBtn;
 	private final Label roomName;
@@ -171,7 +172,14 @@ public class RoomMenuPanel extends Panel {
 			pollResults.open(target);
 		}
 	};
-	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString(1447), Application.getString(1488), false);
+	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString(1447), Application.getString(1488), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			sipDialer.open(target);
+		}
+	};
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
@@ -187,8 +195,8 @@ public class RoomMenuPanel extends Panel {
 		add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
 		add(vote = new VoteDialog("vote"));
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
+		add(sipDialer = new SipDialerDialog("sipDialer", room));
 	}
-	
 	
 	@Override
 	protected void onInitialize() {
@@ -251,7 +259,8 @@ public class RoomMenuPanel extends Panel {
 			return;
 		}
 		Room r = room.getRoom();
-		boolean pollExists = getBean(PollDao.class).hasPoll(r.getId());
+		PollDao pollDao = getBean(PollDao.class);
+		boolean pollExists = pollDao.hasPoll(r.getId());
 		User u = getBean(UserDao.class).get(getUserId());
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
@@ -267,21 +276,23 @@ public class RoomMenuPanel extends Panel {
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.audio) || !room.getClient().hasRight(Client.Right.video));
 		pollCreateMenuItem.setEnabled(moder);
-		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(r.getId(), getUserId()));
-		pollResultMenuItem.setEnabled(pollExists || getBean(PollDao.class).getArchived(r.getId()).size() > 0);
+		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
+		pollResultMenuItem.setEnabled(pollExists || pollDao.getArchived(r.getId()).size() > 0);
+		sipDialerMenuItem.setEnabled(r.isSipEnabled() && getBean(ConfigurationDao.class).isSipEnabled());
 		//TODO sip menus
 		menuPanel.update(handler);
 		//FIXME TODO askBtn should be visible if moder is in room
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
-			org.apache.openmeetings.db.entity.room.Client recUser = getBean(ISessionManager.class).getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
+			ISessionManager sessMngr = getBean(ISessionManager.class);
+			org.apache.openmeetings.db.entity.room.Client recUser = sessMngr.getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
 			if (recUser != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.get().format(recUser.getConnectedSince())));
 				roomClass.append(" screen");
 			}
-			org.apache.openmeetings.db.entity.room.Client pubUser = getBean(ISessionManager.class).getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
+			org.apache.openmeetings.db.entity.room.Client pubUser = sessMngr.getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
 			if (pubUser != null) {
 				if (recUser != null) {
 					roomTitle.append('\n');
