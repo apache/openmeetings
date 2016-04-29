@@ -55,16 +55,14 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
 	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added 
-	private final Long roomId;
 	private final PollAnswerForm form;
 	private final DialogButton vote = new DialogButton("vote", Application.getString(32));
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> user = Model.of((String)null);
 
-	public VoteDialog(String id, Long roomId) {
+	public VoteDialog(String id) {
 		super(id, Application.getString(18));
-		this.roomId = roomId;
 		add(form = new PollAnswerForm("form", new CompoundPropertyModel<RoomPollAnswer>(new RoomPollAnswer())));
 	}
 	
@@ -72,9 +70,9 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		return u == null ? "" : (getUserId().equals(u.getId()) ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname());
 	}
 	
-	public void updateModel(IPartialPageRequestHandler target) {
+	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {
 		RoomPollAnswer a = new RoomPollAnswer();
-		a.setRoomPoll(getBean(PollDao.class).getByRoom(roomId));
+		a.setRoomPoll(rp);
 		User u = getBean(UserDao.class).get(getUserId());
 		a.setVotedUser(u);
 		user.setObject(getName(a.getRoomPoll().getCreator()));
