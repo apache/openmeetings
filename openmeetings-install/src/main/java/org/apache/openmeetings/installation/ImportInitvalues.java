@@ -45,6 +45,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
@@ -266,7 +267,7 @@ public class ImportInitvalues {
 		// red5SIP Integration Coniguration Values
 		// ***************************************
 
-		cfgDao.add("red5sip.enable", cfg.red5SipEnable, null, "Enable to enable the red5SIP integration ");
+		cfgDao.add(CONFIG_SIP_ENABLED, cfg.red5SipEnable, null, "Enable to enable the red5SIP integration ");
 		cfgDao.add("red5sip.room_prefix", cfg.red5SipRoomPrefix, null,
 				"Numerical prefix for OM rooms created inside the SIP");
 		cfgDao.add("red5sip.exten_context", cfg.red5SipExtenContext, null,

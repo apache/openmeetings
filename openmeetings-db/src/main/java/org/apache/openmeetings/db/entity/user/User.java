@@ -397,8 +397,7 @@ public class User implements IDataProviderEntity {
 				throw new RuntimeException("Password of invalid length is provided");
 			}
 		}
-		String sipEnabled = configDao.getConfValue("red5sip.enable", String.class, "no");
-		if("yes".equals(sipEnabled)) {
+		if (configDao.isSipEnabled()) {
 			AsteriskSipUser u = getSipUser();
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());

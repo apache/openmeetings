@@ -91,6 +91,40 @@ function startPrivateChat(el) {
 	openChat();
 	$('#chatMessage .wysiwyg-editor').click();
 }
+/***** functions required by SIP   ******/
+function sipBtnClick() {
+	var txt = $('.sip-number');
+	txt.val(txt.val() + $(this).data('value'));
+}
+function sipBtnEraseClick() {
+	var txt = $('.sip-number');
+	var t = txt.val();
+	if (!!t) {
+		txt.val(t.substring(0, t.length -1));
+	}
+}
+function sipGetKey(evt) {
+	var k = -1;
+	if (evt.keyCode > 47 && evt.keyCode < 58) {
+		k = evt.keyCode - 48;
+	}
+	if (evt.keyCode > 95 && evt.keyCode < 106) {
+		k = evt.keyCode - 96;
+	}
+	return k;
+}
+function sipKeyDown(evt) {
+	var k = sipGetKey(evt);
+	if (k > 0) {
+		$('#sip-dialer-btn-' + k).addClass('ui-state-active');
+	}
+}
+function sipKeyUp(evt) {
+	var k = sipGetKey(evt);
+	if (k > 0) {
+		$('#sip-dialer-btn-' + k).removeClass('ui-state-active');
+	}
+}
 
 /***** functions required by SWF   ******/
 function audioActivity(uid, active) {
