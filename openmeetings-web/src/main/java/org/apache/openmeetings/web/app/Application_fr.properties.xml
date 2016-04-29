@@ -123,7 +123,7 @@
   <entry key="103">Le nom d'utilisateur doit contenir au moins 4 caractères</entry>
   <entry key="104">Le mot de passe doit contenir au moins 4 caractères</entry>
   <entry key="105">Le nom d'utilisateur existe déjà</entry>
-  <entry key="106">Cette adresse e-mail est déjà utilisée</entry>
+  <entry key="106">Cette adresse de courriel est déjà utilisée</entry>
   <entry key="107">Erreur système, merci de contacter l'administrateur</entry>
   <entry key="108">Connexion</entry>
   <entry key="109">Utilisateur :</entry>
@@ -136,7 +136,7 @@
   <entry key="116">Retapez :</entry>
   <entry key="117">Prénom :</entry>
   <entry key="118">Nom :</entry>
-  <entry key="119">E-mail :</entry>
+  <entry key="119">Courriel :</entry>
   <entry key="120">Pays :</entry>
   <entry key="121">Enregistrer</entry>
   <entry key="122">Annuler</entry>
@@ -154,7 +154,7 @@
   <entry key="134">Confirmez</entry>
   <entry key="135">Prénom</entry>
   <entry key="136">Nom</entry>
-  <entry key="137">E-mail</entry>
+  <entry key="137">Courriel</entry>
   <entry key="138">Date de naissance</entry>
   <entry key="139">Rue et N°</entry>
   <entry key="140">Code postal/Ville</entry>
@@ -243,15 +243,15 @@
   <entry key="223">Pseudo</entry>
   <entry key="224">Prénom</entry>
   <entry key="225">Nom</entry>
-  <entry key="226">E-mail</entry>
+  <entry key="226">Courriel</entry>
   <entry key="227">Langue</entry>
   <entry key="228">Entrer</entry>
   <entry key="229">Chargement</entry>
   <entry key="230">Sélectionnez votre langue</entry>
   <entry key="231">Mot de passe erroné</entry>
   <entry key="232">Merci de mettre deux mots de passes identiques avec 6 caractères minimum</entry>
-  <entry key="233">Adresse e-mail erronée</entry>
-  <entry key="234">Vous avez utilisé une adresse E-mail non valide</entry>
+  <entry key="233">Adresse de courriel erronée</entry>
+  <entry key="234">Vous avez utilisé une adresse de courriel non valide</entry>
   <entry key="235">Enregistrement effectué</entry>
   <entry key="236">Votre compte a été créé. Vous pouvez maintenant vous connecter</entry>
   <entry key="237">Vous ne pouvez pas partager votre écran car un autre utilisateur utilise déjà cette fonctionnalité</entry>
@@ -328,15 +328,15 @@
   <entry key="310">Quitter</entry>
   <entry key="311">Mot de passe oublié ?</entry>
   <entry key="312">Réinitialiser votre mot de passe</entry>
-  <entry key="313">Par e-mail</entry>
+  <entry key="313">Par courriel</entry>
   <entry key="314">Par login</entry>
-  <entry key="315">Votre e-mail</entry>
+  <entry key="315">Votre courriel</entry>
   <entry key="316">Votre login</entry>
-  <entry key="317">Envoyer un e-mail de réinitialisation</entry>
+  <entry key="317">Envoyer un courriel de réinitialisation</entry>
   <entry key="318">Aucune adresse trouvée. Soyez sûr d'avoir entré la même adresse que durant l'inscription.</entry>
-  <entry key="319">Entrez votre e-mail ou nom d'utilisateur</entry>
+  <entry key="319">Entrez votre courriel ou nom d'utilisateur</entry>
   <entry key="320">Il n'y a pas d'utilisateur avec ce nom</entry>
-  <entry key="321">Un e-mail contenant un lien vous a été envoyé. Si vous n'avez pas reçu d'e-mail, vérifiez votre antispam et redemandez une confirmation.</entry>
+  <entry key="321">Un courriel contenant un lien vous a été envoyé. Si vous n'avez pas reçu de courriel, vérifiez votre antispam et redemandez une confirmation.</entry>
   <entry key="324">Hachage non valide. Pas d'utilisateur trouvé.</entry>
   <entry key="325">Changez votre mot de passe</entry>
   <entry key="326">Login</entry>
@@ -352,7 +352,7 @@
   <entry key="336">Mot de passe non valide</entry>
   <entry key="337">Déconnecté avec succès</entry>
   <entry key="338">Enregistrement depuis la page d'accueil désactivé.</entry>
-  <entry key="339">E-mail non valide</entry>
+  <entry key="339">Courriel non valide</entry>
   <entry key="340">Nom de fichier identique, veuillez choisir un autre nom de fichier</entry>
   <entry key="341">Nom de fichier trop court</entry>
   <entry key="342">Impossible de sauvegarder l'adresse</entry>
@@ -523,7 +523,7 @@
   <entry key="507">Vos données utilisateur :</entry>
   <entry key="508">Login:</entry>
   <entry key="509">Mot de passe :</entry>
-  <entry key="510">E-mail :</entry>
+  <entry key="510">Courriel :</entry>
   <entry key="511">Equipe-{0}</entry>
   <entry key="512">Inscription {0}</entry>
   <entry key="513">{0} - Réinitialiser mot de passe</entry>
@@ -532,7 +532,7 @@
   <entry key="516">Si ce lien ne fonctionne pas, copier/coller-le dans votre navigateur.</entry>
   <entry key="517">{0} nouveau mot de passe</entry>
   <entry key="518">Entrez une date valide, par exemple 24.12.2001 (jj.mm.aaaa)</entry>
-  <entry key="519">Entrez un e-mail valide, par exemple name@mail.com</entry>
+  <entry key="519">Entrez un courriel valide, par exemple nom@courriel.com</entry>
   <entry key="520">Entrez un nombre décimal valide, par exemple 1.00</entry>
   <entry key="521">Entrez un entier valide, par exemple 100</entry>
   <entry key="522">Entrez un numéro de téléphone valide, par exemple 01 02 03 04 05</entry>
@@ -645,7 +645,7 @@
   <entry key="629">Ajouter un utilisateur extérieur</entry>
   <entry key="630">Prénom</entry>
   <entry key="631">Nom</entry>
-  <entry key="632">E-mail</entry>
+  <entry key="632">Courriel</entry>
   <entry key="633">Confirmer la sortie</entry>
   <entry key="634">Etes-vous sûr de vouloir quitter ?</entry>
   <entry key="635">Actions</entry>
@@ -681,13 +681,13 @@
   <entry key="665">Il n'y a pas de session associée à cet ID.</entry>
   <entry key="666">C'est un compte d'administration ou de modérateur. Vous ne pouvez l'éditer qu'à travers l'onglet d'administration.</entry>
   <entry key="667">Pour terminer votre enregistrement veuillez cliquer sur le lien suivant. Ou copier l'URL dans la barre d'adresse de votre navigateur.</entry>
-  <entry key="668">Cliquez pour vérifier votre E-mail</entry>
+  <entry key="668">Cliquez pour vérifier votre courriel</entry>
   <entry key="669">Aucun utilisateur pour ce hachage.</entry>
   <entry key="670">Cet utilisateur est déjà activé !</entry>
   <entry key="671">Vous avez activé votre compte avec succès !</entry>
   <entry key="672">Se connecter maintenant</entry>
-  <entry key="673">Votre compte n'est pas actif. Utilisez le lien dans l'e-mail que vous avez reçu pour l'enregistrement.</entry>
-  <entry key="674">Vous êtes enregistré. Nous vous avons envoyé un e-mail avec un code de vérification. Regardez votre boite de messagerie.</entry>
+  <entry key="673">Votre compte n'est pas actif. Utilisez le lien dans le courriel que vous avez reçu pour l'enregistrement.</entry>
+  <entry key="674">Vous êtes enregistré. Nous vous avons envoyé un courriel avec un code de vérification. Regardez votre boite de messagerie.</entry>
   <entry key="675">Enlever le rôle de modérateur à cet utilisateur</entry>
   <entry key="676">Donner les droits de modération à cet utilisateur</entry>
   <entry key="677">Utilisateur</entry>
@@ -776,8 +776,8 @@
   <entry key="760">Annuler</entry>
   <entry key="761">Début de réunion</entry>
   <entry key="762">Ne plus poser cette question</entry>
-  <entry key="763">REC</entry>
-  <entry key="764">PLAY</entry>
+  <entry key="763">Enreg.</entry>
+  <entry key="764">Lire</entry>
   <entry key="765">Vous pouvez continuer sans tester si vous ne pensez pas publier votre voix ou votre vidéo. Les participants sans audio ou vidéo peuvent utiliser le tableau blanc, partager leur écran ou écrire des messages.</entry>
   <entry key="766">STOP</entry>
   <entry key="767">Niveau</entry>
@@ -833,7 +833,7 @@
   <entry key="817">Super</entry>
   <entry key="818">ID</entry>
   <entry key="819">Nom</entry>
-  <entry key="820">E-mail</entry>
+  <entry key="820">Courriel</entry>
   <entry key="821">Ajouter un nouveau modérateur par défaut</entry>
   <entry key="822">C'est le super modérateur</entry>
   <entry key="823">Si la salle est modérée, un utilisateur avec le niveau modérateur ou administrateur est automatiquement modérateur s'il participe à la réunion. Si vous ne voulez pas de ce fonctionnement et que voulez qu'un certain utilisateur devienne modérateur, utilisez l'option modérateur par défaut.</entry>
@@ -919,7 +919,7 @@
   <entry key="905">L'applet SIP n'est pas prêt. Acceptez l'applet et cliquez ok !</entry>
   <entry key="906">Obtenir la modération</entry>
   <entry key="907">Sauvegarder les modifications de la réunion</entry>
-  <entry key="908">La réunion a été modifiée. Voulez-vous sauvegarder les changements ? &lt;br/&gt;&lt;br/&gt;Tous les participants à la réunion recevront un e-mail avec la date et l'heure mises à jour (cela dépend du type de notification pour cette réunion).</entry>
+  <entry key="908">La réunion a été modifiée. Voulez-vous sauvegarder les changements ? &lt;br/&gt;&lt;br/&gt;Tous les participants à la réunion recevront un courriel avec la date et l'heure mises à jour (cela dépend du type de notification pour cette réunion).</entry>
   <entry key="909">Pour accéder à d'autres enregistrements vous devez vous connecter à l'application {0} Application.</entry>
   <entry key="910">Choisissez l'utilisateur pour cette vidéo</entry>
   <entry key="911">Utilisateurs disponibles pour ce conteneur</entry>
@@ -990,9 +990,9 @@
   <entry key="976">Montant</entry>
   <entry key="977">Soumettre</entry>
   <entry key="978">Etape 1: {0} - Formulaire de paiement</entry>
-  <entry key="979">E-mail</entry>
+  <entry key="979">Courriel</entry>
   <entry key="980">Cliquez "Régler avec Paypal" pour payer.&lt;br/&gt; Paypal accepte VISA, MasterCard, Discover ou American Express. &lt;br/&gt;Il ne faut pas s'inscrire chez Paypal. &lt;br/&gt;Les citoyens allemands peuvent aussi payer avec un débit direct (Per Lastschrift-Einzug).</entry>
-  <entry key="981">Merci d'avoir acheté {0}. &lt;br/&gt; &lt;br/&gt; Dès que nous aurons reçu le paiement, votre compte sera mis à jour.&lt;br/&gt; Vous recevrez un e-mail avec votre facture en PDF.&lt;br/&gt;Vous pouvez également vérifier les transactions passées et actuelles dansd votre profil.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;Vous pouvez fermer cette fenêtre maintenant et retourner à {0}.</entry>
+  <entry key="981">Merci d'avoir acheté {0}. &lt;br/&gt; &lt;br/&gt; Dès que nous aurons reçu le paiement, votre compte sera mis à jour.&lt;br/&gt; Vous recevrez un courriel avec votre facture en PDF.&lt;br/&gt;Vous pouvez également vérifier les transactions passées et actuelles dansd votre profil.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;Vous pouvez fermer cette fenêtre maintenant et retourner à {0}.</entry>
   <entry key="982">Soumettre et acheter !</entry>
   <entry key="983">Cliquer et acheter !</entry>
   <entry key="984">Etape 3 : Paiement {0} - Vérifier la commande et acheter !</entry>
@@ -1011,7 +1011,7 @@
   <entry key="997">Facture</entry>
   <entry key="998"></entry>
   <entry key="999">Vous devez acheter un volume forfaitaire pour pouvoir envoyer des invitations ou créer des réunions via le calendrier. Avec un paiement à la minute il ne vous est possible que d'accéder à {0}. Vous ne pouvez pas permettre à des tiers de participer à une réunion.</entry>
-  <entry key="1000">Cette adresse e-mail est déjà utilisée par un autre utilisateur.</entry>
+  <entry key="1000">Cette adresse de courriel est déjà utilisée par un autre utilisateur.</entry>
   <entry key="1001">Paramètres SIP</entry>
   <entry key="1002">Le numéro de conférence et PIN sont créés automatiquement via la passerelle OpenXG RPC</entry>
   <entry key="1003">Numéro SIP</entry>
@@ -1218,7 +1218,7 @@
   <entry key="1204">Envoyer</entry>
   <entry key="1205"></entry>
   <entry key="1206">Messages</entry>
-  <entry key="1207">Nouveau mail</entry>
+  <entry key="1207">Nouveau courriel</entry>
   <entry key="1208">Cliquez pour écrire un nouveau message à n'importe quel de vos contacts</entry>
   <entry key="1209">Ecrire un nouveau message</entry>
   <entry key="1210">A :</entry>
@@ -1257,7 +1257,7 @@
   <entry key="1243">Déplacer vers répertoire...</entry>
   <entry key="1244">Ajouter nouveau répertoire...</entry>
   <entry key="1245">Supprimer</entry>
-  <entry key="1246">Des mails effacés se trouvent toujours dans votre poubelle !</entry>
+  <entry key="1246">Des courriels effacés se trouvent toujours dans votre poubelle !</entry>
   <entry key="1247">Marquer non lu</entry>
   <entry key="1248">Marquer lu</entry>
   <entry key="1249">Répondre</entry>
@@ -1301,14 +1301,14 @@
   <entry key="1287">Choisissez votre pseudo</entry>
   <entry key="1288">Prénom</entry>
   <entry key="1289">Nom</entry>
-  <entry key="1290">E-mail</entry>
+  <entry key="1290">Courriel</entry>
   <entry key="1291">Ok</entry>
   <entry key="1292">Longueur minimum de 4 caractères pour le prénom et le nom.</entry>
-  <entry key="1293">Veuillez entrer un e-mail valide !</entry>
+  <entry key="1293">Veuillez entrer un courriel valide !</entry>
   <entry key="1294">Facebook</entry>
   <entry key="1295">Vous connecter avec votre login Facebook</entry>
   <entry key="1296">Date inscr.</entry>
-  <entry key="1297">Vous êtes connecté avec votre compte Facebook. Vous devriez mettre à jour votre profil avec l'e-mail correct. Sans quoi vous ne recevrez pas les invitations et messages privés des autres utilisateurs.</entry>
+  <entry key="1297">Vous êtes connecté avec votre compte Facebook. Vous devriez mettre à jour votre profil avec le courriel correct. Sans quoi vous ne recevrez pas les invitations et messages privés des autres utilisateurs.</entry>
   <entry key="1298">Message</entry>
   <entry key="1299">Ne plus montrer le message de mise à jour du profil</entry>
   <entry key="1300">plus d'options d'affichage...</entry>
@@ -1360,7 +1360,7 @@
   <entry key="1346">Ejecter</entry>
   <entry key="1347">T'chat</entry>
   <entry key="1348">Inviter Participants</entry>
-  <entry key="1349">Par e-mail</entry>
+  <entry key="1349">Par courriel</entry>
   <entry key="1350">L'utilisateur est modérateur</entry>
   <entry key="1351">L'utilisateur a sa webcam connectée</entry>
   <entry key="1352">Désactiver le remplissage de forme</entry>
@@ -1427,7 +1427,7 @@
   <entry key="1413">actif</entry>
   <entry key="1414">Simple graphique</entry>
   <entry key="1415">Graphique camembert</entry>
-  <entry key="1416">Veuillez entrer e-mail</entry>
+  <entry key="1416">Veuillez entrer un courriel</entry>
   <entry key="1417">Nouveau(x) message(s)</entry>
   <entry key="1418">Clôturer</entry>
   <entry key="1419">Etes-vous sûr de vouloir clore ce sondage ? Plus personne ne pourra plus voter.</entry>
@@ -1499,7 +1499,7 @@
   <entry key="1486">Editer les paramètres de la caméra et du micro</entry>
   <entry key="1487">Confirmer et quitter la salle</entry>
   <entry key="1488">Appeler une personne extérieure via VoIP/SIP</entry>
-  <entry key="1489">Envoyer un mail avec un lien direct vers cette salle</entry>
+  <entry key="1489">Envoyer un courriel avec un lien direct vers cette salle</entry>
   <entry key="1490">Changer les paramètres de votre tableau blanc</entry>
   <entry key="1491">Taille maximum</entry>
   <entry key="1492">Demander au modérateur le droit de partager votre tableau blanc</entry>
@@ -1515,12 +1515,12 @@
   <entry key="1502">Détails du serveur</entry>
   <entry key="1503">Envoyer SMS</entry>
   <entry key="1504">Publier. Utilisateur :</entry>
-  <entry key="1505">Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système &lt;ol&gt; &lt;li&gt;Aller dans le répertoire d'installation d'OM (par ex. /opt/red5)&lt;/li&gt; &lt;li&gt;Arrêter OM (par ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)&lt;/li&gt; &lt;li&gt;télécharger la nouvelle version d'OM&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)&lt;/li&gt; &lt;li&gt;extraire la nouvelle version d'OM dans /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (ou './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut )&lt;/li&gt; &lt;li&gt;Démarrer OM&lt;/li&gt; &lt;/ol&gt;</entry>
+  <entry key="1505">Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système &lt;ol&gt; &lt;li&gt;Aller dans le répertoire d'installation d'OM (par ex. /opt/red5)&lt;/li&gt; &lt;li&gt;Arrêter OM (par ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/nom_de_la_sauvegarde.zip (créer la sauvegarde d'OM)&lt;/li&gt; &lt;li&gt;télécharger la nouvelle version d'OM&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)&lt;/li&gt; &lt;li&gt;extraire la nouvelle version d'OM dans /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/aujourdhui_om_sauvegarde.zip (ou './admin.sh -i -file ~/aujourdhui_om_sauvegarde.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BDD qui n'est pas celle par défaut )&lt;/li&gt; &lt;li&gt;Démarrer OM&lt;/li&gt; &lt;/ol&gt;</entry>
   <entry key="1506">Salles pour tous les utilisateurs</entry>
   <entry key="1507">Salles pour les utilisateurs du groupe actuel</entry>
   <entry key="1508">Salles de l'utilisateur</entry>
   <entry key="1509">Créer/Modifier salle particulière</entry>
-  <entry key="1510">Vous pouvez entrer plusieurs adresses sous le format : prénom1 nom1 &lt;e-mail1&gt;,"prénom2 nom2" &lt;e-mail2&gt;,'prénom3 nom3' &lt;e-mail3&gt;, ...</entry>
+  <entry key="1510">Vous pouvez entrer plusieurs adresses sous le format : prénom1 nom1 &lt;courriel1&gt;,"prénom2 nom2" &lt;courriel2&gt;,'prénom3 nom3' &lt;courriel3&gt;, ...</entry>
   <entry key="1511">Ajuster le volume</entry>
   <entry key="1512">Ajuster le volume du micro</entry>
   <entry key="1513">T'chat est-t-il modéré</entry>
@@ -1547,7 +1547,7 @@
   <entry key="1534">Montrer les statistiques de session</entry>
   <entry key="1535">Détails de session</entry>
   <entry key="1536">Importer Système</entry>
-  <entry key="1537">Inclure les fichiers uploadés et les enregistrements dans le backup</entry>
+  <entry key="1537">Inclure les fichiers déposés sur le serveur et les enregistrements dans la sauvegarde</entry>
   <entry key="1538">Activer le transport SIP dans la salle</entry>
   <entry key="1539">Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</entry>
   <entry key="1540">Veuillez spécifier votre fuseau horaire</entry>
@@ -1556,67 +1556,67 @@
   <entry key="1546">Bienvenue</entry>
   <entry key="1547">Widget affichant les infos de base des utilisateurs et les liens pour le support</entry>
   <entry key="1548">Widgets</entry>
-  <entry key="1549">About</entry>
-  <entry key="1550">Name</entry>
+  <entry key="1549">A propos</entry>
+  <entry key="1550">Nom</entry>
   <entry key="1551">Version</entry>
-  <entry key="1552">Revision</entry>
-  <entry key="1553">Build date</entry>
-  <entry key="1554">Loading ...</entry>
-  <entry key="1555">today</entry>
+  <entry key="1552">Révision</entry>
+  <entry key="1553">Date de compilation</entry>
+  <entry key="1554">Chargement ...</entry>
+  <entry key="1555">aujourd'hui</entry>
   <entry key="1556">Jan</entry>
-  <entry key="1557">Feb</entry>
+  <entry key="1557">Fév</entry>
   <entry key="1558">Mar</entry>
-  <entry key="1559">Apr</entry>
-  <entry key="1560">May</entry>
-  <entry key="1561">Jun</entry>
-  <entry key="1562">Jul</entry>
-  <entry key="1563">Aug</entry>
+  <entry key="1559">Avr</entry>
+  <entry key="1560">Mai</entry>
+  <entry key="1561">Jui</entry>
+  <entry key="1562">Juil</entry>
+  <entry key="1563">Aou</entry>
   <entry key="1564">Sep</entry>
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
-  <entry key="1567">Dec</entry>
+  <entry key="1567">Déc</entry>
   <entry key="1571">OAuth2</entry>
-  <entry key="1572">Manage OAuth2 configurations</entry>
-  <entry key="1573">Name</entry>
-  <entry key="1574">Enabled</entry>
-  <entry key="1575">Icon URL</entry>
+  <entry key="1572">Gérer les configurations OAuth2 </entry>
+  <entry key="1573">Nom</entry>
+  <entry key="1574">Activer</entry>
+  <entry key="1575">URL de l'icône</entry>
   <entry key="1576">client_id</entry>
   <entry key="1577">client_secret</entry>
-  <entry key="1578">Request key URL</entry>
-  <entry key="1579">Request token URL</entry>
-  <entry key="1580">Request info URL</entry>
-  <entry key="1581">OAuth2 config</entry>
-  <entry key="1582">Login param name</entry>
-  <entry key="1583">Email param name</entry>
-  <entry key="1584">Firstname param name</entry>
-  <entry key="1585">Lastname param name</entry>
-  <entry key="1586">Request token attributes</entry>
-  <entry key="1587">Redirect uri</entry>
-  <entry key="1588">You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</entry>
-  <entry key="1589">Notify on disconnect</entry>
-  <entry key="1590">Display</entry>
-  <entry key="1591">Your account has been created. Confirmation email has been sent. You can now login.</entry>
-  <entry key="1592">End date entered is earlier than start date.</entry>
-  <entry key="1593">Exit value</entry>
-  <entry key="1594">Conversion messages</entry>
-  <entry key="1595">Recording file is not found</entry>
-  <entry key="1596">Add Whiteboard</entry>
-  <entry key="1597">You can enter address in the format: firstname1 lastname1 &lt;email1&gt; OR "firstname2 lastname2" &lt;email2&gt; OR 'firstname3 lastname3' &lt;email3&gt;</entry>
-  <entry key="1598">Security</entry>
-  <entry key="1599">Access denied. You have no rights to enter this room.</entry>
-  <entry key="1600">Re-convert</entry>
-  <entry key="1601">Apply for audio access</entry>
-  <entry key="1602">Ask moderator to share your micro</entry>
-  <entry key="1603">would like to share his audio</entry>
-  <entry key="1604">Allow this user to publish their audio</entry>
-  <entry key="1605">Remove audio of this user</entry>
-  <entry key="1606">I would like to share my audio</entry>
-  <entry key="1607">You are allowed to share your audio</entry>
+  <entry key="1578">Demander l'URL de la clé</entry>
+  <entry key="1579">Demander l'URL du jeton</entry>
+  <entry key="1580">Demander l'URL d'infos</entry>
+  <entry key="1581">Configuration d'OAuth2</entry>
+  <entry key="1582">Nom du paramètre de l'identifiant</entry>
+  <entry key="1583">Nom du paramètre du courriel</entry>
+  <entry key="1584">Nom du paramètre du prénom</entry>
+  <entry key="1585">Nom du paramètre du nom</entry>
+  <entry key="1586">Demander les attributs du jeton</entry>
+  <entry key="1587">Rediriger l'URI</entry>
+  <entry key="1588">Vous pouvez entrer l'adresse du courriel au format: prenom1 nom1 &lt;courriel1&gt; ou "prenom2 nom2" &lt;courriel2&gt; ou 'prenom3 nom3' &lt;courriel3&gt; ou courriel</entry>
+  <entry key="1589">Notifier à la déconnexion</entry>
+  <entry key="1590">Afficher</entry>
+  <entry key="1591">Votre compte a été créé. Un courriel de confirmation a été envoyé. Vous pouvez maintenant vous connecter.</entry>
+  <entry key="1592">La date de fin saisie est antérieure à la date de début.</entry>
+  <entry key="1593">Valeur de sortie</entry>
+  <entry key="1594">Messages de conversion</entry>
+  <entry key="1595">Le fichier d'enregistrement est introuvable</entry>
+  <entry key="1596">Ajouter tableau blanc</entry>
+  <entry key="1597">Vous pouvez entrer l'adresse du courriel au format: prenom1 nom1 &lt;courriel1&gt; OR "prenom2 nom2" &lt;courriel2&gt; OR 'prenom3 nom3' &lt;courriel3&gt;</entry>
+  <entry key="1598">Sécurité</entry>
+  <entry key="1599">Accès refusé. Vous avez pas le droit d'entrer dans cette salle.</entry>
+  <entry key="1600">Re-convertir</entry>
+  <entry key="1601">Demande d'accès audio</entry>
+  <entry key="1602">Demander au modérateur de partager votre micro</entry>
+  <entry key="1603">aimerait partager son audio</entry>
+  <entry key="1604">Autoriser cet utilisateur à publier son audio</entry>
+  <entry key="1605">Retirer l'audio de cet utilisateur</entry>
+  <entry key="1606">Je voudrais partager mon audio</entry>
+  <entry key="1607">Vous êtes autorisé à partager votre audio</entry>
 	<entry key="install.wizard.install.header">Installation</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Activer l'upload et l'import d'images vers le tableau blanc<a
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Activer le dépot sur le serveur et l'import d'images vers le tableau blanc<a
 					href="#Enabling_Image_Upload_and_import_to_whiteboard"
 					class="section_anchor"></a>
 			</h4>
@@ -1625,7 +1625,7 @@
 					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>.
 					Les instructions d'installation peuvent être trouvées ici <a target="_blank"
 					href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>. Sur la majorité des systèmes linux vous pouvez le trouver via votre manager de paquets (apt-get).
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>. Sur la majorité des systèmes linux vous pouvez le trouver via votre gestionnaire de paquets (apt-get).
 				</li>
 			</ul>
 		</li>
@@ -1637,7 +1637,7 @@
 			<ul>
 				<li>Installez <strong>GhostScript</strong> sur le serveur. Vous trouverez plus d'information sur <a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
-					Sur la majorité des systèmes linux vous pouvez le trouver via votre manager de paquets (apt-get).
+					Sur la majorité des systèmes linux vous pouvez le trouver via votre gestionnaire de paquets (apt-get).
 				</li>
 				<li>Installez <strong>SWFTools</strong> sur le serveur. Vous trouverez plus d'informations sur <a target="_blank"
 					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>. 
@@ -1717,32 +1717,32 @@
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.oracle"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/OracleConfig.html">Oracle</a>]]></entry>
-	<entry key="install.wizard.db.step.field.title">DB configuration</entry>
-	<entry key="install.wizard.db.step.dbtype">Choose DB type</entry>
+	<entry key="install.wizard.db.step.field.title">Configuration BDD</entry>
+	<entry key="install.wizard.db.step.dbtype">Choisissez le type BDD</entry>
 	<entry key="install.wizard.db.step.db2.name">IBM DB2</entry>
 	<entry key="install.wizard.db.step.derby.name">Apache Derby</entry>
 	<entry key="install.wizard.db.step.mssql.name">MSSQL</entry>
 	<entry key="install.wizard.db.step.mysql.name">MySQL</entry>
 	<entry key="install.wizard.db.step.oracle.name">Oracle</entry>
 	<entry key="install.wizard.db.step.postgresql.name">PostgreSql</entry>
-	<entry key="install.wizard.db.step.host">Specify DB host</entry>
-	<entry key="install.wizard.db.step.port">Specify DB port</entry>
-	<entry key="install.wizard.db.step.dbname">Specify the name of the database</entry>
-	<entry key="install.wizard.db.step.user">Specify DB user</entry>
-	<entry key="install.wizard.db.step.pass">Specify DB password</entry>
-	<entry key="install.wizard.db.step.check">Check</entry>
-	<entry key="install.wizard.db.step.errorprops">Unable to get the properties</entry>
-	<entry key="install.wizard.db.step.nodriver">Unable to load proper DB driver, please download appropriate jar file, and restart the OM. Instructions: {0}</entry>
-	<entry key="install.wizard.db.step.notvalid">Database check was unsuccessfull</entry>
-	<entry key="install.wizard.db.step.error.patch">Unexpected error while patching persistence file: {0}</entry>
-	<entry key="install.wizard.db.step.valid">Database check was successfull</entry>
+	<entry key="install.wizard.db.step.host">Indiquez le nom d'hôte du serveur BDD</entry>
+	<entry key="install.wizard.db.step.port">Indiquez le port du serveur BDD</entry>
+	<entry key="install.wizard.db.step.dbname">Indiquez le nom de la base de données (BDD)</entry>
+	<entry key="install.wizard.db.step.user">Indiquez le nom d'utilisateur BDD</entry>
+	<entry key="install.wizard.db.step.pass">Indiquez le mot de passe de la BDD</entry>
+	<entry key="install.wizard.db.step.check">Vérification</entry>
+	<entry key="install.wizard.db.step.errorprops">Impossible d'obtenir les propriétés</entry>
+	<entry key="install.wizard.db.step.nodriver">Impossible de charger le pilote (driver) approprié pour la BDD, veuillez télécharger le fichier jar approprié, et redémarrez ensuite le serveur OpenMeetings. Instructions: {0}</entry>
+	<entry key="install.wizard.db.step.notvalid">La vérification de la base de données a échoué</entry>
+	<entry key="install.wizard.db.step.error.patch">Erreur inattendue lors de l'application du correctif sur le fichier de persistance: {0}</entry>
+	<entry key="install.wizard.db.step.valid">La vérification de la base de données a été réalisé avec succès</entry>
 	<entry key="install.wizard.params.step1.userdata">Données utilisateur</entry>
 	<entry key="install.wizard.params.step1.username">Nom d'utilisateur</entry>
 	<entry key="install.wizard.params.step1.username.title">Entrez un nom d'utilisateur</entry>
 	<entry key="install.wizard.params.step1.password">Mot de passe</entry>
 	<entry key="install.wizard.params.step1.password.title">Entrez un mot de passe</entry>
-	<entry key="install.wizard.params.step1.email">E-Mail</entry>
-	<entry key="install.wizard.params.step1.email.title">Entrez une adresse E-Mail</entry>
+	<entry key="install.wizard.params.step1.email">Courriel</entry>
+	<entry key="install.wizard.params.step1.email.title">Entrez une adresse de courriel</entry>
 	<entry key="install.wizard.params.step1.tz">Fuseau horaire</entry>
 	<entry key="install.wizard.params.step1.groupdata">Organisation(Domaines)</entry>
 	<entry key="install.wizard.params.step1.group">Nom</entry>
@@ -1750,28 +1750,28 @@
 
 	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister">Autoriser les  nouveaux utilisateurs de s'enregistrer (allow_frontend_register)</entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister">Envoyer un E-Mail aux nouveaux utilisateurs (sendEmailAtRegister)</entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Les nouveaux utilisateurs doivent vérifier leur adresse E-Mail (sendEmailWithVerficationCode)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">Envoyer un courriel aux nouveaux utilisateurs (sendEmailAtRegister)</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Les nouveaux utilisateurs doivent vérifier leur adresse de courriel (sendEmailWithVerficationCode)</entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms">Installer toutes les salles par défaut</entry>
-	<entry key="install.wizard.params.step2.mailReferer">Adresse mail du système (system_email_addr)</entry>
-	<entry key="install.wizard.params.step2.mailReferer.title">Entrez l'adresse mail utilisaée par le système</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Adresse de courriel du système (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Entrez l'adresse de courriel utilisée par le système</entry>
 	<entry key="install.wizard.params.step2.smtpServer">SMTP (smtp_server)</entry>
 	<entry key="install.wizard.params.step2.smtpServer.title">Entrez un  serveur SMTP</entry>
 	<entry key="install.wizard.params.step2.smtpPort">Port du serveur SMTP (Le port standard est 25) (smtp_port)</entry>
 	<entry key="install.wizard.params.step2.smtpPort.title">Entrez le port du serveur SMTP Normalement 25</entry>
 	<entry key="install.wizard.params.step2.mailAuthName">Nom d'utilisateur système SMTP (email_username)</entry>
-	<entry key="install.wizard.params.step2.mailAuthName.title">Entrez le nom d'utilisateur mail du système</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Entrez le nom d'utilisateur du courriel du système</entry>
 	<entry key="install.wizard.params.step2.mailAuthPass">Mot de passe SMTP (email_userpass)</entry>
-	<entry key="install.wizard.params.step2.mailAuthPass.title">Entrez le mot de passe mail du système</entry>
-	<entry key="install.wizard.params.step2.mailUseTls">Activer TLS pour le serveur mail</entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer">Inclure l'adresse mail de l'organisateur dans le champ des destinataires d'un E-Mail (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Entrez le mot de passe du courriel du système</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">Activer TLS pour le serveur de courriels</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">Inclure l'adresse de courriel de l'organisateur dans le champ des destinataires d'un courriel (inviter.email.as.replyto)</entry>
 	<entry key="install.wizard.params.step2.defaultLangId">Langue par défaut</entry>
 	<entry key="install.wizard.params.step2.defaultExportFont">Police par défaut pour l'export [default_export_font]</entry>
 
 	<entry key="install.wizard.params.step3.converters">Convertisseurs</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> Voir</entry>
 	<entry key="install.wizard.params.step3.installation">Installation</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom">Zoom des SWFTools</entry>
 	<entry key="install.wizard.params.step3.swfZoom.title">Veuillez indiquer le nombre de dpi que swftools devra utiliser lors de la conversion de PDF vers SWF.</entry>
 	<entry key="install.wizard.params.step3.swfZoom.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Indiquez combien de dpi swtools devra utiliser pour les conversions PDF vers SWF. (Par défaut : 100 dpi).</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools Qualité JPEG</entry>
@@ -1799,13 +1799,13 @@
 	<entry key="install.wizard.params.step3.officePath.title">Chemin vers OpenOffice/LibreOffice (optionnel). Indiquez le chemin réel dans le cas où jodconverter ne pourrait pas trouver l'installation de OpenOffice-/LibreOffice automatiquement.</entry>
 	<entry key="install.wizard.params.step3.officePath.text">Chemin vers OpenOffice/LibreOffice (optionnel). Indiquez le chemin réel dans le cas où jodconverter ne pourrait pas trouver l'installation de OpenOffice-/LibreOffice automatiquement.</entry>
 
-	<entry key="install.wizard.params.step4.crypt">Type de cryptage</entry>
-	<entry key="install.wizard.params.step4.cryptClassName">Classe de cryptage</entry>
-	<entry key="install.wizard.params.step4.cryptClassName.title">Indiquez le nom de la classe de cryptage. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !</entry>
+	<entry key="install.wizard.params.step4.crypt">Type de chiffrement</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Classe de chiffrement</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">Indiquez le nom de la classe de chiffrement. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !</entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		Vous pouvez utiliser ce cryptage par défaut qui est équivalent à la fonction MD5 de PHP ou style de cryptage BDS en utilisant : 
+		Vous pouvez utiliser ce chiffrement par défaut qui est équivalent à la fonction MD5 de PHP ou le style de chiffrement BDS en utilisant : 
 		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		Pour plus d'information ou pour écrire votre propre cryptage voir : <a
+		Pour plus d'information ou pour écrire votre propre chiffrement voir : <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables. 
 	]]></entry>
@@ -1817,12 +1817,12 @@
 	<entry key="install.wizard.params.step4.red5SipExtenContext">Contexte des extensions SIP</entry>
 	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Contexte des extensions Asterisk</entry>
 
-	<entry key="install.wizard.install.desc">Veuillez cliquer sur "Finish" pour commencer l'installation !</entry>
-	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
-	<entry key="install.wizard.install.failed">Installation is failed</entry>
+	<entry key="install.wizard.install.desc">Veuillez cliquer sur "Terminer" pour commencer l'installation !</entry>
+	<entry key="install.wizard.install.started">Veuillez patienter s'il vous plaît, l'installation est en cours</entry>
+	<entry key="install.wizard.install.failed">L'installation a échoué</entry>
 
 	<entry key="install.wizard.congrats.enter">Entrer dans l'application</entry>
-	<entry key="install.wizard.congrats.restart">Database was changed, please restart application to avoid possible issues</entry>
+	<entry key="install.wizard.congrats.restart">La base de données a été modifiée, veuillez s'il vous plaît redémarrer l'application pour éviter des problèmes éventuels</entry>
 	<entry key="install.wizard.congrats.port">Si votre serveur Red5 tourne sur un port différent ou sur un domaine différent</entry>
 	<entry key="install.wizard.congrats.config">modifiez la config du client</entry>
 	<entry key="install.wizard.congrats.mail">Liste de diffusion</entry>
@@ -1831,9 +1831,9 @@
   <entry key="room.type.conference">conférence (1-25 utilisateurs)</entry>
   <entry key="room.type.restricted">restreint (1-150 utilisateurs)</entry>
   <entry key="room.type.interview">interview (1:1 réunion avec enregistrement)</entry>
-  <entry key="appointment.reminder.none">do not send notification</entry>
-  <entry key="appointment.reminder.email">simple email</entry>
-  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="appointment.reminder.none">ne pas envoyer de notification</entry>
+  <entry key="appointment.reminder.email">courriel simple</entry>
+  <entry key="appointment.reminder.ical">courriel iCal</entry>
   <entry key="user.salutation.mr">M.</entry>
   <entry key="user.salutation.ms">Mme.</entry>
   <entry key="user.salutation.mrs">Mlle.</entry>
@@ -1843,35 +1843,37 @@
   <entry key="error.type.info">Message</entry>
   <entry key="poll.type.yesNo">Oui/Non</entry>
   <entry key="poll.type.numeric">Numérique 1-10</entry>
-  <entry key="wizard.button.finish">Finish</entry>
-	<entry key="main.menu.admin.email">Email management</entry>
-	<entry key="main.menu.admin.email.desc">Check e-mails processing by the system</entry>
-	<entry key="admin.email.group.label">Email message</entry>
-	<entry key="admin.email.status.NONE">None</entry>
-	<entry key="admin.email.status.SENDING">Sending</entry>
-	<entry key="admin.email.status.ERROR">Error</entry>
-	<entry key="admin.email.status.DONE">Done</entry>
-	<entry key="admin.email.recipients">Recipients</entry>
-	<entry key="admin.email.body">Body</entry>
-	<entry key="admin.email.errorCount">Error Count</entry>
-	<entry key="admin.email.lastError">Last Error</entry>
-	<entry key="admin.email.reset.status">Reset Status</entry>
-	<entry key="dashboard.widget.admin.title">Admin functions</entry>
-	<entry key="dashboard.widget.admin.desc">General Admin functions</entry>
-	<entry key="dashboard.widget.admin.cleanup.title">Cleanup report</entry>
-	<entry key="dashboard.widget.admin.cleanup.show">Show cleanup report</entry>
-	<entry key="dashboard.widget.admin.cleanup.temp">Temporary files:</entry>
-	<entry key="dashboard.widget.admin.cleanup.upload">Upload folder:</entry>
-	<entry key="dashboard.widget.admin.cleanup.profiles">profiles:</entry>
-	<entry key="dashboard.widget.admin.cleanup.invalid">invalid:</entry>
-	<entry key="dashboard.widget.admin.cleanup.deleted">deleted:</entry>
-	<entry key="dashboard.widget.admin.cleanup.missing">missing count:</entry>
-	<entry key="dashboard.widget.admin.cleanup.import">import:</entry>
-	<entry key="dashboard.widget.admin.cleanup.backup">backup:</entry>
-	<entry key="dashboard.widget.admin.cleanup.files">files:</entry>
-	<entry key="dashboard.widget.admin.cleanup.streams">Streams folder:</entry>
-	<entry key="dashboard.widget.admin.cleanup.final">final:</entry>
-	<entry key="dashboard.widget.admin.cleanup.cleanup">Cleanup</entry>
-	<entry key="dashboard.widget.admin.cleanup.warn">Are you sure you want to delete all temporary files? This operation cannot be undone.</entry>
-	<entry key="dashboard.widget.admin.cleanup.error">Unexpected error while performing cleanup</entry>
+  <entry key="wizard.button.finish">Terminer</entry>
+  <entry key="main.menu.admin.email">Gestion courriels</entry>
+  <entry key="main.menu.admin.email.desc">Verifier courriels traités par le système</entry>
+  <entry key="admin.email.group.label">Message courriel</entry>
+  <entry key="admin.email.status.NONE">Aucun</entry>
+  <entry key="admin.email.status.SENDING">Envoi</entry>
+  <entry key="admin.email.status.ERROR">Erreur</entry>
+  <entry key="admin.email.status.DONE">Terminé</entry>
+  <entry key="admin.email.recipients">Destinataires</entry>
+  <entry key="admin.email.body">Corps</entry>
+  <entry key="admin.email.errorCount">Compteur erreur</entry>
+  <entry key="admin.email.lastError">Dernière erreur</entry>
+  <entry key="admin.email.reset.status">Réinitialiser état</entry>
+  <entry key="dashboard.widget.admin.title">Fonctions d'admin</entry>
+  <entry key="dashboard.widget.admin.desc">Fonctions d'admin générales</entry>
+  <entry key="dashboard.widget.admin.cleanup.title">Rapport de nettoyage</entry>
+  <entry key="dashboard.widget.admin.cleanup.show">Montrer rapport de nettoyage</entry>
+  <entry key="dashboard.widget.admin.cleanup.temp">Fichier temporaires:</entry>
+  <entry key="dashboard.widget.admin.cleanup.upload">Dosier de dépôt:</entry>
+  <entry key="dashboard.widget.admin.cleanup.profiles">profils:</entry>
+  <entry key="dashboard.widget.admin.cleanup.invalid">invalide:</entry>
+  <entry key="dashboard.widget.admin.cleanup.deleted">supprimé:</entry>
+  <entry key="dashboard.widget.admin.cleanup.missing">compteur manquant:</entry>
+  <entry key="dashboard.widget.admin.cleanup.import">importer:</entry>
+  <entry key="dashboard.widget.admin.cleanup.backup">sauvegarde:</entry>
+  <entry key="dashboard.widget.admin.cleanup.files">fichiers:</entry>
+  <entry key="dashboard.widget.admin.cleanup.streams">Dossier des flux:</entry>
+  <entry key="dashboard.widget.admin.cleanup.final">final:</entry>
+  <entry key="dashboard.widget.admin.cleanup.cleanup">Nettoyage</entry>
+  <entry key="dashboard.widget.admin.cleanup.warn">Etes-vous sur de vouloir supprimer tous les fichiers temporaires ? Cette opération ne peut être annulée.</entry>
+  <entry key="dashboard.widget.admin.cleanup.error">Erreur inattendue en effectuant le nettoyage</entry>
+	<entry key="room.action.request.right.moderator">would like to be moderator of this room.</entry>
+	<entry key="admin.room.hidden.elements">Hidden room elements</entry>
 </properties>
