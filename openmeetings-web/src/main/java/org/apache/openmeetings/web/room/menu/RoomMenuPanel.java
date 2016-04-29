@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.message.RoomMessage;
@@ -145,7 +146,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			createPoll.updateModel(target, null); //TODO FIXME
+			createPoll.updateModel(target);
 			createPoll.open(target);
 		}
 	};
@@ -154,8 +155,11 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			vote.updateModel(target);
-			vote.open(target);
+			RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
+			if (rp != null) {
+				vote.updateModel(target, rp);
+				vote.open(target);
+			}
 		}
 	};
 	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString(37), Application.getString(1484), false) {
@@ -181,7 +185,7 @@ public class RoomMenuPanel extends Panel {
 		add(shareBtn = new StartSharingButton("share", room.getClient()));
 		add(invite = new InvitationDialog("invite", room.getRoom().getId()));
 		add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
-		add(vote = new VoteDialog("vote", room.getRoom().getId()));
+		add(vote = new VoteDialog("vote"));
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
 	}
 	
@@ -293,9 +297,12 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void pollCreated(IPartialPageRequestHandler handler) {
-		vote.updateModel(handler);
-		vote.open(handler);
-		update(handler);
+		RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
+		if (rp != null) {
+			vote.updateModel(handler, rp);
+			vote.open(handler);
+			update(handler);
+		}
 	}
 	
 	public void exit(IPartialPageRequestHandler handler) {

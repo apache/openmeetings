@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.RoomBroadcaster.broadcast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +29,9 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -53,7 +54,6 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private final Long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private String publicSid = null;
 
 	public CreatePollDialog(String id, Long roomId) {
 		super(id, Application.getString(18), new CompoundPropertyModel<RoomPoll>(new RoomPoll()));
@@ -61,8 +61,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		add(form = new PollForm("form", getModel()));
 	}
 
-	public void updateModel(AjaxRequestTarget target, String publicSid) {
-		this.publicSid = publicSid;
+	public void updateModel(AjaxRequestTarget target) {
 		RoomPoll p = new RoomPoll();
 		User u = getBean(UserDao.class).get(getUserId());
 		p.setCreator(u);
@@ -94,9 +93,10 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(PollDao.class).close(roomId);
-		RoomPoll p = getBean(PollDao.class).update(form.getModelObject());
-		broadcast(publicSid, "newPoll", p);
+		PollDao dao = getBean(PollDao.class);
+		dao.close(roomId);
+		dao.update(form.getModelObject());
+		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
 
 	private class PollForm extends Form<RoomPoll> {
