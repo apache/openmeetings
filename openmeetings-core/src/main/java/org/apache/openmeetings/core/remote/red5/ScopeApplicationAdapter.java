@@ -2135,50 +2135,52 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
 	}
 	
-    public synchronized int updateSipTransport() {
+	public synchronized int updateSipTransport() {
 		log.debug("-----------  updateSipTransport");
-        IConnection current = Red5.getConnectionLocal();
-        String streamid = current.getClient().getId();
-        Client client = sessionManager.getClientByStreamId(streamid, null);
-        Long roomId = client.getRoomId();
-        Integer count = roomManager.getSipConferenceMembersNumber(roomId); 
-        String newNumber = getSipTransportLastname(count);
-        log.debug("getSipConferenceMembersNumber: " + newNumber);
-        if (!newNumber.equals(client.getLastname())) {
-            client.setLastname(newNumber);
-            sessionManager.updateClientByStreamId(streamid, client, false, null);
-            log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[]{client.getPublicSID(),
-                    client.getRoomId(), client.getFirstname(), client.getLastname(), client.getAvsettings()});
-            sendMessageWithClient(new String[]{"personal",client.getFirstname(),client.getLastname()});
-        }
-        return count != null && count > 0 ? count - 1 : 0; 
-    }
+		IConnection current = Red5.getConnectionLocal();
+		String streamid = current.getClient().getId();
+		Client client = sessionManager.getClientByStreamId(streamid, null);
+		Long roomId = client.getRoomId();
+		Integer count = roomManager.getSipConferenceMembersNumber(roomId);
+		String newNumber = getSipTransportLastname(count);
+		log.debug("getSipConferenceMembersNumber: " + newNumber);
+		if (!newNumber.equals(client.getLastname())) {
+			client.setLastname(newNumber);
+			sessionManager.updateClientByStreamId(streamid, client, false, null);
+			log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getPublicSID(), client.getRoomId(),
+					client.getFirstname(), client.getLastname(), client.getAvsettings() });
+			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
+		}
+		return count != null && count > 0 ? count - 1 : 0;
+	}
 
-    /**
-     * Perform call to specified phone number and join to conference
-     * @param number to call
-     */
+	/**
+	 * Perform call to specified phone number and join to conference
+	 * 
+	 * @param number
+	 *            to call
+	 */
 	public synchronized void joinToConfCall(String number) {
 		IConnection current = Red5.getConnectionLocal();
 		String streamid = current.getClient().getId();
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
 			String sipNumber = getSipNumber(currentClient.getRoomId());
-			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
-			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
+			log.debug("asterisk -rx \"channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
+			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
 		} catch (IOException e) {
 			log.error("Executing asterisk originate error: ", e);
 		}
 	}
 
-    public synchronized String getSipNumber(Long roomId) {
-        Room r = roomDao.get(roomId);
-        if(r != null && r.getConfno() != null) {
-            log.debug("getSipNumber: roomId: {}, sipNumber: {}", new Object[]{roomId, r.getConfno()});
-            return r.getConfno();
-        }
-        return null;
-    }
+	public synchronized String getSipNumber(Long roomId) {
+		Room r = roomDao.get(roomId);
+		if (r != null && r.getConfno() != null) {
+			log.debug("getSipNumber: roomId: {}, sipNumber: {}", new Object[]{roomId, r.getConfno()});
+			return r.getConfno();
+		}
+		return null;
+	}
 
 	public void setSipTransport(Long roomId, String publicSID, String broadCastId) {
 		log.debug("-----------  setSipTransport");
