@@ -2111,8 +2111,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public void joinToConfCall(String number, Room r) {
 		try {
 			String sipNumber = (r != null && r.getConfno() != null) ? r.getConfno() : null;
-			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
-			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
+			log.debug("asterisk -rx \"channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
+			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
 		} catch (IOException e) {
 			log.error("Executing asterisk originate error: ", e);
 		}
