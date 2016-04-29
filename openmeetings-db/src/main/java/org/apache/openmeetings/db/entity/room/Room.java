@@ -515,7 +515,7 @@ public class Room implements IDataProviderEntity {
 		}
 		return hiddenElements.add(e);
 	}
-	
+
 	public List<RoomGroup> getRoomGroups() {
 		return roomGroups;
 	}

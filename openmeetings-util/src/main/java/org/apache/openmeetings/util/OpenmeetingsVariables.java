@@ -28,6 +28,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_OAUTH_REGISTER_KEY = "allow.oauth.register";
 	public static final String CONFIG_LOGIN_MIN_LENGTH_KEY = "user.login.minimum.length";
 	public static final String CONFIG_MAX_UPLOAD_SIZE_KEY = "max_upload_size";
+	public static final String CONFIG_SIP_ENABLED = "red5sip.enable";
 	public static final String CONFIG_PASS_MIN_LENGTH_KEY = "user.pass.minimum.length";
 	public static final String CONFIG_RSS_FEED1_KEY = "rss_feed1";
 	public static final String CONFIG_RSS_FEED2_KEY = "rss_feed2";

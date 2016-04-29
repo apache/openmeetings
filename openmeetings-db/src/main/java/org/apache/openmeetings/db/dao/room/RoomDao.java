@@ -184,12 +184,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
 	}
 	
-	private boolean isSipEnabled() {
-		return "yes".equals(cfgDao.getConfValue("red5sip.enable", String.class, "no"));
-	}
-	
 	private String getSipNumber(long roomId) {
-		if (isSipEnabled()) {
+		if (cfgDao.isSipEnabled()) {
 			return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
 		}
 		return null;
@@ -203,7 +199,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		} else {
 			entity.setUpdated(new Date());
 		}
-		if (entity.isSipEnabled() && isSipEnabled()) {
+		if (entity.isSipEnabled() && cfgDao.isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getId());
 			if (sipNumber != null && !sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);
