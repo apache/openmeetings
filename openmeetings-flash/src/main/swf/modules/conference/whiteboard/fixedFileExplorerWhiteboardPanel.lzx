@@ -89,7 +89,7 @@
 	
 	<handler name="onopenWhiteBoard" >
         if ($debug) Debug.write(".. onopenWhiteBoard ..");
-        this.loadInitObject()
+        this.loadInitObject();
     </handler>
             
     <!--
