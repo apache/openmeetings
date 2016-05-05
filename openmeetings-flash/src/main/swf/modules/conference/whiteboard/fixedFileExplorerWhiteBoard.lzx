@@ -195,7 +195,7 @@
     		<handler name="onx" args="x"><![CDATA[
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# x",x);
-					if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
+					if (parent.parent && parent.parent.scrollContainer) {
 	                    parent.parent.scrollContainer.calcScrollContent();
 					}
                 }
@@ -204,7 +204,7 @@
             <handler name="ony" args="y"><![CDATA[
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# y", y);
-					if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
+					if (parent.parent && parent.parent.scrollContainer) {
                     	parent.parent.scrollContainer.calcScrollContent();
 					}
                 }
@@ -213,7 +213,7 @@
             <handler name="onheight" args="h"><![CDATA[
                 if ($debug) Debug.write("# height",h);
                 //this.dragger.drag_min_x = parent.width - w;
-				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
+				if (parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
                 parent.parent.zoombox.sendUpdate(null);
@@ -222,20 +222,18 @@
             <handler name="onwidth" args="w"><![CDATA[
                 if ($debug) Debug.write("# width",w);
                 //this.dragger.drag_min_y = parent.height - h;
-				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
+				if (parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
             ]]></handler>
             
             <handler name="onupdateScale" args="tRef"><![CDATA[
                 if ($debug) Debug.write("# updateScale",this.getDisplayObject().scaleX);
-				if ('scrollContainer' in parent.parent && parent.parent.scrollContainer) {
+				if (parent.parent && parent.parent.scrollContainer) {
 	                parent.parent.scrollContainer.calcScrollContent();
 				}
             ]]></handler>
     		
-            <attribute name="initH"/>
-            <attribute name="initW"/>
             <handler name="oninit">
                 canvas._drawarea = this; 
             </handler>
