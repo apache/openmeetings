@@ -51,7 +51,7 @@ public class OmFileHelper {
 	private static final String HIBERNATE_DIR = "hibernate";
 	private static final String CONF_DIR = "conf";
 	private static final String BACKUP_DIR = "backup";
-	private static final String DEFAULT_DIR = "default";
+	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
 	
 	private static final String INSTALL_FILE = "install.xml";
@@ -64,12 +64,10 @@ public class OmFileHelper {
 	public static final String nameOfLanguageFile = "languages.xml";
 	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
-	public static final String defaultProfileImageName = "profile_pic.jpg";
+	public static final String defaultProfileImageName = "profile.jpg";
 	public static final String profileFileName = "profile";
 	public static final String recordingFileName = "flvRecording_";
 	public static final String profileImagePrefix = "_profile_";
-	public static final String chatImagePrefix = "_chat_";
-	public static final String bigImagePrefix = "_big_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
 	public static final String FLV_EXTENSION = ".flv";
@@ -123,7 +121,7 @@ public class OmFileHelper {
 	}
 	
 	public static File getDefaultProfilePicture() {
-		return new File(getDefaultDir(), profileImagePrefix + defaultProfileImageName);
+		return new File(getImagesDir(), defaultProfileImageName);
 	}
 	
 	public static File getUserProfilePicture(Long userId, String uri) {
@@ -260,8 +258,8 @@ public class OmFileHelper {
 		return new File(OmFileHelper.OM_HOME, SCREENSHARING_DIR);
 	}
 
-	public static File getDefaultDir() {
-		return new File(OmFileHelper.OM_HOME, DEFAULT_DIR);
+	public static File getImagesDir() {
+		return new File(OmFileHelper.OM_HOME, IMAGES_DIR);
 	}
 	
 	public static File appendSuffix(File original, String suffix) {
