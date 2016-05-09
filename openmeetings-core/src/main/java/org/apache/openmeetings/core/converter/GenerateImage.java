@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
-import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -93,9 +91,7 @@ public class GenerateImage extends BaseConverter {
 		} else {
 			FileHelper.copy(file, destinationFile);
 		}
-		returnMap.addItem("processThumb1", generateThumbs.generateThumb(chatImagePrefix, destinationFile, 40));
 		returnMap.addItem("processThumb2", generateThumbs.generateThumb(profileImagePrefix, destinationFile, 126));
-		returnMap.addItem("processThumb3", generateThumbs.generateThumb(bigImagePrefix, destinationFile, 240));
 
 		if (!skipConvertion) {
 			// Delete old one
