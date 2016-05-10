@@ -39,9 +39,9 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -245,10 +245,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 				@Override
 				public void onClick() {
-					PageParameters pp = new PageParameters();
-					pp.add("swf", RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType()
-							? "networktestingdebug.swf10.swf" : "networktesting.swf10.swf");
-					setResponsePage(SwfPage.class, pp);
+					setResponsePage(SwfPage.class, new PageParameters().add("swf", RoomPanel.SWF_TYPE_NETWORK));
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(

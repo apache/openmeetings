@@ -26,6 +26,7 @@ import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.HashMap;
@@ -48,7 +49,6 @@ import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
 import org.apache.wicket.Component;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -72,6 +72,7 @@ public class RoomPanel extends BasePanel {
 	private static final String WICKET_ROOM_ID = "wicketroomid";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
+	public static final String SWF_TYPE_NETWORK = "network";
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
@@ -84,9 +85,9 @@ public class RoomPanel extends BasePanel {
 		this(id, new PageParameters());
 	}
 	
-	private String getFlashFile() {
-		return RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType()
-				? "maindebug.swf11.swf" : "main.swf11.swf";
+	private String getFlashFile(StringValue type) {
+		String fmt = SWF_TYPE_NETWORK.equals(type.toString()) ? "networktesting%s.swf10.swf" : "main%s.swf11.swf";
+		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
 	
 	private static PageParameters addServer(PageParameters pp, Server s) {
@@ -151,13 +152,11 @@ public class RoomPanel extends BasePanel {
 		} catch (Exception e) {
 			//no-op
 		}
-		StringValue swfVal = pp.get("swf");
 		PageParameters spp = new PageParameters(pp);
 		if (roomId != null) {
 			spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
 		}
-		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
-				+ new PageParametersEncoder().encodePageParameters(spp);
+		String swf = getFlashFile(pp.get("swf")) + new PageParametersEncoder().encodePageParameters(spp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
 		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
 			private static final long serialVersionUID = 1L;

@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,9 +74,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick() {
-				PageParameters pp = new PageParameters();
-				pp.add("swf", "networktesting.swf10.swf");
-				setResponsePage(SwfPage.class, pp);
+				setResponsePage(SwfPage.class, new PageParameters().add("swf", RoomPanel.SWF_TYPE_NETWORK));
 			}
 		});
 	}
