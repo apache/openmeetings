@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -59,6 +59,7 @@ public class SwfPanel extends BasePanel {
 	private static final String WICKET_ROOM_ID = "wicketroomid";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
+	public static final String SWF_TYPE_NETWORK = "network";
 	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
 	private Long roomId = null;
 	
@@ -92,13 +93,11 @@ public class SwfPanel extends BasePanel {
 		} catch (Exception e) {
 			//no-op
 		}
-		StringValue swfVal = pp.get("swf");
 		PageParameters spp = new PageParameters(pp);
 		if (roomId != null) {
 			spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
 		}
-		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
-				+ new PageParametersEncoder().encodePageParameters(spp);
+		String swf = getFlashFile(pp.get("swf")) + new PageParametersEncoder().encodePageParameters(spp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
 		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
 			private static final long serialVersionUID = 1L;
@@ -127,9 +126,9 @@ public class SwfPanel extends BasePanel {
 		}
 	}
 
-	private String getFlashFile() {
-		return RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType()
-				? "maindebug.swf11.swf" : "main.swf11.swf";
+	private String getFlashFile(StringValue type) {
+		String fmt = SWF_TYPE_NETWORK.equals(type.toString()) ? "networktesting%s.swf10.swf" : "main%s.swf11.swf";
+		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
 	
 	private static PageParameters addServer(PageParameters pp, Server s) {

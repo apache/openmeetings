@@ -181,7 +181,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setStreamid(conn.getClient().getId());
 		StringValue scn = StringValue.valueOf(conn.getScope().getName());
 		rcm.setScope(scn.toString());
-		rcm.setRoomId(scn.toOptionalLong());
+		long roomId = scn.toLong(Long.MIN_VALUE);
+		if (Long.MIN_VALUE != roomId) {
+			rcm.setRoomId(roomId);
+		} else if (!"hibernate".equals(scn.toString())) {
+			return rejectClient();
+		}
 		rcm.setUserport(conn.getRemotePort());
 		rcm.setUserip(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
