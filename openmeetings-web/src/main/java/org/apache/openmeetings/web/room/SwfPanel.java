@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.room;
 
 
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
+
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -33,6 +35,7 @@ import org.apache.wicket.util.string.StringValue;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	public static final String SWF_TYPE_NETWORK = "network";
 	
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
@@ -43,10 +46,11 @@ public class SwfPanel extends BasePanel {
 	}
 	
 	public String getInitFunction(PageParameters pp) {
-		StringValue swfVal = pp.get("swf");
 		String initStr = null;
-		if (!swfVal.isEmpty()) {
-			String swf = swfVal.toString() + new PageParametersEncoder().encodePageParameters(pp);
+		StringValue type = pp.get("swf");
+		if (SWF_TYPE_NETWORK.equals(type.toString())) {
+			String swf = String.format("networktesting%s.swf10.swf", DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "")
+					+ new PageParametersEncoder().encodePageParameters(pp);
 			initStr = String.format("initSwf('%s');", swf);
 		}
 		return initStr;
