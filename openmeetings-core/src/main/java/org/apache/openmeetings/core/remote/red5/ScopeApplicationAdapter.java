@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -2105,22 +2104,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
-	}
-
-	/**
-	 * Perform call to specified phone number and join to conference
-	 * 
-	 * @param number
-	 *            to call
-	 */
-	public void joinToConfCall(String number, Room r) {
-		try {
-			String sipNumber = (r != null && r.getConfno() != null) ? r.getConfno() : null;
-			log.debug("asterisk -rx \"channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
-			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
-		} catch (IOException e) {
-			log.error("Executing asterisk originate error: ", e);
-		}
 	}
 
 	public void setSipTransport(Long roomId, String publicSID, String broadCastId) {
