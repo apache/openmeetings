@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -109,6 +110,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
+	@Autowired
+	private SipDao sipDao;
 
 	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
@@ -2165,9 +2168,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String streamid = current.getClient().getId();
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
-			String sipNumber = getSipNumber(currentClient.getRoomId());
-			log.debug("asterisk -rx \"channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
-			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "channel originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
+			sipDao.joinToConfCall(number, roomDao.get(currentClient.getRoomId()))
 		} catch (IOException e) {
 			log.error("Executing asterisk originate error: ", e);
 		}
