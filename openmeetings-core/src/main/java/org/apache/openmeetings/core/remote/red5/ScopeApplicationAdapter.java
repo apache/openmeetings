@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -2168,8 +2167,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String streamid = current.getClient().getId();
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
-			sipDao.joinToConfCall(number, roomDao.get(currentClient.getRoomId()))
-		} catch (IOException e) {
+			sipDao.joinToConfCall(number, roomDao.get(currentClient.getRoomId()));
+		} catch (Exception e) {
 			log.error("Executing asterisk originate error: ", e);
 		}
 	}
