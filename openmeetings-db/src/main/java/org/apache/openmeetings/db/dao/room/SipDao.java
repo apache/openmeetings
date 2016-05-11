@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import org.apache.openmeetings.db.entity.room.Room;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ResponseEvents;
@@ -28,6 +29,7 @@ import org.asteriskjava.manager.action.DbGetAction;
 import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
 import org.asteriskjava.manager.action.ManagerAction;
+import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.red5.logging.Red5LoggerFactory;
@@ -142,5 +144,29 @@ public class SipDao {
 			return r.getEvents().size() - 1; // TODO check if was successfull
 		}
 		return 0;
+	}
+	
+	/**
+	 * Perform call to specified phone number and join to conference
+	 * 
+	 * @param number
+	 *            number to call
+	 * @param r
+	 *            room to be connected to the call
+	 */
+	public void joinToConfCall(String number, Room r) {
+		String sipNumber = (r != null && r.getConfno() != null) ? r.getConfno() : null;
+		if (sipNumber == null) {
+			log.warn("Failed to get SIP number for room: {}", r);
+			return;
+		}
+
+		OriginateAction oa = new OriginateAction();
+		oa.setChannel(String.format("Local/%s@rooms-out", number));
+		oa.setExten(String.format("%s@rooms-originate", sipNumber));
+		oa.setPriority(1);
+		oa.setTimeout(30000L);
+
+		ManagerResponse resp = exec(oa);
 	}
 }

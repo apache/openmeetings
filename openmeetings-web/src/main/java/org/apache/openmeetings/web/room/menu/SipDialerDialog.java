@@ -23,7 +23,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -99,6 +99,6 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(ScopeApplicationAdapter.class).joinToConfCall(number.getModelObject(), room.getRoom());
+		getBean(SipDao.class).joinToConfCall(number.getModelObject(), room.getRoom());
 	}
 }
