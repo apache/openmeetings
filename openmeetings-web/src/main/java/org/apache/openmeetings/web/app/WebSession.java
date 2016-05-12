@@ -89,9 +89,12 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
-	public static int MILLIS_IN_MINUTE = 60000;
+	public static final int MILLIS_IN_MINUTE = 60000;
 	public static final String SECURE_HASH = "secureHash";
 	public static final String INVITATION_HASH = "invitationHash";
+	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
+	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -99,7 +102,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
-	public final static String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	private DateFormat ISO8601FORMAT = new SimpleDateFormat(ISO8601_FORMAT_STRING); //FIXME not thread safe
 	private DateFormat sdf;
 	private UserDashboard dashboard;
@@ -107,9 +109,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long recordingId;
 	private Long loginError = null;
 	private String externalType;
-	public static boolean kickedByAdmin = false;
-	public final static List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
-	public final static Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
+	private boolean kickedByAdmin = false;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -239,6 +239,15 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	private void setUser(User u) {
+		String _sid = SID;
+		Long _recordingId = recordingId;
+		replaceSession(); // required to prevent session fixation
+		if (_sid != null) {
+			SID = _sid;
+		}
+		if (_recordingId != null) {
+			recordingId = _recordingId;
+		}
 		userId = u.getId();
 		rights = Collections.unmodifiableSet(u.getRights());
 		languageId = u.getLanguageId();
@@ -248,9 +257,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId));
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
-		if (null == getId()) {
-			bind();
-		}
 	}
 	
 	public boolean signIn(String login, String password, Type type, Long domainId) {
@@ -379,7 +385,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	public static void setKickedByAdmin(boolean kicked) {
-		kickedByAdmin = kicked;
+		get().kickedByAdmin = kicked;
 	}
 	
 	public boolean isKickedByAdmin() {
