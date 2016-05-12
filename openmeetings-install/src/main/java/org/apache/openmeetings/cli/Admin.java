@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.cli;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +37,6 @@ import java.util.TimeZone;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -63,13 +64,16 @@ import org.apache.openmeetings.installation.InstallationDocumentHandler;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ImportHelper;
-import org.apache.openmeetings.util.OMContextListener;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.MailUtil;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
@@ -78,7 +82,7 @@ public class Admin {
 	private InstallationConfig cfg = null;
 	private Options opts = null;
 	private CommandLine cmdl = null;
-	private ClassPathXmlApplicationContext ctx = null;
+	private WebApplicationContext ctx = null;
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -115,6 +119,7 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
 		options.addOption(new OmOption("i", null, "skip-default-rooms", false, "Do not create default rooms [created by default]", true));
 		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]", true));
+		options.addOption(new OmOption("i", null, "default-language", true, "Default system language as int [1 by default]", true));
 
 		options.addOption(new OmOption("i", null, "db-type", true, "The type of the DB to be used", true));
 		options.addOption(new OmOption("i", null, "db-host", true, "DNS name or IP address of database", true));
@@ -166,15 +171,10 @@ public class Admin {
 		System.exit(1);
 	}
 	
-	private ClassPathXmlApplicationContext getApplicationContext(final String ctxName) {
+	private WebApplicationContext getApplicationContext() {
 		if (ctx == null) {
-			OMContextListener omcl = new OMContextListener();
-			omcl.contextInitialized(new ServletContextEvent(new DummyServletContext(ctxName)));
-			try {
-				ctx = new ClassPathXmlApplicationContext("openmeetings-applicationContext.xml");
-			} catch (Exception e) {
-				handleError("Unable to obtain application context", e);
-			}
+			Long lngId = StringValue.valueOf(cfg.defaultLangId).toLong(1L);
+			ctx = getWebApplicationContext(((WebApplication)ensureApplication(lngId)).getServletContext());
 			SchedulerFactoryBean sfb = ctx.getBean(SchedulerFactoryBean.class);
 			try {
 				sfb.getScheduler().shutdown(false);
@@ -187,6 +187,7 @@ public class Admin {
 	
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
+		OpenmeetingsVariables.wicketApplicationName = ctxName;
 		File home = new File(System.getenv("RED5_HOME"));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 		
@@ -246,6 +247,9 @@ public class Admin {
 					if (cmdl.hasOption("email-use-tls")) {
 						cfg.mailUseTls = "1";
 					}
+					if (cmdl.hasOption("default-language")) {
+						cfg.defaultLangId = cmdl.getOptionValue("default-language");
+					}
 					ConnectionProperties connectionProperties = new ConnectionProperties();
 					File conf = OmFileHelper.getPersistence();
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
@@ -265,14 +269,14 @@ public class Admin {
 						File backup = checkRestoreFile(file);
 						dropDB(connectionProperties);
 						
-						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
+						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
 						importInit.loadSystem(cfg, force); 
-						restoreOm(ctxName, backup);
+						restoreOm(backup);
 					} else {
-						checkAdminDetails(ctxName);
+						checkAdminDetails();
 						dropDB(connectionProperties);
 						
-						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
+						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
 						importInit.loadAll(cfg, force);
 					}					
 					
@@ -295,7 +299,7 @@ public class Admin {
 					File backup_dir = new File(OmFileHelper.getUploadTempDir(), "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
-					BackupExport export = getApplicationContext(ctxName).getBean(BackupExport.class);
+					BackupExport export = getApplicationContext().getBean(BackupExport.class);
 					export.performExport(f, backup_dir, includeFiles, new ProgressHolder());
 					FileHelper.removeRec(backup_dir);
 					backup_dir.delete();
@@ -305,7 +309,7 @@ public class Admin {
 				break;
 			case restore:
 				try {
-					restoreOm(ctxName, checkRestoreFile(file));
+					restoreOm(checkRestoreFile(file));
 				} catch (Exception e) {
 					handleError("Restore failed", e);
 				}
@@ -326,7 +330,7 @@ public class Admin {
 						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
 						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
 						//Profiles
-						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
+						WebApplicationContext ctx = getApplicationContext();
 						UserDao udao = ctx.getBean(UserDao.class);
 						CleanupEntityUnit profile = CleanupHelper.getProfileUnit(udao);
 						long restSize = sectionSize - profile.getSizeTotal();
@@ -363,7 +367,7 @@ public class Admin {
 						}
 					}
 					{ //STREAMS
-						RecordingDao recordDao = getApplicationContext(ctxName).getBean(RecordingDao.class);
+						RecordingDao recordDao = getApplicationContext().getBean(RecordingDao.class);
 						CleanupEntityUnit rec = CleanupHelper.getRecUnit(recordDao);
 						File hibernateDir = OmFileHelper.getStreamsHibernateDir();
 						report.append("Recordings allocates: ").append(rec.getHumanTotal()).append("\n");
@@ -390,7 +394,7 @@ public class Admin {
 				}
 				Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
 				try {
-					getApplicationContext(ctxName).getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
+					getApplicationContext().getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
 				} catch (Exception e) {
 					handleError("LDAP import failed", e);
 				}
@@ -405,7 +409,7 @@ public class Admin {
 		System.exit(0);
 	}
 	
-	private void checkAdminDetails(String ctxName) throws Exception {
+	private void checkAdminDetails() throws Exception {
 		cfg.username = cmdl.getOptionValue("user");
 		cfg.email = cmdl.getOptionValue("email");
 		cfg.group = cmdl.getOptionValue("group");
@@ -428,7 +432,7 @@ public class Admin {
 			System.exit(1);
 		}
 		cfg.password = cmdl.getOptionValue("password");
-		ConfigurationDao cfgDao = getApplicationContext(ctxName).getBean(ConfigurationDao.class);
+		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
 		if (invalidPassword(cfg.password, cfgDao)) {
 			System.out.print("Please enter password for the user '" + cfg.username + "':");
 			cfg.password = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)).readLine();
@@ -483,7 +487,7 @@ public class Admin {
 	
 	private void immediateDropDB(ConnectionProperties props) throws Exception {
 		if (ctx != null) {
-			ctx.destroy();
+			((XmlWebApplicationContext)ctx).destroy();
 			ctx = null;
 		}
 		JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
@@ -513,9 +517,9 @@ public class Admin {
 		return backup;
 	}
 	
-	private void restoreOm(String ctxName, File backup) {
+	private void restoreOm(File backup) {
 		try (InputStream is = new FileInputStream(backup)) {
-			BackupImport importCtrl = getApplicationContext(ctxName).getBean(BackupImport.class);
+			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
 			importCtrl.performImport(is);
 		} catch (Exception e) {
 			handleError("Restore failed", e);

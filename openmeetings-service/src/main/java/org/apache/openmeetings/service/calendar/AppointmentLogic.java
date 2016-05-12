@@ -101,7 +101,7 @@ public class AppointmentLogic {
 		String smsSubject = generateSMSSubject(langDao.getString(1158L, langId), a);
 
 		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
-		invitationManager.sendInvitionLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
+		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
 		invitationManager.sendInvitationReminderSMS(u.getAddress().getPhone(), smsSubject, langId);
 		if (inv.getHash() != null) {
