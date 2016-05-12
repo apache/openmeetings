@@ -27,7 +27,9 @@
 				where that vulnerability has been fixed.<br/>
 				<br/>
 				For more information about reporting vulnerabilities, see the 
-				<a href="https://www.apache.org/security/">Apache Security Team</a> page.
+				<a href="https://www.apache.org/security/">Apache Security Team</a> page.<br/>
+				<br/>
+				<a href="https://www.apache.org/security/committers.html#vulnerability-handling">Vulnerability handling guide</a>
 			</p>
 		</section>
 		<section name="Reporting New Security Problems">
