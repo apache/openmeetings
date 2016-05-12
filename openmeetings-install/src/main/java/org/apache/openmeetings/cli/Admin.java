@@ -18,12 +18,11 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +57,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.installation.InstallationDocumentHandler;
@@ -67,13 +67,11 @@ import org.apache.openmeetings.util.ImportHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.MailUtil;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
@@ -174,7 +172,7 @@ public class Admin {
 	private WebApplicationContext getApplicationContext() {
 		if (ctx == null) {
 			Long lngId = StringValue.valueOf(cfg.defaultLangId).toLong(1L);
-			ctx = getWebApplicationContext(((WebApplication)ensureApplication(lngId)).getServletContext());
+			ctx = ApplicationHelper.getApplicationContext(lngId);
 			SchedulerFactoryBean sfb = ctx.getBean(SchedulerFactoryBean.class);
 			try {
 				sfb.getScheduler().shutdown(false);
@@ -487,7 +485,7 @@ public class Admin {
 	
 	private void immediateDropDB(ConnectionProperties props) throws Exception {
 		if (ctx != null) {
-			((XmlWebApplicationContext)ctx).destroy();
+			destroyApplication();
 			ctx = null;
 		}
 		JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
