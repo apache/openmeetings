@@ -123,7 +123,7 @@ public class InvitationService implements IPendingServiceCallback {
 
 				if (invitation != null) {
 					if (sendMail) {
-						invitationManager.sendInvitionLink(invitation, MessageType.Create, subject, message, false);
+						invitationManager.sendInvitationLink(invitation, MessageType.Create, subject, message, false);
 					}
 
 					return invitation;
@@ -147,7 +147,7 @@ public class InvitationService implements IPendingServiceCallback {
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
 			inv.getInvitee().setLanguageId(languageId);
-			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
+			invitationManager.sendInvitationLink(inv, MessageType.Create, subject, message, false);
 		} else {
 			return "Need User Privileges to perfom the Action";
 		}

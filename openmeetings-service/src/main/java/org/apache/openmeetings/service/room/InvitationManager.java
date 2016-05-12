@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.service.room;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Date;
 import java.util.Map;
@@ -53,7 +53,6 @@ import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -108,12 +107,16 @@ public class InvitationManager implements IInvitationManager {
 				break;
 			
 		}
-		sendInvitionLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
+		sendInvitationLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
 	}
 	
 	@Override
-	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
+	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
+		String invitation_link = null;
+		if (type != MessageType.Cancel) {
+			IApplication app = ensureApplication(1L);
+			invitation_link = app.getOmInvitationLink(configDao.getBaseUrl(), i);
+		}
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();

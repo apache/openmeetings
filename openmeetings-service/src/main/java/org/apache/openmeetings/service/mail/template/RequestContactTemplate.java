@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -34,7 +36,7 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 		add(new Label("lastName", user.getLastname()));
 		add(new Label("likeToAdd", getString(1193, langId)));
 		add(new Label("check", getString(1194, langId)));
-		add(new ExternalLink("link", getApp().getOmContactsLink()).add(new Label("contactList", getString(1196, langId))));
+		add(new ExternalLink("link", ensureApplication().getOmContactsLink()).add(new Label("contactList", getString(1196, langId))));
 	}
 	
 	public static String getEmail(User userToAdd, User user) {
