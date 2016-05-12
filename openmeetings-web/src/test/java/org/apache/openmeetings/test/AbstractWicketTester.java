@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test;
 
-import static org.apache.openmeetings.web.app.Application.getWicketTester;
+import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 

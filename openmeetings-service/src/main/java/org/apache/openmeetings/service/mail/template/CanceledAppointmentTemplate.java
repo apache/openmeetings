@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;

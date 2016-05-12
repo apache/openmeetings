@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.mail;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
@@ -66,7 +67,7 @@ public class EmailManager {
 		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
 		
 		if (sendEmailAtRegister == 1) {
-			RegisterUserTemplate.ensureApplication(langId != null ? langId :
+			ensureApplication(langId != null ? langId :
 					configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 			mailHandler.send(email, getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
