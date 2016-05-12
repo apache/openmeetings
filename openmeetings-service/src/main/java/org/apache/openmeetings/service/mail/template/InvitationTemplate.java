@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
