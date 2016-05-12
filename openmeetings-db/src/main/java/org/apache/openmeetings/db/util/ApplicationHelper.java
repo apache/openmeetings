@@ -74,6 +74,10 @@ public class ApplicationHelper {
 		}
 	}
 	
+	public static IApplication ensureApplication() {
+		return ensureApplication(-1L);
+	}
+	
 	public static IApplication ensureApplication(Long langId) {
 		IApplication a = null;
 		if (Application.exists()) {
