@@ -22,7 +22,7 @@
 	<body>
 		<section name="SIP-Transport Integration">
 			<p>You need Apache OpenMeetings <strong>version 3.0+</strong> to apply this guide!</p>
-			<p>You need Asterisk <strong>version 11</strong> to apply this guide!</p>
+			<p>You need Asterisk <strong>version 13+</strong> to apply this guide!</p>
 			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
 		</section>
 		<section name="Prerequisites">
@@ -41,18 +41,18 @@ sudo apt-get update && sudo apt-get upgrade
 				<source>
 <![CDATA[
 sudo mkdir /usr/src/asterisk &amp;&amp; cd /usr/src/asterisk
-sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-13.6.0.tar.gz
-sudo tar -xvzf asterisk-13.6.0.tar.gz
-cd ./asterisk-13.6.0
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-13.9.0.tar.gz
+sudo tar -xvzf asterisk-13.9.0.tar.gz
+cd ./asterisk-13.9.0
 sudo make clean
 sudo contrib/scripts/install_prereq install
+sudo ./configure
 sudo make menuconfig
 ]]>
 				</source>
 				Make sure you have selected  <tt>Add-ons -> res_config_mysql</tt>, Press F12 to save
 				<source>
 <![CDATA[
-sudo ./configure
 sudo make
 sudo make install
 sudo make samples
