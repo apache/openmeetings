@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
+import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -45,6 +46,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class ApplicationHelper {
@@ -119,10 +121,20 @@ public class ApplicationHelper {
 			WebSession s = WebSession.get();
 			if (langId > 0) {
 				((IWebSession)s).setLanguage(langId);
-				
 			}
-			ThreadContext.setSession(s);
 		}
 		return a;
+	}
+	
+	public static void destroyApplication() {
+		WebApplicationContext ctx = getWebApplicationContext(((WebApplication)ensureApplication()).getServletContext());
+		((XmlWebApplicationContext)ctx).destroy();
+		ThreadContext.setApplication(null);
+		ThreadContext.setRequestCycle(null);
+		ThreadContext.setSession(null);
+	}
+
+	public static WebApplicationContext getApplicationContext(Long langId) {
+		return getWebApplicationContext(((WebApplication)ensureApplication(langId)).getServletContext());
 	}
 }
