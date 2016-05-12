@@ -108,11 +108,11 @@ public class InvitationManager implements IInvitationManager {
 				break;
 			
 		}
-		sendInvitionLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
+		sendInvitationLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
 	}
 	
 	@Override
-	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
+	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
 		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
 		

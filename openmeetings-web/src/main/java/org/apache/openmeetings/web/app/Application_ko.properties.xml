@@ -1910,4 +1910,14 @@
 	<entry key="dashboard.widget.admin.cleanup.cleanup">Cleanup</entry>
 	<entry key="dashboard.widget.admin.cleanup.warn">Are you sure you want to delete all temporary files? This operation cannot be undone.</entry>
 	<entry key="dashboard.widget.admin.cleanup.error">Unexpected error while performing cleanup</entry>
+	<entry key="room.action.request.right.moderator">would like to be moderator of this room.</entry>
+	<entry key="admin.room.hidden.elements">Hidden room elements</entry>
+	<entry key="install.room.public.interview">Public Interview Room</entry>
+	<entry key="install.room.public.conference">Public Conference Room</entry>
+	<entry key="install.room.public.video.only">Public Video Only Room</entry>
+	<entry key="install.room.public.video.wb">Public Video And Whiteboard Room</entry>
+	<entry key="install.room.public.restricted">Public Restricted Room</entry>
+	<entry key="install.room.restricted.micro">Restricted room with micro option set</entry>
+	<entry key="install.room.conference.micro">Conference room with micro option set</entry>
+	<entry key="install.room.private.conference">Private Conference Room</entry>
 </properties>

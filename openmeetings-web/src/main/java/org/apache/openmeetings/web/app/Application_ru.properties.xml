@@ -1914,4 +1914,14 @@
 	<entry key="dashboard.widget.admin.cleanup.cleanup">Очистить</entry>
 	<entry key="dashboard.widget.admin.cleanup.warn">Вы уверены что хотите удалить все временные файлы? Эту операцию нельзя будет отменить.</entry>
 	<entry key="dashboard.widget.admin.cleanup.error">Неизвестная ошибка при попытке очистить</entry>
+	<entry key="room.action.request.right.moderator">хочет быть модератором в этой комнате.</entry>
+	<entry key="admin.room.hidden.elements">Скрытые элементы комнаты</entry>
+	<entry key="install.room.public.interview">Публичная комната для интервью</entry>
+	<entry key="install.room.public.conference">Публичная комната для конференций</entry>
+	<entry key="install.room.public.video.only">Публичная комната только для видео</entry>
+	<entry key="install.room.public.video.wb">Публичная комната для видео с доской</entry>
+	<entry key="install.room.public.restricted">Публичная расширенная комната</entry>
+	<entry key="install.room.restricted.micro">Расширенная комната со статусом микрофона</entry>
+	<entry key="install.room.conference.micro">Комната для конференций со статусом микрофона</entry>
+	<entry key="install.room.private.conference">Закрытая комната для конференций</entry>
 </properties>

@@ -18,31 +18,23 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.util.FormatHelper;
-import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.BufferedWebResponse;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
-import org.apache.wicket.protocol.http.mock.MockHttpSession;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
@@ -50,12 +42,8 @@ public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected long langId;
 	
-	public static IApplication getApp() {
-		return (IApplication)Application.get(wicketApplicationName);
-	}
-	
 	public static <T> T getBean(Class<T> clazz) {
-		return getApp().getOmBean(clazz);
+		return ensureApplication().getOmBean(clazz);
 	}
 	
 	public static IWebSession getOmSession() {
@@ -69,7 +57,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 	
 	public static String getString(long id, long languageId) {
-		return getApp().getOmString(id, languageId);
+		return ensureApplication().getOmString(id, languageId);
 	}
 
 	/**
@@ -106,27 +94,6 @@ public abstract class AbstractTemplatePanel extends Panel {
 		@Override
 		public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
 			return new StringResourceStream("<wicket:container wicket:id='" + COMP_ID + "'></wicket:container>");
-		}
-	}
-	
-	public static void ensureApplication(long langId) {
-		IApplication a = null;
-		if (Application.exists()) {
-			a = (IApplication)Application.get();
-		} else {
-			Application app = Application.get(wicketApplicationName);
-			ThreadContext.setApplication(app);
-			a = (IApplication)Application.get(wicketApplicationName);
-		}
-		if (ThreadContext.getRequestCycle() == null) {
-			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
-			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
-			ThreadContext.setRequestCycle(new RequestCycle(rctx));
-		}
-		if (ThreadContext.getSession() == null) {
-			WebSession s = WebSession.get();
-			((IWebSession)s).setLanguage(langId);
-			ThreadContext.setSession(s);
 		}
 	}
 }

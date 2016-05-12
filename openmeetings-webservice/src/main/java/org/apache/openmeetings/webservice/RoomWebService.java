@@ -470,7 +470,7 @@ public class RoomWebService {
 				
 				if (i != null) {
 					if (sendmail) {
-						invitationManager.sendInvitionLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+						invitationManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
 					}
 					return new ServiceResult(1L, i.getHash(), Type.SUCCESS);
 				} else {

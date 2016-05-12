@@ -43,7 +43,7 @@ public interface IInvitationManager {
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 	
-	void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;
+	void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;
 	
 	Object checkInvitationPass(String hashCode, String pass);
 	

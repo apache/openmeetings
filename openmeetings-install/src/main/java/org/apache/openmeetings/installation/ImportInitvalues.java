@@ -57,6 +57,7 @@ import java.util.Iterator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
@@ -74,6 +75,7 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.wicket.util.string.StringValue;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -100,6 +102,8 @@ public class ImportInitvalues {
 	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
+	@Autowired
+	private LabelDao labelDao;
 	
 	private int progress = 0;
 
@@ -389,29 +393,30 @@ public class ImportInitvalues {
 			ro.setRoom(r);
 			ro.setGroup(groupDao.get(groupId));
 			ro.setInserted(new Date());
+			r.getRoomGroups().add(ro);
 		}
 		r = roomDao.update(r, null);
 		return r;
 	}
 	
-	public void loadDefaultRooms(boolean createRooms) {
+	public void loadDefaultRooms(boolean createRooms, long langId) {
 		if (createRooms) {
-			createRoom("public Interview Room", Type.interview, 16L, true, null);
-			createRoom("public Conference Room", Type.conference, 32L, true, null);
-			Room r = createRoom("public Video Only Room", Type.conference, 32L, true, null);
+			createRoom(labelDao.getString("install.room.public.interview", langId), Type.interview, 16L, true, null);
+			createRoom(labelDao.getString("install.room.public.conference", langId), Type.conference, 32L, true, null);
+			Room r = createRoom(labelDao.getString("install.room.public.video.only", langId), Type.conference, 32L, true, null);
 			r.setHideWhiteboard(true);
 			roomDao.update(r, null);
-			createRoom("public Video And Whiteboard Room", Type.conference, 32L, true, null);
-			createRoom("public Restricted Room", Type.restricted, 100L, true, null);
-			r = createRoom("restricted room with micro option set", Type.restricted, 100L, true, null);
+			createRoom(labelDao.getString("install.room.public.video.wb", langId), Type.conference, 32L, true, null);
+			createRoom(labelDao.getString("install.room.public.restricted", langId), Type.restricted, 100L, true, null);
+			r = createRoom(labelDao.getString("install.room.restricted.micro", langId), Type.restricted, 100L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			r = createRoom("conference room with micro option set", Type.conference, 32L, true, null);
+			r = createRoom(labelDao.getString("install.room.conference.micro", langId), Type.conference, 32L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			createRoom("private Conference Room", Type.conference, 32L, false, 1L);
+			createRoom(labelDao.getString("install.room.private.conference", langId), Type.conference, 32L, false, 1L);
 		}
 	}
 
@@ -508,15 +513,15 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 16;
+		progress = 14;
 		loadMainMenu();
-		progress = 32;
+		progress = 28;
 		loadErrorMappingsFromXML();
-		progress = 48;
+		progress = 42;
 		loadConfiguration(cfg);
-		progress = 80;
+		progress = 56;
 		loadInitialOAuthServers();
-		progress = 99;
+		progress = 70;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
@@ -527,9 +532,9 @@ public class ImportInitvalues {
 		}
 		loadSystem(cfg, force);
 		loadInitUserAndGroup(cfg);
-		progress = 94;
+		progress = 84;
 
-		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
+		loadDefaultRooms("1".equals(cfg.createDefaultRooms), StringValue.valueOf(cfg.defaultLangId).toLong(1L));
 		progress = 100;
 	}
 }

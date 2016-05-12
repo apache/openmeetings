@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
-import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.text.MessageFormat;
@@ -37,8 +36,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
 
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.keyvalue.MultiKey;
@@ -93,10 +90,8 @@ import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
-import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -426,39 +421,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			return get()._getBean(clazz);
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
-		}
-	}
-	
-	public static WicketTester getWicketTester() {
-		return getWicketTester(-1);
-	}
-	
-	public static WicketTester getWicketTester(long langId) {
-		Application app = new Application();
-		
-		WicketTester tester = new WicketTester(app);
-		ServletContext sc = app.getServletContext();
-		XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
-		xmlContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
-		xmlContext.setServletContext(sc);
-		xmlContext.refresh();
-		sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
-		if (langId > 0) {
-			WebSession.get().setLanguage(langId);
-		}
-		InitializationContainer.initComplete = true;
-		return tester;
-	}
-	
-	public static void destroy(WicketTester tester) {
-		if (tester != null) {
-			ServletContext sc = tester.getServletContext();
-			try {
-				((XmlWebApplicationContext)sc.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).close();
-			} catch (Exception e) {
-				log.error("Unexpected error while destroying XmlWebApplicationContext", e);
-			}
-			tester.destroy();
 		}
 	}
 	

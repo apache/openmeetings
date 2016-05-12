@@ -235,7 +235,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					for (User u : recipients.getModelObject()) {
 						Invitation i = create(u);
 						try {
-							getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+							getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
 						} catch (Exception e) {
 							log.error("error while sending invitation by User ", e);
 						}
@@ -245,7 +245,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 						for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
 							Invitation i = create(ou.getUser());
 							try {
-								getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+								getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
 							} catch (Exception e) {
 								log.error("error while sending invitation by Group ", e);
 							}
@@ -255,7 +255,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 			} else {
 				Invitation i = form.getModelObject();
 				try {
-					getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+					getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
 				} catch (Exception e) {
 					log.error("error while sending invitation by URL ", e);
 				}
