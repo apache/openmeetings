@@ -36,9 +36,8 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 public class RssWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;

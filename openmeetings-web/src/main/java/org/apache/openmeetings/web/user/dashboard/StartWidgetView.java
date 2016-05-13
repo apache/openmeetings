@@ -28,9 +28,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
-
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 

@@ -22,9 +22,8 @@ import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
 
 import org.apache.openmeetings.web.user.rooms.RoomsPanel;
 import org.apache.wicket.model.Model;
-
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 public class MyRoomsWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
