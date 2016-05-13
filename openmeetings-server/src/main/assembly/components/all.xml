@@ -30,7 +30,7 @@
 				<exclude>webapps/chat/**</exclude>
 				<exclude>webapps/root/demos/**</exclude>
 				<exclude>webapps/root/index.html</exclude>
-				<exclude>lib/jaudiotagger*.jar</exclude>
+				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>*.sh</exclude>
 			</excludes>
 		</fileSet>
