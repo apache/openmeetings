@@ -44,8 +44,8 @@
 		<wicket.version>7.3.0</wicket.version>
 		<wicketju.version>7.3.0</wicketju.version>
 		<wickets.version>7.3.0</wickets.version>
-		<red5-server.version>1.0.7-M10</red5-server.version>
-		<red5-client.version>1.0.7-M10</red5-client.version>
+		<red5-server.version>1.0.7-RELEASE</red5-server.version>
+		<red5-client.version>1.0.7-RELEASE</red5-client.version>
 		<batik.version>1.8</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
@@ -56,7 +56,7 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
-		<tomcat.version>8.0.32</tomcat.version>
+		<tomcat.version>8.0.33</tomcat.version>
 		<derby.version>10.12.1.1</derby.version>
 	</properties>
 	<modules>
@@ -455,56 +455,12 @@
 				<groupId>org.red5</groupId>
 				<artifactId>red5-server</artifactId>
 				<version>${red5-server.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org</groupId>
-						<artifactId>jaudiotagger</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>xerces</groupId>
-						<artifactId>xercesImpl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>antlr</groupId>
-						<artifactId>antlr</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>c3p0</groupId>
-						<artifactId>c3p0</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.jboss.spec.javax.servlet</groupId>
-						<artifactId>jboss-servlet-api_3.0_spec</artifactId>
-					</exclusion>
-				</exclusions>
 				<optional>true</optional>
 			</dependency>
 			<dependency>
 				<groupId>org.red5</groupId>
 				<artifactId>red5-client</artifactId>
 				<version>${red5-client.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org</groupId>
-						<artifactId>jaudiotagger</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.mina</groupId>
-						<artifactId>mina-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>c3p0</groupId>
-						<artifactId>c3p0</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.jboss.spec.javax.servlet</groupId>
-						<artifactId>jboss-servlet-api_3.0_spec</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>

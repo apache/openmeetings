@@ -129,7 +129,7 @@
 			<id>prepare-red5-server</id>
 			<activation>
 				<file>
-					<missing>red5-server/red5-server-1.0.7-M10.zip</missing> <!-- TODO should be in-sync with global property -->
+					<missing>red5-server/red5-server-1.0.7-RELEASE.zip</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
