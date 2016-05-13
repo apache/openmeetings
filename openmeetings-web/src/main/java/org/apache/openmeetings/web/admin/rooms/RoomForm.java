@@ -109,7 +109,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new TextArea<String>("comment"));
 
-		add(new CheckBox("appointment"));
+		add(new CheckBox("appointment").setEnabled(false));
 		add(new CheckBox("ispublic"));
 
 		List<Group> orgList = Application.getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
