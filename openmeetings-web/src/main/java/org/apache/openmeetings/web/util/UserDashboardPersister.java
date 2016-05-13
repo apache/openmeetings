@@ -30,10 +30,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import org.slf4j.Logger;
-
-import ro.fortsoft.wicket.dashboard.Dashboard;
-import ro.fortsoft.wicket.dashboard.DashboardPersister;
-import ro.fortsoft.wicket.dashboard.WidgetComparator;
+import org.wicketstuff.dashboard.Dashboard;
+import org.wicketstuff.dashboard.DashboardPersister;
+import org.wicketstuff.dashboard.WidgetComparator;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;

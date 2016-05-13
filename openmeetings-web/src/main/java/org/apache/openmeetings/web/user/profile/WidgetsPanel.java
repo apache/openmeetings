@@ -37,11 +37,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-
-import ro.fortsoft.wicket.dashboard.Dashboard;
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
-import ro.fortsoft.wicket.dashboard.web.DashboardContext;
+import org.wicketstuff.dashboard.Dashboard;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.WidgetDescriptor;
+import org.wicketstuff.dashboard.web.DashboardContext;
 
 public class WidgetsPanel extends Panel {
 	private static final long serialVersionUID = 1L;

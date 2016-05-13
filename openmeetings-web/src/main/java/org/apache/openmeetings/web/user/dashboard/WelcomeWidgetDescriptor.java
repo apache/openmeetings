@@ -19,8 +19,7 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import org.apache.openmeetings.web.app.Application;
-
-import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
+import org.wicketstuff.dashboard.WidgetDescriptor;
 
 public class WelcomeWidgetDescriptor implements WidgetDescriptor {
 	private static final long serialVersionUID = 1L;
