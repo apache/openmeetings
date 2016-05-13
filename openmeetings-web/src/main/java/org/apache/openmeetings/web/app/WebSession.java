@@ -81,11 +81,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-
-import ro.fortsoft.wicket.dashboard.Dashboard;
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.WidgetFactory;
-import ro.fortsoft.wicket.dashboard.web.DashboardContext;
+import org.wicketstuff.dashboard.Dashboard;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.WidgetFactory;
+import org.wicketstuff.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;

@@ -20,11 +20,10 @@ package org.apache.openmeetings.web.user.dashboard;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.model.Model;
-
-import ro.fortsoft.wicket.dashboard.AbstractWidget;
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.WidgetLocation;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import org.wicketstuff.dashboard.AbstractWidget;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.WidgetLocation;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 public class RssWidget extends AbstractWidget {
 	private static final long serialVersionUID = 1L;
