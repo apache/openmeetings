@@ -37,9 +37,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 public class WelcomeWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;

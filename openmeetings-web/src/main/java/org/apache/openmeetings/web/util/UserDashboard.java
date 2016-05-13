@@ -22,8 +22,8 @@ import static org.apache.openmeetings.web.user.dashboard.MyRoomsWidget.WIDGET_ID
 import static org.apache.openmeetings.web.user.dashboard.RssWidget.WIDGET_ID_RSS;
 import static org.apache.openmeetings.web.user.dashboard.admin.AdminWidget.WIDGET_ID_ADMIN;
 
-import ro.fortsoft.wicket.dashboard.DefaultDashboard;
-import ro.fortsoft.wicket.dashboard.Widget;
+import org.wicketstuff.dashboard.DefaultDashboard;
+import org.wicketstuff.dashboard.Widget;
 
 public class UserDashboard extends DefaultDashboard {
 	private static final long serialVersionUID = 1L;

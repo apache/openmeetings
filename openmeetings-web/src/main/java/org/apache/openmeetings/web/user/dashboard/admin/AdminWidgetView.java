@@ -21,11 +21,10 @@ package org.apache.openmeetings.web.user.dashboard.admin;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.dashboard.Widget;
+import org.wicketstuff.dashboard.web.WidgetView;
 
 import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
-
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
