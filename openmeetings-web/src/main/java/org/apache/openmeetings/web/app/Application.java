@@ -92,11 +92,10 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
-
-import ro.fortsoft.wicket.dashboard.WidgetRegistry;
-import ro.fortsoft.wicket.dashboard.web.DashboardContext;
-import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
-import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
+import org.wicketstuff.dashboard.WidgetRegistry;
+import org.wicketstuff.dashboard.web.DashboardContext;
+import org.wicketstuff.dashboard.web.DashboardContextInjector;
+import org.wicketstuff.dashboard.web.DashboardSettings;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);

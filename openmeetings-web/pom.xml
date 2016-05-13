@@ -30,7 +30,6 @@
 	<name>Openmeetings Web</name>
 	<description>TODO</description>
 	<properties>
-		<wicket-dashboard.version>0.13.0+wicket-7</wicket-dashboard.version>
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<mysql.version>5.1.38</mysql.version>
 		<old-backups.dir>${project.basedir}/test-data</old-backups.dir>
@@ -560,9 +559,9 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>ro.fortsoft.wicket.dashboard</groupId>
-			<artifactId>wicket-dashboard-core</artifactId>
-			<version>${wicket-dashboard.version}</version>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-dashboard-core</artifactId>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
