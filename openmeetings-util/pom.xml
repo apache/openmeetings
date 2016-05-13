@@ -32,6 +32,7 @@
 	<properties>
 		<dom4j.version>1.6.1</dom4j.version>
 		<commons-codec.version>1.9</commons-codec.version>
+		<commons-io.version>2.5</commons-io.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
@@ -67,13 +68,13 @@
 			<version>${commons-codec.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-util</artifactId>
-			<version>${wicket.version}</version>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-native-websocket-core</artifactId>
+			<artifactId>wicket-util</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>

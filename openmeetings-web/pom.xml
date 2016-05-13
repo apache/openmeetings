@@ -31,7 +31,6 @@
 	<description>TODO</description>
 	<properties>
 		<wicket-dashboard.version>0.13.0+wicket-7</wicket-dashboard.version>
-		<commons-io.version>2.5</commons-io.version>
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<mysql.version>5.1.38</mysql.version>
 		<old-backups.dir>${project.basedir}/test-data</old-backups.dir>
@@ -654,11 +653,6 @@
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>jqplot</artifactId>
 			<version>${wickets.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
