@@ -422,7 +422,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (browserTz == null) {
 			try {
 				browserTz = getClientInfo().getProperties().getTimeZone();
-				if (!AVAILABLE_TIMEZONE_SET.contains(browserTz.getID())) {
+				if (browserTz != null && !AVAILABLE_TIMEZONE_SET.contains(browserTz.getID())) {
 					for (String availableID : AVAILABLE_TIMEZONES) {
 						TimeZone zone = TimeZone.getTimeZone(availableID);
 						if (zone.hasSameRules(browserTz)) {
@@ -433,6 +433,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				}
 				_zone = browserTz;
 			} catch (Exception e) {
+				//no-op
+			}
+			if (browserTz == null) {
 				_zone = Calendar.getInstance(getBrowserLocale()).getTimeZone();
 			}
 		}
