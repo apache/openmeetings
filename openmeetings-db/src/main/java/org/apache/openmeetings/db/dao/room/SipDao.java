@@ -44,8 +44,6 @@ public class SipDao {
 	private String sipUsername;
 	private String sipPassword;
 	private ManagerConnectionFactory factory;
-	private ManagerConnection connection;
-	private ManagerConnection eventConnection;
 
 	@SuppressWarnings("unused")
 	private SipDao() {
@@ -58,61 +56,57 @@ public class SipDao {
 		this.sipUsername = sipUsername;
 		this.sipPassword = sipPassword;
 		factory = new ManagerConnectionFactory(this.sipHostname, this.sipPort, this.sipUsername, this.sipPassword);
-		connection = factory.createManagerConnection(); // TODO secure
-		eventConnection = factory.createManagerConnection(); // TODO secure
 	}
 
 	private ManagerResponse exec(ManagerAction action) {
-		if (connection == null) {
+		if (factory == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		synchronized (connection) {
+		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		try {
+			con.login();
+			ManagerResponse r = con.sendAction(action);
+			if (log.isDebugEnabled() && r != null) {
+				log.debug(r.toString());
+			}
+			return (r instanceof ManagerError) ? null : r;
+		} catch (Exception e) {
+			if (log.isDebugEnabled()) {
+				log.error("Error while executing ManagerAction: " + action, e);
+			}
+		} finally {
 			try {
-				connection.login();
-				ManagerResponse r = connection.sendAction(action);
-				if (log.isDebugEnabled() && r != null) {
-					log.debug(r.toString());
-				}
-				return (r instanceof ManagerError) ? null : r;
+				con.logoff();
 			} catch (Exception e) {
-				if (log.isDebugEnabled()) {
-					log.error("Error while executing ManagerAction: " + action, e);
-				}
-			} finally {
-				try {
-					connection.logoff();
-				} catch (Exception e) {
-					// no-op
-				}
+				// no-op
 			}
 		}
 		return null;
 	}
 
 	private ResponseEvents execEvent(EventGeneratingAction action) {
-		if (eventConnection == null) {
+		if (factory == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		synchronized (eventConnection) {
+		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		try {
+			con.login("on");
+			ResponseEvents r = con.sendEventGeneratingAction(action);
+			if (log.isDebugEnabled() && r != null) {
+				log.debug(r.getResponse().toString());
+			}
+			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
+		} catch (Exception e) {
+			if (log.isDebugEnabled()) {
+				log.error("Error while executing EventGeneratingAction: " + action, e);
+			}
+		} finally {
 			try {
-				eventConnection.login("on");
-				ResponseEvents r = eventConnection.sendEventGeneratingAction(action);
-				if (log.isDebugEnabled() && r != null) {
-					log.debug(r.getResponse().toString());
-				}
-				return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
+				con.logoff();
 			} catch (Exception e) {
-				if (log.isDebugEnabled()) {
-					log.error("Error while executing EventGeneratingAction: " + action, e);
-				}
-			} finally {
-				try {
-					eventConnection.logoff();
-				} catch (Exception e) {
-					// no-op
-				}
+				// no-op
 			}
 		}
 		return null;
