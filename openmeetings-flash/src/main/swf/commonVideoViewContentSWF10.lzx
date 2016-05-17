@@ -95,7 +95,7 @@
 			vidContainer.setAttribute("height",281);
 		}
 		vidContainer.clientVars = object;
-		vidContainer.setAttribute('visibility','hidden');
+		vidContainer.setAttribute('visible', false);
 		return vidContainer;
 	</method>
 
@@ -362,29 +362,37 @@
 	]]>
 	</method>
 
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
-		<![CDATA[
-			if ($debug) Debug.write("startStream: ", publicSID,broadcastId,firstname,lastname,interviewPodId,width,height);
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			//if ($debug) Debug.write("startStream obj: ",obj);
-			if (obj != null ){
-				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
-				obj.setDefaultVideoSize(width,height);
-				obj.setAttribute('chatpartnername',firstname+' '+lastname);
-			}
-			//we have to do this again when the stream starts, the initial video 
-			//component does not know the interviewPodId as the user has not selected 
-			//which interview video pod he is going to use
-			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
-				if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
-				obj.setAttribute("interviewPodId", interviewPodId);
-				obj.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-				obj.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
-				obj.setAttribute("width",322);
-				obj.setAttribute("height",281);
-			}
-			return;
-		]]>
+	<method name="startStream" args="value">
+	<![CDATA[
+		//value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight
+		
+		if ($debug) Debug.write("startStream: ", value);
+		var obj = null;
+		if (!!value.securityCode) {
+			obj = createVideoObject(value.publicSID, true, -1, value);
+			obj.setAttribute('visible', true);
+		} else {
+			obj = getVideoObjectByPublicSID(value.publicSID);
+		}
+		//if ($debug) Debug.write("startStream obj: ",obj);
+		if (obj != null ){
+			obj._chatvideoinner._videostream.playStream(value.broadCastID, -1);
+			obj.setDefaultVideoSize(value.VWidth, value.VHeight);
+			obj.setAttribute('chatpartnername', value.firstname + ' ' + value.lastname);
+		}
+		//we have to do this again when the stream starts, the initial video 
+		//component does not know the interviewPodId as the user has not selected 
+		//which interview video pod he is going to use
+		var interviewPodId = value.interviewPodId;
+		if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+			if ($debug) Debug.write("Is interview ", interviewPodId, "x", canvas["interviewPod" + interviewPodId + "_x"]);
+			obj.setAttribute("interviewPodId", interviewPodId);
+			obj.setAttribute("x",canvas["interviewPod" + interviewPodId + "_x"]);
+			obj.setAttribute("y",canvas["interviewPod" + interviewPodId + "_y"]);
+			obj.setAttribute("width", 322);
+			obj.setAttribute("height", 281);
+		}
+	]]>
 	</method>
 
 	<!---

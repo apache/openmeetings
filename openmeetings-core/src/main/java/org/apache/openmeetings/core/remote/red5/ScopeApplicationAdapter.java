@@ -166,6 +166,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
 		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
 		String uid = params != null && params.length > 0 ? (String)params[0] : "";
+		String securityCode = null;//FIXME TODO should named parameter!!!! params != null && params.length > 0 ? (String)params[0] : "";
 
 		Client parentClient = null;
 		//TODO add similar code for other connections
@@ -222,6 +223,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				rcm.setLastname(u.getLastname());
 			}
 			log.debug("publishName :: " + rcm.getStreamPublishName());
+			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
+		}
+		if (!Strings.isEmpty(securityCode)) {
+			//FIXME TODO check if client by code is in this room
+			rcm.setSecurityCode(securityCode);
 			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
 		}
 
@@ -639,6 +645,19 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.isScreenClient()) {
 				currentClient.setScreenPublishStarted(true);
+				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			}
+			if (!Strings.isEmpty(currentClient.getSecurityCode())) {
+				//FIXME TODO add better mechanism
+				Client parent = sessionManager.getClientByPublicSID(currentClient.getSecurityCode(), null);
+				if (parent == null || !parent.getScope().equals(stream.getScope().getName())) {
+					rejectClient();
+					return;
+				}
+				currentClient.setBroadCastID(Long.parseLong(stream.getPublishedName()));
+				currentClient.setIsBroadcasting(true);
+				currentClient.setVWidth(320);
+				currentClient.setVHeight(240);
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			
