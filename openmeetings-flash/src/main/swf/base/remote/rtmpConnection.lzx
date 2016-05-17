@@ -52,7 +52,7 @@
             
             this._nc.proxyType = canvas.proxyType;
             
-            var ok = this._nc.connect(src == "null" ? null : src, "");
+            var ok = this._nc.connect(src == "null" ? null : src, {uid: ''});
             if (this.debug) {
             	if($debug) Debug.write("*** debug ***");
             }
