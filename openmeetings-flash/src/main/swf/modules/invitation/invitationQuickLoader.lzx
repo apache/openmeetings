@@ -119,7 +119,6 @@
 			canvas.setAttribute('firstName', fName);
 			canvas.setAttribute('lastName', lName);
 			canvas.setAttribute('lastLogin', invitee.lastlogin);
-			canvas.setAttribute('official_code','');
 			canvas.setAttribute('picture_uri', invitee.pictureuri);
 			canvas.setAttribute('language', invitee.language_id);
 			

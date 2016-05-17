@@ -258,10 +258,10 @@ public class Client implements IDataProviderEntity {
 	private String lastLogin;
 	
 	/**
-	 * @see Client#getOfficial_code()
+	 * @see Client#getSecurityCode()
 	 */
-	@Column(name = "official_code")
-	private String official_code;
+	@Column(name = "security_code")
+	private String securityCode;
 	
 	/**
 	 * @see Client#getPicture_uri()
@@ -559,12 +559,12 @@ public class Client implements IDataProviderEntity {
 		this.email = email;
 	}
 
-	public String getOfficial_code() {
-		return official_code;
+	public String getSecurityCode() {
+		return securityCode;
 	}
 
-	public void setOfficial_code(String official_code) {
-		this.official_code = official_code;
+	public void setSecurityCode(String securityCode) {
+		this.securityCode = securityCode;
 	}
 
 	public String getPicture_uri() {

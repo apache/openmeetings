@@ -235,14 +235,6 @@
         ]]>
     </method>
         
-    <!--
-        invoked whenever a User starts to Stream Video in this Room, 
-        interviewPodId has only a meaning in the Room Type Interview
-     -->        
-    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight">
-        canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
-    </method>
-
     <method name="setSpeakingByPos" args="publicSID,bool">
         canvas.commonVideoViewContent.setSpeakingByPos(publicSID, bool);
     </method>

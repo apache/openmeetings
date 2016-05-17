@@ -23,7 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import java.io.Serializable;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.util.crypt.MD5Implementation;
+import org.apache.openmeetings.util.crypt.SHA256Implementation;
 
 public class InstallationConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class InstallationConfig implements Serializable {
 	public String createDefaultRooms = "1";
 	public String ical_timeZone = "Europe/Berlin";
 	
-	public String cryptClassName = MD5Implementation.class.getCanonicalName();
+	public String cryptClassName = SHA256Implementation.class.getCanonicalName();
 	//email
 	public Integer smtpPort = 25;
 	public String smtpServer = "localhost";

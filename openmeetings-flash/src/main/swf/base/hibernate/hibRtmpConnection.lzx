@@ -476,8 +476,7 @@
 				hib.userobject.lastname = lName;
 				
 				canvas.setAttribute('lastLogin','');
-				canvas.setAttribute('official_code','');
-				canvas.setAttribute('picture_uri',value.picture_uri);
+				canvas.setAttribute('picture_uri', value.picture_uri);
 				canvas.setAttribute('language','');
 				
 				if (canvas.wicketroomid > 0) {
@@ -627,7 +626,6 @@
 				canvas.setAttribute('lastName', value.lastname == null ? "" : value.lastname);
 				canvas.setAttribute('mail','');
 				canvas.setAttribute('lastLogin','');
-				canvas.setAttribute('official_code','');
 				canvas.setAttribute('picture_uri','');
 				canvas.setAttribute('language','');
 				canvas.setAttribute('currentuser',value.login);
@@ -635,11 +633,7 @@
 					canvas.timeZoneId = value.timeZoneId;
 				}
 				if (value.rights != null) {
-					for (var i = 0; i < value.rights.length; ++i) {
-						if ('Admin' == value.rights[i]) {
-							canvas.becomemoderator = true;
-						}
-					}
+					canvas.becomemoderator = value.rights.indexOf('Admin') > -1;
 				}
 				if ($debug) Debug.write("hibRtmpConnection::loginWicket -> canvas.becomemoderator", canvas.becomemoderator);
 				if (value.sessionData == null) {
@@ -737,7 +731,7 @@
 			if (value == null || value.screenClient) {
 				return;
 			}
-			canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight);
+			canvas.commonVideoViewContent.startStream(value);
 		</method> 
 		   
 		<netRemoteCallHib name="closeStream" funcname="closeStream">
@@ -802,7 +796,7 @@
 				if ($debug) Debug.write("canvas.currentBaseConferenceRoom._chatPanelStrict: ", canvas.currentBaseConferenceRoom._chatPanelStrict);
 				canvas.currentBaseConferenceRoom._chatPanelStrict.closeprivatechat(["close", value.publicSID]);
 			}
-			if (canvas.currentActivityList != null) {
+			if (!value.securityCode && canvas.currentActivityList != null) {
 				canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
 			}
 			this.roomDisconnectUser(value, value.publicSID);

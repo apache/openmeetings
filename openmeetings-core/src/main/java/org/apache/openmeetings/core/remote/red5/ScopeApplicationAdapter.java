@@ -62,6 +62,7 @@ import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -165,6 +166,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 		Map<String, Object> map = conn.getConnectParams();
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
+		String securityCode = params != null && params.length > 0 ? (String)params[0] : "";
 
 		Client parentClient = null;
 		//TODO add similar code for other connections
@@ -193,13 +195,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			
 			rcm.setUserId(parentClient.getUserId());
-			Long uid = rcm.getUserId();
-			SessionVariablesUtil.setUserId(conn.getClient(), uid);
+			Long userId = rcm.getUserId();
+			SessionVariablesUtil.setUserId(conn.getClient(), userId);
 
 			rcm.setStreamPublishName(parentSid);
 			User u = null;
-			if (uid != null) {
-				long _uid = uid.longValue();
+			if (userId != null) {
+				long _uid = userId.longValue();
 				u = userDao.get(_uid < 0 ? -_uid : _uid);
 			}
 			if (u != null) {
@@ -208,6 +210,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				rcm.setLastname(u.getLastname());
 			}
 			log.debug("publishName :: " + rcm.getStreamPublishName());
+			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
+		}
+		if (!Strings.isEmpty(securityCode)) {
+			//FIXME TODO check if client by code is in this room
+			rcm.setSecurityCode(securityCode);
 			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
 		}
 
@@ -504,50 +511,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * This function is kind of private/protected as the client won't be able 
 	 * to call it with proper values.
 	 * 
-	 * @param currentClient
-	 * @param currentScope
+	 * @param client
+	 * @param scope
 	 */
-	public void roomLeaveByScope(Client currentClient, IScope currentScope, boolean removeUserFromSessionList) {
+	public void roomLeaveByScope(Client client, IScope scope, boolean removeUserFromSessionList) {
 		try {
-			log.debug("currentClient " + currentClient);
-			Long roomId = currentClient.getRoomId();
+			log.debug("currentClient " + client);
+			Long roomId = client.getRoomId();
 
 			// Log the User
 			conferenceLogDao.add(ConferenceLog.Type.roomLeave,
-					currentClient.getUserId(), currentClient.getStreamid(),
-					roomId, currentClient.getUserip(), "");
+					client.getUserId(), client.getStreamid(),
+					roomId, client.getUserip(), "");
 
 			// Remove User from Sync List's
 			if (roomId != null) {
-				whiteBoardService.removeUserFromAllLists(currentScope, currentClient);
+				whiteBoardService.removeUserFromAllLists(scope, client);
 			}
 
-			log.debug("removing Username " + currentClient.getUsername() + " "
-					+ currentClient.getConnectedSince() + " streamid: "
-					+ currentClient.getStreamid());
+			log.debug("removing Username " + client.getUsername() + " "
+					+ client.getConnectedSince() + " streamid: "
+					+ client.getStreamid());
 
 			// stop and save any recordings
-			if (currentClient.getIsRecording()) {
+			if (client.getIsRecording()) {
 				log.debug("*** roomLeave Current Client is Recording - stop that");
-				if (currentClient.getInterviewPodId() != null) {
+				if (client.getInterviewPodId() != null) {
 					//interview, TODO need better check
-					_stopInterviewRecording(currentClient, currentScope);
+					_stopInterviewRecording(client, scope);
 				} else {
-					recordingService.stopRecordAndSave(currentScope, currentClient, null);
+					recordingService.stopRecordAndSave(scope, client, null);
 
 					// set to true and overwrite the default one cause otherwise no
 					// notification is send
-					currentClient.setIsRecording(true);
+					client.setIsRecording(true);
 				}
 			}
 
 			// Notify all clients of the same currentScope (room) with domain
 			// and room except the current disconnected cause it could throw an exception
-			log.debug("currentScope " + currentScope);
+			log.debug("currentScope " + scope);
 
-			if (currentScope != null && currentScope.getClientConnections() != null) {
+			if (scope != null && scope.getClientConnections() != null) {
 				// Notify Users of the current Scope
-				for (IConnection cons : currentScope.getClientConnections()) {
+				for (IConnection cons : scope.getClientConnections()) {
 					if (cons != null && cons instanceof IServiceCapableConnection) {
 						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
 
@@ -560,16 +567,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 						
 						//Do not send back to sender, but actually all other clients should receive this message swagner 01.10.2009
-						if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+						if (!client.getStreamid().equals(rcl.getStreamid())) {
 							// add Notification if another user isrecording
-							log.debug("###########[roomLeave]");
+							log.debug("###########[roomLeaveByScope]");
 							if (rcl.getIsRecording()) {
 								log.debug("*** roomLeave Any Client is Recording - stop that");
-								recordingService.stopRecordingShowForClient(cons, currentClient);
+								recordingService.stopRecordingShowForClient(cons, client);
 							}
 							
 							boolean isScreen = rcl.isScreenClient();
-							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
+							if (isScreen && client.getPublicSID().equals(rcl.getStreamPublishName())) {
 								//going to terminate screen sharing started by this client
 								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
 								continue;
@@ -579,7 +586,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							}
 							
 							// Send to all connected users
-							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { currentClient },this);
+							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { client },this);
 							log.debug("sending roomDisconnect to " + cons);
 						}
 					}
@@ -587,7 +594,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			if (removeUserFromSessionList) {
-				sessionManager.removeClient(currentClient.getStreamid(), null);
+				sessionManager.removeClient(client.getStreamid(), null);
 			}
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
@@ -620,6 +627,19 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.isScreenClient()) {
 				currentClient.setScreenPublishStarted(true);
+				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			}
+			if (!Strings.isEmpty(currentClient.getSecurityCode())) {
+				//FIXME TODO add better mechanism
+				Client parent = sessionManager.getClientByPublicSID(currentClient.getSecurityCode(), null);
+				if (parent == null || !parent.getScope().equals(stream.getScope().getName())) {
+					rejectClient();
+					return;
+				}
+				currentClient.setBroadCastID(Long.parseLong(stream.getPublishedName()));
+				currentClient.setIsBroadcasting(true);
+				currentClient.setVWidth(320);
+				currentClient.setVHeight(240);
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			
@@ -841,7 +861,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
 		} catch (Exception err) {
-			log.error("[addModerator]", err);
+			log.error("[removeModerator]", err);
 		}
 		return -1L;
 	}
