@@ -309,7 +309,7 @@ webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
 webapps/openmeetings/WEB-INF/lib/api-all-1.0.0-M33.jar
-webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0.jar
+webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
 webapps/openmeetings/WEB-INF/lib/batik-anim-1.8.jar
 webapps/openmeetings/WEB-INF/lib/batik-awt-util-1.8.jar
 webapps/openmeetings/WEB-INF/lib/batik-bridge-1.8.jar
@@ -332,28 +332,28 @@ webapps/openmeetings/WEB-INF/lib/commons-lang-2.4.jar
 webapps/openmeetings/WEB-INF/lib/commons-pool-1.6.jar
 webapps/openmeetings/WEB-INF/lib/commons-pool2-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/commons-transaction-1.2.jar
-webapps/openmeetings/WEB-INF/lib/cxf-core-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-soap-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-xml-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-databinding-jaxb-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxrs-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxws-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-simple-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-rs-extension-providers-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-transports-http-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-addr-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-wsdl-3.1.5.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-policy-3.1.5.jar
+webapps/openmeetings/WEB-INF/lib/cxf-core-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-soap-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-xml-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-databinding-jaxb-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxrs-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxws-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-simple-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-rs-extension-providers-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-transports-http-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-addr-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-wsdl-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-policy-3.1.6.jar
 webapps/openmeetings/WEB-INF/lib/derby-10.12.1.1.jar
 webapps/openmeetings/WEB-INF/lib/derbyclient-10.12.1.1.jar
 webapps/openmeetings/WEB-INF/lib/dom4j-1.6.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/groovy-all-2.3.2.jar
-webapps/openmeetings/WEB-INF/lib/gson-2.2.2.jar
+webapps/openmeetings/WEB-INF/lib/gson-2.2.4.jar
 webapps/openmeetings/WEB-INF/lib/guava-18.0.jar
-webapps/openmeetings/WEB-INF/lib/httpclient-4.5.1.jar
-webapps/openmeetings/WEB-INF/lib/httpcore-4.4.3.jar
+webapps/openmeetings/WEB-INF/lib/httpclient-4.5.2.jar
+webapps/openmeetings/WEB-INF/lib/httpcore-4.4.4.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.7.jar
 webapps/openmeetings/WEB-INF/lib/joda-time-2.7.jar
 webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.0.jar
@@ -371,7 +371,6 @@ webapps/openmeetings/WEB-INF/lib/stax-1.2.0.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-3.1.4.jar
 webapps/openmeetings/WEB-INF/lib/wicket-auth-roles-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-core-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-dashboard-core-0.13.0+wicket-7.jar
 webapps/openmeetings/WEB-INF/lib/wicket-datetime-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-devutils-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-extensions-7.3.0.jar
@@ -385,6 +384,7 @@ webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-javax-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-request-7.3.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-dashboard-core-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicketstuff-whiteboard-7.3.0.jar
@@ -1292,7 +1292,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ======================================================================================================================
 
-For XStream Components: xstream-1.4.2.jar
+For XStream Components: xstream-1.4.9.jar
 
 Copyright (c) 2003-2006, Joe Walnes
 Copyright (c) 2006-2007, XStream Committers
