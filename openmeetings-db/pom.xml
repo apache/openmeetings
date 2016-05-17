@@ -31,7 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<openjpa.version>2.4.1</openjpa.version>
-		<asterisk-java.version>1.0.0</asterisk-java.version>
+		<asterisk-java.version>1.0.0-final</asterisk-java.version>
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.4.2</commons-pool2.version>
