@@ -31,7 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<dom4j.version>1.6.1</dom4j.version>
-		<commons-codec.version>1.9</commons-codec.version>
+		<commons-codec.version>1.10</commons-codec.version>
 		<commons-io.version>2.5</commons-io.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
