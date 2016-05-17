@@ -88,6 +88,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
+	private static final String SECURITY_CODE_PARAM = "securityCode";
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -150,6 +151,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> getConnParams(Object[] params) {
+		if (params != null && params.length > 0) {
+			return (Map<String, Object>)params[0]; 
+		}
+		return new HashMap<>();
+	}
+	
 	@Override
 	public boolean roomConnect(IConnection conn, Object[] params) {
 		log.debug("roomConnect : ");
@@ -165,8 +174,19 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Map<String, Object> map = conn.getConnectParams();
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
 		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
-		String uid = params != null && params.length > 0 ? (String)params[0] : "";
-		String securityCode = null;//FIXME TODO should named parameter!!!! params != null && params.length > 0 ? (String)params[0] : "";
+		Map<String, Object> connParams = getConnParams(params);
+		String uid = (String)connParams.get("uid");
+		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
+		if (!Strings.isEmpty(securityCode)) {
+			//FIXME TODO add better mechanism
+			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
+			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
+				return rejectClient();
+			}
+		}
+		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode)) {
+			return rejectClient();
+		}
 
 		Client parentClient = null;
 		//TODO add similar code for other connections
@@ -192,6 +212,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
 		rcm.setPublicSID(uid);
+		rcm.setSecurityCode(securityCode);
 		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
@@ -223,11 +244,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				rcm.setLastname(u.getLastname());
 			}
 			log.debug("publishName :: " + rcm.getStreamPublishName());
-			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
-		}
-		if (!Strings.isEmpty(securityCode)) {
-			//FIXME TODO check if client by code is in this room
-			rcm.setSecurityCode(securityCode);
 			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
 		}
 
@@ -648,12 +664,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			if (!Strings.isEmpty(currentClient.getSecurityCode())) {
-				//FIXME TODO add better mechanism
-				Client parent = sessionManager.getClientByPublicSID(currentClient.getSecurityCode(), null);
-				if (parent == null || !parent.getScope().equals(stream.getScope().getName())) {
-					rejectClient();
-					return;
-				}
 				currentClient.setBroadCastID(Long.parseLong(stream.getPublishedName()));
 				currentClient.setIsBroadcasting(true);
 				currentClient.setVWidth(320);
@@ -2073,7 +2083,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 	}
 
-    /*
+	/*
 	 * SIP transport methods
 	 */
 
