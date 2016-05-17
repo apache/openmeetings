@@ -457,7 +457,6 @@
 				hib.userobject.lastname = lName;
 				
 				canvas.setAttribute('lastLogin','');
-				canvas.setAttribute('official_code','');
 				canvas.setAttribute('picture_uri',value.picture_uri);
 				canvas.setAttribute('language','');
 				
@@ -607,7 +606,6 @@
 				canvas.setAttribute('lastName', value.lastname == null ? "" : value.lastname);
 				canvas.setAttribute('mail','');
 				canvas.setAttribute('lastLogin','');
-				canvas.setAttribute('official_code','');
 				canvas.setAttribute('picture_uri','');
 				canvas.setAttribute('language','');
 				canvas.setAttribute('currentuser',value.login);
@@ -706,7 +704,7 @@
 			if (value == null || value.screenClient) {
 				return;
 			}
-			canvas.commonVideoViewContent.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight);
+			canvas.commonVideoViewContent.startStream(value);
 		</method> 
 		   
 		<netRemoteCallHib name="closeStream" funcname="closeStream">

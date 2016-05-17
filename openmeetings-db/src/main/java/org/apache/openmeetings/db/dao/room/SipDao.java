@@ -45,6 +45,7 @@ public class SipDao {
 	private String sipPassword;
 	private ManagerConnectionFactory factory;
 	private ManagerConnection connection;
+	private ManagerConnection eventConnection;
 
 	@SuppressWarnings("unused")
 	private SipDao() {
@@ -58,6 +59,7 @@ public class SipDao {
 		this.sipPassword = sipPassword;
 		factory = new ManagerConnectionFactory(this.sipHostname, this.sipPort, this.sipUsername, this.sipPassword);
 		connection = factory.createManagerConnection(); // TODO secure
+		eventConnection = factory.createManagerConnection(); // TODO secure
 	}
 
 	private ManagerResponse exec(ManagerAction action) {
@@ -65,38 +67,52 @@ public class SipDao {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		try {
-			connection.login();
-			ManagerResponse r = connection.sendAction(action);
-			connection.logoff();
-			if (log.isDebugEnabled() && r != null) {
-				log.debug(r.toString());
-			}
-			return (r instanceof ManagerError) ? null : r;
-		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing ManagerAction: " + action, e);
+		synchronized (connection) {
+			try {
+				connection.login();
+				ManagerResponse r = connection.sendAction(action);
+				if (log.isDebugEnabled() && r != null) {
+					log.debug(r.toString());
+				}
+				return (r instanceof ManagerError) ? null : r;
+			} catch (Exception e) {
+				if (log.isDebugEnabled()) {
+					log.error("Error while executing ManagerAction: " + action, e);
+				}
+			} finally {
+				try {
+					connection.logoff();
+				} catch (Exception e) {
+					// no-op
+				}
 			}
 		}
 		return null;
 	}
 
 	private ResponseEvents execEvent(EventGeneratingAction action) {
-		if (connection == null) {
+		if (eventConnection == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		try {
-			connection.login("on");
-			ResponseEvents r = connection.sendEventGeneratingAction(action);
-			connection.logoff();
-			if (log.isDebugEnabled() && r != null) {
-				log.debug(r.getResponse().toString());
-			}
-			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
-		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing EventGeneratingAction: " + action, e);
+		synchronized (eventConnection) {
+			try {
+				eventConnection.login("on");
+				ResponseEvents r = eventConnection.sendEventGeneratingAction(action);
+				if (log.isDebugEnabled() && r != null) {
+					log.debug(r.getResponse().toString());
+				}
+				return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
+			} catch (Exception e) {
+				if (log.isDebugEnabled()) {
+					log.error("Error while executing EventGeneratingAction: " + action, e);
+				}
+			} finally {
+				try {
+					eventConnection.logoff();
+				} catch (Exception e) {
+					// no-op
+				}
 			}
 		}
 		return null;
@@ -167,6 +183,6 @@ public class SipDao {
 		oa.setPriority(1);
 		oa.setTimeout(30000L);
 
-		ManagerResponse resp = exec(oa);
+		exec(oa); //TODO handle response
 	}
 }

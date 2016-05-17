@@ -246,7 +246,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="lastName" value="" type="string" />
 <attribute name="mail" value="" type="string" />
 <attribute name="lastLogin" value="" type="string" />
-<attribute name="official_code" value="" type="string" />
 <attribute name="picture_uri" value="" type="string" />
 <attribute name="language" value="" type="string" />
 <attribute name="currentClient" value="null" />   
