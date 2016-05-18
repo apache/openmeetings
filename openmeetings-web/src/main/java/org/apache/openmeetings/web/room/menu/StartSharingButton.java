@@ -129,7 +129,9 @@ public class StartSharingButton extends OmButton {
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);
 		}
-		download.setResourceStream(new StringResourceStream(app, "application/x-java-jnlp-file"));
+		StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
+		srs.setCharset(StandardCharsets.UTF_8);
+		download.setResourceStream(srs);
 		download.initiate(target);
 	}
 
