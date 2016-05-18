@@ -19,7 +19,6 @@
 package org.apache.openmeetings.screen.webstart;
 
 import org.red5.client.net.rtmps.RTMPSClient;
-import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.ICommand;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
@@ -33,18 +32,10 @@ public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 	private final CoreScreenShare core;
 
 	public RTMPSScreenShare(CoreScreenShare core) {
+		protocol = "rtmps"; //FIXME TODO need to be removed after fix in red5
 		this.core = core;
 	};
 
-	@Override
-	public void connect(String server, int port, String application, IPendingServiceCallback connectCallback) {
-		try { //FIXME need to be removed
-			super.connect(server, port, application, connectCallback);
-		} catch (NullPointerException npe) {
-			//no op, since RTMPSClient throws NPE
-		}
-	}
-	
 	// ------------------------------------------------------------------------
 	//
 	// Override
