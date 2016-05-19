@@ -34,6 +34,10 @@ public class CountryDropDown extends DropDownChoice<String>  {
 		this(id, null);
 	}
 	
+	public static String getCountryName(String code) {
+		return new Locale.Builder().setRegion(code).build().getDisplayCountry(WebSession.get().getLocale());
+	}
+	
 	public CountryDropDown(String id, IModel<String> model) {
 		super(id, model, Arrays.asList(Locale.getISOCountries()));
 		setChoiceRenderer(new IChoiceRenderer<String>() {
@@ -46,7 +50,7 @@ public class CountryDropDown extends DropDownChoice<String>  {
 			
 			@Override
 			public Object getDisplayValue(String code) {
-				return new Locale.Builder().setRegion(code).build().getDisplayCountry(WebSession.get().getLocale());
+				return getCountryName(code);
 			}
 
 			@Override
