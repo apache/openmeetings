@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import org.apache.openmeetings.db.entity.room.Room;
+import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ResponseEvents;
@@ -30,6 +31,7 @@ import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
 import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
+import org.asteriskjava.manager.internal.ManagerConnectionImpl;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,6 +45,7 @@ public class SipDao {
 	private int sipPort;
 	private String sipUsername;
 	private String sipPassword;
+	private long timeout;
 	private ManagerConnectionFactory factory;
 
 	@SuppressWarnings("unused")
@@ -50,20 +53,30 @@ public class SipDao {
 		// prohibited default constructor
 	}
 
-	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword) {
+	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword, long timeout) {
 		this.sipHostname = sipHostname;
 		this.sipPort = sipPort;
 		this.sipUsername = sipUsername;
 		this.sipPassword = sipPassword;
+		this.timeout = timeout;
 		factory = new ManagerConnectionFactory(this.sipHostname, this.sipPort, this.sipUsername, this.sipPassword);
 	}
 
+	private ManagerConnection getConnection() {
+		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection(); // TODO secure
+		con.setDefaultEventTimeout(timeout);
+		con.setDefaultResponseTimeout(timeout);
+		con.setSocketReadTimeout((int)timeout);
+		con.setSocketTimeout((int)timeout);
+		return con;
+	}
+	
 	private ManagerResponse exec(ManagerAction action) {
 		if (factory == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		ManagerConnection con = getConnection();
 		try {
 			con.login();
 			ManagerResponse r = con.sendAction(action);
@@ -90,7 +103,7 @@ public class SipDao {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		ManagerConnection con = getConnection();
 		try {
 			con.login("on");
 			ResponseEvents r = con.sendEventGeneratingAction(action);

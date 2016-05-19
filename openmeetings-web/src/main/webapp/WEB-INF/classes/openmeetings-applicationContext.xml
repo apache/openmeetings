@@ -202,12 +202,13 @@
 	<bean id="roommanagement" class="org.apache.openmeetings.core.data.conference.RoomManager" />
 	<bean id="roomDao" class="org.apache.openmeetings.db.dao.room.RoomDao"/>
 	<bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao">
-	<!--  Should be uncommented and updated with real values for Asterisk
-		<constructor-arg><value>127.0.0.1</value></constructor-arg>
+	<!--  Should be uncommented and updated with real values for Asterisk-->
+		<constructor-arg><value>192.168.15.178</value></constructor-arg>
 		<constructor-arg><value>5038</value></constructor-arg>
 		<constructor-arg><value>openmeetings</value></constructor-arg>
 		<constructor-arg><value>12345</value></constructor-arg>
-	 -->
+		<constructor-arg><value>5000</value></constructor-arg>
+	 <!-- -->
 	</bean>
 	<bean id="invitationDao" class="org.apache.openmeetings.db.dao.room.InvitationDao" />
 	<bean id="groupDao" class="org.apache.openmeetings.db.dao.user.GroupDao" />
