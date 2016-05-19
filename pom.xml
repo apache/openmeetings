@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>18-SNAPSHOT</version>
+		<version>18</version>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
@@ -124,6 +124,7 @@
 							</execution>
 						</executions>
 						<configuration>
+							<shasumSummary>true</shasumSummary>
 							<algorithms>
 								<algorithm>SHA-256</algorithm>
 							</algorithms>
