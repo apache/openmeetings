@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -60,7 +61,7 @@ public class UserProfilePanel extends UserPanel {
 			address.add(new Label("address.additionalname"));
 			address.add(new Label("address.zip"));
 			address.add(new Label("address.town"));
-			address.add(new Label("address.state.name"));
+			address.add(new Label("country", CountryDropDown.getCountryName(model.getObject().getAddress().getCountry())));
 			address.add(new Label("address.comment"));
 		} else {
 			address.setVisible(false);
