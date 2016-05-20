@@ -80,14 +80,12 @@ public class SipDao {
 		try {
 			con.login();
 			ManagerResponse r = con.sendAction(action);
-			if (log.isDebugEnabled() && r != null) {
+			if (r != null) {
 				log.debug(r.toString());
 			}
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing ManagerAction: " + action, e);
-			}
+			log.error("Error while executing ManagerAction: " + action, e);
 		} finally {
 			try {
 				con.logoff();
@@ -107,14 +105,12 @@ public class SipDao {
 		try {
 			con.login("on");
 			ResponseEvents r = con.sendEventGeneratingAction(action);
-			if (log.isDebugEnabled() && r != null) {
+			if (r != null) {
 				log.debug(r.getResponse().toString());
 			}
 			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing EventGeneratingAction: " + action, e);
-			}
+			log.error("Error while executing EventGeneratingAction: " + action, e);
 		} finally {
 			try {
 				con.logoff();
@@ -186,6 +182,7 @@ public class SipDao {
 
 		OriginateAction oa = new OriginateAction();
 		oa.setChannel(String.format("Local/%s@rooms-out", number));
+		//oa.setContext("rooms-out");
 		oa.setExten(String.format("%s@rooms-originate", sipNumber));
 		oa.setPriority(1);
 		oa.setTimeout(30000L);

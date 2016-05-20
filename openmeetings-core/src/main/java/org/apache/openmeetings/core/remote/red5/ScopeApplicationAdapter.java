@@ -2193,12 +2193,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param number
 	 *            to call
 	 */
-	public synchronized void joinToConfCall(String number) {
+	public synchronized void joinToConfCall(final String number) {
 		IConnection current = Red5.getConnectionLocal();
 		String streamid = current.getClient().getId();
-		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+		final Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
-			sipDao.joinToConfCall(number, roomDao.get(currentClient.getRoomId()));
+			new Thread() {
+				@Override
+				public void run() {
+					sipDao.joinToConfCall(number, roomDao.get(currentClient.getRoomId()));
+				}
+			}.start();
 		} catch (Exception e) {
 			log.error("Executing asterisk originate error: ", e);
 		}
