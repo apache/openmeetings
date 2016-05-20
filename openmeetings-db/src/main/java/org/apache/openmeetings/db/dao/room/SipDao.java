@@ -30,6 +30,7 @@ import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
 import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
+import org.asteriskjava.manager.internal.ManagerConnectionImpl;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,6 +44,7 @@ public class SipDao {
 	private int sipPort;
 	private String sipUsername;
 	private String sipPassword;
+	private long timeout;
 	private ManagerConnectionFactory factory;
 
 	@SuppressWarnings("unused")
@@ -50,31 +52,39 @@ public class SipDao {
 		// prohibited default constructor
 	}
 
-	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword) {
+	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword, long timeout) {
 		this.sipHostname = sipHostname;
 		this.sipPort = sipPort;
 		this.sipUsername = sipUsername;
 		this.sipPassword = sipPassword;
+		this.timeout = timeout;
 		factory = new ManagerConnectionFactory(this.sipHostname, this.sipPort, this.sipUsername, this.sipPassword);
 	}
 
+	private ManagerConnection getConnection() {
+		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection(); // TODO secure
+		con.setDefaultEventTimeout(timeout);
+		con.setDefaultResponseTimeout(timeout);
+		con.setSocketReadTimeout((int)timeout);
+		con.setSocketTimeout((int)timeout);
+		return con;
+	}
+	
 	private ManagerResponse exec(ManagerAction action) {
 		if (factory == null) {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		ManagerConnection con = getConnection();
 		try {
 			con.login();
 			ManagerResponse r = con.sendAction(action);
-			if (log.isDebugEnabled() && r != null) {
+			if (r != null) {
 				log.debug(r.toString());
 			}
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing ManagerAction: " + action, e);
-			}
+			log.error("Error while executing ManagerAction: " + action, e);
 		} finally {
 			try {
 				con.logoff();
@@ -90,18 +100,16 @@ public class SipDao {
 			log.warn("There is no Asterisk configured");
 			return null;
 		}
-		ManagerConnection con = factory.createManagerConnection(); // TODO secure
+		ManagerConnection con = getConnection();
 		try {
 			con.login("on");
 			ResponseEvents r = con.sendEventGeneratingAction(action);
-			if (log.isDebugEnabled() && r != null) {
+			if (r != null) {
 				log.debug(r.getResponse().toString());
 			}
 			return (r == null || r.getResponse() instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
-			if (log.isDebugEnabled()) {
-				log.error("Error while executing EventGeneratingAction: " + action, e);
-			}
+			log.error("Error while executing EventGeneratingAction: " + action, e);
 		} finally {
 			try {
 				con.logoff();
@@ -173,6 +181,7 @@ public class SipDao {
 
 		OriginateAction oa = new OriginateAction();
 		oa.setChannel(String.format("Local/%s@rooms-out", number));
+		//oa.setContext("rooms-out");
 		oa.setExten(String.format("%s@rooms-originate", sipNumber));
 		oa.setPriority(1);
 		oa.setTimeout(30000L);
