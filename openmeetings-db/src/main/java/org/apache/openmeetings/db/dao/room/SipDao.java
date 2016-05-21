@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import org.apache.openmeetings.db.entity.room.Room;
+import org.asteriskjava.manager.DefaultManagerConnection;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ResponseEvents;
@@ -30,7 +31,6 @@ import org.asteriskjava.manager.action.DbPutAction;
 import org.asteriskjava.manager.action.EventGeneratingAction;
 import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
-import org.asteriskjava.manager.internal.ManagerConnectionImpl;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
 import org.red5.logging.Red5LoggerFactory;
@@ -180,11 +180,11 @@ public class SipDao {
 		}
 
 		OriginateAction oa = new OriginateAction();
-		oa.setChannel(String.format("Local/%s@rooms-out", number));
-		//oa.setContext("rooms-out");
-		oa.setExten(String.format("%s@rooms-originate", sipNumber));
+		oa.setChannel(String.format("Local/%s@rooms-originate", sipNumber));
+		oa.setContext("rooms-out");
+		oa.setExten(number);
 		oa.setPriority(1);
-		oa.setTimeout(30000L);
+		oa.setTimeout(timeout);
 
 		exec(oa); //TODO handle response
 	}
