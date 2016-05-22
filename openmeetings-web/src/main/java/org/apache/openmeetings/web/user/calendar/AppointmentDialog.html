@@ -22,68 +22,95 @@
 	<wicket:panel>
 		<form wicket:id="appForm" class="appointmentPopUp">
 			<span wicket:id="feedback"></span>
-			<table>
-				<tr>
-					<td><wicket:message key="572" /></td>
-					<td><input type="text" wicket:id="title" /></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="570" /></td>
-					<td><span class="date time picker" wicket:id="start"></span></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="571" /></td>
-					<td><span class="date time picker" wicket:id="end"></span></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="565" /></td>
-					<td><select wicket:id="reminder" ></select></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input type="checkbox" wicket:id="createRoom" /><label wicket:for="createRoom"><wicket:message key="1509" /></label></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="619" /></td>
-					<td><select wicket:id="room.type" ></select></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="406" /></td>
-					<td><select wicket:id="room" ></select></td>
-				</tr>
-				<tr wicket:id="sip-container">
-					<td><wicket:message key="1003"/></td>
-					<td><span wicket:id="room.confno"></span></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input type="checkbox" wicket:id="passwordProtected" /><label wicket:for="passwordProtected"><wicket:message key="524" /></label></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="525" /></td>
-					<td><input type="password" wicket:id="password" /></td>
-				</tr>
-				<tr>
-					<td colspan="2" style="font-size: smaller;"><wicket:message key="1445" /></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="1156" /></td>
-					<td><span wicket:id="aowner"></span></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="803" /></td>
-					<td wicket:message="title:1588" class="om-select2"><select class="appointment attendees input" wicket:id="attendees"></select></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="569" /></td>
-					<td><input type="text" wicket:id="location" /></td>
-				</tr>
-				<tr>
-					<td><wicket:message key="573" /></td>
-					<td>
-						<div wicket:id="toolbarContainer"></div>
-						<div wicket:id="description"></div>
-					</td>
-				</tr>
-			</table>
+			<div id="tabs">
+				<ul>
+					<li><a href="#tab1"><wicket:message key="appointment.tab.general"/></a></li>
+					<li><a href="#tab2"><wicket:message key="436"/></a></li>
+					<li><a href="#tab3"><wicket:message key="appointment.tab.advanced"/></a></li>
+				</ul>
+				<div id="tab1">
+					<table>
+						<tr>
+							<td><wicket:message key="572" /></td>
+							<td><input type="text" wicket:id="title" /></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="570" /></td>
+							<td><span class="date time picker" wicket:id="start"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="571" /></td>
+							<td><span class="date time picker" wicket:id="end"></span></td>
+						</tr>
+						<tr wicket:id="owner-row">
+							<td><wicket:message key="1156" /></td>
+							<td><span wicket:id="aowner"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="803" /></td>
+							<td wicket:message="title:1588" class="om-select2"><select class="appointment attendees input" wicket:id="attendees"></select></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="569" /></td>
+							<td><input type="text" wicket:id="location" /></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="573" /></td>
+							<td>
+								<div wicket:id="toolbarContainer"></div>
+								<div wicket:id="description"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab2">
+					<table>
+						<tbody>
+						<tr>
+							<td colspan="2"><input type="checkbox" wicket:id="createRoom" /><label wicket:for="createRoom"><wicket:message key="1509" /></label></td>
+						</tr>
+						</tbody>
+						<tbody wicket:id="create-room-block">
+						<tr>
+							<td><wicket:message key="619" /></td>
+							<td><select wicket:id="room.type" ></select></td>
+						</tr>
+						<tr>
+							<td><label wicket:for="room.moderated"><wicket:message key="640" /></label></td>
+							<td><input type="checkbox" wicket:id="room.moderated" /></td>
+						</tr>
+						</tbody>
+						<tbody>
+						<tr>
+							<td><wicket:message key="436" /></td>
+							<td><select wicket:id="room" ></select></td>
+						</tr>
+						<tr wicket:id="sip-container">
+							<td><wicket:message key="1003"/></td>
+							<td><span wicket:id="room.confno"></span></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="tab3">
+					<table>
+						<tr>
+							<td><wicket:message key="565" /></td>
+							<td><select wicket:id="reminder" ></select></td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="checkbox" wicket:id="passwordProtected" /><label wicket:for="passwordProtected"><wicket:message key="524" /></label></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="525" /></td>
+							<td><input type="password" wicket:id="password" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="font-size: smaller;"><wicket:message key="1445" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</form>
 		<div wicket:id="confirmDelete"></div>
 	</wicket:panel>
