@@ -52,3 +52,7 @@
 	overflow-x: scroll;
 	float: left;
 }
+
+.appointment.ui-dialog .ui-dialog-content {
+	padding: 0;
+}
