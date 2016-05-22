@@ -1888,4 +1888,6 @@
 	<entry key="install.room.restricted.micro">Restricted room with micro option set</entry>
 	<entry key="install.room.conference.micro">Conference room with micro option set</entry>
 	<entry key="install.room.private.conference">Private Conference Room</entry>
+	<entry key="appointment.tab.general">General</entry>
+	<entry key="appointment.tab.advanced">Advanced</entry>
 </properties>

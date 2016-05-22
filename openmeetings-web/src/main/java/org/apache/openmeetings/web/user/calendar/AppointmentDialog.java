@@ -54,6 +54,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -70,7 +71,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.threeten.bp.LocalDateTime;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -100,6 +103,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	@Override
 	public int getWidth() {
 		return 650;
+	}
+	
+	@Override
+	public void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+		behavior.setOption("dialogClass", Options.asString("appointment"));
 	}
 	
 	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {
@@ -159,12 +168,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	public Form<?> getForm() {
-		return this.form;
+		return form;
 	}
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		handler.add(this.form);
+		handler.add(form.add(new JQueryUIBehavior("#tabs", "tabs")));
 	}
 	
 	@Override
@@ -240,6 +249,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
+		private final WebMarkupContainer ownerPanel = new WebMarkupContainer("owner-row");
+		private final WebMarkupContainer createRoomBlock = new WebMarkupContainer("create-room-block");
 		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("room.type");
 		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
@@ -283,9 +294,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}
 			pwd.setEnabled(a.isPasswordProtected());
-			owner.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true);
 			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
-			owner.setVisible(!isOwner(a));
+			ownerPanel.setVisible(!isOwner(a));
 		}
 		
 		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
@@ -293,17 +303,33 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			setOutputMarkupId(true);
 			
 			add(feedback.setOutputMarkupId(true));
+			//General
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
+			add(start);
+			add(end);
+			add(ownerPanel.add(owner));
+			add(new UserMultiChoice("attendees", attendeesModel));
+			add(new TextField<String>("location"));
 			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
-			add(new TextField<String>("location"));
-			add(start);
-			add(end);
-			pwd.setEnabled(getModelObject().isPasswordProtected());
-			pwd.setOutputMarkupId(true);
-			add(pwd);
 			
+			//room
+			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					createRoom = getConvertedInput();
+					target.add(createRoomBlock.setEnabled(createRoom), room.setEnabled(!createRoom));
+				}
+			});
+			add(createRoomBlock.add(roomType, new CheckBox("room.moderated")).setEnabled(createRoom).setOutputMarkupId(true));
+			add(room.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
+			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+			sipContainer.add(new Label("room.confno", "")).setVisible(false);
+			
+			//Advanced
 			add(new DropDownChoice<Reminder>(
 					"reminder"
 					, Arrays.asList(Reminder.values())
@@ -330,21 +356,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 							return null;
 						}
 					}));
-			
-			add(roomType.setEnabled(createRoom).setOutputMarkupId(true));
-			
-			add(room.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
-			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					createRoom = getConvertedInput();
-					target.add(roomType.setEnabled(createRoom), room.setEnabled(!createRoom));
-				}
-			});
-			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
-			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 			add(new AjaxCheckBox("passwordProtected") {
 				private static final long serialVersionUID = 1L;
 
@@ -355,9 +366,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					target.add(pwd);
 				}
 			});
-			add(new UserMultiChoice("attendees", attendeesModel));
-				
-			add(owner);
+			pwd.setEnabled(getModelObject().isPasswordProtected());
+			pwd.setOutputMarkupId(true);
+			add(pwd);
 		}
 		
 		private List<Room> getRoomList() {
