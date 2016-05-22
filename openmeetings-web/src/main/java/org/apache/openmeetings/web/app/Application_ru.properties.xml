@@ -1924,4 +1924,6 @@
 	<entry key="install.room.restricted.micro">Расширенная комната со статусом микрофона</entry>
 	<entry key="install.room.conference.micro">Комната для конференций со статусом микрофона</entry>
 	<entry key="install.room.private.conference">Закрытая комната для конференций</entry>
+	<entry key="appointment.tab.general">Общие</entry>
+	<entry key="appointment.tab.advanced">Дополнительные</entry>
 </properties>
