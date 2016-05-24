@@ -1712,7 +1712,7 @@
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			默认{ 0 }使用集成{ 1 }数据库。对于生产环境，你应该考虑使用{ 2 }，{ 3 }，{ 4 }，{ 5 }或{ 6 }
+			默认 {0} 使用集成 {1} 数据库。对于生产环境，你应该考虑使用 {2}，{3}，{4}，{5} 或 {6}
 		</blockquote>
 	]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
@@ -1738,7 +1738,7 @@
 	<entry key="install.wizard.db.step.errorprops">无法获得属性</entry>
 	<entry key="install.wizard.db.step.nodriver">无法加载正确的数据库驱动程序，请下载适当的jar文件，并重新启动OM。指示: {0}</entry>
 	<entry key="install.wizard.db.step.notvalid">数据库检查不成功</entry>
-	<entry key="install.wizard.db.step.error.patch">意外错误，同时修补持久性文件：{ 0 }</entry>
+	<entry key="install.wizard.db.step.error.patch">意外错误，同时修补持久性文件：{0}</entry>
 	<entry key="install.wizard.db.step.valid">数据库检查成功</entry>
 	<entry key="install.wizard.params.step1.userdata">用户数据</entry>
 	<entry key="install.wizard.params.step1.username">用户名称</entry>
