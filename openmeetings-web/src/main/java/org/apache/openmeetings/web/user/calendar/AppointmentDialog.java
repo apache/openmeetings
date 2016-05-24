@@ -192,42 +192,43 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-        Appointment a = form.getModelObject();
-        final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
-        Set<Long> currentIds = new HashSet<Long>();
-        for (User u : attendeesModel.getObject()) {
-        	if (u.getId() != null) {
-        		currentIds.add(u.getId());
-        	}
-        }
-        
-        //remove users
-        for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
-        	MeetingMember m = i.next();
-        	if (!currentIds.contains(m.getUser().getId())) {
-        		i.remove();
-        	}
-        }
-        Set<Long> originalIds = new HashSet<Long>();
-        for (MeetingMember m : attendees) {
-        	originalIds.add(m.getUser().getId());
-        }
-        //add users
-        for (User u : attendeesModel.getObject()) {
-        	if (u.getId() == null || !originalIds.contains(u.getId())) {
-        		MeetingMember mm = new MeetingMember();
-        		mm.setUser(u);
-        		mm.setDeleted(false);
-        		mm.setInserted(a.getInserted());
-        		mm.setUpdated(a.getUpdated());
-        		mm.setAppointment(a);
-        		attendees.add(mm);
-        	}
-        }
-        a.setMeetingMembers(attendees);
-        a.setStart(getDate(form.start.getModelObject()));
-        a.setEnd(getDate(form.end.getModelObject()));
-        getBean(AppointmentDao.class).update(a, getUserId());
+		Appointment a = form.getModelObject();
+		a.setRoom(form.createRoom ? form.appRoom : form.groom.getModelObject());
+		final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
+		Set<Long> currentIds = new HashSet<Long>();
+		for (User u : attendeesModel.getObject()) {
+			if (u.getId() != null) {
+				currentIds.add(u.getId());
+			}
+		}
+		
+		//remove users
+		for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
+			MeetingMember m = i.next();
+			if (!currentIds.contains(m.getUser().getId())) {
+				i.remove();
+			}
+		}
+		Set<Long> originalIds = new HashSet<Long>();
+		for (MeetingMember m : attendees) {
+			originalIds.add(m.getUser().getId());
+		}
+		//add users
+		for (User u : attendeesModel.getObject()) {
+			if (u.getId() == null || !originalIds.contains(u.getId())) {
+				MeetingMember mm = new MeetingMember();
+				mm.setUser(u);
+				mm.setDeleted(false);
+				mm.setInserted(a.getInserted());
+				mm.setUpdated(a.getUpdated());
+				mm.setAppointment(a);
+				attendees.add(mm);
+			}
+		}
+		a.setMeetingMembers(attendees);
+		a.setStart(getDate(form.start.getModelObject()));
+		a.setEnd(getDate(form.end.getModelObject()));
+		getBean(AppointmentDao.class).update(a, getUserId());
 		target.add(feedback);
 		calendarPanel.refresh(target);
 	}
@@ -245,18 +246,29 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
+		private Room appRoom = null;
 		private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
 		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
 		private final WebMarkupContainer ownerPanel = new WebMarkupContainer("owner-row");
-		private final WebMarkupContainer createRoomBlock = new WebMarkupContainer("create-room-block");
-		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("room.type");
-		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
-				"room"
+		private final WebMarkupContainer createRoomBlock = new WebMarkupContainer("create-room-block", new CompoundPropertyModel<Room>(appRoom));
+		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("type");
+		private final DropDownChoice<Room> groom = new DropDownChoice<Room>(
+				"groom"
+				, Model.of(new Room())
 				, getRoomList()
 				, new ChoiceRenderer<Room>("name", "id"));
 
+		private Room createAppRoom() {
+			Room r = new Room();
+			r.setAppointment(true);
+			if (r.getType() == null) {
+				r.setType(Room.Type.conference);
+			}
+			return r;
+		}
+		
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
@@ -266,16 +278,18 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				a.setReminder(Reminder.none);
 			}
 			if (a.getRoom() == null) {
-				Room r = new Room();
-				r.setAppointment(true);
-				a.setRoom(r);
-			}
-			if (a.getRoom().getType() == null) {
-				a.getRoom().setType(Room.Type.conference);
+				a.setRoom(createAppRoom());
 			}
 			createRoom = a.getRoom().isAppointment();
-			roomType.setEnabled(createRoom);
-			room.setEnabled(!createRoom);
+			if (createRoom) {
+				appRoom = a.getRoom();
+			} else {
+				groom.setModelObject(a.getRoom());
+				appRoom = createAppRoom();
+			}
+			createRoomBlock.setDefaultModelObject(appRoom);
+			createRoomBlock.setEnabled(createRoom);
+			groom.setEnabled(!createRoom);
 			if (a.getId() == null) {
 				java.util.Calendar start = WebSession.getCalendar();
 				start.setTime(a.getStart());
@@ -321,11 +335,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
 					createRoom = getConvertedInput();
-					target.add(createRoomBlock.setEnabled(createRoom), room.setEnabled(!createRoom));
+					target.add(createRoomBlock.setEnabled(createRoom), groom.setEnabled(!createRoom));
 				}
 			});
-			add(createRoomBlock.add(roomType, new CheckBox("room.moderated")).setEnabled(createRoom).setOutputMarkupId(true));
-			add(room.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
+			add(createRoomBlock.add(roomType, new CheckBox("moderated")).setEnabled(createRoom).setOutputMarkupId(true));
+			add(groom.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 			
