@@ -614,22 +614,26 @@ public class UserDao implements IDataProviderDao<User> {
 				.setParameter("type", Type.user)
 				.getResultList();
 
-		log.debug("debug SIZE: " + users.size());
+		log.debug("login:: {} users were found", users.size());
 
 		if (users.size() == 0) {
+			log.debug("No users was found: {}", userOrEmail);
 			throw new OmException(-10L);
 		}
 		User u = users.get(0);
 
 		if (!verifyPassword(u.getId(), userpass)) {
+			log.debug("Password does not match: {}", u);
 			throw new OmException(-11L);
 		}
 		// Check if activated
 		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {
+			log.debug("Not activated: {}", u);
 			throw new OmException(-41L);
 		}
 		log.debug("loginUser " + u.getGroupUsers());
 		if (u.getGroupUsers().isEmpty()) {
+			log.debug("No Group assigned: {}", u);
 			throw new OmException("No Group assigned to user");
 		}
 		
