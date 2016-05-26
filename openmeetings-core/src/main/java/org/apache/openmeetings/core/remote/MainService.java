@@ -357,7 +357,7 @@ public class MainService implements IPendingServiceCallback {
 	public Long loginUserByRemote(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
 				if (sd == null || sd.getXml() == null) {
 					return -37L;
