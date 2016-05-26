@@ -866,17 +866,14 @@
 		Handmodus
 	 -->
 	<method name="doSetHandBodus" >
-		<![CDATA[
+	<![CDATA[
 		////Debug.write("doSetHandBodus: ");
 		var objList = this.getObjectInBounds(this.getMouse('x'),this.getMouse('y'));
-		if(objList.length==1){
-			this.setAttribute('drawmodus','pointer');
-			////Debug.write(objList[0][objList[0].length-1]);
-			this.doShowObjectBounds(objList[0][objList[0].length-1]);
-		} else if (objList.length>1){
-			this.setAttribute('drawmodus','pointer');
-			////Debug.write(objList[objList.length-1][objList[objList.length-1].length-1]);
-			this.doShowObjectBounds(objList[objList.length-1][objList[objList.length-1].length-1]);
+		if (objList.length > 0) {
+			var idx = objList.length - 1;
+			this.setAttribute('drawmodus', 'pointer');
+			//if ($debug) Debug.write("doSetHandBodus:: ", idx, objList[idx][objList[idx].length - 1]);
+			this.doShowObjectBounds(objList[idx][objList[idx].length - 1]);
 		} else {
 			this.startSelect(null);
   	 		this.startx = currentlayer.getMouse('x');
@@ -886,7 +883,7 @@
 	            
 			this.setModus("hand");
 		}
-		]]>
+	]]>
 	</method>
 	
     <method name="doShowObjectBounds" args="val">
@@ -956,44 +953,40 @@
 	</method>
     
 	<method name="getObjectInBounds" args="x,y">
-		<![CDATA[
+	<![CDATA[
 		var tempList = new Array();
-		if ($debug) Debug.write("getObjectInBounds this.baseactionobjectList1: ",x,y,this.baseactionobjectList);
+		if ($debug) Debug.write("getObjectInBounds this.baseactionobjectList1: ", x, y, this.baseactionobjectList);
 		
-		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
-			if ( ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]<=x 
-				&& ( (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]) >=x ) ) 
-				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<=y 
-				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] )>=y  ) ) {
-					
-				if (this.baseactionobjectList[eg][0] != "mindMapNode"
-				        && this.baseactionobjectList[eg][0] != "mindMapCenter")	{
-    				if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7] == null) {
-        				tempList.push(this.baseactionobjectList[eg]);
-    		        } else {
-    		        	var swfObject = this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7];
-    		        	
-    		        	if ($debug) Debug.write("getObjectInBounds :: swfObject ",swfObject.isVisible);
-    		        	
-    		        	if(swfObject.isVisible) {
-    	        	        tempList.push(this.baseactionobjectList[eg]);
-    		        	}
-    		        }
-		        }
-				////Debug.write("found obj: ",this.baseactionobjectList[eg]);
+		for (var eg = this.baseactionobjectList.length - 1; eg > -1 ; --eg) {
+			var item = this.baseactionobjectList[eg];
+			var px = item[item.length - 5], py = item[item.length - 4], pwidth = item[item.length - 3], pheight = item[item.length - 2];
+			//FIXME TODO rotation is not taken into account
+			if (px <= x && px + pwidth >=x && py <= y && py + pheight >=y) {
+				if (item[0] != "mindMapNode" && item[0] != "mindMapCenter")	{
+					var swfObject = item[item.length - 7];
+					if (swfObject == null) {
+						tempList.push(item);
+					} else {
+						if ($debug) Debug.write("getObjectInBounds :: swfObject ", swfObject.isVisible);
+						if (swfObject.isVisible) {
+							tempList.push(item);
+						}
+					}
+				}
+				if ($debug)  Debug.write("found obj: ", item);
 				break;
 			}
 		}		
 		return tempList;
-		]]>
+	]]>
 	</method>
 	
 	
 	<method name="getZIndex">
-		<![CDATA[
-			if ($debug) Debug.write("getZIndex ",this.subviews.length-1);
-			return this.subviews.length-1;
-		]]>
+	<![CDATA[
+		if ($debug) Debug.write("getZIndex ", this.subviews.length - 1);
+		return this.subviews.length - 1;
+	]]>
 	</method>
 	
 	
