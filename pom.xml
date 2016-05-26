@@ -743,7 +743,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>add-third-party</goal>
+							<!--goal>add-third-party</goal-->
 							<goal>aggregate-add-third-party</goal>
 						</goals>
 					</execution>
@@ -761,7 +761,6 @@
 							<configuration>
 								<groupByLicense>true</groupByLicense>
 								<failIfWarning>true</failIfWarning>
-								<force>true</force>
 								<useMissingFile>true</useMissingFile>
 								<excludedScopes>test</excludedScopes>
 								<licenseMerges>
