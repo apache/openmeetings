@@ -1179,7 +1179,7 @@ public class BackupImport {
 	}
 
 	private Long getNewId(Long oldId, Maps map) {
-		Long newId = oldId;
+		Long newId = null;
 		switch (map) {
 			case USERS:
 				if (usersMap.containsKey(oldId)) {
