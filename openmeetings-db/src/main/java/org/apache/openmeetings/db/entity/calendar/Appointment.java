@@ -161,7 +161,7 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name = "appointmentId", data = true)
 	private Long id;
 	
-	@Column(name = "appointmentname")
+	@Column(name = "title")
 	@Element(name="appointmentName", data=true, required=false)
 	private String title;
 	
@@ -169,11 +169,11 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name="appointmentLocation", data=true, required=false)
 	private String location;
 	
-	@Column(name = "start")
+	@Column(name = "app_start") //Oracle fails in case 'start' is used as column name
 	@Element(name="appointmentStarttime", data=true)
 	private Date start;
 	
-	@Column(name = "end")
+	@Column(name = "app_end") //renamed to be in sync with 'app_start'
 	@Element(name="appointmentEndtime", data=true)
 	private Date end;
 	
