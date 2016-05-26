@@ -53,12 +53,12 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
-	private ConfigurationDao configurationDao;
+	protected ConfigurationDao cfgDao;
 
 	@Before
 	public void setUp() throws Exception {
 		wicketApplicationName = "openmeetings";
-		configurationDao.getCryptKey();
+		cfgDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
 			log.info("Default scheme created successfully");
@@ -66,7 +66,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 			log.info("Default scheme already created");
 		}
 		if (configKeyCryptClassName == null) {
-			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
+			assertNotNull("Crypt class name should not be null", cfgDao.getCryptKey());
 		}
 	}
 
@@ -144,7 +144,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setFirstname("firstname" + rnd);
 		u.setLastname("lastname" + rnd);
 		u.setLogin("login" + rnd);
-		u.updatePassword(configurationDao, "pass" + rnd);
+		u.updatePassword(cfgDao, "pass" + rnd);
 		u.setLanguageId(1L);
 		return u;
 	}

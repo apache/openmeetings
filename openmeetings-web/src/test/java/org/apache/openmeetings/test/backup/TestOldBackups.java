@@ -18,13 +18,17 @@
  */
 package org.apache.openmeetings.test.backup;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -33,7 +37,9 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.junit.After;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -56,7 +62,25 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private RoomGroupDao roomGroupDao;
+	private String cryptClass = null;
 
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		// Crypt class need to be preserved here to avoid overriding by backup import
+		cryptClass = cfgDao.getCryptKey();
+	}
+	
+	@After
+	public void tearDown() {
+		List<Configuration> cfgs = cfgDao.get(CONFIG_CRYPT_KEY);
+		assertNotNull("Not null list should be returned", cfgs);
+		assertEquals("There should be exactly 1 item", 1, cfgs.size());
+		Configuration c = cfgs.get(0);
+		c.setValue(cryptClass);
+		cfgDao.update(c, null);
+	}
+	
 	@Test
 	public void importOldVersions() {
 		String backupsDir = System.getProperty("backups.dir", ".");
