@@ -22,6 +22,7 @@
 
 	<body>
 		<section name="Confluence Plugin for OpenMeetings">
+			<p>Sources are available at <a href="https://svn.apache.org/repos/asf/openmeetings/plugin/trunk/confluence">https://svn.apache.org/repos/asf/openmeetings/plugin/trunk/confluence</a></p>
 			<p>
 				To get SNAPSHOTS for testing please contact <a href="mail-lists.html">Mailing lists</a>
 			</p>
