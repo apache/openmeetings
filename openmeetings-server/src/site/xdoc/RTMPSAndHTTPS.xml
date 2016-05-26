@@ -135,7 +135,7 @@ Enter key password for <red5>
 				<li>Restart red5 and try to connect - your connection should now be
 					made via RTMPS (close port 1935 to be sure)
 				</li>   
-		  </ol>
+			</ol>
 		</section>
 		<section name="SSL for the web interface">
 			<p>If you want to use SSL for the web interface in addition to RTMPS,
