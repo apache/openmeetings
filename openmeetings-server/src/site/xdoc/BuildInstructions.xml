@@ -36,7 +36,7 @@
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
 					<li>Oracle JDK7</li>
-					<li>Apache Maven (minimum) 3.2.1</li>
+					<li>Apache Maven (minimum) 3.3.3</li>
 					<li>
 						SVN Command line client (Subversion 1.7 required!)
 						<a href="http://subversion.apache.org/packages.html" target="_blank" rel="nofollow">http://subversion.apache.org/packages.html</a>
@@ -45,7 +45,7 @@
 			</div>
 
 			<p>Get the source: </p>
-			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/trunk//]]></source>
+			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/trunk/]]></source>
 			<p>Run the command: </p>
 			<source><![CDATA[mvn clean install ]]></source>
 		</section>
