@@ -215,6 +215,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
 						user.setExternalId(remoteUser.getExternalUserId());
 						user.setExternalType(remoteUser.getExternalUserType());
+						user.getRights().clear();
 						user.getRights().add(Right.Room);
 						user.getAddress().setEmail(remoteUser.getEmail());
 						user.setPictureuri(remoteUser.getPictureUrl());
