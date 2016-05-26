@@ -197,7 +197,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		//FIXME code is duplicated from MainService, need to be unified
 		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
-		if (soapLogin != null && !soapLogin.isUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
+		if (soapLogin == null) {
+			return false;
+		}
+		if (!soapLogin.isUsed() || soapLogin.getAllowSameURLMultipleTimes()) {
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
 			if (sd != null && sd.getXml() != null) {
