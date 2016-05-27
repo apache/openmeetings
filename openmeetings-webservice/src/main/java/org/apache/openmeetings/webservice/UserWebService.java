@@ -108,7 +108,7 @@ public class UserWebService implements UserService {
 				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}
 			
-			Sessiondata sd = sessionDao.startsession();
+			Sessiondata sd = sessionDao.create();
 			log.debug("Login user SID : " + sd.getSessionId());
 			if (!sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId())) {
 				return new ServiceResult(-35L, "invalid Session-Object", Type.ERROR);
@@ -132,7 +132,7 @@ public class UserWebService implements UserService {
 	@Path("/")
 	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 	
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				return UserDTO.list(userDao.getAllUsers());
@@ -159,7 +159,7 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
@@ -223,7 +223,7 @@ public class UserWebService implements UserService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 				userDao.delete(userDao.get(id), authUserId);
@@ -251,7 +251,7 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 				User user = userDao.getExternalUser(externalId, externalType);
@@ -283,7 +283,7 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						user.getLogin(), user.getFirstname(), user.getLastname()
@@ -296,8 +296,6 @@ public class UserWebService implements UserService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionDao.updateUserRemoteSession(sid, xmlString);
-
 				//TODO LandingZone are not configurable for now
 				String hash = soapLoginDao.addSOAPLogin(sid, options.getRoomId(),
 						options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
@@ -308,6 +306,12 @@ public class UserWebService implements UserService {
 						);
 
 				if (hash != null) {
+					Sessiondata sd = sessionDao.get(sid);
+					if (options.isAllowSameURLMultipleTimes()) {
+						sd.setPermanent(true);
+					}
+					sd.setXml(xmlString);
+					sessionDao.update(sd);
 					return new ServiceResult(0, hash, Type.SUCCESS);
 				}
 			} else {
@@ -329,7 +333,7 @@ public class UserWebService implements UserService {
 	@Path("/kick/{publicsid}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Boolean success = userManagement.kickUserByPublicSID(sid, publicSID);
 	
@@ -351,7 +355,7 @@ public class UserWebService implements UserService {
 	@GET
 	@Path("/count/{roomid}")
 	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();

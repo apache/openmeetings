@@ -31,7 +31,7 @@ public class TestAuth extends AbstractJUnitDefaults {
 
 	@Test
 	public void testTestAuth() {
-		Sessiondata sessionData = sessionDao.startsession();
+		Sessiondata sessionData = sessionDao.create();
 
 		System.out.println("sessionData: " + sessionData.getSessionId());
 

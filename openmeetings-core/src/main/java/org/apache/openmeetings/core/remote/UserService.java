@@ -71,7 +71,7 @@ public class UserService implements IUserService {
 	 * @return User with the id given
 	 */
 	public User getUserById(String SID, long userId) {
-		Long authUserId = sessiondataDao.checkSession(SID);
+		Long authUserId = sessiondataDao.check(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
 			return userDao.get(userId);
 		}
@@ -86,7 +86,7 @@ public class UserService implements IUserService {
 	 */
 	public String refreshSession(String SID) {
 		try {
-			sessiondataDao.checkSession(SID);
+			sessiondataDao.check(SID);
 			return "ok";
 		} catch (Exception err) {
 			log.error("[refreshSession]", err);
@@ -104,7 +104,7 @@ public class UserService implements IUserService {
 	 * @return whole user-list
 	 */
 	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
-		Long userId = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.check(SID);
 		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
@@ -125,7 +125,7 @@ public class UserService implements IUserService {
 	@Override
 	public boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.check(SID);
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 				if (serverId == 0) {
@@ -179,7 +179,7 @@ public class UserService implements IUserService {
 	 */
 	public boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.check(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
@@ -210,7 +210,7 @@ public class UserService implements IUserService {
 	@Override
 	public boolean kickUserBySessionId(String SID, long userId, String sessionId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 			// admin only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 				((IApplication)Application.get(wicketApplicationName)).invalidateClient(userId, sessionId);
