@@ -76,7 +76,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID, String parentFolder) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			log.debug("#############users_id : " + users_id);
 
@@ -111,7 +111,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 */
 	public Long saveAsObject(String SID, Long room_id, String fileName, Object tObjectRef) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
@@ -156,7 +156,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadWmlObject(String SID, Long room_id, Long fileId, Long whiteboardId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				IConnection current = Red5.getConnectionLocal();
@@ -225,7 +225,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@SuppressWarnings("rawtypes")
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()), fileName);
 			}
@@ -242,7 +242,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 */
 	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 

@@ -145,7 +145,7 @@ public class UserManager implements IUserManager {
 		try {
 
 			Sessiondata sessionData = sessiondataDao
-					.getSessionByHash(remoteHash);
+					.get(remoteHash);
 
 			if (sessionData != null) {
 
@@ -424,7 +424,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
@@ -457,7 +457,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.check(SID);
 
 			// admins only
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {

@@ -110,7 +110,7 @@ public class RoomWebService {
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return RoomDTO.list(roomDao.getPublicRooms(Room.Type.valueOf(type)));
@@ -136,7 +136,7 @@ public class RoomWebService {
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return new RoomDTO(roomDao.get(id));
 		} else {
@@ -173,7 +173,7 @@ public class RoomWebService {
 			, @PathParam("externalid") @WebParam(name="externalid") Long externalId
 			, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 				if (r == null) {
@@ -210,7 +210,7 @@ public class RoomWebService {
 	@Path("/")
 	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room r = room.get();
 				r = roomDao.update(r, userId);
@@ -274,7 +274,7 @@ public class RoomWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Room r = roomDao.get(id);
 			if (r != null) {
@@ -308,7 +308,7 @@ public class RoomWebService {
 	@Path("/close/{id}")
 	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			log.debug("close " + id);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -354,7 +354,7 @@ public class RoomWebService {
 	@Path("/open/{id}")
 	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			log.debug("open " + id);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -391,7 +391,7 @@ public class RoomWebService {
 	@Path("/kick/{id}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				boolean result = userManager.kickUserByStreamId(sid, id);
 				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
@@ -420,7 +420,7 @@ public class RoomWebService {
 	public List<RoomCountBean> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
 		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				List<Room> rooms = roomDao.get(ids);
 
@@ -463,7 +463,7 @@ public class RoomWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Invitation i = invite.get(userId, userDao, roomDao);
 				i = invitationDao.update(i);

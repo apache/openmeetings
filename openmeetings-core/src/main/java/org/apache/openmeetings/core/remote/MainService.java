@@ -108,7 +108,7 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public User getUser(String SID, long userId) {
 		User users = new User();
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long users_id = sessiondataDao.check(SID);
 		Set<Right> rights = userDao.getRights(users_id);
 		if (AuthLevelUtil.hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights)) {
 			users = userDao.get(userId);
@@ -140,7 +140,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return a unique session identifier
 	 */
 	public Sessiondata getsessiondata() {
-		return sessiondataDao.startsession();
+		return sessiondataDao.create();
 	}
 
 	public Long setCurrentUserGroup(String SID, Long groupId) {
@@ -203,7 +203,7 @@ public class MainService implements IPendingServiceCallback {
 	
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
 		log.debug("[loginWicket] SID: '{}'; wicketSID: '{}'; wicketroomid: '{}'", SID, wicketSID, wicketroomid);
-		Long userId = sessiondataDao.checkSession(wicketSID);
+		Long userId = sessiondataDao.check(wicketSID);
 		User u = userId == null ? null : userDao.get(userId);
 		if (u != null && wicketroomid != null) {
 			log.debug("[loginWicket] user and roomid are not empty: " + userId + ", " + wicketroomid);
@@ -213,7 +213,7 @@ public class MainService implements IPendingServiceCallback {
 				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 				
 				if (!u.getGroupUsers().isEmpty()) {
-					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
+					u.setSessionData(sessiondataDao.get(wicketSID));
 					currentClient.setUserId(u.getId());
 					currentClient.setRoomId(wicketroomid);
 					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
@@ -356,9 +356,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long loginUserByRemote(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
+				Sessiondata sd = sessiondataDao.get(SID);
 				if (sd == null || sd.getXml() == null) {
 					return -37L;
 				} else {
@@ -441,7 +441,7 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long logoutUser(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			
@@ -466,7 +466,7 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	public List<Userdata> getUserdata(String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long users_id = sessiondataDao.check(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			return userManager.getUserdataDashBoard(users_id);
 		}

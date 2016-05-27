@@ -163,7 +163,7 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
-				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
+				getBean(SessiondataDao.class).check(WebSession.getSid()); //keep SID alive
 			}
 		});
 		add(invite = new InvitationDialog("invite", roomId));

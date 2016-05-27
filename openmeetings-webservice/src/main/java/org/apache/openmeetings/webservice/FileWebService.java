@@ -103,7 +103,7 @@ public class FileWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			FileExplorerItem f = fileDao.get(id);
 			if (f == null) {
@@ -145,7 +145,7 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				FileExplorerItem f = fileDao.get(externalId, externalType);
@@ -181,7 +181,7 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			FileExplorerItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
@@ -230,7 +230,7 @@ public class FileWebService {
 
 		try {
 
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
@@ -282,7 +282,7 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("roomId " + roomId);
@@ -331,7 +331,7 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("getRoomByParent " + parentId);
@@ -379,7 +379,7 @@ public class FileWebService {
 			, @WebParam(name="name") @PathParam("name") String name) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				// FIXME TODO: check if this user is allowed to change this file
@@ -419,7 +419,7 @@ public class FileWebService {
 			, @WebParam(name="parentid") @PathParam("parentid") long parentId) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				// FIXME TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);

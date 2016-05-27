@@ -96,7 +96,7 @@ public class DownloadHandler extends BaseHttpServlet {
 			}
 			log.debug("sid: " + sid);
 
-			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long users_id = getBean(SessiondataDao.class).check(sid);
 			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
 			if (rights != null && !rights.isEmpty()) {
