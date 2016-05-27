@@ -49,7 +49,7 @@ public class PrintService {
 	
 	public String addPrintList(String SID, @SuppressWarnings("rawtypes") List map, int width, int height) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 	        if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 	        	String hashRaw = ""+new Date();
 	        	String hash = MD5.checksum(hashRaw);

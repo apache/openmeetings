@@ -90,7 +90,7 @@ public class ServerWebService {
 			) throws ServiceException
 	{
 		log.debug("getServers enter");
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return ServerDTO.list(serverDao.get(start, max));
@@ -113,7 +113,7 @@ public class ServerWebService {
 	@Path("/count")
 	public long count(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		log.debug("getServerCount enter");
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return serverDao.count();
@@ -136,7 +136,7 @@ public class ServerWebService {
 	@Path("/")
 	public ServerDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="server") @QueryParam("server") ServerDTO server) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = server.get();
 			return new ServerDTO(serverDao.update(s, userId));
@@ -160,7 +160,7 @@ public class ServerWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = serverDao.get(id);
