@@ -153,7 +153,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
@@ -183,7 +183,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
@@ -213,7 +213,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				if (currentClient.getIsMod()) {
@@ -244,7 +244,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long users_id = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {

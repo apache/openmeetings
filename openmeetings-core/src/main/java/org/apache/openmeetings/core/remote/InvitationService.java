@@ -102,7 +102,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Long languageId, String iCalTz, boolean sendMail) {
 
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("sendInvitationHash: ");
@@ -142,7 +142,7 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject, Long languageId) throws Exception {
-		Long userId = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.check(SID);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);

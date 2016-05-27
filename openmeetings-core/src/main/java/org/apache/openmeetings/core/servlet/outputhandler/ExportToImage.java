@@ -97,7 +97,7 @@ public class ExportToImage extends BaseHttpServlet {
 				exportType = "svg";
 			}
 
-			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long users_id = getBean(SessiondataDao.class).check(sid);
 			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
 			log.debug("users_id: " + users_id);

@@ -79,7 +79,7 @@ public class RecordingWebService {
 	@Path("/{id}")
 	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				recordingDao.delete(recordingDao.get(id));
@@ -111,7 +111,7 @@ public class RecordingWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType));
@@ -142,7 +142,7 @@ public class RecordingWebService {
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
@@ -173,7 +173,7 @@ public class RecordingWebService {
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				return RecordingDTO.list(recordingDao.getByRoomId(roomId));

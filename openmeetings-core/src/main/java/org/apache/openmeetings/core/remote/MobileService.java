@@ -188,7 +188,7 @@ public class MobileService {
 	
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
-			Sessiondata sd = sessionDao.startsession();
+			Sessiondata sd = sessionDao.create();
 			boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
 			if (!bool) {
 				// invalid Session-Object
