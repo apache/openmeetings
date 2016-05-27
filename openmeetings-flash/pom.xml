@@ -111,15 +111,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>openlaszlo/**</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
