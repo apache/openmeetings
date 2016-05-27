@@ -92,7 +92,7 @@ public class CalendarWebService {
 	{
 		log.debug("range : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return AppointmentDTO.list(appointmentDao.getInRange(userId, start.getTime(), end.getTime()));
 			} else {
@@ -132,7 +132,7 @@ public class CalendarWebService {
 	{
 		log.debug("rangeForUser : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				return AppointmentDTO.list(appointmentDao.getInRange(userid, start.getTime(), end.getTime()));
 			} else {
@@ -158,7 +158,7 @@ public class CalendarWebService {
 	@Path("/next")
 	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				Appointment a = appointmentDao.getNext(userId, new Date());
 				return a == null ? null : new AppointmentDTO(a);
@@ -188,7 +188,7 @@ public class CalendarWebService {
 	@Path("/next/{userid}")
 	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				Appointment a = appointmentDao.getNext(userid, new Date());
 				return a == null ? null : new AppointmentDTO(a);
@@ -216,7 +216,7 @@ public class CalendarWebService {
 	@Path("/room/{roomid}")
 	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				Appointment app = appointmentDao.getByRoom(userId, roomid);
 				if (app != null) {
@@ -249,7 +249,7 @@ public class CalendarWebService {
 	@Path("/title/{title}")
 	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return AppointmentDTO.list(appointmentDao.searchAppointmentsByTitle(userId, title));
 			} else {
@@ -281,7 +281,7 @@ public class CalendarWebService {
 		log.debug("save SID:" + sid);
 
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			log.debug("save userId:" + userId);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
@@ -318,7 +318,7 @@ public class CalendarWebService {
 	@Path("/{id}")
 	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			Set<Right> rights = userDao.getRights(userId);
 
 			Appointment a = appointmentDao.get(id);

@@ -39,8 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * @author swagner This Class handles all session management
  * 
- *         TODO: Delete all inactive session by a scheduler
- * 
  */
 @Transactional
 public class SessiondataDao {
@@ -56,27 +54,18 @@ public class SessiondataDao {
 	 * 
 	 * @return
 	 */
-	public Sessiondata startsession() {
-		try {
-			log.debug("startsession :: startsession");
+	public Sessiondata create() {
+		log.debug("startsession :: startsession");
 
-			Sessiondata sessiondata = new Sessiondata();
-			sessiondata.setSessionId(UUID.randomUUID().toString());
-			sessiondata.setRefreshed(new Date());
-			sessiondata.setCreated(new Date());
-			sessiondata.setUserId(null);
+		Sessiondata sd = new Sessiondata();
+		sd.setSessionId(UUID.randomUUID().toString());
+		sd.setCreated(new Date());
+		sd.setUserId(null);
 
-			sessiondata = em.merge(sessiondata);
-
-			return sessiondata;
-		} catch (Exception ex2) {
-			log.error("[startsession]: ", ex2);
-		}
-
-		return null;
+		return update(sd);
 	}
 
-	public Sessiondata getSessionByHash(String SID) {
+	public Sessiondata get(String SID) {
 		try {
 			log.debug("updateUser User SID: " + SID);
 
@@ -102,27 +91,27 @@ public class SessiondataDao {
 	 * @param SID
 	 * @return
 	 */
-	public Long checkSession(String SID) {
+	public Long check(String SID) {
 		try {
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
 			List<Sessiondata> sessions = query.getResultList();
 
-			Sessiondata sessiondata = null;
+			Sessiondata sd = null;
 			if (sessions != null && sessions.size() > 0) {
-				sessiondata = sessions.get(0);
+				sd = sessions.get(0);
 			}
 
 			// Update the Session Object
-			if (sessiondata != null)
-				updatesession(SID);
+			if (sd != null) {
+				update(sd);
+			}
 
 			// Checks if wether the Session or the User Object of that Session
 			// is set yet
-			if (sessiondata == null || sessiondata.getUserId() == null
-					|| sessiondata.getUserId().equals(new Long(0))) {
+			if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
 				return new Long(0);
 			} else {
-				return sessiondata.getUserId();
+				return sd.getUserId();
 			}
 		} catch (Exception ex2) {
 			log.error("[checkSession]: ", ex2);
@@ -145,27 +134,19 @@ public class SessiondataDao {
 
 			List<Sessiondata> sessions = query.getResultList();
 
-			Sessiondata sessiondata = null;
+			Sessiondata sd = null;
 			if (sessions != null && sessions.size() > 0) {
-				sessiondata = sessions.get(0);
+				sd = sessions.get(0);
 			}
 
-			if (sessiondata == null) {
+			if (sd == null) {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: " + sessiondata.getSessionId()
-					+ " userId: " + userId);
+			log.debug("Found session to update: {}, userId: {}", sd.getSessionId(), userId);
 
-			sessiondata.setRefreshed(new Date());
-			sessiondata.setUserId(userId);
-			if (sessiondata.getId() == null) {
-				em.persist(sessiondata);
-			} else {
-				if (!em.contains(sessiondata)) {
-					em.merge(sessiondata);
-				}
-			}
+			sd.setUserId(userId);
+			update(sd);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
@@ -180,28 +161,21 @@ public class SessiondataDao {
 
 			List<Sessiondata> sessions = query.getResultList();
 
-			Sessiondata sessiondata = null;
+			Sessiondata sd = null;
 			if (sessions != null && sessions.size() > 0) {
-				sessiondata = sessions.get(0);
+				sd = sessions.get(0);
 			}
 
-			if (sessiondata == null) {
+			if (sd == null) {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: " + sessiondata.getSessionId() + " userId: " + userId);
+			log.debug("Found session to update: {}, userId: {}", sd.getSessionId(), userId);
 
-			sessiondata.setRefreshed(new Date());
-			sessiondata.setUserId(userId);
-			sessiondata.setPermanent(permanent);
-			sessiondata.setLanguageId(languageId);
-			if (sessiondata.getId() == null) {
-				em.persist(sessiondata);
-			} else {
-				if (!em.contains(sessiondata)) {
-					em.merge(sessiondata);
-				}
-			}
+			sd.setUserId(userId);
+			sd.setPermanent(permanent);
+			sd.setLanguageId(languageId);
+			update(sd);
 
 			return true;
 		} catch (Exception ex2) {
@@ -217,27 +191,19 @@ public class SessiondataDao {
 
 			List<Sessiondata> sessions = query.getResultList();
 
-			Sessiondata sessiondata = null;
+			Sessiondata sd = null;
 			if (sessions != null && sessions.size() > 0) {
-				sessiondata = sessions.get(0);
+				sd = sessions.get(0);
 			}
 
-			if (sessiondata == null) {
+			if (sd == null) {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: " + sessiondata.getSessionId()
-					+ " groupId: " + groupId);
+			log.debug("Found session to update: {}, groupId: {}", sd.getSessionId(), groupId);
 
-			sessiondata.setRefreshed(new Date());
-			sessiondata.setGroupId(groupId);
-			if (sessiondata.getId() == null) {
-				em.persist(sessiondata);
-			} else {
-				if (!em.contains(sessiondata)) {
-					em.merge(sessiondata);
-				}
-			}
+			sd.setGroupId(groupId);
+			update(sd);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
@@ -252,95 +218,24 @@ public class SessiondataDao {
 
 			List<Sessiondata> sessions = query.getResultList();
 
-			Sessiondata sessiondata = null;
+			Sessiondata sd = null;
 			if (sessions != null && sessions.size() > 0) {
-				sessiondata = sessions.get(0);
+				sd = sessions.get(0);
 			}
 
-			if (sessiondata == null) {
+			if (sd == null) {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: " + sessiondata.getSessionId()
-					+ " userId: " + userId);
+			log.debug("Found session to update: {}, userId: {}", sd.getSessionId(), userId);
 
-			sessiondata.setRefreshed(new Date());
-			sessiondata.setUserId(userId);
-			if (sessiondata.getId() == null) {
-				em.persist(sessiondata);
-			} else {
-				if (!em.contains(sessiondata)) {
-					em.merge(sessiondata);
-				}
-			}
+			sd.setUserId(userId);
+			update(sd);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
 		}
 		return false;
-	}
-
-	public boolean updateUserRemoteSession(String SID, String sessionXml) {
-		try {
-			log.debug("updateUser User SID: " + SID);
-
-			TypedQuery<Sessiondata> q = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
-			List<Sessiondata> fullList = q.getResultList();
-
-			if (fullList.size() == 0) {
-				log.error("Could not find session to update: " + SID);
-				return false;
-			} else {
-				// log.error("Found session to update: "+SID);
-			}
-			Sessiondata sd = fullList.get(0);
-			sd.setRefreshed(new Date());
-			sd.setXml(sessionXml);
-
-			if (sd.getId() == null) {
-				em.persist(sd);
-			} else {
-				if (!em.contains(sd)) {
-					em.merge(sd);
-				}
-			}
-			return true;
-		} catch (Exception ex2) {
-			log.error("[updateUserRemoteSession]: ", ex2);
-		}
-		return false;
-	}
-
-	/**
-	 * update the session every time a user makes a request
-	 * 
-	 * @param SID
-	 */
-	private void updatesession(String SID) {
-		try {
-			TypedQuery<Sessiondata> q = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
-
-			List<Sessiondata> fullList = q.getResultList();
-			if (fullList.size() == 0) {
-				log.error("Found NO session to updateSession: ");
-
-			} else {
-				// log.debug("Found session to updateSession: ");
-				Sessiondata sd = fullList.iterator().next();
-				sd.setRefreshed(new Date());
-
-				if (sd.getId() == null) {
-					em.persist(sd);
-				} else {
-					if (!em.contains(sd)) {
-						em.merge(sd);
-					}
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[updatesession]: ", ex2);
-		}
 	}
 
 	/**
@@ -393,7 +288,7 @@ public class SessiondataDao {
 				}
 				String SID = aux.substring(init_pos, end_pos);
 
-				Sessiondata sData = getSessionByHash(SID);
+				Sessiondata sData = get(SID);
 				if (sData != null) {
 					em.remove(sData);
 				}
@@ -401,5 +296,16 @@ public class SessiondataDao {
 		} catch (Exception err) {
 			log.error("clearSessionByRoomId", err);
 		}
+	}
+	
+	public Sessiondata update(Sessiondata sd) {
+		sd.setRefreshed(new Date());
+
+		if (sd.getId() == null) {
+			em.persist(sd);
+		} else {
+			sd = em.merge(sd);
+		}
+		return sd;
 	}
 }

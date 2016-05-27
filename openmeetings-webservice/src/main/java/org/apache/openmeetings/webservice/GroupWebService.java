@@ -97,7 +97,7 @@ public class GroupWebService {
 	@POST
 	@Path("/")
 	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Group o = new Group();
 			o.setName(name);
@@ -119,7 +119,7 @@ public class GroupWebService {
 	@GET
 	@Path("/")
 	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
-		Long userId = sessionDao.checkSession(sid);
+		Long userId = sessionDao.check(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return groupDao.get(0, Integer.MAX_VALUE);
 		} else {
@@ -149,7 +149,7 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				if (!groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
@@ -187,7 +187,7 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				if (groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
@@ -227,7 +227,7 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room r = roomDao.get(roomid);
 				if (r != null) {
@@ -285,7 +285,7 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.checkSession(sid);
+			Long userId = sessionDao.check(sid);
 			SearchResult<User> result = new SearchResult<User>();
 			result.setObjectName(User.class.getName());
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -320,7 +320,7 @@ public class GroupWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.checkSession(sid);
+			Long authUserId = sessionDao.check(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 				groupDao.delete(groupDao.get(id), authUserId);

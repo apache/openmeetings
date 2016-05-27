@@ -104,7 +104,7 @@ public class SwfPanel extends BasePanel {
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
-				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
+				getBean(SessiondataDao.class).check(WebSession.getSid()); //keep SID alive
 			}
 		});
 	}
