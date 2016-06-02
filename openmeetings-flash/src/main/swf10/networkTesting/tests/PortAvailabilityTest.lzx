@@ -32,7 +32,7 @@
         </when>
     </switch>
 
-    <rtmpConnection name="rtmp" autoconnect="false" debug="true" />
+    <rtmpConnection name="rtmp" debug="true" />
 
     <handler name="oninit">
         this.setAttribute("testName", "Port");
@@ -43,6 +43,7 @@
         rtmp.setAttribute("src", hostUrl);
         this.log(": start test... " + hostUrl);
 
+		canvas.publicSID = "networktest";
         rtmp.connect();
     </method>
 
