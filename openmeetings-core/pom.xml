@@ -74,19 +74,6 @@
 			<version>1.4.9</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-svg-dom</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-svggen</artifactId>
-			<version>${batik.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlgraphics</groupId>
-			<artifactId>batik-transcoder</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.smslib</groupId>
 			<artifactId>smslib</artifactId>
 			<version>${smslib.version}</version>

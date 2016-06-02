@@ -16,24 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.servlet.outputhandler;
+package org.apache.openmeetings.webservice;
 
-import java.io.IOException;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
-@Controller
-public class NetworkTestingController {
-
+@Path("/networktest")
+public class NetTestWebService {
+	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
     enum TestType {
         UNKNOWN,
         PING,
@@ -50,7 +57,7 @@ public class NetworkTestingController {
     private final byte[] jitterData;
     private final byte[] downloadData;
 
-    public NetworkTestingController() {
+	public NetTestWebService() {
         pingData = new byte[PING_PACKET_SIZE];
         jitterData = new byte[JITTER_PACKET_SIZE];
         downloadData = new byte[DOWNLOAD_PACKET_SIZE];
@@ -58,19 +65,18 @@ public class NetworkTestingController {
         Arrays.fill(pingData, (byte) '0');
         Arrays.fill(jitterData, (byte) '0');
         Arrays.fill(downloadData, (byte) '0');
-    }
+	}
 
-    @RequestMapping(value = "/networktest.upload", method = RequestMethod.GET)
-	public void serviceGet(HttpServletRequest request, HttpServletResponse response, HttpSession session)
-			throws ServletException, IOException {
-        String typeStr = request.getParameter("testType");
-        TestType testType = getTypeByString(typeStr);
+	@GET
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("/")
+	public Response get(@QueryParam("type") String type) {
+        TestType testType = getTypeByString(type);
+        log.debug("Network test:: get");
 
         // choose data to send
         byte[] data = new byte[0];
         switch (testType) {
-            case UNKNOWN:
-                return;
             case PING:
                 data = pingData;
                 break;
@@ -86,19 +92,17 @@ public class NetworkTestingController {
 				break;
         }
 
-        // set needed headers
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Content-Length", String.valueOf(data.length));
-
-        // send data
-        ServletOutputStream outStream = response.getOutputStream();
-        outStream.write(data);
-        outStream.flush();
+        ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new ByteArrayInputStream(data));
+        //response.header("Content-Disposition", "attachment; filename=test.png");
+        response.header("Cache-Control", "no-cache");
+        response.header("Content-Length", String.valueOf(data.length));
+        return response.build();
     }
 
-    @RequestMapping(value = "/networktest.upload", method = RequestMethod.POST)
-	public void servicePost(HttpServletRequest request, HttpServletResponse response, HttpSession session)
-			throws ServletException, IOException {
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Path("/")
+	public void upload(@Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM) InputStream stream) {
     }
 
 
@@ -115,5 +119,4 @@ public class NetworkTestingController {
 
         return TestType.UNKNOWN;
     }
-
 }
