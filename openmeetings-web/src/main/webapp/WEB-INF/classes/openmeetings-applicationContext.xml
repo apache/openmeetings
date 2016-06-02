@@ -21,7 +21,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xmlns:jaxws="http://cxf.apache.org/jaxws"
@@ -29,7 +28,6 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
 		>
@@ -39,12 +37,7 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
-	<!-- Configures the @Controller programming model -->
-	<mvc:annotation-driven />
 
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	<context:annotation-config />
@@ -83,7 +76,6 @@
 
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
-	<bean id="printservice.service" class="org.apache.openmeetings.core.remote.PrintService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.core.remote.InvitationService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteBoardService" />
 	<bean id="userservice.service" class="org.apache.openmeetings.core.remote.UserService" />
@@ -203,6 +195,7 @@
 		<constructor-arg><value>5038</value></constructor-arg>
 		<constructor-arg><value>openmeetings</value></constructor-arg>
 		<constructor-arg><value>12345</value></constructor-arg>
+		<constructor-arg><value>10000</value></constructor-arg>
 	 -->
 	</bean>
 	<bean id="invitationDao" class="org.apache.openmeetings.db.dao.room.InvitationDao" />
@@ -271,6 +264,7 @@
 	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
 	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
+	<bean id="netTestWebService" class="org.apache.openmeetings.webservice.NetTestWebService" />
 	
 	<!-- (writeXsiType=false) -->
 	<jaxrs:server id="server" address="/">
@@ -283,6 +277,7 @@
 			<ref bean="roomWebService"/>
 			<ref bean="serverWebService"/>
 			<ref bean="userWebService"/>
+			<ref bean="netTestWebService"/> <!-- JaxRs only -->
 		</jaxrs:serviceBeans>
 	</jaxrs:server>
 	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService" implementor="#calendarWebService"/>
