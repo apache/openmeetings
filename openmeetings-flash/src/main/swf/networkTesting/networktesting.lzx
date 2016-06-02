@@ -41,6 +41,8 @@
     </switch>
     
     <include href="testsView.lzx" />
+    <include href="../base/remote/restCall.lzx" />
+    
     <handler name="oninit"><![CDATA[
     	flash.external.ExternalInterface.call("loadingComplete");
 		doDebugInit();
