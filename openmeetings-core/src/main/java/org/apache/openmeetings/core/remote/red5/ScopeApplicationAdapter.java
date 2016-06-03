@@ -154,7 +154,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> getConnParams(Object[] params) {
+	private static Map<String, Object> getConnParams(Object[] params) {
 		if (params != null && params.length > 0) {
 			return (Map<String, Object>)params[0]; 
 		}
@@ -184,6 +184,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
 				return rejectClient();
 			}
+		}
+		if ("networktest".equals(uid)) {
+			return true;
 		}
 
 		Client parentClient = null;

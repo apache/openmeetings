@@ -43,6 +43,7 @@
         rtmp.setAttribute("src", hostUrl);
         this.log(": start test... " + hostUrl);
 
+		canvas.publicSID = "networktest";
         rtmp.connect();
     </method>
 

@@ -218,11 +218,12 @@
 				}
 			}
 			
-			public function load(vars):void {
+			public function load(vars):URLRequest {
 				var request:URLRequest = new URLRequest(url + '?sid=' + canvas.sessionId); //FIXME TODO
 				request.method = method;
 				if (contentType) {
-					request.contentType = contentType;
+					var header:URLRequestHeader = new URLRequestHeader('Content-type', contentType);
+					request.requestHeaders.push(header);
 				}
 				for (var i = 0; i < hdrs.length; ++i) {
 					request.requestHeaders.push(hdrs[i]);
@@ -234,7 +235,9 @@
 					requestor.load(request);
 				} catch (e:Error) {
 					if ($debug) Debug.error(e);
+					errorCallback(e);
 				}
+				return request;
 			}
 		}
 	]]>
