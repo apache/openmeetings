@@ -36,6 +36,7 @@
 
     <attribute name="hostUrl" type="string" value="" />
     <attribute name="loaderInited" type="boolean" value="false" />
+    <attribute name="vars" value="null" />
     <attribute name="request" value="null" />
     <attribute name="loader" value="null" />
 
@@ -45,27 +46,31 @@
     </handler>
 
     <method name="initLoader">
-        hostUrl = getBaseUrl() + "networktest.upload";
-        request = new URLRequest(hostUrl);
-        request.method = URLRequestMethod.POST;
-        request.data = getDataString();
-
-        loader = new URLLoader();
-        loader.addEventListener(Event.COMPLETE, this.onComplete);
-        loader.addEventListener(IOErrorEvent.IO_ERROR, this.onError);
-        loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onError);
-
+    	hostUrl = getBaseUrl() + "services/networktest";
+		loader = new RestCall({
+			url: hostUrl
+			, method: URLRequestMethod.POST
+			, dataFormat: URLLoaderDataFormat.BINARY
+			, contentType: "multipart/form-data; charset=utf-8; boundary=" + UploadPostHelper.getBoundary()
+			, errorCallback: onError
+			, successCallback: onComplete
+			});
+		vars = UploadPostHelper.getPostData('aaa', getData());
+		if ($debug) Debug.write("initLoader:: ");//, vars
         loaderInited = true;
     </method>
 
     <method name="start">
+		if ($debug) Debug.write("start:: ", request);
         if (!loaderInited) {
             this.initLoader();
         }
 
+		if ($debug) Debug.write("going to start:: ", loader);
         this.log("start test... " + hostUrl);
         startTime = getTimer();
-        loader.load(request);
+		request = loader.load(vars);
+		if ($debug) Debug.write("load:: ", request);
     </method>
 
     <method name="forcedStop">
@@ -74,6 +79,7 @@
     </method>
 
     <method name="onComplete" args="e">
+		if ($debug) Debug.write("onComplete:: ", e);
         if (running) {
             var endTime = getTimer();
             var loadTime = endTime - startTime;
@@ -94,6 +100,7 @@
     </method>
 
     <method name="onError" args="e">
+		if ($debug) Debug.write("onError:: ", e);
         if (running) {
             this.log("error - " + e);
             this.setFailed();
@@ -101,15 +108,15 @@
     </method>
 
     <!-- returns a 1 Mb string-->
-    <method name="getDataString">
-        <![CDATA[
-        var result = "";
-        var str64 = "0000000000000000000000000000000000000000000000000000000000000000";
-        for (var i=0; i<16384; i++) {
-            result += str64;
+    <method name="getData">
+    <![CDATA[
+        var result:ByteArray = new ByteArray();
+        for (var i = 0; i < 64 * 16384; ++i) {
+            result.writeByte(i % 256);
         }
+        result.position = 0;
         return result;
-        ]]>
+    ]]>
     </method>
 
 </class>

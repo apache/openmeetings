@@ -553,10 +553,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		<dependency> <!-- TODO most probably should be removed -->
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-dashboard-core</artifactId>
@@ -697,6 +693,12 @@
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbynet</artifactId>
 			<version>${derby.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
