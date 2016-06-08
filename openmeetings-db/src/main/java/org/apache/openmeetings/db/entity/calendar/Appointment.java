@@ -108,6 +108,13 @@ import org.simpleframework.xml.Root;
 	    )
     , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
     , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
+
+	//Calendar Related Queries
+	,  @NamedQuery(name = "getAppointmentsbyCalendar",
+		query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.calendar.id = :calId ORDER BY a.id")
+	,  @NamedQuery(name = "getHrefsforAppointmentsinCalendar",
+        query = "SELECT a.href FROM Appointment a WHERE a.deleted = FALSE AND a.calendar.id = :calId ORDER BY a.id"
+)
 })
 @Root(name="appointment")
 public class Appointment implements IDataProviderEntity {
@@ -252,6 +259,16 @@ public class Appointment implements IDataProviderEntity {
 
 	@Column(name = "is_reminder_email_send")
 	private boolean reminderEmailSend;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "calendar_id", nullable = true)
+    @ForeignKey(enabled = true)
+    @Element(name="calendar_id", data=true, required=false)
+    private OmCalendar calendar;
+
+	@Column(name = "href")
+	@Element(data = true, required = false)
+	private String href;
 
 	@Override
 	public Long getId() {
@@ -451,7 +468,23 @@ public class Appointment implements IDataProviderEntity {
 		this.reminderEmailSend = isReminderEmailSend;
 	}
 
-	@Override
+    public OmCalendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(OmCalendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    @Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
 				+ ", deleted=" + deleted + ", icalId=" + icalId + "]";

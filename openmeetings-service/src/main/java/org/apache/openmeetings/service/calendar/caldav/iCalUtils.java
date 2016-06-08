@@ -19,9 +19,9 @@
 package org.apache.openmeetings.service.calendar.caldav;
 
 import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.Calendar;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -42,82 +41,98 @@ public class iCalUtils {
 
     @Autowired
     private TimezoneUtil timezoneUtil;
+    @Autowired
+    private UserDao userDao;
 
     /**
-     * Parses the Calendar from the CalDAV server, to Appointment.
-     * Note: Hasn't been tested to acknowledge DST.
+     * Parses the Calendar from the CalDAV server, to a new Appointment.
      * @param calendar
-     * @param owner
      * @return
      */
-    public List<Appointment> parseCalendartoAppointment(Calendar calendar, String etag, User owner){
-        List<Appointment> appointments = new ArrayList<Appointment>();
-        ComponentList events = calendar.getComponents(Component.VEVENT);
-        TimeZone tz = parseTimeZone(calendar, owner);
-        for(Iterator i = events.iterator(); i.hasNext();) {
-            Component event = (Component) i.next();
-            Appointment a = new Appointment();
-            a.setId(null);
-            a.setDeleted(false);
-            Property dtstart = event.getProperty(Property.DTSTART),
-                    dtend = event.getProperty(Property.DTEND),
-                    uid = event.getProperty(Property.UID),
-                    dtstamp = event.getProperty(Property.DTSTAMP),
-                    description = event.getProperty(Property.DESCRIPTION),
-                    summary = event.getProperty(Property.SUMMARY),
-                    location = event .getProperty(Property.LOCATION),
-                    lastmod = event.getProperty(Property.LAST_MODIFIED),
-                    organizer = event.getProperty(Property.ORGANIZER);
-            PropertyList attendies = event.getProperties(Property.ATTENDEE);
+    public Appointment parseCalendartoAppointment(Calendar calendar, String href, String etag,
+                                                        Long ownerId, OmCalendar omCalendar){
 
-            if(uid != null)
-                a.setIcalId(uid.getValue());
-            try {
-                Date d = parseDate(dtstart, tz);
-                a.setStart(d);
-                if(dtend == null)
-                    a.setEnd(addDaytoDate(d));
-                else
-                    a.setEnd(parseDate(dtend, tz));
+        //Note: By RFC 4791 only one event can be stored in one href.
 
-                a.setInserted(parseDate(dtstamp, tz));
-                if(lastmod != null)
-                    a.setUpdated(parseDate(lastmod, tz));
+        Appointment a = new Appointment();
+        a.setId(null);
+        a.setDeleted(false);
+        a.setHref(href);
+        a.setCalendar(omCalendar);
+        a.setOwner(userDao.get(ownerId));
 
-            } catch (ParseException e) {
-                log.error("Error parsing DATE-TIME components for ical.");
-            }
 
-            if(description != null)
-                a.setDescription(description.getValue());
-
-            if(summary != null)
-                a.setTitle(summary.getValue());
-
-            if(location != null)
-                a.setLocation(location.getValue());
-
-            a.setOwner(owner);
-
-            //Add appointment to list of appointments.
-            appointments.add(a);
-        }
-
-        return appointments;
+        return this.parseCalendartoAppointment(a, calendar, etag);
     }
 
-    public TimeZone parseTimeZone(Calendar calendar, User user){
+    /**
+     * Updating Appointments which already exist, by parsing the Calendar. And updating etag.
+     * Doesn't work with Recurrences.
+     * Note: Hasn't been tested to acknowledge DST.
+     * @param a
+     * @param calendar
+     * @param etag
+     * @return
+     */
+    public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar,
+                                                  String etag){
+        Component event = calendar.getComponent(Component.VEVENT);
+        TimeZone tz = parseTimeZone(calendar, a.getOwner().getId());
+
+        Property dtstart = event.getProperty(Property.DTSTART),
+                dtend = event.getProperty(Property.DTEND),
+                uid = event.getProperty(Property.UID),
+                dtstamp = event.getProperty(Property.DTSTAMP),
+                description = event.getProperty(Property.DESCRIPTION),
+                summary = event.getProperty(Property.SUMMARY),
+                location = event .getProperty(Property.LOCATION),
+                lastmod = event.getProperty(Property.LAST_MODIFIED),
+                organizer = event.getProperty(Property.ORGANIZER);
+        PropertyList attendees = event.getProperties(Property.ATTENDEE);
+
+//        if(uid != null)
+//            a.setIcalId(uid.getValue());
+        a.setIcalId(etag);
+        try {
+            Date d = parseDate(dtstart, tz);
+            a.setStart(d);
+            if(dtend == null)
+                a.setEnd(addDaytoDate(d));
+            else
+                a.setEnd(parseDate(dtend, tz));
+
+            a.setInserted(parseDate(dtstamp, tz));
+            if(lastmod != null)
+                a.setUpdated(parseDate(lastmod, tz));
+
+        } catch (ParseException e) {
+            log.error("Error parsing DATE-TIME components for ical.");
+        }
+
+        if(description != null)
+            a.setDescription(description.getValue());
+
+        if(summary != null)
+            a.setTitle(summary.getValue());
+
+        if(location != null)
+            a.setLocation(location.getValue());
+
+        return a;
+    }
+    public TimeZone parseTimeZone(Calendar calendar, Long userId){
         Component timezone = calendar.getComponent(Component.VTIMEZONE);
         if(timezone != null) {
             Property tzid = timezone.getProperty(Property.TZID);
             if(tzid != null)
                 return timezoneUtil.getTimeZone(tzid.getValue());
         }
-        return timezoneUtil.getTimeZone(user);
+        return timezoneUtil.getTimeZone(userDao.get(userId));
     }
 
     /**
-     * Convenience function to parse date from {@link net.fortuna.ical4j.model.Property}
+     * Convenience function to parse date from {@link net.fortuna.ical4j.model.Property} to
+     * {@link Date}
      * @param dt
      * @param timeZone
      * @return

@@ -18,21 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -47,6 +32,14 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.*;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 @Transactional
 public class AppointmentDao {
@@ -267,5 +260,19 @@ public class AppointmentDao {
 		}
 
 		return a;
+	}
+
+	//Calendar Related Methods
+
+	public List<String> getAppointmentHrefsinCalendar(Long calId){
+		return em.createNamedQuery("getHrefsforAppointmentsinCalendar", String.class)
+				.setParameter("calId", calId)
+				.getResultList();
+	}
+
+	public List<Appointment> getAppointmentsinCalendar(Long calId){
+		return em.createNamedQuery("getAppointmentsbyCalendar", Appointment.class)
+				.setParameter("calId", calId)
+				.getResultList();
 	}
 }
