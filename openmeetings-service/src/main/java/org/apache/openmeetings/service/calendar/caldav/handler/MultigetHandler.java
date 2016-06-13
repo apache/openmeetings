@@ -40,7 +40,6 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -78,14 +77,17 @@ public class MultigetHandler extends AbstractSyncHandler {
 
     public OmCalendar updateItems(Long ownerId){
         if(!isMultigetDisabled){
+
+            CalDAVReportMethod reportMethod = null;
+
             try {
-                CalDAVReportMethod reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+                reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
 
                 client.executeMethod(reportMethod);
 
                 if (reportMethod.succeeded()) {
-                    List<Appointment> origAppointments = new ArrayList<Appointment>(appointmentDao.getAppointmentsinCalendar(calendar.getId()));
-                    List<String> orighrefs = new ArrayList<String>(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()));
+                    List<Appointment> origAppointments = appointmentDao.getAppointmentsinCalendar(calendar.getId());
+                    List<String> orighrefs = appointmentDao.getAppointmentHrefsinCalendar(calendar.getId());
 
                     for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatusResponse()) {
                         if (response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
@@ -126,6 +128,9 @@ public class MultigetHandler extends AbstractSyncHandler {
                 log.error("Error parsing the calendar-multiget Report.");
             } catch (DavException e) {
                 log.error("Error getting Responses from calendar-multiget REPORT Method");
+            } finally {
+                if(reportMethod != null)
+                    reportMethod.releaseConnection();
             }
         }
 
