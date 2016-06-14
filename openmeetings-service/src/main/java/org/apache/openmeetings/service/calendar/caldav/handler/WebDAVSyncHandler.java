@@ -37,13 +37,18 @@ import java.util.List;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+/**
+ * Class used to sync events using WebDAV-Sync defined in RFC 6578.
+ * This handles the additional HTTP Status Code 507, which specifies for further sync required.
+ * For syncing, it gets a Sync Report as response, which specifies which files have been added,
+ * modified or deleted.
+ */
 public class WebDAVSyncHandler extends AbstractSyncHandler {
     private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, webAppRootKey);
 
     public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
             SyncReportInfo.NAMESPACE);
 
-    private boolean additionalSyncNeeded = false;
     private List<String> currenthrefs = new ArrayList<>();
 
     public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client){
@@ -51,15 +56,18 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
     }
 
     public OmCalendar updateItems(Long ownerId){
+        boolean additionalSyncNeeded = false;
+
+        SyncMethod syncMethod = null;
+
         try {
-            //Calendar should have a sync-token set, if it reaches this location
             DavPropertyNameSet properties = new DavPropertyNameSet();
             properties.add(DavPropertyName.GETETAG);
 
             //Create report to get
             SyncReportInfo reportInfo = new SyncReportInfo(calendar.getToken(), properties,
                     SyncReportInfo.SYNC_LEVEL_1);
-            SyncMethod syncMethod = new SyncMethod(path, reportInfo);
+            syncMethod = new SyncMethod(path, reportInfo);
             client.executeMethod(syncMethod);
 
             if(syncMethod.succeeded()){
@@ -77,7 +85,7 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                         //Old Event to get
                         if(index != -1){
                             Appointment a = origAppointments.get(index);
-                            String origetag = a.getIcalId(),
+                            String origetag = a.getEtag(),
                                     currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                             //If event modified, only then get it.
@@ -90,8 +98,12 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                     }
                     else if(status == DavServletResponse.SC_NOT_FOUND){
                         int index = orighrefs.indexOf(response.getHref());
-                        Appointment a = origAppointments.get(index);
-                        appointmentDao.delete(a, calendar.getOwner().getId());
+
+                        //Only if the event exists on the database, delete it.
+                        if(index != -1) {
+                            Appointment a = origAppointments.get(index);
+                            appointmentDao.delete(a, calendar.getOwner().getId());
+                        }
                     }
                     else if (status == DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE){
                         additionalSyncNeeded = true;
@@ -109,6 +121,9 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
 
         } catch (Exception e) {
             log.error("Error while executing the SyncMethod Report.");
+        } finally {
+            if(syncMethod != null)
+                syncMethod.releaseConnection();
         }
 
         if(additionalSyncNeeded)

@@ -78,11 +78,14 @@ public class EtagsHandler extends AbstractSyncHandler{
             vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
 
             CalendarQuery query = new CalendarQuery(properties, vcalendar, calendarData, false, false);
+
+            CalDAVReportMethod reportMethod = null;
+
             try {
-                CalDAVReportMethod reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+                reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
                 client.executeMethod(reportMethod);
                 if(reportMethod.succeeded()){
-                    MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatusResponse();
+                    MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
 
                     //Parse the responses into Appointments
                     for(MultiStatusResponse response: multiStatusResponses){
@@ -103,6 +106,9 @@ public class EtagsHandler extends AbstractSyncHandler{
                 log.error("Error parsing the calendar-query Report.");
             } catch (DavException e) {
                 log.error("Error getting Responses from REPORT with Status Code");
+            } finally {
+                if(reportMethod != null)
+                    reportMethod.releaseConnection();
             }
         }
         else {
@@ -114,18 +120,20 @@ public class EtagsHandler extends AbstractSyncHandler{
             CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
             vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
 
+            CalDAVReportMethod reportMethod = null;
+
             try {
 
                 CalendarQuery calendarQuery = new CalendarQuery(properties, vcalendar, null, false, false);
 
-                CalDAVReportMethod reportMethod = new
+                reportMethod = new
                         CalDAVReportMethod(path, calendarQuery, CalDAVConstants.DEPTH_1);
                 client.executeMethod(reportMethod);
                 if(reportMethod.succeeded()){
                     List<String> currenthrefs = new ArrayList<String>();
                     List<String> orighrefs = new ArrayList<String>(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()));
 
-                    MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatusResponse();
+                    MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
 
                     for(MultiStatusResponse response: multiStatusResponses){
                         if(response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
@@ -135,7 +143,7 @@ public class EtagsHandler extends AbstractSyncHandler{
                             if (index != -1) {
 
                                 Appointment a = origAppointments.get(index);
-                                String origetag = a.getIcalId(),
+                                String origetag = a.getEtag(),
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                                 //If etag is modified
@@ -172,6 +180,9 @@ public class EtagsHandler extends AbstractSyncHandler{
                 log.error("Error parsing the calendar-query Report.");
             } catch (DavException e) {
                 log.error("Error getting Responses from REPORT Method");
+            } finally {
+                if(reportMethod != null)
+                    reportMethod.releaseConnection();
             }
         }
 

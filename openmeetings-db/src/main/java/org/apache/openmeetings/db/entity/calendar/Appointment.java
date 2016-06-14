@@ -260,6 +260,7 @@ public class Appointment implements IDataProviderEntity {
 	@Column(name = "is_reminder_email_send")
 	private boolean reminderEmailSend;
 
+    //Calendar Specific fields.
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "calendar_id", nullable = true)
     @ForeignKey(enabled = true)
@@ -269,6 +270,11 @@ public class Appointment implements IDataProviderEntity {
 	@Column(name = "href")
 	@Element(data = true, required = false)
 	private String href;
+
+	@Column(name = "etag")
+	@Element(data = true, required = false)
+	private String etag;
+
 
 	@Override
 	public Long getId() {
@@ -484,10 +490,18 @@ public class Appointment implements IDataProviderEntity {
         this.href = href;
     }
 
+    public String getEtag() {
+        return etag;
+    }
+
+    public void setEtag(String etag) {
+        this.etag = etag;
+    }
+
     @Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
-				+ ", deleted=" + deleted + ", icalId=" + icalId + "]";
+				+ ", deleted=" + deleted + ", icalId=" + icalId + ", calendar=" + calendar + ", href=" + href + ", etag=" + etag + "]";
 	}
 	
 }

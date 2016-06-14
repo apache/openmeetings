@@ -162,7 +162,8 @@ public class OmCalendar implements IDataProviderEntity{
     }
 
     public String toString(){
-        return "Calendar: " + "[ id: " + id + ", title: " + title + ", token: " + token + ", href: "
-                + href + ", " + syncType + ", deleted: " + deleted + " ]";
+        return "Calendar [ id=" + id + ", title=" + title + ", token=" + token + ", href="
+                + href + ", SyncType=" + syncType + ", deleted=" + deleted + ", login=" + login
+                + ", owner=" + owner + " ]";
     }
 }

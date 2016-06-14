@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.calendar.caldav;
 
 import net.fortuna.ical4j.model.*;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -29,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -68,7 +68,7 @@ public class iCalUtils {
     /**
      * Updating Appointments which already exist, by parsing the Calendar. And updating etag.
      * Doesn't work with Recurrences.
-     * Note: Hasn't been tested to acknowledge DST.
+     * Note: Hasn't been tested to acknowledge DST, timezones should acknowledge this.
      * @param a
      * @param calendar
      * @param etag
@@ -90,9 +90,10 @@ public class iCalUtils {
                 organizer = event.getProperty(Property.ORGANIZER);
         PropertyList attendees = event.getProperties(Property.ATTENDEE);
 
-//        if(uid != null)
-//            a.setIcalId(uid.getValue());
-        a.setIcalId(etag);
+        a.setEtag(etag);
+
+        if(uid != null)
+            a.setIcalId(uid.getValue());
         try {
             Date d = parseDate(dtstart, tz);
             a.setStart(d);
@@ -151,7 +152,8 @@ public class iCalUtils {
     }
 
     /**
-     * Adapted from DateUtils to support Timezones, and parse ical dates into {@link java.util.Date}
+     * Adapted from DateUtils to support Timezones, and parse ical dates into {@link java.util.Date}.
+     * Note: Replace FastDateFormat to java.time, when shifting to Java 8 or higher.
      * @param str
      * @param patterns
      * @param timeZone
@@ -159,17 +161,14 @@ public class iCalUtils {
      * @throws ParseException
      */
     public Date parseDate(String str, String[] patterns, TimeZone timeZone) throws ParseException {
-        SimpleDateFormat parser = new SimpleDateFormat();
-        parser.setLenient(true);
+        FastDateFormat parser = null;
 
         if(str.contains("Z"))
-            parser.setTimeZone(TimeZone.getTimeZone("UTC"));
-        else
-            parser.setTimeZone(timeZone);
+            timeZone = TimeZone.getTimeZone("UTC");
 
         ParsePosition pos = new ParsePosition(0);
         for(String pattern: patterns){
-            parser.applyPattern(pattern);
+            parser = FastDateFormat.getInstance(pattern, timeZone);
             pos.setIndex(0);
             Date date = parser.parse(str, pos);
             if (date != null && pos.getIndex() == str.length()) {

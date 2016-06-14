@@ -126,7 +126,7 @@ public class CalendarManager {
             }
 
 
-            calendar = syncHandler.updateItems(calendar.getOwner().getId());
+            syncHandler.updateItems(calendar.getOwner().getId());
 //            calendarDao.update(calendar);
         }
     }
@@ -135,12 +135,15 @@ public class CalendarManager {
         HttpClient client =  createHttpClient();
         OmCalendar calendar = calendarDao.getCalendarbyId(calId);
         if(calendar.getToken() == null || calendar.getSyncType() == SyncType.NONE){
+
+            PropFindMethod propFindMethod = null;
+
             try {
                 DavPropertyNameSet properties = new DavPropertyNameSet();
                 properties.add(CtagHandler.DNAME_GETCTAG);
                 properties.add(WebDAVSyncHandler.DNAME_SYNCTOKEN);
 
-                PropFindMethod propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
+                propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
                 client.executeMethod(propFindMethod);
 
                 if(propFindMethod.succeeded()){
@@ -167,6 +170,9 @@ public class CalendarManager {
             } catch (Exception e) {
                 log.error("Error in doing initial Sync using PROPFIND Method.");
                 calendar.setSyncType(SyncType.NONE);
+            } finally {
+                if(propFindMethod != null)
+                    propFindMethod.releaseConnection();
             }
             calendarDao.update(calendar);
         }

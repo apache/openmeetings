@@ -58,15 +58,18 @@ public class CtagHandler extends AbstractSyncHandler {
 
     public OmCalendar updateItems(Long ownerId) {
         //Calendar already inited.
+
+        PropFindMethod propFindMethod = null;
+
         try {
             DavPropertyNameSet properties = new DavPropertyNameSet();
             properties.add(DNAME_GETCTAG);
 
-            PropFindMethod propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
+            propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
             client.executeMethod(propFindMethod);
 
             if(propFindMethod.succeeded()){
-                for(MultiStatusResponse response: propFindMethod.getResponseBodyAsMultiStatusResponse()){
+                for(MultiStatusResponse response: propFindMethod.getResponseBodyAsMultiStatus().getResponses()){
                     DavPropertySet set = response.getProperties(CaldavStatus.SC_OK);
                     String ctag = CalendarManager.getTokenfromProperty(set.get(DNAME_GETCTAG));
 
@@ -85,6 +88,9 @@ public class CtagHandler extends AbstractSyncHandler {
             log.error("Unable to create PROPFIND Method.");
         } catch (DavException e) {
             log.error("Error getting responses from PROPFIND method.");
+        } finally {
+            if(propFindMethod != null)
+                propFindMethod.releaseConnection();
         }
 
 

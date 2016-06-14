@@ -89,7 +89,7 @@ public class MultigetHandler extends AbstractSyncHandler {
                     List<Appointment> origAppointments = appointmentDao.getAppointmentsinCalendar(calendar.getId());
                     List<String> orighrefs = appointmentDao.getAppointmentHrefsinCalendar(calendar.getId());
 
-                    for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatusResponse()) {
+                    for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
                         if (response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
                             int index = orighrefs.indexOf(response.getHref());
 
@@ -97,7 +97,7 @@ public class MultigetHandler extends AbstractSyncHandler {
                             if (index != -1) {
 
                                 Appointment a = origAppointments.get(index);
-                                String origetag = a.getIcalId(),
+                                String origetag = a.getEtag(),
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                                 //If etag is modified

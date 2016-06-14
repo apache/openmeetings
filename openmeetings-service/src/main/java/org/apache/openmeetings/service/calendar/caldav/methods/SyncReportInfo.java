@@ -144,7 +144,7 @@ public class SyncReportInfo implements XmlSerializable {
 
         if(limit > 0) {
             Element limit = DomUtil.addChildElement(syncCollection, XML_LIMIT, NAMESPACE);
-            DomUtil.addChildElement(limit, XML_NRESULTS, NAMESPACE, limit.toString());
+            DomUtil.addChildElement(limit, XML_NRESULTS, NAMESPACE, Integer.toString(this.limit));
         }
 
         DomUtil.addChildElement(syncCollection, XML_SYNC_LEVEL, NAMESPACE,
