@@ -36,8 +36,9 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 public interface SyncHandler {
 
     /**
-     * Function to update all items in the CalDAV calendar and Assign the Owner to the OwnerId specified.
+     * Function to update all items in the CalDAV calendar. The owner of the appointments
+     * created are the same as the owner of the calendar.
      * @return Returns the updated calendar after updation of all events.
      */
-    public OmCalendar updateItems(Long ownerId);
+    public OmCalendar updateItems();
 }

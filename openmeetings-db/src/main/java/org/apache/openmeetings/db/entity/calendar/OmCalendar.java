@@ -29,7 +29,7 @@ import javax.persistence.*;
 @Table(name = "om_calendar")
 @NamedQueries({
         @NamedQuery(name = "getCalendars", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false ORDER BY c.id"),
-        @NamedQuery(name = "getCalendarbyUser", query = "SELECT c FROM OmCalendar c WHERE c.owner.id = :userId"),
+        @NamedQuery(name = "getCalendarbyUser", query = "SELECT c FROM OmCalendar c WHERE c.owner.id = :userId")
         , @NamedQuery(name = "getAppointmentsbyCalendarinRange",
             query="SELECT a FROM Appointment a "
                 + "WHERE a.deleted = false "

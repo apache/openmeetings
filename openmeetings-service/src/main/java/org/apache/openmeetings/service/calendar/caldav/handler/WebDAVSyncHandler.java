@@ -24,6 +24,7 @@ import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncMethod;
@@ -51,11 +52,11 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
 
     private List<String> currenthrefs = new ArrayList<>();
 
-    public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client){
-        super(path, calendar, client);
+    public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+        super(path, calendar, client, appointmentDao);
     }
 
-    public OmCalendar updateItems(Long ownerId){
+    public OmCalendar updateItems(){
         boolean additionalSyncNeeded = false;
 
         SyncMethod syncMethod = null;
@@ -112,9 +113,17 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
 
                 if(!additionalSyncNeeded) {
                     MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-                            calendar, client);
-                    return multigetHandler.updateItems(ownerId);
+                            calendar, client, appointmentDao);
+                    return multigetHandler.updateItems();
                 }
+            } else if (syncMethod.getStatusCode() == DavServletResponse.SC_FORBIDDEN ||
+                       syncMethod.getStatusCode() == DavServletResponse.SC_PRECONDITION_FAILED){
+
+                //Specific case where a server might sometimes forget the sync token
+                //Thus requiring a full sync needed to be done.
+                log.info("Sync Token not accepted by server. Doing a full sync again.");
+                calendar.setToken(null);
+                additionalSyncNeeded = true;
             } else {
                 log.error("Error in Sync Method Response with status code" + syncMethod.getStatusCode());
             }
@@ -127,7 +136,7 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
         }
 
         if(additionalSyncNeeded)
-            return updateItems(ownerId);
+            return updateItems();
         else
             return calendar;
     }

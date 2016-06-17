@@ -21,7 +21,6 @@ package org.apache.openmeetings.service.calendar.caldav.handler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Abstract Class which contains all the common code for all Handlers.
@@ -33,12 +32,12 @@ public abstract class AbstractSyncHandler implements SyncHandler {
     protected OmCalendar calendar;
     protected String path;
 
-    @Autowired
     protected AppointmentDao appointmentDao;
 
-    public AbstractSyncHandler(String path, OmCalendar calendar, HttpClient client){
+    public AbstractSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
         this.path = path;
         this.calendar = calendar;
         this.client = client;
+        this.appointmentDao = appointmentDao;
     }
 }

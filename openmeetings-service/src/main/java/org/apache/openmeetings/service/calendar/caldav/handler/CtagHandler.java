@@ -25,6 +25,7 @@ import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.CalendarManager;
 import org.osaf.caldav4j.CalDAVConstants;
@@ -52,11 +53,11 @@ public class CtagHandler extends AbstractSyncHandler {
     public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag",
             NAMESPACE_CALSERVER);
 
-    public CtagHandler(String path, OmCalendar calendar, HttpClient client){
-        super(path, calendar, client);
+    public CtagHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+        super(path, calendar, client, appointmentDao);
     }
 
-    public OmCalendar updateItems(Long ownerId) {
+    public OmCalendar updateItems() {
         //Calendar already inited.
 
         PropFindMethod propFindMethod = null;
@@ -75,8 +76,8 @@ public class CtagHandler extends AbstractSyncHandler {
 
                     if(ctag != null && !ctag.equals(calendar.getToken())){
                         calendar.setToken(ctag);
-                        EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client);
-                        return etagsHandler.updateItems(ownerId);
+                        EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao);
+                        return etagsHandler.updateItems();
                     }
                 }
             } else {

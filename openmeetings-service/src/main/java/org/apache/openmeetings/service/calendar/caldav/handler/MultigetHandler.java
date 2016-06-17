@@ -25,6 +25,7 @@ import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
@@ -55,11 +56,12 @@ public class MultigetHandler extends AbstractSyncHandler {
     private static final Logger log = Red5LoggerFactory.getLogger(MultigetHandler.class, webAppRootKey);
 
     private CalendarMultiget query;
-    private boolean isMultigetDisabled = false;
+    private boolean isMultigetDisabled = false, onlyEtag = false;
     private iCalUtils utils = new iCalUtils();
 
-    public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client){
-        super(path, calendar, client);
+    public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+        super(path, calendar, client, appointmentDao);
+        this.onlyEtag = onlyEtag;
 
         if(hrefs == null || hrefs.isEmpty() || calendar.getSyncType() == SyncType.NONE)
             isMultigetDisabled =  true;
@@ -67,7 +69,9 @@ public class MultigetHandler extends AbstractSyncHandler {
             DavPropertyNameSet properties = new DavPropertyNameSet();
             properties.add(DavPropertyName.GETETAG);
 
-            CalendarData calendarData = new CalendarData();
+            CalendarData calendarData = null;
+            if(!onlyEtag)
+                calendarData = new CalendarData();
             CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
             vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
             query = new CalendarMultiget(properties, calendarData, false, false);
@@ -75,7 +79,12 @@ public class MultigetHandler extends AbstractSyncHandler {
         }
     }
 
-    public OmCalendar updateItems(Long ownerId){
+    public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+        this(hrefs, false, path, calendar, client, appointmentDao);
+    }
+
+    public OmCalendar updateItems(){
+        Long ownerId = this.calendar.getOwner().getId();
         if(!isMultigetDisabled){
 
             CalDAVReportMethod reportMethod = null;
@@ -102,19 +111,24 @@ public class MultigetHandler extends AbstractSyncHandler {
 
                                 //If etag is modified
                                 if (!origetag.equals(currentetag)) {
-                                    Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
-                                    a = utils.parseCalendartoAppointment(a, calendar, currentetag);
+                                    if(onlyEtag){
+                                        a.setEtag(currentetag);
+                                    } else {
+                                        Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
+                                        a = utils.parseCalendartoAppointment(a, calendar, currentetag);
+                                    }
                                     appointmentDao.update(a, ownerId);
                                 }
                             }
 
                             //Else it's a new Appointment
                             // i.e. parse into a new Appointment
-                            else {
+                            // Only applicable when we get calendar data along with etag.
+                            else if(!onlyEtag) {
                                 String etag = CalendarDataProperty.getEtagfromResponse(response);
                                 Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
                                 Appointment appointments = utils.parseCalendartoAppointment(
-                                        ical, response.getHref(), etag, ownerId, calendar);
+                                        ical, response.getHref(), etag, calendar);
                                 appointmentDao.update(appointments, ownerId);
                             }
                         }
