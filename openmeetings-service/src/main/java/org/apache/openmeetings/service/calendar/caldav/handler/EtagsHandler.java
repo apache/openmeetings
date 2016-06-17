@@ -25,6 +25,7 @@ import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
@@ -59,12 +60,13 @@ public class EtagsHandler extends AbstractSyncHandler{
 
     private iCalUtils utils = new iCalUtils();
 
-    public EtagsHandler(String path, OmCalendar calendar, HttpClient client){
-        super(path, calendar, client);
+    public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+        super(path, calendar, client, appointmentDao);
     }
 
     @Override
-    public OmCalendar updateItems(Long ownerId) {
+    public OmCalendar updateItems() {
+        Long ownerId = this.calendar.getOwner().getId();
         List<Appointment> origAppointments = new ArrayList<Appointment>(appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
         if(origAppointments.isEmpty()){
@@ -93,7 +95,7 @@ public class EtagsHandler extends AbstractSyncHandler{
                             String etag = CalendarDataProperty.getEtagfromResponse(response);
                             Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
                             Appointment appointments = utils.parseCalendartoAppointment(
-                                    ical, response.getHref(), etag, ownerId, calendar);
+                                    ical, response.getHref(), etag, calendar);
 
                             appointmentDao.update(appointments, ownerId);
                         }
@@ -168,8 +170,8 @@ public class EtagsHandler extends AbstractSyncHandler{
 
                     //Get the rest of the events through a Multiget Handler.
                     MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-                            calendar, client);
-                    return multigetHandler.updateItems(ownerId);
+                            calendar, client, appointmentDao);
+                    return multigetHandler.updateItems();
                 }
                 else {
                     log.error("Report Method return Status: " + reportMethod.getStatusCode()
