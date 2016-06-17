@@ -149,7 +149,7 @@ public class EtagsHandler extends AbstractSyncHandler{
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                                 //If etag is modified
-                                if (!origetag.equals(currentetag)) {
+                                if (!currentetag.equals(origetag)) {
                                     currenthrefs.add(a.getHref());
                                 }
                                 origAppointments.remove(index);

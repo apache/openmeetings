@@ -90,7 +90,7 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                                     currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                             //If event modified, only then get it.
-                            if(!origetag.equals(currentetag))
+                            if(!currentetag.equals(origetag))
                                 currenthrefs.add(response.getHref());
                         }
                         //New Event, to get

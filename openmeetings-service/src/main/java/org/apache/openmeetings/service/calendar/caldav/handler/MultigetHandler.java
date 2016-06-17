@@ -110,7 +110,7 @@ public class MultigetHandler extends AbstractSyncHandler {
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                                 //If etag is modified
-                                if (!origetag.equals(currentetag)) {
+                                if (!currentetag.equals(origetag)) {
                                     if(onlyEtag){
                                         a.setEtag(currentetag);
                                     } else {
