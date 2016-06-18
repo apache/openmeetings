@@ -20,7 +20,12 @@ package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract Class which contains all the common code for all Handlers.
@@ -39,5 +44,13 @@ public abstract class AbstractSyncHandler implements SyncHandler {
         this.calendar = calendar;
         this.client = client;
         this.appointmentDao = appointmentDao;
+    }
+
+    public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values){
+        Map<String, Appointment> map = new HashMap<String, Appointment>();
+        for(int i = 0; i < keys.size(); i++){
+            map.put(keys.get(i), values.get(i));
+        }
+        return map;
     }
 }

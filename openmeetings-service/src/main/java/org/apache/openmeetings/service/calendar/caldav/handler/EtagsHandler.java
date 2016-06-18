@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -67,9 +68,10 @@ public class EtagsHandler extends AbstractSyncHandler{
     @Override
     public OmCalendar updateItems() {
         Long ownerId = this.calendar.getOwner().getId();
-        List<Appointment> origAppointments = new ArrayList<Appointment>(appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+        Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
+                                        appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
-        if(origAppointments.isEmpty()){
+        if(map.isEmpty()){
             //Initializing the Calendar for the first time.
 
             DavPropertyNameSet properties = new DavPropertyNameSet();
@@ -133,27 +135,23 @@ public class EtagsHandler extends AbstractSyncHandler{
                 client.executeMethod(reportMethod);
                 if(reportMethod.succeeded()){
                     List<String> currenthrefs = new ArrayList<String>();
-                    List<String> orighrefs = new ArrayList<String>(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()));
 
                     MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
 
                     for(MultiStatusResponse response: multiStatusResponses){
                         if(response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
-                            int index = orighrefs.indexOf(response.getHref());
+                            Appointment appointment = map.get(response.getHref());
 
                             //Event updated
-                            if (index != -1) {
-
-                                Appointment a = origAppointments.get(index);
-                                String origetag = a.getEtag(),
+                            if (appointment != null) {
+                                String origetag = appointment.getEtag(),
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
                                 //If etag is modified
                                 if (!currentetag.equals(origetag)) {
-                                    currenthrefs.add(a.getHref());
+                                    currenthrefs.add(appointment.getHref());
                                 }
-                                origAppointments.remove(index);
-                                orighrefs.remove(index);
+                                map.remove(response.getHref());
                             }
 
                             // The orig list of events doesn't contain this event.
@@ -164,8 +162,8 @@ public class EtagsHandler extends AbstractSyncHandler{
                     }
 
                     //Remaining Events have been deleted on the server, thus delete them
-                    for(Appointment origAppointment: origAppointments){
-                        appointmentDao.delete(origAppointment, ownerId);
+                    for(Map.Entry<String, Appointment> entry: map.entrySet()){
+                        appointmentDao.delete(entry.getValue(), ownerId);
                     }
 
                     //Get the rest of the events through a Multiget Handler.

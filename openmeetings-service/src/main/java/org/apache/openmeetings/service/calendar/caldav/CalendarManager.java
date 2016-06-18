@@ -257,6 +257,9 @@ public class CalendarManager {
                         appointment.setEtag(etagh.getValue());
                 }
 
+                //TODO: check the Owner part.
+                appointmentDao.update(appointment, appointment.getOwner().getId());
+
             } catch (Exception e) {
                 log.error("Unable to store the Appointment on the CalDAV server.");
             } finally {
@@ -288,7 +291,12 @@ public class CalendarManager {
 
             try {
                 deleteMethod.setPath(appointment.getHref());
+                deleteMethod.setETag(appointment.getEtag());
+
+                log.info("Deleting at location: " + appointment.getHref() + " with ETag: " + appointment.getEtag());
+
                 client.executeMethod(deleteMethod);
+
                 if(deleteMethod.getStatusCode() == DavServletResponse.SC_NO_CONTENT)
                     log.info("Successfully deleted appointment with id: " + appointment.getId());
 

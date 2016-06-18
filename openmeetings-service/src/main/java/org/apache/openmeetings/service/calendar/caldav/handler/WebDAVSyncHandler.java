@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -76,16 +77,17 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                 //Set the new token
                 calendar.setToken(syncMethod.getResponseSynctoken());
 
-                List<Appointment> origAppointments = appointmentDao.getAppointmentsinCalendar(calendar.getId());
-                List<String> orighrefs = new ArrayList<>(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()));
+                //Map of Href and the Appointments, belonging to it.
+                Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
+                        appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
                 for(MultiStatusResponse response: syncMethod.getResponseBodyAsMultiStatus().getResponses()){
                     int status = response.getStatus()[0].getStatusCode();
                     if(status == DavServletResponse.SC_OK){
-                        int index = orighrefs.indexOf(response.getHref());
+                        Appointment a = map.get(response.getHref());
+
                         //Old Event to get
-                        if(index != -1){
-                            Appointment a = origAppointments.get(index);
+                        if(a != null){
                             String origetag = a.getEtag(),
                                     currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
@@ -98,11 +100,11 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                             currenthrefs.add(response.getHref());
                     }
                     else if(status == DavServletResponse.SC_NOT_FOUND){
-                        int index = orighrefs.indexOf(response.getHref());
+                        //Delete the Appointments not found on the server.
+                        Appointment a = map.get(response.getHref());
 
                         //Only if the event exists on the database, delete it.
-                        if(index != -1) {
-                            Appointment a = origAppointments.get(index);
+                        if(a != null) {
                             appointmentDao.delete(a, calendar.getOwner().getId());
                         }
                     }

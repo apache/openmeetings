@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -95,17 +96,16 @@ public class MultigetHandler extends AbstractSyncHandler {
                 client.executeMethod(reportMethod);
 
                 if (reportMethod.succeeded()) {
-                    List<Appointment> origAppointments = appointmentDao.getAppointmentsinCalendar(calendar.getId());
-                    List<String> orighrefs = appointmentDao.getAppointmentHrefsinCalendar(calendar.getId());
+                    //Map for each Href as key and Appointment as Value.
+                    Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
+                                                            appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
                     for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
                         if (response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
-                            int index = orighrefs.indexOf(response.getHref());
+                            Appointment a = map.get(response.getHref());
 
                             //Check if it's an updated Appointment
-                            if (index != -1) {
-
-                                Appointment a = origAppointments.get(index);
+                            if (a != null) {
                                 String origetag = a.getEtag(),
                                         currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
