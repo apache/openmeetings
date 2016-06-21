@@ -403,6 +403,7 @@
 	</method> 
 	
 	<method name="setRoomValues" args="roomObj">
+	<![CDATA[
 		if ($debug) Debug.warn("setRoomValues ",roomObj);
 		//this is needed cause in the rpc-method *getCurrentModeratorList* we check if its room.type == 'restricted'
 		//if so we will not show any *There is no Moderator* Warning Dialog
@@ -421,6 +422,7 @@
 				new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
 			} 
 		}
+	]]>
 	</method>
 
 	<method name="roomClosed">

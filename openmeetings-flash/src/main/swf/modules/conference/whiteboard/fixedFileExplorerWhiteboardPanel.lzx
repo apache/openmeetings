@@ -26,13 +26,13 @@
 	<attribute name="objWhiteboard" value="null" />
 	<attribute name="objMessage" value="null" />
 	
-    <handler name="onsharedMessage" args="obj">
-        this.objWhiteboard = obj;
-        if (this.sendVarsByWhiteboardId != null){
-	        if ($debug) Debug.write("send: ", obj, whiteboardId);
-        	this.sendVarsByWhiteboardId.doCall();
-        }
-    </handler>
+	<handler name="onsharedMessage" args="obj">
+		this.objWhiteboard = obj;
+		if (this.sendVarsByWhiteboardId != null){
+			if ($debug) Debug.write("multiWhiteboardPanel::onsharedMessage send: ", obj, whiteboardId);
+			this.sendVarsByWhiteboardId.doCall();
+		}
+	</handler>
     
     <netRemoteCallHib name="sendVarsByWhiteboardId" funcname="sendVarsByWhiteboardId" 
     				  	showLoading="false" remotecontext="$once{ canvas.thishib }" >
@@ -52,17 +52,17 @@
     	]]>
     </handler>
     
-    <method name="sendActiveWindow">
-    	if ($debug) Debug.warn("sendActiveWindow :: ");
-    	if (canvas.ismoderator || canvas.isAllowedToDraw) {
-    		if ($debug) Debug.warn("DO sendActiveWindow :: ");
-    		canvas._drawarea = this._drawareaMask._drawarea;
-    		this.objMessage = new Array();
-    		this.objMessage[0] = "activateWhiteboard";
-    		this.objMessage[1] = this.whiteboardId;
-    		this.sendMessageToMembers.doCall();
-    	}
-    </method>
+	<method name="sendActiveWindow">
+		if ($debug) Debug.warn("sendActiveWindow :: ");
+		if (canvas.ismoderator || canvas.isAllowedToDraw) {
+			if ($debug) Debug.warn("DO sendActiveWindow :: ");
+			canvas._drawarea = this._drawareaMask._drawarea;
+			this.objMessage = new Array();
+			this.objMessage[0] = "activateWhiteboard";
+			this.objMessage[1] = this.whiteboardId;
+			this.sendMessageToMembers.doCall();
+		}
+	</method>
     
     <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
     				  	showLoading="false" remotecontext="$once{ canvas.thishib }" >
@@ -79,7 +79,7 @@
     
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" allowToggle="false"
 	   labelid="615" visible="${ !canvas.currentRoomObj.hideWhiteboard }">
-	<attribute name="whiteboardCount" value="0" type="number" />	
+	<attribute name="whiteboardCount" value="0" type="number" />
 	<!--
 	
 	 -->
@@ -138,7 +138,7 @@
                             	   btnName: whiteboardName
                             	});
         
-        this._bar.currentBtn = tWhiteboardBtn;                    	
+        this._bar.currentBtn = tWhiteboardBtn;
                             	
     	tWhiteboardBtn.onmouseout.sendEvent(null);
         this.addNewItemButton.updatePosition();
@@ -269,22 +269,21 @@
         </handler>   
     </netRemoteCallHib>   
     
-    <method name="loadWhiteboards" args="whiteboardObjects">
-    	<![CDATA[
-    	   if ($debug) Debug.write("whiteboardObjects :: ",whiteboardObjects.length);
-    	   var mainArray = new Array();
-    	   for (var eg in whiteboardObjects) {
-    	   	   mainArray.push(whiteboardObjects[eg]);
-    	   }
-    	   mainArray.reverse();
-    	   
-    	   for (var eg=0;eg<mainArray.length;eg++) {
-    	   	  var whiteBoard = this.addNewItemSynced(mainArray[eg].whiteBoardId);
-    	   	  
-    	   	  whiteBoard._drawareaMask._drawarea.loadObjectList(mainArray[eg]);
-    	   }
-    	]]>
-    </method>
+	<method name="loadWhiteboards" args="whiteboardObjects">
+	<![CDATA[
+		if ($debug) Debug.write("whiteboardObjects :: ", whiteboardObjects.length);
+		var mainArray = new Array();
+		for (var eg in whiteboardObjects) {
+			mainArray.push(whiteboardObjects[eg]);
+		}
+		mainArray.reverse();
+		
+		for (var eg = 0; eg < mainArray.length; ++eg) {
+			var whiteBoard = this.addNewItemSynced(mainArray[eg].whiteBoardId);
+			whiteBoard._drawareaMask._drawarea.loadObjectList(mainArray[eg]);
+		}
+	]]>
+	</method>
       
     
     <whiteboardBarMenu name="_bar" height="20" y="21">

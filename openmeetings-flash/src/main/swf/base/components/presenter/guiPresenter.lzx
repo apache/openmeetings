@@ -160,10 +160,10 @@
     
 	<method name="close">
 		if (this.onclose) this.onclose.sendEvent();
-        if (this._barmenuButtonRef!=null){
-            this._barmenuButtonRef.destroy();
-            this._barmenuButtonRef.parent.onwidth.sendEvent();
-        }
+		if (this._barmenuButtonRef != null) {
+			this._barmenuButtonRef.destroy();
+			this._barmenuButtonRef.parent.onwidth.sendEvent();
+		}
 		this.destroy();
 	</method>
     

@@ -507,7 +507,7 @@
 				if (canvas.directUserLogin) {
 					canvas.directRoomObj = value;
 					canvas.thishib.loaderVar.close();
-				} else {
+				} else if (parent.currentInvitation == null) {
 					canvas.setRoomValues(value);
 				}
 			} else {
