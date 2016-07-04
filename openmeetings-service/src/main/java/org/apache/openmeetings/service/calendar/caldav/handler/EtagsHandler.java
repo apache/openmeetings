@@ -22,6 +22,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
+import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -35,7 +36,6 @@ import org.osaf.caldav4j.model.request.CalendarData;
 import org.osaf.caldav4j.model.request.CalendarQuery;
 import org.osaf.caldav4j.model.request.CompFilter;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
-import org.osaf.caldav4j.util.CaldavStatus;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -93,7 +93,7 @@ public class EtagsHandler extends AbstractSyncHandler{
 
                     //Parse the responses into Appointments
                     for(MultiStatusResponse response: multiStatusResponses){
-                        if(response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
+                        if(response.getStatus()[0].getStatusCode() == DavServletResponse.SC_OK) {
                             String etag = CalendarDataProperty.getEtagfromResponse(response);
                             Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
                             Appointment appointments = utils.parseCalendartoAppointment(
@@ -139,7 +139,7 @@ public class EtagsHandler extends AbstractSyncHandler{
                     MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
 
                     for(MultiStatusResponse response: multiStatusResponses){
-                        if(response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
+                        if(response.getStatus()[0].getStatusCode() == DavServletResponse.SC_OK) {
                             Appointment appointment = map.get(response.getHref());
 
                             //Event updated

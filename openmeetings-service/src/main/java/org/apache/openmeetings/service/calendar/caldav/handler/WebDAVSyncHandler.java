@@ -74,9 +74,6 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
 
             if(syncMethod.succeeded()){
 
-                //Set the new token
-                calendar.setToken(syncMethod.getResponseSynctoken());
-
                 //Map of Href and the Appointments, belonging to it.
                 Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
                         appointmentDao.getAppointmentsinCalendar(calendar.getId()));
@@ -116,8 +113,11 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                 if(!additionalSyncNeeded) {
                     MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
                             calendar, client, appointmentDao);
-                    return multigetHandler.updateItems();
+                    multigetHandler.updateItems();
                 }
+
+                //Set the new token
+                calendar.setToken(syncMethod.getResponseSynctoken());
             } else if (syncMethod.getStatusCode() == DavServletResponse.SC_FORBIDDEN ||
                        syncMethod.getStatusCode() == DavServletResponse.SC_PRECONDITION_FAILED){
 

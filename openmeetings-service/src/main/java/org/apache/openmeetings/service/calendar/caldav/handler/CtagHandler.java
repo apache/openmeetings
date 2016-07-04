@@ -20,6 +20,7 @@ package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
+import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -30,7 +31,6 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.CalendarManager;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.PropFindMethod;
-import org.osaf.caldav4j.util.CaldavStatus;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -71,13 +71,13 @@ public class CtagHandler extends AbstractSyncHandler {
 
             if(propFindMethod.succeeded()){
                 for(MultiStatusResponse response: propFindMethod.getResponseBodyAsMultiStatus().getResponses()){
-                    DavPropertySet set = response.getProperties(CaldavStatus.SC_OK);
+                    DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
                     String ctag = CalendarManager.getTokenfromProperty(set.get(DNAME_GETCTAG));
 
                     if(ctag != null && !ctag.equals(calendar.getToken())){
-                        calendar.setToken(ctag);
                         EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao);
-                        return etagsHandler.updateItems();
+                        etagsHandler.updateItems();
+                        calendar.setToken(ctag);
                     }
                 }
             } else {

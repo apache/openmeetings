@@ -59,8 +59,11 @@ public class iCalUtils {
 
     /**
      * Parses the Calendar from the CalDAV server, to a new Appointment.
-     * @param calendar
-     * @return
+     * @param calendar iCalendar Representation.
+     * @param href Location of the Calendar on the server
+     * @param etag ETag of the calendar.
+     * @param omCalendar The Parent OmCalendar, to which the Appointment belongs.
+     * @return Appointment after parsing.
      */
     public Appointment parseCalendartoAppointment(Calendar calendar, String href, String etag,
                                                         OmCalendar omCalendar){
@@ -84,10 +87,10 @@ public class iCalUtils {
      * Updating Appointments which already exist, by parsing the Calendar. And updating etag.
      * Doesn't work with complex Recurrences.
      * Note: Hasn't been tested to acknowledge DST, timezones should acknowledge this.
-     * @param a
-     * @param calendar
-     * @param etag
-     * @return
+     * @param a Appointment to be updated.
+     * @param calendar iCalendar Representation.
+     * @param etag The ETag of the calendar.
+     * @return Updated Appointment.
      */
     public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar,
                                                   String etag){
@@ -247,7 +250,7 @@ public class iCalUtils {
     public Date parseDate(String str, String[] patterns, TimeZone timeZone) {
         FastDateFormat parser = null;
 
-        if(str.contains("Z"))
+        if(str.endsWith("Z"))
             timeZone = TimeZone.getTimeZone("UTC");
 
         ParsePosition pos = new ParsePosition(0);

@@ -22,6 +22,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
+import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -36,7 +37,6 @@ import org.osaf.caldav4j.model.request.CalendarData;
 import org.osaf.caldav4j.model.request.CalendarMultiget;
 import org.osaf.caldav4j.model.request.CompFilter;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
-import org.osaf.caldav4j.util.CaldavStatus;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -101,7 +101,7 @@ public class MultigetHandler extends AbstractSyncHandler {
                                                             appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
                     for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
-                        if (response.getStatus()[0].getStatusCode() == CaldavStatus.SC_OK) {
+                        if (response.getStatus()[0].getStatusCode() == DavServletResponse.SC_OK) {
                             Appointment a = map.get(response.getHref());
 
                             //Check if it's an updated Appointment
