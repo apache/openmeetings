@@ -22,6 +22,13 @@
 
 <class name="whiteboardBarMenu" extends="view" width="${ parent.width }" x="0" y="21" 
     height="20" layout="axis:x;spacing:1;inset:2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
     
     <attribute name="staticwidth" type="number" value="120" />
     <attribute name="currentBtn" value="null" />
@@ -63,13 +70,12 @@
     
     <method name="removeObjectSynced" args="btn">
     <![CDATA[
-    	var removeCurrent = false;
-    	if (this.currentBtn == btn){
-    		removeCurrent = true;
-    	}
+    	var removeCurrent = this.currentBtn == btn;
     	btn.objRef.destroy();
         btn.destroy();
-        if (this.subviews.length != 0 && removeCurrent) {
+        if (this.subviews.length == 0) {
+        	setWhiteboardId(-1);//no WB
+        } else if (removeCurrent) {
         	this.sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
         }
         parent.addNewItemButton.updatePosition();
@@ -82,21 +88,26 @@
         this.sendActiveWindowSynced(btn);
         this.currentBtn.objRef.sendActiveWindow();
     </method>
-    
+
+	<method name="setWhiteboardId" args="wbId">
+		ExternalInterface.call("setActiveWbId", wbId);
+	</method>
+	
     <method name="sendActiveWindowSynced" args="btn">
     	<![CDATA[
             if (this.currentBtn != null){
-                this.currentBtn.isactive=false;
-                if (this.currentBtn._minimizebtn_mo != null) this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
-                if (this.currentBtn._minimizebtn_dn != null) this.currentBtn._minimizebtn_dn.setAttribute('visibility','hidden');
+                this.currentBtn.isactive = false;
+                if (this.currentBtn._minimizebtn_mo != null) this.currentBtn._minimizebtn_mo.setAttribute('visible', false);
+                if (this.currentBtn._minimizebtn_dn != null) this.currentBtn._minimizebtn_dn.setAttribute('visible', false);
             }
             this.currentBtn = btn;
-            this.currentBtn.objRef.setAttribute("visibility","visible");
+            this.currentBtn.objRef.setAttribute("visible", true);
         	this.currentBtn.objRef.bringToFront();
-            ////if ($debug)  //Debug.write("sendActiveWindow2: ",this.currentBtn);
-            this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
-            this.currentBtn._minimizebtn_dn.setAttribute('visibility','visible');
-            this.currentBtn.isactive=true;
+            //if ($debug) Debug.warn("sendActiveWindowSynced: ", this.currentBtn.objRef.whiteboardId);
+            setWhiteboardId(this.currentBtn.objRef.whiteboardId);
+            this.currentBtn._minimizebtn_mo.setAttribute('visible', false);
+            this.currentBtn._minimizebtn_dn.setAttribute('visible', true);
+            this.currentBtn.isactive = true;
         ]]>
     </method>
     

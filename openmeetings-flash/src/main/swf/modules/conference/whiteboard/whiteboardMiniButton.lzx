@@ -61,8 +61,8 @@
             if (this.isHidden) {
                 return;
             }
-            ////////if ($debug)  //Debug.write(this,this._text,this._text.getTextWidth());
-            if (this._text.getTextWidth()>(this.width-24)) {
+            //if ($debug) Debug.write(this, this._text, this._text.getTextWidth());
+            if (this._text.getTextWidth() > (this.width-24)) {
                 this._long.setAttribute('visibility','visible');
                 this._text.setAttribute('width',this.width-26);
             } else {
