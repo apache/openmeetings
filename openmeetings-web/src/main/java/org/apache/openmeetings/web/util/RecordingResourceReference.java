@@ -113,7 +113,7 @@ public abstract class RecordingResourceReference extends FileSystemResourceRefer
 		Long id = null;
 		try {
 			id = _id.toOptionalLong();
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
