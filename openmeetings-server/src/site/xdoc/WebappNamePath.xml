@@ -43,34 +43,32 @@
 					go to openmeetings install dir (for ex. <tt>/opt/red5</tt>)
 				</li>
 				<li>
-					rename
-					<tt>/opt/red5/webapps/openmeetings</tt>
-					to
-					<tt>/opt/red5/webapps/yourmeetings</tt>
-					(for ex.
-					<tt>mv /opt/red5/webapps/openmeetings
-						/opt/red5/webapps/yourmeetings
-					</tt>
-					)
+					rename <tt>/opt/red5/webapps/openmeetings</tt> to <tt>/opt/red5/webapps/yourmeetings</tt>
+					(for ex. <tt>mv /opt/red5/webapps/openmeetings /opt/red5/webapps/yourmeetings</tt>)
 				</li>
 				<li>
-					open
-					<tt>/opt/red5/webapps/yourmeetings/public/config.xml</tt>
-					using your favorite text editor (for ex.
-					<tt>vim /opt/red5/webapps/yourmeetings/public/config.xml</tt>
-					)
+					open <tt>/opt/red5/webapps/yourmeetings/public/config.xml</tt>
+					using your favorite text editor (for ex. <tt>vim /opt/red5/webapps/yourmeetings/public/config.xml</tt>)
+					<ul>
+						<li>
+							find and modify <tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
+							to be <tt>&lt;webAppRootKey&gt;<strong>yourmeetings</strong>&lt;/webAppRootKey&gt;</tt>
+						</li>
+						<li>
+							find and modify <tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
+							to be <tt>&lt;httpRootKey&gt;<strong>/yourmeetings/</strong>&lt;/httpRootKey&gt;</tt>
+						</li>
+					</ul>
 				</li>
 				<li>
-					find and modify
-					<tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
-					to be
-					<tt>&lt;webAppRootKey&gt;<strong>yourmeetings</strong>&lt;/webAppRootKey&gt;</tt>
-				</li>
-				<li>
-					find and modify
-					<tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
-					to be
-					<tt>&lt;httpRootKey&gt;<strong>/yourmeetings/</strong>&lt;/httpRootKey&gt;</tt>
+					open <tt>/opt/red5/webapps/root/index.html</tt>
+					using your favorite text editor (for ex. <tt>vim /opt/red5/webapps/root/index.html</tt>)
+					<ul>
+						<li>
+							find and modify <tt>&lt;meta http-equiv="REFRESH" content="0;url=openmeetings/"&gt;</tt>
+							to be <tt>&lt;meta http-equiv="REFRESH" content="0;url=<strong>yourmeetings/</strong>"&gt;</tt>
+						</li>
+					</ul>
 				</li>
 			</ol>
 			<p>That's it</p>
