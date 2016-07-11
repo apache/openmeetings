@@ -38,6 +38,7 @@ import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
 import org.apache.directory.api.ldap.model.entry.Entry;
+import org.apache.directory.api.ldap.model.entry.Value;
 import org.apache.directory.api.ldap.model.exception.LdapAuthenticationException;
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
@@ -142,14 +143,19 @@ public class LdapLoginManagement {
 		}
 	}
 	
-	private static String getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
+	private static Attribute getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
 		String alias = config.getProperty(aliasCode, "");
 		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
+		return a == null ? null : a;
+	}
+
+	private static String getStringAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
+		Attribute a = getAttr(config, entry, aliasCode, defaultAlias);
 		return a == null ? null : a.getString();
 	}
 	
 	private static String getLogin(Properties config, Entry entry) throws LdapInvalidAttributeValueException {
-		return getAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
+		return getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
 	}
 	
 	/**
@@ -342,22 +348,22 @@ public class LdapLoginManagement {
 				u.setShowContactDataToContacts(true);
 				u.setAddress(new Address());
 			}
-			u.setLastname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
-			u.setFirstname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
-			u.getAddress().setEmail(getAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
-			u.getAddress().setStreet(getAttr(config, entry, CONFIGKEY_LDAP_KEY_STREET, LDAP_KEY_STREET));
-			u.getAddress().setAdditionalname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
-			u.getAddress().setFax(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
-			u.getAddress().setZip(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
-			u.getAddress().setCountry(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY));
-			u.getAddress().setTown(getAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
-			u.getAddress().setPhone(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
-			String tz = getAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
+			u.setLastname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
+			u.setFirstname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
+			u.getAddress().setEmail(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
+			u.getAddress().setStreet(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_STREET, LDAP_KEY_STREET));
+			u.getAddress().setAdditionalname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
+			u.getAddress().setFax(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
+			u.getAddress().setZip(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
+			u.getAddress().setCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY));
+			u.getAddress().setTown(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
+			u.getAddress().setPhone(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
+			String tz = getStringAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
 			if (tz == null) {
 				tz = options.tz;
 			}
 			u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
-			String picture = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
+			String picture = getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
 			if (picture == null) {
 				picture = options.pictureUri;
 			}
@@ -365,10 +371,10 @@ public class LdapLoginManagement {
 			
 			List<Dn> groups = new ArrayList<>();
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
-				String attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
-				if (!Strings.isEmpty(attr)) {
-					for (String g : attr.split("\\|")) {
-						groups.add(new Dn(g));
+				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
+				if (attr != null) {
+					for (Value<?> v : attr) {
+						groups.add(new Dn(v.getString()));
 					}
 				}
 			} else if (GroupMode.QUERY == options.groupMode) {
