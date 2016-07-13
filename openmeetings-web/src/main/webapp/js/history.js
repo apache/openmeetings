@@ -105,7 +105,10 @@ BrowserHistory = (function() {
                 pl[i].browserURLChange(flexAppUrl);
             }
         } else {
-            getPlayer().browserURLChange(flexAppUrl);
+        	var p = getPlayer();
+        	if (p) {
+        		p.browserURLChange(flexAppUrl);
+        	}
         }
     }
 
@@ -370,7 +373,10 @@ BrowserHistory = (function() {
                         pl[i].browserURLChange(flexAppUrl);
                     }
                 } else {
-                    getPlayer().browserURLChange(flexAppUrl);
+                	var p = getPlayer();
+                	if (p) {
+                		p.browserURLChange(flexAppUrl);
+                	}
                 }
                 _storeStates();
             }
@@ -441,7 +447,10 @@ BrowserHistory = (function() {
                         pl[i].browserURLChange(flexAppUrl);
                     }
                 } else {
-                    getPlayer().browserURLChange(flexAppUrl);
+                	var p = getPlayer();
+                	if (p) {
+                		p.browserURLChange(flexAppUrl);
+                	}
                 }
             }
         }
@@ -630,9 +639,10 @@ BrowserHistory = (function() {
                     } catch (e) {}
                 }
             } else {
-                try {
-                    getPlayer(objectId).browserURLChange(flexAppUrl);
-                } catch (e) {}
+            	var p = getPlayer(objectId);
+            	if (p) {
+            		p.browserURLChange(flexAppUrl);
+            	}
             }
 
             currentObjectId = null;
