@@ -21,6 +21,7 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -102,7 +103,9 @@ public class NetTestWebService {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/")
-	public void upload(@Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM) InputStream stream) {
+	public void upload(@Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM) InputStream stream) throws IOException {
+		byte[] b = new byte[1024];
+		while (stream.read(b) >= 0 ) {};
     }
 
 
