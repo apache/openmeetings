@@ -151,7 +151,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
+						//NOT in use since 1.0.8-M3 client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
 						client.setKeyStorePassword(args[10]);
 						instance = client;
 						break;
