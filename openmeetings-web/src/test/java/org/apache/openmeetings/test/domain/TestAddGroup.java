@@ -51,7 +51,7 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		assertNotNull("User should exist", us);
 		
 		assertNotNull("Group User list should exist", us.getGroupUsers());
-		us.getGroupUsers().add(new GroupUser(o));
+		us.getGroupUsers().add(new GroupUser(o, us));
 		us = userDao.update(us, null);
 
 		log.error(us.getLastname());

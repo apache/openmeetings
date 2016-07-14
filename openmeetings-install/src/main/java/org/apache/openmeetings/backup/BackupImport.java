@@ -93,6 +93,7 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.User;
@@ -336,7 +337,6 @@ public class BackupImport {
 					u.setForceTimeZoneCheck(false);
 				}
 				
-				u.setInserted(new Date());
 				Long userId = u.getId();
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
@@ -1037,6 +1037,11 @@ public class BackupImport {
 							u.setAddress(new Address());
 						}
 						u.getAddress().setCountry(country);
+					}
+				}
+				if (u.getGroupUsers() != null) {
+					for (GroupUser gu : u.getGroupUsers()) {
+						gu.setUser(u);
 					}
 				}
 				list.add(u);

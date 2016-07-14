@@ -247,7 +247,7 @@ public class User implements IDataProviderEntity {
 	@Element(name = "address", required = false)
 	private Address address;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent

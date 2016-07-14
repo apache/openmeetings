@@ -51,7 +51,7 @@ public class TestUserContact extends AbstractWicketTester {
 	public void createUserWithGroup() throws Exception {
 		int rnd = random.nextInt();
 		User u = getUser(rnd);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L)));
+		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = userDao.update(u, null);
 		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
 		
