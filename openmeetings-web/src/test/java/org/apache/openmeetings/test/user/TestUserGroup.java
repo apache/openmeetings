@@ -81,18 +81,18 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	@HeavyTests
 	public void add10kUsers() throws Exception {
 		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
-		Group o = null;
+		Group g = null;
 		if (groups == null || groups.isEmpty()) {
-			o = new Group();
-			o.setName(GROUP_NAME);
-			o = groupDao.update(o, null);
+			g = new Group();
+			g.setName(GROUP_NAME);
+			g = groupDao.update(g, null);
 		} else {
-			o = groups.get(0);
+			g = groups.get(0);
 		}
 		Random rnd = new Random();
 		for (int i = 0; i < 10000; ++i) {
 			User u = createUser(rnd.nextInt());
-			u.getGroupUsers().add(new GroupUser(o));
+			u.getGroupUsers().add(new GroupUser(g, u));
 			userDao.update(u, null);
 		}
 	}
