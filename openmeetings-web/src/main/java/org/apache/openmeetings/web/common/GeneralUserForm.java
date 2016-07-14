@@ -127,8 +127,9 @@ public class GeneralUserForm extends Form<User> {
 		if (isAdminForm) {
 			List<Group> orgList = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 			orgUsers = new ArrayList<GroupUser>(orgList.size());
+			User u = GeneralUserForm.this.getModelObject();
 			for (Group org : orgList) {
-				orgUsers.add(new GroupUser(org));
+				orgUsers.add(new GroupUser(org, u));
 			}
 		} else {
 			orgUsers = getModelObject().getGroupUsers();
@@ -163,8 +164,9 @@ public class GeneralUserForm extends Form<User> {
 					ids.add(Long.parseLong(id));
 				}
 				List<GroupUser> list = new ArrayList<GroupUser>();
+				User u = GeneralUserForm.this.getModelObject();
 				for (Group o : getBean(GroupDao.class).get(ids)) {
-					list.add(new GroupUser(o));
+					list.add(new GroupUser(o, u));
 				}
 				return list;
 			}

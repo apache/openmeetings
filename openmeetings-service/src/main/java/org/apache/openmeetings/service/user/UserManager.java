@@ -27,7 +27,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -387,14 +386,10 @@ public class UserManager implements IUserManager {
 					rights.remove(Right.Login);
 				}
 
-				List<GroupUser> groupList = new ArrayList<GroupUser>();
-				for (Long id : groups) {
-					groupList.add(new GroupUser(groupDao.get(id)));
-				}
 				User u = userDao.addUser(rights, firstname, login, lastname, languageId,
 						password, adr, sendSMS, age, hash, timezone,
 						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
-						showContactDataToContacts, null, null, groupList, null);
+						showContactDataToContacts, null, null, groups, null);
 				if (u == null) {
 					return -111L;
 				}
@@ -533,7 +528,7 @@ public class UserManager implements IUserManager {
 			u.setType(Type.oauth);
 			u.getRights().remove(Right.Login);;
 			u.setDomainId(serverId);
-			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
+			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1")), u));
 			u.setLogin(login);
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);
