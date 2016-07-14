@@ -153,7 +153,7 @@ public class GroupWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				if (!groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
-					u.getGroupUsers().add(new GroupUser(groupDao.get(id)));
+					u.getGroupUsers().add(new GroupUser(groupDao.get(id), u));
 					userDao.update(u, authUserId);
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);

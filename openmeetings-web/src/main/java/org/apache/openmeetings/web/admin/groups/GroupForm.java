@@ -86,8 +86,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 						}
 					}
 					if (!found) {
-						GroupUser ou = new GroupUser(o);
-						ou.setUser(u);
+						GroupUser ou = new GroupUser(o, u);
 						usersPanel.getUsers2add().add(ou);
 
 						userToadd.setModelObject(null);
@@ -142,7 +141,9 @@ public class GroupForm extends AdminBaseForm<Group> {
 		Group o = getModelObject();
 		o = getBean(GroupDao.class).update(o, getUserId());
 		setModelObject(o);
-		getBean(GroupUserDao.class).update(usersPanel.getUsers2add(), getUserId());
+		for (GroupUser grpUser : usersPanel.getUsers2add()) {
+			GroupUsersPanel.update(grpUser);
+		}
 		hideNewRecord();
 		updateView(target);
 	}

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -27,17 +26,13 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.DaoHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
-	private UserDao userDao;
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
 	@Override
@@ -117,42 +112,13 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		return q.getSingleResult();
 	}
 
-	public void update(List<GroupUser> list, Long userId) {
-		for (GroupUser ou : list) {
-			update(ou, userId);
-		}
-	}
-	
 	@Override
 	public GroupUser update(GroupUser entity, Long userId) {
-		if (entity.getId() == null) {
-			entity.setInserted(new Date());
-			em.persist(entity);
-		} else {
-			entity.setUpdated(new Date());
-			entity = em.merge(entity);
-		}
-		updateUser(entity, false, userId);
-		return entity;
+		throw new RuntimeException("Should not be used");
 	}
 
-	private void updateUser(GroupUser entity, boolean delete, Long userId) {
-		//entity has been detached need to re-fetch
-		User u = userDao.get(entity.getUser().getId());
-		int idx = u.getGroupUsers().indexOf(entity);
-		if (delete && idx > -1) {
-			GroupUser ou = u.getGroupUsers().remove(idx);
-			em.remove(ou);
-		} else if (!delete && idx < 0) {
-			u.getGroupUsers().add(entity);
-		}
-		userDao.update(u, userId);
-	}
-	
 	@Override
 	public void delete(GroupUser entity, Long userId) {
-		if (entity.getId() != null) {
-			updateUser(entity, true, userId);
-		}
+		throw new RuntimeException("Should not be used");
 	}
 }

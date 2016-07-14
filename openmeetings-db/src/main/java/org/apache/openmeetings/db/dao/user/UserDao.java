@@ -82,6 +82,8 @@ public class UserDao implements IDataProviderDao<User> {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
+	private GroupDao groupDao;
+	@Autowired
 	private TimezoneUtil timezoneUtil;
 
 	public static Set<Right> getDefaultRights() {
@@ -207,11 +209,6 @@ public class UserDao implements IDataProviderDao<User> {
 
 	@Override
 	public User update(User u, Long userId) {
-		if (u.getGroupUsers() != null) {
-			for (GroupUser ou : u.getGroupUsers()) {
-				ou.setUser(u);
-			}
-		}
 		if (u.getId() == null) {
 			if (u.getRegdate() == null) {
 				u.setRegdate(new Date());
@@ -221,10 +218,6 @@ public class UserDao implements IDataProviderDao<User> {
 		} else {
 			u.setUpdated(new Date());
 			u =	em.merge(u);
-		}
-		//this is necessary due to group details are lost on update
-		for (GroupUser ou : u.getGroupUsers()) {
-			em.refresh(ou);
 		}
 		return u;
 	}
@@ -658,7 +651,7 @@ public class UserDao implements IDataProviderDao<User> {
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			boolean forceTimeZoneCheck, String userOffers, String userSearchs, boolean showContactData,
-			boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+			boolean showContactDataToContacts, String externalId, String externalType, List<Long> groupIds, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		
 		User u = new User();
 		u.setFirstname(firstname);
@@ -671,7 +664,6 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setLastlogin(new Date());
 		u.setLasttrans(new Long(0));
 		u.setSalutation(Salutation.mr);
-		u.setInserted(new Date());
 		u.setActivatehash(hash);
 		u.setTimeZoneId(timezone.getID());
 		u.setForceTimeZoneCheck(forceTimeZoneCheck);
@@ -691,10 +683,11 @@ public class UserDao implements IDataProviderDao<User> {
 		if (!Strings.isEmpty(userpass)) {
 			u.updatePassword(cfgDao, userpass);
 		}
-		u.setRegdate(new Date());
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
-		u.setGroupUsers(orgList);
+		for (Long grpId : groupIds) {
+			u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+		}
 		
 		return update(u, null);
 	}
