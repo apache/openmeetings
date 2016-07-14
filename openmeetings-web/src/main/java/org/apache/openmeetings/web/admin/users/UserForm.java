@@ -103,7 +103,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		generalForm.updateModelObject(getModelObject());
+		generalForm.updateModelObject(getModelObject(), true);
 	}
 	
 	@Override
@@ -212,7 +212,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 			@Override
 			public Collection<Right> toChoices(Collection<String> ids) {
-				Collection<Right> rights = new ArrayList<User.Right>(ids.size());
+				Collection<Right> rights = new ArrayList<>(ids.size());
 				for (String id : ids) {
 					rights.add(Right.valueOf(id));
 				}
