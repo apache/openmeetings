@@ -152,7 +152,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> getConnParams(Object[] params) {
+	private static Map<String, Object> getConnParams(Object[] params) {
 		if (params != null && params.length > 0) {
 			return (Map<String, Object>)params[0]; 
 		}
