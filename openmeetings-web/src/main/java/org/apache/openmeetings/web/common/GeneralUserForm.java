@@ -68,8 +68,9 @@ import com.googlecode.wicket.kendo.ui.resource.KendoCultureResourceReference;
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private LocalDate age;
-	private PasswordTextField passwordField;
-	private RequiredTextField<String> email;
+	private final PasswordTextField passwordField;
+	private final RequiredTextField<String> email;
+	private final List<GroupUser> grpUsers = new ArrayList<>();
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
@@ -79,7 +80,7 @@ public class GeneralUserForm extends Form<User> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
-		updateModelObject(getModelObject());
+		updateModelObject(getModelObject(), isAdminForm);
 		add(new DropDownChoice<Salutation>("salutation"
 				, Arrays.asList(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
@@ -123,17 +124,6 @@ public class GeneralUserForm extends Form<User> {
 		add(new CountryDropDown("address.country"));
 		add(new TextArea<String>("address.comment"));
 
-		final List<GroupUser> orgUsers;
-		if (isAdminForm) {
-			List<Group> orgList = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
-			orgUsers = new ArrayList<GroupUser>(orgList.size());
-			User u = GeneralUserForm.this.getModelObject();
-			for (Group org : orgList) {
-				orgUsers.add(new GroupUser(org, u));
-			}
-		} else {
-			orgUsers = getModelObject().getGroupUsers();
-		}
 		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new ChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
@@ -150,7 +140,7 @@ public class GeneralUserForm extends Form<User> {
 
 			@Override
 			public void query(String term, int page, Response<GroupUser> response) {
-				for (GroupUser ou : orgUsers) {
+				for (GroupUser ou : grpUsers) {
 					if (Strings.isEmpty(term) || ou.getGroup().getName().contains(term)) {
 						response.add(ou);
 					}
@@ -165,15 +155,29 @@ public class GeneralUserForm extends Form<User> {
 				}
 				List<GroupUser> list = new ArrayList<GroupUser>();
 				User u = GeneralUserForm.this.getModelObject();
-				for (Group o : getBean(GroupDao.class).get(ids)) {
-					list.add(new GroupUser(o, u));
+				for (Group g : getBean(GroupDao.class).get(ids)) {
+					GroupUser gu = new GroupUser(g, u);
+					int idx = grpUsers.indexOf(gu);
+					list.add(idx < 0 ? gu : grpUsers.get(idx));
 				}
 				return list;
 			}
 		}).setEnabled(isAdminForm));
 	}
 
-	public void updateModelObject(User u) {
+	public void updateModelObject(User u, boolean isAdminForm) {
+		grpUsers.clear();
+		grpUsers.addAll(u.getGroupUsers());
+		if (isAdminForm) {
+			List<Group> grpList = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+			for (Group g : grpList) {
+				GroupUser gu = new GroupUser(g, u);
+				int idx = grpUsers.indexOf(gu);
+				if (idx < 0) {
+					grpUsers.add(gu);
+				}
+			}
+		}
 		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
 	
