@@ -52,7 +52,7 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		Long id = null;
 		try {
 			id = _id.toOptionalLong();
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();

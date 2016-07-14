@@ -54,7 +54,9 @@
     <mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
         
         <handler name="oninit">
-            this._bgIcon.setAttribute("visibility","hidden");
+		if (this["_bgIcon"]) {
+			this._bgIcon.setAttribute("visible", false);
+		}
             var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
                                            + canvas._drawarea.currentClipArtRessourceName;
             
@@ -115,9 +117,9 @@
 	<mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
         
         <handler name="oninit">
-            if (this["_bgIcon"]) {
-        	   this._bgIcon.setAttribute("visibility","hidden");
-        	}
+		if (this["_bgIcon"]) {
+			this._bgIcon.setAttribute("visible", false);
+		}
             var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
                                            + canvas._drawarea.currentClipArtRessourceName;
             

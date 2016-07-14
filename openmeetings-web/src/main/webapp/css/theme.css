@@ -232,8 +232,6 @@ html, body {
 #contents {
 }
 #contents .dragbox-content {
-	min-height: 300px;
-	max-height: 300px;
 }
 #feedcontainer {
 	overflow: auto;
