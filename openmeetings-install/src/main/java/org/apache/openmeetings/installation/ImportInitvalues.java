@@ -437,7 +437,7 @@ public class ImportInitvalues {
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
 		u.getAddress().setEmail(cfg.email);
-		u.getGroupUsers().add(new GroupUser(org));
+		u.getGroupUsers().add(new GroupUser(org, u));
 
 		u = userDao.update(u, cfg.password, -1L);
 

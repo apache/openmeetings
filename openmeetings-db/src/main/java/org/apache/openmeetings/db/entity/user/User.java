@@ -247,7 +247,7 @@ public class User implements IDataProviderEntity {
 	@Element(name = "address", required = false)
 	private Address address;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
@@ -315,7 +315,7 @@ public class User implements IDataProviderEntity {
 	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
 	@ElementList(name="rights", data = true, required = false)
-	private Set<Right> rights = new HashSet<User.Right>();
+	private Set<Right> rights = new HashSet<>();
 	
 	@Column(name = "domain_id")
 	@Element(data = true, required = false)

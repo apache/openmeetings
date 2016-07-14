@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
@@ -55,20 +56,20 @@ public class GroupUsersPanel extends Panel {
 
 			@Override
 			protected void populateItem(Item<GroupUser> item) {
-				final GroupUser orgUser = item.getModelObject();
-				User u = orgUser.getUser();
+				final GroupUser grpUser = item.getModelObject();
 				item.add(new CheckBox("isModerator").add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						if (orgUser.getId() != null) {
-							getBean(GroupUserDao.class).update(orgUser, WebSession.getUserId());
+						if (grpUser.getId() != null) {
+							update(grpUser);
 						}
 					}
 				}));
+				User u = grpUser.getUser();
 				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
-				if (orgUser.getId() == null) {
+				if (grpUser.getId() == null) {
 					label.add(AttributeAppender.append("class", "newItem"));
 				}
 				item.add(label);
@@ -77,16 +78,13 @@ public class GroupUsersPanel extends Panel {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						if (orgUser.getId() == null) {
-							for (int i = 0; i < users2add.size(); ++i) {
-								//FIXME ineffective
-								if (users2add.get(i).getUser().getId().equals(orgUser.getUser().getId())) {
-									users2add.remove(i);
-									break;
-								}
-							}
+						if (grpUser.getId() == null) {
+							users2add.remove(grpUser);
 						} else {
-							getBean(GroupUserDao.class).delete(orgUser, WebSession.getUserId());
+							UserDao uDao = getBean(UserDao.class);
+							User u = uDao.get(grpUser.getUser().getId());
+							u.getGroupUsers().remove(grpUser);
+							uDao.update(u, WebSession.getUserId());
 						}
 						target.add(GroupUsersPanel.this);
 					}
@@ -102,6 +100,18 @@ public class GroupUsersPanel extends Panel {
 				target.add(GroupUsersPanel.this);
 			}
 		});
+	}
+	
+	public static void update(GroupUser grpUser) {
+		UserDao uDao = getBean(UserDao.class);
+		User u = uDao.get(grpUser.getUser().getId());
+		int idx = u.getGroupUsers().indexOf(grpUser);
+		if (idx > -1) {
+			u.getGroupUsers().get(idx).setModerator(grpUser.isModerator());
+		} else {
+			u.getGroupUsers().add(grpUser);
+		}
+		uDao.update(u, WebSession.getUserId());
 	}
 	
 	void update(long groupId) {
