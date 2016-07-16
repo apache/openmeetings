@@ -23,6 +23,10 @@ public class OraclePatcher extends ConnectionPropertiesPatcher {
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "1521" : _port;
 		String db = (_db == null) ? "openmeetings" : _db;
-		return "jdbc:oracle:thin:@" + host + ":" + port + ":" + db; 
+		String delim = ":";
+		if (db.startsWith("/")) {
+			delim = "";
+		}
+		return String.format("jdbc:oracle:thin:@%s:%s%s%s", host, port, delim, db); 
 	}
 }
