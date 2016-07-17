@@ -31,15 +31,14 @@ import java.util.Calendar;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -48,7 +47,6 @@ import org.apache.openmeetings.util.message.RoomMessage.Type;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
@@ -368,31 +366,9 @@ public class RoomPanel extends BasePanel {
 			Client c = getClient();
 			addUserToRoom(c.setRoomId(getRoom().getId()));
 			User u = getBean(UserDao.class).get(getUserId());
-			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
-				//admin user get superModerator level, no-one can kick him/her
-				c.getRights().add(Right.superModerator);
-			} else {
-				if (!r.isModerated() && 1 == getRoomClients(r.getId()).size()) {
-					//room is not moderated, first user is moderator!
-					c.getRights().add(Right.moderator);
-				}
-				//performing loop here to set possible 'superModerator' right
-				for (RoomModerator rm : r.getModerators()) {
-					if (getUserId().equals(rm.getUser().getId())) {
-						c.getRights().add(rm.isSuperModerator() ? Right.superModerator : Right.moderator);
-						break;
-					}
-				}
-				//no need to loop if client is moderator
-				if (!c.hasRight(Right.moderator) && !r.getRoomGroups().isEmpty()) {
-					for (RoomGroup rg : r.getRoomGroups()) {
-						GroupUser gu = getBean(GroupUserDao.class).getByGroupAndUser(rg.getGroup().getId(), getUserId());
-						if (gu.isModerator()) {
-							c.getRights().add(Right.moderator);
-							break;
-						}
-					}
-				}
+			Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+			if (rr != null) {
+				c.getRights().add(rr);
 			}
 		}
 	}
@@ -422,7 +398,7 @@ public class RoomPanel extends BasePanel {
 		return hasRight(userId, roomId, Right.moderator);
 	}
 	
-	public static boolean hasRight(long userId, long roomId, Client.Right r) {
+	public static boolean hasRight(long userId, long roomId, Right r) {
 		for (Client c : getRoomClients(roomId)) {
 			if (c.getUserId().equals(userId) && c.hasRight(r)) {
 				return true;
@@ -475,7 +451,7 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public void requestRight(AjaxRequestTarget target, Client.Right right) {
+	public void requestRight(AjaxRequestTarget target, Right right) {
 		RoomMessage.Type reqType = null;
 		switch (right) {
 			case moderator:
@@ -540,7 +516,7 @@ public class RoomPanel extends BasePanel {
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && getClient().hasRight(Client.Right.share) && getSharingUser() == null;
+				&& r.isAllowRecording() && getClient().hasRight(Right.share) && getSharingUser() == null;
 	}
 	
 	public RoomSidebar getSidebar() {

@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 
 /**
@@ -34,17 +35,6 @@ import org.apache.wicket.protocol.ws.api.registry.IKey;
 public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
-	public enum Right {
-		superModerator
-		, moderator
-		, whiteBoard
-		, share
-		, remoteControl
-		, audio
-		, video
-		, mute
-		, exclusive
-	}
 	public enum Activity {
 		broadcast
 		, share
