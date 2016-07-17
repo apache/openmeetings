@@ -22,10 +22,10 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.KickRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
