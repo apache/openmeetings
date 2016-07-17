@@ -57,14 +57,14 @@ function chatClosed() {
 }
 function openChat() {
 	if (chatClosed()) {
-		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 		$('#chat .control.block').removeClass('ui-state-highlight');
 		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
 	}
 }
 function closeChat() {
 	if (!chatClosed()) {
-		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
+		$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
 		$('#chatPanel').animate({height: closedHeight}, 1000);
 		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
 	}
