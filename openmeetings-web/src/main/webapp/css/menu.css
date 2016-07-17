@@ -17,23 +17,26 @@
  * under the License.
  */
 .ui-menu:after {
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
 }
 .ui-menu .ui-menu-item {
-    display: inline-block;
-    margin: 0;
+	display: inline-block;
+	margin: 0;
 	line-height: 1.2em !important;
-    padding: .4em 2.1em .4em 1em;
+	padding: .2em 2.1em .2em 1em;
 	font-weight: normal;
+}
+.ui-menu .ui-menu-item, .ui-menu .ui-menu-item .ui-state-active {
+	font-weight: bold;
 }
 .ui-menu .ui-menu-item.sub {
 	width: 250px;
-	font-weight: bold;
+	display: block;
 }
 .ui-menu .ui-menu-item.top {
 	border: 0 !important;
