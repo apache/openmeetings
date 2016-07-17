@@ -41,7 +41,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;

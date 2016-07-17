@@ -89,6 +89,18 @@ public class Room implements IDataProviderEntity {
 	public static final int RESTRICTED_TYPE_ID = 3;
 	public static final int INTERVIEW_TYPE_ID = 4;
 	
+	public enum Right {
+		superModerator
+		, moderator
+		, whiteBoard
+		, share
+		, remoteControl
+		, audio
+		, video
+		, mute
+		, exclusive
+	}
+	
 	public enum Type {
 		conference(CONFERENCE_TYPE_ID)
 		//, audience(2)
@@ -129,6 +141,7 @@ public class Room implements IDataProviderEntity {
 			return rt;
 		}
 	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

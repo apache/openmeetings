@@ -50,13 +50,12 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -1167,188 +1166,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			currentClient.setUsercolor(colorObj);
 
+			User u = userDao.get(currentClient.getUserId());
 			// Inject externalUserId if nothing is set yet
-			if (currentClient.getExternalUserId() == null) {
-				if (currentClient.getUserId() != null) {
-					User us = userDao.get(currentClient.getUserId());
-					if (us != null) {
-						currentClient.setExternalUserId(us.getExternalId());
-						currentClient.setExternalUserType(us.getExternalType());
-					}
-				}
+			if (currentClient.getExternalUserId() == null && u != null) {
+				currentClient.setExternalUserId(u.getExternalId());
+				currentClient.setExternalUserType(u.getExternalType());
 			}
 
-			// This can be set without checking for Moderation Flag
-			currentClient.setIsSuperModerator(isSuperModerator);
-
-			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
-
-			Room room = roomDao.get(roomId);
-			if (room.getShowMicrophoneStatus()) {
+			Room r = roomDao.get(roomId);
+			if (r.getShowMicrophoneStatus()) {
 				currentClient.setCanGiveAudio(true);
 			}
-
+			sessionManager.updateClientByStreamId(streamid, currentClient, true, null); // first save to get valid room count
 			// Log the User
 			conferenceLogDao.add(ConferenceLog.Type.roomEnter,
 					currentClient.getUserId(), streamid, roomId,
 					currentClient.getUserip(), "");
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<Client> clientListRoom = sessionManager.getClientListByRoom(roomId);
+			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
 
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
 			// appointed meeting or moderated Room? => Check Max Users first
-			if (clientListRoom.size() > room.getNumberOfPartizipants()) {
+			if (roomClients.size() > r.getNumberOfPartizipants()) {
 				roomStatus.setRoomFull(true);
 				return roomStatus;
 			}
-
-			// default logic for non regular rooms
-			if (!room.isAppointment()) {
-				if (room.isModerated()) {
-					// if this is a Moderated Room then the Room can be only
-					// locked off by the Moderator Bit
-					// List<RoomClient> clientModeratorListRoom =
-					// this.sessionManager.getCurrentModeratorByRoom(roomId);
-
-					// If there is no Moderator yet we have to check if the
-					// current User has the Bit set to true to
-					// become one, otherwise he won't get Moderation and has to
-					// wait
-					if (becomeModerator) {
-						currentClient.setIsMod(true);
-
-						// There is a need to send an extra Event here, cause at
-						// this moment there could be
-						// already somebody in the Room waiting
-
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-						
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-					} else {
-						// The current User is not a Teacher/Admin or whatever
-						// Role that should get the
-						// Moderation
-						currentClient.setIsMod(false);
-					}
-				} else {
-					// If this is a normal Room Moderator rules : first come, first draw ;-)
-					log.debug("setRoomValues : Room"
-							+ roomId
-							+ " not appointed! Moderator rules : first come, first draw ;-)");
-					if (clientListRoom.size() == 1) {
-						log.debug("Room is empty so set this user to be moderation role");
-						currentClient.setIsMod(true);
-					} else {
-						log.debug("Room is already somebody so set this user not to be moderation role");
-
-						if (becomeModerator) {
-							currentClient.setIsMod(true);
-
-							// Update the Client List
-							sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-							List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-							// There is a need to send an extra Event here,
-							// cause at this moment there could be
-							// already somebody in the Room waiting -swagner check this comment, 20.01.2012
-							
-							//Sync message to everybody
-							sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-
-						} else {
-							// The current User is not a Teacher/Admin or
-							// whatever Role that should get the Moderation
-							currentClient.setIsMod(false);
-						}
-					}
-				}
-
+			if (isSuperModerator) {
+				// This can be set without checking for Moderation Flag
+				currentClient.setIsSuperModerator(isSuperModerator);
+				currentClient.setIsMod(isSuperModerator);
+			} else {
+				Room.Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
+				currentClient.setIsSuperModerator(rr == Room.Right.superModerator);
+				currentClient.setIsMod(becomeModerator || rr == Room.Right.moderator);
+			}
+			if (currentClient.getIsMod()) {
 				// Update the Client List
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-			} else {
-				// If this is an Appointment then the Moderator will be set to the Invitor
-				Appointment ment = appointmentDao.getByRoom(roomId);
-				Long userIdInRoomClient = currentClient.getUserId();
-				boolean found = false;
-				boolean moderator_set = false;
-				if (ment != null) {
-					// First check owner who is not in the members list
-					if (ment.getOwner().getId().equals(userIdInRoomClient)) {
-						found = true;
-						log.debug("User "
-								+ userIdInRoomClient
-								+ " is moderator due to flag in MeetingMember record");
-						currentClient.setIsMod(true);
-						moderator_set = true;
-	
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-	
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-	
-						// There is a need to send an extra Event here, cause at this moment 
-						// there could be already somebody in the Room waiting
-	
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-					}
-					if (!found) {
-						// Check if current user is set to moderator
-						for (MeetingMember member : ment.getMeetingMembers()) {
-							// only persistent users can schedule a meeting
-							// user-id is only set for registered users
-							if (member.getUser() != null) {
-								log.debug("checking user " + member.getUser().getFirstname()
-										+ " for moderator role - ID : "
-										+ member.getUser().getId());
-		
-								if (member.getUser().getId().equals(userIdInRoomClient)) {
-									found = true;
-									log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
-									currentClient.setIsMod(false);
-									sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-									break;
-								}
-							}
-						}
-					}
-				}
-				if (!found) {
-					log.debug("User "
-							+ userIdInRoomClient
-							+ " could not be found as MeetingMember -> definitely no moderator");
-					currentClient.setIsMod(false);
-					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-				} else {
-					// if current user is part of the member list, but moderator
-					// couldn't be retrieved : first come, first draw!
-					if (clientListRoom.size() == 1 && !moderator_set) {
-						log.debug("");
-						currentClient.setIsMod(true);
 
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-						// There is a need to send an extra Event here, cause at
-						// this moment there could be
-						// already somebody in the Room waiting
-
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-						
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-					}
-				}
-
+				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
+				
+				//Sync message to everybody
+				sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 			}
 			
 			//Sync message to everybody
@@ -1364,7 +1225,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// RoomStatus roomStatus = new RoomStatus();
 
 			// FIXME: Rework Client Object to DTOs
-			roomStatus.setClientList(clientListRoom);
+			roomStatus.setClientList(roomClients);
 			roomStatus.setBrowserStatus(browserStatus);
 
 			return roomStatus;

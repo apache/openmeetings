@@ -86,27 +86,6 @@ public class ConferenceService {
 	}
 
 	/**
-	 * gets all rooms of an group TODO:check if the requesting user is
-	 * also member of that group
-	 * 
-	 * @param SID
-	 * @param groupId
-	 * @return - all rooms of an group
-	 */
-	public SearchResult<RoomGroup> getRoomsByGroup(String SID,
-			long groupId, int start, int max, String orderby,
-			boolean asc) {
-
-		log.debug("getRoomsByGroup");
-
-		Long userId = sessiondataDao.check(SID);
-		if (AuthLevelUtil.hasModLevel(userDao.get(userId), groupId)) {
-			return roomManager.getRoomGroupByGroupId(groupId, start, max, orderby, asc);
-		}
-		return null;
-	}
-
-	/**
 	 * get a List of all public availible rooms (non-appointments)
 	 * 
 	 * @param SID
