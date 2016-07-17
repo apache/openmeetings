@@ -27,9 +27,9 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;

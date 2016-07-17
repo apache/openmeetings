@@ -24,22 +24,26 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.UUID;
 
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -48,7 +52,6 @@ import org.apache.openmeetings.util.message.RoomMessage.Type;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
@@ -72,6 +75,7 @@ import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
@@ -91,6 +95,7 @@ public class RoomPanel extends BasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private static final String ACCESS_DENIED_ID = "access-denied";
 	private static final String EVENT_DETAILS_ID = "event-details";
+	private static final String PARAM_WB_ID = "wbId";
 	public enum Action {
 		kick
 		, refresh
@@ -116,6 +121,17 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	};
+	private final AbstractDefaultAjaxBehavior activeWb = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			long wbId = getRequest().getRequestParameters().getParameterValue(PARAM_WB_ID).toLong(Long.MIN_VALUE);
+			if (wbId != Long.MIN_VALUE) {
+				activeWbId = wbId;
+			}
+		}
+	};
 	private RedirectMessageDialog roomClosed;
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
@@ -123,6 +139,7 @@ public class RoomPanel extends BasePanel {
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private String publishingUser = null; //TODO add
+	private long activeWbId = -1;
 	
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -153,12 +170,82 @@ public class RoomPanel extends BasePanel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (o instanceof FileItem) {
+				if (activeWbId > 0 && o instanceof FileItem) {
+					//target.appendJavaScript("");
+					/*
+  0: 'swf' 
+  1: «string(223)| 'http://localhost:5080/openmeetings/DownloadHandler?fileName=97321ad42af97bee825988d3ab9a14fd.swf&moduleName=vi…» 
+  2: «string(223)| 'http://localhost:5080/openmeetings/DownloadHandler?fileName=97321ad42af97bee825988d3ab9a14fd.swf&moduleName=vi…» 
+  3: '97321ad42af97bee825988d3ab9a14fd.swf' 
+  4: 'videoconf1' 
+  5: '/97321ad42af97bee825988d3ab9a14fd' 
+  6: 'files' 
+  7: 'public' 
+  8: 1 
+  9: 0 
+  10: 0 
+  11: 354 
+  12: 590 
+  13: 20 
+  14: 354 
+  15: 590 
+  16: 100 
+  17: '97321ad42af97bee825988d3ab9a14fd.swf1464528901162' 
+  18: 'DR600GW-HD_Manual_EN_WEB_Ver.1.01_140704.pdf' 
+  19: true 
+  20: 1 
+  21: null 
+  22: 0 
+  23: 0 
+  24: 0 
+  25: 354 
+  26: 590 
+  27: 'swfpresentationobject_1464528901162' 
+
+					 */
+					FileItem fi = (FileItem)o;
+					int width = 0, height = 0;
+					if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
+						width = fi.getFlvWidth();
+						height = fi.getFlvHeight();
+					}
+					String fuid = UUID.randomUUID().toString();
+					String url = urlFor(new RoomSwfResourceReference(), new PageParameters().add("id", fi.getId()).add("uid", getClient().getUid())).toString();
+					getBean(ScopeApplicationAdapter.class).sendVarsByWhiteboardId(Arrays.asList(
+							"swf" // 0
+							, url // urlname
+							, "--dummy--" // baseurl
+							, fi.getHash() // fileName //3
+							, "--dummy--" // moduleName //4
+							, "--dummy--" // parentPath //5
+							, "--dummy--" // room //6
+							, "--dummy--" // domain //7
+							, 1 // slideNumber //8
+							, 0 // innerx //9
+							, 0 // innery //10
+							, width // innerwidth //11
+							, height // innerheight //12
+							, 20 // zoomlevel //13
+							, width // initwidth //14
+							, height // initheight //15
+							, 100 // currentzoom //16 FIXME TODO
+							, fuid // uniquObjectSyncName //17
+							, fi.getName() // standardFileName //18
+							, true // fullFit //19 FIXME TODO
+							, 1 // zIndex //-8 FIXME TODO
+							, null //-7
+							, 0 // this.counter //-6 FIXME TODO
+							, 0 // posx //-5
+							, 0 // posy //-4
+							, width // width //-3
+							, height // height //-2
+							, fuid // this.currentlayer.name //-1
+							), activeWbId);
 				}
 			}
 		};
 		room.add(wbArea.add(new SwfPanel("whiteboard", r.getId(), getClient().getUid())));
-		room.add(aab);
+		room.add(aab, activeWb);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
 		room.add(activities = new ActivitiesPanel("activities", this));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
@@ -338,31 +425,9 @@ public class RoomPanel extends BasePanel {
 			Client c = getClient();
 			addUserToRoom(c.setRoomId(getRoom().getId()));
 			User u = getBean(UserDao.class).get(getUserId());
-			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
-				//admin user get superModerator level, no-one can kick him/her
-				c.getRights().add(Right.superModerator);
-			} else {
-				if (!r.isModerated() && 1 == getRoomClients(r.getId()).size()) {
-					//room is not moderated, first user is moderator!
-					c.getRights().add(Right.moderator);
-				}
-				//performing loop here to set possible 'superModerator' right
-				for (RoomModerator rm : r.getModerators()) {
-					if (getUserId().equals(rm.getUser().getId())) {
-						c.getRights().add(rm.isSuperModerator() ? Right.superModerator : Right.moderator);
-						break;
-					}
-				}
-				//no need to loop if client is moderator
-				if (!c.hasRight(Right.moderator) && !r.getRoomGroups().isEmpty()) {
-					for (RoomGroup rg : r.getRoomGroups()) {
-						GroupUser gu = getBean(GroupUserDao.class).getByGroupAndUser(rg.getGroup().getId(), getUserId());
-						if (gu.isModerator()) {
-							c.getRights().add(Right.moderator);
-							break;
-						}
-					}
-				}
+			Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+			if (rr != null) {
+				c.getRights().add(rr);
 			}
 		}
 	}
@@ -392,7 +457,7 @@ public class RoomPanel extends BasePanel {
 		return hasRight(userId, roomId, Right.moderator);
 	}
 	
-	public static boolean hasRight(long userId, long roomId, Client.Right r) {
+	public static boolean hasRight(long userId, long roomId, Right r) {
 		for (Client c : getRoomClients(roomId)) {
 			if (c.getUserId().equals(userId) && c.hasRight(r)) {
 				return true;
@@ -442,10 +507,11 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
+			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("setActiveWbId", activeWb, explicit(PARAM_WB_ID)), "setActiveWbId")));
 		}
 	}
 
-	public void requestRight(AjaxRequestTarget target, Client.Right right) {
+	public void requestRight(AjaxRequestTarget target, Right right) {
 		RoomMessage.Type reqType = null;
 		switch (right) {
 			case moderator:
@@ -510,7 +576,7 @@ public class RoomPanel extends BasePanel {
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && getClient().hasRight(Client.Right.share) && getSharingUser() == null;
+				&& r.isAllowRecording() && getClient().hasRight(Right.share) && getSharingUser() == null;
 	}
 	
 	public RoomSidebar getSidebar() {

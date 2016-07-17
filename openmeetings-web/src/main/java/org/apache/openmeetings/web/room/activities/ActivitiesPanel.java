@@ -33,12 +33,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
@@ -93,13 +93,13 @@ public class ActivitiesPanel extends BasePanel {
 							remove(id, target);
 							break;
 						case decline:
-							if (room.getClient().hasRight(Client.Right.moderator)) {
+							if (room.getClient().hasRight(Right.moderator)) {
 								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 							}
 							break;
 						case accept:
 							Client client = getOnlineClient(a.getUid());
-							if (room.getClient().hasRight(Client.Right.moderator) && client != null && roomId == client.getRoomId()) {
+							if (room.getClient().hasRight(Right.moderator) && client != null && roomId == client.getRoomId()) {
 								switch (a.getType()) {
 									case reqRightModerator:
 										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
@@ -152,7 +152,7 @@ public class ActivitiesPanel extends BasePanel {
 				case reqRightAv:
 				case reqRightMute:
 				case reqRightExclusive:
-					if (room.getClient().hasRight(Client.Right.moderator)) {
+					if (room.getClient().hasRight(Right.moderator)) {
 						accept.setVisible(true);
 						decline.setVisible(true);
 						break;

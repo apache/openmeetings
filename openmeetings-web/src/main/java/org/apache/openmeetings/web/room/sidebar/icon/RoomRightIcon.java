@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_CHANGE_RIGHT;
 
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
