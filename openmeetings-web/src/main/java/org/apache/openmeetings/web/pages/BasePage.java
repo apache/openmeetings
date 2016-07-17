@@ -100,7 +100,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
-		response.render(CssReferenceHeaderItem.forUrl(String.format("css/theme_om/jquery-ui-1.11.4.custom.%scss"
+		response.render(CssReferenceHeaderItem.forUrl(String.format("css/theme_om/jquery-ui.%scss"
 				, RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType() ? "" : "min.")));
 		if (isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));

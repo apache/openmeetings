@@ -35,7 +35,7 @@
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.4.2</commons-pool2.version>
-		<postgresql.version>9.4.1208.jre7</postgresql.version>
+		<postgresql.version>9.4.1209.jre7</postgresql.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>

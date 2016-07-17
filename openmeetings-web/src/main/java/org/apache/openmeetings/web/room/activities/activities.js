@@ -23,7 +23,7 @@ function activitiesClosed(activities) {
 function openActivities() {
 	var activities = $('#activities');
 	if (activitiesClosed(activities)) {
-		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 		$('.control.block', activities).removeClass('ui-state-highlight');
 		activities.animate({height: openedHeight}, 1000);
 	}
@@ -31,7 +31,7 @@ function openActivities() {
 function closeActivities() {
 	var activities = $('#activities');
 	if (!activitiesClosed(activities)) {
-		$('.control.block .ui-icon', activities).removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
+		$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
 		activities.animate({height: closedHeight}, 1000);
 	}
 }
