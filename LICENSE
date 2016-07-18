@@ -241,7 +241,6 @@ webapps/openmeetings/upload/*
 webapps/openmeetings/WEB-INF/classes/**
 webapps/openmeetings/WEB-INF/red5-web.properties
 webapps/openmeetings/WEB-INF/red5-web.xml
-webapps/openmeetings/WEB-INF/spring-mvc-servlet.xml
 webapps/openmeetings/WEB-INF/velocity.properties
 webapps/openmeetings/WEB-INF/web.xml
 
@@ -266,15 +265,18 @@ projects licensed under the Apache License 2.0:
 
 red5-*.jar
 webapps/openmeetings/screensharing/red5-*.jar
-commons-cli-jar-1.3.1.jar
+commons-daemon-1.0.15.jar
+install-service.bat
 red5.bat
 red5.sh
 red5-highperf.sh
 red5-highperf.bat
+red5.service
 red5-debug.sh
 red5-debug.bat
 red5-shutdown.sh
 red5-shutdown.bat
+uninstall-service.bat
 conf/access.properties
 conf/catalina.policy
 conf/context.xml
@@ -308,22 +310,8 @@ webapps/root/WEB-INF/red5-web.properties
 webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
-webapps/openmeetings/WEB-INF/lib/api-all-1.0.0-M33.jar
+webapps/openmeetings/WEB-INF/lib/api-all-1.0.0-RC1.jar
 webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
-webapps/openmeetings/WEB-INF/lib/batik-anim-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-awt-util-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-bridge-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-css-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-dom-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-ext-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-gvt-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-parser-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-script-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-svg-dom-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-svggen-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-transcoder-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-util-1.8.jar
-webapps/openmeetings/WEB-INF/lib/batik-xml-1.8.jar
 webapps/openmeetings/WEB-INF/lib/bndlib-2.3.0.jar
 webapps/openmeetings/WEB-INF/lib/commons-cli-1.3.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-collections4-4.1.jar
@@ -363,7 +351,7 @@ webapps/openmeetings/WEB-INF/lib/neethi-3.0.3.jar
 webapps/openmeetings/WEB-INF/lib/openjpa-2.4.1.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
-webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_6.jar
+webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
 webapps/openmeetings/WEB-INF/lib/org.osgi.core-4.3.1.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
 webapps/openmeetings/WEB-INF/lib/smslib-3.5.4.jar
@@ -374,13 +362,13 @@ webapps/openmeetings/WEB-INF/lib/wicket-core-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-datetime-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-devutils-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-extensions-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-culture-7.3.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-7.3.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-culture-7.3.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-7.3.1.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-javax-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-request-7.3.0.jar
@@ -392,10 +380,8 @@ webapps/openmeetings/WEB-INF/lib/wicket-util-7.3.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-webjars-0.5.3.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-4.4.1.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
-webapps/openmeetings/WEB-INF/lib/xalan-2.7.0.jar
 webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
-webapps/openmeetings/WEB-INF/lib/xml-apis-1.0.b2.jar
-webapps/openmeetings/WEB-INF/lib/xml-apis-ext-1.3.04.jar
+webapps/openmeetings/WEB-INF/lib/xercesImpl-2.11.0.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.1.jar
 
@@ -409,60 +395,53 @@ webapps/openmeetings/screenshare/httpcore-4.4.4.jar
 webapps/openmeetings/screenshare/mina-core-2.0.13.jar
 webapps/openmeetings/screenshare/quartz-2.2.1.jar
 webapps/openmeetings/screenshare/quartz-2.2.2.jar
-webapps/openmeetings/screenshare/red5-client-1.0.7-RELEASE.jar
-webapps/openmeetings/screenshare/red5-io-1.0.7-RELEASE.jar
-webapps/openmeetings/screenshare/red5-server-common-1.0.7-RELEASE.jar
-webapps/openmeetings/screenshare/spring-beans-4.2.5.RELEASE.jar
-webapps/openmeetings/screenshare/spring-context-4.2.5.RELEASE.jar
-webapps/openmeetings/screenshare/spring-core-4.2.5.RELEASE.jar
+webapps/openmeetings/screenshare/red5-*.jar
+webapps/openmeetings/screenshare/spring-*.jar
 
 lib/apache-mime4j-core-0.7.2.jar
 lib/apache-mime4j-dom-0.7.2.jar
 lib/boilerpipe-1.1.0.jar
-lib/cglib-nodep-2.2.2.jar
 lib/commons-beanutils-1.9.2.jar
 lib/commons-codec-1.10.jar
 lib/commons-collections-3.2.1.jar
-lib/commons-compress-1.10.jar
+lib/commons-compress-1.11.jar
 lib/commons-daemon-1.0.15.jar
 lib/commons-fileupload-1.3.1.jar
 lib/commons-io-2.5.jar
 lib/commons-lang3-3.4.jar
 lib/ehcache-core-2.6.11.jar
-lib/groovy-2.0.4.jar
+lib/geronimo-jpa_2.0_spec-1.1.jar
+lib/gson-2.2.4.jar
 lib/httpclient-4.5.2.jar
 lib/httpcore-4.4.4.jar
 lib/isoparser-1.1.17.jar
-lib/metadata-extractor-2.8.0.jar
+lib/jackson-core-2.7.1.jar
+lib/jempbox-1.8.12.jar
+lib/metadata-extractor-2.8.1.jar
 lib/mina-core-2.0.13.jar
 lib/mina-integration-beans-2.0.13.jar
+lib/mina-integration-jmx-2.0.13.jar
+lib/ognl-3.1.2.jar
+lib/pdfbox-debugger-2.0.1.jar
+lib/pdfbox-tools-2.0.1.jar
 lib/quartz-2.2.2.jar
 lib/red5-*.jar
-lib/spring-aop-4.2.5.RELEASE.jar
-lib/spring-beans-4.2.5.RELEASE.jar
-lib/spring-context-4.2.5.RELEASE.jar
-lib/spring-context-support-4.2.5.RELEASE.jar
-lib/spring-core-4.2.5.RELEASE.jar
-lib/spring-expression-4.2.5.RELEASE.jar
-lib/spring-jdbc-4.2.5.RELEASE.jar
-lib/spring-orm-4.2.5.RELEASE.jar
-lib/spring-tx-4.2.5.RELEASE.jar
-lib/spring-web-4.2.5.RELEASE.jar
-lib/spring-webmvc-4.2.5.RELEASE.jar
+lib/rome-1.5.1.jar
+lib/rome-utils-1.5.1.jar
+lib/spring-*.jar
 lib/tagsoup-1.2.1.jar
-lib/tika-core-1.11.jar
-lib/tika-parsers-1.11.jar
+lib/tika-core-1.13.jar
+lib/tika-parsers-1.13.jar
 lib/xercesImpl-2.11.0.jar
 lib/xml-apis-1.4.01.jar
 
-plugins/juli-over-slf4j-1.6.1.jar
-plugins/tomcat-embed-core.jar
-plugins/tomcat-embed-el.jar
-plugins/tomcat-embed-jasper.jar
-plugins/tomcat-embed-logging-juli.jar
-plugins/tomcat-embed-websocket-8.0.33.jar
-plugins/tomcatplugin-1.12.jar
-plugins/websocket-1.5.jar
+plugins/tomcat-embed-core-8.0.36.jar
+plugins/tomcat-embed-el-8.0.36.jar
+plugins/tomcat-embed-jasper-8.0.36.jar
+plugins/tomcat-embed-logging-juli-8.0.36.jar
+plugins/tomcat-embed-websocket-8.0.36.jar
+plugins/tomcatplugin-1.13.jar
+plugins/websocket-1.6.jar
 
 ======================================================================================================================
 
@@ -604,12 +583,12 @@ The GlassFish code released under the CDDL shall be governed by the laws of the 
 
 For SLF4J:
 
-webapps/openmeetings/screenshare/jcl-over-slf4j-1.7.18.jar
-webapps/openmeetings/screenshare/slf4j-api-1.7.18.jar
-lib/jcl-over-slf4j-1.7.18.jar
-lib/jul-to-slf4j-1.7.18.jar
-lib/log4j-over-slf4j-1.7.18.jar
-lib/slf4j-api-1.7.18.jar
+webapps/openmeetings/screenshare/jcl-over-slf4j-1.7.21.jar
+webapps/openmeetings/screenshare/slf4j-api-1.7.21.jar
+lib/jcl-over-slf4j-1.7.21.jar
+lib/jul-to-slf4j-1.7.21.jar
+lib/log4j-over-slf4j-1.7.21.jar
+lib/slf4j-api-1.7.21.jar
 
 Copyright (c) 2004-2008 QOS.ch
  All rights reserved.
@@ -1221,8 +1200,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND
 
  For Bouncy Castle:
  
- lib/bcprov-jdk15on-1.52.jar
- webapps/openmeetings/screenshare/bcprov-jdk15on-1.52.jar
+ lib/bcprov-jdk15on-1.54.jar
+ webapps/openmeetings/screenshare/bcprov-jdk15on-1.54.jar
 
  Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
 
@@ -1467,7 +1446,7 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 
-postgresql-9.4.1208.jre7.jar
+postgresql-9.4.1209.jre7.jar
 	Containing Project URL: http://jdbc.postgresql.org
 	
 	The PostgreSQL JDBC driver is distributed under the BSD license, same as the server. The simplest explanation of the licensing terms is that you can do whatever you want with the product and source code as long as you don't claim you wrote it or sue us. You should give it a read though, it's only half a page.
@@ -1578,15 +1557,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 For the components:
 
-webapps/openmeetings/screenshare/logback-classic-1.1.6.jar
-webapps/openmeetings/screenshare/logback-core-1.1.6.jar
+webapps/openmeetings/screenshare/logback-classic-1.1.7.jar
+webapps/openmeetings/screenshare/logback-core-1.1.7.jar
 lib/aspectjrt-1.8.2.jar
 lib/c3p0-0.9.1.1.jar
-lib/logback-access-1.1.6.jar
-lib/logback-classic-1.1.6.jar
-lib/logback-core-1.1.6.jar
+lib/logback-classic-1.1.7.jar
+lib/logback-core-1.1.7.jar
 lib/jruby-1.6.8.jar
-plugins/ecj-4.4.2.jar
+plugins/ecj-4.5.jar
 
 Eclipse Public License - v 1.0
 
@@ -1741,7 +1719,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ======================================================================================================================
 
-For ThreeTen library: threetenbp-1.3.1.jar
+For ThreeTen library: threetenbp-1.3.2.jar
 
  * Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos
  *
@@ -2320,7 +2298,9 @@ For lib/sysout-over-slf4j-1.0.2.jar
  Mozilla Public License 1.1 (MPL 1.1)
  http://www.mozilla.org/MPL/MPL-1.1.html
  
- For lib/juniversalchardet-1.0.3.jar
+ For
+ lib/juniversalchardet-1.0.3.jar
+ lib/javassist-3.11.0.GA.jar
  
                            MOZILLA PUBLIC LICENSE
                                 Version 1.1
