@@ -23,22 +23,12 @@
 	<!-- FamFam Icon Set -->
     <resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
 
-	<!-- Derivative from FamFam Icon Set, author solomax -->
-	<resource name="typing_rsc">
-		<frame src="resources/base0.png" />
-		<frame src="resources/base1.png" />
-		<frame src="resources/base2.png" />
-		<frame src="resources/base3.png" />
-	</resource>
-    
     <!-- APL author sebawagner -->
     <resource name="speaking" src="resources/speaking.png" />
     
     <!-- APL author sebawagner -->
     <resource name="lz_recorder_play" src="resources/webstart_play.png" />
 	
-    <include href="typing.lzx" />
-
 	<include href="whiteboard/" /> 
  	
    	<include href="popups/" />
