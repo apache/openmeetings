@@ -170,7 +170,7 @@ public class RoomPanel extends BasePanel {
 				Object o = component.getDefaultModelObject();
 				if (activeWbId > -1 && o instanceof FileItem) {
 					FileItem fi = (FileItem)o;
-					String url = urlFor(new RoomSwfResourceReference(), new PageParameters().add("id", fi.getId()).add("uid", getClient().getUid())).toString();
+					String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
 					getBean(ScopeApplicationAdapter.class)
 						.sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
 				}

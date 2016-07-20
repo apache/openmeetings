@@ -34,8 +34,12 @@
 .ui-icon.status-mod {
 	background-image: url(images/status-mod.png);
 }
-.top.room.menu.exit {
-	padding-left: 30px;
+.room.menu .ui-menu .ui-menu-item {
+	padding-left: 5px;
+	padding-right: 0;
+}
+.room.menu .top.room.menu.exit {
+	padding-left: 0;
 }
 .room.menu.right {
 	position: absolute;

@@ -67,18 +67,12 @@
         <![CDATA[
             if ($debug) Debug.write("addImageToLayer ",urlname);
         	
-	  		if ($debug) Debug.write("addImageToLayer urlname : ", canvas.getUrl() + 'DownloadHandler');
-			var src = canvas.getUrl() + 'DownloadHandler' + '?fileName=' + encodeURIComponent(fileName) + 
-				'&moduleName=' + moduleName +
-				'&parentPath=' + encodeURIComponent(parentPath) +
-				'&room_id=' + room + 
-				'&sid=' + canvas.sessionId;
-	
-	        if ($debug) Debug.write("addImageToLayer -src- ",src);
+			var downloadurl = canvas.getUrl() + urlname + "?uid=" + canvas.publicSID;
+	  		if ($debug) Debug.write("addImageToLayer urlname : ", downloadurl);
 			if ($debug) Debug.write("alterModus: ",alterModus);
 			
 	  		this.currentlayer = new lz.imageForDrawView(obj,{
-	  			src:src,refObj:this,name:nameing,x:posx,y:posy,
+	  			src: downloadurl,refObj:this,name:nameing,x:posx,y:posy,
 	  			remotewidth:width,remoteheight:height,
 	  			downloadurl:urlname,alterModus:alterModus,
 	  			baseurl:baseurl,fileName:fileName,moduleName:moduleName,

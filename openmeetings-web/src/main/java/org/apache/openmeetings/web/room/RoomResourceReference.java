@@ -33,13 +33,34 @@ import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
-public abstract class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
+public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
 	private static final long serialVersionUID = 1L;
+	public static final String DEFAULT_NAME = "wb-room-file";
+
+	public RoomResourceReference() {
+		super(DEFAULT_NAME);
+	}
 
 	public RoomResourceReference(String name) {
 		super(name);
 	}
 
+	@Override
+	protected String getMimeType(FileExplorerItem r) {
+		String mime = null;
+		switch (r.getType()) {
+			case Image:
+				mime = "image/jpeg";
+				break;
+			case Presentation:
+				mime = "application/x-shockwave-flash";
+				break;
+			default:
+				throw new RuntimeException("Not supported");
+		}
+		return mime;
+	}
+	
 	@Override
 	protected FileExplorerItem getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
@@ -53,14 +74,38 @@ public abstract class RoomResourceReference extends FileItemResourceReference<Fi
 		}
 		WebSession ws = WebSession.get();
 		if (id != null && ws.isSignedIn() && !Strings.isEmpty(uid) && getOnlineClient(uid) != null) {
-			//TODO ADDITIONALLY CHECK Rights !! and room !!
+			//FIXME TODO ADDITIONALLY CHECK Rights !! and room !!
 			return getBean(FileExplorerItemDao.class).get(id);
 		}
 		return null;
 	}
 
 	protected File getFile(FileExplorerItem r, String ext) {
-		File d = new File(OmFileHelper.getUploadFilesDir(), r.getHash());
-		return new File(d, String.format("%s.%s", r.getHash(), ext));
+		File result = null;
+		switch (r.getType()) {
+			case Image: {
+				result = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", r.getHash(), ext == null ? "jpg" : ext));
+			}
+				break;
+			case Presentation: {
+				File d = new File(OmFileHelper.getUploadFilesDir(), r.getHash());
+				result = new File(d, String.format("%s.%s", r.getHash(), ext == null ? "swf" : ext));
+			}
+				break;
+			default:
+				throw new RuntimeException("Not supported");
+		}
+		return result;
+	}
+
+	@Override
+	protected File getFile(FileExplorerItem r) {
+		return getFile(r, null);
+	}
+	
+	@Override
+	protected String getFileName(FileExplorerItem r) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

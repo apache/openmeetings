@@ -123,7 +123,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
-		// TODO Auto-generated method stub
+		if (log.isTraceEnabled()) {
+			log.trace("resultReceived:: {}", arg0);
+		}
 	}
 
 	@Override
@@ -1367,12 +1369,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String fuid = UUID.randomUUID().toString();
 		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
 		
+		String type = "n/a";
+		switch (fi.getType()) {
+			case Image:
+				type = "image";
+				break;
+			case Presentation:
+				type = "swf";
+				break;
+			default:
+		}
 		sendToWhiteboard(client, Arrays.asList(
 				"whiteboard"
 				, new Date()
 				, "draw"
 				, Arrays.asList(
-					"swf" // 0
+					type // 0
 					, url // urlname
 					, "--dummy--" // baseurl
 					, fi.getHash() // fileName //3
@@ -1661,8 +1673,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							if (filter(conn)) {
 								continue;
 							}
-							Object[] msg = newMessage instanceof Object[] ? (Object[])newMessage : new Object[] { newMessage };
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, msg, ScopeApplicationAdapter.this);
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 							count++;
 						}
 					}
