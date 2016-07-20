@@ -63,6 +63,7 @@
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	float: right;
+	padding: 0;
 }
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
@@ -132,6 +133,7 @@
 }
 .room.sidebar.left .user.list .user .user.actions .ui-icon {
 	margin-right: 2px;
+	margin-top: 0;
 }
 .audio-activity.ui-icon.speaking, .ui-icon.moderator-right.granted, .wb-right.ui-icon.granted
 , .screen-share-right.ui-icon.granted, .remote-control-right.ui-icon.granted, .exclsv-audio.ui-icon.granted
@@ -144,6 +146,14 @@
 .audio-activity.ui-icon {
 	opacity: 0.2;
 	background-image: url(images/speaking.png);
+}
+.typing-activity.ui-icon {
+	display: none;
+	width: 30px;
+	background-image: url(images/typing.gif);
+}
+.typing-activity.ui-icon.typing {
+	display: inline-block;
 }
 .private-chat.ui-icon {
 	background-image: url(images/page_edit.png);

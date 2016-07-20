@@ -128,10 +128,18 @@ function sipKeyUp(evt) {
 
 /***** functions required by SWF   ******/
 function audioActivity(uid, active) {
-	var u = $('#user' + uid + ' .user.actions .audio.activity.ui-icon');
+	var u = $('#user' + uid + ' .audio-activity.ui-icon');
 	if (active) {
 		u.addClass("speaking");
 	} else {
 		u.removeClass("speaking");
+	}
+}
+function typingActivity(uid, active) {
+	var u = $('#user' + uid + ' .typing-activity.ui-icon');
+	if (active) {
+		u.addClass("typing");
+	} else {
+		u.removeClass("typing");
 	}
 }
