@@ -49,6 +49,9 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected String getMimeType(FileExplorerItem r) {
 		String mime = null;
 		switch (r.getType()) {
+			case WmlFile:
+				mime = "application/xml";
+				break;
 			case Image:
 				mime = "image/jpeg";
 				break;
@@ -83,6 +86,10 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected File getFile(FileExplorerItem r, String ext) {
 		File result = null;
 		switch (r.getType()) {
+			case WmlFile: {
+				result = new File(OmFileHelper.getUploadWmlDir(), String.format("%s.%s", r.getHash(), ext == null ? "wml" : ext));
+			}
+				break;
 			case Image: {
 				result = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", r.getHash(), ext == null ? "jpg" : ext));
 			}
