@@ -264,8 +264,8 @@ public class RoomMenuPanel extends Panel {
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
-		actionsMenu.setEnabled(!r.isHidden(RoomElement.ActionMenu) && r.isAllowUserQuestions());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
+		actionsMenu.setEnabled((moder &&!r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
 		boolean shareVisible = room.screenShareAllowed();

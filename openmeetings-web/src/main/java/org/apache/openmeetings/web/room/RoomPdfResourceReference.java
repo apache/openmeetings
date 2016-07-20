@@ -30,7 +30,7 @@ public class RoomPdfResourceReference extends RoomResourceReference {
 	}
 
 	@Override
-	protected String getMimeType() {
+	protected String getMimeType(FileExplorerItem r) {
 		return "application/pdf";
 	}
 

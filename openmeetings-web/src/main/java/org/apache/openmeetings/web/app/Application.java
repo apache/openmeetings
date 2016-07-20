@@ -55,7 +55,7 @@ import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
-import org.apache.openmeetings.web.room.RoomSwfResourceReference;
+import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
@@ -150,7 +150,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
-		mountResource("/room/swf/${id}", new RoomSwfResourceReference());
+		mountResource("/room/file/${id}", new RoomResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 	}
 
