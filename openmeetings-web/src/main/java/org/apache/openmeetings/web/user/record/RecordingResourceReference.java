@@ -46,6 +46,13 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	}
 
 	@Override
+	public String getMimeType(Recording r) {
+		return getMimeType();
+	}
+	
+	public abstract String getMimeType();
+	
+	@Override
 	protected Recording getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue _id = params.get("id");
