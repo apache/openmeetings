@@ -1026,15 +1026,15 @@
 		<method name="sendVarsToMessage" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			//Debug.write("sendVarsToMessage : ",value);
+			//if ($debug) Debug.write("sendVarsToMessage : ", value);
 			if (value[0]=='audioActivity'){
 				//canvas.currentModApply
 				//if ($debug) Debug.write("audioActivity Client ",value[1],value[2]);
 				canvas.commonVideoViewContent.setSpeakingByPos(value[2], value[1]);
 				ExternalInterface.call("audioActivity", value[2], value[1]);
 			} else if (value[0]=='typingActivity'){
-				if ($debug) Debug.write("!!!typingActivity ::", value[1], canvas._videocontainer._participants.getUserListItemByPublicSID(value[2]));
-				canvas._videocontainer._participants.getUserListItemByPublicSID(value[2]).userTyping(value[1]);
+				if ($debug) Debug.write("!!!typingActivity ::", value[1], value[2]);
+				ExternalInterface.call("typingActivity", value[2], value[1]);
 			} else if (value[0]=='activateWhiteboard'){
 				// Not Used
 				//Debug.warn("Not Used");

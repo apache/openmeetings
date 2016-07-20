@@ -29,9 +29,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -170,77 +168,11 @@ public class RoomPanel extends BasePanel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (activeWbId > 0 && o instanceof FileItem) {
-					//target.appendJavaScript("");
-					/*
-  0: 'swf' 
-  1: «string(223)| 'http://localhost:5080/openmeetings/DownloadHandler?fileName=97321ad42af97bee825988d3ab9a14fd.swf&moduleName=vi…» 
-  2: «string(223)| 'http://localhost:5080/openmeetings/DownloadHandler?fileName=97321ad42af97bee825988d3ab9a14fd.swf&moduleName=vi…» 
-  3: '97321ad42af97bee825988d3ab9a14fd.swf' 
-  4: 'videoconf1' 
-  5: '/97321ad42af97bee825988d3ab9a14fd' 
-  6: 'files' 
-  7: 'public' 
-  8: 1 
-  9: 0 
-  10: 0 
-  11: 354 
-  12: 590 
-  13: 20 
-  14: 354 
-  15: 590 
-  16: 100 
-  17: '97321ad42af97bee825988d3ab9a14fd.swf1464528901162' 
-  18: 'DR600GW-HD_Manual_EN_WEB_Ver.1.01_140704.pdf' 
-  19: true 
-  20: 1 
-  21: null 
-  22: 0 
-  23: 0 
-  24: 0 
-  25: 354 
-  26: 590 
-  27: 'swfpresentationobject_1464528901162' 
-
-					 */
+				if (activeWbId > -1 && o instanceof FileItem) {
 					FileItem fi = (FileItem)o;
-					int width = 0, height = 0;
-					if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
-						width = fi.getFlvWidth();
-						height = fi.getFlvHeight();
-					}
-					String fuid = UUID.randomUUID().toString();
 					String url = urlFor(new RoomSwfResourceReference(), new PageParameters().add("id", fi.getId()).add("uid", getClient().getUid())).toString();
-					getBean(ScopeApplicationAdapter.class).sendVarsByWhiteboardId(Arrays.asList(
-							"swf" // 0
-							, url // urlname
-							, "--dummy--" // baseurl
-							, fi.getHash() // fileName //3
-							, "--dummy--" // moduleName //4
-							, "--dummy--" // parentPath //5
-							, "--dummy--" // room //6
-							, "--dummy--" // domain //7
-							, 1 // slideNumber //8
-							, 0 // innerx //9
-							, 0 // innery //10
-							, width // innerwidth //11
-							, height // innerheight //12
-							, 20 // zoomlevel //13
-							, width // initwidth //14
-							, height // initheight //15
-							, 100 // currentzoom //16 FIXME TODO
-							, fuid // uniquObjectSyncName //17
-							, fi.getName() // standardFileName //18
-							, true // fullFit //19 FIXME TODO
-							, 1 // zIndex //-8 FIXME TODO
-							, null //-7
-							, 0 // this.counter //-6 FIXME TODO
-							, 0 // posx //-5
-							, 0 // posy //-4
-							, width // width //-3
-							, height // height //-2
-							, fuid // this.currentlayer.name //-1
-							), activeWbId);
+					getBean(ScopeApplicationAdapter.class)
+						.sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
 				}
 			}
 		};

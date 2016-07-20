@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.remote.red5;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.IApplication;
@@ -49,6 +51,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -1342,24 +1345,78 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
 	 * @param whiteboardId - id of whiteboard parameters will be send to
+	 * @return 1 in case of no errors, -1 otherwise
 	 */
 	public int sendVarsByWhiteboardId(List<?> whiteboardObjParam, Long whiteboardId) {
 		try {
+			IConnection current = Red5.getConnectionLocal();
+			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			return sendToWhiteboard(client, whiteboardObjParam, whiteboardId);
+		} catch (Exception err) {
+			log.error("[sendVarsByWhiteboardId]", err);
+			return -1;
+		}
+	}
+	
+	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
+		int width = 0, height = 0;
+		if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
+			width = fi.getFlvWidth();
+			height = fi.getFlvHeight();
+		}
+		String fuid = UUID.randomUUID().toString();
+		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
+		
+		sendToWhiteboard(client, Arrays.asList(
+				"whiteboard"
+				, new Date()
+				, "draw"
+				, Arrays.asList(
+					"swf" // 0
+					, url // urlname
+					, "--dummy--" // baseurl
+					, fi.getHash() // fileName //3
+					, "--dummy--" // moduleName //4
+					, "--dummy--" // parentPath //5
+					, "--dummy--" // room //6
+					, "--dummy--" // domain //7
+					, 1 // slideNumber //8
+					, 0 // innerx //9
+					, 0 // innery //10
+					, width // innerwidth //11
+					, height // innerheight //12
+					, 20 // zoomlevel //13
+					, width // initwidth //14
+					, height // initheight //15
+					, 100 // currentzoom //16 FIXME TODO
+					, fuid // uniquObjectSyncName //17
+					, fi.getName() // standardFileName //18
+					, true // fullFit //19 FIXME TODO
+					, 1 // zIndex //-8 FIXME TODO
+					, null //-7
+					, 0 // this.counter //-6 FIXME TODO
+					, 0 // posx //-5
+					, 0 // posy //-4
+					, width // width //-3
+					, height // height //-2
+					, fuid // this.currentlayer.name //-1
+					)), wbId);
+	}
+	
+	private int sendToWhiteboard(Client client, List<?> wbObj, Long wbId) {
+		try {
+			// Check if this User is the Mod:
+			if (client == null) {
+				return -1;
+			}
+			
 			Map<Integer, Object> whiteboardObj = new HashMap<>();
 			int i = 0;
-			for (Object obj : whiteboardObjParam) {
+			for (Object obj : wbObj) {
 				whiteboardObj.put(i++, obj);
 			}
 
-			// Check if this User is the Mod:
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-			if (currentClient == null) {
-				return -1;
-			}
-
-			Long roomId = currentClient.getRoomId();
+			Long roomId = client.getRoomId();
 
 			// log.debug("***** sendVars: " + whiteboardObj);
 
@@ -1390,21 +1447,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					whiteboardTempObj.put(3, tempActionObject);
 
-					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, whiteboardId);
+					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, wbId);
 				}
 			} else {
-				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, whiteboardId);
+				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
 			}
 
 			Map<String, Object> sendObject = new HashMap<String, Object>();
-			sendObject.put("id", whiteboardId);
-			sendObject.put("param", whiteboardObjParam);
+			sendObject.put("id", wbId);
+			sendObject.put("param", wbObj);
 
 			boolean showDrawStatus = getWhiteboardDrawStatus();
 
-			sendMessageToCurrentScope("sendVarsToWhiteboardById", new Object[]{showDrawStatus ? currentClient : null, sendObject}, false);
+			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[]{showDrawStatus ? client : null, sendObject});
 		} catch (Exception err) {
-			log.error("[sendVarsByWhiteboardId]", err);
+			log.error("[sendToWhiteboard]", err);
+			return -1;
 		}
 		return 1;
 	}
@@ -1603,7 +1661,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							if (filter(conn)) {
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
+							Object[] msg = newMessage instanceof Object[] ? (Object[])newMessage : new Object[] { newMessage };
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, msg, ScopeApplicationAdapter.this);
 							count++;
 						}
 					}
