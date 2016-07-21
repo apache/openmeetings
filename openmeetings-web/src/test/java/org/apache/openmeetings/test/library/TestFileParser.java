@@ -25,20 +25,16 @@ import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestFileParser extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestFileParser.class, webAppRootKey);
 
-	@Autowired
-	private LibraryWmlLoader libraryWmlLoader;
-	
 	@Test
 	public void testLoadWmlFile(){
 		
 		try {
 			
-			libraryWmlLoader.loadWmlFile("filename1");
+			LibraryWmlLoader.loadWmlFile("filename1");
 			
 		} catch (Exception err) {
 			

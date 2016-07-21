@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static org.apache.openmeetings.util.OmFileHelper.WML_EXTENSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -38,13 +39,11 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 public class LibraryDocumentConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, webAppRootKey);
 	
-	private static final String fileExt = ".wml";
-	
 	public static String writeToLocalFolder(String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
 		try {
 			log.debug("filePath: " + OmFileHelper.getUploadWmlDir().getCanonicalPath());
 			
-			File file = new File(OmFileHelper.getUploadWmlDir(), fileName + fileExt);
+			File file = new File(OmFileHelper.getUploadWmlDir(), fileName + WML_EXTENSION);
 			
 			if (file.exists()){
 				return "-20";
