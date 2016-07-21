@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static org.apache.openmeetings.util.OmFileHelper.WML_EXTENSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.BufferedReader;
@@ -27,11 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.openmeetings.util.OmFileHelper;
-import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -40,14 +39,12 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryWmlLoader {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
-	private static final String fileExt = ".wml";
 	
-	@SuppressWarnings({ "rawtypes" })
-	public ArrayList loadWmlFile(String fileName){
+	public static List<?> loadWmlFile(String fileName){
 		try {
 			String name = fileName;
-			if (!name.endsWith(fileExt)) {
-				name += fileExt;
+			if (!name.endsWith(WML_EXTENSION)) {
+				name += WML_EXTENSION;
 			}
 			File file = new File(OmFileHelper.getUploadWmlDir(), name);
 			log.debug("filepathComplete: " + file);
@@ -58,7 +55,7 @@ public class LibraryWmlLoader {
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
 			{
-				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
+				List<?> lMapList = (List<?>) xStream.fromXML(reader);
 				
 				return lMapList;
 			}
@@ -66,185 +63,6 @@ public class LibraryWmlLoader {
 			log.error("loadWmlFile",err);
 		}
 		
-		return null;
+		return new ArrayList<>();
 	}
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	@SuppressWarnings({ "unused", "rawtypes" })
-	private static void createListObjectPaintByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {
-			
-			LinkedHashMap<Integer,LinkedHashMap> pointMap = new LinkedHashMap<Integer,LinkedHashMap>();
-			Element pointElements = paintElement.element("points");
-			Integer k = 0;
-			
-			for ( Iterator i = pointElements.elementIterator( "point" ); i.hasNext(); ) {
-				Element pointElement = (Element) i.next();
-				LinkedHashMap<Integer,Object> singlePoint = new LinkedHashMap<Integer,Object>();
-				singlePoint.put(0, pointElement.getName());
-				singlePoint.put(1, Integer.valueOf(pointElement.attribute("val1").getText()));
-				singlePoint.put(2, Integer.valueOf(pointElement.attribute("val2").getText()));
-				singlePoint.put(3, Integer.valueOf(pointElement.attribute("val3").getText()));
-				singlePoint.put(4, Integer.valueOf(pointElement.attribute("val4").getText()));
-				pointMap.put(k, singlePoint);
-				log.debug("createListObjectPaintByNode"+singlePoint);
-				k++;
-			}
-			subMap.put(1, pointMap);
-
-			subMap.put(2, paintElement.element("fillstyle").getText());
-			subMap.put(3, Integer.valueOf(paintElement.element("linewidth").getText()));
-			subMap.put(4, Integer.valueOf(paintElement.element("strokestyle").getText()));
-			subMap.put(5, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(6, Float.valueOf(paintElement.element("x").getText()));
-			subMap.put(7, Float.valueOf(paintElement.element("y").getText()));
-			subMap.put(8, Float.valueOf(paintElement.element("width").getText()));
-			subMap.put(9, Float.valueOf(paintElement.element("height").getText()));
-			subMap.put(10, paintElement.element("layername").getText());		
-			
-		} catch (Exception err) {
-			log.error("createListObjectPaintByNode",err);
-		}
-	}
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	public void createListObjectLetterByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {
-
-			subMap.put(1, paintElement.element("textforfield").getText());
-			subMap.put(2, Integer.valueOf(paintElement.element("fgcolor").getText()));
-			subMap.put(3, Integer.valueOf(paintElement.element("fontsize").getText()));
-			subMap.put(4, paintElement.element("fontstyle").getText());
-			subMap.put(5, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(6, Float.valueOf(paintElement.element("x").getText()));
-			subMap.put(7, Float.valueOf(paintElement.element("y").getText()));			
-			subMap.put(8, Float.valueOf(paintElement.element("width").getText()));		
-			subMap.put(9, Float.valueOf(paintElement.element("height").getText()));		
-			subMap.put(10, paintElement.element("layername").getText());
-			
-		} catch (Exception err) {
-			log.error("createListObjectLetterByNode",err);
-		}
-	}	
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	public void createListObjectImageByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {
-
-			subMap.put(1, paintElement.element("urlname").getText());
-			subMap.put(2, paintElement.element("baseurl").getText());
-			subMap.put(3, paintElement.element("filename").getText());
-			subMap.put(4, paintElement.element("modulename").getText());
-			subMap.put(5, paintElement.element("parentpath").getText());
-			subMap.put(6, paintElement.element("room").getText());
-			subMap.put(7, paintElement.element("domain").getText());
-			subMap.put(8, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(9, Float.valueOf(paintElement.element("x").getText()));
-			subMap.put(10, Float.valueOf(paintElement.element("y").getText()));
-			subMap.put(11, Float.valueOf(paintElement.element("width").getText()));
-			subMap.put(12, Float.valueOf(paintElement.element("height").getText()));
-			subMap.put(13, paintElement.element("layername").getText());		
-			
-		} catch (Exception err) {
-			log.error("createListObjectImageByNode",err);
-		}
-	}	
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	public void createListObjectObjecByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {	
-			
-			subMap.put(1, paintElement.element("fillstyle").getText());
-			subMap.put(2, paintElement.element("linewidth").getText());
-			subMap.put(3, Integer.valueOf(paintElement.element("strokestyle").getText()));
-			subMap.put(4, Float.valueOf(paintElement.element("startx").getText()));
-			subMap.put(5, Float.valueOf(paintElement.element("starty").getText()));
-			subMap.put(6, Float.valueOf(paintElement.element("endx").getText()));
-			subMap.put(7, Float.valueOf(paintElement.element("endy").getText()));
-			subMap.put(8, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(9, Float.valueOf(paintElement.element("x").getText()));
-			subMap.put(10, Float.valueOf(paintElement.element("y").getText()));
-			subMap.put(11, Float.valueOf(paintElement.element("width").getText()));
-			subMap.put(12, Float.valueOf(paintElement.element("height").getText()));
-			subMap.put(13, paintElement.element("layername").getText());
-			
-		} catch (Exception err) {
-			log.error("createListObjectObjecByNode",err);
-		}
-	}		
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	public void createListObjectRectAndEllipseByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {	
-			
-			subMap.put(1, Integer.valueOf(paintElement.element("stroke").getText()));
-			subMap.put(2, paintElement.element("line").getText());
-			subMap.put(3, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(4, Float.valueOf(paintElement.element("x").getText()));		
-			subMap.put(5, Float.valueOf(paintElement.element("y").getText()));
-			subMap.put(6, Float.valueOf(paintElement.element("width").getText()));
-			subMap.put(7, Float.valueOf(paintElement.element("height").getText()));
-			subMap.put(8, paintElement.element("layername").getText());
-
-		} catch (Exception err) {
-			log.error("createListObjectObjecByNode",err);
-		}
-	}
-	
-	/**
-	 * @deprecated
-	 * @param paintElement
-	 * @param subMap
-	 */
-	public void createListObjectSWFByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
-		try {
-
-			subMap.put(1, paintElement.element("urlname").getText());
-			subMap.put(2, paintElement.element("baseurl").getText());
-			subMap.put(3, paintElement.element("filename").getText());
-			subMap.put(4, paintElement.element("modulename").getText());
-			subMap.put(5, paintElement.element("parentpath").getText());
-			subMap.put(6, paintElement.element("room").getText());
-			subMap.put(7, paintElement.element("domain").getText());
-			subMap.put(8, Integer.valueOf(paintElement.element("slideNumber").getText()));
-			subMap.put(9, Float.valueOf(paintElement.element("innerx").getText()));
-			subMap.put(10, Float.valueOf(paintElement.element("innery").getText()));
-			subMap.put(11, Float.valueOf(paintElement.element("innerwidth").getText()));
-			subMap.put(12, Float.valueOf(paintElement.element("innerheight").getText()));
-			subMap.put(13, Integer.valueOf(paintElement.element("zoomlevel").getText()));
-			subMap.put(14, Float.valueOf(paintElement.element("initwidth").getText()));
-			subMap.put(15, Float.valueOf(paintElement.element("initheight").getText()));
-			subMap.put(16, Integer.valueOf(paintElement.element("currentzoom").getText()));
-			subMap.put(17, Integer.valueOf(paintElement.element("counter").getText()));
-			subMap.put(18, Float.valueOf(paintElement.element("x").getText()));
-			subMap.put(19, Float.valueOf(paintElement.element("y").getText()));
-			subMap.put(20, Float.valueOf(paintElement.element("width").getText()));
-			subMap.put(21, Float.valueOf(paintElement.element("height").getText()));
-			subMap.put(22, paintElement.element("layername").getText());		
-			
-		} catch (Exception err) {
-			log.error("createListObjectImageByNode",err);
-		}
-	}		
-	
 }
