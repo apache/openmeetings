@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 
+import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -170,9 +171,12 @@ public class RoomPanel extends BasePanel {
 				Object o = component.getDefaultModelObject();
 				if (activeWbId > -1 && o instanceof FileItem) {
 					FileItem fi = (FileItem)o;
-					String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
-					getBean(ScopeApplicationAdapter.class)
-						.sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
+					if (fi.getType() == FileItem.Type.WmlFile) {
+						getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
+					} else {
+						String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
+						getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
+					}
 				}
 			}
 		};

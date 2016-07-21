@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryChartLoader {
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, webAppRootKey);
 
     private static final String fileExt = ".xchart";
 

@@ -1471,7 +1471,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			boolean showDrawStatus = getWhiteboardDrawStatus();
 
-			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[]{showDrawStatus ? client : null, sendObject});
+			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[] { showDrawStatus ? client : null, sendObject });
 		} catch (Exception err) {
 			log.error("[sendToWhiteboard]", err);
 			return -1;
