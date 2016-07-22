@@ -136,7 +136,7 @@
 	
 		var ratio = this.flv_width / this.flv_height;
 		var t = {};
-		var area = {height: this.height - 62, width: parent.width - 1}
+		var area = {height: parent.height - 62, width: parent.width - 1}
 		
 		//max height of container is new height of video;
 		//calc new width and x-position of video
