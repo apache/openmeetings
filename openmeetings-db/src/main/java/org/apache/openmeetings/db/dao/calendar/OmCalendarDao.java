@@ -44,6 +44,17 @@ public class OmCalendarDao {
         return em.createNamedQuery("getCalendars", OmCalendar.class).getResultList();
     }
 
+    /**
+     * Return all the Calendars that belong to the User.
+     * @param userId User ID to whom the calendars belong.
+     * @return List of Calendars
+     */
+    public List<OmCalendar> get(Long userId){
+        return em.createNamedQuery("getCalendarbyUser", OmCalendar.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
     public OmCalendar update(OmCalendar c){
         if(c.getId() == null){
             em.persist(c);

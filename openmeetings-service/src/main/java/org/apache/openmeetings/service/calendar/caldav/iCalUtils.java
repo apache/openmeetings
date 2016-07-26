@@ -94,6 +94,7 @@ public class iCalUtils {
      */
     public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar,
                                                   String etag){
+        if(calendar == null) return a;
         Component event = calendar.getComponent(Component.VEVENT);
         TimeZone tz = parseTimeZone(calendar, a.getOwner());
 

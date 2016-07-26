@@ -51,8 +51,6 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
     public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
             SyncReportInfo.NAMESPACE);
 
-    private List<String> currenthrefs = new ArrayList<>();
-
     public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
         super(path, calendar, client, appointmentDao);
     }
@@ -73,6 +71,8 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
             client.executeMethod(syncMethod);
 
             if(syncMethod.succeeded()){
+
+                List<String> currenthrefs = new ArrayList<>();
 
                 //Map of Href and the Appointments, belonging to it.
                 Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
@@ -110,11 +110,10 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                     }
                 }
 
-                if(!additionalSyncNeeded) {
-                    MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-                            calendar, client, appointmentDao);
-                    multigetHandler.updateItems();
-                }
+
+                MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
+                        calendar, client, appointmentDao);
+                multigetHandler.updateItems();
 
                 //Set the new token
                 calendar.setToken(syncMethod.getResponseSynctoken());

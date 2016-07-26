@@ -29,7 +29,8 @@ import javax.persistence.*;
 @Table(name = "om_calendar")
 @NamedQueries({
         @NamedQuery(name = "getCalendars", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false ORDER BY c.id"),
-        @NamedQuery(name = "getCalendarbyUser", query = "SELECT c FROM OmCalendar c WHERE c.owner.id = :userId")
+        @NamedQuery(name = "getCalendarbyUser", query = "SELECT c FROM OmCalendar c" +
+                " WHERE c.deleted = false AND c.owner.id = :userId ORDER BY c.id")
         , @NamedQuery(name = "getAppointmentsbyCalendarinRange",
             query="SELECT a FROM Appointment a "
                 + "WHERE a.deleted = false "
@@ -72,12 +73,6 @@ public class OmCalendar implements IDataProviderEntity{
     @Column(name = "sync_type")
     @Enumerated(EnumType.STRING)
     private SyncType syncType = SyncType.NONE;
-
-    @Column(name = "login")
-    private String login;
-
-    @Column(name = "password")
-    private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = true)
@@ -137,22 +132,6 @@ public class OmCalendar implements IDataProviderEntity{
         this.syncType = syncType;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public User getOwner() {
         return owner;
     }
@@ -163,7 +142,6 @@ public class OmCalendar implements IDataProviderEntity{
 
     public String toString(){
         return "Calendar [ id=" + id + ", title=" + title + ", token=" + token + ", href="
-                + href + ", SyncType=" + syncType + ", deleted=" + deleted + ", login=" + login
-                + ", owner=" + owner + " ]";
+                + href + ", SyncType=" + syncType + ", deleted=" + deleted + ", owner=" + owner + " ]";
     }
 }

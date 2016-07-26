@@ -22,6 +22,7 @@ import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.DavServletResponse;
@@ -50,7 +51,6 @@ import org.w3c.dom.Element;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,14 +58,14 @@ import java.util.List;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 /**
- * Class which does syncing for one Calendar.
+ * Class which does syncing and provides respective API's required for performing CalDAV Operations.
  */
-public class CalendarManager {
-    private static final Logger log = Red5LoggerFactory.getLogger(CalendarManager.class, webAppRootKey);
+public class AppointmentManager {
+    private static final Logger log = Red5LoggerFactory.getLogger(AppointmentManager.class, webAppRootKey);
 
     private String path = null;
 
-    private HttpClient client = null;
+    private HttpClient client;
 
     @Autowired
     private OmCalendarDao calendarDao;
@@ -73,34 +73,27 @@ public class CalendarManager {
     private AppointmentDao appointmentDao;
 
     /**
-     * Returns <code>HttpClient </code> which already exists, does not set <code>HostConfiguration</code>.
+     * Returns the HttpClient which already exists, or creates a new one, if null.
      * @return HttpClient object that was created.
      */
-    private HttpClient getHttpClient(OmCalendar calendar){
-        if(client != null)
-            return client;
-
-        HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-        client = new HttpClient(connectionManager);
-        client.getState().setCredentials(AuthScope.ANY, getCredentials(calendar));
-        return client;
+    public void createHttpClient() {
+        if(client == null){
+            HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+            client = new HttpClient(connectionManager);
+            HttpConnectionManagerParams params = new HttpConnectionManagerParams();
+            int maxHostConnections = 10;
+            params.setMaxConnectionsPerHost(client.getHostConfiguration(), maxHostConnections);
+            client.getHttpConnectionManager().setParams(params);
+        }
     }
 
-    private HttpClient getHttpClient(String href, OmCalendar calendar) throws URISyntaxException {
-        client = getHttpClient(calendar);
+    public void getHttpClient(OmCalendar calendar) throws URISyntaxException {
+        createHttpClient();
 
-        URI temp = new URI(href);
+        URI temp = new URI(calendar.getHref());
         path = ensureTrailingSlash(temp.getPath());
-
         int port = temp.getPort() != -1 ? temp.getPort() : (temp.getScheme().endsWith("s") ? 443: 80);
         client.getHostConfiguration().setHost(temp.getHost(), port, temp.getScheme());
-
-        HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-        int maxHostConnections = 5;
-        params.setMaxConnectionsPerHost(client.getHostConfiguration(), maxHostConnections);
-        client.getHttpConnectionManager().setParams(params);
-
-        return client;
     }
 
     private String ensureTrailingSlash(String str){
@@ -110,9 +103,38 @@ public class CalendarManager {
             return str + "/";
     }
 
-    private Credentials getCredentials(OmCalendar calendar){
-        return new UsernamePasswordCredentials(calendar.getLogin(),
-                calendar.getPassword());
+    public void provideCredentials(OmCalendar calendar, Credentials credentials) throws URISyntaxException {
+        if(!Strings.isEmpty(calendar.getHref()) && credentials != null){
+            createHttpClient();
+
+            URI temp = new URI(calendar.getHref());
+            path = ensureTrailingSlash(temp.getPath());
+
+            int port = temp.getPort() != -1 ? temp.getPort() : (temp.getScheme().endsWith("s") ? 443: 80);
+            client.getHostConfiguration().setHost(temp.getHost(), port, temp.getScheme());
+
+            client.getState().setCredentials(new AuthScope(temp.getHost(), port),
+                    credentials);
+        }
+    }
+
+    public boolean testConnection(OmCalendar calendar){
+        OptionsMethod optionsMethod = null;
+        try {
+            getHttpClient(calendar);
+            optionsMethod = new OptionsMethod(path);
+            optionsMethod.setRequestHeader("Accept", "*/*");
+            client.executeMethod(optionsMethod);
+            int status = optionsMethod.getStatusCode();
+            if(status == DavServletResponse.SC_OK || status == DavServletResponse.SC_NO_CONTENT)
+                return true;
+        } catch (Exception e) {
+            log.error("Error executing HeadMethod.");
+        } finally {
+            if(optionsMethod != null)
+                optionsMethod.releaseConnection();
+        }
+        return false;
     }
 
     /**
@@ -132,61 +154,59 @@ public class CalendarManager {
         calendarDao.delete(calendar);
     }
 
+    public List<OmCalendar> getCalendars(){ return calendarDao.get(); }
+
+    public List<OmCalendar> getCalendars(Long userid) { return calendarDao.get(userid); }
+
     /**
      * Function which when called performs syncing based on the type of Syncing detected.
      * @param calendar Calendar who's sync has to take place
      */
-    public void syncItem(OmCalendar calendar){
-        try {
-            getHttpClient(calendar.getHref(), calendar);
-        } catch (URISyntaxException e){
-            log.error("Unable to parse href for Calendar ID: " + calendar.getId());
-            return;
-        }
+    public void syncItem(OmCalendar calendar) {
 
         if(calendar.getSyncType() != SyncType.NONE) {
 
             SyncHandler syncHandler;
+            try {
+                getHttpClient(calendar);
 
-            switch (calendar.getSyncType()) {
-                case WEBDAV_SYNC:
-                    syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao);
-                    break;
-                case CTAG:
-                    syncHandler = new CtagHandler(path, calendar, client, appointmentDao);
-                    break;
-                case ETAG:
-                default: //Default is the EtagsHandler.
-                    syncHandler = new EtagsHandler(path, calendar, client, appointmentDao);
-                    break;
+                switch (calendar.getSyncType()) {
+                    case WEBDAV_SYNC:
+                        syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao);
+                        break;
+                    case CTAG:
+                        syncHandler = new CtagHandler(path, calendar, client, appointmentDao);
+                        break;
+                    case ETAG:
+                    default: //Default is the EtagsHandler.
+                        syncHandler = new EtagsHandler(path, calendar, client, appointmentDao);
+                        break;
+                }
+
+
+                syncHandler.updateItems();
+                calendarDao.update(calendar);
+            } catch (URISyntaxException e){
+                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             }
-
-
-            syncHandler.updateItems();
-            calendarDao.update(calendar);
         }
     }
 
     /**
      * Syncs all the calendars currrently present on the DB.
      */
-    public void syncItems(){
-        List<OmCalendar> calendars = calendarDao.get();
+    public void syncItems(Long userId){
+        List<OmCalendar> calendars = getCalendars(userId);
         for(OmCalendar calendar : calendars){
             syncItem(calendar);
         }
+        cleanupHttpClient();
     }
 
     /**
      * Function which finds all the calendars of the Principal URL of the calendar
      */
-    public void discoverCalendars(OmCalendar calendar) {
-        try {
-            getHttpClient(calendar.getHref(), calendar);
-        } catch (URISyntaxException e){
-            log.error("Unable to parse the href of the calendar");
-            return;
-        }
+    private void discoverCalendars(OmCalendar calendar) {
 
         if (calendar.getSyncType() == SyncType.NONE) {
             PropFindMethod propFindMethod = null;
@@ -196,9 +216,10 @@ public class CalendarManager {
                     calHomeSet = DavPropertyName.create("calendar-home-set", CalDAVConstants.NAMESPACE_CALDAV),
                     suppCalCompSet = DavPropertyName.create("supported-calendar-component-set", CalDAVConstants.NAMESPACE_CALDAV);
 
-
             //Find out whether it's a calendar or if we can find the calendar-home or current-user url
             try {
+                getHttpClient(calendar);
+
                 DavPropertyNameSet properties = new DavPropertyNameSet();
                 properties.add(curUserPrincipal);
                 properties.add(calHomeSet);
@@ -207,53 +228,34 @@ public class CalendarManager {
                 propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
                 client.executeMethod(propFindMethod);
 
-                if(propFindMethod.succeeded()){
-                    for(MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()){
+                if (propFindMethod.succeeded()) {
+                    for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
                         DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
                         DavProperty calhome = set.get(calHomeSet), curPrinci = set.get(curUserPrincipal),
-                                    resourcetype = set.get(DavPropertyName.RESOURCETYPE);
+                                resourcetype = set.get(DavPropertyName.RESOURCETYPE);
 
-                        if(checkCalendarResourceType(resourcetype)){
+                        if (checkCalendarResourceType(resourcetype)) {
                             //This is a calendar and thus initialize and return
                             initCalendar(calendar);
                             return;
                         }
 
                         //Else find all the calendars on the Principal and return.
-                        if(calhome != null) {
+                        if (calhome != null) {
                             //Calendar Home Path
-                            for(Object o : (Collection) calhome.getValue()){
-                                if(o instanceof Element){
-                                    Element e = (Element) o;
-                                    homepath = DomUtil.getTextTrim(e);
-                                }
-                            }
+                            homepath = getTextValuefromProperty(calhome);
 
                             break;
-                        } else if(curPrinci != null) {
+                        } else if (curPrinci != null) {
 
                             //Current User Principal Path
-                            for(Object o : (Collection) curPrinci.getValue()){
-                                if(o instanceof Element){
-                                    Element e = (Element) o;
-                                    userPath = DomUtil.getTextTrim(e);
-                                }
-                            }
+                            userPath = getTextValuefromProperty(curPrinci);
                             break;
                         }
                     }
-                }
+                } else return;
 
-            } catch (Exception e) {
-                log.error("Error executing PROPFIND Method, during Initializtion of Calendar.");
-                calendar.setSyncType(SyncType.NONE);
-            } finally {
-                if(propFindMethod != null)
-                    propFindMethod.releaseConnection();
-            }
-
-            try{
-                if(homepath == null && userPath != null) {
+                if (homepath == null && userPath != null) {
 
                     //If calendar home path wasn't set, then we get it
                     DavPropertyNameSet props = new DavPropertyNameSet();
@@ -267,29 +269,15 @@ public class CalendarManager {
                             DavProperty calhome = set.get(calHomeSet);
 
                             if (calhome != null) {
-
-                                for (Object o : (Collection) calhome.getValue()) {
-                                    if (o instanceof Element) {
-                                        Element e = (Element) o;
-                                        homepath = DomUtil.getTextTrim(e);
-                                    }
-                                }
-
+                                homepath = getTextValuefromProperty(calhome);
                                 break;
                             }
                         }
                     } else
                         return;
                 }
-            } catch (Exception e) {
-                log.error("Error running PROPFIND method.");
-            } finally {
-                if(propFindMethod != null)
-                    propFindMethod.releaseConnection();
-            }
 
-            try {
-                if(homepath != null) {
+                if (homepath != null) {
                     DavPropertyNameSet props = new DavPropertyNameSet();
                     props.add(DavPropertyName.RESOURCETYPE);
                     props.add(suppCalCompSet);
@@ -303,10 +291,10 @@ public class CalendarManager {
                         for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
                             boolean isVevent = false, isCalendar;
 
-                            DavPropertySet properties = response.getProperties(DavServletResponse.SC_OK);
-                            DavProperty p = properties.get(suppCalCompSet),
-                                    resourcetype = properties.get(DavPropertyName.RESOURCETYPE),
-                                    displayname = properties.get(DavPropertyName.DISPLAYNAME);
+                            DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+                            DavProperty p = set.get(suppCalCompSet),
+                                    resourcetype = set.get(DavPropertyName.RESOURCETYPE),
+                                    displayname = set.get(DavPropertyName.DISPLAYNAME);
 
                             isCalendar = checkCalendarResourceType(resourcetype);
 
@@ -330,8 +318,6 @@ public class CalendarManager {
 
                                 tempCalendar.setHref(client.getHostConfiguration().getHostURL() + response.getHref());
 
-                                tempCalendar.setLogin(calendar.getLogin());
-                                tempCalendar.setPassword(calendar.getPassword());
                                 tempCalendar.setDeleted(false);
                                 tempCalendar.setOwner(calendar.getOwner());
 
@@ -345,13 +331,34 @@ public class CalendarManager {
                     }
                 }
 
+            } catch (URISyntaxException e) {
+                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
-                log.error("Error executing PROPFIND method.");
+                log.error("Error executing PROPFIND Method, during Initialization of Calendar.");
+                calendar.setSyncType(SyncType.NONE);
             } finally {
-                if(propFindMethod != null)
+                if (propFindMethod != null)
                     propFindMethod.releaseConnection();
+                cleanupHttpClient();
             }
         }
+    }
+
+    private String getTextValuefromProperty(DavProperty property){
+        String value = null;
+
+        if (property != null) {
+
+            for (Object o : (Collection) property.getValue()) {
+                if (o instanceof Element) {
+                    Element e = (Element) o;
+                    value = DomUtil.getTextTrim(e);
+                    break;
+                }
+            }
+        }
+
+        return value;
     }
 
     /**
@@ -380,12 +387,15 @@ public class CalendarManager {
     /**
      * Function to initialize the Calendar on the type of syncing and whether it can be used or not.
      */
-    public void initCalendar(OmCalendar calendar){
+    private void initCalendar(OmCalendar calendar) {
+
         if(calendar.getToken() == null || calendar.getSyncType() == SyncType.NONE){
 
             PropFindMethod propFindMethod = null;
 
             try {
+                getHttpClient(calendar);
+
                 DavPropertyNameSet properties = new DavPropertyNameSet();
                 properties.add(DavPropertyName.RESOURCETYPE);
                 properties.add(DavPropertyName.DISPLAYNAME);
@@ -416,12 +426,16 @@ public class CalendarManager {
                         else
                             calendar.setSyncType(SyncType.ETAG);
                     }
+
+                    syncItem(calendar);
                 } else {
                     log.error("Error executing PROPFIND Method, with status Code: "
                             + propFindMethod.getStatusCode());
                     calendar.setSyncType(SyncType.NONE);
                 }
 
+            } catch (URISyntaxException e){
+                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
                 log.error("Error in doing initial Sync using PROPFIND Method.");
                 calendar.setSyncType(SyncType.NONE);
@@ -434,43 +448,27 @@ public class CalendarManager {
     }
 
     /**
-     * Convenience function to create/update a single Item.
+     * Function for create/updating multiple appointment on the server.
+     * Performs modification alongside of creation new events on the server.
      * @param appointment Appointment to create/update.
      */
-    public void updateSingleItem(Appointment appointment, Long calId){
-        this.updateMultipleItems(Collections.singletonList(appointment), calId);
-    }
-
-    /**
-     * Function for create/updating multiple appointment on the server. Performs modification alongside of creation
-     * new events on the server.
-     * @param appointments List of Appointments to create/update.
-     */
-    public void updateMultipleItems(List<Appointment> appointments, Long calId){
+    public String updateItem(Appointment appointment) {
         //Local Variables
-        iCalUtils utils = new iCalUtils();
-        CalendarOutputter calendarOutputter = new CalendarOutputter();
-        Calendar ical;
-        List<String> hrefs = new ArrayList<String>();
-        OmCalendar calendar = calendarDao.getCalendarbyId(calId);
+        OmCalendar calendar = appointment.getCalendar();
+        String href = null;
 
-        //Methods
-        PutMethod putMethod = null;
-        try {
-            getHttpClient(calendar.getHref(), calendar);
-        } catch (URISyntaxException e) {
-            log.error("Unable to parse href for calendar");
-            return;
-        }
+        if (calendar != null && calendar.getSyncType() != SyncType.NONE) {
 
-        //Store new Appointments on the server
-        for(Appointment appointment: appointments){
-
-            if(appointment.getCalendar() == null || appointment.getCalendar().getSyncType() == SyncType.NONE)
-                continue;
-
+            //Store new Appointment on the server
+            PutMethod putMethod = null;
             try {
-                ical = utils.parseAppointmenttoCalendar(appointment);
+                getHttpClient(calendar);
+
+                List<String> hrefs = null;
+                iCalUtils utils = new iCalUtils();
+                CalendarOutputter calendarOutputter = new CalendarOutputter();
+
+                Calendar ical = utils.parseAppointmenttoCalendar(appointment);
 
                 putMethod = new PutMethod();
                 putMethod.setRequestBody(ical);
@@ -491,66 +489,55 @@ public class CalendarManager {
 
                 client.executeMethod(putMethod);
 
-                if(putMethod.getStatusCode() == DavServletResponse.SC_CREATED ||
+                if (putMethod.getStatusCode() == DavServletResponse.SC_CREATED ||
                         putMethod.getStatusCode() == DavServletResponse.SC_NO_CONTENT) {
+                    href = putMethod.getPath();
+
                     //Check if the ETag header was returned.
                     Header etagh = putMethod.getResponseHeader("ETag");
-                    if(etagh == null)
-                        hrefs.add(appointment.getHref());
-                    else
+                    if (etagh == null)
+                        hrefs = Collections.singletonList(appointment.getHref());
+                    else {
                         appointment.setEtag(etagh.getValue());
+                        appointmentDao.update(appointment, appointment.getOwner().getId());
+                    }
                 }
 
-                //TODO: check the Owner part.
-                appointmentDao.update(appointment, appointment.getOwner().getId());
+                //Get new etags for the ones which didn't return an ETag header
+                MultigetHandler multigetHandler = new MultigetHandler(hrefs, true, path,
+                        calendar, client, appointmentDao);
+                multigetHandler.updateItems();
 
+            } catch (URISyntaxException e) {
+                log.error("Unable to parse href for calendar");
             } catch (Exception e) {
                 log.error("Unable to store the Appointment on the CalDAV server.");
             } finally {
-                if(putMethod != null) {
+                if (putMethod != null)
                     putMethod.releaseConnection();
-                    putMethod = null;
-                }
+                cleanupHttpClient();
             }
         }
 
-        //Get new etags for the ones which didn't return an ETag header
-        MultigetHandler multigetHandler = new MultigetHandler(hrefs, true, path,
-                calendarDao.getCalendarbyId(calId), client, appointmentDao);
-        multigetHandler.updateItems();
+        return href;
     }
 
     /**
-     * Convenience function to delete single item from the calendar specified.
+     * Delete Appointment on the CalDAV server.
+     * Delete's on the Server only if the ETag of the Appointment is the one on the server,
+     * i.e. only if the Event hasn't changed on the Server.
      * @param appointment Appointment to Delete
      */
-    public void deleteSingleItem(Appointment appointment, Long calId){
-        this.deleteMultipleItems(Collections.singletonList(appointment), calId);
-    }
+    public void deleteItem(Appointment appointment){
+        OmCalendar calendar = appointment.getCalendar();
 
-    /**
-     * Delete multiple Appointments from the Calendar specified on the server,
-     * as well as on the OM database.
-     * @param appointments List of Appointments to delete
-     */
-    public void deleteMultipleItems(List<Appointment> appointments, Long calId){
-
-        //HTTPClient Methods
-        DeleteMethod deleteMethod = new DeleteMethod("");
-        OmCalendar calendar = calendarDao.getCalendarbyId(calId);
-        try {
-            getHttpClient(calendar.getHref(), calendar);
-        } catch (URISyntaxException e) {
-            log.error("Unable to parse href for calendar.");
-            return;
-        }
-
-        for(Appointment appointment : appointments){
-            if(Strings.isEmpty(appointment.getHref())) return;
-
+        if (calendar != null && calendar.getSyncType() != SyncType.NONE
+                && !Strings.isEmpty(appointment.getHref())) {
+            DeleteMethod deleteMethod = null;
             try {
-                deleteMethod.setPath(appointment.getHref());
-                deleteMethod.setETag(appointment.getEtag());
+                getHttpClient(calendar);
+
+                deleteMethod = new DeleteMethod(appointment.getHref(), appointment.getEtag());
 
                 log.info("Deleting at location: " + appointment.getHref() + " with ETag: " + appointment.getEtag());
 
@@ -558,16 +545,18 @@ public class CalendarManager {
 
                 int status = deleteMethod.getStatusCode();
                 if(status == DavServletResponse.SC_NO_CONTENT
-                   || status == DavServletResponse.SC_OK
-                   || status == DavServletResponse.SC_NOT_FOUND)
+                        || status == DavServletResponse.SC_OK
+                        || status == DavServletResponse.SC_NOT_FOUND)
                     log.info("Successfully deleted appointment with id: " + appointment.getId());
 
-                //TODO: To correct the User Id.
-                appointmentDao.delete(appointment, appointment.getOwner().getId());
+            } catch (URISyntaxException e) {
+                log.error("Unable to parse href for calendar.");
             } catch (Exception e) {
                 log.error("Unable to execute DELETE Method on: " + appointment.getHref());
             } finally {
-                deleteMethod.releaseConnection();
+                if(deleteMethod != null)
+                    deleteMethod.releaseConnection();
+                cleanupHttpClient();
             }
         }
     }
@@ -577,8 +566,19 @@ public class CalendarManager {
      * @param property Property who's string value is to be returned.
      * @return String representation of the Property Value.
      */
-    public static String getTokenfromProperty(DavProperty property){
+    public static String getTokenFromProperty(DavProperty property){
         if(property == null) return null;
         return property.getValue().toString();
+    }
+
+    /**
+     * Clean up HttpClient session, since we use HttpClient Commons, this method has to be called.
+     * Shutsdown the connections and also the MultiThreadedHttpConnectionManager thread, before we remove the reference.
+     */
+    public void cleanupHttpClient() {
+        if (client != null) {
+            MultiThreadedHttpConnectionManager.shutdownAll();
+            client = null;
+        }
     }
 }

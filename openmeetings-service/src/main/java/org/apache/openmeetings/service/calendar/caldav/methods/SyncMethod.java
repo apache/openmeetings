@@ -38,7 +38,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  * @see SyncReportInfo for Request Report to be given as argument
  */
 public class SyncMethod extends DavMethodBase {
-    private static Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, webAppRootKey);
+    private static final Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, webAppRootKey);
 
     private MultiStatus multiStatus = null;
     private String synctoken = null;
@@ -55,7 +55,7 @@ public class SyncMethod extends DavMethodBase {
 
     /**
      * Used to add request header for Depth.
-     * @param depth
+     * @param depth Depth of the Request
      */
     private void parseDepth(int depth){
         addRequestHeader(new DepthHeader(depth));
@@ -63,7 +63,7 @@ public class SyncMethod extends DavMethodBase {
 
     /**
      * Set the Depth Header of the Sync Report.
-     * @param depth
+     * @param depth Depth of the Request
      */
     public void setDepth(int depth){
         parseDepth(depth);
@@ -71,7 +71,6 @@ public class SyncMethod extends DavMethodBase {
 
     /**
      * Implements the Report Method.
-     * @return
      */
     @Override
     public String getName() {
@@ -80,7 +79,6 @@ public class SyncMethod extends DavMethodBase {
 
     /**
      * @see DavMethodBase#isSuccess
-     * @param statusCode
      * @return Return true only when when Response is Multistatus.
      */
     @Override
@@ -117,8 +115,6 @@ public class SyncMethod extends DavMethodBase {
      * Overridden to process the sync-token. Adapted from DavMethodBase.
      * TODO: Fix this override.
      * @see DavMethodBase#processResponseBody(HttpState, HttpConnection)
-     * @param httpState
-     * @param httpConnection
      */
     protected void processResponseBody(HttpState httpState, HttpConnection httpConnection) {
         if(getStatusCode() == DavServletResponse.SC_MULTI_STATUS){

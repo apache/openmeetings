@@ -18,32 +18,35 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
-
-import java.util.Date;
-
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.calendar.Calendar;
+import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
+import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -51,9 +54,15 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.calendar.Calendar;
-import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
+import java.util.Date;
+import java.util.List;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 public class CalendarPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
@@ -69,7 +78,17 @@ public class CalendarPanel extends UserPanel {
 			refresh(target);
 		}
 	};
+    private AbstractAjaxTimerBehavior syncTimer = new AbstractAjaxTimerBehavior(Duration.minutes(3)) {
+        @Override
+        protected void onTimer(AjaxRequestTarget target) {
+            log.debug("CalDAV Syncing has begun");
+            syncCalendar(target);
+        }
+    };
 	private Calendar calendar;
+	private final CalendarDialog calendarDialog;
+    private AppointmentDialog dialog;
+	private final WebMarkupContainer calendarListContainer;
 	
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
@@ -87,6 +106,11 @@ public class CalendarPanel extends UserPanel {
 	
 	public void refresh(IPartialPageRequestHandler handler) {
 		calendar.refresh(handler);
+	}
+
+	//Reloads the Calendar List on Appointment Dialog and the list of Calendars
+	public void refreshCalendars(IPartialPageRequestHandler handler){
+		handler.add(dialog, calendarListContainer);
 	}
 	
 	Calendar getCalendar() {
@@ -112,7 +136,7 @@ public class CalendarPanel extends UserPanel {
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 		
-		final AppointmentDialog dialog = new AppointmentDialog("appointment", Application.getString(815)
+		dialog = new AppointmentDialog("appointment", Application.getString(815)
 				, this, new CompoundPropertyModel<Appointment>(getDefault()));
 		add(dialog);
 		
@@ -258,8 +282,68 @@ public class CalendarPanel extends UserPanel {
 		
 		form.add(calendar);
 		add(refreshTimer);
+        add(syncTimer);
+
+        calendarDialog = new CalendarDialog("calendarDialog", "Calendar User Dialog", this, new CompoundPropertyModel<OmCalendar>(getDefaultCalendar()));
+
+        add(calendarDialog);
+
+        calendarListContainer = new WebMarkupContainer("calendarListContainer");
+        calendarListContainer.setOutputMarkupId(true);
+        calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
+            @Override
+            protected List<OmCalendar> load() {
+                return getBean(AppointmentManager.class).getCalendars();
+            }
+        }) {
+
+            protected void populateItem(final ListItem<OmCalendar> item) {
+                item.setOutputMarkupId(true);
+                final OmCalendar calendar = item.getModelObject();
+				item.add(new Button("item", new PropertyModel<String>(calendar, "title")).add(new AjaxEventBehavior("click") {
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, calendar);
+						target.add(calendarDialog);
+					}
+				}));
+            }
+        });
+
+        add(new Button("syncCalendarButton").add(new AjaxEventBehavior("click") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                syncCalendar(target);
+            }
+        }));
+
+        add(new Button("submitCalendar").add(new AjaxEventBehavior("click") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR,getDefaultCalendar());
+                target.add(calendarDialog);
+            }
+        }));
+
+        add(calendarListContainer);
 	}
-	
+
+	private OmCalendar getDefaultCalendar(){
+		OmCalendar calendar = new OmCalendar();
+		calendar.setDeleted(false);
+		calendar.setOwner(getBean(UserDao.class).get(getUserId()));
+		calendar.setTitle("Default Calendar Title");
+		return calendar;
+	}
+
+	public void syncCalendar(AjaxRequestTarget target) {
+		calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.SYNC_CALENDAR, (OmCalendar) null);
+	}
+
+	public void updatedeleteAppointment(IPartialPageRequestHandler target, CalendarDialog.DIALOG_TYPE type, Appointment a){
+		calendarDialog.open(target, type, a);
+	}
+
 	private static Appointment getDefault() {
 		Appointment a = new Appointment();
 		a.setReminder(Reminder.ical); //TODO: Make configurable
@@ -267,5 +351,9 @@ public class CalendarPanel extends UserPanel {
 		a.setTitle(Application.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
+	}
+
+	public AppointmentManager getAppointmentManager(){
+		return getBean(AppointmentManager.class);
 	}
 }
