@@ -17,7 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<jnlp spec="1.0+" codebase="$codebase">
+<jnlp spec="6.0+" codebase="$codebase">
 	<information>
 		<title>$informationTitle</title>
 		<vendor>$applicationName</vendor>
