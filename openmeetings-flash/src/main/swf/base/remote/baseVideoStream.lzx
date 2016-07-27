@@ -182,7 +182,7 @@
 			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
 			//after re-syncing the stream
 			//this.setBuffer(0.1);
-			if ($debug) Debug.write("Play Stream "+streamName);
+			if ($debug) Debug.write("Play Stream '" + streamName + "'");
 			if (delay == 0) {
 			    this._ns.play(streamName);
 			} else {

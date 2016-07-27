@@ -240,14 +240,14 @@
 		</method>
 		
 		<handler name="onNetStatus" args="info">
-			if ($debug) Debug.write("onNetStatus ",info);
+			//if ($debug) Debug.write("onNetStatus ",info);
 			if (info.code ==  "NetStream.Play.Stop" ) {
 				if ($debug) Debug.write("-- stopStream");
 				parent.stopStream();
 			}
 		</handler>
 		<handler name="onMetaDataEvent" args="info">
-			if ($debug) Debug.warn("onMetaData ",info);
+			//if ($debug) Debug.warn("onMetaData ",info);
 			//if ($debug) Debug.write("parent.parent.deltaInSeconds ",Number(info.duration));
 			parent.deltaInSeconds = Number(info.duration);
 			parent.setDuration();
