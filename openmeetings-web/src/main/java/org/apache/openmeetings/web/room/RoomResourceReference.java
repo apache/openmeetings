@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 
@@ -36,6 +40,7 @@ import org.apache.wicket.util.string.Strings;
 public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_NAME = "wb-room-file";
+	private boolean preview = false;
 
 	public RoomResourceReference() {
 		super(DEFAULT_NAME);
@@ -53,10 +58,13 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 				mime = "application/xml";
 				break;
 			case Image:
-				mime = "image/jpeg";
+				mime = JPG_MIME_TYPE;
 				break;
 			case Presentation:
 				mime = "application/x-shockwave-flash";
+				break;
+			case Video:
+				mime = preview ? JPG_MIME_TYPE : FLV_MIME_TYPE;
 				break;
 			default:
 				throw new RuntimeException("Not supported");
@@ -68,6 +76,8 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected FileExplorerItem getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue _id = params.get("id");
+		StringValue _preview = params.get("preview");
+		preview = _preview.toBoolean(false);
 		String uid = params.get("uid").toString();
 		Long id = null;
 		try {
@@ -94,6 +104,10 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 				result = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", r.getHash(), ext == null ? "jpg" : ext));
 			}
 				break;
+			case Video: {
+				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? FLV_MIME_TYPE : JPG_EXTENTION));
+				break;
+			}
 			case Presentation: {
 				File d = new File(OmFileHelper.getUploadFilesDir(), r.getHash());
 				result = new File(d, String.format("%s.%s", r.getHash(), ext == null ? "swf" : ext));
@@ -112,7 +126,6 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	
 	@Override
 	protected String getFileName(FileExplorerItem r) {
-		// TODO Auto-generated method stub
-		return null;
+		return preview ? r.getPreviewImage() : r.getName();
 	}
 }

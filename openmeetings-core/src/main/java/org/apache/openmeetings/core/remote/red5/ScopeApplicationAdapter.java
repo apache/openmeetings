@@ -1377,6 +1377,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			case Presentation:
 				type = "swf";
 				break;
+			case Video:
+				type = "flv";
+				break;
 			default:
 		}
 		sendToWhiteboard(client, Arrays.asList(
