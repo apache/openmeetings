@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class JpgRecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	public String getMimeType() {
-		return "image/jpeg";
+		return JPG_MIME_TYPE;
 	}
 	
 	@Override

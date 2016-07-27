@@ -19,6 +19,8 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -77,7 +79,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			String name = "UPLOADFLV_" + fileExplorerItem.getId();
+			String name = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId();
 			File outputFullFlv = new File(getStreamsHibernateDir(), name + FLV_EXTENSION);
 
 			fileExplorerItem.setType(Type.Video);
@@ -102,8 +104,8 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getId() + ".jpg";
-			File outPutJpeg = new File(getStreamsHibernateDir(), name + ".jpg");
+			String hashFileFullNameJPEG = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId() + JPG_EXTENTION;
+			File outPutJpeg = new File(getStreamsHibernateDir(), name + JPG_EXTENTION);
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
