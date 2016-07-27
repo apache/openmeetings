@@ -71,12 +71,9 @@
 			if ($debug) Debug.write("deleteFileOrFolder: ",value);
 			parent.isLoaded = true;
 			
-			var downloadurl = canvas.getUrl()+'DownloadHandler?fileName=UPLOADFLV_'+parent.fileId+'.jpg'
-							+'&moduleName=lzRecorderApp&parentPath=&room_id='
-							+'&sid='+canvas.sessionId;
-			
+			var downloadurl = canvas.getUrl() + 'room/file/' + parent.fileId + '?uid='
+				+ canvas.publicSID + '&preview=true';
 			parent._content._preview.imagePreview.setAttribute("src", downloadurl)
-				
 			parent._content._preview.bringToFront();
 							
 			if (parent.sendInit) {
@@ -243,14 +240,14 @@
 		</method>
 		
 		<handler name="onNetStatus" args="info">
-			//if ($debug) Debug.write("onNetStatus ",info);
+			if ($debug) Debug.write("onNetStatus ",info);
 			if (info.code ==  "NetStream.Play.Stop" ) {
 				if ($debug) Debug.write("-- stopStream");
 				parent.stopStream();
 			}
 		</handler>
 		<handler name="onMetaDataEvent" args="info">
-			//if ($debug) Debug.warn("onMetaData ",info);
+			if ($debug) Debug.warn("onMetaData ",info);
 			//if ($debug) Debug.write("parent.parent.deltaInSeconds ",Number(info.duration));
 			parent.deltaInSeconds = Number(info.duration);
 			parent.setDuration();

@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -1360,15 +1361,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 	}
 	
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
-		int width = 0, height = 0;
+	private static Point getSize(FileItem fi) {
+		Point result = new Point(0, 0);
 		if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
-			width = fi.getFlvWidth();
-			height = fi.getFlvHeight();
+			result.x = fi.getFlvWidth();
+			result.y = fi.getFlvHeight();
 		}
+		return result;
+	}
+	
+	private static List<?> getWbObject(FileItem fi, String url) {
 		String fuid = UUID.randomUUID().toString();
-		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
-		
+		Point size = getSize(fi);
 		String type = "n/a";
 		switch (fi.getType()) {
 			case Image:
@@ -1377,45 +1381,78 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			case Presentation:
 				type = "swf";
 				break;
+			default:
+		}
+		return Arrays.asList(
+				type // 0
+				, url // urlname
+				, "--dummy--" // baseurl
+				, fi.getHash() // fileName //3
+				, "--dummy--" // moduleName //4
+				, "--dummy--" // parentPath //5
+				, "--dummy--" // room //6
+				, "--dummy--" // domain //7
+				, 1 // slideNumber //8
+				, 0 // innerx //9
+				, 0 // innery //10
+				, size.x // innerwidth //11
+				, size.y // innerheight //12
+				, 20 // zoomlevel //13
+				, size.x // initwidth //14
+				, size.y // initheight //15
+				, 100 // currentzoom //16 FIXME TODO
+				, fuid // uniquObjectSyncName //17
+				, fi.getName() // standardFileName //18
+				, true // fullFit //19 FIXME TODO
+				, 1 // zIndex //-8 FIXME TODO
+				, null //-7
+				, 0 // this.counter //-6 FIXME TODO
+				, 0 // posx //-5
+				, 0 // posy //-4
+				, size.x // width //-3
+				, size.y // height //-2
+				, fuid // this.currentlayer.name //-1
+				);
+	}
+	
+	private static List<?> getFlvWbObject(FileItem fi) {
+		String fuid = UUID.randomUUID().toString();
+		Point size = getSize(fi);
+		return Arrays.asList(
+				"flv" // 0: 'flv'
+				, fi.getId() // 1: 7
+				, fi.getName() // 2: 'BigBuckBunny_512kb.mp4'
+				, false // 3: false //playRemote
+				, size.x // 4: 416
+				, size.y // 5: 240
+				, fi.getOwnerId() // 6: 1 
+				, null // 7: null //TODO 
+				, 0 // 8: 0 //TODO
+				, 0 // 9: 0 //TODO
+				, 0 // 10: 0 //TODO
+				, 0 // 11: 749 //TODO
+				, 0 // 12: 739 //TODO
+				, fuid // 13: 'flv_1469602000351' 
+				);
+	}
+	
+	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
+		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
+		
+		List<?> wbObject = new ArrayList<>();
+		switch (fi.getType()) {
+			case Image:
+				wbObject = getWbObject(fi, url);
+				break;
+			case Presentation:
+				wbObject = getWbObject(fi, url);
+				break;
 			case Video:
-				type = "flv";
+				wbObject = getFlvWbObject(fi);
 				break;
 			default:
 		}
-		sendToWhiteboard(client, Arrays.asList(
-				"whiteboard"
-				, new Date()
-				, "draw"
-				, Arrays.asList(
-					type // 0
-					, url // urlname
-					, "--dummy--" // baseurl
-					, fi.getHash() // fileName //3
-					, "--dummy--" // moduleName //4
-					, "--dummy--" // parentPath //5
-					, "--dummy--" // room //6
-					, "--dummy--" // domain //7
-					, 1 // slideNumber //8
-					, 0 // innerx //9
-					, 0 // innery //10
-					, width // innerwidth //11
-					, height // innerheight //12
-					, 20 // zoomlevel //13
-					, width // initwidth //14
-					, height // initheight //15
-					, 100 // currentzoom //16 FIXME TODO
-					, fuid // uniquObjectSyncName //17
-					, fi.getName() // standardFileName //18
-					, true // fullFit //19 FIXME TODO
-					, 1 // zIndex //-8 FIXME TODO
-					, null //-7
-					, 0 // this.counter //-6 FIXME TODO
-					, 0 // posx //-5
-					, 0 // posy //-4
-					, width // width //-3
-					, height // height //-2
-					, fuid // this.currentlayer.name //-1
-					)), wbId);
+		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
 	}
 	
 	private int sendToWhiteboard(Client client, List<?> wbObj, Long wbId) {

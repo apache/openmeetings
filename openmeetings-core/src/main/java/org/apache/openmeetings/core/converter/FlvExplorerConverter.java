@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -104,8 +104,8 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId() + JPG_EXTENTION;
-			File outPutJpeg = new File(getStreamsHibernateDir(), name + JPG_EXTENTION);
+			String hashFileFullNameJPEG = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId() + JPG_EXTENSION;
+			File outPutJpeg = new File(getStreamsHibernateDir(), name + JPG_EXTENSION);
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
