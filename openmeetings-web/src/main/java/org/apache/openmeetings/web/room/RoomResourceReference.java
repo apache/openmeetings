@@ -19,7 +19,8 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OmFileHelper.FLV_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -105,7 +106,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 			}
 				break;
 			case Video: {
-				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? FLV_MIME_TYPE : JPG_EXTENTION));
+				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? JPG_EXTENSION : FLV_EXTENSION));
 				break;
 			}
 			case Presentation: {
