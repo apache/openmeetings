@@ -59,10 +59,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 public class EtagsHandler extends AbstractSyncHandler{
     private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, webAppRootKey);
 
-    private iCalUtils utils = new iCalUtils();
-
-    public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
-        super(path, calendar, client, appointmentDao);
+    public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, iCalUtils utils){
+        super(path, calendar, client, appointmentDao, utils);
     }
 
     @Override
@@ -168,7 +166,7 @@ public class EtagsHandler extends AbstractSyncHandler{
 
                     //Get the rest of the events through a Multiget Handler.
                     MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-                            calendar, client, appointmentDao);
+                            calendar, client, appointmentDao, utils);
                     return multigetHandler.updateItems();
                 }
                 else {

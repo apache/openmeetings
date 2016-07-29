@@ -49,8 +49,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -71,6 +69,8 @@ public class AppointmentManager {
     private OmCalendarDao calendarDao;
     @Autowired
     private AppointmentDao appointmentDao;
+    @Autowired
+    private iCalUtils utils;
 
     /**
      * Returns the HttpClient which already exists, or creates a new one, if null.
@@ -87,13 +87,12 @@ public class AppointmentManager {
         }
     }
 
-    public void getHttpClient(OmCalendar calendar) throws URISyntaxException {
+    public void getHttpClient(OmCalendar calendar) throws URIException {
         createHttpClient();
 
-        URI temp = new URI(calendar.getHref());
+        URI temp = new URI(calendar.getHref(), false); //TODO Check if true or false for escaped string.
         path = ensureTrailingSlash(temp.getPath());
-        int port = temp.getPort() != -1 ? temp.getPort() : (temp.getScheme().endsWith("s") ? 443: 80);
-        client.getHostConfiguration().setHost(temp.getHost(), port, temp.getScheme());
+        client.getHostConfiguration().setHost(temp);
     }
 
     private String ensureTrailingSlash(String str){
@@ -103,17 +102,14 @@ public class AppointmentManager {
             return str + "/";
     }
 
-    public void provideCredentials(OmCalendar calendar, Credentials credentials) throws URISyntaxException {
+    public void provideCredentials(OmCalendar calendar, Credentials credentials) throws URIException {
         if(!Strings.isEmpty(calendar.getHref()) && credentials != null){
             createHttpClient();
 
-            URI temp = new URI(calendar.getHref());
+            URI temp = new URI(calendar.getHref(), false);
             path = ensureTrailingSlash(temp.getPath());
-
-            int port = temp.getPort() != -1 ? temp.getPort() : (temp.getScheme().endsWith("s") ? 443: 80);
-            client.getHostConfiguration().setHost(temp.getHost(), port, temp.getScheme());
-
-            client.getState().setCredentials(new AuthScope(temp.getHost(), port),
+            client.getHostConfiguration().setHost(temp);
+            client.getState().setCredentials(new AuthScope(temp.getHost(), temp.getPort()),
                     credentials);
         }
     }
@@ -142,7 +138,9 @@ public class AppointmentManager {
      * @param calendar Calendar to update or create
      */
     public void createCalendar(OmCalendar calendar){
-        calendarDao.update(calendar);
+        if(calendar.getId() != null) {
+            calendarDao.update(calendar);
+        }
         discoverCalendars(calendar);
     }
 
@@ -172,21 +170,21 @@ public class AppointmentManager {
 
                 switch (calendar.getSyncType()) {
                     case WEBDAV_SYNC:
-                        syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao);
+                        syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao, utils);
                         break;
                     case CTAG:
-                        syncHandler = new CtagHandler(path, calendar, client, appointmentDao);
+                        syncHandler = new CtagHandler(path, calendar, client, appointmentDao, utils);
                         break;
                     case ETAG:
                     default: //Default is the EtagsHandler.
-                        syncHandler = new EtagsHandler(path, calendar, client, appointmentDao);
+                        syncHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
                         break;
                 }
 
 
                 syncHandler.updateItems();
                 calendarDao.update(calendar);
-            } catch (URISyntaxException e){
+            } catch (URIException e){
                 log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             }
         }
@@ -321,9 +319,6 @@ public class AppointmentManager {
                                 tempCalendar.setDeleted(false);
                                 tempCalendar.setOwner(calendar.getOwner());
 
-                                if (!calendar.isDeleted())
-                                    calendarDao.delete(calendar);
-
                                 calendarDao.update(tempCalendar);
                                 initCalendar(tempCalendar);
                             }
@@ -331,7 +326,7 @@ public class AppointmentManager {
                     }
                 }
 
-            } catch (URISyntaxException e) {
+            } catch (URIException e) {
                 log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
                 log.error("Error executing PROPFIND Method, during Initialization of Calendar.");
@@ -390,6 +385,7 @@ public class AppointmentManager {
     private void initCalendar(OmCalendar calendar) {
 
         if(calendar.getToken() == null || calendar.getSyncType() == SyncType.NONE){
+            calendarDao.update(calendar);
 
             PropFindMethod propFindMethod = null;
 
@@ -434,7 +430,7 @@ public class AppointmentManager {
                     calendar.setSyncType(SyncType.NONE);
                 }
 
-            } catch (URISyntaxException e){
+            } catch (URIException e){
                 log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
                 log.error("Error in doing initial Sync using PROPFIND Method.");
@@ -465,7 +461,6 @@ public class AppointmentManager {
                 getHttpClient(calendar);
 
                 List<String> hrefs = null;
-                iCalUtils utils = new iCalUtils();
                 CalendarOutputter calendarOutputter = new CalendarOutputter();
 
                 Calendar ical = utils.parseAppointmenttoCalendar(appointment);
@@ -505,10 +500,10 @@ public class AppointmentManager {
 
                 //Get new etags for the ones which didn't return an ETag header
                 MultigetHandler multigetHandler = new MultigetHandler(hrefs, true, path,
-                        calendar, client, appointmentDao);
+                        calendar, client, appointmentDao, utils);
                 multigetHandler.updateItems();
 
-            } catch (URISyntaxException e) {
+            } catch (URIException e) {
                 log.error("Unable to parse href for calendar");
             } catch (Exception e) {
                 log.error("Unable to store the Appointment on the CalDAV server.");
@@ -549,7 +544,7 @@ public class AppointmentManager {
                         || status == DavServletResponse.SC_NOT_FOUND)
                     log.info("Successfully deleted appointment with id: " + appointment.getId());
 
-            } catch (URISyntaxException e) {
+            } catch (URIException e) {
                 log.error("Unable to parse href for calendar.");
             } catch (Exception e) {
                 log.error("Unable to execute DELETE Method on: " + appointment.getHref());

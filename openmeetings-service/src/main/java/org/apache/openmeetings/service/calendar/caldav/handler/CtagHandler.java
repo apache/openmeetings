@@ -29,6 +29,7 @@ import org.apache.jackrabbit.webdav.xml.Namespace;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
+import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.PropFindMethod;
 import org.red5.logging.Red5LoggerFactory;
@@ -53,8 +54,9 @@ public class CtagHandler extends AbstractSyncHandler {
     public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag",
             NAMESPACE_CALSERVER);
 
-    public CtagHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
-        super(path, calendar, client, appointmentDao);
+    public CtagHandler(String path, OmCalendar calendar, HttpClient client,
+                       AppointmentDao appointmentDao, iCalUtils utils){
+        super(path, calendar, client, appointmentDao, utils);
     }
 
     public OmCalendar updateItems() {
@@ -75,7 +77,7 @@ public class CtagHandler extends AbstractSyncHandler {
                     String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
 
                     if(ctag != null && !ctag.equals(calendar.getToken())){
-                        EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao);
+                        EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
                         etagsHandler.updateItems();
                         calendar.setToken(ctag);
                     }

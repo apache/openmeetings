@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
+import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +37,17 @@ public abstract class AbstractSyncHandler implements SyncHandler {
     protected HttpClient client;
     protected OmCalendar calendar;
     protected String path;
+    protected iCalUtils utils;
 
     protected AppointmentDao appointmentDao;
 
-    public AbstractSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
+    public AbstractSyncHandler(String path, OmCalendar calendar, HttpClient client,
+                               AppointmentDao appointmentDao, iCalUtils utils){
         this.path = path;
         this.calendar = calendar;
         this.client = client;
         this.appointmentDao = appointmentDao;
+        this.utils = utils;
     }
 
     public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values){

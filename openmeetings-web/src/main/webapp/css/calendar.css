@@ -75,3 +75,15 @@
 .calendarlist {
 	padding: 0;
 }
+
+#calendarlistcontainer {
+	width: 20%;
+	float: left;
+	display: inline-block;
+}
+
+#wrapper-panel-frame {
+	display: inline-block;
+	width: 80%;
+	height: 100%;
+}

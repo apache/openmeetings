@@ -35,6 +35,7 @@
 		<class>org.apache.openmeetings.db.entity.server.Server</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>
 		<class>org.apache.openmeetings.db.entity.calendar.MeetingMember</class>
+		<class>org.apache.openmeetings.db.entity.calendar.OmCalendar</class>
 		<class>org.apache.openmeetings.db.entity.basic.ChatMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.Group</class>
 		<class>org.apache.openmeetings.db.entity.user.GroupUser</class>

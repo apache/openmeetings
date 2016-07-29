@@ -58,10 +58,10 @@ public class MultigetHandler extends AbstractSyncHandler {
 
     private CalendarMultiget query;
     private boolean isMultigetDisabled = false, onlyEtag = false;
-    private iCalUtils utils = new iCalUtils();
 
-    public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
-        super(path, calendar, client, appointmentDao);
+    public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client,
+                           AppointmentDao appointmentDao, iCalUtils utils){
+        super(path, calendar, client, appointmentDao, utils);
         this.onlyEtag = onlyEtag;
 
         if(hrefs == null || hrefs.isEmpty() || calendar.getSyncType() == SyncType.NONE)
@@ -80,8 +80,9 @@ public class MultigetHandler extends AbstractSyncHandler {
         }
     }
 
-    public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao){
-        this(hrefs, false, path, calendar, client, appointmentDao);
+    public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao,
+                           iCalUtils utils){
+        this(hrefs, false, path, calendar, client, appointmentDao, utils);
     }
 
     public OmCalendar updateItems(){

@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.*;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -34,7 +35,6 @@ import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -154,12 +154,12 @@ public class CalendarDialog extends AbstractFormDialog {
                 c.setHref(form.url.getModelObject());
                 AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
                 try {
-                    appointmentManager.provideCredentials(c,new UsernamePasswordCredentials(form.username.getModelObject(),
-                        form.pass.getModelObject()));
-                    if(c.getId() != null)
-                        c.setSyncType(OmCalendar.SyncType.NONE);
+                    if(c.getId() == null) {
+                        appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
+                                form.pass.getModelObject()));
+                    }
                     appointmentManager.createCalendar(c);
-                } catch (URISyntaxException e) {
+                } catch (URIException e) {
                     log.error("Unable to parse URL: " + c.getHref());
                 }
                 calendarPanel.refreshCalendars(target);
@@ -182,7 +182,6 @@ public class CalendarDialog extends AbstractFormDialog {
                 calendarPanel.refresh(target);
                 break;
         }
-        form.username.setModelObject("");
         target.add(feedback);
     }
 
@@ -194,7 +193,7 @@ public class CalendarDialog extends AbstractFormDialog {
             appointmentManager.syncItem(c);
             calendarPanel.refresh(handler);
             log.trace("Calendar " + c.getTitle() + " Successfully synced.");
-        } catch (URISyntaxException e) {
+        } catch (URIException e) {
             log.error("Unable to parse URL: " + c.getHref());
         }
     }
@@ -341,6 +340,7 @@ public class CalendarDialog extends AbstractFormDialog {
                     pass.setEnabled(true);
                     break;
             }
+            username.setModelObject("");
         }
 
         @Override
@@ -361,8 +361,8 @@ public class CalendarDialog extends AbstractFormDialog {
                                 pass.getInput()));
                         if(appointmentManager.testConnection(calendar))
                             return;
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        log.error("Error executing the TestConnection");
                     }
 
                     error(Application.getString("caldav.error"));

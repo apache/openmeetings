@@ -18,40 +18,24 @@
  */
 package org.apache.openmeetings.util.mail;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.parameter.Cn;
+import net.fortuna.ical4j.model.parameter.Role;
+import net.fortuna.ical4j.model.property.*;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.parameter.Cn;
-import net.fortuna.ical4j.model.parameter.Role;
-import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Method;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Sequence;
-import net.fortuna.ical4j.model.property.Transp;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.util.UidGenerator;
-
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 /**
  * 
@@ -136,7 +120,8 @@ public class IcalHandler {
 		// generate unique identifier (if not submitted)
 		Uid ui = null;
 		if (uid == null || uid.length() < 1) {
-			ui = new UidGenerator("uidGen").generateUid();
+			UUID uuid = UUID.randomUUID();
+			ui = new Uid(uuid.toString());
 			log.debug("Generating Meeting UID : " + ui.getValue());
 		} else {
 			ui = new Uid(uid);

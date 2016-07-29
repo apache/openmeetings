@@ -260,6 +260,9 @@ public class CalendarPanel extends UserPanel {
 				a.setEnd(cal.getTime());
 				
 				dao.update(a, getUserId());
+
+				if(a.getCalendar() != null)
+					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				//FIXME add feedback info
 			}
 
@@ -276,6 +279,9 @@ public class CalendarPanel extends UserPanel {
 				a.setEnd(cal.getTime());
 				
 				dao.update(a, getUserId());
+
+				if(a.getCalendar() != null)
+					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				//FIXME add feedback info
 			}
 		};

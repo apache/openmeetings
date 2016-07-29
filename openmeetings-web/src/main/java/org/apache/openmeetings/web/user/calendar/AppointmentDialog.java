@@ -296,6 +296,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
 					a.setEnd(end.getTime());
 				}
+				cals.setEnabled(true);
 			} else
 				cals.setEnabled(false);
 
