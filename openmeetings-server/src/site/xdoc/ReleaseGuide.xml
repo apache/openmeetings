@@ -194,10 +194,8 @@ mkdir apache-openmeetings
 cd apache-openmeetings
 tar -xzf ../apache-openmeetings-$BRANCHORTAG.tar.gz
 cd webapps/openmeetings/screenshare/
-mvn org.codehaus.mojo:webstart-maven-plugin:1.0-beta-8-SNAPSHOT:unsign -Dmaven.jar.unsign.jarpath=.
 						</source>
 					</li>
-					<li>Check any jar in <tt>webapps/openmeetings/screenshare/</tt>: Its META-INF/MANIFEST.MF file should NOT contain <tt>SHA1-Digest</tt> entries for classes</li>
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
