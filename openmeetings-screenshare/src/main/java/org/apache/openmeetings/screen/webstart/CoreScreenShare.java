@@ -411,12 +411,20 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		return TRUE.equals(Boolean.valueOf("" + b));
 	}
 	
-	private static int getInt(Map<String, Object> returnMap, String key) {
-		return Integer.valueOf(returnMap.get(key).toString()).intValue();
+	private static String getString(Map<String, Object> map, String key) {
+		return String.valueOf(map.get(key));
+	}
+
+	private static Double getDouble(Map<String, Object> map, String key) {
+		return Double.valueOf(getString(map, key));
 	}
 	
-	private static float getFloat(Map<String, Object> returnMap, String key) {
-		return Float.valueOf(returnMap.get(key).toString()).floatValue();
+	private static int getInt(Map<String, Object> map, String key) {
+		return getDouble(map, key).intValue();
+	}
+	
+	private static float getFloat(Map<String, Object> map, String key) {
+		return getDouble(map, key).floatValue();
 	}
 	
 	private Point getCoordinates(Map<String, Object> returnMap) {
