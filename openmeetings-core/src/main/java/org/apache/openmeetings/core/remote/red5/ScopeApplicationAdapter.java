@@ -1425,13 +1425,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				, false // 3: false //playRemote
 				, size.x // 4: 416
 				, size.y // 5: 240
-				, fi.getOwnerId() // 6: 1 
+				, 1 // 6: 1 // z-index 
 				, null // 7: null //TODO 
-				, 0 // 8: 0 //TODO
-				, 0 // 9: 0 //TODO
-				, 0 // 10: 0 //TODO
-				, 0 // 11: 749 //TODO
-				, 0 // 12: 739 //TODO
+				, 0 // 8: 0 //TODO // counter
+				, 0 // 9: 0 //TODO // x
+				, 0 // 10: 0 //TODO // y
+				, size.x // 11: 749 // width
+				, size.y // 12: 739 // height
 				, fuid // 13: 'flv_1469602000351' 
 				);
 	}
