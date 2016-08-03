@@ -185,6 +185,7 @@
 		client.newMessageByRoomAndDomain = this.newMessageByRoomAndDomain;
 		client.interviewStatus = this.interviewStatus;
 		client.newStream = this.newStream;
+		client.closeStream = this.closeStream;
 		//TODO FIXME method is absent :( client.stopStream = this.stopStream;
 		//TODO FIXME method is absent :( sendImagesSyncCompleteFlag
 		client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
@@ -734,25 +735,23 @@
 			canvas.commonVideoViewContent.startStream(value);
 		</method> 
 		   
-		<netRemoteCallHib name="closeStream" funcname="closeStream">
-			<handler name="ondata" args="value">
-				//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("**** closeStream: ",value);
-				if (value == null) {
-					return;
-				}
-				if (value.screenClient) {
-					if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
-					canvas.commonVideoViewContent.closeScreenSharing(value);
-				} else {
-					//free the VideoContainer
-					//canvas._videocontainer.closeStreamClient(value.publicSID);
-					canvas.commonVideoViewContent.closeStreamClient(value.publicSID);
-					canvas.setAttribute('numberofpartners',canvas.numberofpartners-1);
-				}
-				//TODO:check first current tab
-			</handler>   
-		</netRemoteCallHib>  
+		<method name="closeStream" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("**** closeStream: ",value);
+			if (value == null) {
+				return;
+			}
+			if (value.screenClient) {
+				if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
+				canvas.commonVideoViewContent.closeScreenSharing(value);
+			} else {
+				//free the VideoContainer
+				//canvas._videocontainer.closeStreamClient(value.publicSID);
+				canvas.commonVideoViewContent.closeStreamClient(value.publicSID);
+				canvas.setAttribute('numberofpartners',canvas.numberofpartners-1);
+			}
+			//TODO:check first current tab
+		</method>  
 		
 		<!---
 			Event is invoked if a red5 stream sharing is closed
