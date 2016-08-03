@@ -173,7 +173,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public static void main(String[] args) {
 		new CoreScreenShare(args);
 	}
-	
+
 	// ------------------------------------------------------------------------
 	//
 	// GUI
