@@ -37,6 +37,8 @@
 		<key.alias>screen</key.alias>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
+		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
+		<share.bcprov.version>1.52</share.bcprov.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -52,257 +54,137 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>${share.bcprov.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestEntries>
-							<Permissions>all-permissions</Permissions>
-							<Trusted-Only>true"</Trusted-Only>
-							<Codebase>*</Codebase>
-							<Crypto-Strength>unlimited</Crypto-Strength>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<!-- plugin>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
+				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>process-resources</phase>
+						<id>create-template</id>
+						<phase>generate-resources</phase>
 						<goals>
-							<goal>replace</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<file>${project.basedir}/src/main/jnlp/templates/template.jnlp</file>
-							<outputFile>${project.build.directory}/APPLICATION_TEMPLATE.jnlp</outputFile>
-							<regex>false</regex>
-							<replacements>
-								<replacement>
-									<token>$applicationName</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$codebase</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$protocol</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$host</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$port</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$app</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$userId</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$publicSid</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$labels</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$defaultQuality</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$defaultFps</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$showFps</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$allowRemote</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$allowRecording</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$allowPublishing</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$keystore</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$password</token>
-									<value>*</value>
-								</replacement>
-							</replacements>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/jnlp/templates</directory>
+									<includes>
+										<include>*.jnlp</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+							<skip>${skip.site.copy}</skip>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<configuration>
+							<target>
+								<copy file="${project.build.directory}/template.jnlp" tofile="${jnlp.out.dir}/APPLICATION.jnlp" overwrite="true" force="true" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>keytool-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals><goal>generateKeyPair</goal></goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<keystore>${keystore.location}</keystore>
+							<storepass>${keystore.password}</storepass>
+							<keypass>${key.password}</keypass>
+							<alias>${key.alias}</alias>
+							<dname>cn=Sebastian Wagner, ou=technolog, o=openmeetings.apache.org, c=DE</dname>
+							<ext></ext>
+							<validity>365</validity>
+							<keyalg>RSA</keyalg>
+							<keysize>4096</keysize>
+							<storetype>${keystore.type}</storetype>
+							<skip>${jarsigner.skip}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-screen-sharing</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptor>src/main/assembly/assembly.xml</descriptor>
+							<outputDirectory>${jnlp.out.dir}</outputDirectory>
+							<archive>
+								<manifest>
+									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+									<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
+								</manifest>
+								<manifestEntries>
+									<Application-Name>${project.name}</Application-Name>
+									<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
+									<Built-On>${maven.build.timestamp}</Built-On>
+									<Svn-Revision>${buildNumber}</Svn-Revision>
+									<Product-Version>${project.version}</Product-Version>
+									<Permissions>all-permissions</Permissions>
+									<Trusted-Only>true</Trusted-Only>
+									<Codebase>*</Codebase>
+									<Crypto-Strength>unlimited</Crypto-Strength>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>copy-dependencies</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${project.build.directory}/lib</outputDirectory>
-								<overWriteReleases>false</overWriteReleases>
-								<overWriteSnapshots>false</overWriteSnapshots>
-								<overWriteIfNewer>true</overWriteIfNewer>
-								<excludeTransitive>true</excludeTransitive>
-							</configuration>
-						</execution>
-					</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
-				<executions>
-					<!-- execution>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
-						<id>generate-jnlp-template-for-signing</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>jnlp</goal>
-						</goals>
-						<configuration>
-							<excludeTransitive>false</excludeTransitive>
-							<dependencies>
-								<includes>
-									<include>commons-codec:commons-codec</include>
-									<include>commons-beanutils:commons-beanutils</include>
-									<include>commons-collections:commons-collections</include>
-									<include>org.apache.commons:commons-lang3</include>
-									<include>org.apache.httpcomponents:httpclient</include>
-									<include>org.apache.httpcomponents:httpcore</include>
-									<include>org.bouncycastle:bcprov-jdk15on</include>
-									<include>net.sf.ehcache:ehcache-core</include>
-									<include>org.slf4j:slf4j-api</include>
-									<include>org.slf4j:jcl-over-slf4j</include>
-									<include>ch.qos.logback:logback-core</include>
-									<include>ch.qos.logback:logback-classic</include>
-									<include>org.apache.mina:mina-core</include>
-									<include>org.red5:red5-io</include>
-									<include>org.red5:red5-server-common</include>
-									<include>org.red5:red5-client</include>
-									<include>org.springframework:spring-context</include>
-									<include>org.springframework:spring-core</include>
-									<include>org.springframework:spring-beans</include>
-									<include>org.quartz-scheduler:quartz</include>
-								</includes>
-							</dependencies>
-							<jnlp>
-								<inputTemplateResourcePath>${project.build.directory}</inputTemplateResourcePath>
-								<inputTemplate>APPLICATION_TEMPLATE.jnlp</inputTemplate>
-								<outputFile>APPLICATION_TEMPLATE.jnlp</outputFile>
-								<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
-							</jnlp>
-							<makeArchive>false</makeArchive>
-						</configuration>
-					</execution-->
-					<execution>
-						<id>generate-jnlp-and-sign-libs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jnlp-inline</goal>
-						</goals>
-						<configuration>
-							<excludeTransitive>false</excludeTransitive>
-							<dependencies>
-								<includes>
-									<include>commons-codec:commons-codec</include>
-									<include>commons-beanutils:commons-beanutils</include>
-									<include>commons-collections:commons-collections</include>
-									<include>org.apache.commons:commons-lang3</include>
-									<include>org.apache.httpcomponents:httpclient</include>
-									<include>org.apache.httpcomponents:httpcore</include>
-									<include>org.bouncycastle:bcprov-jdk15on</include>
-									<include>net.sf.ehcache:ehcache-core</include>
-									<include>org.slf4j:slf4j-api</include>
-									<include>org.slf4j:jcl-over-slf4j</include>
-									<include>ch.qos.logback:logback-core</include>
-									<include>ch.qos.logback:logback-classic</include>
-									<include>org.apache.mina:mina-core</include>
-									<include>org.red5:red5-io</include>
-									<include>org.red5:red5-server-common</include>
-									<include>org.red5:red5-client</include>
-									<include>org.springframework:spring-context</include>
-									<include>org.springframework:spring-core</include>
-									<include>org.springframework:spring-beans</include>
-									<include>org.quartz-scheduler:quartz</include>
-								</includes>
-							</dependencies>
-							
-							<jnlp>
-								<inputTemplateResourcePath>${project.basedir}/src/main/jnlp/templates</inputTemplateResourcePath>
-								<inputTemplate>template.jnlp</inputTemplate>
-								<outputFile>APPLICATION.jnlp</outputFile>
-								<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
-							</jnlp>
-					
-							<sign>
-								<keystore>${keystore.location}</keystore>
-								<keypass>${key.password}</keypass>
-								<storepass>${keystore.password}</storepass>
-								<storetype>${keystore.type}</storetype>
-								<alias>${key.alias}</alias>
-					
-								<validity>365</validity>
-								<dnameCn>Sebastian Wagner</dnameCn>
-								<dnameOu>technology</dnameOu>
-								<dnameO>openmeetings.apache.org</dnameO>
-								<!-- dnameL>Location</dnameL>
-								<dnameSt>State</dnameSt-->
-								<dnameC>DE</dnameC>
-											
-								<keystoreConfig>
-									<delete>false</delete>
-									<gen>true</gen>
-								</keystoreConfig>
-								<verify>false</verify> <!-- due to self signed certificate -->
-							</sign>
-							<unsign>false</unsign>
-							<outputJarVersions>false</outputJarVersions>
-							<makeArchive>false</makeArchive>
-							<verbose>true</verbose>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- plugin>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>truezip-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>move-jnlp-template</id>
+						<id>copy-bcprov</id>
+						<phase>prepare-package</phase>
 						<goals>
-							<goal>move</goal>
+							<goal>copy</goal>
 						</goals>
-						<phase>verify</phase>
 						<configuration>
-							<from>${project.build.directory}/jnlp/APPLICATION_TEMPLATE.jnlp</from>
-							<to>${project.build.directory}/jnlp/${project.build.finalName}.jar/JNLP-INF/APPLICATION_TEMPLATE.jnlp</to>
+							<outputDirectory>${jnlp.out.dir}</outputDirectory>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.bouncycastle</groupId>
+									<artifactId>bcprov-jdk15on</artifactId>
+								</artifactItem>
+							</artifactItems>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeTransitive>true</excludeTransitive>
 						</configuration>
 					</execution>
 				</executions>
@@ -312,27 +194,21 @@
 				<artifactId>maven-jarsigner-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>sign</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
+						<id>sign-applet</id>
+						<phase>package</phase>
+						<goals><goal>sign</goal></goals>
+						<configuration>
+							<archiveDirectory>${jnlp.out.dir}</archiveDirectory>
+							<keystore>${keystore.location}</keystore>
+							<keypass>${key.password}</keypass>
+							<storepass>${keystore.password}</storepass>
+							<storetype>${keystore.type}</storetype>
+							<alias>${key.alias}</alias>
+							<arguments><argument>-digestalg</argument><argument>SHA1</argument></arguments>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<archiveDirectory>${project.build.directory}/jnlp</archiveDirectory>
-					<includes>
-						<include>${project.build.finalName}.jar</include>
-					</includes>
-					<keystore>${keystore.location}</keystore>
-					<keypass>${key.password}</keypass>
-					<storepass>${keystore.password}</storepass>
-					<storetype>${keystore.type}</storetype>
-					<alias>${key.alias}</alias>
-					<removeExistingSignatures>true</removeExistingSignatures>
-					<verbose>true</verbose>
-				</configuration>
-			</plugin-->
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -359,11 +235,11 @@
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>webstart-maven-plugin</artifactId>
-										<versionRange>[1.0-beta-6,)</versionRange>
+										<groupId>com.google.code.maven-replacer-plugin</groupId>
+										<artifactId>replacer</artifactId>
+										<versionRange>[1.5.3,)</versionRange>
 										<goals>
-											<goal>jnlp</goal>
+											<goal>replace</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -372,11 +248,36 @@
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>com.google.code.maven-replacer-plugin</groupId>
-										<artifactId>replacer</artifactId>
-										<versionRange>[1.5.3,)</versionRange>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.8,)
+										</versionRange>
 										<goals>
-											<goal>replace</goal>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											keytool-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.5,)
+										</versionRange>
+										<goals>
+											<goal>generateKeyPair</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

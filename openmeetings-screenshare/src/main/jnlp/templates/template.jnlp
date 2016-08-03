@@ -19,13 +19,13 @@
 -->
 <jnlp spec="6.0+" codebase="$codebase">
 	<information>
-		<title>$informationTitle</title>
+		<title>${project.name}</title>
 		<vendor>$applicationName</vendor>
-		<homepage>$informationHomepage</homepage>
+		<homepage>${project.organization.url}</homepage>
 		<icon href="icon.png" />
 		<icon kind="splash" href="splashicon.png" />
-		<description>$informationTitle</description>
-		<description kind="short">$informationDescription</description>
+		<description>${project.description}</description>
+		<description kind="short">${project.description}</description>
 		<offline-allowed/>
 	</information>
 	<security>
@@ -33,9 +33,10 @@
 	</security>
 	<resources>
 		<j2se version='1.7+'/>
-		$dependencies
+		<jar href="bcprov-jdk15on-${share.bcprov.version}.jar" main="true"/>
+		<jar href="openmeetings-screenshare-${project.version}-full.jar" main="true"/>
 	</resources>
-	<application-desc main-class='$mainClass'>
+	<application-desc main-class='org.apache.openmeetings.screen.webstart.CoreScreenShare'>
 		<argument>$url</argument>
 		<argument>$publicSid</argument>
 		<argument>$labels</argument>
