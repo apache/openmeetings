@@ -85,7 +85,6 @@
 	
 	<method name="startStreamPlay">
 		parent.playFLV(this,true);
-		this.startStream();
 	</method>
 	
 	<method name="stopStreamPlay">
@@ -227,8 +226,8 @@
 			this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
 		</handler>
 		
-		<method name="playVideoStream" args="streamName,delay">
-			this.playStream(streamName,delay);
+		<method name="playVideoStream" args="streamName, delay">
+			this.playStream(streamName, delay);
 			this.timerDelegateStarted = true;
 			lz.Timer.addTimer(this.timerDelegate , 1000);
 		</method>
