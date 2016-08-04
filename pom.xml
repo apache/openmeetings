@@ -108,10 +108,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>release</id>
-			<properties>
-				<jarsigner.skip>true</jarsigner.skip>
-			</properties>
+			<id>rc</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -193,6 +190,12 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
 		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
