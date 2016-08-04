@@ -123,7 +123,7 @@ svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/application/tru
 				<p>Update versions of all modules</p>
 				<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=3.1.0</source>
 				<p>Run the command: </p>
-				<source>mvn clean install -Prelease</source>
+				<source>mvn clean install -Prc</source>
 				<p>Test building the source on windows and OSx or Linux</p>
 				<p>Test running the binary's</p>
 				<p>
@@ -187,13 +187,10 @@ svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/application/tru
 				<ul>
 					<li>Go to the folder you check out: https://svn.apache.org/repos/asf/openmeetings/application/tags/$BRANCHORTAG/</li>
 					<li>
-						Unarchive <tt>openmeetings-server/target/apache-openmeetings-$BRANCHORTAG.tar.gz</tt>
+						<p>Run the command: </p>
 						<source>
-cd openmeetings-server/target
-mkdir apache-openmeetings
-cd apache-openmeetings
-tar -xzf ../apache-openmeetings-$BRANCHORTAG.tar.gz
-cd webapps/openmeetings/screenshare/
+cd openmeetings-screenshare
+mvn clean install -Prc,release
 						</source>
 					</li>
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
@@ -202,7 +199,7 @@ cd webapps/openmeetings/screenshare/
 					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.1.0-RELEASE"</li>
 					<li>Enter "Version" for ex. "3.1.0-RELEASE"</li>
 					<li>Select "Java Signing" as "Signing service"</li>
-					<li>Select "Upload files" and add all <b>jar</b> files from <tt>openmeetings-server/target/apache-openmeetings/webapps/openmeetings/screenshare</tt></li>
+					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
 					<li>Select "Sign now"</li>
 					<li>Select "Type of signing" -> "Production"</li>
 					<li>Select "Sign"</li>
