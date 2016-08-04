@@ -1160,28 +1160,29 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setRoomValues");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			currentClient.setRoomId(roomId);
-			currentClient.setRoomEnter(new Date());
+			Client client = sessionManager.getClientByStreamId(streamid, null);
+			client.setRoomId(roomId);
+			client.setRoomEnter(new Date());
 
-			currentClient.setUsercolor(colorObj);
+			client.setUsercolor(colorObj);
 
-			User u = userDao.get(currentClient.getUserId());
+			Long userId = client.getUserId();
+			User u = userId == null ? null : userDao.get(userId > 0 ? userId : -userId);
 			// Inject externalUserId if nothing is set yet
-			if (currentClient.getExternalUserId() == null && u != null) {
-				currentClient.setExternalUserId(u.getExternalId());
-				currentClient.setExternalUserType(u.getExternalType());
+			if (client.getExternalUserId() == null && u != null) {
+				client.setExternalUserId(u.getExternalId());
+				client.setExternalUserType(u.getExternalType());
 			}
 
 			Room r = roomDao.get(roomId);
 			if (r.getShowMicrophoneStatus()) {
-				currentClient.setCanGiveAudio(true);
+				client.setCanGiveAudio(true);
 			}
-			sessionManager.updateClientByStreamId(streamid, currentClient, true, null); // first save to get valid room count
+			sessionManager.updateClientByStreamId(streamid, client, true, null); // first save to get valid room count
 			// Log the User
 			conferenceLogDao.add(ConferenceLog.Type.roomEnter,
-					currentClient.getUserId(), streamid, roomId,
-					currentClient.getUserip(), "");
+					client.getUserId(), streamid, roomId,
+					client.getUserip(), "");
 			
 			// Check for Moderation LogicalRoom ENTER
 			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
@@ -1195,25 +1196,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			if (isSuperModerator) {
 				// This can be set without checking for Moderation Flag
-				currentClient.setIsSuperModerator(isSuperModerator);
-				currentClient.setIsMod(isSuperModerator);
+				client.setIsSuperModerator(isSuperModerator);
+				client.setIsMod(isSuperModerator);
 			} else {
 				Room.Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
-				currentClient.setIsSuperModerator(rr == Room.Right.superModerator);
-				currentClient.setIsMod(becomeModerator || rr == Room.Right.moderator);
+				client.setIsSuperModerator(rr == Room.Right.superModerator);
+				client.setIsMod(becomeModerator || rr == Room.Right.moderator);
 			}
-			if (currentClient.getIsMod()) {
+			if (client.getIsMod()) {
 				// Update the Client List
-				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+				sessionManager.updateClientByStreamId(streamid, client, false, null);
 
-				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
+				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(client.getRoomId());
 				
 				//Sync message to everybody
 				sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 			}
 			
 			//Sync message to everybody
-			sendMessageToCurrentScope("addNewUser", currentClient, false);
+			sendMessageToCurrentScope("addNewUser", client, false);
 
 			//Status object for Shared Browsing
 			BrowserStatus browserStatus = (BrowserStatus)current.getScope().getAttribute("browserStatus");

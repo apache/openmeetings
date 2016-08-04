@@ -46,6 +46,9 @@ public class AuthLevelUtil {
 
 	public static Room.Right getRoomRight(User u, Room r, Appointment a, int userCount) {
 		Room.Right result = null;
+		if (u == null) {
+			return result;
+		}
 		if (hasAdminLevel(u.getRights())) {
 			//admin user get superModerator level, no-one can kick him/her
 			result = Room.Right.superModerator;
