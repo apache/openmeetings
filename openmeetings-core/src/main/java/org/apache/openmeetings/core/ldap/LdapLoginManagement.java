@@ -342,7 +342,7 @@ public class LdapLoginManagement {
 				u.setDomainId(domainId);
 				Group g = groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"));
 				if (g != null) {
-					u.getGroupUsers().add(new GroupUser(g));
+					u.getGroupUsers().add(new GroupUser(g, u));
 				}
 				u.setLogin(getLogin(config, entry));
 				u.setShowContactDataToContacts(true);
@@ -417,7 +417,7 @@ public class LdapLoginManagement {
 						}
 					}
 					if (!found) {
-						u.getGroupUsers().add(new GroupUser(o));
+						u.getGroupUsers().add(new GroupUser(o, u));
 						log.debug("Going to add user to group:: " + name);
 					}
 				}

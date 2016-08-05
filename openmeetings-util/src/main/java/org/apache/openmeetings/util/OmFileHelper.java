@@ -70,10 +70,14 @@ public class OmFileHelper {
 	public static final String profileImagePrefix = "_profile_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
+	public static final String WML_EXTENSION = ".wml";
 	public static final String FLV_EXTENSION = ".flv";
 	public static final String MP4_EXTENSION = ".mp4";
 	public static final String OGG_EXTENSION = ".ogg";
-	public static final String JPG_EXTENTION = ".jpg";
+	public static final String JPG_EXTENSION = ".jpg";
+	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
+	public static final String FLV_MIME_TYPE = "video/flv";
+	public static final String JPG_MIME_TYPE = "image/jpeg";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;

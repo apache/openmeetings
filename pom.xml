@@ -36,26 +36,26 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.2.6.RELEASE</spring.version>
+		<spring.version>4.3.1.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.19.1</maven.surefire.version>
 		<maven-site.version>3.5.1</maven-site.version>
-		<wicket.version>7.3.0</wicket.version>
-		<wicketju.version>7.3.0</wicketju.version>
-		<wickets.version>7.3.0</wickets.version>
-		<red5-server.version>1.0.8-M2</red5-server.version>
-		<red5-client.version>1.0.8-M2</red5-client.version>
+		<wicket.version>7.4.0</wicket.version>
+		<wicketju.version>7.3.1</wicketju.version>
+		<wickets.version>7.4.0</wickets.version>
+		<red5-server.version>1.0.8-M6</red5-server.version>
+		<red5-client.version>1.0.8-M6</red5-client.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
 		<cxf.version>3.1.6</cxf.version>
-		<selenium.version>2.53.0</selenium.version>
+		<selenium.version>2.53.1</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
-		<jettison.version>1.3.7</jettison.version>
+		<jettison.version>1.3.8</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
-		<tomcat.version>8.0.35</tomcat.version>
+		<tomcat.version>8.0.36</tomcat.version>
 		<derby.version>10.12.1.1</derby.version>
 	</properties>
 	<modules>
@@ -108,9 +108,55 @@
 			</build>
 		</profile>
 		<profile>
-			<id>release</id>
+			<id>rc</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>1.4.1</version>
+						<executions>
+							<execution>
+								<id>enforce-versions</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireJavaVersion>
+											<version>[1.7.0, 1.8.0)</version>
+										</requireJavaVersion>
+									</rules>
+									<failFast>true</failFast>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>net.ju-n.maven.plugins</groupId>
 						<artifactId>checksum-maven-plugin</artifactId>
@@ -144,6 +190,12 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
 		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
@@ -697,53 +749,9 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<!--goal>add-third-party</goal-->
-							<!--goal>aggregate-add-third-party</goal-->
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
  		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>1.9</version>
-					<executions>
-						<execution>
-							<configuration>
-								<groupByLicense>true</groupByLicense>
-								<failIfWarning>true</failIfWarning>
-								<useMissingFile>true</useMissingFile>
-								<excludedScopes>test</excludedScopes>
-								<licenseMerges>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache 2</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache 2.0 License</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache License 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache Software License - Version 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache Software License 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache Software Licenses</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|The Apache License, Version 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|http://www.apache.org/licenses/LICENSE-2.0.txt</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|ASL, version 2</licenseMerge>
-									<licenseMerge>BSD License|BSD</licenseMerge>
-									<licenseMerge>BSD License|The BSD License</licenseMerge>
-									<licenseMerge>New BSD License|BSD 3-clause</licenseMerge>
-									<licenseMerge>Eclipse Public License 1.0|Eclipse Public License - v 1.0</licenseMerge>
-									<licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
-								</licenseMerges>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
@@ -764,7 +772,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.0.2</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -826,13 +834,8 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>3.2.0</version>
 					<extensions>true</extensions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>webstart-maven-plugin</artifactId>
-					<version>1.0-beta-7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -909,7 +912,17 @@
 						</licenseFamilies>
 					</configuration>
 				</plugin>
-								
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>keytool-maven-plugin</artifactId>
+					<version>1.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jarsigner-plugin</artifactId>
+					<version>1.4</version>
+				</plugin>
+
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -977,21 +990,6 @@
 										<versionRange>[2.9.1,)</versionRange>
 										<goals>
 											<goal>javadoc-no-fork</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>license-maven-plugin</artifactId>
-										<versionRange>[1.9,)</versionRange>
-										<goals>
-											<goal>add-third-party</goal>
-											<goal>download-licenses</goal>
-											<goal>aggregate-add-third-party</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

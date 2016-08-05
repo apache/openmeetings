@@ -443,8 +443,10 @@
 	<method name="deleteItemByNameSync" args="objName">
 	<![CDATA[
 		if ($debug) Debug.write("deleteItemByNameSync :: ", objName);
-		this[objName].prepareForDelete.sendEvent();
-		this[objName].destroy();
+		if (this[objName]) {
+			this[objName].prepareForDelete.sendEvent();
+			this[objName].destroy();
+		}
 		if (this.boundingref!=null) this.boundingref.removeIt();
 		
 		var pos = -1;

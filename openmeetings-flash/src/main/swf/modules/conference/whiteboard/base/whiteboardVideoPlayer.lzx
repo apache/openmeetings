@@ -71,12 +71,9 @@
 			if ($debug) Debug.write("deleteFileOrFolder: ",value);
 			parent.isLoaded = true;
 			
-			var downloadurl = canvas.getUrl()+'DownloadHandler?fileName=UPLOADFLV_'+parent.fileId+'.jpg'
-							+'&moduleName=lzRecorderApp&parentPath=&room_id='
-							+'&sid='+canvas.sessionId;
-			
+			var downloadurl = canvas.getUrl() + 'room/file/' + parent.fileId + '?uid='
+				+ canvas.publicSID + '&preview=true';
 			parent._content._preview.imagePreview.setAttribute("src", downloadurl)
-				
 			parent._content._preview.bringToFront();
 							
 			if (parent.sendInit) {
@@ -88,7 +85,6 @@
 	
 	<method name="startStreamPlay">
 		parent.playFLV(this,true);
-		this.startStream();
 	</method>
 	
 	<method name="stopStreamPlay">
@@ -136,7 +132,7 @@
 	
 		var ratio = this.flv_width / this.flv_height;
 		var t = {};
-		var area = {height: this.height - 62, width: parent.width - 1}
+		var area = {height: parent.height - 62, width: parent.width - 1}
 		
 		//max height of container is new height of video;
 		//calc new width and x-position of video
@@ -230,8 +226,8 @@
 			this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
 		</handler>
 		
-		<method name="playVideoStream" args="streamName,delay">
-			this.playStream(streamName,delay);
+		<method name="playVideoStream" args="streamName, delay">
+			this.playStream(streamName, delay);
 			this.timerDelegateStarted = true;
 			lz.Timer.addTimer(this.timerDelegate , 1000);
 		</method>

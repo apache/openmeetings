@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
@@ -87,7 +86,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(target, Client.Right.moderator);
+			room.requestRight(target, Room.Right.moderator);
 		}
 	};
 	private final RoomPanel room;
@@ -168,7 +167,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			pollResults.updateModel(target, room.getClient().hasRight(Client.Right.moderator));
+			pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
 			pollResults.open(target);
 		}
 	};
@@ -265,16 +264,16 @@ public class RoomMenuPanel extends Panel {
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
-		actionsMenu.setEnabled(!r.isHidden(RoomElement.ActionMenu) && r.isAllowUserQuestions());
-		boolean moder = room.getClient().hasRight(Client.Right.moderator);
+		boolean moder = room.getClient().hasRight(Room.Right.moderator);
+		actionsMenu.setEnabled((moder &&!r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		//TODO add check "sharing started"
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
 		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
-		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.whiteBoard));
-		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Client.Right.audio) || !room.getClient().hasRight(Client.Right.video));
+		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
+		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || pollDao.getArchived(r.getId()).size() > 0);
@@ -317,7 +316,7 @@ public class RoomMenuPanel extends Panel {
 	}
 	
 	public void exit(IPartialPageRequestHandler handler) {
-		if (WebSession.getRights().contains(Right.Dashboard)) {
+		if (WebSession.getRights().contains(User.Right.Dashboard)) {
 			roomExit(room, false);
 			room.getMainPage().updateContents(ROOMS_PUBLIC, handler);
 		} else {

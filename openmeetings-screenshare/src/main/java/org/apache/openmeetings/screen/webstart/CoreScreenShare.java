@@ -41,7 +41,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
@@ -151,7 +150,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
+						//NOT in use since 1.0.8-M3 client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
 						client.setKeyStorePassword(args[10]);
 						instance = client;
 						break;
@@ -174,7 +173,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public static void main(String[] args) {
 		new CoreScreenShare(args);
 	}
-	
+
 	// ------------------------------------------------------------------------
 	//
 	// GUI
@@ -412,12 +411,20 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		return TRUE.equals(Boolean.valueOf("" + b));
 	}
 	
-	private static int getInt(Map<String, Object> returnMap, String key) {
-		return Integer.valueOf(returnMap.get(key).toString()).intValue();
+	private static String getString(Map<String, Object> map, String key) {
+		return String.valueOf(map.get(key));
+	}
+
+	private static Double getDouble(Map<String, Object> map, String key) {
+		return Double.valueOf(getString(map, key));
 	}
 	
-	private static float getFloat(Map<String, Object> returnMap, String key) {
-		return Float.valueOf(returnMap.get(key).toString()).floatValue();
+	private static int getInt(Map<String, Object> map, String key) {
+		return getDouble(map, key).intValue();
+	}
+	
+	private static float getFloat(Map<String, Object> map, String key) {
+		return getDouble(map, key).floatValue();
 	}
 	
 	private Point getCoordinates(Map<String, Object> returnMap) {

@@ -20,7 +20,9 @@ package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.IApplication;
@@ -49,14 +52,14 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -121,7 +124,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
-		// TODO Auto-generated method stub
+		if (log.isTraceEnabled()) {
+			log.trace("resultReceived:: {}", arg0);
+		}
 	}
 
 	@Override
@@ -152,7 +157,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> getConnParams(Object[] params) {
+	private static Map<String, Object> getConnParams(Object[] params) {
 		if (params != null && params.length > 0) {
 			return (Map<String, Object>)params[0]; 
 		}
@@ -1120,194 +1125,57 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setRoomValues");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			currentClient.setRoomId(roomId);
-			currentClient.setRoomEnter(new Date());
+			Client client = sessionManager.getClientByStreamId(streamid, null);
+			client.setRoomId(roomId);
+			client.setRoomEnter(new Date());
 
-			currentClient.setUsercolor(colorObj);
+			client.setUsercolor(colorObj);
 
+			Long userId = client.getUserId();
+			User u = userId == null ? null : userDao.get(userId > 0 ? userId : -userId);
 			// Inject externalUserId if nothing is set yet
-			if (currentClient.getExternalUserId() == null) {
-				if (currentClient.getUserId() != null) {
-					User us = userDao.get(currentClient.getUserId());
-					if (us != null) {
-						currentClient.setExternalUserId(us.getExternalId());
-						currentClient.setExternalUserType(us.getExternalType());
-					}
-				}
+			if (client.getExternalUserId() == null && u != null) {
+				client.setExternalUserId(u.getExternalId());
+				client.setExternalUserType(u.getExternalType());
 			}
 
-			// This can be set without checking for Moderation Flag
-			currentClient.setIsSuperModerator(isSuperModerator);
-
-			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
-
-			Room room = roomDao.get(roomId);
-			if (!room.isHidden(RoomElement.MicrophoneStatus)) {
-				currentClient.setCanGiveAudio(true);
+			Room r = roomDao.get(roomId);
+			if (!r.isHidden(RoomElement.MicrophoneStatus)) {
+				client.setCanGiveAudio(true);
 			}
-
+			sessionManager.updateClientByStreamId(streamid, client, true, null); // first save to get valid room count
 			// Log the User
 			conferenceLogDao.add(ConferenceLog.Type.roomEnter,
-					currentClient.getUserId(), streamid, roomId,
-					currentClient.getUserip(), "");
+					client.getUserId(), streamid, roomId,
+					client.getUserip(), "");
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<Client> clientListRoom = sessionManager.getClientListByRoom(roomId);
+			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
 
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
 			// appointed meeting or moderated Room? => Check Max Users first
-
-			// default logic for non regular rooms
-			if (!room.isAppointment()) {
-				if (room.isModerated()) {
-					// if this is a Moderated Room then the Room can be only
-					// locked off by the Moderator Bit
-					// List<RoomClient> clientModeratorListRoom =
-					// this.sessionManager.getCurrentModeratorByRoom(roomId);
-
-					// If there is no Moderator yet we have to check if the
-					// current User has the Bit set to true to
-					// become one, otherwise he won't get Moderation and has to
-					// wait
-					if (becomeModerator) {
-						currentClient.setIsMod(true);
-
-						// There is a need to send an extra Event here, cause at
-						// this moment there could be
-						// already somebody in the Room waiting
-
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-						
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-					} else {
-						// The current User is not a Teacher/Admin or whatever
-						// Role that should get the
-						// Moderation
-						currentClient.setIsMod(false);
-					}
-				} else {
-					// If this is a normal Room Moderator rules : first come, first draw ;-)
-					log.debug("setRoomValues : Room"
-							+ roomId
-							+ " not appointed! Moderator rules : first come, first draw ;-)");
-					if (clientListRoom.size() == 1) {
-						log.debug("Room is empty so set this user to be moderation role");
-						currentClient.setIsMod(true);
-					} else {
-						log.debug("Room is already somebody so set this user not to be moderation role");
-
-						if (becomeModerator) {
-							currentClient.setIsMod(true);
-
-							// Update the Client List
-							sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-							List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-							// There is a need to send an extra Event here,
-							// cause at this moment there could be
-							// already somebody in the Room waiting -swagner check this comment, 20.01.2012
-							
-							//Sync message to everybody
-							sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-
-						} else {
-							// The current User is not a Teacher/Admin or
-							// whatever Role that should get the Moderation
-							currentClient.setIsMod(false);
-						}
-					}
-				}
-
-				// Update the Client List
-				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			if (isSuperModerator) {
+				// This can be set without checking for Moderation Flag
+				client.setIsSuperModerator(isSuperModerator);
+				client.setIsMod(isSuperModerator);
 			} else {
-				// If this is an Appointment then the Moderator will be set to the Invitor
-				Appointment ment = appointmentDao.getByRoom(roomId);
-				Long userIdInRoomClient = currentClient.getUserId();
-				boolean found = false;
-				boolean moderator_set = false;
-				if (ment != null) {
-					// First check owner who is not in the members list
-					if (ment.getOwner().getId().equals(userIdInRoomClient)) {
-						found = true;
-						log.debug("User "
-								+ userIdInRoomClient
-								+ " is moderator due to flag in MeetingMember record");
-						currentClient.setIsMod(true);
-						moderator_set = true;
-	
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-	
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-	
-						// There is a need to send an extra Event here, cause at this moment 
-						// there could be already somebody in the Room waiting
-	
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-					}
-					if (!found) {
-						// Check if current user is set to moderator
-						for (MeetingMember member : ment.getMeetingMembers()) {
-							// only persistent users can schedule a meeting
-							// user-id is only set for registered users
-							if (member.getUser() != null) {
-								log.debug("checking user " + member.getUser().getFirstname()
-										+ " for moderator role - ID : "
-										+ member.getUser().getId());
-		
-								if (member.getUser().getId().equals(userIdInRoomClient)) {
-									found = true;
-									log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
-									currentClient.setIsMod(false);
-									sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-									break;
-								}
-							}
-						}
-					}
-				}
-				if (!found) {
-					log.debug("User "
-							+ userIdInRoomClient
-							+ " could not be found as MeetingMember -> definitely no moderator");
-					currentClient.setIsMod(false);
-					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-				} else {
-					// if current user is part of the member list, but moderator
-					// couldn't be retrieved : first come, first draw!
-					if (clientListRoom.size() == 1 && !moderator_set) {
-						log.debug("");
-						currentClient.setIsMod(true);
+				Room.Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
+				client.setIsSuperModerator(rr == Room.Right.superModerator);
+				client.setIsMod(becomeModerator || rr == Room.Right.moderator);
+			}
+			if (client.getIsMod()) {
+				// Update the Client List
+				sessionManager.updateClientByStreamId(streamid, client, false, null);
 
-						// Update the Client List
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-						// There is a need to send an extra Event here, cause at
-						// this moment there could be
-						// already somebody in the Room waiting
-
-						//Sync message to everybody
-						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-						
-						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-					}
-				}
-
+				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(client.getRoomId());
+				
+				//Sync message to everybody
+				sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 			}
 			
 			//Sync message to everybody
-			sendMessageToCurrentScope("addNewUser", currentClient, false);
+			sendMessageToCurrentScope("addNewUser", client, false);
 
 			//Status object for Shared Browsing
 			BrowserStatus browserStatus = (BrowserStatus)current.getScope().getAttribute("browserStatus");
@@ -1319,7 +1187,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// RoomStatus roomStatus = new RoomStatus();
 
 			// FIXME: Rework Client Object to DTOs
-			roomStatus.setClientList(clientListRoom);
+			roomStatus.setClientList(roomClients);
 			roomStatus.setBrowserStatus(browserStatus);
 
 			return roomStatus;
@@ -1481,25 +1349,127 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
 	 * @param whiteboardId - id of whiteboard parameters will be send to
+	 * @return 1 in case of no errors, -1 otherwise
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public int sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
+	public int sendVarsByWhiteboardId(List<?> whiteboardObjParam, Long whiteboardId) {
 		try {
-			Map whiteboardObj = new HashMap();
+			IConnection current = Red5.getConnectionLocal();
+			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			return sendToWhiteboard(client, whiteboardObjParam, whiteboardId);
+		} catch (Exception err) {
+			log.error("[sendVarsByWhiteboardId]", err);
+			return -1;
+		}
+	}
+	
+	private static Point getSize(FileItem fi) {
+		Point result = new Point(0, 0);
+		if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
+			result.x = fi.getFlvWidth();
+			result.y = fi.getFlvHeight();
+		}
+		return result;
+	}
+	
+	private static List<?> getWbObject(FileItem fi, String url) {
+		String fuid = UUID.randomUUID().toString();
+		Point size = getSize(fi);
+		String type = "n/a";
+		switch (fi.getType()) {
+			case Image:
+				type = "image";
+				break;
+			case Presentation:
+				type = "swf";
+				break;
+			default:
+		}
+		return Arrays.asList(
+				type // 0
+				, url // urlname
+				, "--dummy--" // baseurl
+				, fi.getHash() // fileName //3
+				, "--dummy--" // moduleName //4
+				, "--dummy--" // parentPath //5
+				, "--dummy--" // room //6
+				, "--dummy--" // domain //7
+				, 1 // slideNumber //8
+				, 0 // innerx //9
+				, 0 // innery //10
+				, size.x // innerwidth //11
+				, size.y // innerheight //12
+				, 20 // zoomlevel //13
+				, size.x // initwidth //14
+				, size.y // initheight //15
+				, 100 // currentzoom //16 FIXME TODO
+				, fuid // uniquObjectSyncName //17
+				, fi.getName() // standardFileName //18
+				, true // fullFit //19 FIXME TODO
+				, 1 // zIndex //-8 FIXME TODO
+				, null //-7
+				, 0 // this.counter //-6 FIXME TODO
+				, 0 // posx //-5
+				, 0 // posy //-4
+				, size.x // width //-3
+				, size.y // height //-2
+				, fuid // this.currentlayer.name //-1
+				);
+	}
+	
+	private static List<?> getFlvWbObject(FileItem fi) {
+		String fuid = UUID.randomUUID().toString();
+		Point size = getSize(fi);
+		return Arrays.asList(
+				"flv" // 0: 'flv'
+				, fi.getId() // 1: 7
+				, fi.getName() // 2: 'BigBuckBunny_512kb.mp4'
+				, false // 3: false //playRemote
+				, size.x // 4: 416
+				, size.y // 5: 240
+				, 1 // 6: 1 // z-index 
+				, null // 7: null //TODO 
+				, 0 // 8: 0 //TODO // counter
+				, 0 // 9: 0 //TODO // x
+				, 0 // 10: 0 //TODO // y
+				, size.x // 11: 749 // width
+				, size.y // 12: 739 // height
+				, fuid // 13: 'flv_1469602000351' 
+				);
+	}
+	
+	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
+		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
+		
+		List<?> wbObject = new ArrayList<>();
+		switch (fi.getType()) {
+			case Image:
+				wbObject = getWbObject(fi, url);
+				break;
+			case Presentation:
+				wbObject = getWbObject(fi, url);
+				break;
+			case Video:
+				wbObject = getFlvWbObject(fi);
+				break;
+			default:
+		}
+		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
+	}
+	
+	private int sendToWhiteboard(Client client, List<?> wbObj, Long wbId) {
+		try {
+			// Check if this User is the Mod:
+			if (client == null) {
+				return -1;
+			}
+			
+			Map<Integer, Object> whiteboardObj = new HashMap<>();
 			int i = 0;
-			for (Object obj : whiteboardObjParam) {
+			for (Object obj : wbObj) {
 				whiteboardObj.put(i++, obj);
 			}
 
-			// Check if this User is the Mod:
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-			if (currentClient == null) {
-				return -1;
-			}
-
-			Long roomId = currentClient.getRoomId();
+			Long roomId = client.getRoomId();
 
 			// log.debug("***** sendVars: " + whiteboardObj);
 
@@ -1508,15 +1478,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			if (action.equals("deleteMindMapNodes")) {
 				// Simulate Single Delete Events for z-Index
-				List actionObject = (List) whiteboardObj.get(3);
+				List<?> actionObject = (List<?>) whiteboardObj.get(3);
 
-				List<List> itemObjects = (List) actionObject.get(3);
+				@SuppressWarnings("unchecked")
+				List<List<?>> itemObjects = (List<List<?>>) actionObject.get(3);
 
-				Map whiteboardTempObj = new HashMap();
+				Map<Integer, Object> whiteboardTempObj = new HashMap<>();
 				whiteboardTempObj.put(2, "delete");
 
-				for (List itemObject : itemObjects) {
-					List<Object> tempActionObject = new LinkedList<Object>();
+				for (List<?> itemObject : itemObjects) {
+					List<Object> tempActionObject = new ArrayList<>();
 					tempActionObject.add("mindmapnode");
 					tempActionObject.add(itemObject.get(0)); // z-Index -8
 					tempActionObject.add(null); // simulate -7
@@ -1529,21 +1500,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					whiteboardTempObj.put(3, tempActionObject);
 
-					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, whiteboardId);
+					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, wbId);
 				}
 			} else {
-				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, whiteboardId);
+				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
 			}
 
 			Map<String, Object> sendObject = new HashMap<String, Object>();
-			sendObject.put("id", whiteboardId);
-			sendObject.put("param", whiteboardObjParam);
+			sendObject.put("id", wbId);
+			sendObject.put("param", wbObj);
 
 			boolean showDrawStatus = getWhiteboardDrawStatus();
 
-			sendMessageToCurrentScope("sendVarsToWhiteboardById", new Object[]{showDrawStatus ? currentClient : null, sendObject}, false);
+			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[] { showDrawStatus ? client : null, sendObject });
 		} catch (Exception err) {
-			log.error("[sendVarsByWhiteboardId]", err);
+			log.error("[sendToWhiteboard]", err);
+			return -1;
 		}
 		return 1;
 	}
@@ -1624,7 +1596,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * wrapper method
 	 * @param newMessage
 	 */
-	public void sendMessageToMembers(Object newMessage) {
+	public void sendMessageToMembers(List<?> newMessage) {
 		//Sync to all users of current scope
 		sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 	}
