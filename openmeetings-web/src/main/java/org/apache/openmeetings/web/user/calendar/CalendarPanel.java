@@ -78,7 +78,7 @@ public class CalendarPanel extends UserPanel {
 			refresh(target);
 		}
 	};
-    private AbstractAjaxTimerBehavior syncTimer = new AbstractAjaxTimerBehavior(Duration.minutes(3)) {
+    private AbstractAjaxTimerBehavior syncTimer = new AbstractAjaxTimerBehavior(Duration.minutes(4)) {
         @Override
         protected void onTimer(AjaxRequestTarget target) {
             log.debug("CalDAV Syncing has begun");

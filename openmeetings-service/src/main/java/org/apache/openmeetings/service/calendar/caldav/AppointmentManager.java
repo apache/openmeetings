@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -77,22 +78,22 @@ public class AppointmentManager {
      * @return HttpClient object that was created.
      */
     public void createHttpClient() {
-        if(client == null){
+        if(client == null) {
             HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-            client = new HttpClient(connectionManager);
             HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-            int maxHostConnections = 10;
-            params.setMaxConnectionsPerHost(client.getHostConfiguration(), maxHostConnections);
-            client.getHttpConnectionManager().setParams(params);
+            int maxHostConnections = 6;
+            params.setDefaultMaxConnectionsPerHost(maxHostConnections);
+            connectionManager.setParams(params);
+            client = new HttpClient(connectionManager);
         }
     }
 
-    public void getHttpClient(OmCalendar calendar) throws URIException {
+    public void getHttpClient(OmCalendar calendar) {
         createHttpClient();
 
-        URI temp = new URI(calendar.getHref(), false); //TODO Check if true or false for escaped string.
-        path = ensureTrailingSlash(temp.getPath());
-        client.getHostConfiguration().setHost(temp);
+        URI temp = URI.create(calendar.getHref());
+        path = temp.getPath();
+        client.getHostConfiguration().setHost(temp.getHost(), temp.getPort(), temp.getScheme());
     }
 
     private String ensureTrailingSlash(String str){
@@ -102,13 +103,13 @@ public class AppointmentManager {
             return str + "/";
     }
 
-    public void provideCredentials(OmCalendar calendar, Credentials credentials) throws URIException {
+    public void provideCredentials(OmCalendar calendar, Credentials credentials) {
         if(!Strings.isEmpty(calendar.getHref()) && credentials != null){
             createHttpClient();
 
-            URI temp = new URI(calendar.getHref(), false);
-            path = ensureTrailingSlash(temp.getPath());
-            client.getHostConfiguration().setHost(temp);
+            URI temp = URI.create(calendar.getHref());
+            path = temp.getPath();
+            client.getHostConfiguration().setHost(temp.getHost(), temp.getPort(), temp.getScheme());
             client.getState().setCredentials(new AuthScope(temp.getHost(), temp.getPort()),
                     credentials);
         }
@@ -125,7 +126,7 @@ public class AppointmentManager {
             if(status == DavServletResponse.SC_OK || status == DavServletResponse.SC_NO_CONTENT)
                 return true;
         } catch (Exception e) {
-            log.error("Error executing HeadMethod.");
+            log.error("Error executing OptionsMethod during testConnection.");
         } finally {
             if(optionsMethod != null)
                 optionsMethod.releaseConnection();
@@ -138,10 +139,10 @@ public class AppointmentManager {
      * @param calendar Calendar to update or create
      */
     public void createCalendar(OmCalendar calendar){
-        if(calendar.getId() != null) {
+        if (calendar.getId() == null)
+            discoverCalendars(calendar);
+        else
             calendarDao.update(calendar);
-        }
-        discoverCalendars(calendar);
     }
 
     /**
@@ -165,28 +166,24 @@ public class AppointmentManager {
         if(calendar.getSyncType() != SyncType.NONE) {
 
             SyncHandler syncHandler;
-            try {
-                getHttpClient(calendar);
+            getHttpClient(calendar);
 
-                switch (calendar.getSyncType()) {
-                    case WEBDAV_SYNC:
-                        syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao, utils);
-                        break;
-                    case CTAG:
-                        syncHandler = new CtagHandler(path, calendar, client, appointmentDao, utils);
-                        break;
-                    case ETAG:
-                    default: //Default is the EtagsHandler.
-                        syncHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
-                        break;
-                }
-
-
-                syncHandler.updateItems();
-                calendarDao.update(calendar);
-            } catch (URIException e){
-                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
+            switch (calendar.getSyncType()) {
+                case WEBDAV_SYNC:
+                    syncHandler = new WebDAVSyncHandler(path, calendar, client, appointmentDao, utils);
+                    break;
+                case CTAG:
+                    syncHandler = new CtagHandler(path, calendar, client, appointmentDao, utils);
+                    break;
+                case ETAG:
+                default: //Default is the EtagsHandler.
+                    syncHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+                    break;
             }
+
+
+            syncHandler.updateItems();
+            calendarDao.update(calendar);
         }
     }
 
@@ -326,8 +323,6 @@ public class AppointmentManager {
                     }
                 }
 
-            } catch (URIException e) {
-                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
                 log.error("Error executing PROPFIND Method, during Initialization of Calendar.");
                 calendar.setSyncType(SyncType.NONE);
@@ -430,8 +425,6 @@ public class AppointmentManager {
                     calendar.setSyncType(SyncType.NONE);
                 }
 
-            } catch (URIException e){
-                log.error("Unable to parse href for Calendar ID: " + calendar.getId());
             } catch (Exception e) {
                 log.error("Error in doing initial Sync using PROPFIND Method.");
                 calendar.setSyncType(SyncType.NONE);
@@ -439,7 +432,6 @@ public class AppointmentManager {
                 if(propFindMethod != null)
                     propFindMethod.releaseConnection();
             }
-            calendarDao.update(calendar);
         }
     }
 
@@ -503,8 +495,6 @@ public class AppointmentManager {
                         calendar, client, appointmentDao, utils);
                 multigetHandler.updateItems();
 
-            } catch (URIException e) {
-                log.error("Unable to parse href for calendar");
             } catch (Exception e) {
                 log.error("Unable to store the Appointment on the CalDAV server.");
             } finally {
@@ -544,8 +534,6 @@ public class AppointmentManager {
                         || status == DavServletResponse.SC_NOT_FOUND)
                     log.info("Successfully deleted appointment with id: " + appointment.getId());
 
-            } catch (URIException e) {
-                log.error("Unable to parse href for calendar.");
             } catch (Exception e) {
                 log.error("Unable to execute DELETE Method on: " + appointment.getHref());
             } finally {

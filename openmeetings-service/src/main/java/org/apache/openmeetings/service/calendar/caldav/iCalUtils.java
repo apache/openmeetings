@@ -20,6 +20,7 @@ package org.apache.openmeetings.service.calendar.caldav;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
@@ -32,6 +33,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.wicket.protocol.http.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,24 @@ public class iCalUtils {
         return this.parseCalendartoAppointment(a, calendar, etag);
     }
 
+    public List<Appointment> parseCalendartoAppointments (Calendar calendar, Long ownerId){
+        List<Appointment> appointments = new ArrayList<>();
+        ComponentList<CalendarComponent> events = calendar.getComponents(Component.VEVENT);
+        User owner = userDao.get(ownerId);
+        TimeZone tz = parseTimeZone(calendar, owner);
+
+        for(CalendarComponent event : events){
+            Appointment a = new Appointment();
+            a.setOwner(owner);
+            a.setDeleted(false);
+            a.setRoom(createDefaultRoom());
+            a.setReminder(Appointment.Reminder.none);
+            a = addVEventPropertiestoAppointment(a, event, tz);
+            appointments.add(a);
+        }
+        return appointments;
+    }
+
     /**
      * Updating Appointments which already exist, by parsing the Calendar. And updating etag.
      * Doesn't work with complex Recurrences.
@@ -95,9 +115,18 @@ public class iCalUtils {
     public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar,
                                                   String etag){
         if(calendar == null) return a;
-        Component event = calendar.getComponent(Component.VEVENT);
-        TimeZone tz = parseTimeZone(calendar, a.getOwner());
+        CalendarComponent event = calendar.getComponent(Component.VEVENT);
+        if(event != null) {
+            TimeZone tz = parseTimeZone(calendar, a.getOwner());
 
+            a.setEtag(etag);
+            a = addVEventPropertiestoAppointment(a, event, tz);
+        }
+        return a;
+    }
+
+    private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event,
+                                                         TimeZone tz){
         Property dtstart = event.getProperty(Property.DTSTART),
                 dtend = event.getProperty(Property.DTEND),
                 uid = event.getProperty(Property.UID),
@@ -109,8 +138,6 @@ public class iCalUtils {
                 organizer = event.getProperty(Property.ORGANIZER),
                 recur = event.getProperty(Property.RRULE);
         PropertyList attendees = event.getProperties(Property.ATTENDEE);
-
-        a.setEtag(etag);
 
         if(uid != null)
             a.setIcalId(uid.getValue());
@@ -250,13 +277,14 @@ public class iCalUtils {
      */
     public Date parseDate(String str, String[] patterns, TimeZone timeZone) {
         FastDateFormat parser = null;
+        Locale locale = WebSession.get().getLocale();
 
         if(str.endsWith("Z"))
             timeZone = TimeZone.getTimeZone("UTC");
 
         ParsePosition pos = new ParsePosition(0);
         for(String pattern: patterns){
-            parser = FastDateFormat.getInstance(pattern, timeZone);
+            parser = FastDateFormat.getInstance(pattern, timeZone, locale);
             pos.setIndex(0);
             Date date = parser.parse(str, pos);
             if (date != null && pos.getIndex() == str.length()) {
@@ -294,12 +322,18 @@ public class iCalUtils {
         icsCalendar.getProperties().add(new ProdId("-//Events Calendar//Apache Openmeetings//EN"));
         icsCalendar.getProperties().add(Version.VERSION_2_0);
         icsCalendar.getProperties().add(CalScale.GREGORIAN);
+        icsCalendar.getComponents().add(timeZone.getVTimeZone());
 
         DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
-        start.setTimeZone(timeZone);
-        end.setTimeZone(timeZone);
 
         VEvent meeting = new VEvent(start, end, appointment.getTitle());
+        meeting = addVEventpropsfromAppointment(appointment, meeting);
+        icsCalendar.getComponents().add(meeting);
+
+        return icsCalendar;
+    }
+
+    private VEvent addVEventpropsfromAppointment(Appointment appointment, VEvent meeting){
 
         if(appointment.getLocation() != null)
             meeting.getProperties().add(new Location(appointment.getLocation()));
@@ -353,8 +387,32 @@ public class iCalUtils {
         organizer.getParameters().add(orgCn);
         meeting.getProperties().add(organizer);
 
+        return meeting;
+    }
+
+    public Calendar parseAppointmentstoCalendar(List<Appointment> appointments, Long ownerId) throws Exception {
+        String tzid = parseTimeZone(null, userDao.get(ownerId)).getID();
+
+        TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
+
+        net.fortuna.ical4j.model.TimeZone timeZone = registry.getTimeZone(tzid);
+        if (timeZone == null) {
+            throw new Exception("Unable to get time zone by id provided: " + tzid);
+        }
+
+        Calendar icsCalendar = new Calendar();
+        icsCalendar.getProperties().add(new ProdId("-//Events Calendar//Apache Openmeetings//EN"));
+        icsCalendar.getProperties().add(Version.VERSION_2_0);
+        icsCalendar.getProperties().add(CalScale.GREGORIAN);
         icsCalendar.getComponents().add(timeZone.getVTimeZone());
-        icsCalendar.getComponents().add(meeting);
+
+        for(Appointment appointment: appointments){
+            DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
+
+            VEvent meeting = new VEvent(start, end, appointment.getTitle());
+            meeting = addVEventpropsfromAppointment(appointment, meeting);
+            icsCalendar.getComponents().add(meeting);
+        }
         return icsCalendar;
     }
 }

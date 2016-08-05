@@ -126,9 +126,11 @@ public class SyncMethod extends DavMethodBase {
                     log.info("Sync-Token for REPORT: " + synctoken);
 
                     multiStatus = MultiStatus.createFromXml(document.getDocumentElement());
+                    processMultiStatusBody(multiStatus, httpState, httpConnection);
                 }
             } catch (IOException e){
                 log.error("Error while parsing sync-token.");
+                setSuccess(false);
             }
         }
     }

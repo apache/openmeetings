@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.calendar;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.*;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
-import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -55,7 +54,7 @@ public class CalendarDialog extends AbstractFormDialog {
     private DialogButton delete = new DialogButton("delete", "Delete");
     private UserCalendarForm form;
     private MessageDialog confirmDelete;
-    private List<OmCalendar> cals;
+    private List<OmCalendar> cals; //List of calendars for syncing
     private int calIndex = 0;
 
     public enum DIALOG_TYPE {
@@ -64,6 +63,8 @@ public class CalendarDialog extends AbstractFormDialog {
         UPDATE_APPOINTMENT,
         DELETE_APPOINTMENT
     }
+
+    //Defines the current mode of in which the Dialog is functioning in
     private DIALOG_TYPE type = DIALOG_TYPE.UPDATE_CALENDAR;
     private Appointment appointment = null;
 
@@ -87,7 +88,9 @@ public class CalendarDialog extends AbstractFormDialog {
         add(confirmDelete);
     }
 
-    //Open the Dialog with a specific type of Appointment Based Prompts
+    /**
+     * Open the Dialog with a specific type of Appointment Based Prompts
+     */
     public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, Appointment a){
         this.type = type;
         appointment = a;
@@ -110,7 +113,9 @@ public class CalendarDialog extends AbstractFormDialog {
 
     }
 
-    //Open the Dialog with a specific type of Calendar Based Prompts
+    /**
+     * Open the Dialog with a specific type of Calendar Based Prompts
+     */
     public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, OmCalendar c){
         this.type = type;
         switch (type){
@@ -153,15 +158,11 @@ public class CalendarDialog extends AbstractFormDialog {
                 OmCalendar c = form.getModelObject();
                 c.setHref(form.url.getModelObject());
                 AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-                try {
-                    if(c.getId() == null) {
-                        appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
-                                form.pass.getModelObject()));
-                    }
-                    appointmentManager.createCalendar(c);
-                } catch (URIException e) {
-                    log.error("Unable to parse URL: " + c.getHref());
+                if(c.getId() == null) {
+                    appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
+                            form.pass.getModelObject()));
                 }
+                appointmentManager.createCalendar(c);
                 calendarPanel.refreshCalendars(target);
                 calendarPanel.refresh(target);
                 break;
@@ -182,43 +183,60 @@ public class CalendarDialog extends AbstractFormDialog {
                 calendarPanel.refresh(target);
                 break;
         }
+        clearFormModel(target);
         target.add(feedback);
     }
 
-    public void syncCalendar(OmCalendar c, IPartialPageRequestHandler handler){
+    /**
+     * Performs syncing of the Calendar.
+     * @param c Calendar to sync
+     * @param handler Handler used to update the CalendarPanel
+     */
+    private void syncCalendar(OmCalendar c, IPartialPageRequestHandler handler){
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-        try {
-            appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
-                    form.pass.getModelObject()));
-            appointmentManager.syncItem(c);
-            calendarPanel.refresh(handler);
-            log.trace("Calendar " + c.getTitle() + " Successfully synced.");
-        } catch (URIException e) {
-            log.error("Unable to parse URL: " + c.getHref());
-        }
+        appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
+                form.pass.getModelObject()));
+        appointmentManager.syncItem(c);
+        calendarPanel.refresh(handler);
+        log.trace("Calendar " + c.getTitle() + " Successfully synced.");
     }
 
-    public void deleteAppointment(Appointment a){
+    /**
+     * Performs Deletion of Appointment on the Calendar.
+     * @param a Appointment to delete
+     */
+    private void deleteAppointment(Appointment a){
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
         appointmentManager.deleteItem(a);
         appointment = null;
     }
 
-    public void updateAppointment(Appointment a){
+    /**
+     * Performs updation of Appointment on the Calendar.
+     * @param a Appointment to update
+     */
+    private void updateAppointment(Appointment a){
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
         appointmentManager.updateItem(a);
         appointment = null;
     }
 
-    public static boolean isOwner(Appointment object) {
+    private static boolean isOwner(Appointment object) {
         return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
     }
 
-    public static boolean isOwner(OmCalendar object) {
+    private static boolean isOwner(OmCalendar object) {
         return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
     }
 
-    public boolean setCalendarList(IPartialPageRequestHandler target){
+    /**
+     * Sets the calendar list to sync and
+     * syncs all them until a calendar whose
+     * @param target Ajax target to update the buttons.
+     * @return <code>true</code> if a Calendar needs to be synced
+     * else all calendars should have gotten synced
+     */
+    private boolean setCalendarList(IPartialPageRequestHandler target){
         type = DIALOG_TYPE.SYNC_CALENDAR;
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
         cals = appointmentManager.getCalendars();
@@ -229,7 +247,7 @@ public class CalendarDialog extends AbstractFormDialog {
     }
 
     // Sets the form object when in need of syncing. Returns true if model is set
-    public boolean setFormModelObject() {
+    private boolean setFormModelObject() {
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
 
         if(cals != null && !cals.isEmpty() && calIndex < cals.size()) {
@@ -250,7 +268,7 @@ public class CalendarDialog extends AbstractFormDialog {
     }
 
     // Sets the form model object if the calendar cannot be reached. Returns true if model is set
-    public boolean setFormModelObject(Appointment a, IPartialPageRequestHandler target) {
+    private boolean setFormModelObject(Appointment a, IPartialPageRequestHandler target) {
         OmCalendar c = a.getCalendar();
         if(calendarPanel.getAppointmentManager().testConnection(c))
             return false;
@@ -261,7 +279,7 @@ public class CalendarDialog extends AbstractFormDialog {
         return true;
     }
 
-    public void setFormModelObject(OmCalendar c, AjaxRequestTarget target) {
+    private void setFormModelObject(OmCalendar c, AjaxRequestTarget target) {
         if(c != null) {
             form.setModelObject(c);
             form.url.setModelObject(c.getHref());
@@ -290,10 +308,18 @@ public class CalendarDialog extends AbstractFormDialog {
         if (delete.equals(button)) {
             confirmDelete.open(handler);
         }
+        clearFormModel(handler);
     }
 
     protected void onError(AjaxRequestTarget target) {
         target.add(feedback);
+    }
+
+    private void clearFormModel(IPartialPageRequestHandler handler){
+        form.clearInput();
+        form.url.setModelObject(null);
+        form.username.setModelObject(null);
+        handler.add(form);
     }
 
     private class UserCalendarForm extends Form<OmCalendar> {
@@ -340,33 +366,38 @@ public class CalendarDialog extends AbstractFormDialog {
                     pass.setEnabled(true);
                     break;
             }
-            username.setModelObject("");
         }
 
+        /**
+         * Validates the credentials and the server entered by the user by
+         * performing a HTTP Options Method.
+         */
         @Override
         protected void onValidate() {
-            switch (type){
-                case UPDATE_CALENDAR:
-                    if(getModelObject().getId() != null)
-                        return;
-                case UPDATE_APPOINTMENT:
-                case DELETE_APPOINTMENT:
-                case SYNC_CALENDAR:
-                    AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-                    try {
-                        OmCalendar calendar = getModelObject();
-                        if(url.isEnabled())
-                            calendar.setHref(url.getInput());
-                        appointmentManager.provideCredentials(calendar, new UsernamePasswordCredentials(username.getInput(),
-                                pass.getInput()));
-                        if(appointmentManager.testConnection(calendar))
+            if (!hasError()) {
+                switch (type) {
+                    case UPDATE_CALENDAR:
+                        if (getModelObject().getId() != null)
                             return;
-                    } catch (Exception e) {
-                        log.error("Error executing the TestConnection");
-                    }
+                    case UPDATE_APPOINTMENT:
+                    case DELETE_APPOINTMENT:
+                    case SYNC_CALENDAR:
+                        AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
+                        try {
+                            OmCalendar calendar = getModelObject();
+                            if (url.isEnabled())
+                                calendar.setHref(url.getInput());
+                            appointmentManager.provideCredentials(calendar, new UsernamePasswordCredentials(username.getInput(),
+                                    pass.getInput()));
+                            if (appointmentManager.testConnection(calendar))
+                                return;
+                        } catch (Exception e) {
+                            log.error("Error executing the TestConnection");
+                        }
 
-                    error(Application.getString("caldav.error"));
-                    break;
+                        error(Application.getString("caldav.error"));
+                        break;
+                }
             }
         }
     }
