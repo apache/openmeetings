@@ -253,12 +253,13 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 	
 	private static List<StringLabel> getLabels(Locale l, final String search) {
-		List<StringLabel> result = null;
-		if (labelCache.containsKey(l)) {
-			result = labelCache.get(l);
-		} else {
-			result = labelCache.putIfAbsent(l, getLabels(l));
+		if (!labelCache.containsKey(l)) {
+			List<StringLabel> ll = getLabels(l);
+			if (ll != null) {
+				labelCache.putIfAbsent(l, ll);
+			}
 		}
+		List<StringLabel> result = labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>();
 		if (!Strings.isEmpty(search)) {
 			CollectionUtils.filter(result, new Predicate<StringLabel>() {
 				@Override
