@@ -96,6 +96,7 @@ public class FolderPanel extends Panel {
 					super.onConfigure(behavior);
 					behavior.setOption("revert", "treeRevert");
 					behavior.setOption("cursor", Options.asString("move"));
+					behavior.setOption("helper", "'clone'");
 				}
 			}.setContainment(treePanel.getContainment());
 			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
