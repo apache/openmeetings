@@ -105,7 +105,7 @@ html, body {
 }
 
 .addLanguagePanel {
-	display: block;
+	display: inline-block;
 }
 
 .addLanguagePanel select {
@@ -257,6 +257,9 @@ html, body {
 	line-height: 20px;
 	color: transparent;
 }
+.trash-toolbar .fileitem {
+	display: none;
+}
 .trash-toolbar-hover {
 	color: inherit;
 }
@@ -322,8 +325,11 @@ html, body {
 	background: url(images/refresh.gif);
 }
 .trash.om-icon {
-	background: url(images/trash.png);
+	background: url(images/bin_closed.png);
 }
+.ui-state-hover.trash-toolbar-hover .trash.om-icon {
+	background: url(images/bin_empty.png);
+} 
 .folder-create.om-icon {
 	background: url(images/folder_add.png);
 }

@@ -16,11 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+ /**** FIXME TODO need to be unified with other icons used ****/
 div.formSaveBar {
 	width: 100%;
 	height: 22px;
 }
- 
+.addButton, .delButton {
+	display: inline-block;
+	cursor: pointer;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+	vertical-align: super;
+}
 div.formSaveButton input {
 	background: url(images/forms/disk.png) no-repeat;
 	float: left;
@@ -31,7 +42,12 @@ div.formSaveButton input {
 	margin-left: 2px;
 	margin-top: 2px;
 }
-
+.addButton {
+	background: url(images/forms/plus_icon.png) no-repeat;
+}
+.delButton {
+	background: url(images/forms/cancel_icon.png) no-repeat;
+}
 div.formNewButton input {
 	background: url(images/forms/plus_icon.png) no-repeat;
 	float: left;
@@ -42,18 +58,9 @@ div.formNewButton input {
 	margin-left: 2px;
 	margin-top: 2px;
 }
-
 div.formNewButton.disabled input {
 	background: url(images/forms/plus_icon_disabled.png) no-repeat;
-	float: left;
-	cursor: default;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
 }
-
 div.formRefreshButton input {
 	background: url(images/forms/arrow_refresh_small.png) no-repeat;
 	float: left;
@@ -64,7 +71,6 @@ div.formRefreshButton input {
 	margin-left: 2px;
 	margin-top: 2px;
 }
-
 div.formCancelButton>div {
 	background: url(images/forms/cancel_icon.png) no-repeat;
 	display: inline-block;
