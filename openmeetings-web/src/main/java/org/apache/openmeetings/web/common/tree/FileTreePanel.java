@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -36,6 +37,8 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.CallbackParameter;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -49,7 +52,10 @@ import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.core.ajax.IJQueryAjaxAware;
+import com.googlecode.wicket.jquery.core.ajax.JQueryAjaxBehavior;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -104,6 +110,37 @@ public abstract class FileTreePanel extends Panel {
 			}
 			
 			@Override
+			public JQueryBehavior newWidgetBehavior(String selector) {
+				return new DroppableBehavior(selector, this) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected JQueryAjaxBehavior newOnDropAjaxBehavior(IJQueryAjaxAware source) {
+						return new OnDropAjaxBehavior(source) {
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public CharSequence getCallbackFunctionBody(CallbackParameter... parameters) {
+								String dialogId = UUID.randomUUID().toString();
+
+								String statement = "var $drop = $(this);";
+								statement += "$('body').append('<div id=" + dialogId + ">" + getString("713") + "</div>');";
+								statement += "$( '#" + dialogId
+										+ "' ).dialog({ title: '" + getString("80") + "', dialogClass: 'no-close', buttons: [";
+								statement += "    { text: '" + getString("54") + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
+								statement += "    { text: '" + getString("25") + "', click: function() { $( this ).dialog('close'); } } ";
+								statement += "],";
+								statement += "close: function(event, ui) { $(this).dialog('destroy').remove(); }";
+								statement += "});";
+
+								return statement;
+							}
+						};
+					}
+				};
+			}
+			
+			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
 				if (o instanceof FileItem) {
@@ -133,6 +170,14 @@ public abstract class FileTreePanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				FileItem f = selectedFile.getObject();
+				if (f != null && f.getId() > 0) {
+					super.onEvent(target);
+				}
+			}
+			
+			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				delete(selectedFile.getObject(), target);
 			}
@@ -152,7 +197,7 @@ public abstract class FileTreePanel extends Panel {
 		return new WebMarkupContainer(id).setVisible(false);
 	}
 	
-	void delete(FileItem f, AjaxRequestTarget target) {
+	void delete(FileItem f, IPartialPageRequestHandler handler) {
 		long id = f.getId();
 		if (id > 0) {
 			if (f instanceof Recording) {
@@ -161,7 +206,7 @@ public abstract class FileTreePanel extends Panel {
 				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
 			}
 		}
-		target.add(trees); //FIXME add correct refresh
+		handler.add(trees); //FIXME add correct refresh
 	}
 	
 	public void createRecordingFolder(String name) {
