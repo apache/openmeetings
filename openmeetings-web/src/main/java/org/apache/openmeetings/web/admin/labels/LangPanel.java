@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -42,6 +44,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -66,15 +69,14 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  * 
  */
 public class LangPanel extends AdminPanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final LangForm langForm;
+	private FileUploadField fileUploadField;
 
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");;
-	private LangForm langForm;
 	Map.Entry<Long, Locale> language;
-	private FileUploadField fileUploadField;
-	// Create feedback panels
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
@@ -225,10 +227,35 @@ public class LangPanel extends AdminPanel {
 		});
 		
 		add(langForm);
-		add(new AddLanguageForm("addLangForm", this));
+		final AddLanguageDialog addLang = new AddLanguageDialog("addLang", this);
+		add(addLang, new AjaxLink<Void>("addLangBtn") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				addLang.open(target);
+			}
+		});
 		add(BootstrapFileUploadBehavior.INSTANCE);
 	}
 
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new ConfirmableAjaxBorder("deleteLangBtn", getString("80"), getString("833")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				LabelDao.delete(language.getValue());
+				List<Map.Entry<Long, Locale>> langs = LangForm.getLanguages();
+				language = langs.isEmpty() ? null : langs.get(0);
+				langForm.updateLanguages(target);
+				target.add(listContainer);
+			}
+		});
+	}
+	
 	public LangForm getLangForm() {
 		return langForm;
 	}

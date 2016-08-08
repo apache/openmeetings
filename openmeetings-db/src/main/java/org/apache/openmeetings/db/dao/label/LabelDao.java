@@ -259,7 +259,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 				labelCache.putIfAbsent(l, ll);
 			}
 		}
-		List<StringLabel> result = labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>();
+		List<StringLabel> result = new ArrayList<>(labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>());
 		if (!Strings.isEmpty(search)) {
 			CollectionUtils.filter(result, new Predicate<StringLabel>() {
 				@Override
