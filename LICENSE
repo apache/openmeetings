@@ -252,10 +252,6 @@ webapps/openmeetings/WEB-INF/lib/openmeetings-util-*.jar
 webapps/openmeetings/WEB-INF/lib/openmeetings-web-*.jar
 webapps/openmeetings/WEB-INF/lib/openmeetings-webservice-*.jar
 
-webapps/openmeetings/screenshare/icon.*
-webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
-webapps/openmeetings/screenshare/splashicon.*
-
 ======================================================================================================================
 
 Further those components are either itself or derivate work from 
@@ -264,7 +260,6 @@ projects licensed under the Apache License 2.0:
 ======================================================================================================================
 
 red5-*.jar
-webapps/openmeetings/screensharing/red5-*.jar
 commons-daemon-1.0.15.jar
 install-service.bat
 red5.bat
@@ -320,18 +315,7 @@ webapps/openmeetings/WEB-INF/lib/commons-lang-2.4.jar
 webapps/openmeetings/WEB-INF/lib/commons-pool-1.6.jar
 webapps/openmeetings/WEB-INF/lib/commons-pool2-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/commons-transaction-1.2.jar
-webapps/openmeetings/WEB-INF/lib/cxf-core-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-soap-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-bindings-xml-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-databinding-jaxb-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxrs-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-jaxws-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-frontend-simple-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-rs-extension-providers-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-transports-http-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-addr-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-wsdl-3.1.6.jar
-webapps/openmeetings/WEB-INF/lib/cxf-rt-ws-policy-3.1.6.jar
+webapps/openmeetings/WEB-INF/lib/cxf-*.jar
 webapps/openmeetings/WEB-INF/lib/derby-10.12.1.1.jar
 webapps/openmeetings/WEB-INF/lib/derbyclient-10.12.1.1.jar
 webapps/openmeetings/WEB-INF/lib/dom4j-1.6.1.jar
@@ -342,10 +326,10 @@ webapps/openmeetings/WEB-INF/lib/gson-2.2.4.jar
 webapps/openmeetings/WEB-INF/lib/guava-18.0.jar
 webapps/openmeetings/WEB-INF/lib/httpclient-4.5.2.jar
 webapps/openmeetings/WEB-INF/lib/httpcore-4.4.4.jar
-webapps/openmeetings/WEB-INF/lib/jettison-1.3.7.jar
-webapps/openmeetings/WEB-INF/lib/joda-time-2.7.jar
-webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.0.jar
-webapps/openmeetings/WEB-INF/lib/jqplot-7.3.0.jar
+webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
+webapps/openmeetings/WEB-INF/lib/joda-time-2.9.4.jar
+webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.1.jar
+webapps/openmeetings/WEB-INF/lib/jqplot-7.4.0.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
 webapps/openmeetings/WEB-INF/lib/neethi-3.0.3.jar
 webapps/openmeetings/WEB-INF/lib/openjpa-2.4.1.jar
@@ -366,18 +350,7 @@ webapps/openmeetings/WEB-INF/lib/xercesImpl-2.11.0.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.1.jar
 
-webapps/openmeetings/screenshare/commons-beanutils-1.9.2.jar
-webapps/openmeetings/screenshare/commons-codec-1.10.jar
-webapps/openmeetings/screenshare/commons-collections-3.2.2.jar
-webapps/openmeetings/screenshare/commons-lang3-3.4.jar
-webapps/openmeetings/screenshare/ehcache-core-2.6.11.jar
-webapps/openmeetings/screenshare/httpclient-4.5.2.jar
-webapps/openmeetings/screenshare/httpcore-4.4.4.jar
-webapps/openmeetings/screenshare/mina-core-2.0.13.jar
-webapps/openmeetings/screenshare/quartz-2.2.1.jar
-webapps/openmeetings/screenshare/quartz-2.2.2.jar
-webapps/openmeetings/screenshare/red5-*.jar
-webapps/openmeetings/screenshare/spring-*.jar
+webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
 
 lib/apache-mime4j-core-0.7.2.jar
 lib/apache-mime4j-dom-0.7.2.jar
@@ -437,9 +410,7 @@ conditions of the following licenses.
 
 For GlassFish components
 
-activation-1.1.jar
-jsr311-api-jar-1.1.1.jar
-plugins/el-api.jar
+webapps/openmeetings/WEB-INF/lib/activation-1.1.jar
 webapps/openmeetings/WEB-INF/lib/javax.mail-1.5.5.jar
 
 
@@ -564,8 +535,6 @@ The GlassFish code released under the CDDL shall be governed by the laws of the 
 
 For SLF4J:
 
-webapps/openmeetings/screenshare/jcl-over-slf4j-1.7.21.jar
-webapps/openmeetings/screenshare/slf4j-api-1.7.21.jar
 lib/jcl-over-slf4j-1.7.21.jar
 lib/jul-to-slf4j-1.7.21.jar
 lib/log4j-over-slf4j-1.7.21.jar
@@ -1182,7 +1151,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND
  For Bouncy Castle:
  
  lib/bcprov-jdk15on-1.54.jar
- webapps/openmeetings/screenshare/bcprov-jdk15on-1.54.jar
+ webapps/openmeetings/screenshare/bcprov-jdk15on-1.52.jar
 
  Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
 
@@ -1376,8 +1345,6 @@ For JDOM
 ======================================================================================================================
 The following components are BSD Licensed 
 
-lib/antlr-3.5.2.jar
-lib/antlr-runtime-3.5.2.jar
 lib/xmpcore-5.1.2.jar
 
 ======================================================================================================================
@@ -1459,8 +1426,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
-lib/asm-4.0.jar
-asm-5.0.4.jar
+lib/asm-5.0.4.jar
 	URL: http://asm.objectweb.org/asm/
 	
 ======================================================================================================================
@@ -1538,13 +1504,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 For the components:
 
-webapps/openmeetings/screenshare/logback-classic-1.1.7.jar
-webapps/openmeetings/screenshare/logback-core-1.1.7.jar
-lib/aspectjrt-1.8.2.jar
 lib/c3p0-0.9.1.1.jar
 lib/logback-classic-1.1.7.jar
 lib/logback-core-1.1.7.jar
-lib/jruby-1.6.8.jar
 plugins/ecj-4.5.jar
 
 Eclipse Public License - v 1.0
