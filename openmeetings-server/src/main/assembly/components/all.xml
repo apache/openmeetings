@@ -88,6 +88,7 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
+				<exclude>WEB-INF/lib/asm*</exclude>
 				<exclude>WEB-INF/lib/aopalliance*</exclude>
 				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
 				<exclude>WEB-INF/lib/slf4j-*</exclude>
