@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -224,11 +224,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				Long room_id = currentClient.getRoomId();
 
 				if (room_id != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
 
 					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
 
-					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
 					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
 						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}
