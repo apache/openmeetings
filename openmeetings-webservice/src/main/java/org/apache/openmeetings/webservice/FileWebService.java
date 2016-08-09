@@ -54,6 +54,7 @@ import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -103,12 +104,13 @@ public class FileWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
 
 			FileExplorerItem f = fileDao.get(id);
 			if (f == null) {
 				return new ServiceResult(-1L, "Bad id", Type.ERROR);
 			}
+			Long userId = sd.getUserId();
 			Set<Right> rights = userDao.getRights(userId);
 			if (AuthLevelUtil.hasWebServiceLevel(rights)
 				|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))
@@ -145,9 +147,9 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
 			
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				FileExplorerItem f = fileDao.get(externalId, externalType);
 				fileDao.delete(f);
 				return new ServiceResult(f.getId(), "Deleted", Type.SUCCESS);
@@ -181,7 +183,8 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 
 			FileExplorerItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
@@ -219,20 +222,19 @@ public class FileWebService {
 	/**
 	 * Get a LibraryPresentation-Object for a certain file
 	 * 
-	 * @param SID
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param parentFolder
 	 * 
 	 * @return - LibraryPresentation-Object for a certain file
 	 * @throws ServiceException
 	 */
-	public LibraryPresentation getPresentationPreviewFileExplorer(String SID, String parentFolder)
+	public LibraryPresentation getPresentationPreviewFileExplorer(String sid, String parentFolder)
 			throws ServiceException {
 
 		try {
-
-			Long userId = sessionDao.check(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 
 				File working_dir = new File(OmFileHelper.getUploadProfilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
@@ -269,7 +271,7 @@ public class FileWebService {
 	 * 
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param id
+	 * @param roomId
 	 *            Room Id
 	 * @return - File Explorer Object by a given Room
 	 * @throws ServiceException
@@ -282,7 +284,8 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("roomId " + roomId);
@@ -331,7 +334,8 @@ public class FileWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("getRoomByParent " + parentId);
@@ -379,9 +383,8 @@ public class FileWebService {
 			, @WebParam(name="name") @PathParam("name") String name) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				// FIXME TODO: check if this user is allowed to change this file
 
 				log.debug("rename " + id);
@@ -419,7 +422,8 @@ public class FileWebService {
 			, @WebParam(name="parentid") @PathParam("parentid") long parentId) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				// FIXME TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);

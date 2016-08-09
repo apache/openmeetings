@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.wicket.Application;
@@ -55,7 +56,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -66,13 +67,13 @@ public class UserService implements IUserService {
 	/**
 	 * get user by id, admin only
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param userId
 	 * @return User with the id given
 	 */
-	public User getUserById(String SID, long userId) {
-		Long authUserId = sessiondataDao.check(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
+	public User getUserById(String sid, long userId) {
+		Sessiondata sd = sessionDao.check(sid);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 			return userDao.get(userId);
 		}
 		return null;
@@ -86,7 +87,7 @@ public class UserService implements IUserService {
 	 */
 	public String refreshSession(String SID) {
 		try {
-			sessiondataDao.check(SID);
+			sessionDao.check(SID);
 			return "ok";
 		} catch (Exception err) {
 			log.error("[refreshSession]", err);
@@ -97,15 +98,15 @@ public class UserService implements IUserService {
 	/**
 	 * gets a whole user-list(admin-role only)
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param start
 	 * @param max
 	 * @param orderby
 	 * @return whole user-list
 	 */
-	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
-		Long userId = sessiondataDao.check(SID);
-		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
+	public List<User> getUserList(String sid, int start, int max, String orderby, boolean asc) {
+		Sessiondata sd = sessionDao.check(sid);
+		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
 		return null;
@@ -115,7 +116,7 @@ public class UserService implements IUserService {
 	 * kicks a user from the server, also from slaves if needed, this method is
 	 * only invoked by the connection administration UI
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param streamid
 	 * @param serverId
 	 *            0 means the session is locally, otherwise we have to perform a
@@ -123,11 +124,11 @@ public class UserService implements IUserService {
 	 * @return - true if user has sufficient permissions, false otherwise
 	 */
 	@Override
-	public boolean kickUserByStreamId(String SID, String streamid, long serverId) {
+	public boolean kickUserByStreamId(String sid, String streamid, long serverId) {
 		try {
-			Long userId = sessiondataDao.check(SID);
+			Sessiondata sd = sessionDao.check(sid);
 			// admins only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 				if (serverId == 0) {
 					Client rcl = sessionManager.getClientByStreamId(streamid, null);
 
@@ -173,15 +174,15 @@ public class UserService implements IUserService {
 	 * invoked from inside the conference room, that means all clients are on the
 	 * same server, no matter if clustered or not.
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param publicSID
 	 * @return - true in case user have sufficient permissions, null otherwise
 	 */
-	public boolean kickUserByPublicSID(String SID, String publicSID) {
+	public boolean kickUserByPublicSID(String sid, String publicSID) {
 		try {
-			Long userId = sessiondataDao.check(SID);
+			Sessiondata sd = sessionDao.check(sid);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {
@@ -208,11 +209,11 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public boolean kickUserBySessionId(String SID, long userId, String sessionId) {
+	public boolean kickUserBySessionId(String sid, long userId, String sessionId) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Sessiondata sd = sessionDao.check(sid);
 			// admin only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 				((IApplication)Application.get(wicketApplicationName)).invalidateClient(userId, sessionId);
 				return true;
 			}

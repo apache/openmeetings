@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarHelper;
@@ -48,7 +49,7 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -75,7 +76,7 @@ public class InvitationService implements IPendingServiceCallback {
 	/**
 	 * send an invitation to another user by Mail
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param firstname
 	 * @param lastname
 	 * @param message
@@ -94,7 +95,7 @@ public class InvitationService implements IPendingServiceCallback {
      * @param iCalTz
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
-	public Object sendInvitationHash(String SID, String firstname, String lastname,
+	public Object sendInvitationHash(String sid, String firstname, String lastname,
 			String message, String email, String subject,
 			Long roomId, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
@@ -102,7 +103,8 @@ public class InvitationService implements IPendingServiceCallback {
 			Long languageId, String iCalTz, boolean sendMail) {
 
 		try {
-			Long userId = sessiondataDao.check(SID);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				log.debug("sendInvitationHash: ");
@@ -141,10 +143,9 @@ public class InvitationService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject, Long languageId) throws Exception {
-		Long userId = sessiondataDao.check(SID);
-
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+	public String sendInvitationByHash(String sid, String invitationHash, String message, String subject, Long languageId) throws Exception {
+		Sessiondata sd = sessionDao.check(sid);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
 			inv.getInvitee().setLanguageId(languageId);
 			invitationManager.sendInvitationLink(inv, MessageType.Create, subject, message, false);
@@ -161,7 +162,7 @@ public class InvitationService implements IPendingServiceCallback {
 			if (i.isAllowEntry()) {
 				User u = i.getInvitee();
 				Long userId = -u.getId(); //TODO check this, extremely weird
-				sessiondataDao.updateUser(SID, userId);
+				sessionDao.updateUser(SID, userId);
 				IConnection current = Red5.getConnectionLocal();
 				String streamId = current.getClient().getId();
 				Client client = sessionManager.getClientByStreamId(streamId, null);

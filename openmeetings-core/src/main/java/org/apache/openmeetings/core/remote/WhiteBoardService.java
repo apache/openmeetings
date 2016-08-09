@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -70,7 +71,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private WhiteBoardObjectListManagerById wbListManagerById;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 
 	public Long getNewWhiteboardId() {
 		try {
@@ -142,20 +143,19 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * besides the Moderator to draw on the whiteboard, only a Moderator is
 	 * allowed to trigger this function
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param publicSID
 	 * @param canDraw
 	 * @return null in case of success, false otherwise
 	 */
-	public boolean setCanDraw(String SID, String publicSID, boolean canDraw) {
+	public boolean setCanDraw(String sid, String publicSID, boolean canDraw) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
 					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
@@ -177,15 +177,14 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-	public boolean setCanShare(String SID, String publicSID, boolean canShare) {
+	public boolean setCanShare(String sid, String publicSID, boolean canShare) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
 					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
@@ -207,15 +206,14 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-	public boolean setCanRemote(String SID, String publicSID, boolean canRemote) {
+	public boolean setCanRemote(String sid, String publicSID, boolean canRemote) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long userId = sessiondataDao.check(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
 					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
@@ -237,16 +235,15 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-    public boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
+	public boolean setCanGiveAudio(String sid, String publicSID, boolean canGiveAudio) {
 		try {
-            log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
+			log.debug("[setCanGiveAudio] " + sid + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
 					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
