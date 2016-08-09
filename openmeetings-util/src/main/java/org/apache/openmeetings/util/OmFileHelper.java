@@ -77,6 +77,7 @@ public class OmFileHelper {
 	public static final String JPG_EXTENSION = ".jpg";
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
 	public static final String FLV_MIME_TYPE = "video/flv";
+	public static final String MP4_MIME_TYPE = "video/mp4";
 	public static final String JPG_MIME_TYPE = "image/jpeg";
 
 	public static void setOmHome(File omHome) {

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
@@ -80,15 +80,12 @@ public class FlvExplorerConverter extends BaseConverter {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 			String name = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId();
-			File outputFullFlv = new File(getStreamsHibernateDir(), name + FLV_EXTENSION);
+			File outputFullFlv = new File(getStreamsHibernateDir(), name + MP4_EXTENSION);
 
 			fileExplorerItem.setType(Type.Video);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
-					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
-					"-vcodec", "flv",
-					outputFullFlv.getCanonicalPath() };
-			// "-s", flvWidth + "x" + flvHeight, 
+					"-codec:a", "mp3", "-codec:v", "mpeg4", outputFullFlv.getCanonicalPath() };
 
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getId(), argv_fullFLV);
@@ -110,7 +107,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-y", "-i",
-					outputFullFlv.getCanonicalPath(), "-vcodec", "mjpeg", "-vframes", "1", "-an",
+					outputFullFlv.getCanonicalPath(), "-codec:v", "mjpeg", "-vframes", "1", "-an",
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
 
