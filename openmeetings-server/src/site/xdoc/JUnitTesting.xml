@@ -21,71 +21,55 @@
 	</properties>
 
 	<body>
-
 		<section name="Introduction">
-
 			<p>
 				Automatic tests are the significant part of development process.
-				Below is the instruction of how to run Openmeetings
-				<a href="http://junit.org" rel="nofollow">JUnit</a>
-				tests.
+				Below is the instruction of how to run Openmeetings <a href="http://junit.org" rel="nofollow">JUnit</a> tests.
 			</p>
 		</section>
-
 		<section name="Details">
-
-
 			<ol>
 				<li>running tests using command line: </li>
 				<li>
 					<ul>
 						<li>all tests:
-							<source>ant test</source>
+							<source>mvn test</source>
 						</li>
 						<li>subset of tests by mask:
-							<source>ant -Dtestcases=TestError* test</source>
+							<source>mvn test -Dtest=TestUserService</source>
 						</li>
 					</ul>
 				</li>
 				<li>running tests from Eclipse IDE: </li>
 				<li>
 					<ul>
-						<li>
-							<source><![CDATA[ant -Ddb=<your_DB> prepare-eclipse]]></source>
-						</li>
 						<li>Start Eclipse </li>
-						<li>Load workspace with Openmeetings project (or refresh existing
-							project)
-						</li>
+						<li>Load workspace with Openmeetings project (or refresh existing project)</li>
 						<li>Select "Debug Configurations..." </li>
 					</ul>
 				</li>
 			</ol>
 			<p>
 				<a class="fancybox-buttons" href="images/DebugConfigurations.png">
-					<img src="images/DebugConfigurations.png" alt="" width="367"
-						height="262" />
+					<img src="images/DebugConfigurations.png" alt="" width="367" height="262" />
 				</a>
 			</p>
 			<ul>
-				<li>Create New Junit configuration, give it a name and select test
-					class
-				</li>
+				<li>Create New Junit configuration, give it a name and select test class</li>
 			</ul>
 			<p>
 				<a class="fancybox-buttons" href="images/NewConfiguration.png">
-					<img src="images/NewConfiguration.png" alt="" width="420"
-						height="206" />
+					<img src="images/NewConfiguration.png" alt="" width="420" height="206" />
 				</a>
 			</p>
 			<ul>
 				<li>Select Arguments tab </li>
 				<li>Add the following code to the VM section
-					<source>-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.3.0.jar -Dom.home=${workspace_loc:Openmeetings}/openmeetings-web/src/main/webapp/ -Dbackups.dir=${workspace_loc:Openmeetings}/build/lib/junit/backups</source>
+					<source>-javaagent:/home/solomax/.m2/repository/org/apache/openjpa/openjpa/2.4.1/openjpa-2.4.1.jar -Dom.home=${workspace_loc:openmeetings-web}/src/main/webapp/ -Dbackups.dir=${workspace_loc:openmeetings-web}/test-data</source>
 				</li>
 				<li>To avoid temporary files being created in OM root, modify
 					"Working Directory" as follows
-					<source>${workspace_loc:Openmeetings}/build/junit</source>
+					<source>${workspace_loc:openmeetings-web/target}</source>
 				</li>
 			</ul>
 			<p>
@@ -95,17 +79,7 @@
 			</p>
 			<ul>
 				<li>Select Debug </li>
-
 			</ul>
-			<ul>
-				<li>Note: You need a file called "persistence.xml" in src/META-INF
-					if you run the JUnit test from inside Eclipse. Normally "ant
-					prepare-eclipse" should do that for you. </li>
-
-			</ul>
-
 		</section>
-
 	</body>
-
 </document>
