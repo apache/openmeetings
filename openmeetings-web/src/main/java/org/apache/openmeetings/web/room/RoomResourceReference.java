@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
@@ -65,7 +65,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 				mime = "application/x-shockwave-flash";
 				break;
 			case Video:
-				mime = preview ? JPG_MIME_TYPE : FLV_MIME_TYPE;
+				mime = preview ? JPG_MIME_TYPE : MP4_MIME_TYPE;
 				break;
 			default:
 				throw new RuntimeException("Not supported");
@@ -106,7 +106,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 			}
 				break;
 			case Video: {
-				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? JPG_EXTENSION : FLV_EXTENSION));
+				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? JPG_EXTENSION : MP4_EXTENSION));
 				break;
 			}
 			case Presentation: {
