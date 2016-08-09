@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
@@ -123,10 +124,13 @@ public class AppointmentManager {
             optionsMethod.setRequestHeader("Accept", "*/*");
             client.executeMethod(optionsMethod);
             int status = optionsMethod.getStatusCode();
-            if(status == DavServletResponse.SC_OK || status == DavServletResponse.SC_NO_CONTENT)
+            if (status == DavServletResponse.SC_OK || status == DavServletResponse.SC_NO_CONTENT)
                 return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("Error executing OptionsMethod during testConnection.");
+        } catch (Exception e) {
+            //Should not ever reach here.
+            log.error("Severe Error in executing OptionsMethod during testConnection.");
         } finally {
             if(optionsMethod != null)
                 optionsMethod.releaseConnection();
@@ -323,9 +327,10 @@ public class AppointmentManager {
                     }
                 }
 
+            } catch (IOException e) {
+                log.error("Error executing OptionsMethod during testConnection.");
             } catch (Exception e) {
-                log.error("Error executing PROPFIND Method, during Initialization of Calendar.");
-                calendar.setSyncType(SyncType.NONE);
+                log.error("Severe Error in executing OptionsMethod during testConnection.");
             } finally {
                 if (propFindMethod != null)
                     propFindMethod.releaseConnection();
@@ -425,9 +430,10 @@ public class AppointmentManager {
                     calendar.setSyncType(SyncType.NONE);
                 }
 
+            } catch (IOException e) {
+                log.error("Error executing OptionsMethod during testConnection.");
             } catch (Exception e) {
-                log.error("Error in doing initial Sync using PROPFIND Method.");
-                calendar.setSyncType(SyncType.NONE);
+                log.error("Severe Error in executing OptionsMethod during testConnection.");
             } finally {
                 if(propFindMethod != null)
                     propFindMethod.releaseConnection();
@@ -464,7 +470,6 @@ public class AppointmentManager {
                 if (Strings.isEmpty(appointment.getHref())) {
                     String temp = path + appointment.getIcalId() + ".ics";
                     temp = UrlUtils.removeDoubleSlashes(temp);
-                    appointment.setHref(temp);
                     putMethod.setPath(temp);
                     putMethod.setIfNoneMatch(true);
                     putMethod.setAllEtags(true);
@@ -479,6 +484,7 @@ public class AppointmentManager {
                 if (putMethod.getStatusCode() == DavServletResponse.SC_CREATED ||
                         putMethod.getStatusCode() == DavServletResponse.SC_NO_CONTENT) {
                     href = putMethod.getPath();
+                    appointment.setHref(href);
 
                     //Check if the ETag header was returned.
                     Header etagh = putMethod.getResponseHeader("ETag");
@@ -488,6 +494,9 @@ public class AppointmentManager {
                         appointment.setEtag(etagh.getValue());
                         appointmentDao.update(appointment, appointment.getOwner().getId());
                     }
+                } else {
+                    //Appointment not created on the server
+
                 }
 
                 //Get new etags for the ones which didn't return an ETag header
@@ -495,8 +504,10 @@ public class AppointmentManager {
                         calendar, client, appointmentDao, utils);
                 multigetHandler.updateItems();
 
+            } catch (IOException e) {
+                log.error("Error executing OptionsMethod during testConnection.");
             } catch (Exception e) {
-                log.error("Unable to store the Appointment on the CalDAV server.");
+                log.error("Severe Error in executing OptionsMethod during testConnection.");
             } finally {
                 if (putMethod != null)
                     putMethod.releaseConnection();
@@ -533,9 +544,15 @@ public class AppointmentManager {
                         || status == DavServletResponse.SC_OK
                         || status == DavServletResponse.SC_NOT_FOUND)
                     log.info("Successfully deleted appointment with id: " + appointment.getId());
+                else {
+                    // Appointment Not deleted
 
+                }
+
+            } catch (IOException e) {
+                log.error("Error executing OptionsMethod during testConnection.");
             } catch (Exception e) {
-                log.error("Unable to execute DELETE Method on: " + appointment.getHref());
+                log.error("Severe Error in executing OptionsMethod during testConnection.");
             } finally {
                 if(deleteMethod != null)
                     deleteMethod.releaseConnection();

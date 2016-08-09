@@ -299,7 +299,7 @@ public class CalendarPanel extends UserPanel {
         calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
             @Override
             protected List<OmCalendar> load() {
-                return getBean(AppointmentManager.class).getCalendars();
+                return getBean(AppointmentManager.class).getCalendars(getUserId());
             }
         }) {
 

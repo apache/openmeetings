@@ -87,10 +87,10 @@ public class CtagHandler extends AbstractSyncHandler {
                         + propFindMethod.getStatusCode());
             }
 
-        } catch (IOException e) {
-            log.error("Unable to create PROPFIND Method.");
-        } catch (DavException e) {
-            log.error("Error getting responses from PROPFIND method.");
+        } catch (IOException | DavException e) {
+            log.error("Error during the execution of calendar-multiget Report.");
+        } catch (Exception e) {
+            log.error("Severe Error during the execution of calendar-multiget Report.");
         } finally {
             if(propFindMethod != null)
                 propFindMethod.releaseConnection();

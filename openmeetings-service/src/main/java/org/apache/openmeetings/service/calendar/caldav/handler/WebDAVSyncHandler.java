@@ -34,6 +34,7 @@ import org.osaf.caldav4j.model.response.CalendarDataProperty;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -131,8 +132,10 @@ public class WebDAVSyncHandler extends AbstractSyncHandler {
                 log.error("Error in Sync Method Response with status code" + syncMethod.getStatusCode());
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("Error while executing the SyncMethod Report.");
+        } catch (Exception e) {
+            log.error("Severe Error while executing the SyncMethod Report.");
         } finally {
             if(syncMethod != null)
                 syncMethod.releaseConnection();

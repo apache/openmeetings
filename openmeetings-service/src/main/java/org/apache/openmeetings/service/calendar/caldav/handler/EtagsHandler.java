@@ -104,10 +104,10 @@ public class EtagsHandler extends AbstractSyncHandler{
                 else log.error("Report Method return Status: " + reportMethod.getStatusCode()
                         + " for calId" + calendar.getId());
 
-            } catch (IOException e) {
-                log.error("Error parsing the calendar-query Report.");
-            } catch (DavException e) {
-                log.error("Error getting Responses from REPORT with Status Code");
+            } catch (IOException | DavException e) {
+                log.error("Error during the execution of calendar-multiget Report.");
+            } catch (Exception e) {
+                log.error("Severe Error during the execution of calendar-multiget Report.");
             } finally {
                 if(reportMethod != null)
                     reportMethod.releaseConnection();
@@ -174,10 +174,10 @@ public class EtagsHandler extends AbstractSyncHandler{
                             + " for calId" + calendar.getId());
                 }
 
-            } catch (IOException e) {
-                log.error("Error parsing the calendar-query Report.");
-            } catch (DavException e) {
-                log.error("Error getting Responses from REPORT Method");
+            } catch (IOException | DavException e) {
+                log.error("Error during the execution of calendar-multiget Report.");
+            } catch (Exception e) {
+                log.error("Severe Error during the execution of calendar-multiget Report.");
             } finally {
                 if(reportMethod != null)
                     reportMethod.releaseConnection();

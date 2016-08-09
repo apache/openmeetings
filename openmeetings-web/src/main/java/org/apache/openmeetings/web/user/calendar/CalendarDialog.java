@@ -239,7 +239,7 @@ public class CalendarDialog extends AbstractFormDialog {
     private boolean setCalendarList(IPartialPageRequestHandler target){
         type = DIALOG_TYPE.SYNC_CALENDAR;
         AppointmentManager appointmentManager = calendarPanel.getAppointmentManager();
-        cals = appointmentManager.getCalendars();
+        cals = appointmentManager.getCalendars(getUserId());
         appointmentManager.createHttpClient();
         calIndex = 0;
         setButtons(target);
