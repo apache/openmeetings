@@ -84,7 +84,7 @@ public class UserManager implements IUserManager {
 	private EntityManager em;
 
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -143,14 +143,13 @@ public class UserManager implements IUserManager {
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
-			Sessiondata sessionData = sessiondataDao
-					.get(remoteHash);
+			Sessiondata sessionData = sessionDao.check(remoteHash);
 
 			if (sessionData != null) {
 
 				User u = userDao.get(sessionData.getUserId());
 
-				sessiondataDao.updateUserWithoutSession(SID, u.getId());
+				sessionDao.updateUserWithoutSession(SID, u.getId());
 
 				return u;
 			}
@@ -163,7 +162,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public Long logout(String SID, long userId) {
-		sessiondataDao.updateUser(SID, null, false, 0);
+		sessionDao.updateUser(SID, null, false, 0);
 		return -12L;
 	}
 
@@ -412,19 +411,18 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 * @param admin
+	 * @param sid
 	 * @param room_id
 	 * @return
 	 */
 	@Override
-	public boolean kickUserByStreamId(String SID, Long room_id) {
+	public boolean kickUserByStreamId(String sid, Long room_id) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
-
+			Sessiondata sd = sessionDao.check(sid);
 			// admins only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 
-				sessiondataDao.clearSessionByRoomId(room_id);
+				sessionDao.clearSessionByRoomId(room_id);
 
 				for (Client rcl : sessionManager.getClientListByRoom(room_id)) {
 					if (rcl == null) {
@@ -450,12 +448,11 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public boolean kickUserByPublicSID(String SID, String publicSID) {
+	public boolean kickUserByPublicSID(String sid, String publicSID) {
 		try {
-			Long userId = sessiondataDao.check(SID);
-
+			Sessiondata sd = sessionDao.check(sid);
 			// admins only
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {

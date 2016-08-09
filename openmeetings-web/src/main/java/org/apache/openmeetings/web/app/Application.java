@@ -219,9 +219,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	@Override
 	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl) {
+		if (rcl == null) {
+			return null;
+		}
 		Client client = getOnlineClient(rcl.getPublicSID());
-		if (rcl == null || client == null) {
-			return rcl;
+		if (client == null) {
+			return null;
 		}
 		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 		rcl.setIsMod(client.hasRight(Right.moderator));

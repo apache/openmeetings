@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,11 +106,11 @@ public class ErrorWebService {
 	@POST
 	@Path("/report/")
 	public void report(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="message") @QueryParam("message") String message) {
-    	if (sid != null && message != null) {
-	    	Long userId = sessionDao.check(sid);
-	    	if (userId != null && userId != 0) {
-	    		log.error("[CLIENT MESSAGE] " + message);
-	    	}
-    	}
+		if (sid != null && message != null) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (sd.getId() != null) {
+				log.error("[CLIENT MESSAGE] " + message);
+			}
+		}
 	}
 }

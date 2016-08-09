@@ -49,12 +49,7 @@ public class SessiondataDao {
 	@Autowired
 	private ISessionManager sessionManager;
 
-	/**
-	 * creates a new session-object in the database
-	 * 
-	 * @return
-	 */
-	public Sessiondata create() {
+	private static Sessiondata newInstance() {
 		log.debug("startsession :: startsession");
 
 		Sessiondata sd = new Sessiondata();
@@ -62,28 +57,17 @@ public class SessiondataDao {
 		sd.setCreated(new Date());
 		sd.setUserId(null);
 
-		return update(sd);
+		return sd;
 	}
-
-	public Sessiondata get(String SID) {
-		try {
-			log.debug("updateUser User SID: " + SID);
-
-			TypedQuery<Sessiondata> q = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
-
-			List<Sessiondata> fullList = q.getResultList();
-			if (fullList.size() == 0) {
-				log.error("Could not find session to update: " + SID);
-				return null;
-			}
-
-			Sessiondata sd = fullList.get(0);
-
-			return sd;
-		} catch (Exception ex2) {
-			log.error("[getSessionByHash]: ", ex2);
-		}
-		return null;
+	
+	/**
+	 * creates a new session-object in the database
+	 * 
+	 * @return created Sessiondata with random UID
+	 */
+	public Sessiondata create() {
+		log.debug("create :: create");
+		return update(newInstance());
 	}
 
 	/**
@@ -91,32 +75,20 @@ public class SessiondataDao {
 	 * @param SID
 	 * @return
 	 */
-	public Long check(String SID) {
-		try {
-			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
-			List<Sessiondata> sessions = query.getResultList();
+	public Sessiondata check(String SID) {
+		List<Sessiondata> sessions = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID).getResultList();
 
-			Sessiondata sd = null;
-			if (sessions != null && sessions.size() > 0) {
-				sd = sessions.get(0);
-			}
-
-			// Update the Session Object
-			if (sd != null) {
-				update(sd);
-			}
-
-			// Checks if wether the Session or the User Object of that Session
-			// is set yet
-			if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
-				return new Long(0);
-			} else {
-				return sd.getUserId();
-			}
-		} catch (Exception ex2) {
-			log.error("[checkSession]: ", ex2);
+		Sessiondata sd = null;
+		if (sessions != null && sessions.size() > 0) {
+			sd = sessions.get(0);
 		}
-		return null;
+
+		// Checks if wether the Session or the User Object of that Session
+		// is set yet
+		if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
+			return newInstance();
+		}
+		return update(sd);
 	}
 
 	/**
@@ -288,7 +260,7 @@ public class SessiondataDao {
 				}
 				String SID = aux.substring(init_pos, end_pos);
 
-				Sessiondata sData = get(SID);
+				Sessiondata sData = check(SID);
 				if (sData != null) {
 					em.remove(sData);
 				}
