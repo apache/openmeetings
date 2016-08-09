@@ -83,7 +83,25 @@
 									<filtering>true</filtering>
 								</resource>
 							</resources>
-							<skip>${skip.site.copy}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-icons</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${jnlp.out.dir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/jnlp/resources</directory>
+									<includes>
+										<include>*.png</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

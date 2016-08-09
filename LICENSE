@@ -252,6 +252,8 @@ webapps/openmeetings/WEB-INF/lib/openmeetings-util-*.jar
 webapps/openmeetings/WEB-INF/lib/openmeetings-web-*.jar
 webapps/openmeetings/WEB-INF/lib/openmeetings-webservice-*.jar
 
+webapps/openmeetings/screenshare/icon.*
+webapps/openmeetings/screenshare/splashicon.*
 ======================================================================================================================
 
 Further those components are either itself or derivate work from 
