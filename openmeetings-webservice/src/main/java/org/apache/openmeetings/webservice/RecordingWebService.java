@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
@@ -79,9 +80,8 @@ public class RecordingWebService {
 	@Path("/{id}")
 	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				recordingDao.delete(recordingDao.get(id));
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
@@ -111,9 +111,8 @@ public class RecordingWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				return RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType));
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
@@ -142,9 +141,8 @@ public class RecordingWebService {
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
@@ -173,9 +171,8 @@ public class RecordingWebService {
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				return RecordingDTO.list(recordingDao.getByRoomId(roomId));
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");

@@ -120,7 +120,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
 	}
 	
-	public static Class<?> getAppClass() throws ClassNotFoundException {
+	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
 		if (APP == null) {
 			//FIXME HACK to resolve package dependencies
 			APP = Class.forName("org.apache.openmeetings.web.app.Application");
