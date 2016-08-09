@@ -132,9 +132,8 @@ public class UserWebService implements UserService {
 	@Path("/")
 	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.check(sid);
-	
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				return UserDTO.list(userDao.getAllUsers());
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -159,9 +158,8 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 				if (testUser != null) {
@@ -200,7 +198,7 @@ public class UserWebService implements UserService {
 					u.setExternalType(user.getExternalType());
 				}
 
-				u = userDao.update(u, authUserId);
+				u = userDao.update(u, sd.getUserId());
 
 				return new UserDTO(u);
 			} else {
@@ -223,10 +221,9 @@ public class UserWebService implements UserService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-				userDao.delete(userDao.get(id), authUserId);
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
+				userDao.delete(userDao.get(id), sd.getUserId());
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
@@ -251,13 +248,12 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.check(sid);
-
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 				User user = userDao.getExternalUser(externalId, externalType);
 
 				// Setting user deleted
-				userDao.delete(user, authUserId);
+				userDao.delete(user, sd.getUserId());
 
 				return new ServiceResult(user.getId(), "Deleted", Type.SUCCESS);
 			} else {
@@ -283,8 +279,8 @@ public class UserWebService implements UserService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						user.getLogin(), user.getFirstname(), user.getLastname()
 						, user.getProfilePictureUrl(), user.getEmail()
@@ -306,7 +302,6 @@ public class UserWebService implements UserService {
 						);
 
 				if (hash != null) {
-					Sessiondata sd = sessionDao.get(sid);
 					if (options.isAllowSameURLMultipleTimes()) {
 						sd.setPermanent(true);
 					}
@@ -333,8 +328,8 @@ public class UserWebService implements UserService {
 	@Path("/kick/{publicsid}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				Boolean success = userManagement.kickUserByPublicSID(sid, publicSID);
 	
 				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
@@ -355,9 +350,8 @@ public class UserWebService implements UserService {
 	@GET
 	@Path("/count/{roomid}")
 	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		Long userId = sessionDao.check(sid);
-
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+		Sessiondata sd = sessionDao.check(sid);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();
 		}
 		return -1;

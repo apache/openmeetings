@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -46,7 +45,7 @@ public class LangForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
 	private DropDownChoice<Map.Entry<Long, Locale>> languages;
 
-	private static List<Map.Entry<Long, Locale>> getLanguages() {
+	static List<Map.Entry<Long, Locale>> getLanguages() {
 		List<Map.Entry<Long, Locale>> list = new ArrayList<Map.Entry<Long, Locale>>();
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
 			list.add(new AbstractMap.SimpleEntry<Long,Locale>(e.getKey(), e.getValue()));
@@ -97,20 +96,6 @@ public class LangForm extends Form<Void> {
 			}
 		});
 		add(languages);
-
-		add(new ConfirmableAjaxBorder("deleteLangBtn", getString("80"), getString("833")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				LabelDao.delete(langPanel.language.getValue());
-				List<Map.Entry<Long, Locale>> langs = getLanguages();
-				langPanel.language = langs.isEmpty() ? null : langs.get(0);
-				languages.setChoices(langs);
-				target.add(languages, listContainer);
-			}
-		});
-
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));

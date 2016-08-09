@@ -37,7 +37,7 @@
 	<handler name="oninit">
 		if ($debug) Debug.write("whiteboardVideoPlayer :: ",this.fileId);
 		
-		this.recordingName = "UPLOADFLV_" + this.fileId + ".flv";
+		this.recordingName = "UPLOADFLV_" + this.fileId + ".mp4";
 		calcVideoWidthHeight();
 		this.copyFileToCurrentRoom.doCall();
 	</handler>

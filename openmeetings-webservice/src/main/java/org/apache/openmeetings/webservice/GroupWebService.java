@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -97,7 +98,8 @@ public class GroupWebService {
 	@POST
 	@Path("/")
 	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
-		Long userId = sessionDao.check(sid);
+		Sessiondata sd = sessionDao.check(sid);
+		Long userId = sd.getUserId();
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Group o = new Group();
 			o.setName(name);
@@ -119,8 +121,8 @@ public class GroupWebService {
 	@GET
 	@Path("/")
 	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
-		Long userId = sessionDao.check(sid);
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		Sessiondata sd = sessionDao.check(sid);
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 			return groupDao.get(0, Integer.MAX_VALUE);
 		} else {
 			log.error("Insufficient permissions");
@@ -149,7 +151,8 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long authUserId = sd.getUserId();
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				if (!groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
@@ -187,7 +190,8 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long authUserId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long authUserId = sd.getUserId();
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 				if (groupUserDao.isUserInGroup(id, userid)) {
 					User u = userDao.get(userid);
@@ -227,7 +231,8 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long userId = sd.getUserId();
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Room r = roomDao.get(roomid);
 				if (r != null) {
@@ -285,10 +290,10 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Long userId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
 			SearchResult<User> result = new SearchResult<User>();
 			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				result.setRecords(groupUserDao.count(id));
 				result.setResult(new ArrayList<User>());
 				for (GroupUser ou : groupUserDao.get(id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
@@ -320,7 +325,8 @@ public class GroupWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.check(sid);
+			Sessiondata sd = sessionDao.check(sid);
+			Long authUserId = sd.getUserId();
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 				groupDao.delete(groupDao.get(id), authUserId);

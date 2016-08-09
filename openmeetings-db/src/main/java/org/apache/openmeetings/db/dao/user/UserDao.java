@@ -685,8 +685,10 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
-		for (Long grpId : groupIds) {
-			u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+		if (groupIds != null) {
+			for (Long grpId : groupIds) {
+				u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+			}
 		}
 		
 		return update(u, null);

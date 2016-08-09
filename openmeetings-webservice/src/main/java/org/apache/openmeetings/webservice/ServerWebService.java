@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.server.ServerDTO;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
@@ -90,9 +91,9 @@ public class ServerWebService {
 			) throws ServiceException
 	{
 		log.debug("getServers enter");
-		Long userId = sessionDao.check(sid);
+		Sessiondata sd = sessionDao.check(sid);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 			return ServerDTO.list(serverDao.get(start, max));
 		} else {
 			log.warn("Insuffisient permissions");
@@ -113,9 +114,9 @@ public class ServerWebService {
 	@Path("/count")
 	public long count(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		log.debug("getServerCount enter");
-		Long userId = sessionDao.check(sid);
+		Sessiondata sd = sessionDao.check(sid);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 			return serverDao.count();
 		} else {
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -136,7 +137,8 @@ public class ServerWebService {
 	@Path("/")
 	public ServerDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="server") @QueryParam("server") ServerDTO server) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long userId = sessionDao.check(sid);
+		Sessiondata sd = sessionDao.check(sid);
+		Long userId = sd.getUserId();
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = server.get();
 			return new ServerDTO(serverDao.update(s, userId));
@@ -160,7 +162,8 @@ public class ServerWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long userId = sessionDao.check(sid);
+		Sessiondata sd = sessionDao.check(sid);
+		Long userId = sd.getUserId();
 
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = serverDao.get(id);

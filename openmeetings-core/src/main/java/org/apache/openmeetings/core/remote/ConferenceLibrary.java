@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -39,10 +39,12 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
+import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -64,7 +66,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -74,13 +76,13 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
-	public LibraryPresentation getPresentationPreviewFileExplorer(String SID, String parentFolder) {
+	public LibraryPresentation getPresentationPreviewFileExplorer(String sid, String parentFolder) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Sessiondata sd = sessionDao.check(sid);
 
-			log.debug("#############users_id : " + users_id);
+			log.debug("#############users_id : " + sd.getUserId());
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
 
@@ -103,16 +105,16 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * 
 	 * Save an Object to the library and returns the file-explorer Id
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param roomId
 	 * @param fileName
 	 * @param tObjectRef
 	 * @return - file-explorer Id in case of success, -1 otherwise
 	 */
-	public Long saveAsObject(String SID, Long roomId, String fileName, Object tObjectRef) {
+	public Long saveAsObject(String sid, Long roomId, String fileName, Object tObjectRef) {
 		try {
-			Long userId = sessiondataDao.check(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
 
@@ -124,7 +126,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				log.debug("saveAsObject" + tObject.size());
 
-				FileExplorerItem file = fileDao.add(fileName, null, null, roomId, userId, Type.WmlFile, "", "");
+				FileExplorerItem file = fileDao.add(fileName, null, null, roomId, sd.getUserId(), Type.WmlFile, "", "");
 				LibraryDocumentConverter.writeToLocalFolder(file.getHash(), tObject);
 
 				return file.getId();
@@ -144,7 +146,12 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param fi - FileItem of the Wml being loaded
 	 */
 	public void sendToWhiteboard(String uid, Long wbId, FileItem fi) {
-		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
+		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
+		if (csi == null) {
+			log.warn("No client was found to send Wml:: {}", uid);
+			return;
+		}
+		Client client = csi.getRcl();
 
 		if (client == null) {
 			log.warn("No client was found to send Wml:: {}", uid);
@@ -181,16 +188,16 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * 
 	 * Loads a chart object
 	 * 
-	 * @param SID
+	 * @param sid
 	 * @param room_id
 	 * @param fileName
 	 * @return - chart object
 	 */
 	@SuppressWarnings("rawtypes")
-	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
+	public ArrayList loadChartObject(String sid, Long room_id, String fileName) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()), fileName);
 			}
 		} catch (Exception err) {
@@ -200,15 +207,14 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	}
 
 	/**
-	 * @param SID
+	 * @param sid
 	 * @param flvFileExplorerId
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
+	public Long copyFileToCurrentRoom(String sid, Long flvFileExplorerId) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();
@@ -218,11 +224,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				Long room_id = currentClient.getRoomId();
 
 				if (room_id != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
 
 					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
 
-					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
 					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
 						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}

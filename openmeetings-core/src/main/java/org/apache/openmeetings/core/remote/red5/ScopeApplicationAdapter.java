@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
+import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -1438,7 +1439,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 	
 	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
-		Client client = sessionManager.getClientByPublicSIDAnyServer(uid).getRcl();
+		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
+		if (csi == null) {
+			log.warn("No client was found to send Wml:: {}", uid);
+			return;
+		}
+		Client client = csi.getRcl();
 		
 		List<?> wbObject = new ArrayList<>();
 		switch (fi.getType()) {

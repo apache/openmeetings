@@ -657,31 +657,30 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			String method = call.getServiceMethodName();
 			Object o = call.getResult();
+			if (log.isTraceEnabled()) {
+				log.trace("Result Map Type " + (o == null ? null : o.getClass().getName()));
+				log.trace("" + o);
+			}
+			@SuppressWarnings("unchecked")
+			Map<String, Object> returnMap = (o != null && o instanceof Map) ? (Map<String, Object>) o : new HashMap<String, Object>();
 			log.trace("call ### get Method Name " + method);
 			if ("connect".equals(method)) {
-				if (o instanceof Map) {
-					@SuppressWarnings("unchecked")
-					Map<String, Object> map = (Map<String, Object>) o;
-					Object code = map.get("code");
-					if ("NetConnection.Connect.Rejected".equals(code) || "NetConnection.Connect.Failed".equals(code)) {
-						frame.setStatus(String.format("Error: %s %s", code, map.get("description")));
-						return;
-					}
+				Object code = returnMap.get("code");
+				if ("NetConnection.Connect.Rejected".equals(code) || "NetConnection.Connect.Failed".equals(code)) {
+					frame.setStatus(String.format("Error: %s %s", code, returnMap.get("description")));
+					return;
 				}
 				isConnected = true;
 				setConnectionAsSharingClient();
 			} else if ("setConnectionAsSharingClient".equals(method)) {
-				@SuppressWarnings("unchecked")
-				Map<String, Object> returnMap = (Map<String, Object>) o;
-
-				if (o == null || !bool(returnMap.get("alreadyPublished"))) {
+				if (!bool(returnMap.get("alreadyPublished"))) {
 					log.trace("Stream not yet started - do it ");
 
 					instance.createStream(this);
 				} else {
 					log.trace("The Stream was already started ");
 				}
-				if (returnMap != null) {
+				if (o != null) {
 					Object modus = returnMap.get("modus");
 					if ("startStreaming".equals(modus)) {
 						frame.setSharingStatus(true, false);
@@ -703,8 +702,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				}
 			} else if ("createStream".equals(method)) {
 				if (startRecording || startStreaming) {
-					if (call.getResult() != null) {
-						getCapture().setStreamId((Number)call.getResult());
+					if (o != null && o instanceof Number) {
+						getCapture().setStreamId((Number)o);
 					}
 					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
@@ -717,13 +716,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					}
 				}
 			} else if ("screenSharerAction".equals(method)) {
-				if (log.isTraceEnabled()) {
-					log.trace("Result Map Type " + (o == null ? null : o.getClass().getName()));
-					log.trace("" + o);
-				}
-
-				@SuppressWarnings("unchecked")
-				Map<String, Object> returnMap = (Map<String, Object>)o;
 				Object result = returnMap.get("result");
 				if ("stopAll".equals(result)) {
 					log.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");

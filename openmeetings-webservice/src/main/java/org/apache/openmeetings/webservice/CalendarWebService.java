@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -92,9 +93,9 @@ public class CalendarWebService {
 	{
 		log.debug("range : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return AppointmentDTO.list(appointmentDao.getInRange(userId, start.getTime(), end.getTime()));
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+				return AppointmentDTO.list(appointmentDao.getInRange(sd.getUserId(), start.getTime(), end.getTime()));
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -132,8 +133,8 @@ public class CalendarWebService {
 	{
 		log.debug("rangeForUser : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long authUserId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				return AppointmentDTO.list(appointmentDao.getInRange(userid, start.getTime(), end.getTime()));
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -158,9 +159,9 @@ public class CalendarWebService {
 	@Path("/next")
 	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment a = appointmentDao.getNext(userId, new Date());
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+				Appointment a = appointmentDao.getNext(sd.getUserId(), new Date());
 				return a == null ? null : new AppointmentDTO(a);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -188,8 +189,8 @@ public class CalendarWebService {
 	@Path("/next/{userid}")
 	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) throws ServiceException {
 		try {
-			Long authUserId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				Appointment a = appointmentDao.getNext(userid, new Date());
 				return a == null ? null : new AppointmentDTO(a);
 			} else {
@@ -216,9 +217,9 @@ public class CalendarWebService {
 	@Path("/room/{roomid}")
 	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment app = appointmentDao.getByRoom(userId, roomid);
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+				Appointment app = appointmentDao.getByRoom(sd.getUserId(), roomid);
 				if (app != null) {
 					return new AppointmentDTO(app);
 				}
@@ -249,9 +250,9 @@ public class CalendarWebService {
 	@Path("/title/{title}")
 	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return AppointmentDTO.list(appointmentDao.searchAppointmentsByTitle(userId, title));
+			Sessiondata sd = sessionDao.check(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+				return AppointmentDTO.list(appointmentDao.searchAppointmentsByTitle(sd.getUserId(), title));
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -281,12 +282,12 @@ public class CalendarWebService {
 		log.debug("save SID:" + sid);
 
 		try {
-			Long userId = sessionDao.check(sid);
-			log.debug("save userId:" + userId);
+			Sessiondata sd = sessionDao.check(sid);
+			log.debug("save userId:" + sd);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				Appointment a = appointment.get(userDao, appointmentDao);
-				return new AppointmentDTO(appointmentDao.update(a, userId));
+				return new AppointmentDTO(appointmentDao.update(a, sd.getUserId()));
 			} else {
 				log.error("save : wrong user level");
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -318,21 +319,21 @@ public class CalendarWebService {
 	@Path("/{id}")
 	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
-			Long userId = sessionDao.check(sid);
-			Set<Right> rights = userDao.getRights(userId);
+			Sessiondata sd = sessionDao.check(sid);
+			Set<Right> rights = userDao.getRights(sd.getUserId());
 
 			Appointment a = appointmentDao.get(id);
 			if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasAdminLevel(rights)) {
 				// fine
 			} else if (AuthLevelUtil.hasUserLevel(rights)) {
 				// check if the appointment belongs to the current user
-				if (!a.getOwner().getId().equals(userId)) {
+				if (!a.getOwner().getId().equals(sd.getUserId())) {
 					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
-			appointmentDao.delete(a, userId);
+			appointmentDao.delete(a, sd.getUserId());
 		} catch (ServiceException err) {
 			throw err;
 		} catch (Exception err) {

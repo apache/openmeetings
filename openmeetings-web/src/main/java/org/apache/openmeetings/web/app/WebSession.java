@@ -202,8 +202,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		if (!soapLogin.isUsed() || soapLogin.getAllowSameURLMultipleTimes()) {
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
-			Sessiondata sd = sessionDao.get(soapLogin.getSessionHash());
-			if (sd != null && sd.getXml() != null) {
+			Sessiondata sd = sessionDao.check(soapLogin.getSessionHash());
+			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
 					UserDao userDao = getBean(UserDao.class);
@@ -330,17 +330,16 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	
 	public String getValidatedSid() {
 		SessiondataDao sessionDao = getBean(SessiondataDao.class);
-		Long _userId = sessionDao.check(SID);
-		if (_userId == null || !_userId.equals(userId)) {
-			Sessiondata sessionData = sessionDao.get(SID);
-			if (sessionData == null) {
-				sessionData = sessionDao.create();
+		Sessiondata sd = sessionDao.check(SID);
+		if (sd.getUserId() == null || !sd.getUserId().equals(userId)) {
+			if (sd.getId() == null) {
+				sd = sessionDao.create();
 			}
-			if (!sessionDao.updateUser(sessionData.getSessionId(), userId, false, languageId)) {
+			if (!sessionDao.updateUser(sd.getSessionId(), userId, false, languageId)) {
 				//something bad, force user to re-login
 				invalidate();
 			} else {
-				SID = sessionData.getSessionId();
+				SID = sd.getSessionId();
 			}
 		}
 		return SID;
