@@ -41,6 +41,7 @@ import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressB
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -64,6 +65,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final DialogButton cancel;
 	private final FileUploadField uploadField;
 	private final HiddenField<String> fileName;
+	private final CheckBox toWb = new CheckBox("to-wb", Model.of(false));
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
 
@@ -81,7 +83,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		};
 		cancel = new DialogButton("close", Application.getString(85));
-		form.add(feedback.setOutputMarkupId(true));
+		form.add(feedback.setOutputMarkupId(true), toWb);
 	
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
@@ -167,7 +169,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			} else {
 				f.setRoomId(parent.getRoomId());
 				f.setOwnerId(parent.getOwnerId());
-				if (parent.getId() > 0) {
+				if (parent.getId() != null) {
 					f.setParentId(FileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
 				}
 			}
@@ -175,9 +177,13 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			
 			try {
 				ConverterProcessResultList result = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
+				room.getSidebar().updateFiles(target);
 				if (result.hasError()) {
 					error(result.getLogMessage());
 				} else {
+					if (toWb.getModelObject()) {
+						room.sendFileToWb(f);
+					}
 					close(target, null);
 				}
 			} catch (Exception e) {

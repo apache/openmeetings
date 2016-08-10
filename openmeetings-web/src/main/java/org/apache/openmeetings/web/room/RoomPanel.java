@@ -137,6 +137,7 @@ public class RoomPanel extends BasePanel {
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private String publishingUser = null; //TODO add
+	private long activeWbId = -1;
 	
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -167,7 +168,8 @@ public class RoomPanel extends BasePanel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (o instanceof FileItem) {
+				if (activeWbId > -1 && o instanceof FileItem) {
+					sendFileToWb((FileItem)o);
 				}
 			}
 		};
@@ -537,5 +539,16 @@ public class RoomPanel extends BasePanel {
 
 	public String getPublishingUser() {
 		return publishingUser;
+	}
+
+	public void sendFileToWb(FileItem fi) {
+		if (activeWbId > -1) {
+			if (fi.getType() == FileItem.Type.WmlFile) {
+				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
+			} else {
+				String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
+				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
+			}
+		}
 	}
 }

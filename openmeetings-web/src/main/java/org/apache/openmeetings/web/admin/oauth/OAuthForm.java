@@ -99,7 +99,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		OAuthServer server = this.getModelObject();
-		if (server.getId() <= 0) {
+		if (server.getId() != null) {
 			server = Application.getBean(OAuth2Dao.class).get(getModelObject().getId());
 		} else {
 			server = new OAuthServer();
