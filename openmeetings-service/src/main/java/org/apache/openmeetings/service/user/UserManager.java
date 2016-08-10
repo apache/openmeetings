@@ -394,7 +394,7 @@ public class UserManager implements IUserManager {
 				}
 				log.debug("Added user-Id " + u.getId());
 
-				if (adr.getId() > 0 && u.getId() > 0) {
+				if (adr.getId() != null && u.getId() != null) {
 					return u.getId();
 				} else {
 					return -16L;

@@ -170,13 +170,7 @@ public class RoomPanel extends BasePanel {
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
 				if (activeWbId > -1 && o instanceof FileItem) {
-					FileItem fi = (FileItem)o;
-					if (fi.getType() == FileItem.Type.WmlFile) {
-						getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
-					} else {
-						String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
-						getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
-					}
+					sendFileToWb((FileItem)o);
 				}
 			}
 		};
@@ -533,5 +527,16 @@ public class RoomPanel extends BasePanel {
 
 	public String getPublishingUser() {
 		return publishingUser;
+	}
+
+	public void sendFileToWb(FileItem fi) {
+		if (activeWbId > -1) {
+			if (fi.getType() == FileItem.Type.WmlFile) {
+				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
+			} else {
+				String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
+				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url);
+			}
+		}
 	}
 }
