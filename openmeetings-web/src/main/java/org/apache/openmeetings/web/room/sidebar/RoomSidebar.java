@@ -203,13 +203,17 @@ public class RoomSidebar extends Panel {
 	private void updateShowFiles() {
 		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.whiteBoard);
 	}
-	
+
 	public void updateUsers(IPartialPageRequestHandler handler) {
 		updateShowFiles();
 		updateUsers();
 		selfRights.setVisible(room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator));
 		selfRights.update(handler);
 		handler.add(tabs);
+	}
+
+	public void updateFiles(IPartialPageRequestHandler handler) {
+		roomFiles.update(handler);
 	}
 
 	public boolean isShowFiles() {

@@ -92,7 +92,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		LdapConfig ldapConfig = this.getModelObject();
-		if (ldapConfig.getId() <= 0) {
+		if (ldapConfig.getId() != null) {
 			ldapConfig = getBean(LdapConfigDao.class).get(ldapConfig.getId());
 		} else {
 			ldapConfig = new LdapConfig();

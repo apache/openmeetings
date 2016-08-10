@@ -18,34 +18,30 @@
  */
 package org.apache.openmeetings.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.util.string.Strings;
 
 public class StoredFile {
+	private final static MimetypesFileTypeMap MIMES_MAP = new MimetypesFileTypeMap();
+	private final static String MIME_AUDIO = "audio";
+	private final static String MIME_VIDEO = "video";
+	private final static String MIME_IMAGE = "image";
 	private static final Set<String> convertExtensions = new HashSet<>(
 			Arrays.asList("ppt", "odp", "odt", "sxw", "wpd", "doc", "rtf", "txt", "ods", "sxc", "xls", "sxi", "pptx", "docx", "xlsx"));
 
 	private static final Set<String> pdfExtensions = new HashSet<>(Arrays.asList("pdf", "ps"));
 
-	private static final Set<String> imageExtensions = new HashSet<>(Arrays.asList("png", "gif", "svg", "dpx", "exr",
-			"pcd", // PhotoCD
-			"pcds", // PhotoCD
-			"psd", // Adobe Photoshop
-			"tiff", // Tagged Image File Format
-			"ttf", // TrueType font
-			"xcf", // GIMP image
-			"wpg", // Word Perfect Graphics
-			"bmp", "ico", // Microsoft Icon
-			"tga", // Truevision Targa
-			"jpg", "jpeg"));
-
 	private static final Set<String> chartExtensions = new HashSet<>(Arrays.asList("xchart"));
-
-	private static final Set<String> videoExtensions = new HashSet<>(Arrays.asList("avi", "mov", "flv", "mp4"));
 
 	private static final Set<String> asIsExtensions = new HashSet<>(Arrays.asList("jpg", "xchart"));
 
@@ -63,26 +59,13 @@ public class StoredFile {
 		this.ext = ext != null ? ext.toLowerCase() : "";
 	}
 
-	public static String[] getExtensions() {
-		Set<String> extensions = new HashSet<>();
-		extensions.addAll(convertExtensions);
-		extensions.addAll(pdfExtensions);
-		extensions.addAll(imageExtensions);
-		extensions.addAll(chartExtensions);
-		extensions.addAll(videoExtensions);
-		extensions.addAll(asIsExtensions);
-
-		return extensions.toArray(new String[extensions.size()]);
-	}
-
 	public static String getAcceptAttr() {
 		Set<String> ext = new LinkedHashSet<>();
 		ext.addAll(convertExtensions);
 		ext.addAll(pdfExtensions);
 		ext.addAll(chartExtensions);
-		StringBuilder sb = new StringBuilder("video/*,image/*,."); // TODO add audio/*,
-		sb.append(StringUtils.join(ext, ",."));
-		// TODO java8 String.join("|.", ext);
+		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,.");
+		sb.append(StringUtils.join(ext, ",.")); // TODO java8 String.join("|.", ext);
 		return sb.toString();
 	}
 
@@ -98,12 +81,29 @@ public class StoredFile {
 		return pdfExtensions.contains(ext);
 	}
 
+	private static String getMimeType(StoredFile f) {
+		String filename = String.format("%s%s%s", f.name, Strings.isEmpty(f.ext) ? "" : ".", f.ext);
+		String type = "";
+		try {
+			type = Files.probeContentType(new File(filename).toPath());
+		} catch (IOException e) {
+			//no-op
+		}
+		if (Strings.isEmpty(type)) {
+			type = MIMES_MAP.getContentType(filename);
+		}
+		String[] mime = type.split("/");
+		return mime[0];
+	}
+	
 	public boolean isImage() {
-		return imageExtensions.contains(ext);
+		String mime = getMimeType(this);
+		return MIME_IMAGE.equals(mime);
 	}
 
 	public boolean isVideo() {
-		return videoExtensions.contains(ext);
+		String mime = getMimeType(this);
+		return MIME_AUDIO.equals(mime) || MIME_VIDEO.equals(mime);
 	}
 
 	public boolean isChart() {

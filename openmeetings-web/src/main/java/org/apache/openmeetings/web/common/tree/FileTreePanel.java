@@ -146,7 +146,7 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(trees);
+				update(target);
 			}
 		}));
 		trashToolbar.add(new ConfirmableAjaxBorder("trash", getString("80"), getString("713")) {
@@ -155,7 +155,7 @@ public abstract class FileTreePanel extends Panel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				FileItem f = selected.getObject();
-				if (f != null && f.getId() > 0) {
+				if (f != null && f.getId() != null) {
 					super.onEvent(target);
 				}
 			}
@@ -189,7 +189,7 @@ public abstract class FileTreePanel extends Panel {
 				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
 			}
 		}
-		handler.add(trees);
+		update(handler);
 	}
 	
 	protected abstract void update(AjaxRequestTarget target, FileItem f);
@@ -215,7 +215,7 @@ public abstract class FileTreePanel extends Panel {
 			f.setRoomId(p.getRoomId());
 			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
 		}
-		target.add(trees);
+		update(target);
 	}
 
 	public abstract void updateSizes();
@@ -223,7 +223,11 @@ public abstract class FileTreePanel extends Panel {
 	public FileItem getSelected() {
 		return selected.getObject();
 	}
-	
+
+	public void update(IPartialPageRequestHandler handler) {
+		handler.add(trees);
+	}
+
 	void updateNode(AjaxRequestTarget target, FileItem fi) {
 		if (fi != null && target != null) {
 			if (Type.Folder == fi.getType()) {
