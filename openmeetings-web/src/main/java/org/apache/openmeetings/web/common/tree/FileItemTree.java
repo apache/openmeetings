@@ -34,31 +34,32 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
+public class FileItemTree extends DefaultNestedTree<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private final FileTreePanel treePanel;
-	private final IModel<T> selectedItem = Model.of((T)null);
 
-	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<T> tp) {
+	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<FileItem> tp) {
 		super(id, tp);
 		this.treePanel = treePanel;
 		setItemReuseStrategy(new ReuseIfModelsEqualStrategy());
 	}
 	
 	@Override
-	protected Component newContentComponent(String id, IModel<T> node) {
-		return new Folder<T>(id, this, node) {
+	protected Component newContentComponent(String id, IModel<FileItem> node) {
+		return new Folder<FileItem>(id, this, node) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected Component newLabelComponent(String id, final IModel<T> lm) {
+			protected Component newLabelComponent(String id, final IModel<FileItem> lm) {
 				FileItem r = lm.getObject();
-				return Type.Folder == r.getType() || r.getId() < 1 ? new FolderPanel(id, lm, treePanel) : new FileItemPanel(id, lm, treePanel);
+				return Type.Folder == r.getType() || r.getId() == null ? new FolderPanel(id, lm, treePanel) : new FileItemPanel(id, lm, treePanel);
 			}
 			
 			@Override
 			protected boolean isSelected() {
-				return getModelObject().getId().equals(treePanel.selectedFile.getObject().getId());
+				FileItem f = getModelObject(), s = treePanel.getSelected();
+				return (s.getId() == null && s.getId() == f.getId() && s.getHash().equals(f.getHash()))
+						|| (s.getId() != null && s.getId().equals(f.getId()));
 			}
 			
 			@Override
@@ -68,28 +69,21 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				T r = getModelObject();
-				treePanel.selected.resetSelected(target);
-				selectedItem.setObject(r);
-				treePanel.selectedFile.setObject(r);
-				treePanel.selected = FileItemTree.this;
+				FileItem r = getModelObject();
+				treePanel.setSelected(r, target);
 				if (Type.Folder == r.getType()) {
 					if (getState(r) == State.COLLAPSED) {
 						super.onClick(target);
 					}
-					updateBranch(r, target);
 				} else {
 					treePanel.update(target, r);
-					updateNode(r, target);
 				}
 			}
 			
-			private String getItemStyle(T f, String def) {
+			private String getItemStyle(FileItem f, String def) {
 				String style;
-				if (f.getId() == 0) {
-					style = "my file om-icon";
-				} else if (f.getId() < 0) {
-					style = "public file om-icon";
+				if (f.getId() == null) {
+					style = f.getHash().indexOf("my") > -1 ? "my file om-icon" : "public file om-icon";
 				} else {
 					switch(f.getType()) {
 						case Folder:
@@ -129,7 +123,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			}
 			
 			@Override
-			protected String getOtherStyleClass(T r) {
+			protected String getOtherStyleClass(FileItem r) {
 				return getItemStyle(r, super.getOtherStyleClass(r));
 			}
 			
@@ -149,27 +143,9 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			}
 			
 			@Override
-			protected IModel<String> newLabelModel(IModel<T> model) {
+			protected IModel<String> newLabelModel(IModel<FileItem> model) {
 				return Model.of(model.getObject().getName());
 			}
 		};
-	}
-
-	private void resetSelected(AjaxRequestTarget target) {
-		T _prev = selectedItem.getObject();
-		if (_prev != null) {
-			if (Type.Folder == _prev.getType()) {
-				updateBranch(_prev, target);
-			} else {
-				updateNode(_prev, target);
-			}
-			selectedItem.setObject(null);
-		}
-	}
-	
-	@Override
-	protected void onDetach() {
-		selectedItem.detach();
-		super.onDetach();
 	}
 }
