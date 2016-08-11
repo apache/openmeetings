@@ -18,6 +18,14 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +35,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -104,11 +109,6 @@ public class Recording extends FileItem {
 		, PROCESSED
 		, ERROR
 	}
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	@Element(data = true, name = "flvRecordingId")
-	private Long id;
 
 	@Column(name = "alternate_download")
 	@Element(data = true, required = false)
@@ -167,16 +167,6 @@ public class Recording extends FileItem {
 	// Not Mapped
 	@Transient
 	private List<RecordingLog> log;
-
-	@Override
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getComment() {
 		return comment;
@@ -288,5 +278,22 @@ public class Recording extends FileItem {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	@Override
+	public File internalGetFile(String ext) {
+		File f = null;
+		if (getId() != null && !isDeleted()) {
+			if (ext == null || EXTENSION_MP4.equals(ext)) {
+				f = getRecording(String.format("%s.%s.%s", recordingFileName, EXTENSION_FLV, EXTENSION_AVI));
+			} else if (EXTENSION_FLV.equals(ext)) {
+				f = getRecording(String.format("%s.%s", recordingFileName, EXTENSION_FLV));
+			} else if (EXTENSION_AVI.equals(ext)) {
+				f = getRecording(String.format("%s.%s", recordingFileName, EXTENSION_AVI));
+			} else if (EXTENSION_OGG.equals(ext)) {
+				f = getRecording(String.format("%s.%s.%s", recordingFileName, EXTENSION_FLV, EXTENSION_AVI));
+			}
+		}
+		return f;
 	}
 }

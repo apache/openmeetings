@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import java.io.File;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlType;
 
@@ -38,6 +42,12 @@ public abstract class FileItem implements IDataProviderEntity {
 		// Folder need to be alphabetically first, for correct sorting
 		Folder, Image, PollChart, Presentation, Recording, Video, WmlFile
 	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	@Element(data = true, name = "flvRecordingId")
+	private Long id;
 
 	@Column(name = "name")
 	@Element(name = "fileName", data = true, required = false)
@@ -93,6 +103,16 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -196,6 +216,28 @@ public abstract class FileItem implements IDataProviderEntity {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public File getFile() {
+		return getFile(null);
+	}
+
+	protected abstract File internalGetFile(String ext);
+	
+	public final File getFile(String ext) {
+		return internalGetFile(ext);
+	}
+
+	public final boolean exists() {
+		return exists(null);
+	}
+
+	public final boolean exists(String ext) {
+		if (id != null && !isDeleted()) {
+			File f = getFile(ext);
+			return f != null && f.exists() && f.isFile();
+		}
+		return false;
 	}
 
 	@Override

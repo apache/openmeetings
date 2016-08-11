@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
-
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -85,39 +82,40 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 				if (f.getId() == null) {
 					style = f.getHash().indexOf("my") > -1 ? "my file om-icon" : "public file om-icon";
 				} else {
+					String _style, addStyle = f.exists() ? "" : "broken";
 					switch(f.getType()) {
 						case Folder:
-							style = def;
+							_style = def;
 							break;
 						case Image:
-							style = "image file om-icon";
+							_style = "image file om-icon";
 							break;
 						case PollChart:
-							style = "chart file om-icon";
+							_style = "chart file om-icon";
 							break;
 						case WmlFile:
-							style = "wml file om-icon";
+							_style = "wml file om-icon";
 							break;
+						case Video:
 						case Recording:
 						{
-							Recording r = (Recording)f;
-							if (isRecordingExists(r.getHash() + MP4_EXTENSION)) {
-								style = "recording om-icon";
-							} else if (Status.RECORDING == r.getStatus() || Status.CONVERTING == r.getStatus()) {
-								style = "processing-recording om-icon";
-							} else {
-								style = "broken-recording om-icon";
+							_style = "recording om-icon";
+							if (f instanceof Recording) {
+								Status st = ((Recording)f).getStatus();
+								if (Status.RECORDING == st || Status.CONVERTING == st) {
+									addStyle = "processing";
+								}
 							}
 						}
 							break;
 						case Presentation:
-							style = "doc file om-icon";
+							_style = "doc file om-icon";
 							break;
-						case Video:
 						default:
-							style = "recording om-icon";
+							_style = "file om-icon";
 							break;
 					}
+					style = String.format("%s %s", addStyle, _style);
 				}
 				return style;
 			}

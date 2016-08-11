@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
@@ -86,7 +84,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<Recording> {
 		if (f.getHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(888));
-		} else if (!isRecordingExists(f.getHash() + MP4_EXTENSION)) {
+		} else if (!f.exists()) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(1595));
 		} else {
