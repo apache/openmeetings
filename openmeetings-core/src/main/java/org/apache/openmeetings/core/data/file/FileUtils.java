@@ -18,12 +18,15 @@
  */
 package org.apache.openmeetings.core.data.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -40,19 +43,28 @@ public class FileUtils {
 	@Autowired
 	private FileExplorerItemDao fileDao;
 
-	public long getSizeOfDirectoryAndSubs(FileExplorerItem file) {
+	public long getSize(List<FileExplorerItem> list) {
+		long size = 0;
+		for (FileExplorerItem f : list) {
+			log.debug("FileExplorerItem fList " + f.getName());
+			size += getSize(f);
+		}
+		return size;
+	}
+	
+	public long getSize(FileExplorerItem file) {
 		try {
 			long fileSize = 0;
 
 			File base = OmFileHelper.getUploadFilesDir();
 			if (Type.Image == file.getType()) {
-
-				File tFile = new File(base, file.getHash());
+				String fname = String.format("%s%s", file.getHash(), JPG_EXTENSION);
+				File tFile = new File(base, fname);
 				if (tFile.exists()) {
 					fileSize += tFile.length();
 				}
 
-				File thumbFile = new File(base, thumbImagePrefix + file.getHash());
+				File thumbFile = new File(base, thumbImagePrefix + fname);
 				if (thumbFile.exists()) {
 					fileSize += thumbFile.length();
 				}
@@ -66,10 +78,21 @@ public class FileUtils {
 				}
 			}
 
+			if (Type.Video == file.getType()) {
+				//FIXME TODO refactor
+				File video = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + file.getId() + MP4_EXTENSION);
+				if (video.exists()) {
+					fileSize += video.length();
+				}
+				File thumb = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + file.getId() + JPG_EXTENSION);
+				if (thumb.exists()) {
+					fileSize += thumb.length();
+				}
+			}
+
 			log.debug("calling [1] fileDao.update()");
-			fileDao.update(file);
 			for (FileExplorerItem child : fileDao.getByParent(file.getId())) {
-				fileSize += getSizeOfDirectoryAndSubs(child);
+				fileSize += getSize(child);
 			}
 
 			return fileSize;

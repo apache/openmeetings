@@ -35,12 +35,14 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -66,6 +68,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final FileUploadField uploadField;
 	private final HiddenField<String> fileName;
 	private final CheckBox toWb = new CheckBox("to-wb", Model.of(false));
+	private final WebMarkupContainer cleanBlock = new WebMarkupContainer("clean-block");
+	private final CheckBox cleanWb = new CheckBox("clean-wb", Model.of(false));
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
 
@@ -83,7 +87,16 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		};
 		cancel = new DialogButton("close", Application.getString(85));
-		form.add(feedback.setOutputMarkupId(true), toWb);
+		toWb.add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				target.add(cleanBlock.setVisible(toWb.getModelObject()));
+			}
+		});
+		form.add(feedback.setOutputMarkupId(true), toWb.setOutputMarkupId(true)
+				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true));
 	
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
@@ -182,7 +195,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 					error(result.getLogMessage());
 				} else {
 					if (toWb.getModelObject()) {
-						room.sendFileToWb(f);
+						room.sendFileToWb(f, cleanWb.getModelObject());
 					}
 					close(target, null);
 				}
