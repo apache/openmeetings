@@ -28,7 +28,7 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 	
 	public ScreenShareRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.share, room);
-		mainCssClass = "screen-share-right ";
+		mainCssClass = "right screen-share ";
 	}
 
 	@Override
