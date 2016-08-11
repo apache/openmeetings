@@ -42,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
+	private static final Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 
 	// Spring loaded Beans
 	@Autowired
@@ -127,18 +128,14 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 	
 	private static FlvDimension getFlvDimension(String txt) throws Exception {
-		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
-		
 		Matcher matcher = p.matcher(txt);
 		
 		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
-			
 			String[] resultions = foundResolution.split("x");
-			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
 		}
 		
-		throw new Exception("Failed to get FLV dimension: " + txt);
+		return new FlvDimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 }

@@ -75,7 +75,7 @@
 				+ canvas.publicSID + '&preview=true';
 			parent._content._preview.imagePreview.setAttribute("src", downloadurl)
 			parent._content._preview.bringToFront();
-							
+
 			if (parent.sendInit) {
 				parent.parent.sendNewVideoRemote(parent);
 			}
@@ -120,7 +120,7 @@
 			this._content.playVideoStream(this.recordingName, 0);
 		}
 	]]>
-	</method>   
+	</method>
 	
 	<!---
 		calculates the new x, y, width and height of the video so that it is 100% 
@@ -170,34 +170,34 @@
 	
 	<method name="setDuration">
 	<![CDATA[
-	   if ($debug) Debug.write("setDuration ",this.deltaInSeconds);
-	   var tString = "";
-	   if (this.deltaInSeconds > 60) {
-		   var minutes = Math.floor(this.deltaInSeconds / 60);
-		   var restSeconds = Math.round(this.deltaInSeconds) - (minutes * 60);
-		   tString = minutes + " min " + restSeconds + " sec";
-	   } else {
-		   tString = Math.round(this.deltaInSeconds) + " sec";
-	   }
-	   this._progress._progressbar._duration.setAttribute("text",tString);
+		if ($debug) Debug.write("setDuration ",this.deltaInSeconds);
+		var tString = "";
+		if (this.deltaInSeconds > 60) {
+			var minutes = Math.floor(this.deltaInSeconds / 60);
+			var restSeconds = Math.round(this.deltaInSeconds) - (minutes * 60);
+			tString = minutes + " min " + restSeconds + " sec";
+		} else {
+			tString = Math.round(this.deltaInSeconds) + " sec";
+		}
+		this._progress._progressbar._duration.setAttribute("text",tString);
 	]]>
 	</method>
 	
 	<method name="calcProgressBar">
 	<![CDATA[
-	   if ($debug) Debug.write("calcProgressBar ",this.currentTime);
-	   this._progress._progressbar._pointer.setAttribute("visibility","visible");
-	   var tString = "";
-	   if (this.currentTime > 60) {
-	   	   var minutes = Math.floor(this.currentTime / 60);
-	   	   var restSeconds = Math.round(this.currentTime) - (minutes * 60);
-	   	   tString = minutes + " min " + restSeconds + " sec";
-	   } else {
-	   	   tString = Math.round(this.currentTime) + " sec";
-	   }
-	   var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * this.currentTime);
-	   this._progress._progressbar._time.setAttribute("text", tString);
-	   this._progress._progressbar._pointer.setAttribute("x", tNewX);
+		if ($debug) Debug.write("calcProgressBar ", this.currentTime);
+		this._progress._progressbar._pointer.setAttribute("visibility","visible");
+		var tString = "";
+		if (this.currentTime > 60) {
+				var minutes = Math.floor(this.currentTime / 60);
+				var restSeconds = Math.round(this.currentTime) - (minutes * 60);
+				tString = minutes + " min " + restSeconds + " sec";
+		} else {
+				tString = Math.round(this.currentTime) + " sec";
+		}
+		var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * this.currentTime);
+		this._progress._progressbar._time.setAttribute("text", tString);
+		this._progress._progressbar._pointer.setAttribute("x", tNewX);
 	]]>
 	</method> 
 	
@@ -214,7 +214,7 @@
 	
 	<method name="toggleStream">
 		if (canvas.ismoderator &amp;&amp; this.isPaused) {
-   			this.startStreamPlay();
+				this.startStreamPlay();
 		}
 	</method>
 	
@@ -223,7 +223,7 @@
 		<attribute name="timerDelegateStarted" value="false" type="boolean"/>
 		
 		<handler name="oninit">
-			this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
+			this.timerDelegate = new LzDelegate(this, "calcProgressBar");
 		</handler>
 		
 		<method name="playVideoStream" args="streamName, delay">
@@ -253,11 +253,11 @@
 		</handler>
 		
 		<method name="calcProgressBar" args="tObjRef">
-			//if ($debug) Debug.write("calcProgressBar updateRecordingStreamTime",this._ns.time)
+			if ($debug) Debug.write("calcProgressBar:: updateRecordingStreamTime", this.timerDelegateStarted, this._ns.time)
 			parent.currentTime = this._ns.time;
 			parent.calcProgressBar();
 			if (this.timerDelegateStarted) {
-				lz.Timer.addTimer( this.timerDelegate , 1000 );
+				lz.Timer.addTimer(this.timerDelegate , 1000);
 			}
 		</method>
 		<view name="_preview" x="0" y="0" width="0" height="0" >
@@ -265,7 +265,7 @@
 			<handler name="onclick">
 				if ($debug) Debug.write("onclick -- toggleStream");
 				parent.parent.toggleStream();
-			</handler>		   
+			</handler>
 			<view width="60" height="40" valign="middle" opacity="0.7" align="center" bgcolor="0xFFFFFF">
 				<view resource="lz_recorder_play" valign="middle" align="center" />
 			</view>

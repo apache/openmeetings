@@ -1406,7 +1406,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				, fuid // uniquObjectSyncName //17
 				, fi.getName() // standardFileName //18
 				, true // fullFit //19 FIXME TODO
-				, 1 // zIndex //-8 FIXME TODO
+				, 0 // zIndex //-8
 				, null //-7
 				, 0 // this.counter //-6 FIXME TODO
 				, 0 // posx //-5
@@ -1427,7 +1427,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				, false // 3: false //playRemote
 				, size.x // 4: 416
 				, size.y // 5: 240
-				, 1 // 6: 1 // z-index 
+				, 0 // 6: 1 // z-index 
 				, null // 7: null //TODO 
 				, 0 // 8: 0 //TODO // counter
 				, 0 // 9: 0 //TODO // x
@@ -1438,7 +1438,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				);
 	}
 	
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url) {
+	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url, boolean clean) {
 		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
 		if (csi == null) {
 			log.warn("No client was found to send Wml:: {}", uid);
@@ -1458,6 +1458,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				wbObject = getFlvWbObject(fi);
 				break;
 			default:
+		}
+		if (clean) {
+			Map<Integer, Object> wbClear = new HashMap<>();
+			wbClear.put(2, "clear");
+			wbClear.put(3, null);
+
+			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", new Object[] { wbClear });
 		}
 		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
 	}
