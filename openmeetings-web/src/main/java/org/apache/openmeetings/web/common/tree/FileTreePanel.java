@@ -225,7 +225,8 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
-		handler.add(trees);
+		updateSizes();
+		handler.add(sizes, trees);
 	}
 
 	void updateNode(AjaxRequestTarget target, FileItem fi) {
