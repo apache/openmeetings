@@ -72,16 +72,12 @@
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
-.ui-icon.moderator-right, .room.menu.right .icon.ask {
-	background-image: url(images/user_add.png);
-}
 .room.sidebar.left {
 	min-width: 200px;
-	width: 20%;
+	width: 315px;
 	float: left;
 }
 .room.wb.area {
-	width: 80%;
 	float: left;
 }
 .room.wb.area.ui-state-hover {
@@ -105,21 +101,22 @@
 	padding: 0;
 }
 .room.sidebar.left .user.header {
-	height: 30px;
-	padding-left: 15px;
+	height: 45px;
+	padding-left: 5px;
 }
 .room.sidebar.left .user.header .ui-icon {
 	margin-top: 5px;
 	margin-left: 5px;
+	width: 32px;
+	height: 32px;
 }
 .room.sidebar.left .user.list {
-	height: 100%;
 	overflow-y: auto;
 }
 .room.sidebar.left .user.list .user {
 	height: 40px;
 	padding-left: 5px;
-    padding-top: 5px;
+	padding-top: 5px;
 }
 .room.sidebar.left .user.list .user .user.name {
 	line-height: 18px;
@@ -139,13 +136,8 @@
 	margin-right: 2px;
 	margin-top: 0;
 }
-.audio-activity.ui-icon.speaking, .ui-icon.moderator-right.granted, .wb-right.ui-icon.granted
-, .screen-share-right.ui-icon.granted, .remote-control-right.ui-icon.granted, .exclsv-audio.ui-icon.granted
-{
-	opacity: 1;
-}
-.ui-icon.moderator-right {
-	opacity: 0.2;
+.room.sidebar.left .user.list .user .ui-icon {
+	background-size: 16px;
 }
 .audio-activity.ui-icon {
 	opacity: 0.2;
@@ -162,33 +154,51 @@
 .private-chat.ui-icon {
 	background-image: url(images/page_edit.png);
 }
-.wb-right.ui-icon {
+.audio-activity.ui-icon.speaking, .ui-icon.granted {
+	opacity: 1;
+}
+.right.moderator.ui-icon, .room.menu.right .icon.ask {
+	background-image: url(images/user_add.png);
+}
+.right.moderator.ui-icon.granted {
+	background-image: url(images/user_delete.png);
+}
+.right.ui-icon {
 	opacity: 0.2;
+}
+.right.wb.ui-icon {
 	background-image: url(images/pencil_add.png);
 }
-.screen-share-right.ui-icon {
-	opacity: 0.2;
+.right.wb.ui-icon.granted {
+	background-image: url(images/pencil_delete.png);
+}
+.right.screen-share.ui-icon {
 	background-image: url(images/monitor_add.png);
 }
-.remote-control-right.ui-icon {
-	opacity: 0.2;
+.right.screen-share.ui-icon.granted {
+	background-image: url(images/monitor_delete.png);
+}
+.right.remote-control.ui-icon {
 	background-image: url(images/mouse_add.png);
 }
-.audio-right.ui-icon {
+.right.remote-control.ui-icon.granted {
+	background-image: url(images/mouse_delete.png);
+}
+.right.audio.ui-icon {
 	opacity: 1;
-	background-image: url(images/micro_small_add.png);
+	background-image: url(images/microphone_add.png);
 }
-.audio-right.ui-icon.granted {
+.right.audio.ui-icon.granted {
 	opacity: 0.2;
-	background-image: url(images/micro_small_no.png);
+	background-image: url(images/microphone_delete.png);
 }
-.camera-right.ui-icon {
+.right.camera.ui-icon {
 	opacity: 1;
-	background-image: url(images/camera_small_add.png);
+	background-image: url(images/webcam_add.png);
 }
-.camera-right.ui-icon.granted {
+.right.camera.ui-icon.granted {
 	opacity: 0.2;
-	background-image: url(images/camera_small_no.png);
+	background-image: url(images/webcam_delete.png);
 }
 .global-mute.ui-icon {
 	opacity: 0.2;
@@ -196,7 +206,7 @@
 }
 .exclsv-audio.ui-icon {
 	opacity: 0.2;
-	background-image: url(images/micro_small.png);
+	background-image: url(images/microphone_exclusive.png);
 }
 .kick.ui-icon {
 	background-image: url(images/cancel_icon.png);

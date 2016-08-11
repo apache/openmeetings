@@ -27,7 +27,7 @@ public class AudioRightIcon extends RoomRightIcon {
 	
 	public AudioRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.audio, room);
-		mainCssClass = "audio-right ";
+		mainCssClass = "right audio ";
 	}
 
 	@Override
