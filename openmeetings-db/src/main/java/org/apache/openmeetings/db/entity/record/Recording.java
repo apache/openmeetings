@@ -35,6 +35,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -110,6 +113,12 @@ public class Recording extends FileItem {
 		, ERROR
 	}
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	@Element(data = true, name = "flvRecordingId")
+	private Long id;
+
 	@Column(name = "alternate_download")
 	@Element(data = true, required = false)
 	private String alternateDownload;
@@ -167,6 +176,16 @@ public class Recording extends FileItem {
 	// Not Mapped
 	@Transient
 	private List<RecordingLog> log;
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getComment() {
 		return comment;

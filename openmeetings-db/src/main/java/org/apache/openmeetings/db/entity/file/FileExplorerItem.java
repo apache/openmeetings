@@ -28,6 +28,9 @@ import java.io.File;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -56,6 +59,12 @@ import org.simpleframework.xml.Root;
 public class FileExplorerItem extends FileItem {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	@Element(data = true, name = "fileExplorerItemId")
+	private Long id;
+
 	@Column(name = "filesize")
 	@Element(data = true, required = false)
 	private Long size;
@@ -65,6 +74,16 @@ public class FileExplorerItem extends FileItem {
 
 	@Column(name = "external_type")
 	private String externalType;
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Long getSize() {
 		return size;
