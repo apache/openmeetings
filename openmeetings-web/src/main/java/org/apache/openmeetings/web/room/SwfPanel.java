@@ -32,10 +32,12 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	public static final String SWF_TYPE_NETWORK = "network";
+	public static final String SWF_TYPE_SETTINGS = "settings";
 	
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
@@ -47,13 +49,24 @@ public class SwfPanel extends BasePanel {
 	
 	public String getInitFunction(PageParameters pp) {
 		String initStr = null;
-		StringValue type = pp.get("swf");
-		if (SWF_TYPE_NETWORK.equals(type.toString())) {
-			String swf = String.format("networktesting%s.swf10.swf", DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "")
-					+ new PageParametersEncoder().encodePageParameters(pp);
+		String swf = getFlashFile(pp.get("swf"));
+		if (!Strings.isEmpty(swf)) {
+			swf += new PageParametersEncoder().encodePageParameters(pp);
 			initStr = String.format("initSwf('%s');", swf);
 		}
 		return initStr;
+	}
+	
+	private String getFlashFile(StringValue type) {
+		String fmt;
+		if (SWF_TYPE_SETTINGS.equals(type.toString())) {
+			fmt = "settings%s.swf11.swf";
+		} else if (SWF_TYPE_NETWORK.equals(type.toString())) {
+			fmt = "networktesting%s.swf10.swf";
+		} else {
+			return "";
+		}
+		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
 	
 	public SwfPanel(String id, PageParameters pp) {
