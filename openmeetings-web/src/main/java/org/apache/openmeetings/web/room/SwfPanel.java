@@ -56,11 +56,12 @@ import org.slf4j.Logger;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
 	private static final String WICKET_ROOM_ID = "wicketroomid";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
 	public static final String SWF_TYPE_NETWORK = "network";
-	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
+	public static final String SWF_TYPE_SETTINGS = "settings";
 	private Long roomId = null;
 	
 	public SwfPanel(String id) {
@@ -127,7 +128,14 @@ public class SwfPanel extends BasePanel {
 	}
 
 	private String getFlashFile(StringValue type) {
-		String fmt = SWF_TYPE_NETWORK.equals(type.toString()) ? "networktesting%s.swf10.swf" : "main%s.swf11.swf";
+		String fmt;
+		if (SWF_TYPE_SETTINGS.equals(type.toString())) {
+			fmt = "settings%s.swf11.swf";
+		} else if (SWF_TYPE_NETWORK.equals(type.toString())) {
+			fmt = "networktesting%s.swf10.swf";
+		} else {
+			fmt = "main%s.swf11.swf";
+		}
 		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
 	

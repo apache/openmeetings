@@ -33,7 +33,6 @@
 	<attribute name="videoWidth" type="number" value="132"/>
 	<attribute name="videoHeight" type="number" value="132"/>
 	<attribute name="SIDEPANEL_WIDTH" type="number" value="270" />
-	<attribute name="testingApplication" value="null" />
 	<attribute name="baseVideoStream" value="null" />
 	
 	<method name="toggleVideo" args="value">
@@ -496,29 +495,6 @@
 		]]>
 	</method>
 
-	<!---
-		Starts the 5 second audio/video testing application and connect to RTMP
-	 -->
-	<method name="doInitTestingApplication" args="x,y,connection_url">
-		if($debug) Debug.write("doInitTestingApplication ",x,y);
-		canvas.thishib.setAttribute('src',connection_url);
-		canvas.thishib.connect();
-		this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
-	</method>
-	
-	<!---
-		Stops and destroys the view with the audio/video testing application
-		and send confirmation back via LocalConnection
-	 -->
-	<method name="closeInitTestingApplication">
-		if($debug) Debug.write("closeInitTestingApplication ");
-		if (this.testingApplication != null) {
-			this.testingApplication.storeSettings();
-			this.testingApplication.destroy();
-			this.testingApplication = null;
-		}
-	</method>
-	
 	<!---
 		Initializes video playback component
 		and connect to RTMP
