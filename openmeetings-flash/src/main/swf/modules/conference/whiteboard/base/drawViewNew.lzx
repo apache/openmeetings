@@ -53,7 +53,7 @@
 	        		parent.redrawRectItemByScaling(this);
 	        	} else if  (this.name.indexOf('ellipse')>=0) {
 	        		parent.redrawEllipseItemByScaling(this);
-	        	}	        	
+	        	}
 	        }
         ]]>
     </handler>
@@ -70,11 +70,11 @@
 	        		parent.redrawRectItemByScaling(this);
 	        	} else if  (this.name.indexOf('ellipse')>=0) {
 	        		parent.redrawEllipseItemByScaling(this);
-	        	}	
+	        	}
 	        }  	
-        ]]>   
+        ]]>
     </handler>
-    <!-- 
+    <!--
     <dragstate name="dragger" drag_axis="both"
 	    drag_min_x="0"
 	    drag_max_x="$once{parent.width - this.width}"

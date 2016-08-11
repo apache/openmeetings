@@ -257,15 +257,6 @@ public class FileWebService {
 		}
 	}
 
-	private long getSize(List<FileExplorerItem> list) {
-		long size = 0;
-		for (FileExplorerItem f : list) {
-			log.debug("FileExplorerItem fList " + f.getName());
-			size += fileUtils.getSizeOfDirectoryAndSubs(f);
-		}
-		return size;
-	}
-	
 	/**
 	 * Get a File Explorer Object by a given Room
 	 * 
@@ -294,11 +285,11 @@ public class FileWebService {
 
 				// Home File List
 				List<FileExplorerItem> fList = fileDao.getByOwner(userId);
-				fileExplorerObject.setUser(fList, getSize(fList));
+				fileExplorerObject.setUser(fList, fileUtils.getSize(fList));
 
 				// Public File List
 				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
-				fileExplorerObject.setRoom(rList, getSize(rList));
+				fileExplorerObject.setRoom(rList, fileUtils.getSize(rList));
 
 				return fileExplorerObject;
 			} else {

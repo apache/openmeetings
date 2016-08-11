@@ -18,6 +18,14 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import org.apache.openmeetings.core.data.file.FileUtils;
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -36,14 +44,21 @@ public class RoomFilePanel extends FileTreePanel {
 	
 	@Override
 	public void updateSizes() {
-		// TODO Auto-generated method stub
-		
+		FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
+		FileUtils utils = getBean(FileUtils.class);
+		RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
+		long userSize = utils.getSize(dao.getByOwner(getUserId()));
+		long roomSize = utils.getSize(dao.getByRoom(room.getRoom().getId()));
+		if (sizeData != null) {
+			userSize += sizeData.getUserHomeSize();
+			roomSize += sizeData.getPublicFileSize();
+		}
+		homeSize.setObject(getHumanSize(userSize));
+		publicSize.setObject(getHumanSize(roomSize));
 	}
 	
 	@Override
 	protected void update(AjaxRequestTarget target, FileItem f) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

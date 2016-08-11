@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util.crypt;
+package org.apache.openmeetings.util;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

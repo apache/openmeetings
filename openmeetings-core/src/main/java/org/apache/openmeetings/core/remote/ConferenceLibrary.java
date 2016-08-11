@@ -160,7 +160,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 		List<?> roomItems = LibraryWmlLoader.loadWmlFile(fi.getHash());
 
-		Map<Integer, String> wbClear = new HashMap<>();
+		Map<Integer, Object> wbClear = new HashMap<>();
 		wbClear.put(2, "clear");
 		wbClear.put(3, null);
 

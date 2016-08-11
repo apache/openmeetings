@@ -222,7 +222,8 @@
 		if ($debug) Debug.write("[store actionObject] ",actionObject);
 		
 		this.baseactionobjectList.push(actionObject);
-			
+		if ($debug) Debug.write(" :: baseactionobjectList.push :: ", this.baseactionobjectList.length, this.baseactionobjectList);
+		
 	]]>
 	</method>
 	
