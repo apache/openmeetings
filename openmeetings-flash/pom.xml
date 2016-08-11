@@ -66,7 +66,7 @@
 				</property>
 			</activation>
 			<properties>
-				<ant.target>compile.laszlo.main</ant.target>
+				<ant.target>main</ant.target>
 			</properties>
 		</profile>
 		<profile>
@@ -78,7 +78,7 @@
 				</property>
 			</activation>
 			<properties>
-				<ant.target>compile.laszlo.main.debug</ant.target>
+				<ant.target>settings.debug</ant.target>
 			</properties>
 		</profile>
 	</profiles>
