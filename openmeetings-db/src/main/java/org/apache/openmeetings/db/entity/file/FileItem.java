@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import java.io.File;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -196,6 +197,28 @@ public abstract class FileItem implements IDataProviderEntity {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public File getFile() {
+		return getFile(null);
+	}
+
+	protected abstract File internalGetFile(String ext);
+	
+	public final File getFile(String ext) {
+		return internalGetFile(ext);
+	}
+
+	public final boolean exists() {
+		return exists(null);
+	}
+
+	public final boolean exists(String ext) {
+		if (getId() != null && !isDeleted()) {
+			File f = getFile(ext);
+			return f != null && f.exists() && f.isFile();
+		}
+		return false;
 	}
 
 	@Override

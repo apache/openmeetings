@@ -18,12 +18,11 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
-import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
@@ -265,20 +264,20 @@ public class RecordingDao {
 	private long getSize(Recording r) {
 		long size = 0;
 
-		if (isRecordingExists(r.getHash())) {
-			size += getRecording(r.getHash()).length();
+		if (r.exists(EXTENSION_FLV)) {
+			size += r.getFile(EXTENSION_FLV).length();
 		}
-		if (isRecordingExists(r.getAlternateDownload())) {
-			size += getRecording(r.getAlternateDownload()).length();
+		if (r.exists(EXTENSION_AVI)) {
+			size += r.getFile(EXTENSION_AVI).length();
 		}
-		if (isRecordingExists(r.getPreviewImage())) {
-			size += getRecording(r.getPreviewImage()).length();
+		if (r.exists(EXTENSION_JPG)) {
+			size += r.getFile(EXTENSION_JPG).length();
 		}
-		if (isRecordingExists(r.getHash() + MP4_EXTENSION)) {
-			size += getMp4Recording(r.getHash()).length();
+		if (r.exists(EXTENSION_MP4)) {
+			size += r.getFile(EXTENSION_MP4).length();
 		}
-		if (isRecordingExists(r.getHash() + OGG_EXTENSION)) {
-			size += getOggRecording(r.getHash()).length();
+		if (r.exists(EXTENSION_OGG)) {
+			size += r.getFile(EXTENSION_OGG).length();
 		}
 		for (Recording rec : getByParent(r.getId())) {
 			size += getSize(rec);

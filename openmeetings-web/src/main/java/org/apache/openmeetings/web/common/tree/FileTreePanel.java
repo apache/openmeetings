@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common.tree;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -39,12 +38,9 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -61,41 +57,28 @@ public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
-	protected final IModel<FileItem> selectedFile = new CompoundPropertyModel<FileItem>((FileItem)null);
+	private final IModel<FileItem> selected = new CompoundPropertyModel<FileItem>((FileItem)null);
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
-	protected FileItemTree<? extends FileItem> selected;
-	protected ListView<ITreeProvider<? extends FileItem>> treesView = new ListView<ITreeProvider<? extends FileItem>>("tree", new ArrayList<ITreeProvider<? extends FileItem>>()) {
-		private static final long serialVersionUID = 1L;
+	final FileItemTree tree;
 
-		@Override
-		protected void populateItem(ListItem<ITreeProvider<? extends FileItem>> item) {
-			@SuppressWarnings({ "unchecked", "rawtypes" }) //TODO investigate this
-			FileItemTree<? extends FileItem> fit = new FileItemTree("item", FileTreePanel.this, item.getModelObject());
-			if (selected == null) {
-				selected = fit;
-			}
-			item.add(fit);
-		}
-	};
-
-	public FileTreePanel(String id) {
+	public FileTreePanel(String id, Long roomId) {
 		super(id);
+		OmTreeProvider tp = new OmTreeProvider(roomId);
+		setSelected(tp.getRoot(), null);
+		add(tree = new FileItemTree("tree", this, tp));
 	}
 	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		defineTrees();
-		selectedFile.getObject().setId(Long.MIN_VALUE);
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				createFolder(getModelObject());
-				target.add(trees); //FIXME add correct refresh
+				createFolder(target, getModelObject());
 			}
 		};
 		add(addFolder);
@@ -163,7 +146,7 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(trees); //FIXME add correct refresh
+				update(target);
 			}
 		}));
 		trashToolbar.add(new ConfirmableAjaxBorder("trash", getString("80"), getString("713")) {
@@ -171,19 +154,19 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				FileItem f = selectedFile.getObject();
-				if (f != null && f.getId() > 0) {
+				FileItem f = selected.getObject();
+				if (f != null && f.getId() != null) {
 					super.onEvent(target);
 				}
 			}
 			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				delete(selectedFile.getObject(), target);
+				delete(selected.getObject(), target);
 			}
 		});
 		
-		add(trees.add(treesView).setOutputMarkupId(true));
+		add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
 		add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
 		add(errorsDialog);
@@ -206,40 +189,66 @@ public abstract class FileTreePanel extends Panel {
 				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
 			}
 		}
-		handler.add(trees); //FIXME add correct refresh
+		update(handler);
 	}
 	
-	public void createRecordingFolder(String name) {
-		Recording f = new Recording();
+	protected abstract void update(AjaxRequestTarget target, FileItem f);
+
+	protected void createFolder(AjaxRequestTarget target, String name) {
+		FileItem p = selected.getObject();
+		boolean isRecording = p instanceof Recording;
+		if (Type.Folder != p.getType()) {
+			
+		}
+		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
 		f.setName(name);
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
-		f.setType(Type.Folder);;
-		Recording p = (Recording)selectedFile.getObject();
-		long parentId = p.getId();
-		if (Type.Folder == p.getType()) {
-			f.setParentId(parentId);
-		}
+		f.setType(Type.Folder);
 		f.setOwnerId(p.getOwnerId());
-		f.setGroupId(p.getGroupId());
-		getBean(RecordingDao.class).update(f);
+		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
+		if (isRecording) {
+			Recording r = (Recording)f;
+			r.setGroupId(((Recording)p).getGroupId());
+			getBean(RecordingDao.class).update(r);
+		} else {
+			f.setRoomId(p.getRoomId());
+			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
+		}
+		update(target);
 	}
-	
-	public abstract void defineTrees();
-	
-	public abstract void update(AjaxRequestTarget target, FileItem f);
-
-	public abstract void createFolder(String name);
 
 	public abstract void updateSizes();
 	
-	public FileItem getSelectedFile() {
-		return selectedFile.getObject();
+	public FileItem getSelected() {
+		return selected.getObject();
+	}
+
+	public void update(IPartialPageRequestHandler handler) {
+		updateSizes();
+		handler.add(sizes, trees);
+	}
+
+	void updateNode(AjaxRequestTarget target, FileItem fi) {
+		if (fi != null && target != null) {
+			if (Type.Folder == fi.getType()) {
+				tree.updateBranch(fi, target);
+			} else {
+				tree.updateNode(fi, target);
+			}
+		}
+	}
+	
+	public void setSelected(FileItem fi, AjaxRequestTarget target) {
+		FileItem _prev = selected.getObject();
+		updateNode(target, _prev);
+		selected.setObject(fi);
+		updateNode(target, fi);
 	}
 	
 	@Override
 	protected void onDetach() {
-		selectedFile.detach();
+		selected.detach();
 		homeSize.detach();
 		publicSize.detach();
 		super.onDetach();

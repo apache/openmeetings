@@ -28,7 +28,7 @@ public class RemoteControlRightIcon extends RoomRightIcon {
 	
 	public RemoteControlRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.remoteControl, room);
-		mainCssClass = "remote-control-right ";
+		mainCssClass = "right remote-control ";
 	}
 
 	@Override

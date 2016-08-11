@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -160,7 +161,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 		List<?> roomItems = LibraryWmlLoader.loadWmlFile(fi.getHash());
 
-		Map<Integer, String> wbClear = new HashMap<>();
+		Map<Integer, Object> wbClear = new HashMap<>();
 		wbClear.put(2, "clear");
 		wbClear.put(3, null);
 
@@ -208,10 +209,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 	/**
 	 * @param sid
-	 * @param flvFileExplorerId
+	 * @param fileId
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public Long copyFileToCurrentRoom(String sid, Long flvFileExplorerId) {
+	public Long copyFileToCurrentRoom(String sid, Long fileId) {
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
@@ -221,14 +222,14 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-				Long room_id = currentClient.getRoomId();
+				Long roomId = currentClient.getRoomId();
 
-				if (room_id != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
+				if (roomId != null) {
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
 
-					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
+					File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
 
-					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + MP4_EXTENSION);
+					File targetFullFlvFile = new File(targetFolder, WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
 					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
 						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}

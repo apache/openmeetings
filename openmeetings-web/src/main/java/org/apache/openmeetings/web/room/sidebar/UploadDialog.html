@@ -31,7 +31,12 @@
 		</div>
 		<div wicket:id="feedback"></div>
 		<span wicket:id="progress">[progressbar]</span>
-		<div style="margin-top: 30px;"><input type="checkbox"/><label><wicket:message key="1312"/></label></div>
+		<div style="margin-top: 30px;">
+			<input wicket:id="to-wb" type="checkbox"/><label wicket:for="to-wb"><wicket:message key="1312"/></label>
+			<div style="margin-left: 30px;" wicket:id="clean-block">
+				<input wicket:id="clean-wb" type="checkbox"/><label wicket:for="clean-wb"><wicket:message key="62"/></label>
+			</div>
+		</div>
 	</form>
 	<form wicket:id="name-form">
 		<input type="hidden" wicket:id="name"/>

@@ -29,7 +29,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	
 	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.whiteBoard, room);
-		mainCssClass = "wb-right ";
+		mainCssClass = "right wb ";
 		Room r = room.getRoom();
 		setVisible(Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard));
 	}

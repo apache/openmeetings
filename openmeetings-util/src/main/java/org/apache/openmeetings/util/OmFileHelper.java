@@ -70,14 +70,21 @@ public class OmFileHelper {
 	public static final String profileImagePrefix = "_profile_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
-	public static final String WML_EXTENSION = ".wml";
-	public static final String FLV_EXTENSION = ".flv";
-	public static final String MP4_EXTENSION = ".mp4";
-	public static final String OGG_EXTENSION = ".ogg";
-	public static final String JPG_EXTENSION = ".jpg";
+	public static final String EXTENSION_WML = "wml";
+	public static final String EXTENSION_FLV = "flv";
+	public static final String EXTENSION_MP4 = "mp4";
+	public static final String EXTENSION_AVI = "avi";
+	public static final String EXTENSION_OGG = "ogg";
+	public static final String EXTENSION_JPG = "jpg";
+	public static final String EXTENSION_SWF = "swf";
+	public static final String WML_EXTENSION = "." + EXTENSION_WML;
+	public static final String FLV_EXTENSION = "." + EXTENSION_FLV;
+	public static final String MP4_EXTENSION = "." + EXTENSION_MP4;
+	public static final String OGG_EXTENSION = "." + EXTENSION_OGG;
+	public static final String JPG_EXTENSION = "." + EXTENSION_JPG;
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
-	public static final String FLV_MIME_TYPE = "video/flv";
-	public static final String MP4_MIME_TYPE = "video/mp4";
+	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
+	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
 	public static final String JPG_MIME_TYPE = "image/jpeg";
 
 	public static void setOmHome(File omHome) {
@@ -187,16 +194,6 @@ public class OmFileHelper {
 	
 	public static File getRecording(String name) {
 		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
-	}
-	
-	public static boolean isRecordingExists(String name) {
-		try {
-			File f = new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
-			return f.exists() && f.isFile();
-		} catch (Exception e) {
-			//no-op
-		}
-		return false;
 	}
 	
 	public static File getMp4Recording(String name) {
