@@ -18,15 +18,21 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
+
+import java.io.File;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.util.OmFileHelper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -49,11 +55,6 @@ import org.simpleframework.xml.Root;
 @Root
 public class FileExplorerItem extends FileItem {
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	@Element(data = true, name = "fileExplorerItemId")
-	private Long id;
 
 	@Column(name = "filesize")
 	@Element(data = true, required = false)
@@ -64,16 +65,6 @@ public class FileExplorerItem extends FileItem {
 
 	@Column(name = "external_type")
 	private String externalType;
-
-	@Override
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getSize() {
 		return size;
@@ -97,5 +88,30 @@ public class FileExplorerItem extends FileItem {
 
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
+	}
+
+	@Override
+	protected File internalGetFile(String ext) {
+		File f = null;
+		switch (getType()) {
+			case WmlFile:
+				f = new File(OmFileHelper.getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
+				break;
+			case Image:
+				f = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
+				break;
+			case Video:
+				f = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s.%s", WB_VIDEO_FILE_PREFIX, getId(), ext == null ? EXTENSION_MP4 : ext));
+				break;
+			case Presentation: {
+					File d = new File(OmFileHelper.getUploadFilesDir(), getHash());
+					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
+				}
+				break;
+			case PollChart:
+			case Folder:
+			default:
+		}
+		return f;
 	}
 }

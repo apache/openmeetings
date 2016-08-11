@@ -18,18 +18,20 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
-import org.apache.openmeetings.core.converter.IRecordingConverter;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -126,7 +128,7 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		downloadBtn.setEnabled(isRecordingExists(r.getAlternateDownload()) || isRecordingExists(r.getHash()));
+		downloadBtn.setEnabled(r.exists() || r.exists(EXTENSION_AVI));
 		if (target != null) {
 			target.add(form);
 		}
@@ -150,6 +152,24 @@ public class VideoInfo extends Panel {
 	private List<IMenuItem> newDownloadMenuList() {
 		List<IMenuItem> list = new ArrayList<>();
 
+		//mp4
+		list.add(new MenuItem(EXTENSION_MP4, JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				Recording r = VideoInfo.this.rm.getObject();
+				return r != null && r.exists(EXTENSION_MP4);
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				File f = rm.getObject().getFile(EXTENSION_MP4);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
+				download.initiate(target);
+			}
+		});
 		//avi
 		list.add(new MenuItem(getString("884"), JQueryIcon.ARROWTHICKSTOP_1_S) {
 			private static final long serialVersionUID = 1L;
@@ -157,13 +177,14 @@ public class VideoInfo extends Panel {
 			@Override
 			public boolean isEnabled() {
 				Recording r = VideoInfo.this.rm.getObject();
-				return r != null && isRecordingExists(r.getAlternateDownload());
+				return r != null && r.exists(EXTENSION_AVI);
 			}
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				download.setFileName(rm.getObject().getAlternateDownload());
-				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getAlternateDownload())));
+				File f = rm.getObject().getFile(EXTENSION_AVI);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});
@@ -174,13 +195,14 @@ public class VideoInfo extends Panel {
 			@Override
 			public boolean isEnabled() {
 				Recording r = VideoInfo.this.rm.getObject();
-				return r != null && isRecordingExists(r.getAlternateDownload());
+				return r != null && r.exists(EXTENSION_FLV);
 			}
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				download.setFileName(rm.getObject().getHash());
-				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getHash())));
+				File f = rm.getObject().getFile(EXTENSION_FLV);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});

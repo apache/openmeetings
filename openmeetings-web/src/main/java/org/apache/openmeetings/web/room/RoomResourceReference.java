@@ -18,11 +18,8 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 
@@ -30,7 +27,6 @@ import java.io.File;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -95,29 +91,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	protected File getFile(FileExplorerItem r, String ext) {
-		File result = null;
-		switch (r.getType()) {
-			case WmlFile: {
-				result = new File(OmFileHelper.getUploadWmlDir(), String.format("%s.%s", r.getHash(), ext == null ? "wml" : ext));
-			}
-				break;
-			case Image: {
-				result = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", r.getHash(), ext == null ? "jpg" : ext));
-			}
-				break;
-			case Video: {
-				result = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s%s", WB_VIDEO_FILE_PREFIX, r.getId(), preview ? JPG_EXTENSION : MP4_EXTENSION));
-				break;
-			}
-			case Presentation: {
-				File d = new File(OmFileHelper.getUploadFilesDir(), r.getHash());
-				result = new File(d, String.format("%s.%s", r.getHash(), ext == null ? "swf" : ext));
-			}
-				break;
-			default:
-				throw new RuntimeException("Not supported");
-		}
-		return result;
+		return r.getFile(ext);
 	}
 
 	@Override

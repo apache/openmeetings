@@ -19,13 +19,12 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
+import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -340,7 +339,7 @@ public abstract class BaseConverter {
 	
 	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		if (!isRecordingExists(r.getHash())) {
+		if (!r.exists()) {
 			return;
 		}
 		File file = getRecording(r.getHash());
