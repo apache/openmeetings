@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
 import java.io.File;
 
@@ -40,11 +38,11 @@ public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	protected String getFileName(Recording r) {
-		return r.getHash() + MP4_EXTENSION;
+		return r.getFile().getName();
 	}
 	
 	@Override
 	protected File getFile(Recording r) {
-		return getMp4Recording(r.getHash());
+		return r.getFile();
 	}
 }
