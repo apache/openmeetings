@@ -27,7 +27,7 @@ public class ModeratorRightIcon extends RoomRightIcon {
 	
 	public ModeratorRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.moderator, room);
-		mainCssClass = "moderator-right ";
+		mainCssClass = "right moderator ";
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class VideoRightIcon extends RoomRightIcon {
 	
 	public VideoRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.video, room);
-		mainCssClass = "camera-right ";
+		mainCssClass = "right camera ";
 		setVisible(!room.getRoom().isAudioOnly());
 	}
 
