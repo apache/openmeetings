@@ -33,10 +33,9 @@
 	</switch>
 
 	<attribute name="showWindowEffect" value="false" type="boolean" />
-	
 	<attribute name="annimationStartStyle" value="center" type="string" />
-	
 	<attribute name="annimationColor" value="$once{ canvas.getThemeColor('basebgcolorizer') }" type="string" />
+	<attribute name="dropShadow" value="true" type="boolean" />
 
 	<event name="animationInited" />
 
@@ -86,8 +85,11 @@
     </method>
 
     <method name="setShadow" args="bool">
+    <![CDATA[
+        if (!dropShadow) {
+        	return;
+        }
         this.hasshadow = bool;
-        <![CDATA[
         if (this.isinited){
             this.normalMC = this.getDisplayObject();
             //Debug.write(this.normalMC);
@@ -96,9 +98,9 @@
            	this.displacementMap = new DropShadowFilter();
             this.normalMC.filters = [this.displacementMap];
         }
-        ]]>              
-    </method>	
-          
+    ]]>
+    </method>
+
 	<!--- The Title of this Box -->
 	<attribute name="title" value="defaulttitle" type="string" />
 	
@@ -371,25 +373,25 @@
 	
 	<view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }" 
 		  x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" />
-	<view x="1" y="1" width="${ this.parent.width-2 }" height="20" >
+	<view name="_titlebar" x="1" y="1" width="${ this.parent.width-2 }" height="20" >
 	
 		<gradientview x="0" width="${ this.parent.width }" height="20"
 				colorFrom="$once{ canvas.getThemeColor('baseMousecolorizer') }"
 				colorTo="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" >
 		</gradientview>
 		
-        <text fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
+		<text fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
 			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
-			
-		<view visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-20 }" 
-			y="2" resource="btn_presenter_close"
-                onmouseover="this.setAttribute('frame',2)"
-                onmouseout="this.setAttribute('frame',1)"
-                onmousedown="this.setAttribute('frame',3)"
-                onmouseup="this.setAttribute('frame',1)" >
+		
+		<view visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-20 }"
+				y="2" resource="btn_presenter_close"
+				onmouseover="this.setAttribute('frame',2)"
+				onmouseout="this.setAttribute('frame',1)"
+				onmousedown="this.setAttribute('frame',3)"
+				onmouseup="this.setAttribute('frame',1)" >
 			<handler name="onclick">
 				this.parent.parent.close();
-			</handler>									
+			</handler>
 		</view>
 	</view>
     <handler name="onaddsubview" args="v">

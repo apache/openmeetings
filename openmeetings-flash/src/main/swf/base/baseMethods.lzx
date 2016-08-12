@@ -114,7 +114,6 @@
 		
 		this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
 		this.setAttribute('webAppRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'));
-		this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
 		
 		//Audio-Video-Settings
 		this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
@@ -211,12 +210,18 @@
 		if (!!canvas.myinit) {
 			canvas.myinit();
 		} else {
+			canvas.showWindowEffect = 'n';
 			new lz.editRecordStreamSWF10(canvas.main_content,{
-				name:"editRecordStream",
-				doDefaultAnimation:false,
-				isInterview:true,
-				interviewPodId:this.parent.parent.interviewPodId,
-				isSyncUpdate:true});
+				allowDragging: false,
+				dropShadow: false,
+				standalone: true,
+				name: "editRecordStream",
+				doDefaultAnimation: false,
+				isInterview: true,
+				interviewPodId: this.parent.parent.interviewPodId,
+				isSyncUpdate: true,
+				x: 0, y: 0, initY: 0
+				});
 		}
 	]]>
 	</method>
