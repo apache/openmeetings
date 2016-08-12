@@ -106,26 +106,32 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.1.1 released!</b>
-				<div>Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
+				<b>Version 3.1.2 released!</b>
+				<div>Service release 2 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
 					<span class="bs-callout bs-callout-danger">
-						Multiple security vulnerabilities (CVE-2016-0783, CVE-2016-0784, CVE-2016-2163, CVE-2016-2164) were fixed,
+						Security vulnerability <b>CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel</b> was fixed,
 						please check <a href="security.html">Security Page</a><br/>
 					</span>
 					<br/>
 					Other fixes<br/>
+					<ul>
+						<li>XSS in Chat window leading to DOS</li>
+						<li>MD5 should not be used for password encryption</li>
+						<li>OpenMeetings is vulnerable to session fixation</li>
+						<li>Private recording files were available to all users</li>
+						<li>Other fixes in admin, localization, installer, invitations, room etc.</li>
+					</ul>
+					<span class="bs-callout bs-callout-info">Additionally signed Screen-Sharing application is available since this release</span>
 				</div>
+				<br/>
 				<span>
-					8 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
-				</span>
-				<span class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
-						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
+					55 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335347">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2016-03-24)</span>
+				<span class="date">(2016-08-12)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

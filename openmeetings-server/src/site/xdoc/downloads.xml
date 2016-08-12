@@ -26,8 +26,8 @@
 		<section name="Downloads">
 			<p>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/3.1.1/KEYS">KEYS</a>, changes: <a 
-					href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a>.
+				signing <a href="https://www.apache.org/dist/openmeetings/3.1.2/KEYS">KEYS</a>, changes: <a 
+					href="https://www.apache.org/dist/openmeetings/3.1.2/CHANGELOG">CHANGELOG</a>.
 			</p>
 			<p>
 				All are available for download as source and binary.
@@ -35,21 +35,21 @@
 			
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 3.1.1
+					Apache Openmeetings 3.1.2
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.zip">apache-openmeetings-3.1.1.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.zip.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.zip">apache-openmeetings-3.1.2.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.tar.gz">apache-openmeetings-3.1.1.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/bin/apache-openmeetings-3.1.1.tar.gz.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.tar.gz">apache-openmeetings-3.1.2.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/bin/apache-openmeetings-3.1.2.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
@@ -57,14 +57,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.zip">apache-openmeetings-3.1.1-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.zip.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.zip">apache-openmeetings-3.1.2-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.tar.gz">apache-openmeetings-3.1.1-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.1.1/src/apache-openmeetings-3.1.1-src.tar.gz.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.tar.gz">apache-openmeetings-3.1.2-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.1.2/src/apache-openmeetings-3.1.2-src.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
