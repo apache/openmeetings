@@ -21,7 +21,10 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -46,17 +49,19 @@ public class SwfPanel extends BasePanel {
 	public String getInitFunction() {
 		return getInitFunction(new PageParameters());
 	}
-	
+
 	public String getInitFunction(PageParameters pp) {
 		String initStr = null;
 		String swf = getFlashFile(pp.get("swf"));
 		if (!Strings.isEmpty(swf)) {
-			swf += new PageParametersEncoder().encodePageParameters(pp);
-			initStr = String.format("initSwf('%s');", swf);
+			initStr = String.format("initSwf(%s);", new JSONObject()
+					.put("src", swf + new PageParametersEncoder().encodePageParameters(pp))
+					.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762, 144))
+					.toString());
 		}
 		return initStr;
 	}
-	
+
 	private String getFlashFile(StringValue type) {
 		String fmt;
 		if (SWF_TYPE_SETTINGS.equals(type.toString())) {
@@ -68,7 +73,15 @@ public class SwfPanel extends BasePanel {
 		}
 		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
-	
+
+	public static String getStringLabels(long... ids) {
+		JSONArray arr = new JSONArray();
+		for (long id : ids) {
+			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
+		}
+		return arr.toString();
+	}
+
 	public SwfPanel(String id, PageParameters pp) {
 		super(id);
 		add(new Label("init", getInitFunction(pp)).setEscapeModelStrings(false));
