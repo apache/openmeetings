@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
@@ -51,7 +52,7 @@ public class VideoPlayer extends Panel {
 		super(id);
 		add(container.setOutputMarkupPlaceholderTag(true));
 		mp4.setDisplayType(true);
-		mp4.setType("video/mp4");
+		mp4.setType(MP4_MIME_TYPE);
 		ogg.setDisplayType(true);
 		ogg.setType("video/ogg");
 		player.add(mp4, ogg);

@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -64,7 +65,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -76,7 +77,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID, String parentFolder) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			log.debug("#############users_id : " + users_id);
 
@@ -111,7 +112,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 */
 	public Long saveAsObject(String SID, Long room_id, String fileName, Object tObjectRef) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
@@ -156,7 +157,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadWmlObject(String SID, Long room_id, Long fileId, Long whiteboardId) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				IConnection current = Red5.getConnectionLocal();
@@ -225,7 +226,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@SuppressWarnings("rawtypes")
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()), fileName);
 			}
@@ -237,12 +238,12 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 	/**
 	 * @param SID
-	 * @param flvFileExplorerId
+	 * @param fileId
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
+	public Long copyFileToCurrentRoom(String SID, Long fileId) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
@@ -251,14 +252,14 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-				Long room_id = currentClient.getRoomId();
+				Long roomId = currentClient.getRoomId();
 
-				if (room_id != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+				if (roomId != null) {
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
 
-					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
+					File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
 
-					File targetFullFlvFile = new File(targetFolder, "UPLOADFLV_" + flvFileExplorerId + FLV_EXTENSION);
+					File targetFullFlvFile = new File(targetFolder, WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
 					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
 						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}

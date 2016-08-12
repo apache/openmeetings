@@ -73,10 +73,22 @@ public class OmFileHelper {
 	public static final String bigImagePrefix = "_big_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
-	public static final String FLV_EXTENSION = ".flv";
-	public static final String MP4_EXTENSION = ".mp4";
-	public static final String OGG_EXTENSION = ".ogg";
-	public static final String JPG_EXTENTION = ".jpg";
+	public static final String EXTENSION_WML = "wml";
+	public static final String EXTENSION_FLV = "flv";
+	public static final String EXTENSION_MP4 = "mp4";
+	public static final String EXTENSION_AVI = "avi";
+	public static final String EXTENSION_OGG = "ogg";
+	public static final String EXTENSION_JPG = "jpg";
+	public static final String EXTENSION_SWF = "swf";
+	public static final String WML_EXTENSION = "." + EXTENSION_WML;
+	public static final String FLV_EXTENSION = "." + EXTENSION_FLV;
+	public static final String MP4_EXTENSION = "." + EXTENSION_MP4;
+	public static final String OGG_EXTENSION = "." + EXTENSION_OGG;
+	public static final String JPG_EXTENSION = "." + EXTENSION_JPG;
+	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
+	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
+	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
+	public static final String JPG_MIME_TYPE = "image/jpeg";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;

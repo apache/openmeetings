@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -40,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
+	private static final Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 
 	// Spring loaded Beans
 	@Autowired
@@ -77,16 +80,13 @@ public class FlvExplorerConverter extends BaseConverter {
 	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			String name = "UPLOADFLV_" + fileExplorerItem.getId();
-			File outputFullFlv = new File(getStreamsHibernateDir(), name + FLV_EXTENSION);
+			String name = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId();
+			File outputFullFlv = new File(getStreamsHibernateDir(), name + MP4_EXTENSION);
 
 			fileExplorerItem.setType(Type.Video);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
-					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
-					"-vcodec", "flv",
-					outputFullFlv.getCanonicalPath() };
-			// "-s", flvWidth + "x" + flvHeight, 
+					"-codec:a", "mp3", "-codec:v", "mpeg4", outputFullFlv.getCanonicalPath() };
 
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getId(), argv_fullFLV);
@@ -102,13 +102,13 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getId() + ".jpg";
-			File outPutJpeg = new File(getStreamsHibernateDir(), name + ".jpg");
+			String hashFileFullNameJPEG = WB_VIDEO_FILE_PREFIX + fileExplorerItem.getId() + JPG_EXTENSION;
+			File outPutJpeg = new File(getStreamsHibernateDir(), name + JPG_EXTENSION);
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-y", "-i",
-					outputFullFlv.getCanonicalPath(), "-vcodec", "mjpeg", "-vframes", "1", "-an",
+					outputFullFlv.getCanonicalPath(), "-codec:v", "mjpeg", "-vframes", "1", "-an",
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
 
@@ -128,18 +128,14 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 	
 	private static FlvDimension getFlvDimension(String txt) throws Exception {
-		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
-		
 		Matcher matcher = p.matcher(txt);
 		
 		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
-			
 			String[] resultions = foundResolution.split("x");
-			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
 		}
 		
-		throw new Exception("Failed to get FLV dimension: " + txt);
+		return new FlvDimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 }
