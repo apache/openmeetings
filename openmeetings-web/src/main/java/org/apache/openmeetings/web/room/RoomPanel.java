@@ -346,7 +346,7 @@ public class RoomPanel extends BasePanel {
 		}
 		super.onEvent(event);
 	}
-	
+
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
