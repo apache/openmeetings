@@ -58,8 +58,6 @@ import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -123,7 +121,7 @@ public class RoomPanel extends BasePanel {
 						.put("host", url.getHost())
 						//.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
 						.put("app", path + r.getId())
-						.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
+						.put("labels", SwfPanel.getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
 						.toString()
 						));
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
@@ -349,18 +347,6 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 		super.onEvent(event);
-	}
-	
-	private String getStringLabels(long... ids) {
-		JSONArray arr = new JSONArray();
-		try {
-			for (long id : ids) {
-				arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
-			}
-		} catch (JSONException e) {
-			log.error("", e);
-		}
-		return arr.toString();
 	}
 
 	@Override
