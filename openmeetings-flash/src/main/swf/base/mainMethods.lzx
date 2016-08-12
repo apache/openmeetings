@@ -35,6 +35,7 @@
 
 	<method name="myinit">
 	<![CDATA[
+		this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
 		hib.userScope = canvas.wicketroomid;
 		var src = hib.getUrl();
 		

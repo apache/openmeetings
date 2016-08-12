@@ -46,7 +46,6 @@
 	<include href="base/baseMethods.lzx" />
 	<include href="base/functions.lzx" />
 	<include href="base/components" />
-	<include href="base/contentviews" />
 	<include href="base/hibernate" />
 	<include href="base/remote" />
 	<include href="resources/" /> 
