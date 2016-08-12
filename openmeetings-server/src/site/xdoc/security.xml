@@ -39,6 +39,17 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel">
+			<p>Severity: Moderate</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
+			<p>Description: The value of the URL's "swf" query parameter is interpolated into the JavaScript tag without 
+				being escaped, leading to the reflected XSS.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-3089">CVE-2016-3089</a>
+			</p>
+			<p>All users are recommended to upgrade to Apache OpenMeetings 3.1.2</p>
+			<p>Credit: This issue was identified by Matthew Daley</p>
+		</section>
 		<section name="CVE-2016-0783 - Predictable password reset token">
 			<p>Severity: Critical</p>
 			<p>Vendor: The Apache Software Foundation</p>
