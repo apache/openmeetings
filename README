@@ -4,9 +4,27 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
 About
 =====
-Apache Openmeetings provides video conferencing, instant messaging, white board,
+Apache OpenMeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
+
+Release Notes 3.1.2
+=============
+see CHANGELOG file for detailed log
+
+Service release 2 for 3.1.0, provides security fixes:
+* CVE-2016-3089 - Apache OpenMeetings XSS in SWF panel
+
+* XSS in Chat window leading to DOS
+* MD5 should not be used for password encryption
+* OpenMeetings is vulnerable to session fixation
+* Private recording files were available to all users
+
+Additionally signed Screen-Sharing application is available since this release
+
+Please update to this release from any previous OpenMeetings release
+
+Other fixes in admin, localization, installer, invitations, room etc.
 
 Release Notes 3.1.1
 =============
