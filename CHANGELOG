@@ -3,6 +3,75 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 3.1.2
+================================================================================================================
+** Vulnerability
+    * CVE-2016-3089 - Apache Openmeetings XSS in SWF panel
+
+** Bug
+    * [OPENMEETINGS-412] - Spacebar and enter key cause keyboard remote control to fail while screen sharing
+    * [OPENMEETINGS-653] - playing video follow the scrolling of the screen and leave its player.
+    * [OPENMEETINGS-1319] - Flash player crashes
+    * [OPENMEETINGS-1327] - Messages are being displayed in the folder right after creation
+    * [OPENMEETINGS-1330] - Contact being deleted from contact list without confirmation dialog
+    * [OPENMEETINGS-1342] - Incorrect user type set when user enter to the OpenMeeitings via plugins
+    * [OPENMEETINGS-1344] - MD5 should not be used for password encryption
+    * [OPENMEETINGS-1349] - Custom address states sets to NULL while restoring from backup
+    * [OPENMEETINGS-1350] - rtmpT connection problem
+    * [OPENMEETINGS-1359] - Links to apache-extras.org should be removed from the site
+    * [OPENMEETINGS-1361] - Room name is shown incorrectly when guest ente to the rom
+    * [OPENMEETINGS-1365] - Network Test Page error and fix URL path
+    * [OPENMEETINGS-1370] - JRE 8 is blocking screen sharing/recording by default
+    * [OPENMEETINGS-1371] - After scaling a document scrolling does not work on the whiteboard
+    * [OPENMEETINGS-1372] - openmeetings-flash is not compilable under OS windows
+    * [OPENMEETINGS-1377] - Backup fails when appointment has deleted room
+    * [OPENMEETINGS-1379] - XSS in Chat window leading to DOS
+    * [OPENMEETINGS-1380] - Chat messages are not being imported
+    * [OPENMEETINGS-1384] - SIP dial to room need to be fixed
+    * [OPENMEETINGS-1385] - Moving Uploaded Images
+    * [OPENMEETINGS-1396] - Swf selection should be improved
+    * [OPENMEETINGS-1399] - OpenMeetings is vulnerable to session fixation
+    * [OPENMEETINGS-1400] - Admin>Conference Rooms>Appointment Room Checkbox
+    * [OPENMEETINGS-1402] - Screen Sharing issue with Greek language
+    * [OPENMEETINGS-1406] - View profile form is broken
+    * [OPENMEETINGS-1410] - Om failed to install using Oracle
+    * [OPENMEETINGS-1411] - allowSameURLMultipleTimes parameter for secure hash is broken
+    * [OPENMEETINGS-1412] - Window too big when changing resolution in Audio-Video Recording Test Application
+    * [OPENMEETINGS-1414] - spring-mvc and batik need to be removed
+    * [OPENMEETINGS-1416] - Users with moderator's flag in usergroup do not become moderators in rooms.
+    * [OPENMEETINGS-1417] - Check/uncheck of moderator flag in usergroups doesn't work.
+    * [OPENMEETINGS-1422] - WB is not usable for the appointment room
+    * [OPENMEETINGS-1423] - Aspect ration is being changed for WB video
+    * [OPENMEETINGS-1432] - Recording download from Moodle is broken
+    * [OPENMEETINGS-1433] - WB vertical tools panel is broken
+    * [OPENMEETINGS-1434] - Only the first group is added in ATTRIBUTE mode
+    * [OPENMEETINGS-1435] - Whiteboard Pointer in OM-3.1.2 gives wrong user name
+    * [OPENMEETINGS-1438] - Recordings permission check is broken
+    * [OPENMEETINGS-1442] - Remote keyboard is not working in screen-sharing app
+    * [OPENMEETINGS-1443] - Invitations are broken
+    * [OPENMEETINGS-1444] - Language editor is broken
+
+** Improvement
+    * [OPENMEETINGS-16] - Missing functionality in SOAP/REST API
+    * [OPENMEETINGS-413] - A good idea could be to add default parameter like default country, default language, default domain, etc
+    * [OPENMEETINGS-649] - Add email management functions to Om Admin
+    * [OPENMEETINGS-1356] - Build should be speed up by reducing forking
+    * [OPENMEETINGS-1357] - maven-dependency-plugin should be used to download/unpack OpenLaszlo
+    * [OPENMEETINGS-1360] - Library versions should be updated (3.1.2)
+    * [OPENMEETINGS-1382] - Update default avatar of user
+    * [OPENMEETINGS-1383] - Updated French translation for OpenMeetings 3.1.1/3.1.1+
+    * [OPENMEETINGS-1393] - Missing text strings are not internationalized for translation
+    * [OPENMEETINGS-1403] - External cameras should be supported
+    * [OPENMEETINGS-1405] - Appointment dialog should be simplified
+    * [OPENMEETINGS-1419] - Connect to Oracle DB with Service Name through Web Installer
+
+** Task
+    * [OPENMEETINGS-90] - Default Country
+
+** Wish
+    * [OPENMEETINGS-853] - temporary uploaded files
+
+
 Release Notes - Openmeetings - Version 3.1.1
 ================================================================================================================
 ** Vulnerability
