@@ -22,6 +22,28 @@
 	<body>
 		<section name="News">
 			<div class="bs-callout bs-callout-info">
+				<b>Version 3.1.1 released!</b>
+				<div>Service release 1 for 3.1.0 contains following improvements and bug fixes:<br/>
+					<br/>
+					<span class="bs-callout bs-callout-danger">
+						Multiple security vulnerabilities (CVE-2016-0783, CVE-2016-0784, CVE-2016-2163, CVE-2016-2164) were fixed,
+						please check <a href="security.html">Security Page</a><br/>
+					</span>
+					<br/>
+					Other fixes<br/>
+				</div>
+				<span>
+					8 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.1.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12334656">Detailed list</a>
+				</span>
+				<span class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
+						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2016-03-24)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.1.0 released!</b>
 				<div>SOAP/REST API was implemented using CXF (Axis2 was removed from the stack)<br/>
 					Build system is now maven (not ant), SWF client is improved
