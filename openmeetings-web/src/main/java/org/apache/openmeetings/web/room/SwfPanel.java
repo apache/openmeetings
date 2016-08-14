@@ -36,10 +36,13 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -50,6 +53,7 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -98,8 +102,7 @@ public class SwfPanel extends BasePanel {
 		if (roomId != null) {
 			spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
 		}
-		String swf = getFlashFile(pp.get("swf")) + new PageParametersEncoder().encodePageParameters(spp);
-		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
+		add(new Label("init", getInitFunction(spp)).setEscapeModelStrings(false));
 		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
 			private static final long serialVersionUID = 1L;
 
@@ -127,6 +130,18 @@ public class SwfPanel extends BasePanel {
 		}
 	}
 
+	public String getInitFunction(PageParameters pp) {
+		String initStr = null;
+		String swf = getFlashFile(pp.get("swf"));
+		if (!Strings.isEmpty(swf)) {
+			initStr = String.format("initSwf(%s);", new JSONObject()
+					.put("src", swf + new PageParametersEncoder().encodePageParameters(pp))
+					.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762, 144))
+					.toString());
+		}
+		return initStr;
+	}
+
 	private String getFlashFile(StringValue type) {
 		String fmt;
 		if (SWF_TYPE_SETTINGS.equals(type.toString())) {
@@ -138,7 +153,15 @@ public class SwfPanel extends BasePanel {
 		}
 		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
-	
+
+	public static String getStringLabels(long... ids) {
+		JSONArray arr = new JSONArray();
+		for (long id : ids) {
+			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
+		}
+		return arr.toString();
+	}
+
 	private static PageParameters addServer(PageParameters pp, Server s) {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
 	}
