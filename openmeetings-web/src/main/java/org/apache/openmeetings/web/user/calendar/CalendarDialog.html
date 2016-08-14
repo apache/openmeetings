@@ -8,7 +8,7 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+	  http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
@@ -19,30 +19,34 @@
 
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-    <form wicket:id="calform" class="appointmentPopUp">
-        <span wicket:id="feedback"></span>
-        <div id="tabs">
-                <table>
-                    <tr>
-                        <td><wicket:message key="572"/></td>
-                        <td><input type="text" wicket:id="title"></td>
-                    </tr>
-                    <tr>
-                        <td><wicket:message key="caldav.url"/></td>
-                        <td><input type="url" wicket:id="url" /></td>
-                    </tr>
-                    <tr>
-                        <td><wicket:message key="114"/></td>
-                        <td><input type="text" wicket:id="login"/></td>
-                    </tr>
-                    <tr>
-                        <td><wicket:message key="115"/></td>
-                        <td><input type="password" wicket:id="password"></td>
-                    </tr>
-                </table>
-            </div>
-        </form>
-        <div wicket:id="confirmDelete"></div>
-    </wicket:panel>
+	<wicket:panel>
+		<form wicket:id="calform" class="appointmentPopUp">
+			<span wicket:id="feedback"></span>
+			<div id="tabs">
+				<table>
+					<tr>
+						<td><wicket:message key="572"/></td>
+						<td><input type="text" wicket:id="title"></td>
+					</tr>
+					<tr>
+						<td wicket:id="urlLabel"></td>
+						<td><input type="url" wicket:id="url" /></td>
+					</tr>
+					<tr>
+						<td wicket:id="userLabel"></td>
+						<td><input type="text" wicket:id="login"/></td>
+					</tr>
+					<tr>
+						<td wicket:id="passLabel"></td>
+						<td><input type="password" wicket:id="password"></td>
+					</tr>
+					<tr>
+						<td>Google Calendar</td>
+						<td><input type="checkbox" wicket:id="gcal"/></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div wicket:id="confirmDelete"></div>
+	</wicket:panel>
 </html>

@@ -31,30 +31,30 @@ import java.util.Map;
 /**
  * Abstract Class which contains all the common code for all Handlers.
  */
-public abstract class AbstractSyncHandler implements SyncHandler {
+public abstract class AbstractCalendarHandler implements CalendarHandler {
 
-    //TODO: Check if protected is necessary.
-    protected HttpClient client;
-    protected OmCalendar calendar;
-    protected String path;
-    protected iCalUtils utils;
+	//TODO: Check if protected is necessary.
+	protected HttpClient client;
+	protected OmCalendar calendar;
+	protected String path;
+	protected iCalUtils utils;
 
-    protected AppointmentDao appointmentDao;
+	protected AppointmentDao appointmentDao;
 
-    public AbstractSyncHandler(String path, OmCalendar calendar, HttpClient client,
-                               AppointmentDao appointmentDao, iCalUtils utils){
-        this.path = path;
-        this.calendar = calendar;
-        this.client = client;
-        this.appointmentDao = appointmentDao;
-        this.utils = utils;
-    }
+	public AbstractCalendarHandler(String path, OmCalendar calendar, HttpClient client,
+								   AppointmentDao appointmentDao, iCalUtils utils){
+		this.path = path;
+		this.calendar = calendar;
+		this.client = client;
+		this.appointmentDao = appointmentDao;
+		this.utils = utils;
+	}
 
-    public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values){
-        Map<String, Appointment> map = new HashMap<String, Appointment>();
-        for(int i = 0; i < keys.size(); i++){
-            map.put(keys.get(i), values.get(i));
-        }
-        return map;
-    }
+	public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values){
+		Map<String, Appointment> map = new HashMap<String, Appointment>();
+		for(int i = 0; i < keys.size(); i++){
+			map.put(keys.get(i), values.get(i));
+		}
+		return map;
+	}
 }

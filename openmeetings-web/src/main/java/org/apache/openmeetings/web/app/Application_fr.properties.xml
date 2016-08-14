@@ -1886,7 +1886,10 @@
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>
-  <entry key="caldav.url">External CalDAV Calendar URL</entry>
-  <entry key="caldav.error">Error in making connection on the URL specified.</entry>
-  <entry key="caldav.addCalendar">Add CalDAV Calendar</entry>
+  <entry key="calendar.url">External CalDAV Calendar URL</entry>
+  <entry key="calendar.error">Error in making connection on the URL specified.</entry>
+  <entry key="calendar.addCalendar">Add External Calendar</entry>
+  <entry key="calendar.googleKey">Google Calendar API key</entry>
+  <entry key="calendar.dialogTitle">Calendar Details</entry>
+  <entry key="calendar.googleID">Google Calendar ID</entry>
 </properties>

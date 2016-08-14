@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
+import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -78,16 +79,16 @@ public class CalendarPanel extends UserPanel {
 			refresh(target);
 		}
 	};
-    private AbstractAjaxTimerBehavior syncTimer = new AbstractAjaxTimerBehavior(Duration.minutes(4)) {
-        @Override
-        protected void onTimer(AjaxRequestTarget target) {
-            log.debug("CalDAV Syncing has begun");
-            syncCalendar(target);
-        }
-    };
+	private AbstractAjaxTimerBehavior syncTimer = new AbstractAjaxTimerBehavior(Duration.minutes(4)) {
+		@Override
+		protected void onTimer(AjaxRequestTarget target) {
+			log.debug("CalDAV Syncing has begun");
+			syncCalendar(target);
+		}
+	};
 	private Calendar calendar;
 	private final CalendarDialog calendarDialog;
-    private AppointmentDialog dialog;
+	private AppointmentDialog dialog;
 	private final WebMarkupContainer calendarListContainer;
 	
 	@Override
@@ -287,25 +288,29 @@ public class CalendarPanel extends UserPanel {
 		};
 		
 		form.add(calendar);
+
+		populateGoogleCalendars();
+
 		add(refreshTimer);
-        add(syncTimer);
+		add(syncTimer);
 
-        calendarDialog = new CalendarDialog("calendarDialog", "Calendar User Dialog", this, new CompoundPropertyModel<OmCalendar>(getDefaultCalendar()));
+		calendarDialog = new CalendarDialog("calendarDialog", Application.getString("calendar.dialogTitle"),
+				this, new CompoundPropertyModel<OmCalendar>(getDefaultCalendar()));
 
-        add(calendarDialog);
+		add(calendarDialog);
 
-        calendarListContainer = new WebMarkupContainer("calendarListContainer");
-        calendarListContainer.setOutputMarkupId(true);
-        calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
-            @Override
-            protected List<OmCalendar> load() {
-                return getBean(AppointmentManager.class).getCalendars(getUserId());
-            }
-        }) {
+		calendarListContainer = new WebMarkupContainer("calendarListContainer");
+		calendarListContainer.setOutputMarkupId(true);
+		calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
+			@Override
+			protected List<OmCalendar> load() {
+				return getAppointmentManager().getCalendars(getUserId());
+			}
+		}) {
 
-            protected void populateItem(final ListItem<OmCalendar> item) {
-                item.setOutputMarkupId(true);
-                final OmCalendar calendar = item.getModelObject();
+			protected void populateItem(final ListItem<OmCalendar> item) {
+				item.setOutputMarkupId(true);
+				final OmCalendar calendar = item.getModelObject();
 				item.add(new Button("item", new PropertyModel<String>(calendar, "title")).add(new AjaxEventBehavior("click") {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
@@ -313,25 +318,36 @@ public class CalendarPanel extends UserPanel {
 						target.add(calendarDialog);
 					}
 				}));
-            }
-        });
+			}
+		});
 
-        add(new Button("syncCalendarButton").add(new AjaxEventBehavior("click") {
-            @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                syncCalendar(target);
-            }
-        }));
+		add(new Button("syncCalendarButton").add(new AjaxEventBehavior("click") {
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				syncCalendar(target);
+			}
+		}));
 
-        add(new Button("submitCalendar").add(new AjaxEventBehavior("click") {
-            @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR,getDefaultCalendar());
-                target.add(calendarDialog);
-            }
-        }));
+		add(new Button("submitCalendar").add(new AjaxEventBehavior("click") {
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR,getDefaultCalendar());
+				target.add(calendarDialog);
+			}
+		}));
 
-        add(calendarListContainer);
+		add(calendarListContainer);
+	}
+
+	// Function which populates the already existing Google Calendars.
+	private void populateGoogleCalendars(){
+		AppointmentManager appointmentManager = getAppointmentManager();
+		List<OmCalendar> gcals = appointmentManager.getGoogleCalendars(getUserId());
+		for(OmCalendar gcal : gcals) {
+
+			//Href has the Calendar ID and Token has the API Key.
+			calendar.addSource(new GoogleCalendar(gcal.getHref(), gcal.getToken()));
+		}
 	}
 
 	private OmCalendar getDefaultCalendar(){
@@ -342,10 +358,12 @@ public class CalendarPanel extends UserPanel {
 		return calendar;
 	}
 
+	//Function which delegates the syncing of the Calendar to CalendarDialog
 	public void syncCalendar(AjaxRequestTarget target) {
 		calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.SYNC_CALENDAR, (OmCalendar) null);
 	}
 
+	//Function which delegates the update / deletion of appointment on the Calendar to CalendarDialog
 	public void updatedeleteAppointment(IPartialPageRequestHandler target, CalendarDialog.DIALOG_TYPE type, Appointment a){
 		calendarDialog.open(target, type, a);
 	}

@@ -38,100 +38,100 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  * @see SyncReportInfo for Request Report to be given as argument
  */
 public class SyncMethod extends DavMethodBase {
-    private static final Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, webAppRootKey);
 
-    private MultiStatus multiStatus = null;
-    private String synctoken = null;
+	private MultiStatus multiStatus = null;
+	private String synctoken = null;
 
-    public SyncMethod(String uri, SyncReportInfo reportInfo) throws IOException {
-        super(uri);
-        setRequestBody(reportInfo);
+	public SyncMethod(String uri, SyncReportInfo reportInfo) throws IOException {
+		super(uri);
+		setRequestBody(reportInfo);
 
-        if(reportInfo.getDepth() >= 0)
-            parseDepth(reportInfo.getDepth());
+		if(reportInfo.getDepth() >= 0)
+			parseDepth(reportInfo.getDepth());
 
-        log.info("Using the WEBDAV-SYNC method for syncing.");
-    }
+		log.info("Using the WEBDAV-SYNC method for syncing.");
+	}
 
-    /**
-     * Used to add request header for Depth.
-     * @param depth Depth of the Request
-     */
-    private void parseDepth(int depth){
-        addRequestHeader(new DepthHeader(depth));
-    }
+	/**
+	 * Used to add request header for Depth.
+	 * @param depth Depth of the Request
+	 */
+	private void parseDepth(int depth){
+		addRequestHeader(new DepthHeader(depth));
+	}
 
-    /**
-     * Set the Depth Header of the Sync Report.
-     * @param depth Depth of the Request
-     */
-    public void setDepth(int depth){
-        parseDepth(depth);
-    }
+	/**
+	 * Set the Depth Header of the Sync Report.
+	 * @param depth Depth of the Request
+	 */
+	public void setDepth(int depth){
+		parseDepth(depth);
+	}
 
-    /**
-     * Implements the Report Method.
-     */
-    @Override
-    public String getName() {
-        return DavMethods.METHOD_REPORT;
-    }
+	/**
+	 * Implements the Report Method.
+	 */
+	@Override
+	public String getName() {
+		return DavMethods.METHOD_REPORT;
+	}
 
-    /**
-     * @see DavMethodBase#isSuccess
-     * @return Return true only when when Response is Multistatus.
-     */
-    @Override
-    protected boolean isSuccess(int statusCode) {
-        return statusCode == DavServletResponse.SC_MULTI_STATUS;
-    }
+	/**
+	 * @see DavMethodBase#isSuccess
+	 * @return Return true only when when Response is Multistatus.
+	 */
+	@Override
+	protected boolean isSuccess(int statusCode) {
+		return statusCode == DavServletResponse.SC_MULTI_STATUS;
+	}
 
-    public String getResponseSynctoken(){
-        checkUsed();
-        return synctoken;
-    }
+	public String getResponseSynctoken(){
+		checkUsed();
+		return synctoken;
+	}
 
-    /**
-     * Adapted from DavMethodBase to handle MultiStatus responses.
-     * @return MultiStatus response
-     * @throws IOException
-     * @throws DavException
-     */
-    public MultiStatus getResponseBodyAsMultiStatus() throws IOException, DavException {
-        checkUsed();
-        if (multiStatus != null) {
-            return multiStatus;
-        } else {
-            DavException dx = getResponseException();
-            if (dx != null) {
-                throw dx;
-            } else {
-                throw new DavException(getStatusCode(), getName() + " resulted with unexpected status: " + getStatusLine());
-            }
-        }
-    }
+	/**
+	 * Adapted from DavMethodBase to handle MultiStatus responses.
+	 * @return MultiStatus response
+	 * @throws IOException
+	 * @throws DavException
+	 */
+	public MultiStatus getResponseBodyAsMultiStatus() throws IOException, DavException {
+		checkUsed();
+		if (multiStatus != null) {
+			return multiStatus;
+		} else {
+			DavException dx = getResponseException();
+			if (dx != null) {
+				throw dx;
+			} else {
+				throw new DavException(getStatusCode(), getName() + " resulted with unexpected status: " + getStatusLine());
+			}
+		}
+	}
 
-    /**
-     * Overridden to process the sync-token. Adapted from DavMethodBase.
-     * TODO: Fix this override.
-     * @see DavMethodBase#processResponseBody(HttpState, HttpConnection)
-     */
-    protected void processResponseBody(HttpState httpState, HttpConnection httpConnection) {
-        if(getStatusCode() == DavServletResponse.SC_MULTI_STATUS){
-            try {
-                Document document = getResponseBodyAsDocument();
-                if(document != null) {
-                    synctoken = DomUtil.getChildText(document.getDocumentElement(), SyncReportInfo.XML_SYNC_TOKEN,
-                            DavConstants.NAMESPACE);
-                    log.info("Sync-Token for REPORT: " + synctoken);
+	/**
+	 * Overridden to process the sync-token. Adapted from DavMethodBase.
+	 * TODO: Fix this override.
+	 * @see DavMethodBase#processResponseBody(HttpState, HttpConnection)
+	 */
+	protected void processResponseBody(HttpState httpState, HttpConnection httpConnection) {
+		if(getStatusCode() == DavServletResponse.SC_MULTI_STATUS){
+			try {
+				Document document = getResponseBodyAsDocument();
+				if(document != null) {
+					synctoken = DomUtil.getChildText(document.getDocumentElement(), SyncReportInfo.XML_SYNC_TOKEN,
+							DavConstants.NAMESPACE);
+					log.info("Sync-Token for REPORT: " + synctoken);
 
-                    multiStatus = MultiStatus.createFromXml(document.getDocumentElement());
-                    processMultiStatusBody(multiStatus, httpState, httpConnection);
-                }
-            } catch (IOException e){
-                log.error("Error while parsing sync-token.");
-                setSuccess(false);
-            }
-        }
-    }
+					multiStatus = MultiStatus.createFromXml(document.getDocumentElement());
+					processMultiStatusBody(multiStatus, httpState, httpConnection);
+				}
+			} catch (IOException e){
+				log.error("Error while parsing sync-token.");
+				setSuccess(false);
+			}
+		}
+	}
 }

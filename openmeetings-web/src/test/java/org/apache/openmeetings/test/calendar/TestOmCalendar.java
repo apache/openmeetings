@@ -31,30 +31,30 @@ import static org.junit.Assert.assertTrue;
 
 public class TestOmCalendar extends AbstractJUnitDefaults {
 
-    @Autowired
-    private OmCalendarDao calendarDao;
-    @Autowired
-    private UserDao userDao;
+	@Autowired
+	private OmCalendarDao calendarDao;
+	@Autowired
+	private UserDao userDao;
 
-    @Test
-    public void saveCalendar() throws Exception {
-        OmCalendar calendar = new OmCalendar();
-        Long userId = 1L;
-        User owner = userDao.get(userId);
-        String title = "Calendar Title",
-            href = "http://caldav.example.com/principals/user";
+	@Test
+	public void saveCalendar() throws Exception {
+		OmCalendar calendar = new OmCalendar();
+		Long userId = 1L;
+		User owner = userDao.get(userId);
+		String title = "Calendar Title",
+			href = "http://caldav.example.com/principals/user";
 
-        calendar.setOwner(owner);
-        calendar.setTitle(title);
-        calendar.setHref(href);
-        calendar.setSyncType(OmCalendar.SyncType.ETAG);
+		calendar.setOwner(owner);
+		calendar.setTitle(title);
+		calendar.setHref(href);
+		calendar.setSyncType(OmCalendar.SyncType.ETAG);
 
-        calendar = calendarDao.update(calendar);
+		calendar = calendarDao.update(calendar);
 
-        assertTrue("Saved appointment should have valid id: " + calendar.getId(),
-                calendar.getId() != null && calendar.getId() > 0);
+		assertTrue("Saved calendar should have valid id: " + calendar.getId(),
+				calendar.getId() != null && calendar.getId() > 0);
 
-        OmCalendar c = calendarDao.getCalendarbyId(calendar.getId());
-        assertNotNull("Failed to find Calendar by id", c);
-    }
+		OmCalendar c = calendarDao.getCalendarbyId(calendar.getId());
+		assertNotNull("Failed to find Calendar by id", c);
+	}
 }

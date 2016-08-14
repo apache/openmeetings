@@ -47,103 +47,115 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  * For syncing, it gets a Sync Report as response, which specifies which files have been added,
  * modified or deleted.
  */
-public class WebDAVSyncHandler extends AbstractSyncHandler {
-    private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, webAppRootKey);
+public class WebDAVSyncHandler extends AbstractCalendarHandler {
+	private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, webAppRootKey);
 
-    public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
-            SyncReportInfo.NAMESPACE);
+	public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
+			SyncReportInfo.NAMESPACE);
 
-    public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client,
-                             AppointmentDao appointmentDao, iCalUtils utils){
-        super(path, calendar, client, appointmentDao, utils);
-    }
+	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client,
+							 AppointmentDao appointmentDao, iCalUtils utils){
+		super(path, calendar, client, appointmentDao, utils);
+	}
 
-    public OmCalendar updateItems(){
-        boolean additionalSyncNeeded = false;
+	public OmCalendar syncItems(){
+		boolean additionalSyncNeeded = false;
 
-        SyncMethod syncMethod = null;
+		SyncMethod syncMethod = null;
 
-        try {
-            DavPropertyNameSet properties = new DavPropertyNameSet();
-            properties.add(DavPropertyName.GETETAG);
+		try {
+			DavPropertyNameSet properties = new DavPropertyNameSet();
+			properties.add(DavPropertyName.GETETAG);
 
-            //Create report to get
-            SyncReportInfo reportInfo = new SyncReportInfo(calendar.getToken(), properties,
-                    SyncReportInfo.SYNC_LEVEL_1);
-            syncMethod = new SyncMethod(path, reportInfo);
-            client.executeMethod(syncMethod);
+			//Create report to get
+			SyncReportInfo reportInfo = new SyncReportInfo(calendar.getToken(), properties,
+					SyncReportInfo.SYNC_LEVEL_1);
+			syncMethod = new SyncMethod(path, reportInfo);
+			client.executeMethod(syncMethod);
 
-            if(syncMethod.succeeded()){
+			if(syncMethod.succeeded()){
 
-                List<String> currenthrefs = new ArrayList<>();
+				List<String> currenthrefs = new ArrayList<>();
 
-                //Map of Href and the Appointments, belonging to it.
-                Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
-                        appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+				//Map of Href and the Appointments, belonging to it.
+				Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
+						appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
-                for(MultiStatusResponse response: syncMethod.getResponseBodyAsMultiStatus().getResponses()){
-                    int status = response.getStatus()[0].getStatusCode();
-                    if(status == DavServletResponse.SC_OK){
-                        Appointment a = map.get(response.getHref());
+				for(MultiStatusResponse response: syncMethod.getResponseBodyAsMultiStatus().getResponses()){
+					int status = response.getStatus()[0].getStatusCode();
+					if(status == DavServletResponse.SC_OK){
+						Appointment a = map.get(response.getHref());
 
-                        //Old Event to get
-                        if(a != null){
-                            String origetag = a.getEtag(),
-                                    currentetag = CalendarDataProperty.getEtagfromResponse(response);
+						//Old Event to get
+						if(a != null){
+							String origetag = a.getEtag(),
+									currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
-                            //If event modified, only then get it.
-                            if(!currentetag.equals(origetag))
-                                currenthrefs.add(response.getHref());
-                        }
-                        //New Event, to get
-                        else
-                            currenthrefs.add(response.getHref());
-                    }
-                    else if(status == DavServletResponse.SC_NOT_FOUND){
-                        //Delete the Appointments not found on the server.
-                        Appointment a = map.get(response.getHref());
+							//If event modified, only then get it.
+							if(!currentetag.equals(origetag))
+								currenthrefs.add(response.getHref());
+						}
+						//New Event, to get
+						else
+							currenthrefs.add(response.getHref());
+					}
+					else if(status == DavServletResponse.SC_NOT_FOUND){
+						//Delete the Appointments not found on the server.
+						Appointment a = map.get(response.getHref());
 
-                        //Only if the event exists on the database, delete it.
-                        if(a != null) {
-                            appointmentDao.delete(a, calendar.getOwner().getId());
-                        }
-                    }
-                    else if (status == DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE){
-                        additionalSyncNeeded = true;
-                    }
-                }
+						//Only if the event exists on the database, delete it.
+						if(a != null) {
+							appointmentDao.delete(a, calendar.getOwner().getId());
+						}
+					}
+					else if (status == DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE){
+						additionalSyncNeeded = true;
+					}
+				}
 
 
-                MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-                        calendar, client, appointmentDao, utils);
-                multigetHandler.updateItems();
+				MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
+						calendar, client, appointmentDao, utils);
+				multigetHandler.syncItems();
 
-                //Set the new token
-                calendar.setToken(syncMethod.getResponseSynctoken());
-            } else if (syncMethod.getStatusCode() == DavServletResponse.SC_FORBIDDEN ||
-                       syncMethod.getStatusCode() == DavServletResponse.SC_PRECONDITION_FAILED){
+				//Set the new token
+				calendar.setToken(syncMethod.getResponseSynctoken());
+			} else if (syncMethod.getStatusCode() == DavServletResponse.SC_FORBIDDEN ||
+					   syncMethod.getStatusCode() == DavServletResponse.SC_PRECONDITION_FAILED){
 
-                //Specific case where a server might sometimes forget the sync token
-                //Thus requiring a full sync needed to be done.
-                log.info("Sync Token not accepted by server. Doing a full sync again.");
-                calendar.setToken(null);
-                additionalSyncNeeded = true;
-            } else {
-                log.error("Error in Sync Method Response with status code" + syncMethod.getStatusCode());
-            }
+				//Specific case where a server might sometimes forget the sync token
+				//Thus requiring a full sync needed to be done.
+				log.info("Sync Token not accepted by server. Doing a full sync again.");
+				calendar.setToken(null);
+				additionalSyncNeeded = true;
+			} else {
+				log.error("Error in Sync Method Response with status code" + syncMethod.getStatusCode());
+			}
 
-        } catch (IOException e) {
-            log.error("Error while executing the SyncMethod Report.");
-        } catch (Exception e) {
-            log.error("Severe Error while executing the SyncMethod Report.");
-        } finally {
-            if(syncMethod != null)
-                syncMethod.releaseConnection();
-        }
+		} catch (IOException e) {
+			log.error("Error while executing the SyncMethod Report.");
+		} catch (Exception e) {
+			log.error("Severe Error while executing the SyncMethod Report.");
+		} finally {
+			if(syncMethod != null)
+				syncMethod.releaseConnection();
+		}
 
-        if(additionalSyncNeeded)
-            return updateItems();
-        else
-            return calendar;
-    }
+		if(additionalSyncNeeded)
+			return syncItems();
+		else
+			return calendar;
+	}
+
+	@Override
+	public boolean updateItem(Appointment appointment) {
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		return etagsHandler.updateItem(appointment);
+	}
+
+	@Override
+	public boolean deleteItem(Appointment appointment) {
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		return etagsHandler.deleteItem(appointment);
+	}
 }

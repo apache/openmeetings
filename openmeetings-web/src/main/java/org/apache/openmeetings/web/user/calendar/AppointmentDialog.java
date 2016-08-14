@@ -132,11 +132,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(IPartialPageRequestHandler handler) {
-        Appointment a = getModelObject();
+		Appointment a = getModelObject();
 		getBean(AppointmentDao.class).delete(a, getUserId());
 		calendarPanel.refresh(handler);
-        if(a.getCalendar() != null)
-            calendarPanel.updatedeleteAppointment(handler, CalendarDialog.DIALOG_TYPE.DELETE_APPOINTMENT, a);
+		if(a.getCalendar() != null && a.getHref() != null)
+			calendarPanel.updatedeleteAppointment(handler, CalendarDialog.DIALOG_TYPE.DELETE_APPOINTMENT, a);
 	}
 
 	@Override

@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+		http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,10 +43,10 @@
 			<artifactId>wicket-core</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>com.github.caldav4j</groupId>
-            <artifactId>caldav4j</artifactId>
-            <version>0.9-SNAPSHOT</version>
+		<dependency>
+			<groupId>com.github.caldav4j</groupId>
+			<artifactId>caldav4j</artifactId>
+			<version>0.9-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<!-- Remove the need for ehcache, since we use the Methods directly -->
@@ -54,6 +54,6 @@
 					<artifactId>ehcache</artifactId>
 				</exclusion>
 			</exclusions>
-        </dependency>
+		</dependency>
 	</dependencies>
 </project>

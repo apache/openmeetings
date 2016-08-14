@@ -264,12 +264,22 @@ public class AppointmentDao {
 
 	//Calendar Related Methods
 
+	/**
+	 * Returns the Appointment HREF's belonging to the Calendar Id specified.
+	 * @param calId Calendar to which the Appointments are related to.
+	 * @return <code>List</code> of Appointment HREF's
+     */
 	public List<String> getAppointmentHrefsinCalendar(Long calId){
 		return em.createNamedQuery("getHrefsforAppointmentsinCalendar", String.class)
 				.setParameter("calId", calId)
 				.getResultList();
 	}
 
+	/**
+	 * Returns the Appointments related to the Calendar ID specified.
+	 * @param calId Calendar ID of the calendar, to which the appointment is associated
+	 * @return <code>List</code> of <code>Appointment</code>
+     */
 	public List<Appointment> getAppointmentsinCalendar(Long calId){
 		return em.createNamedQuery("getAppointmentsbyCalendar", Appointment.class)
 				.setParameter("calId", calId)

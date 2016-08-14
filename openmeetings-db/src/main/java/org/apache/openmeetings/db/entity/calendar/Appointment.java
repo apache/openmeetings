@@ -110,9 +110,9 @@ import org.simpleframework.xml.Root;
     , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
 
 	//Calendar Related Queries
-	,  @NamedQuery(name = "getAppointmentsbyCalendar",
+	, @NamedQuery(name = "getAppointmentsbyCalendar",
 		query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.calendar.id = :calId ORDER BY a.id")
-	,  @NamedQuery(name = "getHrefsforAppointmentsinCalendar",
+	, @NamedQuery(name = "getHrefsforAppointmentsinCalendar",
         query = "SELECT a.href FROM Appointment a WHERE a.deleted = FALSE AND a.calendar.id = :calId ORDER BY a.id"
 )
 })
@@ -260,19 +260,19 @@ public class Appointment implements IDataProviderEntity {
 	@Column(name = "is_reminder_email_send")
 	private boolean reminderEmailSend;
 
-    //Calendar Specific fields.
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "calendar_id", nullable = true)
-    @ForeignKey(enabled = true)
-    @Element(name="calendar_id", data=true, required=false)
-    private OmCalendar calendar;
+	//Calendar Specific fields.
+	@ManyToOne()
+	@JoinColumn(name = "calendar_id", nullable = true)
+	@ForeignKey(enabled = true)
+	@Element(name="calendar_id", data=true, required=false)
+	private OmCalendar calendar;
 
 	@Column(name = "href")
-	@Element(data = true, required = false)
+	@Element(data=true, required=false)
 	private String href;
 
-	@Column(name = "etag")
-	@Element(data = true, required = false)
+	@Column(name="etag")
+	@Element(data=true, required=false)
 	private String etag;
 
 
@@ -474,31 +474,31 @@ public class Appointment implements IDataProviderEntity {
 		this.reminderEmailSend = isReminderEmailSend;
 	}
 
-    public OmCalendar getCalendar() {
-        return calendar;
-    }
+	public OmCalendar getCalendar() {
+		return calendar;
+	}
 
-    public void setCalendar(OmCalendar calendar) {
-        this.calendar = calendar;
-    }
+	public void setCalendar(OmCalendar calendar) {
+		this.calendar = calendar;
+	}
 
-    public String getHref() {
-        return href;
-    }
+	public String getHref() {
+		return href;
+	}
 
-    public void setHref(String href) {
-        this.href = href;
-    }
+	public void setHref(String href) {
+		this.href = href;
+	}
 
-    public String getEtag() {
-        return etag;
-    }
+	public String getEtag() {
+		return etag;
+	}
 
-    public void setEtag(String etag) {
-        this.etag = etag;
-    }
+	public void setEtag(String etag) {
+		this.etag = etag;
+	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
 				+ ", deleted=" + deleted + ", icalId=" + icalId + ", calendar=" + calendar + ", href=" + href + ", etag=" + etag + "]";

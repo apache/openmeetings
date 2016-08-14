@@ -27,6 +27,7 @@ import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
@@ -44,59 +45,71 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  * It checks if the Ctag of the Calendar has changed.
  * If it has then update the events, otherwise leave it as it is.
  *
- * @see org.apache.openmeetings.service.calendar.caldav.handler.SyncHandler
+ * @see CalendarHandler
  */
-public class CtagHandler extends AbstractSyncHandler {
-    private static final Logger log = Red5LoggerFactory.getLogger(CtagHandler.class, webAppRootKey);
+public class CtagHandler extends AbstractCalendarHandler {
+	private static final Logger log = Red5LoggerFactory.getLogger(CtagHandler.class, webAppRootKey);
 
-    public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs",
-            "http://calendarserver.org/ns/");
-    public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag",
-            NAMESPACE_CALSERVER);
+	public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs",
+			"http://calendarserver.org/ns/");
+	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag",
+			NAMESPACE_CALSERVER);
 
-    public CtagHandler(String path, OmCalendar calendar, HttpClient client,
-                       AppointmentDao appointmentDao, iCalUtils utils){
-        super(path, calendar, client, appointmentDao, utils);
-    }
+	public CtagHandler(String path, OmCalendar calendar, HttpClient client,
+	                   AppointmentDao appointmentDao, iCalUtils utils) {
+		super(path, calendar, client, appointmentDao, utils);
+	}
 
-    public OmCalendar updateItems() {
-        //Calendar already inited.
+	public OmCalendar syncItems() {
+		//Calendar already inited.
 
-        PropFindMethod propFindMethod = null;
+		PropFindMethod propFindMethod = null;
 
-        try {
-            DavPropertyNameSet properties = new DavPropertyNameSet();
-            properties.add(DNAME_GETCTAG);
+		try {
+			DavPropertyNameSet properties = new DavPropertyNameSet();
+			properties.add(DNAME_GETCTAG);
 
-            propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
-            client.executeMethod(propFindMethod);
+			propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
+			client.executeMethod(propFindMethod);
 
-            if(propFindMethod.succeeded()){
-                for(MultiStatusResponse response: propFindMethod.getResponseBodyAsMultiStatus().getResponses()){
-                    DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
-                    String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
+			if (propFindMethod.succeeded()) {
+				for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
+					DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+					String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
 
-                    if(ctag != null && !ctag.equals(calendar.getToken())){
-                        EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
-                        etagsHandler.updateItems();
-                        calendar.setToken(ctag);
-                    }
-                }
-            } else {
-                log.error("Error executing PROPFIND Method, with status Code: "
-                        + propFindMethod.getStatusCode());
-            }
+					if (ctag != null && !ctag.equals(calendar.getToken())) {
+						EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+						etagsHandler.syncItems();
+						calendar.setToken(ctag);
+					}
+				}
+			} else {
+				log.error("Error executing PROPFIND Method, with status Code: "
+						+ propFindMethod.getStatusCode());
+			}
 
-        } catch (IOException | DavException e) {
-            log.error("Error during the execution of calendar-multiget Report.");
-        } catch (Exception e) {
-            log.error("Severe Error during the execution of calendar-multiget Report.");
-        } finally {
-            if(propFindMethod != null)
-                propFindMethod.releaseConnection();
-        }
+		} catch (IOException | DavException e) {
+			log.error("Error during the execution of calendar-multiget Report.");
+		} catch (Exception e) {
+			log.error("Severe Error during the execution of calendar-multiget Report.");
+		} finally {
+			if (propFindMethod != null)
+				propFindMethod.releaseConnection();
+		}
 
 
-        return calendar;
-    }
+		return calendar;
+	}
+
+	@Override
+	public boolean updateItem(Appointment appointment) {
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		return etagsHandler.updateItem(appointment);
+	}
+
+	@Override
+	public boolean deleteItem(Appointment appointment) {
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		return etagsHandler.deleteItem(appointment);
+	}
 }

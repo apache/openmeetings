@@ -249,7 +249,7 @@
 	<bean id="backupExport" class="org.apache.openmeetings.backup.BackupExport" />
 	<bean id="backupImport" class="org.apache.openmeetings.backup.BackupImport" />
 	<bean id="appointmentManager" class="org.apache.openmeetings.service.calendar.caldav.AppointmentManager"
-		destroy-method="cleanupHttpClient"/>
+		destroy-method="destroy"/>
 	<bean id="iCalUtils" class="org.apache.openmeetings.service.calendar.caldav.iCalUtils"/>
 
 	<!-- Thread Executor -->

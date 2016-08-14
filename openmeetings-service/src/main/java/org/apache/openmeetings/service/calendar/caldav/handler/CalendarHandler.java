@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 
 /**
@@ -33,12 +34,27 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
  * <li>WebDAV-Sync Report</li>
  * <li>Calendar-Multiget Report</li>
  */
-public interface SyncHandler {
+public interface CalendarHandler {
 
-    /**
-     * Function to update all items in the CalDAV calendar. The owner of the appointments
-     * created are the same as the owner of the calendar.
-     * @return Returns the updated calendar after updation of all events.
-     */
-    public OmCalendar updateItems();
+	/**
+	 * Function to update all items in the CalDAV calendar. The owner of the appointments
+	 * created are the same as the owner of the calendar.
+	 * @return Returns the updated calendar after updation of all events.
+	 */
+	public OmCalendar syncItems();
+
+	/**
+	 * Function for create/updating multiple appointment on the server.
+	 * Performs modification alongside of creation new events on the server.
+	 * @param appointment Appointment to create/update.
+	 * @return <code>True</code> when the updation is a success else <code>False</code>
+	 */
+	public boolean updateItem(Appointment appointment);
+
+	/**
+	 * Delete Appointment on the server.
+	 * @param appointment Appointment to delete
+	 * @return <code>True</code> when the deletion is a success else <code>False</code>
+	 */
+	public boolean deleteItem(Appointment appointment);
 }
