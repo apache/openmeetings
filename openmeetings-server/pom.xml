@@ -160,20 +160,19 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>truezip-maven-plugin</artifactId>
+				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>unpack-red5-server</id>
-						<goals>
-							<goal>copy</goal>
-						</goals>
 						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
 						<configuration>
-							<fileset>
-								<directory>${red5-server-file.dir}/red5-server-${red5-server.version}.tar.gz/red5-server</directory>
-								<outputDirectory>${server.dir}</outputDirectory>
-							</fileset>
+							<target>
+								<untar src="${red5-server-file.dir}/red5-server-${red5-server.version}.tar.gz" dest="${project.build.directory}"
+									compression="gzip" overwrite="true"/>
+							</target>
 							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
@@ -218,6 +217,9 @@
 					<execution>
 						<id>make-assembly</id>
 						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
 						<configuration>
 							<descriptors>
 								<descriptor>${project.basedir}/src/main/assembly/${assembly.descriptor}.xml</descriptor>
@@ -226,13 +228,13 @@
 							<appendAssemblyId>false</appendAssemblyId>
 							<tarLongFileMode>gnu</tarLongFileMode>
 						</configuration>
-						<goals>
-							<goal>single</goal>
-						</goals>
 					</execution>
 					<execution>
 						<id>make-src</id>
 						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
 						<configuration>
 							<descriptors>
 								<descriptor>${project.basedir}/src/main/assembly/src.xml</descriptor>
@@ -242,9 +244,6 @@
 							<tarLongFileMode>gnu</tarLongFileMode>
 							<skipAssembly>${src.pack.skip}</skipAssembly>
 						</configuration>
-						<goals>
-							<goal>single</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -266,19 +265,6 @@
 										<versionRange>[1.0-beta-5,)</versionRange>
 										<goals>
 											<goal>download-single</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>truezip-maven-plugin</artifactId>
-										<versionRange>[1.2,)</versionRange>
-										<goals>
-											<goal>copy</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
