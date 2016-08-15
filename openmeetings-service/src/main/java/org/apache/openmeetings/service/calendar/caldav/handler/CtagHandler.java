@@ -20,7 +20,6 @@ package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -39,6 +38,7 @@ import org.slf4j.Logger;
 import java.io.IOException;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 
 /**
  * Class for Syncing through the help of Ctags.
@@ -74,7 +74,7 @@ public class CtagHandler extends AbstractCalendarHandler {
 
 			if (propFindMethod.succeeded()) {
 				for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
-					DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+					DavPropertySet set = response.getProperties(SC_OK);
 					String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
 
 					if (ctag != null && !ctag.equals(calendar.getToken())) {

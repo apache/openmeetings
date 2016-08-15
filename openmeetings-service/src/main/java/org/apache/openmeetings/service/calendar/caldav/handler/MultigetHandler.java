@@ -22,7 +22,6 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
-import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -44,6 +43,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 /**
@@ -60,18 +60,18 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	private boolean isMultigetDisabled = false, onlyEtag = false;
 
 	public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client,
-						   AppointmentDao appointmentDao, iCalUtils utils){
+	                       AppointmentDao appointmentDao, iCalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);
 		this.onlyEtag = onlyEtag;
 
-		if(hrefs == null || hrefs.isEmpty() || calendar.getSyncType() == SyncType.NONE)
-			isMultigetDisabled =  true;
+		if (hrefs == null || hrefs.isEmpty() || calendar.getSyncType() == SyncType.NONE)
+			isMultigetDisabled = true;
 		else {
 			DavPropertyNameSet properties = new DavPropertyNameSet();
 			properties.add(DavPropertyName.GETETAG);
 
 			CalendarData calendarData = null;
-			if(!onlyEtag)
+			if (!onlyEtag)
 				calendarData = new CalendarData();
 			CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
 			vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
@@ -81,13 +81,13 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	}
 
 	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao,
-						   iCalUtils utils){
+	                       iCalUtils utils) {
 		this(hrefs, false, path, calendar, client, appointmentDao, utils);
 	}
 
-	public OmCalendar syncItems(){
+	public OmCalendar syncItems() {
 		Long ownerId = this.calendar.getOwner().getId();
-		if(!isMultigetDisabled){
+		if (!isMultigetDisabled) {
 
 			CalDAVReportMethod reportMethod = null;
 
@@ -99,10 +99,10 @@ public class MultigetHandler extends AbstractCalendarHandler {
 				if (reportMethod.succeeded()) {
 					//Map for each Href as key and Appointment as Value.
 					Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
-															appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+							appointmentDao.getAppointmentsinCalendar(calendar.getId()));
 
 					for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
-						if (response.getStatus()[0].getStatusCode() == DavServletResponse.SC_OK) {
+						if (response.getStatus()[0].getStatusCode() == SC_OK) {
 							Appointment a = map.get(response.getHref());
 
 							//Check if it's an updated Appointment
@@ -112,7 +112,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 
 								//If etag is modified
 								if (!currentetag.equals(origetag)) {
-									if(onlyEtag){
+									if (onlyEtag) {
 										a.setEtag(currentetag);
 									} else {
 										Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
@@ -125,7 +125,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 							//Else it's a new Appointment
 							// i.e. parse into a new Appointment
 							// Only applicable when we get calendar data along with etag.
-							else if(!onlyEtag) {
+							else if (!onlyEtag) {
 								String etag = CalendarDataProperty.getEtagfromResponse(response);
 								Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
 								Appointment appointments = utils.parseCalendartoAppointment(
@@ -134,8 +134,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 							}
 						}
 					}
-				}
-				else {
+				} else {
 					log.error("Report Method return Status: " + reportMethod.getStatusCode()
 							+ " for calId" + calendar.getId());
 				}
@@ -144,7 +143,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error during the execution of calendar-multiget Report.");
 			} finally {
-				if(reportMethod != null)
+				if (reportMethod != null)
 					reportMethod.releaseConnection();
 			}
 		}

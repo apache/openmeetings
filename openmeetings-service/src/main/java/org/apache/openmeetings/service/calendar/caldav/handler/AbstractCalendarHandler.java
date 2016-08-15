@@ -42,7 +42,7 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	protected AppointmentDao appointmentDao;
 
 	public AbstractCalendarHandler(String path, OmCalendar calendar, HttpClient client,
-								   AppointmentDao appointmentDao, iCalUtils utils){
+	                               AppointmentDao appointmentDao, iCalUtils utils) {
 		this.path = path;
 		this.calendar = calendar;
 		this.client = client;
@@ -50,9 +50,9 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 		this.utils = utils;
 	}
 
-	public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values){
-		Map<String, Appointment> map = new HashMap<String, Appointment>();
-		for(int i = 0; i < keys.size(); i++){
+	public static Map<String, Appointment> listToMap(List<String> keys, List<Appointment> values) {
+		Map<String, Appointment> map = new HashMap<>();
+		for (int i = 0; i < keys.size(); ++i) {
 			map.put(keys.get(i), values.get(i));
 		}
 		return map;

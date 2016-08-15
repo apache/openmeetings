@@ -42,16 +42,17 @@ public class OmCalendarDao {
 	@Autowired
 	private AppointmentDao appointmentDao;
 
-	public List<OmCalendar> get(){
+	public List<OmCalendar> get() {
 		return em.createNamedQuery("getCalendars", OmCalendar.class).getResultList();
 	}
 
 	/**
 	 * Return all the Calendars that belong to the User.
+	 *
 	 * @param userId User ID to whom the calendars belong.
 	 * @return List of Calendars
 	 */
-	public List<OmCalendar> get(Long userId){
+	public List<OmCalendar> get(Long userId) {
 		return em.createNamedQuery("getCalendarbyUser", OmCalendar.class)
 				.setParameter("userId", userId)
 				.getResultList();
@@ -59,6 +60,7 @@ public class OmCalendarDao {
 
 	/**
 	 * Returns all the Google Calendars associated with the user.
+	 *
 	 * @param userId User ID of the owner of the Calendar
 	 * @return List of Google Calendars.
 	 */
@@ -70,11 +72,12 @@ public class OmCalendarDao {
 
 	/**
 	 * Creates or Updates the given calendar.
+	 *
 	 * @param c Calendar to Update
 	 * @return Updated Calendar
 	 */
-	public OmCalendar update(OmCalendar c){
-		if(c.getId() == null){
+	public OmCalendar update(OmCalendar c) {
+		if (c.getId() == null) {
 			em.persist(c);
 		} else
 			c = em.merge(c);
@@ -84,10 +87,11 @@ public class OmCalendarDao {
 
 	/**
 	 * Returns the Calendar Specified by the Calendar ID.
+	 *
 	 * @param calId Calendar ID of the Calendar to return.
 	 * @return Returns the Calendar if found, else returns null
 	 */
-	public OmCalendar getCalendarbyId(Long calId){
+	public OmCalendar getCalendarbyId(Long calId) {
 		TypedQuery<OmCalendar> query = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
 				.setParameter("calId", calId);
 		OmCalendar calendar = null;
@@ -101,14 +105,15 @@ public class OmCalendarDao {
 
 	/**
 	 * Deletes the Calendar on the Database, along with all the Appointments associated with it.
+	 *
 	 * @param c Calendar to Delete
 	 */
-	public void delete(OmCalendar c){
+	public void delete(OmCalendar c) {
 		c.setDeleted(true);
 
 		//Delete all appointments in calendar.
 		List<Appointment> appointments = appointmentDao.getAppointmentsinCalendar(c.getId());
-		for(Appointment appointment: appointments)
+		for (Appointment appointment : appointments)
 			appointmentDao.delete(appointment, appointment.getOwner().getId());
 
 		update(c);

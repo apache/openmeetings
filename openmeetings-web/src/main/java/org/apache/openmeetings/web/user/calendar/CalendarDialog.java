@@ -129,7 +129,8 @@ public class CalendarDialog extends AbstractFormDialog {
 		this.type = type;
 		switch (type) {
 			case UPDATE_CALENDAR:
-				setFormModelObject(c, (AjaxRequestTarget) handler);
+				setFormModelObject(c);
+				setButtons(handler);
 				this.open(handler);
 				break;
 			case SYNC_CALENDAR:
@@ -171,11 +172,14 @@ public class CalendarDialog extends AbstractFormDialog {
 				if (form.gcal.getModelObject()) {
 					c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
 					c.setToken(form.username.getModelObject());
+					appointmentManager.createCalendar(c);
+					if (c.getId() == null)
+						calendarPanel.populateGoogleCalendar(c, target);
 				} else if (c.getId() == null) {
 					appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
 							form.pass.getModelObject()));
+					appointmentManager.createCalendar(c);
 				}
-				appointmentManager.createCalendar(c);
 				calendarPanel.refreshCalendars(target);
 				calendarPanel.refresh(target);
 				break;
@@ -290,18 +294,22 @@ public class CalendarDialog extends AbstractFormDialog {
 		if (calendarPanel.getAppointmentManager().testConnection(c))
 			return false;
 
-		form.setModelObject(c);
-		form.url.setModelObject(c.getHref());
+		setFormModelObject(c);
 		setButtons(target);
 		return true;
 	}
 
-	private void setFormModelObject(OmCalendar c, AjaxRequestTarget target) {
+	private void setFormModelObject(OmCalendar c) {
 		if (c != null) {
 			form.setModelObject(c);
 			form.url.setModelObject(c.getHref());
+			if (c.getSyncType() == OmCalendar.SyncType.GOOGLE_CALENDAR) {
+				form.username.setDefaultModelObject(c.getToken());
+				form.gcal.setDefaultModelObject(true);
+			} else {
+				form.gcal.setDefaultModelObject(false);
+			}
 		}
-		setButtons(target);
 	}
 
 	public void setButtons(IPartialPageRequestHandler target) {
@@ -310,12 +318,15 @@ public class CalendarDialog extends AbstractFormDialog {
 			case DELETE_APPOINTMENT:
 			case SYNC_CALENDAR:
 				delete.setVisible(false, target);
+				save.setVisible(true, target);
 				break;
 			case UPDATE_CALENDAR:
 				OmCalendar c = form.getModelObject();
-				if (c.getId() == null)
+				if (c.getId() == null) {
 					delete.setVisible(false, target);
-				else delete.setVisible(isOwner(c), target);
+				} else {
+					delete.setVisible(isOwner(c), target);
+				}
 				save.setVisible(isOwner(c), target);
 		}
 	}
@@ -327,7 +338,6 @@ public class CalendarDialog extends AbstractFormDialog {
 				if (delete.equals(button)) {
 					confirmDelete.open(handler);
 				}
-				clearFormModel(handler);
 				break;
 			case UPDATE_APPOINTMENT:
 				//If the Appointment to put on the server was a new one, but the user cancelled it.
@@ -350,24 +360,16 @@ public class CalendarDialog extends AbstractFormDialog {
 	}
 
 	private void clearFormModel(IPartialPageRequestHandler handler) {
-		switch (type) {
-			case UPDATE_APPOINTMENT:
-			case DELETE_APPOINTMENT:
-			case UPDATE_CALENDAR:
-				form.url.setModelObject(null);
-			case SYNC_CALENDAR:
-				form.clearInput();
-				form.username.setModelObject(null);
-				form.gcal.setModelObject(false);
-				handler.add(form);
-		}
+		form.clearInput();
+		form.username.setModelObject(null);
+		handler.add(form);
 	}
 
 	private class UserCalendarForm extends Form<OmCalendar> {
 
-		private TextField<String> username = new TextField<String>("login", Model.of(""));
+		private TextField<String> username = new TextField<>("login", Model.of(""));
 		private PasswordTextField pass = new PasswordTextField("password", Model.of(""));
-		RequiredTextField<String> title = new RequiredTextField<String>("title");
+		RequiredTextField<String> title = new RequiredTextField<>("title");
 
 		// Fields required for adding Google Calendar
 		Label urlLabel = new Label("urlLabel", Application.getString("calendar.url")),
@@ -375,7 +377,7 @@ public class CalendarDialog extends AbstractFormDialog {
 				passLabel = new Label("passLabel", Application.getString(115));
 
 		AjaxCheckBox gcal; // Checkbox for Google Calendar
-		UrlTextField url = new UrlTextField("url", Model.<String>of(""), new UrlValidator() {
+		UrlTextField url = new UrlTextField("url", Model.of(""), new UrlValidator() {
 			//Custom UrlValidator
 			@Override
 			public void validate(IValidatable<String> validatable) {
@@ -471,9 +473,7 @@ public class CalendarDialog extends AbstractFormDialog {
 
 				//Google API Key
 				userLabel.setDefaultModelObject(Application.getString("calendar.googleKey"));
-				username.setEnabled(true).setDefaultModelObject(getModelObject().getToken());
-
-
+				username.setEnabled(true);
 			} else {
 				gcal.setModelObject(false);
 				pass.setVisible(true);

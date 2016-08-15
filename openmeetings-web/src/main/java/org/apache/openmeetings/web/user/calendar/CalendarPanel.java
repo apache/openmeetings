@@ -55,6 +55,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -304,7 +305,11 @@ public class CalendarPanel extends UserPanel {
 		calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
 			@Override
 			protected List<OmCalendar> load() {
-				return getAppointmentManager().getCalendars(getUserId());
+				// TODO: better way to do this?
+				AppointmentManager manager = getAppointmentManager();
+				List<OmCalendar> cals = new ArrayList<OmCalendar>(manager.getCalendars(getUserId()));
+				cals.addAll(manager.getGoogleCalendars(getUserId()));
+				return cals;
 			}
 		}) {
 
@@ -339,6 +344,11 @@ public class CalendarPanel extends UserPanel {
 		add(calendarListContainer);
 	}
 
+	//Adds a new Event Source to the Calendar
+	public void populateGoogleCalendar(OmCalendar gcal, IPartialPageRequestHandler target) {
+		calendar.addSource(new GoogleCalendar(gcal.getHref(), gcal.getToken()));
+		refresh(target);
+	}
 	// Function which populates the already existing Google Calendars.
 	private void populateGoogleCalendars(){
 		AppointmentManager appointmentManager = getAppointmentManager();

@@ -27,18 +27,18 @@ import org.simpleframework.xml.Root;
 import javax.persistence.*;
 
 @Entity
-@Table(name="om_calendar")
+@Table(name = "om_calendar")
 @NamedQueries({
-		@NamedQuery(name = "getCalendars", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false ORDER BY c.id")
-		, @NamedQuery(name = "getCalendarbyUser", query = "SELECT c FROM OmCalendar c" +
-				" WHERE c.deleted = false AND c.owner.id = :userId AND c.syncType <> OmCalendar$SyncType.GOOGLE_CALENDAR " +
-				"ORDER BY c.id")
+		@NamedQuery(name="getCalendars", query="SELECT c FROM OmCalendar c WHERE c.deleted = false ORDER BY c.id")
+		, @NamedQuery(name="getCalendarbyUser", query="SELECT c FROM OmCalendar c" +
+		" WHERE c.deleted = false AND c.owner.id = :userId AND c.syncType <> OmCalendar$SyncType.GOOGLE_CALENDAR " +
+		"ORDER BY c.id")
 		// OpenJPA has trouble with referencing Subclasses, thus java $ symbol is used
 		// Comes from the OpenJPA Mailing List.
-		, @NamedQuery(name="getGoogleCalendars", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.owner.id = :userId " +
-				"AND c.syncType = OmCalendar$SyncType.GOOGLE_CALENDAR ORDER BY c.id")
-		, @NamedQuery(name = "getAppointmentsbyCalendarinRange",
-			query="SELECT a FROM Appointment a "
+		, @NamedQuery(name="getGoogleCalendars", query="SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.owner.id = :userId " +
+		"AND c.syncType = OmCalendar$SyncType.GOOGLE_CALENDAR ORDER BY c.id")
+		, @NamedQuery(name="getAppointmentsbyCalendarinRange",
+		query="SELECT a FROM Appointment a "
 				+ "WHERE a.deleted = false "
 				+ "	AND ( "
 				+ "		(a.start BETWEEN :start AND :end) "
@@ -46,11 +46,11 @@ import javax.persistence.*;
 				+ "		OR (a.start < :start AND a.end > :end) "
 				+ "	)"
 				+ "	AND a.owner.id = :userId AND a.calendar.id = :calId  ")
-		, @NamedQuery(name = "getCalendarbyId",
-			query = "SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.id = :calId")
+		, @NamedQuery(name="getCalendarbyId",
+		query="SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.id = :calId")
 })
 @Root(name="om_calendar")
-public class OmCalendar implements IDataProviderEntity{
+public class OmCalendar implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -77,7 +77,7 @@ public class OmCalendar implements IDataProviderEntity{
 	@Element(data=true)
 	private boolean deleted;
 
-	public enum SyncType{
+	public enum SyncType {
 		NONE,
 		ETAG,
 		CTAG,
@@ -156,7 +156,7 @@ public class OmCalendar implements IDataProviderEntity{
 		this.owner = owner;
 	}
 
-	public String toString(){
+	public String toString() {
 		return "Calendar [ id=" + id + ", title=" + title + ", token=" + token + ", href="
 				+ href + ", SyncType=" + syncType + ", deleted=" + deleted + ", owner=" + owner + " ]";
 	}

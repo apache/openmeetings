@@ -26,7 +26,6 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.DavServletResponse;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 import org.apache.jackrabbit.webdav.property.DavProperty;
@@ -56,6 +55,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_NO_CONTENT;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
@@ -125,7 +126,7 @@ public class AppointmentManager {
 			optionsMethod.setRequestHeader("Accept", "*/*");
 			client.executeMethod(optionsMethod);
 			int status = optionsMethod.getStatusCode();
-			if (status == DavServletResponse.SC_OK || status == DavServletResponse.SC_NO_CONTENT)
+			if (status == SC_OK || status == SC_NO_CONTENT)
 				return true;
 		} catch (IOException e) {
 			log.error("Error executing OptionsMethod during testConnection.");
@@ -248,7 +249,7 @@ public class AppointmentManager {
 
 				if (propFindMethod.succeeded()) {
 					for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
-						DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+						DavPropertySet set = response.getProperties(SC_OK);
 						DavProperty calhome = set.get(calHomeSet), curPrinci = set.get(curUserPrincipal),
 								resourcetype = set.get(DavPropertyName.RESOURCETYPE);
 
@@ -282,7 +283,7 @@ public class AppointmentManager {
 
 					if (propFindMethod.succeeded()) {
 						for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
-							DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+							DavPropertySet set = response.getProperties(SC_OK);
 							DavProperty calhome = set.get(calHomeSet);
 
 							if (calhome != null) {
@@ -309,7 +310,7 @@ public class AppointmentManager {
 						for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
 							boolean isVevent = false, isCalendar;
 
-							DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+							DavPropertySet set = response.getProperties(SC_OK);
 							DavProperty p = set.get(suppCalCompSet),
 									resourcetype = set.get(DavPropertyName.RESOURCETYPE),
 									displayname = set.get(DavPropertyName.DISPLAYNAME);
@@ -428,7 +429,7 @@ public class AppointmentManager {
 				if (propFindMethod.succeeded()) {
 
 					for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
-						DavPropertySet set = response.getProperties(DavServletResponse.SC_OK);
+						DavPropertySet set = response.getProperties(SC_OK);
 
 						if (calendar.getTitle() == null) {
 							DavProperty property = set.get(DavPropertyName.DISPLAYNAME);

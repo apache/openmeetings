@@ -53,6 +53,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 public class iCalUtils {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(iCalUtils.class, webAppRootKey);
+	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
 	@Autowired
 	private TimezoneUtil timezoneUtil;
@@ -441,7 +442,7 @@ public class iCalUtils {
 		}
 
 		Calendar icsCalendar = new Calendar();
-		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//Apache Openmeetings//EN"));
+		icsCalendar.getProperties().add(new ProdId(PROD_ID));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getComponents().add(timeZone.getVTimeZone());
