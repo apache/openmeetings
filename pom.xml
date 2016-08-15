@@ -58,19 +58,25 @@
 		<tomcat.version>8.0.36</tomcat.version>
 		<derby.version>10.12.1.1</derby.version>
 	</properties>
-	<modules>
-		<module>openmeetings-util</module>
-		<module>openmeetings-db</module>
-		<module>openmeetings-core</module>
-		<module>openmeetings-install</module>
-		<module>openmeetings-service</module>
-		<module>openmeetings-webservice</module>
-		<module>openmeetings-web</module>
-		<module>openmeetings-flash</module>
-		<module>openmeetings-screenshare</module>
-		<module>openmeetings-server</module>
-	</modules>
 	<profiles>
+		<profile>
+			<id>AllModules</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>openmeetings-util</module>
+				<module>openmeetings-db</module>
+				<module>openmeetings-core</module>
+				<module>openmeetings-install</module>
+				<module>openmeetings-service</module>
+				<module>openmeetings-webservice</module>
+				<module>openmeetings-web</module>
+				<module>openmeetings-flash</module>
+				<module>openmeetings-screenshare</module>
+				<module>openmeetings-server</module>
+			</modules>
+		</profile>
 		<profile>
 			<id>Quick</id>
 			<activation>
@@ -196,6 +202,13 @@
 			<properties>
 				<jarsigner.skip>true</jarsigner.skip>
 			</properties>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<modules>
+				<module>openmeetings-util</module>
+				<module>openmeetings-db</module>
+			</modules>
 		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
@@ -846,11 +859,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>1.8</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>truezip-maven-plugin</artifactId>
-					<version>1.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
