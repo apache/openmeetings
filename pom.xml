@@ -60,7 +60,7 @@
 	</properties>
 	<profiles>
 		<profile>
-			<id>AllModules</id>
+			<id>allModules</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -78,13 +78,7 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>Quick</id>
-			<activation>
-				<property>
-					<name>quick</name>
-					<value>true</value>
-				</property>
-			</activation>
+			<id>quick</id>
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
@@ -756,11 +750,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<excludes>
-						<exclude>src/license/THIRD-PARTY.properties</exclude> <!-- generated -->
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
  		<pluginManagement>

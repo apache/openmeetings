@@ -37,13 +37,7 @@
 	</properties>
 	<profiles>
 		<profile>
-			<id>Mysql</id>
-			<activation>
-				<property>
-					<name>db</name>
-					<value>mysql</value>
-				</property>
-			</activation>
+			<id>mysql</id>
 			<dependencies>
 				<dependency>
 					<groupId>mysql</groupId>
