@@ -51,13 +51,7 @@
 	</scm>
 	<profiles>
 		<profile>
-			<id>Quick</id>
-			<activation>
-				<property>
-					<name>quick</name>
-					<value>true</value>
-				</property>
-			</activation>
+			<id>quick</id>
 			<properties>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>quick</assembly.descriptor>
@@ -111,13 +105,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>Unpacked</id>
-			<activation>
-				<property>
-					<name>unpacked</name>
-					<value>true</value>
-				</property>
-			</activation>
+			<id>unpacked</id>
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<assembly.finalName>server</assembly.finalName>
