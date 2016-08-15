@@ -135,7 +135,7 @@ mvn deploy -Pdeploy,rc
 					</li>
 					<li>
 						<p>Run the command: </p>
-						<source>mvn clean install -Prc</source>
+						<source>mvn clean install -P allModules,rc</source>
 					</li>
 					<li>
 						<p>Test building the source on windows and OSx or Linux</p>

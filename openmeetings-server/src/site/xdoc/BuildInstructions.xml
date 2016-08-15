@@ -47,7 +47,7 @@
 			<p>Get the source: </p>
 			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/trunk/]]></source>
 			<p>Run the command: </p>
-			<source><![CDATA[mvn clean install ]]></source>
+			<source><![CDATA[mvn clean install -P allModules]]></source>
 		</section>
 
 		<section name="Run, Develop, Test">
@@ -65,25 +65,25 @@
 			<p>To compile only client you can run following command: </p>
 			<source>
 <![CDATA[
-mvn install -pl openmeetings-flash               # compiles a complete package into the folder openmeetings-flash/target
+mvn install -P allModules -pl openmeetings-flash               # compiles a complete package into the folder openmeetings-flash/target
 ]]>
 			</source>
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
-mvn clean install -Dunpacked=true -DskipTests=true -Dold-backups.dwnd.skip=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dold-backups.dwnd.skip=true -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>
 			<source>
 <![CDATA[
-mvn install -pl openmeetings-web -pl openmeetings-server -Dquick=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-web -pl openmeetings-server -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
 			<p>Any number of projects can be specified during build: </p>
 			<source>
 <![CDATA[
-mvn install -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dquick=true -Ddb=mysql -Dwicket.mode=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
 			<p>
