@@ -780,7 +780,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Recording> list = new ArrayList<>();
@@ -794,6 +794,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(Date.class, DateConverter.class);
+			registry.bind(Recording.Status.class, RecordingStatusConverter.class);
 			
 			InputNode root = NodeBuilder.read(new FileInputStream(xml));
 			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder
@@ -826,7 +827,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
 		return readUserList(new InputSource(xml), listNodeName);
 	}
