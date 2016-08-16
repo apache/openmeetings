@@ -38,6 +38,9 @@
 	<profiles>
 		<profile>
 			<id>mysql</id>
+			<properties>
+				<db>mysql</db>
+			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>mysql</groupId>
