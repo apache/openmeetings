@@ -31,8 +31,11 @@ public class RTMPTScreenShare extends RTMPTClient implements IScreenShare {
 
 	private final CoreScreenShare core;
 
-	public RTMPTScreenShare(CoreScreenShare core) {
+	public RTMPTScreenShare(CoreScreenShare core, boolean secure) {
 		this.core = core;
+		if (secure) {
+			protocol = "rtmps";
+		}
 	};
 
 	// ------------------------------------------------------------------------

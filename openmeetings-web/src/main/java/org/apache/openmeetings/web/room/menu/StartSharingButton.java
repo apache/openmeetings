@@ -107,7 +107,7 @@ public class StartSharingButton extends OmButton {
 				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
 			}
 			Protocol protocol = Protocol.valueOf(url.getScheme());
-			app = addKeystore(app, protocol).replace("$codebase", baseUrl + "screenshare")
+			app = addKeystore(rc, app, protocol).replace("$codebase", baseUrl + "screenshare")
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
@@ -149,7 +149,7 @@ public class StartSharingButton extends OmButton {
 		return result.toString();
 	}
 	
-	private static String addKeystore(String app, Protocol protocol) {
+	private static String addKeystore(Client rc, String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
 		if (Protocol.rtmps == protocol) {
@@ -187,7 +187,8 @@ public class StartSharingButton extends OmButton {
 				}
 			}
 		}
-		return app.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
+		return app.replace("$native", "" + rc.isNativeSsl())
+				.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
 				.replace("$password", CDATA_BEGIN + password + CDATA_END);
 	}
 }
