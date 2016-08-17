@@ -199,6 +199,7 @@
 		var wicketsid = lz.Browser.getInitArg('wicketsid');
 		if (wicketsid != undefined) {
 			canvas.setAttribute('wicketsid', wicketsid);
+			canvas.setAttribute('sessionId', wicketsid);
 		}
 		var uid = lz.Browser.getInitArg('uid');
 		if (!!uid) {

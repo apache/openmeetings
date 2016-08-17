@@ -290,7 +290,10 @@ public class Client implements IDataProviderEntity {
 
 	@Column(name = "tcurl", length=2048)
 	private String tcUrl;
-	
+
+	@Column(name = "nativeSsl")
+	private boolean nativeSsl = false;
+
 	/**
 	 * @see Client#getIsRecording()
 	 */
@@ -872,6 +875,14 @@ public class Client implements IDataProviderEntity {
 
 	public void setTcUrl(String tcUrl) {
 		this.tcUrl = tcUrl;
+	}
+
+	public boolean isNativeSsl() {
+		return nativeSsl;
+	}
+
+	public void setNativeSsl(boolean nativeSsl) {
+		this.nativeSsl = nativeSsl;
 	}
 
 	@Override
