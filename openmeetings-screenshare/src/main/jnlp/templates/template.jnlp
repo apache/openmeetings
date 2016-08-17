@@ -46,6 +46,7 @@
 		<argument>$allowRemote</argument>
 		<argument>$allowRecording</argument>
 		<argument>$allowPublishing</argument>
+		<argument>$native</argument>
 		<argument>$keystore</argument>
 		<argument>$password</argument>
 	</application-desc>

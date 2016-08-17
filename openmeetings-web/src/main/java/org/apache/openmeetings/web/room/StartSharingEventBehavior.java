@@ -27,7 +27,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
 import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PUBLIC_SID;
-import static org.apache.openmeetings.web.room.RoomPanel.PARAM_URL;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 
 import java.io.File;
@@ -94,8 +93,6 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, StandardCharsets.UTF_8);
 			String baseUrl = cfgDao.getBaseUrl();
-			String _url = getParam(getComponent(), PARAM_URL).toString();
-			URI url = new URI(_url);
 			Room room = getBean(RoomDao.class).get(roomId);
 			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
 			SessionManager sessionManager = getBean(SessionManager.class);
@@ -103,13 +100,15 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			if (rc == null) {
 				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
 			}
+			String _url = rc.getTcUrl();
+			URI url = new URI(_url);
 			String path = url.getPath();
 			path = path.substring(path.lastIndexOf('/') + 1);
 			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {
 				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
 			}
 			Protocol protocol = Protocol.valueOf(url.getScheme());
-			app = addKeystore(app, protocol).replace("$codebase", baseUrl + "screenshare")
+			app = addKeystore(rc, app, protocol).replace("$codebase", baseUrl + "screenshare")
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
@@ -151,7 +150,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		return result.toString();
 	}
 	
-	private static String addKeystore(String app, Protocol protocol) {
+	private static String addKeystore(Client rc, String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
 		if (Protocol.rtmps == protocol) {
@@ -189,7 +188,8 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 				}
 			}
 		}
-		return app.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
+		return app.replace("$native", "" + rc.isNativeSsl())
+				.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
 				.replace("$password", CDATA_BEGIN + password + CDATA_END);
 	}
 }

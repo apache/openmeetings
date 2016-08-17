@@ -287,7 +287,13 @@ public class Client implements IDataProviderEntity {
 	// FIXME: Move to {@link ClientSession}
 	@Column(name = "swfurl", length=2048)
 	private String swfurl;
-	
+
+	@Column(name = "tcurl", length=2048)
+	private String tcUrl;
+
+	@Column(name = "nativeSsl")
+	private boolean nativeSsl = false;
+
 	/**
 	 * @see Client#getIsRecording()
 	 */
@@ -861,6 +867,22 @@ public class Client implements IDataProviderEntity {
 
 	public void setMobile(boolean mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getTcUrl() {
+		return tcUrl;
+	}
+
+	public void setTcUrl(String tcUrl) {
+		this.tcUrl = tcUrl;
+	}
+
+	public boolean isNativeSsl() {
+		return nativeSsl;
+	}
+
+	public void setNativeSsl(boolean nativeSsl) {
+		this.nativeSsl = nativeSsl;
 	}
 
 	@Override

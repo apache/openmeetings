@@ -71,7 +71,6 @@ public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String WICKET_ROOM_ID = "wicketroomid";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
-	public static final String PARAM_URL = "url";
 	public static final String SWF_TYPE_NETWORK = "network";
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final InvitationDialog invite;
@@ -252,7 +251,7 @@ public class RoomPanel extends BasePanel {
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
-					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("startSharing", this, explicit(PARAM_PUBLIC_SID), explicit(PARAM_URL)), "startSharing")));
+					response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("startSharing", this, explicit(PARAM_PUBLIC_SID)), "startSharing")));
 				}
 			});
 		}

@@ -61,6 +61,7 @@ import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
@@ -81,6 +82,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SECURITY_CODE_PARAM = "securityCode";
+	private static final String NATIVE_SSL_PARAM = "nativeSsl";
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -117,7 +119,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
-		// TODO Auto-generated method stub
+		if (log.isTraceEnabled()) {
+			log.trace("resultReceived:: {}", arg0);
+		}
 	}
 
 	@Override
@@ -174,11 +178,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 		Map<String, Object> map = conn.getConnectParams();
 		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
+		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
 		if (!Strings.isEmpty(securityCode)) {
-			//FIXME TODO add better mechanism
+			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
 				return rejectClient();
@@ -197,9 +202,24 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return rejectClient();
 			}
 		}
-		Client rcm = sessionManager.addClientListItem(conn.getClient().getId(),
-				conn.getScope().getName(), conn.getRemotePort(),
-				conn.getRemoteAddress(), swfURL, null);
+		Client rcm = new Client();
+		rcm.setStreamid(conn.getClient().getId());
+		StringValue scn = StringValue.valueOf(conn.getScope().getName());
+		rcm.setScope(scn.toString());
+		long roomId = scn.toLong(Long.MIN_VALUE);
+		if (Long.MIN_VALUE != roomId) {
+			rcm.setRoomId(roomId);
+		} else if (!"hibernate".equals(scn.toString())) {
+			return rejectClient();
+		}
+		rcm.setUserport(conn.getRemotePort());
+		rcm.setUserip(conn.getRemoteAddress());
+		rcm.setSwfurl(swfURL);
+		rcm.setTcUrl(tcUrl);
+		rcm.setNativeSsl(Boolean.TRUE.equals(connParams.get(NATIVE_SSL_PARAM)));
+		rcm.setPublicSID(uid);
+		rcm.setSecurityCode(securityCode);
+		rcm = sessionManager.add(rcm, null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
 			return false;
@@ -230,10 +250,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				rcm.setLastname(u.getLastname());
 			}
 			log.debug("publishName :: " + rcm.getStreamPublishName());
-			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
-		}
-		if (!Strings.isEmpty(securityCode)) {
-			rcm.setSecurityCode(securityCode);
 			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
 		}
 

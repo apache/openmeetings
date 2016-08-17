@@ -35,6 +35,7 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,27 @@ public class SessionManager implements ISessionManager {
 	@Override
 	public void clearCache() {
 		cache.clear();
+	}
+	
+	@Override
+	public Client add(Client c, Server server) {
+		if (server == null) {
+			server = serverUtil.getCurrentServer();
+		}
+		c.setConnectedSince(new Date());
+		c.setRoomEnter(new Date());
+		if (Strings.isEmpty(c.getPublicSID())) {
+			c.setPublicSID(UUID.randomUUID().toString());
+		}
+		c.setServer(server);
+
+		if (cache.containsKey(null, c.getStreamid())) {
+			log.error("Tried to add an existing Client " + c.getStreamid());
+			return null;
+		}
+
+		cache.put(c.getStreamid(), c);
+		return c;
 	}
 	
 	@Override
