@@ -93,6 +93,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SECURITY_CODE_PARAM = "securityCode";
+	private static final String NATIVE_SSL_PARAM = "nativeSsl";
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -184,7 +185,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		String uid = (String)connParams.get("uid");
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
 		if (!Strings.isEmpty(securityCode)) {
-			//FIXME TODO add better mechanism
+			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
 				return rejectClient();
@@ -220,6 +221,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setUserip(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
+		rcm.setNativeSsl(Boolean.TRUE.equals(connParams.get(NATIVE_SSL_PARAM)));
 		rcm.setPublicSID(uid);
 		rcm.setSecurityCode(securityCode);
 		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
