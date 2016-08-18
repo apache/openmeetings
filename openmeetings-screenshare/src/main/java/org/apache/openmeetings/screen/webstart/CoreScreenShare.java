@@ -78,7 +78,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public int defaultQuality = 1;
 	public int defaultFPS = 10;
 	public boolean showFPS = true;
-	public boolean allowRemote = true;
 
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
@@ -125,8 +124,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				defaultQuality = Integer.parseInt(args[3]);
 				defaultFPS = Integer.parseInt(args[4]);
 				showFPS = bool(args[5]);
-				allowRemote = bool(args[6]);
-				remoteEnabled = allowRemote;
+				remoteEnabled = bool(args[6]);
 				allowRecording = bool(args[7]);
 				allowPublishing = bool(args[8]);
 
@@ -146,13 +144,18 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						instance = new RTMPScreenShare(this);
 						break;
 					case rtmpt:
-						instance = new RTMPTScreenShare(this);
+						instance = new RTMPTScreenShare(this, false);
 						break;
 					case rtmps:
-						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						//NOT in use since 1.0.8-M3 client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
-						client.setKeyStorePassword(args[10]);
-						instance = client;
+						boolean nativeSsl = bool(args[9]);
+						if (nativeSsl) {
+							RTMPSScreenShare client = new RTMPSScreenShare(this);
+							//NOT in use since 1.0.8-M3 client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
+							client.setKeyStorePassword(args[11]);
+							instance = client;
+						} else {
+							instance = new RTMPTScreenShare(this, true);
+						}
 						break;
 					case rtmpe:
 					default:

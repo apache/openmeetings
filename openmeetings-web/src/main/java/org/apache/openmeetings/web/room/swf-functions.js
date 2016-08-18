@@ -44,3 +44,7 @@ function initSwf(_options) {
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
 }
+
+function getStringLabels() {
+	return labels;
+}

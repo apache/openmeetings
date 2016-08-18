@@ -32,11 +32,11 @@
 		<fileset dir="${laszlo46.home}/WEB-INF/lib" includes="*.jar" />
 	</path>
 
-	<target name="client.only" depends="main,networktesting,settings" unless="client-already-built">
+	<target name="client.only" depends="main,networktesting" unless="client-already-built">
 		<property name="client-already-built" value="true"/>
 	</target>
 
-	<target name="client.debug.only" depends="main.debug,networktesting.debug,settings.debug" >
+	<target name="client.debug.only" depends="main.debug,networktesting.debug" >
 		<property name="client-already-built" value="true"/>
 	</target>
 
@@ -95,30 +95,6 @@
 			<param name="flash.runtime" value="swf11" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
-			<param name="flash.debug" value="--debug" />
-		</antcall>
-	</target>
-
-	<target name="settings" depends="settings.debug">
-		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="laszlo46.lib" />
-			<param name="flash.src.dir" value="${src.dir}" />
-			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf11" />
-			<param name="flash.main.file" value="settings.lzx" />
-			<param name="flash.out.file" value="settings.swf11.swf" />
-			<param name="flash.debug" value="" />
-		</antcall>
-	</target>
-
-	<target name="settings.debug">
-		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="laszlo46.lib" />
-			<param name="flash.src.dir" value="${src.dir}" />
-			<param name="flash.lps.home" value="${laszlo46.home}" />
-			<param name="flash.runtime" value="swf11" />
-			<param name="flash.main.file" value="settings.lzx" />
-			<param name="flash.out.file" value="settingsdebug.swf11.swf" />
 			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
