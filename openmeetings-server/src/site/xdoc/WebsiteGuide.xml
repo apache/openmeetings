@@ -27,7 +27,7 @@
 				<div>
 					<ul>
 						<li>Sun JDK7</li>
-						<li>Apache Maven (3.2.1 or later)</li>
+						<li>Apache Maven (3.3.9 or later)</li>
 					</ul>
 				</div>
 			</subsection>
@@ -36,7 +36,7 @@
 				<div>
 					<p>
 						The Apache OpenMeetings HTML websites are generated from XML files. 
-						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -Dunpacked=true]]></source> that generates the HTML files 
+						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -P allModules,unpacked]]></source> that generates the HTML files 
 						and then you copy generated HTML files into appropriate place and commit to SVN both: XML and HTML files.
 					</p>
 					<p>
@@ -56,7 +56,7 @@
 					
 					<div>
 						To update the website you need to checkout trunk:<br />
-						<a href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/</a> <br/>
+						<a href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/">https://svn.apache.org/repos/asf/openmeetings/application/trunk/</a> <br/>
 						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>
 						then you run the command:
 						<source><![CDATA[mvn install -Dunpacked=true]]></source>
