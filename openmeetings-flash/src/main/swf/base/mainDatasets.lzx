@@ -72,7 +72,7 @@
 </dataset>
 
 <!-- get values from public/config.xml -->
-<dataset type="http" name="mainTheme" request="false" ondata="canvas.mybaseinit()" proxied="false">
+<dataset type="http" name="mainTheme" request="false" ondata="canvas.myinit()" proxied="false">
 	<method name="loadTheme">
 		var d = new Date();
 		this.setAttribute("src", canvas.getServerBaseUrl() + "theme.xml?random=" + d.getTime());

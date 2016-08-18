@@ -78,7 +78,7 @@
 				</property>
 			</activation>
 			<properties>
-				<ant.target>settings.debug</ant.target>
+				<ant.target>main.debug</ant.target>
 			</properties>
 		</profile>
 	</profiles>
