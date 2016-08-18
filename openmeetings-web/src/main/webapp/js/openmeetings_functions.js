@@ -56,9 +56,9 @@ function getTimeZoneOffsetMinutes() {
 			break;
 		}
 	}
-    return std_time_offset;
+	return std_time_offset;
 }
 
 function getTimeZoneOffset() {
-    document.getElementById("lzapp").getTimeZoneOffsetCallback(getTimeZoneOffsetMinutes()/60);
+	document.getElementById("lzapp").getTimeZoneOffsetCallback(getTimeZoneOffsetMinutes()/60);
 }

@@ -25,7 +25,6 @@
 	<include href="contentviews/" />
 
 	<!-- for main.lzx -->
-	<include href="baseMethods.lzx" />
 	<include href="externalJavaScript.lzx" />
 	<include href="functions.lzx" />
 	<include href="mainAttributes.lzx" /> 
