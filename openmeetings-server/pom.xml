@@ -44,9 +44,9 @@
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>
-		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
-		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</developerConnection>
-		<url>https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp</url>
+		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/branches/3.1.x</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/branches/3.1.x</developerConnection>
+		<url>https://svn.apache.org/repos/asf/openmeetings/application/branches/3.1.x</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>

@@ -32,8 +32,8 @@
 			<source>webapp.virtualHosts=*,localhost, 127.0.0.1</source>
 			Sample file:
 			<a
-				href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
-				rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
+				href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
+				rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
 			</a>
 		</section>
 
