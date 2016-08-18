@@ -82,8 +82,8 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 				List<String> currenthrefs = new ArrayList<>();
 
 				//Map of Href and the Appointments, belonging to it.
-				Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
-						appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+				Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
+						appointmentDao.getbyCalendar(calendar.getId()));
 
 				for (MultiStatusResponse response : syncMethod.getResponseBodyAsMultiStatus().getResponses()) {
 					int status = response.getStatus()[0].getStatusCode();
