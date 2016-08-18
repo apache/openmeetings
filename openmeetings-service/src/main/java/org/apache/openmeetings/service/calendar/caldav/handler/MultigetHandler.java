@@ -98,8 +98,8 @@ public class MultigetHandler extends AbstractCalendarHandler {
 
 				if (reportMethod.succeeded()) {
 					//Map for each Href as key and Appointment as Value.
-					Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
-							appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+					Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
+							appointmentDao.getbyCalendar(calendar.getId()));
 
 					for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
 						if (response.getStatus()[0].getStatusCode() == SC_OK) {

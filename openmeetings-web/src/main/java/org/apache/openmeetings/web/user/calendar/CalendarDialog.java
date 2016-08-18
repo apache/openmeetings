@@ -58,9 +58,9 @@ public class CalendarDialog extends AbstractFormDialog {
 	private CalendarPanel calendarPanel;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private DialogButton save = new DialogButton("save", "Save");
-	private DialogButton cancel = new DialogButton("cancel", "Cancel");
-	private DialogButton delete = new DialogButton("delete", "Delete");
+	private DialogButton save = new DialogButton("save", Application.getString(813));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString(1130));
+	private DialogButton delete = new DialogButton("delete", Application.getString(814));
 	private UserCalendarForm form;
 	private MessageDialog confirmDelete;
 	private List<OmCalendar> cals; //List of calendars for syncing
@@ -139,8 +139,8 @@ public class CalendarDialog extends AbstractFormDialog {
 					handler.add(this);
 				} else {
 					calendarPanel.refresh(handler);
-
 				}
+
 		}
 	}
 
@@ -175,9 +175,11 @@ public class CalendarDialog extends AbstractFormDialog {
 					appointmentManager.createCalendar(c);
 					if (c.getId() == null)
 						calendarPanel.populateGoogleCalendar(c, target);
-				} else if (c.getId() == null) {
-					appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
-							form.pass.getModelObject()));
+				} else {
+					if (c.getId() == null) {
+						appointmentManager.provideCredentials(c, new UsernamePasswordCredentials(form.username.getModelObject(),
+								form.pass.getModelObject()));
+					}
 					appointmentManager.createCalendar(c);
 				}
 				calendarPanel.refreshCalendars(target);
@@ -284,7 +286,6 @@ public class CalendarDialog extends AbstractFormDialog {
 		}
 
 		cals = null;
-		appointmentManager.cleanupHttpClient();
 		return false;
 	}
 
@@ -352,7 +353,6 @@ public class CalendarDialog extends AbstractFormDialog {
 			case SYNC_CALENDAR:
 		}
 		clearFormModel(handler);
-		calendarPanel.getAppointmentManager().cleanupHttpClient();
 	}
 
 	protected void onError(AjaxRequestTarget target) {

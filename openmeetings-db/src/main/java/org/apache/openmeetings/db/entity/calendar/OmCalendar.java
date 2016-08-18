@@ -96,7 +96,6 @@ public class OmCalendar implements IDataProviderEntity {
 	@Element(name="users_id", data=true, required=false)
 	private User owner;
 
-
 	//Getters + Setters
 	@Override
 	public Long getId() {

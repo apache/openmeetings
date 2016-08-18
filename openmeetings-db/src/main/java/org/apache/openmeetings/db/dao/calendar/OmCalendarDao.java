@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
-import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -79,8 +78,9 @@ public class OmCalendarDao {
 	public OmCalendar update(OmCalendar c) {
 		if (c.getId() == null) {
 			em.persist(c);
-		} else
+		} else {
 			c = em.merge(c);
+		}
 
 		return c;
 	}
@@ -112,10 +112,9 @@ public class OmCalendarDao {
 		c.setDeleted(true);
 
 		//Delete all appointments in calendar.
-		List<Appointment> appointments = appointmentDao.getAppointmentsinCalendar(c.getId());
-		for (Appointment appointment : appointments)
-			appointmentDao.delete(appointment, appointment.getOwner().getId());
+		appointmentDao.deletebyCalendar(c.getId());
 
+		//Cascades the Appointment Updates as well.
 		update(c);
 	}
 }

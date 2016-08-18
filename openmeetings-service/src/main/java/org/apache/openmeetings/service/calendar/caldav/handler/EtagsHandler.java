@@ -77,8 +77,8 @@ public class EtagsHandler extends AbstractCalendarHandler {
 	@Override
 	public OmCalendar syncItems() {
 		Long ownerId = this.calendar.getOwner().getId();
-		Map<String, Appointment> map = listToMap(appointmentDao.getAppointmentHrefsinCalendar(calendar.getId()),
-				appointmentDao.getAppointmentsinCalendar(calendar.getId()));
+		Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
+				appointmentDao.getbyCalendar(calendar.getId()));
 
 		if (map.isEmpty()) {
 			//Initializing the Calendar for the first time.

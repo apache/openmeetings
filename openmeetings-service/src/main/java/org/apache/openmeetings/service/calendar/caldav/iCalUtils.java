@@ -62,14 +62,15 @@ public class iCalUtils {
 
 	/**
 	 * Parses the Calendar from the CalDAV server, to a new Appointment.
-	 * @param calendar iCalendar Representation.
-	 * @param href Location of the Calendar on the server
-	 * @param etag ETag of the calendar.
+	 *
+	 * @param calendar   iCalendar Representation.
+	 * @param href       Location of the Calendar on the server
+	 * @param etag       ETag of the calendar.
 	 * @param omCalendar The Parent OmCalendar, to which the Appointment belongs.
 	 * @return Appointment after parsing.
 	 */
 	public Appointment parseCalendartoAppointment(Calendar calendar, String href, String etag,
-														OmCalendar omCalendar){
+												  OmCalendar omCalendar) {
 
 		//Note: By RFC 4791 only one event can be stored in one href.
 
@@ -88,17 +89,18 @@ public class iCalUtils {
 
 	/**
 	 * Parses a Calendar with multiple VEvents into Appointments
+	 *
 	 * @param calendar Calendar to Parse
-	 * @param ownerId Owner of the Appointments
+	 * @param ownerId  Owner of the Appointments
 	 * @return <code>List</code> of Appointments
 	 */
-	public List<Appointment> parseCalendartoAppointments (Calendar calendar, Long ownerId){
+	public List<Appointment> parseCalendartoAppointments(Calendar calendar, Long ownerId) {
 		List<Appointment> appointments = new ArrayList<>();
 		ComponentList<CalendarComponent> events = calendar.getComponents(Component.VEVENT);
 		User owner = userDao.get(ownerId);
 		TimeZone tz = parseTimeZone(calendar, owner);
 
-		for(CalendarComponent event : events){
+		for (CalendarComponent event : events) {
 			Appointment a = new Appointment();
 			a.setOwner(owner);
 			a.setDeleted(false);
@@ -114,16 +116,17 @@ public class iCalUtils {
 	 * Updating Appointments which already exist, by parsing the Calendar. And updating etag.
 	 * Doesn't work with complex Recurrences.
 	 * Note: Hasn't been tested to acknowledge DST, timezones should acknowledge this.
-	 * @param a Appointment to be updated.
+	 *
+	 * @param a        Appointment to be updated.
 	 * @param calendar iCalendar Representation.
-	 * @param etag The ETag of the calendar.
+	 * @param etag     The ETag of the calendar.
 	 * @return Updated Appointment.
 	 */
 	public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar,
-												  String etag){
-		if(calendar == null) return a;
+												  String etag) {
+		if (calendar == null) return a;
 		CalendarComponent event = calendar.getComponent(Component.VEVENT);
-		if(event != null) {
+		if (event != null) {
 			TimeZone tz = parseTimeZone(calendar, a.getOwner());
 
 			a.setEtag(etag);
@@ -134,59 +137,60 @@ public class iCalUtils {
 
 	/**
 	 * Add properties from the Given VEvent Component to the Appointment
-	 * @param a Appointment to which the properties are to be added
+	 *
+	 * @param a     Appointment to which the properties are to be added
 	 * @param event VEvent to parse properties from.
-	 * @param tz Timezone of the Event
+	 * @param tz    Timezone of the Event
 	 * @return Updated Appointment
 	 */
 	private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event,
-														 TimeZone tz){
+														 TimeZone tz) {
 		Property dtstart = event.getProperty(Property.DTSTART),
 				dtend = event.getProperty(Property.DTEND),
 				uid = event.getProperty(Property.UID),
 				dtstamp = event.getProperty(Property.DTSTAMP),
 				description = event.getProperty(Property.DESCRIPTION),
 				summary = event.getProperty(Property.SUMMARY),
-				location = event .getProperty(Property.LOCATION),
+				location = event.getProperty(Property.LOCATION),
 				lastmod = event.getProperty(Property.LAST_MODIFIED),
 				organizer = event.getProperty(Property.ORGANIZER),
 				recur = event.getProperty(Property.RRULE);
 		PropertyList attendees = event.getProperties(Property.ATTENDEE);
 
-		if(uid != null)
+		if (uid != null)
 			a.setIcalId(uid.getValue());
 
 		Date d = parseDate(dtstart, tz);
 		a.setStart(d);
-		if(dtend == null)
+		if (dtend == null)
 			a.setEnd(addTimetoDate(d, java.util.Calendar.HOUR_OF_DAY, 1));
 		else
 			a.setEnd(parseDate(dtend, tz));
 
 		a.setInserted(parseDate(dtstamp, tz));
 
-		if(lastmod != null)
+		if (lastmod != null)
 			a.setUpdated(parseDate(lastmod, tz));
 
-		if(description != null)
+		if (description != null)
 			a.setDescription(description.getValue());
 
-		if(summary != null)
+		if (summary != null)
 			a.setTitle(summary.getValue());
 
-		if(location != null)
+		if (location != null)
 			a.setLocation(location.getValue());
 
-		if(recur != null){
+		if (recur != null) {
 			Parameter freq = recur.getParameter("FREQ");
-			if(freq != null){
-				if(freq.getValue().equals(Recur.DAILY))
+			if (freq != null) {
+				if (freq.getValue().equals(Recur.DAILY))
 					a.setIsDaily(true);
-				else if(freq.getValue().equals(Recur.WEEKLY))
+				else if (freq.getValue().equals(Recur.WEEKLY))
 					a.setIsWeekly(true);
-				else if(freq.getValue().equals(Recur.MONTHLY))
+				else if (freq.getValue().equals(Recur.MONTHLY))
 					a.setIsMonthly(true);
-				else if(freq.getValue().equals(Recur.YEARLY))
+				else if (freq.getValue().equals(Recur.YEARLY))
 					a.setIsYearly(true);
 			}
 		}
@@ -195,11 +199,11 @@ public class iCalUtils {
 				new ArrayList<MeetingMember>() : a.getMeetingMembers();
 
 		//Note this value can be repeated in attendees as well.
-		if(organizer != null){
+		if (organizer != null) {
 			URI uri = URI.create(organizer.getValue());
 
 			//If the value of the organizer is an email
-			if(uri.getScheme().equals("mailto")) {
+			if (uri.getScheme().equals("mailto")) {
 				String email = uri.getSchemeSpecificPart();
 				//Contact or exist and owner
 				User org = userDao.getByEmail(email);
@@ -212,13 +216,13 @@ public class iCalUtils {
 			}
 		}
 
-		if(attendees != null && !attendees.isEmpty()){
-			for(Property attendee: attendees){
+		if (attendees != null && !attendees.isEmpty()) {
+			for (Property attendee : attendees) {
 				URI uri = URI.create(attendee.getValue());
-				if(uri.getScheme().equals("mailto")){
+				if (uri.getScheme().equals("mailto")) {
 					String email = uri.getSchemeSpecificPart();
 					User u = userDao.getByEmail(email);
-					if(u == null)
+					if (u == null)
 						u = userDao.getContact(email, a.getOwner());
 					attList.add(createMeetingMember(a, u));
 				}
@@ -230,7 +234,7 @@ public class iCalUtils {
 		return a;
 	}
 
-	private MeetingMember createMeetingMember(Appointment a, User u){
+	private MeetingMember createMeetingMember(Appointment a, User u) {
 		MeetingMember mm = new MeetingMember();
 		mm.setUser(u);
 		mm.setDeleted(false);
@@ -252,12 +256,13 @@ public class iCalUtils {
 	/**
 	 * Parses the VTimezone Component of the given Calendar. If no, VTimezone component is found the
 	 * User Timezone is used
+	 *
 	 * @param calendar Calendar to parse
-	 * @param owner Owner of the Calendar
+	 * @param owner    Owner of the Calendar
 	 * @return Parsed TimeZone
 	 */
-	public TimeZone parseTimeZone(Calendar calendar, User owner){
-		if(calendar != null) {
+	public TimeZone parseTimeZone(Calendar calendar, User owner) {
+		if (calendar != null) {
 			Component timezone = calendar.getComponent(Component.VTIMEZONE);
 			if (timezone != null) {
 				Property tzid = timezone.getProperty(Property.TZID);
@@ -271,17 +276,18 @@ public class iCalUtils {
 	/**
 	 * Convenience function to parse date from {@link net.fortuna.ical4j.model.Property} to
 	 * {@link Date}
-	 * @param dt DATE-TIME Property from which we parse.
+	 *
+	 * @param dt       DATE-TIME Property from which we parse.
 	 * @param timeZone Timezone of the Date.
 	 * @return {@link java.util.Date} representation of the iCalendar value.
 	 */
 	public Date parseDate(Property dt, TimeZone timeZone) {
-		if(dt == null || dt.getValue().equals(""))
+		if (dt == null || dt.getValue().equals(""))
 			return null;
 
-		String[] acceptedFormats = { "yyyyMMdd'T'HHmmss", "yyyyMMdd'T'HHmmss'Z'", "yyyyMMdd"};
+		String[] acceptedFormats = {"yyyyMMdd'T'HHmmss", "yyyyMMdd'T'HHmmss'Z'", "yyyyMMdd"};
 		Parameter tzid = dt.getParameter(Parameter.TZID);
-		if(tzid == null)
+		if (tzid == null)
 			return parseDate(dt.getValue(), acceptedFormats, timeZone);
 		else
 			return parseDate(dt.getValue(), acceptedFormats, timezoneUtil.getTimeZone(tzid.getValue()));
@@ -290,7 +296,8 @@ public class iCalUtils {
 	/**
 	 * Adapted from DateUtils to support Timezones, and parse ical dates into {@link java.util.Date}.
 	 * Note: Replace FastDateFormat to java.time, when shifting to Java 8 or higher.
-	 * @param str Date representation in String.
+	 *
+	 * @param str      Date representation in String.
 	 * @param patterns Patterns to parse the date against
 	 * @param timeZone Timezone of the Date.
 	 * @return <code>java.util.Date</code> representation of string or
@@ -300,11 +307,11 @@ public class iCalUtils {
 		FastDateFormat parser = null;
 		Locale locale = WebSession.get().getLocale();
 
-		if(str.endsWith("Z"))
+		if (str.endsWith("Z"))
 			timeZone = TimeZone.getTimeZone("UTC");
 
 		ParsePosition pos = new ParsePosition(0);
-		for(String pattern: patterns){
+		for (String pattern : patterns) {
 			parser = FastDateFormat.getInstance(pattern, timeZone, locale);
 			pos.setIndex(0);
 			Date date = parser.parse(str, pos);
@@ -318,12 +325,13 @@ public class iCalUtils {
 
 	/**
 	 * Adds a specified amount of time to a Date.
-	 * @param date Date to which time is added
-	 * @param field Date Field to which the Amount is added
+	 *
+	 * @param date   Date to which time is added
+	 * @param field  Date Field to which the Amount is added
 	 * @param amount Amount to be Added
 	 * @return New Date
 	 */
-	public Date addTimetoDate(Date date, int field, int amount){
+	public Date addTimetoDate(Date date, int field, int amount) {
 		java.util.Calendar c = java.util.Calendar.getInstance();
 		c.setTime(date);
 		c.add(field, amount);
@@ -332,6 +340,7 @@ public class iCalUtils {
 
 	/**
 	 * Methods to parse Appointment to iCalendar according RFC 2445
+	 *
 	 * @param appointment to be converted to iCalendar
 	 * @return iCalendar representation of the Appointment
 	 * @throws Exception
@@ -363,13 +372,14 @@ public class iCalUtils {
 
 	/**
 	 * Adds the Appointment Properties to the given VEvent
+	 *
 	 * @param appointment Appointment whose properties are taken
-	 * @param meeting VEvent of the Appointment
+	 * @param meeting     VEvent of the Appointment
 	 * @return Updated VEvent
 	 */
-	private VEvent addVEventpropsfromAppointment(Appointment appointment, VEvent meeting){
+	private VEvent addVEventpropsfromAppointment(Appointment appointment, VEvent meeting) {
 
-		if(appointment.getLocation() != null)
+		if (appointment.getLocation() != null)
 			meeting.getProperties().add(new Location(appointment.getLocation()));
 
 		meeting.getProperties().add(new Description(appointment.getDescription()));
@@ -401,7 +411,7 @@ public class iCalUtils {
 		if(rRule != null)
 			meeting.getProperties().add(rRule);*/
 
-		if(appointment.getMeetingMembers() != null) {
+		if (appointment.getMeetingMembers() != null) {
 			for (MeetingMember meetingMember : appointment.getMeetingMembers()) {
 				Attendee attendee = new Attendee(URI.create("mailto:" +
 						meetingMember.getUser().getAddress().getEmail()));
@@ -426,8 +436,9 @@ public class iCalUtils {
 
 	/**
 	 * Parses a List of Appointments into a VCALENDAR component.
+	 *
 	 * @param appointments List of Appointments for the Calendar
-	 * @param ownerId Owner of the Appointments
+	 * @param ownerId      Owner of the Appointments
 	 * @return VCALENDAR representation of the Appointments
 	 * @throws Exception
 	 */
@@ -447,7 +458,7 @@ public class iCalUtils {
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getComponents().add(timeZone.getVTimeZone());
 
-		for(Appointment appointment: appointments){
+		for (Appointment appointment : appointments) {
 			DateTime start = new DateTime(appointment.getStart()), end = new DateTime(appointment.getEnd());
 
 			VEvent meeting = new VEvent(start, end, appointment.getTitle());

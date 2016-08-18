@@ -219,7 +219,6 @@ public class AppointmentManager {
 		for (OmCalendar calendar : calendars) {
 			syncItem(calendar);
 		}
-		cleanupHttpClient();
 	}
 
 	/**
@@ -356,7 +355,6 @@ public class AppointmentManager {
 			} finally {
 				if (propFindMethod != null)
 					propFindMethod.releaseConnection();
-				cleanupHttpClient();
 			}
 		}
 
@@ -535,8 +533,7 @@ public class AppointmentManager {
 	 * @return String representation of the Property Value.
 	 */
 	public static String getTokenFromProperty(DavProperty property) {
-		if (property == null) return null;
-		return property.getValue().toString();
+		return (property == null)? null : property.getValue().toString();
 	}
 
 	/**
