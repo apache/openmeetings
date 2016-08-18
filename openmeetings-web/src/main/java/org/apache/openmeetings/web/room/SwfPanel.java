@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import org.apache.openmeetings.web.app.Application;
@@ -52,20 +51,19 @@ public class SwfPanel extends BasePanel {
 
 	public String getInitFunction(PageParameters pp) {
 		String initStr = null;
-		String swf = getFlashFile(pp.get("swf"));
+		String swf = getFlashFile(pp);
 		if (!Strings.isEmpty(swf)) {
-			initStr = String.format("initSwf(%s);", new JSONObject()
-					.put("src", swf + new PageParametersEncoder().encodePageParameters(pp))
-					.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762, 144))
-					.toString());
+			initStr = String.format("var labels = %s; initSwf(%s);", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762, 144)
+					, new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp)).toString());
 		}
 		return initStr;
 	}
 
-	private String getFlashFile(StringValue type) {
+	private String getFlashFile(PageParameters pp) {
+		StringValue type = pp.get("swf");
 		String fmt;
 		if (SWF_TYPE_SETTINGS.equals(type.toString())) {
-			fmt = "settings%s.swf11.swf";
+			fmt = "main%s.swf11.swf";
 		} else if (SWF_TYPE_NETWORK.equals(type.toString())) {
 			fmt = "networktesting%s.swf10.swf";
 		} else {
