@@ -169,26 +169,26 @@
 		@param number delay The time it should seek, for Live-Streams this value should be -1
 	 -->
 	<method name="playStream" args="_streamName, delay">
-		<![CDATA[
-			this.streamName = "" + _streamName;
-			this.delay=delay;
-			if (this._ns!=null){
-				this._stop();
-			}
-			this.mode = "play";
-			this.createStream();
-			//invokes Method in baseVideoView which shows the stream
-			this.attachVideo(this._ns);
-			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
-			//after re-syncing the stream
-			//this.setBuffer(0.1);
-			if ($debug) Debug.write("Play Stream "+streamName);
-			if (delay == 0) {
-			    this._ns.play(streamName);
-			} else {
-			    this._ns.play(streamName,delay);
-			}
-		]]>
+	<![CDATA[
+		this.streamName = "" + _streamName;
+		this.delay = delay;
+		if (this._ns != null){
+			this._stop();
+		}
+		this.mode = "play";
+		this.createStream();
+		//invokes Method in baseVideoView which shows the stream
+		this.attachVideo(this._ns);
+		//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
+		//after re-syncing the stream
+		//this.setBuffer(0.1);
+		if ($debug) Debug.write("Play Stream '" + streamName + "'");
+		if (delay == 0) {
+		    this._ns.play(streamName);
+		} else {
+		    this._ns.play(streamName,delay);
+		}
+	]]>
 	</method>
 
 	<method name="justPlayStream" args="_streamName, delay">

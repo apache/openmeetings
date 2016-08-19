@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,29 +26,20 @@
 			</passthrough>
 		</when>
 	</switch>
-
 <script>
 <![CDATA[
-
-
 	ExternalInterface.addCallback("redirectToUrlCallback", redirectToUrlCallback);
-    ExternalInterface.addCallback("getBrowserInfoCallback", getBrowserInfoCallback);
-    ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
-
+	ExternalInterface.addCallback("getBrowserInfoCallback", getBrowserInfoCallback);
+	ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
 	
 	var redirectToUrlReturnObject = null;
 	var timeZoneOffsetReturnObject = null;
 	var browserInfoReturnObject = null;
 	var browserLangReturnObject = null;
 	
-	
 	function redirectToUrl(url, returnObject) {
-		
 		redirectToUrlReturnObject = returnObject;
-		
 		ExternalInterface.call("redirectToUrl", url);
-		
-		//lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
 	}
 	
 	function redirectToUrlCallback(returnValue) {
@@ -57,42 +48,30 @@
 			redirectToUrlReturnObject.callback(returnValue);
 		}
 	}
-
 	
 	function getBrowserInfo(returnObject) {
-        
-        browserInfoReturnObject = returnObject;
-        
-        ExternalInterface.call("getBrowserInfo");
-        
-        //lz.Browser.callJS("getBrowserInfo",callback);
-    }
-    
-    function getBrowserInfoCallback(returnValue) {
-        if ($debug) Debug.write("getBrowserInfoCallback ",returnValue);
-        if (browserInfoReturnObject != null) {
-            browserInfoReturnObject.callback(returnValue);
-        }
-    }
-    
-    
-    function getBrowserLang(returnObject) {
-        
-        browserLangReturnObject = returnObject;
-        
-        ExternalInterface.call("getBrowserLang");
-        
-        //lz.Browser.callJS("getBrowserLang",callback);
-    }
-    
-    function getBrowserLangCallback(returnValue) {
-        if ($debug) Debug.write("getBrowserLangCallback ",returnValue);
-        if (browserLangReturnObject != null) {
-            browserLangReturnObject.callback(returnValue);
-        }
-    }
+		browserInfoReturnObject = returnObject;
+		ExternalInterface.call("getBrowserInfo");
+	}
 	
-
+	function getBrowserInfoCallback(returnValue) {
+		if ($debug) Debug.write("getBrowserInfoCallback ",returnValue);
+		if (browserInfoReturnObject != null) {
+			browserInfoReturnObject.callback(returnValue);
+		}
+	}
+	
+	function getBrowserLang(returnObject) {
+		browserLangReturnObject = returnObject;
+		ExternalInterface.call("getBrowserLang");
+	}
+	
+	function getBrowserLangCallback(returnValue) {
+		if ($debug) Debug.write("getBrowserLangCallback ",returnValue);
+		if (browserLangReturnObject != null) {
+			browserLangReturnObject.callback(returnValue);
+		}
+	}
 ]]>
 </script>
 

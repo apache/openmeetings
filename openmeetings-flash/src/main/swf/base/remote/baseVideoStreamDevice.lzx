@@ -15,7 +15,6 @@
 		which are thrown, once a device was set -->
 
 	<class name="baseVideoStreamDevice" extends="baseVideoStream">
-
 		<switch>
 			<when property="$as3">
 				<passthrough>

@@ -51,6 +51,8 @@
 
 	<attribute name="myvideocontainer" value="null" />
 
+	<attribute name="standalone" value="false" type="boolean" />
+	<attribute name="initY" value="40" type="number" />
 	<attribute name="chosenCam" value="null" />
 	<attribute name="chosenMic" value="null" />
 	<attribute name="chosenSetting" value="null" />
@@ -112,6 +114,11 @@
 	<![CDATA[
 		//Make this view the upmost in the z-Index order
 		canvas.inner.bringToFront();
+		if (standalone) {
+			_titlebar.setAttribute('visible', false);
+			lz.Cursor.showHandCursor(false);
+			lz.Cursor.unlock();
+		}
 	
 		this.counterDelegate = new LzDelegate(this, "count");
 	
@@ -133,7 +140,7 @@
 			if (this.doDefaultAnimation && !canvas.isInterview) {
 				this._chooseDeviceAnimation.setAttribute('started', true);
 			} else {
-				this.setAttribute("y", 40);
+				this.setAttribute("y", initY);
 			}
 			this.initItemsAndDefaultAttachCamera();
 		}
@@ -198,10 +205,10 @@
 			
 			parent.setUserAVSettings.doCall();
 		]]>
-		</handler>   
-	</netRemoteCallHib>  
+		</handler>
+	</netRemoteCallHib>
 	
-	<netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" remotecontext="$once{ canvas.thishib }" >  
+	<netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" remotecontext="$once{ canvas.thishib }" >
 		<netparam><method name="getValue">return parent.parent.chosenSetting;</method></netparam>
 		<netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
 		<netparam><method name="getValue">return parent.parent.cam_default_width;</method></netparam>
@@ -215,12 +222,12 @@
 				parent.currentClient = value;
 				parent.doStartConference();
 			]]>
-		</handler>   
-	</netRemoteCallHib>  
+		</handler>
+	</netRemoteCallHib>
 
 	<method name="storelocaldata">
 		<![CDATA[
-			//Debug.write("sharedobject store ");
+			//if ($debug) Debug.write("sharedobject store::  [width, height] : [" + this.cam_default_width + ", " + this.cam_default_height + "]");
 			var t:SharedObject = SharedObject.getLocal('userdata');
 			var g = t.data;
 			if (g==null) g = new Array();
@@ -786,7 +793,7 @@
 			   width="${ parent.width-50 }" multiline="true" />
 
 	<!-- Remember Me -->
-	<labelCheckbox name="holddatainSO" labelid="762" x="10" y="${ parent.height-20 }" >
+	<labelCheckbox name="holddatainSO" labelid="762" x="10" y="${ parent.height-20 }" visible="${ !parent.standalone }" >
 		<switch>
 			<when property="$as3">
 				<passthrough>
@@ -803,8 +810,8 @@
 		</handler>
 	</labelCheckbox>
 
-	<simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
-					   labelid="54" x="${ parent.width-220 }" y="${ parent.height-50 }" width="100">
+	<simpleLabelButton fontsize="11" visible="${ !parent.standalone &amp;&amp; canvas.isInterview }" labelid="54" x="${ parent.width-220 }"
+			y="${ parent.height-50 }" width="100">
 		<handler name="onclick">
 			parent.cleanVideos();
 			this.parent.storelocaldata();
@@ -819,16 +826,16 @@
 		</handler>
 	</simpleLabelButton>
 
-	<simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
-					   labelid="918" x="${ parent.width-110 }" y="${ parent.height-50 }" width="100">
+	<simpleLabelButton fontsize="11" visible="${ !parent.standalone &amp;&amp; canvas.isInterview }" labelid="918" x="${ parent.width-110 }"
+			y="${ parent.height-50 }" width="100">
 		<handler name="onclick">
 			parent.cleanVideos();
 			parent.close();
 		</handler>
 	</simpleLabelButton>
 
-	<simpleLabelButton fontsize="11" visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }"
-					   labelid="761" width="160" x="${ parent.width-170 }" y="${ parent.height-50 }" height="28">
+	<simpleLabelButton fontsize="11" visible="${ !parent.standalone &amp;&amp; !canvas.isInterview }" labelid="761" width="160" x="${ parent.width-170 }"
+			y="${ parent.height-50 }" height="28">
 		<handler name="onclick">
 			parent.cleanVideos();
 			this.parent.storelocaldata();
@@ -843,6 +850,13 @@
 		</handler>
 	</simpleLabelButton>
 
+	<simpleLabelButton fontsize="11" visible="${ parent.standalone }" labelid="144" width="160" x="${ parent.width-170 }" 
+			y="${ parent.height-50 }" height="28">
+		<handler name="onclick">
+			parent.cleanVideos();
+			this.parent.storelocaldata();
+		</handler>
+	</simpleLabelButton>
 </class>
 	
 </library>

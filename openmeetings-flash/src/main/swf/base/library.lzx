@@ -19,15 +19,15 @@
   
 -->
 <library>
-    <include href="remote/" />
-    <include href="components/" /> 
-    <include href="hibernate/" />
-    <include href="contentviews/" />
-    <include href="navi/" />
+	<include href="remote/" />
+	<include href="components/" /> 
+	<include href="hibernate/" />
+	<include href="contentviews/" />
+	<include href="navi/" />
 
 	<!-- for main.lzx -->
 	<include href="externalJavaScript.lzx" />
-    <include href="functions.lzx" />
+	<include href="functions.lzx" />
 	<include href="mainAttributes.lzx" /> 
 	<include href="mainDatasets.lzx" /> 
 	<include href="mainMethods.lzx" /> 

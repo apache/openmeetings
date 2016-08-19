@@ -17,26 +17,31 @@
  * under the License.
  */
 
-function initSwf(swfurl) {
-	var general = {
-			url : swfurl,
-			bgcolor : '#ffffff',
-			width : '100%',
-			height : '100%',
-			id : 'lzapp',
-			__lzminimumversion : 8
-		};
-	var options = $.extend({}, general, {allowfullscreen : 'true'});
+function initSwf(_options) {
+	var options = $.extend({
+		allowfullscreen : 'true',
+		bgcolor : '#ffffff',
+		width : '100%',
+		height : '100%',
+		id : 'lzapp',
+		__lzminimumversion : 8
+	}, _options);
 	$('#header, #topControls, #chatPanel').hide();
 	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
-	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
-		.attr('src', "public/" + options.url)
-		.attr('wmode', 'direct').attr('allowfullscreen', true)
+	var embed = $('<embed>')
+		.attr('quality', 'high')
+		.attr('bgcolor', options.bgcolor)
+		.attr('src', "public/" + options.src)
+		.attr('wmode', 'direct')
+		.attr('allowfullscreen', true)
 		.attr('width', options.width).attr('height', options.height)
-		.attr('id', 'lzapp').attr('name', 'lzapp')
-		.attr('flashvars', escape($.param(general)))
-		.attr('swliveconnect', true).attr('align', 'middle')
-		.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
+		.attr('id', 'lzapp')
+		.attr('name', 'lzapp')
+		//.attr('flashvars', $.param(options))
+		.attr('swliveconnect', true)
+		.attr('align', 'middle')
+		.attr('allowscriptaccess', 'sameDomain')
+		.attr('type', 'application/x-shockwave-flash')
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
 }
@@ -45,4 +50,7 @@ function roomExit() {
 	$('div[id="contents"], div[id="contents"] > div').css('height', 'auto');
 	window.location.hash = "#rooms/public";
 	$('#lzappContainer').remove();
+}
+function getStringLabels() {
+	return labels;
 }

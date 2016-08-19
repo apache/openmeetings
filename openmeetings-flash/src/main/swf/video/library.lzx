@@ -19,9 +19,18 @@
   
 -->
 <library>
-
+	<!-- APL author sebawagner -->
+	<resource name="level_meter_rsc" src="resources/level_meter.png" />
+	<!-- APL author sebawagner -->
+	<resource name="test_setup_record_rsc" src="resources/webstart_record.png" />
+	<!-- APL author sebawagner -->
+	<resource name="test_setup_play_rsc" src="resources/run.png" />
+	<!-- APL author sebawagner -->
+	<resource name="test_setup_stop_rsc" src="resources/stop.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="test_setup_info_rsc" src="resources/information.png" />
 	<!--  FamFam Icon Creative Commons -->
-    <resource name="warning_icon_popup_devices_rsc" src="resources/error.png" />
+	<resource name="warning_icon_popup_devices_rsc" src="resources/error.png" />
 
 	<!--  APL author sebawagner -->
 	<resource name="chatbgitem" src="resources/profile_pic.jpg" />
@@ -30,13 +39,13 @@
 	<resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
 	
 	<!--  APL author sebawagner -->
-    <resource name="mic_rsc" src="resources/micro.png" />
-    
-    <!--  APL author sebawagner -->
+	<resource name="mic_rsc" src="resources/micro.png" />
+	
+	<!--  APL author sebawagner -->
 	<resource name="speaking" src="resources/speaking.png" />
 
-    <!--  IconFinder Creative Commons -->
-    <resource name="volume" src="resources/volume.png" />
+	<!--  IconFinder Creative Commons -->
+	<resource name="volume" src="resources/volume.png" />
 	
 	<!--  FamFam Icon Creative Commons -->
 	<resource name="mute_btn_rsc">
@@ -45,7 +54,7 @@
 	</resource>
 	
 	<!--  APL author sebawagner -->
-    <resource name="mute_micro_btn_rsc">
+	<resource name="mute_micro_btn_rsc">
 		<frame src="resources/mute_micro.png" />
 		<frame src="resources/mute_micro_red.png" />
 	</resource>
@@ -53,13 +62,13 @@
 	<!--  APL author sebawagner -->
 	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
 
-    <include href="changeDevice.lzx" />
-    <include href="videoUserProfilePicSWF10.lzx" />
-    <include href="editRecordStreamSWF10.lzx" />
-    <include href="baseVideoObject.lzx" />
-    <include href="videoObjectPlayBroadcast.lzx" />
-    <include href="videoObjectTestBroadcast.lzx" />
-    <include href="videoObjectPlayTestBroadcast.lzx" />
-    <include href="volumeSlider.lzx" />
-    
+	<include href="changeDevice.lzx" />
+	<include href="videoUserProfilePicSWF10.lzx" />
+	<include href="editRecordStreamSWF10.lzx" />
+	<include href="baseVideoObject.lzx" />
+	<include href="videoObjectPlayBroadcast.lzx" />
+	<include href="videoObjectTestBroadcast.lzx" />
+	<include href="videoObjectPlayTestBroadcast.lzx" />
+	<include href="volumeSlider.lzx" />
+	
 </library>

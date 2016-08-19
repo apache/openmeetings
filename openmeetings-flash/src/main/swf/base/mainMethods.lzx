@@ -8,8 +8,8 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -136,9 +136,9 @@
 	
 	<method name="getColorForUser">
 		<![CDATA[
-		   var colorArray = [0x92E8A4,0xC2F1FF,0xFFFCAE,0xE8C792,0xFF8073,
+			var colorArray = [0x92E8A4,0xC2F1FF,0xFFFCAE,0xE8C792,0xFF8073,
 							0xE8DB87,0xAFFFB8,0xBED4FF,0xE0BBE8,0xFFBBA5];
-		   return colorArray[Math.round(Math.random()*10)];
+			return colorArray[Math.round(Math.random()*10)];
 		]]>
 	</method>
 	
@@ -156,20 +156,20 @@
 	</method>
 	
 	<method name="getHttpHost">
-   	<![CDATA[
+	<![CDATA[
 		if (canvas.httphostlocal != null && canvas.httphostlocal.length > 0) {
 			return canvas.httphostlocal;
 		}
 		return canvas.rtmphostlocal;
 	]]>
 	</method>
-		
+	
 	<method name="getUrl">
 	<![CDATA[
 		return canvas.protocol + '://' + getHttpHost() + ':' + canvas.red5httpport + canvas.httpRootKey;
 	]]>
 	</method>
-		
+	
 	<method name="getServicesUrl">
 	<![CDATA[
 		return getUrl() + 'services/';
@@ -189,7 +189,7 @@
 	</method>
 
 	<method name="myinit">
-		<![CDATA[
+	<![CDATA[
 		canvas.mediaerrortimeout = 30000;
 		canvas.medialoadtimeout = 30000;
 		
@@ -198,7 +198,7 @@
 		//Set Config-values by public/config.xml, see comments on public/config.xml
 		if (!canvas.isCluster) {
 			this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));
-		}   
+		}
 		this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
 		this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
 		
@@ -295,23 +295,49 @@
 			canvas.setAttribute('wicketroomid', Number(wicketroomid));
 			hib.userScope = canvas.wicketroomid;
 		}
-	   	canvas.setAttribute('wicketsid', null);
+		canvas.setAttribute('wicketsid', null);
 		var wicketsid = lz.Browser.getInitArg('wicketsid');
 		if (wicketsid != undefined) {
 			canvas.setAttribute('wicketsid', wicketsid);
+			canvas.setAttribute('sessionId', wicketsid);
 		}
-		this.setBaseColors();
-	
-		//Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost); 
-		var src = hib.getUrl();
-		
-		canvas.thishib.setAttribute('src',src);
-		canvas.thishib.loaderVar = new lz.autoLoader(canvas);
-		canvas.thishib.loaderVar._src.setAttribute('text',src);
-		canvas.thishib.connect();
-		]]>
+		this.setColors();
+		if ($debug) Debug.info("###################### -3 ");
+		var swf = lz.Browser.getInitArg('swf');
+		if ($debug) Debug.info("swf ", swf);
+		if (swf == 'settings') {
+			canvas.currentClient = {canVideo: true};
+			canvas.currentRoomObj = {audioOnly: false};
+			canvas.showWindowEffect = 'n';
+			var lbls = ExternalInterface.call("getStringLabels");
+			if ($debug) Debug.info("###################### -3 ", lbls);
+			if (lbls) {
+				setLabelObjectByHundred(0, lbls);
+			}
+			canvas.main_content.setAttribute('visible', true);
+			new lz.editRecordStreamSWF10(canvas.main_content,{
+				allowDragging: false,
+				dropShadow: false,
+				standalone: true,
+				name: "editRecordStream",
+				doDefaultAnimation: false,
+				isInterview: true,
+				interviewPodId: this.parent.parent.interviewPodId,
+				isSyncUpdate: true,
+				x: 0, y: 0, initY: 0
+				});
+		} else {
+			hib.userScope = canvas.wicketroomid;
+			var src = hib.getUrl();
+			
+			canvas.thishib.setAttribute('src',src);
+			canvas.thishib.loaderVar = new lz.autoLoader(canvas);
+			canvas.thishib.loaderVar._src.setAttribute('text',src);
+			canvas.thishib.connect();
+		}
+	]]>
 	</method>
-	
+
 	<netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
@@ -723,7 +749,7 @@
 		return tResColor;
 	</method>
 	
-	<method name="setBaseColors">
+	<method name="setColors">
 		defaultstyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
 		itemStyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
 		menuStyle.setAttribute("basecolor",canvas.getThemeColor('styleMenuBarBaseColor'));
