@@ -48,3 +48,6 @@
 	max-height: 30px;
 	min-height: 30px;
 }
+.recording .ui-menu .ui-menu-item {
+	display: block;
+}
