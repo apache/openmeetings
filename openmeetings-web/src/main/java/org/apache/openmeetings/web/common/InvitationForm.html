@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<div class="invitation table">
+		<div>
+			<div class="column label"><label wicket:for="subject"><wicket:message key="215" /></label></div>
+			<div class="column data"><input type="text" wicket:id="subject" class="input"/></div>
+		</div>
+		<wicket:child/>
+		<div>
+			<div class="column label"><label wicket:for="message"><wicket:message key="217" /></label></div>
+			<div class="column data"><textarea wicket:id="message" style="width: 280px; height: 70px;"></textarea></div>
+		</div>
+		<div>
+			<input wicket:id="passwordProtected" type="checkbox"/>&nbsp;<label 
+					wicket:for="passwordProtected"><wicket:message key="524" /></label>
+		</div>
+		<div>
+			<div class="column label"><label wicket:for="password"><wicket:message key="525" /></label></div>
+			<div class="column data"><input wicket:id="password" type="password"/></div>
+		</div>
+		<div>
+			<div class="column label"><wicket:message key="526" /></div>
+			<div class="column data">
+				<div wicket:id="valid">
+					<input type="radio" wicket:id="one"/><label wicket:for="one"><wicket:message key="529" /></label>
+					<input type="radio" wicket:id="period"/><label wicket:for="period"><wicket:message key="528" /></label>
+					<input type="radio" wicket:id="endless"/><label wicket:for="endless"><wicket:message key="527" /></label>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="column label"><label wicket:for="from"><wicket:message key="530" /></label></div>
+			<div class="column data"><span class="date time picker" wicket:id="from"></span></div>
+		</div>
+		<div>
+			<div class="column label"><label wicket:for="to"><wicket:message key="531" /></label></div>
+			<div class="column data"><span class="date time picker" wicket:id="to"></span></div>
+		</div>
+		<div>
+			<div class="column label"><label wicket:for="timeZoneId"><wicket:message key="1143" /></label></div>
+			<div class="column data"><select wicket:id="timeZoneId"/></div>
+		</div>
+		<div>
+			<div class="column label"><label wicket:for="language"><wicket:message key="59" /></label></div>
+			<div class="column data"><select wicket:id="language"/></div>
+		</div>
+		<div>
+			<input wicket:id="url" type="text" readonly="readonly" style="width: 100%;"/>
+		</div>
+	</div>
+	<span wicket:id="feedback"></span>
+</wicket:panel>
+</html>
