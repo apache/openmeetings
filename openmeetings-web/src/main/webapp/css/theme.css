@@ -627,3 +627,17 @@ form .input {
 .no-close .ui-dialog-titlebar-close {
 	display: none;
 }
+.table {
+	position: relative;
+}
+.table .column {
+	display: inline-block;
+	margin-bottom: 5px;
+}
+.table .column.label {
+	width: 20%;
+}
+.table .column.data {
+	width: 75%;
+	vertical-align: middle;
+}

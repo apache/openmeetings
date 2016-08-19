@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
@@ -163,7 +164,9 @@ public class RoomPanel extends BasePanel {
 				getBean(SessiondataDao.class).check(WebSession.getSid()); //keep SID alive
 			}
 		});
-		add(invite = new InvitationDialog("invite", roomId));
+		RoomInvitationForm rif = new RoomInvitationForm("form", roomId);
+		add(invite = new InvitationDialog("invite", rif));
+		rif.setDialog(invite);
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
 		add(vote = new VoteDialog("vote", roomId));
 		add(pollResults = new PollResultsDialog("pollResults", roomId));
