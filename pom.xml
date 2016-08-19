@@ -36,7 +36,7 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.3.1.RELEASE</spring.version>
+		<spring.version>4.3.2.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.19.1</maven.surefire.version>
