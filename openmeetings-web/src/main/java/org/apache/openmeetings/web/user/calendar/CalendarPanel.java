@@ -378,7 +378,7 @@ public class CalendarPanel extends UserPanel {
 		OmCalendar calendar = new OmCalendar();
 		calendar.setDeleted(false);
 		calendar.setOwner(getBean(UserDao.class).get(getUserId()));
-		calendar.setTitle("Default Calendar Title");
+		calendar.setTitle(Application.getString("calendar.defaultTitle"));
 		return calendar;
 	}
 

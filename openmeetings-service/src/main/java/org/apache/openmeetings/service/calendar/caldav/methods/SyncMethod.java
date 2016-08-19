@@ -129,7 +129,7 @@ public class SyncMethod extends DavMethodBase {
 					processMultiStatusBody(multiStatus, httpState, httpConnection);
 				}
 			} catch (IOException e){
-				log.error("Error while parsing sync-token.");
+				log.error("Error while parsing sync-token.", e);
 				setSuccess(false);
 			}
 		}

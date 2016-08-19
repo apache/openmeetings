@@ -1927,4 +1927,5 @@
     <entry key="calendar.dialogTitle">Calendar Details</entry>
   <entry key="calendar.googleID">Google Calendar ID</entry>
   <entry key="calendar.gcal">Google Calendar</entry>
+  <entry key="calendar.defaultTitle">New Calendar</entry>
 </properties>

@@ -115,9 +115,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 						+ " for calId" + calendar.getId());
 
 			} catch (IOException | DavException e) {
-				log.error("Error during the execution of calendar-multiget Report.");
+				log.error("Error during the execution of calendar-multiget Report.", e);
 			} catch (Exception e) {
-				log.error("Severe Error during the execution of calendar-multiget Report.");
+				log.error("Severe Error during the execution of calendar-multiget Report.", e);
 			} finally {
 				if (reportMethod != null) {
 					reportMethod.releaseConnection();
@@ -184,9 +184,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				}
 
 			} catch (IOException | DavException e) {
-				log.error("Error during the execution of calendar-multiget Report.");
+				log.error("Error during the execution of calendar-multiget Report.", e);
 			} catch (Exception e) {
-				log.error("Severe Error during the execution of calendar-multiget Report.");
+				log.error("Severe Error during the execution of calendar-multiget Report.", e);
 			} finally {
 				if (reportMethod != null) {
 					reportMethod.releaseConnection();
@@ -254,9 +254,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				multigetHandler.syncItems();
 				return true;
 			} catch (IOException e) {
-				log.error("Error executing OptionsMethod during testConnection.");
+				log.error("Error executing OptionsMethod during testConnection.", e);
 			} catch (Exception e) {
-				log.error("Severe Error in executing OptionsMethod during testConnection.");
+				log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 			} finally {
 				if (putMethod != null) {
 					putMethod.releaseConnection();
@@ -295,9 +295,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				}
 
 			} catch (IOException e) {
-				log.error("Error executing OptionsMethod during testConnection.");
+				log.error("Error executing OptionsMethod during testConnection.", e);
 			} catch (Exception e) {
-				log.error("Severe Error in executing OptionsMethod during testConnection.");
+				log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 			} finally {
 				if (deleteMethod != null) {
 					deleteMethod.releaseConnection();

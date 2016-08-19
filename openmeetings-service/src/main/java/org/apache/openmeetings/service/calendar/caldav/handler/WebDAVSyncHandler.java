@@ -135,9 +135,9 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 			}
 
 		} catch (IOException e) {
-			log.error("Error while executing the SyncMethod Report.");
+			log.error("Error while executing the SyncMethod Report.", e);
 		} catch (Exception e) {
-			log.error("Severe Error while executing the SyncMethod Report.");
+			log.error("Severe Error while executing the SyncMethod Report.", e);
 		} finally {
 			if (syncMethod != null) {
 				syncMethod.releaseConnection();
