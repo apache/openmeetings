@@ -1932,4 +1932,5 @@
   <entry key="calendar.googleKey">Google Calendar API key</entry>
   <entry key="calendar.dialogTitle">Calendar Details</entry>
   <entry key="calendar.googleID">Google Calendar ID</entry>
+  <entry key="calendar.gcal">Google Calendar</entry>
 </properties>

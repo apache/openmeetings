@@ -23,6 +23,7 @@ import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -91,6 +92,7 @@ public class CalendarPanel extends UserPanel {
 	private final CalendarDialog calendarDialog;
 	private AppointmentDialog dialog;
 	private final WebMarkupContainer calendarListContainer;
+	private transient HttpClient client; // Non-Serializable HttpClient.
 
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
@@ -101,6 +103,8 @@ public class CalendarPanel extends UserPanel {
 	public void cleanup(IPartialPageRequestHandler handler) {
 		refreshTimer.stop(handler);
 		syncTimer.stop(handler);
+		getAppointmentManager().cleanupIdleConnections();
+		client.getState().clear();
 	}
 
 	private static AppointmentDao getDao() {
@@ -135,6 +139,8 @@ public class CalendarPanel extends UserPanel {
 
 	public CalendarPanel(String id) {
 		super(id);
+
+		client = getAppointmentManager().createHttpClient();
 
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
@@ -346,7 +352,12 @@ public class CalendarPanel extends UserPanel {
 		add(calendarListContainer);
 	}
 
+	public HttpClient getHttpClient() {
+		return client;
+	}
+
 	//Adds a new Event Source to the Calendar
+	//TODO: The Ajax Refresh does not work.
 	public void populateGoogleCalendar(OmCalendar gcal, IPartialPageRequestHandler target) {
 		calendar.addSource(new GoogleCalendar(gcal.getHref(), gcal.getToken()));
 		refresh(target);

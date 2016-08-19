@@ -93,8 +93,9 @@ public class CtagHandler extends AbstractCalendarHandler {
 		} catch (Exception e) {
 			log.error("Severe Error during the execution of calendar-multiget Report.");
 		} finally {
-			if (propFindMethod != null)
+			if (propFindMethod != null) {
 				propFindMethod.releaseConnection();
+			}
 		}
 
 

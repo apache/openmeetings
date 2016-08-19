@@ -20,10 +20,10 @@ package org.apache.openmeetings.service.calendar.caldav;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.OptionsMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
@@ -54,19 +54,24 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_NO_CONTENT;
+import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
+ * @author Ankush Mishra
  */
 public class AppointmentManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentManager.class, webAppRootKey);
 
-	private String path = null;
+	//HttpClient and ConnectionManager Params
+	private static final int IDLE_CONNECTION_TIMEOUT = 30000; // 30 seconds
+	private static final int MAX_HOST_CONNECTIONS = 6; // Number of simultaneous connections to one host
+	private static final int MAX_TOTAL_CONNECTIONS = 10; // Max Connections, at one time in memory.
+	private static final int CONNECTION_MANAGER_TIMEOUT = 1000; // Waits for 1 sec if no empty connection exists
 
-	private HttpClient client;
+	private MultiThreadedHttpConnectionManager connmanager = null;
 
 	@Autowired
 	private OmCalendarDao calendarDao;
@@ -76,29 +81,44 @@ public class AppointmentManager {
 	private iCalUtils utils;
 
 	/**
-	 * Returns the HttpClient which already exists, or creates a new one, if null.
+	 * Returns a new HttpClient with the inbuilt connection manager in this.
 	 *
 	 * @return HttpClient object that was created.
 	 */
-	public void createHttpClient() {
-		if (client == null) {
-			HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+	public HttpClient createHttpClient() {
+		if (connmanager == null) {
+			connmanager = new MultiThreadedHttpConnectionManager();
 			HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-			int maxHostConnections = 6;
-			params.setDefaultMaxConnectionsPerHost(maxHostConnections);
-			connectionManager.setParams(params);
-			client = new HttpClient(connectionManager);
+			params.setDefaultMaxConnectionsPerHost(MAX_HOST_CONNECTIONS);
+			params.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+			connmanager.setParams(params);
 		}
+
+		HttpClientParams clientParams = new HttpClientParams();
+		clientParams.setConnectionManagerTimeout(CONNECTION_MANAGER_TIMEOUT);
+		return new HttpClient(connmanager);
 	}
 
-	public void getHttpClient(OmCalendar calendar) {
-		createHttpClient();
+	/**
+	 * Returns the Path from the Calendar.
+	 *
+	 * @param client   Client which makes the connection.
+	 * @param calendar Calendar who's URL is used to get the path from.
+	 * @return Path component of the URL.
+	 */
+	public String getPathfromCalendar(HttpClient client, OmCalendar calendar) {
 
 		URI temp = URI.create(calendar.getHref());
-		path = temp.getPath();
 		client.getHostConfiguration().setHost(temp.getHost(), temp.getPort(), temp.getScheme());
+		return temp.getPath();
 	}
 
+	/**
+	 * Ensure the URL ends with a, trailing slash, i.e. "/"
+	 *
+	 * @param str String URL to check.
+	 * @return String which has a trailing slash.
+	 */
 	private String ensureTrailingSlash(String str) {
 		if (str.endsWith("/") || str.endsWith("\\"))
 			return str;
@@ -106,22 +126,35 @@ public class AppointmentManager {
 			return str + "/";
 	}
 
-	public void provideCredentials(OmCalendar calendar, Credentials credentials) {
+	/**
+	 * Adds the Credentials provided to the given client on the Calendar's URL.
+	 *
+	 * @param client      Client which makes the connection.
+	 * @param calendar    Calendar whose Host the Credentials are for.
+	 * @param credentials Credentials to add
+	 */
+	public void provideCredentials(HttpClient client, OmCalendar calendar, Credentials credentials) {
 		if (!Strings.isEmpty(calendar.getHref()) && credentials != null) {
-			createHttpClient();
-
 			URI temp = URI.create(calendar.getHref());
-			path = temp.getPath();
 			client.getHostConfiguration().setHost(temp.getHost(), temp.getPort(), temp.getScheme());
 			client.getState().setCredentials(new AuthScope(temp.getHost(), temp.getPort()),
 					credentials);
 		}
 	}
 
-	public boolean testConnection(OmCalendar calendar) {
+	/**
+	 * Tests if the Calendar's URL can be accessed, or not.
+	 *
+	 * @param client   Client which makes the connection.
+	 * @param calendar Calendar whose URL is to be accessed.
+	 * @return Returns true for HTTP Status 200, or 204, else false.
+	 */
+	public boolean testConnection(HttpClient client, OmCalendar calendar) {
+		cleanupIdleConnections();
+
 		OptionsMethod optionsMethod = null;
 		try {
-			getHttpClient(calendar);
+			String path = getPathfromCalendar(client, calendar);
 			optionsMethod = new OptionsMethod(path);
 			optionsMethod.setRequestHeader("Accept", "*/*");
 			client.executeMethod(optionsMethod);
@@ -129,13 +162,14 @@ public class AppointmentManager {
 			if (status == SC_OK || status == SC_NO_CONTENT)
 				return true;
 		} catch (IOException e) {
-			log.error("Error executing OptionsMethod during testConnection.");
+			log.error("Error executing OptionsMethod during testConnection.", e);
 		} catch (Exception e) {
 			//Should not ever reach here.
-			log.error("Severe Error in executing OptionsMethod during testConnection.");
+			log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 		} finally {
-			if (optionsMethod != null)
+			if (optionsMethod != null) {
 				optionsMethod.releaseConnection();
+			}
 		}
 		return false;
 	}
@@ -145,9 +179,9 @@ public class AppointmentManager {
 	 *
 	 * @param calendar Calendar to update or create
 	 */
-	public boolean createCalendar(OmCalendar calendar) {
+	public boolean createCalendar(HttpClient client, OmCalendar calendar) {
 		if (calendar.getId() == null && calendar.getSyncType() != SyncType.GOOGLE_CALENDAR)
-			return discoverCalendars(calendar);
+			return discoverCalendars(client, calendar);
 
 		calendarDao.update(calendar);
 		return true;
@@ -167,7 +201,7 @@ public class AppointmentManager {
 	}
 
 	/**
-	 *@see OmCalendarDao#get(Long)
+	 * @see OmCalendarDao#get(Long)
 	 */
 	public List<OmCalendar> getCalendars(Long userid) {
 		return calendarDao.get(userid);
@@ -185,12 +219,13 @@ public class AppointmentManager {
 	 *
 	 * @param calendar Calendar who's sync has to take place
 	 */
-	public void syncItem(OmCalendar calendar) {
+	public void syncItem(HttpClient client, OmCalendar calendar) {
+		cleanupIdleConnections();
 
 		if (calendar.getSyncType() != SyncType.NONE) {
 
 			CalendarHandler calendarHandler;
-			getHttpClient(calendar);
+			String path = getPathfromCalendar(client, calendar);
 
 			switch (calendar.getSyncType()) {
 				case WEBDAV_SYNC:
@@ -214,17 +249,18 @@ public class AppointmentManager {
 	/**
 	 * Syncs all the calendars currrently present on the DB.
 	 */
-	public void syncItems(Long userId) {
+	public void syncItems(HttpClient client, Long userId) {
 		List<OmCalendar> calendars = getCalendars(userId);
 		for (OmCalendar calendar : calendars) {
-			syncItem(calendar);
+			syncItem(client, calendar);
 		}
 	}
 
 	/**
 	 * Function which finds all the calendars of the Principal URL of the calendar
 	 */
-	private boolean discoverCalendars(OmCalendar calendar) {
+	private boolean discoverCalendars(HttpClient client, OmCalendar calendar) {
+		cleanupIdleConnections();
 
 		if (calendar.getSyncType() == SyncType.NONE) {
 			PropFindMethod propFindMethod = null;
@@ -236,7 +272,7 @@ public class AppointmentManager {
 
 			//Find out whether it's a calendar or if we can find the calendar-home or current-user url
 			try {
-				getHttpClient(calendar);
+				String path = getPathfromCalendar(client, calendar);
 
 				DavPropertyNameSet properties = new DavPropertyNameSet();
 				properties.add(curUserPrincipal);
@@ -254,7 +290,7 @@ public class AppointmentManager {
 
 						if (checkCalendarResourceType(resourcetype)) {
 							//This is a calendar and thus initialize and return
-							return initCalendar(calendar);
+							return initCalendar(client, calendar);
 						}
 
 						//Else find all the calendars on the Principal and return.
@@ -341,7 +377,7 @@ public class AppointmentManager {
 								tempCalendar.setOwner(calendar.getOwner());
 
 								calendarDao.update(tempCalendar);
-								initCalendar(tempCalendar);
+								initCalendar(client, tempCalendar);
 							}
 						}
 						return success;
@@ -349,12 +385,13 @@ public class AppointmentManager {
 				}
 
 			} catch (IOException e) {
-				log.error("Error executing OptionsMethod during testConnection.");
+				log.error("Error executing PROPFIND Method, during testConnection.", e);
 			} catch (Exception e) {
-				log.error("Severe Error in executing OptionsMethod during testConnection.");
+				log.error("Severe Error in executing PROPFIND Method, during testConnection.", e);
 			} finally {
-				if (propFindMethod != null)
+				if (propFindMethod != null) {
 					propFindMethod.releaseConnection();
+				}
 			}
 		}
 
@@ -405,7 +442,7 @@ public class AppointmentManager {
 	/**
 	 * Function to initialize the Calendar on the type of syncing and whether it can be used or not.
 	 */
-	private boolean initCalendar(OmCalendar calendar) {
+	private boolean initCalendar(HttpClient client, OmCalendar calendar) {
 
 		if (calendar.getToken() == null || calendar.getSyncType() == SyncType.NONE) {
 			calendarDao.update(calendar);
@@ -413,7 +450,7 @@ public class AppointmentManager {
 			PropFindMethod propFindMethod = null;
 
 			try {
-				getHttpClient(calendar);
+				String path = getPathfromCalendar(client, calendar);
 
 				DavPropertyNameSet properties = new DavPropertyNameSet();
 				properties.add(DavPropertyName.RESOURCETYPE);
@@ -444,7 +481,7 @@ public class AppointmentManager {
 							calendar.setSyncType(SyncType.ETAG);
 					}
 
-					syncItem(calendar);
+					syncItem(client, calendar);
 					return true;
 				} else {
 					log.error("Error executing PROPFIND Method, with status Code: "
@@ -453,12 +490,13 @@ public class AppointmentManager {
 				}
 
 			} catch (IOException e) {
-				log.error("Error executing OptionsMethod during testConnection.");
+				log.error("Error executing OptionsMethod during testConnection.", e);
 			} catch (Exception e) {
-				log.error("Severe Error in executing OptionsMethod during testConnection.");
+				log.error("Severe Error in executing OptionsMethod during testConnection.", e);
 			} finally {
-				if (propFindMethod != null)
+				if (propFindMethod != null) {
 					propFindMethod.releaseConnection();
+				}
 			}
 		}
 
@@ -471,13 +509,15 @@ public class AppointmentManager {
 	 *
 	 * @param appointment Appointment to create/update.
 	 */
-	public boolean updateItem(Appointment appointment) {
+	public boolean updateItem(HttpClient client, Appointment appointment) {
+		cleanupIdleConnections();
+
 		OmCalendar calendar = appointment.getCalendar();
 		SyncType type = calendar.getSyncType();
 		if (type != SyncType.NONE && type != SyncType.GOOGLE_CALENDAR) {
 
 			CalendarHandler calendarHandler;
-			getHttpClient(calendar);
+			String path = ensureTrailingSlash(getPathfromCalendar(client, calendar));
 
 			switch (type) {
 				case WEBDAV_SYNC:
@@ -502,14 +542,16 @@ public class AppointmentManager {
 	 *
 	 * @param appointment Appointment to Delete
 	 */
-	public boolean deleteItem(Appointment appointment) {
+	public boolean deleteItem(HttpClient client, Appointment appointment) {
+		cleanupIdleConnections();
+
 		OmCalendar calendar = appointment.getCalendar();
 		SyncType type = calendar.getSyncType();
 
 		if (type != SyncType.NONE && type != SyncType.GOOGLE_CALENDAR) {
 
 			CalendarHandler calendarHandler;
-			getHttpClient(calendar);
+			String path = getPathfromCalendar(client, calendar);
 
 			switch (type) {
 				case WEBDAV_SYNC:
@@ -533,17 +575,15 @@ public class AppointmentManager {
 	 * @return String representation of the Property Value.
 	 */
 	public static String getTokenFromProperty(DavProperty property) {
-		return (property == null)? null : property.getValue().toString();
+		return (property == null) ? null : property.getValue().toString();
 	}
 
 	/**
-	 * Clean up HttpClient session, since we use HttpClient Commons, this method has to be called.
-	 * Shutsdown the connections before we remove the reference.
+	 * Cleans up unused idle connections.
 	 */
-	public void cleanupHttpClient() {
-		if (client != null) {
-			((MultiThreadedHttpConnectionManager) client.getHttpConnectionManager()).shutdown();
-			client = null;
+	public void cleanupIdleConnections() {
+		if (connmanager != null) {
+			connmanager.closeIdleConnections(IDLE_CONNECTION_TIMEOUT);
 		}
 	}
 
@@ -551,7 +591,7 @@ public class AppointmentManager {
 	 * Method which is called when the Context is destroyed.
 	 */
 	public void destroy() {
-		cleanupHttpClient();
 		MultiThreadedHttpConnectionManager.shutdownAll();
+		connmanager = null;
 	}
 }

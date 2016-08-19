@@ -139,12 +139,13 @@ public class MultigetHandler extends AbstractCalendarHandler {
 							+ " for calId" + calendar.getId());
 				}
 			} catch (IOException | DavException e) {
-				log.error("Error during the execution of calendar-multiget Report.");
+				log.error("Error during the execution of calendar-multiget Report.", e);
 			} catch (Exception e) {
-				log.error("Severe Error during the execution of calendar-multiget Report.");
+				log.error("Severe Error during the execution of calendar-multiget Report.", e);
 			} finally {
-				if (reportMethod != null)
+				if (reportMethod != null) {
 					reportMethod.releaseConnection();
+				}
 			}
 		}
 

@@ -139,8 +139,9 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 		} catch (Exception e) {
 			log.error("Severe Error while executing the SyncMethod Report.");
 		} finally {
-			if (syncMethod != null)
+			if (syncMethod != null) {
 				syncMethod.releaseConnection();
+			}
 		}
 
 		if (additionalSyncNeeded)

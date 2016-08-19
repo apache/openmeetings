@@ -119,8 +119,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error during the execution of calendar-multiget Report.");
 			} finally {
-				if (reportMethod != null)
+				if (reportMethod != null) {
 					reportMethod.releaseConnection();
+				}
 			}
 		} else {
 			//Calendar has been inited before
@@ -187,8 +188,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error during the execution of calendar-multiget Report.");
 			} finally {
-				if (reportMethod != null)
+				if (reportMethod != null) {
 					reportMethod.releaseConnection();
+				}
 			}
 		}
 
@@ -256,8 +258,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error in executing OptionsMethod during testConnection.");
 			} finally {
-				if (putMethod != null)
+				if (putMethod != null) {
 					putMethod.releaseConnection();
+				}
 			}
 		}
 
@@ -296,8 +299,9 @@ public class EtagsHandler extends AbstractCalendarHandler {
 			} catch (Exception e) {
 				log.error("Severe Error in executing OptionsMethod during testConnection.");
 			} finally {
-				if (deleteMethod != null)
+				if (deleteMethod != null) {
 					deleteMethod.releaseConnection();
+				}
 			}
 		}
 		return false;
