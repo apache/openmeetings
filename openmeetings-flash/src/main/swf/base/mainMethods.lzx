@@ -562,9 +562,6 @@
 		itemStyle.setAttribute("basecolor",canvas.getThemeColor('basebgcolorizer'));
 		menuStyle.setAttribute("basecolor",canvas.getThemeColor('styleMenuBarBaseColor'));
 		main_content.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
-		if (!!canvas.setBaseColors) {
-			canvas.setBaseColors();
-		}
 	</method>
 
 	<method name="getPictureUrl" args="pictureuri,extraParams">
