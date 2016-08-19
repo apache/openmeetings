@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.util.Version;
+import org.apache.openmeetings.db.dto.basic.Info;
 
 /**
  * 
@@ -50,7 +50,7 @@ public class InfoWebService {
 	@WebMethod
 	@GET
 	@Path("/version")
-	public String getVersion() {
-		return Version.getVersion();
+	public Info getVersion() {
+		return new Info();
 	}
 }
