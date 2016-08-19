@@ -36,7 +36,7 @@ function initSwf(_options) {
 		.attr('width', options.width).attr('height', options.height)
 		.attr('id', 'lzapp')
 		.attr('name', 'lzapp')
-		.attr('flashvars', $.param(options))
+		//.attr('flashvars', $.param(options))
 		.attr('swliveconnect', true)
 		.attr('align', 'middle')
 		.attr('allowscriptaccess', 'sameDomain')
@@ -44,7 +44,6 @@ function initSwf(_options) {
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
 }
-
 function getStringLabels() {
 	return labels;
 }
