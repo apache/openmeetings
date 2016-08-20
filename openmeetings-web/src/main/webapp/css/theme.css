@@ -241,6 +241,7 @@ html, body {
 }
 .file.tree.container {
 	border: 1px solid #ccc;
+	max-width: 350px;
 }
 .file.tree {
 	width: 100%;
