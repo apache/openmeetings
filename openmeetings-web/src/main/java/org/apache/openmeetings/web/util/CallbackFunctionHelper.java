@@ -26,14 +26,13 @@ public class CallbackFunctionHelper {
 		StringBuilder sb = new StringBuilder();
 		sb.append("function ").append(name).append("(");
 		boolean first = true;
-		for (CallbackParameter curExtraParameter : extraParameters)
-		{
-			if (curExtraParameter.getFunctionParameterName() != null)
-			{
-				if (!first)
-					sb.append(',');
-				else
+		for (CallbackParameter curExtraParameter : extraParameters) {
+			if (curExtraParameter.getFunctionParameterName() != null) {
+				if (first) {
 					first = false;
+				} else {
+					sb.append(',');
+				}
 				sb.append(curExtraParameter.getFunctionParameterName());
 			}
 		}

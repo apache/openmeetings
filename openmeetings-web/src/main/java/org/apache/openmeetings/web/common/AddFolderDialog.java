@@ -70,13 +70,13 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 				});
 			}
 		};
-		add(form);
+		add(form.setOutputMarkupId(true));
 	}
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		super.onOpen(handler);
-		
+		handler.add(form);
 		setModelObject(name);
 		getFeedbackMessages().clear();
 	}

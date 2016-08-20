@@ -24,15 +24,15 @@
 		function treeRevert(dropped) {
 			$('#tree-anchor').get(0).scrollIntoView();
 			this.parent().parent().get(0).scrollIntoView();
-			return !dropped;
+			return !dropped || (!!dropped && !!dropped.context && $(dropped.context).hasClass('wb', 'room'));
 		}
 	</script>
-	<div class="file tree">
-		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar">
+	<div class="file tree item drop area">
+		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar" wicket:message="title:705">
+			<span wicket:id="upload" class="add om-icon align-left clickable" wicket:message="title:702"></span>
 			<span wicket:id="create" class="folder-create om-icon align-left clickable" wicket:message="title:703"></span>
 			<span wicket:id="refresh" class="refresh om-icon align-left clickable" wicket:message="title:704"></span>
 			<span wicket:id="trash" class="trash om-icon align-right clickable"></span>
-			<span style="padding-left: 20px;" wicket:message="title:705"><wicket:message key="1224"/></span>
 			<div class="clear"></div>
 		</div>
 		<div wicket:id="tree-container" class="trees">

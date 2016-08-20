@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#activitiesPanel {
+#activities {
 	position: fixed;
 	z-index: 2000;
 	bottom: 0px;
@@ -24,15 +24,24 @@
 	width: 600px;
 	height: 20px;
 }
-#activitiesPanel .control.block .ui-icon {
+#activities .control.block .ui-icon {
 	text-align: center;
 }
-#activitiesPanel .control.block .label {
+#activities .control.block .label {
 	display: inline-block;
 	padding-left: 20px;
 }
-#activitiesPanel .area {
-	height: 310px;
+#activities .area {
+	height: 319px;
 	overflow-y: auto;
+}
+.activity.item {
+	position: relative;
 	padding: 5px;
+	margin-bottom: 3px
+}
+.activity.item .ui-icon {
+	border-width: 1px;
+	border-style: solid;
+	margin-left: 2px;
 }

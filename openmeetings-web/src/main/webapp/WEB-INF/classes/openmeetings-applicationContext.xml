@@ -243,9 +243,7 @@
 	<bean id="generatePDF" class="org.apache.openmeetings.core.documents.GeneratePDF" />
 	<bean id="smsHandler" class="org.apache.openmeetings.core.mail.SMSHandler" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
-	<bean id="libraryWmlLoader" class="org.apache.openmeetings.core.documents.LibraryWmlLoader" />
 	<bean id="generateSWF" class="org.apache.openmeetings.core.converter.GenerateSWF" />
-	<bean id="fileUtils" class="org.apache.openmeetings.core.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.core.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.db.util.TimezoneUtil" />
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />

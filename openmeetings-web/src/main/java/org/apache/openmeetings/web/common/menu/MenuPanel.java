@@ -52,14 +52,12 @@ public class MenuPanel extends BasePanel {
 			protected void addMenuItem(ListItem<IMenuItem> item, IMenuItem menuItem) {
 				super.addMenuItem(item, menuItem);
 				MenuItem m = (MenuItem)menuItem;
-				if (Strings.isEmpty(m.getDesc())) {
-					item.add(AttributeAppender.append("class", "top"));
-				} else {
-					item.add(AttributeAppender.append("class", "sub"));
+				item.add(AttributeAppender.append("class", m.isTop() ? "top" : "sub"));
+				if (!Strings.isEmpty(m.getDesc())) {
 					item.add(AttributeAppender.append("title", m.getDesc()));
 				}
-				if (!Strings.isEmpty(m.getCssClass())) {
-					item.add(AttributeAppender.append("class", m.getCssClass()));
+				if (!Strings.isEmpty(m.getIcon())) {
+					item.add(AttributeAppender.append("class", m.getIcon()));
 				}
 			}
 		});

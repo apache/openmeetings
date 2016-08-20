@@ -16,33 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.FLV_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 
 import java.io.File;
 
 import org.apache.openmeetings.db.entity.record.Recording;
 
-public class JpgRecordingResourceReference extends RecordingResourceReference {
+public class FlvRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	public JpgRecordingResourceReference() {
-		super("jpg-recording-cover");
+	public FlvRecordingResourceReference() {
+		super("flv-recording");
 	}
 	
 	@Override
 	public String getMimeType() {
-		return "image/jpeg";
+		return FLV_MIME_TYPE;
 	}
 	
 	@Override
-	String getFileName(Recording r) {
-		return r.getPreviewImage();
+	protected String getFileName(Recording r) {
+		return r.getHash();
 	}
 	
 	@Override
-	File getFile(Recording r) {
-		return getRecording(r.getPreviewImage());
+	protected File getFile(Recording r) {
+		return getRecording(r.getHash());
 	}
 }

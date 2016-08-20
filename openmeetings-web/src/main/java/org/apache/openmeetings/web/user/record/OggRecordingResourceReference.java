@@ -16,40 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common.tree;
+package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
 
-import java.util.Iterator;
+import java.io.File;
 
-import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
-public abstract class RecordingTreeProvider implements ITreeProvider<Recording> {
+public class OggRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public void detach() {
-		// TODO LDM should be used
+	public OggRecordingResourceReference() {
+		super("ogg-recording");
 	}
-
+	
 	@Override
-	public boolean hasChildren(Recording node) {
-		return node.getId() <= 0 || Type.Folder == node.getType();
+	public String getMimeType() {
+		return "video/ogg";
 	}
-
+	
 	@Override
-	public Iterator<? extends Recording> getChildren(Recording node) {
-		return getBean(RecordingDao.class).getByParent(node.getId()).iterator();
+	protected String getFileName(Recording r) {
+		return r.getHash() + OGG_EXTENSION;
 	}
-
+	
 	@Override
-	public IModel<Recording> model(Recording object) {
-		// TODO LDM should be used
-		return Model.of(object);
+	protected File getFile(Recording r) {
+		return getOggRecording(r.getHash());
 	}
 }

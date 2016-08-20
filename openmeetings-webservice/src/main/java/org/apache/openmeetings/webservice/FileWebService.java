@@ -43,7 +43,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.core.data.file.FileUtils;
 import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -84,8 +83,6 @@ public class FileWebService {
 	private UserDao userDao;
 	@Autowired
 	private FileExplorerItemDao fileDao;
-	@Autowired
-	private FileUtils fileUtils;
 	@Autowired
 	private FileProcessor fileProcessor;
 
@@ -255,21 +252,12 @@ public class FileWebService {
 		}
 	}
 
-	private long getSize(List<FileExplorerItem> list) {
-		long size = 0;
-		for (FileExplorerItem f : list) {
-			log.debug("FileExplorerItem fList " + f.getName());
-			size += fileUtils.getSizeOfDirectoryAndSubs(f);
-		}
-		return size;
-	}
-	
 	/**
 	 * Get a File Explorer Object by a given Room
 	 * 
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param id
+	 * @param roomId
 	 *            Room Id
 	 * @return - File Explorer Object by a given Room
 	 * @throws ServiceException
@@ -291,11 +279,11 @@ public class FileWebService {
 
 				// Home File List
 				List<FileExplorerItem> fList = fileDao.getByOwner(userId);
-				fileExplorerObject.setUser(fList, getSize(fList));
+				fileExplorerObject.setUser(fList, fileDao.getSize(fList));
 
 				// Public File List
 				List<FileExplorerItem> rList = fileDao.getByRoom(roomId);
-				fileExplorerObject.setRoom(rList, getSize(rList));
+				fileExplorerObject.setRoom(rList, fileDao.getSize(rList));
 
 				return fileExplorerObject;
 			} else {

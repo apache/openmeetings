@@ -199,16 +199,6 @@ public class OmFileHelper {
 		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
 	}
 	
-	public static boolean isRecordingExists(String name) {
-		try {
-			File f = new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
-			return f.exists() && f.isFile();
-		} catch (Exception e) {
-			//no-op
-		}
-		return false;
-	}
-	
 	public static File getMp4Recording(String name) {
 		return getRecording(name + MP4_EXTENSION);
 	}

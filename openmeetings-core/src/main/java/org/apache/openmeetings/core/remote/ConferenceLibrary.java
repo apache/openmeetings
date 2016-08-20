@@ -24,8 +24,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.transaction.util.FileHelper;
@@ -44,7 +44,6 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -70,8 +69,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	private UserDao userDao;
 	@Autowired
 	private FileExplorerItemDao fileDao;
-	@Autowired
-	private LibraryWmlLoader libraryWmlLoader;
 	@Autowired
 	private WhiteboardManager whiteboardManagement;
 
@@ -105,12 +102,12 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * Save an Object to the library and returns the file-explorer Id
 	 * 
 	 * @param SID
-	 * @param room_id
+	 * @param roomId
 	 * @param fileName
 	 * @param tObjectRef
 	 * @return - file-explorer Id in case of success, -1 otherwise
 	 */
-	public Long saveAsObject(String SID, Long room_id, String fileName, Object tObjectRef) {
+	public Long saveAsObject(String SID, Long roomId, String fileName, Object tObjectRef) {
 		try {
 			Long users_id = sessionDao.check(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
@@ -125,18 +122,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				log.debug("saveAsObject" + tObject.size());
 
-				String localFileName = MD5.checksum(new Date().toString()) + ".wml";
+				FileExplorerItem file = fileDao.add(fileName, null, null, roomId, users_id, Type.WmlFile, "", "");
+				LibraryDocumentConverter.writeToLocalFolder(file.getHash(), tObject);
 
-				LibraryDocumentConverter.writeToLocalFolder(localFileName, tObject);
-
-				// String wmlPath = current_dir + File.separatorChar+fileName
-				// +".xml";
-				// OwnerID == null
-				Long fileExplorerId = fileDao.add(fileName, "", null,
-						null, room_id, users_id, Type.WmlFile, localFileName, // WML localFileName
-						"", "");
-
-				return fileExplorerId;
+				return file.getId();
 			}
 		} catch (Exception err) {
 			log.error("[saveAsObject] ", err);
@@ -145,7 +134,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	}
 
 	/**
-	 * 
 	 * Loads a Object from the library into the whiteboard of all participant of
 	 * the current room
 	 * 
@@ -167,13 +155,13 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				FileExplorerItem fileExplorerItem = fileDao.get(fileId);
-				if (fileExplorerItem == null) {
+				FileExplorerItem fi = fileDao.get(fileId);
+				if (fi == null) {
 					log.warn("[loadWmlObject] Unable to load Wml file by Id {}", fileId);
 					return;
 				}
 
-				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
+				List<?> roomItems = LibraryWmlLoader.loadWmlFile(fi.getHash());
 
 				Map whiteboardObjClear = new HashMap();
 				whiteboardObjClear.put(2, "clear");

@@ -66,12 +66,12 @@ public class FolderPanel extends Panel {
 				if (o instanceof FileItem) {
 					FileItem p = (FileItem)drop.getDefaultModelObject();
 					FileItem f = (FileItem)o;
-					long pid = p.getId();
+					Long pid = p.getId();
 					//FIXME parent should not be moved to child !!!!!!!
-					if (pid == f.getId()) {
+					if (pid != null && pid.equals(f.getId())) {
 						return;
 					}
-					f.setParentId(pid > 0 ? pid : null);
+					f.setParentId(pid);
 					f.setOwnerId(p.getOwnerId());
 					f.setRoomId(p.getRoomId());
 					if (f instanceof Recording) {
@@ -81,14 +81,16 @@ public class FolderPanel extends Panel {
 					} else {
 						getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
 					}
+					treePanel.updateNode(target, p);
+					treePanel.updateNode(target, f);
 				}
-				target.add(treePanel.trees); //FIXME add correct refresh
+				target.add(treePanel.trees);
 			}
 		} : new WebMarkupContainer("drop");
-		if (r.getId() < 1) {
+		if (r.getId() == null) {
 			drag = new WebMarkupContainer("drag");
 		} else {
-			Draggable<? extends FileItem> d = new Draggable<FileItem>("drag", Model.of(r)) {
+			drag = new Draggable<FileItem>("drag", Model.of(r)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -96,13 +98,12 @@ public class FolderPanel extends Panel {
 					super.onConfigure(behavior);
 					behavior.setOption("revert", "treeRevert");
 					behavior.setOption("cursor", Options.asString("move"));
+					behavior.setOption("helper", "'clone'");
 				}
-			};
-			d.setContainment(".file.tree");
-			d.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
-			drag = d;
+			}.setContainment(treePanel.getContainment());
+			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 		}
-		drag.add(r.getId() < 1 ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
+		drag.add(r.getId() == null ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override

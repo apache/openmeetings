@@ -335,18 +335,15 @@ html, body {
 	background: url(images/folder_add.png);
 }
 .recording.om-icon {
-	padding-left: 18px;
 	background-image: url(images/film.png);
 }
-.broken-recording.om-icon {
-	padding-left: 18px;
+.broken.recording.om-icon {
 	background-image: url(images/film_error.png);
 }
-.processing-recording.om-icon {
-	padding-left: 18px;
+.processing.recording.om-icon {
 	background-image: url(images/film_processing.png);
 }
-.file.om-icon {
+.file.om-icon, .recording.om-icon {
 	padding-left: 18px;
 }
 .my.file.om-icon {
@@ -356,16 +353,28 @@ html, body {
 	background-image: url(images/world_link.png);
 }
 .image.file.om-icon {
-	background-image: url(images/photo.png);
+	background-image: url(images/picture.png);
+}
+.broken.image.file.om-icon {
+	background-image: url(images/picture_error.png);
 }
 .chart.file.om-icon {
 	background-image: url(images/chart_pie.png);
 }
+.broken.chart.file.om-icon {
+	background-image: url(images/chart_pie_error.png);
+}
 .wml.file.om-icon {
-	background-image: url(images/map.png);
+	background-image: url(images/layout.png);
+}
+.broken.wml.file.om-icon {
+	background-image: url(images/layout_error.png);
 }
 .doc.file.om-icon {
-	background-image: url(images/report.png);
+	background-image: url(images/page.png);
+}
+.broken.doc.file.om-icon {
+	background-image: url(images/page_error.png);
 }
 .invite.om-icon {
 	background-image: url(images/connect.png);

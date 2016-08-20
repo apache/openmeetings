@@ -75,7 +75,6 @@ import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -89,7 +88,9 @@ public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final static String PARAM_USER_ID = "userId";
+	private Client client;
 	private final MenuPanel menu;
+	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
@@ -99,13 +100,15 @@ public class MainPage extends BaseInitedPage {
 	private final UserInfoDialog userInfo;
 	private final InviteUserToRoomDialog inviteUser;
 	
-	public MainPage(PageParameters pp) {
+	public MainPage() {
 		super();
+		client = new Client();
 		getHeader().setVisible(false);
+		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
-		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
+		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
 
@@ -142,11 +145,11 @@ public class MainPage extends BaseInitedPage {
 		});
 		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-		    add(dev = new DebugBar("dev"));
-		    dev.setOutputMarkupId(true);
+			add(dev = new DebugBar("dev"));
+			dev.setOutputMarkupId(true);
 		} else {
 			dev = null;
-		    add(new EmptyPanel("dev").setVisible(false));
+			add(new EmptyPanel("dev").setVisible(false));
 		}		
 		
 		add(chat = new ChatPanel("chatPanel"));
@@ -321,6 +324,10 @@ public class MainPage extends BaseInitedPage {
 		return topLinks;
 	}
 
+	public WebMarkupContainer getTopControls() {
+		return topControls;
+	}
+
 	public ChatPanel getChat() {
 		return chat;
 	}
@@ -328,5 +335,9 @@ public class MainPage extends BaseInitedPage {
 	@Override
 	protected boolean isMainPage() {
 		return true;
+	}
+	
+	public Client getClient() {
+		return client;
 	}
 }

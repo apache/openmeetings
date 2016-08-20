@@ -18,10 +18,14 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,6 +34,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,13 +49,13 @@ public class FileExplorerItemDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long add(String fileName, String fileHash, Long parentId, Long ownerId, Long roomId, Long insertedBy,
-			Type type, String wmlFilePath, String externalId, String externalType) {
+	public FileExplorerItem add(String fileName, Long parentId, Long ownerId, Long roomId, Long insertedBy,
+			Type type, String externalId, String externalType) {
 		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
 		try {
 			FileExplorerItem fileItem = new FileExplorerItem();
 			fileItem.setName(fileName);
-			fileItem.setHash(fileHash);
+			fileItem.setHash(UUID.randomUUID().toString());
 			fileItem.setDeleted(false);
 			fileItem.setParentId(parentId);
 			fileItem.setOwnerId(ownerId);
@@ -59,15 +64,13 @@ public class FileExplorerItemDao {
 			fileItem.setInsertedBy(insertedBy);
 			fileItem.setType(type);
 			fileItem.setUpdated(new Date());
-			fileItem.setWmlFilePath(wmlFilePath);
 			fileItem.setExternalId(externalId);
 			fileItem.setExternalType(externalType);
 
 			fileItem = em.merge(fileItem);
-			Long fileItemId = fileItem.getId();
 
-			log.debug(".add(): file " + fileName + " added as " + fileItemId);
-			return fileItemId;
+			log.debug(".add(): file " + fileName + " added as " + fileItem.getId());
+			return fileItem;
 		} catch (Exception ex2) {
 			log.error(".add(): ", ex2);
 		}
@@ -253,4 +256,58 @@ public class FileExplorerItemDao {
 		return update(f);
 	}
 
+	public long getOwnSize(Long userId) {
+		return getSize(getByOwner(userId));
+	}
+
+	public long getRoomSize(Long roomId) {
+		return getSize(getByRoom(roomId));
+	}
+
+	public long getSize(List<FileExplorerItem> list) {
+		long size = 0;
+		for (FileExplorerItem f : list) {
+			log.debug("FileExplorerItem fList " + f.getName());
+			size += getSize(f);
+		}
+		return size;
+	}
+	
+	public long getSize(FileExplorerItem f) {
+		long size = 0;
+		try {
+			if (f.exists()) {
+				File base = OmFileHelper.getUploadFilesDir();
+				if (Type.Image == f.getType()) {
+					size += f.getFile().length();
+					File thumbFile = new File(base, String.format("%s%s.%s", thumbImagePrefix, f.getHash(), EXTENSION_JPG));
+					if (thumbFile.exists()) {
+						size += thumbFile.length();
+					}
+				}
+				if (Type.Presentation == f.getType()) {
+					File tFolder = new File(base, f.getHash());
+
+					if (tFolder.exists()) {
+						size += OmFileHelper.getSize(tFolder);
+					}
+				}
+				if (Type.Video == f.getType()) {
+					size += f.getFile().length();
+					File thumb = f.getFile(EXTENSION_JPG);
+					if (thumb.exists()) {
+						size += thumb.length();
+					}
+				}
+			}
+			if (Type.Folder == f.getType()) {
+				for (FileExplorerItem child : getByParent(f.getId())) {
+					size += getSize(child);
+				}
+			}
+		} catch (Exception err) {
+			log.error("[getSize] ", err);
+		}
+		return size;
+	}
 }

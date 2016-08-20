@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.data.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadTempFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -26,8 +25,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
@@ -38,7 +37,6 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,20 +58,23 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
+	public static String getExt(FileExplorerItem f) {
+		int dotidx = f.getName().lastIndexOf('.');
+		return dotidx < 0 ? "" : f.getName().substring(dotidx + 1).toLowerCase();
+	}
+	
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(Long userId, FileExplorerItem f, InputStream is) throws Exception {
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
 		
-		int dotidx = f.getName().lastIndexOf('.');
-
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
-		String newName = MD5.checksum("FILE_" + new Date().getTime());
+		String hash = UUID.randomUUID().toString();
 
-		String extDot = f.getName().substring(dotidx, f.getName().length()).toLowerCase();
-		String ext = extDot.substring(1);
+		String ext = getExt(f);
+		String extDot = String.format(".%s", ext);
 		log.debug("file extension: " + ext);
-		StoredFile storedFile = new StoredFile(newName, ext); 
+		StoredFile storedFile = new StoredFile(hash, ext); 
 
 		// Check variable to see if this file is a presentation
 		// check if this is a a file that can be converted by
@@ -94,22 +95,18 @@ public class FileProcessor {
 			return returnError;
 		}
 
-		File completeName = new File(isAsIs ? getUploadFilesDir() : getUploadTempFilesDir(), newName + extDot);
+		File completeName = new File(isAsIs ? getUploadFilesDir() : getUploadTempFilesDir(), hash + extDot);
 		log.debug("writing file to: " + completeName);
 		FileHelper.copy(is, completeName);
 		is.close();
 
-		String hash = newName + extDot;
 		if (isImage) {
-			hash = newName + ".jpg";
 			f.setType(Type.Image);
 		} else if (isVideo) {
-			hash = newName + FLV_EXTENSION;
 			f.setType(Type.Video);
 		} else if (isChart) {
 			f.setType(Type.PollChart);
 		} else if (isPdf || canBeConverted) {
-			hash = newName;
 			f.setType(Type.Presentation);
 		}
 		f.setHash(hash);
@@ -120,16 +117,16 @@ public class FileProcessor {
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(newName, "files", true, completeName);
+			returnError = generatePDF.convertPDF(hash, "files", true, completeName);
 		} else if (isPdf) {
 			// convert to thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(newName, "files", false, completeName);
+			returnError = generatePDF.convertPDF(hash, "files", false, completeName);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
 		} else if (isImage && !isAsIs) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(newName, extDot, "files");
+			returnError = generateImage.convertImage(hash, extDot, "files");
 		} else if (isAsIs) {
 			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
 			returnError.addItem("processThumb", processThumb);

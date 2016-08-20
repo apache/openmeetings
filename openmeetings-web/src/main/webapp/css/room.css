@@ -19,11 +19,27 @@
 .room.container {
 	width: 100%;
 }
-.room.menu.exit {
-	padding-left: 20px;
+.ui-icon.room.menu.exit {
 	background-image: url(images/exit_button.png);
 	background-repeat: no-repeat;
-	background-position: 5px 5px;
+	background-size: 16px 16px;
+	margin-left: 5px;
+}
+.ui-icon.status-user {
+	background-image: url(images/status-user.png);
+}
+.ui-icon.status-wb {
+	background-image: url(images/status-wb.png);
+}
+.ui-icon.status-mod {
+	background-image: url(images/status-mod.png);
+}
+.room.menu .ui-menu .ui-menu-item {
+	padding-left: 5px;
+	padding-right: 0;
+}
+.room.menu .top.room.menu.exit {
+	padding-left: 0;
 }
 .room.menu.right {
 	position: absolute;
@@ -40,8 +56,10 @@
 .room.menu.right .room.name {
 	font-weight: bold;
 }
-.room.menu.right .room.recording {
+.room.menu.right .room.name.screen {
 	color: red;
+}
+.room.menu.right .room.demo {
 }
 .room.menu.right .icon {
 	width: 30px;
@@ -49,31 +67,56 @@
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	float: right;
+	padding: 0;
 }
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
-.room.menu.right .icon.ask {
-	background-image: url(images/user_add.png);
-}
 .room.sidebar.left {
 	min-width: 200px;
-	width: 20%;
+	width: 315px;
 	float: left;
 }
 .room.wb.area {
-	width: 80%;
 	float: left;
 }
+.room.wb.area.ui-state-hover {
+	border: 0;
+}
+.room.wb.area.ui-state-hover .wb {
+	visibility: hidden;
+	height: 1px !important;
+}
+.room.wb.area .wb-drop-area {
+	display: none;
+}
+.room.wb.area.ui-state-hover .wb-drop-area {
+	background-image: url(images/drop.png);
+	display: block;
+	background-repeat: no-repeat;
+	height: inherit;
+	background-position: center;
+}
+.room.sidebar.left .ui-tabs .ui-tabs-panel {
+	padding: 0;
+}
+.room.sidebar.left .user.header {
+	height: 45px;
+	padding-left: 5px;
+}
+.room.sidebar.left .user.header .ui-icon {
+	margin-top: 5px;
+	margin-left: 5px;
+	width: 32px;
+	height: 32px;
+}
 .room.sidebar.left .user.list {
-	border-right: 1px solid #dddddd;
-	height: 100%;
 	overflow-y: auto;
 }
 .room.sidebar.left .user.list .user {
 	height: 40px;
 	padding-left: 5px;
-    padding-top: 5px;
+	padding-top: 5px;
 }
 .room.sidebar.left .user.list .user .user.name {
 	line-height: 18px;
@@ -84,15 +127,100 @@
 	position: relative;
 	height: 18px;
 	padding: 0;
+	visibility: hidden;
 }
-.private-chat.om-icon {
+.room.sidebar.left .user.list .user:hover .user.actions {
+	visibility: visible;
+}
+.room.sidebar.left .user.list .user .user.actions .ui-icon {
+	margin-right: 2px;
+	margin-top: 0;
+}
+.room.sidebar.left .user.list .user .ui-icon {
+	background-size: 16px;
+}
+.audio-activity.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/speaking.png);
+}
+.typing-activity.ui-icon {
+	display: none;
+	width: 30px;
+	background-image: url(images/typing.gif);
+}
+.typing-activity.ui-icon.typing {
+	display: inline-block;
+}
+.private-chat.ui-icon {
 	background-image: url(images/page_edit.png);
+}
+.audio-activity.ui-icon.speaking, .ui-icon.granted {
+	opacity: 1;
+}
+.right.moderator.ui-icon, .room.menu.right .icon.ask {
+	background-image: url(images/user_add.png);
+}
+.right.moderator.ui-icon.granted {
+	background-image: url(images/user_delete.png);
+}
+.right.ui-icon {
+	opacity: 0.2;
+}
+.right.wb.ui-icon {
+	background-image: url(images/pencil_add.png);
+}
+.right.wb.ui-icon.granted {
+	background-image: url(images/pencil_delete.png);
+}
+.right.screen-share.ui-icon {
+	background-image: url(images/monitor_add.png);
+}
+.right.screen-share.ui-icon.granted {
+	background-image: url(images/monitor_delete.png);
+}
+.right.remote-control.ui-icon {
+	background-image: url(images/mouse_add.png);
+}
+.right.remote-control.ui-icon.granted {
+	background-image: url(images/mouse_delete.png);
+}
+.right.audio.ui-icon {
+	opacity: 1;
+	background-image: url(images/microphone_add.png);
+}
+.right.audio.ui-icon.granted {
+	opacity: 0.2;
+	background-image: url(images/microphone_delete.png);
+}
+.right.camera.ui-icon {
+	opacity: 1;
+	background-image: url(images/webcam_add.png);
+}
+.right.camera.ui-icon.granted {
+	opacity: 0.2;
+	background-image: url(images/webcam_delete.png);
+}
+.global-mute.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/sound.png);
+}
+.exclsv-audio.ui-icon {
+	opacity: 0.2;
+	background-image: url(images/microphone_exclusive.png);
+}
+.kick.ui-icon {
+	background-image: url(images/cancel_icon.png);
+	background-size: 16px;
+}
+.restart.ui-icon {
+	background-image: url(images/arrow_refresh_small.png);
 }
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }
 .room.sidebar.left .user.list .user.current {
 	font-weight: bold;
+	background: #00FF00;
 }
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
 	padding: 0;
@@ -102,10 +230,17 @@
 	max-height: 100px;
 	overflow-y: auto;
 }
-.activity.item {
-	position: relative;
+.sip .button-row {
+	text-align: center;
+	margin: 5px;
 }
-.activity.item .ui-dialog-titlebar-close {
-	width: 20px;
-	height: 20px;
+.sip .button-row input.sip-number {
+	width: 130px;
+}
+.sip .button-row #sip-dialer-btn-erase {
+	margin-left: 5px;
+}
+.sip .button-row #sip-dialer-btn-erase .ui-button-text {
+	padding: .1em .7em;
+	font-weight: bolder;
 }

@@ -35,31 +35,31 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryChartLoader {
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, webAppRootKey);
 
-    private static final String fileExt = ".xchart";
+	private static final String fileExt = ".xchart";
 
-    private static LibraryChartLoader instance;
+	private static LibraryChartLoader instance;
 
-    private LibraryChartLoader() {
-    }
+	private LibraryChartLoader() {
+	}
 
-    public static synchronized LibraryChartLoader getInstance() {
-        if (instance == null) {
-            instance = new LibraryChartLoader();
-        }
-        return instance;
-    }
+	public static synchronized LibraryChartLoader getInstance() {
+		if (instance == null) {
+			instance = new LibraryChartLoader();
+		}
+		return instance;
+	}
 
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	public ArrayList loadChart(File dir, String fileName) {
-        try {
-            File file = new File(dir, fileName + fileExt);
+		try {
+			File file = new File(dir, fileName + fileExt);
 
-            log.error("filepathComplete: " + file);
+			log.error("filepathComplete: " + file);
 
-            XStream xStream = new XStream(new XppDriver());
-            xStream.setMode(XStream.NO_REFERENCES);
+			XStream xStream = new XStream(new XppDriver());
+			xStream.setMode(XStream.NO_REFERENCES);
 
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
@@ -67,11 +67,11 @@ public class LibraryChartLoader {
 				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
 				return lMapList;
 			}
-        } catch (Exception err) {
-            log.error("Unexpected error while loading chart", err);
-        }
+		} catch (Exception err) {
+			log.error("Unexpected error while loading chart", err);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

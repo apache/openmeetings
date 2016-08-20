@@ -16,38 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common.tree;
+package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.io.File;
 
-import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.app.Application;
 
-public class MyRecordingTreeProvider extends RecordingTreeProvider {
+public class AviRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public Iterator<? extends Recording> getRoots() {
-		Recording r = new Recording();
-		r.setId(0L);
-		r.setType(Type.Folder);
-		r.setName(Application.getString(860));
-		r.setOwnerId(getUserId());
-		return Arrays.asList(r).iterator();
+	public AviRecordingResourceReference() {
+		super("avi-recording");
 	}
 	
 	@Override
-	public Iterator<? extends Recording> getChildren(Recording node) {
-		if (node.getId() == 0) {
-			return getBean(RecordingDao.class).getRootByOwner(getUserId()).iterator();
-		} else {
-			return super.getChildren(node);
-		}
+	public String getMimeType() {
+		return "video/avi";
+	}
+	
+	@Override
+	protected String getFileName(Recording r) {
+		return r.getAlternateDownload();
+	}
+	
+	@Override
+	protected File getFile(Recording r) {
+		return getRecording(r.getAlternateDownload());
 	}
 }

@@ -23,17 +23,11 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
-import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
-import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class RecordingsPanel extends UserPanel {
@@ -43,20 +37,9 @@ public class RecordingsPanel extends UserPanel {
 	
 	public RecordingsPanel(String id) {
 		super(id);
-		add(new FileTreePanel("tree") {
+		add(new FileTreePanel("tree", null) {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			public void defineTrees() {
-				selectedFile.setObject(new Recording());
-				treesView.add(selected = new FileItemTree<Recording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
-				treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
-				for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
-					Group o = ou.getGroup();
-					treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
-				}
-			}
-			
 			@Override
 			public void updateSizes() {
 				RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
@@ -67,14 +50,9 @@ public class RecordingsPanel extends UserPanel {
 			}
 			
 			@Override
-			public void update(AjaxRequestTarget target, FileItem f) {
+			protected void update(AjaxRequestTarget target, FileItem f) {
 				video.update(target, (Recording)f);
 				info.update(target, (Recording)f);
-			}
-			
-			@Override
-			public void createFolder(String name) {
-				createRecordingFolder(name);
 			}
 		});
 		add(video, info);

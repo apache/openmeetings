@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
-import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +144,7 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		boolean exists = isRecordingExists(r.getAlternateDownload()) || isRecordingExists(r.getHash());
+		boolean exists = r.exists() || r.exists(EXTENSION_AVI);
 		downloadBtn.setEnabled(exists);
 		share.setEnabled(exists);
 		if (target != null) {
@@ -177,14 +177,14 @@ public class VideoInfo extends Panel {
 			@Override
 			public boolean isEnabled() {
 				Recording r = rm.getObject();
-				return r != null && isRecordingExists(r.getHash() + MP4_EXTENSION);
+				return r != null && r.exists(EXTENSION_MP4);
 			}
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				String filename = rm.getObject().getHash() + MP4_EXTENSION;
-				download.setFileName(filename);
-				download.setResourceStream(new FileResourceStream(getRecording(filename)));
+				File f = rm.getObject().getFile(EXTENSION_MP4);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});
@@ -195,14 +195,14 @@ public class VideoInfo extends Panel {
 			@Override
 			public boolean isEnabled() {
 				Recording r = rm.getObject();
-				return r != null && isRecordingExists(r.getAlternateDownload());
+				return r != null && r.exists(EXTENSION_AVI);
 			}
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				Recording r = rm.getObject();
-				download.setFileName(r.getAlternateDownload());
-				download.setResourceStream(new FileResourceStream(getRecording(r.getAlternateDownload())));
+				File f = rm.getObject().getFile(EXTENSION_AVI);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});
@@ -212,15 +212,15 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public boolean isEnabled() {
-				Recording r = rm.getObject();
-				return r != null && isRecordingExists(r.getHash());
+				Recording r = VideoInfo.this.rm.getObject();
+				return r != null && r.exists(EXTENSION_FLV);
 			}
 			
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				Recording r = rm.getObject();
-				download.setFileName(r.getHash());
-				download.setResourceStream(new FileResourceStream(getRecording(r.getHash())));
+				File f = rm.getObject().getFile(EXTENSION_FLV);
+				download.setFileName(f.getName());
+				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});

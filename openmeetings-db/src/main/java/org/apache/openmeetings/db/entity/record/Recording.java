@@ -18,6 +18,14 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -104,6 +112,7 @@ public class Recording extends FileItem {
 		, PROCESSED
 		, ERROR
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -288,5 +297,22 @@ public class Recording extends FileItem {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	@Override
+	public File internalGetFile(String ext) {
+		File f = null;
+		if (getId() != null && !isDeleted()) {
+			if (ext == null || EXTENSION_MP4.equals(ext)) {
+				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_MP4));
+			} else if (EXTENSION_FLV.equals(ext)) {
+				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
+			} else if (EXTENSION_AVI.equals(ext)) {
+				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_AVI));
+			} else if (EXTENSION_OGG.equals(ext)) {
+				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_OGG));
+			}
+		}
+		return f;
 	}
 }
