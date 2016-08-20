@@ -241,6 +241,7 @@ html, body {
 }
 .file.tree.container {
 	border: 1px solid #ccc;
+	max-width: 350px;
 }
 .file.tree {
 	width: 100%;
@@ -633,6 +634,9 @@ form .input {
 .table .column {
 	display: inline-block;
 	margin-bottom: 5px;
+	min-height: initial;
+	float: none;
+	margin-right: 0;
 }
 .table .column.label {
 	width: 20%;

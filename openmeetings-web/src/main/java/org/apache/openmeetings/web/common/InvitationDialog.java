@@ -33,7 +33,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	public final DialogButton generate = new DialogButton("generate", Application.getString(1526));
 	public final DialogButton send = new DialogButton("send", Application.getString(218));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
+	public final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
@@ -80,13 +80,15 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		form.onError(target);
 	}
 
+	public void onSuperClick(AjaxRequestTarget target, DialogButton button) {
+		super.onClick(target, button);
+	}
+
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (!form.onSubmit(target, button.equals(generate), button.equals(send))) {
-			super.onClick(target, button);
-		}
+		form.onClick(target, button);
 	}
-	
+
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		//designed to be empty because of multiple submit buttons

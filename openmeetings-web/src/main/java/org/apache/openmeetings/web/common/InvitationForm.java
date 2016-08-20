@@ -19,20 +19,28 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.CalendarHelper.getDate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -48,13 +56,19 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.util.string.Strings;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.threeten.bp.LocalDateTime;
 
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public abstract class InvitationForm extends Form<Invitation> {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationForm.class, webAppRootKey);
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final PasswordTextField passwd;
 	private final DropDownChoice<String> timeZoneId = new DropDownChoice<String>("timeZoneId", Model.of((String)null), AVAILABLE_TIMEZONES);
@@ -64,6 +78,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	protected final TextField<String> subject = new TextField<String>("subject", Model.of((String)null));
 	protected final TextArea<String> message = new TextArea<String>("message", Model.of((String)null));
 	protected final TextField<String> url = new TextField<String>("url", Model.of((String)null));
+	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
 	protected InvitationDialog dialog;
 
 	public InvitationForm(String id) {
@@ -71,6 +86,15 @@ public abstract class InvitationForm extends Form<Invitation> {
 		setOutputMarkupId(true);
 
 		add(subject, message);
+		recipients.setLabel(Model.of(Application.getString(216))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				url.setModelObject(null);
+				updateButtons(target);
+			}
+		}).setOutputMarkupId(true);
 		add(new AjaxCheckBox("passwordProtected") {
 			private static final long serialVersionUID = 1L;
 
@@ -112,7 +136,13 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(url.setOutputMarkupId(true));
 		add(lang, feedback);
 	}
-	
+
+	protected void updateButtons(AjaxRequestTarget target) {
+		Collection<User> to = recipients.getModelObject();
+		dialog.send.setEnabled(to.size() > 0, target);
+		dialog.generate.setEnabled(to.size() == 1, target);
+	}
+
 	@Override
 	protected void onValidate() {
 		if (from.getConvertedInput() != null && to.getConvertedInput() != null && from.getConvertedInput().isAfter(to.getConvertedInput())) {
@@ -163,6 +193,8 @@ public abstract class InvitationForm extends Form<Invitation> {
 		lang.setModelObject(u.getLanguageId());
 		url.setModelObject(null);
 		setModelObject(i);
+		recipients.setModelObject(new ArrayList<User>());
+		recipients.setEnabled(true);
 		target.add(this);
 	}
 
@@ -170,5 +202,34 @@ public abstract class InvitationForm extends Form<Invitation> {
 		this.dialog = dialog;
 	}
 
-	public abstract boolean onSubmit(AjaxRequestTarget target, boolean generate, boolean send);
+	public void onClick(AjaxRequestTarget target, DialogButton button) {
+		//TODO need to be reviewed
+		if (button.equals(dialog.cancel)) {
+			dialog.onSuperClick(target, button);
+		} else if (button.equals(dialog.generate)) {
+			Invitation i = create(recipients.getModelObject().iterator().next());
+			setModelObject(i);
+			url.setModelObject(getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i));
+			target.add(url);
+		} else if (button.equals(dialog.send)) {
+			if (Strings.isEmpty(url.getModelObject())) {
+				for (User u : recipients.getModelObject()) {
+					Invitation i = create(u);
+					try {
+						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+					} catch (Exception e) {
+						log.error("error while sending invitation by User ", e);
+					}
+				}
+			} else {
+				Invitation i = getModelObject();
+				try {
+					getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+				} catch (Exception e) {
+					log.error("error while sending invitation by URL ", e);
+				}
+			}
+			dialog.onSuperClick(target, button);
+		}
+	}
 }

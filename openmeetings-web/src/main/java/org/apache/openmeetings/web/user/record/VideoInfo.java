@@ -90,6 +90,7 @@ public class VideoInfo extends Panel {
 		@Override
 		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 			rif.setRecordingId(rm.getObject().getId());
+			invite.updateModel(target);
 			invite.open(target);
 		}
 	};

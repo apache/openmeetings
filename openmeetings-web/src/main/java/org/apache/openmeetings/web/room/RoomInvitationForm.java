@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -43,7 +41,6 @@ import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.InvitationForm;
-import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -60,13 +57,14 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
 public class RoomInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomInvitationForm.class, webAppRootKey);
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
-	final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
 	final Select2MultiChoice<Group> groups = new Select2MultiChoice<Group>("groups"
 			, new CollectionModel<Group>(new ArrayList<Group>())
 			, new ChoiceProvider<Group>() {
@@ -132,15 +130,6 @@ public class RoomInvitationForm extends InvitationForm {
 				target.add(groups.setEnabled(groupsEnabled), recipients.setEnabled(!groupsEnabled));
 			}
 		}));
-		rdi.add(recipients.setLabel(Model.of(Application.getString(216))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				url.setModelObject(null);
-				updateButtons(target);
-			}
-		}).setOutputMarkupId(true));
 		groupContainer.add(
 			groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
@@ -153,17 +142,16 @@ public class RoomInvitationForm extends InvitationForm {
 			}).setOutputMarkupId(true)
 			, new Radio<InviteeType>("group", Model.of(InviteeType.group))
 		);
-		rdi.add(groupContainer.setVisible(showGroups));
+		rdi.add(recipients, groupContainer.setVisible(showGroups));
 		rdi.add(new Radio<InviteeType>("user", Model.of(InviteeType.user)));
 		add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		sipContainer.add(new Label("room.confno", "")).setVisible(false);
 	}
 
-	private void updateButtons(AjaxRequestTarget target) {
+	@Override
+	protected void updateButtons(AjaxRequestTarget target) {
 		if (rdi.getModelObject() == InviteeType.user) {
-			Collection<User> to = recipients.getModelObject();
-			dialog.send.setEnabled(to.size() > 0, target);
-			dialog.generate.setEnabled(to.size() == 1, target);
+			super.updateButtons(target);
 		} else {
 			Collection<Group> to = groups.getModelObject();
 			dialog.send.setEnabled(to.size() > 0, target);
@@ -179,54 +167,26 @@ public class RoomInvitationForm extends InvitationForm {
 		if (i.getRoom() != null) {
 			target.add(sipContainer.replace(new Label("room.confno", i.getRoom().getConfno())).setVisible(i.getRoom().isSipEnabled()));
 		}
-		recipients.setModelObject(new ArrayList<User>());
-		recipients.setEnabled(true);
 		groups.setModelObject(new ArrayList<Group>());
 		groups.setEnabled(false);
 		rdi.setModelObject(InviteeType.user);
 	}
 
 	@Override
-	public boolean onSubmit(AjaxRequestTarget target, boolean generate, boolean send) {
+	public void onClick(AjaxRequestTarget target, DialogButton button) {
 		//TODO need to be reviewed
-		if (generate) {
-			Invitation i = create(recipients.getModelObject().iterator().next());
-			setModelObject(i);
-			url.setModelObject(getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i));
-			target.add(url);
-			return true;
-		} else if (send) {
-			if (Strings.isEmpty(url.getModelObject())) {
-				if (rdi.getModelObject() == InviteeType.user) {
-					for (User u : recipients.getModelObject()) {
-						Invitation i = create(u);
-						try {
-							getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
-						} catch (Exception e) {
-							log.error("error while sending invitation by User ", e);
-						}
+		if (button.equals(dialog.send) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
+			for (Group g : groups.getModelObject()) {
+				for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
+					Invitation i = create(ou.getUser());
+					try {
+						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+					} catch (Exception e) {
+						log.error("error while sending invitation by Group ", e);
 					}
-				} else {
-					for (Group g : groups.getModelObject()) {
-						for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
-							Invitation i = create(ou.getUser());
-							try {
-								getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
-							} catch (Exception e) {
-								log.error("error while sending invitation by Group ", e);
-							}
-						}
-					}
-				}
-			} else {
-				Invitation i = getModelObject();
-				try {
-					getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
-				} catch (Exception e) {
-					log.error("error while sending invitation by URL ", e);
 				}
 			}
 		}
-		return false;
+		super.onClick(target, button);
 	}
 }
