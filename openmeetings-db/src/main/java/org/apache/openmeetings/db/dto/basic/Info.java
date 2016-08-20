@@ -16,38 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-.ui-menu:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
-.ui-menu .ui-menu-item {
-	display: inline-block;
-	margin: 0;
-	line-height: 1.2em !important;
-	padding: .2em 2.1em .2em 1em;
-	font-weight: normal;
-}
-.ui-menu .ui-menu-item, .ui-menu .ui-menu-item .ui-state-active {
-	font-weight: bold;
-}
-.ui-menu .ui-menu-item.sub {
-	width: 250px;
-	display: block;
-}
-.ui-menu .ui-menu-item.top {
-	border: 0 !important;
-}
-.ui-menu.ui-widget.ui-widget-content.ui-menu-icons {
-	border: 0;
-}
-#menu.ui-menu, #roomMenu.ui-menu {
-	max-height: 30px;
-	min-height: 30px;
-}
-.recording .ui-menu .ui-menu-item {
-	display: block;
+package org.apache.openmeetings.db.dto.basic;
+
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.openmeetings.util.Version;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Info implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private final String version;
+	private final String revision;
+	private final String buildDate;
+
+	public Info() {
+		version = Version.getVersion();
+		revision = Version.getRevision();
+		buildDate = Version.getBuildDate();
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public String getRevision() {
+		return revision;
+	}
+
+	public String getBuildDate() {
+		return buildDate;
+	}
 }

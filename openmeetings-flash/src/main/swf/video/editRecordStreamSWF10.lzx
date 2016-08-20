@@ -227,7 +227,7 @@
 
 	<method name="storelocaldata">
 		<![CDATA[
-			if ($debug) Debug.write("sharedobject store::  [width, height] : [" + this.cam_default_width + ", " + this.cam_default_height + "]");
+			//if ($debug) Debug.write("sharedobject store::  [width, height] : [" + this.cam_default_width + ", " + this.cam_default_height + "]");
 			var t:SharedObject = SharedObject.getLocal('userdata');
 			var g = t.data;
 			if (g==null) g = new Array();

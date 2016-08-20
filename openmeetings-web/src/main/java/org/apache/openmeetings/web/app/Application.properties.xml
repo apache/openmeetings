@@ -1861,7 +1861,7 @@
 	<entry key="install.wizard.congrats.config">alter the config values of the client</entry>
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
-        that also offer commercial support for Apache OpenMeetings:</entry>
+			that also offer commercial support for Apache OpenMeetings:</entry>
   <entry key="room.type.conference">conference (1-25 users)</entry>
   <entry key="room.type.restricted">restricted (1-150 users)</entry>
   <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>

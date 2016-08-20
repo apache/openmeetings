@@ -43,6 +43,7 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
@@ -190,7 +191,9 @@ public class RoomMenuPanel extends Panel {
 		add(askBtn);
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupId(true));
 		add(shareBtn = new StartSharingButton("share", room.getClient()));
-		add(invite = new InvitationDialog("invite", room.getRoom().getId()));
+		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
+		add(invite = new InvitationDialog("invite", rif));
+		rif.setDialog(invite);
 		add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
 		add(vote = new VoteDialog("vote"));
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));

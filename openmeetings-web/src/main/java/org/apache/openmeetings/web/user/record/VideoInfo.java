@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -81,6 +82,17 @@ public class VideoInfo extends Panel {
 	private final IModel<Recording> rm = new CompoundPropertyModel<Recording>(new Recording());
 	private final IModel<String> roomName = Model.of((String)null);
 	private boolean isInterview = false;
+	private final InvitationDialog invite;
+	RecordingInvitationForm rif = new RecordingInvitationForm("form");
+	private final AjaxButton share = new AjaxButton("share") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			rif.setRecordingId(rm.getObject().getId());
+			invite.open(target);
+		}
+	};
 
 	public VideoInfo(String id) {
 		this(id, null);
@@ -92,8 +104,11 @@ public class VideoInfo extends Panel {
 		setDefaultModel(rm);
 		
 		form.add(new Label("name"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
-				downloadBtn.setEnabled(false), reConvert.setEnabled(false));
+				downloadBtn.setEnabled(false), reConvert.setEnabled(false), share.setEnabled(false));
 		add(download);
+		add(invite = new InvitationDialog("invitation", rif));
+		rif.setDialog(invite);
+
 		update(null, r);
 	}
 	
@@ -128,7 +143,9 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		downloadBtn.setEnabled(r.exists() || r.exists(EXTENSION_AVI));
+		boolean exists = r.exists() || r.exists(EXTENSION_AVI);
+		downloadBtn.setEnabled(exists);
+		share.setEnabled(exists);
 		if (target != null) {
 			target.add(form);
 		}
@@ -158,7 +175,7 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public boolean isEnabled() {
-				Recording r = VideoInfo.this.rm.getObject();
+				Recording r = rm.getObject();
 				return r != null && r.exists(EXTENSION_MP4);
 			}
 			
@@ -176,7 +193,7 @@ public class VideoInfo extends Panel {
 			
 			@Override
 			public boolean isEnabled() {
-				Recording r = VideoInfo.this.rm.getObject();
+				Recording r = rm.getObject();
 				return r != null && r.exists(EXTENSION_AVI);
 			}
 			
