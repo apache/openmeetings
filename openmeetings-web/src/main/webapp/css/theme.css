@@ -643,6 +643,9 @@ form .input {
 .table .column {
 	display: inline-block;
 	margin-bottom: 5px;
+	min-height: initial;
+	float: none;
+	margin-right: 0;
 }
 .table .column.label {
 	width: 20%;
