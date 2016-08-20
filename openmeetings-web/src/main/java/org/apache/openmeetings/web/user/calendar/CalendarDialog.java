@@ -353,9 +353,14 @@ public class CalendarDialog extends AbstractFormDialog {
 					getBean(AppointmentDao.class).update(appointment, getUserId());
 					calendarPanel.refresh(handler);
 				}
-				break;
 			case DELETE_APPOINTMENT:
+				appointment = null;
+				break;
 			case SYNC_CALENDAR:
+				//If the user cancels the syncing then remove
+				// all the calendars and stop the syncing.
+				cals = null;
+				break;
 		}
 		clearFormModel(handler);
 	}
@@ -386,7 +391,7 @@ public class CalendarDialog extends AbstractFormDialog {
 			//Custom UrlValidator
 			@Override
 			public void validate(IValidatable<String> validatable) {
-				//Only Validate when It's not a Google Calendar
+				//Only Validate when It's not a Google Calendar i.e a URL
 				if (!gcal.getModelObject()) {
 					super.validate(validatable);
 				}
@@ -510,6 +515,7 @@ public class CalendarDialog extends AbstractFormDialog {
 		/**
 		 * Validates the credentials and the server entered by the user by
 		 * performing a HTTP Options Method.
+		 * @see Form#onValidate()
 		 */
 		@Override
 		protected void onValidate() {

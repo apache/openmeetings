@@ -140,8 +140,6 @@ public class CalendarPanel extends UserPanel {
 	public CalendarPanel(String id) {
 		super(id);
 
-		client = getAppointmentManager().createHttpClient();
-
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 
@@ -352,7 +350,13 @@ public class CalendarPanel extends UserPanel {
 		add(calendarListContainer);
 	}
 
+	// Client creation here, because the client is not created until necessary
 	public HttpClient getHttpClient() {
+		if (client == null) {
+			//Ensure there's always a client
+			client = getAppointmentManager().createHttpClient();
+		}
+
 		return client;
 	}
 
