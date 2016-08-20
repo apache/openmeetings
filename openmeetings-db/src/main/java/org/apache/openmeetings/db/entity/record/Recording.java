@@ -304,13 +304,13 @@ public class Recording extends FileItem {
 		File f = null;
 		if (getId() != null && !isDeleted()) {
 			if (ext == null || EXTENSION_MP4.equals(ext)) {
-				f = getRecording(String.format("%s.%s.%s", recordingFileName, EXTENSION_FLV, EXTENSION_AVI));
+				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_MP4));
 			} else if (EXTENSION_FLV.equals(ext)) {
-				f = getRecording(String.format("%s.%s", recordingFileName, EXTENSION_FLV));
+				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
 			} else if (EXTENSION_AVI.equals(ext)) {
-				f = getRecording(String.format("%s.%s", recordingFileName, EXTENSION_AVI));
+				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_AVI));
 			} else if (EXTENSION_OGG.equals(ext)) {
-				f = getRecording(String.format("%s.%s.%s", recordingFileName, EXTENSION_FLV, EXTENSION_AVI));
+				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_OGG));
 			}
 		}
 		return f;
