@@ -62,9 +62,9 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 
 		String code = getLanguageCode();
 		add(new TransparentWebMarkupContainer("html")
-	    	.add(new AttributeModifier("xml:lang", code))
-	    	.add(new AttributeModifier("lang", code))
-	    	.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
+				.add(new AttributeModifier("xml:lang", code))
+				.add(new AttributeModifier("lang", code))
+				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 	}

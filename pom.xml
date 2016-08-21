@@ -599,6 +599,11 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-rs-service-description</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>
 				<version>${selenium.version}</version>
@@ -651,6 +656,12 @@
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-servlet-api</artifactId>
 				<version>${tomcat.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.4</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>
