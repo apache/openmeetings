@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>CalDAV and Google Calendar integration</title>
+		<author email="ankushmishra9@gmail.com">Ankush Mishra</author>
+	</properties>
+	<body>
+		<section name="CalDAV and Google Calendar integration">
+			<subsection name="Introduction">
+				<p>This integration brings the ability to use an External CalDAV server or a Google Calendar.
+					Till now the CalDAV server support includes, bidirectional access,
+					but Google Calendar for now supports only a read-only access.</p>
+				<p>Two types of external calendar available:</p>
+				<div>
+					<ul>
+						<li>CalDAV Calendar</li>
+						<li>Google Calendar</li>
+					</ul>
+				</div>
+			</subsection>
+			<subsection name="CalDAV Calendar">
+				<p>On the Calendar Page, after selecting the "Add External Calendar", you should see the Dialog Box as shown.</p>
+				<img src="images/CalendarDialog_1.png" alt="" width="600"/>
+				<br/>
+				<p>
+					By default it should be as shown. In the Title field,
+					it'll be Display Title of the Calendar. The External CalDAV URL, will be either the URL to your <b>Calendar</b> or to the <b>User Principal</b>.
+					Along with this provide the credentials to the Calendar Server, if necessary.</p>
+				<p>In case the URL is the User Principal, then all the Calendars in the Principal will be added to the Calendar page.</p>
+			</subsection>
+			<subsection name="Google Calendar">
+				<p>When the Google Calendar Checkbox is selected, then the calendar is a Google Calendar.
+					The two options, should be about the Google Calendar ID and the API Access Key. To know about how get those, follow the steps below.
+				</p>
+				<img src="images/CalendarDialog_2.png" alt="" width="600"/>
+				<br/>
+				<p>
+					First we, need to make a Google Calendar API key.
+				</p>
+				<div>
+					<ul>
+						<li>Go to the <a href="https://console.developers.google.com/" rel="nofollow">Google Developer Console</a> and create a new project (it might take a second).</li>
+						<li>Once in the project, go to <b>APIs &amp; auth > APIs</b> on the sidebar.</li>
+						<li>Find "Calendar API" in the list and turn it ON.</li>
+						<li>On the sidebar, click <b>APIs &amp; auth > Credentials</b>.</li>
+						<li>In the "Public API access" section, click "Create new Key".</li>
+						<li>Choose "Browser key".</li>
+						<li>If you know what domains will host your calendar, enter them into the box. Otherwise, leave it blank. You can always change it later.</li>
+						<li>Your new API key will appear. It might take second or two before it starts working.</li>
+					</ul>
+				</div>
+				<p>Make your Google Calendar public:</p>
+				<div>
+					<ul>
+						<li>In the Google Calendar interface, locate the "My calendars" area on the left.</li>
+						<li>Hover over the calendar you need and click the downward arrow.</li>
+						<li>A menu will appear. Click "Share this Calendar".</li>
+						<li>Check "Make this calendar public".</li>
+						<li>Make sure "Share only my free/busy information" is <b>unchecked</b>.</li>
+						<li>Click "Save".</li>
+					</ul>
+				</div>
+				<p>Obtain your Google Calendar's ID:</p>
+				<div>
+					<ul>
+						<li>In the Google Calendar interface, locate the "My calendars" area on the left.</li>
+						<li>Hover over the calendar you need and click the downward arrow.</li>
+						<li>A menu will appear. Click "Calendar settings".</li>
+						<li>In the "Calendar Address" section of the screen, you will see your Calendar ID. It will look something like "abcd1234@group.calendar.google.com".</li>
+					</ul>
+				</div>
+				<p>Place these two values in the Dialog Box's fields.
+					Note, at the current state the Google Calendar events, may not be visible on the page,
+					after adding. If you've done the aforementioned steps correctly, then,
+					just Reload the page or go out of the Calendar page for a moment and come back.</p>
+				<p>Note: The Steps mentioned have been taken from <a href="http://fullcalendar.io/docs/google_calendar/" rel="nofollow">here.</a></p>
+			</subsection>
+		</section>
+	</body>
+</document>

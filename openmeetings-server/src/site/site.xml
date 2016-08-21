@@ -60,6 +60,7 @@
 				<item name="OAuth2" href="/oauth2.html" />
 				<item name="VoIP and SIP" href="/voip-sip-integration.html" />
 				<item name="Errors table" href="/errorvalues.html" />
+				<item name="CalDAV and Google Calendar" href="/CalDAVandGCal.html"/>
 			</item>
 			<item name="Plugins" href="#plugins">
 				<item name="Moodle Plugin" href="/MoodlePlugin.html" />
