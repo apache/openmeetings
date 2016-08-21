@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -156,7 +155,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		i.setUpdated(null);
 		i.setUsed(false);
 		
-		i.setPassword(CryptProvider.get().hash(i.getPassword())); //FIXME should be hidden
+		i.setPassword(CryptProvider.get().hash(i.getPassword()));
 		i.setValidFrom(getDate(from.getModelObject().minusMinutes(5), timeZoneId.getModelObject()));
 		i.setValidTo(getDate(to.getModelObject(), timeZoneId.getModelObject()));
 		
@@ -209,7 +208,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		} else if (button.equals(dialog.generate)) {
 			Invitation i = create(recipients.getModelObject().iterator().next());
 			setModelObject(i);
-			url.setModelObject(getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i));
+			url.setModelObject(getInvitationLink(i));
 			target.add(url);
 		} else if (button.equals(dialog.send)) {
 			if (Strings.isEmpty(url.getModelObject())) {
