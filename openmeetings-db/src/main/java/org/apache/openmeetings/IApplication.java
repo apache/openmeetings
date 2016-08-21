@@ -37,7 +37,7 @@ public interface IApplication {
 	String getOmString(String key, long languageId);
 	Client updateClient(Client rcl);
 	String getOmContactsLink();
-	String getOmInvitationLink(String baseUrl, Invitation i);
+	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
 	void invalidateClient(Long userId, String sessionId);
 }
