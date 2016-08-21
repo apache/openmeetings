@@ -40,6 +40,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 
 /**
  * Handle {@link Configuration} items as list and form
@@ -67,7 +68,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
 				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
-					error(Application.getString(1544L));
+					validatable.error(new ValidationError(Application.getString(1544L)));
 				}
 			}
 		}));

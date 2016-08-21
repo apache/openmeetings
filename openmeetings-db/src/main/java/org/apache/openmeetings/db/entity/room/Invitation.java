@@ -39,6 +39,7 @@ import javax.persistence.Transient;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
@@ -91,6 +92,11 @@ public class Invitation implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private Room room;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "recording_id", nullable = true)
+	@ForeignKey(enabled = true)
+	private Recording recording;
+
 	// the hash for the link
 	@Column(name = "hash")
 	private String hash;
@@ -139,6 +145,7 @@ public class Invitation implements IDataProviderEntity {
 		updated = i.updated;
 		deleted = i.deleted;
 		room = i.room;
+		recording = i.recording;
 		hash = i.hash;
 		invitee = i.invitee;
 		passwordProtected = i.passwordProtected;
@@ -166,6 +173,14 @@ public class Invitation implements IDataProviderEntity {
 
 	public void setRoom(Room room) {
 		this.room = room;
+	}
+
+	public Recording getRecording() {
+		return recording;
+	}
+
+	public void setRecording(Recording recording) {
+		this.recording = recording;
 	}
 
 	public User getInvitedBy() {

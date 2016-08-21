@@ -16,28 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.record;
+package org.apache.openmeetings.web.common;
 
-import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class RecordingInvitationForm extends InvitationForm {
-	private static final long serialVersionUID = 1L;
-	private Recording recording;
-
-	public RecordingInvitationForm(String id) {
-		super(id);
-		add(recipients);
-	}
-
-	@Override
-	public void updateModel(AjaxRequestTarget target) {
-		super.updateModel(target);
-		getModelObject().setRecording(recording);
-	}
-
-	public void setRecording(Recording recording) {
-		this.recording = recording;
-	}
+public interface IUpdatable {
+	void update(AjaxRequestTarget target);
 }

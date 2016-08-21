@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUr
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
+import static org.apache.openmeetings.web.app.WebSession.INVITATION_HASH;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
@@ -147,12 +149,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
 		mountPage("/recording/${hash}", RecordingPage.class);
+		mountPage("/recording", RecordingPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
-		mountResource("/profile/${id}", new ProfileImageResourceReference()); //should be in sync with VideoPlayer
+		mountResource("/profile/${id}", new ProfileImageResourceReference());
 	}
 
 	private static class NoVersionMapper extends MountedMapper {
@@ -437,11 +440,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return getContactsLink();
 	}
 
-	public static String getInvitationLink(String baseUrl, Invitation i) {
-		String link = baseUrl;
-		if (link == null) {
-			return null;
-		}
+	public static String getInvitationLink(Invitation i) {
+		String link = "";
 		Room r = i.getRoom();
 		User u = i.getInvitee();
 		if (r != null) {
@@ -450,21 +450,26 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
 			}
 			if (!allowed) {
-				link += "?invitationHash=" + i.getHash();
-		
+				PageParameters pp = new PageParameters();
+				pp.add(INVITATION_HASH, i.getHash());
 				if (u.getLanguageId() > 0) {
-					link += "&language=" + u.getLanguageId();
+					pp.add("language", u.getLanguageId());
 				}
+				link = urlForPage(MainPage.class, pp);
 			} else {
 				link = getRoomUrlFragment(r.getId()).getLink();
 			}
+		}
+		Recording rec = i.getRecording();
+		if (rec != null) {
+			link = urlForPage(RecordingPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()));
 		}
 		return link;
 	}
 	
 	@Override
-	public String getOmInvitationLink(String baseUrl, Invitation i) { //FIXME hack for email templates support (should be in separate module for now
-		return getInvitationLink(baseUrl, i);
+	public String getOmInvitationLink(Invitation i) { //FIXME hack for email templates support (should be in separate module for now
+		return getInvitationLink(i);
 	}
 	
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp) {

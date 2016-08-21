@@ -89,7 +89,7 @@ public class VideoInfo extends Panel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			rif.setRecordingId(rm.getObject().getId());
+			rif.setRecording(rm.getObject());
 			invite.updateModel(target);
 			invite.open(target);
 		}
@@ -225,5 +225,11 @@ public class VideoInfo extends Panel {
 			}
 		});
 		return list;
+	}
+
+	public VideoInfo setShowShare(boolean visible) {
+		reConvert.setVisible(visible);
+		share.setVisible(visible);
+		return this;
 	}
 }

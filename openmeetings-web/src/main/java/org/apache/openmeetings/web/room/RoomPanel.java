@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.WebSession.WICKET_ROOM_ID;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -34,14 +35,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.core.session.SessionManager;
-import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -74,7 +72,6 @@ import org.slf4j.Logger;
 
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final String WICKET_ROOM_ID = "wicketroomid";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String SWF_TYPE_NETWORK = "network";
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
@@ -84,10 +81,6 @@ public class RoomPanel extends BasePanel {
 	private final PollResultsDialog pollResults;
 	private final StartSharingEventBehavior startSharing;
 	private Long roomId = null;
-	
-	public RoomPanel(String id) {
-		this(id, new PageParameters());
-	}
 	
 	private static PageParameters addServer(PageParameters pp, Server s) {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
@@ -134,19 +127,8 @@ public class RoomPanel extends BasePanel {
 		//OK let's find the room
 		try {
 			StringValue room = pp.get(WICKET_ROOM_ID);
-			StringValue secureHash = pp.get(WebSession.SECURE_HASH);
-			StringValue invitationHash = pp.get(WebSession.INVITATION_HASH);
 			if (!room.isEmpty()) {
 				roomId = room.toLongObject();
-			} else if (!secureHash.isEmpty()) {
-				if (WebSession.get().signIn(secureHash.toString(), false)) {
-					SOAPLogin soapLogin = getBean(SOAPLoginDao.class).get(secureHash.toString());
-					roomId = soapLogin.getRoomId();
-					pp = pp.mergeWith(RoomPanel.addServer(roomId, false));
-				}
-				//TODO access denied
-			} else if (!invitationHash.isEmpty()) {
-				roomId = getBean(InvitationDao.class).getInvitationByHashCode(invitationHash.toString(), true).getRoom().getId();
 			}
 		} catch (Exception e) {
 			//no-op

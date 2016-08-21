@@ -23,29 +23,55 @@ import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
-public class RecordingPage extends BaseInitedPage {
+public class RecordingPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
+	private final VideoInfo vi = new VideoInfo("info", null);
+	private final VideoPlayer vp = new VideoPlayer("player", null);
 
 	public RecordingPage(PageParameters p) {
-		String hash = p.get("hash").toString();
+		StringValue hash = p.get("hash");
 		Recording r = null;
-		if (WebSession.get().signIn(hash, true)) {
+		WebSession ws = WebSession.get();
+		if (!hash.isEmpty()) {
+			ws.signIn(hash.toString(), true);
+		}
+		Invitation i = ws.getInvitation();
+		if (i != null && !i.isPasswordProtected()) {
+			r = i.getRecording();
+		} else if (i == null) {
 			Long recId = getRecordingId();
 			if (recId != null) {
 				r = getBean(RecordingDao.class).get(recId);
 			}
 		}
-		add(new VideoInfo("info", r).setVisible(r != null), new VideoPlayer("player", r).setVisible(r != null));
+		add(vi.setShowShare(false).update(null, r).setOutputMarkupPlaceholderTag(true).setVisible(r != null)
+			, vp.update(null, r).setOutputMarkupPlaceholderTag(true).setVisible(r != null)
+			, new InvitationPasswordDialog("i-pass", this));
+	}
+
+	@Override
+	protected boolean getHashRedirect() {
+		return false;
 	}
 
 	@Override
 	protected void onParameterArrival(IRequestParameters requestParameters, AjaxRequestTarget target) {
+	}
+	
+	@Override
+	public void update(AjaxRequestTarget target) {
+		Invitation i = WebSession.get().getInvitation();
+		target.add(vi.update(target, i.getRecording()).setVisible(true)
+				, vp.update(target, i.getRecording()).setVisible(true));
 	}
 }

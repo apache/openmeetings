@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -243,7 +242,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 					
-					invitation_link = getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
+					invitation_link = getInvitationLink(i);
 
 					if (invitation_link == null) {
 						invitation_link = "";

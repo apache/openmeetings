@@ -30,8 +30,6 @@ import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,14 +42,17 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -60,6 +61,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.web.pages.RecordingPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
@@ -89,11 +91,12 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
 	public static final int MILLIS_IN_MINUTE = 60000;
-	public static final String SECURE_HASH = "secureHash";
-	public static final String INVITATION_HASH = "invitationHash";
 	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
+	public static final String WICKET_ROOM_ID = "wicketroomid";
+	static final String SECURE_HASH = "secureHash";
+	static final String INVITATION_HASH = "invitationHash";
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -101,15 +104,17 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
-	private DateFormat ISO8601FORMAT = new SimpleDateFormat(ISO8601_FORMAT_STRING); //FIXME not thread safe
-	private DateFormat sdf;
+	private FastDateFormat ISO8601FORMAT = null;
+	private FastDateFormat  sdf = null;
 	private UserDashboard dashboard;
 	private Locale browserLocale = null;
-	private Long recordingId;
+	private Invitation i = null;
+	private Long roomId = null;
+	private Long recordingId = null;
 	private Long loginError = null;
 	private String externalType;
 	private boolean kickedByAdmin = false;
-	
+
 	public WebSession(Request request) {
 		super(request);
 		browserLocale = getLocale();
@@ -122,7 +127,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		userId = null;
 		rights = new HashSet<User.Right>();
 		SID = null;
+		ISO8601FORMAT = null;
 		sdf = null;
+		i = null;
+		roomId = null;
 		recordingId = null;
 		externalType = null;
 		tz = null;
@@ -130,36 +138,23 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		loginError = null;
 		browserLocale = null;
 	}
-	
-	@Override
-	public Roles getRoles() {
-		//first of all will check hashes
-		try {
-			IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-			StringValue secureHash = params.getParameterValue(SECURE_HASH);
-			StringValue invitationHash = params.getParameterValue(INVITATION_HASH);
-			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
-				PageParameters pp = new PageParameters();
-				for (String p : params.getParameterNames()) {
-					List<StringValue> vals = params.getParameterValues(p);
-					if (vals != null) {
-						for (StringValue sv : vals) {
-							if (!sv.isEmpty()) {
-								pp.add(p, sv.toString());
-							}
-						}
+
+	private PageParameters getParams(IRequestParameters params, PageParameters pp) {
+		for (String p : params.getParameterNames()) {
+			List<StringValue> vals = params.getParameterValues(p);
+			if (vals != null) {
+				for (StringValue sv : vals) {
+					if (!sv.isEmpty()) {
+						pp.add(p, sv.toString());
 					}
 				}
-				if (isSignedIn()) {
-					invalidate();
-				}
-				throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
 			}
-		} catch (RestartResponseAtInterceptPageException e) {
-			throw e;
-		} catch (Exception e) {
-			//no-op, will continue to sign-in page
 		}
+		return pp;
+	}
+
+	@Override
+	public Roles getRoles() {
 		if (rights.isEmpty()) {
 			isSignedIn();
 		}
@@ -191,6 +186,56 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			}
 		}
 		return userId != null && userId.longValue() > 0;
+	}
+
+	public void checkHashes(boolean redirect) {
+		IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+		StringValue secureHash = params.getParameterValue(SECURE_HASH);
+		StringValue invitationHash = params.getParameterValue(INVITATION_HASH);
+		PageParameters pp = new PageParameters();
+		try {
+			if (!secureHash.isEmpty()) {
+				if (isSignedIn()) {
+					invalidate();
+				}
+				if (signIn(secureHash.toString(), false)) {
+					//TODO markUsed
+				} else {
+					//TODO redirect to error
+				}
+			}
+			if (!invitationHash.isEmpty()) {
+				if (isSignedIn()) {
+					invalidate();
+				}
+				i = getBean(InvitationDao.class).getByHash(invitationHash.toString(), false, false);
+				if (i.isAllowEntry()) {
+					setUser(i.getInvitee());
+					//TODO markUsed
+					if (i.getRoom() != null) {
+						roomId = i.getRoom().getId();
+					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
+						roomId = i.getAppointment().getRoom().getId();
+					} else if (i.getRecording() != null) {
+						recordingId = i.getRecording().getId();
+					}
+				}
+			}
+			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
+				if (roomId != null) {
+					getParams(params, pp).add(WICKET_ROOM_ID, roomId);
+					if (redirect) {
+						throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
+					}
+				} else if (recordingId != null && redirect){
+					throw new RestartResponseAtInterceptPageException(RecordingPage.class, pp);
+				}
+			}
+		} catch (RestartResponseAtInterceptPageException e) {
+			throw e;
+		} catch (Exception e) {
+			//no-op, will continue to sign-in page
+		}
 	}
 
 	public boolean signIn(String secureHash, boolean markUsed) {
@@ -234,6 +279,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					}
 					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
+					roomId = soapLogin.getRoomId();
 					recordingId = soapLogin.getRecordingId();
 					return true;
 				}
@@ -241,7 +287,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return false;
 	}
-	
+
 	private void setUser(User u) {
 		String _sid = SID;
 		Long _recordingId = recordingId;
@@ -257,10 +303,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
-		ISO8601FORMAT.setTimeZone(tz);
+		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING, tz);
 		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId));
 		//FIXMW locale need to be set by User language first
-		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
+		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}
 	
 	public boolean signIn(String login, String password, Type type, Long domainId) {
@@ -354,15 +400,19 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		checkIsInvalid();
 		return get().userId;
 	}
-	
+
 	public static Long getRecordingId() {
 		return get().recordingId;
 	}
-	
+
+	public Invitation getInvitation() {
+		return i;
+	}
+
 	public static String getExternalType() {
 		return get().externalType;
 	}
-	
+
 	public static TimeZone getUserTimeZone() {
 		return get().tz;
 	}
@@ -375,11 +425,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return Calendar.getInstance(getClientTimeZone());
 	}
 
-	public static DateFormat getIsoDateFormat() {
+	public static FastDateFormat getIsoDateFormat() {
 		return get().ISO8601FORMAT;
 	}
 	
-	public static DateFormat getDateFormat() {
+	public static FastDateFormat getDateFormat() {
 		return get().sdf;
 	}
 	

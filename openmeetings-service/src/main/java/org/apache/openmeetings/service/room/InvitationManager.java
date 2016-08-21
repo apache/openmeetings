@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.service.room;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Date;
 import java.util.Map;
@@ -31,7 +31,6 @@ import java.util.Vector;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.mail.SMSHandler;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
@@ -53,7 +52,6 @@ import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -77,8 +75,6 @@ public class InvitationManager implements IInvitationManager {
 	private SMSHandler smsHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private ConfigurationDao configDao;
 
 	/**
 	 * @author vasya
@@ -113,7 +109,11 @@ public class InvitationManager implements IInvitationManager {
 	
 	@Override
 	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
+		String invitation_link = null;
+		if (type != MessageType.Cancel) {
+			IApplication app = ensureApplication(1L);
+			invitation_link = app.getOmInvitationLink(i);
+		}
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
@@ -183,7 +183,7 @@ public class InvitationManager implements IInvitationManager {
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
 			log.debug("Invitation was requested by hashcode: " + hashCode);
-			Invitation i = invitationDao.getInvitationByHashCode(hashCode, hidePass);
+			Invitation i = invitationDao.getByHash(hashCode, hidePass, true);
 
 			if (i == null) {
 				// already deleted or does not exist
@@ -193,48 +193,15 @@ public class InvitationManager implements IInvitationManager {
 					case OneTime:
 						// do this only if the user tries to get the Invitation, not
 						// while checking the PWD
-						if (hidePass) {
-							// one-time invitation
-							if (i.isUsed()) {
-								// Invitation is of type *only-one-time* and was
-								// already used
-								return new Long(-32);
-							} else {
-								// set to true if this is the first time / a normal
-								// getInvitation-Query
-								i.setUsed(true);
-								invitationDao.update(i);
-								// invitation.setInvitationpass(null);
-								i.setAllowEntry(true);
-							}
-						} else {
-							i.setAllowEntry(true);
+						if (!i.isAllowEntry()) {
+							// Invitation is of type *only-one-time* and was
+							// already used
+							return new Long(-32);
 						}
 						break;
 					case Period:
-						LocalDateTime now = ZonedDateTime.now(getZoneId(i.getInvitee().getTimeZoneId())).toLocalDateTime();
-						LocalDateTime from = CalendarHelper.getDateTime(i.getValidFrom(), i.getInvitee().getTimeZoneId());
-						LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), i.getInvitee().getTimeZoneId());
-						if (now.isAfter(from) && now.isBefore(to)) {
-							invitationDao.update(i);
-							// invitation.setInvitationpass(null);
-							i.setAllowEntry(true);
-						} else {
-
-							// Invitation is of type *period* and is not valid
-							// anymore, this is an extra hook to display the time
-							// correctly
-							// in the method where it shows that the hash code does
-							// not work anymore
-							i.setAllowEntry(false);
-						}
-						break;
 					case Endless:
 					default:
-						invitationDao.update(i);
-
-						i.setAllowEntry(true);
-						// invitation.setInvitationpass(null);
 						break;
 				}
 				return i;
