@@ -61,8 +61,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.web.pages.RecordingPage;
-import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
@@ -73,15 +71,10 @@ import org.apache.openmeetings.web.user.dashboard.admin.AdminWidget;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.UserDashboard;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
-import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -141,23 +134,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		browserLocale = null;
 	}
 
-	private PageParameters getParams(IRequestParameters params, PageParameters pp) {
-		for (String p : params.getParameterNames()) {
-			List<StringValue> vals = params.getParameterValues(p);
-			if (vals != null) {
-				for (StringValue sv : vals) {
-					if (!sv.isEmpty()) {
-						pp.add(p, sv.toString());
-					}
-				}
-			}
-		}
-		return pp;
-	}
-
 	@Override
 	public Roles getRoles() {
-		checkHashes();
 		if (rights.isEmpty()) {
 			isSignedIn();
 		}
@@ -191,11 +169,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return userId != null && userId.longValue() > 0;
 	}
 
-	public void checkHashes() {
-		IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-		StringValue secureHash = params.getParameterValue(SECURE_HASH);
-		StringValue invitationHash = params.getParameterValue(INVITATION_HASH);
-		PageParameters pp = new PageParameters();
+	public void checkHashes(PageParameters params) {
+		StringValue secureHash = params.get(SECURE_HASH);
+		StringValue invitationHash = params.get(INVITATION_HASH);
 		try {
 			if (!secureHash.isEmpty()) {
 				if (isSignedIn()) {
@@ -224,16 +200,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					}
 				}
 			}
-			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
-				if (roomId != null) {
-					getParams(params, pp).add(WICKET_ROOM_ID, roomId);
-					throw new RestartResponseException(new PageProvider(SwfPage.class, pp), RedirectPolicy.ALWAYS_REDIRECT);
-				} else if (recordingId != null){
-					throw new RestartResponseException(new PageProvider(RecordingPage.class, pp), RedirectPolicy.ALWAYS_REDIRECT);
-				}
-			}
-		} catch (RestartResponseException e) {
-			throw e;
 		} catch (Exception e) {
 			//no-op, will continue to sign-in page
 		}
