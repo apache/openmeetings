@@ -1926,4 +1926,5 @@
 	<entry key="install.room.private.conference">Закрытая комната для конференций</entry>
 	<entry key="appointment.tab.general">Общие</entry>
 	<entry key="appointment.tab.advanced">Дополнительные</entry>
+	<entry key="button.label.share">Share</entry>
 </properties>
