@@ -27,15 +27,6 @@ import org.apache.openmeetings.web.app.WebSession;
 public abstract class BaseInitedPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 
-	public BaseInitedPage() {
-		super();
-		WebSession.get().checkHashes(getHashRedirect());
-	}
-
-	protected boolean getHashRedirect() {
-		return true;
-	}
-
 	@Override
 	protected String getApplicationName() {
 		return getBean(ConfigurationDao.class).getAppName();

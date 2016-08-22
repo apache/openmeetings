@@ -97,6 +97,7 @@ public class InvitationDao {
 					i.setAllowEntry(true);
 					break;
 			}
+			em.detach(i); // required to disable password update
 			if (hidePass) {
 				i.setPassword(null);
 			}
