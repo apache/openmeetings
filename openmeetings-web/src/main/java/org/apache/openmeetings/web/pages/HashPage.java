@@ -33,12 +33,12 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
-public class RecordingPage extends BaseInitedPage implements IUpdatable {
+public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 
-	public RecordingPage(PageParameters p) {
+	public HashPage(PageParameters p) {
 		WebSession ws = WebSession.get();
 		StringValue hash = p.get("hash");
 		Recording r = null;
