@@ -50,7 +50,7 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 	private final IUpdatable comp;
 
 	public InvitationPasswordDialog(String id, IUpdatable comp) {
-		super(id, Application.getString(524));
+		super(id, Application.getString(230));
 		this.comp = comp;
 		password.setLabel(Model.of(Application.getString(536))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
@@ -68,7 +68,8 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", WebSession.get().getInvitation().isPasswordProtected());
+		Invitation i = WebSession.get().getInvitation();
+		behavior.setOption("autoOpen", i != null && i.isPasswordProtected());
 		behavior.setOption("closeOnEscape", false);
 		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
