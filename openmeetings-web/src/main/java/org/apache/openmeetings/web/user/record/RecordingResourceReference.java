@@ -63,14 +63,8 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		} catch (Exception e) {
 			//no-op expected
 		}
-		WebSession ws = WebSession.get();
-		if (id != null && ws.isSignedIn()) {
+		if (id != null && WebSession.get().isSignedIn()) {
 			return getRecording(id);
-		} else {
-			ws.invalidate();
-			if (ws.signIn(_id.toString(), true)) {
-				return getRecording(getRecordingId());
-			}
 		}
 		return null;
 	}
@@ -80,6 +74,9 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		Recording r = getBean(RecordingDao.class).get(id);
 		if (r == null || r.getType() == Type.Folder || r.isDeleted()) {
 			return null;
+		}
+		if (id.equals(getRecordingId())) {
+			return r;
 		}
 		//TODO should we check parentId here
 		if (r.getOwnerId() == null && r.getGroupId() == null) {

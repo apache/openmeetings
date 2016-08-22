@@ -53,7 +53,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	protected abstract boolean isRtl();
 	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
-	
+
 	public BasePage() {
 		options = new HashMap<String, String>();
 		options.put("fragmentIdentifierSuffix", "");
@@ -62,13 +62,13 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 
 		String code = getLanguageCode();
 		add(new TransparentWebMarkupContainer("html")
-	    	.add(new AttributeModifier("xml:lang", code))
-	    	.add(new AttributeModifier("lang", code))
-	    	.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
+				.add(new AttributeModifier("xml:lang", code))
+				.add(new AttributeModifier("lang", code))
+				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 	}
-	
+
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
 		for (AreaKeys key : AreaKeys.values()) {
 			StringValue type = params.getParameterValue(key.name());
@@ -78,11 +78,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		}
 		return null;
 	}
-	
+
 	public HeaderPanel getHeader() {
 		return header;
 	}
-	
+
 	@Override
 	protected Map<String, String> getOptions() {
 		return options;
