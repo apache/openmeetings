@@ -42,6 +42,7 @@ import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
