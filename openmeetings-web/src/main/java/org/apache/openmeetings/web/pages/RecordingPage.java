@@ -39,9 +39,9 @@ public class RecordingPage extends BaseInitedPage implements IUpdatable {
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 
 	public RecordingPage(PageParameters p) {
+		WebSession ws = WebSession.get();
 		StringValue hash = p.get("hash");
 		Recording r = null;
-		WebSession ws = WebSession.get();
 		if (!hash.isEmpty()) {
 			ws.signIn(hash.toString(), true);
 		}
@@ -57,11 +57,6 @@ public class RecordingPage extends BaseInitedPage implements IUpdatable {
 		add(vi.setShowShare(false).update(null, r).setOutputMarkupPlaceholderTag(true).setVisible(r != null)
 			, vp.update(null, r).setOutputMarkupPlaceholderTag(true).setVisible(r != null)
 			, new InvitationPasswordDialog("i-pass", this));
-	}
-
-	@Override
-	protected boolean getHashRedirect() {
-		return false;
 	}
 
 	@Override
