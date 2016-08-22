@@ -92,7 +92,7 @@ public class CalendarPanel extends UserPanel {
 	private final CalendarDialog calendarDialog;
 	private AppointmentDialog dialog;
 	private final WebMarkupContainer calendarListContainer;
-	private transient HttpClient client; // Non-Serializable HttpClient.
+	private transient HttpClient client = null; // Non-Serializable HttpClient.
 
 	@Override
 	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
@@ -103,8 +103,10 @@ public class CalendarPanel extends UserPanel {
 	public void cleanup(IPartialPageRequestHandler handler) {
 		refreshTimer.stop(handler);
 		syncTimer.stop(handler);
-		getAppointmentManager().cleanupIdleConnections();
-		client.getState().clear();
+		if (client != null) {
+			getAppointmentManager().cleanupIdleConnections();
+			client.getState().clear();
+		}
 	}
 
 	private static AppointmentDao getDao() {
