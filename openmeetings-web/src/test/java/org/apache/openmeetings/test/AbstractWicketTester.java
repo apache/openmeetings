@@ -34,8 +34,8 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-        tester = getWicketTester();
-        assertNotNull("Web session should not be null", WebSession.get());
+		tester = getWicketTester();
+		assertNotNull("Web session should not be null", WebSession.get());
 	}
 
 	public void login(String login, String password) {
@@ -49,6 +49,9 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	
 	@After
 	public void tearDown() {
-		tester.destroy();
+		if (tester != null) {
+			//can be null in case exception on initialization 
+			tester.destroy();
+		}
 	}
 }

@@ -211,6 +211,7 @@ public class AppointmentLogic {
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
 			a.getRoom().setType(Room.Type.get(roomType));
+			a.getRoom().setAppointment(true);
 		}
 		a.setOwner(userDao.get(userId));
 		a.setPasswordProtected(isPasswordProtected);
