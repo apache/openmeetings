@@ -1908,4 +1908,5 @@
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>
+	<entry key="button.label.share">Share</entry>
 </properties>
