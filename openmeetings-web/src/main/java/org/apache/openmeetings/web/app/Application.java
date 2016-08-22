@@ -53,11 +53,10 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.pages.ActivatePage;
+import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
-import org.apache.openmeetings.web.pages.RecordingPage;
 import org.apache.openmeetings.web.pages.ResetPage;
-import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
@@ -143,13 +142,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", SwfPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("recording/${hash}", HashPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("hash", HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
-		mountPage("/recording/${hash}", RecordingPage.class);
-		mountPage("/recording", RecordingPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
@@ -455,14 +454,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				if (u.getLanguageId() > 0) {
 					pp.add("language", u.getLanguageId());
 				}
-				link = urlForPage(MainPage.class, pp);
+				link = urlForPage(HashPage.class, pp);
 			} else {
 				link = getRoomUrlFragment(r.getId()).getLink();
 			}
 		}
 		Recording rec = i.getRecording();
 		if (rec != null) {
-			link = urlForPage(RecordingPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()));
+			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()));
 		}
 		return link;
 	}

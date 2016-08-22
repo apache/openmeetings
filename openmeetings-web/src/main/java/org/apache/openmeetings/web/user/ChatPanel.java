@@ -25,7 +25,7 @@ import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.openmeetings.web.room.SwfPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;

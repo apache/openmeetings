@@ -45,6 +45,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.InvitationDialog;
+import org.apache.openmeetings.web.room.menu.RoomInvitationForm;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
@@ -70,11 +71,11 @@ import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class RoomPanel extends BasePanel {
+public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String SWF_TYPE_NETWORK = "network";
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
 	private final VoteDialog vote;
@@ -82,47 +83,11 @@ public class RoomPanel extends BasePanel {
 	private final StartSharingEventBehavior startSharing;
 	private Long roomId = null;
 	
-	private static PageParameters addServer(PageParameters pp, Server s) {
-		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
-	}
-	
-	public static PageParameters addServer(Long roomId, boolean addBasic) {
-		PageParameters pp = new PageParameters();
-		if (addBasic) {
-			pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
-		}
-		List<Server> serverList = getBean(ServerDao.class).getActiveServers();
-
-		long minimum = -1;
-		Server result = null;
-		HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
-		for (Server server : serverList) {
-			List<Long> roomIds = getBean(SessionManager.class).getActiveRoomIdsByServer(server);
-			if (roomIds.contains(roomId)) {
-				// if the room is already opened on a server, redirect the user to that one,
-				log.debug("Room is already opened on a server " + server.getAddress());
-				return addServer(pp, server);
-			}
-			activeRoomsMap.put(server, roomIds);
-		}
-		for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
-			List<Long> roomIds = entry.getValue();
-			long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
-			if (minimum < 0 || capacity < minimum) {
-				minimum = capacity;
-				result = entry.getKey();
-			}
-			log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
-					+ roomIds + " max(Sum): " + capacity);
-		}
-		return result == null ? pp : addServer(pp, result);
-	}
-
-	public RoomPanel(String id, Long roomId) {
+	public SwfPanel(String id, Long roomId) {
 		this(id, addServer(roomId, true));
 	}
 	
-	public RoomPanel(String id, PageParameters pp) {
+	public SwfPanel(String id, PageParameters pp) {
 		super(id);
 		//OK let's find the room
 		try {
@@ -257,7 +222,7 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	private static ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(RoomPanel.class, "swf-functions.js");
+		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	}
 	
 	@Override
@@ -269,10 +234,10 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(CssHeaderItem.forUrl("css/history.css")));
 		//FIXME TODO ugly HACK
 		if (WebSession.get().getClientInfo().getProperties().isBrowserMozillaFirefox()) {
-			response.render(new PriorityHeaderItem(CssHeaderItem.forCSS(".ui-widget-overlay{opacity: 1 !important;}", "linux-ff-veil-hack")));
+			response.render(new PriorityHeaderItem(CssHeaderItem.forCSS(".ui-widget-overlay{opacity: 1 !important;}", "ff-veil-hack")));
 		}
 	}
-	
+
 	public String getInitFunction(PageParameters pp) {
 		String initStr = null;
 		String swf = getFlashFile(pp);
@@ -298,6 +263,42 @@ public class RoomPanel extends BasePanel {
 			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
 		}
 		return arr.toString();
+	}
+
+	private static PageParameters addServer(PageParameters pp, Server s) {
+		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
+	}
+	
+	public static PageParameters addServer(Long roomId, boolean addBasic) {
+		PageParameters pp = new PageParameters();
+		if (addBasic) {
+			pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
+		}
+		List<Server> serverList = getBean(ServerDao.class).getActiveServers();
+
+		long minimum = -1;
+		Server result = null;
+		HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
+		for (Server server : serverList) {
+			List<Long> roomIds = getBean(SessionManager.class).getActiveRoomIdsByServer(server);
+			if (roomIds.contains(roomId)) {
+				// if the room is already opened on a server, redirect the user to that one,
+				log.debug("Room is already opened on a server " + server.getAddress());
+				return addServer(pp, server);
+			}
+			activeRoomsMap.put(server, roomIds);
+		}
+		for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
+			List<Long> roomIds = entry.getValue();
+			long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
+			if (minimum < 0 || capacity < minimum) {
+				minimum = capacity;
+				result = entry.getKey();
+			}
+			log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
+					+ roomIds + " max(Sum): " + capacity);
+		}
+		return result == null ? pp : addServer(pp, result);
 	}
 
 	private String getPublicSid() {

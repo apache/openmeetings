@@ -40,7 +40,7 @@ import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
@@ -269,7 +269,7 @@ public class OmUrlFragment implements Serializable {
 					Long roomId = Long.valueOf(type);
 					Room r = getBean(RoomDao.class).get(roomId);
 					if (r != null) {
-						basePanel = new RoomPanel(CHILD_ID, roomId);
+						basePanel = new SwfPanel(CHILD_ID, roomId);
 					}
 				} catch(NumberFormatException ne) {
 					//skip it, bad roomid passed

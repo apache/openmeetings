@@ -26,7 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
-import static org.apache.openmeetings.web.room.RoomPanel.PARAM_PUBLIC_SID;
+import static org.apache.openmeetings.web.room.SwfPanel.PARAM_PUBLIC_SID;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 
 import java.io.File;
