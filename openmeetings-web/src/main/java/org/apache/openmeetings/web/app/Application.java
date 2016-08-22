@@ -20,11 +20,11 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.web.app.WebSession.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
-import static org.apache.openmeetings.web.app.WebSession.INVITATION_HASH;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
