@@ -75,7 +75,6 @@ import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.dashboard.Dashboard;
@@ -90,8 +89,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
 	public static final String WICKET_ROOM_ID = "wicketroomid";
-	static final String SECURE_HASH = "secureHash";
-	static final String INVITATION_HASH = "invitationHash";
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -169,27 +166,25 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return userId != null && userId.longValue() > 0;
 	}
 
-	public void checkHashes(PageParameters params) {
-		StringValue secureHash = params.get(SECURE_HASH);
-		StringValue invitationHash = params.get(INVITATION_HASH);
+	public void checkHashes(StringValue secure, StringValue invitation) {
 		try {
-			if (!secureHash.isEmpty()) {
+			if (!secure.isEmpty()) {
 				if (isSignedIn()) {
 					invalidate();
 				}
-				if (signIn(secureHash.toString(), false)) {
+				if (signIn(secure.toString(), false)) {
 					//TODO markUsed
 				} else {
 					//TODO redirect to error
 				}
 			}
-			if (!invitationHash.isEmpty()) {
+			if (!invitation.isEmpty()) {
 				if (isSignedIn()) {
 					invalidate();
 				}
-				i = getBean(InvitationDao.class).getByHash(invitationHash.toString(), false, false);
+				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, false);
 				if (i.isAllowEntry()) {
-					setUser(i.getInvitee());
+					setUser(i.getInvitee(), true);
 					//TODO markUsed
 					if (i.getRoom() != null) {
 						roomId = i.getRoom().getId();
@@ -245,7 +240,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						soapDao.update(soapLogin);
 					}
 					sessionDao.updateUser(SID, user.getId());
-					setUser(user);
+					setUser(user, true);
 					roomId = soapLogin.getRoomId();
 					recordingId = soapLogin.getRecordingId();
 					return true;
@@ -255,9 +250,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return false;
 	}
 
-	private void setUser(User u) {
+	private void setUser(User u, boolean emptyRights) {
 		String _sid = SID;
 		Long _recordingId = recordingId;
+		Long _roomId = roomId;
+		Invitation _i = i;
 		replaceSession(); // required to prevent session fixation
 		if (_sid != null) {
 			SID = _sid;
@@ -265,8 +262,18 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (_recordingId != null) {
 			recordingId = _recordingId;
 		}
+		if (_roomId != null) {
+			roomId = _roomId;
+		}
+		if (i != null) {
+			i = _i;
+		}
 		userId = u.getId();
-		rights = Collections.unmodifiableSet(u.getRights());
+		if (emptyRights) {
+			rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
+		} else {
+			rights = Collections.unmodifiableSet(u.getRights());
+		}
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
@@ -311,7 +318,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (u == null) {
 			return false;
 		}
-		setUser(u);
+		setUser(u, false);
 		return true;
 	}
 	
@@ -370,6 +377,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public static Long getRecordingId() {
 		return get().recordingId;
+	}
+
+	public Long getRoomId() {
+		return get().roomId;
 	}
 
 	public Invitation getInvitation() {

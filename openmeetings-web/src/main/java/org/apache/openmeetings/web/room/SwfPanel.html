@@ -19,9 +19,28 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		html,body { /* http://www.quirksmode.org/css/100percheight.html */
+			height: 100%;
+			/* prevent scrollbars */
+			margin: 0;
+			padding: 0;
+			border: 0 none;
+			overflow: hidden;
+		}
+		body {
+			background-color: #ffffff;
+		}
+		img {
+			border: 0 none;
+		}
+	</style>
+</wicket:head>
 <wicket:panel>
-	<div id="swfloading"
-		style="z-index: 666666; position: absolute; top: 50%; left: 50%;">
+	<div id="swfloading" style="z-index: 666666; position: absolute; top: 50%; left: 50%;">
 		<img src="images/ajax-loader.gif" />
 	</div>
 	<noscript>Please enable JavaScript in order to use this application.</noscript>

@@ -74,8 +74,10 @@ import org.slf4j.Logger;
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
+	public static final String SWF = "swf";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String SWF_TYPE_NETWORK = "network";
+	public static final String SWF_TYPE_SETTINGS = "settings";
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
 	private final VoteDialog vote;
@@ -249,7 +251,7 @@ public class SwfPanel extends BasePanel {
 	}
 
 	private String getFlashFile(PageParameters pp) {
-		StringValue type = pp.get("swf");
+		StringValue type = pp.get(SWF);
 		String fmt = "main%s.swf11.swf";
 		if (SWF_TYPE_NETWORK.equals(type.toString())) {
 			fmt = "networktesting%s.swf10.swf";

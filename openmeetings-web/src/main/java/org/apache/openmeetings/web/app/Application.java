@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-import static org.apache.openmeetings.web.app.WebSession.INVITATION_HASH;
+import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
@@ -143,12 +143,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("recording/${hash}", HashPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("hash", HashPage.class));
+		//getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("/recording/${hash}", HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
+		mountPage("/hash", HashPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
