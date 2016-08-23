@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-          
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -21,12 +21,12 @@
 <canvas width="100%" height="100%" title="NetworkTesting">
 
 	<switch>
-        <when property="$as3">
-            <passthrough>
-                import flash.external.ExternalInterface;
-            </passthrough>
-        </when>
-    </switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.external.ExternalInterface;
+			</passthrough>
+		</when>
+	</switch>
 	<switch>
 		<when property="$debug">
 			<method name="doDebugInit">
@@ -38,28 +38,39 @@
 			<method name="doDebugInit">
 			</method>
 		</otherwise>
-    </switch>
-    
-    <include href="testsView.lzx" />
-    <include href="../base/remote/restCall.lzx" />
-    
-    <handler name="oninit"><![CDATA[
-    	flash.external.ExternalInterface.call("loadingComplete");
+	</switch>
+	
+	<include href="testsView.lzx" />
+	<include href="../base/remote/restCall.lzx" />
+	
+	<handler name="oninit"><![CDATA[
+		flash.external.ExternalInterface.call("loadingComplete");
+		var lbls = ExternalInterface.call("getStringLabels");
+		canvas.lbls = new Array(lbls.length);
+		for (var i = 0; i < lbls.length; ++i) {
+			canvas.lbls[lbls[i].id] = lbls[i].value;
+		}
 		doDebugInit();
 	]]></handler>
+
+	<method name="lbl" args="key">
+		var s = canvas.lbls['network.test.' + key];
+		if ($debug) Debug.info("LBL ", key, s, canvas.lbls);
+		return !!s ? s : "Missing[" + key + "]";
+	</method>
+
+	<!--
+		These attributes are rewritten by values from "public/config.xml"
+	-->
+	<attribute name="rtmpProtocol" type="string" value="rtmp" />
+	<attribute name="rtmpHost" type="string" value="" />
+	<attribute name="rtmpPort" type="number" value="1935" />
 	
-    <!--
-        These attributes are rewritten by values from "public/config.xml"
-    -->
-    <attribute name="rtmpProtocol" type="string" value="rtmp" />
-    <attribute name="rtmpHost" type="string" value="" />
-    <attribute name="rtmpPort" type="number" value="1935" />
-    
-    <attribute name="httpProtocol" type="string" value="http" />
-    <attribute name="httpHost" type="string" value="" />
-    <attribute name="httpPort" type="number" value="5080" />
-    <attribute name="uriContext" type="string" value="/openmeetings" />
-    <attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
+	<attribute name="httpProtocol" type="string" value="http" />
+	<attribute name="httpHost" type="string" value="" />
+	<attribute name="httpPort" type="number" value="5080" />
+	<attribute name="uriContext" type="string" value="/openmeetings" />
+	<attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
 
 	<method name="getBrowserHost">
 		var host:String = ExternalInterface.call("window.location.host.toString()");
@@ -105,32 +116,32 @@
 		canvas.setAttribute("rtmpUriPath", canvas.uriContext + "hibernate");
 	</method>
 
-    <method name="showTests">
-        var tests = new lz.TestsView(canvas, {name:"testsView"});
-        tests.testAll();
-    </method>
+	<method name="showTests">
+		var tests = new lz.TestsView(canvas, {name:"testsView"});
+		tests.testAll();
+	</method>
 
-    <dataset type="http" name="settings" request="false" proxied="false">
-        <handler name="oninit">
-            this.setAttribute("src", "config.xml");
-            this.doRequest();
-        </handler>
-        <handler name="ondata">
-            if ($debug) Debug.write("Settings are retrieved");
-            canvas.getSettings();
-            canvas.showTests();
-        </handler>
-        <handler name="onerror" args="e">
-            if ($debug) Debug.write("Settings error [" + this.src + "]", e);
-        </handler>
-        <handler name="ontimeout" args="e">
-            if ($debug) Debug.write("Settings timeout error", e);
-        </handler>
-    </dataset>
+	<dataset type="http" name="settings" request="false" proxied="false">
+		<handler name="oninit">
+			this.setAttribute("src", "config.xml");
+			this.doRequest();
+		</handler>
+		<handler name="ondata">
+			if ($debug) Debug.write("Settings are retrieved");
+			canvas.getSettings();
+			canvas.showTests();
+		</handler>
+		<handler name="onerror" args="e">
+			if ($debug) Debug.write("Settings error [" + this.src + "]", e);
+		</handler>
+		<handler name="ontimeout" args="e">
+			if ($debug) Debug.write("Settings timeout error", e);
+		</handler>
+	</dataset>
 
-    <attribute name="busy" type="boolean" value="false"/>
-    <attribute name="log" type="string" value="" />
+	<attribute name="busy" type="boolean" value="false"/>
+	<attribute name="log" type="string" value="" />
 
-    <attribute name="testsView" value="null"/>
+	<attribute name="testsView" value="null"/>
 
 </canvas>
