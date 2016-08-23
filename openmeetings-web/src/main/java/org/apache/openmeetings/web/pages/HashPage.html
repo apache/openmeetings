@@ -20,11 +20,15 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-	<div class="page recording">
-		<div wicket:id="info"></div>
-		<div wicket:id="player"></div>
+	<div wicket:id="panel-recording">
+		<div class="page recording">
+			<div wicket:id="info"></div>
+			<div wicket:id="player"></div>
+		</div>
+		<div wicket:id="i-pass"></div>
 	</div>
-	<div wicket:id="i-pass"></div>
+	<div wicket:id="panel-swf" style="width: 100%; height: 100%;"></div>
+	<div wicket:id="access-denied"></div>
 </wicket:extend>
 </html>
 
