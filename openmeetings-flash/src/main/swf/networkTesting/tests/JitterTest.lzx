@@ -22,35 +22,35 @@
 
 <class name="JitterTest" extends="BaseURLLoadTest">
 
-    <handler name="oninit">
-        this.setAttribute("testsCount", 100);
-        this.setAttribute("testName", "Jitter");
-        this.setAttribute("testTypeParameter", "jitter");
-        this.setAttribute("verbose", false);
-        this.setAttribute("resultText", true);
-    </handler>
+	<handler name="oninit">
+		this.setAttribute("testsCount", 100);
+		this.setAttribute("testName", lbl('jitter'));
+		this.setAttribute("testTypeParameter", "jitter");
+		this.setAttribute("verbose", false);
+		this.setAttribute("resultText", true);
+	</handler>
 
-    <method name="generateReport">
-        <![CDATA[
-        var averageTime = wholeTime / successfulTestsCount;
-        var jitterMax = maxTime - averageTime;
-        var jitterMin = minTime - averageTime;
-        var report = "Average time: " + averageTime + " ms\n";
-        report += "Min time: " + minTime + " ms\n";
-        report += "Max time: " + maxTime + " ms\n";
-        report += "Jitter: " + jitterMax + " ms and " + jitterMin + " ms \n";
+	<method name="generateReport">
+		<![CDATA[
+		var averageTime = wholeTime / successfulTestsCount;
+		var jitterMax = maxTime - averageTime;
+		var jitterMin = minTime - averageTime;
+		var report = lbl('jitter.avg') + ": " + averageTime + " " + lbl('ms') + "\n";
+		report += lbl('jitter.min') + ": " + minTime + " " + lbl('ms') + "\n";
+		report += lbl('jitter.max') + ": " + maxTime + " " + lbl('ms') + "\n";
+		report += lbl('jitter') + ": " + jitterMax + " " + lbl('ms') + "; " + jitterMin + " " + lbl('ms') + " \n";
 
-        var max = -jitterMin;
-        if (jitterMax > max) {
-            max = jitterMax;
-        }
+		var max = -jitterMin;
+		if (jitterMax > max) {
+			max = jitterMax;
+		}
 
-        resultLabel.setAttribute("text", "");
-        resultLabel.addFormat("%.0d\n%s", max, "ms");
+		resultLabel.setAttribute("text", "");
+		resultLabel.addFormat("%.0d\n%s", max, lbl('ms'));
 
-        return report;
-        ]]>
-    </method>
+		return report;
+		]]>
+	</method>
 
 </class>
 

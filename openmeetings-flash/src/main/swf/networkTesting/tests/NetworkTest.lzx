@@ -22,109 +22,106 @@
 
 <class name="NetworkTest" extends="view">
 
-    <attribute name="testName" type="string" value="null" />
-    <attribute name="protocol" type="string" value="null" />
-    <attribute name="host" type="string" value="null" />
-    <attribute name="port" type="number" value="null" />
-    <attribute name="running" type="boolean" value="false" />
-    <attribute name="allTests" type="boolean" value="false" />
-    <attribute name="resultText" type="boolean" value="false" />
+	<attribute name="testName" type="string" value="null" />
+	<attribute name="protocol" type="string" value="null" />
+	<attribute name="host" type="string" value="null" />
+	<attribute name="port" type="number" value="null" />
+	<attribute name="running" type="boolean" value="false" />
+	<attribute name="allTests" type="boolean" value="false" />
+	<attribute name="resultText" type="boolean" value="false" />
 
-    <method name="start" />
-    <method name="forcedStop" />
+	<method name="start" />
+	<method name="forcedStop" />
 
-    <method name="startAllTestsMode">
-        allTests = true;
-        this.setRunning();
-    </method>
+	<method name="startAllTestsMode">
+		allTests = true;
+		this.setRunning();
+	</method>
 
-    <view name="picture">
-        <view name="rsc" resource="notrun" width="113" height="113" />
-    </view>
-    <text name="nameLabel"
-          text="${parent.testName}"
-          x="${(parent.picture.rsc.width - this.width)/2}"
-          y="$once{parent.picture.rsc.height}"
-    />
-    <text name="resultLabel"
-          visible="false"
-          fgcolor="white"
-          align="center"
-          fontsize="16"
-    />
+	<view name="picture">
+		<view name="rsc" resource="notrun" width="113" height="113" />
+	</view>
+	<text name="nameLabel" text="${parent.testName}" x="${(parent.picture.rsc.width - this.width)/2}"
+		y="$once{parent.picture.rsc.height}"
+	/>
+	<text name="resultLabel" visible="false" fgcolor="white" align="center" fontsize="16" />
 
-    <handler name="onclick">
-        if (running) {
-            this.setStopped();
-        } else {
-            allTests = false;
-            this.setRunning();
-        }
-    </handler>
+	<handler name="onclick">
+		if (running) {
+			this.setStopped();
+		} else {
+			allTests = false;
+			this.setRunning();
+		}
+	</handler>
 
-    <method name="handleAllTestsMode">
-        if (allTests) {
-            canvas.testsView.testAll();
-        }
-    </method>
-    
-    <method name="setPassed">
-        if (running) {
-            running=false;
-            if (resultText) {
-                picture.rsc.setAttribute("resource", "passed_result");
-                var x = (picture.rsc.width - resultLabel.width)/2;
-                var y = (picture.rsc.height - resultLabel.height)/2;
-                resultLabel.setAttribute("x", x);
-                resultLabel.setAttribute("y", y);
-                resultLabel.setAttribute("visible", true);
-            } else {
-                picture.rsc.setAttribute("resource", "passed");
-            }
-            canvas.setAttribute("busy", false);
-            this.handleAllTestsMode();
-        }
-    </method>
+	<method name="handleAllTestsMode">
+		if (allTests) {
+			canvas.testsView.testAll();
+		}
+	</method>
+	
+	<method name="setPassed">
+		if (running) {
+			running=false;
+			if (resultText) {
+				picture.rsc.setAttribute("resource", "passed_result");
+				var x = (picture.rsc.width - resultLabel.width)/2;
+				var y = (picture.rsc.height - resultLabel.height)/2;
+				resultLabel.setAttribute("x", x);
+				resultLabel.setAttribute("y", y);
+				resultLabel.setAttribute("visible", true);
+			} else {
+				picture.rsc.setAttribute("resource", "passed");
+			}
+			canvas.setAttribute("busy", false);
+			this.handleAllTestsMode();
+		}
+	</method>
 
-    <method name="setFailed">
-        if (running) {
-            running=false;
-            picture.rsc.setAttribute("resource", "failed");
-            canvas.setAttribute("busy", false);
-            this.handleAllTestsMode();
-        }
-    </method>
+	<method name="setFailed">
+		if (running) {
+			running=false;
+			picture.rsc.setAttribute("resource", "failed");
+			canvas.setAttribute("busy", false);
+			this.handleAllTestsMode();
+		}
+	</method>
 
-    <method name="setRunning">
-        if (canvas.busy) {
-            return;
-        }
-        canvas.setAttribute("busy", true);
-        this.start();
-        running=true;
-        resultLabel.setAttribute("visible", false);
-        picture.rsc.setAttribute("resource", "running");
-        picture.rsc.play();
-    </method>
+	<method name="setRunning">
+		if (canvas.busy) {
+			return;
+		}
+		canvas.setAttribute("busy", true);
+		this.start();
+		running=true;
+		resultLabel.setAttribute("visible", false);
+		picture.rsc.setAttribute("resource", "running");
+		picture.rsc.play();
+	</method>
 
-    <method name="setStopped">
-        this.forcedStop();
-        running=false;
-        picture.rsc.setAttribute("resource", "notrun");
-        canvas.setAttribute("busy", false);
-        this.handleAllTestsMode();
-    </method>
+	<method name="setStopped">
+		this.forcedStop();
+		running=false;
+		picture.rsc.setAttribute("resource", "notrun");
+		canvas.setAttribute("busy", false);
+		this.handleAllTestsMode();
+	</method>
 
-    <method name="log" args="message">
-        var str = testName + ": " + message + "\n";
-        canvas.log += str;
-        if ($debug) Debug.write(str);
-    </method>
+	<method name="log" args="message">
+		var str = testName + ": " + message + "\n";
+		canvas.log += str;
+		if ($debug) Debug.write(str);
+	</method>
 
-    <method name="getBaseUrl">
-    	var hostUrl = protocol + "://" + host + ":" + port + canvas.uriContext;
-    	return hostUrl + (hostUrl.slice(-1) == '/' ? '' : '/');
-    </method>
+	<method name="getBaseUrl">
+		var hostUrl = protocol + "://" + host + ":" + port + canvas.uriContext;
+		return hostUrl + (hostUrl.slice(-1) == '/' ? '' : '/');
+	</method>
+
+	<method name="lbl" args="key">
+		return canvas.lbl(key);
+	</method>
 
 </class>
 
