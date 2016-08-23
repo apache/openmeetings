@@ -339,7 +339,7 @@ public abstract class BaseConverter {
 	
 	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		if (!r.exists()) {
+		if (!r.exists(FLV_EXTENSION)) {
 			return;
 		}
 		File file = getRecording(r.getHash());
