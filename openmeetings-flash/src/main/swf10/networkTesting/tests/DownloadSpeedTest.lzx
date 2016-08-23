@@ -22,28 +22,28 @@
 
 <class name="DownloadSpeedTest" extends="BaseURLLoadTest">
 
-    <handler name="oninit">
-        this.setAttribute("testsCount", 1);
-        this.setAttribute("testName", "Download speed");
-        this.setAttribute("testTypeParameter", "download");
-        this.setAttribute("verbose", false);
-        this.setAttribute("resultText", true);
-    </handler>
+	<handler name="oninit">
+		this.setAttribute("testsCount", 1);
+		this.setAttribute("testName", lbl('dwn'));
+		this.setAttribute("testTypeParameter", "download");
+		this.setAttribute("verbose", false);
+		this.setAttribute("resultText", true);
+	</handler>
 
-    <method name="generateReport">
-        var mBytes = loader.bytesTotal/(1024*1024);
-        var timeSec = wholeTime/1000;
-        var speed = mBytes/timeSec;
+	<method name="generateReport">
+		var mBytes = loader.bytesTotal/(1024*1024);
+		var timeSec = wholeTime/1000;
+		var speed = mBytes/timeSec;
 
-        var report = "Bytes downloaded: " + mBytes + " Mb\n";
-        report += "Download time: " + timeSec + " s\n";
-        report += "Download speed: " + speed + " Mb/s\n";
+		var report = lbl('dwn.bytes') + ": " + mBytes + " " + lbl('mb') + "\n";
+		report += lbl('dwn.time') + ": " + timeSec + " " + lbl('sec') + "\n";
+		report += lbl('dwn.speed') + ": " + speed + " " + lbl('mb') + "/" + lbl('sec') + "\n";
 
-        resultLabel.setAttribute("text", "");
-        resultLabel.addFormat("%.2f\n%s", speed, "Mb/s");
+		resultLabel.setAttribute("text", "");
+		resultLabel.addFormat("%.2f\n%s", speed, lbl('mb') + "/" + lbl('sec'));
 
-        return report;
-    </method>
+		return report;
+	</method>
 
 </class>
 

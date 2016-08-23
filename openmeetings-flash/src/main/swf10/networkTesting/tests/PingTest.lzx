@@ -22,21 +22,21 @@
 
 <class name="PingTest" extends="BaseURLLoadTest">
 
-    <handler name="oninit">
-        this.setAttribute("testsCount", 10);
-        this.setAttribute("testName", "Ping");
-        this.setAttribute("testTypeParameter", "ping");
-    </handler>
+	<handler name="oninit">
+		this.setAttribute("testsCount", 10);
+		this.setAttribute("testName", lbl('ping'));
+		this.setAttribute("testTypeParameter", "ping");
+	</handler>
 
-    <method name="generateReport">
-        var averageTime = wholeTime / successfulTestsCount;
-        var packetsLost = testsCount - successfulTestsCount;
-        var report = "Average ping time: " + averageTime + " ms\n";
-        report += "Packets received: " + successfulTestsCount + "\n";
-        report += "Packets lost: " + packetsLost + "\n";
+	<method name="generateReport">
+		var averageTime = wholeTime / successfulTestsCount;
+		var packetsLost = testsCount - successfulTestsCount;
+		var report = lbl('ping.avg') + ": " + averageTime + " " + lbl('ms') + "\n";
+		report += lbl('ping.rcv') + ": " + successfulTestsCount + "\n";
+		report += lbl('ping.lost') + ": " + packetsLost + "\n";
 
-        return report;
-    </method>
+		return report;
+	</method>
 
 </class>
 
