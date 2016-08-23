@@ -59,9 +59,11 @@ import org.slf4j.Logger;
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
+	public static final String SWF = "swf";
 	public static final String PARAM_PUBLIC_SID = "publicSid";
 	public static final String PARAM_URL = "url";
 	public static final String SWF_TYPE_NETWORK = "network";
+	public static final String SWF_TYPE_SETTINGS = "settings";
 	private Long roomId = null;
 	
 	public SwfPanel(String id) {

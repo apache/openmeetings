@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.user.dashboard;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
@@ -30,7 +32,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,7 +74,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick() {
-				setResponsePage(HashPage.class, new PageParameters().add("swf", SwfPanel.SWF_TYPE_NETWORK));
+				setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_NETWORK));
 			}
 		});
 	}
