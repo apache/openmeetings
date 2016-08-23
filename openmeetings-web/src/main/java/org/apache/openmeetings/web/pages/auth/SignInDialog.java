@@ -23,6 +23,8 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,6 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.HashPage;
-import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
@@ -245,7 +246,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 				@Override
 				public void onClick() {
-					setResponsePage(HashPage.class, new PageParameters().add("swf", SwfPanel.SWF_TYPE_NETWORK));
+					setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_NETWORK));
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(
