@@ -22,31 +22,31 @@
 
 <class name="UploadSpeedTest" extends="NetworkTest">
 
-    <switch>
-        <when property="$as3">
-            <passthrough>
-                import flash.events.*;
-                import flash.net.*;
-                import flash.utils.*;
-            </passthrough>
-        </when>
-    </switch>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.events.*;
+				import flash.net.*;
+				import flash.utils.*;
+			</passthrough>
+		</when>
+	</switch>
 
-    <attribute name="startTime" type="number" value="0" />
+	<attribute name="startTime" type="number" value="0" />
 
-    <attribute name="hostUrl" type="string" value="" />
-    <attribute name="loaderInited" type="boolean" value="false" />
-    <attribute name="vars" value="null" />
-    <attribute name="request" value="null" />
-    <attribute name="loader" value="null" />
+	<attribute name="hostUrl" type="string" value="" />
+	<attribute name="loaderInited" type="boolean" value="false" />
+	<attribute name="vars" value="null" />
+	<attribute name="request" value="null" />
+	<attribute name="loader" value="null" />
 
-    <handler name="oninit">
-        this.setAttribute("testName", "Upload speed");
-        this.setAttribute("resultText", true);
-    </handler>
+	<handler name="oninit">
+		this.setAttribute("testName", lbl('upl'));
+		this.setAttribute("resultText", true);
+	</handler>
 
-    <method name="initLoader">
-    	hostUrl = getBaseUrl() + "services/networktest";
+	<method name="initLoader">
+		hostUrl = getBaseUrl() + "services/networktest";
 		loader = new RestCall({
 			url: hostUrl
 			, method: URLRequestMethod.POST
@@ -57,67 +57,67 @@
 			});
 		vars = UploadPostHelper.getPostData('aaa', getData());
 		if ($debug) Debug.write("initLoader:: ");//, vars
-        loaderInited = true;
-    </method>
+		loaderInited = true;
+	</method>
 
-    <method name="start">
+	<method name="start">
 		if ($debug) Debug.write("start:: ", request);
-        if (!loaderInited) {
-            this.initLoader();
-        }
+		if (!loaderInited) {
+			this.initLoader();
+		}
 
 		if ($debug) Debug.write("going to start:: ", loader);
-        this.log("start test... " + hostUrl);
-        startTime = getTimer();
+		this.log(lbl('report.start') + " " + hostUrl);
+		startTime = getTimer();
 		request = loader.load(vars);
 		if ($debug) Debug.write("load:: ", request);
-    </method>
+	</method>
 
-    <method name="forcedStop">
-        loader.close();
-        this.log("stopped");
-    </method>
+	<method name="forcedStop">
+		loader.close();
+		this.log("stopped");
+	</method>
 
-    <method name="onComplete" args="e">
+	<method name="onComplete" args="e">
 		if ($debug) Debug.write("onComplete:: ", e);
-        if (running) {
-            var endTime = getTimer();
-            var loadTime = endTime - startTime;
-            var loadTimeSec = loadTime/1000;
-            var mBytes = request.data.length/(1024*1024);
-            var speed = mBytes / loadTimeSec;
+		if (running) {
+			var endTime = getTimer();
+			var loadTime = endTime - startTime;
+			var loadTimeSec = loadTime/1000;
+			var mBytes = request.data.length/(1024*1024);
+			var speed = mBytes / loadTimeSec;
 
-            var report = "report:\n";
-            report += "Bytes uploaded: " + mBytes + " Mb\n";
-            report += "Upload time: " + loadTimeSec + " s\n";
-            report += "Upload speed: " + speed + " Mb/s\n";
+			var report = "report:\n";
+			report += lbl('upl.bytes') + ": " + mBytes + " " + lbl('mb') + "\n";
+			report += lbl('upl.time') + ": " + loadTimeSec + " " + lbl('sec') + "\n";
+			report += lbl('upl.speed') + ": " + speed + " " + lbl('mb') + "/" + lbl('sec') + "\n";
 
-            resultLabel.setAttribute("text", "");
-            resultLabel.addFormat("%.2f\n%s", speed, "Mb/s");
-            this.log(report);
-            this.setPassed();
-        }
-    </method>
+			resultLabel.setAttribute("text", "");
+			resultLabel.addFormat("%.2f\n%s", speed, lbl('mb') + "/" + lbl('sec'));
+			this.log(report);
+			this.setPassed();
+		}
+	</method>
 
-    <method name="onError" args="e">
+	<method name="onError" args="e">
 		if ($debug) Debug.write("onError:: ", e);
-        if (running) {
-            this.log("error - " + e);
-            this.setFailed();
-        }
-    </method>
+		if (running) {
+			this.log(lbl('report.error') + " - " + e);
+			this.setFailed();
+		}
+	</method>
 
-    <!-- returns a 1 Mb string-->
-    <method name="getData">
-    <![CDATA[
-        var result:ByteArray = new ByteArray();
-        for (var i = 0; i < 64 * 16384; ++i) {
-            result.writeByte(i % 256);
-        }
-        result.position = 0;
-        return result;
-    ]]>
-    </method>
+	<!-- returns a 1 Mb string-->
+	<method name="getData">
+	<![CDATA[
+		var result:ByteArray = new ByteArray();
+		for (var i = 0; i < 64 * 16384; ++i) {
+			result.writeByte(i % 256);
+		}
+		result.position = 0;
+		return result;
+	]]>
+	</method>
 
 </class>
 
