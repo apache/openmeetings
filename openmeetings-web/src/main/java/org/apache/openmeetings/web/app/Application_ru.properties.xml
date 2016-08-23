@@ -1927,4 +1927,5 @@
 	<entry key="appointment.tab.general">Общие</entry>
 	<entry key="appointment.tab.advanced">Дополнительные</entry>
 	<entry key="button.label.share">Share</entry>
+	<entry key="invalid.hash">Invalid hash</entry>
 </properties>
