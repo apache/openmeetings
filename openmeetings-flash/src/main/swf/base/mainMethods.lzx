@@ -326,6 +326,10 @@
 				isSyncUpdate: true,
 				x: 0, y: 0, initY: 0
 				});
+			var rtmpCon = new lz.rtmpConnection(canvas, {
+					src: hib.getUrl()
+				});
+			rtmpCon.connect();
 		} else {
 			hib.userScope = canvas.wicketroomid;
 			var src = hib.getUrl();
