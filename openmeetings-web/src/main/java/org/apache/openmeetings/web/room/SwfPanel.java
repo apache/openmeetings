@@ -38,6 +38,7 @@ import org.apache.wicket.util.string.Strings;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
 	
