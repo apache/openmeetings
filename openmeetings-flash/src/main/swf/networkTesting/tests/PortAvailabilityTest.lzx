@@ -22,68 +22,68 @@
 
 <class name="PortAvailabilityTest" extends="NetworkTest">
 
-    <switch>
-        <when property="$as3">
-            <passthrough>
-                import flash.events.*;
-                import flash.net.*;
-                import flash.system.*;
-            </passthrough>
-        </when>
-    </switch>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.events.*;
+				import flash.net.*;
+				import flash.system.*;
+			</passthrough>
+		</when>
+	</switch>
 
-    <rtmpConnection name="rtmp" debug="true" />
+	<rtmpConnection name="rtmp" debug="true" />
 
-    <handler name="oninit">
-        this.setAttribute("testName", "Port");
-    </handler>
+	<handler name="oninit">
+		this.setAttribute("testName", lbl('port'));
+	</handler>
 
-    <method name="start">
-        var hostUrl = protocol + "://" + host + ":" + port + canvas.rtmpUriPath;
-        rtmp.setAttribute("src", hostUrl);
-        this.log(": start test... " + hostUrl);
+	<method name="start">
+		var hostUrl = protocol + "://" + host + ":" + port + canvas.rtmpUriPath;
+		rtmp.setAttribute("src", hostUrl);
+		this.log(": " + lbl('report.start') + " " + hostUrl);
 
 		canvas.publicSID = "networktest";
-        rtmp.connect();
-    </method>
+		rtmp.connect();
+	</method>
 
-    <method name="forcedStop">
-        this.log("stopped");
+	<method name="forcedStop">
+		this.log(lbl('port.stopped'));
 		disconnect();
-    </method>
+	</method>
 
 	<method name="disconnect">
-       rtmp._nc.close();
-       rtmp.setAttribute('status', 'disconnected');
-       rtmp.setAttribute('stage', 0);
+		rtmp._nc.close();
+		rtmp.setAttribute('status', 'disconnected');
+		rtmp.setAttribute('stage', 0);
 	</method>
 	
-    <handler name="onconnect" reference="rtmp">
+	<handler name="onconnect" reference="rtmp">
 		if (running) {
-			this.log("port is available\n");
+			this.log(lbl('port.avail') + "\n");
 			this.setPassed();
 			disconnect();
-        }
-    </handler>
+		}
+	</handler>
 
-    <handler name="onerror" args="e" reference="rtmp">
-        if (running) {
-            this.log("connection error - " + e + "\n");
-            this.setFailed();
-        }
-    </handler>
+	<handler name="onerror" args="e" reference="rtmp">
+		if (running) {
+			this.log(lbl('report.con.err') + " - " + e + "\n");
+			this.setFailed();
+		}
+	</handler>
 
-    <handler name="onstatus" args="e" reference="rtmp">
-        if (running) {
-        	switch(e) {
-        		case "timed out":
-        		case "connection failed":
-        			this.setFailed();
-        			break;
-        	}
-            if($debug) Debug.write(testName + ": RTMP connect status - ", e);
-        }
-    </handler>
+	<handler name="onstatus" args="e" reference="rtmp">
+		if (running) {
+			switch(e) {
+				case "timed out":
+				case "connection failed":
+					this.setFailed();
+					break;
+			}
+			if($debug) Debug.write(testName + ": RTMP connect status - ", e);
+		}
+	</handler>
 
 </class>
 

@@ -242,16 +242,37 @@ public class SwfPanel extends BasePanel {
 
 	public String getInitFunction(PageParameters pp) {
 		String initStr = null;
-		String swf = getFlashFile(pp);
+		StringValue type = pp.get(SWF);
+		String swf = getFlashFile(type);
 		if (!Strings.isEmpty(swf)) {
-			initStr = String.format("var labels = %s; initSwf(%s);", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762, 144)
+			String lbls = null;
+			if (SWF_TYPE_NETWORK.equals(type.toString())) {
+				lbls = getStringLabels(
+						"network.test.ms", "network.test.mb", "network.test.sec"
+						, "network.test.click.play", "network.test.copy.log"
+						, "network.test.report", "network.test.report.start", "network.test.report.error"
+						, "network.test.report.con.err"
+						, "network.test.ping", "network.test.ping.avg", "network.test.ping.rcv"
+						, "network.test.ping.lost", "network.test.ping.load"
+						, "network.test.port", "network.test.port.avail", "network.test.port.stopped"
+						, "network.test.jitter", "network.test.jitter.avg", "network.test.jitter.min"
+						, "network.test.jitter.max"
+						, "network.test.dwn", "network.test.dwn.bytes", "network.test.dwn.time"
+						, "network.test.dwn.speed"
+						, "network.test.upl", "network.test.upl.bytes", "network.test.upl.time"
+						, "network.test.upl.speed"
+						);
+			} else if (SWF_TYPE_SETTINGS.equals(type.toString())) {
+				lbls = getStringLabels("448", "449", "450", "451", "758", "447", "52", "53", "1429", "1430"
+						, "775", "452", "767", "764", "765", "918", "54", "761", "762", "144");
+			}
+			initStr = String.format("var labels = %s; initSwf(%s);", lbls
 					, new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp)).toString());
 		}
 		return initStr;
 	}
 
-	private String getFlashFile(PageParameters pp) {
-		StringValue type = pp.get(SWF);
+	private String getFlashFile(StringValue type) {
 		String fmt = "main%s.swf11.swf";
 		if (SWF_TYPE_NETWORK.equals(type.toString())) {
 			fmt = "networktesting%s.swf10.swf";
@@ -259,9 +280,9 @@ public class SwfPanel extends BasePanel {
 		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
 	}
 
-	public static String getStringLabels(long... ids) {
+	public static String getStringLabels(String... ids) {
 		JSONArray arr = new JSONArray();
-		for (long id : ids) {
+		for (String id : ids) {
 			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
 		}
 		return arr.toString();
