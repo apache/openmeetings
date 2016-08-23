@@ -1931,4 +1931,5 @@
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>
 	<entry key="button.label.share">Share</entry>
+	<entry key="invalid.hash">Invalid hash</entry>
 </properties>
