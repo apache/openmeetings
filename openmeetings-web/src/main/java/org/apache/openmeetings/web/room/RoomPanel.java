@@ -121,7 +121,8 @@ public class RoomPanel extends BasePanel {
 						.put("host", url.getHost())
 						//.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
 						.put("app", path + r.getId())
-						.put("labels", SwfPanel.getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
+						.put("labels", SwfPanel.getStringLabels("448", "449", "450", "451", "758", "447", "52", "53"
+								, "1429", "1430", "775", "452", "767", "764", "765", "918", "54", "761", "762"))
 						.toString()
 						));
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
