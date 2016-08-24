@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -117,6 +118,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	protected void init() {
 		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
+		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		
 		//Add custom resource loader at the beginning, so it will be checked first in the 
 		//chain of Resource Loaders, if not found it will search in Wicket's internal 
