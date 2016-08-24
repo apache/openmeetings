@@ -100,7 +100,7 @@ public class Invitation implements IDataProviderEntity {
 	// the hash for the link
 	@Column(name = "hash")
 	private String hash;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "invitee_id", nullable = true)
 	@ForeignKey(enabled = true)
@@ -108,8 +108,8 @@ public class Invitation implements IDataProviderEntity {
 
 	@Column(name = "password_protected")
 	private boolean passwordProtected;
-	
-	@Column(name = "password")
+
+	@Column(name = "password", length = 1024)
 	private String password;
 
 	// Invitations by Time are only valid between the validFrom validTo
