@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
@@ -339,7 +340,7 @@ public abstract class BaseConverter {
 	
 	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		if (!r.exists(FLV_EXTENSION)) {
+		if (!r.exists(EXTENSION_FLV)) {
 			return;
 		}
 		File file = getRecording(r.getHash());
