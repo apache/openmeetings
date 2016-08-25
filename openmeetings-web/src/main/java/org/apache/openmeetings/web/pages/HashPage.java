@@ -127,10 +127,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		PageParameters pp = new PageParameters(p);
 		if (roomId != null) {
 			pp.add(WICKET_ROOM_ID, roomId);
+			SwfPanel rp = new SwfPanel(CHILD_ID, pp);
+			replace(new MainPanel(PANEL_MAIN, rp));
+			rp.onMenuPanelLoad(null);
+		} else {
+			replace(new SwfPanel(PANEL_MAIN, pp));
 		}
-		SwfPanel rp = new SwfPanel(CHILD_ID, pp);
-		replace(new MainPanel(PANEL_MAIN, rp));
-		rp.onMenuPanelLoad(null);
 	}
 
 	@Override
