@@ -219,7 +219,7 @@ mvn clean install -Prc,release
 					<li>Select "Add signing set"</li>
 					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.1.0-RELEASE"</li>
 					<li>Enter "Version" for ex. "3.1.0-RELEASE"</li>
-					<li>Select "Java Signing" as "Signing service"</li>
+					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
 					<li>Select "Sign now"</li>
 					<li>Select "Type of signing" -> "Production"</li>
