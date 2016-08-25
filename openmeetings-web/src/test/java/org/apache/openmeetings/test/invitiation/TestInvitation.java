@@ -18,33 +18,44 @@
  */
 package org.apache.openmeetings.test.invitiation;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import static org.apache.openmeetings.util.CalendarHelper.getDate;
 
-import org.apache.openmeetings.core.remote.InvitationService;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.webservice.UserWebService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.threeten.bp.LocalDateTime;
 
 public class TestInvitation extends AbstractJUnitDefaults {
 	@Autowired
-	private InvitationService invitationService;
+	private InvitationManager invitationManager;
 	@Autowired
 	private UserWebService userWebService;
 	@Autowired
 	private UserDao userDao;
-	
+	@Autowired
+	private RoomDao roomDao;
+
 	@Test
-	public void testSendInvitationLink() {
+	public void testSendInvitationLink() throws Exception {
 		ServiceResult result = userWebService.login(username, userpass);
 		User us = userDao.get(result.getCode());
 		
-		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
-		invitationService.sendInvitationHash(result.getMessage(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
-				"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
+		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
+		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());
+		Invitation i = invitationManager.getInvitation(invitee, roomDao.get(1L),
+				false, "", Valid.OneTime
+				, us, us.getLanguageId(),
+				getDate(from, "GMT"), getDate(from.plusHours(2), "GMT"), null);
+		
+		invitationManager.sendInvitationLink(i, MessageType.Create, "subject", "message", false);
 	}
 }
