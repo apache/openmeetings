@@ -46,7 +46,7 @@ public class AccessDeniedPage extends BaseInitedPage {
 
 					@Override
 					public boolean isVisible() {
-						return !WebSession.get().isSignedIn();
+						return WebSession.get().isSignedIn();
 					}
 
 					@Override

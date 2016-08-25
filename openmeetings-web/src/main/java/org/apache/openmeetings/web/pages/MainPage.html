@@ -30,31 +30,7 @@
 	</script>
 </wicket:head>
 <wicket:extend>
-	<script type="text/javascript">
-		$(function() {
-			Wicket.Event.subscribe('/ajax/call/failure', hideBusyIndicator);
-			Wicket.Event.subscribe('/ajax/call/before', showBusyIndicator);
-			Wicket.Event.subscribe('/ajax/call/success', hideBusyIndicator);
-			Wicket.Event.subscribe('/ajax/call/complete', hideBusyIndicator);
-		});
-	</script>
-	<div wicket:id="topControls" id="topControls">
-		<div wicket:id="topLinks"><span 
-			id="contactsAndMessages"><a wicket:id="messages"><wicket:message key="1188"/></a></span><span 
-			id="profile"><a wicket:id="profile"><wicket:message key="5"/></a></span><span 
-			id="logout"><a wicket:id="logout" href="#"><wicket:message key="310"/></a></span><span 
-			id="reportBug"><a target="_blank" href="https://issues.apache.org/jira/browse/OPENMEETINGS"><wicket:message key="284"/></a></span><span><a 
-			wicket:id="about"><wicket:message key="1549"/></a></span>
-		</div>
-		<div id="busy_indicator" class="ui-widget-header"><span><wicket:message key="1554"/></span></div>
-		<div wicket:id="menu"></div>
-	</div>
-	<div wicket:id="dev" id="devMenu"/>
-	<div wicket:id="contents"><div wicket:id="child"></div></div>
-	<div wicket:id="chatPanel"></div>
-	<div wicket:id="aboutDialog"></div>
-	<div wicket:id="userInfoDialog"></div>
-	<div wicket:id="newMessageDialog"></div>
-	<div wicket:id="inviteUserDialog"></div>
+	<div wicket:id="main"/>
+	<div wicket:id="invite-to-room"></div>
 </wicket:extend>
 </html>

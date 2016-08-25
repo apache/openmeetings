@@ -217,10 +217,15 @@ public class SwfPanel extends BasePanel {
 	}
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getMenu().setVisible(false)
-				, getMainPage().getTopLinks().setVisible(false));
-		//handler.appendJavaScript("roomLoad();");
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		getBasePage().getHeader().setVisible(false);
+		getMainPanel().getMenu().setVisible(false);
+		getMainPanel().getTopLinks().setVisible(false);
+		if (handler != null) {
+			handler.add(getBasePage().getHeader(), getMainPanel().getMenu(), getMainPanel().getTopLinks());
+			//handler.appendJavaScript("roomLoad();");
+		}
+		return this;
 	}
 	
 	private static ResourceReference newResourceReference() {

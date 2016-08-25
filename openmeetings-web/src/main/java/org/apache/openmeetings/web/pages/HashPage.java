@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
+import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
@@ -52,13 +53,14 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
 	public static final String SECURE_HASH = "secureHash";
+	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitationHash";
 	private static final String HASH = "hash";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 	private String errorKey = "invalid.hash";
-	private boolean error = true;;
+	private boolean error = true;
 
 	public HashPage(PageParameters p) {
 		StringValue secure = p.get(SECURE_HASH);
@@ -71,7 +73,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		ws.checkHashes(secure, invitation);
 
 		recContainer.setVisible(false);
-		add(new EmptyPanel("panel-swf").setVisible(false));
+		add(new EmptyPanel(PANEL_MAIN).setVisible(false));
 		if (!invitation.isEmpty()) {
 			Invitation i = ws.getInvitation();
 			if (i == null) {
@@ -91,13 +93,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				}
 				Room r = i.getRoom();
 				if (r != null) {
-					replace(new SwfPanel("panel-swf", new PageParameters(p).add(WICKET_ROOM_ID, r.getId())));
+					createRoom(p, r.getId());
 				}
-				error = false;
 			}
 		} else if (!secure.isEmpty()) {
-			Long recId = getRecordingId();
-			if (recId == null && ws.getRoomId() == null) {
+			Long recId = getRecordingId(), roomId = ws.getRoomId();
+			if (recId == null && roomId == null) {
 				errorKey = "1599";
 			} else if (recId != null) {
 				recContainer.setVisible(true);
@@ -106,14 +107,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				vp.update(null, rec);
 				error = false;
 			} else {
-				replace(new SwfPanel("panel-swf", new PageParameters(p).add(WICKET_ROOM_ID, ws.getRoomId())));
-				error = false;
+				createRoom(p, roomId);
 			}
 		}
 		StringValue swf = p.get(SWF);
 		if (!swf.isEmpty() && (SWF_TYPE_NETWORK.equals(swf.toString()) || SWF_TYPE_SETTINGS.equals(swf.toString()))) {
-			replace(new SwfPanel("panel-swf", p));
-			error = false;
+			createRoom(p, null);
 		}
 		add(recContainer
 			.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true)
@@ -121,10 +120,22 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				, new InvitationPasswordDialog("i-pass", this)));
 	}
 
+	private void createRoom(PageParameters p, Long roomId) {
+		error = false;
+		PageParameters pp = new PageParameters(p);
+		if (roomId != null) {
+			pp.add(WICKET_ROOM_ID, roomId);
+		}
+		SwfPanel rp = new SwfPanel(PANEL_MAIN, pp);
+		replace(new MainPanel(PANEL_MAIN, rp));
+		rp.onMenuPanelLoad(null);
+	}
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK, DialogIcon.ERROR) {
+		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK,
+				DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -117,7 +117,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		removeOnlineUser(getClientByKeys(getUserId(), get().getId()));
 		super.invalidate();
 		userId = null;
-		rights = new HashSet<User.Right>();
+		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
 		SID = null;
 		ISO8601FORMAT = null;
 		sdf = null;
@@ -184,15 +184,18 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				}
 				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, false);
 				if (i.isAllowEntry()) {
-					setUser(i.getInvitee(), true);
+					Set<Right> rights = new HashSet<>();
 					//TODO markUsed
 					if (i.getRoom() != null) {
+						rights.add(Right.Room);
 						roomId = i.getRoom().getId();
 					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
+						rights.add(Right.Room);
 						roomId = i.getAppointment().getRoom().getId();
 					} else if (i.getRecording() != null) {
 						recordingId = i.getRecording().getId();
 					}
+					setUser(i.getInvitee(), rights);
 				}
 			}
 		} catch (Exception e) {
@@ -240,7 +243,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						soapDao.update(soapLogin);
 					}
 					sessionDao.updateUser(SID, user.getId());
-					setUser(user, true);
+					setUser(user, null);
 					roomId = soapLogin.getRoomId();
 					recordingId = soapLogin.getRecordingId();
 					return true;
@@ -250,7 +253,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return false;
 	}
 
-	private void setUser(User u, boolean emptyRights) {
+	private void setUser(User u, Set<Right> rights) {
 		String _sid = SID;
 		Long _recordingId = recordingId;
 		Long _roomId = roomId;
@@ -269,10 +272,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			i = _i;
 		}
 		userId = u.getId();
-		if (emptyRights) {
-			rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
+		if (rights == null || rights.isEmpty()) {
+			this.rights = Collections.unmodifiableSet(u.getRights());
 		} else {
-			rights = Collections.unmodifiableSet(u.getRights());
+			this.rights = Collections.unmodifiableSet(rights);
 		}
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
@@ -318,7 +321,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (u == null) {
 			return false;
 		}
-		setUser(u, false);
+		setUser(u, null);
 		return true;
 	}
 	
