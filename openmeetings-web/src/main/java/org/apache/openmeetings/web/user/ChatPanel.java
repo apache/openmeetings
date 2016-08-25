@@ -205,19 +205,22 @@ public class ChatPanel extends BasePanel {
 		sb.append("});");
 		target.appendJavaScript(sb);
 	}
-	
+
 	public void roomExit(Room r, IPartialPageRequestHandler handler) {
 		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
 		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));
 	}
-	
+
 	public void toggle(IPartialPageRequestHandler handler, boolean visible) {
-		handler.add(setVisible(visible));
-		handler.appendJavaScript("reinit();");
+		setVisible(visible);
+		if (handler != null) {
+			handler.add(this);
+			handler.appendJavaScript("reinit();");
+		}
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

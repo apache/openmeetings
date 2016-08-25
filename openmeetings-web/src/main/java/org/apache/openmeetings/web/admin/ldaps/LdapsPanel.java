@@ -22,6 +22,7 @@ import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -46,9 +47,10 @@ public class LdapsPanel extends AdminPanel {
 	private LdapForm form;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
 		handler.appendJavaScript("omLdapPanelInit();");
+		return this;
 	}
 
 	public LdapsPanel(String id) {

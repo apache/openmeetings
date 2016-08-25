@@ -23,6 +23,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -45,11 +46,12 @@ import org.apache.wicket.markup.repeater.Item;
 public class GroupsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	private GroupForm form;
-	
+
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
 		handler.appendJavaScript("groupsInit();");
+		return this;
 	}
 
 	public GroupsPanel(String id) {
