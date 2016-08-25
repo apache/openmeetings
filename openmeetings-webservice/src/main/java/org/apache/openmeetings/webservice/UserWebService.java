@@ -108,12 +108,8 @@ public class UserWebService implements UserService {
 				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}
 			
-			Sessiondata sd = sessionDao.create();
+			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
 			log.debug("Login user SID : " + sd.getSessionId());
-			if (!sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId())) {
-				return new ServiceResult(-35L, "invalid Session-Object", Type.ERROR);
-			}
-			
 			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
 			return new ServiceResult(oe.getCode() == null ? -1 : oe.getCode(), oe.getMessage(), Type.ERROR);

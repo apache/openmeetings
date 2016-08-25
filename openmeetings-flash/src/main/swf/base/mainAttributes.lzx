@@ -265,27 +265,11 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="publicSID" value="" type="string" />
 
 <!--- attributes for direct room access -->
-<attribute name="initroomid" value="0" type="number" />
 <attribute name="initroomStr" value="" type="string" />
 <attribute name="initdomainid" value="" type="string" />
 <attribute name="initlangid" value="1" type="number" />
 <attribute name="isinitRoomDirect" value="false" type="boolean" />
 <attribute name="isinitRoomObject" value="null" /> 
-
-<!-- attributes for direct room access via direct link -->
-<attribute name="directUserLogin" value="false" type="boolean" />
-<attribute name="directRoomId" value="1" type="number" />
-<attribute name="directRoomObj" value="null" />
-
-<!--- attributes for direct room access via remoteUser -->
-<attribute name="remoteUserLogin" value="false" type="boolean" />
-<attribute name="remoteUserSid" value="" type="string" />
-
-<!--- attributes for direct room access via remoteUser
-    This is using the advanced methods to prevent abuse
- -->
-<attribute name="secureRemoteUserLogin" value="false" type="boolean" />
-<attribute name="secureHash" value="" type="string" />
 
 <!-- Attributes for wicket login (since it hard not to break anything)-->
 <attribute name="wicketsid" type="string" value="null"/>

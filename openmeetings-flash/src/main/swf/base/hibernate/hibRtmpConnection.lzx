@@ -84,9 +84,6 @@
 	 -->
 	 <attribute name="currentroomid" value="0" type="number" />
 	 
-	 <!--- the current Invitation-Object -->
-	 <attribute name="currentInvitation" value="null" />
-	
 	<!-- shows what kind of conferenceView it is at the moment
 		wether its conferenceView or audienceView -->
 	<attribute name="modus" value="" type="string" />
@@ -156,15 +153,11 @@
 				canvas.thishib.loaderVar.setProgress();
 			}
 			getDefaultLanguage.doCall();
-		} else {
 			this.refreshDelegate = new LzDelegate(this, "refreshSessionMeth");
 			lz.Timer.addTimer(this.refreshDelegate, canvas.refreshSession);
 			if (canvas.thishib.loaderVar != null) {
 				canvas.thishib.loaderVar.setProgress();
 			}
-			
-			//Load Session Data
-			this.getsessiondata.doCall();	
 		}
 		connected = true;
 		client.roomConnect = this.roomConnect;
@@ -225,17 +218,6 @@
 			if ($debug) Debug.write("this.reconnectionAction: ", this.lastCalled);
 			this.connect();
 		} else {
-			if (canvas.isRemoteUser() && (this.status == 'NetConnection.Connect.Closed' 
-					|| this.status == 'NetConnection.Connect.NetworkChange'))
-			{
-				if (null != canvas.REDIRECT_URL_FOR_EXTERNAL_USERS) {
-					new lz.redirectBox(canvas, {
-							redirectURL:canvas.REDIRECT_URL_FOR_EXTERNAL_USERS
-							, maxTime: 0
-						});
-				}
-				this.counterror = 6; //NO more reconnects
-			}
 			this.useRTMPT = true
 			var src = getUrl();
 			this.setAttribute('src',src);
@@ -268,26 +250,13 @@
 	
 	<!-- This Function is just for refreshing the Session -->
 	<netRemoteCallHib name="refreshSession" funcname="userservice.refreshSession" showLoading="false" >	
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<handler name="ondata" args="value">
 			//if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
 			lz.Timer.addTimer(parent.refreshDelegate, canvas.refreshSession);
 		</handler>
 	</netRemoteCallHib>
-	  
-	<netRemoteCallHib name="getsessiondata" funcname="xmlcrm.getsessiondata" >	  
-		<handler name="ondata" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("hibRtmpConnection/getsessiondata [",value,"]");
-			canvas.sessionObject = value;
-			canvas.sessionId = value.sessionId;
-			if (canvas.thishib.loaderVar != null) {
-				canvas.thishib.loaderVar.setProgress();
-			}
-			parent.getPublicSID.doCall();
-		</handler>  
-	</netRemoteCallHib>
-	 
+
 	<netRemoteCallHib name="getPublicSID" funcname="getPublicSID" >	  
 		<handler name="ondata" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
@@ -343,90 +312,8 @@
 				parent.userlang = canvas.language_id;
 			}
 			parent.getLanguageByIdAndMax.doCall();
-		</handler>  
-	</netRemoteCallHib>	  
-	
-	<netRemoteCallHib name="getInvitationByHash" activeErrorHandler="true" funcname="invitationservice.getInvitationByHash">
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
-		<handler name="ondata" args="value">
-		<![CDATA[
-			if (canvas.thishib.loaderVar != null) {
-				canvas.thishib.loaderVar.close();
-			}
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("getInvitationByHash: ",value);
-			if (value<0){
-			} else {
-				if (value.allowEntry) {
-					parent.currentInvitation = value;
-					new lz.invitationQuickLoader(canvas.main_content._content.inner);
-				} else {
-					var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
-					var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
-				}
-			}
-		]]>
 		</handler>
-	</netRemoteCallHib> 
-	
-	<netRemoteCallHib name="secureLoginByRemote" activeErrorHandler="true" funcname="xmlcrm.secureLoginByRemote" >
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam name="remoteSessionId"><method name="getValue">return canvas.secureHash;</method></netparam>
-		<handler name="ondata" args="value">
-		<![CDATA[
-			if (canvas.thishib.loaderVar != null) {
-				canvas.thishib.loaderVar.close();
-			}
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("secureLoginByRemote: ",value);
-			if (value < 0) {
-			} else {
-				if (value == null) {
-					new lz.errorPopup(canvas,{error:'Invalid Hash'});
-					return;
-				}
-				
-				canvas.showNickNameDialog = value.showNickNameDialog;
-				if ($debug) Debug.write("secureLoginByRemote1: ",canvas.showNickNameDialog);
-				
-				canvas.initroomid = value.roomId;
-				canvas.becomemoderator = value.becomemoderator;
-				canvas.showAudioVideoTest = value.showAudioVideoTest;
-				
-				canvas.roomRecordingId = value.roomRecordingId;
-				
-				if (canvas.roomRecordingId == null) {
-					canvas.roomRecordingId = 0;
-				}
-				
-				if (canvas.showNickNameDialog) {
-					new lz.chooseNickName(canvas);
-				} else {
-					parent.getCurrentRoomClient.doCall();
-				}
-			}
-		]]>
-		</handler>
-	</netRemoteCallHib>  
-	
-	<netRemoteCallHib name="loginUserByRemote" activeErrorHandler="true" 
-		funcname="xmlcrm.loginUserByRemote" >		  
-		<netparam name="remoteSessionId"><method name="getValue">return canvas.remoteUserSid;</method></netparam>
-		<handler name="ondata" args="value">
-			<![CDATA[
-				
-				//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("loginUserByRemote -1-: ",value);
-				if ($debug) Debug.write("loginUserByRemote -2-: ",canvas.remoteUserSid);
-				if (value<0){
-					
-				} else {
-					parent.getCurrentRoomClient.doCall();
-				}
-			]]>
-		</handler>   
-	</netRemoteCallHib>  
+	</netRemoteCallHib>
 	
 	<netRemoteCallHib name="getCurrentRoomClient" funcname="xmlcrm.getCurrentRoomClient" >
 		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -449,10 +336,6 @@
 				canvas.setAttribute('lastName', lName);
 				canvas.setAttribute('mail', value.email);
 				
-				if (canvas.isRemoteUser() && !fName && !lName) {
-					if ($debug) Debug.write("!!!!!!!!!!! Nickname HIB ", value.email);
-					new lz.chooseNickName(canvas);
-				}
 				hib.userobject.id = value.userId;
 				hib.userobject.firstname = fName;
 				hib.userobject.lastname = lName;
@@ -460,45 +343,13 @@
 				canvas.setAttribute('lastLogin','');
 				canvas.setAttribute('picture_uri',value.picture_uri);
 				canvas.setAttribute('language','');
-				
-				if (canvas.wicketroomid > 0) {
-					canvas.initroomid = canvas.wicketroomid;
-				} else {
-					if (canvas.thishib.loaderVar != null) {
-						canvas.thishib.loaderVar.close();
-					}
-				}
-				parent.getRoomById.doCall();
+				canvas.setRoomValues(canvas.currentRoomObj);
 			}
 			if ($debug) Debug.write("getCurrentRoomClient: ", canvas.currentClient);
 		]]>
 		</handler>
 	</netRemoteCallHib>
-	
-	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >		  
-		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam name="roomId"><method name="getValue">return canvas.initroomid;</method></netparam>
-		<handler name="ondata" args="value">
-		<![CDATA[
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("getRoomById: ",value);
-			if (value!=null){
-				if (canvas.wicketsid != null) {
-					canvas.thishib.loaderVar.close();
-				}
-				if (canvas.directUserLogin) {
-					canvas.directRoomObj = value;
-					canvas.thishib.loaderVar.close();
-				} else if (parent.currentInvitation == null) {
-					canvas.setRoomValues(value);
-				}
-			} else {
-				new lz.labelerrorPopup(canvas,{errorlabelid:1286});
-			}
-		]]>
-		</handler>
-	</netRemoteCallHib>
-		
+
 	<netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
 		<attribute name="start" value="0" type="number" />
 		<attribute name="step" value="100" type="number" />
@@ -576,20 +427,6 @@
 			}
 			if (canvas.wicketsid != null) {
 				parent.loginWicket.doCall();
-			} else { 
-				if (canvas.thishib.loaderVar != null) {
-					canvas.thishib.loaderVar.close();
-				}
-				//do not show loggin-PopUp for the test-Application
-				if (parent.testAppLoading){ 
-					canvas.loadNextStepTestApp();
-				} else if (!!canvas.invitationHash) {
-					parent.getInvitationByHash.doCall();   
-				} else if (canvas.secureRemoteUserLogin) {
-					if ($debug) Debug.write("secureLoginByRemote:: ",canvas.secureHash);
-					hib.userobject = {};
-					parent.secureLoginByRemote.doCall();
-				}
 			}
 		]]>
 		</handler>
@@ -602,26 +439,28 @@
 		<![CDATA[
 			if ($debug) Debug.write("!!!!!!!!!!! loginWicket", value);
 			if (value != null) {
-				canvas.setAttribute('userId', value.id);
-				canvas.setAttribute('firstName', value.firstname == null ? "" : value.firstname);
-				canvas.setAttribute('lastName', value.lastname == null ? "" : value.lastname);
+				var user = value[0];
+				canvas.setAttribute('userId', user.id);
+				canvas.setAttribute('firstName', user.firstname == null ? "" : user.firstname);
+				canvas.setAttribute('lastName', user.lastname == null ? "" : user.lastname);
 				canvas.setAttribute('mail','');
 				canvas.setAttribute('lastLogin','');
 				canvas.setAttribute('picture_uri','');
 				canvas.setAttribute('language','');
-				canvas.setAttribute('currentuser',value.login);
-				if (value.timeZoneId != null) {
-					canvas.timeZoneId = value.timeZoneId;
+				canvas.setAttribute('currentuser', user.login);
+				if (user.timeZoneId != null) {
+					canvas.timeZoneId = user.timeZoneId;
 				}
-				if (value.rights != null) {
-					canvas.becomemoderator = value.rights.indexOf('Admin') > -1;
+				if (user.rights != null) {
+					canvas.becomemoderator = user.rights.indexOf('Admin') > -1;
 				}
 				if ($debug) Debug.write("hibRtmpConnection::loginWicket -> canvas.becomemoderator", canvas.becomemoderator);
-				if (value.sessionData == null) {
+				if (user.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
 					return;
 				}
-				hib.userobject = value;
+				hib.userobject = user;
+				canvas.currentRoomObj = value[1];
 				parent.getCurrentRoomClient.doCall();
 			} else {
 				new lz.labelerrorPopup(canvas, {errorlabelid: 1599});

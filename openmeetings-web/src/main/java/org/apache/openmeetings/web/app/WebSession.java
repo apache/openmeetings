@@ -242,9 +242,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						//soapLogin.setClientURL(clientURL); //FIXME
 						soapDao.update(soapLogin);
 					}
-					sessionDao.updateUser(SID, user.getId());
-					setUser(user, null);
 					roomId = soapLogin.getRoomId();
+					sd.setUserId(user.getId());
+					sd.setRoomId(roomId);
+					sessionDao.update(sd);
+					setUser(user, null);
 					recordingId = soapLogin.getRecordingId();
 					return true;
 				}
@@ -316,8 +318,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	public boolean signIn(User u) {
-		Sessiondata sessData = getBean(SessiondataDao.class).create();
-		SID = sessData.getSessionId();
 		if (u == null) {
 			return false;
 		}
@@ -354,16 +354,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public String getValidatedSid() {
 		SessiondataDao sessionDao = getBean(SessiondataDao.class);
 		Sessiondata sd = sessionDao.check(SID);
+		//TODO need to check roomId equality
 		if (sd.getUserId() == null || !sd.getUserId().equals(userId)) {
 			if (sd.getId() == null) {
-				sd = sessionDao.create();
+				sd = sessionDao.create(userId, roomId, languageId);
 			}
-			if (!sessionDao.updateUser(sd.getSessionId(), userId, false, languageId)) {
-				//something bad, force user to re-login
-				invalidate();
-			} else {
-				SID = sd.getSessionId();
-			}
+			SID = sd.getSessionId();
 		}
 		return SID;
 	}

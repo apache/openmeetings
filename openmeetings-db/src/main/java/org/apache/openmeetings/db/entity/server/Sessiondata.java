@@ -49,6 +49,9 @@ public class Sessiondata implements Serializable {
 	@Column(name = "user_id")
 	private Long userId;
 
+	@Column(name = "room_id")
+	private Long roomId;
+
 	@Column(name = "session_id")
 	private String sessionId;
 
@@ -67,9 +70,6 @@ public class Sessiondata implements Serializable {
 
 	@Column(name = "language_id")
 	private long languageId;
-
-	@Column(name = "group_id")
-	private Long groupId;
 
 	public Sessiondata() {
 	}
@@ -114,6 +114,14 @@ public class Sessiondata implements Serializable {
 		this.userId = userId;
 	}
 
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
 	public String getXml() {
 		return xml;
 	}
@@ -137,13 +145,4 @@ public class Sessiondata implements Serializable {
 	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
 	}
-
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
 }
