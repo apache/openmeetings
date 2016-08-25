@@ -143,9 +143,6 @@
 			if (!!canvas.wicketsid) {
 				canvas.sessionId = canvas.wicketsid;
 				getDefaultLanguage.doCall();
-			} else {
-				this.overwritePublicSID.doCall(); //FIXME investigate
-				this.setUsernameReconnect.doCall();
 			}
 		} else if (!!canvas.wicketsid) {
 			canvas.sessionId = canvas.wicketsid;
