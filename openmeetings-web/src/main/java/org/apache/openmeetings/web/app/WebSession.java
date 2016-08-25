@@ -172,20 +172,15 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (isSignedIn()) {
 					invalidate();
 				}
-				if (signIn(secure.toString(), false)) {
-					//TODO markUsed
-				} else {
-					//TODO redirect to error
-				}
+				signIn(secure.toString(), true);
 			}
 			if (!invitation.isEmpty()) {
 				if (isSignedIn()) {
 					invalidate();
 				}
-				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, false);
+				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
 				if (i.isAllowEntry()) {
 					Set<Right> rights = new HashSet<>();
-					//TODO markUsed
 					if (i.getRoom() != null) {
 						rights.add(Right.Room);
 						roomId = i.getRoom().getId();

@@ -1940,4 +1940,5 @@
 	<entry key="network.test.upl.time">Upload time</entry>
 	<entry key="network.test.upl.speed">Upload speed</entry>
 	<entry key="access.denied.header">Access denied. You are not authorized to perform this action.</entry>
+	<entry key="save.success">Saved successfully</entry>
 </properties>
