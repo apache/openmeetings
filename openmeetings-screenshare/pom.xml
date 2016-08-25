@@ -38,7 +38,6 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
-		<share.bcprov.version>1.52</share.bcprov.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,11 +52,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>${share.bcprov.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -189,20 +183,15 @@
 						<id>copy-bcprov</id>
 						<phase>prepare-package</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
 							<outputDirectory>${jnlp.out.dir}</outputDirectory>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.bouncycastle</groupId>
-									<artifactId>bcprov-jdk15on</artifactId>
-								</artifactItem>
-							</artifactItems>
+							<includeArtifactIds>bcprov-jdk15on</includeArtifactIds>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
-							<excludeTransitive>true</excludeTransitive>
+							<excludeTransitive>false</excludeTransitive>
 						</configuration>
 					</execution>
 				</executions>
