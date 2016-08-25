@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -79,9 +80,10 @@ public class LangPanel extends AdminPanel {
 	Map.Entry<Long, Locale> language;
 	
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
 		handler.appendJavaScript("labelsInit();");
+		return this;
 	}
 
 	public LangPanel(String id) {

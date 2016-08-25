@@ -70,25 +70,20 @@ public class CalendarPanel extends UserPanel {
 		}
 	};
 	private Calendar calendar;
-	
-	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		super.onMenuPanelLoad(handler);
-	}
 
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
 		refreshTimer.stop(handler);
 	}
-	
+
 	private static AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);
 	}
-	
+
 	public void refresh(IPartialPageRequestHandler handler) {
 		calendar.refresh(handler);
 	}
-	
+
 	Calendar getCalendar() {
 		return calendar;
 	}

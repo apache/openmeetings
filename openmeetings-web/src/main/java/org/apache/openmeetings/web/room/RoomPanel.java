@@ -114,7 +114,7 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
-				getMainPage().getChat().roomEnter(r, target);
+				getMainPanel().getChat().roomEnter(r, target);
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
@@ -406,25 +406,30 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getTopControls().setVisible(false));
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		getBasePage().getHeader().setVisible(false);
+		getMainPanel().getTopControls().setVisible(false);
 		if (r.isHidden(RoomElement.Chat)) {
-			getMainPage().getChat().toggle(handler, false);
+			getMainPanel().getChat().toggle(handler, false);
 		}
-		handler.appendJavaScript("roomLoad();");
+		if (handler != null) {
+			handler.add(getBasePage().getHeader(), getMainPanel().getTopControls());
+			handler.appendJavaScript("roomLoad();");
+		}
+		return this;
 	}
-	
+
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getTopControls().setVisible(true));
+		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getTopControls().setVisible(true));
 		if (r.isHidden(RoomElement.Chat)) {
-			getMainPage().getChat().toggle(handler, true);
+			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("$(window).off('resize.openmeetings');");
 		RoomMenuPanel.roomExit(this);
-		getMainPage().getChat().roomExit(r, handler);
+		getMainPanel().getChat().roomExit(r, handler);
 	}
 
 	private static ResourceReference newResourceReference() {
@@ -500,7 +505,7 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	public Client getClient() {
-		return getMainPage().getClient();
+		return getMainPanel().getClient();
 	}
 
 	public boolean screenShareAllowed() {
