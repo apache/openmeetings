@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
-import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -39,23 +39,28 @@ public abstract class BasePanel extends Panel {
 		setOutputMarkupId(true);
 	}
 
-	public MainPage getMainPage() {
-		return (MainPage)super.getPage();
+	public BasePage getBasePage() {
+		return (BasePage)getPage();
 	}
-	
+
+	public MainPanel getMainPanel() {
+		return findParent(MainPanel.class);
+	}
+
 	protected boolean isRtl() { //TODO unify, remove copy/paste
 		return FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
 	}
-	
+
 	/**
 	 * Overwrite this method to execute Java code after Panel is loaded by the
 	 * {@link MenuPanel}
 	 * 
 	 * @param target
 	 */
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
-				, getMainPage().getTopLinks().setVisible(true));
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getMenu().setVisible(true)
+				, getMainPanel().getTopLinks().setVisible(true));
+		return this;
 	}
 
 	/**

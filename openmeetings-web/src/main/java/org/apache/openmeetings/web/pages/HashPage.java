@@ -19,24 +19,30 @@
 package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.WICKET_ROOM_ID;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
+import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
+import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.IRequestParameters;
@@ -52,13 +58,15 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
 	public static final String SECURE_HASH = "secureHash";
+	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitationHash";
 	private static final String HASH = "hash";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 	private String errorKey = "invalid.hash";
-	private boolean error = true;;
+	private boolean error = true;
+	private Long roomId;
 
 	public HashPage(PageParameters p) {
 		StringValue secure = p.get(SECURE_HASH);
@@ -71,7 +79,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		ws.checkHashes(secure, invitation);
 
 		recContainer.setVisible(false);
-		add(new EmptyPanel("panel-swf").setVisible(false));
+		add(new EmptyPanel(PANEL_MAIN).setVisible(false));
 		if (!invitation.isEmpty()) {
 			Invitation i = ws.getInvitation();
 			if (i == null) {
@@ -91,13 +99,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				}
 				Room r = i.getRoom();
 				if (r != null) {
-					replace(new SwfPanel("panel-swf", new PageParameters(p).add(WICKET_ROOM_ID, r.getId())));
+					createRoom(r.getId());
 				}
-				error = false;
 			}
 		} else if (!secure.isEmpty()) {
-			Long recId = getRecordingId();
-			if (recId == null && ws.getRoomId() == null) {
+			Long recId = getRecordingId(), roomId = ws.getRoomId();
+			if (recId == null && roomId == null) {
 				errorKey = "1599";
 			} else if (recId != null) {
 				recContainer.setVisible(true);
@@ -106,25 +113,36 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				vp.update(null, rec);
 				error = false;
 			} else {
-				replace(new SwfPanel("panel-swf", new PageParameters(p).add(WICKET_ROOM_ID, ws.getRoomId())));
-				error = false;
+				createRoom(roomId);
 			}
 		}
 		StringValue swf = p.get(SWF);
 		if (!swf.isEmpty() && (SWF_TYPE_NETWORK.equals(swf.toString()) || SWF_TYPE_SETTINGS.equals(swf.toString()))) {
-			replace(new SwfPanel("panel-swf", p));
+			replace(new SwfPanel(PANEL_MAIN, p));
 			error = false;
 		}
-		add(recContainer
-			.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true)
-				, vp.setOutputMarkupPlaceholderTag(true)
-				, new InvitationPasswordDialog("i-pass", this)));
+		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
+				vp.setOutputMarkupPlaceholderTag(true), new InvitationPasswordDialog("i-pass", this)));
+	}
+
+	private void createRoom(Long roomId) {
+		error = false;
+		getHeader().setVisible(false);
+		// need to re-fetch Room object to initialize all collections
+		Room room = getBean(RoomDao.class).get(roomId);
+		if (room != null) {
+			this.roomId = roomId;
+			RoomPanel rp = new RoomPanel(CHILD_ID, room);
+			replace(new MainPanel(PANEL_MAIN, rp));
+			rp.onMenuPanelLoad(null);
+		}
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK, DialogIcon.ERROR) {
+		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK,
+				DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -150,5 +168,14 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		Invitation i = WebSession.get().getInvitation();
 		target.add(vi.update(target, i.getRecording()).setVisible(true)
 				, vp.update(target, i.getRecording()).setVisible(true));
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(CssHeaderItem.forCSS(".invite.om-icon{display: none !important;}", "no-invite-to-room"));
+		if (roomId != null) {
+			response.render(OnDomReadyHeaderItem.forScript("roomLoad();"));
+		}
 	}
 }

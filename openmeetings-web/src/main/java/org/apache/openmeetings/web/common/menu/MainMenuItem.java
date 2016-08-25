@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.common.menu;
 
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
@@ -37,7 +37,7 @@ public class MainMenuItem extends MenuItem {
 		params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
 	}
 	
-	public void onClick(MainPage page, AjaxRequestTarget target) {
-		page.updateContents(new OmUrlFragment(action, params), target);
+	public void onClick(MainPanel main, AjaxRequestTarget target) {
+		main.updateContents(new OmUrlFragment(action, params), target);
 	}
 }
