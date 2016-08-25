@@ -77,7 +77,6 @@
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.core.remote.LanguageService" />
-	<bean id="invitationservice.service" class="org.apache.openmeetings.core.remote.InvitationService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteBoardService" />
 	<bean id="userservice.service" class="org.apache.openmeetings.core.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.core.remote.ConferenceLibrary" />

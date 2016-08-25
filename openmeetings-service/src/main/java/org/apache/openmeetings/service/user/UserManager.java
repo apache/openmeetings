@@ -162,7 +162,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public Long logout(String SID, long userId) {
-		sessionDao.updateUser(SID, null, false, 0);
+		sessionDao.updateUser(SID, null);
 		return -12L;
 	}
 

@@ -21,13 +21,13 @@
 <library>
 
 <class name="videoUserProfilePicSWF10" extends="view" x="1" y="2" width="${parent.width-2}" height="${parent.height-3}" 
-	   clip="true" bgcolor="white">
+		clip="true" bgcolor="white">
 	<attribute name="value" value="null" />
 		
 	<handler name="oninit">
 	<![CDATA[
 		var extra = value.sipTransport ? "&parentPath=../default&moduleName=videoconf1"
-			: '&parentPath=&moduleName=remoteuserprofile&remoteUserid='+this.value.userId;
+			: '&parentPath=&remoteUserid='+this.value.userId;
 
 		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri, extra));
 	]]>

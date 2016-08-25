@@ -25,7 +25,7 @@
 	Creative Commons 3.0
 	 -->
 	<resource name="warning_icon_rsc" src="resources/error.png" />
-    
+
     <include href="rpcerrorDialog.lzx" />
     <include href="errorPopup.lzx" />
     <include href="messageWin.lzx" />
@@ -37,7 +37,5 @@
     <include href="errorModeratorPopup.lzx" />
     <include href="syncWin.lzx" />
     <include href="incomingScreenSharing.lzx" />
-    <include href="redirectBox.lzx" />
-    <include href="chooseNickName.lzx" />
-    
+
 </library>

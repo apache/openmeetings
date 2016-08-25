@@ -188,40 +188,34 @@ public class MobileService {
 	
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
-			Sessiondata sd = sessionDao.create();
-			boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
-			if (!bool) {
-				// invalid Session-Object
-				result.put("status", -35);
+			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
+			IConnection conn = Red5.getConnectionLocal();
+			String streamId = conn.getClient().getId();
+			Client c = sessionManager.getClientByStreamId(streamId, null);
+			if (c == null) {
+				c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
+					conn.getRemoteAddress(), "", null);
+			}
+			if (c == null) {
+				// Failed to create client
+				result.put("status", -1);
 			} else {
-				IConnection conn = Red5.getConnectionLocal();
-				String streamId = conn.getClient().getId();
-				Client c = sessionManager.getClientByStreamId(streamId, null);
-				if (c == null) {
-					c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
-						conn.getRemoteAddress(), "", null);
-				}
-				if (c == null) {
-					// Failed to create client
-					result.put("status", -1);
-				} else {
-					SessionVariablesUtil.initClient(conn.getClient(), c.getPublicSID());
-					c.setUserId(u.getId());
-					c.setFirstname(u.getFirstname());
-					c.setLastname(u.getLastname());
-					c.setMobile(true);
-					sessionManager.updateClientByStreamId(streamId, c, false, null);
-	
-					add(result, "sid", sd.getSessionId());
-					add(result, "publicSid", c.getPublicSID());
-					add(result, "status", 0);
-					add(result, "userId", u.getId());
-					add(result, "firstname", u.getFirstname());
-					add(result, "lastname", u.getLastname());
-					add(result, "login", u.getLogin());
-					add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
-					add(result, "language", u.getLanguageId()); //TODO rights
-				}
+				SessionVariablesUtil.initClient(conn.getClient(), c.getPublicSID());
+				c.setUserId(u.getId());
+				c.setFirstname(u.getFirstname());
+				c.setLastname(u.getLastname());
+				c.setMobile(true);
+				sessionManager.updateClientByStreamId(streamId, c, false, null);
+
+				add(result, "sid", sd.getSessionId());
+				add(result, "publicSid", c.getPublicSID());
+				add(result, "status", 0);
+				add(result, "userId", u.getId());
+				add(result, "firstname", u.getFirstname());
+				add(result, "lastname", u.getLastname());
+				add(result, "login", u.getLogin());
+				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
+				add(result, "language", u.getLanguageId()); //TODO rights
 			}
 		}
 		return result;

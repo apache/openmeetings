@@ -168,23 +168,6 @@
 			this.setAttribute('rtmphostlocal',server);
 		}
 		
-		//Check for Invitation
-		var invitationHash = lz.Browser.getInitArg('invitationHash');
-		
-		if ($debug) Debug.info("###################### -1 ");
-		if ($debug) Debug.info("invitationHash :: ",invitationHash);
-		
-		if (invitationHash != undefined){
-			canvas.isinitRoomDirect = true;
-			canvas.invitationHash = invitationHash;
-		}
-		
-		var secureHash = lz.Browser.getInitArg('secureHash');
-		if (secureHash != undefined){
-			canvas.secureRemoteUserLogin = true;
-			canvas.secureHash = secureHash;
-		}
-		
 		if ($debug) Debug.info("###################### -2 ");
 		
 		var language = lz.Browser.getInitArg('language');
@@ -292,6 +275,7 @@
 			hib.currentroomid = roomObj.id;
 			canvas.isConference = roomObj.type == 'conference';
 			canvas.isInterview = roomObj.type == 'interview';
+			canvas.main_content.setAttribute('visible', true);
 		
 			if (roomObj.type == 'conference') {
 				new lz.flexibleConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
@@ -299,7 +283,7 @@
 				new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
 			} else if (roomObj.type == 'interview') {
 				new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
-			} 
+			}
 		}
 	]]>
 	</method>
@@ -586,10 +570,6 @@
 
 	<method name="getNotNullString" args="value">
 		return value == null ? '' : value;
-	</method>
-	
-	<method name="isRemoteUser" args="">
-		return canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.directUserLogin || canvas.secureRemoteUserLogin;
 	</method>
 	
 	<method name="loadImgBySrc" args="cmp, imgUrl, completeCallback">
