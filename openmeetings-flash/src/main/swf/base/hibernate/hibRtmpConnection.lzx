@@ -151,12 +151,17 @@
 				canvas.sessionId = canvas.wicketsid;
 				this.getPublicSID.doCall();
 			}
-		} else if (canvas.wicketsid != null) {
+		} else if (!!canvas.wicketsid) {
 			canvas.sessionId = canvas.wicketsid;
 			if (canvas.thishib.loaderVar != null) {
 				canvas.thishib.loaderVar.setProgress();
 			}
 			this.getPublicSID.doCall();
+			this.refreshDelegate = new LzDelegate(this, "refreshSessionMeth");
+			lz.Timer.addTimer(this.refreshDelegate, canvas.refreshSession);
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
 		} else {
 			this.refreshDelegate = new LzDelegate(this, "refreshSessionMeth");
 			lz.Timer.addTimer(this.refreshDelegate, canvas.refreshSession);
