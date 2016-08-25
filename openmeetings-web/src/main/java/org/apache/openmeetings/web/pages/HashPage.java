@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
+import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -90,6 +91,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						vp.update(null, rec);
 					}
 					recContainer.setVisible(true);
+					error = false;
 				}
 				Room r = i.getRoom();
 				if (r != null) {
@@ -126,7 +128,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		if (roomId != null) {
 			pp.add(WICKET_ROOM_ID, roomId);
 		}
-		SwfPanel rp = new SwfPanel(PANEL_MAIN, pp);
+		SwfPanel rp = new SwfPanel(CHILD_ID, pp);
 		replace(new MainPanel(PANEL_MAIN, rp));
 		rp.onMenuPanelLoad(null);
 	}
