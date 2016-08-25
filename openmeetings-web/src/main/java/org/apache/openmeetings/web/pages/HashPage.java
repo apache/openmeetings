@@ -96,6 +96,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						vp.update(null, rec);
 					}
 					recContainer.setVisible(true);
+					error = false;
 				}
 				Room r = i.getRoom();
 				if (r != null) {
