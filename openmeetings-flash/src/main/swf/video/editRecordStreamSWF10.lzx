@@ -853,8 +853,9 @@
 	<simpleLabelButton fontsize="11" visible="${ parent.standalone }" labelid="144" width="160" x="${ parent.width-170 }" 
 			y="${ parent.height-50 }" height="28">
 		<handler name="onclick">
-			parent.cleanVideos();
+			//parent.cleanVideos();
 			this.parent.storelocaldata();
+			new lz.labelerrorPopup(this.parent, {errorlabelid: 'save.success', labelid: '203'});
 		</handler>
 	</simpleLabelButton>
 </class>
