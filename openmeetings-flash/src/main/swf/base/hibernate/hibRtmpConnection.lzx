@@ -342,6 +342,9 @@
 				canvas.setAttribute('language','');
 				canvas.setRoomValues(canvas.currentRoomObj);
 			}
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.close();
+			}
 			if ($debug) Debug.write("getCurrentRoomClient: ", canvas.currentClient);
 		]]>
 		</handler>
@@ -891,16 +894,16 @@
 		<netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
 			<netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
 			<handler name="ondata" args="value">
-				<![CDATA[
+			<![CDATA[
 				//The onResult-Handler will be called be the rtmpconnection
 				//Debug.write("sendVarsModeratorGeneral : ",value);
 				
-				]]>
-			</handler>   
-		</netRemoteCallHib>  
+			]]>
+			</handler>
+		</netRemoteCallHib>
 
-		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
-						  remotecontext="$once{ canvas.thishib }" >  
+		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient"
+						  remotecontext="$once{ canvas.thishib }" >
 			
 			<attribute name="messageObj" value="null" />
 			<method name="sendMessage" args="typeName,messageObject">
