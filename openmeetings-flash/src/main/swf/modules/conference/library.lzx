@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -21,19 +21,18 @@
 <library>
 	
 	<!-- FamFam Icon Set -->
-    <resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
+	<resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
 
-    <!-- APL author sebawagner -->
-    <resource name="speaking" src="resources/speaking.png" />
-    
-    <!-- APL author sebawagner -->
-    <resource name="lz_recorder_play" src="resources/webstart_play.png" />
+	<!-- BEGIN APL author sebawagner -->
+	<resource name="speaking" src="resources/speaking.png" />
+	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
+	<!-- END APL author sebawagner -->
 	
 	<include href="whiteboard/" /> 
- 	
-   	<include href="popups/" />
-   	<include href="moderation/" />
-   	
-    <include href="flexibleConferenceRoom/" />
-    
+	
+	<include href="popups/" />
+	<include href="moderation/" />
+	
+	<include href="flexibleConferenceRoom/" />
+
 </library>
