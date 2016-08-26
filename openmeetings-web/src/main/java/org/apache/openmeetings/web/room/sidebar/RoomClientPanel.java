@@ -43,6 +43,7 @@ public class RoomClientPanel extends Panel {
 		setRenderBodyOnly(true);
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
+		item.add(AttributeAppender.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
 		User u = getBean(UserDao.class).get(c.getUserId());
 		add(new RefreshIcon("refresh", c, room));
 		add(new Label("name", u.getFirstname() + " " + u.getLastname()));

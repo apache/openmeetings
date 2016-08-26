@@ -118,16 +118,22 @@
 	height: 40px;
 	padding-left: 5px;
 	padding-top: 5px;
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
 }
-.room.sidebar.left .user.list .user .user.name {
+.room.sidebar.left .user.list .user .name {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
+	padding-left: 44px;
+	overflow: hidden;
 }
-.room.sidebar.left .user.list .user .user.actions {
+.room.sidebar.left .user.list .user .actions {
 	position: relative;
 	height: 18px;
 	padding: 0;
+	padding-left: 44px;
 	visibility: hidden;
 }
 .room.sidebar.left .user.list .user:hover .user.actions {
@@ -221,7 +227,7 @@
 }
 .room.sidebar.left .user.list .user.current {
 	font-weight: bold;
-	background: #00FF00;
+	background-color: #00FF00;
 }
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
 	padding: 0;
