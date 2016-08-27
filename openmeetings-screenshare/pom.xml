@@ -211,7 +211,6 @@
 							<storepass>${keystore.password}</storepass>
 							<storetype>${keystore.type}</storetype>
 							<alias>${key.alias}</alias>
-							<arguments><argument>-digestalg</argument><argument>SHA256</argument></arguments>
 						</configuration>
 					</execution>
 				</executions>
