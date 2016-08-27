@@ -26,12 +26,12 @@ import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RTMPTScreenShare extends RTMPTClient implements IScreenShare {
-	private static final Logger log = LoggerFactory.getLogger(RTMPTScreenShare.class);
+public class RTMPTSScreenShare extends RTMPTClient implements IScreenShare {
+	private static final Logger log = LoggerFactory.getLogger(RTMPTSScreenShare.class);
 
 	private final CoreScreenShare core;
 
-	public RTMPTScreenShare(CoreScreenShare core) {
+	public RTMPTSScreenShare(CoreScreenShare core, boolean secure) {
 		this.core = core;
 	};
 
