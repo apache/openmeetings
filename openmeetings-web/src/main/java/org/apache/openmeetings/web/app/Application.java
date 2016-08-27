@@ -313,12 +313,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return c;
 	}
 	
-	public static void removeUserFromRoom(long roomId, int pageId) {
-		Client c = new Client(WebSession.get().getId(), pageId, WebSession.getUserId());
-		c.setRoomId(roomId);
-		removeUserFromRoom(c);
-	}
-	
 	public static Client removeUserFromRoom(Client c) {
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {

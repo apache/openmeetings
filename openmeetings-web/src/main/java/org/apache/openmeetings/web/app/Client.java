@@ -134,33 +134,29 @@ public class Client implements IDataProviderEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + pageId;
-		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
 		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Client)) {
 			return false;
+		}
 		Client other = (Client) obj;
-		if (pageId != other.pageId)
-			return false;
-		if (sessionId == null) {
-			if (other.sessionId != null)
-				return false;
-		} else if (!sessionId.equals(other.sessionId))
-			return false;
 		if (uid == null) {
-			if (other.uid != null)
+			if (other.uid != null) {
 				return false;
-		} else if (!uid.equals(other.uid))
+			}
+		} else if (!uid.equals(other.uid)) {
 			return false;
+		}
 		return true;
 	}
 
