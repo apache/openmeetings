@@ -144,7 +144,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						instance = new RTMPScreenShare(this);
 						break;
 					case rtmpt:
-						instance = new RTMPTScreenShare(this, false);
+						instance = new RTMPTScreenShare(this);
 						break;
 					case rtmps:
 						boolean nativeSsl = bool(args[9]);
@@ -154,7 +154,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 							client.setKeyStorePassword(args[11]);
 							instance = client;
 						} else {
-							instance = new RTMPTScreenShare(this, true);
+							instance = new RTMPTSScreenShare(this, true);
 						}
 						break;
 					case rtmpe:
