@@ -27,30 +27,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
-	private static final Logger logger = LoggerFactory.getLogger(RTMPSScreenShare.class);
+	private static final Logger log = LoggerFactory.getLogger(RTMPSScreenShare.class);
 
 	private final CoreScreenShare core;
 
 	public RTMPSScreenShare(CoreScreenShare core) {
-		protocol = "rtmps"; //FIXME TODO need to be removed after fix in red5
 		this.core = core;
 	};
 
-	// ------------------------------------------------------------------------
-	//
-	// Override
-	//
-	// ------------------------------------------------------------------------
 	@Override
 	public void connectionOpened(RTMPConnection conn) {
-		logger.debug("connection opened");
+		log.debug("connection opened");
 		super.connectionOpened(conn);
 		core.setDeadlockGuard(conn);
 	}
 
 	@Override
 	public void connectionClosed(RTMPConnection conn) {
-		logger.debug("connection closed");
+		log.debug("connection closed");
 		super.connectionClosed(conn);
 		if (core.isAudioNotify()) {
 			AudioTone.play();
@@ -66,7 +60,7 @@ public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 
 	@Override
 	public void handleException(Throwable throwable) {
-		logger.error("{}", new Object[] { throwable.getCause() });
+		log.error("{}", new Object[] { throwable.getCause() });
 		System.out.println(throwable.getCause());
 	}
 }
