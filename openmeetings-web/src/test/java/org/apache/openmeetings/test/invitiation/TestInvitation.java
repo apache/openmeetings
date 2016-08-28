@@ -28,13 +28,13 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.test.AbstractWicketTester;
 import org.apache.openmeetings.webservice.UserWebService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.threeten.bp.LocalDateTime;
 
-public class TestInvitation extends AbstractJUnitDefaults {
+public class TestInvitation extends AbstractWicketTester {
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
