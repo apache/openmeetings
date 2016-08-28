@@ -204,7 +204,7 @@ public class ConnectionsPanel extends AdminPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(container);
+				target.add(container, containerWeb);
 			}
 		});
 	}
