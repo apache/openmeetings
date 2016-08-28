@@ -223,6 +223,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
+	public void setId(String id) {
+	}
+
 	public void setConnectionAsSharingClient() {
 		log.debug("########## setConnectionAsSharingClient");
 		try {
