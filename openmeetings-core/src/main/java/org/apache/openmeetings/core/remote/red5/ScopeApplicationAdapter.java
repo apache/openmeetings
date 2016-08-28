@@ -184,6 +184,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
+		String parentSid = (String)map.get("parentSid");
 		if (!Strings.isEmpty(securityCode)) {
 			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
@@ -191,23 +192,27 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return rejectClient();
 			}
 		}
-		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode)) {
+		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
 			return rejectClient();
 		}
 		if ("networktest".equals(uid)) {
 			return true;
 		}
 
+		Client rcm = new Client();
 		Client parentClient = null;
 		//TODO add similar code for other connections
 		if (map.containsKey("screenClient")) {
-			String parentSid = (String)map.get("parentSid");
 			parentClient = sessionManager.getClientByPublicSID(parentSid, null);
 			if (parentClient == null) {
 				return rejectClient();
 			}
+			SessionVariablesUtil.setIsScreenClient(conn.getClient());
+			rcm.setUserId(parentClient.getUserId());
+			rcm.setScreenClient(true);
+			rcm.setPublicSID(UUID.randomUUID().toString());
+			rcm.setStreamPublishName(parentSid);
 		}
-		Client rcm = new Client();
 		rcm.setStreamid(conn.getClient().getId());
 		StringValue scn = StringValue.valueOf(conn.getScope().getName());
 		rcm.setScope(scn.toString());
@@ -222,7 +227,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
 		rcm.setNativeSsl(Boolean.TRUE.equals(connParams.get(NATIVE_SSL_PARAM)));
-		rcm.setPublicSID(uid);
+		if (!Strings.isEmpty(uid)) {
+			rcm.setPublicSID(uid);
+		}
 		rcm.setSecurityCode(securityCode);
 		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
 		if (rcm == null) {
@@ -234,17 +241,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		//TODO add similar code for other connections, merge with above block
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
-			String parentSid = parentClient.getPublicSID();
-			rcm.setRoomId(Long.valueOf(conn.getScope().getName()));
-			rcm.setScreenClient(true);
-			SessionVariablesUtil.setIsScreenClient(conn.getClient());
-			
-			rcm.setUserId(parentClient.getUserId());
+			User u = null;
 			Long userId = rcm.getUserId();
 			SessionVariablesUtil.setUserId(conn.getClient(), userId);
-
-			rcm.setStreamPublishName(parentSid);
-			User u = null;
 			if (userId != null) {
 				long _uid = userId.longValue();
 				u = userDao.get(_uid < 0 ? -_uid : _uid);

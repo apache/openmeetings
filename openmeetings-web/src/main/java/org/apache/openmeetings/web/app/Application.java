@@ -227,15 +227,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (rcl == null) {
 			return null;
 		}
-		Client client = getOnlineClient(rcl.getPublicSID());
-		if (client == null) {
-			return null;
+		if (!rcl.isScreenClient()) {
+			Client client = getOnlineClient(rcl.getPublicSID());
+			if (client == null) {
+				return null;
+			}
+			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
+			rcl.setIsMod(client.hasRight(Right.moderator));
+			rcl.setIsBroadcasting(client.hasRight(Right.audio));
+			rcl.setCanVideo(client.hasRight(Right.video));
+			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 		}
-		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
-		rcl.setIsMod(client.hasRight(Right.moderator));
-		rcl.setIsBroadcasting(client.hasRight(Right.audio));
-		rcl.setCanVideo(client.hasRight(Right.video));
-		rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 		return rcl;
 	}
 	
