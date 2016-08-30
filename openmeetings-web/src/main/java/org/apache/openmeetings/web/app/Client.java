@@ -18,13 +18,16 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 
 /**
@@ -45,7 +48,7 @@ public class Client implements IDataProviderEntity {
 	}
 	private final String sessionId;
 	private int pageId;
-	private final Long userId;
+	private final User user;
 	private Long roomId;
 	private final String uid;
 	private final Set<Right> rights = new HashSet<>();
@@ -59,7 +62,7 @@ public class Client implements IDataProviderEntity {
 	public Client(String sessionId, int pageId, Long userId) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
-		this.userId = userId;
+		this.user = getBean(UserDao.class).get(userId);
 		this.connectedSince = new Date();
 		uid = UUID.randomUUID().toString();
 	}
@@ -81,8 +84,12 @@ public class Client implements IDataProviderEntity {
 		this.pageId = pageId;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
 	public Long getUserId() {
-		return userId;
+		return user.getId();
 	}
 
 	public String getUid() {
@@ -162,7 +169,7 @@ public class Client implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + userId + ", roomId=" + roomId
+		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", roomId=" + roomId
 				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 }

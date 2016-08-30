@@ -27,11 +27,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.core.remote.UserService;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
@@ -152,8 +150,7 @@ public class ConnectionsPanel extends AdminPanel {
 			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
 				org.apache.openmeetings.web.app.Client c = item.getModelObject();
 				item.add(new Label("id", ""));
-				User u = getBean(UserService.class).getUserById(getSid(), c.getUserId());
-				item.add(new Label("login", u == null ? null : u.getLogin()));
+				item.add(new Label("login", c.getUser().getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));
 				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
