@@ -71,7 +71,7 @@ mvn install -P allModules -pl openmeetings-flash               # compiles a comp
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
-mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dold-backups.dwnd.skip=true -Dwicket.mode=DEVELOPMENT
+mvn clean install -P unpacked,mysql -DskipTests=true -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>
