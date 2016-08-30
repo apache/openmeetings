@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
@@ -34,6 +32,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.util.string.Strings;
 
 public class RoomClientPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -44,9 +43,8 @@ public class RoomClientPanel extends Panel {
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
 		item.add(AttributeAppender.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
-		User u = getBean(UserDao.class).get(c.getUserId());
 		add(new RefreshIcon("refresh", c, room));
-		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
+		add(new Label("name", getName(c)));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new RoomRightPanel("rights", c, room));
@@ -62,7 +60,28 @@ public class RoomClientPanel extends Panel {
 		}
 		add(actions);
 	}
-	
+
+	private static String getName(Client c) {
+		String delim = "";
+		StringBuilder sb = new StringBuilder();
+		User u = c.getUser();
+		if (!Strings.isEmpty(u.getFirstname())) {
+			sb.append(u.getFirstname());
+			delim = " ";
+		}
+		if (!Strings.isEmpty(u.getLastname())) {
+			sb.append(delim).append(u.getLastname());
+			delim = " ";
+		}
+		if (Strings.isEmpty(sb) && u.getAddress() != null && !Strings.isEmpty(u.getAddress().getEmail())) {
+			sb.append(delim).append(u.getAddress().getEmail());
+		}
+		if (Strings.isEmpty(sb)) {
+			sb.append("N/A");
+		}
+		return sb.toString();
+	}
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
