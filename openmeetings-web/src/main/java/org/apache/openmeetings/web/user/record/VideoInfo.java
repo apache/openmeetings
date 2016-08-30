@@ -69,7 +69,7 @@ public class VideoInfo extends Panel {
 		
 		@Override
 		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			final IRecordingConverter converter = getBean(isInterview ? InterviewConverter.class : RecordingConverter.class);
+			final IRecordingConverter converter = isInterview ? getBean(InterviewConverter.class) : getBean(RecordingConverter.class);
 			new Thread() {
 				@Override
 				public void run() {

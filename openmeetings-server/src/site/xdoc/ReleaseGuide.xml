@@ -26,7 +26,7 @@
 				<div>
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
-						<li>Sun JDK7</li>
+						<li>Sun JDK8</li>
 						<li>Apache Maven 3.3.9</li>
 						<li>
 							SVN Command line client (Subversion 1.7 required!)
