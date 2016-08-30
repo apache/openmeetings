@@ -189,10 +189,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
+				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
 			}
 		}
 		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
+			log.warn("No UIDs are provided, client is rejected");
 			return rejectClient();
 		}
 		if ("networktest".equals(uid)) {
@@ -205,6 +207,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		if (map.containsKey("screenClient")) {
 			parentClient = sessionManager.getClientByPublicSID(parentSid, null);
 			if (parentClient == null) {
+				log.warn("Bad parent for screen-sharing client, client is rejected");
 				return rejectClient();
 			}
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
@@ -220,6 +223,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		if (Long.MIN_VALUE != roomId) {
 			rcm.setRoomId(roomId);
 		} else if (!"hibernate".equals(scn.toString())) {
+			log.warn("Bad room specified, client is rejected");
 			return rejectClient();
 		}
 		rcm.setUserport(conn.getRemotePort());
