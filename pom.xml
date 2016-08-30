@@ -82,7 +82,6 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
-				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
 				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
 				<wicket.mode>DEVELOPMENT</wicket.mode>
 				<src.pack.skip>true</src.pack.skip>
