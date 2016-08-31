@@ -255,6 +255,11 @@ public class RoomPanel extends BasePanel {
 		} else {
 			add(new WebMarkupContainer("wait-for-recording").setVisible(false));
 		}
+		if (room.isVisible()) {
+			add(new NicknameDialog("nickname", getClient().getUser()));
+		} else {
+			add(new WebMarkupContainer("nickname").setVisible(false));
+		}
 	}
 	
 	@Override
