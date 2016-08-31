@@ -19,27 +19,23 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<script type="text/javascript">
-		Wicket.Event.subscribe("/websocket/closed", function(jqEvent, msg) {
-			//FIXME add Error dialog should be displayed 
-		});
-	</script>
-</wicket:head>
 <wicket:panel>
-	<div wicket:id="roomContainer" style="height: 100%">
-		<div class="room menu" wicket:id="menu"></div>
-		<div class="room sidebar left" wicket:id="sidebar"></div>
-		<div wicket:id="wb-area" class="room wb area">
-			<div class="wb-drop-area"></div>
-			<div class="wb" wicket:id="whiteboard"></div>
+	<form wicket:id="form">
+		<div wicket:id="feedback"></div>
+		<div class="table">
+			<div>
+				<div class="column label"><label wicket:for="subject"><wicket:message key="135" /></label></div>
+				<div class="column data"><input type="text" wicket:id="firstname" class="input"/></div>
+			</div>
+			<div>
+				<div class="column label"><label wicket:for="subject"><wicket:message key="136" /></label></div>
+				<div class="column data"><input type="text" wicket:id="lastname" class="input"/></div>
+			</div>
+			<div>
+				<div class="column label"><label wicket:for="subject"><wicket:message key="137" /></label></div>
+				<div class="column data"><input type="text" wicket:id="address.email" class="input"/></div>
+			</div>
 		</div>
-		<div wicket:id="activities"></div>
-	</div>
-	<div wicket:id="event-details"></div>
-	<div wicket:id="access-denied"></div>
-	<div wicket:id="room-closed"></div>
-	<div wicket:id="wait-for-recording"></div>
-	<div wicket:id="nickname"></div>
+	</form>
 </wicket:panel>
 </html>
