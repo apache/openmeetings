@@ -31,7 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<smslib.version>3.5.4</smslib.version>
-		<mail.version>1.5.5</mail.version>
+		<mail.version>1.5.6</mail.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
