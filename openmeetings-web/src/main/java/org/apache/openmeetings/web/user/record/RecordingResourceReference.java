@@ -63,7 +63,11 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		} catch (Exception e) {
 			//no-op expected
 		}
-		if (id != null && WebSession.get().isSignedIn()) {
+		WebSession ws = WebSession.get();
+		if (id == null && ws.signIn(_id.toString(), true)) {
+			id = getRecordingId();
+		}
+		if (id != null && ws.isSignedIn()) {
 			return getRecording(id);
 		}
 		return null;
