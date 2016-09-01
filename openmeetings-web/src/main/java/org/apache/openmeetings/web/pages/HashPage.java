@@ -56,10 +56,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
-	public static final String SECURE_HASH = "secureHash";
 	public static final String PANEL_MAIN = "panel-main";
-	public static final String INVITATION_HASH = "invitationHash";
-	private static final String HASH = "hash";
+	public static final String INVITATION_HASH = "invitation";
+	private static final String HASH = "secure";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player", null);
@@ -67,10 +66,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private boolean error = true;
 
 	public HashPage(PageParameters p) {
-		StringValue secure = p.get(SECURE_HASH);
-		if (secure.isEmpty()) {
-			secure = p.get(HASH);
-		}
+		StringValue secure = p.get(HASH);
 		StringValue invitation = p.get(INVITATION_HASH);
 
 		WebSession ws = WebSession.get();

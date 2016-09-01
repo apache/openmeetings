@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -184,6 +185,8 @@ public class RoomPanel extends BasePanel {
 		} else if (getRoomClients(r.getId()).size() >= r.getNumberOfPartizipants()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
+		} else if (r.getId().equals(WebSession.get().getRoomId())) {
+			// secureHash/invitationHash, already checked
 		} else {
 			boolean allowed = false;
 			String deniedMessage = null;
@@ -359,10 +362,15 @@ public class RoomPanel extends BasePanel {
 			//We are setting initial rights here
 			Client c = getClient();
 			addUserToRoom(c.setRoomId(getRoom().getId()));
-			User u = getBean(UserDao.class).get(getUserId());
-			Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
-			if (rr != null) {
-				c.getRights().add(rr);
+			SOAPLogin soap = WebSession.get().getSoapLogin();
+			if (soap != null && soap.isModerator()) {
+				c.getRights().add(Right.superModerator);
+			} else {
+				User u = getBean(UserDao.class).get(getUserId());
+				Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+				if (rr != null) {
+					c.getRights().add(rr);
+				}
 			}
 		}
 	}

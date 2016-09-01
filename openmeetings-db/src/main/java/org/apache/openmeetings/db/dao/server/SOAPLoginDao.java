@@ -43,8 +43,7 @@ public class SOAPLoginDao {
 	public String addSOAPLogin(String sessionHash, Long roomId,
 			boolean becomemoderator, boolean showAudioVideoTest,
 			boolean allowSameURLMultipleTimes, Long recordingId,
-			boolean showNickNameDialog, String landingZone,
-			boolean allowRecording) {
+			String landingZone, boolean allowRecording) {
 		try {
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
@@ -54,9 +53,8 @@ public class SOAPLoginDao {
 			soapLogin.setHash(UUID.randomUUID().toString());
 			soapLogin.setRecordingId(recordingId);
 			soapLogin.setSessionHash(sessionHash);
-			soapLogin.setBecomemoderator(becomemoderator);
+			soapLogin.setModerator(becomemoderator);
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);
-			soapLogin.setShowNickNameDialog(showNickNameDialog);
 			soapLogin.setLandingZone(landingZone);
 			soapLogin.setAllowRecording(allowRecording);
 
