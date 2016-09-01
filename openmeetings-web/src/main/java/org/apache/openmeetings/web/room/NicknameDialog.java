@@ -21,8 +21,10 @@ package org.apache.openmeetings.web.room;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,12 +43,18 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class NicknameDialog extends AbstractFormDialog<User> {
 	private static final long serialVersionUID = 1L;
+	private static final FastDateFormat TIME_DF = FastDateFormat.getInstance("HH:mm:ss");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final DialogButton ok = new DialogButton("ok", Application.getString(54));
+	private final RoomPanel room;
 	private final Form<User> form;
 
-	public NicknameDialog(String id, User u) {
+	public NicknameDialog(String id, final RoomPanel room) {
 		super(id, Application.getString(1287));
+		this.room = room;
+		User u = room.getClient().getUser();
+		u.setFirstname(Application.getString(433));
+		u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
 		add(form = new Form<>("form", new CompoundPropertyModel<>(u)));
 		form.add(feedback);
 		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(Application.getString(135))).add(minimumLength(4)));
@@ -86,5 +94,6 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
+		room.broadcast(target, room.getClient());
 	}
 }
