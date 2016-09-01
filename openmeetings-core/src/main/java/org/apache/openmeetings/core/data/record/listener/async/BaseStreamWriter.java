@@ -147,7 +147,7 @@ public abstract class BaseStreamWriter implements Runnable {
 					closeStream();
 				}
 				if (++counter % 5000 == 0) {
-					log.debug("##REC:: Stream writer is still listening:: " + file.getName());;
+					log.debug("##REC:: Stream writer is still listening:: " + file.getName());
 				}
 			} catch (InterruptedException e) {
 				log.error("##REC:: [run]", e);

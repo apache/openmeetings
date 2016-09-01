@@ -317,10 +317,10 @@ public class RoomMenuPanel extends Panel {
 			update(handler);
 		}
 	}
-	
+
 	public void exit(IPartialPageRequestHandler handler) {
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
-			roomExit(room, false);
+			roomExit(room.getClient(), false);
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
@@ -331,15 +331,14 @@ public class RoomMenuPanel extends Panel {
 		}
 	}
 
-	public static void roomExit(RoomPanel room) {
-		roomExit(room, true);
+	public static void roomExit(Client c) {
+		roomExit(c, true);
 	}
 	
-	public static void roomExit(RoomPanel room, boolean broadcast) {
-		Client c = room.getClient();
+	public static void roomExit(Client c, boolean broadcast) {
 		removeUserFromRoom(c);
 		if (broadcast) {
-			RoomPanel.broadcast(new RoomMessage(room.getRoom().getId(), c.getUserId(), RoomMessage.Type.roomExit));
+			RoomPanel.broadcast(new RoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.roomExit));
 		}
 	}
 }
