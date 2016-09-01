@@ -34,7 +34,6 @@ public class RoomOptionsDTO implements Serializable {
 	private Long recordingId;
 	private boolean moderator;
 	private boolean showAudioVideoTest;
-	private boolean showNickNameDialog;
 	private boolean allowSameURLMultipleTimes;
 	private boolean allowRecording;
 
@@ -72,14 +71,6 @@ public class RoomOptionsDTO implements Serializable {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
 
-	public boolean isShowNickNameDialog() {
-		return showNickNameDialog;
-	}
-
-	public void setShowNickNameDialog(boolean showNickNameDialog) {
-		this.showNickNameDialog = showNickNameDialog;
-	}
-
 	public boolean isAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
@@ -113,7 +104,6 @@ public class RoomOptionsDTO implements Serializable {
 		ro.recordingId = optLong(o, "recordingId");
 		ro.roomId = optLong(o, "roomId");
 		ro.showAudioVideoTest = o.optBoolean("showAudioVideoTest", false);
-		ro.showNickNameDialog = o.optBoolean("showNickNameDialog", false);
 		return ro;
 	}
 	

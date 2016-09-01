@@ -142,14 +142,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
-		//getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("/recording/${hash}", HashPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
-		mountPage("/hash", HashPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());

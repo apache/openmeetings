@@ -101,6 +101,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private UserDashboard dashboard;
 	private Locale browserLocale = null;
 	private Invitation i = null;
+	private SOAPLogin soap = null;
 	private Long roomId = null;
 	private Long recordingId = null;
 	private Long loginError = null;
@@ -122,6 +123,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		ISO8601FORMAT = null;
 		sdf = null;
 		i = null;
+		soap = null;
 		roomId = null;
 		recordingId = null;
 		externalType = null;
@@ -169,28 +171,34 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public void checkHashes(StringValue secure, StringValue invitation) {
 		try {
 			if (!secure.isEmpty()) {
-				if (isSignedIn()) {
-					invalidate();
+				if (!isSignedIn() || soap == null || !soap.getHash().equals(secure.toString())) {
+					// otherwise already logged-in with the same hash
+					if (isSignedIn()) {
+						invalidate();
+					}
+					signIn(secure.toString(), true);
 				}
-				signIn(secure.toString(), true);
 			}
 			if (!invitation.isEmpty()) {
-				if (isSignedIn()) {
-					invalidate();
-				}
-				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
-				if (i.isAllowEntry()) {
-					Set<Right> rights = new HashSet<>();
-					if (i.getRoom() != null) {
-						rights.add(Right.Room);
-						roomId = i.getRoom().getId();
-					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
-						rights.add(Right.Room);
-						roomId = i.getAppointment().getRoom().getId();
-					} else if (i.getRecording() != null) {
-						recordingId = i.getRecording().getId();
+				if (!isSignedIn() || i == null || !i.getHash().equals(invitation.toString())) {
+					// otherwise already logged-in with the same hash
+					if (isSignedIn()) {
+						invalidate();
 					}
-					setUser(i.getInvitee(), rights);
+					i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
+					if (i != null && i.isAllowEntry()) {
+						Set<Right> rights = new HashSet<>();
+						if (i.getRoom() != null) {
+							rights.add(Right.Room);
+							roomId = i.getRoom().getId();
+						} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
+							rights.add(Right.Room);
+							roomId = i.getAppointment().getRoom().getId();
+						} else if (i.getRecording() != null) {
+							recordingId = i.getRecording().getId();
+						}
+						setUser(i.getInvitee(), rights);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -243,6 +251,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					sessionDao.update(sd);
 					setUser(user, null);
 					recordingId = soapLogin.getRecordingId();
+					soap = soapLogin;
 					return true;
 				}
 			}
@@ -255,6 +264,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		Long _recordingId = recordingId;
 		Long _roomId = roomId;
 		Invitation _i = i;
+		SOAPLogin _soap = soap;
 		replaceSession(); // required to prevent session fixation
 		if (_sid != null) {
 			SID = _sid;
@@ -265,8 +275,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (_roomId != null) {
 			roomId = _roomId;
 		}
-		if (i != null) {
+		if (_i != null) {
 			i = _i;
+		}
+		if (_soap != null) {
+			soap = _soap;
 		}
 		userId = u.getId();
 		if (rights == null || rights.isEmpty()) {
@@ -378,6 +391,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public Invitation getInvitation() {
 		return i;
+	}
+
+	public SOAPLogin getSoapLogin() {
+		return soap;
 	}
 
 	public static String getExternalType() {
