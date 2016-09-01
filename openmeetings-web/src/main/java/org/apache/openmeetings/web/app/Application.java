@@ -327,21 +327,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return c;
 	}
 	
-	public static List<Client> getRoomClients(long roomId) {
+	public static List<Client> getRoomClients(Long roomId) {
 		List<Client> clients = new ArrayList<>();
-		Set<String> uids = ROOMS.get(roomId);
-		if (uids != null) {
-			for (String uid : uids) {
-				Client c = getOnlineClient(uid);
-				if (c != null) {
-					clients.add(c);
+		if (roomId != null) {
+			Set<String> uids = ROOMS.get(roomId);
+			if (uids != null) {
+				for (String uid : uids) {
+					Client c = getOnlineClient(uid);
+					if (c != null) {
+						clients.add(c);
+					}
 				}
 			}
 		}
 		return clients;
 	}
 	
-	public static Set<Long> getUserRooms(long userId) {
+	public static Set<Long> getUserRooms(Long userId) {
 		Set<Long> result = new HashSet<>();
 		for (Entry<Long, Set<String>> me : ROOMS.entrySet()) {
 			for (String uid : me.getValue()) {

@@ -130,9 +130,9 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		try {
 			((CleanupUnit)temp.getDefaultModelObject()).cleanup();
 			((CleanupEntityUnit)profile.getDefaultModelObject()).cleanup();
-			((CleanupUnit)imp.getDefaultModelObject()).cleanup();;
+			((CleanupUnit)imp.getDefaultModelObject()).cleanup();
 			((CleanupUnit)backup.getDefaultModelObject()).cleanup();
-			((CleanupEntityUnit)files.getDefaultModelObject()).cleanup();;
+			((CleanupEntityUnit)files.getDefaultModelObject()).cleanup();
 			((CleanupEntityUnit)fin.getDefaultModelObject()).cleanup();
 			update(target);
 		} catch (Exception e) {
