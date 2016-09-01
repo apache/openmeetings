@@ -53,8 +53,10 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 		super(id, Application.getString(1287));
 		this.room = room;
 		User u = room.getClient().getUser();
-		u.setFirstname(Application.getString(433));
-		u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
+		if (isVisible(u)) {
+			u.setFirstname(Application.getString(433));
+			u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
+		}
 		add(form = new Form<>("form", new CompoundPropertyModel<>(u)));
 		form.add(feedback);
 		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(Application.getString(135))).add(minimumLength(4)));
@@ -62,11 +64,14 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(Application.getString(137))).add(RfcCompliantEmailAddressValidator.getInstance()));
 	}
 
+	private static boolean isVisible(User u) {
+		return User.Type.external == u.getType() && Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname());
+	}
+	
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-		User u = form.getModelObject();
-		behavior.setOption("autoOpen", User.Type.external == u.getType() && Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname()));
+		behavior.setOption("autoOpen", isVisible(form.getModelObject()));
 		behavior.setOption("closeOnEscape", false);
 		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
