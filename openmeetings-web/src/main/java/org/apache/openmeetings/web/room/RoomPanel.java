@@ -436,7 +436,7 @@ public class RoomPanel extends BasePanel {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("$(window).off('resize.openmeetings');");
-		RoomMenuPanel.roomExit(this);
+		RoomMenuPanel.roomExit(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
 
