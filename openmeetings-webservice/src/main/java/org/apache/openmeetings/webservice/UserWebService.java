@@ -292,7 +292,6 @@ public class UserWebService implements UserService {
 				String hash = soapLoginDao.addSOAPLogin(sid, options.getRoomId(),
 						options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
 						options.getRecordingId(),
-						options.isShowNickNameDialog(),
 						"room", // LandingZone,
 						options.isAllowRecording()
 						);
