@@ -78,18 +78,6 @@
 	]]>
 	</method>
 
-	<method name="getTestingUrl">
-	<![CDATA[
-		return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
-	]]>
-	</method>
-
-	<method name="getAppBaseUrl">
-	<![CDATA[
-		return getUrl() + "swf";
-	]]>
-	</method>
-
 	<method name="myinit">
 	<![CDATA[
 		canvas.mediaerrortimeout = 30000;
