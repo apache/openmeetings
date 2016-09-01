@@ -42,7 +42,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.IRequestParameters;
@@ -66,7 +65,6 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 	private String errorKey = "invalid.hash";
 	private boolean error = true;
-	private Long roomId;
 
 	public HashPage(PageParameters p) {
 		StringValue secure = p.get(SECURE_HASH);
@@ -132,10 +130,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		// need to re-fetch Room object to initialize all collections
 		Room room = getBean(RoomDao.class).get(roomId);
 		if (room != null) {
-			this.roomId = roomId;
-			RoomPanel rp = new RoomPanel(CHILD_ID, room);
-			replace(new MainPanel(PANEL_MAIN, rp));
-			rp.onMenuPanelLoad(null);
+			replace(new MainPanel(PANEL_MAIN, new RoomPanel(CHILD_ID, room)));
 		}
 	}
 
@@ -175,8 +170,5 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(CssHeaderItem.forCSS(".invite.om-icon{display: none !important;}", "no-invite-to-room"));
-		if (roomId != null) {
-			response.render(OnDomReadyHeaderItem.forScript("roomLoad();"));
-		}
 	}
 }

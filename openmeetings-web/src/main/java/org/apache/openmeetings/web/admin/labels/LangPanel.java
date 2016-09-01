@@ -76,7 +76,7 @@ public class LangPanel extends AdminPanel {
 	private final LangForm langForm;
 	private FileUploadField fileUploadField;
 
-	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	Map.Entry<Long, Locale> language;
 	
 	@Override

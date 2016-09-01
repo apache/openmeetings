@@ -635,7 +635,7 @@
 				var py = parent.y < 0 ? 5 : parent.y;
 				var maxWidth = Math.min(600, canvas.width - parent.x - 10)
 					, maxHeight = Math.min(500, canvas.height - py - 10)
-					, newWidth = maxWidth, newHeight = maxHeight;;
+					, newWidth = maxWidth, newHeight = maxHeight;
 				if (item.cam_width > 240) {
 					newWidth = maxWidth + item.cam_width - 240;
 				}

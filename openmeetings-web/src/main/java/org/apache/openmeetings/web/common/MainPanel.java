@@ -45,7 +45,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
@@ -69,10 +68,12 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
+import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
@@ -83,8 +84,9 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, webAppRootKey);
-	public final static String PARAM_USER_ID = "userId";
-	private Client client;
+	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
+	public static final String PARAM_USER_ID = "userId";
+	private Client client = null;
 	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
@@ -92,18 +94,19 @@ public class MainPanel extends Panel {
 	private final ChatPanel chat;
 	private final MessageDialog newMessage;
 	private final UserInfoDialog userInfo;
+	private BasePanel panel;
 
 	public MainPanel(String id) {
-		this(id, new WebMarkupContainer(CHILD_ID));
+		this(id, null);
 	}
 
-	public MainPanel(String id, WebMarkupContainer panel) {
+	public MainPanel(String id, BasePanel _panel) {
 		super(id);
-		client = new Client(getSession().getId(), getUserId());
+		this.panel = _panel;
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
-		add(contents.add(panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(contents.add(client == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
@@ -203,31 +206,41 @@ public class MainPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onConnect(ConnectedMessage message) {
-				super.onConnect(message);
-				addOnlineUser(client.setPageId(message.getKey()));
-				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), message.getSessionId(), message.getKey());
+			protected void onConnect(ConnectedMessage msg) {
+				super.onConnect(msg);
+				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId());
+				addOnlineUser(client);
+				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
-			
+
 			@Override
-			protected void onAbort(AbortedMessage message) {
-				super.onAbort(message);
-				closeHandler(message);
-			}
-			
-			@Override
-			protected void onClose(ClosedMessage message) {
-				super.onClose(message);
-				closeHandler(message);
-			}
-			
-			private void closeHandler(AbstractClientMessage message) {
-				if (MainPanel.this.getCurrentPanel() instanceof RoomPanel) {
-					RoomPanel rp = (RoomPanel)MainPanel.this.getCurrentPanel();
-					RoomMenuPanel.roomExit(rp);
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
+				if ("socketConnected".equals(msg.getText())) {
+					if (panel != null) {
+						updateContents(panel, handler);
+					}
 				}
+			}
+
+			@Override
+			protected void onAbort(AbortedMessage msg) {
+				super.onAbort(msg);
+				closeHandler(msg);
+			}
+			
+			@Override
+			protected void onClose(ClosedMessage msg) {
+				super.onClose(msg);
+				closeHandler(msg);
+			}
+			
+			private void closeHandler(AbstractClientMessage msg) {
+				if (client != null && client.getRoomId() != null) {
+					RoomMenuPanel.roomExit(client);
+				}
+				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 				removeOnlineUser(client);
-				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), message.getSessionId(), message.getKey());
+				client = null;
 			}
 		});
 	}
@@ -244,7 +257,7 @@ public class MainPanel extends Panel {
 					public void onClick(AjaxRequestTarget target) {
 						onClick(MainPanel.this, target);
 					}
-				}); 
+				});
 			}
 			menu.add(new MenuItem(Application.getString(gl.getLabelId()), l));
 		}
@@ -266,15 +279,25 @@ public class MainPanel extends Panel {
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
+			if (client != null) {
+				updateContents(panel, handler);
+			} else {
+				this.panel = panel;
+			}
+			if (updateFragment) {
+				UrlFragment uf = new UrlFragment(handler);
+				uf.set(f.getArea().name(), f.getType());
+			}
+		}
+	}
+
+	private void updateContents(BasePanel panel, IPartialPageRequestHandler handler) {
+		if (panel != null) {
 			BasePanel prev = getCurrentPanel();
 			if (prev != null) {
 				prev.cleanup(handler);
 			}
 			handler.add(contents.replace(panel));
-			if (updateFragment) {
-				UrlFragment uf = new UrlFragment(handler);
-				uf.set(f.getArea().name(), f.getType());
-			}
 			panel.onMenuPanelLoad(handler);
 		}
 	}
