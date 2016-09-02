@@ -54,7 +54,7 @@ import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, webAppRootKey);
-	public static final String FUNC_CHANGE_RIGHT = "changeRight";
+	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
 	public static final String FUNC_ACTION = "roomAction";
 	public static final String PARAM_ACTION = "action";
 	public static final String PARAM_RIGHT = "right";
@@ -65,7 +65,7 @@ public class RoomSidebar extends Panel {
 	private final ITab fileTab;
 	private final UploadDialog upload;
 	private final RoomFilePanel roomFiles;
-	private final RoomRightPanel selfRights;
+	private final SelfIconsPanel selfRights;
 	private boolean showFiles;
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
@@ -82,7 +82,7 @@ public class RoomSidebar extends Panel {
 		protected void respond(AjaxRequestTarget target) {
 		}
 	};
-	private final AbstractDefaultAjaxBehavior requestRight = new AbstractDefaultAjaxBehavior() {
+	private final AbstractDefaultAjaxBehavior toggleRight = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -119,7 +119,7 @@ public class RoomSidebar extends Panel {
 			}
 		}
 	};
-	
+
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
@@ -163,15 +163,15 @@ public class RoomSidebar extends Panel {
 		};
 		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(room.getRoom().isFilesOpened() ? 1 : 0));
 		roomFiles = new RoomFilePanel("tree", room);
-		selfRights = new RoomRightPanel("rights", room.getClient(), room);
+		selfRights = new SelfIconsPanel("icons", room.getClient(), room);
 		add(upload = new UploadDialog("upload", room, roomFiles));
-		add(requestRight, action);
+		add(toggleRight, action);
 	}
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_CHANGE_RIGHT, requestRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_CHANGE_RIGHT)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_TOGGLE_RIGHT)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_ACTION, action, explicit(PARAM_ACTION), explicit(PARAM_UID)), FUNC_ACTION)));
 	}
 	

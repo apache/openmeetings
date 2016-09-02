@@ -16,42 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
-
-import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.RoomPanel.Action;
+import org.apache.openmeetings.web.room.sidebar.icon.SettingsIcon;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
-public class KickRightIcon extends RoomRightIcon {
+public class SelfIconsPanel extends ClientIconsPanel {
 	private static final long serialVersionUID = 1L;
-	
-	public KickRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.moderator, room);
-		mainCssClass = "kick ";
+	private final SettingsIcon settings;
+
+	public SelfIconsPanel(String id, Client client, RoomPanel room) {
+		super(id, client, room);
+		add(settings = new SettingsIcon("settings", client, room));
 	}
 
 	@Override
-	protected String getTitle() {
-		return getString("1213");
+	protected void onInitialize() {
+		super.onInitialize();
+		update(null);
 	}
-	
-	@Override
-	protected boolean isClickable() {
-		return !self && room.getClient().hasRight(right) && !client.hasRight(Right.superModerator);
-	}
-	
-	@Override
-	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.kick.name(), client.getUid());
-	}
-	
+
 	@Override
 	public void update(IPartialPageRequestHandler handler) {
 		super.update(handler);
-		setVisible(isClickable());
+		settings.update(handler);
 	}
 }

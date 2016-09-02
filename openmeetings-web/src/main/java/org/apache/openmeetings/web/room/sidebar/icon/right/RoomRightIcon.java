@@ -16,32 +16,49 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
+
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_RIGHT;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 
-public class AudioRightIcon extends RoomRightIcon {
+public abstract class RoomRightIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
-	
-	public AudioRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.audio, room);
-		mainCssClass = "right audio ";
+	private static final String CLS_GRANTED = "granted ";
+	protected final Right right;
+
+	public RoomRightIcon(String id, Client client, Right right, RoomPanel room) {
+		super(id, client, room);
+		this.right = right;
 	}
 
 	@Override
 	protected boolean isClickable() {
-		return self || room.getClient().hasRight(Right.moderator);
+		return (self && !hasRight()) || !self && room.getClient().hasRight(Right.moderator);
 	}
-	
-	@Override
+
 	protected boolean hasRight() {
-		return false; //FIXME TODO need some flag
+		return client.hasRight(right);
 	}
-	
+
 	@Override
-	protected String getTitle() {
-		return getString(self ? "1606" : "1604");
+	protected String getScript() {
+		return String.format("%s('%s', '%s');", FUNC_TOGGLE_RIGHT, right.name(), client.getUid());
+	}
+
+	protected boolean visible() {
+		return !client.hasRight(Right.superModerator) &&
+				((self && !hasRight()) || (!self && room.getClient().hasRight(Right.moderator)));
+	}
+
+	@Override
+	public void internalUpdate() {
+		setVisible(visible());
+		if (hasRight()) {
+			cssClass.append(CLS_GRANTED);
+		}
 	}
 }

@@ -16,31 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
-public class ExclusiveRightIcon extends RoomRightIcon {
+public class WhiteboardRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	
-	public ExclusiveRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.exclusive, room);
-		mainCssClass = "exclsv-audio ";
+
+	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.whiteBoard, room);
+		mainCssClass = "right wb ";
 	}
 
 	@Override
 	protected String getTitle() {
-		//TODO this need to be fixed
-		String title = self ? "1432" : "1423";
-		/*
+		String title;
 		if (client.hasRight(right)) {
-			title = self ? "1403" : "612";
+			title = self ? "689" : "612";
 		} else {
 			title = self ? "686" : "694";
 		}
-		*/
 		return getString(title);
+	}
+
+	@Override
+	protected boolean visible() {
+		Room r = room.getRoom();
+		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard) && super.visible();
 	}
 }

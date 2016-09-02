@@ -98,6 +98,7 @@ public class RoomPanel extends BasePanel {
 	private static final String PARAM_WB_ID = "wbId";
 	public enum Action {
 		kick
+		, settings
 		, refresh
 	}
 	private final Room r;
