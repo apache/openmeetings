@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.sidebar.icon.KickRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.KickIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,16 +47,14 @@ public class RoomClientPanel extends Panel {
 		add(new Label("name", getName(c)));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
-		actions.add(new RoomRightPanel("rights", c, room));
-		actions.add(new KickRightIcon("kick", c, room));
+		actions.add(new KickIcon("kick", c, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
-		if (room.getClient() != null) {
-			actions.setVisible(room.getClient().hasRight(Right.moderator));
-			if (c.getUid().equals(room.getClient().getUid())) {
-				item.add(AttributeAppender.append("class", "current"));
-			}
+		actions.setVisible(room.getClient().hasRight(Right.moderator));
+		if (c.getUid().equals(room.getClient().getUid())) {
+			actions.add(new SelfIconsPanel("icons", c, room));
+			item.add(AttributeAppender.append("class", "current"));
 		} else {
-			actions.setVisible(false);
+			actions.add(new ClientIconsPanel("icons", c, room));
 		}
 		add(actions);
 	}

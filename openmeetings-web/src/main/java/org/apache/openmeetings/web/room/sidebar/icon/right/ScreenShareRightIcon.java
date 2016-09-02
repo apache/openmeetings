@@ -16,45 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
-
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.RoomPanel.Action;
 
-public class RefreshIcon extends ClientIcon {
+public class ScreenShareRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 	
-	public RefreshIcon(String id, Client client, RoomPanel room) {
-		super(id, client, room);
-		mainCssClass = "restart ";
+	public ScreenShareRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.share, room);
+		mainCssClass = "right screen-share ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString("610");
-	}
-	
-	@Override
-	protected String getAlign() {
-		return ALIGN_RIGHT;
-	}
-	
-	@Override
-	protected boolean isClickable() {
-		return false;//TODO broadcasting return self || room.getClient().hasRight(right) && !client.hasRight(Right.superModerator);
-	}
-	
-	@Override
-	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.refresh.name(), client.getUid());
+		String title;
+		if (client.hasRight(right)) {
+			title = self ? "1071" : "1068";
+		} else {
+			title = "1072";
+		}
+		return getString(title);
 	}
 
 	@Override
-	public void internalUpdate() {
-		super.internalUpdate();
-		setVisible(isClickable());
+	protected boolean visible() {
+		return room.screenShareAllowed() && super.visible();
 	}
 }

@@ -97,6 +97,7 @@ public class RoomPanel extends BasePanel {
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {
 		kick
+		, settings
 		, refresh
 	}
 	private final Room r;
