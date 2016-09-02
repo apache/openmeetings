@@ -222,6 +222,9 @@
 .restart.ui-icon {
 	background-image: url(images/arrow_refresh_small.png);
 }
+.settings.ui-icon {
+	background-image: url(images/settings.png);
+}
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }

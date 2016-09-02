@@ -20,18 +20,18 @@ package org.apache.openmeetings.web.room.sidebar;
 
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.sidebar.icon.AudioRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.ExclusiveRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.ModeratorRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.MuteRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.RemoteControlRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.ScreenShareRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.VideoRightIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.WhiteboardRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.ModeratorRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.MuteRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.RemoteControlRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.ScreenShareRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.VideoRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.WhiteboardRightIcon;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
 
-public class RoomRightPanel extends Panel {
+public class ClientIconsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final ModeratorRightIcon rightModer;
 	private final WhiteboardRightIcon rightWb;
@@ -42,7 +42,7 @@ public class RoomRightPanel extends Panel {
 	private final MuteRightIcon rightMute;
 	private final ExclusiveRightIcon rightExclsv;
 
-	public RoomRightPanel(String id, Client client, RoomPanel room) {
+	public ClientIconsPanel(String id, Client client, RoomPanel room) {
 		super(id);
 		setOutputMarkupId(true);
 		add(rightModer = new ModeratorRightIcon("right-moder", client, room));

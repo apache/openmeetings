@@ -16,35 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
-public class ScreenShareRightIcon extends RoomRightIcon {
+public class AudioRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	
-	public ScreenShareRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.share, room);
-		mainCssClass = "right screen-share ";
+
+	public AudioRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.audio, room);
+		mainCssClass = "right audio ";
 	}
 
 	@Override
 	protected String getTitle() {
-		String title;
-		if (client.hasRight(right)) {
-			title = self ? "1071" : "1068";
-		} else {
-			title = "1072";
-		}
-		return getString(title);
-	}
-	
-	@Override
-	public void update(IPartialPageRequestHandler handler) {
-		setVisible(room.screenShareAllowed());
-		super.update(handler);
+		return getString(self ? "1606" : "1604");
 	}
 }

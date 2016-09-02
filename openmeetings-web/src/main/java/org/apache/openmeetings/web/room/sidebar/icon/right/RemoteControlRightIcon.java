@@ -16,32 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
-public class WhiteboardRightIcon extends RoomRightIcon {
+public class RemoteControlRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 	
-	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.whiteBoard, room);
-		mainCssClass = "right wb ";
-		Room r = room.getRoom();
-		setVisible(Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard));
+	public RemoteControlRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.remoteControl, room);
+		mainCssClass = "right remote-control ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
 		if (client.hasRight(right)) {
-			title = self ? "689" : "612";
+			title = self ? "1081" : "1078";
 		} else {
-			title = self ? "686" : "694";
+			title = "1080";
 		}
 		return getString(title);
+	}
+
+	@Override
+	protected boolean visible() {
+		return room.screenShareAllowed() && super.visible();
 	}
 }
