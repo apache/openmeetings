@@ -114,12 +114,6 @@
 	<![CDATA[
 		//Make this view the upmost in the z-Index order
 		canvas.inner.bringToFront();
-		if (standalone) {
-			_titlebar.setAttribute('visible', false);
-			lz.Cursor.showHandCursor(false);
-			lz.Cursor.unlock();
-		}
-	
 		this.counterDelegate = new LzDelegate(this, "count");
 	
 		if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
@@ -855,7 +849,7 @@
 		<handler name="onclick">
 			//parent.cleanVideos();
 			this.parent.storelocaldata();
-			new lz.labelerrorPopup(this.parent, {errorlabelid: 'save.success', labelid: '203'});
+			//new lz.labelerrorPopup(this.parent, {errorlabelid: 'save.success', labelid: '203'});
 		</handler>
 	</simpleLabelButton>
 </class>
