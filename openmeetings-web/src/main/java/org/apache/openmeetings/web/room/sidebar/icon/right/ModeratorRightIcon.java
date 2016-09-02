@@ -16,45 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
-
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.RoomPanel.Action;
 
-public class RefreshIcon extends ClientIcon {
+public class ModeratorRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	
-	public RefreshIcon(String id, Client client, RoomPanel room) {
-		super(id, client, room);
-		mainCssClass = "restart ";
+
+	public ModeratorRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.moderator, room);
+		mainCssClass = "right moderator ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString("610");
-	}
-	
-	@Override
-	protected String getAlign() {
-		return ALIGN_RIGHT;
-	}
-	
-	@Override
-	protected boolean isClickable() {
-		return false;//TODO broadcasting return self || room.getClient().hasRight(right) && !client.hasRight(Right.superModerator);
-	}
-	
-	@Override
-	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.refresh.name(), client.getUid());
-	}
-
-	@Override
-	public void internalUpdate() {
-		super.internalUpdate();
-		setVisible(isClickable());
+		String title;
+		if (client.hasRight(right)) {
+			title = self ? "688" : "675";
+		} else {
+			title = self ? "685" : "676";
+		}
+		return getString(title);
 	}
 }

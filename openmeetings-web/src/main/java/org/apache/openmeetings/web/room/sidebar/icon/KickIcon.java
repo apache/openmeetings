@@ -18,29 +18,39 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
+
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.RoomPanel.Action;
 
-public class MuteRightIcon extends RoomRightIcon {
+public class KickIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 	
-	public MuteRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.mute, room);
-		mainCssClass = "global-mute ";
+	public KickIcon(String id, Client client, RoomPanel room) {
+		super(id, client, room);
+		mainCssClass = "kick ";
 	}
 
 	@Override
 	protected String getTitle() {
-		//TODO this need to be fixed
-		String title = self ? "1403" : "1384";
-		/*
-		if (client.hasRight(right)) {
-			title = self ? "1403" : "612";
-		} else {
-			title = self ? "686" : "694";
-		}
-		*/
-		return getString(title);
+		return getString("1213");
+	}
+
+	@Override
+	protected boolean isClickable() {
+		return !self && room.getClient().hasRight(Right.moderator) && !client.hasRight(Right.superModerator);
+	}
+
+	@Override
+	protected String getScript() {
+		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.kick.name(), client.getUid());
+	}
+
+	@Override
+	public void internalUpdate() {
+		super.internalUpdate();
+		setVisible(isClickable());
 	}
 }

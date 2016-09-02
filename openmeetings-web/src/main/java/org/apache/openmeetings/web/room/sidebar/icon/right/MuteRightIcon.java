@@ -16,33 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
-public class VideoRightIcon extends RoomRightIcon {
+public class MuteRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
-	
-	public VideoRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.video, room);
-		mainCssClass = "right camera ";
-		setVisible(!room.getRoom().isAudioOnly());
+
+	public MuteRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.mute, room);
+		mainCssClass = "global-mute ";
 	}
 
 	@Override
-	protected boolean isClickable() {
-		return self || room.getClient().hasRight(Right.moderator);
-	}
-	
-	@Override
-	protected boolean hasRight() {
-		return false; //FIXME TODO need some flag
-	}
-	
-	@Override
 	protected String getTitle() {
-		return getString(self ? "687" : "683");
+		//TODO this need to be fixed
+		String title = self ? "1403" : "1384";
+		/*
+		if (client.hasRight(right)) {
+			title = self ? "1403" : "612";
+		} else {
+			title = self ? "686" : "694";
+		}
+		*/
+		return getString(title);
 	}
 }

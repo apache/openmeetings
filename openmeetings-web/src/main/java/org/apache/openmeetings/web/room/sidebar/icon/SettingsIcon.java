@@ -18,33 +18,32 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import org.apache.openmeetings.db.entity.room.Room.Right;
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
+
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.openmeetings.web.room.RoomPanel.Action;
 
-public class RemoteControlRightIcon extends RoomRightIcon {
+public class SettingsIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 	
-	public RemoteControlRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.remoteControl, room);
-		mainCssClass = "right remote-control ";
+	public SettingsIcon(String id, Client client, RoomPanel room) {
+		super(id, client, room);
+		mainCssClass = "settings ";
 	}
 
 	@Override
 	protected String getTitle() {
-		String title;
-		if (client.hasRight(right)) {
-			title = self ? "1081" : "1078";
-		} else {
-			title = "1080";
-		}
-		return getString(title);
+		return getString("306");
 	}
 
 	@Override
-	public void update(IPartialPageRequestHandler handler) {
-		setVisible(room.screenShareAllowed());
-		super.update(handler);
+	protected boolean isClickable() {
+		return true;
+	}
+
+	@Override
+	protected String getScript() {
+		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.settings.name(), client.getUid());
 	}
 }
