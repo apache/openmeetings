@@ -18,11 +18,9 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
-
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.RoomPanel.Action;
 
 public class SettingsIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
@@ -44,6 +42,6 @@ public class SettingsIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.settings.name(), client.getUid());
+		return String.format("$('#lzapp').showAvSettings(%s);", Room.Type.interview == room.getRoom().getType());
 	}
 }
