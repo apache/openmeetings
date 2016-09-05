@@ -494,7 +494,6 @@
 				<groupId>org.red5</groupId>
 				<artifactId>red5-server</artifactId>
 				<version>${red5-server.version}</version>
-				<optional>true</optional>
 			</dependency>
 			<dependency>
 				<groupId>org.red5</groupId>
