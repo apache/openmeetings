@@ -5,6 +5,28 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 
 Release Notes - Openmeetings - Version 3.1.2
 ================================================================================================================
+** Bug
+    * [OPENMEETINGS-508] - Network testing page is not localized
+    * [OPENMEETINGS-1267] - inproper handover of rtmphostlocal to screenshare-client
+    * [OPENMEETINGS-1358] - RTMPS SSHHandshakeFailed error  in 3.0.7 and working fine with 3.0.4
+    * [OPENMEETINGS-1448] - Recordings backup fails "Enum missing"
+    * [OPENMEETINGS-1460] - Application.ONLINE_USERS does not reflect changes to Client instances
+    * [OPENMEETINGS-1461] - We need to switch to java8
+
+** Improvement
+    * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.
+    * [OPENMEETINGS-1138] - In the general interface, provide a way to access links to recordings, which can be shared with others (both registered users and external people).
+    * [OPENMEETINGS-1445] - 3.1.2 Build Compilation Warnings
+    * [OPENMEETINGS-1446] - SSL installation not fully working
+    * [OPENMEETINGS-1447] - 3.1.3 - Library versions should be updated
+
+** New Feature
+    * [OPENMEETINGS-1408] - provide device-settings dialog via link
+    * [OPENMEETINGS-1453] - Provision for getting OpenMeetings version from SOAP/REST api
+
+
+Release Notes - Openmeetings - Version 3.1.2
+================================================================================================================
 ** Vulnerability
     * CVE-2016-3089 - Apache Openmeetings XSS in SWF panel
 
