@@ -322,7 +322,7 @@ public class RoomWebService {
 
 				Map<String, String> message = new HashMap<String, String>();
 				message.put("message", "roomClosed");
-				scopeApplicationAdapter.sendMessageByRoomAndDomain(id, message);
+				appAdapter.sendMessageByRoomAndDomain(id, message);
 				
 				return new ServiceResult(1L, "Closed", Type.SUCCESS);
 			} else {
