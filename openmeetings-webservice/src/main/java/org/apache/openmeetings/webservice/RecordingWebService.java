@@ -38,6 +38,8 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -78,11 +80,12 @@ public class RecordingWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				recordingDao.delete(recordingDao.get(id));
+				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
