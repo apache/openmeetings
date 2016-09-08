@@ -23,6 +23,7 @@ import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -55,6 +56,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -136,7 +138,8 @@ public class RoomWebService {
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		Sessiondata sd = sessionDao.check(sid);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+		Set<User.Right> rights = userDao.getRights(sd.getUserId());
+		if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasUserLevel(rights)) {
 			return new RoomDTO(roomDao.get(id));
 		} else {
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
