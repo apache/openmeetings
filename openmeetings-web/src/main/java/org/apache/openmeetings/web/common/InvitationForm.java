@@ -194,6 +194,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		setModelObject(i);
 		recipients.setModelObject(new ArrayList<User>());
 		recipients.setEnabled(true);
+		passwd.setEnabled(false);
 		target.add(this);
 	}
 
