@@ -152,7 +152,7 @@
 	<method name="clearSlideOnly">
 		<![CDATA[
 			var itemsToDelete = this.getCurrentSlideAnnotations();
-			this.onsharedMessage('clearSlide',itemsToDelete); 
+			this.onsharedMessage('clearSlide', itemsToDelete);
 			this.clearSlideRemote(itemsToDelete);
 		]]>
 	</method>
@@ -166,29 +166,33 @@
 
 	<method name="getCurrentSlideAnnotations">
 	<![CDATA[
+		//if ($debug) Debug.write("** getCurrentSlideAnnotations: ", baseactionobjectList.length);
 		var currentSlideNumber = -1;
-		for (var i = 0; i < this.baseactionobjectList.length; ++i) {
-			if (this.baseactionobjectList[i][0] == "swf") {
-				currentSlideNumber = this.baseactionobjectList[i][8];
+		for (var i = 0; i < baseactionobjectList.length; ++i) {
+			var obj = baseactionobjectList[i];
+			if (obj[0] == "swf") {
+				currentSlideNumber = obj[8];
 				break;
 			}
 		}
 		var itemsToDelete = new Array();
-		for (var i = 0; i < this.baseactionobjectList.length; ++i) {
-			if (this.baseactionobjectList[i][0] == "ellipse" 
-					|| this.baseactionobjectList[i][0] == "drawarrow"
-					|| this.baseactionobjectList[i][0] == "line"
-					|| this.baseactionobjectList[i][0] == "paint"
-					|| this.baseactionobjectList[i][0] == "rectangle"
-					|| this.baseactionobjectList[i][0] == "uline"
-					|| this.baseactionobjectList[i][0] == "image"
-					|| this.baseactionobjectList[i][0] == "clipart"
-					|| this.baseactionobjectList[i][0] == "letter") {
+		for (var i = 0; i < baseactionobjectList.length; ++i) {
+			var obj = baseactionobjectList[i];
+			if (obj[0] == "ellipse" 
+				|| obj[0] == "drawarrow"
+				|| obj[0] == "line"
+				|| obj[0] == "paint"
+				|| obj[0] == "rectangle"
+				|| obj[0] == "uline"
+				|| obj[0] == "image"
+				|| obj[0] == "clipart"
+				|| obj[0] == "letter")
+			{
 						
-				var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
+				var swfObj = obj[obj.length - 7];
 				
-				if (swfObj.slide == currentSlideNumber) {
-					itemsToDelete.push(this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]);
+				if (swfObj && swfObj.slide == currentSlideNumber) {
+					itemsToDelete.push(obj[obj.length-1]);
 				}
 			}
 		}
