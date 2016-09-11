@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 public class ConverterProcessResultList {
 	private static final Logger log = getLogger(ConverterProcessResultList.class, webAppRootKey);
 
-	private Map<String, ConverterProcessResult> jobslist = new LinkedHashMap<>();
+	private Map<String, ConverterProcessResult> jobs = new LinkedHashMap<>();
 
 	private Long fileItemId;
 	private String completeName;
@@ -59,11 +59,11 @@ public class ConverterProcessResultList {
 	}
 
 	public ConverterProcessResult addItem(String name, ConverterProcessResult processResult) {
-		if (jobslist.containsKey(name)) {
+		if (jobs.containsKey(name)) {
 			log.error("Duplicate key in jobslist");
 			return null;
 		}
-		return jobslist.put(name, processResult);
+		return jobs.put(name, processResult);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class ConverterProcessResultList {
 	 * @return
 	 */
 	public boolean hasError() {
-		for (Entry<String, ConverterProcessResult> entry : jobslist.entrySet()) {
+		for (Entry<String, ConverterProcessResult> entry : jobs.entrySet()) {
 			if (!entry.getValue().isOk()) {
 				return true;
 			}
@@ -87,7 +87,7 @@ public class ConverterProcessResultList {
 	 */
 	public String getLogMessage() {
 		StringBuilder logMessage = new StringBuilder();
-		for (Entry<String, ConverterProcessResult> entry : jobslist.entrySet()) {
+		for (Entry<String, ConverterProcessResult> entry : jobs.entrySet()) {
 			logMessage.append("key: ");
 			logMessage.append(entry.getKey());
 			logMessage.append("\r\n");
@@ -97,7 +97,10 @@ public class ConverterProcessResultList {
 	}
 
 	public int size() {
-		return jobslist.size();
+		return jobs.size();
 	}
 
+	public Map<String, ConverterProcessResult> getJobs() {
+		return jobs;
+	}
 }
