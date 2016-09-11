@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.ldap;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -315,7 +315,7 @@ public class LdapLoginManagement {
 			this.domainId = domainId;
 			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
 			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
-					Reader r = new InputStreamReader(is, StandardCharsets.UTF_8))
+					Reader r = new InputStreamReader(is, UTF_8))
 			{
 				config.load(r);
 				if (config.isEmpty()) {

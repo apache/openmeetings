@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -183,7 +183,7 @@ public class BackupExport {
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);
 			}
 			
@@ -240,7 +240,7 @@ public class BackupExport {
 	
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
@@ -280,7 +280,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
@@ -298,7 +298,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
@@ -318,7 +318,7 @@ public class BackupExport {
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
 			}
 			
@@ -336,7 +336,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
@@ -355,7 +355,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
 			}
 			
@@ -412,7 +412,7 @@ public class BackupExport {
 	
 	private static <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
 		Format format = new Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, StandardCharsets.UTF_8), format);
+		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, UTF_8), format);
 		OutputNode root = doc.getChild("root");
 		root.setComment(BACKUP_COMMENT);
 		OutputNode listNode = root.getChild(listElement);
@@ -441,7 +441,7 @@ public class BackupExport {
 
 		registry.bind(Group.class, GroupConverter.class);
 		registry.bind(Salutation.class, SalutationConverter.class);
-		if (list != null && list.size() > 0) {
+		if (list != null && !list.isEmpty()) {
 			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
 			registry.bind(dateClass, DateConverter.class);
 		}

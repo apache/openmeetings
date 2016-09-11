@@ -20,10 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -42,6 +39,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.io.flv.impl.FLVWriter;
@@ -114,31 +112,29 @@ public abstract class BaseConverter {
 		r.setDuration(formatMillis(diff(r.getRecordEnd(), r.getRecordStart())));
 	}
 	
-	protected void deleteFileIfExists(String name) {
-		File f = new File(name);
-
+	protected void deleteFileIfExists(File f) {
 		if (f.exists()) {
 			f.delete();
 		}
 	}
 	
-	protected String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav) {
+	protected String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
 		List<String> argv = new ArrayList<String>();
 		
 		argv.add(getPathToSoX());
 		argv.add("-m");
-		for (String arg : listOfFullWaveFiles) {
-			argv.add(arg);
+		for (File arg : waveFiles) {
+			argv.add(arg.getCanonicalPath());
 		}
-		argv.add(outputFullWav);
+		argv.add(wav.getCanonicalPath());
 		
 		return argv.toArray(new String[0]);
 	}
 	
 	protected void stripAudioFirstPass(Recording recording, List<ConverterProcessResult> returnLog,
-			List<String> listOfFullWaveFiles, File streamFolder)
+			List<File> waveFiles, File streamFolder)
 	{
-		stripAudioFirstPass(recording, returnLog, listOfFullWaveFiles, streamFolder
+		stripAudioFirstPass(recording, returnLog, waveFiles, streamFolder
 				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
 	}
 	
@@ -229,7 +225,7 @@ public abstract class BaseConverter {
 	
 	protected void stripAudioFirstPass(Recording recording,
 			List<ConverterProcessResult> returnLog,
-			List<String> listOfFullWaveFiles, File streamFolder,
+			List<File> waveFiles, File streamFolder,
 			List<RecordingMetaData> metaDataList) {
 		try {
 			// Init variables
@@ -246,7 +242,7 @@ public abstract class BaseConverter {
 				
 				metaData = waitForTheStream(metaId);
 	
-				File inputFlvFile = new File(streamFolder, metaData.getStreamName() + FLV_EXTENSION);
+				File inputFlvFile = new File(streamFolder, OmFileHelper.getName(metaData.getStreamName(), EXTENSION_FLV));
 	
 				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
 	
@@ -328,7 +324,7 @@ public abstract class BaseConverter {
 					metaData.setFullWavAudioData(hashFileFullName);
 	
 					// Finally add it to the row!
-					listOfFullWaveFiles.add(outputFullWav.getCanonicalPath());
+					waveFiles.add(outputFullWav);
 				}
 	
 				metaDataDao.update(metaData);
@@ -343,12 +339,11 @@ public abstract class BaseConverter {
 		if (!r.exists(EXTENSION_FLV)) {
 			return;
 		}
-		File file = getRecording(r.getHash());
-		String path = file.getCanonicalPath();
-		String mp4path = path + MP4_EXTENSION;
+		File file = r.getFile(EXTENSION_FLV);
+		File mp4 = r.getFile();
 		String[] argv = new String[] {
 				getPathToFFMPEG(), "-y",
-				"-i", path,
+				"-i", file.getCanonicalPath(),
 				"-c:v", "libx264",
 				"-crf", "24",
 				"-pix_fmt", "yuv420p",
@@ -357,16 +352,16 @@ public abstract class BaseConverter {
 				"-c:a", "libfaac",
 				"-c:a", "libfdk_aac", "-b:a", "32k", //FIXME add quality constants 
 				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
-				mp4path
+				mp4.getCanonicalPath()
 				};
 		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
 		
 		argv = new String[] {
-				getPathToFFMPEG(), "-y",
-				"-i", mp4path,
-				"-vcodec", "libtheora",
-				"-acodec", "libvorbis",
-				path + OGG_EXTENSION
+				getPathToFFMPEG(), "-y"
+				, "-i", mp4.getCanonicalPath()
+				, "-vcodec", "libtheora"
+				, "-acodec", "libvorbis"
+				, r.getFile(EXTENSION_OGG).getCanonicalPath()
 				};
 
 		returnLog.add(ProcessHelper.executeScript("generate OGG", argv));

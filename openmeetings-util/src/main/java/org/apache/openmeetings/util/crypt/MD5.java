@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import java.nio.charset.StandardCharsets;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -27,7 +28,7 @@ import org.apache.commons.codec.binary.Hex;
 public class MD5 {
 	public static String checksum(String data) throws NoSuchAlgorithmException {
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
-		byte[] b = data == null ? new byte[0] : data.getBytes(StandardCharsets.UTF_8);
+		byte[] b = data == null ? new byte[0] : data.getBytes(UTF_8);
 		md5.update(b, 0, b.length);
 		return Hex.encodeHexString(md5.digest());
 	}

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
@@ -29,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -294,7 +294,7 @@ public class Admin {
 						f = new File(file);
 					}
 					boolean includeFiles = !cmdl.hasOption("exclude-files");
-					File backup_dir = new File(OmFileHelper.getUploadTempDir(), "" + System.currentTimeMillis());
+					File backup_dir = new File(OmFileHelper.getUploadBackupDir(), "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
@@ -319,11 +319,6 @@ public class Admin {
 						System.out.println("WARNING: all intermadiate files will be clean up!");
 					}
 					StringBuilder report = new StringBuilder();
-					CleanupUnit temp = CleanupHelper.getTempUnit();
-					if (cleanup) {
-						temp.cleanup();
-					}
-					report.append("Temporary files allocates: ").append(temp.getHumanTotal()).append("\n");
 					{ //UPLOAD
 						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
 						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
@@ -433,7 +428,7 @@ public class Admin {
 		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
 		if (invalidPassword(cfg.password, cfgDao)) {
 			System.out.print("Please enter password for the user '" + cfg.username + "':");
-			cfg.password = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)).readLine();
+			cfg.password = new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine();
 			if (invalidPassword(cfg.password, cfgDao)) {
 				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);

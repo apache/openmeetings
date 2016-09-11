@@ -18,10 +18,11 @@
  */
 package org.apache.openmeetings.installation;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.openmeetings.util.OmFileHelper;
 import org.dom4j.Document;
@@ -42,7 +43,7 @@ public class InstallationDocumentHandler {
 		step.addElement("stepname").addText("Step " + stepNo);
 
 		try (OutputStream os = new FileOutputStream(OmFileHelper.getInstallFile())) {
-			XMLWriter writer = new XMLWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
+			XMLWriter writer = new XMLWriter(new OutputStreamWriter(os, UTF_8));
 			writer.write(document);
 			writer.close();
 		}

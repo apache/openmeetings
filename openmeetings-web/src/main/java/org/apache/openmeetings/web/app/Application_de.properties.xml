@@ -1904,7 +1904,6 @@
 	<entry key="dashboard.widget.admin.desc">Generale Admin-Functions</entry>
 	<entry key="dashboard.widget.admin.cleanup.title">Cleanup-bericht</entry>
 	<entry key="dashboard.widget.admin.cleanup.show">Cleanup-Bericht anzeigen</entry>
-	<entry key="dashboard.widget.admin.cleanup.temp">Temporäre Dateien:</entry>
 	<entry key="dashboard.widget.admin.cleanup.upload">Upload-Ordner:</entry>
 	<entry key="dashboard.widget.admin.cleanup.profiles">Profile:</entry>
 	<entry key="dashboard.widget.admin.cleanup.invalid">ungültig:</entry>
@@ -1963,4 +1962,6 @@
 	<entry key="network.test.upl.speed">Upload speed</entry>
 	<entry key="access.denied.header">Access denied. You are not authorized to perform this action.</entry>
 	<entry key="save.success">Saved successfully</entry>
+	<entry key="convert.errors.file">The have been errors while processing the file</entry>
+	<entry key="convert.errors.file.missing">File is not found</entry>
 </properties>

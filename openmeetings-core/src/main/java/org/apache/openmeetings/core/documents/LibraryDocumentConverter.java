@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.core.documents;
 
-import static org.apache.openmeetings.util.OmFileHelper.WML_EXTENSION;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -26,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.apache.openmeetings.util.OmFileHelper;
@@ -43,7 +43,7 @@ public class LibraryDocumentConverter {
 		try {
 			log.debug("filePath: " + OmFileHelper.getUploadWmlDir().getCanonicalPath());
 			
-			File file = new File(OmFileHelper.getUploadWmlDir(), fileName + WML_EXTENSION);
+			File file = new File(OmFileHelper.getUploadWmlDir(), OmFileHelper.getName(fileName, EXTENSION_WML));
 			
 			if (file.exists()){
 				return "-20";
@@ -56,7 +56,7 @@ public class LibraryDocumentConverter {
 			log.debug("Write to " + file);
 			
 			try (OutputStream os = new FileOutputStream(file);
-					Writer out = new OutputStreamWriter(os, StandardCharsets.UTF_8))
+					Writer out = new OutputStreamWriter(os, UTF_8))
 			{
 				out.write(xmlString);
 				out.flush();

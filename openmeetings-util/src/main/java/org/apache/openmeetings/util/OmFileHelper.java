@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,14 +33,13 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class OmFileHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(OmFileHelper.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(OmFileHelper.class, webAppRootKey);
 
 	/**
 	 * This variable needs to point to the openmeetings webapp directory
 	 */
 	private static File OM_HOME = null;
 	private static final String UPLOAD_DIR = "upload";
-	private static final String UPLOAD_TEMP_DIR = "uploadtemp";
 	private static final String FILES_DIR = "files";
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
@@ -53,11 +54,11 @@ public class OmFileHelper {
 	private static final String BACKUP_DIR = "backup";
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
-	
+
 	private static final String INSTALL_FILE = "install.xml";
-	
+
 	public static final String SCREENSHARING_DIR = "screensharing";
-	
+
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
@@ -77,11 +78,7 @@ public class OmFileHelper {
 	public static final String EXTENSION_OGG = "ogg";
 	public static final String EXTENSION_JPG = "jpg";
 	public static final String EXTENSION_SWF = "swf";
-	public static final String WML_EXTENSION = "." + EXTENSION_WML;
-	public static final String FLV_EXTENSION = "." + EXTENSION_FLV;
-	public static final String MP4_EXTENSION = "." + EXTENSION_MP4;
-	public static final String OGG_EXTENSION = "." + EXTENSION_OGG;
-	public static final String JPG_EXTENSION = "." + EXTENSION_JPG;
+	public static final String EXTENSION_PDF = "pdf";
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
 	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
@@ -90,20 +87,20 @@ public class OmFileHelper {
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
 	}
-	
+
 	public static void setOmHome(String omHome) {
 		OmFileHelper.OM_HOME = new File(omHome);
 	}
-	
+
 	public static File getRootDir() {
-		//FIXME hack !!!!
+		// FIXME hack !!!!
 		return getOmHome().getParentFile().getParentFile();
 	}
-	
+
 	public static File getOmHome() {
 		return OmFileHelper.OM_HOME;
 	}
-	
+
 	private static File getDir(File parent, String name) {
 		File f = new File(parent, name);
 		if (!f.exists()) {
@@ -111,31 +108,31 @@ public class OmFileHelper {
 		}
 		return f;
 	}
-	
+
 	public static File getUploadDir() {
 		return new File(OmFileHelper.OM_HOME, UPLOAD_DIR);
 	}
-	
+
 	public static File getUploadFilesDir() {
 		return getDir(getUploadDir(), FILES_DIR);
 	}
-	
+
 	public static File getUploadProfilesDir() {
 		return getDir(getUploadDir(), PROFILES_DIR);
 	}
-	
+
 	public static File getUploadProfilesUserDir(Long userId) {
 		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
 	}
-	
+
 	public static File getUploadProfilesUserDir(String userId) {
 		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
 	}
-	
+
 	public static File getDefaultProfilePicture() {
 		return new File(getImagesDir(), defaultProfileImageName);
 	}
-	
+
 	public static File getUserProfilePicture(Long userId, String uri) {
 		File img = new File(getUploadProfilesUserDir(userId), profileImagePrefix + uri);
 		if (!img.exists()) {
@@ -143,119 +140,95 @@ public class OmFileHelper {
 		}
 		return img;
 	}
-	
+
 	public static File getUserDashboard(Long userId) {
 		return new File(getUploadProfilesUserDir(userId), dashboardFile);
 	}
-	
+
 	public static File getUploadImportDir() {
 		return getDir(getUploadDir(), IMPORT_DIR);
 	}
-	
+
 	public static File getUploadBackupDir() {
 		return getDir(getUploadDir(), BACKUP_DIR);
 	}
-	
+
 	public static File getUploadRoomDir(String roomName) {
 		return getDir(getUploadDir(), roomName);
 	}
-	
+
 	public static File getUploadWmlDir() {
 		return getDir(getUploadDir(), WML_DIR);
 	}
-	
-	public static File getUploadTempDir() {
-		return getDir(OmFileHelper.OM_HOME, UPLOAD_TEMP_DIR);
-	}
-	
-	public static File getUploadTempFilesDir() {
-		return getDir(getUploadTempDir(), FILES_DIR);
-	}
-	
-	public static File getUploadTempProfilesDir() {
-		return getDir(getUploadTempDir(), PROFILES_DIR);
-	}
-	
-	public static File getUploadTempProfilesUserDir(Long userId) {
-		return getDir(getUploadTempProfilesDir(), OmFileHelper.profilesPrefix + userId);
-	}
-	
-	public static File getUploadTempRoomDir(String roomName) {
-		return getDir(getUploadTempDir(), roomName);
-	}
-	
+
 	public static File getStreamsDir() {
 		return getDir(OmFileHelper.OM_HOME, STREAMS_DIR);
 	}
-	
+
 	public static File getStreamsHibernateDir() {
 		return getDir(getStreamsDir(), HIBERNATE_DIR);
 	}
-	
+
 	public static File getRecording(String name) {
 		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
 	}
-	
-	public static File getMp4Recording(String name) {
-		return getRecording(name + MP4_EXTENSION);
-	}
-	
-	public static File getOggRecording(String name) {
-		return getRecording(name + OGG_EXTENSION);
-	}
-	
+
 	public static File getStreamsSubDir(Long id) {
 		return getDir(getStreamsDir(), id.toString());
 	}
-	
+
 	public static File getStreamsSubDir(String name) {
 		return getDir(getStreamsDir(), name);
 	}
-	
-	public static File getRecordingMetaData(Long roomId, String name) {
-		return new File(getStreamsSubDir(roomId), name + FLV_EXTENSION);
+
+	public static String getName(String name, String ext) {
+		return String.format("%s.%s", name, ext);
 	}
-	
+
+	public static File getRecordingMetaData(Long roomId, String name) {
+		return new File(getStreamsSubDir(roomId), getName(name, EXTENSION_FLV));
+	}
+
 	public static File getLanguagesDir() {
 		return new File(OmFileHelper.OM_HOME, LANGUAGES_DIR);
 	}
-	
+
 	public static File getPublicDir() {
 		return new File(OmFileHelper.OM_HOME, PUBLIC_DIR);
 	}
-	
+
 	public static File getPublicClipartsDir() {
 		return new File(getPublicDir(), CLIPARTS_DIR);
 	}
-	
+
 	public static File getPublicEmotionsDir() {
 		return new File(getPublicDir(), EMOTIONS_DIR);
 	}
-	
+
 	public static File getWebinfDir() {
 		return new File(OmFileHelper.OM_HOME, WEB_INF_DIR);
 	}
-	
+
 	public static File getPersistence() {
-		return getPersistence((DbType)null);
+		return getPersistence((DbType) null);
 	}
-	
+
 	public static File getPersistence(String dbType) {
 		return getPersistence(DbType.valueOf(dbType));
 	}
-	
+
 	public static File getPersistence(DbType dbType) {
 		return new File(OmFileHelper.getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
 	}
-	
+
 	public static File getConfDir() {
 		return new File(OmFileHelper.OM_HOME, CONF_DIR);
 	}
-	
+
 	public static File getInstallFile() {
 		return new File(getConfDir(), INSTALL_FILE);
 	}
-	
+
 	public static File getScreenSharingDir() {
 		return new File(OmFileHelper.OM_HOME, SCREENSHARING_DIR);
 	}
@@ -263,7 +236,7 @@ public class OmFileHelper {
 	public static File getImagesDir() {
 		return new File(OmFileHelper.OM_HOME, IMAGES_DIR);
 	}
-	
+
 	public static File appendSuffix(File original, String suffix) {
 		File parent = original.getParentFile();
 		String name = original.getName();
@@ -275,10 +248,10 @@ public class OmFileHelper {
 		}
 		return new File(parent, name + suffix + ext);
 	}
-	
-	//FIXME need to be generalized
+
+	// FIXME need to be generalized
 	public static File getNewFile(File dir, String name, String ext) throws IOException {
-		File f = new File(dir, name + ext);
+		File f = new File(dir, getName(name, ext));
 		int recursiveNumber = 0;
 		while (f.exists()) {
 			f = new File(dir, name + "_" + (recursiveNumber++) + ext);
@@ -286,7 +259,7 @@ public class OmFileHelper {
 		f.createNewFile();
 		return f;
 	}
-	
+
 	public static File getNewDir(File dir, String name) throws IOException {
 		File f = new File(dir, name);
 		String baseName = f.getCanonicalPath();
@@ -298,16 +271,18 @@ public class OmFileHelper {
 		f.mkdir();
 		return f;
 	}
-	
+
 	public static String getHumanSize(File dir) {
 		return getHumanSize(getSize(dir));
 	}
-	
+
 	public static String getHumanSize(long size) {
-		if(size <= 0) return "0";
+		if (size <= 0) {
+			return "0";
+		}
 		final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
-		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
-		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+		int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 
 	public static long getSize(File dir) {
@@ -316,14 +291,14 @@ public class OmFileHelper {
 			size = dir.length();
 		} else {
 			File[] subFiles = dir.listFiles();
-	
+
 			for (File file : subFiles) {
 				if (file.isFile()) {
 					size += file.length();
 				} else {
 					size += getSize(file);
 				}
-	
+
 			}
 		}
 		return size;
@@ -332,7 +307,7 @@ public class OmFileHelper {
 	public static void copyFile(String sourceFile, String targetFile) throws IOException {
 		FileHelper.copy(new File(sourceFile), new File(targetFile));
 	}
-	
+
 	public static void copyFile(File f1, OutputStream out) throws IOException {
 		try (InputStream in = new FileInputStream(f1)) {
 			FileHelper.copy(in, out);

@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.db.dao.record.RecordingLogDao;
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
@@ -35,22 +35,24 @@ public class FileItemPanel extends FolderPanel {
 
 	public FileItemPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
-		if (model.getObject() instanceof Recording) {
-			Recording r = (Recording)model.getObject();
-			long errorCount = getBean(RecordingLogDao.class).countErrors(r.getId());
-			boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !r.exists());
-			errors.add(new AjaxEventBehavior("click") {
-				private static final long serialVersionUID = 1L;
-	
-				@Override
-				protected void onEvent(AjaxRequestTarget target) {
-					fileTreePanel.errorsDialog.setDefaultModel(model);
-					fileTreePanel.errorsDialog.open(target);
-				}
-			}).setVisible(visible);
+		FileItem f = model.getObject();
+		long errorCount = getBean(FileItemLogDao.class).countErrors(f);
+		boolean visible = errorCount != 0;
+		if (FileItem.Type.Recording == f.getType()) {
+			Recording r = (Recording)f;
+			visible |= (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !f.exists());
 		} else {
-			errors.setVisible(false);
+			visible |= !f.exists();
 		}
+		errors.add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				fileTreePanel.errorsDialog.setDefaultModel(model);
+				fileTreePanel.errorsDialog.open(target);
+			}
+		}).setVisible(visible);
 		drag.add(errors);
 	}
 }

@@ -1900,7 +1900,6 @@
 	<entry key="dashboard.widget.admin.desc">Основные административные фукции</entry>
 	<entry key="dashboard.widget.admin.cleanup.title">Отчёт о файлах</entry>
 	<entry key="dashboard.widget.admin.cleanup.show">Показать отчёт о файлах</entry>
-	<entry key="dashboard.widget.admin.cleanup.temp">Временные файлы:</entry>
 	<entry key="dashboard.widget.admin.cleanup.upload">Папка upload:</entry>
 	<entry key="dashboard.widget.admin.cleanup.profiles">профили:</entry>
 	<entry key="dashboard.widget.admin.cleanup.invalid">не валидные:</entry>
@@ -1959,4 +1958,8 @@
 	<entry key="network.test.upl.speed">Upload speed</entry>
 	<entry key="access.denied.header">Access denied. You are not authorized to perform this action.</entry>
 	<entry key="save.success">Saved successfully</entry>
+	<entry key="convert.errors.file">The have been errors while processing the file</entry>
+	<entry key="convert.errors.file.missing">File is not found</entry>
+	<entry key="convert.errors.file">The have been errors while processing the file</entry>
+	<entry key="convert.errors.file.missing">File is not found</entry>
 </properties>

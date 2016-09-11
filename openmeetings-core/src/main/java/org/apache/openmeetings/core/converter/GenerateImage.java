@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
@@ -31,6 +31,7 @@ import java.io.IOException;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
@@ -48,23 +49,16 @@ public class GenerateImage extends BaseConverter {
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
-	public ConverterProcessResultList convertImage(String fileName, String fileExt, String roomName) throws IOException {
+	public ConverterProcessResultList convertImage(FileItem f, String ext) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
-		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), fileName + fileExt);
+		File img = f.getFile(ext);
+		File jpg = f.getFile(EXTENSION_JPG);
 
-		File destinationFile = OmFileHelper.getNewFile(OmFileHelper.getUploadRoomDir(roomName), fileName, ".jpg");
+		log.debug("##### convertImage destinationFile: " + jpg);
 
-		log.debug("##### convertImage destinationFile: " + destinationFile);
-
-		ConverterProcessResult processJPG = convertSingleJpg(fileFullPath.getCanonicalPath(), destinationFile);
-		ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, destinationFile, 50);
-
-		returnMap.addItem("processJPG", processJPG);
-		returnMap.addItem("processThumb", processThumb);
-
-		// Delete old one
-		fileFullPath.delete();
+		returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
+		returnMap.addItem("processThumb", generateThumbs.generateThumb(thumbImagePrefix, jpg, 50));
 
 		return returnMap;
 	}
@@ -76,7 +70,7 @@ public class GenerateImage extends BaseConverter {
 		File[] files = getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(JPG_EXTENSION);
+				return pathname.getName().endsWith(EXTENSION_JPG);
 			}
 		});
 		if (files != null) {
@@ -85,9 +79,9 @@ public class GenerateImage extends BaseConverter {
 			}
 		}
 		
-		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, JPG_EXTENSION);
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, EXTENSION_JPG);
 		if (!skipConvertion) {
-			returnMap.addItem("processJPG", convertSingleJpg(file.getCanonicalPath(), destinationFile));
+			returnMap.addItem("processJPG", convertSingleJpg(file, destinationFile));
 		} else {
 			FileHelper.copy(file, destinationFile);
 		}
@@ -115,25 +109,9 @@ public class GenerateImage extends BaseConverter {
 	 * @throws IOException 
 	 * 
 	 */
-	private ConverterProcessResult convertSingleJpg(String inputFile, File outputfile) throws IOException {
-		String[] argv = new String[] { getPathToImageMagick(), inputFile, outputfile.getCanonicalPath() };
+	private ConverterProcessResult convertSingleJpg(File in, File out) throws IOException {
+		String[] argv = new String[] { getPathToImageMagick(), in.getCanonicalPath(), out.getCanonicalPath() };
 
 		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-	}
-
-	public ConverterProcessResult convertImageByTypeAndSize(String inputFile,
-			String outputfile, int width, int height) {
-		String[] argv = new String[] { getPathToImageMagick(), "-size",
-				width + "x" + height, inputFile, outputfile };
-		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
-	}
-
-	public ConverterProcessResult convertImageByTypeAndSizeAndDepth(
-			String inputFile, String outputfile, int width, int height,
-			int depth) {
-		String[] argv = new String[] { getPathToImageMagick(), "-size",
-				width + "x" + height, "-depth", Integer.toString(depth),
-				inputFile, outputfile };
-		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
 	}
 }
