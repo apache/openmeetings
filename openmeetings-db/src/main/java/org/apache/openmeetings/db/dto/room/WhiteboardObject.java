@@ -96,6 +96,11 @@ public class WhiteboardObject {
 		zIndex = 1;
 	}
 
+	//getter is required, otherwise roomItems are not available in red5
+	public Map<String, List<Object>> getRoomItems() {
+		return roomItems;
+	}
+
 	public void add(String oid, List<Object> actionObject) {
 		Object type = actionObject.size() > 0 ? actionObject.get(0) : "";
 		if (actionObject.size() > 8 && ("swf".equals(type) || "image".equals(type) || "flv".equals(type))) {

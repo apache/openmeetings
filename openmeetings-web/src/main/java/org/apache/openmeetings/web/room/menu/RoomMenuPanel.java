@@ -25,11 +25,10 @@ import static org.apache.openmeetings.web.app.Application.removeUserFromRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -73,12 +72,7 @@ public class RoomMenuPanel extends Panel {
 	private final MenuPanel menuPanel;
 	private final StartSharingButton shareBtn;
 	private final Label roomName;
-	private static ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() {
-		@Override
-		protected DateFormat initialValue() {
-			return new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		};
-	};
+	private static final FastDateFormat df = FastDateFormat.getInstance("dd.MM.yyyy HH:mm");
 	private final OmButton askBtn = new OmButton("ask") {
 		private static final long serialVersionUID = 1L;
 		{
@@ -291,7 +285,7 @@ public class RoomMenuPanel extends Panel {
 			org.apache.openmeetings.db.entity.room.Client recUser = sessMngr.getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
 			if (recUser != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
-						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.get().format(recUser.getConnectedSince())));
+						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.format(recUser.getConnectedSince())));
 				roomClass.append(" screen");
 			}
 			org.apache.openmeetings.db.entity.room.Client pubUser = sessMngr.getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
@@ -336,9 +330,10 @@ public class RoomMenuPanel extends Panel {
 	}
 	
 	public static void roomExit(Client c, boolean broadcast) {
+		Long roomId = c.getRoomId();
 		removeUserFromRoom(c);
-		if (broadcast) {
-			RoomPanel.broadcast(new RoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.roomExit));
+		if (broadcast && roomId != null) {
+			RoomPanel.broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
 		}
 	}
 }

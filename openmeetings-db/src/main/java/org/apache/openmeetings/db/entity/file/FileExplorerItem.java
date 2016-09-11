@@ -112,20 +112,19 @@ public class FileExplorerItem extends FileItem {
 	@Override
 	protected File internalGetFile(String ext) {
 		File f = null;
+		File d = new File(OmFileHelper.getUploadFilesDir(), getHash());
 		switch (getType()) {
 			case WmlFile:
 				f = new File(OmFileHelper.getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
 				break;
 			case Image:
-				f = new File(OmFileHelper.getUploadFilesDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
+				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
 				break;
 			case Video:
-				f = new File(OmFileHelper.getStreamsHibernateDir(), String.format("%s%s.%s", WB_VIDEO_FILE_PREFIX, getId(), ext == null ? EXTENSION_MP4 : ext));
+				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
 				break;
-			case Presentation: {
-					File d = new File(OmFileHelper.getUploadFilesDir(), getHash());
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
-				}
+			case Presentation:
+				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
 				break;
 			case PollChart:
 			case Folder:
