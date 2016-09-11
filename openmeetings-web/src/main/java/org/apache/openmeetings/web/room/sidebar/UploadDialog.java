@@ -24,12 +24,15 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
+import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -194,9 +197,12 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			f.setInsertedBy(getUserId());
 			
 			try {
-				ConverterProcessResultList result = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
+				ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
+				for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {
+					getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
+				}
 				room.getSidebar().updateFiles(target);
-				if (result.hasError()) {
+				if (logs.hasError()) {
 					form.error(getString("convert.errors.file"));
 					onError(target);
 				} else {

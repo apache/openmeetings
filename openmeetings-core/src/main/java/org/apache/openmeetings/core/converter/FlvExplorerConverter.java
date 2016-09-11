@@ -89,10 +89,6 @@ public class FlvExplorerConverter extends BaseConverter {
 			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), argv_previewFLV));
 
 			fileDao.update(f);
-
-			for (ConverterProcessResult returnMap : returnLog) {
-				fileLogDao.add(returnMap.getProcess(), null, returnMap);
-			}
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
 			returnLog.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));
