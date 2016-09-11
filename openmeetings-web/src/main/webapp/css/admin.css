@@ -41,7 +41,7 @@ table.adminListTable tr:nth-child(odd), table.adminListTableSmall tr:nth-child(o
 table.adminListTable tr:hover, table.adminListTableSmall tr:hover {
 	/*SHOULD BE MANUALLY IN SYNC WITH THEME .ui-state-hover */
 	border: 1px solid #74b2e2;
-	background: #e4f1fb url(theme_om/images/ui-bg_glass_100_e4f1fb_1x400.png) 50% 50% repeat-x;
+	background: #e4f1fb;
 	font-weight: normal;
 	color: #0070a3;
 }
