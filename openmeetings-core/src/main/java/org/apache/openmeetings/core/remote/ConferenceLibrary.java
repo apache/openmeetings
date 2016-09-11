@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -216,22 +216,21 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();
 
-				Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+				Client client = sessionManager.getClientByStreamId(streamid, null);
+				Long roomId = client.getRoomId();
 
-				Long roomId = currentClient.getRoomId();
-
-				if (roomId != null) {
-					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir(), WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
+				FileExplorerItem f = fileDao.get(fileId);
+				if (roomId != null && f != null) {
+					File mp4 = f.getFile(EXTENSION_MP4);
 
 					File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
 
-					File targetFullFlvFile = new File(targetFolder, WB_VIDEO_FILE_PREFIX + fileId + MP4_EXTENSION);
-					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
-						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
+					File target = new File(targetFolder, OmFileHelper.getName(WB_VIDEO_FILE_PREFIX + fileId, EXTENSION_MP4));
+					if (mp4.exists() && !target.exists()) {
+						FileHelper.copy(mp4, target);
 					}
 					return 1L;
 				}

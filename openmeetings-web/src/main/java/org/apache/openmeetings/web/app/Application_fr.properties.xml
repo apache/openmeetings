@@ -1860,7 +1860,6 @@
   <entry key="dashboard.widget.admin.desc">Fonctions d'admin générales</entry>
   <entry key="dashboard.widget.admin.cleanup.title">Rapport de nettoyage</entry>
   <entry key="dashboard.widget.admin.cleanup.show">Montrer rapport de nettoyage</entry>
-  <entry key="dashboard.widget.admin.cleanup.temp">Fichier temporaires:</entry>
   <entry key="dashboard.widget.admin.cleanup.upload">Dosier de dépôt:</entry>
   <entry key="dashboard.widget.admin.cleanup.profiles">profils:</entry>
   <entry key="dashboard.widget.admin.cleanup.invalid">invalide:</entry>
@@ -1919,4 +1918,6 @@
 	<entry key="network.test.upl.speed">Upload speed</entry>
 	<entry key="access.denied.header">Access denied. You are not authorized to perform this action.</entry>
 	<entry key="save.success">Saved successfully</entry>
+	<entry key="convert.errors.file">The have been errors while processing the file</entry>
+	<entry key="convert.errors.file.missing">File is not found</entry>
 </properties>

@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.FLV_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
 
@@ -31,19 +32,19 @@ public class FlvRecordingResourceReference extends RecordingResourceReference {
 	public FlvRecordingResourceReference() {
 		super("flv-recording");
 	}
-	
+
 	@Override
 	public String getMimeType() {
 		return FLV_MIME_TYPE;
 	}
-	
+
 	@Override
 	protected String getFileName(Recording r) {
-		return r.getHash();
+		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_FLV);
 	}
-	
+
 	@Override
 	protected File getFile(Recording r) {
-		return getRecording(r.getHash());
+		return r.getFile(EXTENSION_FLV);
 	}
 }

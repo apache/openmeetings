@@ -213,9 +213,9 @@
 	<bean id="roomGroupDao" class="org.apache.openmeetings.db.dao.room.RoomGroupDao"/>
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.service.mail.EmailManager" />
+	<bean id="fileItemLogDao" class="org.apache.openmeetings.db.dao.file.FileItemLogDao" />
 	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.db.dao.file.FileExplorerItemDao" />
 	<bean id="recordingDao" class="org.apache.openmeetings.db.dao.record.RecordingDao" />
-	<bean id="recordingLogDao" class="org.apache.openmeetings.db.dao.record.RecordingLogDao" />
 	<bean id="recordingMetaDataDao" class="org.apache.openmeetings.db.dao.record.RecordingMetaDataDao" />
 	<bean id="recordingMetaDeltaDao" class="org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao" />
 	<bean id="ldapConfigDao" class="org.apache.openmeetings.db.dao.server.LdapConfigDao" />

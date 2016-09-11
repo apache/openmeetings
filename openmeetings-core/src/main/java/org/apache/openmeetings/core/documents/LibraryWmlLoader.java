@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.core.documents;
 
-import static org.apache.openmeetings.util.OmFileHelper.WML_EXTENSION;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.BufferedReader;
@@ -26,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +43,8 @@ public class LibraryWmlLoader {
 	public static List<?> loadWmlFile(String fileName){
 		try {
 			String name = fileName;
-			if (!name.endsWith(WML_EXTENSION)) {
-				name += WML_EXTENSION;
+			if (!name.endsWith(EXTENSION_WML)) {
+				name = OmFileHelper.getName(fileName, EXTENSION_WML);
 			}
 			File file = new File(OmFileHelper.getUploadWmlDir(), name);
 			log.debug("filepathComplete: " + file);
@@ -53,7 +53,7 @@ public class LibraryWmlLoader {
 			xStream.setMode(XStream.NO_REFERENCES);
 			
 			try (InputStream is = new FileInputStream(file);
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
 				List<?> lMapList = (List<?>) xStream.fromXML(reader);
 				

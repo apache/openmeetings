@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,7 +97,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			}
 		});
 		form.add(feedback.setOutputMarkupId(true), toWb.setOutputMarkupId(true)
-				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true));
+				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true))
+			.setOutputMarkupId(true);
 	
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
@@ -161,6 +163,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		super.onOpen(handler);
+		upload.setEnabled(true, handler);
+		uploadField.setModelObject(new ArrayList<>());
+		handler.add(form, fileName);
 		handler.appendJavaScript(String.format("bindUpload('%s', '%s');", form.getMarkupId(), fileName.getMarkupId()));
 	}
 	
@@ -192,7 +197,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				ConverterProcessResultList result = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
 				room.getSidebar().updateFiles(target);
 				if (result.hasError()) {
-					error(result.getLogMessage());
+					form.error(getString("convert.errors.file"));
+					onError(target);
 				} else {
 					if (toWb.getModelObject()) {
 						room.sendFileToWb(f, cleanWb.getModelObject());
@@ -200,7 +206,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 					close(target, null);
 				}
 			} catch (Exception e) {
-				error(e.getMessage());
+				form.error(e.getMessage());
+				onError(target);
 			}
 		}
 	}

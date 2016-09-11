@@ -18,10 +18,15 @@
  */
 package org.apache.openmeetings.util.mail;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
-import javax.activation.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.activation.DataSource;
 
 public class ByteArrayDataSource implements DataSource {
 	private byte[] data; // data
@@ -50,7 +55,7 @@ public class ByteArrayDataSource implements DataSource {
 
 	/* Create a DataSource from a String */
 	public ByteArrayDataSource(String data, String type) {
-		this.data = data.getBytes(StandardCharsets.UTF_8);
+		this.data = data.getBytes(UTF_8);
 		this.type = type;
 	}
 

@@ -23,7 +23,6 @@ import static org.apache.openmeetings.cli.CleanupHelper.getFileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getImportUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getProfileUnit;
 import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
-import static org.apache.openmeetings.cli.CleanupHelper.getTempUnit;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
@@ -49,7 +48,6 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final CleanupUnitPanel temp;
 	private final Label uploadSize;
 	private final CleanupEntityUnitPanel profile;
 	private final CleanupUnitPanel imp;
@@ -62,7 +60,6 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 
 	public AdminCleanupInfoDialog(String id) {
 		super(id, "");
-		temp = new CleanupUnitPanel("temp", "dashboard.widget.admin.cleanup.temp", new CleanupUnit());
 		uploadSize = new Label("upload-size", "");
 		profile = new CleanupEntityUnitPanel("profile", "dashboard.widget.admin.cleanup.profiles", new CleanupEntityUnit());
 		imp = new CleanupUnitPanel("import", "dashboard.widget.admin.cleanup.import", new CleanupUnit());
@@ -72,7 +69,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		fin = new CleanupEntityUnitPanel("final", "dashboard.widget.admin.cleanup.final", new CleanupEntityUnit());
 
 		add(feedback.setOutputMarkupId(true));
-		add(container.add(temp, uploadSize, profile, imp, backup, files, streamsSize, fin).setOutputMarkupId(true));
+		add(container.add(uploadSize, profile, imp, backup, files, streamsSize, fin).setOutputMarkupId(true));
 		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
 
@@ -110,7 +107,6 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	}
 	
 	private void update(AjaxRequestTarget target) {
-		temp.setDefaultModelObject(getTempUnit());
 		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
 		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
 		imp.setDefaultModelObject(getImportUnit());
@@ -128,7 +124,6 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 
 	public void cleanup(AjaxRequestTarget target) {
 		try {
-			((CleanupUnit)temp.getDefaultModelObject()).cleanup();
 			((CleanupEntityUnit)profile.getDefaultModelObject()).cleanup();
 			((CleanupUnit)imp.getDefaultModelObject()).cleanup();
 			((CleanupUnit)backup.getDefaultModelObject()).cleanup();

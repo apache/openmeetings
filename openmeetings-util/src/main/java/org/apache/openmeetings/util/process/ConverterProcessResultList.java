@@ -73,7 +73,7 @@ public class ConverterProcessResultList {
 	 */
 	public boolean hasError() {
 		for (Entry<String, ConverterProcessResult> entry : jobslist.entrySet()) {
-			if ("-1".equals(entry.getValue().getExitValue())) {
+			if (!entry.getValue().isOk()) {
 				return true;
 			}
 		}

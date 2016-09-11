@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OmFileHelper.getUserDashboard;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -26,7 +27,6 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -57,9 +57,9 @@ public class UserDashboardPersister implements DashboardPersister {
 		public XStreamDashboardPersister() {
 			this.file = getUserDashboard(getUserId());
 			
-	        xstream = new XStream(new DomDriver(StandardCharsets.UTF_8.name()));
-	        xstream.setMode(XStream.NO_REFERENCES);
-	        xstream.alias("dashboard", UserDashboard.class);
+			xstream = new XStream(new DomDriver(UTF_8.name()));
+			xstream.setMode(XStream.NO_REFERENCES);
+			xstream.alias("dashboard", UserDashboard.class);
 		}
 		
 		@Override

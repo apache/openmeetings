@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
 
@@ -31,19 +32,19 @@ public class JpgRecordingResourceReference extends RecordingResourceReference {
 	public JpgRecordingResourceReference() {
 		super("jpg-recording-cover");
 	}
-	
+
 	@Override
 	public String getMimeType() {
 		return JPG_MIME_TYPE;
 	}
-	
+
 	@Override
 	protected String getFileName(Recording r) {
-		return r.getPreviewImage();
+		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_JPG);
 	}
-	
+
 	@Override
 	protected File getFile(Recording r) {
-		return getRecording(r.getPreviewImage());
+		return r.getFile(EXTENSION_JPG);
 	}
 }
