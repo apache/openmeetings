@@ -23,9 +23,9 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.record.RecordingLogDao;
-import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingLog;
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItemLog;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -39,19 +39,19 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
-public class ConvertingErrorsDialog extends AbstractDialog<Recording> {
+public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
-	private final ListView<RecordingLog> logView = new ListView<RecordingLog>("row") {
+	private final ListView<FileItemLog> logView = new ListView<FileItemLog>("row") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void populateItem(ListItem<RecordingLog> item) {
-			RecordingLog l = item.getModelObject();
-			item.add(new Label("exitCode", l.getExitValue()));
-			item.add(new Label("message", l.getFullMessage()));
-			if (!"0".equals(l.getExitValue())) {
+		protected void populateItem(ListItem<FileItemLog> item) {
+			FileItemLog l = item.getModelObject();
+			item.add(new Label("exitCode"));
+			item.add(new Label("message"));
+			if (!l.isOk()) {
 				item.add(AttributeModifier.replace("class", "alert"));
 			}
 		}
@@ -72,21 +72,22 @@ public class ConvertingErrorsDialog extends AbstractDialog<Recording> {
 		return true;
 	}
 
-	public ConvertingErrorsDialog(String id, IModel<Recording> model) {
+	public ConvertingErrorsDialog(String id, IModel<FileItem> model) {
 		super(id, Application.getString(887), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 	
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		Recording f = getModelObject();
-		List<RecordingLog> logs = getBean(RecordingLogDao.class).getByRecordingId(f.getId());
+		FileItem f = getModelObject();
+		setTitle(handler, Model.of(getString(f.getType() == FileItem.Type.Recording ? "887" : "convert.errors.file")));
+		List<FileItemLog> logs = getBean(FileItemLogDao.class).get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(888));
 		} else if (!f.exists()) {
 			message.setVisible(true);
-			message.setDefaultModelObject(Application.getString(1595));
+			message.setDefaultModelObject(getString(f.getType() == FileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));
 		} else {
 			message.setVisible(false);
 		}

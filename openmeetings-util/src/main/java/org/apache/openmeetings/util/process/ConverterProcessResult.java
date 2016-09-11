@@ -28,11 +28,13 @@ package org.apache.openmeetings.util.process;
  *
  */
 public class ConverterProcessResult {
+	public static final Integer ZERO = new Integer(0);
+	
 	private String process;
 	private String command;
 	private String exception;
 	private String error;
-	private String exitValue;
+	private Integer exitCode;
 	private String out;
 
 	public ConverterProcessResult() {
@@ -47,7 +49,7 @@ public class ConverterProcessResult {
 		setProcess(process);
 		setException(ex == null ? null : ex.toString());
 		setError(error);
-		setExitValue("-1");
+		setExitCode(-1);
 	}
 
 	public String getOut() {
@@ -90,12 +92,16 @@ public class ConverterProcessResult {
 		this.error = error;
 	}
 
-	public String getExitValue() {
-		return exitValue;
+	public Integer getExitCode() {
+		return exitCode;
 	}
 
-	public void setExitValue(String exitValue) {
-		this.exitValue = exitValue;
+	public void setExitCode(Integer exitCode) {
+		this.exitCode = exitCode;
+	}
+
+	public boolean isOk() {
+		return ZERO.equals(exitCode);
 	}
 
 	public String buildLogMessage() {
@@ -104,7 +110,7 @@ public class ConverterProcessResult {
 			.append("command: ").append(command).append("\r\n")
 			.append("exception: ").append(exception).append("\r\n")
 			.append("error: ").append(error).append("\r\n")
-			.append("exitValue: ").append(exitValue).append("\r\n")
+			.append("exitValue: ").append(exitCode).append("\r\n")
 			.append("out: ").append(out).append("\r\n").toString();
 	}
 }

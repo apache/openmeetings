@@ -20,11 +20,13 @@ package org.apache.openmeetings.db.entity.file;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -86,14 +88,14 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Integer flvHeight;
 
-	@Column(name = "preview_image")
-	@Element(data = true, required = false)
-	private String previewImage;
-
 	@Column(name = "type")
 	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
+
+	// Not Mapped
+	@Transient
+	private List<FileItemLog> log;
 
 	public String getName() {
 		return name;
@@ -183,20 +185,20 @@ public abstract class FileItem implements IDataProviderEntity {
 		this.flvHeight = flvHeight;
 	}
 
-	public String getPreviewImage() {
-		return previewImage;
-	}
-
-	public void setPreviewImage(String previewImage) {
-		this.previewImage = previewImage;
-	}
-
 	public Type getType() {
 		return type;
 	}
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public List<FileItemLog> getLog() {
+		return log;
+	}
+
+	public void setLog(List<FileItemLog> log) {
+		this.log = log;
 	}
 
 	public File getFile() {

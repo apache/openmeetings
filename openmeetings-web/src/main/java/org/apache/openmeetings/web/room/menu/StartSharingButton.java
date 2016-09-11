@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -31,7 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Hex;
@@ -89,7 +89,7 @@ public class StartSharingButton extends OmButton {
 		String app = "";
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			app = IOUtils.toString(jnlp, StandardCharsets.UTF_8);
+			app = IOUtils.toString(jnlp, UTF_8);
 			String baseUrl = cfgDao.getBaseUrl();
 			String publicSid = c.getUid();
 			Client rc = getClient(publicSid);
@@ -130,7 +130,7 @@ public class StartSharingButton extends OmButton {
 			log.error("Unexpected error while creating jnlp file", e);
 		}
 		StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
-		srs.setCharset(StandardCharsets.UTF_8);
+		srs.setCharset(UTF_8);
 		download.setResourceStream(srs);
 		download.initiate(target);
 	}

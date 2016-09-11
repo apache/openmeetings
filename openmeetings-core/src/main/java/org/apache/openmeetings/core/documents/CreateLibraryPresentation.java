@@ -37,74 +37,56 @@ import org.slf4j.Logger;
 
 public class CreateLibraryPresentation {
 	private static final Logger log = Red5LoggerFactory.getLogger(CreateLibraryPresentation.class, webAppRootKey);
-	
-	public static ConverterProcessResult generateXMLDocument(File targetDirectory, String originalDocument, 
-			String pdfDocument, String swfDocument){
+
+	private static void addFile(Element root, String name, File f) {
+		if (f != null) {
+			root.addElement(name)
+				.addAttribute("lastmod", "" + f.lastModified())
+				.addAttribute("size", "" + f.length())
+				.addText(f.getName());
+		}
+	}
+
+	public static ConverterProcessResult generateXMLDocument(File original, File pdf, File swf) {
 		ConverterProcessResult returnMap = new ConverterProcessResult();
-		returnMap.setProcess("generateXMLDocument");		
+		returnMap.setProcess("generateXMLDocument");
 		try {
 			Document document = DocumentHelper.createDocument();
 			Element root = document.addElement("presentation");
-			
-			File file = new File(targetDirectory, originalDocument);
-			root.addElement("originalDocument")
-				.addAttribute("lastmod", (new Long(file.lastModified())).toString())
-				.addAttribute("size", (new Long(file.length())).toString())	        
-				.addText(originalDocument);
 
-			if (pdfDocument!=null){
-				File pdfDocumentFile = new File(targetDirectory, pdfDocument);
-				root.addElement("pdfDocument")
-					.addAttribute("lastmod", (new Long(pdfDocumentFile.lastModified())).toString())
-					.addAttribute("size", (new Long(pdfDocumentFile.length())).toString())	   		        
-					.addText(pdfDocument);
-			}
+			addFile(root, "originalDocument", original);
+			addFile(root, "pdfDocument", pdf);
+			addFile(root, "swfDocument", swf);
 
-			if (swfDocument!=null){
-				File swfDocumentFile = new File(targetDirectory, originalDocument);
-				root.addElement("swfDocument")
-					.addAttribute("lastmod", (new Long(swfDocumentFile.lastModified())).toString())
-					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())
-					.addText(swfDocument);
-			}
+			Element thumbs = root.addElement("thumbs");
 
-			Element thumbs = root.addElement( "thumbs" );
-
-			//Second get all Files of this Folder
+			// Second get all Files of this Folder
 			FilenameFilter ff = new FilenameFilter() {
 				@Override
 				public boolean accept(File b, String name) {
 					File f = new File(b, name);
-					return f.isFile();
+					return f.isFile() && f.getName().startsWith(thumbImagePrefix);
 				}
-			};	
-			
-			String[] allfiles = targetDirectory.list(ff);			
-			if(allfiles!=null){
-				Arrays.sort(allfiles);
-				for(int i=0; i<allfiles.length; i++){
-					File thumbfile = new File(targetDirectory, allfiles[i]);
-					if (allfiles[i].startsWith(thumbImagePrefix)){
-						thumbs.addElement( "thumb" )
-							.addAttribute("lastmod", (new Long(thumbfile.lastModified())).toString())
-							.addAttribute("size", (new Long(thumbfile.length())).toString())
-							.addText(allfiles[i]);
-					}
-				}
+			};
+
+			File[] _thumbs = original.getParentFile().listFiles(ff);
+			Arrays.sort(_thumbs);
+			for (File thumb : _thumbs) {
+				addFile(thumbs, "thumb", thumb);
 			}
-			
+
 			// lets write to a file
-			XMLWriter writer = new XMLWriter(new FileOutputStream(new File(targetDirectory, OmFileHelper.libraryFileName)));
+			XMLWriter writer = new XMLWriter(new FileOutputStream(new File(original.getParentFile(), OmFileHelper.libraryFileName)));
 			writer.write(document);
 			writer.close();
-			
-			returnMap.setExitValue("0");
-			
+
+			returnMap.setExitCode(0);
+
 			return returnMap;
 		} catch (Exception err) {
 			log.error("Error while generateXMLDocument", err);
 			returnMap.setError(err.getMessage());
-			returnMap.setExitValue("-1");
+			returnMap.setExitCode(-1);
 			return returnMap;
 		}
 	}

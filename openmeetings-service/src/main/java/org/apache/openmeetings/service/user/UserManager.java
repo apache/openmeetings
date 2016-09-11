@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.user;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -25,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
@@ -518,7 +518,7 @@ public class UserManager implements IUserManager {
 		for (int i = 0; i < rawPass.length; ++i) {
 			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
 		}
-		String pass = new String(rawPass, StandardCharsets.UTF_8);
+		String pass = new String(rawPass, UTF_8);
 		// check if the user already exists and register new one if it's needed
 		if (u == null) {
 			u = userDao.getNewUserInstance(null);

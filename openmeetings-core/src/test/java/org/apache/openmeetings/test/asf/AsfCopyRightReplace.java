@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.asf;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.BufferedReader;
@@ -28,7 +29,6 @@ import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -130,7 +130,7 @@ public class AsfCopyRightReplace {
 
 	private void scanAndWriteXMLFile(File javaFile) {
 		StringWriter strWriter = new StringWriter();
-		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), StandardCharsets.UTF_8))) {
+		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), UTF_8))) {
 			log.debug("Processing " + javaFile.getCanonicalPath());
 
 			String line;
@@ -165,7 +165,7 @@ public class AsfCopyRightReplace {
 		} catch (Exception err) {
 			log.error("Error while scanAndWriteXMLFile", err);
 		}
-		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), StandardCharsets.UTF_8)) {
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), UTF_8)) {
 			out.write(strWriter.toString());
 			out.flush();
 		} catch (Exception err) {
@@ -175,7 +175,7 @@ public class AsfCopyRightReplace {
 
 	private void scanAndWriteJavaFile(File javaFile) {
 		StringWriter strWriter = new StringWriter();
-		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), StandardCharsets.UTF_8))) {
+		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), UTF_8))) {
 			log.debug("Processing " + javaFile.getCanonicalPath());
 
 			String line;
@@ -196,7 +196,7 @@ public class AsfCopyRightReplace {
 		} catch (Exception err) {
 			log.error("Error while scanAndWriteJavaFile", err);
 		}
-		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), StandardCharsets.UTF_8)) {
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(javaFile), UTF_8)) {
 			out.write(strWriter.toString());
 			out.flush();
 		} catch (Exception err) {

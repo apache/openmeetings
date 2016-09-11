@@ -71,7 +71,7 @@ public class GenerateSWF {
 		return valueForSwfJpegQuality;
 	}
 
-	public ConverterProcessResult generateSwf(File originalFolder, File destinationFolder, String fileNamePure) throws IOException {
+	public ConverterProcessResult generateSwf(File in, File out) throws IOException {
 		
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] {
@@ -82,8 +82,8 @@ public class GenerateSWF {
 				"-i", // change draw order to reduce pdf complexity
 				"-j", "" + getSwfJpegQuality(), // JPEG Quality 
 				"-s", "zoom=" + getSwfZoom(), // set zoom dpi 
-				new File(originalFolder, fileNamePure + ".pdf").getCanonicalPath(),
-				new File(destinationFolder, fileNamePure + ".swf").getCanonicalPath() };
+				in.getCanonicalPath(),
+				out.getCanonicalPath() };
 
 		return ProcessHelper.executeScript("generateSwf", argv);
 	}

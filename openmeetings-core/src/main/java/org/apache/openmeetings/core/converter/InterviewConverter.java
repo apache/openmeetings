@@ -18,22 +18,24 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.record.RecordingLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -57,23 +59,20 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 	@Autowired
-	private RecordingLogDao logDao;
+	private FileItemLogDao logDao;
 
-	private String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav,
-			List<RecordingMetaData> metaDataList, ReConverterParams rcv) {
-		String[] argv_full_sox = new String[listOfFullWaveFiles.size() + 5];
+	private String[] mergeAudioToWaves(List<File> waveFiles, File wav,
+			List<RecordingMetaData> metaDataList, ReConverterParams rcv) throws IOException {
+		String[] argv_full_sox = new String[waveFiles.size() + 5];
 		argv_full_sox[0] = this.getPathToSoX();
 		argv_full_sox[1] = "-m";
 
 		int counter = 2;
-		for (int i = 0; i < listOfFullWaveFiles.size(); i++) {
+		for (File _wav : waveFiles) {
 			for (RecordingMetaData metaData : metaDataList) {
 				String hashFileFullNameStored = metaData.getFullWavAudioData();
 
-				String fullFilePath = listOfFullWaveFiles.get(i);
-				String fileNameOnly = new File(fullFilePath).getName();
-
-				if (hashFileFullNameStored.equals(fileNameOnly)) {
+				if (hashFileFullNameStored.equals(_wav.getName())) {
 					if (metaData.getInteriewPodId() == 1) {
 						argv_full_sox[counter] = "-v " + rcv.leftSideLoud;
 						counter++;
@@ -84,11 +83,11 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					}
 				}
 			}
-			argv_full_sox[counter] = listOfFullWaveFiles.get(i);
+			argv_full_sox[counter] = _wav.getCanonicalPath();
 			counter++;
 		}
 
-		argv_full_sox[counter] = outputFullWav;
+		argv_full_sox[counter] = wav.getCanonicalPath();
 
 		return argv_full_sox;
 	}
@@ -98,36 +97,35 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		startConversion(recordingId, false, new ReConverterParams());
 	}
 
-	public void startConversion(Long recordingId, boolean reconversion, ReConverterParams rcv) {
-		Recording recording = null;
+	public void startConversion(Long id, boolean reconversion, ReConverterParams rcv) {
+		Recording r = null;
 		try {
-			recording = recordingDao.get(recordingId);
-			log.debug("recording " + recording.getId());
-			recording.setStatus(Recording.Status.CONVERTING);
-			recording = recordingDao.update(recording);
+			r = recordingDao.get(id);
+			log.debug("recording " + r.getId());
+			r.setStatus(Recording.Status.CONVERTING);
+			r = recordingDao.update(r);
 
-			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
-			List<String> listOfFullWaveFiles = new LinkedList<String>();
-			File streamFolder = getStreamFolder(recording);
-			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(recording.getId());
+			List<ConverterProcessResult> returnLog = new ArrayList<>();
+			List<File> waveFiles = new ArrayList<>();
+			File streamFolder = getStreamFolder(r);
+			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
 	
-			stripAudioFirstPass(recording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
+			stripAudioFirstPass(r, returnLog, waveFiles, streamFolder, metaDataList);
 		
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
 
-			String hashFileFullName = "INTERVIEW_" + recording.getId() + "_FINAL_WAVE.wav";
-			String outputFullWav = streamFolder.getAbsolutePath() + File.separatorChar + hashFileFullName;
-			deleteFileIfExists(outputFullWav);
+			File wav = new File(streamFolder, "INTERVIEW_" + r.getId() + "_FINAL_WAVE.wav");
+			deleteFileIfExists(wav);
 
-			if (listOfFullWaveFiles.size() == 1) {
-				outputFullWav = listOfFullWaveFiles.get(0);
-			} else if (listOfFullWaveFiles.size() > 0) {
+			if (waveFiles.size() == 1) {
+				wav = waveFiles.get(0);
+			} else if (waveFiles.size() > 0) {
 				String[] argv_full_sox;
 				if (reconversion) {
-					argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav, metaDataList, rcv);
+					argv_full_sox = mergeAudioToWaves(waveFiles, wav, metaDataList, rcv);
 				} else {
-					argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav);
+					argv_full_sox = mergeAudioToWaves(waveFiles, wav);
 				}
 
 				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
@@ -137,9 +135,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
-				double deltaPadding = diffSeconds(recording.getRecordEnd(), recording.getRecordStart());
+				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", "" + deltaPadding };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", "" + deltaPadding };
 
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
@@ -158,7 +156,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			String[] pods = new String[2];
 			boolean found = false;
 			for (RecordingMetaData meta : metaDataList) {
-				File flv = getRecordingMetaData(recording.getRoomId(), meta.getStreamName());
+				File flv = getRecordingMetaData(r.getRoomId(), meta.getStreamName());
 
 				Integer pod = meta.getInteriewPodId();
 				if (flv.exists() && pod != null && pod > 0 && pod < 3) {
@@ -173,9 +171,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							, "-v", "error"
 							, "-f", "null"
 							, "file.null"};
-					ConverterProcessResult r = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
-					returnLog.add(r);
-					if ("0".equals(r.getExitValue())) {
+					ConverterProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
+					returnLog.add(res);
+					if (res.isOk()) {
 						//TODO need to remove smallest gap
 						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());
 						if (diff != 0L) {
@@ -193,7 +191,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
 							
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
-							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + FLV_EXTENSION);
+							File podF = new File(streamFolder, OmFileHelper.getName(meta.getStreamName() + "_pod_" + pod, EXTENSION_FLV));
 							String podP = podF.getCanonicalPath();
 							String[] argsPod = new String[] { getPathToFFMPEG(), "-y"//
 									, "-i", podPB //
@@ -212,10 +210,10 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 			}
 			if (!found) {
-				ConverterProcessResult r = new ConverterProcessResult();
-				r.setProcess("CheckFlvFilesExists");
-				r.setError("No valid pods found");
-				returnLog.add(r);
+				ConverterProcessResult res = new ConverterProcessResult();
+				res.setProcess("CheckFlvFilesExists");
+				res.setError("No valid pods found");
+				returnLog.add(res);
 				return;
 			}
 			boolean shortest = false;
@@ -238,7 +236,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					args.add("-i"); args.add(pods[i]);
 				}
 			}
-			args.add("-i"); args.add(outputFullWav);
+			args.add("-i"); args.add(wav.getCanonicalPath());
 			args.add("-ar"); args.add("22050");
 			args.add("-ab"); args.add("32k");
 			args.add("-filter_complex");
@@ -254,68 +252,58 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
 			args.add("-y");
-			String hashFileFullNameFlv = recordingFileName + recording.getId() + FLV_EXTENSION;
-			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
-			args.add(outputFullFlv);
+			File flv = r.getFile(EXTENSION_FLV);
+			args.add(flv.getCanonicalPath());
 			// TODO additional flag to 'quiet' output should be added
 			returnLog.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
-			recording.setFlvWidth(2 * flvWidth);
-			recording.setFlvHeight(flvHeight);
-
-			recording.setHash(hashFileFullNameFlv);
+			r.setFlvWidth(2 * flvWidth);
+			r.setFlvHeight(flvHeight);
 
 			// Extract first Image for preview purpose
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			String hashFileFullNameJPEG = recordingFileName + recording.getId() + ".jpg";
-			String outPutJpeg = new File(streamFolderGeneral, hashFileFullNameJPEG).getCanonicalPath();
-			deleteFileIfExists(outPutJpeg);
-
-			recording.setPreviewImage(hashFileFullNameJPEG);
+			File jpg = r.getFile(EXTENSION_JPG);
+			deleteFileIfExists(jpg);
 
 			String[] argv_previewFLV = new String[] { //
 					getPathToFFMPEG(), "-y", //
-					"-i", outputFullFlv, //
+					"-i", flv.getCanonicalPath(), //
 					"-vcodec", "mjpeg", //
 					"-vframes", "100", "-an", //
 					"-f", "rawvideo", //
 					"-s", (2 * flvWidth) + "x" + flvHeight, //
-					outPutJpeg };
+					jpg.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = recordingFileName + recording.getId() + ".avi";
-			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
-			deleteFileIfExists(alternateDownloadFullName);
+			File avi = r.getFile(EXTENSION_AVI);
+			deleteFileIfExists(avi);
 
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, alternateDownloadFullName };
+			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", flv.getCanonicalPath(), avi.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
-			recording.setAlternateDownload(alternateDownloadName);
+			updateDuration(r);
+			convertToMp4(r, returnLog);
+			r.setStatus(Recording.Status.PROCESSED);
 
-			updateDuration(recording);
-			convertToMp4(recording, returnLog);
-			recording.setStatus(Recording.Status.PROCESSED);
-
-			logDao.deleteByRecordingId(recording.getId());
+			logDao.delete(r);
 			for (ConverterProcessResult returnMap : returnLog) {
-				logDao.add("generateFFMPEG", recording, returnMap);
+				logDao.add("generateFFMPEG", r, returnMap);
 			}
 
 			// Delete Wave Files
-			for (String fileName : listOfFullWaveFiles) {
-				File audio = new File(fileName);
+			for (File audio : waveFiles) {
 				if (audio.exists()) {
 					audio.delete();
 				}
 			}
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
-			recording.setStatus(Recording.Status.ERROR);
+			r.setStatus(Recording.Status.ERROR);
 		}
-		recordingDao.update(recording);
+		recordingDao.update(r);
 	}
 }

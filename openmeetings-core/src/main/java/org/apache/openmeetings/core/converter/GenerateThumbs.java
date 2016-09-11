@@ -55,14 +55,14 @@ public class GenerateThumbs extends BaseConverter {
 		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 
-	public ConverterProcessResult generateBatchThumb(File inputfile, File outputpath, Integer thumbSize, String pre) throws IOException {
+	public ConverterProcessResult generateBatchThumb(File in, File outDir, Integer thumbSize, String pre) throws IOException {
 		log.debug("generateBatchThumbByWidth");
 		String[] argv = new String[] {
 			getPathToImageMagick()
 			, "-thumbnail" // FIXME
 			, "" + thumbSize
-			, inputfile.getCanonicalPath()
-			, new File(outputpath, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
+			, in.getCanonicalPath()
+			, new File(outDir, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
 			};
 
 		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);

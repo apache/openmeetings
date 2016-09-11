@@ -18,18 +18,18 @@
  */
 package org.apache.openmeetings.core.documents;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.core.documents.CreateLibraryPresentation.generateXMLDocument;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
-import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.core.converter.GenerateSWF;
 import org.apache.openmeetings.core.converter.GenerateThumbs;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;
@@ -47,58 +47,38 @@ public class GeneratePDF {
 	@Autowired
 	private ConfigurationDao configurationDao;
 
-	public ConverterProcessResultList convertPDF(String hash, String roomName, boolean fullProcessing, File inFile) throws Exception {
-		String inFileName = inFile.getName();
-		ConverterProcessResultList returnError = new ConverterProcessResultList();
+	public ConverterProcessResultList convertPDF(FileExplorerItem f, String ext) throws Exception {
+		ConverterProcessResultList errors = new ConverterProcessResultList();
 
-		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), inFileName);
-		File destinationFolder = OmFileHelper.getNewDir(OmFileHelper.getUploadRoomDir(roomName), hash);
-
+		boolean fullProcessing = !EXTENSION_PDF.equals(ext);
+		File original = f.getFile(ext);
+		File pdf = f.getFile(EXTENSION_PDF);
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
-			ConverterProcessResult processOpenOffice = doJodConvert(fileFullPath, destinationFolder, hash);
-			returnError.addItem("processOpenOffice", processOpenOffice);
-			ConverterProcessResult processThumb = generateThumbs.generateBatchThumb(new File(destinationFolder, hash + ".pdf"), destinationFolder, 80, "thumb");
-			returnError.addItem("processThumb", processThumb);
-			ConverterProcessResult processSWF = generateSWF.generateSwf(destinationFolder, destinationFolder, hash);
-			returnError.addItem("processSWF", processSWF);
-		} else {
-			log.debug("-- generateBatchThumb --");
-
-			ConverterProcessResult processThumb = generateThumbs.generateBatchThumb(fileFullPath, destinationFolder, 80, "thumb");
-			returnError.addItem("processThumb", processThumb);
-
-			ConverterProcessResult processSWF = generateSWF.generateSwf(fileFullPath.getParentFile(), destinationFolder, hash);
-			returnError.addItem("processSWF", processSWF);
+			log.debug("-- running JOD --");
+			errors.addItem("processOpenOffice", doJodConvert(original, pdf));
 		}
+		
+		log.debug("-- generateBatchThumb --");
+		errors.addItem("processThumb", generateThumbs.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
+		File swf = f.getFile();
+		errors.addItem("processSWF", generateSWF.generateSwf(pdf, swf));
 
-		// now it should be completed so copy that file to the expected location
-		File fileWhereToMove = new File(destinationFolder, inFileName);
-		fileWhereToMove.createNewFile();
-		FileHelper.moveRec(inFile, fileWhereToMove);
-
-		if (fullProcessing) {
-			ConverterProcessResult processXML = generateXMLDocument(destinationFolder, inFileName, hash + ".pdf", hash + ".swf");
-			returnError.addItem("processXML", processXML);
-		} else {
-			ConverterProcessResult processXML = generateXMLDocument(destinationFolder, inFileName, null, hash + ".swf");
-			returnError.addItem("processXML", processXML);
-		}
-
-		return returnError;
+		errors.addItem("processXML", generateXMLDocument(original, fullProcessing ? pdf : null, swf));
+		return errors;
 	}
 
 	/**
 	 * Generates PDF using JOD Library (external library)
 	 */
-	public ConverterProcessResult doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
+	public ConverterProcessResult doJodConvert(File in, File out) {
 		try {
 			String jodPath = configurationDao.getConfValue("jod.path", String.class, "./jod");
 			String officePath = configurationDao.getConfValue("office.path", String.class, "");
 
 			File jodFolder = new File(jodPath);
 			if (!jodFolder.exists() || !jodFolder.isDirectory()) {
-				throw new Exception("Path to JOD Library folder does not exist");
+				return new ConverterProcessResult("doJodConvert", "Path to JOD Library folder does not exist", null);
 			}
 
 			ArrayList<String> argv = new ArrayList<String>();
@@ -130,8 +110,8 @@ public class GeneratePDF {
 
 			argv.add("-jar");
 			argv.add(new File(jodFolder, jodConverterJar).getCanonicalPath());
-			argv.add(fileFullPath.getCanonicalPath());
-			argv.add(new File(destinationFolder, outputfile + ".pdf").getCanonicalPath());
+			argv.add(in.getCanonicalPath());
+			argv.add(out.getCanonicalPath());
 
 			return ProcessHelper.executeScript("doJodConvert", argv.toArray(new String[argv.size()]));
 

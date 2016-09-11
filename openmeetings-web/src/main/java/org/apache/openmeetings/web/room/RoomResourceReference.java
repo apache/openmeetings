@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -101,6 +102,6 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	
 	@Override
 	protected String getFileName(FileExplorerItem r) {
-		return preview ? r.getPreviewImage() : r.getName();
+		return preview ? String.format("%s.%s", r.getName(), EXTENSION_JPG) : r.getName();
 	}
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.documents;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.BufferedReader;
@@ -25,7 +26,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.red5.logging.Red5LoggerFactory;
@@ -62,7 +62,7 @@ public class LibraryChartLoader {
             xStream.setMode(XStream.NO_REFERENCES);
 
 			try (InputStream is = new FileInputStream(file);
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
 				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
 				return lMapList;

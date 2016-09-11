@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
 
@@ -39,11 +39,11 @@ public class OggRecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	protected String getFileName(Recording r) {
-		return r.getHash() + OGG_EXTENSION;
+		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_OGG);
 	}
 	
 	@Override
 	protected File getFile(Recording r) {
-		return getOggRecording(r.getHash());
+		return r.getFile(EXTENSION_OGG);
 	}
 }

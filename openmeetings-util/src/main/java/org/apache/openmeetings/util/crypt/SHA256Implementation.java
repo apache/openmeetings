@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -39,15 +39,15 @@ public class SHA256Implementation implements ICrypt {
 	private static final int SALT_LENGTH = 256;
 
 	private static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
-        byte[] salt = new byte[SALT_LENGTH];
-        sr.nextBytes(salt);
-        return salt;
-    }
+		SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
+		byte[] salt = new byte[SALT_LENGTH];
+		sr.nextBytes(salt);
+		return salt;
+	}
 	
 	private static String hash(String str, byte[] salt, int iter) {
 		PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
-		gen.init(str.getBytes(StandardCharsets.UTF_8), salt, iter);
+		gen.init(str.getBytes(UTF_8), salt, iter);
 		byte[] dk = ((KeyParameter) gen.generateDerivedParameters(KEY_LENGTH)).getKey();
 		return Base64.encodeBase64String(dk);
 	}
