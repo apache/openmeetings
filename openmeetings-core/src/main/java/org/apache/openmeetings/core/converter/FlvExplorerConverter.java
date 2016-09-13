@@ -86,7 +86,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			fileExplorerItem.setType(Type.Video);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
-					"-codec:a", "mp3", "-codec:v", "mpeg4", outputFullFlv.getCanonicalPath() };
+					"-c:a", "aac", "-c:v", "h264", outputFullFlv.getCanonicalPath() };
 
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getId(), argv_fullFLV);
