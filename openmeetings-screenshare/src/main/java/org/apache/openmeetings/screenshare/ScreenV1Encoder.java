@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
 import static org.red5.io.IoConstants.FLAG_CODEC_SCREEN;
 import static org.red5.io.IoConstants.FLAG_FRAMETYPE_INTERFRAME;
 import static org.red5.io.IoConstants.FLAG_FRAMETYPE_KEYFRAME;

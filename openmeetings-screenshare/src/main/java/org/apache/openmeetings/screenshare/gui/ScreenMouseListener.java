@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.gui;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -24,17 +24,18 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class ScreenHeightMouseListener extends MouseInputAdapter  {
+public class ScreenMouseListener extends MouseInputAdapter {
 	private ScreenSharerFrame frame;
-	private double y = 0;
+	private int x = 0;
+	private int y = 0;
 
-	public ScreenHeightMouseListener(ScreenSharerFrame frame) {
+	public ScreenMouseListener(ScreenSharerFrame frame) {
 		this.frame = frame;
 	}
-	
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 
 	@Override
@@ -45,7 +46,8 @@ public class ScreenHeightMouseListener extends MouseInputAdapter  {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		frame.setShowWarning(false);
-		y = e.getY();
+		this.x = e.getX();
+		this.y = e.getY();
 	}
 
 	@Override
@@ -58,17 +60,19 @@ public class ScreenHeightMouseListener extends MouseInputAdapter  {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;
 		}
-		double newY = e.getY();
+		int newX = e.getX();
+		int newY = e.getY();
 
-		int newHeight = ScreenDimensions.spinnerHeight - (int)(y - newY);
-		int newSpinnerY = ScreenDimensions.spinnerY + newHeight;
-
-		if (newSpinnerY >= 0 && newSpinnerY <= ScreenDimensions.heightMax) {
-			frame.setDoUpdateBounds(false);
-			frame.setSpinnerHeight(newHeight);
-			frame.setDoUpdateBounds(true);
-			frame.updateVScreenBounds();
-			frame.calcRescaleFactors();
+		int newXPosition = ScreenDimensions.spinnerX - (this.x - newX);
+		int newYPosition = ScreenDimensions.spinnerY - (this.y - newY);
+		if (newXPosition >= 0) {
+			frame.setSpinnerX(newXPosition);
 		}
+		if (newYPosition >= 0) {
+			frame.setSpinnerY(newYPosition);
+		}
+
+		frame.calcRescaleFactors();
 	}
+
 }

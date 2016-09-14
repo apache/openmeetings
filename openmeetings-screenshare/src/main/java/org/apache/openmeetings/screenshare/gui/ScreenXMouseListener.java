@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.gui;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -24,18 +24,17 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class ScreenMouseListener extends MouseInputAdapter {
+public class ScreenXMouseListener extends MouseInputAdapter {
 	private ScreenSharerFrame frame;
-	private int x = 0;
-	private int y = 0;
+	private double x = 0;
 
-	public ScreenMouseListener(ScreenSharerFrame frame) {
+	public ScreenXMouseListener(ScreenSharerFrame frame) {
 		this.frame = frame;
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
 	}
 
 	@Override
@@ -47,7 +46,6 @@ public class ScreenMouseListener extends MouseInputAdapter {
 	public void mousePressed(MouseEvent e) {
 		frame.setShowWarning(false);
 		this.x = e.getX();
-		this.y = e.getY();
 	}
 
 	@Override
@@ -60,19 +58,18 @@ public class ScreenMouseListener extends MouseInputAdapter {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;
 		}
-		int newX = e.getX();
-		int newY = e.getY();
+		double newX = e.getX();
+		int delta = (int) (x - newX);
+		int newXPosition = ScreenDimensions.spinnerX - delta;
+		int newWidth = ScreenDimensions.spinnerWidth + delta;
 
-		int newXPosition = ScreenDimensions.spinnerX - (this.x - newX);
-		int newYPosition = ScreenDimensions.spinnerY - (this.y - newY);
-		if (newXPosition >= 0) {
+		if (newXPosition >= 0 && newWidth >= 0) {
+			frame.setDoUpdateBounds(false);
 			frame.setSpinnerX(newXPosition);
+			frame.setSpinnerWidth(newWidth);
+			frame.setDoUpdateBounds(true);
+			frame.updateVScreenBounds();
+			frame.calcRescaleFactors();
 		}
-		if (newYPosition >= 0) {
-			frame.setSpinnerY(newYPosition);
-		}
-
-		frame.calcRescaleFactors();
 	}
-
 }
