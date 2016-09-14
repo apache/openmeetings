@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.gui;
 
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.ROUND_VALUE;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.ROUND_VALUE;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.AWTException;
@@ -56,8 +56,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.openmeetings.screen.webstart.CoreScreenShare;
-import org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.ScreenQuality;
+import org.apache.openmeetings.screenshare.Core;
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions.ScreenQuality;
 import org.slf4j.Logger;
 
 public class ScreenSharerFrame extends JFrame {
@@ -191,8 +191,8 @@ public class ScreenSharerFrame extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		public VerticalSlider() {
-			ImageIcon iUp = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/up.png"));
-			ImageIcon iDown = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/down.png"));
+			ImageIcon iUp = new ImageIcon(ScreenSharerFrame.class.getResource("up.png"));
+			ImageIcon iDown = new ImageIcon(ScreenSharerFrame.class.getResource("down.png"));
 			setSize(16, 32);
 			JLabel jUp = new JLabel(iUp);
 			jUp.setBounds(0, 0, 16, 16);
@@ -207,8 +207,8 @@ public class ScreenSharerFrame extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		public HorizontalSlider() {
-			ImageIcon iLeft = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/previous.png"));
-			ImageIcon iRight = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/next.png"));
+			ImageIcon iLeft = new ImageIcon(ScreenSharerFrame.class.getResource("previous.png"));
+			ImageIcon iRight = new ImageIcon(ScreenSharerFrame.class.getResource("next.png"));
 			setSize(32, 16);
 			JLabel jLeft = new JLabel(iLeft);
 			jLeft.setBounds(0, 0, 16, 16);
@@ -228,7 +228,7 @@ public class ScreenSharerFrame extends JFrame {
 	 * @throws AWTException 
 	 * @throws IOException 
 	 */
-	public ScreenSharerFrame(final CoreScreenShare core, String[] textLabels) throws AWTException {
+	public ScreenSharerFrame(final Core core, String[] textLabels) throws AWTException {
 		setTitle(getTextLabel(textLabels, 0)); //#id 730
 		setBackground(Color.WHITE);
 		setResizable(false);
@@ -261,8 +261,8 @@ public class ScreenSharerFrame extends JFrame {
 		reduceYLabel = getTextLabel(textLabels, 32); //#id 1474
 		recordingTipLabel = getTextLabel(textLabels, 35); //#id 1477
 		publishingTipLabel = getTextLabel(textLabels, 34); //#id 1476
-		startIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/play.png"));
-		stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/stop.png"));
+		startIcon = new ImageIcon(getClass().getResource("play.png"));
+		stopIcon = new ImageIcon(getClass().getResource("stop.png"));
 		btnStartStopSharing = new JButton(startSharingLabel);
 		btnStartStopSharing.setToolTipText(startSharingLabel);
 		btnStartStopSharing.setIcon(startIcon);
@@ -273,14 +273,14 @@ public class ScreenSharerFrame extends JFrame {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.streamingStop();
+						core.sharingStop();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}
 				} else {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.streamingStart();
+						core.sharingStart();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}

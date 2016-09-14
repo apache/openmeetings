@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
 import org.red5.client.net.rtmpt.RTMPTClient;
 import org.red5.server.net.ICommand;
@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
 public class RTMPTScreenShare extends RTMPTClient implements IScreenShare {
 	private static final Logger log = LoggerFactory.getLogger(RTMPTScreenShare.class);
 
-	private final CoreScreenShare core;
+	private final Core core;
 
-	public RTMPTScreenShare(CoreScreenShare core) {
+	public RTMPTScreenShare(Core core) {
 		this.core = core;
 	};
 

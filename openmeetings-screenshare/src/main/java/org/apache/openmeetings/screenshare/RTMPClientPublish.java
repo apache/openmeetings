@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.client.net.rtmp.RTMPClient;
@@ -34,13 +34,13 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	private static final Logger logger = LoggerFactory.getLogger(RTMPClientPublish.class);
 	private final CaptureScreen publishScreen;
 	private String id;
-	private CoreScreenShare core;
+	private Core core;
 	
-	public void setCore(CoreScreenShare core) {
+	public void setCore(Core core) {
 		this.core = core;
 	}
 	
-	RTMPClientPublish(CoreScreenShare core, String host, String app, String id) {
+	RTMPClientPublish(Core core, String host, String app, String id) {
 		this.id = id;
 		this.core = core;
 		publishScreen = new CaptureScreen(core, this, host, app, 1935);

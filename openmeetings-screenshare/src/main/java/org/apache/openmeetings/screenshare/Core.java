@@ -16,32 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
-import static java.awt.Toolkit.getDefaultToolkit;
-import static java.awt.datatransfer.DataFlavor.stringFlavor;
 import static java.lang.Boolean.TRUE;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerHeight;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerWidth;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerX;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerY;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerHeight;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerWidth;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerX;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerY;
+import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Robot;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
+import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
+import org.apache.openmeetings.screenshare.job.RemoteJob;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.Red5;
@@ -57,8 +61,12 @@ import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
-	private static final Logger log = getLogger(CoreScreenShare.class);
+public class Core implements IPendingServiceCallback, INetStreamEventHandler {
+	private static final Logger log = getLogger(Core.class);
+	public static float Ampl_factor = 1f;
+	final static String QUARTZ_GROUP_NAME = "ScreenShare";
+	final static String QUARTZ_REMOTE_JOB_NAME = "RemoteJob";
+	final static String QUARTZ_REMOTE_TRIGGER_NAME = "RemoteTrigger";
 
 	enum Protocol {
 		rtmp, rtmpt, rtmpe, rtmps
@@ -82,16 +90,16 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
 
-	private boolean startStreaming = false;
+	private boolean startSharing = false;
 	private boolean startRecording = false;
 	private boolean startPublishing = false;
-	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
 	private boolean readyToRecord = false;
 	private boolean audioNotify = false;
 	private boolean remoteEnabled = true;
-
-	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
+	private SchedulerFactory schdlrFactory;
+	private Scheduler schdlr;
+	private LinkedBlockingQueue<Map<String, Object>> remoteEvents = new LinkedBlockingQueue<>();
 
 	private CaptureScreen getCapture() {
 		if (_capture == null) {
@@ -105,7 +113,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	//
 	// ------------------------------------------------------------------------
 
-	public CoreScreenShare(String[] args) {
+	public Core(String[] args) {
 		try {
 			System.setProperty("org.terracotta.quartz.skipUpdateCheck", "true");
 			for (String arg : args) {
@@ -132,9 +140,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					textArray = labelTexts.split(";");
 
 					log.debug("labelTexts :: " + labelTexts);
-
 					log.debug("textArray Length " + textArray.length);
-
 					for (int i = 0; i < textArray.length; i++) {
 						log.debug(i + " :: " + textArray[i]);
 					}
@@ -166,6 +172,15 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else {
 				System.exit(0);
 			}
+			schdlrFactory = new StdSchedulerFactory(getQurtzProps("CoreScreenShare"));
+			schdlr = schdlrFactory.getScheduler();
+			JobDetail remoteJob = JobBuilder.newJob(RemoteJob.class).withIdentity(QUARTZ_REMOTE_JOB_NAME, QUARTZ_GROUP_NAME).build();
+			Trigger cursorTrigger = TriggerBuilder.newTrigger()
+					.withIdentity(QUARTZ_REMOTE_TRIGGER_NAME, QUARTZ_GROUP_NAME)
+					.withSchedule(simpleSchedule().withIntervalInMilliseconds(50).repeatForever())
+					.build();
+			remoteJob.getJobDataMap().put(RemoteJob.CORE_KEY, this);
+			schdlr.scheduleJob(remoteJob, cursorTrigger);
 
 			createWindow(textArray);
 		} catch (Exception err) {
@@ -174,7 +189,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	}
 
 	public static void main(String[] args) {
-		new CoreScreenShare(args);
+		new Core(args);
 	}
 
 	// ------------------------------------------------------------------------
@@ -243,7 +258,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put("screenHeight", scaledHeight);
 			map.put("publishName", publishName);
 			map.put("startRecording", startRecording);
-			map.put("startStreaming", startStreaming);
+			map.put("startStreaming", startSharing);
 			map.put("startPublishing", startPublishing);
 			map.put("publishingHost", frame.getPublishHost());
 			map.put("publishingApp", frame.getPublishApp());
@@ -258,8 +273,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	public void streamingStart() {
-		startStreaming = true;
+	public void sharingStart() {
+		try {
+			schdlr.start();
+		} catch (SchedulerException e) {
+			log.error("[schdlr.start]", e);
+		}
+		startSharing = true;
 		captureScreenStart();
 	}
 	
@@ -295,8 +315,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	public void streamingStop() {
-		startStreaming = false;
+	public void sharingStop() {
+		try {
+			schdlr.standby();
+		} catch (SchedulerException e) {
+			log.error("[schdlr.standby]", e);
+		}
+		startSharing = false;
 		captureScreenStop("stopStreaming");
 	}
 	
@@ -327,18 +352,23 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	public void stopStreaming() {
-		frame.setSharingStatus(false, !startPublishing && !startRecording && !startStreaming);
-		startStreaming = false;
+	public void stopSharing() {
+		try {
+			schdlr.standby();
+		} catch (SchedulerException e) {
+			log.error("[schdlr.standby]", e);
+		}
+		frame.setSharingStatus(false, !startPublishing && !startRecording && !startSharing);
+		startSharing = false;
 	}
 	
 	public void stopRecording() {
-		frame.setRecordingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		frame.setRecordingStatus(false, !startPublishing && !startRecording && !startSharing);
 		startRecording = false;
 	}
 	
 	public void stopPublishing() {
-		frame.setPublishingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		frame.setPublishingStatus(false, !startPublishing && !startRecording && !startSharing);
 		startPublishing = false;
 		if (publishClient != null) {
 			publishClient.disconnect();
@@ -383,7 +413,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		try {
 			log.debug("ScreenShare stopStream");
 
-			stopStreaming();
+			stopSharing();
 			stopRecording();
 			stopPublishing();
 			isConnected = false;
@@ -417,239 +447,16 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		return TRUE.equals(Boolean.valueOf("" + b));
 	}
 	
-	private static String getString(Map<String, Object> map, String key) {
-		return String.valueOf(map.get(key));
-	}
-
-	private static Double getDouble(Map<String, Object> map, String key) {
-		return Double.valueOf(getString(map, key));
-	}
-	
-	private static int getInt(Map<String, Object> map, String key) {
-		return getDouble(map, key).intValue();
-	}
-	
-	private static float getFloat(Map<String, Object> map, String key) {
-		return getDouble(map, key).floatValue();
-	}
-	
-	private Point getCoordinates(Map<String, Object> returnMap) {
-		float scaleFactorX = spinnerWidth / (Ampl_factor * resizeX);
-		float scaleFactorY = spinnerHeight / (Ampl_factor * resizeY);
-
-		int x = Math.round(scaleFactorX * getFloat(returnMap, "x") + spinnerX);
-		int y = Math.round(scaleFactorY * getFloat(returnMap, "y") + spinnerY);
-		return new Point(x, y);
-	}
-	
-	public void sendRemoteCursorEvent(Object obj) {
-		try {
-			if (!remoteEnabled) {
-				return;
-			}
-			log.trace("#### sendRemoteCursorEvent ");
-			log.trace("Result Map Type "+obj.getClass().getName());
-
-			@SuppressWarnings("unchecked")
-			Map<String, Object> returnMap = (Map<String, Object>)obj;
-
-			String action = "" + returnMap.get("action");
-
-			if (action.equals("onmouseup")) {
-				Robot robot = new Robot();
-				
-				Point p = getCoordinates(returnMap);
-				robot.mouseMove(p.x, p.y);
-				robot.mouseRelease(InputEvent.BUTTON1_MASK);
-			} else if (action.equals("onmousedown")) {
-				Robot robot = new Robot();
-
-				Point p = getCoordinates(returnMap);
-				robot.mouseMove(p.x, p.y);
-				robot.mousePress(InputEvent.BUTTON1_MASK);
-			} else if (action.equals("mousePos")) {
-				Robot robot = new Robot();
-
-				Point p = getCoordinates(returnMap);
-				robot.mouseMove(p.x, p.y);
-			} else if (action.equals("onkeydown")) {
-				Robot robot = new Robot();
-
-				int key = getInt(returnMap, "k");
-
-				log.trace("KEY EVENT!!!!!  key onkeydown -1 " + key);
-				boolean doAction = true;
-
-				if (key == 221) {
-					key = 61;
-				} else if (key == -1) {
-					String charValue = returnMap.get("c").toString();
-
-					// key = KeyEvent.VK_ADD;
-					doAction = false;
-
-					for (Integer storedKey : currentPressedKeys.keySet()) {
-						robot.keyRelease(storedKey);
-					}
-
-					currentPressedKeys.clear();
-
-					pressSpecialSign(charValue, robot);
-				} else if (key == 188) {
-					key = 44;
-				} else if (key == 189) {
-					key = 109;
-				} else if (key == 190) {
-					key = 46;
-				} else if (key == 191) {
-					key = 47;
-				} else if (key == 13) {
-					key = KeyEvent.VK_ENTER;
-				}
-
-				if (doAction) {
-					currentPressedKeys.put(key, true);
-
-					robot.keyPress(key);
-				}
-			} else if (action.equals("onkeyup")) {
-				Robot robot = new Robot();
-
-				int key = getInt(returnMap, "k");
-
-				boolean doAction = true;
-
-				if (key == 221) {
-					key = 61;
-				} else if (key == -1) {
-					doAction = false;
-				} else if (key == 188) {
-					key = 44;
-				} else if (key == 189) {
-					key = 109;
-				} else if (key == 190) {
-					key = 46;
-				} else if (key == 191) {
-					key = 47;
-				} else if (key == 13) {
-					key = KeyEvent.VK_ENTER;
-				}
-
-				log.trace("KEY EVENT!!!!!  key onkeyup 2- " + key);
-
-				if (doAction) {
-					if (currentPressedKeys.containsKey(key)) {
-						currentPressedKeys.remove(key);
-
-						robot.keyRelease(key);
-					}
-				}
-			} else if (action.equals("paste")) {
-				Robot robot = new Robot();
-
-				String paste = returnMap.get("paste").toString();
-
-				pressSpecialSign(paste, robot);
-			} else if (action.equals("copy")) {
-				Robot robot = new Robot();
-
-				String paste = this.getHighlightedText(robot);
-
-				Map<Integer, String> map = new HashMap<Integer, String>();
-				map.put(0, "copiedText");
-				map.put(1, paste);
-
-				String clientId = returnMap.get("clientId").toString();
-
-				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
-			} else if (action.equals("show")) {
-				String paste = getClipboardText();
-
-				Map<Integer, String> map = new HashMap<Integer, String>();
-				map.put(0, "copiedText");
-				map.put(1, paste);
-
-				String clientId = returnMap.get("clientId").toString();
-
-				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
-			}
-		} catch (Exception err) {
-			log.error("[sendRemoteCursorEvent]", err);
+	public void sendRemoteCursorEvent(Map<String, Object> obj) {
+		if (!remoteEnabled) {
+			return;
 		}
-	}
+		log.trace("#### sendRemoteCursorEvent ");
+		log.trace("Result Map Type "+ obj);
 
-	public String getClipboardText() {
-		try {
-			// get the system clipboard
-			Clipboard systemClipboard = getDefaultToolkit().getSystemClipboard();
-
-			// get the contents on the clipboard in a
-			// transferable object
-			Transferable clipboardContents = systemClipboard.getContents(null);
-
-			// check if clipboard is empty
-			if (clipboardContents == null) {
-				// Clipboard is empty!!!
-				return ("");
-
-				// see if DataFlavor of
-				// DataFlavor.stringFlavor is supported
-			} else if (clipboardContents.isDataFlavorSupported(stringFlavor)) {
-				// return text content
-				String returnText = (String) clipboardContents.getTransferData(stringFlavor);
-
-				return returnText;
-			}
-
-			return "";
-		} catch (Exception e) {
-			log.error("Unexpected exception while getting clipboard text", e);
-		}
-		return "";
-	}
-
-	private static void pressSequence(Robot robot, long delay, int... codes) throws InterruptedException {
-		for (int i = 0; i < codes.length; ++i) {
-			robot.keyPress(codes[i]);
-			Thread.sleep(delay);
-		}
-		for (int i = codes.length - 1; i >= 0; --i) {
-			robot.keyRelease(codes[i]);
-			Thread.sleep(delay);
-		}
-	}
-	
-	private String getHighlightedText(Robot robot) {
-		try {
-			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
-				// pressing STRG+C == copy
-				pressSequence(robot, 200, KeyEvent.VK_CONTROL, KeyEvent.VK_C);
-			} else {
-				// Macintosh simulate Copy
-				pressSequence(robot, 200, 157, 67);
-			}
-			return getClipboardText();
-		} catch (Exception e) {
-			log.error("Unexpected exception while getting highlighted text", e);
-		}
-		return "";
-	}
-
-	private static void pressSpecialSign(String charValue, Robot robot) {
-		Clipboard clippy = getDefaultToolkit().getSystemClipboard();
-		try {
-			Transferable transferableText = new StringSelection(charValue);
-			clippy.setContents(transferableText, null);
-
-			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") > -1) {
-				// pressing STRG+V == insert-mode
-				pressSequence(robot, 100, KeyEvent.VK_CONTROL, KeyEvent.VK_V);
-			} else {
-				// Macintosh simulate Insert
-				pressSequence(robot, 100, 157, 86);
-			}
-		} catch (Exception e) {
-			log.error("Unexpected exception while pressSpecialSign", e);
+		if (obj != null) {
+			remoteEvents.offer(obj);
+			log.trace("Action offered:: {}, count: {}", obj, remoteEvents.size());
 		}
 	}
 
@@ -707,7 +514,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					return;
 				}
 			} else if ("createStream".equals(method)) {
-				if (startRecording || startStreaming) {
+				if (startRecording || startSharing) {
 					if (o != null && o instanceof Number) {
 						getCapture().setStreamId((Number)o);
 					}
@@ -717,7 +524,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", spinnerWidth, spinnerHeight);
 	
 					if (!getCapture().isAlive()) {
-						getCapture().setSendCursor(startStreaming);
+						getCapture().setSendCursor(startSharing);
 						getCapture().start();
 					}
 				}
@@ -727,7 +534,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					log.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
 					stopStream();
 				} else if ("stopSharingOnly".equals(result)) {
-					stopStreaming();
+					stopSharing();
 				} else if ("stopRecordingOnly".equals(result)) {
 					stopRecording();
 				} else if ("stopPublishingOnly".equals(result)) {
@@ -768,5 +575,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		deadlockGuard.setThreadNamePrefix("DeadlockGuardScheduler-");
 		deadlockGuard.afterPropertiesSet();
 		conn.setDeadlockGuardScheduler(deadlockGuard);
+	}
+
+	public IScreenShare getInstance() {
+		return instance;
+	}
+
+	public LinkedBlockingQueue<Map<String, Object>> getRemoteEvents() {
+		return remoteEvents;
 	}
 }
