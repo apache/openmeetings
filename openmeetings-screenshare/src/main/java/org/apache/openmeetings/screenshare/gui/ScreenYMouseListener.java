@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.gui;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -24,17 +24,17 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class ScreenXMouseListener extends MouseInputAdapter {
+public class ScreenYMouseListener extends MouseInputAdapter {
 	private ScreenSharerFrame frame;
-	private double x = 0;
+	private double y = 0;
 
-	public ScreenXMouseListener(ScreenSharerFrame frame) {
+	public ScreenYMouseListener(ScreenSharerFrame frame) {
 		this.frame = frame;
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ScreenXMouseListener extends MouseInputAdapter {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		frame.setShowWarning(false);
-		this.x = e.getX();
+		this.y = e.getY();
 	}
 
 	@Override
@@ -58,15 +58,16 @@ public class ScreenXMouseListener extends MouseInputAdapter {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;
 		}
-		double newX = e.getX();
-		int delta = (int) (x - newX);
-		int newXPosition = ScreenDimensions.spinnerX - delta;
-		int newWidth = ScreenDimensions.spinnerWidth + delta;
+		double newY = e.getY();
 
-		if (newXPosition >= 0 && newWidth >= 0) {
+		int delta = (int) (y - newY);
+		int newYPosition = ScreenDimensions.spinnerY - delta;
+		int newHeight = ScreenDimensions.spinnerHeight + delta;
+
+		if (newYPosition >= 0 && newHeight >= 0) {
 			frame.setDoUpdateBounds(false);
-			frame.setSpinnerX(newXPosition);
-			frame.setSpinnerWidth(newWidth);
+			frame.setSpinnerY(newYPosition);
+			frame.setSpinnerHeight(newHeight);
 			frame.setDoUpdateBounds(true);
 			frame.updateVScreenBounds();
 			frame.calcRescaleFactors();

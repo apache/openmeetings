@@ -16,33 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.FPS;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerHeight;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerWidth;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerX;
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerY;
+import static org.apache.openmeetings.screenshare.Core.QUARTZ_GROUP_NAME;
+import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.FPS;
+import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.quartz.impl.StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
 import java.io.IOException;
-import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
+import org.apache.openmeetings.screenshare.job.CursorJob;
+import org.apache.openmeetings.screenshare.job.EncodeJob;
+import org.apache.openmeetings.screenshare.job.SendJob;
 import org.quartz.JobBuilder;
-import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -55,16 +46,15 @@ import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 
-class CaptureScreen extends Thread {
+public class CaptureScreen extends Thread {
 	private static final Logger log = getLogger(CaptureScreen.class);
-	private final static String QUARTZ_GROUP_NAME = "ScreenShare";
 	private final static String QUARTZ_CURSOR_TRIGGER_NAME = "CursorTrigger";
 	private final static String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
-	private CoreScreenShare core;
-	private int timeBetweenFrames;
+	private Core core;
+	private int timestampDelta;
 	private volatile AtomicInteger timestamp = new AtomicInteger(0);
 	private volatile AtomicBoolean sendFrameGuard = new AtomicBoolean(false);
-	private long timeCaptureStarted = 0;
+	private long startTime = 0;
 	private volatile boolean active = true;
 	private IScreenEncoder se;
 	private IScreenShare client;
@@ -76,7 +66,7 @@ class CaptureScreen extends Thread {
 	private boolean startPublish = false;
 	private Scheduler _scheduler;
 
-	public CaptureScreen(CoreScreenShare coreScreenShare, IScreenShare client, String host, String app, int port) {
+	public CaptureScreen(Core coreScreenShare, IScreenShare client, String host, String app, int port) {
 		core = coreScreenShare;
 		this.client = client;
 		this.host = host;
@@ -86,12 +76,9 @@ class CaptureScreen extends Thread {
 
 	private Scheduler getScheduler() {
 		if (_scheduler == null) {
-			final Properties p = new Properties();
-			p.put(PROP_SCHED_SKIP_UPDATE_CHECK, "true");
-			p.put("org.quartz.threadPool.threadCount", "10");
 			try {
-				SchedulerFactory sf = new StdSchedulerFactory(p);
-				_scheduler = sf.getScheduler();
+				SchedulerFactory schdlrFactory = new StdSchedulerFactory(getQurtzProps("CaptureScreen"));
+				_scheduler = schdlrFactory.getScheduler();
 			} catch (SchedulerException e) {
 				log.error("Unexpected error while creating scheduler", e);
 			}
@@ -110,7 +97,7 @@ class CaptureScreen extends Thread {
 		}
 		active = false;
 		timestamp = new AtomicInteger(0);
-		timeCaptureStarted = 0;
+		startTime = 0;
 	}
 
 	@Override
@@ -120,20 +107,20 @@ class CaptureScreen extends Thread {
 				Thread.sleep(60);
 			}
 
-			timeBetweenFrames = 1000 / FPS;
+			timestampDelta = 1000 / FPS;
 			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
-			timeCaptureStarted = System.currentTimeMillis();
+			startTime = System.currentTimeMillis();
 
 			JobDetail encodeJob = JobBuilder.newJob(EncodeJob.class).withIdentity("EncodeJob", QUARTZ_GROUP_NAME).build();
 			encodeJob.getJobDataMap().put(EncodeJob.CAPTURE_KEY, this);
 			Trigger encodeTrigger = TriggerBuilder.newTrigger()
 					.withIdentity("EncodeTrigger", QUARTZ_GROUP_NAME)
-					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
+					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timestampDelta).repeatForever())
 					.build();
 			JobDetail sendJob = JobBuilder.newJob(SendJob.class).withIdentity("SendJob", QUARTZ_GROUP_NAME).build();
 			Trigger sendTrigger = TriggerBuilder.newTrigger()
 					.withIdentity("SendTrigger", QUARTZ_GROUP_NAME)
-					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
+					.withSchedule(simpleSchedule().withIntervalInMilliseconds(timestampDelta).repeatForever())
 					.build();
 			sendJob.getJobDataMap().put(SendJob.CAPTURE_KEY, this);
 
@@ -163,105 +150,7 @@ class CaptureScreen extends Thread {
 	}
 	*/
 	
-	@DisallowConcurrentExecution
-	public static class EncodeJob implements Job {
-		private static final String CAPTURE_KEY = "capture";
-		Robot robot;
-		Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);
-		int[][] image = null;
-		
-		public EncodeJob() {
-			try {
-				robot = new Robot();
-			} catch (AWTException e) {
-				log.error("encode: Unexpected Error while creating robot", e);
-			}
-		}
-		
-		@Override
-		public void execute(JobExecutionContext context) throws JobExecutionException {
-			JobDataMap data = context.getJobDetail().getJobDataMap();
-			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
-			
-			long start = 0;
-			if (log.isTraceEnabled()) {
-				start = System.currentTimeMillis();
-			}
-			image = ScreenV1Encoder.getImage(screen, robot);
-			if (log.isTraceEnabled()) {
-				log.trace(String.format("encode: Image was captured in %s ms, size %sk", System.currentTimeMillis() - start, 4 * image.length * image[0].length / 1024));
-				start = System.currentTimeMillis();
-			}
-			try {
-				VideoData vData = capture.se.encode(image);
-				if (log.isTraceEnabled()) {
-					long now = System.currentTimeMillis();
-					log.trace(String.format("encode: Image was encoded in %s ms, timestamp is %s", now - start, now - capture.timeCaptureStarted));
-				}
-				capture.frames.offer(vData);
-				capture.se.createUnalteredFrame();
-			} catch (Exception e) {
-				log.error("Error while encoding: ", e);
-			}
-		}
-	}
-	
-	public static class SendJob implements Job {
-		private static final String CAPTURE_KEY = "capture";
-		public SendJob() {}
-		
-		@Override
-		public void execute(JobExecutionContext context) throws JobExecutionException {
-			JobDataMap data = context.getJobDetail().getJobDataMap();
-			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
-			capture.sendFrameGuard.set(true);
-			if (log.isTraceEnabled()) {
-				long real = System.currentTimeMillis() - capture.timeCaptureStarted;
-				log.trace(String.format("send: Enter method, timestamp: %s, real: %s, diff: %s", capture.timestamp, real, real - capture.timestamp.get()));
-			}
-			VideoData f = capture.frames.poll();
-			if (log.isTraceEnabled()) {
-				log.trace(String.format("send: Getting %s image", f == null ? "DUMMY" : "CAPTURED"));
-			}
-			f = f == null ? capture.se.getUnalteredFrame() : f;
-			if (f != null) {
-				try {
-					capture.pushVideo(f, capture.timestamp.get());
-					if (log.isTraceEnabled()) {
-						long real = System.currentTimeMillis() - capture.timeCaptureStarted;
-						log.trace(String.format("send: Sending video %sk, timestamp: %s, real: %s, diff: %s", f.getData().capacity() / 1024, capture.timestamp, real, real - capture.timestamp.get()));
-					}
-					capture.timestamp.addAndGet(capture.timeBetweenFrames);
-					if (log.isTraceEnabled()) {
-						log.trace(String.format("send: new timestamp: %s", capture.timestamp));
-					}
-				} catch (IOException e) {
-					log.error("Error while sending: ", e);
-				}
-			} else if (log.isTraceEnabled()) {
-				log.trace(String.format("send: nothing to send"));
-			}
-			capture.sendFrameGuard.set(false);
-		}
-	}
-	
-	@DisallowConcurrentExecution
-	public static class CursorJob implements Job {
-		private static final String CAPTURE_KEY = "capture";
-		
-		public CursorJob() {}
-		
-		@Override
-		public void execute(JobExecutionContext context) throws JobExecutionException {
-			JobDataMap data = context.getJobDetail().getJobDataMap();
-			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
-			if (!capture.sendFrameGuard.get()) {
-				capture.core.sendCursorStatus();
-			}
-		}
-	}
-	
-	private void pushVideo(VideoData data, int ts) throws IOException {
+	public void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
 			if (Red5.getConnectionLocal() == null) {
 				Red5.setConnectionLocal(client.getConnection());
@@ -293,6 +182,38 @@ class CaptureScreen extends Thread {
 
 	public void setStartPublish(boolean startPublish) {
 		this.startPublish = startPublish;
+	}
+
+	public IScreenEncoder getEncoder() {
+		return se;
+	}
+
+	public ArrayBlockingQueue<VideoData> getFrames() {
+		return frames;
+	}
+
+	public void setSendFrameGuard(boolean b) {
+		sendFrameGuard.set(b);
+	}
+
+	public boolean getSendFrameGuard() {
+		return sendFrameGuard.get();
+	}
+
+	public AtomicInteger getTimestamp() {
+		return timestamp;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public int getTimestampDelta() {
+		return timestampDelta;
+	}
+
+	public void sendCursorStatus() {
+		core.sendCursorStatus();
 	}
 
 	public void setSendCursor(boolean sendCursor) {

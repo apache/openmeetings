@@ -16,28 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.job;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import org.apache.openmeetings.screenshare.CaptureScreen;
+import org.quartz.DisallowConcurrentExecution;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class ScreenKeyListener implements KeyListener {
-	private static final Logger logger = LoggerFactory.getLogger(ScreenKeyListener.class);
-
+@DisallowConcurrentExecution
+public class CursorJob implements Job {
+	public static final String CAPTURE_KEY = "capture";
+	
+	public CursorJob() {}
+	
 	@Override
-	public void keyPressed(KeyEvent kEvent) {
-		logger.debug("keyPressed :Code: " + kEvent.getKeyCode());
-	}
-
-	@Override
-	public void keyReleased(KeyEvent kEvent) {
-		logger.debug("keyReleased :Code: " + kEvent.getKeyCode());
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		JobDataMap data = context.getJobDetail().getJobDataMap();
+		CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
+		if (!capture.getSendFrameGuard()) {
+			capture.sendCursorStatus();
+		}
 	}
 }

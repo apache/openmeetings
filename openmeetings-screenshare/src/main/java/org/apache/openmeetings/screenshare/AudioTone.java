@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;

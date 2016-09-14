@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart;
+package org.apache.openmeetings.screenshare;
 
-import org.red5.client.net.rtmps.RTMPSClient;
+import org.red5.client.net.rtmp.RTMPClient;
 import org.red5.server.net.ICommand;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
@@ -26,14 +26,14 @@ import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
-	private static final Logger log = LoggerFactory.getLogger(RTMPSScreenShare.class);
+public class RTMPScreenShare extends RTMPClient implements IScreenShare {
+	private static final Logger log = LoggerFactory.getLogger(RTMPScreenShare.class);
 
-	private final CoreScreenShare core;
+	private final Core core;
 
-	public RTMPSScreenShare(CoreScreenShare core) {
+	public RTMPScreenShare(Core core) {
 		this.core = core;
-	};
+	}
 
 	@Override
 	public void connectionOpened(RTMPConnection conn) {

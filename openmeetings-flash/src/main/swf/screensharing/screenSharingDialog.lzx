@@ -116,25 +116,25 @@
 	
 	<method name="doMinimize">
 		<![CDATA[
-		   
-		   this.isStarted = false;
-		   
-		   this._subcontent._content._video._videostream.stop();
-		   
-		   this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
-		   this._showScreenSharing._x.setAttribute("to",canvas.width - 270 - 20);
-		   this._showScreenSharing._height.setAttribute("to",100);
-		   this._showScreenSharing._width.setAttribute("to",270);
-		   
-		   this._showScreenSharing.setAttribute('started', true);
-		   
-		   this._infoBox.setAttribute("visibility","hidden");
-		   this._zoombar.setAttribute("visibility","hidden");
-		   this._pause.setAttribute("visibility","hidden");
-		   this._close.setAttribute("visibility","hidden");
-		   
-		   this._subcontent.setAttribute("visibility","hidden");
-		   
+			
+			this.isStarted = false;
+			
+			this._subcontent._content._video._videostream.stop();
+			
+			this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
+			this._showScreenSharing._x.setAttribute("to",canvas.width - 270 - 20);
+			this._showScreenSharing._height.setAttribute("to",100);
+			this._showScreenSharing._width.setAttribute("to",270);
+			
+			this._showScreenSharing.setAttribute('started', true);
+			
+			this._infoBox.setAttribute("visibility","hidden");
+			this._zoombar.setAttribute("visibility","hidden");
+			this._pause.setAttribute("visibility","hidden");
+			this._close.setAttribute("visibility","hidden");
+			
+			this._subcontent.setAttribute("visibility","hidden");
+			
 		]]>
 	</method>
 	
@@ -157,13 +157,13 @@
 	
 	<view name="_initText">
 		<labelText name="_infoText" labelid="724" width="230" x="10" y="26" multiline="true" />
-	
+
 		<simpleLabelButton name="_startButton" labelid="848" x="10" width="124" y="78">
 			<handler name="onclick">
 				parent.parent.startViewerSession();
 			</handler>
 		</simpleLabelButton>
-		  
+
 		<simpleLabelButton name="_closeButton" labelid="851" x="138" width="124" y="78">
 			<handler name="onclick">
 				parent.parent.close();
@@ -174,6 +174,13 @@
 	<view name="_subcontent" width="${ parent.width }" visibility="hidden" y="20" height="${ parent.height - 48 }" clip="true">
 		<view name="_content">
 			<videoObjectPlayScreenShare name="_video">
+				<switch>
+					<when property="$as3">
+						<passthrough>
+							import flash.events.*;
+						</passthrough>
+					</when>
+				</switch>
 				<contextmenu>
 					<contextmenuitem caption="$once{ canvas.getLabelName(1087) }" onselect="parent.parent.parent.pasteContent()" />
 				</contextmenu>
@@ -189,541 +196,35 @@
 				<attribute name="isLinux" value="false" type="boolean"/>
 				
 				<handler name="oninit">
-					var osInfo = lz.Browser.getOS();
-					
-					if ($debug) Debug.write("osInfo :: ",osInfo);
-					
-					if (osInfo.indexOf("Mac") >= 0) {
-						this.isMac = true;
-					} else if (osInfo.indexOf("Win") >= 0) {
-						this.isWindows = true;
-					} else if (osInfo.indexOf("Linux") >= 0) {
-						this.isLinux = true;
-					}
-					
-					if ($debug) Debug.write("this.isMac :: ",this.isMac);
-					if ($debug) Debug.write("this.isWindows :: ",this.isWindows);
-					
+					canvas.sprite.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyhandler);
 					this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
+				</handler>
+				
+				<handler name="ondestroy">
+					canvas.sprite.stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyhandler);
 				</handler>
 				
 				<method name="pasteContent">
 					if ($debug) Debug.write("pasteContent :: ");
 				</method>
 				
-				<handler name="onkeydown" reference="lz.Keys" args="k">
+				<method name="keyhandler" args="evt">
 				<![CDATA[
-					if (this.isMouseOverActive) {
-						if ($debug) Debug.write("onkeydown ",k);
-						
-						var tObject = new Object();
-						tObject["action"] = "onkeydown";
-						tObject["k"] = k;
-						
-						var downkeys = lz.Keys.downKeysArray;
-						
-						if ($debug) Debug.write("downkeys ",downkeys,downkeys.length);
-						if (this.isWindows) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 81) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							}
-						} else if (this.isMac) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 225) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 50) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 55) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 225) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							}
-						} else if (this.isLinux) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 51) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 223) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 188) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 252) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 228) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 50) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 55) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 51) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 223) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 188) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 228) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							}
-						}
-						if (lz.Keys.downKeysArray.length > 1) {
-							for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
-								if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
-									lz.Keys.downKeysArray = new Array();
-									break;
-								}
-							}
-						}
-						
-						if (k == 18 || k == 17) {
-							return;
-						}
-						
-						if ($debug) Debug.write("tObject :: ",tObject,this.isWindows,this.isMac);
-						this.sendRemoteCursorEvent.tObject = tObject;
-						if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
-							this.sendRemoteCursorEvent.doCall();
-						}
+					if (this.isMouseOverActive && (canvas.isAllowedToRemoteControl || canvas.ismoderator)) {
+						var obj = {
+							action: evt.type
+							, ctrl: evt.ctrlKey
+							, shift: evt.shiftKey
+							, alt: evt.altKey
+							, char: evt.charCode
+							, key: evt.keyCode
+						};
+						if ($debug) Debug.write("keyhandler ", obj);
+						this.sendRemoteCursorEvent.tObject = obj;
+						this.sendRemoteCursorEvent.doCall();
 					}
 				]]>
-				</handler>
-				
-				<handler name="onkeyup" reference="lz.Keys" args="k">
-				<![CDATA[
-					if (this.isMouseOverActive) {
-						if ($debug) Debug.write("onkeyup ",k);
-						
-						var tObject = new Object();
-						tObject["action"] = "onkeyup";
-						tObject["k"] = k;
-						
-						var downkeys = lz.Keys.downKeysArray;
-						if (this.isWindows) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 81) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 226) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							}
-						} else if (this.isMac) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 225) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 50) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 55) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 221) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 220) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 191) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 225) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 192) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 219) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 186) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							}
-						} else if (this.isLinux) {
-							if (downkeys.length==2 && downkeys[0]==16) {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "*";
-								} else if (k == 51) {
-									tObject["k"] = -1;
-									tObject["c"] = "'";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "_";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 223) {
-									tObject["k"] = -1;
-									tObject["c"] = "?";
-								} else if (k == 188) {
-									tObject["k"] = -1;
-									tObject["c"] = ">";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "°";
-								} else if (k == 252) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ü";
-								} else if (k == 228) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ä";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "Ö";
-								}
-							} else if (downkeys.length==2 && downkeys[0]==18) {
-								if (k == 50) {
-									tObject["k"] = -1;
-									tObject["c"] = "@";
-								} else if (k == 55) {
-									tObject["k"] = -1;
-									tObject["c"] = "|";
-								}
-							} else {
-								if (k == 187) {
-									tObject["k"] = -1;
-									tObject["c"] = "+";
-								} else if (k == 51) {
-									tObject["k"] = -1;
-									tObject["c"] = "#";
-								} else if (k == 189) {
-									tObject["k"] = -1;
-									tObject["c"] = "-";
-								} else if (k == 222) {
-									tObject["k"] = -1;
-									tObject["c"] = "`";
-								} else if (k == 223) {
-									tObject["k"] = -1;
-									tObject["c"] = "ß";
-								} else if (k == 188) {
-									tObject["k"] = -1;
-									tObject["c"] = "<";
-								} else if (k == 176) {
-									tObject["k"] = -1;
-									tObject["c"] = "^";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "ü";
-								} else if (k == 228) {
-									tObject["k"] = -1;
-									tObject["c"] = "ä";
-								} else if (k == 246) {
-									tObject["k"] = -1;
-									tObject["c"] = "ö";
-								}
-							}
-						}
-							
-						if (k == 18 || k == 17) {
-							return;
-						}
-						
-						if (lz.Keys.downKeysArray.length > 1) {
-							for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
-								if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
-									lz.Keys.downKeysArray = new Array();
-									break;
-								}
-							}
-						}
-					
-						if ($debug) Debug.write("tObject :: ",tObject,this.isWindows,this.isMac);
-						
-						this.sendRemoteCursorEvent.tObject = tObject;
-						if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
-							this.sendRemoteCursorEvent.doCall();
-						}
-					}
-				]]>
-				</handler>
+				</method>
 				
 				<handler name="onmouseover">
 					//if ($debug) Debug.write("onmouseout ");
@@ -922,13 +423,13 @@
 				</labelCheckbox>	
 				
 				<simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
-					   y="$once{ parent.height-24 }" onclick="this.parent.close();" />
-					   
-			</labelExplorerBox>  
+						y="$once{ parent.height-24 }" onclick="this.parent.close();" />
+						
+			</labelExplorerBox>
 			
 		</view>
 		
-	</view>  
+	</view>
 
 	<view name="_zoombar" x="20" visibility="hidden" y="${ parent.height-26 }">
 		
@@ -977,7 +478,7 @@
 			</handler>
 		</changeWidthSlider>
 		
-		<labelText x="64" y="4" labelid="253" />   
+		<labelText x="64" y="4" labelid="253" />
 		
 		<labelText x="84" y="4" labelid="1096" />  
 		
@@ -1029,7 +530,7 @@
 		y="${ parent.height-22 }" onclick="this.parent.doClose();" />
 		
 	<animatorgroup name="_showScreenSharing" started="false" 
-				   process="simultaneous" duration="1000" >
+					process="simultaneous" duration="1000" >
 		<handler name="onstop">
 			if ($debug) Debug.write("onstop this._y.to ",this._y.to);
 			if (!parent.isStarted) {
