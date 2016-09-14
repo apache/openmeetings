@@ -16,17 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare.gui;
 
-import java.awt.event.MouseAdapter;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
-import javax.swing.JLabel;
-
-public class MouseListenerable extends JLabel {
+public class NumberSpinner extends JSpinner {
 	private static final long serialVersionUID = 1L;
 
-	public void addListener(MouseAdapter listner) {
-		addMouseListener(listner);
-		addMouseMotionListener(listner);
+	public NumberSpinner(int value, int min, int max, int step) {
+		super(new SpinnerNumberModel(value, min, max, step));
+	}
+	
+	@Override
+	public Integer getValue() {
+		return (Integer)super.getValue();
 	}
 }

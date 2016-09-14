@@ -16,25 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screen.webstart.gui;
+package org.apache.openmeetings.screenshare;
 
-import javax.swing.*;
-import java.awt.Dimension;
-import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 
-public class BlankArea extends MouseListenerable {
-	private static final long serialVersionUID = 1L;
-	private Dimension minSize = new Dimension(100, 50);
+public abstract class BaseScreenEncoder implements IScreenEncoder {
 
-    public BlankArea(Color color) {
-        setBackground(color);
-        setOpaque(false);
-		setHorizontalAlignment(SwingConstants.LEFT);
-		setVerticalAlignment(SwingConstants.TOP);
-		setHorizontalTextPosition(0);
-		setVerticalTextPosition(0);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-        setMinimumSize(minSize);
-        setPreferredSize(minSize);
-    }
+	public static BufferedImage resize(BufferedImage _img, Rectangle size) {
+		BufferedImage img = _img;
+		if (img.getWidth() != size.width || img.getHeight() != size.height) {
+			img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+			
+			Graphics2D graphics2D = img.createGraphics();
+			graphics2D.setRenderingHint(
+				RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			graphics2D.drawImage(_img, 0, 0, size.width, size.height, null);
+			graphics2D.dispose();
+		}
+		return img;
+	}
+	
 }
