@@ -117,7 +117,7 @@
 			<id>prepare-red5-server</id>
 			<activation>
 				<file>
-					<missing>red5-server/red5-server-1.0.8-M10.tar.gz</missing> <!-- TODO should be in-sync with global property -->
+					<missing>red5-server/red5-server-1.0.8-M12.tar.gz</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
