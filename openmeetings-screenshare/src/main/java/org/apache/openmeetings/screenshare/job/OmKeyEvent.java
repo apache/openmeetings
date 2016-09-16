@@ -19,13 +19,14 @@
 package org.apache.openmeetings.screenshare.job;
 
 import static java.lang.Boolean.TRUE;
+import static java.lang.Character.toUpperCase;
+import static javax.swing.KeyStroke.getKeyStroke;
 import static org.apache.openmeetings.screenshare.util.Util.getInt;
 import static org.slf4j.LoggerFactory.getLogger;
-import static javax.swing.KeyStroke.getKeyStroke;
-import static java.lang.Character.toUpperCase;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +45,9 @@ public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
 	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
-	private static final Stream<Character> UMLAUT_STREAM = Stream.of('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
-	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(UMLAUT_STREAM.collect(Collectors.toSet()));
-	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(UMLAUT_STREAM, Stream.of('§')).collect(Collectors.toSet()));
+	private static final List<Character> _UMLAUTS = Arrays.asList('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
+	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(_UMLAUTS.stream().collect(Collectors.toSet()));
+	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(_UMLAUTS.stream(), Stream.of('§')).collect(Collectors.toSet()));
 	static {
 		KEY_MAP.put(13, KeyEvent.VK_ENTER);
 		KEY_MAP.put(16, 0);
