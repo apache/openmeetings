@@ -44,7 +44,7 @@ public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
 	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
-	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.of('§', 'ö', 'ä', 'ü', 'ß', 'Ö', 'Ä' , 'Ü').collect(Collectors.toSet()));
+	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.of('§', 'ö', 'ä', 'ü', 'ß', 'Ö', 'Ä', 'Ü').collect(Collectors.toSet()));
 	static {
 		KEY_MAP.put(13, KeyEvent.VK_ENTER);
 		KEY_MAP.put(16, 0);
@@ -119,12 +119,35 @@ public class OmKeyEvent {
 		if (UNPRINTABLE.contains(ch)) {
 			if (SystemUtils.IS_OS_LINUX) {
 				r.press(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_U);
-				String hex = String.format("%04X", (int)ch);
+				//String hex = String.format("%04X", (int)ch);
+				String hex = Integer.toHexString((int)ch);
 				log.debug("sequence:: hex {}", hex);
 				for (int i = 0; i < hex.length(); ++i) {
 					r.press(KeyStroke.getKeyStroke(toUpperCase(hex.charAt(i)), 0).getKeyCode());
 				}
 				r.press(KeyEvent.VK_ENTER);
+			}
+			if (SystemUtils.IS_OS_MAC) {
+				if (ch == 'ß') {
+					r.press(KeyEvent.VK_ALT, KeyEvent.VK_S);
+				} else {
+					char uch = toUpperCase(ch);
+					if (uch == 'Ö' || uch == 'Ä' || uch == 'Ü') {
+						r.press(KeyEvent.VK_ALT, KeyEvent.VK_U);
+						List<Integer> list = new ArrayList<>();
+						if (Character.isUpperCase(ch)) {
+							list.add(KeyEvent.VK_SHIFT);
+						}
+						if (uch == 'Ö') {
+							list.add(KeyEvent.VK_O);
+						} else if (uch == 'Ä') {
+							list.add(KeyEvent.VK_A);
+						} else if (uch == 'Ü') {
+							list.add(KeyEvent.VK_U);
+						}
+						r.press(list);
+					}
+				}
 			}
 		} else {
 			List<Integer> list = new ArrayList<>();
@@ -140,8 +163,7 @@ public class OmKeyEvent {
 			if (key != 0) {
 				list.add(key);
 			}
-			log.debug("sequence:: list {}", list);
-			r.press(list.stream().mapToInt(Integer::intValue).toArray());
+			r.press(list);
 		}
 	}
 }
