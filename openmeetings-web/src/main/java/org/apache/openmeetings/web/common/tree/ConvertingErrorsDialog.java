@@ -49,8 +49,8 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 		@Override
 		protected void populateItem(ListItem<FileItemLog> item) {
 			FileItemLog l = item.getModelObject();
-			item.add(new Label("exitCode"));
-			item.add(new Label("message"));
+			item.add(new Label("exitCode", l.getExitCode()));
+			item.add(new Label("message", l.getMessage()));
 			if (!l.isOk()) {
 				item.add(AttributeModifier.replace("class", "alert"));
 			}

@@ -18,14 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
-import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
-
-import java.io.File;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +27,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.util.OmFileHelper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -107,29 +98,5 @@ public class FileExplorerItem extends FileItem {
 
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
-	}
-
-	@Override
-	protected File internalGetFile(String ext) {
-		File f = null;
-		File d = new File(OmFileHelper.getUploadFilesDir(), getHash());
-		switch (getType()) {
-			case WmlFile:
-				f = new File(OmFileHelper.getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
-				break;
-			case Image:
-				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
-				break;
-			case Video:
-				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
-				break;
-			case Presentation:
-				f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
-				break;
-			case PollChart:
-			case Folder:
-			default:
-		}
-		return f;
 	}
 }
