@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.openmeetings.screenshare.Core;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -53,7 +54,6 @@ import org.slf4j.Logger;
 @DisallowConcurrentExecution
 public class RemoteJob implements Job {
 	private static final Logger log = getLogger(RemoteJob.class);
-	private static final boolean isWindows = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") > -1;
 	public static final String CORE_KEY = "core";
 	private Robot robot = null;
 	
@@ -88,10 +88,10 @@ public class RemoteJob implements Job {
 					Point p = getCoordinates(obj);
 					robot.mouseMove(p.x, p.y);
 				} else if (action.equals("keyDown")) {
-					pressSequence(new OmKeyEvent(obj).sequence());
+					new OmKeyEvent(obj).press(this);
 				} else if (action.equals("paste")) {
 					String paste = obj.get("paste").toString();
-					pressSpecialSign(paste);
+					paste(paste);
 				} else if (action.equals("copy")) {
 					String paste = getHighlightedText();
 
@@ -119,7 +119,7 @@ public class RemoteJob implements Job {
 		}
 	}
 
-	private void pressSequence(int... codes) throws InterruptedException {
+	public void press(int... codes) throws InterruptedException {
 		for (int i = 0; i < codes.length; ++i) {
 			robot.keyPress(codes[i]);
 		}
@@ -130,12 +130,12 @@ public class RemoteJob implements Job {
 
 	private String getHighlightedText() {
 		try {
-			if (isWindows) {
-				// pressing STRG+C == copy
-				pressSequence(KeyEvent.VK_CONTROL, KeyEvent.VK_C);
-			} else {
+			if (SystemUtils.IS_OS_MAC) {
 				// Macintosh simulate Copy
-				pressSequence(157, 67);
+				press(157, 67);
+			} else {
+				// pressing CTRL+C == copy
+				press(KeyEvent.VK_CONTROL, KeyEvent.VK_C);
 			}
 			return getClipboardText();
 		} catch (Exception e) {
@@ -165,18 +165,18 @@ public class RemoteJob implements Job {
 		return "";
 	}
 
-	private void pressSpecialSign(String charValue) {
+	private void paste(String charValue) {
 		Clipboard clippy = getDefaultToolkit().getSystemClipboard();
 		try {
 			Transferable transferableText = new StringSelection(charValue);
 			clippy.setContents(transferableText, null);
 
-			if (isWindows) {
-				// pressing STRG+V == insert-mode
-				pressSequence(KeyEvent.VK_CONTROL, KeyEvent.VK_V);
-			} else {
+			if (SystemUtils.IS_OS_MAC) {
 				// Macintosh simulate Insert
-				pressSequence(157, 86);
+				press(157, 86);
+			} else {
+				// pressing CTRL+V == insert-mode
+				press(KeyEvent.VK_CONTROL, KeyEvent.VK_V);
 			}
 		} catch (Exception e) {
 			log.error("Unexpected exception while pressSpecialSign", e);
