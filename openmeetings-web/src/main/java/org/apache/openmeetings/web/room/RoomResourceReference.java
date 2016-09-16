@@ -91,17 +91,17 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		return null;
 	}
 
-	protected File getFile(FileExplorerItem r, String ext) {
-		return r.getFile(ext);
+	protected File getFile(FileExplorerItem f, String ext) {
+		return f.getFile(ext);
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem r) {
-		return getFile(r, null);
+	protected File getFile(FileExplorerItem f) {
+		return getFile(f, null);
 	}
 	
 	@Override
-	protected String getFileName(FileExplorerItem r) {
-		return preview ? String.format("%s.%s", r.getName(), EXTENSION_JPG) : r.getName();
+	protected String getFileName(FileExplorerItem f) {
+		return f.getFileName(preview ? EXTENSION_JPG : null);
 	}
 }
