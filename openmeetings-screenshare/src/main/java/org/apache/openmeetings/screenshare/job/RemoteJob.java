@@ -39,6 +39,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -117,6 +118,11 @@ public class RemoteJob implements Job {
 		} catch (Exception err) {
 			log.error("[sendRemoteCursorEvent]", err);
 		}
+	}
+
+	public void press(List<Integer> codes) throws InterruptedException {
+		log.debug("sequence:: codes {}", codes);
+		press(codes.stream().mapToInt(Integer::intValue).toArray());
 	}
 
 	public void press(int... codes) throws InterruptedException {
