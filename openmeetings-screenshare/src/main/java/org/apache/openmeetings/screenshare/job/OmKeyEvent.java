@@ -44,7 +44,9 @@ public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
 	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
-	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.of('§', 'ö', 'ä', 'ü', 'ß', 'Ö', 'Ä', 'Ü').collect(Collectors.toSet()));
+	private static final Stream<Character> UMLAUT_STREAM = Stream.of('ß', 'ö', 'Ö', 'ä', 'Ä', 'ü', 'Ü');
+	private static final Set<Character> UMLAUTS = Collections.unmodifiableSet(UMLAUT_STREAM.collect(Collectors.toSet()));
+	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.concat(UMLAUT_STREAM, Stream.of('§')).collect(Collectors.toSet()));
 	static {
 		KEY_MAP.put(13, KeyEvent.VK_ENTER);
 		KEY_MAP.put(16, 0);
@@ -115,42 +117,58 @@ public class OmKeyEvent {
 		log.debug("sequence:: shift {}, ch {}, orig {} -> key {}({}), map {}", shift, ch == 0 ? ' ' : ch, inKey, key, Integer.toHexString(key), _key);
 	}
 
+	private int getVowel(char ch) {
+		int vowel = ch;
+		switch(toUpperCase(ch)) {
+			case 'Ö':
+				vowel = KeyEvent.VK_O;
+				break;
+			case 'Ä':
+				vowel = KeyEvent.VK_A;
+				break;
+			case 'Ü':
+				vowel = KeyEvent.VK_U;
+				break;
+		}
+		return vowel;
+	}
+
 	public void press(RemoteJob r) throws InterruptedException {
+		List<Integer> list = new ArrayList<>();
 		if (UNPRINTABLE.contains(ch)) {
 			if (SystemUtils.IS_OS_LINUX) {
 				r.press(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_U);
-				//String hex = String.format("%04X", (int)ch);
 				String hex = Integer.toHexString((int)ch);
 				log.debug("sequence:: hex {}", hex);
 				for (int i = 0; i < hex.length(); ++i) {
 					r.press(KeyStroke.getKeyStroke(toUpperCase(hex.charAt(i)), 0).getKeyCode());
 				}
 				r.press(KeyEvent.VK_ENTER);
-			}
-			if (SystemUtils.IS_OS_MAC) {
+			} else if (SystemUtils.IS_OS_MAC) {
 				if (ch == 'ß') {
 					r.press(KeyEvent.VK_ALT, KeyEvent.VK_S);
 				} else {
-					char uch = toUpperCase(ch);
-					if (uch == 'Ö' || uch == 'Ä' || uch == 'Ü') {
+					if (UMLAUTS.contains(ch)) {
 						r.press(KeyEvent.VK_ALT, KeyEvent.VK_U);
-						List<Integer> list = new ArrayList<>();
 						if (Character.isUpperCase(ch)) {
 							list.add(KeyEvent.VK_SHIFT);
 						}
-						if (uch == 'Ö') {
-							list.add(KeyEvent.VK_O);
-						} else if (uch == 'Ä') {
-							list.add(KeyEvent.VK_A);
-						} else if (uch == 'Ü') {
-							list.add(KeyEvent.VK_U);
-						}
+						list.add(getVowel(ch));
 						r.press(list);
 					}
 				}
+			} else if (SystemUtils.IS_OS_WINDOWS) {
+				if (UMLAUTS.contains(ch)) {
+					list.add(KeyEvent.VK_ALT);
+					list.add(KeyEvent.VK_ADD);
+					String code = String.format("%04", (int)ch);
+					for (int i = 0; i < code.length(); ++i) {
+						list.add(KeyEvent.VK_NUMPAD0 + (int)code.charAt(i));
+					}
+					r.press(list);
+				}
 			}
 		} else {
-			List<Integer> list = new ArrayList<>();
 			if (shift) {
 				list.add(KeyEvent.VK_SHIFT);
 			}
