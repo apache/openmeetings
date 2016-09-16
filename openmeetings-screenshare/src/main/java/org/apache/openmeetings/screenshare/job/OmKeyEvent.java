@@ -20,6 +20,7 @@ package org.apache.openmeetings.screenshare.job;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.Character.toUpperCase;
+import static java.lang.Character.isUpperCase;
 import static javax.swing.KeyStroke.getKeyStroke;
 import static org.apache.openmeetings.screenshare.util.Util.getInt;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -90,7 +91,7 @@ public class OmKeyEvent {
 	public OmKeyEvent(Map<String, Object> obj) {
 		alt = TRUE.equals(obj.get("alt"));
 		ctrl = TRUE.equals(obj.get("ctrl"));
-		shift = TRUE.equals(obj.get("shift"));
+		shift = TRUE.equals(obj.get("shift")) || isUpperCase(ch);
 		ch = (char)getInt(obj, "char");
 		key = inKey = getInt(obj, "key");
 		Integer _key = null;
@@ -151,7 +152,7 @@ public class OmKeyEvent {
 				} else {
 					if (UMLAUTS.contains(ch)) {
 						r.press(KeyEvent.VK_ALT, KeyEvent.VK_U);
-						if (Character.isUpperCase(ch)) {
+						if (shift) {
 							list.add(KeyEvent.VK_SHIFT);
 						}
 						list.add(getVowel(ch));
