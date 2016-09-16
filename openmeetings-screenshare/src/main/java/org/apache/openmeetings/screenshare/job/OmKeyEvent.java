@@ -19,24 +19,37 @@
 package org.apache.openmeetings.screenshare.job;
 
 import static java.lang.Boolean.TRUE;
+import static org.apache.openmeetings.screenshare.util.Util.getInt;
+import static org.slf4j.LoggerFactory.getLogger;
+import static javax.swing.KeyStroke.getKeyStroke;
+import static java.lang.Character.toUpperCase;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.swing.KeyStroke;
+
+import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
-
-import static org.apache.openmeetings.screenshare.util.Util.getInt;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class OmKeyEvent {
 	private static final Logger log = getLogger(OmKeyEvent.class);
 	private static final Map<Integer, Integer> KEY_MAP = new HashMap<>();
+	private static final Map<Character, Integer> CHAR_MAP = new HashMap<>();
+	private static final Set<Character> UNPRINTABLE = Collections.unmodifiableSet(Stream.of('§', 'ö', 'ä', 'ü', 'ß', 'Ö', 'Ä' , 'Ü').collect(Collectors.toSet()));
 	static {
 		KEY_MAP.put(13, KeyEvent.VK_ENTER);
 		KEY_MAP.put(16, 0);
 		KEY_MAP.put(20, KeyEvent.VK_CAPS_LOCK);
+		KEY_MAP.put(43, KeyEvent.VK_ADD); //normal + -> numpad + ????
 		KEY_MAP.put(46, KeyEvent.VK_DELETE);
 		KEY_MAP.put(110, KeyEvent.VK_DECIMAL);
 		KEY_MAP.put(186, KeyEvent.VK_SEMICOLON);
@@ -49,80 +62,86 @@ public class OmKeyEvent {
 		KEY_MAP.put(220, KeyEvent.VK_BACK_SLASH);
 		KEY_MAP.put(221, KeyEvent.VK_CLOSE_BRACKET);
 		KEY_MAP.put(222, KeyEvent.VK_QUOTE);
+		
+		CHAR_MAP.put(Character.valueOf('#'), KeyEvent.VK_NUMBER_SIGN);
+		CHAR_MAP.put(Character.valueOf('<'), KeyEvent.VK_LESS);
+		CHAR_MAP.put(Character.valueOf('.'), KeyEvent.VK_PERIOD);
+		CHAR_MAP.put(Character.valueOf(','), KeyEvent.VK_COMMA);
+		CHAR_MAP.put(Character.valueOf('-'), KeyEvent.VK_MINUS);
+		CHAR_MAP.put(Character.valueOf('='), KeyEvent.VK_EQUALS);
+		CHAR_MAP.put(Character.valueOf('['), KeyEvent.VK_OPEN_BRACKET);
+		CHAR_MAP.put(Character.valueOf(']'), KeyEvent.VK_CLOSE_BRACKET);
+		CHAR_MAP.put(Character.valueOf(';'), KeyEvent.VK_SEMICOLON);
+		CHAR_MAP.put(Character.valueOf('\''), KeyEvent.VK_QUOTE);
+		CHAR_MAP.put(Character.valueOf('\\'), KeyEvent.VK_BACK_SLASH);
+		CHAR_MAP.put(Character.valueOf('`'), KeyEvent.VK_BACK_QUOTE);
+		CHAR_MAP.put(Character.valueOf('/'), KeyEvent.VK_SLASH);
 	}
 	private boolean alt = false;
 	private boolean ctrl = false;
 	private boolean shift = false;
+	private int inKey = 0;
 	private int key = 0;
 	private char ch = 0;
 	
-	public OmKeyEvent(int key) {
-		this(key, false);
-	}
-
-	public OmKeyEvent(int key, boolean shift) {
-		this.key = key;
-		this.shift = shift;
-	}
-
 	public OmKeyEvent(Map<String, Object> obj) {
 		alt = TRUE.equals(obj.get("alt"));
 		ctrl = TRUE.equals(obj.get("ctrl"));
 		shift = TRUE.equals(obj.get("shift"));
 		ch = (char)getInt(obj, "char");
+		key = inKey = getInt(obj, "key");
 		Integer _key = null;
-		int key = getInt(obj, "key");
-		if (key == 0) {
-			if (ch == 61) {
-				this.key = KeyEvent.VK_EQUALS;
+		if (CharUtils.isAsciiPrintable(ch)) {
+			boolean alpha = Character.isAlphabetic(ch);
+			if (alpha) { // can't be combined due to different types
+				key = getKeyStroke(toUpperCase(ch), 0).getKeyCode();
+			} else {
+				key = getKeyStroke(Character.valueOf(ch), 0).getKeyCode();
+			}
+			if (key == 0) {
+				_key = CHAR_MAP.get(ch);
+				if (_key == null) {
+					// fallback
+					key = inKey;
+				}
+			}
+			if (!alpha && _key == null) {
+				_key = KEY_MAP.get(key);
 			}
 		} else {
 			_key = KEY_MAP.get(key);
-			this.key = _key == null ? key : _key;
 		}
-		log.debug("sequence:: shift {}, orig {} -> key {}, _key {}", shift, key, this.key, _key);
+		this.key = _key == null ? key : _key;
+		log.debug("sequence:: shift {}, ch {}, orig {} -> key {}({}), map {}", shift, ch == 0 ? ' ' : ch, inKey, key, Integer.toHexString(key), _key);
 	}
 
-	public int[] sequence() {
-		List<Integer> list = new ArrayList<>();
-		if (alt) {
-			list.add(KeyEvent.VK_ALT);
+	public void press(RemoteJob r) throws InterruptedException {
+		if (UNPRINTABLE.contains(ch)) {
+			if (SystemUtils.IS_OS_LINUX) {
+				r.press(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_U);
+				String hex = String.format("%04X", (int)ch);
+				log.debug("sequence:: hex {}", hex);
+				for (int i = 0; i < hex.length(); ++i) {
+					r.press(KeyStroke.getKeyStroke(toUpperCase(hex.charAt(i)), 0).getKeyCode());
+				}
+				r.press(KeyEvent.VK_ENTER);
+			}
+		} else {
+			List<Integer> list = new ArrayList<>();
+			if (shift) {
+				list.add(KeyEvent.VK_SHIFT);
+			}
+			if (alt) {
+				list.add(KeyEvent.VK_ALT);
+			}
+			if (ctrl) {
+				list.add(KeyEvent.VK_CONTROL);
+			}
+			if (key != 0) {
+				list.add(key);
+			}
+			log.debug("sequence:: list {}", list);
+			r.press(list.stream().mapToInt(Integer::intValue).toArray());
 		}
-		if (ctrl) {
-			list.add(KeyEvent.VK_CONTROL);
-		}
-		if (shift) {
-			list.add(KeyEvent.VK_SHIFT);
-		}
-		if (key != 0) {
-			list.add(key);
-		}
-		return list.stream().mapToInt(Integer::intValue).toArray();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + key;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof OmKeyEvent)) {
-			return false;
-		}
-		OmKeyEvent other = (OmKeyEvent) obj;
-		if (key != other.key) {
-			return false;
-		}
-		return true;
 	}
 }
