@@ -81,7 +81,6 @@
 	<bean id="fileservice.service" class="org.apache.openmeetings.core.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.core.converter.FlvExplorerConverter" />
-	<bean id="conferenceservice.service" class="org.apache.openmeetings.core.remote.ConferenceService" />
 	<bean id="recordingservice.service" class="org.apache.openmeetings.core.remote.RecordingService" />
 	<bean id="mobile.service" class="org.apache.openmeetings.core.remote.MobileService" />
 	<bean id="openmeetings.RecordingConverterTask" class="org.apache.openmeetings.core.data.record.converter.RecordingConverterTask" />

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.WB_VIDEO_FILE_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -228,7 +227,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 					File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
 
-					File target = new File(targetFolder, OmFileHelper.getName(WB_VIDEO_FILE_PREFIX + fileId, EXTENSION_MP4));
+					File target = new File(targetFolder, mp4.getName());
 					if (mp4.exists() && !target.exists()) {
 						FileHelper.copy(mp4, target);
 					}
