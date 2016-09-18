@@ -29,6 +29,7 @@
 	<attribute name="deltaInSeconds" value="0" type="number" />
 	<attribute name="currentTime" value="0" type="number" /> 	
 	<attribute name="recordingName" value="" type="string" />
+	<attribute name="hash" value="" type="string" />
 	<attribute name="isLoaded" value="false" type="boolean" />
 	<attribute name="sendInit" value="false" type="boolean" />
 	<attribute name="flv_width" value="0" type="number" /> 
@@ -37,7 +38,7 @@
 	<handler name="oninit">
 		if ($debug) Debug.write("whiteboardVideoPlayer :: ",this.fileId);
 		
-		this.recordingName = "UPLOADFLV_" + this.fileId + ".mp4";
+		this.recordingName = hash + ".mp4";
 		calcVideoWidthHeight();
 		this.copyFileToCurrentRoom.doCall();
 	</handler>

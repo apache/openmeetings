@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -38,6 +39,7 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +65,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 	private String[] mergeAudioToWaves(List<File> waveFiles, File wav,
 			List<RecordingMetaData> metaDataList, ReConverterParams rcv) throws IOException {
-		String[] argv_full_sox = new String[waveFiles.size() + 5];
-		argv_full_sox[0] = this.getPathToSoX();
-		argv_full_sox[1] = "-m";
+		String[] cmdSox = new String[waveFiles.size() + 5];
+		cmdSox[0] = this.getPathToSoX();
+		cmdSox[1] = "-m";
 
 		int counter = 2;
 		for (File _wav : waveFiles) {
@@ -74,22 +76,22 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 				if (hashFileFullNameStored.equals(_wav.getName())) {
 					if (metaData.getInteriewPodId() == 1) {
-						argv_full_sox[counter] = "-v " + rcv.leftSideLoud;
+						cmdSox[counter] = "-v " + rcv.leftSideLoud;
 						counter++;
 					}
 					if (metaData.getInteriewPodId() == 2) {
-						argv_full_sox[counter] = "-v " + rcv.rightSideLoud;
+						cmdSox[counter] = "-v " + rcv.rightSideLoud;
 						counter++;
 					}
 				}
 			}
-			argv_full_sox[counter] = _wav.getCanonicalPath();
+			cmdSox[counter] = _wav.getCanonicalPath();
 			counter++;
 		}
 
-		argv_full_sox[counter] = wav.getCanonicalPath();
+		cmdSox[counter] = wav.getCanonicalPath();
 
-		return argv_full_sox;
+		return cmdSox;
 	}
 
 	@Override
@@ -102,15 +104,18 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		try {
 			r = recordingDao.get(id);
 			log.debug("recording " + r.getId());
+			if (Strings.isEmpty(r.getHash())) {
+				r.setHash(UUID.randomUUID().toString());
+			}
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
 
-			List<ConverterProcessResult> returnLog = new ArrayList<>();
+			List<ConverterProcessResult> logs = new ArrayList<>();
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
 	
-			stripAudioFirstPass(r, returnLog, waveFiles, streamFolder, metaDataList);
+			stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaDataList);
 		
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
@@ -128,7 +133,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					argv_full_sox = mergeAudioToWaves(waveFiles, wav);
 				}
 
-				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
 				// create default Audio to merge it.
 				// strip to content length
@@ -137,9 +142,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				// Calculate delta at beginning
 				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", "" + deltaPadding };
+				String[] cmdSox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", "" + deltaPadding };
 
-				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmdSox));
 			}
 			// Default Image for empty interview video pods
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
@@ -172,7 +177,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							, "-f", "null"
 							, "file.null"};
 					ConverterProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
-					returnLog.add(res);
+					logs.add(res);
 					if (res.isOk()) {
 						//TODO need to remove smallest gap
 						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());
@@ -188,7 +193,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-t", formatMillis(diff) //
 									, "-pix_fmt", "yuv420p" //
 									, podPB };
-							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
+							logs.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
 							
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
 							File podF = new File(streamFolder, OmFileHelper.getName(meta.getStreamName() + "_pod_" + pod, EXTENSION_FLV));
@@ -199,7 +204,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-filter_complex", String.format("[0:0]setsar=1/1[sarfix];[1:0]scale=%1$d:%2$d,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]", flvWidth, flvHeight) //
 									, "-map", "[v]" //
 									, podP };
-							returnLog.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
+							logs.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
 	
 							pods[pod - 1] = podP;
 						} else {
@@ -213,7 +218,8 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				ConverterProcessResult res = new ConverterProcessResult();
 				res.setProcess("CheckFlvFilesExists");
 				res.setError("No valid pods found");
-				returnLog.add(res);
+				res.setExitCode(-1);
+				logs.add(res);
 				return;
 			}
 			boolean shortest = false;
@@ -255,7 +261,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			File flv = r.getFile(EXTENSION_FLV);
 			args.add(flv.getCanonicalPath());
 			// TODO additional flag to 'quiet' output should be added
-			returnLog.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
+			logs.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
 			r.setFlvWidth(2 * flvWidth);
 			r.setFlvHeight(flvHeight);
@@ -276,21 +282,21 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					"-s", (2 * flvWidth) + "x" + flvHeight, //
 					jpg.getCanonicalPath() };
 
-			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
+			logs.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
 			File avi = r.getFile(EXTENSION_AVI);
 			deleteFileIfExists(avi);
 
 			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", flv.getCanonicalPath(), avi.getCanonicalPath() };
 
-			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
+			logs.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
 			updateDuration(r);
-			convertToMp4(r, returnLog);
+			convertToMp4(r, logs);
 			r.setStatus(Recording.Status.PROCESSED);
 
 			logDao.delete(r);
-			for (ConverterProcessResult returnMap : returnLog) {
+			for (ConverterProcessResult returnMap : logs) {
 				logDao.add("generateFFMPEG", r, returnMap);
 			}
 

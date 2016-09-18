@@ -41,7 +41,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.remote.ConferenceService;
+import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -91,7 +91,7 @@ public class UserWebService implements UserService {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private ConferenceService conferenceService;
+	private SessionManager sessionManager;
 
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
@@ -347,7 +347,7 @@ public class UserWebService implements UserService {
 	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		Sessiondata sd = sessionDao.check(sid);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-			return conferenceService.getRoomClientsListByRoomId(roomId).size();
+			return sessionManager.getClientListByRoom(roomId).size();
 		}
 		return -1;
 	}

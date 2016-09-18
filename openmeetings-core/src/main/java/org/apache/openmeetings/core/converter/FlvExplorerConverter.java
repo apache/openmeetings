@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -29,7 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
@@ -45,8 +44,6 @@ public class FlvExplorerConverter extends BaseConverter {
 	// Spring loaded Beans
 	@Autowired
 	private FileExplorerItemDao fileDao;
-	@Autowired
-	private FileItemLogDao fileLogDao;
 	
 	private static class FlvDimension {
 		public FlvDimension(int width, int height) {
@@ -58,43 +55,43 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 
 	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
-		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
+		List<ConverterProcessResult> logs = new ArrayList<ConverterProcessResult>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);
 
 			f.setType(Type.Video);
+			ConverterProcessResult res;
+			if (EXTENSION_MP4.equals(ext)) {
+				String[] args = new String[] { getPathToFFMPEG(), "-i", f.getFile(ext).getCanonicalPath() };
+				res = ProcessHelper.executeScript("Info ID :: " + f.getId(), args);
+				res.setExitCode(0); //normal code is 1, ffmpeg requires output file
+			} else {
+				String[] args = new String[] { getPathToFFMPEG(), "-y", "-i", f.getFile(ext).getCanonicalPath(),
+						"-c:a", "aac", "-c:v", "h264", mp4.getCanonicalPath() };
+				res = ProcessHelper.executeScript("uploadFLV ID :: " + f.getId(), args);
 
-			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", f.getFile(ext).getCanonicalPath(),
-					"-c:a", "aac", "-c:v", "h264", mp4.getCanonicalPath() };
-
-			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: " + f.getId(), argv_fullFLV);
-			
+			}
+			logs.add(res);
 			//Parse the width height from the FFMPEG output
-			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.getError());
-			int flvWidth = flvDimension.width;
-			int flvHeight = flvDimension.height;
-			
-			f.setFlvWidth(flvWidth);
-			f.setFlvHeight(flvHeight);
-
-			returnLog.add(returnMapConvertFLV);
-
+			FlvDimension dim = getFlvDimension(res.getError());
+			f.setFlvWidth(dim.width);
+			f.setFlvHeight(dim.height);
 			File jpeg = f.getFile(EXTENSION_JPG);
 
 			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-y", "-i",
 					mp4.getCanonicalPath(), "-codec:v", "mjpeg", "-vframes", "1", "-an",
-					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
+					"-f", "rawvideo", "-s", dim.width + "x" + dim.height,
 					jpeg.getCanonicalPath() };
 
-			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), argv_previewFLV));
+			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), argv_previewFLV));
 
 			fileDao.update(f);
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
-			returnLog.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));
+			logs.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));
 		}
 
-		return returnLog;
+		return logs;
 	}
 	
 	private static FlvDimension getFlvDimension(String txt) throws Exception {

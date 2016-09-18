@@ -41,7 +41,7 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getFileLogsByFile", query = "SELECT fl FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.fileType = :type"),
-		@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.fileType = :type AND fl.exitCode <> '0'"),
+		@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.fileType = :type AND fl.exitCode <> 0"),
 		@NamedQuery(name = "deleteErrorFileLogsByFile", query = "DELETE FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.fileType = :type") })
 @Table(name = "file_log")
 public class FileItemLog implements IDataProviderEntity {

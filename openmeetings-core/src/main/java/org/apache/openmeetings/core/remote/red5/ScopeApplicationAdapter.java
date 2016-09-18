@@ -1394,7 +1394,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				type // 0
 				, url // urlname
 				, "--dummy--" // baseurl
-				, fi.getHash() // fileName //3
+				, fi.getName() // fileName //3
 				, "--dummy--" // moduleName //4
 				, "--dummy--" // parentPath //5
 				, "--dummy--" // room //6
@@ -1433,7 +1433,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				, size.x // 4: 416
 				, size.y // 5: 240
 				, 0 // 6: 1 // z-index 
-				, null // 7: null //TODO 
+				, fi.getHash() // 7: null //TODO 
 				, 0 // 8: 0 //TODO // counter
 				, 0 // 9: 0 //TODO // x
 				, 0 // 10: 0 //TODO // y
