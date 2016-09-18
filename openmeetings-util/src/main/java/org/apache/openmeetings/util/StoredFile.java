@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +45,7 @@ public class StoredFile {
 
 	private static final Set<String> chartExtensions = new HashSet<>(Arrays.asList("xchart"));
 
-	private static final Set<String> asIsExtensions = new HashSet<>(Arrays.asList("jpg", "xchart"));
+	private static final Set<String> asIsExtensions = new HashSet<>(Arrays.asList(EXTENSION_MP4, EXTENSION_JPG, "xchart"));
 
 	private final String name;
 	private final String ext;

@@ -222,7 +222,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
-		log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + type);
+		log.debug("getUserRoom : " + ownerId + " || " + type);
 		Room room = null;
 		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
 		if (ll.size() > 0) {

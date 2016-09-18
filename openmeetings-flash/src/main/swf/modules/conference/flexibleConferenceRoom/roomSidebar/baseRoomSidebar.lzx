@@ -44,7 +44,7 @@
 	<method name="setRoomModerators">
 	<![CDATA[
 		var moders = canvas.currentRoomObj.moderators;
-		if ($debug) Debug.write("getRoomModeratorsByRoomId: ", moders);
+		if ($debug) Debug.write("setRoomModerators: ", moders);
 		canvas.becomeSuperModerator = false;
 		
 		this.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
