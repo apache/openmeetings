@@ -179,14 +179,22 @@ public class BackupExport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(User.class, UserConverter.class);
 			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && !list.isEmpty()) {
-				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);
+				for (Appointment a : list) {
+					if (a.getStart() != null) {
+						registry.bind(a.getStart().getClass(), DateConverter.class);
+						break;
+					} else if (a.getInserted() != null) {
+						registry.bind(a.getInserted().getClass(), DateConverter.class);
+						break;
+					}
+				}
 			}
-			
+
 			writeList(serializer, backup_dir, "appointements.xml", "appointments", list);
 			progressHolder.setProgress(25);
 		}
