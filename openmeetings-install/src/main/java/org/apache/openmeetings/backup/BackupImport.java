@@ -454,6 +454,10 @@ public class BackupImport {
 					log.warn("Appointment without room was found, skipping: {}", a);
 					continue;
 				}
+				if (a.getStart() == null || a.getEnd() == null) {
+					log.warn("Appointment without start/end time was found, skipping: {}", a);
+					continue;
+				}
 				a = appointmentDao.update(a, null, false);
 				appointmentsMap.put(appId, a.getId());
 			}
