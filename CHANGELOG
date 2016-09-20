@@ -12,6 +12,11 @@ Release Notes - Openmeetings - Version 3.1.2
     * [OPENMEETINGS-1448] - Recordings backup fails "Enum missing"
     * [OPENMEETINGS-1460] - Application.ONLINE_USERS does not reflect changes to Client instances
     * [OPENMEETINGS-1461] - We need to switch to java8
+    * [OPENMEETINGS-1464] - Clear objects on current slide only is not working
+    * [OPENMEETINGS-1465] - Password field is enabled when Password protected is not checked
+    * [OPENMEETINGS-1466] - REST/SOAP methods are incomplete
+    * [OPENMEETINGS-1468] - problems with keyborad usage while screensharing with remote desktop 
+    * [OPENMEETINGS-1470] - WB video is not displayed
 
 ** Improvement
     * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.

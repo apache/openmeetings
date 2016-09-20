@@ -362,7 +362,7 @@ lib/commons-codec-1.10.jar
 lib/commons-collections-3.2.2.jar
 lib/commons-compress-1.11.jar
 lib/commons-daemon-1.0.15.jar
-lib/commons-fileupload-1.3.1.jar
+lib/commons-fileupload-1.3.2.jar
 lib/commons-io-2.5.jar
 lib/commons-lang3-3.4.jar
 lib/ehcache-core-2.6.11.jar
