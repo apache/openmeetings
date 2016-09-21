@@ -168,9 +168,6 @@ mvn deploy -Pdeploy,rc
 3.1.0/rc1/KEYS
 						</source>
 					</li>
-					<li>Upload Artifacts with signatures created on the previous steps to 
-						https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION
-					</li>
 				</ul>
 			</subsection>
 
