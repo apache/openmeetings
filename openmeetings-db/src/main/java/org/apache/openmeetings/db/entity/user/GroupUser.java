@@ -39,7 +39,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="deleteUsersFromGroup", query="DELETE FROM GroupUser c WHERE c.group.id = :id")
+	@NamedQuery(name="deleteGroupUsersByGroup", query="DELETE FROM GroupUser gu WHERE gu.group.id = :id")
 	, @NamedQuery(name="countGroupUsers", query="SELECT COUNT(c) FROM GroupUser c WHERE c.group.id = :id")
 	, @NamedQuery(name="getGroupUsersById", query="SELECT c FROM GroupUser c WHERE c.id = :id")
 	, @NamedQuery(name="getGroupUsersByGroupId", query="SELECT c FROM GroupUser c WHERE c.group.id = :id")
