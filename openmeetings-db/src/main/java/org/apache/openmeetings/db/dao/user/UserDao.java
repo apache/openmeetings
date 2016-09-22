@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -287,10 +288,7 @@ public class UserDao implements IDataProviderDao<User> {
 	@Override
 	public void delete(User u, Long userId) {
 		if (u != null && u.getId() != null) {
-			for (GroupUser ou : u.getGroupUsers()){
-				em.remove(ou);
-			}
-			u.setGroupUsers(null);
+			u.setGroupUsers(new ArrayList<>());
 			u.setDeleted(true);
 			u.setUpdated(new Date());
 			u.setSipUser(null);
@@ -298,7 +296,6 @@ public class UserDao implements IDataProviderDao<User> {
 			if (adr != null) {
 				adr.setDeleted(true);
 			}
-
 			update(u, userId);
 		}
 	}
@@ -685,8 +682,10 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
-		for (Long grpId : groupIds) {
-			u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+		if (groupIds != null) {
+			for (Long grpId : groupIds) {
+				u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+			}
 		}
 		
 		return update(u, null);
