@@ -67,7 +67,7 @@ public class FlvExplorerConverter extends BaseConverter {
 				res.setExitCode(0); //normal code is 1, ffmpeg requires output file
 			} else {
 				String[] args = new String[] { getPathToFFMPEG(), "-y", "-i", f.getFile(ext).getCanonicalPath(),
-						"-c:a", "aac", "-c:v", "h264", mp4.getCanonicalPath() };
+						"-c:a", "aac", "-c:v", "h264", "-pix_fmt", "yuv420p", mp4.getCanonicalPath() };
 				res = ProcessHelper.executeScript("uploadFLV ID :: " + f.getId(), args);
 
 			}
