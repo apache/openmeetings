@@ -17,6 +17,9 @@ Release Notes - Openmeetings - Version 3.1.2
     * [OPENMEETINGS-1466] - REST/SOAP methods are incomplete
     * [OPENMEETINGS-1468] - problems with keyborad usage while screensharing with remote desktop 
     * [OPENMEETINGS-1470] - WB video is not displayed
+    * [OPENMEETINGS-1472] - User cannot be deleted
+    * [OPENMEETINGS-1473] - JPG file display in the room is broken
+    * [OPENMEETINGS-1474] - Users are not being displayed in restricted room
 
 ** Improvement
     * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.
