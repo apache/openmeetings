@@ -95,11 +95,6 @@ public class CalendarPanel extends UserPanel {
 	private transient HttpClient client = null; // Non-Serializable HttpClient.
 
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		super.onMenuPanelLoad(handler);
-	}
-
-	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
 		refreshTimer.stop(handler);
 		syncTimer.stop(handler);
@@ -108,11 +103,11 @@ public class CalendarPanel extends UserPanel {
 			client.getState().clear();
 		}
 	}
-	
+
 	private static AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);
 	}
-	
+
 	public void refresh(IPartialPageRequestHandler handler) {
 		calendar.refresh(handler);
 	}
@@ -125,7 +120,7 @@ public class CalendarPanel extends UserPanel {
 	Calendar getCalendar() {
 		return calendar;
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
@@ -141,14 +136,14 @@ public class CalendarPanel extends UserPanel {
 
 	public CalendarPanel(String id) {
 		super(id);
-		
+
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 
 		dialog = new AppointmentDialog("appointment", Application.getString(815)
 				, this, new CompoundPropertyModel<Appointment>(getDefault()));
 		add(dialog);
-		
+
 		boolean isRtl = isRtl();
 		javaScriptAddDatepicker = String.format("addCalButton(%s, 'datepicker');", isRtl);
 		Options options = new Options();
@@ -190,43 +185,43 @@ public class CalendarPanel extends UserPanel {
 		options.set("dayNames", days.toString());
 		options.set("dayNamesShort", shortDays.toString());
 		options.set("firstDay", getBean(ConfigurationDao.class).getConfValue(CONFIG_CALENDAR_FIRST_DAY, String.class, "0"));
-		
+
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
 				add(new CalendarFunctionsBehavior(getMarkupId()));
 			}
-			
+
 			@Override
 			public boolean isSelectable() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean isDayClickEnabled() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean isEventClickEnabled() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean isEventDropEnabled() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean isEventResizeEnabled() {
 				return true;
 			}
-			
+
 			//no need to override onDayClick
-			
+
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, LocalDateTime start, LocalDateTime end, boolean allDay) {
 				Appointment a = getDefault();
@@ -239,18 +234,18 @@ public class CalendarPanel extends UserPanel {
 				a.setStart(getDate(s));
 				a.setEnd(getDate(e));
 				dialog.setModelObjectWithAjaxTarget(a, target);
-				
+
 				dialog.open(target);
 			}
-			
+
 			@Override
 			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
 				Appointment a = getDao().get((long)eventId);
 				dialog.setModelObjectWithAjaxTarget(a, target);
-				
+
 				dialog.open(target);
 			}
-			
+
 			@Override
 			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
 				AppointmentDao dao = getDao();
@@ -263,11 +258,11 @@ public class CalendarPanel extends UserPanel {
 				cal.setTime(a.getStart());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setStart(cal.getTime());
-				
+
 				cal.setTime(a.getEnd());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
-				
+
 				dao.update(a, getUserId());
 
 				if (a.getCalendar() != null) {
@@ -287,7 +282,7 @@ public class CalendarPanel extends UserPanel {
 				cal.setTime(a.getEnd());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
-				
+
 				dao.update(a, getUserId());
 
 				if (a.getCalendar() != null)
@@ -295,7 +290,7 @@ public class CalendarPanel extends UserPanel {
 				//FIXME add feedback info
 			}
 		};
-		
+
 		form.add(calendar);
 
 		populateGoogleCalendars();
