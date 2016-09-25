@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -115,6 +116,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	protected void init() {
 		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
+		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		
 		//Add custom resource loader at the beginning, so it will be checked first in the 
 		//chain of Resource Loaders, if not found it will search in Wicket's internal 
@@ -140,14 +142,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
-		//getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("/recording/${hash}", HashPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
-		mountPage("/hash", HashPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
@@ -225,15 +224,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (rcl == null) {
 			return null;
 		}
-		Client client = getOnlineClient(rcl.getPublicSID());
-		if (client == null) {
-			return null;
+		if (!rcl.isScreenClient()) {
+			Client client = getOnlineClient(rcl.getPublicSID());
+			if (client == null) {
+				return null;
+			}
+			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
+			rcl.setIsMod(client.hasRight(Right.moderator));
+			rcl.setIsBroadcasting(client.hasRight(Right.audio));
+			rcl.setCanVideo(client.hasRight(Right.video));
+			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 		}
-		rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
-		rcl.setIsMod(client.hasRight(Right.moderator));
-		rcl.setIsBroadcasting(client.hasRight(Right.audio));
-		rcl.setCanVideo(client.hasRight(Right.video));
-		rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 		return rcl;
 	}
 	
@@ -311,12 +312,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return c;
 	}
 	
-	public static void removeUserFromRoom(long roomId, int pageId) {
-		Client c = new Client(WebSession.get().getId(), pageId, WebSession.getUserId());
-		c.setRoomId(roomId);
-		removeUserFromRoom(c);
-	}
-	
 	public static Client removeUserFromRoom(Client c) {
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {
@@ -329,21 +324,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return c;
 	}
 	
-	public static List<Client> getRoomClients(long roomId) {
+	public static List<Client> getRoomClients(Long roomId) {
 		List<Client> clients = new ArrayList<>();
-		Set<String> uids = ROOMS.get(roomId);
-		if (uids != null) {
-			for (String uid : uids) {
-				Client c = getOnlineClient(uid);
-				if (c != null) {
-					clients.add(c);
+		if (roomId != null) {
+			Set<String> uids = ROOMS.get(roomId);
+			if (uids != null) {
+				for (String uid : uids) {
+					Client c = getOnlineClient(uid);
+					if (c != null) {
+						clients.add(c);
+					}
 				}
 			}
 		}
 		return clients;
 	}
 	
-	public static Set<Long> getUserRooms(long userId) {
+	public static Set<Long> getUserRooms(Long userId) {
 		Set<Long> result = new HashSet<>();
 		for (Entry<Long, Set<String>> me : ROOMS.entrySet()) {
 			for (String uid : me.getValue()) {

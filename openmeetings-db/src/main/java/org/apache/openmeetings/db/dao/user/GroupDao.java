@@ -112,16 +112,14 @@ public class GroupDao implements IDataProviderDao<Group> {
 	}
 
 	@Override
-	public void delete(Group entity, Long userId) {
-		em.createNamedQuery("deleteUsersFromGroup")
-			.setParameter("id", entity.getId())
-			.executeUpdate();
+	public void delete(Group g, Long userId) {
+		em.createNamedQuery("deleteGroupUsersByGroup").setParameter("id", g.getId()).executeUpdate();
 
-		entity.setDeleted(true);
+		g.setDeleted(true);
 		if (userId != null) {
-			entity.setUpdatedby(userId);
+			g.setUpdatedby(userId);
 		}
 
-		em.merge(entity);
+		em.merge(g);
 	}
 }

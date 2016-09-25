@@ -108,9 +108,7 @@ public class SwfPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/history.js")));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
-		response.render(new PriorityHeaderItem(CssHeaderItem.forUrl("css/history.css")));
 		//FIXME TODO ugly HACK
 		if (WebSession.get().getClientInfo().getProperties().isBrowserMozillaFirefox()) {
 			response.render(new PriorityHeaderItem(CssHeaderItem.forCSS(".ui-widget-overlay{opacity: 1 !important;}", "ff-veil-hack")));
@@ -141,7 +139,8 @@ public class SwfPanel extends BasePanel {
 						);
 			} else if (SWF_TYPE_SETTINGS.equals(type.toString())) {
 				lbls = getStringLabels("448", "449", "450", "451", "758", "447", "52", "53", "1429", "1430"
-						, "775", "452", "767", "764", "765", "918", "54", "761", "762", "144");
+						, "775", "452", "767", "764", "765", "918", "54", "761", "762", "144", "203", "642"
+						, "save.success");
 			}
 			initStr = String.format("var labels = %s; initSwf(%s);", lbls
 					, new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp)).toString());

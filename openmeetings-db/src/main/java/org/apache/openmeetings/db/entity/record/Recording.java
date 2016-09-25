@@ -18,14 +18,9 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +38,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -119,10 +113,6 @@ public class Recording extends FileItem {
 	@Element(data = true, name = "flvRecordingId")
 	private Long id;
 
-	@Column(name = "alternate_download")
-	@Element(data = true, required = false)
-	private String alternateDownload;
-
 	@Column(name = "comment")
 	@Element(data = true, required = false)
 	private String comment;
@@ -173,10 +163,6 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private Status status = Status.NONE;
 	
-	// Not Mapped
-	@Transient
-	private List<RecordingLog> log;
-
 	@Override
 	public Long getId() {
 		return id;
@@ -259,22 +245,6 @@ public class Recording extends FileItem {
 		this.height = height;
 	}
 
-	public String getAlternateDownload() {
-		return alternateDownload;
-	}
-
-	public void setAlternateDownload(String alternateDownload) {
-		this.alternateDownload = alternateDownload;
-	}
-
-	public List<RecordingLog> getLog() {
-		return log;
-	}
-
-	public void setLog(List<RecordingLog> log) {
-		this.log = log;
-	}
-
 	public boolean isInterview() {
 		return interview;
 	}
@@ -300,19 +270,7 @@ public class Recording extends FileItem {
 	}
 
 	@Override
-	public File internalGetFile(String ext) {
-		File f = null;
-		if (getId() != null && !isDeleted()) {
-			if (ext == null || EXTENSION_MP4.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_MP4));
-			} else if (EXTENSION_FLV.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
-			} else if (EXTENSION_AVI.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_AVI));
-			} else if (EXTENSION_OGG.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_OGG));
-			}
-		}
-		return f;
+	public String getFileName(String ext) {
+		return String.format("%s%s.%s", recordingFileName, id, ext == null ? EXTENSION_MP4 : ext);
 	}
 }

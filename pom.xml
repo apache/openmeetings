@@ -44,8 +44,8 @@
 		<wicket.version>7.4.0</wicket.version>
 		<wicketju.version>7.4.0</wicketju.version>
 		<wickets.version>7.4.0</wickets.version>
-		<red5-server.version>1.0.8-M8</red5-server.version>
-		<red5-client.version>1.0.8-M8</red5-client.version>
+		<red5-server.version>1.0.8-M12</red5-server.version>
+		<red5-client.version>1.0.8-M12</red5-client.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
 		<cxf.version>3.1.7</cxf.version>
@@ -55,7 +55,7 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
-		<tomcat.version>8.0.36</tomcat.version>
+		<tomcat.version>8.5.5</tomcat.version>
 		<derby.version>10.12.1.1</derby.version>
 	</properties>
 	<profiles>
@@ -82,30 +82,10 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
-				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
 				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
 				<wicket.mode>DEVELOPMENT</wicket.mode>
 				<src.pack.skip>true</src.pack.skip>
 			</properties>
-		</profile>
-		<profile>
-			<id>doclint-java8-disable</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-							<configuration>
-								<additionalparam>-Xdoclint:none</additionalparam>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
 		</profile>
 		<profile>
 			<id>rc</id>
@@ -124,7 +104,7 @@
 								<configuration>
 									<rules>
 										<requireJavaVersion>
-											<version>[1.7.0, 1.8.0)</version>
+											<version>[1.8.0,)</version>
 										</requireJavaVersion>
 									</rules>
 									<failFast>true</failFast>
@@ -768,6 +748,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${maven.javadoc.version}</version>
+					<configuration>
+						<additionalparam>-Xdoclint:none</additionalparam>
+					</configuration>
 				</plugin>
 				<plugin>
 					<inherited>true</inherited>
@@ -775,8 +758,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.5.1</version>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
+						<source>1.8</source>
+						<target>1.8</target>
 						<optimize>true</optimize>
 						<debug>true</debug>
 					</configuration>

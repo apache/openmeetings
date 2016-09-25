@@ -26,7 +26,7 @@
 				<div>
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
-						<li>Sun JDK7</li>
+						<li>Sun JDK8</li>
 						<li>Apache Maven 3.3.9</li>
 						<li>
 							SVN Command line client (Subversion 1.7 required!)
@@ -168,9 +168,6 @@ mvn deploy -Pdeploy,rc
 3.1.0/rc1/KEYS
 						</source>
 					</li>
-					<li>Upload Artifacts with signatures created on the previous steps to 
-						https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION
-					</li>
 				</ul>
 			</subsection>
 
@@ -219,7 +216,7 @@ mvn clean install -Prc,release
 					<li>Select "Add signing set"</li>
 					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.1.0-RELEASE"</li>
 					<li>Enter "Version" for ex. "3.1.0-RELEASE"</li>
-					<li>Select "Java Signing" as "Signing service"</li>
+					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
 					<li>Select "Sign now"</li>
 					<li>Select "Type of signing" -> "Production"</li>

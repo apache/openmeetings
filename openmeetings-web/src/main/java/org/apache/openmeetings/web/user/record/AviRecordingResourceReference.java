@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
 
@@ -38,11 +39,11 @@ public class AviRecordingResourceReference extends RecordingResourceReference {
 	
 	@Override
 	protected String getFileName(Recording r) {
-		return r.getAlternateDownload();
+		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_AVI);
 	}
 	
 	@Override
 	protected File getFile(Recording r) {
-		return getRecording(r.getAlternateDownload());
+		return r.getFile(EXTENSION_AVI);
 	}
 }

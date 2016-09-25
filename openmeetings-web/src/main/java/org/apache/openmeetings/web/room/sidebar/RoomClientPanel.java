@@ -18,22 +18,21 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.sidebar.icon.KickRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.KickIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.util.string.Strings;
 
 public class RoomClientPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -43,25 +42,44 @@ public class RoomClientPanel extends Panel {
 		setRenderBodyOnly(true);
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
-		User u = getBean(UserDao.class).get(c.getUserId());
+		item.add(AttributeAppender.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
 		add(new RefreshIcon("refresh", c, room));
-		add(new Label("name", u.getFirstname() + " " + u.getLastname()));
+		add(new Label("name", getName(c)));
 		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
-		actions.add(new RoomRightPanel("rights", c, room));
-		actions.add(new KickRightIcon("kick", c, room));
+		actions.add(new KickIcon("kick", c, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
-		if (room.getClient() != null) {
-			actions.setVisible(room.getClient().hasRight(Right.moderator));
-			if (c.getUid().equals(room.getClient().getUid())) {
-				item.add(AttributeAppender.append("class", "current"));
-			}
+		actions.setVisible(room.getClient().hasRight(Right.moderator));
+		if (c.getUid().equals(room.getClient().getUid())) {
+			actions.add(new SelfIconsPanel("icons", c, room));
+			item.add(AttributeAppender.append("class", "current"));
 		} else {
-			actions.setVisible(false);
+			actions.add(new ClientIconsPanel("icons", c, room));
 		}
 		add(actions);
 	}
-	
+
+	private static String getName(Client c) {
+		String delim = "";
+		StringBuilder sb = new StringBuilder();
+		User u = c.getUser();
+		if (!Strings.isEmpty(u.getFirstname())) {
+			sb.append(u.getFirstname());
+			delim = " ";
+		}
+		if (!Strings.isEmpty(u.getLastname())) {
+			sb.append(delim).append(u.getLastname());
+			delim = " ";
+		}
+		if (Strings.isEmpty(sb) && u.getAddress() != null && !Strings.isEmpty(u.getAddress().getEmail())) {
+			sb.append(delim).append(u.getAddress().getEmail());
+		}
+		if (Strings.isEmpty(sb)) {
+			sb.append("N/A");
+		}
+		return sb.toString();
+	}
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
@@ -42,10 +42,6 @@ public class CleanupHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(CleanupHelper.class);
 	private static File hibernateDir = OmFileHelper.getStreamsHibernateDir();
 	
-	public static CleanupUnit getTempUnit() {
-		return new CleanupUnit(OmFileHelper.getUploadTempDir());
-	}
-
 	public static CleanupEntityUnit getProfileUnit(final UserDao udao) {
 		File parent = OmFileHelper.getUploadProfilesDir();
 		List<File> invalid = new ArrayList<>();
@@ -106,14 +102,14 @@ public class CleanupHelper {
 		for (File f : list(hibernateDir, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.startsWith(recordingFileName) && name.endsWith(FLV_EXTENSION);
+				return name.startsWith(recordingFileName) && name.endsWith(EXTENSION_FLV);
 			}
 		})) {
 			if (!f.isFile()) {
 				log.warn("Recording found is not a file: " + f);
 				continue;
 			}
-			Long id = Long.valueOf(f.getName().substring(recordingFileName.length(), f.getName().length() - FLV_EXTENSION.length()));
+			Long id = Long.valueOf(f.getName().substring(recordingFileName.length(), f.getName().length() - EXTENSION_FLV.length() - 1));
 			Recording item = recordDao.get(id);
 			if (item == null) {
 				add(invalid, id);

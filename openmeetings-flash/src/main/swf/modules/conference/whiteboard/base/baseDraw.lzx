@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-
+  
       http://www.apache.org/licenses/LICENSE-2.0
-
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-
+  
 -->
 <library>
 
@@ -73,15 +73,15 @@
 	<!--
 	 not needed anymore, Issue 507
 	<netRemoteCallHib name="getOID" funcname="getOID" showLoading="false"
-					  remotecontext="$once{ canvas.thishib }" >
+					remotecontext="$once{ canvas.thishib }" > 
 		<handler name="ondata" args="value">
 			<![CDATA[
 				//The onResult-Handler will be called be the rtmpconnection
 				if($debug) Debug.write("getOID: ",value);
 				parent.counter = value;
 			]]>
-		</handler>
-	</netRemoteCallHib>
+		</handler>   
+	</netRemoteCallHib>	 
 	 -->
 
 	<method name="compareAndSetCounter" args="c">
@@ -151,11 +151,8 @@
 
 	<method name="clearSlideOnly">
 		<![CDATA[
-
 			var itemsToDelete = this.getCurrentSlideAnnotations();
-
-			this.onsharedMessage('clearSlide',itemsToDelete);
-
+			this.onsharedMessage('clearSlide', itemsToDelete);
 			this.clearSlideRemote(itemsToDelete);
 		]]>
 	</method>
@@ -168,77 +165,56 @@
 	</method>
 
 	<method name="getCurrentSlideAnnotations">
-		<![CDATA[
-
-			var currentSlideNumber = -1;
-
-			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
-				if (this.baseactionobjectList[i][0] == "swf") {
-					currentSlideNumber = this.baseactionobjectList[i][8];
-					break;
-				}
-
+	<![CDATA[
+		//if ($debug) Debug.write("** getCurrentSlideAnnotations: ", baseactionobjectList.length);
+		var currentSlideNumber = -1;
+		for (var i = 0; i < baseactionobjectList.length; ++i) {
+			var obj = baseactionobjectList[i];
+			if (obj[0] == "swf") {
+				currentSlideNumber = obj[8];
+				break;
 			}
-
-			var itemsToDelete = new Array();
-
-			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
-				if (this.baseactionobjectList[i][0] == "ellipse"
-						|| this.baseactionobjectList[i][0] == "drawarrow"
-						|| this.baseactionobjectList[i][0] == "line"
-						|| this.baseactionobjectList[i][0] == "paint"
-						|| this.baseactionobjectList[i][0] == "rectangle"
-						|| this.baseactionobjectList[i][0] == "uline"
-						|| this.baseactionobjectList[i][0] == "image"
-						|| this.baseactionobjectList[i][0] == "clipart"
-						|| this.baseactionobjectList[i][0] == "letter") {
-
-					var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
-
-					if (swfObj.slide == currentSlideNumber) {
-						itemsToDelete.push(this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]);
-					}
-
+		}
+		var itemsToDelete = new Array();
+		for (var i = 0; i < baseactionobjectList.length; ++i) {
+			var obj = baseactionobjectList[i];
+			if (obj[0] == "ellipse" 
+				|| obj[0] == "drawarrow"
+				|| obj[0] == "line"
+				|| obj[0] == "paint"
+				|| obj[0] == "rectangle"
+				|| obj[0] == "uline"
+				|| obj[0] == "image"
+				|| obj[0] == "clipart"
+				|| obj[0] == "letter")
+			{
+						
+				var swfObj = obj[obj.length - 7];
+				
+				if (swfObj && swfObj.slide == currentSlideNumber) {
+					itemsToDelete.push(obj[obj.length-1]);
 				}
-
 			}
-
-			return itemsToDelete;
-		]]>
+		}
+		return itemsToDelete;
+	]]>
 	</method>
 
 	<method name="clearSlideRemote" args="itemsToDelete">
 		<![CDATA[
-
 			var indexOfItemsToDelete = new Array();
-
 			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
-
 				for (var k=0;k<itemsToDelete.length;k++) {
-
 					if (this.baseactionobjectList[i][this.baseactionobjectList[i].length-1] == itemsToDelete[k]) {
-
 						indexOfItemsToDelete.push(i);
-
 					}
-
 				}
-
 			}
-
 			for (var i=indexOfItemsToDelete.length-1;i>=0;i--) {
-
 				var itemToDelete = this.baseactionobjectList[indexOfItemsToDelete[i]];
-
 				var refObj = this.getObjectByName(itemToDelete[itemToDelete.length-1]);
-
 				refObj.destroy();
-
 				this.baseactionobjectList.splice(indexOfItemsToDelete[i],1);
-
 			}
 		]]>
 	</method>
@@ -277,8 +253,7 @@
 	<method name="doAction" args="modi">
 		if (modi=='saveobj'){
 			if (this.sendObject) this.sendObject.sendEvent();
-		} else if (modi=='loadobj'){
-
+		} else if (modi=='loadobj') {
 		}
 	</method>
 
@@ -337,7 +312,6 @@
 						my_pj.send();
 					}
 
-
 					//if ($debug) Debug.write("mc ",mc);
 					//if ($debug) Debug.write("mc.name ",mc._name);
 
@@ -359,8 +333,8 @@
 				this.doClearSlide = false;
 				this.doClearAll = true;
 				new lz.confirmationSingle(canvas.main_content._content.inner,{
-											labelid:1339,labeliderror:1340,
-											refObj:this,showCheckBox:false});
+										labelid:1339,labeliderror:1340,
+										refObj:this,showCheckBox:false});
 				//this.clearAll();
 				//if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
 				this.setAttribute('drawmodus',previousModus);
@@ -503,10 +477,8 @@
 		var ty = objRef.y;
 
 		if(this.isSnapToGrid){
-
 			tx = Math.round(tx/this.gridWidth)*this.gridWidth;
 			ty = Math.round(ty/this.gridWidth)*this.gridWidth;
-
 		}
 
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
@@ -529,7 +501,6 @@
 	<!-- ##############
 		undo/redo
 	 -->
-
 	<method name="undoredo">
 		<![CDATA[
 		if (this.baseactionobjectList.length>0){
@@ -540,7 +511,6 @@
 		}
 		]]>
 	</method>
-
 
 	<method name="checkStepLayers">
 		if (this.layers.length==0){
@@ -557,17 +527,14 @@
 	</method>
 
 	<method name="onmouseoverMethod">
-
 	</method>
 
 	<method name="onmouseoutMethod">
-
 	</method>
 
 	<method name="onmousedownMethod" >
 		<![CDATA[
 		if ($debug) Debug.write("onmousedownMethod this.drawmodus: ",this.drawmodus);
-
 
 		if(this.selectedObjects != null && this.selectedObjects.length > 0){
 			for (var eg=0;eg<this.selectedObjects.length;eg++){
@@ -759,14 +726,13 @@
 		//Debug.write("click on whiteBoard ",obj);
 	</handler>
 	 -->
-
 	<method name="trackmouse" args="item">
 		<![CDATA[
 
 		this.mx = currentlayer.getMouse('x');
 		this.my = currentlayer.getMouse('y');
 
-		if (this.drawmodus=="paint"){
+		if (this.drawmodus=="paint") {
 			if (mx != prevx || my != prevy) {
 				if (prevx == null) {
 					prevx = mx;
@@ -923,7 +889,6 @@
 			this.ObjectByName = this.getObjectByName(val);
 			//FIXME: Set Corrent Value to Document Toolbar or use another var
 
-
 			//if ($debug) Debug.write("this.ObjectByName ",val,this.ObjectByName);
 
 			var x = this.ObjectByName.x;
@@ -983,15 +948,12 @@
 	]]>
 	</method>
 
-
 	<method name="getZIndex">
 	<![CDATA[
 		if ($debug) Debug.write("getZIndex ", this.subviews.length - 1);
 		return this.subviews.length - 1;
 	]]>
 	</method>
-
-
 
 	<!-- ##################
 		SharedModus
@@ -1057,90 +1019,52 @@
 			if (isWmlLoader && actionObject[0]!='image' && isWmlLoader && actionObject[0]!='swf') {
 				if (this.onwmlLoaderSend) this.onwmlLoaderSend.sendEvent(actionObject[0]);
 			}
-
 		} else if(action=='clear'){
-
 			this.clearRemote();
-
 		} else if(action=='clearSlide'){
-
 			this.clearSlideRemote(actionObject);
-
 		} else if(action=='moveMap'){
-
 			this.setAttribute("x",actionObject[1]);
 			this.setAttribute("y",actionObject[2]);
-
 		} else if(actionObject[0]=='whiteboardObj'){
 			this.doUpdateFullFitAndZoomRemote(actionObject);
 		} else if(action=='flv'){
-
 			this.playFLVRemote(actionObject);
-
 		} else if(action=='addBrainStorming'){
-
 			this.brainStormingIdeasGathering(actionObject);
-
 		} else if(action=='addBrainStormingIdeaPhase2'){
-
 			//Adding Idea in Phase 2
 			this.addIdeaToPhase2(actionObject);
-
 		} else if(action=='deleteBrainStorming'){
-
 			this.brainStormingClose(actionObject);
-
 		} else if(action=='updateBrainStormingPhase'){
-
 			this.brainStormingPhase2(actionObject);
-
 		} else if(action=='updateBrainStormingPhase'){
-
 			this.brainStormingPhase2(actionObject);
-
 		} else if(action=='updatePrioBrainStormingIdea'){
-
 			this.updatePrioBrainStormingIdea(actionObject);
-
 		} else if(action=='updateTextBrainStormingIdeaColor'){
-
 			this.updateTextBrainStormingIdeaColor(actionObject);
-
 		} else if(action=='updateBrainStormingGroupName'){
-
 			this.updateBrainStormingGroupName(actionObject);
-
 		} else if(action=='deleteBrainStormingGroup'){
-
 			this.deleteBrainStormingGroup(actionObject);
-
 		} else if(action=='deleteBrainStormingIdea'){
-
 			this.deleteBrainStormingIdea(actionObject);
-
 		} else if(action=='addBrainStormingGroup'){
-
 			this.addNewGroupRemote(actionObject,false);
-
 		} else if(action=='updateGroupBrainStormingIdea'){
-
 			if (actionObject[3] == "") {
 				this.moveIdeaToResultListRemote(actionObject);
 			} else {
 				this.moveIdeaToGroupRemote(actionObject);
 			}
-
 		} else if(action=='delete' || action=='undo'){
-
 			var lastactionObject = actionObject;
 			this.deleteItemByNameSync(lastactionObject[lastactionObject.length-1]);
-
 		} else if(action=='size'){
-
 			var lastactionObject = actionObject;
-
 			if (lastactionObject[0] == "clipart") {
-
 				var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
 				obj.destroy();
 
@@ -1148,11 +1072,8 @@
 
 				for (var eg=0;eg<this.baseactionobjectList.length;eg++){
 					if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==lastactionObject[lastactionObject.length-1]) {
-
 						//if ($debug) Debug.write("Found Object 1: ",this.baseactionobjectList[eg]);
-
 						this.baseactionobjectList[eg] = lastactionObject;
-
 						break;
 					}
 				}
@@ -1160,9 +1081,7 @@
 				if (this.boundingIsActive) {
 					this.reselectShowObjectBounds(lastactionObject[lastactionObject.length-1]);
 				}
-
 			} else {
-
 				var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
 
 				if ($debug) Debug.write("Set Size for Object ",obj);
@@ -1184,7 +1103,6 @@
 				}
 
 			}
-
 		} else if (action=="loadwml"){
 			//Debug.write(actionObject,actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
 			this.remoteWmlLoader(actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
@@ -1214,14 +1132,9 @@
 	]]>
 	</method>
 
-
 	<method name="updateBaseObjectByName" args="tName,x,y,width,height">
 		<![CDATA[
-
-
-
 			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
 				if (this.baseactionobjectList[i][this.baseactionobjectList[i].length-1] == tName) {
 					this.baseactionobjectList[i][this.baseactionobjectList[i].length-5] = x;
 					this.baseactionobjectList[i][this.baseactionobjectList[i].length-4] = y;
@@ -1229,93 +1142,63 @@
 					this.baseactionobjectList[i][this.baseactionobjectList[i].length-2] = height;
 					return;
 				}
-
 			}
-
-
 			if ($debug) Debug.warn("Could Not Find Item on List ",tName);
 		]]>
 	</method>
 
 	<method name="getSWFDocumentStatus">
 		<![CDATA[
-
 			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
 				if (this.baseactionobjectList[i][0] == "swf") {
-
 					var tSWF = new Object();
-
 					tSWF.name = this.baseactionobjectList[i][this.baseactionobjectList[i].length-1];
 					tSWF.slide = this.baseactionobjectList[i][8];
 					tSWF.isVisible = true;
-
 					return tSWF;
 				}
-
 			}
-
 			return null;
 		]]>
 	</method>
 
 	<method name="checkSWFDocumentStatus" args="swfObj">
 		<![CDATA[
-
 			if (swfObj != null) {
-
 				var swfBaseObj = this.getBaseObjectByName(swfObj.name);
-
 				if (swfBaseObj != null) {
-
 					if (swfObj.slide == swfBaseObj[8]) {
 						return true;
 					} else {
 						return false;
 					}
-
 				}
-
 			}
-
 			return true;
 		]]>
 	</method>
 
 	<method name="doSWFDocumentStatus" args="refObj,swfObj">
 		<![CDATA[
-
 			if (swfObj != null) {
-
 				if (swfObj.isVisible) {
-
 					refObj.setAttribute("visibility","visible");
-
 				} else {
-
 					refObj.setAttribute("visibility","hidden");
-
 				}
-
 			} else {
-
 				refObj.setAttribute("visibility","visible");
-
 			}
-
 		]]>
 	</method>
 
 	<method name="updateObjectsToSlideNumber" args="baseObject">
 		<![CDATA[
-
 			var baseObjectName = baseObject[baseObject.length-1];
 			var slidesNumber = baseObject[8];
-
 			if ($debug) Debug.write("updateObjectsToSlideNumber :: ",baseObjectName,slidesNumber)
 
 			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
 				if (this.baseactionobjectList[i][0] == "ellipse"
 						|| this.baseactionobjectList[i][0] == "drawarrow"
 						|| this.baseactionobjectList[i][0] == "line"
@@ -1330,44 +1213,27 @@
 					if ($debug) Debug.write("swfObj :: ",swfObj);
 
 					if (swfObj != null) {
-
 						if (swfObj.name == baseObjectName) {
-
 							if (swfObj.slide == slidesNumber) {
-
 								swfObj.isVisible = true;
-
 								this.baseactionobjectList[i][this.baseactionobjectList[i].length-7] = swfObj;
-
 								this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","visible");
-
 							} else {
-
 								swfObj.isVisible = false;
-
 								this.baseactionobjectList[i][this.baseactionobjectList[i].length-7] = swfObj;
-
 								this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","hidden");
-
 							}
-
 						}
-
 					}
-
 				}
 			}
-
 		]]>
 	</method>
 
 	<method name="updateAllObjectsToSlideNumber">
 		<![CDATA[
-
 			if ($debug) Debug.write(" :: updateAllObjectsToSlideNumber :: ")
-
 			for (var i=0;i<this.baseactionobjectList.length;i++) {
-
 				if (this.baseactionobjectList[i][0] == "ellipse"
 						|| this.baseactionobjectList[i][0] == "drawarrow"
 						|| this.baseactionobjectList[i][0] == "line"
@@ -1381,30 +1247,18 @@
 					if ($debug) Debug.write("swfObj :: ",swfObj);
 
 					if (swfObj != null) {
-
-
 						if (swfObj.isVisible) {
-
 							this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","visible");
-
 						} else {
-
 							this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","hidden");
-
 						}
-
-
 					}
-
 				}
-
 			}
-
 		]]>
 	</method>
 
 	<dragstate name="dragger"/>
-
 </class>
 
 </library>

@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -97,6 +98,7 @@ public class RoomPanel extends BasePanel {
 	private static final String PARAM_WB_ID = "wbId";
 	public enum Action {
 		kick
+		, settings
 		, refresh
 	}
 	private final Room r;
@@ -114,7 +116,7 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
-				getMainPage().getChat().roomEnter(r, target);
+				getMainPanel().getChat().roomEnter(r, target);
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
@@ -184,6 +186,8 @@ public class RoomPanel extends BasePanel {
 		} else if (getRoomClients(r.getId()).size() >= r.getNumberOfPartizipants()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
+		} else if (r.getId().equals(WebSession.get().getRoomId())) {
+			// secureHash/invitationHash, already checked
 		} else {
 			boolean allowed = false;
 			String deniedMessage = null;
@@ -254,6 +258,11 @@ public class RoomPanel extends BasePanel {
 			});
 		} else {
 			add(new WebMarkupContainer("wait-for-recording").setVisible(false));
+		}
+		if (room.isVisible()) {
+			add(new NicknameDialog("nickname", this));
+		} else {
+			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
 	}
 	
@@ -354,10 +363,15 @@ public class RoomPanel extends BasePanel {
 			//We are setting initial rights here
 			Client c = getClient();
 			addUserToRoom(c.setRoomId(getRoom().getId()));
-			User u = getBean(UserDao.class).get(getUserId());
-			Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
-			if (rr != null) {
-				c.getRights().add(rr);
+			SOAPLogin soap = WebSession.get().getSoapLogin();
+			if (soap != null && soap.isModerator()) {
+				c.getRights().add(Right.superModerator);
+			} else {
+				User u = getBean(UserDao.class).get(getUserId());
+				Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+				if (rr != null) {
+					c.getRights().add(rr);
+				}
 			}
 		}
 	}
@@ -406,25 +420,30 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	@Override
-	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getTopControls().setVisible(false));
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		getBasePage().getHeader().setVisible(false);
+		getMainPanel().getTopControls().setVisible(false);
 		if (r.isHidden(RoomElement.Chat)) {
-			getMainPage().getChat().toggle(handler, false);
+			getMainPanel().getChat().toggle(handler, false);
 		}
-		handler.appendJavaScript("roomLoad();");
+		if (handler != null) {
+			handler.add(getBasePage().getHeader(), getMainPanel().getTopControls());
+			handler.appendJavaScript("roomLoad();");
+		}
+		return this;
 	}
-	
+
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
-		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getTopControls().setVisible(true));
+		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getTopControls().setVisible(true));
 		if (r.isHidden(RoomElement.Chat)) {
-			getMainPage().getChat().toggle(handler, true);
+			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("$(window).off('resize.openmeetings');");
-		RoomMenuPanel.roomExit(this);
-		getMainPage().getChat().roomExit(r, handler);
+		RoomMenuPanel.roomExit(getClient());
+		getMainPanel().getChat().roomExit(r, handler);
 	}
 
 	private static ResourceReference newResourceReference() {
@@ -500,7 +519,7 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	public Client getClient() {
-		return getMainPage().getClient();
+		return getMainPanel().getClient();
 	}
 
 	public boolean screenShareAllowed() {

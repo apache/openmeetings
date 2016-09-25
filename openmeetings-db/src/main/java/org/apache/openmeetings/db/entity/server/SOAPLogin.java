@@ -55,17 +55,14 @@ public class SOAPLogin implements Serializable {
 	@Column(name="use_date")
 	private Date useDate;
 	
-	@Column(name="becomemoderator")
-	private boolean becomemoderator;
+	@Column(name="moderator")
+	private boolean moderator;
 	
 	@Column(name="showaudiovideotest")
 	private boolean showAudioVideoTest;
 	
 	@Column(name="allow_same_url_multiple_times")
 	private boolean allowSameURLMultipleTimes;
-	
-	@Column(name="show_nick_name_dialog")
-	private boolean showNickNameDialog;
 	
 	@Column(name="client_url")
 	private String clientURL;
@@ -128,11 +125,11 @@ public class SOAPLogin implements Serializable {
 		this.useDate = useDate;
 	}
 	
-	public boolean isBecomemoderator() {
-		return becomemoderator;
+	public boolean isModerator() {
+		return moderator;
 	}
-	public void setBecomemoderator(boolean becomemoderator) {
-		this.becomemoderator = becomemoderator;
+	public void setModerator(boolean moderator) {
+		this.moderator = moderator;
 	}
 	
 	public boolean getShowAudioVideoTest() {
@@ -149,13 +146,6 @@ public class SOAPLogin implements Serializable {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
 
-	public boolean getShowNickNameDialog() {
-		return showNickNameDialog;
-	}
-	public void setShowNickNameDialog(boolean showNickNameDialog) {
-		this.showNickNameDialog = showNickNameDialog;
-	}
-	
 	public String getClientURL() {
 		return clientURL;
 	}

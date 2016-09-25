@@ -18,13 +18,23 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
+
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
@@ -86,14 +96,14 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Integer flvHeight;
 
-	@Column(name = "preview_image")
-	@Element(data = true, required = false)
-	private String previewImage;
-
 	@Column(name = "type")
 	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
+
+	// Not Mapped
+	@Transient
+	private List<FileItemLog> log;
 
 	public String getName() {
 		return name;
@@ -183,14 +193,6 @@ public abstract class FileItem implements IDataProviderEntity {
 		this.flvHeight = flvHeight;
 	}
 
-	public String getPreviewImage() {
-		return previewImage;
-	}
-
-	public void setPreviewImage(String previewImage) {
-		this.previewImage = previewImage;
-	}
-
 	public Type getType() {
 		return type;
 	}
@@ -199,14 +201,48 @@ public abstract class FileItem implements IDataProviderEntity {
 		this.type = type;
 	}
 
+	public List<FileItemLog> getLog() {
+		return log;
+	}
+
+	public void setLog(List<FileItemLog> log) {
+		this.log = log;
+	}
+
+	public String getFileName(String ext) {
+		return ext == null ? name : String.format("%s.%s", name, ext);
+	}
+
 	public File getFile() {
 		return getFile(null);
 	}
 
-	protected abstract File internalGetFile(String ext);
-	
 	public final File getFile(String ext) {
-		return internalGetFile(ext);
+		File f = null;
+		if (getHash() != null) {
+			File d = new File(getUploadFilesDir(), getHash());
+			switch (getType()) {
+				case WmlFile:
+					f = new File(getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
+					break;
+				case Image:
+					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
+					break;
+				case Recording:
+					f = new File(getStreamsHibernateDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
+					break;
+				case Video:
+					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
+					break;
+				case Presentation:
+					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
+					break;
+				case PollChart:
+				case Folder:
+				default:
+			}
+		}
+		return f;
 	}
 
 	public final boolean exists() {

@@ -41,7 +41,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.remote.ConferenceService;
+import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -91,7 +91,7 @@ public class UserWebService implements UserService {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private ConferenceService conferenceService;
+	private SessionManager sessionManager;
 
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
@@ -108,12 +108,8 @@ public class UserWebService implements UserService {
 				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}
 			
-			Sessiondata sd = sessionDao.create();
+			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
 			log.debug("Login user SID : " + sd.getSessionId());
-			if (!sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId())) {
-				return new ServiceResult(-35L, "invalid Session-Object", Type.ERROR);
-			}
-			
 			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
 			return new ServiceResult(oe.getCode() == null ? -1 : oe.getCode(), oe.getMessage(), Type.ERROR);
@@ -296,7 +292,6 @@ public class UserWebService implements UserService {
 				String hash = soapLoginDao.addSOAPLogin(sid, options.getRoomId(),
 						options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
 						options.getRecordingId(),
-						options.isShowNickNameDialog(),
 						"room", // LandingZone,
 						options.isAllowRecording()
 						);
@@ -352,7 +347,7 @@ public class UserWebService implements UserService {
 	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		Sessiondata sd = sessionDao.check(sid);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-			return conferenceService.getRoomClientsListByRoomId(roomId).size();
+			return sessionManager.getClientListByRoom(roomId).size();
 		}
 		return -1;
 	}

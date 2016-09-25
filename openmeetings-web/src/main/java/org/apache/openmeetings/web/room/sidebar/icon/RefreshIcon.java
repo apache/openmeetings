@@ -20,17 +20,15 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
 
-import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
-public class RefreshIcon extends RoomRightIcon {
+public class RefreshIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 	
 	public RefreshIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.audio, room);
+		super(id, client, room);
 		mainCssClass = "restart ";
 	}
 
@@ -53,10 +51,10 @@ public class RefreshIcon extends RoomRightIcon {
 	protected String getScript() {
 		return String.format("%s('%s', '%s');", FUNC_ACTION, Action.refresh.name(), client.getUid());
 	}
-	
+
 	@Override
-	public void update(IPartialPageRequestHandler handler) {
-		super.update(handler);
+	public void internalUpdate() {
+		super.internalUpdate();
 		setVisible(isClickable());
 	}
 }

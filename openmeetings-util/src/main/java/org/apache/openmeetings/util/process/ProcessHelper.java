@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.util.process;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -61,7 +62,7 @@ public class ProcessHelper {
 		private StreamWatcher(Process process, boolean isError) throws UnsupportedEncodingException {
 			output = new StringBuilder();
 			is = isError ? process.getErrorStream() : process.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+			br = new BufferedReader(new InputStreamReader(is, UTF_8));
 		}
 	
 		@Override
@@ -150,13 +151,13 @@ public class ProcessHelper {
 			try {
 				worker.join(timeout);
 				if (worker.exitCode != null) {
-					returnMap.setExitValue("" + worker.exitCode);
+					returnMap.setExitCode(worker.exitCode);
 					log.debug("exitVal: " + worker.exitCode);
 					returnMap.setError(errorWatcher.output.toString());
 				} else {
 					returnMap.setException("timeOut");
 					returnMap.setError(errorWatcher.output.toString());
-					returnMap.setExitValue("-1");
+					returnMap.setExitCode(-1);
 	
 					throw new TimeoutException();
 				}
@@ -167,25 +168,18 @@ public class ProcessHelper {
 				Thread.currentThread().interrupt();
 	
 				returnMap.setError(ex.getMessage());
-				returnMap.setExitValue("-1");
+				returnMap.setExitCode(-1);
 	
 				throw ex;
 			} finally {
 				proc.destroy();
 			}
 			
-		} catch (TimeoutException e) {
-			// Timeout exception is processed above
-			log.error("executeScript",e);
-			returnMap.setError(e.getMessage());
-			returnMap.setException(e.toString());
-			returnMap.setExitValue("-1");
 		} catch (Throwable t) {
-			// Any other exception is shown in debug window
-			log.error("executeScript",t);
+			log.error("executeScript", t);
 			returnMap.setError(t.getMessage());
 			returnMap.setException(t.toString());
-			returnMap.setExitValue("-1");
+			returnMap.setExitCode(-1);
 		}
 		
 		debugCommandEnd(process);

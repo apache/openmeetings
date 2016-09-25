@@ -114,12 +114,6 @@
 	<![CDATA[
 		//Make this view the upmost in the z-Index order
 		canvas.inner.bringToFront();
-		if (standalone) {
-			_titlebar.setAttribute('visible', false);
-			lz.Cursor.showHandCursor(false);
-			lz.Cursor.unlock();
-		}
-	
 		this.counterDelegate = new LzDelegate(this, "count");
 	
 		if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
@@ -635,7 +629,7 @@
 				var py = parent.y < 0 ? 5 : parent.y;
 				var maxWidth = Math.min(600, canvas.width - parent.x - 10)
 					, maxHeight = Math.min(500, canvas.height - py - 10)
-					, newWidth = maxWidth, newHeight = maxHeight;;
+					, newWidth = maxWidth, newHeight = maxHeight;
 				if (item.cam_width > 240) {
 					newWidth = maxWidth + item.cam_width - 240;
 				}
@@ -853,8 +847,9 @@
 	<simpleLabelButton fontsize="11" visible="${ parent.standalone }" labelid="144" width="160" x="${ parent.width-170 }" 
 			y="${ parent.height-50 }" height="28">
 		<handler name="onclick">
-			parent.cleanVideos();
+			//parent.cleanVideos();
 			this.parent.storelocaldata();
+			//new lz.labelerrorPopup(this.parent, {errorlabelid: 'save.success', labelid: '203'});
 		</handler>
 	</simpleLabelButton>
 </class>

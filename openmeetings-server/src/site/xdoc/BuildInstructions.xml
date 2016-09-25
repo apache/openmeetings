@@ -35,8 +35,8 @@
 			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
-					<li>Oracle JDK7</li>
-					<li>Apache Maven (minimum) 3.3.3</li>
+					<li>Oracle JDK8</li>
+					<li>Apache Maven (minimum) 3.3.9</li>
 					<li>
 						SVN Command line client (Subversion 1.7 required!)
 						<a href="http://subversion.apache.org/packages.html" target="_blank" rel="nofollow">http://subversion.apache.org/packages.html</a>
@@ -71,7 +71,7 @@ mvn install -P allModules -pl openmeetings-flash               # compiles a comp
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
-mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dold-backups.dwnd.skip=true -Dwicket.mode=DEVELOPMENT
+mvn clean install -P unpacked,mysql -DskipTests=true -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>

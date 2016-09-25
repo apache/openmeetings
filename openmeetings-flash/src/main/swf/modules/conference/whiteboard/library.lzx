@@ -19,18 +19,17 @@
   
 -->
 <library>
-	<!-- APL author sebawagner -->
+	<!-- BEGIN APL author sebawagner -->
 	<resource name="_boundingBoxPointerTR" src="resources/boundingBoxTR.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerTL" src="resources/boundingBoxTL.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUR" src="resources/boundingBoxUR.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerURNoGripper" src="resources/boundingBoxULNoGripper.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUL" src="resources/boundingBoxUL.png" />
-	<!-- APL author sebawagner -->
 	<resource name="pointer_whiteboard_rsc" src="resources/pointer.swf" />
+	<resource name="interview_record_start" src="resources/webstart_play.png" />
+	<resource name="interview_record_stop" src="resources/webstart_stop.png" />
+	<!-- END APL author sebawagner -->
+	
 	<!-- FamFam Icon Set -->
 	<resource name="bold" src="resources/text_bold.png" />
 	<!-- FamFam Icon Set -->
@@ -48,8 +47,8 @@
 	<include href="interviewVideoBox.lzx" />
 	<include href="interviewWhiteboard.lzx" />
 	<include href="basePropertyPanelWhiteboard.lzx" />
-    <include href="fixedFileExplorerWhiteBoard.lzx" />
-    <include href="fixedFileExplorerWhiteboardPanel.lzx" />
-    <include href="whiteboardMiniButton.lzx" />
-    <include href="whiteboardBarMenu.lzx" />
+	<include href="fixedFileExplorerWhiteBoard.lzx" />
+	<include href="fixedFileExplorerWhiteboardPanel.lzx" />
+	<include href="whiteboardMiniButton.lzx" />
+	<include href="whiteboardBarMenu.lzx" />
 </library>

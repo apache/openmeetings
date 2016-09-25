@@ -184,30 +184,38 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
+		String parentSid = (String)map.get("parentSid");
 		if (!Strings.isEmpty(securityCode)) {
 			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
+				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
 			}
 		}
-		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode)) {
+		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
+			log.warn("No UIDs are provided, client is rejected");
 			return rejectClient();
 		}
 		if ("networktest".equals(uid)) {
 			return true;
 		}
 
+		Client rcm = new Client();
 		Client parentClient = null;
 		//TODO add similar code for other connections
 		if (map.containsKey("screenClient")) {
-			String parentSid = (String)map.get("parentSid");
 			parentClient = sessionManager.getClientByPublicSID(parentSid, null);
 			if (parentClient == null) {
+				log.warn("Bad parent for screen-sharing client, client is rejected");
 				return rejectClient();
 			}
+			SessionVariablesUtil.setIsScreenClient(conn.getClient());
+			rcm.setUserId(parentClient.getUserId());
+			rcm.setScreenClient(true);
+			rcm.setPublicSID(UUID.randomUUID().toString());
+			rcm.setStreamPublishName(parentSid);
 		}
-		Client rcm = new Client();
 		rcm.setStreamid(conn.getClient().getId());
 		StringValue scn = StringValue.valueOf(conn.getScope().getName());
 		rcm.setScope(scn.toString());
@@ -215,6 +223,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		if (Long.MIN_VALUE != roomId) {
 			rcm.setRoomId(roomId);
 		} else if (!"hibernate".equals(scn.toString())) {
+			log.warn("Bad room specified, client is rejected");
 			return rejectClient();
 		}
 		rcm.setUserport(conn.getRemotePort());
@@ -222,7 +231,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
 		rcm.setNativeSsl(Boolean.TRUE.equals(connParams.get(NATIVE_SSL_PARAM)));
-		rcm.setPublicSID(uid);
+		if (!Strings.isEmpty(uid)) {
+			rcm.setPublicSID(uid);
+		}
 		rcm.setSecurityCode(securityCode);
 		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
 		if (rcm == null) {
@@ -234,17 +245,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		//TODO add similar code for other connections, merge with above block
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
-			String parentSid = parentClient.getPublicSID();
-			rcm.setRoomId(Long.valueOf(conn.getScope().getName()));
-			rcm.setScreenClient(true);
-			SessionVariablesUtil.setIsScreenClient(conn.getClient());
-			
-			rcm.setUserId(parentClient.getUserId());
+			User u = null;
 			Long userId = rcm.getUserId();
 			SessionVariablesUtil.setUserId(conn.getClient(), userId);
-
-			rcm.setStreamPublishName(parentSid);
-			User u = null;
 			if (userId != null) {
 				long _uid = userId.longValue();
 				u = userDao.get(_uid < 0 ? -_uid : _uid);
@@ -1391,7 +1394,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				type // 0
 				, url // urlname
 				, "--dummy--" // baseurl
-				, fi.getHash() // fileName //3
+				, fi.getName() // fileName //3
 				, "--dummy--" // moduleName //4
 				, "--dummy--" // parentPath //5
 				, "--dummy--" // room //6
@@ -1430,7 +1433,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				, size.x // 4: 416
 				, size.y // 5: 240
 				, 0 // 6: 1 // z-index 
-				, null // 7: null //TODO 
+				, fi.getHash() // 7: null //TODO 
 				, 0 // 8: 0 //TODO // counter
 				, 0 // 9: 0 //TODO // x
 				, 0 // 10: 0 //TODO // y

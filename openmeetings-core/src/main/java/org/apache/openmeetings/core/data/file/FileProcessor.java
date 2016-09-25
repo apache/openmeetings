@@ -18,14 +18,18 @@
  */
 package org.apache.openmeetings.core.data.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadTempFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.transaction.util.FileHelper;
@@ -72,7 +76,6 @@ public class FileProcessor {
 		String hash = UUID.randomUUID().toString();
 
 		String ext = getExt(f);
-		String extDot = String.format(".%s", ext);
 		log.debug("file extension: " + ext);
 		StoredFile storedFile = new StoredFile(hash, ext); 
 
@@ -94,12 +97,6 @@ public class FileProcessor {
 			returnError.addItem("wrongType", new ConverterProcessResult("The file type cannot be converted"));
 			return returnError;
 		}
-
-		File completeName = new File(isAsIs ? getUploadFilesDir() : getUploadTempFilesDir(), hash + extDot);
-		log.debug("writing file to: " + completeName);
-		FileHelper.copy(is, completeName);
-		is.close();
-
 		if (isImage) {
 			f.setType(Type.Image);
 		} else if (isVideo) {
@@ -113,25 +110,32 @@ public class FileProcessor {
 
 		f = fileDao.update(f);
 		log.debug("fileId: " + f.getId());
+
+		File file = f.getFile(ext);
+		log.debug("writing file to: " + file);
+		if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+			returnError.addItem("No parent", new ConverterProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
+			return returnError;
+		}
+		FileHelper.copy(is, file);
+		is.close();
+
 		
 		log.debug("canBeConverted: " + canBeConverted);
-		if (canBeConverted) {
+		if (canBeConverted || isPdf) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(hash, "files", true, completeName);
-		} else if (isPdf) {
-			// convert to thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(hash, "files", false, completeName);
+			returnError = generatePDF.convertPDF(f, ext);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
 		} else if (isImage && !isAsIs) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(hash, extDot, "files");
+			returnError = generateImage.convertImage(f, ext);
 		} else if (isAsIs) {
-			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
+			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, file, 50);
 			returnError.addItem("processThumb", processThumb);
 		} else if (isVideo) {
-			List<ConverterProcessResult> returnList = flvExplorerConverter.startConversion(f.getId(), completeName.getCanonicalPath());
+			List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
 			
 			int i = 0;
 			for (ConverterProcessResult returnMap : returnList) {
@@ -141,7 +145,7 @@ public class FileProcessor {
 		
 		// has to happen at the end, otherwise it will be overwritten
 		//cause the variable is new initialized
-		returnError.setCompleteName(completeName.getName());
+		returnError.setCompleteName(file.getName());
 		returnError.setFileItemId(f.getId());
 		
 		return returnError;
