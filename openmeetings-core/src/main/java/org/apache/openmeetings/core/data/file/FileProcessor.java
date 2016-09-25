@@ -18,18 +18,13 @@
  */
 package org.apache.openmeetings.core.data.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.transaction.util.FileHelper;
@@ -62,11 +57,6 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
-	public static String getExt(FileExplorerItem f) {
-		int dotidx = f.getName().lastIndexOf('.');
-		return dotidx < 0 ? "" : f.getName().substring(dotidx + 1).toLowerCase();
-	}
-	
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(Long userId, FileExplorerItem f, InputStream is) throws Exception {
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
@@ -75,7 +65,7 @@ public class FileProcessor {
 		// foreign characters and duplicates
 		String hash = UUID.randomUUID().toString();
 
-		String ext = getExt(f);
+		String ext = getFileExt(f.getName());
 		log.debug("file extension: " + ext);
 		StoredFile storedFile = new StoredFile(hash, ext); 
 
