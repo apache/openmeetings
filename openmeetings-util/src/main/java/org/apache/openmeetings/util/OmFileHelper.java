@@ -316,4 +316,14 @@ public class OmFileHelper {
 			log.error("[copyfile(File, File)]", e);
 		}
 	}
+
+	public static String getFileName(String name) {
+		int dotidx = name.lastIndexOf('.');
+		return dotidx < 0 ? "" : name.substring(0, dotidx);
+	}
+
+	public static String getFileExt(String name) {
+		int dotidx = name.lastIndexOf('.');
+		return dotidx < 0 ? "" : name.substring(dotidx + 1).toLowerCase();
+	}
 }
