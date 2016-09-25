@@ -23,11 +23,18 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
+import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
+import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -163,13 +170,14 @@ public class BackupImport {
 	@Autowired
 	private RoomGroupDao roomGroupDao;
 
-	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> groupMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> appointmentsMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> roomsMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> messageFoldersMap = new HashMap<Long, Long>();
-	private final Map<Long, Long> userContactsMap = new HashMap<Long, Long>();
-	private final Map<String, Integer> userEmailMap = new HashMap<String, Integer>();
+	private final Map<Long, Long> usersMap = new HashMap<>();
+	private final Map<Long, Long> groupMap = new HashMap<>();
+	private final Map<Long, Long> appointmentsMap = new HashMap<>();
+	private final Map<Long, Long> roomsMap = new HashMap<>();
+	private final Map<Long, Long> messageFoldersMap = new HashMap<>();
+	private final Map<Long, Long> userContactsMap = new HashMap<>();
+	private final Map<String, Integer> userEmailMap = new HashMap<>();
+	private final Map<String, String> fileMap = new HashMap<>();
 
 	private enum Maps {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
@@ -223,6 +231,7 @@ public class BackupImport {
 		messageFoldersMap.clear();
 		userContactsMap.clear();
 		userEmailMap.clear();
+		fileMap.clear();
 		messageFoldersMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 		messageFoldersMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
 		messageFoldersMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
@@ -495,21 +504,30 @@ public class BackupImport {
 		 */
 		{
 			List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
-			for (Recording fr : list) {
-				fr.setId(null);
-				if (fr.getRoomId() != null) {
-					fr.setRoomId(roomsMap.get(fr.getRoomId()));
+			for (Recording r : list) {
+				r.setId(null);
+				if (r.getRoomId() != null) {
+					r.setRoomId(roomsMap.get(r.getRoomId()));
 				}
-				if (fr.getOwnerId() != null) {
-					fr.setOwnerId(usersMap.get(fr.getOwnerId()));
+				if (r.getOwnerId() != null) {
+					r.setOwnerId(usersMap.get(r.getOwnerId()));
 				}
-				if (fr.getMetaData() != null) {
-					for (RecordingMetaData meta : fr.getMetaData()) {
+				if (r.getMetaData() != null) {
+					for (RecordingMetaData meta : r.getMetaData()) {
 						meta.setId(null);
-						meta.setRecording(fr);
+						meta.setRecording(r);
 					}
 				}
-				recordingDao.update(fr);
+				if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
+					String name = getFileName(r.getHash());
+					r.setHash(UUID.randomUUID().toString());
+					fileMap.put(String.format("%s.%s", name, EXTENSION_FLV), String.format("%s.%s", r.getHash(), EXTENSION_FLV));
+					fileMap.put(String.format("%s.%s", name, EXTENSION_AVI), String.format("%s.%s", r.getHash(), EXTENSION_AVI));
+					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
+					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
+					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_OGG), String.format("%s.%s", r.getHash(), EXTENSION_OGG));
+				}
+				recordingDao.update(r);
 			}
 		}
 
@@ -775,7 +793,11 @@ public class BackupImport {
 					//Some hashes were stored with file extension
 					int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
 					if (idx > -1) {
-						f.setHash(f.getHash().substring(0, idx));
+						String hash = f.getHash().substring(0, idx);
+						if (FileItem.Type.Image == f.getType()) {
+							fileMap.put(f.getHash(), String.format("%s/%s", hash, f.getHash()));
+						}
+						f.setHash(hash);
 					}
 					list.add(f);
 					item = listNode.getNext();
