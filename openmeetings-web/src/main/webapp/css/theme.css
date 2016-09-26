@@ -258,7 +258,7 @@ html, body {
 	line-height: 20px;
 	color: transparent;
 }
-.trash-toolbar .fileitem {
+.trash-toolbar .fileitem, .trash-toolbar .recorditem {
 	display: none;
 }
 .trash-toolbar-hover {
