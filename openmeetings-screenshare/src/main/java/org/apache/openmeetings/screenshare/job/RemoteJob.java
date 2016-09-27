@@ -189,7 +189,7 @@ public class RemoteJob implements Job {
 		}
 	}
 
-	private Point getCoordinates(Map<String, Object> obj) {
+	private static Point getCoordinates(Map<String, Object> obj) {
 		float scaleFactorX = spinnerWidth / (Ampl_factor * resizeX);
 		float scaleFactorY = spinnerHeight / (Ampl_factor * resizeY);
 
