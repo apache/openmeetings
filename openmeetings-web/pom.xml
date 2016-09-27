@@ -293,6 +293,7 @@
 										<versionRange>[2.8,)</versionRange>
 										<goals>
 											<goal>copy-dependencies</goal>
+											<goal>copy</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
