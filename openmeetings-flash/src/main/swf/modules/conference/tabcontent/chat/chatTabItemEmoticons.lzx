@@ -60,7 +60,7 @@
 
 		var tFormat:TextFormat = new TextFormat();
 		tFormat.leading = 4;
-		tFormat.size = 11;
+		tFormat.size = 14;
 		var items = messageObj;
 		if ($debug) Debug.write("items :: ", items, this.leading);
 		var t = "";
