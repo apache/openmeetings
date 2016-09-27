@@ -119,7 +119,7 @@ public class OmKeyEvent {
 		log.debug("sequence:: shift {}, ch {}, orig {} -> key {}({}), map {}", shift, ch == 0 ? ' ' : ch, inKey, key, Integer.toHexString(key), _key);
 	}
 
-	private int getVowel(char ch) {
+	private static int getVowel(char ch) {
 		int vowel = ch;
 		switch(toUpperCase(ch)) {
 			case 'Ö':
