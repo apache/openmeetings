@@ -8,8 +8,8 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -40,16 +40,13 @@
 		canvas.currentClient.canVideo = value;
 	</method>
 	
-	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
-		if($debug) Debug.info("createEditRecordStream,", syncUpdate, isInterview, interviewPodId, canvas.currentClient);
-		if (canvas.inner.editRecordStream != null)
-			canvas.inner.editRecordStream.destroy();
-			new lz.editRecordStreamSWF10(canvas.inner, {
-					name:"editRecordStream",
-					isSyncUpdate:syncUpdate,
-					isInterview:isInterview,
-					interviewPodId:interviewPodId
-				});
+	<method name="createEditRecordStream" args="isInterview, standalone, isSyncUpdate">
+		if($debug) Debug.info("createEditRecordStream,", isInterview, standalone, canvas.currentClient);
+		new lz.editRecordStreamSWF10(canvas, {
+				isInterview: isInterview,
+				standalone: standalone,
+				isSyncUpdate: isSyncUpdate
+			});
 		return;
 	</method>
 
@@ -133,9 +130,8 @@
 				vidContainer.updateAVSettingsSymbol(object);
 				if (object.micMuted) {
 					vidContainer.setMicMuted(object.micMuted);
-		   	 	}
+				}
 			}
-			
 			
 			if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
 			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
@@ -152,14 +148,14 @@
 	
 	<method name="getVideoObjectByPublicSID" args="publicSID">
 		<![CDATA[
-			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-			for (var i=0;i<this.subviews.length;i++){
-				//if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
-				if (this.subviews[i].publicSID==publicSID){
+			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ", publicSID);
+			for (var i = 0; i < this.subviews.length; ++i) {
+				//if ($debug) Debug.write("this.subviews[i].publicSID ", this.subviews[i].publicSID);
+				if (this.subviews[i].publicSID == publicSID) {
 					return this.subviews[i];
 				}
 			}
-			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ", publicSID);
 			return null;
 		]]>
 	</method>
@@ -299,10 +295,8 @@
 		if (obj != null) {
 			obj.resetValues();
 		}
-		if (canvas.publicSID == publicSID && canvas.inner.editRecordStream != null) {
-			canvas.inner.editRecordStream.cleanVideos();
-			canvas.inner.editRecordStream.destroy();
-			canvas.inner.editRecordStream = null;
+		if (canvas.publicSID == publicSID && canvas.editRecordStream != null) {
+			canvas.editRecordStream.destroy();
 		}
 		return obj;
 	]]>
@@ -406,8 +400,8 @@
 			}
 			this.subviews[0].destroy();
 		}
-		if (canvas.inner.editRecordStream != null) {
-			canvas.inner.editRecordStream.destroy();
+		if (canvas.editRecordStream != null) {
+			canvas.editRecordStream.destroy();
 		}
 		return;
 	]]>
@@ -417,19 +411,6 @@
 		<![CDATA[
 			if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
 			canvas.setAttribute("isAllowedToGiveExclusiveAudio",canGiveAudio);
-			return;
-		]]>
-	</method>
-
-	<!---
-		Shows the window with device settings
-	-->
-	<method name="changeDevice">
-		<![CDATA[
-			if ($debug) Debug.write("changeDevice");
-			new lz.changeDevice(canvas.inner, {
-									name:"changeDeviceDialog"
-								});
 			return;
 		]]>
 	</method>
@@ -646,7 +627,7 @@
 			canvas.screenSharingDialogContainer.destroy();
 			canvas.screenSharingDialogContainer = null;
 		}
-		parent._videoComponent.clearAll();
+		canvas.commonVideoViewContent.clearAll();
 	]]>
 	</method>
 	

@@ -16,35 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar;
+package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
 import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.sidebar.icon.SettingsIcon;
-import org.apache.openmeetings.web.room.sidebar.icon.activity.CamActivityIcon;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
-public class SelfIconsPanel extends ClientIconsPanel {
+public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
-	private final SettingsIcon settings;
-	private final CamActivityIcon cam;
 
-	public SelfIconsPanel(String id, Client client, RoomPanel room) {
-		super(id, client, room);
-		add(settings = new SettingsIcon("settings", client, room)
-			, cam = new CamActivityIcon("cam", client, room));
+	public CamActivityIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Activity.broadcastVideo, room);
+		mainCssClass = "activity cam ";
 	}
 
 	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		update(null);
+	protected String getTitle() {
+		return getString("687");
 	}
 
 	@Override
-	public void update(IPartialPageRequestHandler handler) {
-		super.update(handler);
-		settings.update(handler);
-		cam.update(handler);
+	protected boolean isClickable() {
+		return true;
 	}
+
 }

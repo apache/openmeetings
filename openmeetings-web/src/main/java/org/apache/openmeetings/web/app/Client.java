@@ -39,10 +39,11 @@ public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
-		broadcast
+		broadcastAudio //sends Audio to the room
+		, broadcastVideo //sends Video to the room
 		, share
 		, record
-		, publish
+		, publish //sends A/V to external server
 		, muted
 		, exclusive
 	}
