@@ -269,9 +269,11 @@
 	<method name="_stop">
 		if ($debug) Debug.write("STOP: ",this.mode,this._ns);
 		//Stop NetStream
-		if (this._ns==null) return;
+		if (this._ns == null) return;
 		this.camera = null;
 		this.micro = null;
+		this._ns.attachCamera(null);
+		this._ns.attachAudio(null);
 		if (this.mode == "play") {
 			this.soundRefMC = null;
 			this.soundRef = null;

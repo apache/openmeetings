@@ -89,10 +89,13 @@
 
 	<method name="clear">
 		if ($debug) Debug.write("Select unattach :3");
-		var vid = this._getflashvideo();
-		vid.attachNetStream(null);
-		vid.attachCamera(null);
-		this.__LZvideo.clear();
+		if (this.__LZvideo != null) {
+			this.__LZvideo.attachCamera(null);
+			this.__LZvideo.attachNetStream(null);
+			this.__LZvideo.clear();
+			this.sprite.removeChild(this.__LZvideo);
+			this.__LZvideo = null;
+		}
 		if ($debug) Debug.write("Select unattach : 4");
 	</method>
 </class>

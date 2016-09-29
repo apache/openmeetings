@@ -225,6 +225,12 @@
 .settings.ui-icon {
 	background-image: url(images/settings.png);
 }
+.activity.cam.ui-icon {
+	background-image: url(images/webcam_enable.png);
+}
+.activity.cam.enabled.ui-icon {
+	background-image: url(images/webcam_disable.png);
+}
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }

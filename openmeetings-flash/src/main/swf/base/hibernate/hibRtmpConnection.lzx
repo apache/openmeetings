@@ -836,6 +836,7 @@
 			if ($debug) Debug.write("clientUpdated changes ###### ");
 			if (client.publicSID == canvas.publicSID) {
 				if ($debug) Debug.write("Its about You ", client);
+				canvas.currentClient = client;
 				canvas.setAttribute("isAllowedToDraw", client.canDraw);
 				canvas.setAttribute("isAllowedToScreenShare", client.canShare);
 				canvas.setAttribute("isAllowedToRemoteControl", client.canRemote);
@@ -849,13 +850,11 @@
 					if (canvas.thishib.modus == "interview") {
 						canvas._drawarea.newInterviewStarting(client);
 					} else {
-						canvas.commonVideoViewContent.createEditRecordStream(false, false, -1);
+						canvas.commonVideoViewContent.createEditRecordStream(false, false, false);
 					}
 					canvas.setAttribute("lastBroadCastingUser", client);
 				} else {
-					if (canvas.inner.editRecordStream != null) {
-						canvas.inner.editRecordStream.destroy();
-					}
+					canvas.commonVideoViewContent.removeVideoByUser(canvas.publicSID);
 				}
 			}
 		]]>
@@ -931,7 +930,7 @@
 		<method name="sendVarsToMessageWithClient" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("sendVarsToMessageWithClient : ", value,value.message, value.message[0]);
+			if ($debug) Debug.write("sendVarsToMessageWithClient : ", value, value.message, value.message[0]);
 			if (value[0] == 'kick' || value.message[0] == 'kick') {
 				if ($debug) Debug.write("!!!!!! THIS USER GOING TO BE KICKED");
 				this.showKickMessage = true;

@@ -985,6 +985,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return -1L;
 	}
 
+	public static long nextBroadCastId() {
+		return broadCastCounter.getAndIncrement();
+	}
+
 	/**
 	 * there will be set an attribute called "broadCastCounter" this is the name
 	 * this user will publish his stream
@@ -997,7 +1001,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client client = sessionManager.getClientByStreamId(streamid, null);
-			client.setBroadCastID(broadCastCounter.getAndIncrement());
+			client.setBroadCastID(nextBroadCastId());
 			sessionManager.updateClientByStreamId(streamid, client, false, null);
 			return client.getBroadCastID();
 		} catch (Exception err) {
@@ -1009,49 +1013,37 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	/**
 	 * this must be set _after_ the Video/Audio-Settings have been chosen (see
 	 * editrecordstream.lzx) but _before_ anything else happens, it cannot be
-	 * applied _after_ the stream has started! avsettings can be: av - video and
-	 * audio a - audio only v - video only n - no a/v only static image
+	 * applied _after_ the stream has started! 
+	 * avsettings can be: 
+	 * 		av - video and audio
+	 * 		a - audio only
+	 * 		v - video only
+	 * 		n - no a/v only static image
 	 * furthermore
 	 * 
 	 * @param avsettings
-	 * @param newMessage
 	 * @param vWidth
 	 * @param vHeight
-	 * @param roomId
-	 * @param publicSID
-	 * @param interviewPodId
+	 * 
 	 * @return RoomClient being updated in case of no errors, null otherwise
 	 */
-	public Client setUserAVSettings(String avsettings,
-			Object newMessage, Integer vWidth, Integer vHeight, 
-			long roomId, String publicSID, Integer interviewPodId) {
+	public Client setUserAVSettings(String avsettings, Integer vWidth, Integer vHeight) {
 		try {
-			IConnection current = Red5.getConnectionLocal();
-			IClient c = current.getClient();
-			String streamid = c.getId();
-			log.debug("-----------  setUserAVSettings {} {} {}", new Object[] {streamid, publicSID, avsettings, newMessage});
-			Client parentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			String streamid = Red5.getConnectionLocal().getClient().getId();
+			log.debug("-----------  setUserAVSettings {} {} {}", new Object[] {streamid, avsettings});
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			if (parentClient == null || currentClient == null) {
+			if (currentClient == null) {
 				log.warn("Failed to find appropriate clients");
 				return null;
 			}
 			currentClient.setAvsettings(avsettings);
-			currentClient.setRoomId(roomId);
-			currentClient.setPublicSID(publicSID);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
-			currentClient.setInterviewPodId(interviewPodId);
-			currentClient.setUserId(parentClient.getUserId());
-			currentClient.setLastname(parentClient.getLastname());
-			currentClient.setFirstname(parentClient.getFirstname());
-			currentClient.setPicture_uri(parentClient.getPicture_uri());
 			sessionManager.updateAVClientByStreamId(streamid, currentClient, null);
-			SessionVariablesUtil.initClient(c, publicSID);
 
-			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			HashMap<String, Object> hsm = new HashMap<>();
 			hsm.put("client", currentClient);
-			hsm.put("message", newMessage);
+			hsm.put("message", new Object[]{"avsettings", 0, avsettings});
 
 			sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true);
 			return currentClient;

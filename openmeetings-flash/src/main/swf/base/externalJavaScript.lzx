@@ -32,17 +32,8 @@
 	ExternalInterface.addCallback("getBrowserInfoCallback", getBrowserInfoCallback);
 	ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
 	ExternalInterface.addCallback("showAvSettings", function(isInterview) {
-		//FIXME TODO unify
-		if (canvas.inner.editRecordStream != null) {
-			canvas.inner.editRecordStream.destroy();
-			new lz.editRecordStreamSWF10(canvas.inner, {
-					name: "editRecordStream"
-					, isSyncUpdate: true
-					, isInterview: isInterview
-					, standalone: true
-					//, interviewPodId: interviewPodId
-				});
-		}
+		if ($debug) Debug.write("showAvSettings ", isInterview);
+		canvas.commonVideoViewContent.createEditRecordStream(isInterview, true, false);
 	});
 	
 	var redirectToUrlReturnObject = null;

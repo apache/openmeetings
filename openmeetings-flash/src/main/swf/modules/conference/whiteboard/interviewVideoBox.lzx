@@ -77,6 +77,7 @@
 		if ($debug) Debug.write("startInterView :: ");
 		var tx = this.getAttributeRelative("x",canvas);
 		var ty = this.getAttributeRelative("y",canvas);
+		//TODO
 		canvas.commonVideoViewContent.createEditRecordStream(false, true, this.interviewPodId);
 	</method>
 
