@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -49,6 +50,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -232,8 +234,24 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 			rcl.setIsMod(client.hasRight(Right.moderator));
 			rcl.setIsBroadcasting(client.hasRight(Right.audio));
-			rcl.setCanVideo(client.hasRight(Right.video));
+			rcl.setCanVideo(client.hasRight(Right.video) && client.hasActivity(Activity.broadcastVideo));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
+			if (client.hasActivity(Activity.broadcastAudio) || client.hasActivity(Activity.broadcastVideo)) {
+				rcl.setIsBroadcasting(true);
+				rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
+				StringBuilder sb = new StringBuilder();
+				if (client.hasActivity(Activity.broadcastAudio)) {
+					sb.append('a');
+				}
+				if (client.hasActivity(Activity.broadcastVideo)) {
+					sb.append('v');
+				}
+				rcl.setAvsettings(sb.toString());
+			} else {
+				rcl.setAvsettings("n");
+				rcl.setIsBroadcasting(false);
+				rcl.setBroadCastID(-1L);
+			}
 		}
 		return rcl;
 	}

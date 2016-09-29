@@ -27,9 +27,11 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -55,10 +57,13 @@ public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, webAppRootKey);
 	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
+	public static final String FUNC_TOGGLE_ACTIVITY = "toggleActivity";
 	public static final String FUNC_ACTION = "roomAction";
 	public static final String PARAM_ACTION = "action";
+	public static final String PARAM_ACTIVITY = "activity";
 	public static final String PARAM_RIGHT = "right";
 	public static final String PARAM_UID = "uid";
+	public static final String PARAM_POD = "pod";
 	private final RoomPanel room;
 	private final TabbedPanel tabs;
 	private final ITab userTab;
@@ -67,6 +72,11 @@ public class RoomSidebar extends Panel {
 	private final RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
 	private boolean showFiles;
+	public enum Pod {
+		none
+		, right
+		, left
+	};
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
 
@@ -115,7 +125,35 @@ public class RoomSidebar extends Panel {
 					room.requestRight(target, right);
 				}
 			} catch (Exception e) {
-				log.error("Unexpected exception while processing activity action", e);
+				log.error("Unexpected exception while toggle 'right'", e);
+			}
+		}
+	};
+	private final AbstractDefaultAjaxBehavior toggleActivity = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			try {
+				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				if (Strings.isEmpty(uid)) {
+					return;
+				}
+				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString()); 
+				Client c = getOnlineClient(uid);
+				if (c == null) {
+					return;
+				}
+				if (activityAllowed(c, a, room.getRoom())) {
+					if (c.hasActivity(a)) {
+						c.getActivities().remove(a);
+					} else {
+						c.getActivities().add(a);
+					}
+					room.broadcast(target, c);
+				}
+			} catch (Exception e) {
+				log.error("Unexpected exception while toggle 'activity'", e);
 			}
 		}
 	};
@@ -165,13 +203,14 @@ public class RoomSidebar extends Panel {
 		roomFiles = new RoomFilePanel("tree", room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room);
 		add(upload = new UploadDialog("upload", room, roomFiles));
-		add(toggleRight, action);
+		add(toggleRight, toggleActivity, action);
 	}
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_TOGGLE_RIGHT)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD)), FUNC_TOGGLE_ACTIVITY)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_ACTION, action, explicit(PARAM_ACTION), explicit(PARAM_UID)), FUNC_ACTION)));
 	}
 	
@@ -222,5 +261,26 @@ public class RoomSidebar extends Panel {
 	
 	public void showUpload(IPartialPageRequestHandler handler) {
 		upload.open(handler);
+	}
+
+	public static boolean activityAllowed(Client c, Activity a, Room room) {
+		switch (a) {
+			case broadcastVideo:
+				{
+					if (room.isAudioOnly()) {
+						return false;
+					}
+					if (c.hasRight(Right.moderator)) {
+						return true;
+					}
+					for (Right r : new Right[]{Right.video}) {
+						if (!c.hasRight(r)) {
+							return false;
+						}
+					}
+				}
+				break;
+		}
+		return false;
 	}
 }

@@ -42,6 +42,6 @@ public class SettingsIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("$('#lzapp').showAvSettings(%s);", Room.Type.interview == room.getRoom().getType());
+		return String.format("document.getElementById('lzapp').showAvSettings(%s);", Room.Type.interview == room.getRoom().getType());
 	}
 }

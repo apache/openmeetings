@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -29,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -283,14 +285,31 @@ public class RoomPanel extends BasePanel {
 						}
 						break;
 					case recordingStoped:
-						//TODO check recordingUser == ((TextRoomMessage)m).getText();
-						recordingUser = null;
-						menu.update(handler);
+						{
+							String uid = ((TextRoomMessage)m).getText();
+							if (Strings.isEmpty(uid) || !uid.equals(recordingUser)) {
+								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid, recordingUser);
+							}
+							recordingUser = null;
+							menu.update(handler);
+							Client c = getOnlineClient(uid);
+							if (c == null) {
+								log.error("Not existing user has stopped recording {} !!!!", uid);
+								return;
+							}
+							c.getActivities().remove(Client.Activity.record);
+						}
 						break;
 					case recordingStarted:
 						{
 							recordingUser = ((TextRoomMessage)m).getText();
 							menu.update(handler);
+							Client c = getOnlineClient(recordingUser);
+							if (c == null) {
+								log.error("Not existing user has started recording {} !!!!", recordingUser);
+								return;
+							}
+							c.getActivities().add(Client.Activity.record);
 						}
 						break;
 					case sharingStoped:
