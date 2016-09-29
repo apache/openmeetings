@@ -18,30 +18,26 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
-import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
+import com.googlecode.wicket.jquery.ui.widget.dialog.*;
+import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
+import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
@@ -54,36 +50,20 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.model.*;
 import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.threeten.bp.LocalDateTime;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import java.util.*;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -152,8 +132,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(IPartialPageRequestHandler handler) {
-		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
-		calendarPanel.refresh(handler);		
+		Appointment a = getModelObject();
+		getBean(AppointmentDao.class).delete(a, getUserId());
+		calendarPanel.refresh(handler);
+		if(a.getCalendar() != null && a.getHref() != null)
+			calendarPanel.updatedeleteAppointment(handler, CalendarDialog.DIALOG_TYPE.DELETE_APPOINTMENT, a);
 	}
 
 	@Override
@@ -228,7 +211,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		a.setMeetingMembers(attendees);
 		a.setStart(getDate(form.start.getModelObject()));
 		a.setEnd(getDate(form.end.getModelObject()));
+		a.setCalendar(form.cals.getModelObject());
 		getBean(AppointmentDao.class).update(a, getUserId());
+		if(a.getCalendar() != null)
+			calendarPanel.updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 		target.add(feedback);
 		calendarPanel.refresh(target);
 	}
@@ -259,6 +245,16 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				, Model.of(new Room())
 				, getRoomList()
 				, new ChoiceRenderer<Room>("name", "id"));
+		private DropDownChoice<OmCalendar> cals = new DropDownChoice<OmCalendar>(
+				"calendar",
+				new LoadableDetachableModel<List<? extends OmCalendar>>() {
+					@Override
+					protected List<? extends OmCalendar> load() {
+						return getCalendarList();
+					}
+				},
+				new ChoiceRenderer<OmCalendar>("title", "id")
+		);
 
 		private Room createAppRoom() {
 			Room r = new Room();
@@ -300,7 +296,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
 					a.setEnd(end.getTime());
 				}
-			}
+				cals.setEnabled(true);
+			} else
+				cals.setEnabled(false);
+
 			attendeesModel.setObject(new ArrayList<User>());
 			if (a.getMeetingMembers() != null) {
 				for (MeetingMember mm : a.getMeetingMembers()) {
@@ -383,6 +382,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);
+			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
 		}
 		
 		private List<Room> getRoomList() {
@@ -397,6 +397,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				result.add(getModelObject().getRoom());
 			}
 			return result;
+		}
+
+		private List<OmCalendar> getCalendarList(){
+			return getBean(AppointmentManager.class).getCalendars(getUserId());
 		}
 		
 		@Override
