@@ -20,11 +20,19 @@
 -->
 <library>
     
-<class name="participants" extends="baseRoomInnerList" 
-       height="$once{ parent.height-34 }">
+<class name="participants" extends="baseRoomInnerList" height="$once{ parent.height-34 }">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.utils.*;
+			</passthrough>
+		</when>
+	</switch>
 
     <!--- holds a references to the videoview which is broadcasting -->
     <attribute name="broadCastViewRef" value="null" />
+	<attribute name="delayedCreateVideoId" type="number" value="-1"/>
+	<attribute name="delayedCheckRecordingId" type="number" value="-1"/>
     
     <handler name="oninit">
         //set modus
@@ -71,11 +79,10 @@
     	//it can happen that if you click to exit the room the views are not
     	//not cleaned up yet and you receive this event from the LocalConnection
     	if (this["getRoomModeratorsByRoomId"]) {
+			if ($debug) Debug.write("loadModerators", new Date());
             this.getRoomModeratorsByRoomId.doCall();
     	}
     </method>
-
-
 
     <!---
         Returns a list of all moderators of the current room and parses 
@@ -87,7 +94,7 @@
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
-                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ", value);
                 canvas.becomeSuperModerator = false;
                 
                 parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
@@ -140,35 +147,50 @@
                 canvas.thishib.showFullMessage = true;
                 canvas.thishib.disconnect();
             }
-            
-            if (roomStatus.browserStatus.browserInited) {
-                var tObj = new Object();
-                tObj[0] = "newBrowserURL";
-                tObj[1] = roomStatus.browserStatus.currentURL;
-                canvas.startBrowser(tObj);
-            }
-            
+
             var value = roomStatus.clientList;
-            
+			parent.delayedCheckRecording();
+
             for (var i = 0; i < value.length; ++i){
                 if ( value[i].streamid == canvas.streamid ) {
                     canvas.isAllowedToDraw = value[i].canDraw;
                 }
                 //if ($debug) Debug.write("getClientListScope value: ",value[i]);
-                this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
-                              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
+                parent._participants.addItem(value[i]);
             }
-            
-            //this content must be inited _after_ setting the default values
-            canvas.thishib.getCurrentModeratorList.doCall(); 
-            
-            canvas.thishib.checkLzRecording.doCall();
-            if (canvas._currentChatPanel.visible) {
+
+			//this content must be inited _after_ setting the default values
+			canvas.thishib.getCurrentModeratorList.doCall(); 
+
+			parent.delayedCreateVideo(value);
+			if (canvas._currentChatPanel.visible) {
 				canvas._currentChatPanel.toggleopen();
 			}
 		]]>
-        </handler>  
-    </netRemoteCallHib>
+		</handler>  
+	</netRemoteCallHib>
+
+	<method name="delayedCheckRecording">
+		delayedCheckRecordingId = setTimeout(checkRecording, 1);
+	</method>
+
+	<method name="checkRecording">
+		clearTimeout(delayedCheckRecordingId);
+		canvas.thishib.checkLzRecording.doCall();
+	</method>
+
+	<method name="delayedCreateVideo" args="clients">
+		delayedCreateVideoId = setTimeout(batchCreateVideo, 100, clients);
+	</method>
+
+	<method name="batchCreateVideo" args="clients">
+		if ($debug) Debug.write("interval 0 :: ", clients.length);
+		if (delayedCreateVideoId > -1) {
+			clearTimeout(delayedCreateVideoId);
+			delayedCreateVideoId = -1;
+		}
+		canvas.commonVideoViewContent.batchCreateVideo(canvas.streamid, clients);
+	</method>
 
     <!---
         invoked if another client logs into the room 
@@ -196,10 +218,10 @@
     
     <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
         <![CDATA[
-            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,object);
+            if ($debug) Debug.write("initializeStreams addItem: ", object);
             
             //Do init only in case this stream is NOT the same as we are
-            if (streamid!=canvas.streamid){
+            if (streamid != canvas.streamid){
             	//if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
                 canvas.commonVideoViewContent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
             }

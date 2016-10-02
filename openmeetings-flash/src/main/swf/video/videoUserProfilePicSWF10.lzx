@@ -26,10 +26,7 @@
 		
 	<handler name="oninit">
 	<![CDATA[
-		var extra = value.sipTransport ? "&parentPath=../default&moduleName=videoconf1"
-			: '&parentPath=&moduleName=remoteuserprofile&remoteUserid='+this.value.userId;
-
-		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri, extra));
+		this._userpic.setAttribute('src', canvas.getPictureUrl(value.userId, value.picture_uri));
 	]]>
 	</handler>	
 	<omImage name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />

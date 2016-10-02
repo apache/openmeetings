@@ -34,7 +34,7 @@
        bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" y="22">
     <!-- clip="true" -->
     
-    <attribute name="sortType" value="alphabetical" type="string" />    
+	<attribute name="sortType" value="alphabetical" type="string" />    
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="0xFFFFFF" />

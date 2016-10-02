@@ -21,8 +21,14 @@
 <library>
 
  
-<class name="restrictedUserList" extends="view" width="$once{ parent.width }" 
-       height="${ parent.height-34 }">
+<class name="restrictedUserList" extends="view" width="$once{ parent.width }" height="${ parent.height-34 }">
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.utils.*;
+			</passthrough>
+		</when>
+	</switch>
 
     <!--- holds a references to the videoview which is broadcasting -->
     <attribute name="broadCastViewRef" value="null" />
@@ -34,6 +40,7 @@
 
 	<attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
 	<attribute name="timeout" value="500" type="number"/>
+	<attribute name="delayedCreateVideoId" type="number" value="-1"/>
     
     <handler name="onallowUserQuestions" args="bool">
         if (bool != null) {
@@ -143,13 +150,6 @@
                 canvas.thishib.disconnect();
             }
             
-            if (roomStatus.browserStatus.browserInited) {
-                var tObj = new Object();
-                tObj[0] = "newBrowserURL";
-                tObj[1] = roomStatus.browserStatus.currentURL;
-                canvas.startBrowser(tObj);
-            }
-            
             var value = roomStatus.clientList;
             
             for (var i = 0; i < value.length; ++i){
@@ -158,28 +158,33 @@
                 }
 				parent.addItemInitial(value[i]);
 			}
-			parent.batchCreateVideo(value);
             
             //Render and Show User-List
             parent._participants.sortAndRenderList();
-            
-            if (canvas._currentChatPanel.visible) {
+
+			parent.delayedCreateVideo(value);
+			//this content must be inited _after_ setting the default values
+			canvas.thishib.getCurrentModeratorList.doCall();
+			//FIXME Issue-1076
+			canvas.thishib.checkLzRecording.doCall();
+			if (canvas._currentChatPanel.visible) {
 				canvas._currentChatPanel.toggleopen();
 			}
 		]]>
-        </handler>  
-    </netRemoteCallHib>
+		</handler>  
+	</netRemoteCallHib>
+
+	<method name="delayedCreateVideo" args="clients">
+		delayedCreateVideoId = setTimeout(batchCreateVideo, 100, clients);
+	</method>
 
 	<method name="batchCreateVideo" args="clients">
-	<![CDATA[
 		if ($debug) Debug.write("interval 0 :: ", clients.length);
+		if (delayedCreateVideoId > -1) {
+			clearTimeout(delayedCreateVideoId);
+			delayedCreateVideoId = -1;
+		}
 		canvas.commonVideoViewContent.batchCreateVideo(canvas.streamid, clients);
-			
-		//this content must be inited _after_ setting the default values
-		canvas.thishib.getCurrentModeratorList.doCall();
-		//FIXME Issue-1076
-		canvas.thishib.checkLzRecording.doCall();
-	]]>
 	</method>
 
     <!-- invoked if another client logs into the room 

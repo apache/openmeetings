@@ -37,6 +37,7 @@
 			<param-value>classpath:openmeetings-applicationContext.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CXFServlet</servlet-name>
@@ -46,6 +47,7 @@
 	<filter>
 		<filter-name>LoggerContextFilter</filter-name>
 		<filter-class>org.red5.logging.LoggerContextFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	
 	<filter-mapping>
@@ -56,6 +58,7 @@
 	<filter>
 		<filter-name>OpenmeetingsApplication</filter-name>
 		<filter-class>org.apache.wicket.protocol.ws.javax.JavaxWebSocketFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>applicationClassName</param-name>
 			<param-value>org.apache.openmeetings.web.app.Application</param-value>
@@ -95,6 +98,7 @@
 	<servlet>
 		<servlet-name>DownloadHandler</servlet-name>
 		<servlet-class>org.apache.openmeetings.core.servlet.outputhandler.DownloadHandler</servlet-class>
+		<async-supported>true</async-supported>
 	</servlet>
 	
 	<servlet-mapping>

@@ -127,13 +127,6 @@
                 canvas.thishib.disconnect();
             }
             
-            if (roomStatus.browserStatus.browserInited) {
-                var tObj = new Object();
-                tObj[0] = "newBrowserURL";
-                tObj[1] = roomStatus.browserStatus.currentURL;
-                canvas.startBrowser(tObj);
-            }
-            
             var value = roomStatus.clientList;
             
             for (var i = 0; i < value.length; ++i){

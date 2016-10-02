@@ -692,7 +692,7 @@
 		<netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
 			<handler name="ondata" args="value">
 				<![CDATA[
-					if ($debug) Debug.write("############ getCurrentModeratorList: ",value);
+					if ($debug) Debug.write("############ getCurrentModeratorList: ", value);
 					
 					canvas.analyzeModerationList(value);
 					
@@ -1028,7 +1028,7 @@
 			<handler name="ondata" args="value">
 			<![CDATA[
 				//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write(" onResult checkScreenSharing : ",value);  
+				if ($debug) Debug.write(" onResult checkScreenSharing : ", value);  
 				if (value != null) {
 					canvas.commonVideoViewContent.newScreenSharings(value);
 				} else {
@@ -1413,7 +1413,7 @@
 	
 	<netRemoteCallHib name="checkLzRecording" funcname="recordingservice.checkLzRecording" >	  
 		<handler name="ondata" args="value">
-			if ($debug) Debug.write("checkLzRecording: ",value);
+			if ($debug) Debug.write("checkLzRecording: ", value);
 			if (value != null) {
 				canvas._mymod.recordingUser = value;
 				canvas._mymod.setMessage();

@@ -30,6 +30,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,212 +77,219 @@ public class DownloadHandler extends BaseHttpServlet {
 	 * , javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			request.setCharacterEncoding(StandardCharsets.UTF_8.name());
+	protected void service(HttpServletRequest _request, HttpServletResponse _response) throws ServletException, IOException {
+		final AsyncContext acontext = _request.startAsync();
+		acontext.start(new Runnable() {
+			public void run() {
+				try {
+					HttpServletRequest request = (HttpServletRequest)acontext.getRequest();
+					request.setCharacterEncoding(StandardCharsets.UTF_8.name());
+					log.debug("\nquery = " + request.getQueryString());
+					log.debug("\n\nfileName = " + request.getParameter("fileName"));
+					log.debug("\n\nparentPath = " + request.getParameter("parentPath"));
 
-			log.debug("\nquery = " + request.getQueryString());
-			log.debug("\n\nfileName = " + request.getParameter("fileName"));
-			log.debug("\n\nparentPath = " + request.getParameter("parentPath"));
-
-			String queryString = request.getQueryString();
-			if (queryString == null) {
-				queryString = "";
-			}
-
-			String sid = request.getParameter("sid");
-
-			if (sid == null) {
-				sid = "default";
-			}
-			log.debug("sid: " + sid);
-
-			Long users_id = getBean(SessiondataDao.class).check(sid);
-			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
-
-			if (rights != null && !rights.isEmpty()) {
-				String room_id = request.getParameter("room_id");
-				if (room_id == null) {
-					room_id = "default";
-				}
-
-				String moduleName = request.getParameter("moduleName");
-				if (moduleName == null) {
-					moduleName = "nomodule";
-				}
-
-				String parentPath = request.getParameter("parentPath");
-				if (parentPath == null) {
-					parentPath = "nomodule";
-				}
-
-				String requestedFile = request.getParameter("fileName");
-				if (requestedFile == null) {
-					requestedFile = "";
-				}
-				
-				String fileIdParam = request.getParameter("fileId");
-				Long fileId = null;
-				if (fileIdParam != null) {
-					fileId = Long.valueOf(fileIdParam);
-				}
-				
-				
-
-				// make a complete name out of domain(group) + roomname
-				String roomName = room_id;
-				// trim whitespaces cause it is a directory name
-				roomName = StringUtils.deleteWhitespace(roomName);
-
-				// Get the current User-Directory
-
-				File working_dir;
-
-				// Add the Folder for the Room
-				if (moduleName.equals("lzRecorderApp")) {
-					working_dir = OmFileHelper.getStreamsHibernateDir();
-				} else if (moduleName.equals("videoconf1")) {
-					working_dir = OmFileHelper.getUploadRoomDir(roomName);
-					if (parentPath.length() != 0 && !parentPath.equals("/")) {
-						working_dir = new File(working_dir, parentPath);
+					String queryString = request.getQueryString();
+					if (queryString == null) {
+						queryString = "";
 					}
-				} else if (moduleName.equals("userprofile")) {
-					working_dir = OmFileHelper.getUploadProfilesUserDir(users_id);
-					logNonExistentFolder(working_dir);
-				} else if (moduleName.equals("remoteuserprofile")) {
-					String remoteUser_id = request.getParameter("remoteUserid");
-					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
-					logNonExistentFolder(working_dir);
-				} else if (moduleName.equals("remoteuserprofilebig")) {
-					String remoteUser_id = request.getParameter("remoteUserid");
-					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
-					logNonExistentFolder(working_dir);
-					
-					requestedFile = getBigProfileUserName(working_dir);
-				} else if (moduleName.equals("chat")) {
-					String remoteUser_id = request.getParameter("remoteUserid");
-					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
-					logNonExistentFolder(working_dir);
 
-					requestedFile = getChatUserName(working_dir);
-				} else {
-					working_dir = OmFileHelper.getUploadRoomDir(roomName);
-				}
+					String sid = request.getParameter("sid");
 
-				if (!moduleName.equals("nomodule")) {
-					log.debug("requestedFile: " + requestedFile + " current_dir: " + working_dir);
+					if (sid == null) {
+						sid = "default";
+					}
+					log.debug("sid: " + sid);
 
-					File full_path = new File(working_dir, requestedFile);
+					Long users_id = getBean(SessiondataDao.class).check(sid);
+					Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
-					// If the File does not exist or is not readable show/load a
-					// place-holder picture
-
-					if (!full_path.exists() || !full_path.canRead()) {
-						if (!full_path.canRead()) {
-							log.debug("LOG DownloadHandler: The request file is not readable ");
-						} else {
-							log.debug("LOG DownloadHandler: The request file does not exist / has already been deleted");
+					if (rights != null && !rights.isEmpty()) {
+						String room_id = request.getParameter("room_id");
+						if (room_id == null) {
+							room_id = "default";
 						}
-						log.debug("LOG ERROR requestedFile: " + requestedFile);
-						// replace the path with the default picture/document
 
-						if (requestedFile.endsWith(".jpg")) {
-							log.debug("LOG endsWith d.jpg");
+						String moduleName = request.getParameter("moduleName");
+						if (moduleName == null) {
+							moduleName = "nomodule";
+						}
 
-							log.debug("LOG moduleName: " + moduleName);
+						String parentPath = request.getParameter("parentPath");
+						if (parentPath == null) {
+							parentPath = "nomodule";
+						}
 
-							requestedFile = defaultImageName;
-							if (moduleName.equals("remoteuserprofile")) {
-								requestedFile = defaultProfileImageName;
-							} else if (moduleName.equals("remoteuserprofilebig")) {
-								requestedFile = defaultProfileImageNameBig;
-							} else if (moduleName.equals("userprofile")) {
-								requestedFile = defaultProfileImageName;
-							} else if (moduleName.equals("chat")) {
-								requestedFile = defaultChatImageName;
+						String requestedFile = request.getParameter("fileName");
+						if (requestedFile == null) {
+							requestedFile = "";
+						}
+						
+						String fileIdParam = request.getParameter("fileId");
+						Long fileId = null;
+						if (fileIdParam != null) {
+							fileId = Long.valueOf(fileIdParam);
+						}
+						
+						
+
+						// make a complete name out of domain(group) + roomname
+						String roomName = room_id;
+						// trim whitespaces cause it is a directory name
+						roomName = StringUtils.deleteWhitespace(roomName);
+
+						// Get the current User-Directory
+
+						File working_dir;
+
+						// Add the Folder for the Room
+						if (moduleName.equals("lzRecorderApp")) {
+							working_dir = OmFileHelper.getStreamsHibernateDir();
+						} else if (moduleName.equals("videoconf1")) {
+							working_dir = OmFileHelper.getUploadRoomDir(roomName);
+							if (parentPath.length() != 0 && !parentPath.equals("/")) {
+								working_dir = new File(working_dir, parentPath);
 							}
-						} else if (requestedFile.endsWith(".swf")) {
-							requestedFile = defaultSWFName;
-						} else {
-							requestedFile = defaultImageName;
-						}
-						full_path = new File(OmFileHelper.getDefaultDir(), requestedFile);
-					}
-
-					log.debug("full_path: " + full_path);
-
-					if (!full_path.exists() || !full_path.canRead()) {
-						log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
-						// no file to handle abort processing
-						return;
-					}
-					// Requested file is outside OM webapp folder
-					File curDirFile = OmFileHelper.getOmHome();
-					if (!full_path.getCanonicalPath().startsWith(curDirFile.getCanonicalPath())) {
-						throw new Exception("Invalid file requested: f2.cp == "
-								+ full_path.getCanonicalPath() + "; curDir.cp == "
-								+ curDirFile.getCanonicalPath());
-					}
-
-					// Default type - Explorer, Chrome and others
-					int browserType = 0;
-
-					// Firefox and Opera browsers
-					if (request.getHeader("User-Agent") != null) {
-						if ((request.getHeader("User-Agent").contains("Firefox")) || (request.getHeader("User-Agent").contains("Opera"))) {
-							browserType = 1;
-						}
-					}
-
-					log.debug("Detected browser type:" + browserType);
-
-					response.reset();
-					response.resetBuffer();
-					try (OutputStream out = response.getOutputStream()) {
-						if (requestedFile.endsWith(".swf")) {
-							// trigger download to SWF => THIS is a workaround for
-							// Flash Player 10, FP 10 does not seem
-							// to accept SWF-Downloads with the Content-Disposition
-							// in the Header
-							response.setContentType("application/x-shockwave-flash");
-							response.setHeader("Content-Length", "" + full_path.length());
-						} else {
-							response.setContentType("APPLICATION/OCTET-STREAM");
+						} else if (moduleName.equals("userprofile")) {
+							working_dir = OmFileHelper.getUploadProfilesUserDir(users_id);
+							logNonExistentFolder(working_dir);
+						} else if (moduleName.equals("remoteuserprofile")) {
+							String remoteUser_id = request.getParameter("remoteUserid");
+							working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
+							logNonExistentFolder(working_dir);
+						} else if (moduleName.equals("remoteuserprofilebig")) {
+							String remoteUser_id = request.getParameter("remoteUserid");
+							working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
+							logNonExistentFolder(working_dir);
 							
-							String fileNameResult = requestedFile;
-							if (fileId != null && fileId > 0) {
-								FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileId);
-								if (fileExplorerItem != null) {
-									
-									fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)
-														+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
-									
+							requestedFile = getBigProfileUserName(working_dir);
+						} else if (moduleName.equals("chat")) {
+							String remoteUser_id = request.getParameter("remoteUserid");
+							working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
+							logNonExistentFolder(working_dir);
+
+							requestedFile = getChatUserName(working_dir);
+						} else {
+							working_dir = OmFileHelper.getUploadRoomDir(roomName);
+						}
+
+						if (!moduleName.equals("nomodule")) {
+							log.debug("requestedFile: " + requestedFile + " current_dir: " + working_dir);
+
+							File full_path = new File(working_dir, requestedFile);
+
+							// If the File does not exist or is not readable show/load a
+							// place-holder picture
+
+							if (!full_path.exists() || !full_path.canRead()) {
+								if (!full_path.canRead()) {
+									log.debug("LOG DownloadHandler: The request file is not readable ");
+								} else {
+									log.debug("LOG DownloadHandler: The request file does not exist / has already been deleted");
+								}
+								log.debug("LOG ERROR requestedFile: " + requestedFile);
+								// replace the path with the default picture/document
+
+								if (requestedFile.endsWith(".jpg")) {
+									log.debug("LOG endsWith d.jpg");
+
+									log.debug("LOG moduleName: " + moduleName);
+
+									requestedFile = defaultImageName;
+									if (moduleName.equals("remoteuserprofile")) {
+										requestedFile = defaultProfileImageName;
+									} else if (moduleName.equals("remoteuserprofilebig")) {
+										requestedFile = defaultProfileImageNameBig;
+									} else if (moduleName.equals("userprofile")) {
+										requestedFile = defaultProfileImageName;
+									} else if (moduleName.equals("chat")) {
+										requestedFile = defaultChatImageName;
+									}
+								} else if (requestedFile.endsWith(".swf")) {
+									requestedFile = defaultSWFName;
+								} else {
+									requestedFile = defaultImageName;
+								}
+								full_path = new File(OmFileHelper.getDefaultDir(), requestedFile);
+							}
+
+							log.debug("full_path: " + full_path);
+
+							if (!full_path.exists() || !full_path.canRead()) {
+								log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
+								// no file to handle abort processing
+								return;
+							}
+							// Requested file is outside OM webapp folder
+							File curDirFile = OmFileHelper.getOmHome();
+							if (!full_path.getCanonicalPath().startsWith(curDirFile.getCanonicalPath())) {
+								throw new Exception("Invalid file requested: f2.cp == "
+										+ full_path.getCanonicalPath() + "; curDir.cp == "
+										+ curDirFile.getCanonicalPath());
+							}
+
+							// Default type - Explorer, Chrome and others
+							int browserType = 0;
+
+							// Firefox and Opera browsers
+							if (request.getHeader("User-Agent") != null) {
+								if ((request.getHeader("User-Agent").contains("Firefox")) || (request.getHeader("User-Agent").contains("Opera"))) {
+									browserType = 1;
 								}
 							}
-							
-							if (browserType == 0) {
-								response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
-							} else {
-								response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
-												+ URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
-							}
-	
-							response.setHeader("Content-Length", "" + full_path.length());
-						}
-	
-						OmFileHelper.copyFile(full_path, out);
-						out.flush();
-					}
-				}
-			} else {
-				log.error("ERROR DownloadHandler: not authorized FileDownload ");
-			}
 
-		} catch (ServerNotInitializedException e) {
-			return;
-		} catch (Exception er) {
-			log.error("Error downloading: ", er);
-		}
+							log.debug("Detected browser type:" + browserType);
+
+							HttpServletResponse response = (HttpServletResponse)acontext.getResponse();
+							response.reset();
+							response.resetBuffer();
+							try (OutputStream out = response.getOutputStream()) {
+								if (requestedFile.endsWith(".swf")) {
+									// trigger download to SWF => THIS is a workaround for
+									// Flash Player 10, FP 10 does not seem
+									// to accept SWF-Downloads with the Content-Disposition
+									// in the Header
+									response.setContentType("application/x-shockwave-flash");
+									response.setHeader("Content-Length", "" + full_path.length());
+								} else {
+									response.setContentType("APPLICATION/OCTET-STREAM");
+									
+									String fileNameResult = requestedFile;
+									if (fileId != null && fileId > 0) {
+										FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).get(fileId);
+										if (fileExplorerItem != null) {
+											
+											fileNameResult = fileExplorerItem.getName().substring(0, fileExplorerItem.getName().length()-4)
+																+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
+											
+										}
+									}
+									
+									if (browserType == 0) {
+										response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+									} else {
+										response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
+														+ URLEncoder.encode(fileNameResult, StandardCharsets.UTF_8.name()));
+									}
+			
+									response.setHeader("Content-Length", "" + full_path.length());
+								}
+			
+								OmFileHelper.copyFile(full_path, out);
+								out.flush();
+							}
+							acontext.complete();
+						}
+					} else {
+						log.error("ERROR DownloadHandler: not authorized FileDownload ");
+					}
+
+				} catch (ServerNotInitializedException e) {
+					return;
+				} catch (Exception er) {
+					log.error("Error downloading: ", er);
+				}
+			}
+		});
 	}
 
 	private static String getChatUserName(File f) throws Exception {
