@@ -1714,13 +1714,12 @@
 		href="http://openmeetings.apache.org/mail-lists.html"
 		target="_blank">Список рассылки</a></span>
 	<br />
-    <br />
-	<br />
-    <b> <span style="font-size: 1.4em">Это компании,
-        которые также оказывают коммерческую поддержку Apache OpenMeetings:</span></b>
 	<br />
 	<br />
-    
+	<b> <span style="font-size: 1.4em">Это компании,
+	которые также оказывают коммерческую поддержку Apache OpenMeetings:</span></b>
+	<br />
+	<br />
 	<span style="font-size: 1.3em"><a
 		href="http://openmeetings.apache.org/commercial-support.html"
 		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
@@ -1738,7 +1737,6 @@
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
 	]]></entry>
-
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.postgresql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/PostgresConfig.html">PostgreSql</a>]]></entry>
@@ -1753,67 +1751,66 @@
 	<entry key="install.wizard.db.step.mysql.name">MySQL</entry>
 	<entry key="install.wizard.db.step.oracle.name">Oracle</entry>
 	<entry key="install.wizard.db.step.postgresql.name">PostgreSql</entry>
-    <entry key="install.wizard.db.step.host">Вкажіть ім'я сервера БД</entry>
+	<entry key="install.wizard.db.step.host">Вкажіть ім'я сервера БД</entry>
 	<entry key="install.wizard.db.step.port">Вкажіть порт БД</entry>
 	<entry key="install.wizard.db.step.dbname">Вкажіть ім'я бази даних</entry>
 	<entry key="install.wizard.db.step.user">Вкажіть користувача БД</entry>
 	<entry key="install.wizard.db.step.pass">Вкажіть пароль БД</entry>
 	<entry key="install.wizard.db.step.check">Перевірка</entry>
 	<entry key="install.wizard.db.step.errorprops">Неможливо взяти конфігурацію</entry>
-    <entry key="install.wizard.db.step.nodriver">Неможливо завантажити необхідний драйвер БД, будь ласка скачайте потрібний архів jar, і перезавантажте ОМ. Інструкції: {0}</entry>
+	<entry key="install.wizard.db.step.nodriver">Неможливо завантажити необхідний драйвер БД, будь ласка скачайте потрібний архів jar, і перезавантажте ОМ. Інструкції: {0}</entry>
 	<entry key="install.wizard.db.step.notvalid">Помилка перевірки БД</entry>
 	<entry key="install.wizard.db.step.error.patch">Несподівана помилка при оновленні файлу persistence.xml: {0}</entry>
 	<entry key="install.wizard.db.step.valid">Перевірка БД пройшла успішно</entry>
 	<entry key="install.wizard.params.step1.userdata">дані</entry>
 	<entry key="install.wizard.params.step1.username">Логін</entry>
-    <entry key="install.wizard.params.step1.username.title">Введіть логін користувача</entry>
+	<entry key="install.wizard.params.step1.username.title">Введіть логін користувача</entry>
 	<entry key="install.wizard.params.step1.password">Пароль</entry>
 	<entry key="install.wizard.params.step1.password.title">Введіть пароль</entry>
 	<entry key="install.wizard.params.step1.email">пошта</entry>
 	<entry key="install.wizard.params.step1.email.title">Введіть адресу електронної пошти</entry>
 	<entry key="install.wizard.params.step1.tz">Часовий пояс користувача</entry>
 	<entry key="install.wizard.params.step1.groupdata">Організація(Домен)</entry>
-    <entry key="install.wizard.params.step1.group">Назва</entry>
+	<entry key="install.wizard.params.step1.group">Назва</entry>
 	<entry key="install.wizard.params.step1.group.title">Введіть організацію за замовчуванням</entry>
 
 	<entry key="install.wizard.params.step2.configuration">Налаштування</entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister">Дозволити самореєстрацію (allow_frontend_register)</entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister">Посилати повідомлення новим користувачам (sendEmailAtRegister)</entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Нові користувачі повинні підтвердити свій Email (sendEmailWithVerficationCode)</entry>
-    <entry key="install.wizard.params.step2.createDefaultRooms">За замовчуванням створити кімнати всіх типів</entry>
-    <entry key="install.wizard.params.step2.mailReferer">Електронна пошта розсилки (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">За замовчуванням створити кімнати всіх типів</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Електронна пошта розсилки (system_email_addr)</entry>
 	<entry key="install.wizard.params.step2.mailReferer.title">Введіть адресу електронної пошти, з якої буде відправлятися інформація</entry>
 	<entry key="install.wizard.params.step2.smtpServer">SMTP-Сервер (smtp_server)</entry>
 	<entry key="install.wizard.params.step2.smtpServer.title">Введіть адресу SMTP-Сервера</entry>
 	<entry key="install.wizard.params.step2.smtpPort">Порт SMTP-сервера (за умолчению 25) (smtp_port)</entry>
-    <entry key="install.wizard.params.step2.smtpPort.title">Введіть порт SMTP-Сервера, зазвичай 25</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Введіть порт SMTP-Сервера, зазвичай 25</entry>
 	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Користувач (email_username)</entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title">Введіть логін для електронної пошти</entry>
 	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Пароль користувача (email_userpass)</entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title">Введіть пароль для електронної пошти</entry>
-    <entry key="install.wizard.params.step2.mailUseTls">Увімкнути перевірку TLS на поштовому сервері</entry>
-    <entry key="install.wizard.params.step2.replyToOrganizer">Встановлювати адресу електронної
-	                пошти організатора, як адреса відповіді на запрошення (inviter.email.as.replyto)</entry>
-    <entry key="install.wizard.params.step2.defaultLangId">Мову за замовчуванням</entry>
-    <entry key="install.wizard.params.step2.defaultExportFont">Шрифт для експорту за замовчуванням [default_export_font]</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">Увімкнути перевірку TLS на поштовому сервері</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">Встановлювати адресу електронної
+		пошти організатора, як адреса відповіді на запрошення (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Мову за замовчуванням</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Шрифт для експорту за замовчуванням [default_export_font]</entry>
 
-	
 	<entry key="install.wizard.params.step3.converters">Конвертери</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> дивіться також</entry>
 	<entry key="install.wizard.params.step3.installation">Установка</entry>
-    <entry key="install.wizard.params.step3.swfZoom">SWFTools масштабування</entry>
-    <entry key="install.wizard.params.step3.swfZoom.title">Вкажіть дозвіл (dpi), яке ви будете використовувати для конвертації PDF в SWF</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools масштабування</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">Вкажіть дозвіл (dpi), яке ви будете використовувати для конвертації PDF в SWF</entry>
 	<entry key="install.wizard.params.step3.swfZoom.text">
                	DPI яке swftools буде використовувати для конвертації PDF в SWF. За замовчуванням 100 dpi.
 	</entry>
-    <entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Якість</entry>
-    <entry key="install.wizard.params.step3.swfJpegQuality.title">Вкажіть якість вбудованого jpeg зображення. 0 погане (маленьке), 100 висока (велике). (за замовчуванням:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Якість</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">Вкажіть якість вбудованого jpeg зображення. 0 погане (маленьке), 100 висока (велике). (за замовчуванням:85)</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality.text">
 			Якість вбудованого jpeg зображення. 0 погане (маленьке),
 			100 висока (велике). (за замовчуванням:85)
-    </entry>
-    <entry key="install.wizard.params.step3.swfPath">SWFTools Шлях</entry>
-    <entry key="install.wizard.params.step3.swfPath.title">Вкажіть шлях до swftools наприклад C:/swftools (Windows) або не заповнюйте це поле якщо шлях до swftools задано в системних шляхах</entry>
+	</entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools Шлях</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Вкажіть шлях до swftools наприклад C:/swftools (Windows) або не заповнюйте це поле якщо шлях до swftools задано в системних шляхах</entry>
 	<entry key="install.wizard.params.step3.swfPath.text">
 			Ви можете перевірити, чи налаштований запуск swftools на Вашій системі
 			з допомогою командного рядка або shell або cmd-prompt набравши команду pdf2swf. Якщо буде показаний
@@ -1822,24 +1819,24 @@
 	</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Шлях</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Вкажіть шлях до ImageMagick, або не заповнюйте це поле якщо ImageMagick встановлений в шляхах Вашої системи</entry>
-    <entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
-    <entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Шлях</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Шлях</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Вкажіть шлях до FFMPEG, або не заповнюйте це поле якщо FFMPEG встановлений в шляхах Вашої системи</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX Шлях</entry>
-    <entry key="install.wizard.params.step3.soxPath.title">Вкажіть шлях до SoX, або не заповнюйте це поле якщо SoX встановлений в шляхах Вашої системи</entry>
-    <entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Вкажіть шлях до SoX, або не заповнюйте це поле якщо SoX встановлений в шляхах Вашої системи</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
 	<entry key="install.wizard.params.step3.jodPath">JOD Шлях</entry>
 	<entry key="install.wizard.params.step3.jodPath.title">Шлях до бібліотеки JOD (http://code.google.com/p/jodconverter), налаштуйте шлях, указываюший на папку бібліотеки JOD, яка містить jodconverter-core-version.jar файл</entry>
 	<entry key="install.wizard.params.step3.jodPath.text"></entry>
-    <entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Шлях для jodconverter</entry>
-    <entry key="install.wizard.params.step3.officePath.title">Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях, у разі коли jodconverter не в змозі знайти автоматично шлях до встановленого OpenOffice/LibreOffice</entry>
+	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Шлях для jodconverter</entry>
+	<entry key="install.wizard.params.step3.officePath.title">Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях, у разі коли jodconverter не в змозі знайти автоматично шлях до встановленого OpenOffice/LibreOffice</entry>
 	<entry key="install.wizard.params.step3.officePath.text">
 			Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях
 			у разі коли jodconverter не в змозі знайти
 			шлях до встановленого OpenOffice/LibreOffice
-    </entry>	
-	
+	</entry>
+
 	<entry key="install.wizard.params.step4.crypt">Тип шифрування</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">Клас шифрування</entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title">Вкажіть ім'я класу для шифрування. НЕ ЗМІНЮЙТЕ ЗАЗНАЧЕНИЙ КЛАС ЯКЩО ВИ НЕ ВПЕВНЕНІ</entry>
@@ -1851,7 +1848,7 @@
 		target="_blank">Користувальницький механізм шифрування</a> Ви можете змінити це
 		значення пізніше, АЛЕ створені раніше Користувачі Сесії можуть бути
 		не доступні в подальшому
-		]]></entry>
+	]]></entry>
 	<entry key="install.wizard.params.step4.red5SIP">Конфігурація red5SIP</entry>
 	<entry key="install.wizard.params.step4.red5SipEnable">Дозволити SIP</entry>
 	<entry key="install.wizard.params.step4.red5SipEnable.text">Дозволити інтеграцію з red5SIP</entry>
@@ -1930,4 +1927,37 @@
 	<entry key="install.room.private.conference">Закрита кімната для конференцій</entry>
 	<entry key="appointment.tab.general">Загальне</entry>
 	<entry key="appointment.tab.advanced">Додаткові</entry>
+	<entry key="button.label.share">Share</entry>
+	<entry key="invalid.hash">Invalid hash</entry>
+	<entry key="network.test.ms">ms</entry>
+	<entry key="network.test.mb">Mb</entry>
+	<entry key="network.test.sec">sec</entry>
+	<entry key="network.test.click.play">Click a play button to run a test</entry>
+	<entry key="network.test.copy.log">Copy the log to the clipboard</entry>
+	<entry key="network.test.report">report</entry>
+	<entry key="network.test.report.start">start test...</entry>
+	<entry key="network.test.report.error">Error</entry>
+	<entry key="network.test.report.con.err">connection error</entry>
+	<entry key="network.test.ping">Ping</entry>
+	<entry key="network.test.ping.avg">Average ping time</entry>
+	<entry key="network.test.ping.rcv">Packets received</entry>
+	<entry key="network.test.ping.lost">Packets lost</entry>
+	<entry key="network.test.ping.load">load time</entry>
+	<entry key="network.test.port">Port</entry>
+	<entry key="network.test.port.avail">port is available</entry>
+	<entry key="network.test.port.stopped">stopped</entry>
+	<entry key="network.test.jitter">Jitter</entry>
+	<entry key="network.test.jitter.avg">Average time</entry>
+	<entry key="network.test.jitter.min">Min time</entry>
+	<entry key="network.test.jitter.max">Max time</entry>
+	<entry key="network.test.dwn">Download speed</entry>
+	<entry key="network.test.dwn.bytes">Bytes downloaded</entry>
+	<entry key="network.test.dwn.time">Download time</entry>
+	<entry key="network.test.dwn.speed">Download speed</entry>
+	<entry key="network.test.upl">Upload speed</entry>
+	<entry key="network.test.upl.bytes">Bytes uploaded</entry>
+	<entry key="network.test.upl.time">Upload time</entry>
+	<entry key="network.test.upl.speed">Upload speed</entry>
+	<entry key="access.denied.header">Access denied. You are not authorized to perform this action.</entry>
+	<entry key="save.success">Saved successfully</entry>
 </properties>
