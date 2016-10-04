@@ -61,8 +61,8 @@ public class Configuration implements IDataProviderEntity {
 	@Column(name = "id")
 	@Element(name = "id", data = true)
 	private Long id;
-	
-	@Column(name = "key", unique = true)
+
+	@Column(name = "om_key", unique = true)
 	@Element(name = "key", data = true, required = false)
 	private String key;
 
@@ -158,5 +158,4 @@ public class Configuration implements IDataProviderEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 }
