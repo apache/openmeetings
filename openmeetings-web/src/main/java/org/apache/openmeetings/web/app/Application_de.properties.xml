@@ -1964,4 +1964,12 @@
 	<entry key="save.success">Saved successfully</entry>
 	<entry key="convert.errors.file">The have been errors while processing the file</entry>
 	<entry key="convert.errors.file.missing">File is not found</entry>
+	<entry key="calendar.url">External CalDAV Calendar URL</entry>
+	<entry key="calendar.error">Error in making connection on the URL specified.</entry>
+	<entry key="calendar.addCalendar">Add External Calendar</entry>
+	<entry key="calendar.googleKey">Google Calendar API key</entry>
+	<entry key="calendar.dialogTitle">Calendar Details</entry>
+	<entry key="calendar.googleID">Google Calendar ID</entry>
+	<entry key="calendar.gcal">Google Calendar</entry>
+	<entry key="calendar.defaultTitle">New Calendar</entry>
 </properties>

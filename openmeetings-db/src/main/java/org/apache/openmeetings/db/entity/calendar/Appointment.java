@@ -108,6 +108,14 @@ import org.simpleframework.xml.Root;
 		)
 	, @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
 	, @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
+
+	//Calendar Related Queries
+	, @NamedQuery(name = "getAppointmentsbyCalendar",
+		query = "SELECT a FROM Appointment a WHERE a.deleted = false AND a.calendar.id = :calId ORDER BY a.id")
+	, @NamedQuery(name = "getHrefsforAppointmentsinCalendar",
+		query = "SELECT a.href FROM Appointment a WHERE a.deleted = FALSE AND a.calendar.id = :calId ORDER BY a.id")
+	, @NamedQuery(name = "deleteAppointmentsbyCalendar",
+		query = "UPDATE Appointment a SET a.deleted = true WHERE a.calendar.id = :calId")
 })
 @Root(name="appointment")
 public class Appointment implements IDataProviderEntity {
@@ -119,26 +127,26 @@ public class Appointment implements IDataProviderEntity {
 		none(REMINDER_NONE_ID)
 		, email(REMINDER_EMAIL_ID)
 		, ical(REMINDER_ICAL_ID);
-		
+
 		private int id;
-		
+
 		Reminder() {} //default;
 		Reminder(int id) {
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
-		
+
 		public static Reminder get(Long type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Reminder get(Integer type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Reminder get(int type) {
 			Reminder r = Reminder.none;
 			switch (type) {
@@ -154,97 +162,97 @@ public class Appointment implements IDataProviderEntity {
 			return r;
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(name = "appointmentId", data = true)
 	private Long id;
-	
+
 	@Column(name = "title")
-	@Element(name="appointmentName", data=true, required=false)
+	@Element(name = "appointmentName", data = true, required = false)
 	private String title;
-	
+
 	@Column(name = "location")
-	@Element(name="appointmentLocation", data=true, required=false)
+	@Element(name = "appointmentLocation", data = true, required = false)
 	private String location;
-	
+
 	@Column(name = "app_start") //Oracle fails in case 'start' is used as column name
-	@Element(name="appointmentStarttime", data=true)
+	@Element(name = "appointmentStarttime", data = true)
 	private Date start;
-	
+
 	@Column(name = "app_end") //renamed to be in sync with 'app_start'
-	@Element(name="appointmentEndtime", data=true)
+	@Element(name = "appointmentEndtime", data = true)
 	private Date end;
-	
-	@Lob 
-	@Column(name = "description", length=2048)
-	@Element(name="appointmentDescription", data=true, required=false)
+
+	@Lob
+	@Column(name = "description", length = 2048)
+	@Element(name = "appointmentDescription", data = true, required = false)
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="users_id", data=true, required=false)
+	@Element(name = "users_id", data = true, required = false)
 	private User owner;
 
 	@Column(name = "inserted")
-	@Element(name="inserted", data=true, required=false)
+	@Element(name = "inserted", data = true, required = false)
 	private Date inserted;
-	
+
 	@Column(name = "updated")
-	@Element(name="updated", data=true, required=false)
+	@Element(name = "updated", data = true, required = false)
 	private Date updated;
-	
+
 	@Column(name = "deleted")
-	@Element(data=true)
+	@Element(data = true)
 	private boolean deleted;
-	
+
 	@Column(name = "reminder")
 	@Enumerated(EnumType.STRING)
-	@Element(name="typId", data=true, required=false)
+	@Element(name = "typId", data = true, required = false)
 	private Reminder reminder = Reminder.none;
 
 	@Column(name = "isdaily")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isDaily;
-	
+
 	@Column(name = "isweekly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isWeekly;
-	
+
 	@Column(name = "ismonthly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isMonthly;
-	
+
 	@Column(name = "isyearly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isYearly;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="room_id", data=true, required=false)
+	@Element(name = "room_id", data = true, required = false)
 	private Room room;
 
 	@Column(name = "icalId")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String icalId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "appointment_id")
 	private List<MeetingMember> meetingMembers;
-	
+
 	@Column(name = "language_id")
-	@Element(name="language_id", data=true, required=false)
+	@Element(name = "language_id", data = true, required = false)
 	private Long languageId;
-	
+
 	@Column(name = "is_password_protected")
-	@Element(name="isPasswordProtected", data=true, required=false)
+	@Element(name = "isPasswordProtected", data = true, required = false)
 	private boolean passwordProtected;
-	
+
 	@Column(name = "password")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String password;
 
 	@Column(name = "is_connected_event")
@@ -252,6 +260,22 @@ public class Appointment implements IDataProviderEntity {
 
 	@Column(name = "is_reminder_email_send")
 	private boolean reminderEmailSend;
+
+	//Calendar Specific fields.
+	@ManyToOne()
+	@JoinColumn(name = "calendar_id", nullable = true)
+	@ForeignKey(enabled = true)
+	@Element(name = "calendar_id", data = true, required = false)
+	private OmCalendar calendar;
+
+	@Column(name = "href")
+	@Element(data = true, required = false)
+	private String href;
+
+	@Column(name = "etag")
+	@Element(data = true, required = false)
+	private String etag;
+
 
 	@Override
 	public Long getId() {
@@ -451,10 +475,33 @@ public class Appointment implements IDataProviderEntity {
 		this.reminderEmailSend = isReminderEmailSend;
 	}
 
+	public OmCalendar getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(OmCalendar calendar) {
+		this.calendar = calendar;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
+	public String getEtag() {
+		return etag;
+	}
+
+	public void setEtag(String etag) {
+		this.etag = etag;
+	}
+
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
-				+ ", deleted=" + deleted + ", icalId=" + icalId + "]";
+				+ ", deleted=" + deleted + ", icalId=" + icalId + ", calendar=" + calendar + ", href=" + href + ", etag=" + etag + "]";
 	}
-	
 }

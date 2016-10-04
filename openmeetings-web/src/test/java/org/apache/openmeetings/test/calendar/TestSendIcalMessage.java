@@ -22,12 +22,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.SocketException;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.activation.DataHandler;
@@ -65,7 +65,6 @@ import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.util.UidGenerator;
 
 public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestSendIcalMessage.class, webAppRootKey);
@@ -116,16 +115,8 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 		meeting.getProperties().add(tz.getTimeZoneId());
 
 		// generate unique identifier..
-		UidGenerator ug;
-		try {
-			ug = new UidGenerator("uidGen");
-
-			Uid uid = ug.generateUid();
-			meeting.getProperties().add(uid);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			log.error("Error", e);
-		}
+		Uid uid = new Uid(UUID.randomUUID().toString());
+		meeting.getProperties().add(uid);
 
 		// add attendees..
 		Attendee dev1 = new Attendee(URI.create("mailto:dev1@mycompany.com"));

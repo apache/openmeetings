@@ -26,7 +26,11 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Vector;
+
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
@@ -48,10 +52,6 @@ import net.fortuna.ical4j.model.property.Sequence;
 import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.util.UidGenerator;
-
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 
 /**
  * 
@@ -136,7 +136,7 @@ public class IcalHandler {
 		// generate unique identifier (if not submitted)
 		Uid ui = null;
 		if (uid == null || uid.length() < 1) {
-			ui = new UidGenerator("uidGen").generateUid();
+			ui = new Uid(UUID.randomUUID().toString());
 			log.debug("Generating Meeting UID : " + ui.getValue());
 		} else {
 			ui = new Uid(uid);

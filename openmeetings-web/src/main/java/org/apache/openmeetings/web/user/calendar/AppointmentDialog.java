@@ -38,10 +38,12 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
+import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
@@ -64,6 +66,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
@@ -152,8 +155,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(IPartialPageRequestHandler handler) {
-		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
-		calendarPanel.refresh(handler);		
+		Appointment a = getModelObject();
+		getBean(AppointmentDao.class).delete(a, getUserId());
+		calendarPanel.refresh(handler);
+		if (a.getCalendar() != null && a.getHref() != null) {
+			calendarPanel.updatedeleteAppointment(handler, CalendarDialog.DIALOG_TYPE.DELETE_APPOINTMENT, a);
+		}
 	}
 
 	@Override
@@ -228,7 +235,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		a.setMeetingMembers(attendees);
 		a.setStart(getDate(form.start.getModelObject()));
 		a.setEnd(getDate(form.end.getModelObject()));
+		a.setCalendar(form.cals.getModelObject());
 		getBean(AppointmentDao.class).update(a, getUserId());
+		if (a.getCalendar() != null) {
+			calendarPanel.updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
+		}
 		target.add(feedback);
 		calendarPanel.refresh(target);
 	}
@@ -259,6 +270,18 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				, Model.of(new Room())
 				, getRoomList()
 				, new ChoiceRenderer<Room>("name", "id"));
+		private DropDownChoice<OmCalendar> cals = new DropDownChoice<>(
+				"calendar",
+				new LoadableDetachableModel<List<? extends OmCalendar>>() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected List<? extends OmCalendar> load() {
+						return getCalendarList();
+					}
+				},
+				new ChoiceRenderer<OmCalendar>("title", "id")
+		);
 
 		private Room createAppRoom() {
 			Room r = new Room();
@@ -268,7 +291,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			}
 			return r;
 		}
-		
+
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
@@ -300,7 +323,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
 					a.setEnd(end.getTime());
 				}
+				cals.setEnabled(true);
+			} else {
+				cals.setEnabled(false);
 			}
+
 			attendeesModel.setObject(new ArrayList<User>());
 			if (a.getMeetingMembers() != null) {
 				for (MeetingMember mm : a.getMeetingMembers()) {
@@ -311,7 +338,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
 			ownerPanel.setVisible(!isOwner(a));
 		}
-		
+
 		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
@@ -383,6 +410,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);
+			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
 		}
 		
 		private List<Room> getRoomList() {
@@ -397,6 +425,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				result.add(getModelObject().getRoom());
 			}
 			return result;
+		}
+
+		private List<OmCalendar> getCalendarList(){
+			return getBean(AppointmentManager.class).getCalendars(getUserId());
 		}
 		
 		@Override
