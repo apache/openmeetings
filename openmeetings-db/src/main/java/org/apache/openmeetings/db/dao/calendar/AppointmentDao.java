@@ -76,24 +76,26 @@ public class AppointmentDao {
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentById", Appointment.class);
 		query.setParameter("id", id);
 
-		Appointment appoint = null;
+		Appointment a = null;
 		try {
-			appoint = query.getSingleResult();
+			a = query.getSingleResult();
 		} catch (NoResultException ex) {
+			//no-op
 		}
-		return appoint;
+		return a;
 	}
 
 	public Appointment getAny(Long id) {
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", id);
 
-		Appointment appoint = null;
+		Appointment a = null;
 		try {
-			appoint = query.getSingleResult();
+			a = query.getSingleResult();
 		} catch (NoResultException ex) {
+			//no-op
 		}
 
-		return appoint;
+		return a;
 	}
 
 	public List<Appointment> get() {
@@ -103,7 +105,7 @@ public class AppointmentDao {
 	public Appointment update(Appointment a, Long userId) {
 		return update(a, userId, true);
 	}
-	
+
 	public Appointment update(Appointment a, Long userId, boolean sendmails) {
 		Room r = a.getRoom();
 		if (r.getId() == null) {
@@ -155,7 +157,7 @@ public class AppointmentDao {
 		}
 		return a;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------
 
 	public void delete(Appointment a, Long userId) {
@@ -167,7 +169,7 @@ public class AppointmentDao {
 		}
 		update(a, userId);
 	}
-	
+
 	public List<Appointment> getInRange(Long userId, Date start, Date end) {
 		log.debug("Start " + start + " End " + end);
 
@@ -175,8 +177,8 @@ public class AppointmentDao {
 		query.setParameter("start", start);
 		query.setParameter("end", end);
 		query.setParameter("userId", userId);
-		
-		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
+
+		List<Appointment> listAppoints = new ArrayList<>(query.getResultList());
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
 		q1.setParameter("start", start);
 		q1.setParameter("end", end);
@@ -196,7 +198,7 @@ public class AppointmentDao {
 		q.setParameter("end", end.getTime());
 		return q.getResultList();
 	}
-	
+
 	// next appointment to select date
 	public Appointment getNext(Long userId, Date start) {
 		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)
@@ -267,5 +269,47 @@ public class AppointmentDao {
 		}
 
 		return a;
+	}
+
+	//Calendar Related Methods
+
+	/**
+	 * Returns the Appointment HREF's belonging to the Calendar Id specified.
+	 *
+	 * @param calId Calendar to which the Appointments are related to.
+	 * @return <code>List</code> of Appointment HREF's
+	 */
+	public List<String> getHrefsbyCalendar(Long calId) {
+		return em.createNamedQuery("getHrefsforAppointmentsinCalendar", String.class)
+				.setParameter("calId", calId)
+				.getResultList();
+	}
+
+	/**
+	 * Returns the Appointments related to the Calendar ID specified.
+	 *
+	 * @param calId Calendar ID of the calendar, to which the appointment is associated
+	 * @return <code>List</code> of <code>Appointment</code>
+	 */
+	public List<Appointment> getbyCalendar(Long calId) {
+		return em.createNamedQuery("getAppointmentsbyCalendar", Appointment.class)
+				.setParameter("calId", calId)
+				.getResultList();
+	}
+
+	/**
+	 * Bulk Deletes the Appointments related the the calId.<br/>
+	 * Note: Does not automatically, commit, but gets cascaded in the function which calls it.
+	 * If there is a need to commit during this function, use <code>em.flush()</code> and <code>em.clear()</code>
+	 *
+	 * @param calId Calendar Id of the Calendar Id to which the Appointments belong to.
+	 * @return Returns <code>-1</code> if the there was an error executing the query,
+	 * otherwise returns the number of updated rows.
+	 * @see Query#executeUpdate()
+	 */
+	public int deletebyCalendar(Long calId) {
+		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)
+				.setParameter("calId", calId)
+				.executeUpdate();
 	}
 }

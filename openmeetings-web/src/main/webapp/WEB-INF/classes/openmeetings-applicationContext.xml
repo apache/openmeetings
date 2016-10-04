@@ -230,6 +230,7 @@
 	<bean id="clientDao" class="org.apache.openmeetings.db.dao.room.ClientDao" />
 	<bean id="mailMessageDao" class="org.apache.openmeetings.db.dao.basic.MailMessageDao" />
 	<bean id="oauth2Dao" class="org.apache.openmeetings.db.dao.server.OAuth2Dao" />
+	<bean id="omCalendarDao" class="org.apache.openmeetings.db.dao.calendar.OmCalendarDao" />
 
 	<!-- No Interface -->
 	<bean id="generateImage" class="org.apache.openmeetings.core.converter.GenerateImage" />
@@ -243,6 +244,8 @@
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />
 	<bean id="backupExport" class="org.apache.openmeetings.backup.BackupExport" />
 	<bean id="backupImport" class="org.apache.openmeetings.backup.BackupImport" />
+	<bean id="appointmentManager" class="org.apache.openmeetings.service.calendar.caldav.AppointmentManager" destroy-method="destroy"/>
+	<bean id="iCalUtils" class="org.apache.openmeetings.service.calendar.caldav.iCalUtils"/>
 
 	<!-- Thread Executor -->
 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
