@@ -115,7 +115,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public void invalidate() {
-		removeOnlineUser(getClientByKeys(getUserId(), get().getId()));
+		removeOnlineUser(getClientByKeys(userId, getId()));
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
