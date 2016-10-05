@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -87,6 +88,7 @@ public class ChatPanel extends BasePanel {
 	private static final String ID_ALL = ID_TAB_PREFIX + "all";
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
+	private boolean  showDashboardChat = getBean(ConfigurationDao.class).getConfValue("dashboard.show.chat", Integer.class, "1") == 1;
 	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -196,6 +198,9 @@ public class ChatPanel extends BasePanel {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(function() {");
+		if (!showDashboardChat) {
+			sb.append("$('#chat').show();");
+		}
 		sb.append(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString(406)));
 		sb.append(r.isChatOpened() ? "openChat();" : "closeChat();");
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
@@ -211,6 +216,13 @@ public class ChatPanel extends BasePanel {
 			return;
 		}
 		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));
+		if (!showDashboardChat) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("$(function() {");
+			sb.append("$('#chat').hide();");
+			sb.append("});");
+			handler.appendJavaScript(sb);
+		}
 	}
 
 	public void toggle(IPartialPageRequestHandler handler, boolean visible) {
@@ -227,6 +239,14 @@ public class ChatPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ChatPanel.class, "chat.js"))));
 		response.render(CssHeaderItem.forUrl("css/chat.css"));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID)), "acceptMessage")));
+		if (!showDashboardChat) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("$(document).ready(function(){");
+			sb.append("$('#ui-id-1').hide();");
+			sb.append("$('#chat').hide();");
+			sb.append("});");
+			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
+		}
 	}
 	
 	private static void sendRoom(ChatMessage m, String msg) {
