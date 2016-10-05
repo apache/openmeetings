@@ -451,7 +451,7 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy);
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
-			List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class);
+			List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
 			for (OmCalendar a : list) {
 				
 			}
