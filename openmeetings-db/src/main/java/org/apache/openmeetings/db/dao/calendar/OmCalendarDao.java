@@ -41,12 +41,30 @@ public class OmCalendarDao {
 	}
 
 	/**
+	 * Returns the Calendar Specified by the Calendar ID.
+	 *
+	 * @param calId Calendar ID of the Calendar to return.
+	 * @return Returns the Calendar if found, else returns null
+	 */
+	public OmCalendar get(Long calId) {
+		TypedQuery<OmCalendar> query = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
+				.setParameter("calId", calId);
+		OmCalendar c = null;
+		try {
+			c = query.getSingleResult();
+		} catch (NoResultException e) {
+			//no-op
+		}
+		return c;
+	}
+
+	/**
 	 * Return all the Calendars that belong to the User.
 	 *
 	 * @param userId User ID to whom the calendars belong.
 	 * @return List of Calendars
 	 */
-	public List<OmCalendar> get(Long userId) {
+	public List<OmCalendar> getByUser(Long userId) {
 		return em.createNamedQuery("getCalendarbyUser", OmCalendar.class)
 				.setParameter("userId", userId)
 				.getResultList();
@@ -78,25 +96,6 @@ public class OmCalendarDao {
 		}
 
 		return c;
-	}
-
-	/**
-	 * Returns the Calendar Specified by the Calendar ID.
-	 *
-	 * @param calId Calendar ID of the Calendar to return.
-	 * @return Returns the Calendar if found, else returns null
-	 */
-	public OmCalendar getCalendarbyId(Long calId) {
-		TypedQuery<OmCalendar> query = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
-				.setParameter("calId", calId);
-		OmCalendar calendar = null;
-		try {
-			calendar = query.getSingleResult();
-		} catch (NoResultException e) {
-			//no-op
-		}
-
-		return calendar;
 	}
 
 	/**

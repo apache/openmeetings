@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -52,6 +53,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -90,6 +92,8 @@ public class BackupExport {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private OmCalendarDao calendarDao;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -168,9 +172,22 @@ public class BackupExport {
 			registry.bind(Room.class, RoomConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
-			progressHolder.setProgress(20);
+			progressHolder.setProgress(17);
 		}
 
+		/*
+		 * ##################### Backup Calendars
+		 */
+		{
+			List<OmCalendar> list = calendarDao.get();
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			Serializer serializer = new Persister(strategy);
+			registry.bind(User.class, UserConverter.class);
+
+			writeList(serializer, backup_dir, "calendars.xml", "calendars", list);
+			progressHolder.setProgress(22);
+		}
 		/*
 		 * ##################### Backup Appointments
 		 */

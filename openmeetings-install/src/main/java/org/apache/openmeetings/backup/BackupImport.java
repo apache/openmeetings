@@ -68,6 +68,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -85,6 +86,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -136,6 +138,8 @@ public class BackupImport {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
+	private OmCalendarDao calendarDao;
+	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private UserDao userDao;
@@ -170,12 +174,13 @@ public class BackupImport {
 	@Autowired
 	private RoomGroupDao roomGroupDao;
 
-	private final Map<Long, Long> usersMap = new HashMap<>();
+	private final Map<Long, Long> userMap = new HashMap<>();
 	private final Map<Long, Long> groupMap = new HashMap<>();
-	private final Map<Long, Long> appointmentsMap = new HashMap<>();
-	private final Map<Long, Long> roomsMap = new HashMap<>();
-	private final Map<Long, Long> messageFoldersMap = new HashMap<>();
-	private final Map<Long, Long> userContactsMap = new HashMap<>();
+	private final Map<Long, Long> calendarMap = new HashMap<>();
+	private final Map<Long, Long> appointmentMap = new HashMap<>();
+	private final Map<Long, Long> roomMap = new HashMap<>();
+	private final Map<Long, Long> messageFolderMap = new HashMap<>();
+	private final Map<Long, Long> userContactMap = new HashMap<>();
 	private final Map<String, Integer> userEmailMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
 
@@ -224,17 +229,18 @@ public class BackupImport {
 	}
 	
 	public void performImport(InputStream is) throws Exception {
-		usersMap.clear();
+		userMap.clear();
 		groupMap.clear();
-		appointmentsMap.clear();
-		roomsMap.clear();
-		messageFoldersMap.clear();
-		userContactsMap.clear();
+		calendarMap.clear();
+		appointmentMap.clear();
+		roomMap.clear();
+		messageFolderMap.clear();
+		userContactMap.clear();
 		userEmailMap.clear();
 		fileMap.clear();
-		messageFoldersMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
-		messageFoldersMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
-		messageFoldersMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
+		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
+		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
+		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 
 		File f = unzip(is);
 
@@ -249,7 +255,7 @@ public class BackupImport {
 
 			matcher.bind(Long.class, LongTransform.class);
 			registry.bind(Date.class, DateConverter.class);
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
@@ -363,7 +369,7 @@ public class BackupImport {
 					u.setType(User.Type.external);
 				}
 				userDao.update(u, Long.valueOf(-1));
-				usersMap.put(userId, u.getId());
+				userMap.put(userId, u.getId());
 			}
 		}
 
@@ -387,7 +393,7 @@ public class BackupImport {
 					}
 				}
 				r = roomDao.update(r, null);
-				roomsMap.put(roomId, r.getId());
+				roomMap.put(roomId, r.getId());
 			}
 		}
 
@@ -401,7 +407,7 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			
 			List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
 			for (RoomGroup ro : list) {
@@ -422,8 +428,8 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
@@ -435,8 +441,23 @@ public class BackupImport {
 				chatDao.update(m);
 			}
 		}
-		
-		log.info("Chat messages import complete, starting appointement import");
+		log.info("Chat messages import complete, starting calendar import");
+		/*
+		 * ##################### Import Calendars
+		 */
+		{
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			Serializer serializer = new Persister(strategy);
+			registry.bind(User.class, new UserConverter(userDao, userMap));
+			//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
+			List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class);
+			for (OmCalendar a : list) {
+				
+			}
+		}
+
+		log.info("Calendar import complete, starting appointement import");
 		/*
 		 * ##################### Import Appointements
 		 */
@@ -445,10 +466,11 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
-			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
+			registry.bind(OmCalendar.class, new OmCalendarConverter(calendarDao, calendarMap));
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
 			for (Appointment a : list) {
@@ -468,7 +490,7 @@ public class BackupImport {
 					continue;
 				}
 				a = appointmentDao.update(a, null, false);
-				appointmentsMap.put(appId, a.getId());
+				appointmentMap.put(appId, a.getId());
 			}
 		}
 
@@ -507,10 +529,10 @@ public class BackupImport {
 			for (Recording r : list) {
 				r.setId(null);
 				if (r.getRoomId() != null) {
-					r.setRoomId(roomsMap.get(r.getRoomId()));
+					r.setRoomId(roomMap.get(r.getRoomId()));
 				}
 				if (r.getOwnerId() != null) {
-					r.setOwnerId(usersMap.get(r.getOwnerId()));
+					r.setOwnerId(userMap.get(r.getOwnerId()));
 				}
 				if (r.getMetaData() != null) {
 					for (RecordingMetaData meta : r.getMetaData()) {
@@ -544,7 +566,7 @@ public class BackupImport {
 				if (storedFolder == null) {
 					p.setId(null);
 					Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
-					messageFoldersMap.put(folderId, newFolderId);
+					messageFolderMap.put(folderId, newFolderId);
 				}
 			}
 		}
@@ -558,7 +580,7 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
 			
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
@@ -571,7 +593,7 @@ public class BackupImport {
 						uc.setOwner(null);
 					}
 					uc = userContactDao.update(uc);
-					userContactsMap.put(ucId, uc.getId());
+					userContactMap.put(ucId, uc.getId());
 				}
 			}
 		}
@@ -585,8 +607,8 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
@@ -634,9 +656,9 @@ public class BackupImport {
 				// We need to reset this as openJPA reject to store them otherwise
 				file.setId(null);
 				Long roomId = file.getRoomId();
-				file.setRoomId(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
+				file.setRoomId(roomMap.containsKey(roomId) ? roomMap.get(roomId) : null);
 				if (file.getOwnerId() != null) {
-					file.setOwnerId(usersMap.get(file.getOwnerId()));
+					file.setOwnerId(userMap.get(file.getOwnerId()));
 				}
 				if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 					file.setParentId(null);
@@ -656,8 +678,8 @@ public class BackupImport {
 			Serializer serializer = new Persister(strategy, matcher);
 	
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -873,8 +895,8 @@ public class BackupImport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 
-		registry.bind(User.class, new UserConverter(userDao, usersMap));
-		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentMap));
 		
 		File xml = new File(baseDir, filename);
 		if (!xml.exists()) {
@@ -1090,7 +1112,7 @@ public class BackupImport {
 
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(userDao, usersMap));
+			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
 			InputNode root = NodeBuilder.read(new FileInputStream(xml));
@@ -1214,8 +1236,8 @@ public class BackupImport {
 		Long newId = null;
 		switch (map) {
 			case USERS:
-				if (usersMap.containsKey(oldId)) {
-					newId = usersMap.get(oldId);
+				if (userMap.containsKey(oldId)) {
+					newId = userMap.get(oldId);
 				}
 				break;
 			case ORGANISATIONS:
@@ -1224,23 +1246,23 @@ public class BackupImport {
 				}
 				break;
 			case APPOINTMENTS:
-				if (appointmentsMap.containsKey(oldId)) {
-					newId = appointmentsMap.get(oldId);
+				if (appointmentMap.containsKey(oldId)) {
+					newId = appointmentMap.get(oldId);
 				}
 				break;
 			case ROOMS:
-				if (roomsMap.containsKey(oldId)) {
-					newId = roomsMap.get(oldId);
+				if (roomMap.containsKey(oldId)) {
+					newId = roomMap.get(oldId);
 				}
 				break;
 			case MESSAGEFOLDERS:
-				if (messageFoldersMap.containsKey(oldId)) {
-					newId = messageFoldersMap.get(oldId);
+				if (messageFolderMap.containsKey(oldId)) {
+					newId = messageFolderMap.get(oldId);
 				}
 				break;
 			case USERCONTACTS:
-				if (userContactsMap.containsKey(oldId)) {
-					newId = userContactsMap.get(oldId);
+				if (userContactMap.containsKey(oldId)) {
+					newId = userContactMap.get(oldId);
 				}
 				break;
 			default:
