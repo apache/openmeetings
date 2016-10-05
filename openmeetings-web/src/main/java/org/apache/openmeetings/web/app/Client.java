@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
