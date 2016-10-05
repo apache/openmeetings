@@ -197,10 +197,10 @@ public class AppointmentManager {
 	}
 
 	/**
-	 * @see OmCalendarDao#get(Long)
+	 * @see OmCalendarDao#getByUser(Long)
 	 */
 	public List<OmCalendar> getCalendars(Long userid) {
-		return calendarDao.get(userid);
+		return calendarDao.getByUser(userid);
 	}
 
 	/**

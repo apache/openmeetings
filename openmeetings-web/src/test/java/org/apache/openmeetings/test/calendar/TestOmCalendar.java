@@ -52,7 +52,7 @@ public class TestOmCalendar extends AbstractJUnitDefaults {
 		assertTrue("Saved calendar should have valid id: " + calendar.getId(),
 				calendar.getId() != null && calendar.getId() > 0);
 
-		OmCalendar c = calendarDao.getCalendarbyId(calendar.getId());
+		OmCalendar c = calendarDao.get(calendar.getId());
 		assertNotNull("Failed to find Calendar by id", c);
 	}
 }
