@@ -20,6 +20,7 @@ package org.apache.openmeetings.util;
 
 public class OpenmeetingsVariables {
 	public static final String CONFIG_CRYPT_KEY = "crypt_ClassName";
+	public static final String CONFIG_DASHBOARD_SHOW_CHAT = "dashboard.show.chat";
 	public static final String CONFIG_DASHBOARD_SHOW_MYROOMS_KEY = "dashboard.show.myrooms";
 	public static final String CONFIG_DASHBOARD_SHOW_RSS_KEY = "dashboard.show.rssfeed";
 	public static final String CONFIG_DEFAULT_LANG_KEY = "default_lang_id";

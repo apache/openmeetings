@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
@@ -88,7 +89,7 @@ public class ChatPanel extends BasePanel {
 	private static final String ID_ALL = ID_TAB_PREFIX + "all";
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
-	private boolean  showDashboardChat = getBean(ConfigurationDao.class).getConfValue("dashboard.show.chat", Integer.class, "1") == 1;
+	private boolean  showDashboardChat = getBean(ConfigurationDao.class).getConfValue(CONFIG_DASHBOARD_SHOW_CHAT, Integer.class, "1") == 1;
 	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
