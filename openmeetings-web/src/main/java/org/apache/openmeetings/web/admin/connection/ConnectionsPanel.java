@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
@@ -152,7 +151,7 @@ public class ConnectionsPanel extends AdminPanel {
 			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
 				org.apache.openmeetings.web.app.Client c = item.getModelObject();
 				item.add(new Label("id", ""));
-				User u = getBean(UserDao.class).get(c.getUserId());
+				User u = c.getUser();
 				item.add(new Label("login", u == null ? null : u.getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", "html5"));

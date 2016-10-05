@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.WICKET_ROOM_ID;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.Application;
@@ -208,8 +209,8 @@ public class SwfPanel extends BasePanel {
 	}
 
 	public static boolean isModerator(long userId, long roomId) {
-		for (org.apache.openmeetings.web.app.Client c : getRoomUsers(roomId)) {
-			if (c.getUserId() == userId && c.hasRight(org.apache.openmeetings.web.app.Client.Right.moderator)) {
+		for (org.apache.openmeetings.web.app.Client c : getRoomClients(roomId)) {
+			if (c.getUserId() == userId && c.hasRight(Room.Right.moderator)) {
 				return true;
 			}
 		}

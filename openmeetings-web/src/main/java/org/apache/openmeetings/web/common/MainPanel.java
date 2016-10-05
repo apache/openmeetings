@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -68,6 +67,8 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
+import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.red5.logging.Red5LoggerFactory;
@@ -81,7 +82,7 @@ public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, webAppRootKey);
 	public final static String PARAM_USER_ID = "userId";
-	private Client client;
+	private Client client = null;
 	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
@@ -96,7 +97,6 @@ public class MainPanel extends Panel {
 
 	public MainPanel(String id, WebMarkupContainer panel) {
 		super(id);
-		client = new Client();
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
@@ -200,18 +200,29 @@ public class MainPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onConnect(ConnectedMessage message) {
-				super.onConnect(message);
-				addOnlineUser(new Client(message.getSessionId(), message.getKey(), getUserId()));
-				log.debug(String.format("WebSocketBehavior::onConnect [session: %s, key: %s]", message.getSessionId(), message.getKey()));
+			protected void onConnect(ConnectedMessage msg) {
+				super.onConnect(msg);
+				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId());
+				addOnlineUser(client);
+				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
+			}
+
+			@Override
+			protected void onAbort(AbortedMessage msg) {
+				super.onAbort(msg);
+				closeHandler(msg);
 			}
 			
 			@Override
-			protected void onClose(ClosedMessage message) {
-				Client client = getClientByKeys(getUserId(), WebSession.get().getId());
+			protected void onClose(ClosedMessage msg) {
+				super.onClose(msg);
+				closeHandler(msg);
+			}
+
+			private void closeHandler(AbstractClientMessage msg) {
+				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 				removeOnlineUser(client);
-				super.onClose(message);
-				log.debug("WebSocketBehavior::onClose");
+				client = null;
 			}
 		});
 	}
@@ -228,7 +239,7 @@ public class MainPanel extends Panel {
 					public void onClick(AjaxRequestTarget target) {
 						onClick(MainPanel.this, target);
 					}
-				}); 
+				});
 			}
 			menu.add(new MenuItem(Application.getString(gl.getLabelId()), l));
 		}
