@@ -62,7 +62,6 @@
         actionObject[5] = width;//-3
         actionObject[6] = height;//-2
         actionObject[7] = newName;//-1
-        this.baseactionobjectList.push(actionObject);
         this.onsharedMessage('draw',actionObject);
         this.drawPointerToHistory(actionObject,this);
     </method>
