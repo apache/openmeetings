@@ -170,9 +170,6 @@
 .right.moderator.ui-icon.granted {
 	background-image: url(images/user_delete.png);
 }
-.right.ui-icon {
-	opacity: 0.2;
-}
 .right.wb.ui-icon {
 	background-image: url(images/pencil_add.png);
 }
@@ -192,27 +189,21 @@
 	background-image: url(images/mouse_delete.png);
 }
 .right.audio.ui-icon {
-	opacity: 1;
 	background-image: url(images/microphone_add.png);
 }
 .right.audio.ui-icon.granted {
-	opacity: 0.2;
 	background-image: url(images/microphone_delete.png);
 }
 .right.camera.ui-icon {
-	opacity: 1;
 	background-image: url(images/webcam_add.png);
 }
 .right.camera.ui-icon.granted {
-	opacity: 0.2;
 	background-image: url(images/webcam_delete.png);
 }
 .global-mute.ui-icon {
-	opacity: 0.2;
 	background-image: url(images/sound.png);
 }
 .exclsv-audio.ui-icon {
-	opacity: 0.2;
 	background-image: url(images/microphone_exclusive.png);
 }
 .kick.ui-icon {
@@ -224,6 +215,18 @@
 }
 .settings.ui-icon {
 	background-image: url(images/settings.png);
+}
+.activity.cam.ui-icon {
+	background-image: url(images/webcam_enable.png);
+}
+.activity.cam.enabled.ui-icon {
+	background-image: url(images/webcam_disable.png);
+}
+.activity.mic.ui-icon {
+	background-image: url(images/microphone_enable.png);
+}
+.activity.mic.enabled.ui-icon {
+	background-image: url(images/microphone_disable.png);
 }
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;

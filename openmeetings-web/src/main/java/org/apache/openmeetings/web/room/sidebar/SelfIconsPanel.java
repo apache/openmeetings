@@ -22,17 +22,20 @@ import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.SettingsIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.activity.CamActivityIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.activity.MicActivityIcon;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
 public class SelfIconsPanel extends ClientIconsPanel {
 	private static final long serialVersionUID = 1L;
 	private final SettingsIcon settings;
 	private final CamActivityIcon cam;
+	private final MicActivityIcon mic;
 
 	public SelfIconsPanel(String id, Client client, RoomPanel room) {
 		super(id, client, room);
 		add(settings = new SettingsIcon("settings", client, room)
-			, cam = new CamActivityIcon("cam", client, room));
+			, cam = new CamActivityIcon("cam", client, room)
+			, mic = new MicActivityIcon("mic", client, room));
 	}
 
 	@Override
@@ -46,5 +49,6 @@ public class SelfIconsPanel extends ClientIconsPanel {
 		super.update(handler);
 		settings.update(handler);
 		cam.update(handler);
+		mic.update(handler);
 	}
 }
