@@ -112,7 +112,7 @@ public class ChatPanel extends BasePanel {
 			}
 		}
 	};
-	
+
 	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
 		String scope, scopeName;
 		if (m.getToUser() != null) {
@@ -129,11 +129,11 @@ public class ChatPanel extends BasePanel {
 		}
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
-	
+
 	public JSONObject getMessage(List<ChatMessage> list) throws JSONException {
 		return getMessage(getUserId(), list);
 	}
-	
+
 	private JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
 		JSONArray arr = new JSONArray();
 		for (ChatMessage m : list) {
@@ -249,7 +249,7 @@ public class ChatPanel extends BasePanel {
 			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 		}
 	}
-	
+
 	private static void sendRoom(ChatMessage m, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 		for (Client c : getRoomClients(m.getToRoom().getId())) {
@@ -265,7 +265,7 @@ public class ChatPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	private class ChatForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
 		private final ChatToolbar toolbar = new ChatToolbar("toolbarContainer");

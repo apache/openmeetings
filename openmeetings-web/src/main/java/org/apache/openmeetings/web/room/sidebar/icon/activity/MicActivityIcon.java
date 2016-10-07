@@ -22,17 +22,17 @@ import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.room.RoomPanel;
 
-public class CamActivityIcon extends RoomActivityIcon {
+public class MicActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
-	public CamActivityIcon(String id, Client client, RoomPanel room) {
+	public MicActivityIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Activity.broadcastVideo, room);
-		mainCssClass = "activity cam ";
+		mainCssClass = "activity mic ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString("687");
+		return getString("1606");
 	}
 
 	@Override

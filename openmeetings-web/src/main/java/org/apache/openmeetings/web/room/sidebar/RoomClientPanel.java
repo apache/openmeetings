@@ -43,9 +43,9 @@ public class RoomClientPanel extends Panel {
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
 		item.add(AttributeAppender.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
+		item.add(AttributeAppender.append("data-userid", c.getUserId()));
 		add(new RefreshIcon("refresh", c, room));
 		add(new Label("name", getName(c)));
-		add(AttributeAppender.append("data-userid", c.getUserId()));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new KickIcon("kick", c, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
