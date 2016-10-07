@@ -75,7 +75,7 @@
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO" />
 			<property name="openjpa.DataCache" value="true" />
 			<property name="openjpa.QueryCache" value="true" />
-			<property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
+			<property name="openjpa.jdbc.DBDictionary" value="sqlserver(batchLimit=100,charTypeName=nchar,varcharTypeName=nvarchar,longVarcharTypeName=ntext)" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 		</properties>
 	</persistence-unit>
