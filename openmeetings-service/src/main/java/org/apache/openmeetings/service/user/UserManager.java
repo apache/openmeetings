@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.user;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -25,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
@@ -84,7 +84,7 @@ public class UserManager implements IUserManager {
 	private EntityManager em;
 
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -143,14 +143,13 @@ public class UserManager implements IUserManager {
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
-			Sessiondata sessionData = sessiondataDao
-					.get(remoteHash);
+			Sessiondata sessionData = sessionDao.check(remoteHash);
 
 			if (sessionData != null) {
 
 				User u = userDao.get(sessionData.getUserId());
 
-				sessiondataDao.updateUserWithoutSession(SID, u.getId());
+				sessionDao.updateUserWithoutSession(SID, u.getId());
 
 				return u;
 			}
@@ -163,7 +162,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public Long logout(String SID, long userId) {
-		sessiondataDao.updateUser(SID, null, false, 0);
+		sessionDao.updateUser(SID, null, false, 0);
 		return -12L;
 	}
 
@@ -373,7 +372,7 @@ public class UserManager implements IUserManager {
 				link += "activate?u=" + hash;
 
 				if (sendWelcomeMessage && email.length() != 0) {
-					String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation, languageId);
+					String sendMail = emailManagement.sendMail(login, email, link, sendConfirmation, languageId);
 					if (!sendMail.equals("success")) {
 						return -19L;
 					}
@@ -395,7 +394,7 @@ public class UserManager implements IUserManager {
 				}
 				log.debug("Added user-Id " + u.getId());
 
-				if (adr.getId() > 0 && u.getId() > 0) {
+				if (adr.getId() != null && u.getId() != null) {
 					return u.getId();
 				} else {
 					return -16L;
@@ -412,19 +411,19 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 * @param admin
+	 * @param sid
 	 * @param room_id
 	 * @return
 	 */
 	@Override
-	public boolean kickUserByStreamId(String SID, Long room_id) {
+	public boolean kickUserByStreamId(String sid, Long room_id) {
 		try {
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
-				sessiondataDao.clearSessionByRoomId(room_id);
+				sessionDao.clearSessionByRoomId(room_id);
 
 				for (Client rcl : sessionManager.getClientListByRoom(room_id)) {
 					if (rcl == null) {
@@ -450,9 +449,9 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public boolean kickUserByPublicSID(String SID, String publicSID) {
+	public boolean kickUserByPublicSID(String sid, String publicSID) {
 		try {
-			Long userId = sessiondataDao.check(SID);
+			Long userId = sessionDao.check(sid);
 
 			// admins only
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -521,7 +520,7 @@ public class UserManager implements IUserManager {
 		for (int i = 0; i < rawPass.length; ++i) {
 			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
 		}
-		String pass = new String(rawPass, StandardCharsets.UTF_8);
+		String pass = new String(rawPass, UTF_8);
 		// check if the user already exists and register new one if it's needed
 		if (u == null) {
 			u = userDao.getNewUserInstance(null);

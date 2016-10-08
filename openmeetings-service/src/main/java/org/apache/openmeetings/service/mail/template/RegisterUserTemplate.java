@@ -25,11 +25,10 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RegisterUserTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterUserTemplate(String username, String userpass, String email, String verification_url) {
+	public RegisterUserTemplate(String username, String email, String verification_url) {
 		super(getOmSession().getOmLanguage());
 		add(new Label("registrationLbl", getString(506, langId)));
 		add(new Label("username", username));
-		add(new Label("userpass", userpass));
 		add(new Label("email", email));
 		WebMarkupContainer verification = new WebMarkupContainer("verification");
 		add(verification.add(new Label("verification_url2", verification_url))
@@ -38,7 +37,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 		add(new Label("groupLbl", getString(511, langId)));
 	}
 
-	public static String getEmail(String username, String userpass, String email, String verification_url) {
-		return renderPanel(new RegisterUserTemplate(username, userpass, email, verification_url)).toString();
+	public static String getEmail(String username, String email, String verification_url) {
+		return renderPanel(new RegisterUserTemplate(username, email, verification_url)).toString();
 	}
 }

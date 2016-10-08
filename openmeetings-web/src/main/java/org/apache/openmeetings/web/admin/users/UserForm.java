@@ -115,8 +115,7 @@ public class UserForm extends AdminBaseForm<User> {
 			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
 			if (isNew && sendEmailAtRegister) {
 				String link = getBean(ConfigurationDao.class).getBaseUrl();
-				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(),
-						generalForm.getPasswordField().getConvertedInput(), generalForm.getEmail(), link, false, null);
+				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), generalForm.getEmail(), link, false, null);
 				if (!sendMail.equals("success")) {
 					throw new Exception("Mail for new user is not sent");
 				}
