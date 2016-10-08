@@ -331,11 +331,14 @@
 		
 		<handler name="onScrollItem" args="item">
 		<![CDATA[
+			//if ($debug) Debug.write("SCROLL item:: ", item.itemId);
 			if (this.renderList.length > item.itemId) {
-				item.setAttribute("clickable",true);
-				item.refObj = this.renderList[item.itemId];
+				item.setAttribute("clickable", true);
+				var o = this.renderList[item.itemId];
+				//if ($debug) Debug.write("SCROLL item:: ", o.lastname, item.lastname);
+				item.refObj = o;
 				
-				if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+				if (o["isselected"] && o.isselected) {
 					item.isselected = true;
 					item.onmouseout.sendEvent();
 					item.initModeratorIcons();
@@ -345,24 +348,23 @@
 					item.hideModeratorIcons();
 				}
 				
-				if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
+				if ($debug) Debug.write(item.itemId, o.isMod, o.publicSID);
 				
-				item.setAttribute("userId",this.renderList[item.itemId].userId);
-				item.setAttribute("firstname",this.renderList[item.itemId].firstname);
-				item.setAttribute("isSuperModerator",this.renderList[item.itemId].isSuperModerator);
-				item.setAttribute("lastname",this.renderList[item.itemId].lastname);
-				item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
-				item.setAttribute("micMuted",this.renderList[item.itemId].micMuted);
-				item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
-				item.setAttribute("isMod",this.renderList[item.itemId].isMod);
-				item.streamid = this.renderList[item.itemId].streamid;
-				item.setAttribute("username",this.renderList[item.itemId].username);
-				item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
+				item.setAttribute("userId", o.userId);
+				item.setAttribute("firstname", o.firstname);
+				item.setAttribute("isSuperModerator", o.isSuperModerator);
+				item.setAttribute("lastname", o.lastname);
+				item.setAttribute("connectedSince", o.connectedSince);
+				item.setAttribute("micMuted", o.micMuted);
+				item.isBroadcasting = o.isBroadcasting;
+				item.setAttribute("isMod", o.isMod);
+				item.streamid = o.streamid;
+				item.setAttribute("username", o.username);
+				item.setAttribute("formatedDate", o.formatedDate);
 				
-				item.setAttribute("itemId",item.itemId);
-				
+				item.setAttribute("itemId", item.itemId);
+				item.update(o);
 				item.updateIconByModScroll();
-					
 			} else {
 				item.isselected = false;
 				item.onmouseout.sendEvent();
