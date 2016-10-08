@@ -59,7 +59,6 @@
 					<archiveClasses>true</archiveClasses>
 					<packagingExcludes>**/*.class</packagingExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-					<skip>${om.quick.build}</skip>
 				</configuration>
 				<executions>
 					<execution>
@@ -505,12 +504,6 @@
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbynet</artifactId>
 			<version>${derby.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.4.01</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
