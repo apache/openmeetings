@@ -75,7 +75,6 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		super.onOpen(handler);
 		handler.add(form);
 		setModelObject(name);
 		getFeedbackMessages().clear();

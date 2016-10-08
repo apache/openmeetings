@@ -148,7 +148,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		country = WebSession.get().getBrowserLocale().getCountry();
 	}
 
-	public void onOpen(AjaxRequestTarget target) {
+	@Override
+	protected void onOpen(IPartialPageRequestHandler handler) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String baseURL = cfgDao.getBaseUrl();
 		sendEmailAtRegister = 1 == cfgDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
@@ -162,7 +163,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		}
 		confirmRegistration.setModelObject(Application.getString(messageCode));
 		reset();
-		target.add(form);
+		handler.add(form);
 	}
 
 	@Override
