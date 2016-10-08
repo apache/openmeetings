@@ -60,7 +60,7 @@ public class EmailManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String userpass, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
+	public String sendMail(String username, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
@@ -70,7 +70,7 @@ public class EmailManager {
 			ensureApplication(langId != null ? langId :
 					configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 			mailHandler.send(email, getString(512)
-				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
+				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
 	}
