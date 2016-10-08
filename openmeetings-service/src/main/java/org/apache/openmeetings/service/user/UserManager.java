@@ -143,7 +143,7 @@ public class UserManager implements IUserManager {
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
-			Sessiondata sessionData = sessionDao.check(remoteHash);
+			Sessiondata sessionData = sessionDao.get(remoteHash);
 
 			if (sessionData != null) {
 
@@ -418,7 +418,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public boolean kickUserByStreamId(String sid, Long room_id) {
 		try {
-			Long users_id = sessionDao.check(SID);
+			Long users_id = sessionDao.check(sid);
 
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
