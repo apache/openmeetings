@@ -20,26 +20,17 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
-import org.apache.openmeetings.web.app.Application;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-
-public class ProfileImagePanel extends BasePanel {
+public class ProfileImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
-	protected final WebMarkupContainer profile = new TransparentWebMarkupContainer("profile");
 	private final long userId;
-	
+
 	public ProfileImagePanel(String id, final long userId) {
 		super(id);
 		this.userId = userId;
-		add(profile.setOutputMarkupId(true));
-		update();
 	}
-	
-	public void update() {
-		profile.addOrReplace(new WebMarkupContainer("img").add(
-				AttributeModifier.append("alt", Application.getString(5L))
-				, AttributeModifier.append("src", getUrl(getRequestCycle(), userId))));
+
+	@Override
+	protected String getImageUrl() {
+		return getUrl(getRequestCycle(), userId);
 	}
 }

@@ -1968,4 +1968,13 @@
 	<entry key="calendar.googleID">Google Calendar ID</entry>
 	<entry key="calendar.gcal">Google Calendar</entry>
 	<entry key="calendar.defaultTitle">New Calendar</entry>
+	<entry key="admin.group.form.logo">Logo</entry>
+	<entry key="admin.group.form.tag">Tag</entry>
+	<entry key="admin.group.form.limited">Limits enabled</entry>
+	<entry key="admin.group.form.maxFilesSize">Maximum files size</entry>
+	<entry key="admin.group.form.maxRecordingsSize">Maximum recordings size</entry>
+	<entry key="admin.group.form.maxRooms">Maximum room number</entry>
+	<entry key="admin.group.form.recordingTtl">Recordings expire in</entry>
+	<entry key="admin.group.form.reminderDays">Expire reminder sent in</entry>
+	<entry key="admin.group.form.days">days</entry>
 </properties>
