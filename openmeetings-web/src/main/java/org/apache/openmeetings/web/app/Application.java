@@ -66,6 +66,7 @@ import org.apache.openmeetings.web.user.record.FlvRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.user.record.OggRecordingResourceReference;
+import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.Localizer;
@@ -154,6 +155,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
+		mountResource("/group/${id}", new GroupLogoResourceReference());
 	}
 
 	private static class NoVersionMapper extends MountedMapper {

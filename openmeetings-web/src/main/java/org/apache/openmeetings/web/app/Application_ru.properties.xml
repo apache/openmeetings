@@ -144,10 +144,10 @@
   <entry key="124">На главную</entry>
   <entry key="125">Пользователи</entry>
   <entry key="126">Группы</entry>
-  <entry key="127">Организации</entry>
+  <entry key="127">Группы</entry>
   <entry key="128">Комнаты совещаний</entry>
   <entry key="129">Публично</entry>
-  <entry key="130">Организация</entry>
+  <entry key="130">Группа</entry>
   <entry key="131">Вход</entry>
   <entry key="132">Логин</entry>
   <entry key="133">Пароль</entry>
@@ -1959,4 +1959,13 @@
 	<entry key="network.test.upl.speed">Скорость загрузки</entry>
 	<entry key="access.denied.header">Доступ запрещён. У вас недостаточно прав на это действие.</entry>
 	<entry key="save.success">Успешно сохранено</entry>
+	<entry key="admin.group.form.logo">Лого</entry>
+	<entry key="admin.group.form.tag">Тэг</entry>
+	<entry key="admin.group.form.limited">Разрешить ограничения</entry>
+	<entry key="admin.group.form.maxFilesSize">Максимальный размер файлов</entry>
+	<entry key="admin.group.form.maxRecordingsSize">Максимальный размер записей</entry>
+	<entry key="admin.group.form.maxRooms">Максимальное количество комнат</entry>
+	<entry key="admin.group.form.recordingTtl">Записи стираются через</entry>
+	<entry key="admin.group.form.reminderDays">Напоминание о стирании посылается за</entry>
+	<entry key="admin.group.form.days">дней</entry>
 </properties>

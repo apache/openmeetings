@@ -20,21 +20,30 @@ package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
+import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 
+import java.io.File;
+
+import org.apache.openmeetings.core.converter.GenerateImage;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.UploadableImagePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
@@ -43,8 +52,13 @@ import org.wicketstuff.select2.Select2Choice;
 public class GroupForm extends AdminBaseForm<Group> {
 	private static final long serialVersionUID = 1L;
 	private GroupUsersPanel usersPanel;
-	private WebMarkupContainer groupList;
-	private Select2Choice<User> userToadd = null;
+	private final WebMarkupContainer groupList;
+	private final Select2Choice<User> userToadd;
+	private final NumberTextField<Integer> maxFilesSize = new NumberTextField<>("maxFilesSize");
+	private final NumberTextField<Integer> maxRecordingsSize = new NumberTextField<>("maxRecordingsSize");
+	private final NumberTextField<Integer> maxRooms = new NumberTextField<>("maxRooms");
+	private final NumberTextField<Integer> recordingTtl = new NumberTextField<>("recordingTtl");
+	private final NumberTextField<Integer> reminderDays = new NumberTextField<>("reminderDays");
 	
 	static String formatUser(User choice) {
 		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
@@ -55,7 +69,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
-		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(165))));
 		usersPanel = new GroupUsersPanel("users", getGroupId());
 		add(usersPanel);
 
@@ -99,10 +112,59 @@ public class GroupForm extends AdminBaseForm<Group> {
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
-	
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
+		add(new UploadableImagePanel("logo") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getImageUrl() {
+				return getUrl(getRequestCycle(), GroupForm.this.getModelObject().getId());
+			}
+
+			@Override
+			protected void processImage(StoredFile sf, File f) throws Exception {
+				getBean(GenerateImage.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 23);
+			}
+
+			@Override
+			protected String getTitle() {
+				return getString("admin.group.form.logo");
+			}
+		});
+		add(new TextField<String>("tag").setLabel(Model.of(getString("admin.group.form.tag"))));
+		add(new AjaxCheckBox("limited") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				target.add(
+					maxFilesSize.setEnabled(getModelObject())
+					, maxRecordingsSize.setEnabled(getModelObject())
+					, maxRooms.setEnabled(getModelObject())
+					, recordingTtl.setEnabled(getModelObject())
+					, reminderDays.setEnabled(getModelObject())
+				);
+			}
+		}.setLabel(Model.of(getString("admin.group.form.limited"))));
+		add(maxFilesSize.setLabel(Model.of(getString("admin.group.form.maxFilesSize"))).setEnabled(false).setOutputMarkupId(true));
+		add(maxRecordingsSize.setLabel(Model.of(getString("admin.group.form.maxRecordingsSize"))).setEnabled(false).setOutputMarkupId(true));
+		add(maxRooms.setLabel(Model.of(getString("admin.group.form.maxRooms"))).setEnabled(false).setOutputMarkupId(true));
+		add(recordingTtl.setLabel(Model.of(getString("admin.group.form.recordingTtl"))).setEnabled(false).setOutputMarkupId(true));
+		add(reminderDays.setLabel(Model.of(getString("admin.group.form.reminderDays"))).setEnabled(false).setOutputMarkupId(true));
+	}
+
 	public void updateView(AjaxRequestTarget target) {
 		userToadd.setModelObject(null);
 		usersPanel.update(getGroupId());
+		maxFilesSize.setEnabled(getModelObject().isLimited());
+		maxRecordingsSize.setEnabled(getModelObject().isLimited());
+		maxRooms.setEnabled(getModelObject().isLimited());
+		recordingTtl.setEnabled(getModelObject().isLimited());
+		reminderDays.setEnabled(getModelObject().isLimited());
 		target.add(this, groupList);
 		target.appendJavaScript("groupsInit();");
 	}

@@ -122,14 +122,15 @@ public class GenerateImage extends BaseConverter {
 	private ConverterProcessResult convertSingleJpg(String inputFile, File outputfile) throws IOException {
 		String[] argv = new String[] { getPathToImageMagick(), inputFile, outputfile.getCanonicalPath() };
 
-		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
+		return ProcessHelper.executeScript("convertSingleJpg", argv);
 	}
 
-	public ConverterProcessResult convertImageByTypeAndSize(String inputFile,
-			String outputfile, int width, int height) {
-		String[] argv = new String[] { getPathToImageMagick(), "-size",
-				width + "x" + height, inputFile, outputfile };
-		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
+	public ConverterProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
+		String[] argv = new String[] { getPathToImageMagick()
+				, "-size", (width == null ? "" : width) + (height == null ? "" : "x" + height)
+				, in.getCanonicalPath(), out.getCanonicalPath()
+				};
+		return ProcessHelper.executeScript("GenerateImage::resize", argv);
 	}
 
 	public ConverterProcessResult convertImageByTypeAndSizeAndDepth(

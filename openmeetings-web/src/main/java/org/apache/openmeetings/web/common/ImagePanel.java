@@ -18,30 +18,35 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import java.io.File;
-
-import org.apache.openmeetings.core.converter.GenerateImage;
-import org.apache.openmeetings.util.StoredFile;
-
-public class UploadableProfileImagePanel extends UploadableImagePanel {
+public abstract class ImagePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private final long userId;
+	protected final WebMarkupContainer profile = new TransparentWebMarkupContainer("profile");
 
-	public UploadableProfileImagePanel(String id, final long userId) {
+	public ImagePanel(String id) {
 		super(id);
-		this.userId = userId;
+		add(profile.setOutputMarkupId(true));
 	}
 
 	@Override
-	protected void processImage(StoredFile sf, File f) throws Exception {
-		getBean(GenerateImage.class).convertImageUserProfile(f, userId, sf.isAsIs());
+	protected void onInitialize() {
+		super.onInitialize();
+		update();
 	}
 
-	@Override
-	protected String getImageUrl() {
-		return getUrl(getRequestCycle(), userId);
+	protected abstract String getImageUrl();
+
+	protected String getTitle() {
+		return getString("5");
+	}
+
+	public void update() {
+		profile.addOrReplace(new WebMarkupContainer("img").add(
+				AttributeModifier.append("alt", getTitle())
+				, AttributeModifier.append("title", getTitle())
+				, AttributeModifier.append("src", getImageUrl())));
 	}
 }

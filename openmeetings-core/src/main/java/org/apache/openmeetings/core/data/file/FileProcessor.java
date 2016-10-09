@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.data.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadTempFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -117,16 +118,16 @@ public class FileProcessor {
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(hash, "files", true, completeName);
+			returnError = generatePDF.convertPDF(hash, FILES_DIR, true, completeName);
 		} else if (isPdf) {
 			// convert to thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(hash, "files", false, completeName);
+			returnError = generatePDF.convertPDF(hash, FILES_DIR, false, completeName);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
 		} else if (isImage && !isAsIs) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(hash, extDot, "files");
+			returnError = generateImage.convertImage(hash, extDot, FILES_DIR);
 		} else if (isAsIs) {
 			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
 			returnError.addItem("processThumb", processThumb);

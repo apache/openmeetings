@@ -110,15 +110,6 @@ public class MainPanel extends Panel {
 				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
-		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				getSession().invalidate();
-				setResponsePage(Application.get().getSignInPageClass());
-			}
-		});
 		topLinks.add(new AjaxLink<Void>("profile") {
 			private static final long serialVersionUID = 1L;
 
@@ -223,6 +214,20 @@ public class MainPanel extends Panel {
 				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 				removeOnlineUser(client);
 				client = null;
+			}
+		});
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				getSession().invalidate();
+				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
 	}
