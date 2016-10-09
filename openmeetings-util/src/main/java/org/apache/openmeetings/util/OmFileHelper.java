@@ -40,11 +40,11 @@ public class OmFileHelper {
 	 */
 	private static File OM_HOME = null;
 	private static final String UPLOAD_DIR = "upload";
-	private static final String FILES_DIR = "files";
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
 	private static final String WEB_INF_DIR = "WEB-INF";
 	private static final String PROFILES_DIR = "profiles";
+	private static final String GROUP_LOGO_DIR = "grouplogo";
 	private static final String STREAMS_DIR = "streams";
 	private static final String EMOTIONS_DIR = "emoticons";
 	private static final String LANGUAGES_DIR = "languages";
@@ -58,7 +58,8 @@ public class OmFileHelper {
 	private static final String INSTALL_FILE = "install.xml";
 
 	public static final String SCREENSHARING_DIR = "screensharing";
-
+	
+	public static final String FILES_DIR = "files";
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
@@ -83,6 +84,7 @@ public class OmFileHelper {
 	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
 	public static final String JPG_MIME_TYPE = "image/jpeg";
+	public static final String PNG_MIME_TYPE = "image/png";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
@@ -127,6 +129,18 @@ public class OmFileHelper {
 
 	public static File getUploadProfilesUserDir(String userId) {
 		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
+	}
+
+	public static File getGroupLogoDir() {
+		return getDir(getUploadDir(), GROUP_LOGO_DIR);
+	}
+
+	public static File getGroupLogo(Long groupId, boolean check) {
+		File logo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
+		if (check && !logo.exists()) {
+			logo = new File(getImagesDir(), "blank.png");
+		}
+		return logo;
 	}
 
 	public static File getDefaultProfilePicture() {

@@ -313,7 +313,8 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 .adminForm div.formelement {
 	display: block;
 	clear: both;
-	max-width: 490px;
+	max-width: 540px;
+	white-space: nowrap;
 }
 
 .adminForm select {

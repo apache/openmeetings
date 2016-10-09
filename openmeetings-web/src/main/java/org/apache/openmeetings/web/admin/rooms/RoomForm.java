@@ -299,10 +299,10 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 		}).setOutputMarkupId(true));
 
-        add(new CheckBox("moderated"));
+		add(new CheckBox("moderated"));
 
 		add(new TextField<String>("confno").setEnabled(false));
-		add(pin = new TextField<String>("pin"));
+		add(pin = new TextField<>("pin"));
 		pin.setEnabled(room.isSipEnabled());
 		add(new TextField<String>("ownerId").setEnabled(false));
 		add(new AjaxCheckBox("sipEnabled") {

@@ -44,40 +44,68 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name="countGroups", query="SELECT COUNT(c) FROM Group AS c WHERE c.deleted = false")
 })
 @Table(name = "om_group")
-@Root(name="organisation")
+@Root(name = "organisation")
 public class Group implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, name = "organisation_id")
 	private Long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	@Element(data = true, required = false)
 	private String name;
-	
-	@Column(name="insertedby")
+
+	@Column(name = "insertedby")
 	private Long insertedby;
-	
-	@Column(name="updatedby")
+
+	@Column(name = "updatedby")
 	private Long updatedby;
-	
-	@Column(name="inserted")
+
+	@Column(name = "inserted")
 	private Date inserted;
-	
-	@Column(name="updated")
+
+	@Column(name = "updated")
 	private Date updated;
-	
-	@Column(name="deleted")
+
+	@Column(name = "deleted")
 	@Element(data = true, required = false)
 	private boolean deleted;
-	
+
+	@Column(name = "tag")
+	@Element(data = true, required = false)
+	private String tag;
+
+	@Column(name = "limited")
+	@Element(data = true, required = false)
+	private boolean limited;
+
+	@Column(name = "max_files_size")
+	@Element(data = true, required = false)
+	private int maxFilesSize;
+
+	@Column(name = "max_rec_size")
+	@Element(data = true, required = false)
+	private int maxRecordingsSize;
+
+	@Column(name = "max_rooms")
+	@Element(data = true, required = false)
+	private int maxRooms;
+
+	@Column(name = "recording_ttl")
+	@Element(data = true, required = false)
+	private int recordingTtl;
+
+	@Column(name = "reminder_days")
+	@Element(data = true, required = false)
+	private int reminderDays;
 
 	public Long getInsertedby() {
 		return insertedby;
 	}
+
 	public void setInsertedby(Long insertedby) {
 		this.insertedby = insertedby;
 	}
@@ -85,6 +113,7 @@ public class Group implements IDataProviderEntity {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -93,6 +122,7 @@ public class Group implements IDataProviderEntity {
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -101,14 +131,15 @@ public class Group implements IDataProviderEntity {
 	public Long getUpdatedby() {
 		return updatedby;
 	}
+
 	public void setUpdatedby(Long updatedby) {
 		this.updatedby = updatedby;
-	}	
-	
+	}
 
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -116,18 +147,77 @@ public class Group implements IDataProviderEntity {
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public boolean isLimited() {
+		return limited;
+	}
+
+	public void setLimited(boolean limited) {
+		this.limited = limited;
+	}
+
+	public int getMaxFilesSize() {
+		return maxFilesSize;
+	}
+
+	public void setMaxFilesSize(int maxFilesSize) {
+		this.maxFilesSize = maxFilesSize;
+	}
+
+	public int getMaxRecordingsSize() {
+		return maxRecordingsSize;
+	}
+
+	public void setMaxRecordingsSize(int maxRecordingsSize) {
+		this.maxRecordingsSize = maxRecordingsSize;
+	}
+
+	public int getMaxRooms() {
+		return maxRooms;
+	}
+
+	public void setMaxRooms(int maxRooms) {
+		this.maxRooms = maxRooms;
+	}
+
+	public int getRecordingTtl() {
+		return recordingTtl;
+	}
+
+	public void setRecordingTtl(int recordingTtl) {
+		this.recordingTtl = recordingTtl;
+	}
+
+	public int getReminderDays() {
+		return reminderDays;
+	}
+
+	public void setReminderDays(int reminderDays) {
+		this.reminderDays = reminderDays;
+	}
+
 	@Override
 	public String toString() {
 		return "Group [id=" + id + ", name=" + name + ", deleted=" + deleted + "]";
-	}	
+	}
 }
