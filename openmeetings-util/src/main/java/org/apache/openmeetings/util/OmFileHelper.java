@@ -84,6 +84,7 @@ public class OmFileHelper {
 	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
 	public static final String JPG_MIME_TYPE = "image/jpeg";
+	public static final String PNG_MIME_TYPE = "image/png";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
