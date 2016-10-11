@@ -45,6 +45,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -158,11 +159,11 @@ public class CalendarPanel extends UserPanel {
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", Options.asString("H(:mm)"));
 
-		options.set("buttonText", "{month: '" + Application.getString(801) +
-								"', week: '" + Application.getString(800) + 
-								"', day: '"  + Application.getString(799) + 
-								"', today: '"  + Application.getString(1555) + 
-								"'}");
+		options.set("buttonText", new JSONObject()
+				.put("month", Application.getString(801))
+				.put("week", Application.getString(800))
+				.put("day", Application.getString(799))
+				.put("today", Application.getString(1555)).toString());
 
 		JSONArray monthes = new JSONArray();
 		JSONArray shortMonthes = new JSONArray();
