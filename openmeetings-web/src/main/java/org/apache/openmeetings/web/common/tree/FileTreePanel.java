@@ -18,10 +18,15 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -33,6 +38,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,29 +51,39 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.resource.FileResourceStream;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.ajax.IJQueryAjaxAware;
 import com.googlecode.wicket.jquery.core.ajax.JQueryAjaxBehavior;
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private final IModel<FileItem> selected = new CompoundPropertyModel<FileItem>((FileItem)null);
+	private final AjaxDownload downloader = new AjaxDownload();
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
 	final FileItemTree tree;
+	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>());
+	private final Form<Void> form = new Form<Void>("form");
 
 	public FileTreePanel(String id, Long roomId) {
 		super(id);
 		OmTreeProvider tp = new OmTreeProvider(roomId);
 		setSelected(tp.getRoot(), null);
-		add(tree = new FileItemTree("tree", this, tp));
+		form.add(tree = new FileItemTree("tree", this, tp));
+		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true).setDefaultModelObject(newDownloadMenuList()));
+		add(form.add(downloader));
 	}
 	
 	@Override
@@ -81,7 +97,7 @@ public abstract class FileTreePanel extends Panel {
 				createFolder(target, getModelObject());
 			}
 		};
-		add(addFolder);
+		form.add(addFolder);
 		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
 
@@ -131,7 +147,7 @@ public abstract class FileTreePanel extends Panel {
 				}
 			}
 		};
-		add(trashToolbar);
+		form.add(trashToolbar);
 		trashToolbar.add(getUpload("upload"));
 		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
@@ -166,10 +182,10 @@ public abstract class FileTreePanel extends Panel {
 			}
 		});
 		
-		add(trees.add(tree).setOutputMarkupId(true));
+		form.add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
-		add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
-		add(errorsDialog);
+		form.add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
+		form.add(errorsDialog);
 	}
 	
 	protected String getContainment() {
@@ -242,6 +258,9 @@ public abstract class FileTreePanel extends Panel {
 	public void setSelected(FileItem fi, AjaxRequestTarget target) {
 		FileItem _prev = selected.getObject();
 		updateNode(target, _prev);
+		if (target != null) {
+			target.add(download.setVisible(fi.getType() == Type.Presentation || fi.getType() == Type.Image));
+		}
 		selected.setObject(fi);
 		updateNode(target, fi);
 	}
@@ -252,5 +271,65 @@ public abstract class FileTreePanel extends Panel {
 		homeSize.detach();
 		publicSize.detach();
 		super.onDetach();
+	}
+	
+	private List<IMenuItem> newDownloadMenuList() {
+		List<IMenuItem> list = new ArrayList<>();
+
+		//original
+		list.add(new MenuItem(getString("files.download.original"), JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				File f = selected.getObject().getFile();
+				return f != null && f.exists();
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				File f = selected.getObject().getFile();
+				downloader.setFileName(f.getName());
+				downloader.setResourceStream(new FileResourceStream(f));
+				downloader.initiate(target);
+			}
+		});
+		//pdf
+		list.add(new MenuItem(getString("files.download.pdf"), JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				File f = selected.getObject().getFile(EXTENSION_PDF);
+				return f != null && f.exists();
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				File f = selected.getObject().getFile(EXTENSION_PDF);
+				downloader.setFileName(f.getName());
+				downloader.setResourceStream(new FileResourceStream(f));
+				downloader.initiate(target);
+			}
+		});
+		//jpg
+		list.add(new MenuItem(getString("files.download.jpg"), JQueryIcon.ARROWTHICKSTOP_1_S) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isEnabled() {
+				File f = selected.getObject().getFile(EXTENSION_JPG);
+				return f != null && f.exists();
+			}
+			
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				File f = selected.getObject().getFile(EXTENSION_JPG);
+				downloader.setFileName(f.getName());
+				downloader.setResourceStream(new FileResourceStream(f));
+				downloader.initiate(target);
+			}
+		});
+		return list;
 	}
 }

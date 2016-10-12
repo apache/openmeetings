@@ -20,6 +20,7 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
+	<form wicket:id="form">
 	<script type="text/javascript">
 		function treeRevert(dropped) {
 			$('#tree-anchor').get(0).scrollIntoView();
@@ -39,6 +40,7 @@
 			<div id="tree-anchor" style="height: 2px; width: 2px;"></div>
 			<div wicket:id="tree"></div>
 		</div>
+		<span wicket:id="download" wicket:message="title:867"></span>
 		<div class="sizes" wicket:id="sizes">
 			<table>
 				<tr>
@@ -54,5 +56,6 @@
 		<div wicket:id="addFolder"></div>
 		<div wicket:id="errors"></div>
 	</div>
+	</form>
 </wicket:panel>
 </html>
