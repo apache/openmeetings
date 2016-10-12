@@ -1977,4 +1977,7 @@
 	<entry key="admin.group.form.recordingTtl">Записи стираются через</entry>
 	<entry key="admin.group.form.reminderDays">Напоминание о стирании посылается за</entry>
 	<entry key="admin.group.form.days">дней</entry>
+	<entry key="files.download.original">Оригинальный</entry>
+	<entry key="files.download.pdf">PDF</entry>
+	<entry key="files.download.jpg">JPG</entry>
 </properties>

@@ -1977,4 +1977,7 @@
 	<entry key="admin.group.form.recordingTtl">Recordings expire in</entry>
 	<entry key="admin.group.form.reminderDays">Expire reminder sent in</entry>
 	<entry key="admin.group.form.days">days</entry>
+	<entry key="files.download.original">Original</entry>
+	<entry key="files.download.pdf">PDF</entry>
+	<entry key="files.download.jpg">JPG</entry>
 </properties>
