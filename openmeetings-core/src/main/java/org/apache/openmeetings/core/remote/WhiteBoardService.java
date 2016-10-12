@@ -237,9 +237,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-    public boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
+	public boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
 		try {
-            log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
+			log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
@@ -252,12 +252,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
-				        sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
-				        newMessage.put(0, "updateGiveAudioStatus");
-				        newMessage.put(1, rcl);
-				        scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						newMessage.put(0, "updateGiveAudioStatus");
+						newMessage.put(1, rcl);
+						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
