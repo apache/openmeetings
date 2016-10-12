@@ -33,10 +33,10 @@
 	<attribute name="screenImageRefNumber" value="1" type="number" />
 	<attribute name="screenImageRef1" value="null" />
 	<attribute name="screenImageRef2" value="null" />
-	
+
 	<event name="setNewScreenUserName" />
-	
-	<!-- invoked by clicking on the confirmation dialog after 
+
+	<!-- invoked by clicking on the confirmation dialog after
 		clicking on an image in the Library -->
 	<method name="addNewSyncImage" args="urlname,posx,posy,baseurl,fileName,moduleName,parentPath,room,domain">
 		if ($debug) Debug.write("urlname: ",urlname);
@@ -49,7 +49,7 @@
 			moduleName,parentPath,room,domain,
 			this.startNewObjectSyncProcess.uniqueObjectSyncName,false);
 	</method>
-	
+
 	<!-- standard add Function -->
 	<method name="addNewImage" args="urlname,posx,posy,baseurl,fileName,moduleName,parentPath,room,domain,uniqueObjectSyncName,isLocalSync">
 		if ($debug) Debug.write("urlname posx: ",urlname,posx);
@@ -58,7 +58,7 @@
 			true,
 			baseurl,fileName,moduleName,parentPath,room,domain,uniqueObjectSyncName,isLocalSync);
 	</method>
-	
+
 	<!--
 		alterModus => this is added by the mod not remotely
 	 -->
@@ -77,9 +77,9 @@
 				baseurl:baseurl,fileName:fileName,moduleName:moduleName,
 				parentPath:parentPath,room:room,domain:domain,
 				uniqueObjectSyncName:uniqueObjectSyncName,
-				isLocalSync:isLocalSync});	
+				isLocalSync:isLocalSync});
 			
-			//Add Layer to global Layer	
+			//Add Layer to global Layer
 			return this.currentlayer;
 		]]>
 	</method>
@@ -95,7 +95,7 @@
 					+'&room='+hib.currentroomid
 					+'&domain='+hib.conferencedomain
 					+'&sid='+canvas.sessionId;
-			
+
 				//Debug.write("incomingScreenSharing URL: ",downloadurl);
 				if (this.screenImageRefNumber==1){
 					this.screenImageRef1 = new lz.imageForScreenViewer(this,{visible:false,src:downloadurl,refObj:this,name:'screen1',x:0,y:0,downloadurl:downloadurl});
@@ -111,8 +111,8 @@
 				(new lz.singletonErrorPopupHolder()).setError(canvas.getLabelName(240));
 			}
 		]]>
-	</method>   
-	
+	</method>
+
 	<!--
 	TODO: Make new Base Class including the Screen sharing Functions
 	 -->
@@ -125,15 +125,13 @@
 			if (this.screenImageRef2) this.screenImageRef2.destroy();
 		}
 		this.isScreenImageLoading = false;
-	</method> 
-	
+	</method>
+
 	<!--
 		actionObject => attributes neccessary for loading image
 		refObj = drawarea
 		isWmlLoader => (true)is loaded as part of wml-object
-		
-		-->
-		
+	-->
 	<!-- method adds a new Image to the Layer,
 	but without making an Update-Event, 
 	Image added by remote host -->	
@@ -150,16 +148,16 @@
 				false,
 				actionObject[2],actionObject[3],actionObject[4],actionObject[5],
 				actionObject[6],actionObject[7],actionObject[8],false);
-				
+
 		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
 	</method>
-			
-	<!--- 
+
+	<!---
 		invoke by the initial Loading process in remoteWhiteboard.lzx, 
 		does not invoke any Update Handler
 		once this object is loaded, it will throw an Update event of kind
 		addImageToLayerHistoryToLocalLoaded		
-	 -->
+	-->
 	<method name="addImageToLayerHistoryToLocal" args="actionObject,refObj">
 		if ($debug) Debug.write("addImageToLayerHistoryToLocal: ",actionObject,refObj);
 		this.addImageToLayer(refObj,actionObject[actionObject.length-1],actionObject[1],
@@ -169,8 +167,8 @@
 				actionObject[2],actionObject[3],actionObject[4],actionObject[5],
 				actionObject[6],actionObject[7],actionObject[8],true);
 	</method>
-	
-	<!-- 
+
+	<!--
 		this handler is implemented also in remoteWhiteboard.lzx to sync a Local Object list
 		but throws NO Update Event, cause its only needed Locally, the whole Sync Process
 		has a different Sync-Object for Loading the complete Object List from the Sever.
@@ -180,7 +178,7 @@
 	<handler name="addImageToLayerHistoryToLocalLoaded" args="objRef">
 		if ($debug) Debug.write("addImageToLayerHistoryToLocal: ",objRef);
 		this.syncImageRefObj = objRef;
-		
+
 		this.registerNewImage(this.syncImageRefObj.src,
 			this.syncImageRefObj.x,this.syncImageRefObj.y,
 			this.syncImageRefObj.width,this.syncImageRefObj.height,
@@ -233,11 +231,11 @@
 	<method name="storeTempValsAndLoadSyncList" args="objRef">
 		if ($debug) Debug.write("storeTempValsAndLoadSyncList: ",objRef);
 		this.syncImageRefObj = objRef;
-		
+
 		//This invokes a Method which is in the remoteWhiteboard.lzx
 		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
 		this.sendCompletedObjectSyncEvent.doCall();
-		
+
 		this.registerNewImage(this.syncImageRefObj.src,
 			this.syncImageRefObj.x,this.syncImageRefObj.y,
 			this.syncImageRefObj.width,this.syncImageRefObj.height,
@@ -245,10 +243,9 @@
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
 			true,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-				this.getZIndex());		
-	
+			this.getZIndex());
 	</method>
-	
+
 	<!--- @keywords deprecated
 	TODO: check Recorder Modus
 	 -->
@@ -258,7 +255,7 @@
 		this.doRegisterAfterLoadingOrRecording();
 		this.sendCompleteImageSync();
 	</method>
-	
+
 	<method name="sendLoadNotificationImage" args="objRef" >
 		if ($debug) Debug.write("sendLoadNotificationImage: ",objRef);
 		this.syncImageRefObj = objRef;
@@ -269,12 +266,12 @@
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
 			false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-				this.getZIndex());	
+			this.getZIndex());
 		//This invokes a Method which is in the remoteWhiteboard.lzx
 		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
 		this.sendCompletedObjectSyncEvent.doCall();
 	</method>
-	
+
 	<!--- @keywords deprecated
 	TODO: Check recorder Modus
 	 -->
@@ -284,15 +281,13 @@
 		//now send notifications to connected clients
 		this.setAttribute('drawmodus','image');
 		this.registerNewImage(this.syncImageRefObj.src,
-					  this.syncImageRefObj.x,this.syncImageRefObj.y,
-					  this.syncImageRefObj.width,this.syncImageRefObj.height,
-					  this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
-					  this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
-					  this.syncImageRefObj.room,this.syncImageRefObj.domain,
-					  false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-					  this.getZIndex());		
+				this.syncImageRefObj.x,this.syncImageRefObj.y,
+				this.syncImageRefObj.width,this.syncImageRefObj.height,
+				this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
+				this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
+				this.syncImageRefObj.room,this.syncImageRefObj.domain,
+				false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
+				this.getZIndex());
 	</method>
-	
 </class>
-
 </library>
