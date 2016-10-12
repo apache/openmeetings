@@ -64,7 +64,7 @@ import org.apache.openmeetings.util.Version;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.adapter.ApplicationAdapter;
+import org.red5.server.adapter.MultiThreadedApplicationAdapter;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -79,7 +79,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
+public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SECURITY_CODE_PARAM = "securityCode";
 	private static final String NATIVE_SSL_PARAM = "nativeSsl";
@@ -1508,7 +1508,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @return 1
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public synchronized int sendBrowserMessageToMembers(Object newMessage) {
+	public int sendBrowserMessageToMembers(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 
