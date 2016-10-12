@@ -249,12 +249,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
-				        sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
-				        newMessage.put(0, "updateGiveAudioStatus");
-				        newMessage.put(1, rcl);
-				        scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						newMessage.put(0, "updateGiveAudioStatus");
+						newMessage.put(1, rcl);
+						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
