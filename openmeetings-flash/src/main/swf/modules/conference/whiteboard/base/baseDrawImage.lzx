@@ -61,7 +61,6 @@
 
 	<!--
 		alterModus => this is added by the mod not remotely
-		
 	 -->
 	<method name="addImageToLayer" args="obj,nameing,urlname,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,uniqueObjectSyncName,isLocalSync">
 		<![CDATA[
@@ -184,7 +183,7 @@
 		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
 	</method>
 
-	<!--- 
+	<!---
 		invoke by the initial Loading process in remoteWhiteboard.lzx, 
 		does not invoke any Update Handler
 		once this object is loaded, it will throw an Update event of kind

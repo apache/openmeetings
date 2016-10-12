@@ -25,6 +25,7 @@
 		<when property="$as3">
 			<passthrough>
 				import flash.printing.PrintJob;
+				import flash.events.MouseEvent;
 			</passthrough>
 		</when>
 	</switch>
@@ -63,26 +64,13 @@
 	<attribute name="selectedObjects" value="null"/>
 
 	<attribute name="ObjectByName" value="null" />
+	<attribute name="originalFrameRate" type="number" value="0"/>
 
 	<method name="getCounter">
 		//Debug.write("### getCounter :",this.counter);
 		var now = new Date();
 		return "_"+now.getTime();
 	</method>
-
-	<!--
-	 not needed anymore, Issue 507
-	<netRemoteCallHib name="getOID" funcname="getOID" showLoading="false"
-					remotecontext="$once{ canvas.thishib }" > 
-		<handler name="ondata" args="value">
-			<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				if($debug) Debug.write("getOID: ",value);
-				parent.counter = value;
-			]]>
-		</handler>   
-	</netRemoteCallHib>	 
-	 -->
 
 	<method name="compareAndSetCounter" args="c">
 		<![CDATA[
@@ -533,7 +521,7 @@
 	</method>
 
 	<method name="onmousedownMethod" >
-		<![CDATA[
+	<![CDATA[
 		if ($debug) Debug.write("onmousedownMethod this.drawmodus: ",this.drawmodus);
 
 		if(this.selectedObjects != null && this.selectedObjects.length > 0){
@@ -559,7 +547,10 @@
 				this.doSetHandBodus();
 			} else if(this.drawmodus=="paint"){
 				this.startPaint();
-				mousetracker_del.register(lz.Idle,'onidle');
+				originalFrameRate = canvas.sprite.stage.frameRate;
+				canvas.sprite.stage.frameRate = 60;
+				if ($debug) Debug.write("Current FPS: ", canvas.sprite.stage.frameRate);
+				canvas.sprite.stage.addEventListener(MouseEvent.MOUSE_MOVE, drawLine);
 			} else if(this.drawmodus=="line"){
 				this.startLine(null);
 				this.startx = currentlayer.getMouse('x');
@@ -614,91 +605,96 @@
 				startTyping();
 			}
 		}
-		]]>
+	]]>
+	</method>
+
+	<method name="drawLine" args="e">
+		//fake
 	</method>
 
 	<method name="onmouseupMethod" >
+	<![CDATA[
 		if ($debug) Debug.write("onmouseupMethod this.drawmodus: ",this.drawmodus);
-		<![CDATA[
-			if (canvas.ismoderator || canvas.isAllowedToDraw) {
+		if (canvas.ismoderator || canvas.isAllowedToDraw) {
 
-				var knownModus = true;
-				if(this.drawmodus=="drag"){
-					this.isDragging = false;
-					this.dragger.remove();
+			var knownModus = true;
+			if(this.drawmodus=="drag"){
+				this.isDragging = false;
+				this.dragger.remove();
 
-					this.setAttribute("x",Math.round(this.x));
-					this.setAttribute("y",Math.round(this.y));
+				this.setAttribute("x",Math.round(this.x));
+				this.setAttribute("y",Math.round(this.y));
 
-					if (this.last_x == this.x && this.last_x == this.x) {
-						if ($debug) Debug.write("No Change");
-						return;
-					}
-
-					this.last_x = this.x;
-					this.last_y = this.y;
-
-					var tArray = new Array();
-					tArray[0] = "moveMap";
-					tArray[1] = this.x;
-					tArray[2] = this.y;
-
-					this.onsharedMessage('moveMap',tArray);
-
-				} else if(this.drawmodus=="paint"){
-					this.endPaint();
-					mousetracker_del.unregisterAll();
-				} else if(this.drawmodus=="line"){
-					this.endLine();
-					mousetracker_del.unregisterAll();
-				} else if(this.drawmodus=="drawarrow"){
-					this.endDrawarrowline();
-					mousetracker_del.unregisterAll();
-				} else if(this.drawmodus=="uline"){
-					this.endUline();
-					mousetracker_del.unregisterAll();
-				} else if(this.drawmodus=="letter"){
-					this.endLetter();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'rectangle') {
-					this.endRect();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'ellipse') {
-					this.endEllipse();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'pointer') {
-					this.setAttribute('drawmodus','hand');
-					if (this.boundingIsActive){
-						this.boundingref._innerDrag.onmouseup.sendEvent();
-					}
-				} else if (this.drawmodus == 'pointerWhiteboard') {
-					if ($debug) Debug.write("pointerWhiteboard set New Point ");
-					this.endPointerWhiteBoard();
-				} else if(this.drawmodus=="clipart"){
-					this.endDrawClipArt();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'triangle') {
-					this.endTriangle();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'hand') {
-					this.endSelect();
-					mousetracker_del.unregisterAll();
-				} else if (this.drawmodus == 'paste') {
-				} else {
-					knownModus = true;
-					if ($debug) Debug.write("onmouseupMethod Unkown Modus ",this.drawmodus);
-				}
-				if (knownModus && !this.boundingIsActive && !this.letterObjectIsActive) {
-					endTyping();
+				if (this.last_x == this.x && this.last_x == this.x) {
+					if ($debug) Debug.write("No Change");
+					return;
 				}
 
-				this.checkStepLayers();
+				this.last_x = this.x;
+				this.last_y = this.y;
+
+				var tArray = new Array();
+				tArray[0] = "moveMap";
+				tArray[1] = this.x;
+				tArray[2] = this.y;
+
+				this.onsharedMessage('moveMap',tArray);
+
+			} else if(this.drawmodus=="paint"){
+				canvas.sprite.stage.frameRate = originalFrameRate;
+				canvas.sprite.stage.addEventListener(MouseEvent.MOUSE_MOVE, drawLine);
+				this.endPaint();
+			} else if(this.drawmodus=="line"){
+				this.endLine();
+				mousetracker_del.unregisterAll();
+			} else if(this.drawmodus=="drawarrow"){
+				this.endDrawarrowline();
+				mousetracker_del.unregisterAll();
+			} else if(this.drawmodus=="uline"){
+				this.endUline();
+				mousetracker_del.unregisterAll();
+			} else if(this.drawmodus=="letter"){
+				this.endLetter();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'rectangle') {
+				this.endRect();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'ellipse') {
+				this.endEllipse();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'pointer') {
+				this.setAttribute('drawmodus','hand');
+				if (this.boundingIsActive){
+					this.boundingref._innerDrag.onmouseup.sendEvent();
+				}
+			} else if (this.drawmodus == 'pointerWhiteboard') {
+				if ($debug) Debug.write("pointerWhiteboard set New Point ");
+				this.endPointerWhiteBoard();
+			} else if(this.drawmodus=="clipart"){
+				this.endDrawClipArt();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'triangle') {
+				this.endTriangle();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'hand') {
+				this.endSelect();
+				mousetracker_del.unregisterAll();
+			} else if (this.drawmodus == 'paste') {
 			} else {
-				if (!this.restricted) {
-					this.endPointerWhiteBoard();
-				}
+				knownModus = true;
+				if ($debug) Debug.write("onmouseupMethod Unkown Modus ",this.drawmodus);
 			}
-		]]>
+			if (knownModus && !this.boundingIsActive && !this.letterObjectIsActive) {
+				endTyping();
+			}
+
+			this.checkStepLayers();
+		} else {
+			if (!this.restricted) {
+				this.endPointerWhiteBoard();
+			}
+		}
+	]]>
 	</method>
 
 	<method name="startTyping">
@@ -721,16 +717,11 @@
 		canvas.thishib.sendMessage.doCall();
 	</method>
 
-	<!--
-	<handler name="onclick" args="obj">
-		//Debug.write("click on whiteBoard ",obj);
-	</handler>
-	 -->
 	<method name="trackmouse" args="item">
-		<![CDATA[
-
+	<![CDATA[
 		this.mx = currentlayer.getMouse('x');
 		this.my = currentlayer.getMouse('y');
+		//if ($debug) Debug.info("..trackmouse ", mx, my, item);
 
 		if (this.drawmodus=="paint") {
 			if (mx != prevx || my != prevy) {
@@ -826,8 +817,7 @@
 			this.endy = this.my;
 			this.drawrectangle (this.startx, this.starty, this.mx, this.my);
 		}
-
-		]]>
+	]]>
 	</method>
 
 	<!-- ####################
