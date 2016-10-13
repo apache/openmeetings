@@ -1811,9 +1811,6 @@
 	<entry key="install.wizard.params.step3.soxPath">SoX útvonala</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Adja meg a SoX elérési útvonalát, hagyja üresen, ha a SoX elérhető a rendszer útvonalak közt</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>
-	<entry key="install.wizard.params.step3.jodPath">JOD útvonala</entry>
-	<entry key="install.wizard.params.step3.jodPath.title">A JOD könyvtár útvonala (http://code.google.com/p/jodconverter), a JOD könyvtárban szükséges a jodconverter-core-version.jar</entry>
-	<entry key="install.wizard.params.step3.jodPath.text"></entry>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice útvonala a jodconverterhez</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Adja meg az OpenOffice/LibreOffice (optional) valós útvonalát, a OpenOffice/LibreOffice nem keresi automatikusan a jodconverter</entry>
 	<entry key="install.wizard.params.step3.officePath.text">
