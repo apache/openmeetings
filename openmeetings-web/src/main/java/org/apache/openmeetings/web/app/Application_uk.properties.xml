@@ -1826,9 +1826,6 @@
 	<entry key="install.wizard.params.step3.soxPath">SoX Шлях</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Вкажіть шлях до SoX, або не заповнюйте це поле якщо SoX встановлений в шляхах Вашої системи</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>
-	<entry key="install.wizard.params.step3.jodPath">JOD Шлях</entry>
-	<entry key="install.wizard.params.step3.jodPath.title">Шлях до бібліотеки JOD (http://code.google.com/p/jodconverter), налаштуйте шлях, указываюший на папку бібліотеки JOD, яка містить jodconverter-core-version.jar файл</entry>
-	<entry key="install.wizard.params.step3.jodPath.text"></entry>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Шлях для jodconverter</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Шлях до OpenOffice/LibreOffice (не обов'язковий) будь ласка, встановіть цей шлях, у разі коли jodconverter не в змозі знайти автоматично шлях до встановленого OpenOffice/LibreOffice</entry>
 	<entry key="install.wizard.params.step3.officePath.text">
