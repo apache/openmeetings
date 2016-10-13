@@ -52,7 +52,6 @@ public class InstallationConfig implements Serializable {
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";
 	public String soxPath = "";
-	public String jodPath = "/opt/jod/lib";
 	public String officePath = "";
 	
 	public String defaultLangId = "1";
@@ -78,7 +77,7 @@ public class InstallationConfig implements Serializable {
 				+ ", mailUseTls=" + mailUseTls + ", swfZoom=" + swfZoom
 				+ ", swfJpegQuality=" + swfJpegQuality  + ", swfPath=" + swfPath
 				+ ", imageMagicPath=" + imageMagicPath + ", ffmpegPath="
-				+ ffmpegPath + ", soxPath=" + soxPath + ", jodPath=" + jodPath
+				+ ffmpegPath + ", soxPath=" + soxPath
 				+ ", defaultLangId=" + defaultLangId + ", sendEmailAtRegister="
 				+ sendEmailAtRegister + ", urlFeed=" + urlFeed + ", urlFeed2="
 				+ urlFeed2 + ", sendEmailWithVerficationCode="

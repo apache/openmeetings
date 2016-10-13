@@ -245,8 +245,6 @@ public class ImportInitvalues {
 		cfgDao.add("ffmpeg_path", cfg.ffmpegPath, null, "Path To FFMPEG");
 		cfgDao.add("office.path", cfg.officePath, null,
 				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
-		cfgDao.add("jod.path", cfg.jodPath, null,
-				"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
 		cfgDao.add(CONFIG_RSS_FEED1_KEY, cfg.urlFeed, null, "Feed URL");
 
