@@ -483,7 +483,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new TextField<String>("imageMagicPath"));
 			add(new TextField<String>("ffmpegPath"));
 			add(new TextField<String>("soxPath"));
-			add(new TextField<String>("jodPath"));
 			add(new TextField<String>("officePath"));
 		}
 

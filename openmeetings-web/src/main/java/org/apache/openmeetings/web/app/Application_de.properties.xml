@@ -1829,9 +1829,6 @@
 	<entry key="install.wizard.params.step3.soxPath">SoX-Pfad</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Geben Sie den Pfad zu SoX an, falls es sich nicht im Systempfad befindet.</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>
-	<entry key="install.wizard.params.step3.jodPath">JOD-Pfad</entry>
-	<entry key="install.wizard.params.step3.jodPath.title"><![CDATA[Der Pfad zur JOD-Bibliothek (http://code.google.com/p/jodconverter). Beachten Sie, dass der Pfad auf das lib-Verzeichnis zeigen muss, welches auch jodconverter-core-version.jar enth&auml;lt.]]></entry>
-	<entry key="install.wizard.params.step3.jodPath.text"></entry>
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice-/LibreOffice-Pfad f&uuml;r jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den echten Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.</entry>
 	<entry key="install.wizard.params.step3.officePath.text">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls 

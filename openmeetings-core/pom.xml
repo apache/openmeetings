@@ -93,6 +93,11 @@
 			<artifactId>javax.mail</artifactId>
 			<version>${mail.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.artofsolving.jodconverter</groupId>
+			<artifactId>jodconverter-core</artifactId>
+			<version>3.0.1-om</version>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.red5</groupId>
