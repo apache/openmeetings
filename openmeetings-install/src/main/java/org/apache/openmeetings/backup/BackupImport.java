@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -224,7 +225,7 @@ public class BackupImport {
 					}
 				}
 				if (!fentry.isDirectory()) {
-					FileUtils.copyInputStreamToFile(zis, fentry);
+					Files.copy(zis, fentry.toPath());
 					zis.closeEntry();
 				}
 			}

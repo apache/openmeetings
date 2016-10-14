@@ -108,7 +108,6 @@ public class FileProcessor {
 			return returnError;
 		}
 		FileUtils.copyInputStreamToFile(is, file);
-		is.close();
 
 		
 		log.debug("canBeConverted: " + canBeConverted);
