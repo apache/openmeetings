@@ -18,23 +18,27 @@
  */
 package org.apache.openmeetings.backup;
 
-import static org.apache.commons.transaction.util.FileHelper.copyRec;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
+import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -63,7 +67,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -220,14 +224,14 @@ public class BackupImport {
 					}
 				}
 				if (!fentry.isDirectory()) {
-					FileHelper.copy(zis, fentry);
+					FileUtils.copyInputStreamToFile(zis, fentry);
 					zis.closeEntry();
 				}
 			}
 		}
 		return f;
 	}
-	
+
 	public void performImport(InputStream is) throws Exception {
 		userMap.clear();
 		groupMap.clear();
@@ -712,14 +716,14 @@ public class BackupImport {
 		importFolders(f);
 
 		log.info("File explorer item import complete, clearing temp files");
-		
-		FileHelper.removeRec(f);
+
+		FileUtils.deleteDirectory(f);
 	}
-	
+
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {
 		return readList(ser, baseDir, fileName, listNodeName, clazz, false);
 	}
-	
+
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
 		List<T> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
@@ -744,7 +748,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	private static Node getNode(Node doc, String name) {
 		if (doc != null) {
 			NodeList nl = doc.getChildNodes();
@@ -757,7 +761,7 @@ public class BackupImport {
 		}
 		return null;
 	}
-	
+
 	//FIXME (need to be removed in later versions) HACK to fix old properties
 	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<FileExplorerItem> list = new ArrayList<>();
@@ -882,7 +886,7 @@ public class BackupImport {
 	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
 		return readUserList(new InputSource(xml), listNodeName);
 	}
-	
+
 	public List<User> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
@@ -891,7 +895,7 @@ public class BackupImport {
 		
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
 	}
-	
+
 	//FIXME (need to be removed in later versions) HACK to add external attendees previously stored in MeetingMember structure
 	private List<MeetingMember> readMeetingMemberList(File baseDir, String filename, String listNodeName) throws Exception {
 		Registry registry = new Registry();
@@ -967,7 +971,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
@@ -1102,7 +1106,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	//FIXME (need to be removed in later versions) HACK to fix old properties
 	private List<Room> readRoomList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Room> list = new ArrayList<>();
@@ -1170,7 +1174,7 @@ public class BackupImport {
 		}
 		return list;
 	}
-	
+
 	private static Long getProfileId(File f) {
 		String n = f.getName();
 		if (n.indexOf(profilesPrefix) > -1) {
@@ -1178,10 +1182,10 @@ public class BackupImport {
 		}
 		return null;
 	}
-	
+
 	private void importFolders(File importBaseDir) throws IOException {
 		// Now check the room files and import them
-		File roomFilesFolder = new File(importBaseDir, "roomFiles");
+		File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
 
 		File uploadDir = getUploadDir();
 
@@ -1191,26 +1195,35 @@ public class BackupImport {
 			for (File file : roomFilesFolder.listFiles()) {
 				if (file.isDirectory()) {
 					String fName = file.getName();
-					if ("profiles".equals(fName)) {
+					if (PROFILES_DIR.equals(fName)) {
 						// profile should correspond to the new user id
 						for (File profile : file.listFiles()) {
 							Long oldId = getProfileId(profile);
 							Long id = oldId != null ? getNewId(oldId, Maps.USERS) : null;
 							if (id != null) {
-								copyRec(profile, getUploadProfilesUserDir(id));
+								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
 							}
 						}
 						continue;
+					} else if (FILES_DIR.equals(fName)) {
+						for (File rf : file.listFiles()) {
+							// going to fix images
+							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
+								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
+							} else {
+								FileUtils.copyDirectory(rf, getUploadFilesDir());
+							}
+						}
 					} else {
 						// check if folder is room folder, store it under new id if necessary
 						Long oldId = importLongType(fName);
 						Long id = oldId != null ? getNewId(oldId, Maps.ROOMS) : null;
 						if (id != null) {
-							copyRec(file, getUploadRoomDir(id.toString()));
+							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
 							continue;
 						}
 					}
-					copyRec(file, new File(uploadDir, fName));
+					FileUtils.copyDirectory(file, new File(uploadDir, fName));
 				}
 			}
 		}
@@ -1221,8 +1234,14 @@ public class BackupImport {
 
 		log.debug("sourceDirRec PATH " + sourceDirRec.getCanonicalPath());
 		if (sourceDirRec.exists()) {
-			copyRec(sourceDirRec, getStreamsHibernateDir());
+			FileUtils.copyDirectory(sourceDirRec, getStreamsHibernateDir());
 		}
+	}
+
+	private static File getImgDir(String name) {
+		int start = name.startsWith(thumbImagePrefix) ? thumbImagePrefix.length() : 0;
+		String hash = name.substring(start, name.length() - EXTENSION_JPG.length() - 1);
+		return new File(getUploadFilesDir(), hash);
 	}
 
 	private static Long importLongType(String value) {

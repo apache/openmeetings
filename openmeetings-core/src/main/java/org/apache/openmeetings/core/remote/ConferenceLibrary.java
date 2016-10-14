@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.documents.LibraryChartLoader;
 import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
@@ -229,7 +229,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 					File target = new File(targetFolder, mp4.getName());
 					if (mp4.exists() && !target.exists()) {
-						FileHelper.copy(mp4, target);
+						FileUtils.copyFile(mp4, target);
 					}
 					return 1L;
 				}

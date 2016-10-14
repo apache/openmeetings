@@ -19,6 +19,9 @@
 package org.apache.openmeetings.backup;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OmFileHelper.BACKUP_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
+import static org.apache.openmeetings.util.OmFileHelper.IMPORT_DIR;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -31,7 +34,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -391,7 +394,7 @@ public class BackupExport {
 			/*
 			 * ##################### Backup Room Files
 			 */
-			File targetRootDir = new File(backup_dir, "roomFiles");
+			File targetRootDir = new File(backup_dir, BCKP_ROOM_FILES);
 
 			if (!targetRootDir.exists()) {
 				targetRootDir.mkdir();
@@ -402,10 +405,11 @@ public class BackupExport {
 			File[] files = sourceDir.listFiles();
 			for (File file : files) {
 				if (file.isDirectory()) {
-					if (!file.getName().equals("backup") && !file.getName().equals("import")) {
+					String fName = file.getName();
+					if (!IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
 						log.debug("### " + file.getName());
 
-						FileHelper.copyRec(file, new File(targetRootDir, file.getName()));
+						FileUtils.copyDirectory(file, new File(targetRootDir, file.getName()));
 					}
 				}
 			}
@@ -421,7 +425,7 @@ public class BackupExport {
 
 			File sourceDirRec = OmFileHelper.getStreamsHibernateDir();
 
-			FileHelper.copyRec(sourceDirRec, targetDirRec);
+			FileUtils.copyDirectory(sourceDirRec, targetDirRec);
 			progressHolder.setProgress(90);
 		}
 
@@ -493,7 +497,7 @@ public class BackupExport {
 				ZipEntry zipEntry = new ZipEntry(path);
 				zos.putNextEntry(zipEntry);
 
-				OmFileHelper.copyFile(file, zos);
+				FileUtils.copyFile(file, zos);
 				zos.closeEntry();
 			}
 		}

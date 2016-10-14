@@ -43,7 +43,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
 import org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl;
 import org.apache.openjpa.jdbc.schema.SchemaTool;
@@ -299,7 +299,7 @@ public class Admin {
 					
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
 					export.performExport(f, backup_dir, includeFiles, new ProgressHolder());
-					FileHelper.removeRec(backup_dir);
+					FileUtils.deleteDirectory(backup_dir);
 					backup_dir.delete();
 				} catch (Exception e) {
 					handleError("Backup failed", e);

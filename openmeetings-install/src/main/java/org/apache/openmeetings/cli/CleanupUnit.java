@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.util.OmFileHelper;
 
 public class CleanupUnit implements Serializable {
@@ -45,7 +45,7 @@ public class CleanupUnit implements Serializable {
 	
 	public void cleanup() throws IOException {
 		for (File f : getParent().listFiles()) {
-			FileHelper.removeRec(f);
+			FileUtils.deleteQuietly(f);
 		}
 	}
 	

@@ -68,10 +68,6 @@
 			<artifactId>red5-server</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-transaction</groupId>
-			<artifactId>commons-transaction</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>${dom4j.version}</version>
@@ -79,6 +75,10 @@
 		<dependency>
 			<groupId>org.mnode.ical4j</groupId>
 			<artifactId>ical4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>

@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.util.OmFileHelper;
 
 public class CleanupEntityUnit extends CleanupUnit {
@@ -56,10 +56,10 @@ public class CleanupEntityUnit extends CleanupUnit {
 	@Override
 	public void cleanup() throws IOException {
 		for (File i : invalid) {
-			FileHelper.removeRec(i);
+			FileUtils.deleteQuietly(i);
 		}
 		for (File i : deleted) {
-			FileHelper.removeRec(i);
+			FileUtils.deleteQuietly(i);
 		}
 	}
 	

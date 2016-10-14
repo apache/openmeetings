@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -130,7 +130,7 @@ public class CleanupHelper {
 				String hiberPath = hibernateDir.getCanonicalPath();
 				for (File f : list(getParent(), null)) {
 					if (!f.getCanonicalPath().equals(hiberPath)) {
-						FileHelper.removeRec(f);
+						FileUtils.deleteQuietly(f);
 					}
 				}
 				super.cleanup();
