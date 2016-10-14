@@ -68,10 +68,6 @@
 			<artifactId>red5-server</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-transaction</groupId>
-			<artifactId>commons-transaction</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>${dom4j.version}</version>

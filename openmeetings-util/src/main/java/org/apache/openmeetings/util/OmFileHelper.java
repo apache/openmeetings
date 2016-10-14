@@ -18,23 +18,13 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DecimalFormat;
 
-import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 
 public class OmFileHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(OmFileHelper.class, webAppRootKey);
-
 	/**
 	 * This variable needs to point to the openmeetings webapp directory
 	 */
@@ -43,22 +33,20 @@ public class OmFileHelper {
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
 	private static final String WEB_INF_DIR = "WEB-INF";
-	private static final String PROFILES_DIR = "profiles";
 	private static final String GROUP_LOGO_DIR = "grouplogo";
 	private static final String STREAMS_DIR = "streams";
 	private static final String EMOTIONS_DIR = "emoticons";
 	private static final String LANGUAGES_DIR = "languages";
-	private static final String IMPORT_DIR = "import";
 	private static final String HIBERNATE_DIR = "hibernate";
 	private static final String CONF_DIR = "conf";
-	private static final String BACKUP_DIR = "backup";
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
-
 	private static final String INSTALL_FILE = "install.xml";
 
+	public static final String BACKUP_DIR = "backup";
+	public static final String IMPORT_DIR = "import";
+	public static final String PROFILES_DIR = "profiles";
 	public static final String SCREENSHARING_DIR = "screensharing";
-	
 	public static final String FILES_DIR = "files";
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
@@ -85,6 +73,7 @@ public class OmFileHelper {
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
 	public static final String JPG_MIME_TYPE = "image/jpeg";
 	public static final String PNG_MIME_TYPE = "image/png";
+	public static final String BCKP_ROOM_FILES = "roomFiles";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
@@ -304,31 +293,15 @@ public class OmFileHelper {
 		if (dir.isFile()) {
 			size = dir.length();
 		} else {
-			File[] subFiles = dir.listFiles();
-
-			for (File file : subFiles) {
+			for (File file : dir.listFiles()) {
 				if (file.isFile()) {
 					size += file.length();
 				} else {
 					size += getSize(file);
 				}
-
 			}
 		}
 		return size;
-	}
-
-	public static void copyFile(String sourceFile, String targetFile) throws IOException {
-		FileHelper.copy(new File(sourceFile), new File(targetFile));
-	}
-
-	public static void copyFile(File f1, OutputStream out) throws IOException {
-		try (InputStream in = new FileInputStream(f1)) {
-			FileHelper.copy(in, out);
-			log.debug("File copied.");
-		} catch (Exception e) {
-			log.error("[copyfile(File, File)]", e);
-		}
 	}
 
 	public static String getFileName(String name) {

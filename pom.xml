@@ -48,7 +48,6 @@
 		<spring.version>4.3.3.RELEASE</spring.version>
 		<mina.version>2.0.15</mina.version>
 		<tomcat.version>8.5.6</tomcat.version>
-		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
 		<cxf.version>3.1.7</cxf.version>
 		<selenium.version>2.53.1</selenium.version>
@@ -517,17 +516,6 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>commons-transaction</groupId>
-				<artifactId>commons-transaction</artifactId>
-				<version>${commons-transaction.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>commons-logging</groupId>

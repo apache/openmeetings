@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-import org.apache.commons.transaction.util.FileHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
@@ -75,7 +75,7 @@ public class GenerateImage extends BaseConverter {
 		});
 		if (files != null) {
 			for (File f : files) {
-				FileHelper.removeRec(f);
+				FileUtils.deleteQuietly(f);
 			}
 		}
 		
@@ -83,7 +83,7 @@ public class GenerateImage extends BaseConverter {
 		if (!skipConvertion) {
 			returnMap.addItem("processJPG", convertSingleJpg(file, destinationFile));
 		} else {
-			FileHelper.copy(file, destinationFile);
+			FileUtils.copyFile(file, destinationFile);
 		}
 		returnMap.addItem("processThumb2", generateThumbs.generateThumb(profileImagePrefix, destinationFile, 126));
 
