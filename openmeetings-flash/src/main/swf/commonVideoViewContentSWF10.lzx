@@ -339,9 +339,7 @@
 		if (obj == null) {
 			obj = this.getNewVideoObjectByPos(rcl.publicSID);
 		}
-		if ("n" == rcl.avsettings){
-			obj.setVideouserProfilePic(rcl);
-		} else if ("a" == rcl.avsettings){
+		if ("n" == rcl.avsettings || "a" == rcl.avsettings) {
 			obj.setVideouserProfilePic(rcl);
 		} else {
 			obj.deleteVideoConfProfilePic();
@@ -349,8 +347,7 @@
 		obj.thisVars = rcl;
 		obj.updateAVSettingsSymbol(rcl);
 		var v = ("a" == rcl.avsettings && obj.isInterview) || ("a" != rcl.avsettings && rcl.avsettings != "n");
-		obj.setAttribute("visible", v);
-		obj.setAttribute("visibility", v ? "visible" : "hidden");
+		obj.setAttribute("visible", "n" != rcl.avsettings);
 		if ($debug) Debug.write("setAVSettingsToClient: ", v, obj.visible);
 	]]>
 	</method>

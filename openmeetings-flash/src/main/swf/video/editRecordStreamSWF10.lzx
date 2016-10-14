@@ -105,7 +105,7 @@
 		canvas.editRecordStream = this;
 		
 		this.counterDelegate = new LzDelegate(this, "count");
-	
+
 		if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
 		if ($debug) Debug.write("editrecordstream ###################### ");
 
@@ -299,12 +299,10 @@
 				break;
 			case "a":
 				videoview.broadcast(this.currentClient.broadCastID,null,_micro);
-				this.myvideocontainer.setAttribute("visible", canvas.isInterview || !this.myvideocontainer.hidebyAudioOnly);
+				this.myvideocontainer.setAttribute("visible", true);
 				if(!canvas.isInterview) {
-					if (!this.myvideocontainer.hidebyAudioOnly) {
-						if (!this.myvideocontainer.minimized) {
-							this.myvideocontainer.minimize();
-						}
+					if (!this.myvideocontainer.minimized) {
+						this.myvideocontainer.minimize();
 					}
 				}
 				break;
@@ -489,7 +487,7 @@
 		selectListItem(availableMics, foundStoredMic, mics.length > 0);
 
 		// settings
-		var addCams = canvas.currentClient.canVideo && !canvas.currentRoomObj.audioOnly && cameras.length > 0;
+		var addCams = !canvas.currentRoomObj.audioOnly && cameras.length > 0;
 		var addMics = mics.length > 0;
 		if (addCams && addMics) {
 			availableSettings.addItem(canvas.getLabelName(448), "av");

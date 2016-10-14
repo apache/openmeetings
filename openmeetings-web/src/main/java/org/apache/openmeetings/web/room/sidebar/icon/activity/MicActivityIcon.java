@@ -26,7 +26,7 @@ public class MicActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
 	public MicActivityIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Activity.broadcastVideo, room);
+		super(id, client, Activity.broadcastAudio, room);
 		mainCssClass = "activity mic ";
 	}
 

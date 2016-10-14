@@ -65,8 +65,6 @@
 
 		<attribute name="minimized" value="false" type="boolean" />
 
-		<attribute name="hidebyAudioOnly" value="false" type="boolean" />
-
 		<attribute name="custom" value="false" type="boolean" />
 
 		<attribute name="initH" value="40" type="number" />
