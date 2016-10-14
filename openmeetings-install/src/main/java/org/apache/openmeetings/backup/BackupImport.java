@@ -185,7 +185,7 @@ public class BackupImport {
 	private final Map<String, String> fileMap = new HashMap<>();
 
 	private enum Maps {
-		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
+		USERS, ORGANISATIONS, CALENDARS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
 	};
 
 	private static File validate(String zipname, File intended) throws IOException {
@@ -452,8 +452,11 @@ public class BackupImport {
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
 			List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
-			for (OmCalendar a : list) {
-				
+			for (OmCalendar c : list) {
+				Long id = c.getId();
+				c.setId(null);
+				c = calendarDao.update(c);
+				calendarMap.put(id, c.getId());
 			}
 		}
 
@@ -1243,6 +1246,11 @@ public class BackupImport {
 			case ORGANISATIONS:
 				if (groupMap.containsKey(oldId)) {
 					newId = groupMap.get(oldId);
+				}
+				break;
+			case CALENDARS:
+				if (calendarMap.containsKey(oldId)) {
+					newId = calendarMap.get(oldId);
 				}
 				break;
 			case APPOINTMENTS:

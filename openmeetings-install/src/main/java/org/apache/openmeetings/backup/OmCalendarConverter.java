@@ -32,12 +32,12 @@ public class OmCalendarConverter extends OmConverter<OmCalendar> {
 	public OmCalendarConverter() {
 		//default constructor is for export
 	}
-	
+
 	public OmCalendarConverter(OmCalendarDao calendarDao, Map<Long, Long> idMap) {
 		this.calendarDao = calendarDao;
 		this.idMap = idMap;
 	}
-	
+
 	@Override
 	public OmCalendar read(InputNode node) throws Exception {
 		long oldId = getLong(node);
