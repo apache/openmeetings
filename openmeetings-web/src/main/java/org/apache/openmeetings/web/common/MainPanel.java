@@ -31,6 +31,7 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -67,6 +69,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
@@ -74,6 +78,10 @@ import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
+import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
+import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
+import org.apache.wicket.protocol.ws.concurrent.Executor;
+import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
@@ -95,6 +103,35 @@ public class MainPanel extends Panel {
 	private final MessageDialog newMessage;
 	private final UserInfoDialog userInfo;
 	private BasePanel panel;
+	private AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onTimer(AjaxRequestTarget target) {
+			if (client != null) {
+				WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
+				IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+				Executor executor = settings.getWebSocketPushMessageExecutor();
+				try {
+					final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), client.getSessionId(), new PageIdKey(client.getPageId()));
+					if (wsConnection != null) {
+						executor.run(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									wsConnection.sendMessage(new byte[1], 0, 1);
+								} catch (IOException e) {
+									log.error("Error while sending ping message to room", e);
+								}
+							}
+						});
+					}
+				} catch (Exception e) {
+					log.error("Error preparing executor", e);
+				}
+			}
+		}
+	};
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -172,7 +209,7 @@ public class MainPanel extends Panel {
 			protected void respond(AjaxRequestTarget target) {
 				ContactsHelper.addUserToContactList(getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
@@ -186,14 +223,14 @@ public class MainPanel extends Panel {
 			protected void respond(AjaxRequestTarget target) {
 				newMessage.reset(true).open(target, getParam(getComponent(), PARAM_USER_ID).toOptionalLong());
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID)), "privateMessage")));
 			}
 		});
-		add(new WebSocketBehavior() {
+		add(pingTimer, new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -218,14 +255,15 @@ public class MainPanel extends Panel {
 				super.onAbort(msg);
 				closeHandler(msg);
 			}
-			
+
 			@Override
 			protected void onClose(ClosedMessage msg) {
 				super.onClose(msg);
 				closeHandler(msg);
 			}
-			
+
 			private void closeHandler(AbstractClientMessage msg) {
+				//no chance to stop pingTimer here :(
 				if (client != null && client.getRoomId() != null) {
 					RoomMenuPanel.roomExit(client);
 				}
