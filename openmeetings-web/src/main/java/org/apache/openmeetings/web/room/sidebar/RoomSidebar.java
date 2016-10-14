@@ -265,21 +265,15 @@ public class RoomSidebar extends Panel {
 
 	public static boolean activityAllowed(Client c, Activity a, Room room) {
 		switch (a) {
+			case broadcastAudio:
+				return c.hasRight(Right.audio);
 			case broadcastVideo:
 				{
 					if (room.isAudioOnly()) {
 						return false;
 					}
-					if (c.hasRight(Right.moderator)) {
-						return true;
-					}
-					for (Right r : new Right[]{Right.video}) {
-						if (!c.hasRight(r)) {
-							return false;
-						}
-					}
+					return c.hasRight(Right.video);
 				}
-				break;
 		}
 		return false;
 	}
