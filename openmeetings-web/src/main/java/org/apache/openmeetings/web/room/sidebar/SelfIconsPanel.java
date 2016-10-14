@@ -30,9 +30,11 @@ public class SelfIconsPanel extends ClientIconsPanel {
 	private final SettingsIcon settings;
 	private final CamActivityIcon cam;
 	private final MicActivityIcon mic;
+	private final boolean header;
 
-	public SelfIconsPanel(String id, Client client, RoomPanel room) {
+	public SelfIconsPanel(String id, Client client, RoomPanel room, boolean header) {
 		super(id, client, room);
+		this.header = header;
 		add(settings = new SettingsIcon("settings", client, room)
 			, cam = new CamActivityIcon("cam", client, room)
 			, mic = new MicActivityIcon("mic", client, room));
@@ -42,10 +44,15 @@ public class SelfIconsPanel extends ClientIconsPanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		update(null);
+		if (header) {
+			//This is required to avoid initial displaying of all icons
+			setVisible(false);
+		}
 	}
 
 	@Override
 	public void update(IPartialPageRequestHandler handler) {
+		setVisible(true);
 		super.update(handler);
 		settings.update(handler);
 		cam.update(handler);

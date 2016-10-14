@@ -42,6 +42,7 @@ public abstract class ClientIcon extends WebMarkupContainer {
 		this.client = client;
 		self = room.getClient().getUid().equals(client.getUid());
 		setOutputMarkupId(true);
+		setOutputMarkupPlaceholderTag(true);
 	}
 
 	@Override
