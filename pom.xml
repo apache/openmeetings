@@ -36,7 +36,6 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.3.2.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.19.1</maven.surefire.version>
@@ -44,8 +43,11 @@
 		<wicket.version>7.4.0</wicket.version>
 		<wicketju.version>7.4.0</wicketju.version>
 		<wickets.version>7.4.0</wickets.version>
-		<red5-server.version>1.0.8-M12</red5-server.version>
-		<red5-client.version>1.0.8-M12</red5-client.version>
+		<red5-server.version>1.0.8-M13</red5-server.version>
+		<red5-client.version>1.0.8-M13</red5-client.version>
+		<spring.version>4.3.3.RELEASE</spring.version>
+		<mina.version>2.0.15</mina.version>
+		<tomcat.version>8.5.6</tomcat.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0-beta1</ical4j.version>
 		<cxf.version>3.1.7</cxf.version>
@@ -55,7 +57,6 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
-		<tomcat.version>8.5.5</tomcat.version>
 		<derby.version>10.12.1.1</derby.version>
 	</properties>
 	<profiles>

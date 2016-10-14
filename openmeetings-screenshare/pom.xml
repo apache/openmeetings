@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-core</artifactId>
-			<version>2.0.14</version>
+			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
