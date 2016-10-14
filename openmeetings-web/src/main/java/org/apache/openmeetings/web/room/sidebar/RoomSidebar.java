@@ -201,7 +201,7 @@ public class RoomSidebar extends Panel {
 		};
 		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(room.getRoom().isFilesOpened() ? 1 : 0));
 		roomFiles = new RoomFilePanel("tree", room);
-		selfRights = new SelfIconsPanel("icons", room.getClient(), room);
+		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
 		add(upload = new UploadDialog("upload", room, roomFiles));
 		add(toggleRight, toggleActivity, action);
 	}

@@ -45,6 +45,7 @@ public class ClientIconsPanel extends Panel {
 	public ClientIconsPanel(String id, Client client, RoomPanel room) {
 		super(id);
 		setOutputMarkupId(true);
+		setOutputMarkupPlaceholderTag(true);
 		add(rightModer = new ModeratorRightIcon("right-moder", client, room));
 		add(rightWb = new WhiteboardRightIcon("right-wb", client, room));
 		add(rightScreen = new ScreenShareRightIcon("right-screen-share", client, room));

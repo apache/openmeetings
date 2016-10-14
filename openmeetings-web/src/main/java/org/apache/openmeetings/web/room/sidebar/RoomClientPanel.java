@@ -51,7 +51,7 @@ public class RoomClientPanel extends Panel {
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		actions.setVisible(room.getClient().hasRight(Right.moderator));
 		if (c.getUid().equals(room.getClient().getUid())) {
-			actions.add(new SelfIconsPanel("icons", c, room));
+			actions.add(new SelfIconsPanel("icons", c, room, false));
 			item.add(AttributeAppender.append("class", "current"));
 		} else {
 			actions.add(new ClientIconsPanel("icons", c, room));
