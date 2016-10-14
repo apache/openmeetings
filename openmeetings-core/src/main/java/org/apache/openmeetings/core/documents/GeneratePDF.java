@@ -29,6 +29,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.wicket.util.string.Strings;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
 import org.artofsolving.jodconverter.office.OfficeException;
@@ -107,9 +108,11 @@ public class GeneratePDF {
 	 */
 	public ConverterProcessResult doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
 		try {
-			String officePath = configurationDao.getConfValue("office.path", String.class, "");
+			String officePath = configurationDao.getConfValue("office.path", String.class, null);
 			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
-			configuration.setOfficeHome(officePath);
+			if (!Strings.isEmpty(officePath)) {
+				configuration.setOfficeHome(officePath);
+			}
 			OfficeManager officeManager = configuration.buildOfficeManager();
 			officeManager.start();
 			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
