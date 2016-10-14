@@ -38,12 +38,10 @@ import org.simpleframework.xml.Root;
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@XmlType(namespace="org.apache.openmeetings.user.asterisk")
+
+	@XmlType(namespace = "org.apache.openmeetings.user.asterisk")
 	public enum Type {
-		friend,
-		user,
-		peer
+		friend, user, peer
 	}
 
 	@Id
@@ -52,73 +50,73 @@ public class AsteriskSipUser implements Serializable {
 	@Element(data = true)
 	private long id;
 
-	@Column(name = "type", nullable = false, length=6)
+	@Column(name = "type", nullable = false, length = 6)
 	@Enumerated(EnumType.STRING)
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Type type = Type.friend;
-	
-	@Column(name = "name", nullable = false, length=128)
-	@Element(data=true, required=false)
-	private String name = ""; //	Varchar 128
-	
-	@Column(name = "secret", length=128)
-	@Element(data=true, required = false)
-	private String secret; //	Varchar 128
-	
-	@Column(name = "context", length=128)
-	@Element(data=true, required = false)
-	private String context; //	Varchar 128
-	
-	@Column(name = "host", nullable = false, length=128)
-	@Element(data=true, required = false)
-	private String host = "dynamic"; //	Varchar 128
-	
-	@Column(name = "ipaddr", nullable = false, length=128)
-	@Element(data=true, required=false)
-	private String ipaddr = ""; //	Varchar 128
-	
-	@Column(name = "port", nullable = false, length=8)
-	@Element(data=true, required=false)
-	private Integer port = 0; //	mediumint(8)
-	
+
+	@Column(name = "name", nullable = false, length = 128)
+	@Element(data = true, required = false)
+	private String name = ""; // Varchar 128
+
+	@Column(name = "secret", length = 128)
+	@Element(data = true, required = false)
+	private String secret; // Varchar 128
+
+	@Column(name = "context", length = 128)
+	@Element(data = true, required = false)
+	private String context; // Varchar 128
+
+	@Column(name = "host", nullable = false, length = 128)
+	@Element(data = true, required = false)
+	private String host = "dynamic"; // Varchar 128
+
+	@Column(name = "ipaddr", nullable = false, length = 128)
+	@Element(data = true, required = false)
+	private String ipaddr = ""; // Varchar 128
+
+	@Column(name = "port", nullable = false, length = 8)
+	@Element(data = true, required = false)
+	private Integer port = 0; // mediumint(8)
+
 	@Column(name = "regseconds", nullable = false)
-	@Element(data=true, required = false)
-	private Long regseconds = 0L; //	Bigint
-	
-	@Column(name = "defaultuser", nullable = true, length=128)
-	@Element(data=true, required = false)
-	private String defaultuser; //	Varchar 128
-	
-	@Column(name = "fullcontact", length=512)
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
+	private Long regseconds = 0L; // Bigint
+
+	@Column(name = "defaultuser", nullable = true, length = 128)
+	@Element(data = true, required = false)
+	private String defaultuser; // Varchar 128
+
+	@Column(name = "fullcontact", length = 512)
+	@Element(data = true, required = false)
 	private String fullcontact;
-	
-	@Column(name = "regserver", nullable = true, length=128)
-	@Element(data=true, required = false)
-	private String regserver; //	Varchar 128
-	
-	@Column(name = "useragent", nullable = true, length=128)
-	@Element(data=true, required = false)
-	private String useragent; //	Varchar 128
-	
+
+	@Column(name = "regserver", nullable = true, length = 128)
+	@Element(data = true, required = false)
+	private String regserver; // Varchar 128
+
+	@Column(name = "useragent", nullable = true, length = 128)
+	@Element(data = true, required = false)
+	private String useragent; // Varchar 128
+
 	@Column(name = "lastms")
-	@Element(data=true, required = false)
-	private Integer lastms; //	Integer
-	
+	@Element(data = true, required = false)
+	private Integer lastms; // Integer
+
 	@Column(name = "md5secret")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private String md5secret;
 
-	@Column(name = "nat", nullable=false)
-	@Element(data=true, required = false)
+	@Column(name = "nat", nullable = false)
+	@Element(data = true, required = false)
 	private String nat = "force_rport,comedia";
-	
-	@Column(name = "callbackextension", nullable=true, length=250)
-	@Element(data=true, required = false)
+
+	@Column(name = "callbackextension", nullable = true, length = 250)
+	@Element(data = true, required = false)
 	private String callbackextension;
 
-	@Column(name = "allow", nullable=false, length=100)
-	@Element(data=true, required = false)
+	@Column(name = "allow", nullable = false, length = 100)
+	@Element(data = true, required = false)
 	private String allow = "ulaw;alaw;h264";
 
 	public long getId() {
