@@ -33,9 +33,9 @@ import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -45,11 +45,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,6 +69,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -225,7 +226,9 @@ public class BackupImport {
 					}
 				}
 				if (!fentry.isDirectory()) {
-					Files.copy(zis, fentry.toPath());
+					try (FileOutputStream fos = FileUtils.openOutputStream(fentry)) {
+						IOUtils.copy(zis, fos);
+					}
 					zis.closeEntry();
 				}
 			}
@@ -1205,7 +1208,6 @@ public class BackupImport {
 								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
 							}
 						}
-						continue;
 					} else if (FILES_DIR.equals(fName)) {
 						for (File rf : file.listFiles()) {
 							// going to fix images
@@ -1221,10 +1223,10 @@ public class BackupImport {
 						Long id = oldId != null ? getNewId(oldId, Maps.ROOMS) : null;
 						if (id != null) {
 							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
-							continue;
+						} else {
+							FileUtils.copyDirectory(file, new File(uploadDir, fName));
 						}
 					}
-					FileUtils.copyDirectory(file, new File(uploadDir, fName));
 				}
 			}
 		}
