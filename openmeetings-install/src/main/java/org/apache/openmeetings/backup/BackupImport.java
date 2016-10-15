@@ -1209,12 +1209,13 @@ public class BackupImport {
 							}
 						}
 					} else if (FILES_DIR.equals(fName)) {
+						log.debug("Entered FILES folder ");
 						for (File rf : file.listFiles()) {
 							// going to fix images
 							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
 								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
 							} else {
-								FileUtils.copyDirectory(rf, getUploadFilesDir());
+								FileUtils.copyDirectory(rf, new File(getUploadFilesDir(), rf.getName()));
 							}
 						}
 					} else {
