@@ -751,6 +751,7 @@
 						<target>1.8</target>
 						<optimize>true</optimize>
 						<debug>true</debug>
+						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
 				<plugin>
