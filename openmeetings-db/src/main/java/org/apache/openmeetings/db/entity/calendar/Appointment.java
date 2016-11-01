@@ -50,11 +50,11 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "appointment")
 @NamedQueries({
-    @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.id = :id")
-    , @NamedQuery(name="getAppointmentByIdAny", query="SELECT a FROM Appointment a WHERE a.id = :id")
-    , @NamedQuery(name="getAppointments", query="SELECT a FROM Appointment a WHERE a.deleted = false ORDER BY a.id")
-    , @NamedQuery(name="appointmentsInRange",
-    	query="SELECT a FROM Appointment a "
+	@NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.id = :id")
+	, @NamedQuery(name="getAppointmentByIdAny", query="SELECT a FROM Appointment a WHERE a.id = :id")
+	, @NamedQuery(name="getAppointments", query="SELECT a FROM Appointment a WHERE a.deleted = false ORDER BY a.id")
+	, @NamedQuery(name="appointmentsInRange",
+		query="SELECT a FROM Appointment a "
 			+ "WHERE a.deleted = false "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :start AND :end) "
@@ -62,8 +62,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 			+ "	AND a.owner.id = :userId"
-    	)
-    , @NamedQuery(name="joinedAppointmentsInRange",
+		)
+	, @NamedQuery(name="joinedAppointmentsInRange",
 		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.id = :userId)"
@@ -73,8 +73,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
-    	)
-    , @NamedQuery(name="appointmentsInRangeRemind",
+		)
+	, @NamedQuery(name="appointmentsInRangeRemind",
 		query="SELECT a FROM Appointment a "
 			//only ReminderType simple mail is concerned!
 			+ "WHERE a.deleted = false AND a.reminderEmailSend = false"
@@ -84,11 +84,11 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
-    	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
-    , @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
+		)
+	, @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
+	, @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
 	//TODO this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
-    , @NamedQuery(name="appointmentsInRangeByUser",
+	, @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
@@ -96,8 +96,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
-	    )
-    , @NamedQuery(name="appointedRoomsInRangeByUser",
+		)
+	, @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
@@ -105,40 +105,40 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :start AND :end) "
 			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
-	    )
-    , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
-    , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
+		)
+	, @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
+	, @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.id = :userId")
 })
-@Root(name="appointment")
+@Root(name = "appointment")
 public class Appointment implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int REMINDER_NONE_ID = 1;
 	public static final int REMINDER_EMAIL_ID = 2;
 	public static final int REMINDER_ICAL_ID = 3;
+
 	public enum Reminder {
-		none(REMINDER_NONE_ID)
-		, email(REMINDER_EMAIL_ID)
-		, ical(REMINDER_ICAL_ID);
-		
+		none(REMINDER_NONE_ID), email(REMINDER_EMAIL_ID), ical(REMINDER_ICAL_ID);
+
 		private int id;
-		
-		Reminder() {} //default;
+
+		Reminder() {} // default;
+
 		Reminder(int id) {
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
-		
+
 		public static Reminder get(Long type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Reminder get(Integer type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Reminder get(int type) {
 			Reminder r = Reminder.none;
 			switch (type) {
@@ -149,102 +149,102 @@ public class Appointment implements IDataProviderEntity {
 					r = Reminder.ical;
 					break;
 				default:
-					//no-op
+					// no-op
 			}
 			return r;
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(name = "appointmentId", data = true)
 	private Long id;
-	
+
 	@Column(name = "title")
-	@Element(name="appointmentName", data=true, required=false)
+	@Element(name = "appointmentName", data = true, required = false)
 	private String title;
-	
+
 	@Column(name = "location")
-	@Element(name="appointmentLocation", data=true, required=false)
+	@Element(name = "appointmentLocation", data = true, required = false)
 	private String location;
-	
-	@Column(name = "app_start") //Oracle fails in case 'start' is used as column name
-	@Element(name="appointmentStarttime", data=true)
+
+	@Column(name = "app_start") // Oracle fails in case 'start' is used as column name
+	@Element(name = "appointmentStarttime", data = true)
 	private Date start;
-	
-	@Column(name = "app_end") //renamed to be in sync with 'app_start'
-	@Element(name="appointmentEndtime", data=true)
+
+	@Column(name = "app_end") // renamed to be in sync with 'app_start'
+	@Element(name = "appointmentEndtime", data = true)
 	private Date end;
-	
-	@Lob 
-	@Column(name = "description", length=2048)
-	@Element(name="appointmentDescription", data=true, required=false)
+
+	@Lob
+	@Column(name = "description", length = 2048)
+	@Element(name = "appointmentDescription", data = true, required = false)
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="users_id", data=true, required=false)
+	@Element(name = "users_id", data = true, required = false)
 	private User owner;
 
 	@Column(name = "inserted")
-	@Element(name="inserted", data=true, required=false)
+	@Element(name = "inserted", data = true, required = false)
 	private Date inserted;
-	
+
 	@Column(name = "updated")
-	@Element(name="updated", data=true, required=false)
+	@Element(name = "updated", data = true, required = false)
 	private Date updated;
-	
+
 	@Column(name = "deleted")
-	@Element(data=true)
+	@Element(data = true)
 	private boolean deleted;
-	
+
 	@Column(name = "reminder")
 	@Enumerated(EnumType.STRING)
-	@Element(name="typId", data=true, required=false)
+	@Element(name = "typId", data = true, required = false)
 	private Reminder reminder = Reminder.none;
 
 	@Column(name = "isdaily")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isDaily;
-	
+
 	@Column(name = "isweekly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isWeekly;
-	
+
 	@Column(name = "ismonthly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isMonthly;
-	
+
 	@Column(name = "isyearly")
-	@Element(data=true, required = false)
+	@Element(data = true, required = false)
 	private Boolean isYearly;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="room_id", data=true, required=false)
+	@Element(name = "room_id", data = true, required = false)
 	private Room room;
 
 	@Column(name = "icalId")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String icalId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "appointment_id")
 	private List<MeetingMember> meetingMembers;
-	
+
 	@Column(name = "language_id")
-	@Element(name="language_id", data=true, required=false)
+	@Element(name = "language_id", data = true, required = false)
 	private Long languageId;
-	
+
 	@Column(name = "is_password_protected")
-	@Element(name="isPasswordProtected", data=true, required=false)
+	@Element(name = "isPasswordProtected", data = true, required = false)
 	private boolean passwordProtected;
-	
+
 	@Column(name = "password")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String password;
 
 	@Column(name = "is_connected_event")
@@ -456,5 +456,5 @@ public class Appointment implements IDataProviderEntity {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
 				+ ", deleted=" + deleted + ", icalId=" + icalId + "]";
 	}
-	
+
 }
