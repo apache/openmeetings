@@ -186,7 +186,7 @@ public class LdapLoginManagement {
 					bindAdmin(w.conn, w.options);
 					Dn baseDn = new Dn(w.options.searchBase);
 					String searchQ = String.format(w.options.searchQuery, login);
-			        
+
 					try (EntryCursor cursor = new EntryCursorImpl(w.conn.search(
 							new SearchRequestImpl()
 								.setBase(baseDn)
