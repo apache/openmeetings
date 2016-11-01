@@ -117,20 +117,20 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "deleteAppointmentsbyCalendar",
 		query = "UPDATE Appointment a SET a.deleted = true WHERE a.calendar.id = :calId")
 })
-@Root(name="appointment")
+@Root(name = "appointment")
 public class Appointment implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int REMINDER_NONE_ID = 1;
 	public static final int REMINDER_EMAIL_ID = 2;
 	public static final int REMINDER_ICAL_ID = 3;
+
 	public enum Reminder {
-		none(REMINDER_NONE_ID)
-		, email(REMINDER_EMAIL_ID)
-		, ical(REMINDER_ICAL_ID);
+		none(REMINDER_NONE_ID), email(REMINDER_EMAIL_ID), ical(REMINDER_ICAL_ID);
 
 		private int id;
 
-		Reminder() {} //default;
+		Reminder() {} // default;
+
 		Reminder(int id) {
 			this.id = id;
 		}
@@ -157,7 +157,7 @@ public class Appointment implements IDataProviderEntity {
 					r = Reminder.ical;
 					break;
 				default:
-					//no-op
+					// no-op
 			}
 			return r;
 		}
@@ -177,11 +177,11 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name = "appointmentLocation", data = true, required = false)
 	private String location;
 
-	@Column(name = "app_start") //Oracle fails in case 'start' is used as column name
+	@Column(name = "app_start") // Oracle fails in case 'start' is used as column name
 	@Element(name = "appointmentStarttime", data = true)
 	private Date start;
 
-	@Column(name = "app_end") //renamed to be in sync with 'app_start'
+	@Column(name = "app_end") // renamed to be in sync with 'app_start'
 	@Element(name = "appointmentEndtime", data = true)
 	private Date end;
 

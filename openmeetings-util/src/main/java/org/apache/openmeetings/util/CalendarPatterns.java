@@ -20,6 +20,7 @@ package org.apache.openmeetings.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -109,12 +110,9 @@ public class CalendarPatterns {
 		Date resultDate = null;
 		try {
 			resultDate = sdf.parse(testdate);
-		}
-
-		// if the format of the string provided doesn't match the format we
-		// declared in SimpleDateFormat() we will get an exception
-
-		catch (java.text.ParseException e) {
+		} catch (ParseException|NumberFormatException e) {
+			// if the format of the string provided doesn't match the format we
+			// declared in SimpleDateFormat() we will get an exception
 			return null;
 		}
 
@@ -123,7 +121,6 @@ public class CalendarPatterns {
 		}
 
 		return resultDate;
-
 	}
 
 	public static String getDateWithTimeByMiliSecondsAndTimeZone(Date t, TimeZone timezone) {
