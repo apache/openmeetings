@@ -525,6 +525,7 @@ select.messages.selector {
 	border: none;
 	padding-left: 20px;
 	font-style: italic;
+	white-space: normal;
 }
 .invisible-form-component {
 	position: absolute;
