@@ -20,9 +20,9 @@
 	min-width: 1070px;
 }
 /* 
-    ################################
-    Column layout admin section
-    ################################
+  ################################
+  Column layout admin section
+  ################################
  */
 .adminPanelColumnTable {
 	display: inline-block;
@@ -327,12 +327,13 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	font-weight: bold;
 	text-align: right;
 	width: 180px;
+	white-space: normal;
 }
 
 .adminBackupForm div.formelement {
-    display: block;
-    clear: both;
-    max-width: 1240px;
+	display: block;
+	clear: both;
+	max-width: 1240px;
 }
 .adminFormsFeedbackPanel {
 	position: fixed;
