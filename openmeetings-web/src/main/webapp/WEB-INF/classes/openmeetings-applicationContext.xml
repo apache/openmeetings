@@ -108,12 +108,12 @@
 		<property name="repeatInterval" value="300000" /><!-- repeat every 300 seconds == 5 minutes -->
 	</bean>
 
-	<bean id="openmeetings.MeetingReminderJob" class="org.apache.openmeetings.service.quartz.scheduler.MeetingReminderJob" />
+	<bean id="meetingReminderJob" class="org.apache.openmeetings.service.quartz.scheduler.MeetingReminderJob" />
 	<bean id="meetingReminderClear" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
-			<ref bean="openmeetings.MeetingReminderJob" />
+			<ref bean="meetingReminderJob" />
 		</property>
-		<property name="targetMethod" value="doIt"/>
+		<property name="targetMethod" value="remindIt"/>
 		<property name="concurrent" value="false" />
 	</bean>
 	<bean id="triggerMeetingReminder" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">

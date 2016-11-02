@@ -18,28 +18,35 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.util.InitializationContainer;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MeetingReminderJob {
-	private static Logger log = Red5LoggerFactory.getLogger(MeetingReminderJob.class, OpenmeetingsVariables.webAppRootKey);
+	private static Logger log = Red5LoggerFactory.getLogger(MeetingReminderJob.class, webAppRootKey);
 	@Autowired
 	private AppointmentLogic appointmentLogic;
-	
-	public void doIt() {
+	@Autowired
+	private RecordingDao recordingDao;
+
+	public void remindIt() {
 		log.debug("MeetingReminderJob.execute");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
 		try {
 			appointmentLogic.doScheduledMeetingReminder();
-		} catch (Exception err){
-			log.error("execute",err);
+		} catch (Exception err) {
+			log.error("execute", err);
 		}
+	}
+
+	public void remindExpiring() {
+		//recordingDao.
 	}
 }

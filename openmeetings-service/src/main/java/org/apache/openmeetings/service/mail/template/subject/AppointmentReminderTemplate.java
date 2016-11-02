@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.service.mail.template;
+package org.apache.openmeetings.service.mail.template.subject;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
@@ -28,13 +28,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
 
-public class CanceledAppointmentTemplate extends AbstractAppointmentTemplate {
+public class AppointmentReminderTemplate extends AbstractSubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
 
-	private CanceledAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	private AppointmentReminderTemplate(Long langId, Appointment a, TimeZone tz) {
 		super(langId, a, tz);
+	}
 
-		add(new Label("titleLbl", getString(1157L, langId)));
+	@Override
+	void omInit() {
+		add(new Label("titleLbl", getString(1158L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
 			.add(new Label("descLbl", getString(1152L, langId)))
@@ -45,22 +48,15 @@ public class CanceledAppointmentTemplate extends AbstractAppointmentTemplate {
 		add(new Label("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)));
 		add(new Label("endLbl", getString(1154L, langId)));
 		add(new Label("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)));
-		add(new Label("invitorLbl", getString(1156L, langId)));
-		add(new Label("invitor", invitorName));
 	}
-	
-	public static CanceledAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
+
+	public static AppointmentReminderTemplate get(Long langId, Appointment a, TimeZone tz) {
 		ensureApplication(langId);
-		return new CanceledAppointmentTemplate(langId, a, tz, invitorName);
+		return new AppointmentReminderTemplate(langId, a, tz);
 	}
 
 	@Override
-	public String getSubject() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getString(1157L, langId)).append(" ").append(a.getTitle())
-			.append(" ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
-			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz));
-
-		return sb.toString();
+	String getPrefix() {
+		return ensureApplication().getOmString(1158, langId);
 	}
 }

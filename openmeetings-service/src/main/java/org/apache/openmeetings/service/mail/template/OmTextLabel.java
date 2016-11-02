@@ -18,20 +18,36 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import org.apache.wicket.core.util.string.ComponentRenderer;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class ResetPasswordTemplate extends AbstractTemplatePanel {
+public class OmTextLabel extends Label {
 	private static final long serialVersionUID = 1L;
+	private static final String WICKET_VISIBLE = ":visible";
 
-	public ResetPasswordTemplate(String link) {
-		super(getOmSession().getOmLanguage());
-		add(new ExternalLink("reset_link1", link));
-		add(new Label("reset_link2", link));
+	public OmTextLabel(String id, long key, long langId) {
+		this(id, "" + key, langId);
 	}
-	
-	public static String getEmail(String link) {
-		return ComponentRenderer.renderComponent(new ResetPasswordTemplate(link)).toString();
+
+	public OmTextLabel(String id, String key, long langId) {
+		this(id, ensureApplication().getOmString(key, langId));
+	}
+
+	public OmTextLabel(String id, String label) {
+		super(id, label);
+		setRenderBodyOnly(true);
+	}
+
+	@Override
+	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+		final String vis = openTag.getAttribute(markupStream.getWicketNamespace() + WICKET_VISIBLE);
+		if (vis != null && Boolean.FALSE.equals(Boolean.valueOf(vis))) {
+			//skip the body
+			return;
+		}
+		super.onComponentTagBody(markupStream, openTag);
 	}
 }
