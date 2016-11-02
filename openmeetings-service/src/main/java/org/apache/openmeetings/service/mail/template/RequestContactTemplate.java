@@ -21,6 +21,7 @@ package org.apache.openmeetings.service.mail.template;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
@@ -40,6 +41,6 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(User userToAdd, User user) {
-		return renderPanel(new RequestContactTemplate(userToAdd, user)).toString();
+		return ComponentRenderer.renderComponent(new RequestContactTemplate(userToAdd, user)).toString();
 	}
 }

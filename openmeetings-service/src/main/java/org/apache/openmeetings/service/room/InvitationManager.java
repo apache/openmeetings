@@ -43,11 +43,11 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.service.mail.template.AbstractAppointmentTemplate;
-import org.apache.openmeetings.service.mail.template.CanceledAppointmentTemplate;
-import org.apache.openmeetings.service.mail.template.CreatedAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
-import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
+import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
+import org.apache.openmeetings.service.mail.template.subject.CanceledAppointmentTemplate;
+import org.apache.openmeetings.service.mail.template.subject.CreatedAppointmentTemplate;
+import org.apache.openmeetings.service.mail.template.subject.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.wicket.util.string.Strings;
@@ -86,7 +86,7 @@ public class InvitationManager implements IInvitationManager {
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		Long langId = mm.getUser().getLanguageId();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
-		AbstractAppointmentTemplate t = null;
+		AbstractSubjectEmailTemplate t = null;
 		switch (type) {
 			case Cancel:
 				t = CanceledAppointmentTemplate.get(langId, a, tz, invitorName);

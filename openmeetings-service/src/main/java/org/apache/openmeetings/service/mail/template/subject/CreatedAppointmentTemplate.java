@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.service.mail.template;
+package org.apache.openmeetings.service.mail.template.subject;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
@@ -28,13 +28,18 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
 
-public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
+public class CreatedAppointmentTemplate extends AbstractSubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
+	private final String invitorName;
 
-	private UpdatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	private CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		super(langId, a, tz);
+		this.invitorName = invitorName;
+	}
 
-		add(new Label("titleLbl", getString(1155L, langId)));
+	@Override
+	void omInit() {
+		add(new Label("titleLbl", getString(1151L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
 			.add(new Label("descLbl", getString(1152L, langId)))
@@ -48,19 +53,14 @@ public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
 		add(new Label("invitorLbl", getString(1156L, langId)));
 		add(new Label("invitor", invitorName));
 	}
-	
-	public static UpdatedAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
+
+	public static CreatedAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		ensureApplication(langId);
-		return new UpdatedAppointmentTemplate(langId, a, tz, invitorName);
+		return new CreatedAppointmentTemplate(langId, a, tz, invitorName);
 	}
 
 	@Override
-	public String getSubject() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getString(1155L, langId)).append(" ").append(a.getTitle())
-			.append(" ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
-			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz));
-
-		return sb.toString();
+	String getPrefix() {
+		return ensureApplication().getOmString(1151, langId);
 	}
 }

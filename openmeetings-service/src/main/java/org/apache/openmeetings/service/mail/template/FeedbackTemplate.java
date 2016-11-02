@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.mail.template;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
@@ -35,6 +36,6 @@ public class FeedbackTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(String username, String email, String message) {
-		return renderPanel(new FeedbackTemplate(username, email, message)).toString();
+		return ComponentRenderer.renderComponent(new FeedbackTemplate(username, email, message)).toString();
 	}
 }

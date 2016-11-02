@@ -18,24 +18,10 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import java.util.TimeZone;
-
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-
-public abstract class AbstractAppointmentTemplate extends AbstractTemplatePanel {
+public class DashOmTextLabel extends OmTextLabel {
 	private static final long serialVersionUID = 1L;
-	protected Appointment a;
-	protected TimeZone tz;
 
-	public AbstractAppointmentTemplate(Long langId, Appointment a, TimeZone tz) {
-		super(langId);
-		this.a = a;
-		this.tz = tz;
+	public DashOmTextLabel(String id) {
+		super(id, " - ");
 	}
-
-	public String getEmail() {
-		return renderPanel(this).toString();
-	}
-
-	public abstract String getSubject();
 }

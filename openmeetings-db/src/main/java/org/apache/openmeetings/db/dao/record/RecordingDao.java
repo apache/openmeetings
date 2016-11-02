@@ -174,6 +174,10 @@ public class RecordingDao {
 		return null;
 	}
 
+	public List<Recording> getExpiring() {
+		return null;
+	}
+
 	public List<Recording> getByParent(Long parentId) {
 		return em.createNamedQuery("getRecordingsByParent", Recording.class).setParameter("parentId", parentId).getResultList();
 	}
