@@ -94,7 +94,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private User owner;
 
-	@Column(name = "booked_room")
+	@Column(name = "booked_room", nullable = false)
 	@Element(data = true)
 	private boolean bookedRoom;
 
@@ -104,12 +104,9 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Room room;
 
-	@Column(name = "is_read")
+	@Column(name = "is_read", nullable = false)
 	@Element(data = true)
 	private boolean isRead;
-
-	@Element(data = true)
-	private boolean isTrash;
 
 	@Column(name = "parent_message_id")
 	@Element(data = true, required = false)
@@ -119,7 +116,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Element(data = true, name = "privateMessageFolderId")
 	private Long folderId;
 
-	@Column(name = "is_contact_request")
+	@Column(name = "is_contact_request", nullable = false)
 	@Element(data = true)
 	private boolean isContactRequest;
 

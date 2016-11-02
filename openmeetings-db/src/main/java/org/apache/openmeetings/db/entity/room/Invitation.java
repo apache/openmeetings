@@ -84,7 +84,7 @@ public class Invitation implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -106,7 +106,7 @@ public class Invitation implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private User invitee;
 
-	@Column(name = "password_protected")
+	@Column(name = "password_protected", nullable = false)
 	private boolean passwordProtected;
 
 	@Column(name = "password", length = 1024)
@@ -124,7 +124,7 @@ public class Invitation implements IDataProviderEntity {
 	@Column(name = "valid_to")
 	private Date validTo;
 	
-	@Column(name = "was_used")
+	@Column(name = "was_used", nullable = false)
 	private boolean used;
 	
 	@ManyToOne(fetch = FetchType.EAGER)

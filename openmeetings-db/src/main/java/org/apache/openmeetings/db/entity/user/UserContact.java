@@ -89,7 +89,7 @@ public class UserContact implements Serializable {
 	@Element(data=true, required=false)
 	private User owner;
 	
-	@Column(name="pending")
+	@Column(name="pending", nullable = false)
 	@Element(data=true)
 	private boolean pending;
 	
@@ -99,7 +99,7 @@ public class UserContact implements Serializable {
 	@Column(name="updated")
 	private Date updated;
 	
-	@Column(name="share_calendar")
+	@Column(name="share_calendar", nullable = false)
 	@Element(data=true, required=false)
 	private boolean shareCalendar;
 	

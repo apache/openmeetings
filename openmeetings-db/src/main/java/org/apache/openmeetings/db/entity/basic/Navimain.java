@@ -72,7 +72,7 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "label_id")
 	private String labelId;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "tooltip_label_id")

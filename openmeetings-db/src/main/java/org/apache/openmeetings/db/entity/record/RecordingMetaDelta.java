@@ -85,10 +85,10 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	@Column(name="received_audio_data_length")
 	private Long receivedAudioDataLength;
 	
-	@Column(name="is_end_padding")
+	@Column(name="is_end_padding", nullable = false)
 	private boolean endPadding;
 	
-	@Column(name="is_start_padding")
+	@Column(name="is_start_padding", nullable = false)
 	private boolean startPadding;
 	
 	@Column(name="debug_status")

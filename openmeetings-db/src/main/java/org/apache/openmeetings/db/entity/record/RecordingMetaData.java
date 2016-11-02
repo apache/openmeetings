@@ -97,15 +97,15 @@ public class RecordingMetaData implements IDataProviderEntity {
 	@Element(data = true)
 	private String freeTextUserName;
 
-	@Column(name = "is_audio_only")
+	@Column(name = "is_audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true)
 	private boolean audioOnly;
 
-	@Column(name = "is_video_only")
+	@Column(name = "is_video_only", nullable = false)
 	@Element(name = "isVideoOnly", data = true)
 	private boolean videoOnly;
 
-	@Column(name = "is_screen_data")
+	@Column(name = "is_screen_data", nullable = false)
 	@Element(name = "isScreenData", data = true)
 	private boolean screenData;
 
@@ -121,7 +121,7 @@ public class RecordingMetaData implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date updated;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "wav_audio_data")
@@ -132,7 +132,7 @@ public class RecordingMetaData implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String fullWavAudioData;
 
-	@Column(name = "audio_is_valid")
+	@Column(name = "audio_is_valid", nullable = false)
 	@Element(name="audioIsValid", data = true, required = false)
 	private boolean audioValid;
 

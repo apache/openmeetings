@@ -49,19 +49,19 @@ public class SOAPLogin implements Serializable {
 	@Column(name="created")
 	private Date created;
 	
-	@Column(name="used")
+	@Column(name="used", nullable = false)
 	private boolean used;
 	
 	@Column(name="use_date")
 	private Date useDate;
 	
-	@Column(name="moderator")
+	@Column(name="moderator", nullable = false)
 	private boolean moderator;
 	
-	@Column(name="showaudiovideotest")
+	@Column(name="showaudiovideotest", nullable = false)
 	private boolean showAudioVideoTest;
 	
-	@Column(name="allow_same_url_multiple_times")
+	@Column(name="allow_same_url_multiple_times", nullable = false)
 	private boolean allowSameURLMultipleTimes;
 	
 	@Column(name="client_url")
@@ -73,7 +73,7 @@ public class SOAPLogin implements Serializable {
 	@Column(name="landing_zone")
 	private String landingZone;
 	
-	@Column(name="allow_recording")
+	@Column(name="allow_recording", nullable = false)
 	private boolean allowRecording;
 	
 	public Long getId() {

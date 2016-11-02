@@ -41,10 +41,11 @@ public class StringLabel extends SimpleEntry<String, String> implements IDataPro
 	
 	@Override
 	public boolean equals(Object o) {
-        if (!(o instanceof Map.Entry))
-            return false;
-        Map.Entry<?,?> e = (Map.Entry<?,?>)o;
-        return getKey() == null ? e.getKey() == null : getKey().equals(e.getKey());
+		if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+		Map.Entry<?,?> e = (Map.Entry<?,?>)o;
+		return getKey() == null ? e.getKey() == null : getKey().equals(e.getKey());
 	}
 
 	@Override

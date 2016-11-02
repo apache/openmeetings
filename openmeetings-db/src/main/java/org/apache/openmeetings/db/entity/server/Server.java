@@ -120,7 +120,7 @@ public class Server implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String pass;
 
-	@Column(name = "active", nullable = true)
+	@Column(name = "active", nullable = false)
 	@Element(data = true, required = false)
 	private boolean active;
 	

@@ -57,7 +57,7 @@ public class Userdata implements Serializable {
 	@Column(name = "comment")
 	private String comment;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	public String getComment() {

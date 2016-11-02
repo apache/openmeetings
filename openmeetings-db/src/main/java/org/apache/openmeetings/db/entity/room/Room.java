@@ -185,11 +185,11 @@ public class Room implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;
 
-	@Column(name = "ispublic")
+	@Column(name = "ispublic", nullable = false)
 	@Element(name = "ispublic", data = true, required = false)
 	private boolean ispublic;
 
@@ -197,7 +197,7 @@ public class Room implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private long numberOfPartizipants = 4L;
 
-	@Column(name = "appointment")
+	@Column(name = "appointment", nullable = false)
 	@Element(data = true, required = false)
 	private boolean appointment;
 
@@ -210,7 +210,7 @@ public class Room implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String externalType;
 
-	@Column(name = "demo_room")
+	@Column(name = "demo_room", nullable = false)
 	@Element(name = "isDemoRoom", data = true, required = false)
 	private boolean demoRoom;
 
@@ -220,19 +220,19 @@ public class Room implements IDataProviderEntity {
 
 	// If this is true all participants of a meeting have to wait for the
 	// moderator to come into the room
-	@Column(name = "ismoderatedroom")
+	@Column(name = "ismoderatedroom", nullable = false)
 	@Element(name="isModeratedRoom", data = true, required = false)
 	private boolean moderated;
 
-	@Column(name = "allow_user_questions")
+	@Column(name = "allow_user_questions", nullable = false)
 	@Element(data = true, required = false)
 	private boolean allowUserQuestions;
 
-	@Column(name = "is_audio_only")
+	@Column(name = "is_audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true, required = false)
 	private boolean audioOnly;
 	
-	@Column(name = "is_closed")
+	@Column(name = "is_closed", nullable = false)
 	@Element(data = true, required = false)
 	private boolean closed;
 
@@ -244,16 +244,16 @@ public class Room implements IDataProviderEntity {
 	@Element(name = "ownerid", data = true, required = false)
 	private Long ownerId; // Those are the rooms from the myrooms section
 
-	@Column(name = "wait_for_recording")
+	@Column(name = "wait_for_recording", nullable = false)
 	@Element(data = true, required = false)
 	private boolean waitForRecording; // Show warning that user has to start
 										// recording
 
-	@Column(name = "allow_recording")
+	@Column(name = "allow_recording", nullable = false)
 	@Element(name = "allowRecording", data = true, required = false)
 	private boolean allowRecording = true; // Show or show not the recording option in a conference room
-	
-	@Column(name = "chat_moderated")
+
+	@Column(name = "chat_moderated", nullable = false)
 	@Element(data = true, required = false)
 	private boolean chatModerated;
 
@@ -266,16 +266,16 @@ public class Room implements IDataProviderEntity {
 	@Enumerated(EnumType.STRING)
 	@ElementList(name="hide_element", data = true, required = false)
 	private Set<RoomElement> hiddenElements = new HashSet<>();
-	
-	@Column(name = "chat_opened")
+
+	@Column(name = "chat_opened", nullable = false)
 	@Element(data = true, required = false)
 	private boolean chatOpened;
 
-	@Column(name = "files_opened")
+	@Column(name = "files_opened", nullable = false)
 	@Element(data = true, required = false)
 	private boolean filesOpened;
 
-	@Column(name = "auto_video_select")
+	@Column(name = "auto_video_select", nullable = false)
 	@Element(data = true, required = false)
 	private boolean autoVideoSelect;
 
@@ -285,7 +285,7 @@ public class Room implements IDataProviderEntity {
 	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerator> moderators = new ArrayList<RoomModerator>();
 
-	@Column(name = "sip_enabled")
+	@Column(name = "sip_enabled", nullable = false)
 	@Element(data = true, required = false)
 	private boolean sipEnabled;
 	
