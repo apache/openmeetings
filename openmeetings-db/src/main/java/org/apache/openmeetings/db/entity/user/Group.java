@@ -82,23 +82,23 @@ public class Group implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean limited;
 
-	@Column(name = "max_files_size")
+	@Column(name = "max_files_size", nullable = false)
 	@Element(data = true, required = false)
 	private int maxFilesSize;
 
-	@Column(name = "max_rec_size")
+	@Column(name = "max_rec_size", nullable = false)
 	@Element(data = true, required = false)
 	private int maxRecordingsSize;
 
-	@Column(name = "max_rooms")
+	@Column(name = "max_rooms", nullable = false)
 	@Element(data = true, required = false)
 	private int maxRooms;
 
-	@Column(name = "recording_ttl")
+	@Column(name = "recording_ttl", nullable = false)
 	@Element(data = true, required = false)
 	private int recordingTtl;
 
-	@Column(name = "reminder_days")
+	@Column(name = "reminder_days", nullable = false)
 	@Element(data = true, required = false)
 	private int reminderDays;
 
