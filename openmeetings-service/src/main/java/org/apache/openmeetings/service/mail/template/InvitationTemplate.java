@@ -20,6 +20,7 @@ package org.apache.openmeetings.service.mail.template;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
+import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -47,6 +48,6 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	
 	public static String getEmail(Long langId, String invitorName, String message, String link) {
 		ensureApplication(langId);
-		return renderPanel(new InvitationTemplate(langId, invitorName, message, link)).toString();
+		return ComponentRenderer.renderComponent(new InvitationTemplate(langId, invitorName, message, link)).toString();
 	}
 }
