@@ -74,7 +74,7 @@ public class Naviglobal implements IDataProviderEntity {
 	@Column(name = "level_id")
 	private int levelId;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "label_id")

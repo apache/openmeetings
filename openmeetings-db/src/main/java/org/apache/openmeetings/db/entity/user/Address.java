@@ -79,7 +79,7 @@ public class Address implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private String zip;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "email")

@@ -83,7 +83,7 @@ public class Configuration implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;
 

@@ -63,7 +63,7 @@ public class LdapConfig implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String configFileName;
 
-	@Column(name = "add_domain_to_user_name")
+	@Column(name = "add_domain_to_user_name", nullable = false)
 	@Element(data = true)
 	private boolean addDomainToUserName;
 
@@ -71,7 +71,7 @@ public class LdapConfig implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String domain;
 
-	@Column(name = "is_active")
+	@Column(name = "is_active", nullable = false)
 	@Element(data = true, name = "isActive")
 	private boolean active;
 
@@ -91,7 +91,7 @@ public class LdapConfig implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private User updatedby;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Lob

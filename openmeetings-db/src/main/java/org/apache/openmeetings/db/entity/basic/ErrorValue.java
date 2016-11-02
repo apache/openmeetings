@@ -61,7 +61,7 @@ public class ErrorValue implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Override

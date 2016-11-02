@@ -89,7 +89,7 @@ public class RoomGroup implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data=true)
 	private boolean deleted;
 

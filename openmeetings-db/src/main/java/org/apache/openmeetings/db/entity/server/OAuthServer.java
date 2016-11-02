@@ -58,7 +58,7 @@ public class OAuthServer implements IDataProviderEntity {
 	@Element(data = true)
 	private String iconUrl;
 	
-	@Column(name = "enabled")
+	@Column(name = "enabled", nullable = false)
 	@Element(data = true)
 	private boolean enabled;
 	
@@ -107,7 +107,7 @@ public class OAuthServer implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String lastnameParamName;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;
 

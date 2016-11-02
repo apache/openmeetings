@@ -59,7 +59,7 @@ public class RoomModerator implements Serializable {
 	@Column(name = "roomId")
 	private Long roomId;
 	
-	@Column(name="is_supermoderator")
+	@Column(name="is_supermoderator", nullable = false)
 	@Element(name="is_supermoderator", data = true)
 	private boolean superModerator;
 	
@@ -75,7 +75,7 @@ public class RoomModerator implements Serializable {
 	@Column(name = "updated")
 	private Date updated;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 	
 	public Long getId() {
