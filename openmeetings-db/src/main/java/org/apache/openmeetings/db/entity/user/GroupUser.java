@@ -71,7 +71,7 @@ public class GroupUser implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 	
-	@Column(name = "is_moderator")
+	@Column(name = "is_moderator", nullable = false)
 	@Element(data = true, required = false)
 	private boolean moderator;
 	

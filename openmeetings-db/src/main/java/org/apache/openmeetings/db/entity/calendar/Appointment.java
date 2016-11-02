@@ -196,7 +196,7 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name = "updated", data = true, required = false)
 	private Date updated;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;
 
@@ -239,7 +239,7 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name = "language_id", data = true, required = false)
 	private Long languageId;
 
-	@Column(name = "is_password_protected")
+	@Column(name = "is_password_protected", nullable = false)
 	@Element(name = "isPasswordProtected", data = true, required = false)
 	private boolean passwordProtected;
 
@@ -247,10 +247,10 @@ public class Appointment implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String password;
 
-	@Column(name = "is_connected_event")
+	@Column(name = "is_connected_event", nullable = false)
 	private boolean connectedEvent;
 
-	@Column(name = "is_reminder_email_send")
+	@Column(name = "is_reminder_email_send", nullable = false)
 	private boolean reminderEmailSend;
 
 	@Override

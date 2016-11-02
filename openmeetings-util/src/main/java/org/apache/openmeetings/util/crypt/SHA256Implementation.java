@@ -39,19 +39,19 @@ public class SHA256Implementation implements ICrypt {
 	private static final int SALT_LENGTH = 256;
 
 	private static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
-        byte[] salt = new byte[SALT_LENGTH];
-        sr.nextBytes(salt);
-        return salt;
-    }
-	
+		SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
+		byte[] salt = new byte[SALT_LENGTH];
+		sr.nextBytes(salt);
+		return salt;
+	}
+
 	private static String hash(String str, byte[] salt, int iter) {
 		PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
 		gen.init(str.getBytes(StandardCharsets.UTF_8), salt, iter);
 		byte[] dk = ((KeyParameter) gen.generateDerivedParameters(KEY_LENGTH)).getKey();
 		return Base64.encodeBase64String(dk);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.apache.openmeetings.utils.crypt.ICrypt#hash(java.lang.String)

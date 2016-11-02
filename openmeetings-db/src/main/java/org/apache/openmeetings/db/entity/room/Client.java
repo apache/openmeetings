@@ -131,40 +131,40 @@ public class Client implements IDataProviderEntity {
 	/**
 	 * @see Client#getIsMod()
 	 */
-	@Column(name = "is_mod")
+	@Column(name = "is_mod", nullable = false)
 	private boolean isMod = false;
 	
 	/**
 	 * @see Client#getIsSuperModerator()
 	 */
-	@Column(name = "is_supermoderator")
+	@Column(name = "is_supermoderator", nullable = false)
 	private boolean isSuperModerator = false;
 	
 	/**
 	 * @see Client#getCanDraw()
 	 */
-	@Column(name = "can_draw")
+	@Column(name = "can_draw", nullable = false)
 	private boolean canDraw = false;
 	
 	/**
 	 * @see Client#getCanShare()
 	 */
-	@Column(name = "can_share")
+	@Column(name = "can_share", nullable = false)
 	private boolean canShare = false;
 	
 	/**
 	 * @see Client#getCanRemote()
 	 */
-	@Column(name = "can_remote")
+	@Column(name = "can_remote", nullable = false)
 	private boolean canRemote = false;
 	
 	/**
 	 * @see Client#getCanGiveAudio()
 	 */
-	@Column(name = "can_giveaudio")
+	@Column(name = "can_giveaudio", nullable = false)
 	private boolean canGiveAudio = false;
 
-	@Column(name = "can_video")
+	@Column(name = "can_video", nullable = false)
 	private boolean canVideo = false;
 
 	/**
@@ -182,7 +182,7 @@ public class Client implements IDataProviderEntity {
 	/**
 	 * @see Client#isScreenClient()
 	 */
-	@Column(name = "is_screenclient")
+	@Column(name = "is_screenclient", nullable = false)
 	private boolean screenClient;
 	
 	/**
@@ -291,13 +291,13 @@ public class Client implements IDataProviderEntity {
 	@Column(name = "tcurl", length=2048)
 	private String tcUrl;
 
-	@Column(name = "nativeSsl")
+	@Column(name = "nativeSsl", nullable = false)
 	private boolean nativeSsl = false;
 
 	/**
 	 * @see Client#getIsRecording()
 	 */
-	@Column(name = "is_recording")
+	@Column(name = "is_recording", nullable = false)
 	private boolean isRecording = false;
 	
 	/**
@@ -321,31 +321,31 @@ public class Client implements IDataProviderEntity {
 	/**
 	 * @see Client#isStartRecording()
 	 */
-	@Column(name = "start_recording")
+	@Column(name = "start_recording", nullable = false)
 	private boolean startRecording = false;
 	
 	/**
 	 * @see Client#isStartStreaming()
 	 */
-	@Column(name = "start_streaming")
+	@Column(name = "start_streaming", nullable = false)
 	private boolean startStreaming = false;
 	
 	/**
 	 * @see Client#isScreenPublishStarted()
 	 */
-	@Column(name = "screen_publish_started")
+	@Column(name = "screen_publish_started", nullable = false)
 	private boolean screenPublishStarted = false;
 	
 	/**
 	 * @see Client#isStreamPublishStarted()
 	 */
-	@Column(name = "stream_publish_started")
+	@Column(name = "stream_publish_started", nullable = false)
 	private boolean streamPublishStarted = false;
 	
 	/**
 	 * @see Client#getIsBroadcasting()
 	 */
-	@Column(name = "is_broadcasting")
+	@Column(name = "is_broadcasting", nullable = false)
 	private boolean isBroadcasting = false;
 	
 	/**
@@ -369,36 +369,36 @@ public class Client implements IDataProviderEntity {
 	/**
 	 * @see Client#isAllowRecording()
 	 */
-	@Column(name = "allow_recording")
+	@Column(name = "allow_recording", nullable = false)
 	private boolean allowRecording = true;
 	
 	/**
 	 * @see Client#getZombieCheckFlag()
 	 */
-	@Column(name = "zombie_check_flag")
+	@Column(name = "zombie_check_flag", nullable = false)
 	private boolean zombieCheckFlag = false;
 	
 	/**
 	 * @see Client#getMicMuted()
 	 */
-	@Column(name = "mic_muted")
+	@Column(name = "mic_muted", nullable = false)
 	private boolean micMuted = false;
 	
 	/**
 	 * @see Client#isSipTransport()
 	 */
-	@Column(name = "sip_transport")
+	@Column(name = "sip_transport", nullable = false)
 	private boolean sipTransport = false;
 	
-	@Column(name = "mobile")
+	@Column(name = "mobile", nullable = false)
 	private boolean mobile = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "server_id")
 	private Server server;
-    
+
 	public Client() {}
-    
+
 	public Client(String streamid, String publicSID, Long roomId,
 			Long userId, String firstname, String lastname,
 			String username, String connectedSince, String scope) {

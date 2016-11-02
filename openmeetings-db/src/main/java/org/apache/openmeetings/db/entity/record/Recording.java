@@ -155,7 +155,7 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private Long groupId;
 
-	@Column(name = "is_interview")
+	@Column(name = "is_interview", nullable = false)
 	@Element(data = true, required = false)
 	private boolean interview;
 

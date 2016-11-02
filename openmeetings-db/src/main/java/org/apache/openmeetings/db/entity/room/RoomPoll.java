@@ -119,7 +119,7 @@ public class RoomPoll implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date created;
 
-	@Column(name = "archived")
+	@Column(name = "archived", nullable = false)
 	@Element(data = true, required = false)
 	private boolean archived;
 	

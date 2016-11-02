@@ -70,7 +70,7 @@ public class Group implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true, required = false)
 	private boolean deleted;
 
@@ -78,7 +78,7 @@ public class Group implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String tag;
 
-	@Column(name = "limited")
+	@Column(name = "limited", nullable = false)
 	@Element(data = true, required = false)
 	private boolean limited;
 

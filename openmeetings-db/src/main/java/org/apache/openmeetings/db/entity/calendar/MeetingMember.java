@@ -80,7 +80,7 @@ public class MeetingMember implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Date updated;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;
 
@@ -89,7 +89,7 @@ public class MeetingMember implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private Invitation invitation;
 
-	@Column(name = "is_connected_event")
+	@Column(name = "is_connected_event", nullable = false)
 	private boolean connectedEvent;
 
 	@Override

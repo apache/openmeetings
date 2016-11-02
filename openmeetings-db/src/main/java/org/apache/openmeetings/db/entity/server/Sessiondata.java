@@ -62,7 +62,7 @@ public class Sessiondata implements Serializable {
 	@Column(name = "xml")
 	private String xml;
 
-	@Column(name = "permanent")
+	@Column(name = "permanent", nullable = false)
 	private boolean permanent;
 
 	@Column(name = "language_id")

@@ -225,7 +225,7 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String pictureuri;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(data = true, required = false)
 	private boolean deleted;
 
@@ -277,11 +277,11 @@ public class User implements IDataProviderEntity {
 	@Transient
 	private Sessiondata sessionData;
 
-	@Column(name = "forceTimeZoneCheck")
+	@Column(name = "forceTimeZoneCheck", nullable = false)
 	@Element(data = true, required = false)
 	private boolean forceTimeZoneCheck;
 
-	@Column(name = "sendSMS")
+	@Column(name = "sendSMS", nullable = false)
 	@Element(data = false, required = false)
 	private boolean sendSMS;
 
