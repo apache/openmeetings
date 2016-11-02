@@ -310,11 +310,12 @@ public class LdapLoginManagement {
 		Properties config = new Properties();
 		LdapOptions options = null;
 		Long domainId = null;
+		LdapConfig ldapCfg = null;
 		
 		public LdapWorker(Long domainId) throws Exception {
 			this.domainId = domainId;
-			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
-			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
+			ldapCfg = ldapConfigDao.get(domainId);
+			try (InputStream is = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapCfg.getConfigFileName()));
 					Reader r = new InputStreamReader(is, UTF_8))
 			{
 				config.load(r);
@@ -344,7 +345,11 @@ public class LdapLoginManagement {
 				if (g != null) {
 					u.getGroupUsers().add(new GroupUser(g, u));
 				}
-				u.setLogin(getLogin(config, entry));
+				String login = getLogin(config, entry);
+				if (ldapCfg.getAddDomainToUserName()) {
+					login = login + "@" + ldapCfg.getDomain();
+				}
+				u.setLogin(login);
 				u.setShowContactDataToContacts(true);
 				u.setAddress(new Address());
 			}
