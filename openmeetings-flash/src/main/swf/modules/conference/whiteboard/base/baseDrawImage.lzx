@@ -51,7 +51,7 @@
 	</method>
 
 	<!-- standard add Function -->
-	<method name="addNewImage" args="urlname,posx,posy,baseurl,fileName,moduleName,parentPath,room,domain,uniqueObjectSyncName,isLocalSync">
+	<method name="addNewImage" args="urlname, posx, posy, baseurl, fileName, moduleName, parentPath, room, domain, uniqueObjectSyncName, isLocalSync">
 		if ($debug) Debug.write("urlname posx: ",urlname,posx);
 		this.addImageToLayer(this,'image'+this.getCounter(),urlname,
 			posx,posy,0,0,
