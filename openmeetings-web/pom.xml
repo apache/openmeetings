@@ -30,7 +30,7 @@
 	<name>Openmeetings Web</name>
 	<description>TODO</description>
 	<properties>
-		<mysql.version>5.1.40</mysql.version>
+		<mysql.version>5.1.39</mysql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
