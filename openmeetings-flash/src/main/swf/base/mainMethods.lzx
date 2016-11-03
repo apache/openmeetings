@@ -361,7 +361,7 @@
 			if ($debug) Debug.error("updateModerationFlag::error ", e);
 		}
 	]]>
-	</method> 
+	</method>
 	
 	<!---
 		Checks if a certain publicSID is a moderator
