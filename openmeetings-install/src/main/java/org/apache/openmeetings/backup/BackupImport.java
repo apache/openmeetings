@@ -739,14 +739,16 @@ public class BackupImport {
 				throw new Exception(msg);
 			}
 		} else {
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode listNode = root.getNext();
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				while (item != null) {
-					T o = ser.read(clazz, item, false);
-					list.add(o);
-					item = listNode.getNext();
+			try (InputStream rootIs = new FileInputStream(xml)) {
+				InputNode root = NodeBuilder.read(rootIs);
+				InputNode listNode = root.getNext();
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					while (item != null) {
+						T o = ser.read(clazz, item, false);
+						list.add(o);
+						item = listNode.getNext();
+					}
 				}
 			}
 		}
@@ -780,60 +782,62 @@ public class BackupImport {
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(Date.class, DateConverter.class);
 			
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-			InputNode listNode = root.getNext();
-			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-				while (item != null) {
-					FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
-					
-					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
-					do {
-						String name = item1.getName();
-						String val = item1.getValue();
-						if ("wmlFilePath".equals(name) && !Strings.isEmpty(val)) {
-							f.setType(FileItem.Type.WmlFile);
-							f.setHash(val);
+			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
+				InputNode root = NodeBuilder.read(rootIs1);
+				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				InputNode listNode = root.getNext();
+				InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+					while (item != null) {
+						FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
+						
+						//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
+						do {
+							String name = item1.getName();
+							String val = item1.getValue();
+							if ("wmlFilePath".equals(name) && !Strings.isEmpty(val)) {
+								f.setType(FileItem.Type.WmlFile);
+								f.setHash(val);
+							}
+							if ("isChart".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.PollChart);
+							}
+							if ("isImage".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.Image);
+							}
+							if ("isVideo".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.Video);
+							}
+							if ("isRecording".equals(name) && "true".equals(val)) {
+								log.warn("Recording is stored in FileExplorer Items");
+								f.setType(FileItem.Type.Video);
+							}
+							if ("isPresentation".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.Presentation);
+							}
+							if ("isStoredWmlFile".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.WmlFile);
+							}
+							if ("isFolder".equals(name) && "true".equals(val)) {
+								f.setType(FileItem.Type.Folder);
+							}
+							item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
+						} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
+						
+						//Some hashes were stored with file extension
+						int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
+						if (idx > -1) {
+							String hash = f.getHash().substring(0, idx);
+							if (FileItem.Type.Image == f.getType()) {
+								fileMap.put(f.getHash(), String.format("%s/%s", hash, f.getHash()));
+							}
+							f.setHash(hash);
 						}
-						if ("isChart".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.PollChart);
-						}
-						if ("isImage".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.Image);
-						}
-						if ("isVideo".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.Video);
-						}
-						if ("isRecording".equals(name) && "true".equals(val)) {
-							log.warn("Recording is stored in FileExplorer Items");
-							f.setType(FileItem.Type.Video);
-						}
-						if ("isPresentation".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.Presentation);
-						}
-						if ("isStoredWmlFile".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.WmlFile);
-						}
-						if ("isFolder".equals(name) && "true".equals(val)) {
-							f.setType(FileItem.Type.Folder);
-						}
-						item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
-					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
-					
-					//Some hashes were stored with file extension
-					int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
-					if (idx > -1) {
-						String hash = f.getHash().substring(0, idx);
-						if (FileItem.Type.Image == f.getType()) {
-							fileMap.put(f.getHash(), String.format("%s/%s", hash, f.getHash()));
-						}
-						f.setHash(hash);
+						list.add(f);
+						item = listNode.getNext();
 					}
-					list.add(f);
-					item = listNode.getNext();
 				}
 			}
 		}
@@ -855,32 +859,34 @@ public class BackupImport {
 			registry.bind(Date.class, DateConverter.class);
 			registry.bind(Recording.Status.class, RecordingStatusConverter.class);
 			
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder
-			InputNode listNode = root.getNext();
-			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
-				while (item != null) {
-					Recording r = ser.read(Recording.class, item, false);
-					
-					boolean isFolder = false;
-					//HACK to handle old isFolder
-					do {
-						String name = item1.getName();
-						String val = item1.getValue();
-						if ("isFolder".equals(name) && "true".equals(val)) {
-							isFolder = true;
+			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
+				InputNode root = NodeBuilder.read(rootIs1);
+				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder
+				InputNode listNode = root.getNext();
+				InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
+					while (item != null) {
+						Recording r = ser.read(Recording.class, item, false);
+						
+						boolean isFolder = false;
+						//HACK to handle old isFolder
+						do {
+							String name = item1.getName();
+							String val = item1.getValue();
+							if ("isFolder".equals(name) && "true".equals(val)) {
+								isFolder = true;
+							}
+							item1 = listNode1.getNext(); //HACK to handle Address inside user
+						} while (item1 != null && !"flvrecording".equals(item1.getName()));
+						
+						if (r.getType() == null) {
+							r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
 						}
-						item1 = listNode1.getNext(); //HACK to handle Address inside user
-					} while (item1 != null && !"flvrecording".equals(item1.getName()));
-					
-					if (r.getType() == null) {
-						r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
+						list.add(r);
+						item = listNode.getNext();
 					}
-					list.add(r);
-					item = listNode.getNext();
 				}
 			}
 		}
@@ -1126,53 +1132,55 @@ public class BackupImport {
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
-			InputNode listNode = root.getNext();
-			InputNode listNode1 = root1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				InputNode item1 = listNode1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
-				while (item != null) {
-					Room r = ser.read(Room.class, item, false);
-					
-					Boolean showMicrophoneStatus = null;
-					//HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
-					do {
-						String name = item1.getName();
-						String val = item1.getValue();
-						if ("hideTopBar".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.TopBar);
+			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
+				InputNode root = NodeBuilder.read(rootIs1);
+				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+				InputNode listNode = root.getNext();
+				InputNode listNode1 = root1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					InputNode item1 = listNode1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+					while (item != null) {
+						Room r = ser.read(Room.class, item, false);
+						
+						Boolean showMicrophoneStatus = null;
+						//HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
+						do {
+							String name = item1.getName();
+							String val = item1.getValue();
+							if ("hideTopBar".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.TopBar);
+							}
+							if ("hideChat".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.Chat);
+							}
+							if ("hideActivitiesAndActions".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.Activities);
+							}
+							if ("hideFilesExplorer".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.Files);
+							}
+							if ("hideActionsMenu".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.ActionMenu);
+							}
+							if ("hideScreenSharing".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.ScreenSharing);
+							}
+							if ("hideWhiteboard".equals(name) && "true".equals(val)) {
+								r.hide(RoomElement.Whiteboard);
+							}
+							if ("showMicrophoneStatus".equals(name)) {
+								showMicrophoneStatus = Boolean.valueOf(val);
+							}
+							item1 = listNode1.getNext(); //HACK to handle Address inside user
+						} while (item1 != null && !"room".equals(item1.getName()));
+						
+						if (Boolean.FALSE.equals(showMicrophoneStatus)) {
+							r.hide(RoomElement.MicrophoneStatus);
 						}
-						if ("hideChat".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.Chat);
-						}
-						if ("hideActivitiesAndActions".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.Activities);
-						}
-						if ("hideFilesExplorer".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.Files);
-						}
-						if ("hideActionsMenu".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.ActionMenu);
-						}
-						if ("hideScreenSharing".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.ScreenSharing);
-						}
-						if ("hideWhiteboard".equals(name) && "true".equals(val)) {
-							r.hide(RoomElement.Whiteboard);
-						}
-						if ("showMicrophoneStatus".equals(name)) {
-							showMicrophoneStatus = Boolean.valueOf(val);
-						}
-						item1 = listNode1.getNext(); //HACK to handle Address inside user
-					} while (item1 != null && !"room".equals(item1.getName()));
-					
-					if (Boolean.FALSE.equals(showMicrophoneStatus)) {
-						r.hide(RoomElement.MicrophoneStatus);
+						list.add(r);
+						item = listNode.getNext();
 					}
-					list.add(r);
-					item = listNode.getNext();
 				}
 			}
 		}
