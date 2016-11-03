@@ -35,16 +35,17 @@
     
 	<method name="loadImageToWhiteboard">
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
-    		var mouse_x = canvas._drawarea.getMouse("x");
-    		var mouse_y = canvas._drawarea.getMouse("y");
-    		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(),mouse_x,mouse_y,
-    		          canvas.getUrl()+'DownloadHandler',
-    		          this.fileHash,"videoconf1","/","files",hib.conferencedomain);
+			var mouse_x = canvas._drawarea.getMouse("x");
+			var mouse_y = canvas._drawarea.getMouse("y");
+			canvas._drawarea.parent.parent.clearAreaAndAddImage(
+					this.generateFileLink(), mouse_x, mouse_y,
+					canvas.getUrl() + 'DownloadHandler',
+					this.fileHash, "videoconf1", "/", "files", hib.conferencedomain);
 		} else {
-            new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(721)});
-        }
+			new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(721)});
+		}
 	</method>
-	
+
 	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
 		<contextmenu>
 			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" onselect="parent.parent.parent.editFolderName()" />

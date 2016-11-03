@@ -103,36 +103,37 @@
         g["image"]["askagainclear"]=true;
         canvas.setUserData(g);
     </method>   
-    
-    <method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">
-        <![CDATA[
-        ////Debug.write("clearAreaAndAddImage: ",downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain);
-        this.downloadurl=downloadurlVal;
-        this.iamgex=xVal;
-        this.imagey=yVal;   
-        this.baseurl=baseurl;
-        this.fileName=fileName;
-        this.moduleName=moduleName;
-        this.parentPath=parentPath;
-        this.room=room;
-        this.domain=domain;
-        var storedImageDate = this.getconfirmationscode();
-        ////Debug.write(" g[image] ",storedImageDate);
-        if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
-            canvas._drawarea.setModus('plain');
-            if ($debug) Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
-            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
-        } else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
-            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
-            if ($debug) Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
-        } else if (storedImageDate["askagainclear"]){
-            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
-        } else {
-            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
-        }
-        ]]> 
-    </method>
-    
+
+	<method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">
+	<![CDATA[
+		//if ($debug) Debug.write("clearAreaAndAddImage: ", downloadurlVal, xVal, yVal, baseurl, fileName, moduleName, parentPath, room, domain);
+		this.downloadurl = downloadurlVal;
+		this.iamgex = xVal;
+		this.imagey = yVal;
+		this.baseurl = baseurl;
+		this.fileName = fileName;
+		this.moduleName = moduleName;
+		this.parentPath = parentPath;
+		this.room = room;
+		this.domain = domain;
+		var storedImageDate = this.getconfirmationscode();
+		//if ($debug) Debug.write("clearAreaAndAddImage storedImageDate = ", storedImageDate);
+		if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
+			canvas._drawarea.setModus('plain');
+			canvas._drawarea.addNewImage(this.downloadurl, this.x, this.y, this.baseurl, this.fileName, this.moduleName, this.parentPath, this.room, this.domain, fileName, false);
+		} else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
+			if ($debug) Debug.write(" canvas._drawarea.addNewImage 2 ", this.downloadurl, this.x, this.y);
+			canvas._drawarea.addNewImage(this.downloadurl, this.x, this.y, this.baseurl, this.fileName, this.moduleName, this.parentPath, this.room, this.domain, fileName, false);
+		} else if (storedImageDate["askagainclear"]){
+			if ($debug) Debug.write("clearAreaAndAddImage confirmdialog 1 ");
+			this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+		} else {
+			if ($debug) Debug.write("clearAreaAndAddImage confirmdialog 2 ");
+			this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+		}
+	]]>
+	</method>
+
     <event name="isloadingImage" />
     <event name="isloadedImage" />
     

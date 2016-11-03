@@ -66,8 +66,8 @@
 					if ($debug) Debug.write(url);
 					
 					canvas._drawarea.loadSWFPresentationSynced(url,tArrayValueObj.fileHash + ".swf",
-							  "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
-							  tArrayValueObj.fileSystemName);
+							"videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
+							tArrayValueObj.fileSystemName);
 				} else if (tArrayValueObj.isImage) {
 					canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(tArrayValueObj.fileHash),0,0,
 							canvas.getUrl() +'DownloadHandler',
