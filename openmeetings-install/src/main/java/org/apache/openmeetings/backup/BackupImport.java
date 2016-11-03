@@ -697,14 +697,16 @@ public class BackupImport {
 				throw new Exception(msg);
 			}
 		} else {
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode listNode = root.getNext();
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				while (item != null) {
-					T o = ser.read(clazz, item, false);
-					list.add(o);
-					item = listNode.getNext();
+			try (InputStream rootIs = new FileInputStream(xml)) {
+				InputNode root = NodeBuilder.read(rootIs);
+				InputNode listNode = root.getNext();
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					while (item != null) {
+						T o = ser.read(clazz, item, false);
+						list.add(o);
+						item = listNode.getNext();
+					}
 				}
 			}
 		}
@@ -738,66 +740,68 @@ public class BackupImport {
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(Date.class, DateConverter.class);
 			
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-			InputNode listNode = root.getNext();
-			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-				while (item != null) {
-					FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
-					
-					boolean isFolder = false, isImage = false, isVideo = false, isPresentation = false, isStoredWmlFile = false, isChart = false;
-					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
-					do {
-						if ("isChart".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isChart = true;
+			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
+				InputNode root = NodeBuilder.read(rootIs1);
+				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				InputNode listNode = root.getNext();
+				InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+					while (item != null) {
+						FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
+						
+						boolean isFolder = false, isImage = false, isVideo = false, isPresentation = false, isStoredWmlFile = false, isChart = false;
+						//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+						do {
+							if ("isChart".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isChart = true;
+							}
+							if ("isImage".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isImage = true;
+							}
+							if ("isVideo".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isVideo = true;
+							}
+							if ("isRecording".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								log.warn("Recording is stored in FileExplorer Items");
+								isVideo = true;
+							}
+							if ("isPresentation".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isPresentation = true;
+							}
+							if ("isStoredWmlFile".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isStoredWmlFile = true;
+							}
+							if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isFolder = true;
+							}
+							item1 = listNode1.getNext(); //HACK to handle Address inside user
+						} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
+						
+						if (f.getType() == null) {
+							if (isChart) {
+								f.setType(FileItem.Type.PollChart);
+							}
+							if (isImage) {
+								f.setType(FileItem.Type.Image);
+							}
+							if (isVideo) {
+								f.setType(FileItem.Type.Video);
+							}
+							if (isPresentation) {
+								f.setType(FileItem.Type.Presentation);
+							}
+							if (isStoredWmlFile) {
+								f.setType(FileItem.Type.WmlFile);
+							}
+							if (isFolder) {
+								f.setType(FileItem.Type.Folder);
+							}
 						}
-						if ("isImage".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isImage = true;
-						}
-						if ("isVideo".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isVideo = true;
-						}
-						if ("isRecording".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							log.warn("Recording is stored in FileExplorer Items");
-							isVideo = true;
-						}
-						if ("isPresentation".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isPresentation = true;
-						}
-						if ("isStoredWmlFile".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isStoredWmlFile = true;
-						}
-						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isFolder = true;
-						}
-						item1 = listNode1.getNext(); //HACK to handle Address inside user
-					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
-					
-					if (f.getType() == null) {
-						if (isChart) {
-							f.setType(FileItem.Type.PollChart);
-						}
-						if (isImage) {
-							f.setType(FileItem.Type.Image);
-						}
-						if (isVideo) {
-							f.setType(FileItem.Type.Video);
-						}
-						if (isPresentation) {
-							f.setType(FileItem.Type.Presentation);
-						}
-						if (isStoredWmlFile) {
-							f.setType(FileItem.Type.WmlFile);
-						}
-						if (isFolder) {
-							f.setType(FileItem.Type.Folder);
-						}
+						list.add(f);
+						item = listNode.getNext();
 					}
-					list.add(f);
-					item = listNode.getNext();
 				}
 			}
 		}
@@ -819,30 +823,32 @@ public class BackupImport {
 			registry.bind(Date.class, DateConverter.class);
 			registry.bind(Recording.Status.class, RecordingStatusConverter.class);
 			
-			InputNode root = NodeBuilder.read(new FileInputStream(xml));
-			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder
-			InputNode listNode = root.getNext();
-			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
-			if (listNodeName.equals(listNode.getName())) {
-				InputNode item = listNode.getNext();
-				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
-				while (item != null) {
-					Recording r = ser.read(Recording.class, item, false);
-					
-					boolean isFolder = false;
-					//HACK to handle old isFolder
-					do {
-						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
-							isFolder = true;
+			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
+				InputNode root = NodeBuilder.read(rootIs1);
+				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder
+				InputNode listNode = root.getNext();
+				InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
+				if (listNodeName.equals(listNode.getName())) {
+					InputNode item = listNode.getNext();
+					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
+					while (item != null) {
+						Recording r = ser.read(Recording.class, item, false);
+						
+						boolean isFolder = false;
+						//HACK to handle old isFolder
+						do {
+							if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+								isFolder = true;
+							}
+							item1 = listNode1.getNext(); //HACK to handle Address inside user
+						} while (item1 != null && !"flvrecording".equals(item1.getName()));
+						
+						if (r.getType() == null) {
+							r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
 						}
-						item1 = listNode1.getNext(); //HACK to handle Address inside user
-					} while (item1 != null && !"flvrecording".equals(item1.getName()));
-					
-					if (r.getType() == null) {
-						r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
+						list.add(r);
+						item = listNode.getNext();
 					}
-					list.add(r);
-					item = listNode.getNext();
 				}
 			}
 		}
