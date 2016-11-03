@@ -133,8 +133,17 @@
 		return v;
 	]]>
 	</method>
-    
-    <participantsTable name="_table" y="20" /> 
+
+	<method name="updateByPublicSID" args="publicSID, obj, full=true">
+	<![CDATA[
+		var u = getUserListItemByPublicSID(publicSID);
+		if (!!u) {
+			u.update(obj, full);
+		}
+	]]>
+	</method>
+
+	<participantsTable name="_table" y="20" /> 
 
     <view name="_miniIcons" x="112" y="0" height="18">
         

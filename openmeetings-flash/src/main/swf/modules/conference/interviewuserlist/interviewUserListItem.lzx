@@ -55,16 +55,16 @@
             this.updateIconByMod();
         ]]>
     </handler>
-    
-    <method name="update" args="obj, full=true">
-    	if (!!obj.scope) {
-	    	setAttribute('firstname', obj.firstname);
-	    	setAttribute('lastname', obj.lastname);
-	    	refObj = obj;
+
+	<method name="update" args="obj, full=true">
+		if (!!obj.scope) {
+			setAttribute('firstname', obj.firstname);
+			setAttribute('lastname', obj.lastname);
+			refObj = obj;
 			_userName.setAttribute('text', getUName());
 		}
-    </method>
-     
+	</method>
+
     <method name="updateIconByMod">
     	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
     	if (this.isMod) {

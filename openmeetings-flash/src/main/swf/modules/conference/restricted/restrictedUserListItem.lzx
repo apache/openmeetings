@@ -42,7 +42,8 @@
 	
 	<method name="update" args="obj, full=true">
 	<![CDATA[
-		if ($debug) Debug.write("!!!! update ", obj, this.userId);
+		if ($debug) Debug.write("!!!! update ", this.userId, obj);
+		//if ($debug) Debug.write("!!!! update ", this);
 		if (!!obj.scope) {
 			setAttribute('firstname', obj.firstname);
 			setAttribute('lastname', obj.lastname);

@@ -113,7 +113,9 @@
 			if (this._table.renderList[i].publicSID == publicSID) {
 				this._table.renderList.splice(i,1);
 				var item = this._table._innerlist._inn._inn.subviews[i];
-				item.destroy();
+				if (!!item) {
+					item.destroy();
+				}
 				break;
 			}
 		}
@@ -121,7 +123,7 @@
 		this.moderationPanel.updateIcons(canvas.currentClient);
 	]]>
 	</method>
-	
+
 	<method name="getUserListItemByPublicSID" args="publicSID">
 	<![CDATA[
 		var v = null;
@@ -135,19 +137,41 @@
 		return v;
 	]]>
 	</method>
-	
+
+	<method name="updateByPublicSID" args="publicSID, obj, full=true">
+	<![CDATA[
+		var u = getUserListItemByPublicSID(publicSID);
+		if (!!u) {
+			u.update(obj, full);
+		} else if (!!obj.scope) {
+			var renderList = this._table.renderList;
+			//if ($debug) Debug.write("!!!! update renderList", renderList);
+			for (var i = 0; i < renderList.length; ++i) {
+				if (renderList[i].publicSID == obj.publicSID) {
+					if (full) {
+						renderList[i] = obj;
+					} else {
+						renderList[i].isMod = obj.isMod;
+					}
+					break;
+				}
+			}
+		}
+	]]>
+	</method>
+
 	<view name="userStatus" layout="axis:y">
 		<view>
-			 <view resource="userstatus_multiframe_rsc" frame="1" />
-			 <labelText x="16" labelid="677" />
+			<view resource="userstatus_multiframe_rsc" frame="1" />
+			<labelText x="16" labelid="677" />
 		</view>
 		<view>
-			 <view resource="userstatus_multiframe_rsc" frame="2" />
-			 <labelText x="16" labelid="678" />
+			<view resource="userstatus_multiframe_rsc" frame="2" />
+			<labelText x="16" labelid="678" />
 		</view>
 		<view>
-			 <view resource="userstatus_multiframe_rsc" frame="3" />
-			 <labelText x="16" labelid="679" />
+			<view resource="userstatus_multiframe_rsc" frame="3" />
+			<labelText x="16" labelid="679" />
 		</view>
 	</view>
 	
@@ -169,12 +193,11 @@
 		</handler>
 	</moderationMiniIconsEventUserList>
 	
-	
 	<turnOverListOrderedPaged name="_table" showTopBar="false" x="1"
-			 height="${ parent.height-30-parent.moderationPanel.height }" 
-			 y="30" itemHeight="40" listLabelId="1001" headerHeight="0"
-			 listItemName="restrictedUserListItem" showHScrollbar="hidden"
-			 multiselect="false" width="268">
+			height="${ parent.height-30-parent.moderationPanel.height }"
+			y="30" itemHeight="40" listLabelId="1001" headerHeight="0"
+			listItemName="restrictedUserListItem" showHScrollbar="hidden"
+			multiselect="false" width="268">
 		
 		<attribute name="currentSelectedIndex" value="null" />
 		
@@ -327,7 +350,7 @@
 				}
 			}
 		]]>
-		</method>   
+		</method>
 		
 		<handler name="onScrollItem" args="item">
 		<![CDATA[
@@ -392,11 +415,11 @@
 		]]>
 		</handler>
 		
-	</turnOverListOrderedPaged> 
-	   
+	</turnOverListOrderedPaged>
+	
 	<view name="moderationPanel" clip="true" 
-		  height="${ (canvas.ismoderator) ? 40 : 0 }"
-		  y="${ parent.height - this.height - 2 }">
+			height="${ (canvas.ismoderator) ? 40 : 0 }"
+			y="${ parent.height - this.height - 2 }">
 		
 		<handler name="onismoderator" reference="canvas" args="m">
 			if ($debug) Debug.write("###### ismoderator ",m);

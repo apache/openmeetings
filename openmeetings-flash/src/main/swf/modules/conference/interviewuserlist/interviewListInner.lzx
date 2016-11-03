@@ -144,11 +144,20 @@
 	<![CDATA[
 		for (var i=0;i<this._table.innerList.subviews.length;i++){
 			//if ($debug) Debug.write("getUserListItemByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
-			if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+			if (this._table.innerList.subviews[i].refObj.publicSID == publicSID){
 				return this._table.innerList.subviews[i];
 			}
 		}
 		return null;
+	]]>
+	</method>
+
+	<method name="updateByPublicSID" args="publicSID, obj, full=true">
+	<![CDATA[
+		var u = getUserListItemByPublicSID(publicSID);
+		if (!!u) {
+			u.update(obj, full);
+		}
 	]]>
 	</method>
 

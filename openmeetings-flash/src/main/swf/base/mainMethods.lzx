@@ -450,7 +450,7 @@
 				new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
 			} else if (roomObj.type == 'interview') {
 				new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj:roomObj});
-			} 
+			}
 		}
 	]]>
 	</method>
@@ -526,21 +526,18 @@
 		if ($debug) Debug.write("updateModerationFlag", canvas.removeModeratorList);
 		for (var i = 0; i < canvas.removeModeratorList.length; ++i) {
 			var item = canvas.removeModeratorList[i];
-			item.isMod = false;
-			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(item.publicSID);
-			if (u != null) {
-				u.update(item, false);
+			if (canvas.publicSID == item.publicSID) {
+				isCurrentModerator = false;
 			}
+			item.isMod = false;
+			canvas._videocontainer._participants.updateByPublicSID(item.publicSID, item, false);
 		}
 		if ($debug) Debug.write("updateModerationFlag", canvas.currentModeratorList);
 		for (var i = 0; i < canvas.currentModeratorList.length; ++i) {
 			var item = canvas.currentModeratorList[i];
-			var u = canvas._videocontainer._participants.getUserListItemByPublicSID(item.publicSID);
-			if (u != null) {
-				u.update(item);
-				if (canvas.publicSID == item.publicSID) {
-					isCurrentModerator = true;
-				}
+			canvas._videocontainer._participants.updateByPublicSID(item.publicSID, item);
+			if (canvas.publicSID == item.publicSID) {
+				isCurrentModerator = true;
 			}
 		}
 		
@@ -553,7 +550,7 @@
 			if ($debug) Debug.error("updateModerationFlag::error ", e);
 		}
 	]]>
-	</method> 
+	</method>
 	
 	<!---
 		Checks if a certain publicSID is a moderator
@@ -576,9 +573,8 @@
 	 -->
 	<method name="setDrawAllowStatus" args="roomClientObj">
 	<![CDATA[
-		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		if (!!u && !!roomClientObj) {
-			u.update(roomClientObj);
+		if (!!roomClientObj) {
+			canvas._videocontainer._participants.updateByPublicSID(roomClientObj.publicSID, roomClientObj);
 		}
 		if ($debug) Debug.write("drawAllowStatus changes ###### ");
 		if (roomClientObj.publicSID == canvas.publicSID) {
@@ -595,9 +591,8 @@
 	 -->
 	<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
 	<![CDATA[
-		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		if (!!u && !!roomClientObj) {
-			u.update(roomClientObj);
+		if (!!roomClientObj) {
+			canvas._videocontainer._participants.updateByPublicSID(roomClientObj.publicSID, roomClientObj);
 		}
 		if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
 		if (roomClientObj.publicSID==canvas.publicSID) {
@@ -610,9 +605,8 @@
 	<method name="setMuteStatus" args="roomClientObj">
 	<![CDATA[
 		if ($debug) Debug.write("setMuteStatus ###### ", roomClientObj);
-		var u = canvas._videocontainer._participants.getUserListItemByPublicSID(roomClientObj.publicSID);
-		if (!!u && !!roomClientObj) {
-			u.update(roomClientObj);
+		if (!!roomClientObj) {
+			canvas._videocontainer._participants.updateByPublicSID(roomClientObj.publicSID, roomClientObj);
 		}
 		if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
 		//Check for self status
