@@ -105,11 +105,11 @@ public class ErrorWebService {
 	@POST
 	@Path("/report/")
 	public void report(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="message") @QueryParam("message") String message) {
-    	if (sid != null && message != null) {
-	    	Long userId = sessionDao.check(sid);
-	    	if (userId != null && userId != 0) {
-	    		log.error("[CLIENT MESSAGE] " + message);
-	    	}
-    	}
+		if (sid != null && message != null) {
+			Long userId = sessionDao.check(sid);
+			if (userId != null && userId != 0) {
+				log.error("[CLIENT MESSAGE] " + message);
+			}
+		}
 	}
 }
