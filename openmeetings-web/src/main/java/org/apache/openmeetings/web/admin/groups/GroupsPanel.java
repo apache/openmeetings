@@ -18,7 +18,17 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.admin.AdminPanel;
@@ -31,6 +41,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -43,6 +54,7 @@ import org.apache.wicket.markup.repeater.Item;
  * @author swagner
  * 
  */
+@AuthorizeInstantiation({"Admin", "GroupAdmin"})
 public class GroupsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	private GroupForm form;
@@ -57,7 +69,16 @@ public class GroupsPanel extends AdminPanel {
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	
+		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
+		final Set<Long> groupIds = new HashSet<>();
+		if (isGroupAdmin) {
+			for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+				if (gu.isModerator()) {
+					groupIds.add(gu.getGroup().getId());
+				}
+			}
+		}
+
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Group());
 		add(form);
@@ -68,22 +89,26 @@ public class GroupsPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(Item<Group> item) {
-				final Group o = item.getModelObject();
+				final Group g = item.getModelObject();
 				item.add(new Label("id"));
 				item.add(new Label("name"));
-				item.add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						form.hideNewRecord();
-						form.setModelObject(o);
-						form.updateView(target);
-						target.add(listContainer);
-						target.appendJavaScript("groupsInit();");
-					}
-				});
-				item.add(AttributeModifier.append("class", getRowClass(o.getId(), form.getModelObject().getId())));
+				if (isGroupAdmin && groupIds.contains(g.getId())) {
+					item.add(new AjaxEventBehavior("click") {
+						private static final long serialVersionUID = 1L;
+	
+						@Override
+						protected void onEvent(AjaxRequestTarget target) {
+							form.hideNewRecord();
+							form.setModelObject(g);
+							form.updateView(target);
+							target.add(listContainer);
+							target.appendJavaScript("groupsInit();");
+						}
+					});
+					item.add(AttributeModifier.append("class", getRowClass(g.getId(), form.getModelObject().getId())));
+				} else {
+					item.add(AttributeModifier.append("class", BASE_ROW_CLASS));
+				}
 			}
 		};
 

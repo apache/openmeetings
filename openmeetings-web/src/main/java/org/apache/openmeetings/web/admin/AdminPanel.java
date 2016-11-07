@@ -24,7 +24,8 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 @AuthorizeInstantiation("Admin")
 public abstract class AdminPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	protected final static String ROW_CLASS = "clickable ui-widget-content %s";
+	protected final static String BASE_ROW_CLASS = "ui-widget-content";
+	protected final static String ROW_CLASS = BASE_ROW_CLASS + " clickable";
 
 	public AdminPanel(String id) {
 		super(id);
