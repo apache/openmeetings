@@ -92,6 +92,10 @@ public class AuthLevelUtil {
 		return check(rights, User.Right.Admin);
 	}
 
+	public static boolean hasGroupAdminLevel(Set<User.Right> rights) {
+		return check(rights, User.Right.GroupAdmin);
+	}
+
 	public static boolean hasWebServiceLevel(Set<User.Right> rights) {
 		return check(rights, User.Right.Soap);
 	}

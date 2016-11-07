@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,9 +41,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted = false AND ng.levelId <= :levelId AND nm.levelId <= :levelId "
-				+ "AND ng.deleted = false ORDER BY ng.naviorder ASC"),
+		@NamedQuery(name = "getNavigation", query = "SELECT ng FROM Naviglobal ng "
+				+ "WHERE ng.levelId <= :levelId AND ng.deleted = false ORDER BY ng.naviorder ASC"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.id = :id") })
 @Table(name = "naviglobal")
 public class Naviglobal implements IDataProviderEntity {
@@ -68,10 +68,10 @@ public class Naviglobal implements IDataProviderEntity {
 	@Column(name = "comment")
 	private String comment;
 
-	@Column(name = "naviorder")
+	@Column(name = "naviorder", nullable = false)
 	private int naviorder;
 
-	@Column(name = "level_id")
+	@Column(name = "level_id", nullable = false)
 	private int levelId;
 
 	@Column(name = "deleted", nullable = false)
@@ -84,10 +84,10 @@ public class Naviglobal implements IDataProviderEntity {
 	private String tooltipLabelId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "global_id")
+	@JoinColumn(name = "global_id", nullable = false)
 	@ForeignKey(enabled = true)
 	@OrderBy("naviorder")
-	private List<Navimain> mainnavi;
+	private List<Navimain> mainnavi = new ArrayList<>();
 
 	@Override
 	public Long getId() {

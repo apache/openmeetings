@@ -63,10 +63,10 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "comment")
 	private String comment;
 
-	@Column(name = "naviorder")
+	@Column(name = "naviorder", nullable = false)
 	private int naviorder;
 
-	@Column(name = "level_id")
+	@Column(name = "level_id", nullable = false)
 	private int levelId;
 
 	@Column(name = "label_id")
