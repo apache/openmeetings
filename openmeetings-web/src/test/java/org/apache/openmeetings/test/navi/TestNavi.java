@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.test.navi;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -31,29 +34,44 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestNavi extends AbstractJUnitDefaults {
-	
 	@Autowired
 	private NavigationDao navimanagement;
-	
-	@Test
-	public void testGetNavi(){
-		
-        List<Naviglobal> ll = navimanagement.getMainMenu(true);
 
-        assertTrue("GlobalNavi size should be greater than zero: " + ll.size(), ll.size() > 0);
-        System.out.println("NaviGlobal size: " + ll.size());
+	private List<Naviglobal> testGetNavi(int level) {
+		List<Naviglobal> ll = navimanagement.getMainMenu(level);
 
-        for (Naviglobal navigl : ll) {
-        	assertNotNull("Naviglobal retrieved should not be null", navigl);
-            System.out.println("Naviglobal label: " + navigl.getLevelId());
+		assertTrue("GlobalNavi size should be greater than zero: " + ll.size(), ll.size() > 0);
 
-        	assertNotNull("Naviglobal retrieved should have Navimain entries", navigl.getMainnavi());
-            for (Navimain navim : navigl.getMainnavi()) {
-            	assertNotNull("Navimain retrieved should not be null", navim);
-                System.out.println("-->" + navim.getLabelId());
-            }
-        }
-		
+		for (Naviglobal navigl : ll) {
+			assertNotNull("Naviglobal retrieved should not be null", navigl);
+			assertTrue(String.format("Naviglobal retrieved should have level not greater than: %s, has: ", level, navigl.getLevelId()), navigl.getLevelId() <= level);
+
+			assertNotNull("Naviglobal retrieved should have Navimain entries", navigl.getMainnavi());
+			for (Navimain navim : navigl.getMainnavi()) {
+				assertNotNull("Navimain retrieved should not be null", navim);
+				assertTrue(String.format("Navimain retrieved should have level not greater than: %s, has: ", level, navim.getLevelId()), navim.getLevelId() <= level);
+			}
+		}
+		return ll;
 	}
 
+	@Test
+	public void testGetUserNavi() {
+		testGetNavi(LEVEL_USER);
+	}
+
+	@Test
+	public void testGetGroupAdminNavi() {
+		testGetNavi(LEVEL_GROUP_ADMIN);
+	}
+
+	@Test
+	public void testGetAdminNavi() {
+		List<Naviglobal> menu = testGetNavi(LEVEL_ADMIN);
+		for (Naviglobal ng : menu) {
+			if (ng.getLevelId() == LEVEL_ADMIN) {
+				assertTrue("Admin menu should conatin more than 4 items: " + ng.getMainnavi().size(), ng.getMainnavi().size() > 4);
+			}
+		}
+	}
 }

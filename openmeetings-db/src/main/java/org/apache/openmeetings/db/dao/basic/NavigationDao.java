@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,10 +54,25 @@ public class NavigationDao {
 
 	}
 
-	public List<Naviglobal> getMainMenu(boolean admin) {
-		return em.createNamedQuery("getNavigation", Naviglobal.class)
-				.setParameter("levelId", admin ? 3L : 1L)
+	public List<Naviglobal> getMainMenu(int level) {
+		List<Naviglobal> menu = em.createNamedQuery("getNavigation", Naviglobal.class)
+				.setParameter("levelId", level)
 				.getResultList();
+		if (LEVEL_GROUP_ADMIN == level) {
+			// filtering of child objects is not working on JPQL level
+			for (Naviglobal ng : menu) {
+				em.detach(ng);
+				ng.setId(null); // we don't need below changed to be saved
+				List<Navimain> sub = new ArrayList<>();
+				for (Navimain nm : ng.getMainnavi()) {
+					if (nm.getLevelId() <= level) {
+						sub.add(nm);
+					}
+				}
+				ng.setMainnavi(sub);
+			}
+		}
+		return menu;
 	}
 
 	public Naviglobal addGlobalStructure(int naviorder, String labelId, int levelId, String name, String tooltipLabelId) {
@@ -70,7 +86,6 @@ public class NavigationDao {
 		ng.setName(name);
 		ng.setInserted(new Date());
 		ng.setTooltipLabelId(tooltipLabelId);
-		// CriteriaBuilder crit = em.getCriteriaBuilder();
 
 		em.persist(ng);
 		return ng;
@@ -79,8 +94,6 @@ public class NavigationDao {
 	public void addMainStructure(String action, String params, int naviorder, String labelId,
 			int levelId, String name, Long globalId, String tooltipLabelId) {
 		Naviglobal ng = getGlobalMenuEntry(globalId);
-		List<Navimain> mainEntries = ng.getMainnavi();
-		mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
 
 		Navimain nm = new Navimain();
 		nm.setAction(action);
@@ -96,10 +109,9 @@ public class NavigationDao {
 		nm.setInserted(new Date());
 		nm.setTooltipLabelId(tooltipLabelId);
 
-		mainEntries.add(nm);
-		ng.setMainnavi(mainEntries);
+		ng.getMainnavi().add(nm);
 
-		em.persist(ng);
+		em.merge(ng);
 	}
 
 }

@@ -110,6 +110,7 @@ public class User implements IDataProviderEntity {
 	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
 		Admin			// access to Admin module
+		, GroupAdmin	// partial access to Admin module (should not be directly assigned)
 		, Room			// enter the room
 		, Dashboard		// access the dashboard
 		, Login			// login to Om internal DB

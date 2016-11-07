@@ -203,6 +203,9 @@ public class UserForm extends AdminBaseForm<User> {
 			@Override
 			public void query(String term, int page, Response<Right> response) {
 				for (Right r : Right.values()) {
+					if (Right.GroupAdmin == r) {
+						continue;
+					}
 					if (Strings.isEmpty(term) || r.name().contains(term)) {
 						response.add(r);
 					}

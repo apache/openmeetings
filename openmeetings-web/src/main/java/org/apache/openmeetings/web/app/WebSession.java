@@ -56,9 +56,11 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
@@ -273,7 +275,16 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		userId = u.getId();
 		if (rights == null || rights.isEmpty()) {
-			this.rights = Collections.unmodifiableSet(u.getRights());
+			Set<Right> r = new HashSet<>(u.getRights());
+			if (!AuthLevelUtil.hasAdminLevel(r)) {
+				for (GroupUser gu : u.getGroupUsers()) {
+					if (gu.isModerator()) {
+						r.add(Right.GroupAdmin);
+						break;
+					}
+				}
+			}
+			this.rights = Collections.unmodifiableSet(r);
 		} else {
 			this.rights = Collections.unmodifiableSet(rights);
 		}

@@ -19,6 +19,9 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
@@ -30,16 +33,19 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
@@ -270,9 +276,14 @@ public class MainPanel extends Panel {
 		});
 	}
 
+	private int getLevel() {
+		Set<Right> r = WebSession.getRights();
+		return hasAdminLevel(r) ? LEVEL_ADMIN : (hasGroupAdminLevel(r) ? LEVEL_GROUP_ADMIN : LEVEL_USER);
+	}
+
 	private List<IMenuItem> getMainMenu() {
 		List<IMenuItem> menu = new ArrayList<>();
-		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()))) {
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(getLevel())) {
 			List<IMenuItem> l = new ArrayList<>();
 			for (Navimain nm : gl.getMainnavi()) {
 				l.add(new MainMenuItem(nm) {
