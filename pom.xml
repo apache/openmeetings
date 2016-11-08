@@ -41,7 +41,7 @@
 		<maven.surefire.version>2.19.1</maven.surefire.version>
 		<maven-site.version>3.5.1</maven-site.version>
 		<wicket.version>7.5.0</wicket.version>
-		<wicketju.version>7.4.0</wicketju.version>
+		<wicketju.version>7.5.0</wicketju.version>
 		<wickets.version>7.5.0</wickets.version>
 		<wicketws.version>7.4.0</wicketws.version>
 		<red5-server.version>1.0.8-M13</red5-server.version>
@@ -51,8 +51,8 @@
 		<tomcat.version>8.5.6</tomcat.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>2.0.0</ical4j.version>
-		<cxf.version>3.1.7</cxf.version>
-		<selenium.version>2.53.1</selenium.version>
+		<cxf.version>3.1.8</cxf.version>
+		<selenium.version>3.0.1</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.3.8</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
