@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -45,7 +44,6 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		log.debug("Test started");
 		Long userId = 1L;
 		
-		Random rnd = new Random();
 		Calendar now = Calendar.getInstance();
 		Calendar rangeStart = Calendar.getInstance();
 		rangeStart.setTime(now.getTime());
@@ -64,7 +62,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		a2.setTitle("AppointmentByRange_a2");
 		a2.setMeetingMembers(new ArrayList<MeetingMember>());
 		MeetingMember mm1 = new MeetingMember();
-		mm1.setUser(createUserContact(rnd.nextInt(), userId));
+		mm1.setUser(createUserContact(userId));
 		mm1.setAppointment(a2);
 		a2.getMeetingMembers().add(mm1);
 		
@@ -72,11 +70,11 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		a3.setTitle("AppointmentByRange_a3");
 		a3.setMeetingMembers(new ArrayList<MeetingMember>());
 		MeetingMember mm2 = new MeetingMember();
-		mm2.setUser(createUserContact(rnd.nextInt(), userId));
+		mm2.setUser(createUserContact(userId));
 		mm2.setAppointment(a3);
 		a3.getMeetingMembers().add(mm2);
 		MeetingMember mm3 = new MeetingMember();
-		mm3.setUser(createUserContact(rnd.nextInt(), userId));
+		mm3.setUser(createUserContact(userId));
 		mm3.setAppointment(a3);
 		a3.getMeetingMembers().add(mm3);
 		
