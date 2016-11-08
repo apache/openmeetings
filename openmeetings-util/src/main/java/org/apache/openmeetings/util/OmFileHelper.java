@@ -230,7 +230,11 @@ public class OmFileHelper {
 	public static File getStreamsSubDir(String name) {
 		return getDir(getStreamsDir(), name);
 	}
-	
+
+	public static String getName(String name, String ext) {
+		return String.format("%s.%s", name, ext);
+	}
+
 	public static File getRecordingMetaData(Long roomId, String name) {
 		return new File(getStreamsSubDir(roomId), name + FLV_EXTENSION);
 	}
