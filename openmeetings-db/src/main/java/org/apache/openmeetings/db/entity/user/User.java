@@ -249,7 +249,7 @@ public class User implements IDataProviderEntity {
 	private Address address;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "user_id", insertable = true, updatable = true)
+	@JoinColumn(name = "user_id", insertable = true, updatable = true, nullable = false)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
 	private List<GroupUser> groupUsers = new ArrayList<>();
@@ -482,9 +482,6 @@ public class User implements IDataProviderEntity {
 	}
 
 	public List<GroupUser> getGroupUsers() {
-		if (groupUsers == null) {
-			groupUsers = new ArrayList<>();
-		}
 		return groupUsers;
 	}
 

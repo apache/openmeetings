@@ -375,6 +375,7 @@ public class UserDao implements IDataProviderDao<User> {
 					.setParameter("type", type)
 					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
 					.getSingleResult();
+			u.getGroupUsers().size(); // this will initiate lazy collection
 		} catch (NoResultException ex) {
 		}
 		return u;

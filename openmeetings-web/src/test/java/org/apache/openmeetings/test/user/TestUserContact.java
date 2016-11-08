@@ -25,7 +25,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -40,7 +40,6 @@ public class TestUserContact extends AbstractWicketTester {
 	private UserDao userDao;
 	@Autowired
 	private GroupDao groupDao;
-	Random random = new Random();
 	
 	@Test
 	public void testGetUser() throws Exception {
@@ -49,11 +48,11 @@ public class TestUserContact extends AbstractWicketTester {
 	
 	@Test
 	public void createUserWithGroup() throws Exception {
-		int rnd = random.nextInt();
-		User u = getUser(rnd);
+		String uuid = UUID.randomUUID().toString();
+		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = userDao.update(u, null);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), getRandomPass(uuid)));
 		
 		User u1 = userDao.get(u.getId());
 		assertNotNull("Just created user should not be null", u1);
@@ -62,10 +61,10 @@ public class TestUserContact extends AbstractWicketTester {
 	}
 	
 	@Test
-	public void createUser() throws Exception {
-		int rnd = random.nextInt();
-		User u = createUser(rnd);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
+	public void testCreateUser() throws Exception {
+		String uuid = UUID.randomUUID().toString();
+		User u = createUser(uuid);
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), getRandomPass(uuid)));
 	}
 	
 	@Test
@@ -76,7 +75,7 @@ public class TestUserContact extends AbstractWicketTester {
 		assertNotNull("User list should not be null ", users);
 		assertFalse("User list should not be empty ", users.isEmpty());
 		
-		User contact = createUserContact(random.nextInt(), getUserId());
+		User contact = createUserContact(getUserId());
 		String email = contact.getAddress().getEmail();
 		List<User> l = userDao.get(email, false, 0, 9999);
 		// check that contact is visible for admin
@@ -91,9 +90,9 @@ public class TestUserContact extends AbstractWicketTester {
 		l = userDao.get(email, false, 0, 9999);
 		assertTrue("Contact list should be empty after deletion", l.isEmpty());
 
-		User u = createUser(random.nextInt());
-		User u1 = createUser(random.nextInt());
-		contact = createUserContact(random.nextInt(), u.getId());
+		User u = createUser();
+		User u1 = createUser();
+		contact = createUserContact(u.getId());
 		email = contact.getAddress().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
 		l = userDao.get(email, 0, 9999, null, true, u1.getId());

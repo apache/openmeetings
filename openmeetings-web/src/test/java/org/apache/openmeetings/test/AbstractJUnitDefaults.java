@@ -23,12 +23,14 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -138,19 +140,34 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return ap;
 	}
 
-	public User getUser(int rnd) throws Exception {
+	public User getUser() throws Exception {
+		return getUser(UUID.randomUUID().toString());
+	}
+
+	protected String getRandomPass(String uuid) {
+		return "pass" + uuid;
+	}
+
+	public User getUser(String uuid) throws Exception {
 		User u = new User();
 		// add user
-		u.setFirstname("firstname" + rnd);
-		u.setLastname("lastname" + rnd);
-		u.setLogin("login" + rnd);
-		u.updatePassword(cfgDao, "pass" + rnd);
+		u.setFirstname("firstname" + uuid);
+		u.setLastname("lastname" + uuid);
+		u.setLogin("login" + uuid);
+		u.setAddress(new Address());
+		u.getAddress().setEmail(String.format("email%s@local", uuid));
+		u.setRights(UserDao.getDefaultRights());
+		u.updatePassword(cfgDao, getRandomPass(uuid));
 		u.setLanguageId(1L);
 		return u;
 	}
 
-	public User createUser(int rnd) throws Exception {
-		User u = getUser(rnd);
+	public User createUser() throws Exception {
+		return createUser(UUID.randomUUID().toString());
+	}
+
+	public User createUser(String uuid) throws Exception {
+		User u = getUser(uuid);
 		u = userDao.update(u, null);
 		assertNotNull("Can't add user", u);
 		return u;
@@ -166,8 +183,12 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		importInitvalues.loadAll(cfg, false);
 	}
 
-	public User createUserContact(int rnd, Long ownerId) {
-		User user = userDao.getContact("email" + rnd, "firstname" + rnd, "lastname" + rnd, ownerId);
+	public User createUserContact(Long ownerId) {
+		return createUserContact(UUID.randomUUID().toString(), ownerId);
+	}
+
+	public User createUserContact(String uuid, Long ownerId) {
+		User user = userDao.getContact("email" + uuid, "firstname" + uuid, "lastname" + uuid, ownerId);
 		user = userDao.update(user, ownerId);
 		assertNotNull("Cann't add user", user);
 		return user;

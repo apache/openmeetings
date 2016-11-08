@@ -21,8 +21,6 @@ package org.apache.openmeetings.test.user;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Random;
-
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractWicketTester;
@@ -32,25 +30,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestUserCount extends AbstractWicketTester {
 	@Autowired
 	private UserDao userDao;
-	Random random = new Random();
 
 	@Test
 	public void testCountSearchUsers() throws Exception {
-		User u = createUser(random.nextInt());
+		User u = createUser();
 		assertTrue("Account of search users should be one", userDao.count(u.getFirstname()) == 1);
 	}
 
 	@Test
 	public void testCountFilteredUsers() throws Exception {
-		User u = createUser(random.nextInt());
-		User contact = createUserContact(random.nextInt(), u.getId());
+		User u = createUser();
+		User contact = createUserContact(u.getId());
 		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getId()) == 1);
 	}
 
 	@Test
 	public void testCountUnfilteredUsers() throws Exception {
-		User u = createUser(random.nextInt());
-		createUserContact(random.nextInt(), u.getId());
+		User u = createUser();
+		createUserContact(u.getId());
 		assertTrue("Account of unfiltered should be more then one", userDao.count("firstname", false, getUserId()) > 1);
 	}
 		

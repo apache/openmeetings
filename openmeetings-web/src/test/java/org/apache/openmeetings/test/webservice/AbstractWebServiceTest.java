@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Random;
+import java.util.UUID;
 
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
@@ -39,7 +39,6 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public final static String CONTEXT = "/openmeetings";
 	public final static String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
 	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
-	protected static final Random rnd = new Random();
 
 	public static WebClient getClient(String url) {
 		return WebClient.create(url).accept("application/json").type("application/json");
@@ -56,7 +55,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public static void initialize() throws Exception {
 		tomcat = new Tomcat();
 		tomcat.setPort(8080);
-		File wd = Files.createTempDirectory("om" + rnd.nextInt()).toFile();
+		File wd = Files.createTempDirectory("om" + UUID.randomUUID().toString()).toFile();
 		tomcat.setBaseDir(wd.getCanonicalPath());
 		tomcat.getHost().setAppBase(wd.getCanonicalPath());
 		tomcat.getHost().setAutoDeploy(true);
