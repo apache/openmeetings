@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -42,9 +43,10 @@ public class TestRecordingService extends AbstractWebServiceTest {
 	private UserDao userDao;
 
 	private User getExternalUser() throws Exception {
-		User u = getUser(rnd.nextInt());
+		String uuid = UUID.randomUUID().toString();
+		User u = getUser(uuid);
 		u.setExternalType(UNIT_TEST_GROUP);
-		u.setExternalId("" + rnd.nextInt());
+		u.setExternalId(uuid);
 		u = userDao.update(u, null);
 		return u;
 	}
