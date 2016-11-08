@@ -44,7 +44,7 @@
 			<p>Vendor: The Apache Software Foundation</p>
 			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
 			<p>Description: Apache Openmeetings is vulnerable to Remote Code Execution via RMI deserialization attack<br/>
-				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-3089">CVE-2016-3089</a>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8736">CVE-2016-8736</a>
 			</p>
 			<p>The issue was fixed in 3.1.2<br/>
 				All users are recommended to upgrade to Apache OpenMeetings 3.1.3</p>
