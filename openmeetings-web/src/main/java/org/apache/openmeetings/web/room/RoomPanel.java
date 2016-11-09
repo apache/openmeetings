@@ -54,7 +54,6 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.common.CommonMessageDialog;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
@@ -138,7 +137,7 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	private RedirectMessageDialog roomClosed;
-	private CommonMessageDialog kickClientDialog;
+	private MessageDialog clientKicked;
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
@@ -271,12 +270,13 @@ public class RoomPanel extends BasePanel {
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
-		add(kickClientDialog = new CommonMessageDialog("kickClientDialog", "606"){
+		add(clientKicked = new MessageDialog("client-kicked", getString("797"), getString("606"), DialogButtons.OK, DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				setResponsePage(Application.get().getHomePage());
-	}
+				menu.exit(handler, true);
+			}
 		});
 	}
 	
@@ -383,14 +383,17 @@ public class RoomPanel extends BasePanel {
 						break;
 					case kick:
 						{
+							//FIXME TODO add line to activities about user kick
+							//activities.add(new Activity(m, Activity.Type.roomExit), handler);
 							String uid = ((TextRoomMessage)m).getText();
 							if (getClient().getUid().equals(uid)) {
 								handler.add(room.setVisible(false));
-								kickClientDialog.open(handler);
-				}
-			}
+								//FIXME TODO chat still available for the client being kicked
+								clientKicked.open(handler);
+							}
+						}
 						break;
-		}
+				}
 			}
 		}
 		super.onEvent(event);

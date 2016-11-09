@@ -313,8 +313,12 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
+		exit(handler, false);
+	}
+
+	public void exit(IPartialPageRequestHandler handler, boolean broadcast) {
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
-			roomExit(room.getClient(), false);
+			roomExit(room.getClient(), broadcast);
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");

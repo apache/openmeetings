@@ -294,7 +294,7 @@ public class MainPanel extends Panel {
 		});
 	}
 
-	private int getLevel() {
+	private static int getLevel() {
 		Set<Right> r = WebSession.getRights();
 		return hasAdminLevel(r) ? LEVEL_ADMIN : (hasGroupAdminLevel(r) ? LEVEL_GROUP_ADMIN : LEVEL_USER);
 	}
