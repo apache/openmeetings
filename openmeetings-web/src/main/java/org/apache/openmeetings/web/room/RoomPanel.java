@@ -54,6 +54,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.common.CommonMessageDialog;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
@@ -137,6 +138,7 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	private RedirectMessageDialog roomClosed;
+	private CommonMessageDialog kickClientDialog;
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
@@ -269,6 +271,13 @@ public class RoomPanel extends BasePanel {
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
+		add(kickClientDialog = new CommonMessageDialog("kickClientDialog", "606"){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				setResponsePage(Application.get().getHomePage());
+	}
+		});
 	}
 	
 	@Override
@@ -372,7 +381,16 @@ public class RoomPanel extends BasePanel {
 							activities.remove(tm.getText(), handler);
 						}
 						break;
+					case kick:
+						{
+							String uid = ((TextRoomMessage)m).getText();
+							if (getClient().getUid().equals(uid)) {
+								handler.add(room.setVisible(false));
+								kickClientDialog.open(handler);
 				}
+			}
+						break;
+		}
 			}
 		}
 		super.onEvent(event);
@@ -530,6 +548,10 @@ public class RoomPanel extends BasePanel {
 		broadcast(target, client);
 	}
 
+	public void kickUser(AjaxRequestTarget target, Client client) {
+		RoomPanel.broadcast(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
+	}
+	
 	public void broadcast(AjaxRequestTarget target, Client client) {
 		broadcast(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);

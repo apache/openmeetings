@@ -48,6 +48,10 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		setOutputMarkupId(true);
 	}
 
+	public AbstractFormDialog<?> getDialog() {
+		return dialog;
+	}
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();

@@ -32,7 +32,9 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -41,6 +43,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -71,7 +74,9 @@ public class RoomSidebar extends Panel {
 	private final UploadDialog upload;
 	private final RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
+	private final ConfirmableAjaxBorder kickDialog;
 	private boolean showFiles;
+	private Client kickClient;
 	public enum Pod {
 		none
 		, right
@@ -85,11 +90,34 @@ public class RoomSidebar extends Panel {
 			item.add(new RoomClientPanel("user", item, room));
 		}
 	};
-	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
+	private final AbstractDefaultAjaxBehavior roomAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			try {
+				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				if (Strings.isEmpty(uid)) {
+					return;
+				}
+				if (room.getClient().hasRight(Right.moderator)) {
+					Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString()); 
+					kickClient = getOnlineClient(uid);
+					if (kickClient == null || a == null) {
+						return;
+					}
+					switch (a) {
+						case kick:
+							if ((!room.getClient().getUid().equals(kickClient.getUid()))) {
+								kickDialog.getDialog().open(target);
+							}
+							break;
+						default:
+					}
+				}
+			} catch (Exception e) {
+				log.error("Unexpected exception while toggle 'action'", e);
+			}
 		}
 	};
 	private final AbstractDefaultAjaxBehavior toggleRight = new AbstractDefaultAjaxBehavior() {
@@ -203,7 +231,15 @@ public class RoomSidebar extends Panel {
 		roomFiles = new RoomFilePanel("tree", room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
 		add(upload = new UploadDialog("upload", room, roomFiles));
-		add(toggleRight, toggleActivity, action);
+		add(kickDialog = new ConfirmableAjaxBorder("kickDialog", getString("603"), getString("605")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				room.kickUser(target, kickClient);
+			}
+		});
+		add(toggleRight, toggleActivity, roomAction);
 	}
 	
 	@Override
@@ -211,7 +247,7 @@ public class RoomSidebar extends Panel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_TOGGLE_RIGHT)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD)), FUNC_TOGGLE_ACTIVITY)));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_ACTION, action, explicit(PARAM_ACTION), explicit(PARAM_UID)), FUNC_ACTION)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_ACTION, roomAction, explicit(PARAM_ACTION), explicit(PARAM_UID)), FUNC_ACTION)));
 	}
 	
 	private ListView<Client> updateUsers() {
