@@ -45,7 +45,7 @@
 				<li>Rename the existing truststore file <tt>red5/conf/truststore.jmx</tt> to <tt>red5/conf/truststore.bak</tt></li>
 			</ul>
 		</section>
-		<section name="Configuring RTMPS for the Flash Client">
+		<section name="Create Keystore from the scratch (*)">
 			<ol>
 				<li>
 					Create a new keystore and key, use the same password for both:<br/>
@@ -87,6 +87,48 @@ Enter key password for <red5>
 				</li>
 				<li>Import the certificate you received:
 					<source><![CDATA[keytool -import -alias red5 -keystore red5/conf/keystore -trustcacerts -file demo.openmeetings.de.crt]]></source>
+				</li>
+				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
+					guide you can split keystore and truststore (OPTIONAL you might just copy keystore to truststore)
+				</li>
+				<li>Create additional certificate as described above.
+					Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>. (This step is required to be able to use
+					screen-sharing web application, you can copy "main" keystore while testing)
+				</li>
+			</ol>
+		</section>
+		<section name="Create Keystore using existing key-pair (**)">
+			<p>Prerequicites:</p>
+			<ul>
+				<li>Server key: red5.key</li>
+				<li>Signed CSR: red5.crt</li>
+				<li>CA's root certificate: root.crt</li>
+				<li>** Intermediate certificate(s): intermedXX.crt</li>
+			</ul>
+			<ol>
+				<li>
+					Export existing keys into PKCS12 format:<br/>
+					<br/><source><![CDATA[
+openssl pkcs12 -export -in red5.crt -inkey red5.key -out red5.p12 -name red5 -certfile root.crt -certfile intermedXX.crt
+
+Enter Export Password: password
+Verifying - Enter Export Password: password
+]]></source>
+				</li>
+				<li>Import resulting red5.p12 into keystore: <source><![CDATA[
+keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass password -destkeystore red5/conf/keystore -alias red5
+]]></source>
+				</li>
+				<li>Import your chosen CA's root certificate into the keystore (may
+					need to download it from their site - make sure to get the root CA and
+					not the intermediate one): 
+					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore -trustcacerts -file root.crt]]></source>
+					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
+					anyway)
+				</li>
+				<li>Import the intermediate certificate(s) you normally receive with
+					the certificate:
+					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts -file intermedXX.crt]]></source>
 				</li>
 				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
 					guide you can split keystore and truststore (OPTIONAL you might just copy keystore to truststore)
