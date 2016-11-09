@@ -104,7 +104,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		checkEmptyGroup("dao.getByLogin(ldap)", userDao.getByLogin(u1.getLogin(), u1.getType(), u1.getDomainId()));
 	}
 
-	private void checkEmptyGroup(String prefix, User u) {
+	private static void checkEmptyGroup(String prefix, User u) {
 		assertNotNull(prefix + ":: Created user should be available", u);
 		assertNotNull(prefix + ":: List<GroupUser> for newly created user should not be null", u.getGroupUsers());
 		assertTrue(prefix + ":: List<GroupUser> for newly created user should be empty", u.getGroupUsers().isEmpty());
