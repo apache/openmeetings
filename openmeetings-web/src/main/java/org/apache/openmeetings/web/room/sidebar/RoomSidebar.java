@@ -74,9 +74,9 @@ public class RoomSidebar extends Panel {
 	private final UploadDialog upload;
 	private final RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
-	private final ConfirmableAjaxBorder kickDialog;
+	private final ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
-	private Client kickClient;
+	private Client kickedClient;
 	public enum Pod {
 		none
 		, right
@@ -102,14 +102,14 @@ public class RoomSidebar extends Panel {
 				}
 				if (room.getClient().hasRight(Right.moderator)) {
 					Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString()); 
-					kickClient = getOnlineClient(uid);
-					if (kickClient == null || a == null) {
+					kickedClient = getOnlineClient(uid);
+					if (kickedClient == null) {
 						return;
 					}
 					switch (a) {
 						case kick:
-							if ((!room.getClient().getUid().equals(kickClient.getUid()))) {
-								kickDialog.getDialog().open(target);
+							if (!kickedClient.hasRight(Right.superModerator) && !room.getClient().getUid().equals(kickedClient.getUid())) {
+								confirmKick.getDialog().open(target);
 							}
 							break;
 						default:
@@ -231,12 +231,12 @@ public class RoomSidebar extends Panel {
 		roomFiles = new RoomFilePanel("tree", room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
 		add(upload = new UploadDialog("upload", room, roomFiles));
-		add(kickDialog = new ConfirmableAjaxBorder("kickDialog", getString("603"), getString("605")) {
+		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				room.kickUser(target, kickClient);
+				room.kickUser(target, kickedClient);
 			}
 		});
 		add(toggleRight, toggleActivity, roomAction);
