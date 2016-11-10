@@ -29,7 +29,7 @@ import org.apache.wicket.model.Model;
 
 public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
-	private Label newRecord;
+	private final Label newRecord;
 	private final Form<T> form;
 	
 	public AdminSavePanel(String id, final Form<T> form) {
@@ -38,9 +38,12 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		
 		newRecord = new Label("newRecord", Model.of(Application.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
-		
-		// add a new button that can be used to submit the form via ajax
-		add(new AjaxButton("ajax-new-button", form) {
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -58,14 +61,9 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				target.add(feedback);
 				onNewError(target, form);
 			}
-		});
-	}
-	
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+		};
 		// add a cancel button that can be used to submit the form via ajax
-		add(new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), form) {
+		ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -83,9 +81,10 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				hideNewRecord();
 				onDeleteSubmit(target, form);
 			}
-		});
+		};
+		add(newBtn.setVisible(isNewBtnVisible()), delBtn.setVisible(isDelBtnVisible()));
 	}
-	
+
 	/**
 	 * Hide the new record text
 	 */
@@ -93,13 +92,16 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	public void hideNewRecord() {
 		newRecord.setVisible(false);
 	}
-	
+
 	/**
 	 * Hide the new record text
 	 */
 	public void showNewRecord() {
 		newRecord.setVisible(true);
 	}
+
+	protected abstract boolean isNewBtnVisible();
+	protected abstract boolean isDelBtnVisible();
 
 	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
 	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
