@@ -48,7 +48,7 @@ div.formSaveButton input {
 .delButton {
 	background: url(images/forms/cancel_icon.png) no-repeat;
 }
-div.formNewButton input {
+.formNewButton {
 	background: url(images/forms/plus_icon.png) no-repeat;
 	float: left;
 	cursor: pointer;
@@ -58,7 +58,7 @@ div.formNewButton input {
 	margin-left: 2px;
 	margin-top: 2px;
 }
-div.formNewButton.disabled input {
+.formNewButton.disabled {
 	background: url(images/forms/plus_icon_disabled.png) no-repeat;
 }
 div.formRefreshButton input {
@@ -71,7 +71,7 @@ div.formRefreshButton input {
 	margin-left: 2px;
 	margin-top: 2px;
 }
-div.formCancelButton>div {
+.formCancelButton {
 	background: url(images/forms/cancel_icon.png) no-repeat;
 	display: inline-block;
 	float: left;

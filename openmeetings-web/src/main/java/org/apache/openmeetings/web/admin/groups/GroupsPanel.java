@@ -92,7 +92,7 @@ public class GroupsPanel extends AdminPanel {
 				final Group g = item.getModelObject();
 				item.add(new Label("id"));
 				item.add(new Label("name"));
-				if (isGroupAdmin && groupIds.contains(g.getId())) {
+				if (!isGroupAdmin || (isGroupAdmin && groupIds.contains(g.getId()))) {
 					item.add(new AjaxEventBehavior("click") {
 						private static final long serialVersionUID = 1L;
 	

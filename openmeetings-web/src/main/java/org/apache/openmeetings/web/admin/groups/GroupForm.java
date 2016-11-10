@@ -19,7 +19,9 @@
 package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 
@@ -68,7 +70,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		super(id, new CompoundPropertyModel<Group>(group));
 		this.groupList = groupList;
 		setOutputMarkupId(true);
-		
+
 		usersPanel = new GroupUsersPanel("users", getGroupId());
 		add(usersPanel);
 
@@ -114,8 +116,20 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	@Override
+	protected boolean isNewBtnVisible() {
+		return !hasGroupAdminLevel(getRights());
+	}
+
+	@Override
+	protected boolean isDelBtnVisible() {
+		return !hasGroupAdminLevel(getRights());
+	}
+
+	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
+		userToadd.setEnabled(!isGroupAdmin);
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
 		add(new UploadableImagePanel("logo") {
 			private static final long serialVersionUID = 1L;
