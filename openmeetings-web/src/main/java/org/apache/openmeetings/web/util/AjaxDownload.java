@@ -18,10 +18,19 @@
  */
 package org.apache.openmeetings.web.util;
 
+import java.util.UUID;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 
 /**
@@ -31,11 +40,10 @@ import org.apache.wicket.util.resource.IResourceStream;
  */
 public class AjaxDownload extends AbstractAjaxBehavior {
 	private static final long serialVersionUID = 1L;
-
 	private boolean addAntiCache;
-
 	private String fileName;
 	private IResourceStream resourceStream;
+	private final String iframeId;
 
 	public AjaxDownload() {
 		this(true);
@@ -44,21 +52,40 @@ public class AjaxDownload extends AbstractAjaxBehavior {
 	public AjaxDownload(boolean addAntiCache) {
 		super();
 		this.addAntiCache = addAntiCache;
+		iframeId = String.format("download-iframe-%s", UUID.randomUUID().toString());
 	}
 
 	/**
 	 * Call this method to initiate the download.
 	 */
 	public void initiate(AjaxRequestTarget target) {
-		String url = getCallbackUrl().toString();
+		StringBuilder url = new StringBuilder(getCallbackUrl());
 
 		if (addAntiCache) {
-			url = url + (url.contains("?") ? "&" : "?");
-			url = url + "antiCache=" + System.currentTimeMillis();
+			url.append(url.indexOf("?") > -1 ? "&" : "?")
+				.append("antiCache=").append(System.currentTimeMillis());
 		}
+		target.appendJavaScript(String.format("$('#%s').attr('src', '%s');", iframeId, url.toString()));
+	}
 
-		// the timeout is needed to let Wicket release the channel
-		target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");
+	@Override
+	protected void onBind() {
+		super.onBind();
+		// it is impossible to get page by id anyway
+		if (!(getComponent() instanceof Page)) {
+			getComponent().setOutputMarkupId(true);
+		}
+	}
+
+	private static ResourceReference newResourceReference() {
+		return new JavaScriptResourceReference(AjaxDownload.class, "ajax-download.js");
+	}
+
+	@Override
+	public void renderHead(Component component, IHeaderResponse response) {
+		super.renderHead(component, response);
+		response.render(JavaScriptHeaderItem.forReference(newResourceReference()));
+		response.render(OnDomReadyHeaderItem.forScript(String.format("addDwnldIframe('%s', '%s');", component instanceof Page ? "" : component.getMarkupId(), iframeId)));
 	}
 
 	@Override
