@@ -125,7 +125,8 @@ public class MainPanel extends Panel {
 							@Override
 							public void run() {
 								try {
-									wsConnection.sendMessage(new byte[1], 0, 1);
+									//wsConnection.sendMessage(new byte[1], 0, 1); //FIXME TODO commented for now
+									wsConnection.sendMessage("ping");
 								} catch (IOException e) {
 									log.error("Error while sending ping message to room", e);
 								}
