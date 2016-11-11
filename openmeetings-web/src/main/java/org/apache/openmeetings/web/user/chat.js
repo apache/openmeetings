@@ -28,13 +28,17 @@ var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 	, closedHeight = "20px", openedHeight = "345px";
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
-		var m = jQuery.parseJSON(msg);
-		if (m) {
-			switch(m.type) {
-				case "chat":
-					addChatMessage(m);
-					break;
+		try {
+			var m = jQuery.parseJSON(msg);
+			if (m) {
+				switch(m.type) {
+					case "chat":
+						addChatMessage(m);
+						break;
+				}
 			}
+		} catch (err) {
+			//no-op
 		}
 	});
 	reinit();
