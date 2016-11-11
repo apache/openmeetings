@@ -34,7 +34,7 @@
     <fixedFileExplorerWhiteboardPanel name="_whiteboard" labelid="615"
         y="0" x="${ parent._sidePanel.width }" 
         width="${ canvas.width - parent._sidePanel.width }"
-        height="${ canvas.height - 6 + 28 }" />
+        height="${ canvas.height }" />
     
 </class>
 
