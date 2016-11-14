@@ -35,12 +35,12 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getGroupById", query="SELECT c FROM Group AS c WHERE c.id = :id AND c.deleted = false")
-	, @NamedQuery(name="getGroupByName", query="SELECT o FROM Group AS o WHERE o.name = :name AND o.deleted = false")
-	, @NamedQuery(name="getAnyGroupById", query="SELECT c FROM Group AS c WHERE c.id = :groupId")
-	, @NamedQuery(name="getGroupsByIds", query="SELECT c FROM Group AS c WHERE c.id IN :ids")
-	, @NamedQuery(name="getNondeletedGroups", query="SELECT o FROM Group o WHERE o.deleted = false ORDER BY o.id")
-	, @NamedQuery(name="countGroups", query="SELECT COUNT(c) FROM Group AS c WHERE c.deleted = false")
+	@NamedQuery(name="getGroupById", query="SELECT g FROM Group AS g WHERE g.id = :id AND g.deleted = false")
+	, @NamedQuery(name="getGroupByName", query="SELECT g FROM Group AS g WHERE g.name = :name AND g.deleted = false")
+	, @NamedQuery(name="getAnyGroupById", query="SELECT g FROM Group AS g WHERE g.id = :groupId")
+	, @NamedQuery(name="getGroupsByIds", query="SELECT g FROM Group AS g WHERE g.id IN :ids")
+	, @NamedQuery(name="getNondeletedGroups", query="SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
+	, @NamedQuery(name="countGroups", query="SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
 })
 @Table(name = "om_group")
 @Root(name = "organisation")

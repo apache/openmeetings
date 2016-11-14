@@ -30,7 +30,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.SearchableGroupAdminDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -69,7 +69,7 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableDataProvider<User>(UserDao.class)) {
+		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableGroupAdminDataProvider<User>(UserDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

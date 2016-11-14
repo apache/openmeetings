@@ -103,7 +103,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 		UserDao dao = getBean(UserDao.class);
 		response.addAll(dao.get(term, page * PAGE_SIZE, PAGE_SIZE, null, true, getUserId()));
 
-		response.setHasMore(page < dao.count(term, getUserId()) / PAGE_SIZE);
+		response.setHasMore(page < dao.countUsers(term, getUserId()) / PAGE_SIZE);
 	}
 
 	@Override
