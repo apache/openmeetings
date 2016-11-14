@@ -151,7 +151,9 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptor>src/main/assembly/assembly.xml</descriptor>
+							<descriptors>
+								<descriptor>src/main/assembly/assembly.xml</descriptor>
+							</descriptors>
 							<outputDirectory>${jnlp.out.dir}</outputDirectory>
 							<archive>
 								<manifest>
