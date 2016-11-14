@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -202,8 +204,12 @@ public class UserForm extends AdminBaseForm<User> {
 
 			@Override
 			public void query(String term, int page, Response<Right> response) {
+				boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 				for (Right r : Right.values()) {
 					if (Right.GroupAdmin == r) {
+						continue;
+					}
+					if (isGroupAdmin && (Right.Admin == r || Right.Soap == r)) {
 						continue;
 					}
 					if (Strings.isEmpty(term) || r.name().contains(term)) {
@@ -259,7 +265,7 @@ public class UserForm extends AdminBaseForm<User> {
 			target.add(domain);
 		}
 	}
-	
+
 	public void update(AjaxRequestTarget target) {
 		updateDomain(target);
 		if (target != null) {
@@ -267,12 +273,12 @@ public class UserForm extends AdminBaseForm<User> {
 			target.appendJavaScript("omUserPanelInit();");
 		}
 	}
-	
+
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
 		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
-			error(Application.getString(105));
+			error(getString("105"));
 		}
 	}
 

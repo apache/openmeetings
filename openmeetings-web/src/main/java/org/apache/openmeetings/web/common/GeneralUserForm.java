@@ -18,9 +18,12 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
@@ -71,9 +74,11 @@ public class GeneralUserForm extends Form<User> {
 	private final PasswordTextField passwordField;
 	private final RequiredTextField<String> email;
 	private final List<GroupUser> grpUsers = new ArrayList<>();
+	private final boolean isAdminForm;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
+		this.isAdminForm = isAdminForm;
 
 		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
 		add(passwordField = new PasswordTextField("password", new Model<String>()));
@@ -123,7 +128,11 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("address.town"));
 		add(new CountryDropDown("address.country"));
 		add(new TextArea<String>("address.comment"));
+	}
 
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new ChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
@@ -162,14 +171,16 @@ public class GeneralUserForm extends Form<User> {
 				}
 				return list;
 			}
-		}).setEnabled(isAdminForm));
+		}).setLabel(Model.of(getString("161"))).setRequired(isAdminForm && hasGroupAdminLevel(getRights())).setEnabled(isAdminForm));
 	}
 
 	public void updateModelObject(User u, boolean isAdminForm) {
 		grpUsers.clear();
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
-			List<Group> grpList = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+			List<Group> grpList = hasGroupAdminLevel(getRights())
+					? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+					: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 			for (Group g : grpList) {
 				GroupUser gu = new GroupUser(g, u);
 				int idx = grpUsers.indexOf(gu);
