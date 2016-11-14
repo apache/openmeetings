@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
@@ -29,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -418,7 +418,7 @@ public class Admin {
 		
 		try {
 			if (cfg.email == null || !MailUtil.matches(cfg.email)) {
-			    throw new AddressException("Invalid address");
+				throw new AddressException("Invalid address");
 			}
 			new InternetAddress(cfg.email, true);
 		} catch (AddressException ae) {
@@ -429,12 +429,12 @@ public class Admin {
 			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
 			System.exit(1);
 		}
-		cfg.password = cmdl.getOptionValue("password");
+		cfg.setPassword(cmdl.getOptionValue("password"));
 		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
-		if (invalidPassword(cfg.password, cfgDao)) {
+		if (invalidPassword(cfg.getPassword(), cfgDao)) {
 			System.out.print("Please enter password for the user '" + cfg.username + "':");
-			cfg.password = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)).readLine();
-			if (invalidPassword(cfg.password, cfgDao)) {
+			cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
+			if (invalidPassword(cfg.getPassword(), cfgDao)) {
 				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);
 			}

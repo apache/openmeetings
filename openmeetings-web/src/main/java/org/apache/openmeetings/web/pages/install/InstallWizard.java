@@ -401,7 +401,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		protected void onInitialize() {
 			super.onInitialize();
 			add(new RequiredTextField<String>("username").setLabel(Model.of(getString("install.wizard.params.step1.username"))).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
-			add(new PasswordTextField("password").setLabel(Model.of(getString("install.wizard.params.step1.password"))).add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
+			add(new PasswordTextField("password")
+					.setResetPassword(false).setLabel(Model.of(getString("install.wizard.params.step1.password"))).add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
 			add(new RequiredTextField<String>("email").setLabel(Model.of(getString("install.wizard.params.step1.email"))).add(RfcCompliantEmailAddressValidator.getInstance()));
 			add(new RequiredTextField<String>("group").setLabel(Model.of(getString("install.wizard.params.step1.group"))));
 		}
@@ -513,7 +514,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public ParamsStep4() {
 			super(paramsStep3);
 			add(new RequiredTextField<String>("cryptClassName")); //Validate class
-            
+
 			//TODO add check for red5sip connection
 			add(new YesNoTextDropDown("red5SipEnable"));
 			add(new TextField<String>("red5SipRoomPrefix"));
