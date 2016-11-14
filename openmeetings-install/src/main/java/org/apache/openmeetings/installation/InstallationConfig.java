@@ -27,16 +27,16 @@ import org.apache.openmeetings.util.crypt.SHA256Implementation;
 
 public class InstallationConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	public String appName = ConfigurationDao.DEFAULT_APP_NAME;
 	public String username;
-	public String password;
+	private String password;
 	public String email;
 	public String group;
 	public String allowFrontendRegister = "1";
 	public String createDefaultRooms = "1";
 	public String ical_timeZone = "Europe/Berlin";
-	
+
 	public String cryptClassName = SHA256Implementation.class.getCanonicalName();
 	//email
 	public Integer smtpPort = 25;
@@ -53,19 +53,27 @@ public class InstallationConfig implements Serializable {
 	public String ffmpegPath = "";
 	public String soxPath = "";
 	public String officePath = "";
-	
+
 	public String defaultLangId = "1";
 	public String sendEmailAtRegister = "0";
 	public String urlFeed = "http://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
-    public String red5SipEnable = "no";
-    public String red5SipRoomPrefix = "400";
-    public String red5SipExtenContext = "rooms";
-    public String replyToOrganizer = "1";
-    public String baseUrl = DEFAULT_BASE_URL;
-    
+	public String red5SipEnable = "no";
+	public String red5SipRoomPrefix = "400";
+	public String red5SipExtenContext = "rooms";
+	public String replyToOrganizer = "1";
+	public String baseUrl = DEFAULT_BASE_URL;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
 		return "InstallationConfig [allowFrontendRegister="

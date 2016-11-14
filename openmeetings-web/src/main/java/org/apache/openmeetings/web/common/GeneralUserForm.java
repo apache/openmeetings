@@ -83,7 +83,7 @@ public class GeneralUserForm extends Form<User> {
 		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
 		add(passwordField = new PasswordTextField("password", new Model<String>()));
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
+		passwordField.setResetPassword(false).setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 		updateModelObject(getModelObject(), isAdminForm);
 		add(new DropDownChoice<Salutation>("salutation"
