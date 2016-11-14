@@ -28,7 +28,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.SearchableGroupAdminDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -57,7 +57,7 @@ public class RoomsPanel extends AdminPanel {
 
 	public RoomsPanel(String id) {
 		super(id);
-		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableDataProvider<Room>(RoomDao.class)) {
+		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableGroupAdminDataProvider<Room>(RoomDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

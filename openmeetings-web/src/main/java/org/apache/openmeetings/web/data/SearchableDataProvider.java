@@ -43,7 +43,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 	public SearchableDataProvider(Class<? extends IDataProviderDao<T>> c) {
 		this.clazz = c;
 	}
-	
+
 	@Override
 	public void detach() {
 		// does nothing
@@ -52,7 +52,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 	protected IDataProviderDao<T> getDao() {
 		return getBean(clazz);
 	}
-	
+
 	protected String getSortStr() {
 		String result = null;
 		if (getSort() != null) {
@@ -60,7 +60,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (search == null && getSort() == null

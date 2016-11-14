@@ -27,13 +27,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.DaoHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class GroupDao implements IDataProviderDao<Group> {
+public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
@@ -71,12 +71,22 @@ public class GroupDao implements IDataProviderDao<Group> {
 
 	@Override
 	public List<Group> get(String search, int start, int count, String sort) {
-		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, false, sort, searchFields), Group.class);
+		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("Group", "g", search, true, false, sort, searchFields), Group.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
+	@Override
+	public List<Group> get(String search, Long adminId, int start, int count, String order) {
+		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, false
+				, "gu.user.id = :adminId AND gu.moderator = true", order, searchFields), Group.class);
+		q.setParameter("adminId", adminId);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
 	@Override
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countGroups", Long.class);
@@ -88,7 +98,15 @@ public class GroupDao implements IDataProviderDao<Group> {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
-	
+
+	@Override
+	public long count(String search, Long adminId) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, true
+				, "gu.user.id = :adminId AND gu.moderator = true", null, searchFields), Long.class);
+		q.setParameter("adminId", adminId);
+		return q.getSingleResult();
+	}
+
 	public List<Group> get(Collection<Long> ids) {
 		return em.createNamedQuery("getGroupsByIds", Group.class).setParameter("ids", ids).getResultList();
 	}

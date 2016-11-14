@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.rooms;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -76,17 +78,42 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
 			100L, 150L, 200L, 500L, 1000L);
 	private final WebMarkupContainer roomList;
-	private final TextField<String> pin;
+	private final TextField<String> pin = new TextField<>("pin");
 	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
-	private final ListView<Client> clients;
-	private List<Client> clientsInRoom = null;
+	private final ListView<Client> clients = new ListView<Client>("clients", new ArrayList<>()) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void populateItem(final ListItem<Client> item) {
+			Client client = item.getModelObject();
+			item.add(new Label("clientId", "" + client.getId()))
+				.add(new Label("clientLogin", "" + client.getUsername()))
+				.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+						Client c = item.getModelObject();
+						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
+								, c.getServer() == null ? 0 : c.getServer().getId());
+						
+						updateClients(target);
+					}
+				});
+		}
+	};
 	private IModel<User> moderator2add = Model.of((User)null);
 	
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
 		this.roomList = roomList;
 		setOutputMarkupId(true);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		RequiredTextField<String> name = new RequiredTextField<String>("name");
 		name.setLabel(new Model<String>(Application.getString(193)));
 		add(name);
@@ -109,10 +136,13 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new TextArea<String>("comment"));
 
+		boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 		add(new CheckBox("appointment").setEnabled(false));
-		add(new CheckBox("ispublic"));
+		add(new CheckBox("ispublic").setEnabled(!isGroupAdmin));
 
-		List<Group> orgList = Application.getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+		List<Group> orgList = isGroupAdmin
+				? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+				: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 		final List<RoomGroup> orgRooms = new ArrayList<RoomGroup>(orgList.size());
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
@@ -153,7 +183,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}
 				return list;
 			}
-		}));
+		}).setLabel(Model.of(getString("828"))).setRequired(isGroupAdmin));
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<Integer>("demoTime");
@@ -181,28 +211,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("autoVideoSelect"));	
 		
 		// Users in this Room 
-		clients = new ListView<Client>("clients", clientsInRoom) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(final ListItem<Client> item) {
-				Client client = item.getModelObject();
-				item.add(new Label("clientId", "" + client.getId()))
-					.add(new Label("clientLogin", "" + client.getUsername()))
-					.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-							Client c = item.getModelObject();
-							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-									, c.getServer() == null ? 0 : c.getServer().getId());
-							
-							updateClients(target);
-						}
-					});
-			}
-		};
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
 		
 		// Moderators
@@ -279,8 +287,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("moderated"));
 
 		add(new TextField<String>("confno").setEnabled(false));
-		add(pin = new TextField<>("pin"));
-		pin.setEnabled(room.isSipEnabled());
+		add(pin);
+		pin.setEnabled(getModelObject().isSipEnabled());
 		add(new TextField<String>("ownerId").setEnabled(false));
 		add(new AjaxCheckBox("sipEnabled") {
 			private static final long serialVersionUID = 1L;
@@ -298,7 +306,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);  
-		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
+		final List<Client> clientsInRoom = getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}

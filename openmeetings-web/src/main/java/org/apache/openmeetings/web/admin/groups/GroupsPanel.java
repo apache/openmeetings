@@ -18,17 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.web.app.WebSession.getRights;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.admin.AdminPanel;
@@ -37,7 +27,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.SearchableGroupAdminDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -69,22 +59,13 @@ public class GroupsPanel extends AdminPanel {
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
-		final Set<Long> groupIds = new HashSet<>();
-		if (isGroupAdmin) {
-			for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
-				if (gu.isModerator()) {
-					groupIds.add(gu.getGroup().getId());
-				}
-			}
-		}
 
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Group());
 		add(form);
 
 		//List view
-		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableDataProvider<Group>(GroupDao.class)) {
+		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableGroupAdminDataProvider<Group>(GroupDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -92,23 +73,19 @@ public class GroupsPanel extends AdminPanel {
 				final Group g = item.getModelObject();
 				item.add(new Label("id"));
 				item.add(new Label("name"));
-				if (!isGroupAdmin || (isGroupAdmin && groupIds.contains(g.getId()))) {
-					item.add(new AjaxEventBehavior("click") {
-						private static final long serialVersionUID = 1L;
-	
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							form.hideNewRecord();
-							form.setModelObject(g);
-							form.updateView(target);
-							target.add(listContainer);
-							target.appendJavaScript("groupsInit();");
-						}
-					});
-					item.add(AttributeModifier.append("class", getRowClass(g.getId(), form.getModelObject().getId())));
-				} else {
-					item.add(AttributeModifier.append("class", BASE_ROW_CLASS));
-				}
+				item.add(new AjaxEventBehavior("click") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						form.hideNewRecord();
+						form.setModelObject(g);
+						form.updateView(target);
+						target.add(listContainer);
+						target.appendJavaScript("groupsInit();");
+					}
+				});
+				item.add(AttributeModifier.append("class", getRowClass(g.getId(), form.getModelObject().getId())));
 			}
 		};
 

@@ -32,7 +32,7 @@ import javax.persistence.TypedQuery;
 import org.apache.openjpa.persistence.OpenJPAEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -45,16 +45,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomDao implements IDataProviderDao<Room> {
+public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, webAppRootKey);
 	public final static String[] searchFields = {"name"};
 	
 	@PersistenceContext
 	private EntityManager em;
-    @Autowired
+	@Autowired
 	private ConfigurationDao cfgDao;
-    @Autowired
-    private SipDao sipDao;
+	@Autowired
+	private SipDao sipDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -64,7 +64,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	public Room get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public Room get(Long id) {
 		Room r = null;
@@ -125,6 +125,16 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	@Override
+	public List<Room> get(String search, Long adminId, int start, int count, String order) {
+		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, false
+				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), Room.class);
+		q.setParameter("adminId", adminId);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
+	@Override
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countRooms", Long.class);
 		return q.getSingleResult();
@@ -133,6 +143,14 @@ public class RoomDao implements IDataProviderDao<Room> {
 	@Override
 	public long count(String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, true, null, searchFields), Long.class);
+		return q.getSingleResult();
+	}
+
+	@Override
+	public long count(String search, Long adminId) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, true
+				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
+		q.setParameter("adminId", adminId);
 		return q.getSingleResult();
 	}
 
@@ -226,7 +244,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
-		log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + type);
+		log.debug("getUserRoom : " + ownerId + " || " + type);
 		Room room = null;
 		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
 		if (ll.size() > 0) {

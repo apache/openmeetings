@@ -45,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -72,7 +72,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class UserDao implements IDataProviderDao<User> {
+public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, webAppRootKey);
 
 	public final static String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
@@ -164,7 +164,17 @@ public class UserDao implements IDataProviderDao<User> {
 		setAdditionalParams(q, params);
 		return q.getResultList();
 	}
-	
+
+	@Override
+	public List<User> get(String search, Long adminId, int start, int count, String order) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, false
+				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
+		q.setParameter("adminId", adminId);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
 	@Override
 	public long count() {
 		// get all users
@@ -176,11 +186,11 @@ public class UserDao implements IDataProviderDao<User> {
 	public long count(String search) {
 		return count(search, false, Long.valueOf(-1));
 	}
-	
-	public long count(String search, Long currentUserId) {
+
+	public long countUsers(String search, Long currentUserId) {
 		return count(search, false, currentUserId);
 	}
-	
+
 	public long count(String search, boolean filterContacts, Long currentUserId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, true
@@ -188,7 +198,15 @@ public class UserDao implements IDataProviderDao<User> {
 		setAdditionalParams(q, params);
 		return q.getSingleResult();
 	}
-	
+
+	@Override
+	public long count(String search, Long adminId) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, true
+				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
+		q.setParameter("adminId", adminId);
+		return q.getSingleResult();
+	}
+
 	//This is AdminDao method
 	public List<User> get(String search, boolean excludeContacts, int first, int count) {
 		Map<String, Object> params = new HashMap<String, Object>();
