@@ -176,7 +176,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private void makeDefaultScheme() throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
 		cfg.username = username;
-		cfg.password = userpass;
+		cfg.setPassword(userpass);
 		cfg.email = useremail;
 		cfg.group = orgname;
 		cfg.ical_timeZone = timeZone;
