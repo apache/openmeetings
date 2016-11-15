@@ -29,17 +29,17 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactTemplate(User userToAdd, User user) {
-		super(userToAdd.getLanguageId());
-		add(new Label("hi", getString(1192, langId)));
+		super(getOmSession().getLocale(userToAdd));
+		add(new Label("hi", getString("1192", locale)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new Label("likeToAdd", getString(1193, langId)));
-		add(new Label("check", getString(1194, langId)));
-		add(new ExternalLink("link", ensureApplication().getOmContactsLink()).add(new Label("contactList", getString(1196, langId))));
+		add(new Label("likeToAdd", getString("1193", locale)));
+		add(new Label("check", getString("1194", locale)));
+		add(new ExternalLink("link", ensureApplication().getOmContactsLink()).add(new Label("contactList", getString("1196", locale))));
 	}
-	
+
 	public static String getEmail(User userToAdd, User user) {
 		return ComponentRenderer.renderComponent(new RequestContactTemplate(userToAdd, user)).toString();
 	}

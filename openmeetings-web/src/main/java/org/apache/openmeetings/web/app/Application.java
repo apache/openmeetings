@@ -490,4 +490,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public String getOmString(String key, long languageId) {
 		return getString(key, languageId);
 	}
+
+	@Override
+	public String getOmString(String key, final Locale loc) {
+		return getString(key, loc, false);
+	}
 }

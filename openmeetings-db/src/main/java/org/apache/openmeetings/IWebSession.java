@@ -18,7 +18,13 @@
  */
 package org.apache.openmeetings;
 
+import java.util.Locale;
+
+import org.apache.openmeetings.db.entity.user.User;
+
 public interface IWebSession {
 	long getOmLanguage();
 	void setLanguage(long languageId);
+	Locale getLocale();
+	Locale getLocale(User u);
 }

@@ -18,13 +18,18 @@
  */
 package org.apache.openmeetings.service.mail.template.subject;
 
+import static org.apache.commons.lang3.time.FastDateFormat.MEDIUM;
+import static org.apache.commons.lang3.time.FastDateFormat.SHORT;
+
+import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.service.mail.template.AbstractTemplatePanel;
 import org.apache.openmeetings.service.mail.template.DashOmTextLabel;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.panel.Fragment;
 
@@ -34,42 +39,53 @@ public abstract class AbstractSubjectEmailTemplate extends AbstractTemplatePanel
 	protected TimeZone tz;
 	private String email = null;
 	private String subject = null;
+	private boolean created = false;
 
-
-	public AbstractSubjectEmailTemplate(Long langId, Appointment a, TimeZone tz) {
-		super(langId);
+	public AbstractSubjectEmailTemplate(Locale locale, Appointment a, TimeZone tz) {
+		super(locale);
 		this.a = a;
 		this.tz = tz;
 	}
 
-	abstract void omInit();
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		omInit();
+	AbstractSubjectEmailTemplate create() {
 		email = ComponentRenderer.renderComponent(this).toString();
 		subject = ComponentRenderer.renderComponent(getSubjectFragment()).toString();
-	}
-
-	public final String getEmail() {
-		return email;
+		created = true;
+		return this;
 	}
 
 	abstract String getPrefix();
+
+	protected String format(Date d) {
+		return format(d, MEDIUM);
+	}
+
+	protected String format(Date d, int fmt) {
+		return FastDateFormat.getDateTimeInstance(fmt, fmt, tz, locale).format(d);
+	}
 
 	Fragment getSubjectFragment() {
 		Fragment f = new Fragment(COMP_ID, "subject", this);
 		f.add(new OmTextLabel("prefix", getPrefix())
 				, new OmTextLabel("title", a.getTitle())
-				, new OmTextLabel("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
+				, new OmTextLabel("start", format(a.getStart(), SHORT))
 				, new DashOmTextLabel("dash")
-				, new OmTextLabel("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz))
+				, new OmTextLabel("end", format(a.getEnd(), SHORT))
 				);
 		return f;
 	}
 
+	public final String getEmail() {
+		if (!created) {
+			throw new RuntimeException("Not created!!");
+		}
+		return email;
+	}
+
 	public final String getSubject() {
+		if (!created) {
+			throw new RuntimeException("Not created!!");
+		}
 		return subject;
 	}
 }
