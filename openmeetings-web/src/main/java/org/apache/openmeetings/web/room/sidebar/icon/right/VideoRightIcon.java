@@ -32,7 +32,7 @@ public class VideoRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(self ? "687" : "683");
+		return getString(self ? (hasRight() ? "690" : "687"): (hasRight() ?  "684": "683"));
 	}
 
 	@Override
