@@ -32,13 +32,7 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		String title;
-		if (client.hasRight(right)) {
-			title = self ? "1071" : "1068";
-		} else {
-			title = "1072";
-		}
-		return getString(title);
+		return getString(self ?(hasRight() ? "1071" : "1070") : (hasRight() ? "1068" : "1067"));
 	}
 
 	@Override

@@ -32,13 +32,7 @@ public class RemoteControlRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		String title;
-		if (client.hasRight(right)) {
-			title = self ? "1081" : "1078";
-		} else {
-			title = "1080";
-		}
-		return getString(title);
+		return getString(self ? (hasRight() ? "1081" : "1080") : (hasRight() ? "1079" : "1078"));
 	}
 
 	@Override

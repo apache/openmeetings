@@ -32,6 +32,6 @@ public class AudioRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(self ? "1606" : "1604");
+		return getString(self ? (hasRight() ? "1607" : "1606") : (hasRight() ? "1605" : "1604"));
 	}
 }
