@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings;
 
+import java.util.Locale;
+
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.db.entity.room.Client;
@@ -35,6 +37,7 @@ public interface IApplication {
 	String getOmString(long id);
 	String getOmString(long id, long languageId);
 	String getOmString(String key, long languageId);
+	String getOmString(String key, final Locale loc);
 	Client updateClient(Client rcl);
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);

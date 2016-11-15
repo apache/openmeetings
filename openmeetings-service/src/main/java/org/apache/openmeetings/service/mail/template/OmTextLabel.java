@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,14 +25,6 @@ import org.apache.wicket.markup.html.basic.Label;
 public class OmTextLabel extends Label {
 	private static final long serialVersionUID = 1L;
 	private static final String WICKET_VISIBLE = ":visible";
-
-	public OmTextLabel(String id, long key, long langId) {
-		this(id, "" + key, langId);
-	}
-
-	public OmTextLabel(String id, String key, long langId) {
-		this(id, ensureApplication().getOmString(key, langId));
-	}
 
 	public OmTextLabel(String id, String label) {
 		super(id, label);

@@ -26,15 +26,15 @@ public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactConfirmTemplate(UserContact contact) {
-		super(contact.getOwner().getLanguageId());
-		add(new Label("hi", getString(1192, langId)));
+		super(getOmSession().getLocale(contact.getOwner()));
+		add(new Label("hi", getString("1192", locale)));
 		add(new Label("firstName", contact.getOwner().getFirstname()));
 		add(new Label("lastName", contact.getOwner().getLastname()));
 		add(new Label("addedFirstName", contact.getContact().getFirstname()));
 		add(new Label("addedLastName", contact.getContact().getLastname()));
-		add(new Label("confirmed", getString(1198, langId)));
+		add(new Label("confirmed", getString("1198", locale)));
 	}
-	
+
 	public static String getEmail(UserContact contact) {
 		return ComponentRenderer.renderComponent(new RequestContactConfirmTemplate(contact)).toString();
 	}

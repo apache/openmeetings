@@ -20,6 +20,9 @@ package org.apache.openmeetings.service.mail.template;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
+import java.util.Locale;
+
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,26 +31,26 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class InvitationTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	private InvitationTemplate(Long langId, String invitorName, String message, String link) {
-		super(langId);
+	private InvitationTemplate(Locale locale, String invitorName, String message, String link) {
+		super(locale);
 
-		add(new Label("titleLbl", getString(500, langId)));
-		add(new Label("userLbl", getString(501, langId)));
+		add(new Label("titleLbl", getString("500", locale)));
+		add(new Label("userLbl", getString("501", locale)));
 		add(new Label("user", invitorName));
-		add(new Label("messageLbl", getString(502, langId)));
+		add(new Label("messageLbl", getString("502", locale)));
 		add(new Label("message", message).setEscapeModelStrings(false));
 		
 		add(new WebMarkupContainer("links")
-			.add(new Label("comment_for_link1", getString(503, langId)))
-			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", getString(504, langId))))
-			.add(new Label("comment_for_link2", getString(505, langId)))
+			.add(new Label("comment_for_link1", getString("503", locale)))
+			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", getString("504", locale))))
+			.add(new Label("comment_for_link2", getString("505", locale)))
 			.add(new Label("invitation_link2", link))
 			.setVisible(link != null)
 			);
 	}
-	
-	public static String getEmail(Long langId, String invitorName, String message, String link) {
-		ensureApplication(langId);
-		return ComponentRenderer.renderComponent(new InvitationTemplate(langId, invitorName, message, link)).toString();
+
+	public static String getEmail(User invitee, String invitorName, String message, String link) {
+		ensureApplication(invitee.getLanguageId());
+		return ComponentRenderer.renderComponent(new InvitationTemplate(getOmSession().getLocale(invitee), invitorName, message, link)).toString();
 	}
 }

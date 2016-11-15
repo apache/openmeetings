@@ -26,7 +26,7 @@ public class ResetPasswordTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public ResetPasswordTemplate(String link) {
-		super(getOmSession().getOmLanguage());
+		super(getOmSession().getLocale());
 		add(new ExternalLink("reset_link1", link));
 		add(new Label("reset_link2", link));
 	}

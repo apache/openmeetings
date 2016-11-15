@@ -84,19 +84,18 @@ public class InvitationManager implements IInvitationManager {
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		Long langId = mm.getUser().getLanguageId();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
 		AbstractSubjectEmailTemplate t = null;
 		switch (type) {
 			case Cancel:
-				t = CanceledAppointmentTemplate.get(langId, a, tz, invitorName);
+				t = CanceledAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
 			case Create:
-				t = CreatedAppointmentTemplate.get(langId, a, tz, invitorName);
+				t = CreatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
 			case Update:
 			default:
-				t = UpdatedAppointmentTemplate.get(langId, a, tz, invitorName);
+				t = UpdatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
 			
 		}
@@ -113,7 +112,7 @@ public class InvitationManager implements IInvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link);
+		String template = InvitationTemplate.getEmail(i.getInvitee(), invitorName, message, invitation_link);
 		String email = i.getInvitee().getAddress().getEmail();
 		String replyToEmail = owner.getAddress().getEmail();
 		

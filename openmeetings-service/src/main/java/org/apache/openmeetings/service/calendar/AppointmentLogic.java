@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
 import org.apache.openmeetings.service.mail.template.subject.AppointmentReminderTemplate;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -100,7 +101,7 @@ public class AppointmentLogic {
 
 		String smsSubject = generateSMSSubject(langDao.getString(1158L, langId), a);
 
-		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
+		AbstractSubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
 		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
 		invitationManager.sendInvitationReminderSMS(u.getAddress().getPhone(), smsSubject, langId);

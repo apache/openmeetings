@@ -22,6 +22,7 @@ import static java.text.DateFormat.SHORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getClientByKeys;
@@ -29,6 +30,7 @@ import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -79,6 +81,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+import org.slf4j.Logger;
 import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetFactory;
@@ -86,6 +89,7 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = getLogger(WebSession.class, webAppRootKey);
 	public static final int MILLIS_IN_MINUTE = 60000;
 	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
@@ -261,6 +265,21 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return false;
 	}
 
+	public Locale getLocale(User u) {
+		Long langId = u.getLanguageId();
+		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.languages.get(langId);
+		try {
+			Locale.Builder builder = new Locale.Builder().setLanguage(locale.getLanguage());
+			if (u.getAddress() != null && u.getAddress().getCountry() != null) {
+				builder.setRegion(u.getAddress().getCountry());
+			}
+			locale = builder.build();
+		} catch (Exception e) {
+			log.error("Unexpected Error whilw constructing locale for the user", e.getMessage());
+		}
+		return locale;
+	}
+
 	private void setUser(User u, Set<Right> rights) {
 		String _sid = SID;
 		Long _recordingId = recordingId;
@@ -302,8 +321,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING, tz);
-		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId));
-		//FIXMW locale need to be set by User language first
+		setLocale(getLocale(u));
 		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}
 	

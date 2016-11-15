@@ -20,10 +20,11 @@ package org.apache.openmeetings.service.mail.template.subject;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
@@ -32,35 +33,36 @@ public class CreatedAppointmentTemplate extends AbstractSubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
 	private final String invitorName;
 
-	private CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		super(langId, a, tz);
+	private CreatedAppointmentTemplate(Locale locale, Appointment a, TimeZone tz, String invitorName) {
+		super(locale, a, tz);
 		this.invitorName = invitorName;
 	}
 
 	@Override
-	void omInit() {
-		add(new Label("titleLbl", getString(1151L, langId)));
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new Label("titleLbl", getString("1151", locale)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
-			.add(new Label("descLbl", getString(1152L, langId)))
+			.add(new Label("descLbl", getString("1152", locale)))
 			.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
-		add(new Label("startLbl", getString(1153L, langId)));
-		add(new Label("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)));
-		add(new Label("endLbl", getString(1154L, langId)));
-		add(new Label("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)));
-		add(new Label("invitorLbl", getString(1156L, langId)));
+		add(new Label("startLbl", getString("1153", locale)));
+		add(new Label("start", format(a.getStart())));
+		add(new Label("endLbl", getString("1154", locale)));
+		add(new Label("end", format(a.getEnd())));
+		add(new Label("invitorLbl", getString("1156", locale)));
 		add(new Label("invitor", invitorName));
 	}
 
-	public static CreatedAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		ensureApplication(langId);
-		return new CreatedAppointmentTemplate(langId, a, tz, invitorName);
+	public static AbstractSubjectEmailTemplate get(User u, Appointment a, TimeZone tz, String invitorName) {
+		ensureApplication(u.getLanguageId());
+		return new CreatedAppointmentTemplate(getOmSession().getLocale(u), a, tz, invitorName).create();
 	}
 
 	@Override
 	String getPrefix() {
-		return ensureApplication().getOmString(1151, langId);
+		return ensureApplication().getOmString("1151", locale);
 	}
 }
