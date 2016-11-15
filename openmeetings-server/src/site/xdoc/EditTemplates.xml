@@ -22,7 +22,6 @@
 	</properties>
 
 	<body>
-
 		<section name="Changing Labels and text strings">
 			<p>
 				All language string should be localized and stored in the language
@@ -39,21 +38,27 @@
 				<a href="installation.html" rel="nofollow">Installation guide</a>
 			</p>
 		</section>
-
 		<section name="Changing layout, adding footers in emails">
-
 			<p>If you would like to change the standard email layout or add for
 				example some footer in every email you have to change the email
 				templates.
 			</p>
-			<p>To do that:
+			<div>To do that:
 				<ul>
 					<li>Stop the Red5/OpenMeetings service</li>
 					<li>Goto: <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/</tt></li>
-					<li>Change HTML file(s) according to your needs, BUT do not remove elements with <tt>wicket:id</tt> attributes</li>
+					<li>Change HTML file(s) according to your needs, BUT do not remove 
+						elements with <tt>wicket:id</tt> attributes! You can hide those 
+						elements by adding <tt>wicket:visible="false"</tt> attribute
+					</li>
+					<li>Starting OM 3.1.4 you can change Appointment reminder subject by
+						modifying "subject" fragment in file 
+						<tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/subject/AbstractSubjectEmailTemplate.html</tt>
+						as described in previous bullet.
+					</li>
 					<li>Start the Red5/OpenMeetings service</li>
 				</ul>
-			</p>
+			</div>
 		</section>
 	</body>
 </document>
