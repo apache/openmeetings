@@ -443,7 +443,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new TextField<String>("smtpServer"));
 			add(new TextField<Integer>("smtpPort").setRequired(true));
 			add(new TextField<String>("mailAuthName"));
-			add(new PasswordTextField("mailAuthPass").setRequired(false));
+			add(new PasswordTextField("mailAuthPass").setResetPassword(false).setRequired(false));
 			add(new YesNoDropDown("mailUseTls"));
 			//TODO check mail server
 			add(new YesNoDropDown("replyToOrganizer"));
