@@ -313,7 +313,7 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
-		exit(handler, false);
+		exit(handler, true);
 	}
 
 	public void exit(IPartialPageRequestHandler handler, boolean broadcast) {

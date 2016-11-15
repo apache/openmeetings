@@ -113,6 +113,26 @@ public class ActivitiesPanel extends BasePanel {
 										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.whiteBoard);
 										break;
+									case reqRightShare:
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(target, client, Right.share);
+										break;
+									case reqRightRemote:
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(target, client, Right.remoteControl);
+										break;
+									case reqRightA:
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(target, client, Right.audio);
+										break;
+									case reqRightMute:
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(target, client, Right.mute);
+										break;
+									case reqRightExclusive:
+										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(target, client, Right.exclusive);
+										break;
 									default:
 										break;
 								}
