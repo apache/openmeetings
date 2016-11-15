@@ -230,6 +230,7 @@ public class LdapLoginManagement {
 					break;
 			}
 			u = authenticated ? userDao.getByLogin(login, Type.ldap, domainId) : userDao.login(login, passwd);
+			log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
 			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
 				throw new OmException(-11L);
