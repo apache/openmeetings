@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -32,7 +33,7 @@ public class CamActivityIcon extends RoomActivityIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(!client.hasActivity(activity) ? "687" : "690");
+		return getString(client.hasRight(Right.audio) &&  client.hasRight(Right.video) ? "690" : "687");
 	}
 
 	@Override
