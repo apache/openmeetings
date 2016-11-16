@@ -125,9 +125,9 @@ public abstract class FileTreePanel extends Panel {
 								String statement = "var $drop = $(this);";
 								statement += "$('body').append('<div id=" + dialogId + ">" + getString("713") + "</div>');";
 								statement += "$( '#" + dialogId
-										+ "' ).dialog({ title: '" + getString("80") + "', dialogClass: 'no-close', buttons: [";
-								statement += "    { text: '" + getString("54") + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
-								statement += "    { text: '" + getString("25") + "', click: function() { $( this ).dialog('close'); } } ";
+										+ "' ).dialog({ title: '" + escapeEcmaScript(getString("80")) + "', dialogClass: 'no-close', buttons: [";
+								statement += "	{ text: '" + escapeEcmaScript(getString("54")) + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
+								statement += "	{ text: '" + escapeEcmaScript(getString("25")) + "', click: function() { $(this).dialog('close'); } } ";
 								statement += "],";
 								statement += "close: function(event, ui) { $(this).dialog('destroy').remove(); }";
 								statement += "});";
