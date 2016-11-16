@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.Application.getBean;
