@@ -41,6 +41,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name="getGroupsByIds", query="SELECT g FROM Group AS g WHERE g.id IN :ids")
 	, @NamedQuery(name="getNondeletedGroups", query="SELECT g FROM Group g WHERE g.deleted = false ORDER BY g.id")
 	, @NamedQuery(name="countGroups", query="SELECT COUNT(g) FROM Group AS g WHERE g.deleted = false")
+	, @NamedQuery(name="getLimitedGroups", query="SELECT g FROM Group AS g WHERE g.deleted = false AND g.limited = true")
 })
 @Table(name = "om_group")
 @Root(name = "organisation")

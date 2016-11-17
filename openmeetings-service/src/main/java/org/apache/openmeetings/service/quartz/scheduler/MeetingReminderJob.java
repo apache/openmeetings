@@ -21,6 +21,9 @@ package org.apache.openmeetings.service.quartz.scheduler;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.red5.logging.Red5LoggerFactory;
@@ -33,9 +36,11 @@ public class MeetingReminderJob {
 	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private RecordingDao recordingDao;
+	@Autowired
+	private GroupDao groupDao;
 
 	public void remindIt() {
-		log.debug("MeetingReminderJob.execute");
+		log.debug("MeetingReminderJob.remindIt");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
@@ -47,6 +52,14 @@ public class MeetingReminderJob {
 	}
 
 	public void remindExpiring() {
-		//recordingDao.
+		log.debug("MeetingReminderJob.remindExpiring");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
+		for (Group g : groupDao.getLimited()) {
+			for (Recording rec : recordingDao.getExpiring(g.getId(), g.getReminderDays())) {
+				
+			}
+		}
 	}
 }
