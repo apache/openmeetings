@@ -45,7 +45,6 @@ import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -66,7 +65,6 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
-import com.googlecode.wicket.kendo.ui.resource.KendoCultureResourceReference;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -217,6 +215,6 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(new KendoCultureResourceReference(WebSession.get().getLocale())));
+		response.render(KendoCultureHeaderItem.get());
 	}
 }
