@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.rooms;
 
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -60,7 +59,7 @@ public class RoomListPanel extends UserPanel {
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
+				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getRoomClients(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
 				item.add(new Button("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
@@ -76,7 +75,7 @@ public class RoomListPanel extends UserPanel {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
+						target.add(curUsers.setDefaultModelObject(Application.getRoomClients(r.getId()).size()));
 						onRefreshClick(target, r);
 					}
 				});

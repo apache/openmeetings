@@ -24,12 +24,11 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -109,7 +108,7 @@ public class RoomsPanel extends UserPanel {
 						return null;
 					}
 				}));
-				item.add(new Label("clientLogin", client.getUsername()));
+				item.add(new Label("clientLogin", client.getUser().getLogin()));
 				item.add(new Label("from", client.getConnectedSince()));
 			}
 		};
@@ -117,7 +116,7 @@ public class RoomsPanel extends UserPanel {
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
-		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
+		final List<Client> clientsInRoom = Application.getRoomClients(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		Room room = Application.getBean(RoomDao.class).get(roomId);
 		roomID.setObject(room.getId());
