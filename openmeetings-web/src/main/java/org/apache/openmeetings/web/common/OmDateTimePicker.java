@@ -22,7 +22,6 @@ import java.util.Locale;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -32,7 +31,6 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
-import com.googlecode.wicket.kendo.ui.resource.KendoCultureResourceReference;
 
 public class OmDateTimePicker extends DateTimePicker {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +52,6 @@ public class OmDateTimePicker extends DateTimePicker {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(new KendoCultureResourceReference(WebSession.get().getLocale())));
+		response.render(KendoCultureHeaderItem.get());
 	}
 }
