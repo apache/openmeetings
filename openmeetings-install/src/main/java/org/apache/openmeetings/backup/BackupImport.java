@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
@@ -555,6 +556,7 @@ public class BackupImport {
 					String name = getFileName(r.getHash());
 					r.setHash(UUID.randomUUID().toString());
 					fileMap.put(String.format("%s.%s", name, EXTENSION_FLV), String.format("%s.%s", r.getHash(), EXTENSION_FLV));
+					fileMap.put(String.format("%s.%s.meta", name, EXTENSION_FLV), String.format("%s.%s.meta", r.getHash(), EXTENSION_FLV));
 					fileMap.put(String.format("%s.%s", name, EXTENSION_AVI), String.format("%s.%s", r.getHash(), EXTENSION_AVI));
 					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
 					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
@@ -1181,7 +1183,7 @@ public class BackupImport {
 						list.add(r);
 						item = listNode.getNext();
 					}
-			}
+				}
 			}
 		}
 		return list;
@@ -1241,12 +1243,17 @@ public class BackupImport {
 		}
 
 		// Now check the recordings and import them
-
-		File sourceDirRec = new File(importBaseDir, "recordingFiles");
-
-		log.debug("sourceDirRec PATH " + sourceDirRec.getCanonicalPath());
-		if (sourceDirRec.exists()) {
-			FileUtils.copyDirectory(sourceDirRec, getStreamsHibernateDir());
+		File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
+		log.debug("sourceDirRec PATH " + recDir.getCanonicalPath());
+		if (recDir.exists()) {
+			for (File r : recDir.listFiles()) {
+				String n = fileMap.get(r.getName());
+				if (n != null) {
+					FileUtils.copyFile(r, new File(getStreamsHibernateDir(), n));
+				} else {
+					FileUtils.copyFileToDirectory(r, getStreamsHibernateDir());
+				}
+			}
 		}
 	}
 
