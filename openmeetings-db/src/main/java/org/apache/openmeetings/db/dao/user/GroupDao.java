@@ -111,6 +111,10 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 		return em.createNamedQuery("getGroupsByIds", Group.class).setParameter("ids", ids).getResultList();
 	}
 
+	public List<Group> getLimited() {
+		return em.createNamedQuery("getLimitedGroups", Group.class).getResultList();
+	}
+
 	@Override
 	public Group update(Group entity, Long userId) {
 		if (entity.getId() == null) {
@@ -137,7 +141,6 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 		if (userId != null) {
 			g.setUpdatedby(userId);
 		}
-
 		em.merge(g);
 	}
 }

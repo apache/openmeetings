@@ -90,6 +90,11 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM Recording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
 			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
+	, @NamedQuery(name = "getExpiringRecordings", query = "SELECT DISTINCT rec FROM Recording rec "
+			+ "WHERE rec.deleted = false AND (rec.groupId = : groupId "
+			+ "    OR rec.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
+			+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId))"
+			+ "  AND rec.inserted BETWEEN :startDate AND :endDate")
 })
 @Table(name = "recording")
 @Root(name = "flvrecording")

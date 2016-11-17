@@ -25,6 +25,8 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -174,8 +176,14 @@ public class RecordingDao {
 		return null;
 	}
 
-	public List<Recording> getExpiring() {
-		return null;
+	public List<Recording> getExpiring(Long groupId, int reminderDays) {
+		Date startDate = Date.from(Instant.now().minus(Duration.ofDays(reminderDays)));
+		Date endDate = Date.from(Instant.now().minus(Duration.ofMinutes(15)));
+		return em.createNamedQuery("getExpiringRecordings", Recording.class)
+				.setParameter("groupId", groupId)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.getResultList();
 	}
 
 	public List<Recording> getByParent(Long parentId) {
