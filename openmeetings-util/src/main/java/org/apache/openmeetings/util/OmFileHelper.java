@@ -74,6 +74,7 @@ public class OmFileHelper {
 	public static final String JPG_MIME_TYPE = "image/jpeg";
 	public static final String PNG_MIME_TYPE = "image/png";
 	public static final String BCKP_ROOM_FILES = "roomFiles";
+	public static final String BCKP_RECORD_FILES = "recordingFiles";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;

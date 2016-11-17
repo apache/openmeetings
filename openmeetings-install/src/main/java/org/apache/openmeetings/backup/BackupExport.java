@@ -20,6 +20,7 @@ package org.apache.openmeetings.backup;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OmFileHelper.BACKUP_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.IMPORT_DIR;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -417,7 +418,7 @@ public class BackupExport {
 			/*
 			 * ##################### Backup Recording Files
 			 */
-			File targetDirRec = new File(backup_dir, "recordingFiles");
+			File targetDirRec = new File(backup_dir, BCKP_RECORD_FILES);
 
 			if (!targetDirRec.exists()) {
 				targetDirRec.mkdir();
