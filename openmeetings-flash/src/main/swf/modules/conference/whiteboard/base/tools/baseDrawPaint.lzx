@@ -52,6 +52,10 @@
 			maxy = Math.max(p.y, maxy);
 		</method>
 
+		<method name="_drawLine" args="g, x, y">
+			g.lineTo(x, y);
+		</method>
+
 		<method name="drawlineOnObject" args="obj,x1,y1,x2,y2">
 		<![CDATA[
 			obj.beginPath();
@@ -167,16 +171,22 @@
 			this.currentlayer.lineWidth = this.currentlayerlineWidth;
 			this.currentlayer.strokeStyle = this.currentlayerstroke;
 			//restore image after destroy
-			for (var eg = 0; eg < this.basetempactionobjectList.length; ++eg) {
-				drawline(this.basetempactionobjectList[eg][1],
-						this.basetempactionobjectList[eg][2],
-						this.basetempactionobjectList[eg][3],
-						this.basetempactionobjectList[eg][4]);
-			}
+			paintLayer(currentlayer, this.basetempactionobjectList);
 			//Add Layer to global Layer
 			this.layers.push(this.currentlayer);
 
 			this.registerFinal(this.getSWFDocumentStatus(), this.getZIndex());
+		]]>
+		</method>
+
+		<method name="paintLayer" args="layer, pointArr">
+		<![CDATA[
+			var g = layer.__drawcontext.graphics;
+			g.lineStyle(layer.lineWidth, layer.strokeStyle);
+			g.moveTo(pointArr[0][3], pointArr[0][4]);
+			for (var i = 1; i < pointArr.length; ++i) {
+				_drawLine(g, pointArr[i][3], pointArr[i][4]);
+			}
 		]]>
 		</method>
 
@@ -222,17 +232,8 @@
 			
 			if ($debug) ("paintactionHistory 2 ",tmpCurrentlayer.fillstyle,tmpCurrentlayer.lineWidth,tmpCurrentlayer.strokeStyle);
 
-			for (var eg = 0; eg < lastActionObject[1].length; eg++) {
-				if ($debug) ("paintactionHistory 3 ",lastActionObject[1][eg][1], lastActionObject[1][eg][2],
-										lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
-				this.drawlineOnObject(tmpCurrentlayer,
-						lastActionObject[1][eg][1], lastActionObject[1][eg][2],
-						lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
-			}
-
-			//tmpCurrentlayer.setAttribute('stretches','both');
-			this.doSWFDocumentStatus(tmpCurrentlayer,
-					lastActionObject[lastActionObject.length - 7]);
+			paintLayer(tmpCurrentlayer, lastActionObject[1]);
+			this.doSWFDocumentStatus(tmpCurrentlayer, lastActionObject[lastActionObject.length - 7]);
 		]]>
 		</method>
 	</class>
