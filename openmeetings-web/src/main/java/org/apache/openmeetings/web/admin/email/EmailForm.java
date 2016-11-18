@@ -20,12 +20,14 @@ package org.apache.openmeetings.web.admin.email;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -42,9 +44,12 @@ public class EmailForm extends Form<MailMessage> {
 	private final DateLabel updated;
 	private final Label status;
 	private final AjaxButton reset;
+	private ConfirmableAjaxBorder delBtn;
+	private final WebMarkupContainer list;
 
 	public EmailForm(String id, final WebMarkupContainer list, MailMessage m) {
 		super(id, new CompoundPropertyModel<>(m));
+		this.list = list;
 		add(status = new Label("status", Model.of("")));
 		add(new Label("subject"));
 		add(new Label("recipients"));
@@ -66,12 +71,34 @@ public class EmailForm extends Form<MailMessage> {
 	}
 
 	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		// add a cancel button that can be used to submit the form via ajax
+		delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), this) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				getBean(MailMessageDao.class).delete(getModelObject().getId(), getUserId());
+				setModelObject(new MailMessage());
+				target.add(list, EmailForm.this);
+			}
+		};
+		add(delBtn.setOutputMarkupId(true).setEnabled(false));
+	}
+
+	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
 		MailMessage m = getModelObject();
+		delBtn.setEnabled(m.getId() != null);
 		status.setDefaultModelObject(getString("admin.email.status." + m.getStatus().name()));
-		inserted.setModelObject(m.getInserted().getTime());
-		updated.setModelObject(m.getInserted().getTime());
+		inserted.setModelObject(m.getInserted() == null ? null : m.getInserted().getTime());
+		updated.setModelObject(m.getUpdated() == null ? null : m.getUpdated().getTime());
 		reset.setEnabled(m.getId() != null && MailMessage.Status.ERROR == m.getStatus());
 	}
 }
