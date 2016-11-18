@@ -44,12 +44,15 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
 	, @NamedQuery(name = "getChatMessages", query = "SELECT c FROM ChatMessage c ORDER BY c.id")
 	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL ORDER BY c.sent DESC")
-	, @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser.id IS NULL AND c.toRoom.id = :roomId"
+	, @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom.id = :roomId"
 			+ " AND (true = :all OR (false = :all AND c.needModeration = false)) ORDER BY c.sent DESC")
 	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
 			+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) ORDER BY c.sent DESC")
 	, @NamedQuery(name = "getChatMessagesByUserTime", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
 			+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) AND c.sent > :date ORDER BY c.sent DESC")
+	, @NamedQuery(name = "deleteChatGlobal", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL")
+	, @NamedQuery(name = "deleteChatRoom", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom.id = :roomId")
+	, @NamedQuery(name = "deleteChatUser", query = "DELETE FROM ChatMessage c WHERE c.toRoom IS NULL AND c.toUser.id = :userId")
 })
 @Table(name = "chat")
 @Root(name = "ChatMessage")
