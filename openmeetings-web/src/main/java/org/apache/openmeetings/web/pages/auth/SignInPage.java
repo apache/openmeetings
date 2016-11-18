@@ -100,13 +100,13 @@ public class SignInPage extends BaseInitedPage {
 				if (p.get("code").toString() != null) { // got code
 					String code = p.get("code").toString();
 					log.debug("OAuth response code=" + code);
-				 	AuthInfo authInfo = getToken(code, server);
-				 	if (authInfo == null) return;
-				 	log.debug("OAuthInfo=" + authInfo);
-				 	Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-				 	if (authParams != null) {
-				 		loginViaOAuth2(authParams, serverId);
-				 	}
+					AuthInfo authInfo = getToken(code, server);
+					if (authInfo == null) return;
+					log.debug("OAuthInfo=" + authInfo);
+					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
+					if (authParams != null) {
+						loginViaOAuth2(authParams, serverId);
+					}
 				} else { // redirect to get code
 					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
 							null, null, getRedirectUri(server, this), null);
@@ -157,7 +157,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	// ============= OAuth2 methods =============
-		
+
 	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret, 
 			String clientToken, String redirectUri, String code) throws UnsupportedEncodingException {
 		String result = urlTemplate;
@@ -178,7 +178,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		return result;
 	}
-		
+
 	public static String getRedirectUri(OAuthServer server, Component component) {
 		String result = "";
 		if (server.getId() != null) {
@@ -194,10 +194,14 @@ public class SignInPage extends BaseInitedPage {
 	}
 		
 	private static void prepareConnection(URLConnection connection) {
-		if (!(connection instanceof HttpsURLConnection)) return;
+		if (!(connection instanceof HttpsURLConnection)) {
+			return;
+		}
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
 		Boolean ignoreBadSSL = configurationDao.getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no").equals("yes");
-		if (!ignoreBadSSL) return;
+		if (!ignoreBadSSL) {
+			return;
+		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			@Override
 			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
@@ -209,25 +213,25 @@ public class SignInPage extends BaseInitedPage {
 				return null;
 			}
 				
-	    } };
+		}};
 		try {
 			SSLContext sslContext = SSLContext.getInstance("SSL");
-			sslContext.init( null, trustAllCerts, new java.security.SecureRandom() );
-		    SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
 			((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
-					
+				
 				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
-					
+			
 			});
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
 		}
 	}
-		
+
 	private AuthInfo getToken(String code, OAuthServer server) throws IOException {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
@@ -309,7 +313,7 @@ public class SignInPage extends BaseInitedPage {
 		prepareConnection(connection);
 		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new HashMap<>();
 		try {
 			JSONObject parsedJson = new JSONObject(sourceResponse);
 			result.put("login", parsedJson.getString(loginAttributeName));
@@ -334,31 +338,28 @@ public class SignInPage extends BaseInitedPage {
 		}
 		return result;
 	}
-	
+
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
 		User u = getBean(IUserManager.class).loginOAuth(params, serverId);
-		
+
 		if (u != null && WebSession.get().signIn(u)) {
- 			setResponsePage(Application.get().getHomePage());
+			setResponsePage(Application.get().getHomePage());
 		} else {
 			log.error("Failed to login via OAuth2!");
 		}
 	}
-		
+
 	private static class AuthInfo {
-			
 		String accessToken;
 		String refreshToken;
 		String tokenType;
 		long expiresIn;
-			
+
 		@Override
 		public String toString() {
 			return "AuthInfo [accessToken=" + accessToken + ", refreshToken="
 					+ refreshToken + ", tokenType=" + tokenType
 					+ ", expiresIn=" + expiresIn + "]";
 		}
-			
 	}
-	
 }
