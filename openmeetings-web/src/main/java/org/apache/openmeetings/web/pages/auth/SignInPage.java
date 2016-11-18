@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -32,7 +33,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -100,13 +100,13 @@ public class SignInPage extends BaseInitedPage {
 				if (p.get("code").toString() != null) { // got code
 					String code = p.get("code").toString();
 					log.debug("OAuth response code=" + code);
-				 	AuthInfo authInfo = getToken(code, server);
-				 	if (authInfo == null) return;
-				 	log.debug("OAuthInfo=" + authInfo);
-				 	Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-				 	if (authParams != null) {
-				 		loginViaOAuth2(authParams, serverId);
-				 	}
+					AuthInfo authInfo = getToken(code, server);
+					if (authInfo == null) return;
+					log.debug("OAuthInfo=" + authInfo);
+					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
+					if (authParams != null) {
+						loginViaOAuth2(authParams, serverId);
+					}
 				} else { // redirect to get code
 					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
 							null, null, getRedirectUri(server, this), null);
@@ -157,7 +157,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	// ============= OAuth2 methods =============
-		
+
 	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret, 
 			String clientToken, String redirectUri, String code) throws UnsupportedEncodingException {
 		String result = urlTemplate;
@@ -171,14 +171,14 @@ public class SignInPage extends BaseInitedPage {
 			result = result.replace("{$access_token}", clientToken);
 		}
 		if (redirectUri != null) {
-			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.name()));
+			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, UTF_8.name()));
 		}
 		if (code != null) {
 			result = result.replace("{$code}", code);
 		}
 		return result;
 	}
-		
+
 	public static String getRedirectUri(OAuthServer server, Component component) {
 		String result = "";
 		if (server.getId() != null) {
@@ -194,10 +194,14 @@ public class SignInPage extends BaseInitedPage {
 	}
 		
 	private static void prepareConnection(URLConnection connection) {
-		if (!(connection instanceof HttpsURLConnection)) return;
+		if (!(connection instanceof HttpsURLConnection)) {
+			return;
+		}
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
 		Boolean ignoreBadSSL = configurationDao.getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no").equals("yes");
-		if (!ignoreBadSSL) return;
+		if (!ignoreBadSSL) {
+			return;
+		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			@Override
 			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
@@ -209,25 +213,25 @@ public class SignInPage extends BaseInitedPage {
 				return null;
 			}
 				
-	    } };
+		}};
 		try {
 			SSLContext sslContext = SSLContext.getInstance("SSL");
-			sslContext.init( null, trustAllCerts, new java.security.SecureRandom() );
-		    SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
 			((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
-					
+				
 				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
-					
+			
 			});
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
 		}
 	}
-		
+
 	private AuthInfo getToken(String code, OAuthServer server) throws IOException {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
@@ -239,7 +243,7 @@ public class SignInPage extends BaseInitedPage {
 		prepareConnection(urlConnection);
 		urlConnection.setRequestMethod("POST");
 		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		urlConnection.setRequestProperty("charset", StandardCharsets.UTF_8.name());
+		urlConnection.setRequestProperty("charset", UTF_8.name());
 		urlConnection.setRequestProperty("Content-Length", String.valueOf(requestTokenParams.length()));
 		urlConnection.setDoInput(true);
 		urlConnection.setDoOutput(true);
@@ -247,7 +251,7 @@ public class SignInPage extends BaseInitedPage {
 		DataOutputStream paramsOutputStream = new DataOutputStream(urlConnection.getOutputStream());
 		paramsOutputStream.writeBytes(requestTokenParams);
 		paramsOutputStream.flush();
-		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), StandardCharsets.UTF_8);
+		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
 		try {
@@ -307,10 +311,10 @@ public class SignInPage extends BaseInitedPage {
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
 		prepareConnection(connection);
-		String sourceResponse = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
-        // parse json result
-        Map<String, String> result = new HashMap<String, String>();
-        try {
+		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
+		// parse json result
+		Map<String, String> result = new HashMap<>();
+		try {
 			JSONObject parsedJson = new JSONObject(sourceResponse);
 			result.put("login", parsedJson.getString(loginAttributeName));
 			result.put("email", parsedJson.getString(emailAttributeName));
@@ -334,31 +338,28 @@ public class SignInPage extends BaseInitedPage {
 		}
 		return result;
 	}
-	
+
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
 		User u = getBean(IUserManager.class).loginOAuth(params, serverId);
-		
+
 		if (u != null && WebSession.get().signIn(u)) {
- 			setResponsePage(Application.get().getHomePage());
+			setResponsePage(Application.get().getHomePage());
 		} else {
 			log.error("Failed to login via OAuth2!");
 		}
 	}
-		
+
 	private static class AuthInfo {
-			
 		String accessToken;
 		String refreshToken;
 		String tokenType;
 		long expiresIn;
-			
+
 		@Override
 		public String toString() {
 			return "AuthInfo [accessToken=" + accessToken + ", refreshToken="
 					+ refreshToken + ", tokenType=" + tokenType
 					+ ", expiresIn=" + expiresIn + "]";
 		}
-			
 	}
-	
 }
