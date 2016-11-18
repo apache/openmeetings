@@ -18,21 +18,27 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestSetupCleanupJob {
-	private static Logger log = Red5LoggerFactory.getLogger(TestSetupCleanupJob.class, OpenmeetingsVariables.webAppRootKey);
-	private long expirationInterval = 60 * 60 * 1000; // 1 hour
+public class CleanupJob {
+	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, webAppRootKey);
+	private long sessionTimeout = 30 * 60 * 1000L;
+	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 
-	public void doIt() {
-		log.debug("TestSetupClearJob.execute");
+	@Autowired
+	private SessiondataDao sessiondataDao;
+
+	public void cleanTestSetup() {
+		log.debug("CleanupJob.execute");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
@@ -51,7 +57,7 @@ public class TestSetupCleanupJob {
 						//TODO need to rework this and remove hardcodings
 						if (files != null) {
 							for (File file : files) {
-								if (file.isFile() && file.lastModified() + expirationInterval < System.currentTimeMillis()) {
+								if (file.isFile() && file.lastModified() + testSetupTimeout < System.currentTimeMillis()) {
 									log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
 									file.delete();
 								}
@@ -63,5 +69,34 @@ public class TestSetupCleanupJob {
 		} catch (Exception e) {
 			log.error("Unexpected exception while processing tests setup videous.", e);
 		}
+	}
+
+	public void cleanSessions() {
+		log.trace("SessionClearJob.execute");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
+		try {
+			// TODO Generate report
+			sessiondataDao.clearSessionTable(sessionTimeout);
+		} catch (Exception err){
+			log.error("execute",err);
+		}
+	}
+
+	public long getSessionTimeout() {
+		return sessionTimeout;
+	}
+
+	public void setSessionTimeout(long sessionTimeout) {
+		this.sessionTimeout = sessionTimeout;
+	}
+
+	public long getTestSetupTimeout() {
+		return testSetupTimeout;
+	}
+
+	public void setTestSetupTimeout(long testSetupTimeout) {
+		this.testSetupTimeout = testSetupTimeout;
 	}
 }

@@ -177,12 +177,10 @@ public class RecordingDao {
 	}
 
 	public List<Recording> getExpiring(Long groupId, int reminderDays) {
-		Date startDate = Date.from(Instant.now().minus(Duration.ofDays(reminderDays)));
-		Date endDate = Date.from(Instant.now().minus(Duration.ofMinutes(15)));
+		Instant date = Instant.now().minus(Duration.ofDays(reminderDays));
 		return em.createNamedQuery("getExpiringRecordings", Recording.class)
 				.setParameter("groupId", groupId)
-				.setParameter("startDate", startDate)
-				.setParameter("endDate", endDate)
+				.setParameter("date", Date.from(date))
 				.getResultList();
 	}
 
@@ -195,7 +193,6 @@ public class RecordingDao {
 
 			Recording fId = get(recordingId);
 
-			fId.setProgressPostProcessing(0);
 			fId.setRecordEnd(recordEnd);
 
 			update(fId);
@@ -216,7 +213,10 @@ public class RecordingDao {
 	public Recording update(Recording f) {
 		try {
 			if (f.getId() == null) {
-				f.setInserted(new Date());
+				if (f.getInserted() == null) {
+					//required to preserve date while import
+					f.setInserted(new Date());
+				}
 				em.persist(f);
 			} else {
 				f.setUpdated(new Date());
