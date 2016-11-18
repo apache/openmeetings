@@ -35,12 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Override
 	public MailMessage get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public MailMessage get(Long id) {
 		return em.createNamedQuery("getMailMessageById", MailMessage.class).setParameter("id", id).getSingleResult();
@@ -56,7 +56,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 		return em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter("status", status)
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
-	
+
 	private <T> TypedQuery<T> getQuery(boolean isCount, String search, String order, Class<T> clazz) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		sb.append(isCount ? "COUNT(m)" : "m")
@@ -73,7 +73,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 		}
 		return q;
 	}
-	
+
 	@Override
 	public List<MailMessage> get(String search, int start, int count, String order) {
 		return getQuery(false, search, order, MailMessage.class).setFirstResult(start).setMaxResults(count).getResultList();
@@ -96,14 +96,14 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 			.setParameter("date", date)
 			.executeUpdate();
 	}
-	
+
 	public void resetSendingStatus(Long id) {
 		em.createNamedQuery("resetMailStatusById")
 			.setParameter("noneStatus", Status.NONE)
 			.setParameter("id", id)
 			.executeUpdate();
 	}
-	
+
 	@Override
 	public MailMessage update(MailMessage m, Long userId) {
 		if (m.getId() == null) {
@@ -118,6 +118,14 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 
 	@Override
 	public void delete(MailMessage m, Long userId) {
-		em.remove(m);
+		if (m != null) {
+			delete(m.getId(), userId);
+		}
+	}
+
+	public void delete(Long id, Long userId) {
+		if (id != null) {
+			em.remove(get(id));
+		}
 	}
 }
