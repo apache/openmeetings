@@ -30,10 +30,13 @@ import static org.apache.openmeetings.web.room.SwfPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,11 +46,12 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -78,15 +82,15 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 @AuthorizeInstantiation({"Dashboard", "Room"})
 public class ChatPanel extends BasePanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final String ID_TAB_PREFIX = "chatTab-";
 	private static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
 	private static final String ID_ALL = ID_TAB_PREFIX + "all";
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
-	private boolean  showDashboardChat = getBean(ConfigurationDao.class).getConfValue(CONFIG_DASHBOARD_SHOW_CHAT, Integer.class, "1") == 1;
+	private boolean showDashboardChat = getBean(ConfigurationDao.class).getConfValue(CONFIG_DASHBOARD_SHOW_CHAT, Integer.class, "1") == 1;
 	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -109,7 +113,7 @@ public class ChatPanel extends BasePanel {
 			}
 		}
 	};
-	
+
 	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
 		String scope, scopeName;
 		if (m.getToUser() != null) {
@@ -126,11 +130,11 @@ public class ChatPanel extends BasePanel {
 		}
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
-	
+
 	public JSONObject getMessage(List<ChatMessage> list) throws JSONException {
 		return getMessage(getUserId(), list);
 	}
-	
+
 	private JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
 		JSONArray arr = new JSONArray();
 		for (ChatMessage m : list) {
@@ -171,9 +175,7 @@ public class ChatPanel extends BasePanel {
 						Room r = getBean(RoomDao.class).get(roomId);
 						list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
 					}
-					Calendar c = WebSession.getCalendar();
-					c.add(Calendar.HOUR_OF_DAY, -1);
-					list.addAll(dao.getUserRecent(getUserId(), c.getTime(), 0, 30));
+					list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
 					if (list.size() > 0) {
 						StringBuilder sb = new StringBuilder();
 						sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
@@ -205,7 +207,7 @@ public class ChatPanel extends BasePanel {
 		sb.append("});");
 		target.appendJavaScript(sb);
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
@@ -220,12 +222,12 @@ public class ChatPanel extends BasePanel {
 			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 		}
 	}
-	
+
 	private static void sendRoom(ChatMessage m, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 		for (Client c : getRoomClients(m.getToRoom().getId())) {
 			try {
-				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Room.Right.moderator))) {
+				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))) {
 					IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
 					if (con != null) {
 						con.sendMessage(msg);
@@ -236,7 +238,7 @@ public class ChatPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	private class ChatForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
 		private final ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
@@ -321,6 +323,50 @@ public class ChatPanel extends BasePanel {
 						target.add(chatMessage);
 					};
 				});
+		}
+		
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("832"), this) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onError(AjaxRequestTarget target, Form<?> form) {
+				}
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					ChatDao dao = getBean(ChatDao.class);
+					String scope = activeTab.getModelObject();
+					boolean clean = false;
+					try {
+						if (scope == null || ID_ALL.equals(scope)) {
+							scope = ID_ALL;
+							dao.deleteGlobal();
+							clean = true;
+						} else if (scope.startsWith(ID_ROOM_PREFIX)) {
+							Room r = getBean(RoomDao.class).get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
+							if (r != null) {
+								dao.deleteRoom(r.getId());
+								clean = true;
+							}
+						} else if (scope.startsWith(ID_USER_PREFIX)) {
+							User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
+							if (u != null) {
+								dao.deleteUser(u.getId());
+								clean = true;
+							}
+						}
+					} catch (Exception e) {
+						//no-op
+					}
+					if (clean) {
+						target.appendJavaScript("$('#" + scope + "').html('')");
+					}
+				}
+			};
+			add(delBtn.setVisible(hasAdminLevel(getRights())));
 		}
 	}
 }
