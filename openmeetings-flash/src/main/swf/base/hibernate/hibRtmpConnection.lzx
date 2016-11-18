@@ -494,11 +494,15 @@
 		<!--- Notification of new User --> 
 		<method name="addNewUser" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("addNewUser: ",value);
-			if(value.sipTransport) {
-				canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.roomId,'',value.formatedDate,value.userpos,value.usercolor,value);
-			} else {
-				canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.roomId,'',value.formatedDate,value.userpos,value.usercolor,value);
+			if ($debug) Debug.write("addNewUser: ", value);
+			if (!!canvas._videocontainer) {
+				if (value.sipTransport) {
+					canvas._videocontainer.addItem(value.connectedSince, value.isMod, value.streamid
+							, value.roomId, '', value.formatedDate, value.userpos, value.usercolor, value);
+				} else {
+					canvas._videocontainer.addClientItem(value.connectedSince, value.isMod, value.streamid
+							, value.roomId, '', value.formatedDate, value.userpos, value.usercolor, value);
+				}
 			}
 			canvas.setAttribute('numberofpartners',canvas.numberofpartners+1);
 		</method>	
@@ -1067,9 +1071,11 @@
 	</method>
 	
 	<method name="roomConnect" args="value">
-		if ($debug) Debug.write("roomConnect: ",value);
-		canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.username,
-				'',value.formatedDate,value.userpos,value.usercolor,value);
+		if ($debug) Debug.write("roomConnect: ", value);
+		if (!!canvas._videocontainer) {
+			canvas._videocontainer.addItem(value.connectedSince, value.isMod, value.streamid, value.username
+					, '', value.formatedDate, value.userpos, value.usercolor, value);
+		}
 	</method>
 	
 	<method name="nickNameSet" args="value">
