@@ -277,6 +277,7 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	border: solid 1px #aacfe4;
 	width: 280px;
 	min-height: 20px;
+	white-space: initial;
 }
 .adminForm input {
 	border: solid 1px #aacfe4;

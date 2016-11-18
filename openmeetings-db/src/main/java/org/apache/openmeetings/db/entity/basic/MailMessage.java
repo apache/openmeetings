@@ -48,27 +48,24 @@ public class MailMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Status {
-		NONE
-		, SENDING
-		, ERROR
-		, DONE
+		NONE, SENDING, ERROR, DONE
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Lob
 	@Column(name = "recipients")
 	private String recipients;
-	
+
 	@Column(name = "replyTo")
 	private String replyTo;
-	
+
 	@Column(name = "subject")
 	private String subject;
-	
+
 	@Lob
 	@Column(name = "body")
 	private String body;
@@ -83,13 +80,13 @@ public class MailMessage implements IDataProviderEntity {
 
 	@Column(name = "inserted")
 	private Calendar inserted;
-	
+
 	@Column(name = "updated")
 	private Calendar updated;
-	
+
 	@Column(name = "error_count", nullable = false)
 	private int errorCount = 0;
-	
+
 	@Lob
 	@Column(name = "last_error")
 	private String lastError;
