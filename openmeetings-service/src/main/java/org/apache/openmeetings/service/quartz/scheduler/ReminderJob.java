@@ -18,37 +18,48 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.util.InitializationContainer;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
- 
-public class SessionClearJob {
-	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, OpenmeetingsVariables.webAppRootKey);
-	@Autowired
-	private SessiondataDao sessiondataDao;
-	private long timeout = 1800000L;
 
-	public void doIt() {
-		log.trace("SessionClearJob.execute");
+public class ReminderJob {
+	private static Logger log = Red5LoggerFactory.getLogger(ReminderJob.class, webAppRootKey);
+	@Autowired
+	private AppointmentLogic appointmentLogic;
+	@Autowired
+	private RecordingDao recordingDao;
+	@Autowired
+	private GroupDao groupDao;
+
+	public void remindMeetings() {
+		log.debug("ReminderJob.remindMeetings");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
 		try {
-			// TODO Generate report
-			sessiondataDao.clearSessionTable(timeout);
-		} catch (Exception err){
-			log.error("execute",err);
+			appointmentLogic.doScheduledMeetingReminder();
+		} catch (Exception err) {
+			log.error("execute", err);
 		}
 	}
 
-	public long getTimeout() {
-		return timeout;
-	}
-
-	public void setTimeout(long timeout) {
-		this.timeout = timeout;
+	public void remindExpiringRecordings() {
+		log.debug("ReminderJob.remindExpiringRecordings");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
+		for (Group g : groupDao.getLimited()) {
+			for (Recording rec : recordingDao.getExpiring(g.getId(), g.getReminderDays())) {
+				int i = 1;
+			}
+		}
 	}
 }

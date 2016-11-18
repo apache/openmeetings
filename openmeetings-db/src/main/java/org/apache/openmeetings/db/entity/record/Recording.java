@@ -91,10 +91,11 @@ import org.simpleframework.xml.Root;
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
 			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
 	, @NamedQuery(name = "getExpiringRecordings", query = "SELECT DISTINCT rec FROM Recording rec "
-			+ "WHERE rec.deleted = false AND (rec.groupId = : groupId "
+			+ "WHERE rec.deleted = false AND rec.notified = false AND rec.inserted < :date "
+			+ "  AND (rec.groupId = :groupId "
 			+ "    OR rec.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
-			+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId))"
-			+ "  AND rec.inserted BETWEEN :startDate AND :endDate")
+			+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"
+			+ "  ) order by rec.inserted ASC")
 })
 @Table(name = "recording")
 @Root(name = "flvrecording")
@@ -154,10 +155,6 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private boolean interview;
 
-	@Column(name = "progress_post_processing")
-	@Element(data = true, required = false)
-	private Integer progressPostProcessing;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "recording_id")
 	@ElementList(name = "flvrecordingmetadatas", required = false)
@@ -167,7 +164,11 @@ public class Recording extends FileItem {
 	@Enumerated(value = EnumType.STRING)
 	@Element(data = true, required = false)
 	private Status status = Status.NONE;
-	
+
+	@Column(name = "notified", nullable = false)
+	@Element(data = true, required = false)
+	private boolean notified = false;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -258,20 +259,20 @@ public class Recording extends FileItem {
 		this.interview = interview;
 	}
 
-	public Integer getProgressPostProcessing() {
-		return progressPostProcessing;
-	}
-
-	public void setProgressPostProcessing(Integer progressPostProcessing) {
-		this.progressPostProcessing = progressPostProcessing;
-	}
-
 	public Status getStatus() {
 		return status;
 	}
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public boolean isNotified() {
+		return notified;
+	}
+
+	public void setNotified(boolean notified) {
+		this.notified = notified;
 	}
 
 	@Override
