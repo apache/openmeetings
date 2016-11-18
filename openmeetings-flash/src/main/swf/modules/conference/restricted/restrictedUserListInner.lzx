@@ -111,11 +111,9 @@
 	<![CDATA[
 		for (var i = 0; i < this._table.renderList.length; ++i) {
 			if (this._table.renderList[i].publicSID == publicSID) {
-				this._table.renderList.splice(i,1);
-				var item = this._table._innerlist._inn._inn.subviews[i];
-				if (!!item) {
-					item.destroy();
-				}
+				this._table.renderList.splice(i, 1);
+				if ($debug) Debug.write("!!!!! disconnectclient:: ", this._table._innerlist._inn._inn.subviews.length, this._table.renderList.length);
+				//we will NOT destroy ANY items here
 				break;
 			}
 		}
@@ -244,7 +242,6 @@
 		</method>
 		
 		<method name="renderByHeightChange" args="refObj">
-			
 			if ($debug) Debug.write("..:: renderByHeightChange ::..",refObj);
 			
 			lz.Timer.removeTimer(this.resizeDelegate);
@@ -297,7 +294,7 @@
 			
 			for (var i = 0; i < list.subviews.length; ++i) {
 				if (records.length > i) {
-					
+					//if ($debug) Debug.write(":: renderContent :: draw", i);
 					list.subviews[i].setAttribute("clickable",true);
 					list.subviews[i].update(records[i]);
 					
@@ -323,10 +320,9 @@
 					list.subviews[i].setAttribute("username",records[i].username);
 					list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
 					
-					list.subviews[i].setAttribute("itemId",i);
-					
+					list.subviews[i].setAttribute("itemId", i);
 				} else {
-					
+					//if ($debug) Debug.write(":: renderContent :: reset", i);
 					list.subviews[i].refObj = null;
 					
 					list.subviews[i].isselected = false;
@@ -347,6 +343,7 @@
 					list.subviews[i].setAttribute("itemId","");
 					
 					list.subviews[i].setAttribute("clickable",false);
+					list.subviews[i].updateUName();
 				}
 			}
 		]]>
@@ -354,7 +351,7 @@
 		
 		<handler name="onScrollItem" args="item">
 		<![CDATA[
-			//if ($debug) Debug.write("SCROLL item:: ", item.itemId);
+			//if ($debug) Debug.write("SCROLL item:: ", item.itemId, item);
 			if (this.renderList.length > item.itemId) {
 				item.setAttribute("clickable", true);
 				var o = this.renderList[item.itemId];
@@ -411,7 +408,6 @@
 				
 				item.setAttribute("clickable",false);
 			}
-			
 		]]>
 		</handler>
 		

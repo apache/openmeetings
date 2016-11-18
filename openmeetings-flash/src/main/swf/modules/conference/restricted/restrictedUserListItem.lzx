@@ -66,13 +66,17 @@
 			}
 			
 			this.isMod = refObj.isMod;
-			this._content._userName.setAttribute('text', getUName());
+			updateUName();
 		}
 		updateUserStatus();
 		this._content._iconsModerator.oninit.sendEvent();
 	]]>
 	</method>
-	
+
+	<method name="updateUName">
+		this._content._userName.setAttribute('text', getUName());
+	</method>
+
 	<method name="updateUserStatus">
 	<![CDATA[
 		if (this.isMod) {
@@ -105,13 +109,13 @@
 			//if ($debug) Debug.write(" :: updateIconByMod :: ",this.isMod)
 			updateUserStatus();
 		}
-	</method>  
+	</method>
 	
 	<method name="updateIconByModScroll">
 		if (this.clickable) {
 			updateUserStatus();
 		}
-	</method>  
+	</method>
 	
 	<method name="initModeratorIcons">
 		//if ($debug) Debug.write(" :1: initModeratorIcons :: ");
@@ -159,9 +163,9 @@
 	
 	<view name="_content" width="254">
 		<view name="_contentIsCurrent" visible="${ parent.parent.refObj != null &amp;&amp; canvas.publicSID == parent.parent.refObj.publicSID }" width="254" height="40" bgcolor="0x7CFC00"/>
-		  
+		
 		<labelText name="_userName" x="2" y="2" text="$once{ parent.parent.getUName() }" />
-			   
+		
 		<typingIcon name="_user_typing" x="132" y="2" width="30" height="16" visible="false"/>
 		<miniIcons name="_restartDevice" x="220" y="0" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true"
 				visible="${ parent.parent.clickable &amp;&amp; parent.parent.refObj != null &amp;&amp; canvas.publicSID == parent.parent.refObj.publicSID &amp;&amp; canvas.isBroadCasting }">
@@ -172,7 +176,7 @@
 			<labelTooltip labelid="610" />
 		</miniIcons>
 		<view name="userStatus" visible="${ parent.parent.clickable }" x="238" frame="1" resource="userstatus_multiframe_rsc" />
-			
+		
 		<moderationMiniIconRestricted name="_iconsModerator" visibility="hidden"/>
 	</view>
 </class>
