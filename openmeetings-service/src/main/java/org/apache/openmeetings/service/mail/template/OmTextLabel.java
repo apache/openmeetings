@@ -21,14 +21,20 @@ package org.apache.openmeetings.service.mail.template;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 public class OmTextLabel extends Label {
 	private static final long serialVersionUID = 1L;
 	private static final String WICKET_VISIBLE = ":visible";
 
-	public OmTextLabel(String id, String label) {
-		super(id, label);
+	public OmTextLabel(String id, IModel<?> model) {
+		super(id, model);
 		setRenderBodyOnly(true);
+	}
+
+	public OmTextLabel(String id, String label) {
+		this(id, Model.of(label));
 	}
 
 	@Override

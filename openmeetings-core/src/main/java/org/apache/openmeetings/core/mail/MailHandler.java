@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.mail;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class MailHandler {
 	private void init() {
 		smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
 		smtpPort = cfgDao.getConfValue("smtp_port", String.class, "25");
-		from = cfgDao.getConfValue("system_email_addr", String.class, null);
+		from = cfgDao.getConfValue(CONFIG_SYSTEM_EMAIL, String.class, null);
 		mailAuthUser = cfgDao.getConfValue("email_username", String.class, null);
 		mailAuthPass = cfgDao.getConfValue("email_userpass", String.class, null);
 		mailTls = "1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"));
@@ -97,7 +98,7 @@ public class MailHandler {
 		smtpConnectionTimeOut = cfgDao.getConfValue("mail.smtp.connection.timeout", Integer.class, "30000");
 		smtpTimeOut = cfgDao.getConfValue("mail.smtp.timeout", Integer.class, "30000");
 	}
-	
+
 	public void init(String smtpServer, String smtpPort, String from, String mailAuthUser, String mailAuthPass, boolean mailTls, boolean mailAddReplyTo) {
 		this.smtpServer = smtpServer;
 		this.smtpPort = smtpPort;
@@ -107,7 +108,7 @@ public class MailHandler {
 		this.mailTls = mailTls;
 		this.mailAddReplyTo = mailAddReplyTo;
 	}
-	
+
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {
 		log.debug("setMessageBody for iCal message");
 		// -- Create a new message --
@@ -140,11 +141,11 @@ public class MailHandler {
 		msg.setContent(multipart);
 		return msg;
 	}
-	
+
 	private MimeMessage appendBody(MimeMessage msg, MailMessage m) throws MessagingException, IOException {
 		return appendBody(msg, m.getBody());
 	}
-	
+
 	public MimeMessage appendBody(MimeMessage msg, String body) throws MessagingException, IOException {
 		// -- Set the subject and body text --
 		msg.setDataHandler(new DataHandler(new ByteArrayDataSource(body, "text/html; charset=\"utf-8\"")));
@@ -155,7 +156,7 @@ public class MailHandler {
 		
 		return msg;
 	}
-	
+
 	public MimeMessage getBasicMimeMessage() throws Exception {
 		log.debug("getBasicMimeMessage");
 		if (smtpServer == null) {
@@ -192,7 +193,7 @@ public class MailHandler {
 		msg.setFrom(new InternetAddress(from));
 		return msg;
 	}
-	
+
 	private MimeMessage getMimeMessage(MailMessage m) throws Exception {
 		log.debug("getMimeMessage");
 		// Building MimeMessage
@@ -209,19 +210,19 @@ public class MailHandler {
 		
 		return m.getIcs() == null ? appendBody(msg, m) : appendIcsBody(msg, m);
 	}
-	
+
 	public void send(String toEmail, String subj, String message) {
 		send(toEmail, null, subj, message);
 	}
-	
+
 	public void send(String toEmail, String replyTo, String subj, String message) {
 		send(new MailMessage(toEmail, replyTo, subj, message));
 	}
-	
+
 	public void send(MailMessage m) {
 		send(m, false);
 	}
-	
+
 	public void send(final MailMessage m, boolean send) {
 		if (send) {
 			if (m.getId() != null) {
@@ -260,7 +261,7 @@ public class MailHandler {
 			mailMessageDao.update(m, null);
 		}
 	}
-	
+
 	public void resetSendingStatus() {
 		log.debug("resetSendingStatus enter ...");
 		Calendar c = Calendar.getInstance();
@@ -268,7 +269,7 @@ public class MailHandler {
 		mailMessageDao.resetSendingStatus(c);
 		log.debug("... resetSendingStatus done.");
 	}
-	
+
 	public void sendMails() throws Exception {
 		init();
 		log.debug("sendMails enter ...");
