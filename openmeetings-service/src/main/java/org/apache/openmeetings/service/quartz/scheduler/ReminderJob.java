@@ -20,11 +20,19 @@ package org.apache.openmeetings.service.quartz.scheduler;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
+import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
+import org.apache.openmeetings.service.mail.template.subject.RecordingExpiringTemplate;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -38,6 +46,10 @@ public class ReminderJob {
 	private RecordingDao recordingDao;
 	@Autowired
 	private GroupDao groupDao;
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private MailHandler mailHandler;
 
 	public void remindMeetings() {
 		log.debug("ReminderJob.remindMeetings");
@@ -58,7 +70,25 @@ public class ReminderJob {
 		}
 		for (Group g : groupDao.getLimited()) {
 			for (Recording rec : recordingDao.getExpiring(g.getId(), g.getReminderDays())) {
-				int i = 1;
+				try {
+					long days = g.getRecordingTtl() - ChronoUnit.DAYS.between(rec.getInserted().toInstant(), Instant.now());
+					if (days > 0) {
+						User u = userDao.get(rec.getOwnerId());
+						if (u == null) {
+							log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
+							continue;
+						} else {
+							AbstractSubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
+							mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
+						}
+					} else {
+						log.debug("Recording is too old to send notification, {} days", days);
+					}
+					rec.setNotified(true);
+					recordingDao.update(rec);
+				} catch (Exception e) {
+					log.error("Uexpected exception while sending expiring recordings emails", e);
+				}
 			}
 		}
 	}

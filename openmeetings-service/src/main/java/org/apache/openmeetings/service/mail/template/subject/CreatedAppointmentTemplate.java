@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
 
-public class CreatedAppointmentTemplate extends AbstractSubjectEmailTemplate {
+public class CreatedAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 	private final String invitorName;
 
