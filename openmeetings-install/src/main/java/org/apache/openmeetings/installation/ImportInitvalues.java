@@ -48,6 +48,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
@@ -214,7 +215,7 @@ public class ImportInitvalues {
 		cfgDao.add("smtp_port", "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 
-		cfgDao.add("system_email_addr", cfg.mailReferer, null, "all send e-mails by the system will have this address");
+		cfgDao.add(CONFIG_SYSTEM_EMAIL, cfg.mailReferer, null, "all send e-mails by the system will have this address");
 
 		cfgDao.add("email_username", cfg.mailAuthName, null, "System auth email username");
 

@@ -53,6 +53,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	public AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);
 		this.locale = locale == null ? getDefault() : locale;
+		WebSession.get().setLocale(this.locale);
 		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
 	}
 
