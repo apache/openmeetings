@@ -90,4 +90,16 @@ public class ChatDao {
 	public void delete(ChatMessage entity, long userId) {
 		// TODO Auto-generated method stub
 	}
+
+	public void deleteGlobal() {
+		em.createNamedQuery("deleteChatGlobal").executeUpdate();
+	}
+
+	public void deleteRoom(Long roomId) {
+		em.createNamedQuery("deleteChatRoom").setParameter("roomId", roomId).executeUpdate();
+	}
+
+	public void deleteUser(Long userId) {
+		em.createNamedQuery("deleteChatUser").setParameter("userId", userId).executeUpdate();
+	}
 }

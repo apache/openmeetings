@@ -265,6 +265,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return false;
 	}
 
+	@Override
 	public Locale getLocale(User u) {
 		Long langId = u.getLanguageId();
 		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.languages.get(langId);
