@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -33,7 +34,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Hex;
@@ -78,20 +78,20 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			}
 		};
 	}
-	
+
 	@Override
 	protected void onBind() {
 		super.onBind();
 		getComponent().add(download);
 	}
-	
+
 	@Override
 	protected void respond(AjaxRequestTarget target) {
 		//TODO deny download in case other screen sharing is in progress
 		String app = "";
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			app = IOUtils.toString(jnlp, StandardCharsets.UTF_8);
+			app = IOUtils.toString(jnlp, UTF_8);
 			String baseUrl = cfgDao.getBaseUrl();
 			Room room = getBean(RoomDao.class).get(roomId);
 			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
@@ -112,14 +112,14 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
-					.replace("$labels", CDATA_BEGIN + getLabels(730,  731,  732,  733,  734
+					.replace("$labels", getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
 							,  741,  742,  844,  869,  870
 							,  871,  872,  878, 1089, 1090
 							, 1091, 1092, 1093, 1465, 1466
 							, 1467, 1468, 1469, 1470, 1471
 							, 1472, 1473, 1474, 1475, 1476
-							, 1477, 1589, 1598, 1078) + CDATA_END)
+							, 1477, 1589, 1598, 1078))
 					.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
@@ -131,13 +131,13 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			log.error("Unexpected error while creating jnlp file", e);
 		}
 		StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
-		srs.setCharset(StandardCharsets.UTF_8);
+		srs.setCharset(UTF_8);
 		download.setResourceStream(srs);
 		download.initiate(target);
 	}
 
 	private static String getLabels(int ... ids) {
-		StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder(CDATA_BEGIN);
 		boolean delim = false;
 		LabelDao labelDao = getBean(LabelDao.class);
 		for (int id : ids) {
@@ -147,9 +147,10 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 			result.append(labelDao.getString(id, getLanguage()));
 			delim = true;
 		}
+		result.append(CDATA_END);
 		return result.toString();
 	}
-	
+
 	private static String addKeystore(Client rc, String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
