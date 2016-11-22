@@ -97,7 +97,7 @@ import org.simpleframework.xml.Root;
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
 			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
 	, @NamedQuery(name = "getExpiringRecordings", query = "SELECT DISTINCT rec FROM Recording rec "
-			+ "WHERE rec.deleted = false AND rec.notified = false AND rec.inserted < :date "
+			+ "WHERE rec.deleted = false AND rec.notified = :notified AND rec.inserted < :date "
 			+ "  AND (rec.groupId = :groupId "
 			+ "    OR rec.ownerId IN (SELECT gu.user.id FROM GroupUser gu WHERE gu.group.id = :groupId)"
 			+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"

@@ -18,7 +18,12 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FileFilter;
 
@@ -29,13 +34,29 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CleanupJob {
+public class CleanupJob extends AbstractJob {
 	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, webAppRootKey);
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 
 	@Autowired
 	private SessiondataDao sessiondataDao;
+
+	public long getSessionTimeout() {
+		return sessionTimeout;
+	}
+
+	public void setSessionTimeout(long sessionTimeout) {
+		this.sessionTimeout = sessionTimeout;
+	}
+
+	public long getTestSetupTimeout() {
+		return testSetupTimeout;
+	}
+
+	public void setTestSetupTimeout(long testSetupTimeout) {
+		this.testSetupTimeout = testSetupTimeout;
+	}
 
 	public void cleanTestSetup() {
 		log.debug("CleanupJob.execute");
@@ -72,7 +93,7 @@ public class CleanupJob {
 	}
 
 	public void cleanSessions() {
-		log.trace("SessionClearJob.execute");
+		log.trace("CleanupJob.cleanSessions");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
@@ -84,19 +105,17 @@ public class CleanupJob {
 		}
 	}
 
-	public long getSessionTimeout() {
-		return sessionTimeout;
-	}
-
-	public void setSessionTimeout(long sessionTimeout) {
-		this.sessionTimeout = sessionTimeout;
-	}
-
-	public long getTestSetupTimeout() {
-		return testSetupTimeout;
-	}
-
-	public void setTestSetupTimeout(long testSetupTimeout) {
-		this.testSetupTimeout = testSetupTimeout;
+	public void cleanExpiredRecordings() {
+		log.debug("CleanupJob.cleanExpiredRecordings");
+		processExpiringRecordings(true, (rec, days) -> {
+			if (days < 0) {
+				log.debug("cleanExpiredRecordings:: following recording will be deleted {}", rec);
+				rec.getFile(EXTENSION_MP4).delete();
+				rec.getFile(EXTENSION_FLV).delete();
+				rec.getFile(EXTENSION_AVI).delete();
+				rec.getFile(EXTENSION_OGG).delete();
+				recordingDao.delete(rec);
+			}
+		});
 	}
 }

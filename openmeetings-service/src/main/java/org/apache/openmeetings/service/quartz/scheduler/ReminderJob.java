@@ -20,15 +20,8 @@ package org.apache.openmeetings.service.quartz.scheduler;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
@@ -38,14 +31,10 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ReminderJob {
+public class ReminderJob extends AbstractJob {
 	private static Logger log = Red5LoggerFactory.getLogger(ReminderJob.class, webAppRootKey);
 	@Autowired
 	private AppointmentLogic appointmentLogic;
-	@Autowired
-	private RecordingDao recordingDao;
-	@Autowired
-	private GroupDao groupDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -65,31 +54,20 @@ public class ReminderJob {
 
 	public void remindExpiringRecordings() {
 		log.debug("ReminderJob.remindExpiringRecordings");
-		if (!InitializationContainer.initComplete) {
-			return;
-		}
-		for (Group g : groupDao.getLimited()) {
-			for (Recording rec : recordingDao.getExpiring(g.getId(), g.getReminderDays())) {
-				try {
-					long days = g.getRecordingTtl() - ChronoUnit.DAYS.between(rec.getInserted().toInstant(), Instant.now());
-					if (days > 0) {
-						User u = userDao.get(rec.getOwnerId());
-						if (u == null) {
-							log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
-							continue;
-						} else {
-							AbstractSubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
-							mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
-						}
-					} else {
-						log.debug("Recording is too old to send notification, {} days", days);
-					}
-					rec.setNotified(true);
-					recordingDao.update(rec);
-				} catch (Exception e) {
-					log.error("Uexpected exception while sending expiring recordings emails", e);
+		processExpiringRecordings(false, (rec, days) -> {
+			if (days > 0) {
+				User u = userDao.get(rec.getOwnerId());
+				if (u == null) {
+					log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
+				} else {
+					AbstractSubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
+					mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
 				}
+			} else {
+				log.debug("Recording is too old to send notification, {} days", days);
 			}
-		}
+			rec.setNotified(true);
+			recordingDao.update(rec);
+		});
 	}
 }
