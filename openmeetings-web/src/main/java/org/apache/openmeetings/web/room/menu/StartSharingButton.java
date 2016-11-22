@@ -82,7 +82,7 @@ public class StartSharingButton extends OmButton {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onClick(AjaxRequestTarget target) {
 		//TODO deny download in case other screen sharing is in progress
@@ -111,14 +111,14 @@ public class StartSharingButton extends OmButton {
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
-					.replace("$labels", CDATA_BEGIN + getLabels(730,  731,  732,  733,  734
+					.replace("$labels", getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
 							,  741,  742,  844,  869,  870
 							,  871,  872,  878, 1089, 1090
 							, 1091, 1092, 1093, 1465, 1466
 							, 1467, 1468, 1469, 1470, 1471
 							, 1472, 1473, 1474, 1475, 1476
-							, 1477, 1589, 1598, 1078) + CDATA_END)
+							, 1477, 1589, 1598, 1078))
 					.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
@@ -136,7 +136,7 @@ public class StartSharingButton extends OmButton {
 	}
 
 	private static String getLabels(int ... ids) {
-		StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder(CDATA_BEGIN);
 		boolean delim = false;
 		LabelDao labelDao = getBean(LabelDao.class);
 		for (int id : ids) {
@@ -146,9 +146,10 @@ public class StartSharingButton extends OmButton {
 			result.append(labelDao.getString(id, getLanguage()));
 			delim = true;
 		}
+		result.append(CDATA_END);
 		return result.toString();
 	}
-	
+
 	private static String addKeystore(Client rc, String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
