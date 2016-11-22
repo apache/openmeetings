@@ -176,11 +176,12 @@ public class RecordingDao {
 		return null;
 	}
 
-	public List<Recording> getExpiring(Long groupId, int reminderDays) {
+	public List<Recording> getExpiring(Long groupId, int reminderDays, boolean notified) {
 		Instant date = Instant.now().minus(Duration.ofDays(reminderDays));
 		return em.createNamedQuery("getExpiringRecordings", Recording.class)
 				.setParameter("groupId", groupId)
 				.setParameter("date", Date.from(date))
+				.setParameter("notified", notified)
 				.getResultList();
 	}
 
