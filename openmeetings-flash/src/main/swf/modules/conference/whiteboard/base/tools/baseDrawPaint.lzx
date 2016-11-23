@@ -24,6 +24,7 @@
 			<when property="$as3">
 				<passthrough>
 					import flash.geom.Point;
+					import flash.events.MouseEvent;
 				</passthrough>
 			</when>
 		</switch>
@@ -37,6 +38,8 @@
 		<attribute name="maxy" value="0" type="number" />
 		<attribute name="g" type="object"/>
 		<attribute name="points" type="object"/>
+		<attribute name="originalFrameRate" type="number" value="0"/>
+		<attribute name="paintStarted" type="boolean" value="false"/>
 
 		<method name="drawline" args="x1,y1,x2,y2">
 			drawlineOnObject(currentlayer, x1, y1, x2, y2);
@@ -71,6 +74,14 @@
 
 		<method name="startPaint">
 		<![CDATA[
+			if (paintStarted) {
+				endPaint();
+			}
+			originalFrameRate = canvas.sprite.stage.frameRate;
+			canvas.sprite.stage.frameRate = 60;
+			if ($debug) Debug.write("Current FPS: ", canvas.sprite.stage.frameRate);
+			canvas.sprite.stage.addEventListener(MouseEvent.MOUSE_MOVE, drawLine);
+			paintStarted = true;
 			//Debug.write("startPaint ",this.startx,this.starty);
 			this.currentlayer = new lz.drawViewNew(this, {
 						name : 'paint' + this.getCounter(),
@@ -110,6 +121,11 @@
 
 		<method name="endPaint">
 		<![CDATA[
+			if (!paintStarted) {
+				return;
+			}
+			canvas.sprite.stage.frameRate = originalFrameRate;
+			canvas.sprite.stage.removeEventListener(MouseEvent.MOUSE_MOVE, drawLine);
 			if ($debug) Debug.write("endPaint:: ", minx, miny, points);
 			var tempName = this.currentlayer.name;
 			this.currentlayer.destroy();
@@ -176,6 +192,7 @@
 			this.layers.push(this.currentlayer);
 
 			this.registerFinal(this.getSWFDocumentStatus(), this.getZIndex());
+			paintStarted = false;
 		]]>
 		</method>
 

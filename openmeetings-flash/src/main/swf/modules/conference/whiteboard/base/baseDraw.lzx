@@ -25,7 +25,6 @@
 		<when property="$as3">
 			<passthrough>
 				import flash.printing.PrintJob;
-				import flash.events.MouseEvent;
 			</passthrough>
 		</when>
 	</switch>
@@ -64,7 +63,6 @@
 	<attribute name="selectedObjects" value="null"/>
 
 	<attribute name="ObjectByName" value="null" />
-	<attribute name="originalFrameRate" type="number" value="0"/>
 
 	<method name="getCounter">
 		//Debug.write("### getCounter :",this.counter);
@@ -547,10 +545,6 @@
 				this.doSetHandBodus();
 			} else if(this.drawmodus=="paint"){
 				this.startPaint();
-				originalFrameRate = canvas.sprite.stage.frameRate;
-				canvas.sprite.stage.frameRate = 60;
-				if ($debug) Debug.write("Current FPS: ", canvas.sprite.stage.frameRate);
-				canvas.sprite.stage.addEventListener(MouseEvent.MOUSE_MOVE, drawLine);
 			} else if(this.drawmodus=="line"){
 				this.startLine(null);
 				this.startx = currentlayer.getMouse('x');
@@ -608,10 +602,6 @@
 	]]>
 	</method>
 
-	<method name="drawLine" args="e">
-		//fake
-	</method>
-
 	<method name="onmouseupMethod" >
 	<![CDATA[
 		if ($debug) Debug.write("onmouseupMethod this.drawmodus: ",this.drawmodus);
@@ -641,8 +631,6 @@
 				this.onsharedMessage('moveMap',tArray);
 
 			} else if(this.drawmodus=="paint"){
-				canvas.sprite.stage.frameRate = originalFrameRate;
-				canvas.sprite.stage.addEventListener(MouseEvent.MOUSE_MOVE, drawLine);
 				this.endPaint();
 			} else if(this.drawmodus=="line"){
 				this.endLine();
@@ -724,24 +712,6 @@
 		//if ($debug) Debug.info("..trackmouse ", mx, my, item);
 
 		if (this.drawmodus=="paint") {
-			if (mx != prevx || my != prevy) {
-				if (prevx == null) {
-					prevx = mx;
-				}
-				if (prevy == null) {
-					prevy = my;
-				}
-				var mmx = this.mx;
-				var mmy = this.my;
-				var px = this.prevx;
-				var py = this.prevy;
-
-				this.drawline(px, py, mmx, mmy);
-				this.drawlineRegisterPaint(px, py, mmx, mmy);
-
-				this.prevx  = this.mx;
-				this.prevy = this.my;
-			}
 		} else if (this.drawmodus=="line"){
 			var oid_name = this.currentlayer.name;
 			this.currentlayer.destroy();
