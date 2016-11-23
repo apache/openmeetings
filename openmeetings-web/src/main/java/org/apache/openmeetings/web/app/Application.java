@@ -408,7 +408,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static String getString(String key, final long languageId) {
-		return getString(key, getLocale(languageId), false);
+		return getString(key, getLocale(languageId));
 	}
 	
 	public static String getString(long id, final long languageId) {
@@ -416,20 +416,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static String getString(long id, final Locale loc) {
-		return getString("" + id, loc, false);
+		return getString("" + id, loc);
 	}
-	
-	public static String getString(String key, final Locale loc, boolean noReplace) {
+
+	public static String getString(String key, final Locale loc, String... params) {
 		if (!exists()) {
 			ThreadContext.setApplication(Application.get(appName));
 		}
+		if ((params == null || params.length == 0) && STRINGS_WITH_APP.contains(key)) {
+			params = new String[]{getBean(ConfigurationDao.class).getAppName()};
+		}
 		Localizer l = get().getResourceSettings().getLocalizer();
 		String value = l.getStringIgnoreSettings(key, null, null, loc, null, "[Missing]");
-		if (!noReplace && STRINGS_WITH_APP.contains(key)) {
+		if (params != null && params.length > 0) {
 			final MessageFormat format = new MessageFormat(value, loc);
-			value = format.format(new Object[]{getBean(ConfigurationDao.class).getAppName()});
+			value = format.format(params);
 		}
-		if (!noReplace && RuntimeConfigurationType.DEVELOPMENT == get().getConfigurationType()) {
+		if (RuntimeConfigurationType.DEVELOPMENT == get().getConfigurationType()) {
 			value += String.format(" [%s]", key);
 		}
 		return value;
@@ -529,7 +532,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public String getOmString(String key, final Locale loc) {
-		return getString(key, loc, false);
+	public String getOmString(String key, final Locale loc, String... params) {
+		return getString(key, loc, params);
 	}
 }

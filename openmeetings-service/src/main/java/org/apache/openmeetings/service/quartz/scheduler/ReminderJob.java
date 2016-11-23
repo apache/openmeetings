@@ -56,7 +56,7 @@ public class ReminderJob extends AbstractJob {
 		log.debug("ReminderJob.remindExpiringRecordings");
 		processExpiringRecordings(false, (rec, days) -> {
 			if (days > 0) {
-				User u = userDao.get(rec.getOwnerId());
+				User u = userDao.get(rec.getInsertedBy());
 				if (u == null) {
 					log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
 				} else {
