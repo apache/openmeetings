@@ -73,6 +73,12 @@
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
+.room.menu.right .icon .profile {
+	margin-top: 3px;
+}
+.room.menu.right .icon .profile img {
+	width: 28px;
+}
 .room.sidebar.left {
 	min-width: 200px;
 	width: 315px;
@@ -118,16 +124,22 @@
 	height: 40px;
 	padding-left: 5px;
 	padding-top: 5px;
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
 }
-.room.sidebar.left .user.list .user .user.name {
+.room.sidebar.left .user.list .user .name {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
+	padding-left: 44px;
+	overflow: hidden;
 }
-.room.sidebar.left .user.list .user .user.actions {
+.room.sidebar.left .user.list .user .actions {
 	position: relative;
 	height: 18px;
 	padding: 0;
+	padding-left: 44px;
 	visibility: hidden;
 }
 .room.sidebar.left .user.list .user:hover .user.actions {
@@ -164,9 +176,6 @@
 .right.moderator.ui-icon.granted {
 	background-image: url(images/user_delete.png);
 }
-.right.ui-icon {
-	opacity: 0.2;
-}
 .right.wb.ui-icon {
 	background-image: url(images/pencil_add.png);
 }
@@ -186,27 +195,21 @@
 	background-image: url(images/mouse_delete.png);
 }
 .right.audio.ui-icon {
-	opacity: 1;
 	background-image: url(images/microphone_add.png);
 }
 .right.audio.ui-icon.granted {
-	opacity: 0.2;
 	background-image: url(images/microphone_delete.png);
 }
 .right.camera.ui-icon {
-	opacity: 1;
 	background-image: url(images/webcam_add.png);
 }
 .right.camera.ui-icon.granted {
-	opacity: 0.2;
 	background-image: url(images/webcam_delete.png);
 }
 .global-mute.ui-icon {
-	opacity: 0.2;
 	background-image: url(images/sound.png);
 }
 .exclsv-audio.ui-icon {
-	opacity: 0.2;
 	background-image: url(images/microphone_exclusive.png);
 }
 .kick.ui-icon {
@@ -216,12 +219,27 @@
 .restart.ui-icon {
 	background-image: url(images/arrow_refresh_small.png);
 }
+.settings.ui-icon {
+	background-image: url(images/settings.png);
+}
+.activity.cam.ui-icon {
+	background-image: url(images/webcam_enable.png);
+}
+.activity.cam.enabled.ui-icon {
+	background-image: url(images/webcam_disable.png);
+}
+.activity.mic.ui-icon {
+	background-image: url(images/microphone_enable.png);
+}
+.activity.mic.enabled.ui-icon {
+	background-image: url(images/microphone_disable.png);
+}
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }
 .room.sidebar.left .user.list .user.current {
 	font-weight: bold;
-	background: #00FF00;
+	background-color: #00FF00;
 }
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
 	padding: 0;
