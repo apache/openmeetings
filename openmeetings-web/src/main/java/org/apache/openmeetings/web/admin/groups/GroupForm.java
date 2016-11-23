@@ -61,11 +61,29 @@ public class GroupForm extends AdminBaseForm<Group> {
 	private final NumberTextField<Integer> maxRooms = new NumberTextField<>("maxRooms");
 	private final NumberTextField<Integer> recordingTtl = new NumberTextField<>("recordingTtl");
 	private final NumberTextField<Integer> reminderDays = new NumberTextField<>("reminderDays");
-	
+	private final UploadableImagePanel logo = new UploadableImagePanel("logo") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected String getImageUrl() {
+			return getUrl(getRequestCycle(), GroupForm.this.getModelObject().getId());
+		}
+
+		@Override
+		protected void processImage(StoredFile sf, File f) throws Exception {
+			getBean(GenerateImage.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
+		}
+
+		@Override
+		protected String getTitle() {
+			return getString("admin.group.form.logo");
+		}
+	};
+
 	static String formatUser(User choice) {
 		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
 	}
-	
+
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
 		super(id, new CompoundPropertyModel<Group>(group));
 		this.groupList = groupList;
@@ -131,24 +149,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
 		userToadd.setEnabled(!isGroupAdmin);
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
-		add(new UploadableImagePanel("logo") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String getImageUrl() {
-				return getUrl(getRequestCycle(), GroupForm.this.getModelObject().getId());
-			}
-
-			@Override
-			protected void processImage(StoredFile sf, File f) throws Exception {
-				getBean(GenerateImage.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 23);
-			}
-
-			@Override
-			protected String getTitle() {
-				return getString("admin.group.form.logo");
-			}
-		});
+		add(logo);
 		add(new TextField<String>("tag").setLabel(Model.of(getString("admin.group.form.tag"))));
 		add(new AjaxCheckBox("limited") {
 			private static final long serialVersionUID = 1L;
@@ -179,6 +180,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		maxRooms.setEnabled(getModelObject().isLimited());
 		recordingTtl.setEnabled(getModelObject().isLimited());
 		reminderDays.setEnabled(getModelObject().isLimited());
+		logo.update();
 		target.add(this, groupList);
 		target.appendJavaScript("groupsInit();");
 	}
