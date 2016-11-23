@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-          
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -35,7 +35,6 @@
     
     
     <view y="24">
-        
         <dtmfButton text="1" x="20" dtmf="1"/> 
             <dtmfButton text="2" x="40" dtmf="2"/> 
                 <dtmfButton text="3" x="60" dtmf="3"/>
@@ -46,24 +45,18 @@
                 
         <dtmfButton text="7" x="20" y="40" dtmf="7"/> 
             <dtmfButton text="8" x="40" y="40" dtmf="8"/> 
-                <dtmfButton text="9" x="60" y="40" dtmf="9"/>
-                
+            <dtmfButton text="9" x="60" y="40" dtmf="9"/>
         <dtmfButton text="10" x="20" y="60" dtmf="10"/>
-        
     </view>
-    
-    
 </class>
 
 <class name="baseConferenceRoom" extends="baseContentView" destroyByMethod="true" >
-    
-    <attribute name="roomobj" value="null" />
-    
-    <attribute name="meetingTimer" value="null" />
-    
+	<attribute name="roomobj" value="null" />
+	<attribute name="meetingTimer" value="null" />
+
 	<handler name="oninit">
 	<![CDATA[
-    	if ($debug) Debug.write("baseConferenceRoom:: oninit");
+		if ($debug) Debug.write("baseConferenceRoom:: oninit");
 		_mainScrollBar.setAttribute("visibility","hidden");
 		
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
@@ -74,7 +67,6 @@
 		if (this.roomobj.closed) {
 			canvas.roomClosed();
 		}
-		
 		if (this.roomobj.waitForRecording) {
 			new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
 		}
@@ -100,11 +92,24 @@
 			canvas._mymod.destroy();
 			canvas._mymod = null;
 		}
-		new lz.moderationPanel(canvas._moderatormenu, {
-				name:'_moderationPanel', align:'right',
-				allowUserQuestions:this.roomobj.allowUserQuestions,
-				roomName:this.roomobj.name
+		var m = new lz.moderationPanel(canvas._moderatormenu, {
+				name: '_moderationPanel'
+				, align: 'right'
+				, allowUserQuestions: this.roomobj.allowUserQuestions
+				, roomName: this.roomobj.name
 			});
+		if ($debug) Debug.write("GROUPS!!! ", this.roomobj.roomGroups);
+		if (this.roomobj.roomGroups) {
+			var g = this.roomobj.roomGroups[0].group;
+		if ($debug) Debug.write("GROUPS!!! ", g);
+			m._group_logo.setAttribute('src', canvas.getUrl() + "group/" + g.id + "?anticache=" + new Date().getTime()); 
+			m._group_logo.setAttribute("visible", true);
+			if (g.tag) {
+				m._group_tag.setAttribute("text", g.tag);
+				m._group_tag.setAttribute("visible", true);
+			}
+		if ($debug) Debug.write("GROUPS!!! ", m);
+		}
 		if (roomobj.appointment) {
 			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
 		} else {
@@ -120,7 +125,7 @@
 		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
 	]]>
 	</handler>
-    
+
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[
 		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);

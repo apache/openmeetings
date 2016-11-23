@@ -617,6 +617,9 @@ form .input {
 	width: 280px;
 	margin: 2px 2px;
 }
+.profile img {
+	width: 125px;
+}
 .date.time.picker {
 	font-size: 12px;
 	white-space: nowrap;
