@@ -73,6 +73,12 @@
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
+.room.menu.right .icon .profile {
+	margin-top: 3px;
+}
+.room.menu.right .icon .profile img {
+	width: 28px;
+}
 .room.sidebar.left {
 	min-width: 200px;
 	width: 315px;

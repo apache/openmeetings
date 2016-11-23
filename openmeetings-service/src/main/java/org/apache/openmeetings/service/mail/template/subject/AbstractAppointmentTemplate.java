@@ -44,6 +44,7 @@ public abstract class AbstractAppointmentTemplate extends AbstractSubjectEmailTe
 
 	abstract String getPrefix();
 
+	@Override
 	Fragment getSubjectFragment() {
 		Fragment f = new Fragment(COMP_ID, "subject", this);
 		f.add(new OmTextLabel("prefix", getPrefix())

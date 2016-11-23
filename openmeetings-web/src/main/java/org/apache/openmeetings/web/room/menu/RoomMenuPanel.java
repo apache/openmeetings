@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeUserFromRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import java.util.ArrayList;
@@ -36,12 +37,14 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
@@ -174,6 +177,21 @@ public class RoomMenuPanel extends Panel {
 			sipDialer.open(target);
 		}
 	};
+	private final ImagePanel logo = new ImagePanel("logo") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected String getImageUrl() {
+			return getUrl(getRequestCycle(), getGroup().getId());
+		}
+	};
+
+	private Group getGroup() {
+		Room r = room.getRoom();
+		return r.getRoomGroups() == null || r.getRoomGroups().isEmpty()
+				? new Group()
+				: r.getRoomGroups().get(0).getGroup();
+	}
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
@@ -184,6 +202,8 @@ public class RoomMenuPanel extends Panel {
 		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
 		add(askBtn);
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupId(true));
+		String tag = getGroup().getTag();
+		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
 		add(shareBtn = new StartSharingButton("share", room.getClient()));
 		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
 		add(invite = new InvitationDialog("invite", rif));
