@@ -330,7 +330,10 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	width: 180px;
 	white-space: normal;
 }
-
+.adminForm .group.logo .profile img {
+	height: 16px;
+	width: auto;
+}
 .adminBackupForm div.formelement {
 	display: block;
 	clear: both;

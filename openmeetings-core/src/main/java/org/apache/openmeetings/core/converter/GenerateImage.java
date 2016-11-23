@@ -117,7 +117,7 @@ public class GenerateImage extends BaseConverter {
 
 	public ConverterProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
 		String[] argv = new String[] { getPathToImageMagick()
-				, "-size", (width == null ? "" : width) + (height == null ? "" : "x" + height)
+				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height)
 				, in.getCanonicalPath(), out.getCanonicalPath()
 				};
 		return ProcessHelper.executeScript("GenerateImage::resize", argv);

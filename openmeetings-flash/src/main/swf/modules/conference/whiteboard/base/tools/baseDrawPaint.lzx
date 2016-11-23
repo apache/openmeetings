@@ -141,13 +141,13 @@
 
 			var width = maxx - minx;
 			var height = maxy - miny;
-			if ($debug) Debug.info("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+			if ($debug) Debug.info("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height, "point count: ", points.length);
 
 			if (width < 2 && height < 2) {
 				//if ($debug) Debug.info("Add minimum size of Painting Line");
 				if (points.length > 0) {
 					var lastPoint = points[points.length - 1];
-					drawlineRegisterPaint(lastPoint[3].x, lastPoint[4].y, lastPoint[3].x + 2, lastPoint[4].y + 2);
+					drawlineRegisterPaint(lastPoint.x, lastPoint.y, lastPoint.x + 2, lastPoint.y + 2);
 				} else {
 					//if ($debug) Debug.info("## 2 ## CURRENT width,height ",this.width,this.height);
 
@@ -159,7 +159,6 @@
 					height = 2;
 				}
 			}
-
 			if (this.isSnapToGrid) {
 				var xgrid = Math.round((minx - 1) / this.gridWidth) * this.gridWidth;
 				var ygrid = Math.round((miny - 1) / this.gridWidth) * this.gridWidth;
