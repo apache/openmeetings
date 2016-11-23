@@ -28,7 +28,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.StringResourceModel;
 
 public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
@@ -52,17 +51,17 @@ public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
 	protected void onInitialize() {
 		super.onInitialize();
 		final String app = getBean(ConfigurationDao.class).getAppName();
-		add(new Label("greetings", new StringResourceModel("template.recording.expiring.greetings").setParameters(u.getFirstname())));
-		add(new Label("body", new StringResourceModel("template.recording.expiring.body").setParameters(app, remainingDays)));
-		add(new Label("footer", new StringResourceModel("template.recording.expiring.footer").setParameters(app)));
+		add(new Label("greetings", getString("template.recording.expiring.greetings", locale, u.getFirstname())));
+		add(new Label("body", getString("template.recording.expiring.body", locale, app, "" + remainingDays)));
+		add(new Label("footer", getString("template.recording.expiring.footer", locale, app)));
 	}
 
 	@Override
 	Fragment getSubjectFragment() {
 		Fragment f = new Fragment(COMP_ID, "subject", this);
 		Room room = getBean(RoomDao.class).get(rec.getRoomId());
-		f.add(new OmTextLabel("prefix", getString("template.recording.expiring.subj.prefix"))
-				, new OmTextLabel("room", room == null ? null : new StringResourceModel("template.recording.expiring.subj.room").setParameters(room.getName())).setVisible(room != null)
+		f.add(new OmTextLabel("prefix", getString("template.recording.expiring.subj.prefix", locale))
+				, new OmTextLabel("room", room == null ? null : getString("template.recording.expiring.subj.room", locale, room.getName())).setVisible(room != null)
 				);
 		return f;
 	}
