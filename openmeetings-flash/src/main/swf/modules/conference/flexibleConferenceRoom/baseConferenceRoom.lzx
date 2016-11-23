@@ -98,17 +98,15 @@
 				, allowUserQuestions: this.roomobj.allowUserQuestions
 				, roomName: this.roomobj.name
 			});
-		if ($debug) Debug.write("GROUPS!!! ", this.roomobj.roomGroups);
-		if (this.roomobj.roomGroups) {
+		//if ($debug) Debug.write("GROUPS!!! ", this.roomobj.roomGroups);
+		if (!!this.roomobj.roomGroups && !!this.roomobj.roomGroups.length) {
 			var g = this.roomobj.roomGroups[0].group;
-		if ($debug) Debug.write("GROUPS!!! ", g);
 			m._group_logo.setAttribute('src', canvas.getUrl() + "group/" + g.id + "?anticache=" + new Date().getTime()); 
 			m._group_logo.setAttribute("visible", true);
 			if (g.tag) {
 				m._group_tag.setAttribute("text", g.tag);
 				m._group_tag.setAttribute("visible", true);
 			}
-		if ($debug) Debug.write("GROUPS!!! ", m);
 		}
 		if (roomobj.appointment) {
 			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
