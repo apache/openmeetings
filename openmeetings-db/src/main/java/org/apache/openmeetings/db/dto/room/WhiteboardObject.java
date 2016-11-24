@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 public class WhiteboardObject {
-
 	private long whiteBoardId;
 	private Integer x = 0;
 	private Integer y = 0;
@@ -33,9 +32,10 @@ public class WhiteboardObject {
 	@SuppressWarnings("rawtypes")
 	private Map<String, List> roomItems = new HashMap<String, List>();
 	private Date created = new Date();
+	private String name;
 
 	public WhiteboardObject() {}
-	
+
 	public long getWhiteBoardId() {
 		return whiteBoardId;
 	}
@@ -94,4 +94,11 @@ public class WhiteboardObject {
 		this.fullFit = fullFit;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

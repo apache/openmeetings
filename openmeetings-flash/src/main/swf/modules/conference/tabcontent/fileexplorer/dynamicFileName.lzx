@@ -28,16 +28,21 @@
 			</passthrough>
 		</when>
 	</switch>
-	
+
 	<attribute name="refObj" value="null" />
-	
+	<attribute name="onBlurFunc" value="null" />
+
 	<handler name="onblur">
 		lz.ModeManager.release(this);
 		if ($debug) Debug.write("Store and Destroy ", this.refObj.parentId);
-		if (this.refObj.fileId == 0) {
-		    canvas.currentFileExplorer.createFile(this.text, null, this, this.refObj);
+		if (!!onBlurFunc) {
+			onBlurFunc();
 		} else {
-			this.rename();
+			if (this.refObj.fileId == 0) {
+				canvas.currentFileExplorer.createFile(this.text, null, this, this.refObj);
+			} else {
+				this.rename();
+			}
 		}
 	</handler>
 	
