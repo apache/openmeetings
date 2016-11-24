@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +94,7 @@ public class MobileService {
 	public Map<String, String> getStates() {
 		Map<String, String> result = new Hashtable<>();
 		for (String code : Locale.getISOCountries()) {
-			result.put(code, new Locale.Builder().setRegion(code).build().getDisplayCountry());
+			result.put(code, getCountryName(code));
 		}
 		return result;
 	}
