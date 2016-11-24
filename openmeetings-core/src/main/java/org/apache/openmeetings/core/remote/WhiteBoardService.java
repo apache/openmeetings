@@ -138,6 +138,10 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 
+	public void rename(Long wbId, String name) {
+		//
+	}
+
 	/**
 	 * change the draw status of a user, allow disallow him to draw anybody
 	 * besides the Moderator to draw on the whiteboard, only a Moderator is

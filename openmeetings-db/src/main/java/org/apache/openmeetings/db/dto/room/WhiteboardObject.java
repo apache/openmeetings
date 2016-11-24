@@ -40,9 +40,10 @@ public class WhiteboardObject {
 	private Map<String, List<Object>> roomItems = new ConcurrentHashMap<>();
 	private Date created = new Date();
 	private int zIndex = 1;
+	private String name;
 
 	public WhiteboardObject() {}
-	
+
 	public long getWhiteBoardId() {
 		return whiteBoardId;
 	}
@@ -172,5 +173,13 @@ public class WhiteboardObject {
 		}
 		*/
 		roomItems.remove(oid);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

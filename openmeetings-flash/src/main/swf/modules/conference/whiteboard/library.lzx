@@ -43,7 +43,8 @@
 	<include href="helper/" />
 	
 	<include href="panels/" />
-	
+
+	<include href="dynamicFileName.lzx" />
 	<include href="interviewVideoBox.lzx" />
 	<include href="interviewWhiteboard.lzx" />
 	<include href="basePropertyPanelWhiteboard.lzx" />
@@ -52,3 +53,4 @@
 	<include href="whiteboardMiniButton.lzx" />
 	<include href="whiteboardBarMenu.lzx" />
 </library>
+
