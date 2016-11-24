@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.web.util;
 
-import java.util.Arrays;
+import static org.apache.openmeetings.util.LocaleHelper.getCountries;
+import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
+
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -33,13 +34,9 @@ public class CountryDropDown extends DropDownChoice<String>  {
 	public CountryDropDown(String id) {
 		this(id, null);
 	}
-	
-	public static String getCountryName(String code) {
-		return new Locale.Builder().setRegion(code).build().getDisplayCountry(WebSession.get().getLocale());
-	}
-	
+
 	public CountryDropDown(String id, IModel<String> model) {
-		super(id, model, Arrays.asList(Locale.getISOCountries()));
+		super(id, model, getCountries());
 		setChoiceRenderer(new IChoiceRenderer<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -47,10 +44,10 @@ public class CountryDropDown extends DropDownChoice<String>  {
 			public String getIdValue(String code, int index) {
 				return code;
 			}
-			
+
 			@Override
 			public Object getDisplayValue(String code) {
-				return getCountryName(code);
+				return getCountryName(code, WebSession.get().getLocale());
 			}
 
 			@Override

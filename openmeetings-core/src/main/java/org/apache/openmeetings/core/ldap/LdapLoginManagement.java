@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.ldap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -361,7 +362,7 @@ public class LdapLoginManagement {
 			u.getAddress().setAdditionalname(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
 			u.getAddress().setFax(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
 			u.getAddress().setZip(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
-			u.getAddress().setCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY));
+			u.getAddress().setCountry(validateCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
 			u.getAddress().setTown(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
 			u.getAddress().setPhone(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
 			String tz = getStringAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
