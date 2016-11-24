@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 
 import java.util.List;
 
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
@@ -47,7 +46,7 @@ public class CountryDropDown extends DropDownChoice<String>  {
 
 			@Override
 			public Object getDisplayValue(String code) {
-				return getCountryName(code, WebSession.get().getLocale());
+				return getCountryName(code, getLocale());
 			}
 
 			@Override
