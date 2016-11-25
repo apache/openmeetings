@@ -32,15 +32,11 @@ public class ExclusiveRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		//TODO this need to be fixed
-		String title = self ? "1432" : "1423";
-		/*
-		if (client.hasRight(right)) {
-			title = self ? "1403" : "612";
-		} else {
-			title = self ? "686" : "694";
-		}
-		*/
-		return getString(title);
+		return getString(hasRight() ? "1433" : "1432");
+	}
+
+	@Override
+	protected boolean visible() {
+		return true;
 	}
 }
