@@ -34,9 +34,4 @@ public class ExclusiveRightIcon extends RoomRightIcon {
 	protected String getTitle() {
 		return getString(hasRight() ? "1433" : "1432");
 	}
-
-	@Override
-	protected boolean visible() {
-		return true;
-	}
 }
