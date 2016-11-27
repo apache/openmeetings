@@ -33,15 +33,15 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
  */
 public class WhiteBoardObjectListManagerById {
 	private Map<Long, WhiteboardObjectList> whiteBoardObjectList = new ConcurrentHashMap<>();
-	
+
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
-	
-	public long getNewWhiteboardId(Long roomId) throws Exception {
+
+	public long getNewWhiteboardId(Long roomId, String name) throws Exception {
 		long wbId = whiteboardId.getAndIncrement();
-		setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), wbId);
+		setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(name), wbId);
 		return wbId;
 	}
-	
+
 	/*
 	 * Room items a Whiteboard
 	 */
@@ -54,7 +54,7 @@ public class WhiteBoardObjectListManagerById {
 			return whiteboardObjectList;
 		}
 	}
-	
+
 	public WhiteboardObject getWhiteBoardObjectListByRoomIdAndWhiteboard(Long roomId, Long whiteBoardId){
 		WhiteboardObjectList whiteboardObjectList = getWhiteBoardObjectListByRoomId(roomId);
 		WhiteboardObject whiteboardObjects = whiteboardObjectList.getWhiteboardObjects().get(whiteBoardId);
@@ -63,16 +63,15 @@ public class WhiteBoardObjectListManagerById {
 		}
 		return whiteboardObjects;
 	}
-	
+
 	/*
 	 * Whiteboard Object List
 	 * 
 	 */
-	
 	public void setWhiteBoardObjectListRoomObj(Long roomId, WhiteboardObjectList whiteboardObjectList){
 		whiteBoardObjectList.put(roomId, whiteboardObjectList);
 	}
-	
+
 	public void setWhiteBoardObjectListRoomObjAndWhiteboardId(Long roomId, WhiteboardObject whiteboardObjects, long whiteBoardId) {
 		WhiteboardObjectList whiteboardObjectList = getWhiteBoardObjectListByRoomId(roomId);
 		whiteboardObjects.setWhiteBoardId(whiteBoardId);

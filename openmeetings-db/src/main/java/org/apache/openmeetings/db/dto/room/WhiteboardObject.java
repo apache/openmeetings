@@ -44,6 +44,10 @@ public class WhiteboardObject {
 
 	public WhiteboardObject() {}
 
+	public WhiteboardObject(String name) {
+		this.name = name;
+	}
+
 	public long getWhiteBoardId() {
 		return whiteBoardId;
 	}
