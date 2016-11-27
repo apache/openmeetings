@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -62,7 +64,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private ScopeApplicationAdapter scopeApplicationAdapter;
+	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
@@ -70,22 +72,24 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private WhiteBoardObjectListManagerById wbListManagerById;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
+	@Autowired
+	private LabelDao labelDao;
 
-	public Long getNewWhiteboardId() {
+	public boolean getNewWhiteboardId(String name) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			Long roomId = currentClient.getRoomId();
 
-			Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId);
-
-			return whiteBoardId;
-		} catch (Exception err) {
-			log.error("[deleteWhiteboard]", err);
+			Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId, name);
+			scopeAdapter.sendMessageAll(Arrays.asList("newWhiteboard", whiteBoardId, name));
+		} catch (Exception e) {
+			log.error("[getNewWhiteboardId]", e);
+			return false;
 		}
-		return null;
+		return true;
 	}
 
 	public boolean deleteWhiteboard(Long whiteBoardId) {
@@ -111,7 +115,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-	public WhiteboardObjectList getRoomItemsBy() {
+	public Map<Long, WhiteboardObject> getRoomItemsBy() {
+		Map<Long, WhiteboardObject> result = new LinkedHashMap<>();
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -122,23 +127,37 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 
 			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
-				Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId);
-
-				wbListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), whiteBoardId);
-
+				wbListManagerById.getNewWhiteboardId(roomId, labelDao.getString("615", userDao.get(currentClient.getUserId()).getLanguageId()));
 				log.debug("Init New Room List");
-
 				whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 			}
-			return whiteboardObjectList;
+			whiteboardObjectList.getWhiteboardObjects().entrySet().stream()
+					.sorted(Map.Entry.<Long, WhiteboardObject>comparingByKey().reversed())
+					.forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
 		} catch (Exception err) {
 			log.error("[getRoomItemsBy]", err);
 		}
-		return null;
+		return result;
 	}
 
-	public void rename(Long wbId, String name) {
-		//
+	public boolean rename(Long wbId, String name) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Long roomId = currentClient.getRoomId();
+
+			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+			WhiteboardObject wb = whiteboardObjectList.getWhiteboardObjects().get(wbId);
+			wb.setName(name);
+
+			log.debug(" :: rename whiteBoard :: id = {}, name = {}", wbId, name);
+			scopeAdapter.sendMessageAll(Arrays.asList("renameWhiteboard", wbId, name));
+		} catch (Exception err) {
+			log.error("[rename]", err);
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -157,7 +176,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
@@ -170,7 +189,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
@@ -187,7 +206,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
@@ -200,7 +219,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
@@ -217,7 +236,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long userId = sessiondataDao.check(SID);
+			Long userId = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				if (currentClient.getIsMod()) {
@@ -230,7 +249,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
-						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
@@ -248,7 +267,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			Long users_id = sessiondataDao.check(SID);
+			Long users_id = sessionDao.check(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
@@ -261,7 +280,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateGiveAudioStatus");
 						newMessage.put(1, rcl);
-						scopeApplicationAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
+						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
 						return true;
 					}
 				}
@@ -293,7 +312,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			wbListManager.setWhiteBoardSyncListByRoomid(roomId, syncListRoom);
 			
 			//Sync to clients
-			scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
+			scopeAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
 
 			return wSyncLockObject;
 		} catch (Exception err) {
@@ -327,7 +346,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				int numberOfInitial = getNumberOfInitialLoaders(syncListRoom);
 
 				if (numberOfInitial == 0) {
-					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, true);
+					scopeAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, true);
 				} else {
 					return;
 				}
@@ -373,7 +392,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			// Do only send the Token to show the Loading Splash for the
 			// initial-Request that starts the loading
 			if (isStarting) {
-				scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncFlag", wSyncLockObject, true);
+				scopeAdapter.sendMessageToCurrentScope("sendObjectSyncFlag", wSyncLockObject, true);
 			}
 		} catch (Exception err) {
 			log.error("[startNewObjectSyncProcess]", err);
@@ -410,7 +429,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				log.debug("sendCompletedImagesSyncEvent numberOfInitial: " + numberOfInitial);
 
 				if (numberOfInitial == 0) {
-					scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
+					scopeAdapter.sendMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
 					return 1;
 				} else {
 					return -4;
@@ -447,7 +466,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				log.debug("scope " + scope);
 
 				if (numberOfInitial == 0 && scope != null) {
-					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
+					scopeAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
 				}
 
 				// Check Image Loaders
@@ -463,7 +482,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				int numberOfImageLoaders = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId).size();
 
 				if (numberOfImageLoaders == 0 && scope != null) {
-					scopeApplicationAdapter.sendMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
+					scopeAdapter.sendMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
 				}
 			}
 		} catch (Exception err) {
