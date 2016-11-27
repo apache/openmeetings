@@ -60,17 +60,17 @@
 
 	<method name="calcTextWidth">
 	<![CDATA[
-			if (this.isHidden) {
-				return;
-			}
-			//if ($debug) Debug.write(this, this._text, this._text.getTextWidth());
-			if (this._text.getTextWidth() > (this.width-24)) {
-				this._long.setAttribute('visibility','visible');
-				this._text.setAttribute('width',this.width-26);
-			} else {
-				this._long.setAttribute('visibility','hidden');
-				this._text.setAttribute('width',this.width-18);
-			}
+		if (this.isHidden) {
+			return;
+		}
+		//if ($debug) Debug.write(this, this._text, this._text.getTextWidth());
+		if (this._text.getTextWidth() > (this.width-24)) {
+			this._long.setAttribute('visibility','visible');
+			this._text.setAttribute('width',this.width-26);
+		} else {
+			this._long.setAttribute('visibility','hidden');
+			this._text.setAttribute('width',this.width-18);
+		}
 	]]>
 	</method>
 
@@ -79,37 +79,7 @@
 		if (this.isHidden) {
 			return;
 		}
-		if (this.isactive && canvas.ismoderator) {
-			var tWidth = this._text.width;
-			var _y = this._text.getAttributeRelative("y", canvas);
-			var _x = this._text.getAttributeRelative("x", canvas);
-
-			var t = new lz.dynamicFileName(canvas, {
-					text: this._text.text
-					, refObj: this
-					, width: tWidth + 10
-					, onBlurFunc: function () {
-						if ($debug) Debug.write("WB blur:: ", objRef);
-						canvas.thishib._nc.call(
-								"whiteboardservice.rename"
-								, new Responder(
-										function ():void {
-											if ($debug) Debug.write("WB blur:: complete");
-											t.destroy();
-										}, function ():void {
-											if ($debug) Debug.write("WB blur:: error");
-											t.destroy()
-										})
-								, objRef.whiteboardId
-								, t.text
-							);
-					}
-					, x: _x
-					, y: _y
-				});
-			lz.Focus.setFocus(t, true);
-			lz.ModeManager.makeModal(t);
-		}
+		rename();
 		this._minimizebtn_mo.setAttribute('visibility','visible');
 		this._minimizebtn_dn.setAttribute('visibility','hidden');
 		if ($debug) Debug.write(" :: onclick :: ");
@@ -168,7 +138,47 @@
 	<view name="_minimizebtn_dn" width="${ parent.width-2 }" height="16"
 			bgcolor="black" opacity="0.3" visibility="hidden" x="1" y="1" />
 
-	<text text="${ parent.btnName }" fgcolor="0xFFFFFF" resize="false" x="1" fontsize="10" name="_text" />
+	<text text="${ parent.btnName }" fgcolor="0xFFFFFF" resize="false" x="1" fontsize="10" name="_text">
+		<contextmenu>
+			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" onselect="this.parent.parent.parent.rename()" />
+		</contextmenu>
+	</text>
+
+	<method name="rename">
+	<![CDATA[
+		if (this.isactive && canvas.ismoderator) {
+			var tWidth = this._text.width;
+			var _y = this._text.getAttributeRelative("y", canvas);
+			var _x = this._text.getAttributeRelative("x", canvas);
+
+			var t = new lz.dynamicFileName(canvas, {
+					text: this._text.text
+					, refObj: this
+					, width: tWidth + 10
+					, onBlurFunc: function () {
+						if ($debug) Debug.write("WB blur:: ", objRef);
+						canvas.thishib._nc.call(
+								"whiteboardservice.rename"
+								, new Responder(
+										function ():void {
+											if ($debug) Debug.write("WB blur:: complete");
+											t.destroy();
+										}, function ():void {
+											if ($debug) Debug.write("WB blur:: error");
+											t.destroy()
+										})
+								, objRef.whiteboardId
+								, t.text
+							);
+					}
+					, x: _x
+					, y: _y
+				});
+			lz.Focus.setFocus(t, true);
+			lz.ModeManager.makeModal(t);
+		}
+	]]>
+	</method>
 
 	<view y="1" x="${ parent.width-18 }" name="_close"
 			resource="btn_presenter_close"
