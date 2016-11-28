@@ -19,35 +19,33 @@
   
 -->
 <library>
-	<!-- APL author sebawagner -->
+	<!-- BEGIN APL author sebawagner -->
 	<resource name="_boundingBoxPointerTR" src="resources/boundingBoxTR.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerTL" src="resources/boundingBoxTL.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUR" src="resources/boundingBoxUR.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerURNoGripper" src="resources/boundingBoxULNoGripper.png" />
-	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUL" src="resources/boundingBoxUL.png" />
-	<!-- APL author sebawagner -->
 	<resource name="pointer_whiteboard_rsc" src="resources/pointer.swf" />
+	<!-- END APL author sebawagner -->
+
 	<!-- FamFam Icon Set -->
 	<resource name="bold" src="resources/text_bold.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="italic" src="resources/text_italic.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="add_whiteboard_rsc" src="resources/add.png" />
+	<resource name="wb_arrow_left_rsc" src="resources/left.png" />
+	<resource name="wb_arrow_right_rsc" src="resources/right.png" />
 	
 	<include href="incubator/lzcombobox.lzx"/> 
 	<include href="base/" />
 	<include href="windows/" />
 	<include href="helper/" />
-	
 	<include href="panels/" />
-	
+
 	<include href="basePropertyPanelWhiteboard.lzx" />
-    <include href="fixedFileExplorerWhiteBoard.lzx" />
-    <include href="fixedFileExplorerWhiteboardPanel.lzx" />
-    <include href="whiteboardMiniButton.lzx" />
-    <include href="whiteboardBarMenu.lzx" />
+	<include href="fixedFileExplorerWhiteBoard.lzx" />
+	<include href="fixedFileExplorerWhiteboardPanel.lzx" />
+	<include href="whiteboardMiniButton.lzx" />
+	<include href="whiteboardBarMenu.lzx" />
 </library>

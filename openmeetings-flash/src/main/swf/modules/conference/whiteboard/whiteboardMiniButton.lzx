@@ -40,12 +40,6 @@
 		parent.onwidth.sendEvent();
 	</handler>
 
-	<handler name="onwidth">
-		if (this.isinited){
-			this.calcTextWidth();
-		}
-	</handler>
-
 	<method name="disableItem">
 		//if ($debug) Debug.write("disableItem :: set visibility to hidden");
 		this.isHidden = true;
@@ -138,11 +132,11 @@
 	<view name="_minimizebtn_dn" width="${ parent.width-2 }" height="16"
 			bgcolor="black" opacity="0.3" visibility="hidden" x="1" y="1" />
 
-	<text text="${ parent.btnName }" fgcolor="0xFFFFFF" resize="false" x="1" fontsize="10" name="_text">
-		<contextmenu>
-			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" onselect="this.parent.parent.parent.rename()" />
-		</contextmenu>
-	</text>
+	<text text="${ parent.btnName }" fgcolor="0xFFFFFF" resize="false" x="1" fontsize="10" name="_text"/>
+
+	<contextmenu>
+		<contextmenuitem caption="$once{ canvas.getLabelName(711) }" onselect="parent.parent.rename()" />
+	</contextmenu>
 
 	<method name="rename">
 	<![CDATA[

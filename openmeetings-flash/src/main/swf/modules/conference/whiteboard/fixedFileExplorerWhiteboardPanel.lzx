@@ -75,9 +75,9 @@
 		</handler>
 	</netRemoteCallHib> 
 </class>
-
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" allowToggle="false"
 		labelid="615" visible="${ !canvas.currentRoomObj.hideWhiteboard }">
+	<attribute name="_bar" value="null" />
 
 	<handler name="oninit">
 		canvas._drawarea = this;
@@ -122,16 +122,14 @@
 		var whiteboard = new lz.multiWhiteboardPanel(this,{
 							whiteboardId:whiteboardId
 						});
-		var tempWidth = this._bar.getCurrentSize();
 		var tWhiteboardBtn = new lz.whiteboardMiniButton(this._bar,{
 									objRef:whiteboard,
-									width:tempWidth,
+									width: _bar.staticwidth,
 									isactive:true,
 									btnName: wbName
 								});
 		this._bar.currentBtn = tWhiteboardBtn;
 		tWhiteboardBtn.onmouseout.sendEvent(null);
-		this.addNewItemButton.updatePosition();
 		canvas.whiteboardCount++;
 		return whiteboard;
 	</method>
@@ -265,29 +263,32 @@
 	]]>
 	</method>
 
-	<whiteboardBarMenu name="_bar" height="20" y="21">
-		<attribute name="whiteboardId" value="-1" type="number" />
-		
-		<handler name="onsubview" args="newSub">
-			parent.addNewItemButton.updatePosition();
+	<view name="scrollLeft" y="21" x="0" width="20">
+		<handler name="onclick" args="refOb">
+			parent._barArea._scroll.step(-1);
 		</handler>
-		<handler name="onwidth" args="newSub">
-			parent.addNewItemButton.updatePosition();
+		<view resource="wb_arrow_left_rsc" y="0" x="0" opacity="${ parent.parent._barArea._scroll.scrollable ? 1 : 0.1 }" />
+	</view>
+	<view name="_barArea" width="${ parent.width - 60 }" height="20" x="20" y="21" clip="true">
+		<whiteboardBarMenu name="_bar" height="20" y="0" x="0">
+			<attribute name="whiteboardId" value="-1" type="number" />
+			
+			<handler name="oninit">
+				parent.parent._bar = this;
+			</handler>
+		</whiteboardBarMenu>
+		<om_hscrollbar name="_scroll" height="0" stepsize="50"/>
+	</view>
+	<view name="scrollRight" y="21" x="${ parent.width - 40 }" width="20">
+		<handler name="onclick" args="refOb">
+			parent._barArea._scroll.step(1);
 		</handler>
-	</whiteboardBarMenu>
+		<view resource="wb_arrow_right_rsc" y="0" x="0" opacity="${ parent.parent._barArea._scroll.scrollable ? 1 : 0.1 }" />
+	</view>
 
-	<view name="addNewItemButton" y="24" 
+	<view name="addNewItemButton" y="24" x="${ parent.width - 20 }"
 			visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
 		<attribute name="whiteboardId" value="-1" type="number" />
-		
-		<method name="updatePosition">
-			if (parent._bar.subviews.length != 0) {
-				var borderItem = parent._bar.subviews[parent._bar.subviews.length-1];
-				this.setAttribute("x",borderItem.x + borderItem.width + 2);
-			} else {
-				this.setAttribute("x",2);
-			}
-		</method>
 		
 		<handler name="onmouseover" args="refOb">
 			this.bg.setAttribute("visibility","visible");
@@ -309,7 +310,7 @@
 	</view>
 
 	<view width="${ parent.width }" height="1" y="41"
-		  bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
+			bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
 		<attribute name="whiteboardId" value="-1" type="number" />
 	</view>
 </class>

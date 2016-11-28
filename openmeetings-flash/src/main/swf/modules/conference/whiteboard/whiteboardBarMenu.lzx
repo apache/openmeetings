@@ -19,40 +19,10 @@
   
 -->
 <library>
-
-<class name="whiteboardBarMenu" extends="view" width="${ parent.width }" x="0" y="21" 
+<class name="whiteboardBarMenu" extends="view" x="0" y="21" 
 		height="20" layout="axis:x;spacing:1;inset:2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
 	<attribute name="staticwidth" type="number" value="120" />
 	<attribute name="currentBtn" value="null" />
-
-	<method name="getCurrentSize">
-	<![CDATA[
-		if ( ((this.subviews.length+1)*(this.staticwidth+1)) <= this.width) {
-			return this.staticwidth;
-		} else {
-			var newwidth = Math.round((this.width-this.subviews.length)/(this.subviews.length+1));
-			for (var i=0;i<this.subviews.length;i++) {
-				this.subviews[i].setAttribute('width',newwidth);
-			}
-			return newwidth;
-		}
-	]]>
-	</method>
-
-	<handler name="onwidth">
-	<![CDATA[
-		if ( ((this.subviews.length)*(this.staticwidth+1)) <= this.width) {
-			for (var i=0;i<this.subviews.length;i++) {
-				this.subviews[i].setAttribute('width',this.staticwidth);
-			}
-		} else {
-			var newwidth = Math.round((this.width-this.subviews.length)/(this.subviews.length));
-			for (var i=0;i<this.subviews.length;i++) {
-				this.subviews[i].setAttribute('width',newwidth);
-			}
-		} 
-	]]>
-	</handler>
 
 	<method name="removeObject" args="btn">
 		var whiteboardId = btn.objRef.whiteboardId;
@@ -68,7 +38,6 @@
 		if (this.subviews.length != 0 && removeCurrent) {
 			this.sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
 		}
-		parent.addNewItemButton.updatePosition();
 	]]>
 	</method>
 
