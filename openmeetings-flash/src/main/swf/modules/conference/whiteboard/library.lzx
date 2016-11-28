@@ -29,19 +29,20 @@
 	<resource name="interview_record_start" src="resources/webstart_play.png" />
 	<resource name="interview_record_stop" src="resources/webstart_stop.png" />
 	<!-- END APL author sebawagner -->
-	
+
 	<!-- FamFam Icon Set -->
 	<resource name="bold" src="resources/text_bold.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="italic" src="resources/text_italic.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="add_whiteboard_rsc" src="resources/add.png" />
+	<resource name="wb_arrow_left_rsc" src="resources/left.png" />
+	<resource name="wb_arrow_right_rsc" src="resources/right.png" />
 	
 	<include href="incubator/lzcombobox.lzx"/> 
 	<include href="base/" />
 	<include href="windows/" />
 	<include href="helper/" />
-	
 	<include href="panels/" />
 
 	<include href="dynamicFileName.lzx" />
