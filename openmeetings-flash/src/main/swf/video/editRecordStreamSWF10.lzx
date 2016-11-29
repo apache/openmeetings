@@ -8,8 +8,8 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -584,7 +584,7 @@
 	</view>
 	
 	<resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
-				y="244" width="280" editable="false">
+			y="244" width="280" editable="false">
 		<!--- @keywords private -->
 		<attribute name="counter" value="0" />
 		<handler name="onselect" args="item">
@@ -634,7 +634,7 @@
 					this.cam_width = Number(this.datapath.xpathQuery('@width'));
 					this.cam_height = Number(this.datapath.xpathQuery('@height'));
 					this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
-					var isDefault = this.datapath.xpathQuery('@isDefault');
+					var isDefault = this.datapath.xpathQuery('@isDefault') == "true";
 					
 					var t:SharedObject = SharedObject.getLocal('userdata');
 					var g = t.data;
@@ -646,17 +646,17 @@
 							parent.onselect.sendEvent(this);
 						}
 					} else {
-						if (isDefault == "true") {
+						if (isDefault) {
 							if ($debug) Debug.write("Found default one ",type);
 							parent.selectItemAt(parent.counter);
 							parent.onselect.sendEvent(this);
 						}
 					}
-					parent.counter+=1;
+					parent.counter += 1;
 				]]>
 			</handler>
 		</textlistitem>
-	</resetCombobox>	  
+	</resetCombobox>
 	
 	<simpleLabelButton name="_btnStartRecording" labelid="775" width="140" x="150" y="280" height="28">
 		<handler name="onclick">
@@ -664,7 +664,7 @@
 			parent.doStartRecording();
 		</handler>
 	</simpleLabelButton>
-	
+
 	<view x="340" y="60" name="_video" clip="true" 
 			width="${ parent.width-this.x-10 }" height="${ parent.height-260 }"> 
 		<view name="content">
@@ -687,15 +687,14 @@
 			</videoObjectTestBroadcast>
 			
 			<videoObjectPlayTestBroadcast name="_viewer" visibility="hidden" 
-						width="${ parent.parent.parent.cam_default_width }" 
-						height="${ parent.parent.parent.cam_default_height }" />
+					width="${ parent.parent.parent.cam_default_width }" 
+					height="${ parent.parent.parent.cam_default_height }" />
 		</view>
 		
 		<om_vscrollbar />
 		<om_hscrollbar />
 	</view>
 	
-								  
 	<view name="_text" x="340" y="60" width="240" height="180" visibility="hidden">
 		<text name="_info" resize="true" bgcolor="0xFFFFFF" align="right" fontsize="12" fontstyle="bold" />
 	</view>
@@ -705,7 +704,7 @@
 			parent.doPlay();
 		</handler>
 	</simpleLabelButton>
-	
+
 	<view name="_level_meter" x="340" y="${ parent.height-190 }" width="240" height="20" clip="true" bgcolor="0x000000">
 		 <!--- Level delegate, used to track level changes. 
 			  @keywords private -->
