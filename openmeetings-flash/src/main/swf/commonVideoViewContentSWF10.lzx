@@ -8,8 +8,8 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -99,6 +99,14 @@
 		return vidContainer;
 	</method>
 
+	<method name="setPartnerName" args="obj, first, last=null">
+		if (!obj) {
+			return;
+		}
+		var dispName = !last ? first : first + ' ' + last;
+		obj.setAttribute('chatpartnername', dispName);
+	</method>
+
 	<!-- 
 		
 		Method that creates the video views when user(self) initially entering a room.
@@ -112,7 +120,7 @@
 			if(vidContainer == null) {
 				vidContainer = this.getNewVideoObjectByPos(publicSID);
 				vidContainer.clientVars = object;
-				vidContainer.setAttribute('chatpartnername',displayName);
+				setPartnerName(vidContainer, displayName);
 				if (avsettings=="n"){
 					vidContainer.setVideouserProfilePic(object);
 					vidContainer.setAttribute("visibility","hidden");
@@ -134,10 +142,9 @@
 				vidContainer.updateAVSettingsSymbol(object);
 				if (object.micMuted) {
 					vidContainer.setMicMuted(object.micMuted);
-		   	 	}
+				}
 			}
-			
-			
+
 			if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
 			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
 				if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
@@ -153,14 +160,14 @@
 	
 	<method name="getVideoObjectByPublicSID" args="publicSID">
 		<![CDATA[
-			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-			for (var i=0;i<this.subviews.length;i++){
-				//if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
-				if (this.subviews[i].publicSID==publicSID){
+			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ", publicSID);
+			for (var i = 0; i < this.subviews.length; ++i) {
+				//if ($debug) Debug.write("this.subviews[i].publicSID ", this.subviews[i].publicSID);
+				if (this.subviews[i].publicSID == publicSID) {
 					return this.subviews[i];
 				}
 			}
-			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ", publicSID);
 			return null;
 		]]>
 	</method>
@@ -186,7 +193,7 @@
 		this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
 		this.broadCastViewRef._chatvideoinner.r.destroy();
 		if ($debug) Debug.write("getNewVideoObject canvas.currentClient ",publicSID, canvas.currentClient);
-		this.broadCastViewRef.setAttribute('chatpartnername', canvas.currentClient.firstname + ' ' + canvas.currentClient.lastname);
+		setPartnerName(this.broadCastViewRef, canvas.currentClient.firstname, canvas.currentClient.lastname);
 		return this.broadCastViewRef;
 	]]>
 	</method>
@@ -346,9 +353,7 @@
 		if (obj == null) {
 			obj = this.getNewVideoObjectByPos(rcl.publicSID);
 		}
-		if ("n" == rcl.avsettings){
-			obj.setVideouserProfilePic(rcl);
-		} else if ("a" == rcl.avsettings){
+		if ("n" == rcl.avsettings || "a" == rcl.avsettings) {
 			obj.setVideouserProfilePic(rcl);
 		} else {
 			obj.deleteVideoConfProfilePic();
@@ -378,7 +383,7 @@
 		if (obj != null ){
 			obj._chatvideoinner._videostream.playStream(value.broadCastID, -1);
 			obj.setDefaultVideoSize(value.VWidth, value.VHeight);
-			obj.setAttribute('chatpartnername', value.firstname + ' ' + value.lastname);
+			setPartnerName(obj, value.firstname, value.lastname);
 		}
 		//we have to do this again when the stream starts, the initial video 
 		//component does not know the interviewPodId as the user has not selected 
@@ -467,13 +472,10 @@
 	]]>
 	</method>
 
-	<method name="updateFirstLastName" args="publicSID,first,last">
-		var v = getVideoObjectByPublicSID(publicSID);
-		if (v != null) {
-			v.setAttribute('chatpartnername', first + ' ' + last);
-		}
+	<method name="updateFirstLastName" args="publicSID, first, last">
+		setPartnerName(getVideoObjectByPublicSID(publicSID), first, last);
 	</method>
-	
+
 	<!-- arranges video pods -->
 	<method name="arrangeWindows">
 	<![CDATA[
