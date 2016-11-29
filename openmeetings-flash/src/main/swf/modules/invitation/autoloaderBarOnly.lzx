@@ -83,17 +83,17 @@
             if ($debug) Debug.write("setUsername: value, ",canvas.thishib.currentInvitation.room.type);
             clearStageContent();		
             parent.close();
-            
-			if (canvas.thishib.currentInvitation.room.type == 'conference'){
-            	new lz.flexibleConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
-			} else if (canvas.thishib.currentInvitation.room.type == 'restricted'){
-            	new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
-			} else if (canvas.thishib.currentInvitation.room.type == 'interview'){
-            	new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj: canvas.thishib.currentInvitation.room});
-            }                 
-        </handler>  
-    </netRemoteCallHib>     
-          
+
+			var r = canvas.thishib.currentInvitation.room;
+			if (r.type == 'conference'){
+				new lz.flexibleConferenceRoom(canvas.main_content._content.inner, {roomobj: r});
+			} else if (r.type == 'restricted'){
+				new lz.restrictedConferenceRoom(canvas.main_content._content.inner, {roomobj: r});
+			} else if (r.type == 'interview'){
+				new lz.interviewConferenceRoom(canvas.main_content._content.inner, {roomobj: r});
+			}
+        </handler>
+    </netRemoteCallHib>
 </class>
 
 </library>

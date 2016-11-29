@@ -78,6 +78,4 @@
     <include href="flexibleConferenceRoom.lzx" />
     <include href="restrictedConferenceRoom.lzx" />
     <include href="interviewConferenceRoom.lzx" />
-    
-    
 </library>
