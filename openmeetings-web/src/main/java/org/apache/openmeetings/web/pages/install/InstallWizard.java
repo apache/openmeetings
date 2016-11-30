@@ -40,11 +40,14 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
+import org.apache.openmeetings.core.converter.GenerateSWF;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -70,7 +73,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
+import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
+import org.artofsolving.jodconverter.office.OfficeException;
+import org.artofsolving.jodconverter.office.OfficeManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
@@ -78,6 +85,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
@@ -146,6 +154,14 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	@Override
 	protected boolean closeOnFinish() {
 		return false;
+	}
+
+	private static String getPath(String path, String app) {
+		if (!"".equals(path) && !path.endsWith(File.separator)) {
+			path += File.separator;
+		}
+		path += app;
+		return path;
 	}
 	
 	private abstract class BaseStep extends DynamicWizardStep {
@@ -474,19 +490,108 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	
 	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
-
+		private final TextField<String> ffmpegPath;
+		private final TextField<String> imageMagicPath;
+		private final TextField<String> soxPath;
+		private final TextField<String> swfPath;
+		private final TextField<String> officePath;
+		private final String regex = "\\r\\n|\\r|\\n";
+		private boolean isAllChecked = false;
 		public ParamsStep3() {
 			super(paramsStep2);
 			
 			add(new TextField<Integer>("swfZoom").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("swfJpegQuality").setRequired(true).add(range(1, 100)));
-			add(new TextField<String>("swfPath"));
-			add(new TextField<String>("imageMagicPath"));
-			add(new TextField<String>("ffmpegPath"));
-			add(new TextField<String>("soxPath"));
-			add(new TextField<String>("officePath"));
+			add(swfPath = new TextField<String>("swfPath"));
+			add(new AjaxButton("validateSwf") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"});
+					target.add(getFeedbackPanel());
+				}
+			});
+			add(imageMagicPath = new TextField<String>("imageMagicPath"));
+			add(new AjaxButton("validateImageMagic") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"});
+					target.add(getFeedbackPanel());
+				}
+			});
+			add(ffmpegPath = new TextField<String>("ffmpegPath"));
+			add(new AjaxButton("validateFfmpeg") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"});
+					target.add(getFeedbackPanel());
+				}
+			});
+			add(soxPath = new TextField<String>("soxPath"));
+			add(new AjaxButton("validateSox") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"});
+					target.add(getFeedbackPanel());
+				}
+			});
+			add(officePath = new TextField<String>("officePath"));
+			add(new AjaxButton("validateOffice") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					checkOfficePath();
+					target.add(getFeedbackPanel());
+				}
+			});			
+		}
+		
+		private boolean checkToolPath(TextField<String> path, String[] args) {
+			ConverterProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
+			if (!result.isOk()) {
+				path.error(result.getError().replaceAll(regex, ""));
+			}
+			return result.isOk();
+		}
+		
+		private boolean checkOfficePath() {
+			String err  = "";
+			try {
+				DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
+				if (!Strings.isEmpty(officePath.getValue())) {
+					configuration.setOfficeHome(officePath.getValue());
+				}
+				OfficeManager officeManager = configuration.buildOfficeManager();
+				try {
+					officeManager.start();
+				} catch (OfficeException ex) {
+					err = ex.getMessage().replaceAll(regex, "");
+				} finally {
+					officeManager.stop();
+				}
+			} catch (Exception ex) {
+				err = ex.getMessage().replaceAll(regex, "");
+			}
+			if (!err.isEmpty()) {
+				officePath.error(err);
+			}
+			return err.isEmpty();
 		}
 
+		private boolean checkAllPath() {
+			boolean result = checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"}); 
+			result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"}) && result;
+			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"}) && result;
+			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"}) && result;
+			result = checkOfficePath() && result;
+			isAllChecked = true;
+			return result;
+		}
+		
+		
 		@Override
 		public boolean isLastStep() {
 			return false;
@@ -494,12 +599,17 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		@Override
 		public IDynamicWizardStep next() {
+			if (!isAllChecked) {
+				if (!checkAllPath()) {
+					return this;
+				}
+			}
 			return paramsStep4;
 		}
 		
 		@Override
 		public boolean isLastAvailable() {
-			return true;
+			return isAllChecked;
 		}
 		
 		@Override
