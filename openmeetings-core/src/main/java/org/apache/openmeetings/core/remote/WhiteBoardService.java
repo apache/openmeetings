@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
