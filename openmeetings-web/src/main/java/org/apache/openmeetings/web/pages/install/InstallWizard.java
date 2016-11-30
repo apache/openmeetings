@@ -551,10 +551,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		
 		private boolean checkToolPath(TextField<String> path, String[] args) {
 			ConverterProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
-			if (!result.isOk()) {
+			if (!result.getExitValue().equals("0")) {
 				path.error(result.getError().replaceAll(regex, ""));
 			}
-			return result.isOk();
+			return result.getExitValue().equals("0");
 		}
 		
 		private boolean checkOfficePath() {
