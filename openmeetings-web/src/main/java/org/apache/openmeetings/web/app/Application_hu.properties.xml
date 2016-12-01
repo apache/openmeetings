@@ -1616,21 +1616,6 @@
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Képek feltöltése/importálása a prezentációs területbe<a
-					href="#Enabling_Image_Upload_and_import_to_whiteboard"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Telepítse a <strong>ImageMagick</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt 
-				<a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-				<a target="_blank"
-					href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
-				</li>
-			</ul>
-		</li>
-		<li><h4>
 				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>PDF fileok feltöltése a prezentációs területbe<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
@@ -1646,47 +1631,6 @@
 					href="http://packages.debian.org/unstable/utils/swftools"
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
 					ajánlott verzió a <strong>SWFTools</strong> 0.9 egyéb verzió bugja miatt hibát okozhat a prezentációkban. 
-				</li>
-		</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Dokumentumok importálása a prezentációs területrbe
-				.doc, .docx, .ppt, .pptx, ... stb (OpenOfice kompatibilis).<a
-					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Telepítse az <strong>OpenOffice / LibreOffice</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
-					href="http://www.openoffice.org/" rel="nofollow">http://www.openoffice.org/</a>
-					<a target="_blank"
-					href="http://www.libreoffice.org/" rel="nofollow">http://www.libreffice.org/</a>
-					LibreOffice program csomag használata esetén rendelje hozzá szimbólikus linkként az OpenOffice könyvtárat.
-					<br />
-					ln -s /opt/libreoffice /opt/openoffice 
-				</li>
-				<li><strong>OpenOffice-Service</strong> automatikusan indul és elérhető a
-					8100 porton. Bővebb információ itt <a target="_blank"
-					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-				</li>
-			</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Videó felvétele és importálása .avi, .flv, .mov and .mp4 formátumokban a prezentációs területbe<a
-					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Telepítse az <strong>FFMpeg</strong> programcsomagot. Használja az FFMPEG aktuális, friss verzióját.
-				 	Windows rendszerekhez kiadások itt <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux, OSX rendszerkhez
-					többféle lehetőség érhető el, keresse meg a megfelelőt az interneten. 
-					Szükséges a libmp3lame kóder engedélyezése/implementálása!
-				</li>
-				<li>Telepítse a <strong>SoX</strong> programot innen: <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					A SoX friss verzióit használja! SoX 12.xx nem/hibásan működik!
 				</li>
 			</ul>
 		</li>
@@ -1783,39 +1727,25 @@
 	<entry key="install.wizard.params.step3.installation">Telepítés</entry>
 	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
 	<entry key="install.wizard.params.step3.swfZoom.title">Adja meg az SWFTools felbontását (dpi) amit a PDF2SWF konverziónál használ</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">
-		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
-		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a felbontást.
-		Alapértelmezett felbontás 100 dpi.
-	</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a felbontást. Alapértelmezett felbontás 100 dpi.</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Minőség</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality.title">Adja meg a jpeg képek minőségi rátáját. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">
-		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
-		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a 
-		a jpeg képek minőségét. 0 a gyengébb (kicsi),
-		100 a legjobb (nagy). (alapértelmezett:85).
-	</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a jpeg képek minőségét. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85).</entry>
 	<entry key="install.wizard.params.step3.swfPath">SWFTools útvonala</entry>
 	<entry key="install.wizard.params.step3.swfPath.title">Adja meg az SWFTools elérési útvonalát C:/swftools (Windows) /usr/local/swftools (Linux) vagy hagyja üresen, ha elérhető a rendszerútvonalak közt</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">
-		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
-		Nyisson egy parancssort és futtassa: pdf2swf. Hagyja üresen, ha nem ismeri, vagy ha elérhető a rendszerútvonalon. 
-	</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Hagyja üresen, ha nem ismeri, vagy ha elérhető a rendszerútvonalon.</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick útvonala</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Adja meg a ImageMagick elérési útvonalát, hagyja üresen, ha az ImageMagick elérhető a rendszer útvonalak közt</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Telepítse a ImageMagick program csomagot a szerverre. Telepítési útmutató és további információk itt http://www.imagemagick.org http://www.imagemagick.org/script/binary-releases.php, Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG útvonala</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Adja meg az FFMPEG alérési útvonalát, hagyja üresen, ha az FFMPEG elérhető a rendszer útvonalak közt</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Telepítse az FFMpeg programcsomagot. Használja az FFMPEG aktuális, friss verzióját. Windows rendszerekhez kiadások itt http://ffmpeg.arrozcru.org/builds/ Linux, OSX rendszerkhez többféle lehetőség érhető el, keresse meg a megfelelőt az interneten. Szükséges a libmp3lame kóder engedélyezése/implementálása!]]></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX útvonala</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Adja meg a SoX elérési útvonalát, hagyja üresen, ha a SoX elérhető a rendszer útvonalak közt</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Telepítse a SoX programot innen: http://sox.sourceforge.net/. A SoX friss verzióit használja! SoX 12.xx nem/hibásan működik!]]></entry>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice útvonala a jodconverterhez</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Adja meg az OpenOffice/LibreOffice (optional) valós útvonalát, a OpenOffice/LibreOffice nem keresi automatikusan a jodconverter</entry>
-	<entry key="install.wizard.params.step3.officePath.text">
-		Az OpenOffice/LibreOffice (optional) útvonalát a jodconverter nem találja autómatikusan, az abszolút elérési útvonal szükséges
-	</entry>
+	<entry key="install.wizard.params.step3.officePath.text">Az OpenOffice/LibreOffice (optional) útvonalát a jodconverter nem találja autómatikusan, az abszolút elérési útvonal szükséges</entry>
 
 	<entry key="install.wizard.params.step4.crypt">Titkosítás típusa</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">Titkosító osztály</entry>
