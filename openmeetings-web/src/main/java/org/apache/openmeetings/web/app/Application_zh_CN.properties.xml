@@ -1616,21 +1616,6 @@
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>使图像上传和导入到白板上<a
-					href="#Enabling_Image_Upload_and_import_to_whiteboard"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>安装 <strong>ImageMagick</strong> 在服务器上，你可以得到更多的信息在 <a target="_blank"
-					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					关于安装. 安装的说明可以在这里找到 <a target="_blank"
-					href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)
-				</li>
-			</ul>
-		</li>
-		<li><h4>
 				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>E使导入的PDF文件到白板<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
@@ -1646,37 +1631,6 @@
 					href="http://packages.debian.org/unstable/utils/swftools"
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
 					推荐的版本 <strong>SWFTools</strong> 是 0.9 因为之前的版本有一个错误，导致在白板上显示错误的对象尺寸
-				</li>
-		</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>激活
-				导入.doc, .docx, .ppt, .pptx, ... 所有的MS Office文档到白板<a
-					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li><strong>OpenOffice-Service</strong> 已经启动并监听端口 8100, 参照 <a target="_blank"
-					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					查阅细节</li>
-			</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>激活
-				记录和导入 .avi, .flv, .mov and .mp4 到白板上<a
-					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>安装 <strong>FFMpeg</strong>. 你应该获得一个最新版本的FFMPEG!针对Windows你可以下载一个示例从
-					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux和OSX用户应该能够使用网上不同的安装说明，你需要激活libmp3lame！
-				</li>
-				<li>安装 <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					你应该安装一个最新版本的 SoX! SoX 12.xx 版本不支持!
 				</li>
 			</ul>
 		</li>
@@ -1783,23 +1737,19 @@
 	<entry key="install.wizard.params.step3.swfJpegQuality.text">输入嵌入的JPEG图片的质量。0是最坏的（小），100是最好的（大）。（默认：85）</entry>
 	<entry key="install.wizard.params.step3.swfPath">SWFTools 路径</entry>
 	<entry key="install.wizard.params.step3.swfPath.title">输入swftools例如C:/swftools（Windows）或留有空白，如果swftools是已知的系统路径</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">
-		你可以测试是否将swftools安装到系统路径，
-		打开shell或者cmd提示符下输入Pdf2swf，如果出现了一个列表，上有一些选项，就不用填写这个字段，否则否则你必须指定Pdf2swf在您的系统上的路径
-	</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">你可以测试是否将swftools安装到系统路径，打开shell或者cmd提示符下输入Pdf2swf，如果出现了一个列表，上有一些选项，就不用填写这个字段，否则否则你必须指定Pdf2swf在您的系统上的路径</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick 路径</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">输入ImageMagick的路径, 如果ImageMagick成功安装到系统路径，就不用填写这个字段</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[安装 ImageMagick 在服务器上，你可以得到更多的信息在 http://www.imagemagick.org 关于安装. 安装的说明可以在这里找到 http://www.imagemagick.org/script/binary-releases.php, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG 路径</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">输入FFMPEG的路径, 如果FFMPEG成功安装到系统路径，就不用填写这个字段</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[安装 FFMpeg. 你应该获得一个最新版本的FFMPEG!针对Windows你可以下载一个示例从 http://ffmpeg.arrozcru.org/builds/ Linux和OSX用户应该能够使用网上不同的安装说明，你需要激活libmp3lame！]]></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX 路径</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">输入SoX的路径, 如果SoX成功安装到系统路径，就不用填写这个字段</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[安装 SoX http://sox.sourceforge.net/. 你应该安装一个最新版本的 SoX! SoX 12.xx 版本不支持!]]></entry>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice和LibreOffice使用jodconverter的路径</entry>
 	<entry key="install.wizard.params.step3.officePath.title">OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装</entry>
-	<entry key="install.wizard.params.step3.officePath.text">OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装
-	</entry>
+	<entry key="install.wizard.params.step3.officePath.text">OpenOffice和LibreOffice的路径（可选），请把它指向真实路径，以防 jodconverter不能自动找到OpenOffice/LibreOffice 安装</entry>
 
 	<entry key="install.wizard.params.step4.crypt">加密类型</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">加密类</entry>

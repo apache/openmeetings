@@ -1616,22 +1616,6 @@
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Activar Subir Imagen e Importar a la pizarra
-				<a href="#Enabling_Image_Upload_and_import_to_whiteboard"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Instalar <strong>ImageMagick</strong> en el servidor, puede obtener más información en
-				<a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					observando instalación. Las instrucciones para la misma puede encontrarlas aquí
-					<a target="_blank" href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					de todos modos en la mayoría de los sistemas linux puede conseguirlo via su paquete favorito
-					de administración (apt-get it).
-				</li>
-			</ul>
-		</li>
-		<li><h4>
 				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Activando
 				importar PDFs a la pizarra<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
@@ -1653,39 +1637,7 @@
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
 					la versión recomendada de <strong>SWFTools</strong> es 0.9 porque las
 					anteriores tienen un bug que hace llevar unas dimensiones erróneas al objeto
-                     en la Pizarra.
-				</li>
-		</ul>
-		</li>
-		<li><h4>
-				<a id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Activando
-				importar .doc, .docx, .ppt, .pptx, ... todos los Documentos de Oficina a la Pizarra
-				<a href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu" class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li><strong>OpenOffice-Service</strong> lanzado escucha en el
-					puerto 8100, vea <a target="_blank"
-					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					para más detalles.</li>
-			</ul>
-		</li>
-		<li><h4>
-				<a id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Activando
-				Grabación e importación de .avi, .flv, .mov and .mp4 a la pizarra<a
-					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Instalar <strong>FFMpeg</strong>. Puede conseguir FFMPEG de una copia actualizada! 
-				    Para Windows puede descargar una Build, por ejemplo desde
-					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Los usuarios de Linux o OSx
-					pueden emplear una de las variadas Instrucciones de Instalación que hay en la Web. 
-					Es necesario activar libmp3lame!
-				</li>
-				<li>Instalar <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_blank">http://sox.sourceforge.net/</a>.
-					Instalar una copia de SOX actualizada! SOX 12.xx no funcionará!
+					en la Pizarra.
 				</li>
 			</ul>
 		</li>
@@ -1790,37 +1742,25 @@
 	<entry key="install.wizard.params.step3.installation">Instalación</entry>
 	<entry key="install.wizard.params.step3.swfZoom">Zoom SWFTools</entry>
 	<entry key="install.wizard.params.step3.swfZoom.title">Introduzca el dpi que swftools empleará para convertir PDF a SWF</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">Puede comprobar si la ruta a la instalación de swftools es la correcta
-		abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la dpi
-		que swftools empleará para convertir PDF a SWF. Preconfigurada es
-		100 dpi</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la dpi que swftools empleará para convertir PDF a SWF. Preconfigurada es 100 dpi</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality">Calidad de JPEG en SWFTools</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality.title">Introduzca la calidad embebida de las imágenes jpeg. 0 es la menor (pesa menos), 100 es la mejor (pesa más). (por omisión:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Puede comprobar si la ruta a la instalación de swftools es la correcta
-		abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la calidad
-		de las imagenes jpeg embebidas. 0 es la menor (pequeña),
-		100 es la mejor (grande). (preconfigurada:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la calidad de las imagenes jpeg embebidas. 0 es la menor (pequeña), 100 es la mejor (grande). (preconfigurada:85)</entry>
 	<entry key="install.wizard.params.step3.swfPath">SWFTools Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.swfPath.title">Introduzca la ruta a swftools, por ejemplo C:/swftools (Windows) o déjelo en blanco si swftools está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">
-		Puede comprobar si la ruta a la instalación de swftools es la correcta
-		abriendo una shell o cmd-prompt y escribir pdf2swf  Si muestra
-		una lista de opciones, deje este campo en blanco, si no debe especificar
-		la ruta a pdf2swf en su sistema
-	</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Si muestra una lista de opciones, deje este campo en blanco, si no debe especificar la ruta a pdf2swf en su sistema</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Introduzca la ruta a ImageMagick, o déjelo en blanco si ImageMagick está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"/>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Instalar ImageMagick en el servidor, puede obtener más información en http://www.imagemagick.org observando instalación. Las instrucciones para la misma puede encontrarlas aquí http://www.imagemagick.org/script/binary-releases.php, de todos modos en la mayoría de los sistemas linux puede conseguirlo via su paquete favorito de administración (apt-get it).]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Introduzca la ruta a FFMPEG, o déjelo en blanco si ImageMagick está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"/>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Instalar FFMpeg. Puede conseguir FFMPEG de una copia actualizada! Para Windows puede descargar una Build, por ejemplo desde http://ffmpeg.arrozcru.org/builds/ Los usuarios de Linux o OSx pueden emplear una de las variadas Instrucciones de Instalación que hay en la Web. Es necesario activar libmp3lame!]]></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Introduzca la ruta a SOX, o déjelo en blanco si SOX está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"/>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Instalar SoX http://sox.sourceforge.net/. Instalar una copia de SOX actualizada! SOX 12.xx no funcionará!]]></entry>
 	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice Path (Ruta) para jodconverter</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Ruta a OpenOffice/LibreOffice (opcional), por favor introdúzcala en el caso que jodconverter no encuentre a OpenOffice/LibreOffice automáticamente</entry>
-	<entry key="install.wizard.params.step3.officePath.text">El path (ruta) a OpenOffice/LibreOffice (opcional) por favor configúrelo correctamente en caso de que jodconverter no pueda encontrar la instalación de OpenOffice/LibreOffice
-	</entry>
+	<entry key="install.wizard.params.step3.officePath.text">El path (ruta) a OpenOffice/LibreOffice (opcional) por favor configúrelo correctamente en caso de que jodconverter no pueda encontrar la instalación de OpenOffice/LibreOffice</entry>
 
 	<entry key="install.wizard.params.step4.crypt">Tipo de Encriptación</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">Crypt Class</entry>

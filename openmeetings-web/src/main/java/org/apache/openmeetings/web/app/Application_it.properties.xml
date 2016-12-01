@@ -1616,25 +1616,6 @@
   <entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Abilita
-				caricamento immagini e importazione sulla lavagna<a
-					href="#Enabling_Image_Upload_and_import_to_whiteboard"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Installa <strong>ImageMagick</strong> sul server, puoi
-					trovare informazioni su <a target="_blank"
-					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					per l'installazione. Le istruzioni per l'installazione possono essere
-					recuperate qui <a target="_blank"
-					href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					comunque nella maggior parte dei sistemi linux potrai recuperarlo dal vostro
-					gestore dei pacchetti (apt-get, yum, etc)
-				</li>
-			</ul>
-		</li>
-		<li><h4>
 				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Abilita
 				importazione dei PDF sulla lavagna<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
@@ -1658,44 +1639,6 @@
 					la versione suggerita di <strong>SWFTools</strong> è 0.9 poichè 
 					le versioni precedenti hanno un bug che portano ad oggetti dalla dimensione errata sulla
 					scrivania
-				</li>
-		</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Abilita
-				importazione di .doc, .docx, .ppt, .pptx, ... tutti i documenti Office sulla
-				lavagna<a
-					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li><strong>Servizio OpenOffice</strong> avviato e in ascolto sulla
-					porta 8100, vedi <a target="_blank"
-					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					per dettagli</li>
-			</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Abilita
-				registrazione e importazione di .avi, .flv, .mov and .mp4 sulla lavagna<a
-					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Installa <strong>FFMpeg</strong>. Dovresti recuperare FFMPEG nella
-					copia più aggiornata! Per Windows puoi scaricare una Build per esempio
-					da <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Gli utenti Linux o OSx
-					dovrebbero poter usare una delle varie istruzioni di installazione
-					presenti sul Web. Devi abilitare libmp3lame, libx264, libfdk_aac, libvorbis
-					e libtheora.
-				</li>
-				<li>Installa <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					Devi installare SoX da una copia aggiornata! SoX 12.xx NON
-					funziona!
 				</li>
 			</ul>
 		</li>
@@ -1794,6 +1737,7 @@
 					come ReplyTo negli inviti email (inviter.email.as.replyto)</entry>
 	<entry key="install.wizard.params.step2.defaultLangId">Lingua predefinita</entry>
 	<entry key="install.wizard.params.step2.defaultExportFont">Font predefinito per le ssportazione [default_export_font]</entry>
+
 	<entry key="install.wizard.params.step3.converters">Convertitore</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> vedi anche</entry>
 	<entry key="install.wizard.params.step3.installation">Installazione</entry>
@@ -1802,31 +1746,22 @@
 	<entry key="install.wizard.params.step3.swfZoom.text">DPI che swftools useranno per la conversione da PDF a SWF (predefinito è 100)</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality">Qualità JPEG SWFTools</entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality.title">Specifica la qualità delle immagini jpeg inserite. 0 è peggiore (piccola), 100 è migliore (grande). (predefinito:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Specifica la qualità delle immagini jpeg inserite. 0 è peggiore (piccola),
-				100 è migliore (grande). (predefinito:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">Specifica la qualità delle immagini jpeg inserite. 0 è peggiore (piccola), 100 è migliore (grande). (predefinito:85)</entry>
 	<entry key="install.wizard.params.step3.swfPath">Percorso SWFTools</entry>
 	<entry key="install.wizard.params.step3.swfPath.title">Specifica il percorso di swftools per esempio C:/swftools (Windows) o lascia vuoto se swftools è già compreso nel tuo percorso di sistema</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">
-		Puoi verificare se swftools è presente nel percorso di sistema
-		aprendo una shell o cmd-prompt e digita pdf2swf. Se viene visualizzata
-		una lista di opzioni lascia questo campo vuoto altrimenti devi
-		specificare il percorso di pdf2swf sul tuo sistema
-	</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">Puoi verificare se swftools è presente nel percorso di sistema aprendo una shell o cmd-prompt e digita pdf2swf. Se viene visualizzata una lista di opzioni lascia questo campo vuoto altrimenti devi specificare il percorso di pdf2swf sul tuo sistema</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">Percorso ImageMagick</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Specifica il percorso di ImageMagick, lascia vuoto se ImageMagick è già presente nel percorso di sistema</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installa ImageMagick sul server, puoi trovare informazioni su http://www.imagemagick.org per l'installazione. Le istruzioni per l'installazione possono essere recuperate qui http://www.imagemagick.org/script/binary-releases.php, comunque nella maggior parte dei sistemi linux potrai recuperarlo dal vostro gestore dei pacchetti (apt-get, yum, etc)]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">Percorso FFMPEG</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Specifica il percorso di  FFMPEG, lascia vuoto se FFMPEG è già presente nel percorso di sistema</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Installa FFMpeg. Dovresti recuperare FFMPEG nella copia più aggiornata! Per Windows puoi scaricare una Build per esempio da http://ffmpeg.arrozcru.org/builds/ Gli utenti Linux o OSx dovrebbero poter usare una delle varie istruzioni di installazione presenti sul Web. Devi abilitare libmp3lame, libx264, libfdk_aac, libvorbis e libtheora.]]></entry>
 	<entry key="install.wizard.params.step3.soxPath">Percorso SoX</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Specifica il percorso di SoX, lascia vuoto se SoX è già presente nel percorso di sistema</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Installa SoX http://sox.sourceforge.net/. Devi installare SoX da una copia aggiornata! SoX 12.xx NON funziona!]]></entry>
 	<entry key="install.wizard.params.step3.officePath">Percorso OpenOffice/LibreOffice per jodconverter</entry>
 	<entry key="install.wizard.params.step3.officePath.title">Percorsoath di OpenOffice/LibreOffice (opzionale) impostalo al percorso reale nel caso jodconverter non riesca a trovare automaticamente l'installazione  di OpenOffice/LibreOffice</entry>
-	<entry key="install.wizard.params.step3.officePath.text">Percorso di OpenOffice/LibreOffice (opzionale) impostalo 
-			al percorso reale nel caso jodconverter non riesca a trovare
-			l'installazione di OpenOffice/LibreOffice
-	</entry>
+	<entry key="install.wizard.params.step3.officePath.text">Percorso di OpenOffice/LibreOffice (opzionale) impostalo al percorso reale nel caso jodconverter non riesca a trovare l'installazione di OpenOffice/LibreOffice</entry>
 
 	<entry key="install.wizard.params.step4.crypt">Tipo di Crypt</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">Classe Crypt</entry>
