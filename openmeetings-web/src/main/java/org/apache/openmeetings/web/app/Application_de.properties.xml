@@ -1616,24 +1616,6 @@
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Import von Bildern auf 
-					das Whiteboard erm&ouml;glichen<a
-					href="#Enabling_Image_Upload_and_import_to_whiteboard"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Installieren Sie <strong>ImageMagick</strong> auf dem Server. Weitere
-					Informationen unter <a target="_blank"
-					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>.
-					Anleitungen f&uuml;r die Installation finden Sie unter <a target="_blank"
-					href="http://www.imagemagick.org/script/binary-releases.php"
-					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>, in den
-					meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager
-					(z.B. apt-get) installieren.
-				</li>
-			</ul>
-		</li>
-		<li><h4>
 				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Import von PDF-Dateien auf das
 					Whiteboard erm&ouml;glichen<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
@@ -1656,41 +1638,6 @@
 					Die empfohlene Version von <strong>SWFTools</strong> ist 0.9 - fr&uuml;here Versionen
 					enthalten einen Bug, welcher zu falschen Objektausdehnungen auf dem Whiteboard 
 					f&uuml;hrt.
-				</li>
-		</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Import von 
-					Office-Dokumenten (.doc, .docx, .ppt, .pptx, etc.) auf das Whiteboard erm&ouml;glichen
-					<a
-					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li><strong>OpenOffice-Service</strong> muss gestartet worden sein und auf Port 8100 lauschen, 
-					siehe <a target="_blank"
-					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>.</li>
-			</ul>
-		</li>
-		<li><h4>
-				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Aufzeichnung und 
-					Import von Videos (.avi, .flv, .mov und .mp4) auf das Whiteboard erm&ouml;glichen<a
-					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
-					class="section_anchor"></a>
-			</h4>
-			<ul>
-				<li>Installieren Sie <strong>FFmpeg</strong>. Sie sollten die neueste Version verwenden! 
-					Windows-Binaries finden Sie z.B. unter 
-					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a>. Linux- oder OSx-Nutzer sollten 
-					eine der zahlreichen Installationsanleitungen im Web zu Rate ziehen. libmp3lame muss 
-					aktiviert sein!
-				</li>
-				<li>Installieren Sie <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					Sie sollten die neueste Version verwenden! SoX 12.xx wird NICHT funktionieren!
 				</li>
 			</ul>
 		</li>
@@ -1717,10 +1664,10 @@
 	<br />
 	<br />
 
-    <span style="font-size: 1.3em"><a
-        href="http://openmeetings.apache.org/commercial-support.html"
-        target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
-    <br />
+	<span style="font-size: 1.3em"><a
+		href="http://openmeetings.apache.org/commercial-support.html"
+		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
+	<br />
 	]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[
 		<h4>
@@ -1822,18 +1769,16 @@
 	]]></entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick-Pfad</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Geben Sie den Pfad zu ImageMagick an, falls es sich nicht im Systempfad befindet.</entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installieren Sie ImageMagick auf dem Server. Weitere Informationen unter http://www.imagemagick.org. Anleitungen f&uuml;r die Installation finden Sie unter http://www.imagemagick.org/script/binary-releases.php, in den meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager (z.B. apt-get) installieren.]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG-Pfad</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Geben Sie den Pfad zu FFMPEG an, falls es sich nicht im Systempfad befindet.</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Installieren Sie FFmpeg. Sie sollten die neueste Version verwenden! Windows-Binaries finden Sie z.B. unter http://ffmpeg.arrozcru.org/builds/. Linux- oder OSx-Nutzer sollten eine der zahlreichen Installationsanleitungen im Web zu Rate ziehen. libmp3lame muss aktiviert sein!]]></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX-Pfad</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Geben Sie den Pfad zu SoX an, falls es sich nicht im Systempfad befindet.</entry>
-	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Installieren Sie SoX http://sox.sourceforge.net/. Sie sollten die neueste Version verwenden! SoX 12.xx wird NICHT funktionieren!]]></entry>
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice-/LibreOffice-Pfad f&uuml;r jodconverter]]></entry>
 	<entry key="install.wizard.params.step3.officePath.title">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den echten Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.</entry>
-	<entry key="install.wizard.params.step3.officePath.text">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls 
-					jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.
-	</entry>
+	<entry key="install.wizard.params.step3.officePath.text">Der Pfad zu OpenOffice/LibreOffice (optional). Bitte geben Sie den richtigen Pfad an, falls jodconverter die OpenOffice-/LibreOffice-Installation nicht automatisch findet.</entry>
 
 	<entry key="install.wizard.params.step4.crypt">Krypto-Typ</entry>
 	<entry key="install.wizard.params.step4.cryptClassName">Krypto-Klasse</entry>

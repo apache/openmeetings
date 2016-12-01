@@ -108,11 +108,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private Throwable th = null;
 	private DbType initDbType = null;
 	private DbType dbType = null;
-	
+
 	public void initTzDropDown() {
 		paramsStep1.tzDropDown.setOption();
 	}
-	
+
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
 		super(id, title, new CompoundPropertyModel<InstallationConfig>(new InstallationConfig()), true);
@@ -130,7 +130,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		wmodel.setLastVisible(true);
 		init(wmodel);
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
@@ -150,7 +150,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	public int getWidth() {
 		return 1000;
 	}
-	
+
 	@Override
 	protected boolean closeOnFinish() {
 		return false;
@@ -163,7 +163,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		path += app;
 		return path;
 	}
-	
+
 	private abstract class BaseStep extends DynamicWizardStep {
 		private static final long serialVersionUID = 1L;
 
@@ -178,7 +178,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			InstallWizard.this.setTitle(Model.of(getModelObject().appName + " - " + getString("install.wizard.install.header")));
 		}
 	}
-	
+
 	private final class WelcomeStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
@@ -191,7 +191,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super.onInitialize();
 			add(new Label("step", getString("install.wizard.welcome.panel")).setEscapeModelStrings(false));
 		}
-		
+
 		@Override
 		public boolean isLastStep() {
 			return false;
@@ -214,22 +214,21 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			private static final long serialVersionUID = 1L;
 			private final DropDownChoice<DbType> db = new DropDownChoice<DbType>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
-	        	public Object getDisplayValue(DbType object) {
-	        		return getString(String.format("install.wizard.db.step.%s.name", object.name()));
-	        	}
-	        	
-	        	@Override
-	        	public String getIdValue(DbType object, int index) {
-	        		return object.name();
-	        	}
-	        });
+				public Object getDisplayValue(DbType object) {
+					return getString(String.format("install.wizard.db.step.%s.name", object.name()));
+				}
+
+				@Override
+				public String getIdValue(DbType object, int index) {
+					return object.name();
+				}
+			});
 			private final RequiredTextField<String> user = new RequiredTextField<String>("login");
 			private final TextField<String> pass = new TextField<String>("password");
-			
-        	{
-        		add(db.add(new OnChangeAjaxBehavior() {
+			{
+				add(db.add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -238,25 +237,25 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						initForm(true, target);
 					}
 				}));
-        		add(hostelem.add(host), portelem.add(port));
-        		add(dbname, user, pass);
-        		add(new IndicatingAjaxButton("check") {
+				add(hostelem.add(host), portelem.add(port));
+				add(dbname, user, pass);
+				add(new IndicatingAjaxButton("check") {
 					private static final long serialVersionUID = 1L;
-					
+
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						target.add(getFeedbackPanel());
 					}
-					
+
 					@Override
 					protected void onError(AjaxRequestTarget target, Form<?> form) {
 						target.add(getFeedbackPanel());
 					}
-        		});
-        	}
-        	
-        	@Override
-        	protected void onValidateModelObjects() {
+				});
+			}
+
+			@Override
+			protected void onValidateModelObjects() {
 				ConnectionProperties props = getModelObject();
 				try {
 					Class.forName(props.getDriver());
@@ -299,7 +298,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					form.success(getString("install.wizard.db.step.valid"));
 				}
 		}
-		
+
 		@Override
 		protected void onSubmit() {
 			try {
@@ -319,63 +318,63 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 		}
 	};
-		
+
 	private ConnectionProperties getProps(DbType type) {
-			ConnectionProperties props = new ConnectionProperties();
-			try {
-				File conf = OmFileHelper.getPersistence(type);
-				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
-			} catch (Exception e) {
-				form.warn(getString("install.wizard.db.step.errorprops"));
-			}
+		ConnectionProperties props = new ConnectionProperties();
+		try {
+			File conf = OmFileHelper.getPersistence(type);
+			props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
+		} catch (Exception e) {
+			form.warn(getString("install.wizard.db.step.errorprops"));
+		}
 		return props;
 	}
-		
-		private void initForm(boolean getProps, AjaxRequestTarget target) {
-			ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
-			form.setModelObject(props);
-			hostelem.setVisible(props.getDbType() != DbType.derby);
-			portelem.setVisible(props.getDbType() != DbType.derby);
-			try {
-				switch (props.getDbType()) {
-					case mssql: {
-						String url = props.getURL().substring("jdbc:sqlserver://".length());
-						String[] parts = url.split(";");
-						String[] hp = parts[0].split(":");
-						host.setModelObject(hp[0]);
-						port.setModelObject(Integer.parseInt(hp[1]));
-						dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
-						}
-						break;
-					case oracle: {
-						String[] parts = props.getURL().split(":");
-						host.setModelObject(parts[3].substring(1));
-						port.setModelObject(Integer.parseInt(parts[4]));
-						dbname.setModelObject(parts[5]);
-						}
-						break;
-					case derby: {
-						host.setModelObject("");
-						port.setModelObject(0);
-						String[] parts = props.getURL().split(";");
-						String[] hp = parts[0].split(":");
-						dbname.setModelObject(hp[2]);
-						}
-						break;
-					default:
-						URI uri = URI.create(props.getURL().substring(5));
-						host.setModelObject(uri.getHost());
-						port.setModelObject(uri.getPort());
-						dbname.setModelObject(uri.getPath().substring(1));
-						break;
-				}
-			} catch (Exception e) {
-				form.warn(getString("install.wizard.db.step.errorprops"));
+
+	private void initForm(boolean getProps, AjaxRequestTarget target) {
+		ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
+		form.setModelObject(props);
+		hostelem.setVisible(props.getDbType() != DbType.derby);
+		portelem.setVisible(props.getDbType() != DbType.derby);
+		try {
+			switch (props.getDbType()) {
+				case mssql: {
+					String url = props.getURL().substring("jdbc:sqlserver://".length());
+					String[] parts = url.split(";");
+					String[] hp = parts[0].split(":");
+					host.setModelObject(hp[0]);
+					port.setModelObject(Integer.parseInt(hp[1]));
+					dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
+					}
+					break;
+				case oracle: {
+					String[] parts = props.getURL().split(":");
+					host.setModelObject(parts[3].substring(1));
+					port.setModelObject(Integer.parseInt(parts[4]));
+					dbname.setModelObject(parts[5]);
+					}
+					break;
+				case derby: {
+					host.setModelObject("");
+					port.setModelObject(0);
+					String[] parts = props.getURL().split(";");
+					String[] hp = parts[0].split(":");
+					dbname.setModelObject(hp[2]);
+					}
+					break;
+				default:
+					URI uri = URI.create(props.getURL().substring(5));
+					host.setModelObject(uri.getHost());
+					port.setModelObject(uri.getPort());
+					dbname.setModelObject(uri.getPath().substring(1));
+					break;
 			}
-			if (target != null) {
-				target.add(form);
-			}
+		} catch (Exception e) {
+			form.warn(getString("install.wizard.db.step.errorprops"));
 		}
+		if (target != null) {
+			target.add(form);
+		}
+	}
 		
 		public DbStep() {
 			super(welcomeStep);
@@ -432,18 +431,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public IDynamicWizardStep next() {
 			return paramsStep2;
 		}
-		
-		@Override
-		public boolean isLastAvailable() {
-			return true;
-		}
-		
+
 		@Override
 		public IDynamicWizardStep last() {
 			return installStep;
 		}
 	}
-	
+
 	private final class ParamsStep2 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
@@ -476,18 +470,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public IDynamicWizardStep next() {
 			return paramsStep3;
 		}
-		
-		@Override
-		public boolean isLastAvailable() {
-			return true;
-		}
-		
+
 		@Override
 		public IDynamicWizardStep last() {
 			return installStep;
 		}
 	}
-	
+
 	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 		private final TextField<String> ffmpegPath;
@@ -499,7 +488,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private boolean isAllChecked = false;
 		public ParamsStep3() {
 			super(paramsStep2);
-			
+
 			add(new TextField<Integer>("swfZoom").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("swfJpegQuality").setRequired(true).add(range(1, 100)));
 			add(swfPath = new TextField<String>("swfPath"));
@@ -546,9 +535,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					checkOfficePath();
 					target.add(getFeedbackPanel());
 				}
-			});			
+			});
 		}
-		
+
 		private boolean checkToolPath(TextField<String> path, String[] args) {
 			ConverterProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
 			if (!result.getExitValue().equals("0")) {
@@ -556,7 +545,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 			return result.getExitValue().equals("0");
 		}
-		
+
 		private boolean checkOfficePath() {
 			String err  = "";
 			try {
@@ -590,8 +579,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			isAllChecked = true;
 			return result;
 		}
-		
-		
+
 		@Override
 		public boolean isLastStep() {
 			return false;
@@ -606,18 +594,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 			return paramsStep4;
 		}
-		
+
 		@Override
 		public boolean isLastAvailable() {
 			return isAllChecked;
 		}
-		
+
 		@Override
 		public IDynamicWizardStep last() {
 			return installStep;
 		}
 	}
-	
+
 	private final class ParamsStep4 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
@@ -640,18 +628,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public IDynamicWizardStep next() {
 			return installStep;
 		}
-		
+
 		@Override
 		public boolean isLastAvailable() {
 			return true;
 		}
-		
+
 		@Override
 		public IDynamicWizardStep last() {
 			return installStep;
 		}
-}
-	
+	}
+
 	private final class InstallStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
 		private final CongratulationsPanel congrat;
@@ -660,7 +648,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final ProgressBar progressBar;
 		private final Label desc = new Label("desc", "");
 		private boolean started = false;
-		
+
 		public void startInstallation(AjaxRequestTarget target) {
 			started = true;
 			timer.restart(target);
@@ -670,10 +658,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
 			target.add(desc, container);
 		}
-		
+
 		public InstallStep() {
 			super(paramsStep4);
-			
+
 			// Timer //
 			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
 				private static final long serialVersionUID = 1L;
@@ -713,10 +701,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			//TODO uncomment later progressBar.add(value = new Label("value", progressBar.getModel()));
 			//TODO uncomment later value.setOutputMarkupId(true);
 			//progressBar.setVisible(false);
-			
+
 			container.add(congrat = new CongratulationsPanel("status"));
 			congrat.setVisible(false);
-			
+
 			add(container.setOutputMarkupId(true));
 		}
 
@@ -726,7 +714,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			desc.setDefaultModelObject(getString("install.wizard.install.desc"));
 			add(desc.setOutputMarkupId(true));
 		}
-		
+
 		@Override
 		public boolean isLastStep() {
 			return true;
@@ -737,15 +725,15 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			return null;
 		}
 	}
-	
+
 	private class InstallProcess implements Runnable {
 		private ImportInitvalues installer;
-		
+
 		public InstallProcess(ImportInitvalues installer) {
 			this.installer = installer;
 			th = null;
 		}
-		
+
 		@Override
 		public void run() {
 			try {
@@ -755,7 +743,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 		}
 	}
-	
+
 	private static class SelectOption implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private static SelectOption NO = new SelectOption("0", "No");
@@ -776,20 +764,20 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private static final long serialVersionUID = 1L;
 		T option;
 		IModel<Object> propModel;
-		
+
 		WizardDropDown(String id) {
 			super(id);
 			propModel = ((CompoundPropertyModel<InstallationConfig>)InstallWizard.this.getModel()).bind(id);
 			setModel(new PropertyModel<T>(this, "option"));
 		}
-		
+
 		@Override
 		protected void onDetach() {
 			propModel.detach();
 			super.onDetach();
 		}
 	}
-	
+
 	private final class TzDropDown extends WizardDropDown<String> {
 		private static final long serialVersionUID = 1L;
 
@@ -797,24 +785,25 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			String tzId = WebSession.get().getClientTZCode();
 			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : AVAILABLE_TIMEZONES.get(0);
 		}
-		
+
 		public TzDropDown(String id) {
 			super(id);
 			setChoices(AVAILABLE_TIMEZONES);
 			setChoiceRenderer(new ChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
 				public Object getDisplayValue(String object) {
-    				return object.toString();
-    			}
+					return object.toString();
+				}
+
 				@Override
 				public String getIdValue(String object, int index) {
 					return object.toString();
 				}
 			});
 		}
-		
+
 		@Override
 		protected void onModelChanged() {
 			if (propModel != null && option != null) {
@@ -822,7 +811,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 		}
 	}
-	
+
 	private class SelectOptionDropDown extends WizardDropDown<SelectOption> {
 		private static final long serialVersionUID = 1L;
 
@@ -830,19 +819,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super(id);
 			setChoiceRenderer(new ChoiceRenderer<SelectOption>("value", "key"));
 		}
-		
+
 		@Override
 		protected void onModelChanged() {
 			if (propModel != null && option != null) {
 				propModel.setObject(option.key);
 			}
 		}
-		
 	}
-	
+
 	private final class YesNoDropDown extends SelectOptionDropDown {
 		private static final long serialVersionUID = 1L;
-		
+
 		YesNoDropDown(String id) {
 			super(id);
 			setChoices(yesNoList);
@@ -850,10 +838,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					SelectOption.NO : SelectOption.YES;
 		}
 	}
-	
+
 	private final class YesNoTextDropDown extends SelectOptionDropDown {
 		private static final long serialVersionUID = 1L;
-		
+
 		YesNoTextDropDown(String id) {
 			super(id);
 			setChoices(yesNoTextList);
@@ -861,18 +849,20 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					SelectOption.NO_TEXT : SelectOption.YES_TEXT;
 		}
 	}
-	
+
 	private final class LangDropDown extends SelectOptionDropDown {
 		private static final long serialVersionUID = 1L;
 
 		public LangDropDown(String id) {
 			super(id);
-			
+
 			List<SelectOption> list = new ArrayList<SelectOption>();
-			
 			for (Map.Entry<Long, Locale> me : LabelDao.languages.entrySet()) {
 				SelectOption op = new SelectOption(me.getKey().toString(), me.getValue().getDisplayName());
 				if (getSession().getLocale().equals(me.getValue())) {
+					option = op;
+				}
+				if (option == null && getSession().getLocale().getLanguage().equals(me.getValue().getLanguage())) {
 					option = op;
 				}
 				list.add(op);
