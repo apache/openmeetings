@@ -128,7 +128,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		if (roomId != null) {
 			pp.add(WICKET_ROOM_ID, roomId);
 			SwfPanel rp = new SwfPanel(CHILD_ID, pp);
-			replace(new MainPanel(PANEL_MAIN, rp));
+			MainPanel mp = new MainPanel(PANEL_MAIN, rp);
+			mp.getChat().setVisible(false);
+			replace(mp);
 			rp.onMenuPanelLoad(null);
 		} else {
 			replace(new SwfPanel(PANEL_MAIN, pp));

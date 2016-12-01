@@ -85,11 +85,11 @@ public class SwfPanel extends BasePanel {
 	private final PollResultsDialog pollResults;
 	private final StartSharingEventBehavior startSharing;
 	private Long roomId = null;
-	
+
 	public SwfPanel(String id, Long roomId) {
 		this(id, addServer(roomId, true));
 	}
-	
+
 	public SwfPanel(String id, PageParameters pp) {
 		super(id);
 		//OK let's find the room
@@ -124,13 +124,13 @@ public class SwfPanel extends BasePanel {
 		if (roomId != null && roomId.longValue() > 0) {
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void respond(AjaxRequestTarget target) {
 					invite.updateModel(target);
 					invite.open(target);
 				}
-				
+
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
@@ -139,7 +139,7 @@ public class SwfPanel extends BasePanel {
 			});
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void respond(AjaxRequestTarget target) {
 					String publicSid = getPublicSid();
@@ -149,7 +149,7 @@ public class SwfPanel extends BasePanel {
 						createPoll.open(target);
 					}
 				}
-				
+
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
@@ -158,7 +158,7 @@ public class SwfPanel extends BasePanel {
 			});
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void respond(AjaxRequestTarget target) {
 					Client c = getClient(getPublicSid());
@@ -167,7 +167,7 @@ public class SwfPanel extends BasePanel {
 						pollResults.open(target);
 					}
 				}
-				
+
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
@@ -176,7 +176,7 @@ public class SwfPanel extends BasePanel {
 			});
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void respond(AjaxRequestTarget target) {
 					if (getBean(PollDao.class).hasPoll(roomId) && !getBean(PollDao.class).hasVoted(roomId, getUserId()) && getClient(getPublicSid()) != null) {
@@ -184,7 +184,7 @@ public class SwfPanel extends BasePanel {
 						vote.open(target);
 					}
 				}
-				
+
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
@@ -193,12 +193,12 @@ public class SwfPanel extends BasePanel {
 			});
 			add(new AbstractDefaultAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void respond(AjaxRequestTarget target) {
 					startSharing.respond(target);
 				}
-				
+
 				@Override
 				public void renderHead(Component component, IHeaderResponse response) {
 					super.renderHead(component, response);
@@ -216,7 +216,7 @@ public class SwfPanel extends BasePanel {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		getBasePage().getHeader().setVisible(false);
@@ -228,11 +228,11 @@ public class SwfPanel extends BasePanel {
 		}
 		return this;
 	}
-	
+
 	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
@@ -298,7 +298,7 @@ public class SwfPanel extends BasePanel {
 	private static PageParameters addServer(PageParameters pp, Server s) {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
 	}
-	
+
 	public static PageParameters addServer(Long roomId, boolean addBasic) {
 		PageParameters pp = new PageParameters();
 		if (addBasic) {

@@ -81,6 +81,9 @@ public class ProfileImageResourceReference extends ResourceReference {
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
 				PageParameters params = attributes.getParameters();
 				userId = params.get("id").toOptionalLong();
+				if (userId != null && userId.longValue() < 0) {
+					userId = -userId;
+				}
 				uri = getBean(UserDao.class).get(userId).getPictureuri();
 				ResourceResponse rr = super.newResourceResponse(attributes);
 				rr.disableCaching();

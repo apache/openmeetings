@@ -69,7 +69,7 @@ public class MainPage extends BaseInitedPage {
 			protected void respond(AjaxRequestTarget target) {
 				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
