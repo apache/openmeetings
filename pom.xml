@@ -39,7 +39,7 @@
 		<junit.version>4.12</junit.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.19.1</maven.surefire.version>
-		<maven-site.version>3.6</maven-site.version>
+		<maven-site.version>3.3</maven-site.version>
 		<wicket.version>7.5.0</wicket.version>
 		<wicketju.version>7.5.0</wicketju.version>
 		<wickets.version>7.5.0</wickets.version>
@@ -715,6 +715,19 @@
 						</goals>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>lt.velykis.maven.skins</groupId>
+						<artifactId>reflow-velocity-tools</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+					<!-- Reflow skin requires Velocity >= 1.7 -->
+					<dependency>
+						<groupId>org.apache.velocity</groupId>
+						<artifactId>velocity</artifactId>
+						<version>1.7</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -895,6 +908,7 @@
 								<notes></notes>
 								<patterns>
 									<pattern>Licensed MIT</pattern>
+									<pattern>MIT/GPL2 Licensed</pattern>
 								</patterns>
 							</license>
 						</licenses>
