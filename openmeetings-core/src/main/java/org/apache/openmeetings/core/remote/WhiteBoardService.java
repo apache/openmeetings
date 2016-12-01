@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -34,6 +35,7 @@ import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -44,6 +46,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -76,6 +79,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	private SessiondataDao sessionDao;
 	@Autowired
 	private LabelDao labelDao;
+	@Autowired
+	private ConfigurationDao cfgDao;
 
 	public boolean getNewWhiteboardId(String name) {
 		try {
@@ -128,7 +133,16 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 
 			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
-				wbListManagerById.getNewWhiteboardId(roomId, labelDao.getString("615", userDao.get(currentClient.getUserId()).getLanguageId()));
+				Long langId = null;
+				{
+					Long userId = currentClient.getUserId();
+					if (userId != null && userId.longValue() < 0) {
+						userId = -userId;
+					}
+					User u = userDao.get(userId);
+					langId = u == null ? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : u.getLanguageId();
+				}
+				wbListManagerById.getNewWhiteboardId(roomId, labelDao.getString("615", langId));
 				log.debug("Init New Room List");
 				whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
 			}
