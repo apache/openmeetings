@@ -14,50 +14,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-.carousel-caption .title, .carousel-caption .desc {
-	color: white;
-	display: block;
-	text-align: center;
-	text-shadow: rgba(0, 0, 0, 0.6) 0px 1px 2px;
-	margin-bottom: 10px;
-}
-.carousel-caption .title {
-	font-size: 24px;
-	font-weight: 500;
-	margin-top: 20px;
-}
-.feature.title {
-	display: block;
-	text-align: center;
-	font-size: 1.17em;
-	font-weight: bold;
-	margin-top: 20px;
-	margin-bottom: 10px;
-}
-.feature img {
-	float: left;
-}
-.feature .p_content {
-	padding-left: 10px;
-	display: inline-block;
-}
-.feature .desc_image {
-	float: left;
-}
-.feature .desc{
-	float: left;
-	width: 550px;
-}
-.feature li {
-	position: relative;
-	left: 30px;
-	margin-right: 20px;
-}
-.feature li img {
-	float: none;
-	padding: 0;
-	padding-right: 10px;
-}
 iframe {
 	width: 100%;
 	min-height: 700px;
@@ -137,39 +93,6 @@ iframe {
 	top: 65px;
 	left: 65px;
 }
-
 .example-image-link {
 	display: block;
-}
-
-#overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 10000;
-}
-
-#overlay .bg {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #000;
-	filter:alpha(opacity=70);
-	-moz-opacity:0.7;
-	-khtml-opacity: 0.7;
-	opacity: 0.7;
-	z-index: 10000;
-}
-
-#overlay img{
-	position: absolute;
-	max-width: 80%;
-	left: 10%;
-	top: 10%;
-	height: auto;
-	z-index: 10001;
 }
