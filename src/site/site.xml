@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/DECORATION/1.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd"
+<project xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
   name="Apache OpenMeetings Project">
 
 	<bannerLeft>
@@ -28,33 +28,50 @@
 	</bannerRight>
 
 	<skin>
-		<groupId>org.apache.maven.skins</groupId>
-		<artifactId>maven-fluido-skin</artifactId>
-		<version>1.6</version>
+		<groupId>lt.velykis.maven.skins</groupId>
+		<artifactId>reflow-maven-skin</artifactId>
+		<version>1.1.1</version>
 	</skin>
-	
+
 	<version position="none"/>
-	
+
 	<body>
 		<head>
-			<![CDATA[<script type="text/javascript" src="http://openmeetings.apache.org/js/site.js"></script>]]>
+			<link rel="stylesheet" href="$resourcePath/css/site.css"/>
 		</head>
-		
 		<links>
 			<item name="Demo" href="http://openmeetings.apache.org/demo.html"/>
 			<item name="Download" href="http://openmeetings.apache.org/downloads.html"/>
-			<item name="Installation" href="http://openmeetings.apache.org/installation.html"/>
 			<item name="Wiki" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS"/>
 		</links>
-		<menu ref="modules" inherit="bottom"/>
+		<menu ref="modules" inherit="top"/>
 	</body>
-	
+
 	<poweredBy></poweredBy>
-	
+
 	<custom>
-		<fluidoSkin>
-			<topBarEnabled>false</topBarEnabled>
-			<sideBarEnabled>true</sideBarEnabled>
-		</fluidoSkin>
+		<reflowSkin>
+			<brand>
+				<name><![CDATA[
+					<span class="color-highlight">Apache</span> OpenMeetings
+				]]></name>
+			</brand>
+			<!--localResources>true</localResources--><!-- DEVELOPMENT -->
+			<!--absoluteResourceURL>http://localhost:5080/openmeetings/docs</absoluteResourceURL--><!-- DEVELOPMENT -->
+			<absoluteResourceURL>http://openmeetings.apache.org</absoluteResourceURL>
+			<protocolRelativeURLs>true</protocolRelativeURLs>
+			<theme>site</theme><!-- http://bootswatch.com/2/cerulean offline -->
+			<bottomNav maxSpan="12">
+				<column>General</column>
+				<column>Installation</column>
+				<column>Community</column>
+				<column>Development</column>
+			</bottomNav>
+			<toc>sidebar</toc>
+			<skinAttribution>false</skinAttribution>
+			<endContent>
+				<script src="$resourcePath/js/site.js"></script>
+			</endContent>
+		</reflowSkin>
 	</custom>
 </project>

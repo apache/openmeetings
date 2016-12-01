@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/DECORATION/1.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd"
+<project xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
   name="Apache OpenMeetings Project">
 
 	<body>
@@ -29,4 +29,12 @@
 			<item name="JavaDoc" href="/apidocs/index.html" target="_blank" />
 		</menu>
 	</body>
+	<custom>
+		<reflowSkin>
+			<bottomNav maxSpan="12">
+				<column>Parent Project</column>
+				<column>Project</column>
+			</bottomNav>
+		</reflowSkin>
+	</custom>
 </project>

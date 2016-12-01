@@ -20,14 +20,11 @@
 	</properties>
 
 	<head>
-		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="js/netcalc.js"></script>
 		<link rel="stylesheet" href="css/jquery-ui.css"/>
 		<link rel="stylesheet" href="css/netcalc.css"/>
 	</head>
 	<body>
 		<section name="Network bandwidth for OpenMeetings">
-			
 			<div id="content">
 				<span class="result-area">
 					Server inbound bandwidth:
