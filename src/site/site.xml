@@ -56,10 +56,10 @@
 					<span class="color-highlight">Apache</span> OpenMeetings
 				]]></name>
 			</brand>
-			<!--localResources>true</localResources--><!-- DEVELOPMENT -->
 			<!--absoluteResourceURL>http://localhost:5080/openmeetings/docs</absoluteResourceURL--><!-- DEVELOPMENT -->
 			<absoluteResourceURL>http://openmeetings.apache.org</absoluteResourceURL>
 			<protocolRelativeURLs>true</protocolRelativeURLs>
+			<localResources>true</localResources>
 			<theme>site</theme><!-- http://bootswatch.com/2/cerulean offline -->
 			<bottomNav maxSpan="12">
 				<column>General</column>
