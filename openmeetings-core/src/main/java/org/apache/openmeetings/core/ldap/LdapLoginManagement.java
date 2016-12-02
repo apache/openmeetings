@@ -89,7 +89,6 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-	static final String CONFIGKEY_LDAP_KEY_PICTURE_URI = "ldap_user_picture_uri";
 	private static final String CONFIGKEY_LDAP_KEY_GROUP = "ldap_group_attr";
 
 	// LDAP default attributes mapping
@@ -105,7 +104,6 @@ public class LdapLoginManagement {
 	private static final String LDAP_KEY_TOWN = "l";
 	private static final String LDAP_KEY_PHONE = "telephoneNumber";
 	private static final String LDAP_KEY_TIMEZONE = "timezone";
-	private static final String LDAP_KEY_PICTURE_URI = "pictureUri";
 	private static final String LDAP_KEY_GROUP = "memberOf";
 
 	public enum AuthType {
@@ -113,13 +111,13 @@ public class LdapLoginManagement {
 		, SEARCHANDBIND
 		, SIMPLEBIND
 	}
-	
+
 	public enum Provisionning {
 		NONE
 		, AUTOUPDATE
 		, AUTOCREATE
 	}
-	
+
 	public enum GroupMode {
 		NONE
 		, ATTRIBUTE
@@ -143,7 +141,7 @@ public class LdapLoginManagement {
 			conn.bind();
 		}
 	}
-	
+
 	private static Attribute getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
 		String alias = config.getProperty(aliasCode, "");
 		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
@@ -154,11 +152,11 @@ public class LdapLoginManagement {
 		Attribute a = getAttr(config, entry, aliasCode, defaultAlias);
 		return a == null ? null : a.getString();
 	}
-	
+
 	private static String getLogin(Properties config, Entry entry) throws LdapInvalidAttributeValueException {
 		return getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_LOGIN, LDAP_KEY_LOGIN);
 	}
-	
+
 	/**
 	 * Ldap Login
 	 * 
@@ -177,7 +175,7 @@ public class LdapLoginManagement {
 			if (w.options.useLowerCase) {
 				login = login.toLowerCase();
 			}
-			
+
 			boolean authenticated = true;
 			Dn userDn = null;
 			Entry entry = null;
@@ -266,12 +264,12 @@ public class LdapLoginManagement {
 		}
 		return u;
 	}
-	
+
 	public void importUsers(Long domainId, boolean print) throws OmException {
 		try (LdapWorker w = new LdapWorker(domainId)) {
 			bindAdmin(w.conn, w.options);
 			Dn baseDn = new Dn(w.options.searchBase);
-	
+
 			try (EntryCursor cursor = new EntryCursorImpl(w.conn.search(
 					new SearchRequestImpl()
 						.setBase(baseDn)
@@ -306,14 +304,14 @@ public class LdapLoginManagement {
 			throw new OmException(e);
 		}
 	}
-	
+
 	private class LdapWorker implements Closeable {
 		LdapConnection conn = null;
 		Properties config = new Properties();
 		LdapOptions options = null;
 		Long domainId = null;
 		LdapConfig ldapCfg = null;
-		
+
 		public LdapWorker(Long domainId) throws Exception {
 			this.domainId = domainId;
 			ldapCfg = ldapConfigDao.get(domainId);
@@ -332,7 +330,7 @@ public class LdapLoginManagement {
 
 			conn = new LdapNetworkConnection(options.host, options.port, options.secure);
 		}
-		
+
 		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException, IOException {
 			if (entry == null) {
 				log.error("LDAP entry is null, search or lookup by Dn failed");
@@ -370,11 +368,9 @@ public class LdapLoginManagement {
 				tz = options.tz;
 			}
 			u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
-			String picture = getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
-			if (picture == null) {
-				picture = options.pictureUri;
+			if (!Strings.isEmpty(options.pictureUri)) {
+				u.setPictureuri(options.pictureUri);
 			}
-			u.setPictureuri(picture);
 			
 			List<Dn> groups = new ArrayList<>();
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
@@ -387,7 +383,7 @@ public class LdapLoginManagement {
 			} else if (GroupMode.QUERY == options.groupMode) {
 				Dn baseDn = new Dn(options.searchBase);
 				String searchQ = String.format(options.groupQuery, u.getLogin());
-		
+
 				try (EntryCursor cursor = new EntryCursorImpl(conn.search(
 						new SearchRequestImpl()
 							.setBase(baseDn)
@@ -431,7 +427,7 @@ public class LdapLoginManagement {
 			}
 			return u;
 		}
-		
+
 		@Override
 		public void close() throws IOException {
 			if (conn != null) {

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.ldap;
 
-import static org.apache.openmeetings.core.ldap.LdapLoginManagement.CONFIGKEY_LDAP_KEY_PICTURE_URI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Properties;
@@ -53,7 +52,8 @@ public class LdapOptions {
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
 	private static final String CONFIGKEY_LDAP_GROUP_QUERY = "ldap_group_query";
 	private static final String CONFIGKEY_LDAP_IMPORT_QUERY = "ldap_import_query";
-	
+	private static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
+
 	AuthType type = AuthType.SIMPLEBIND;
 	Provisionning prov = Provisionning.AUTOCREATE;
 	AliasDerefMode derefMode = AliasDerefMode.DEREF_ALWAYS;
@@ -74,7 +74,7 @@ public class LdapOptions {
 	String userDn = EMPTY_FORMAT;
 	String pictureUri = null;
 	String importQuery = null;
-	
+
 	public LdapOptions(Properties config) {
 		String ldap_use_lower_case = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
 		useLowerCase = "true".equals(ldap_use_lower_case);
@@ -135,7 +135,7 @@ public class LdapOptions {
 		tz = config.getProperty(CONFIGKEY_LDAP_TIMEZONE_NAME, null);
 		groupQuery = config.getProperty(CONFIGKEY_LDAP_GROUP_QUERY, EMPTY_FORMAT);
 		userDn = config.getProperty(CONFIGKEY_LDAP_USERDN_FORMAT, EMPTY_FORMAT);
-		pictureUri = config.getProperty(CONFIGKEY_LDAP_KEY_PICTURE_URI, null);
+		pictureUri = config.getProperty(CONFIGKEY_LDAP_PICTURE_URI, null);
 		importQuery = config.getProperty(CONFIGKEY_LDAP_IMPORT_QUERY, "(objectClass=*)");
 	}
 }
