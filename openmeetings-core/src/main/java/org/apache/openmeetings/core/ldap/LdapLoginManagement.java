@@ -349,6 +349,9 @@ public class LdapLoginManagement {
 				if (ldapCfg.getAddDomainToUserName()) {
 					login = login + "@" + ldapCfg.getDomain();
 				}
+				if (options.useLowerCase) {
+					login = login.toLowerCase();
+				}
 				u.setLogin(login);
 				u.setShowContactDataToContacts(true);
 				u.setAddress(new Address());
