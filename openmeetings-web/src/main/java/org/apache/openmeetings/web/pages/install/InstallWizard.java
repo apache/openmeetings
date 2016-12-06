@@ -156,12 +156,16 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		return false;
 	}
 
-	private static String getPath(String path, String app) {
-		if (!"".equals(path) && !path.endsWith(File.separator)) {
-			path += File.separator;
+	private static String getPath(String _path, String app) {
+		StringBuilder path = new StringBuilder();
+		if (!Strings.isEmpty(_path)) {
+			path.append(_path);
+			if (!_path.endsWith(File.separator)) {
+				path.append(File.separator);
+			}
 		}
-		path += app;
-		return path;
+		path.append(app);
+		return path.toString();
 	}
 
 	private abstract class BaseStep extends DynamicWizardStep {
@@ -297,85 +301,85 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				if (valid) {
 					form.success(getString("install.wizard.db.step.valid"));
 				}
-		}
+			}
 
-		@Override
-		protected void onSubmit() {
-			try {
-				ConnectionPropertiesPatcher.patch(getModelObject());
-				XmlWebApplicationContext ctx = (XmlWebApplicationContext)getWebApplicationContext(Application.get().getServletContext());
-				if (ctx == null) {
-					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters("Web context is NULL").getObject());
-					log.error("Web context is NULL");
-					return;
+			@Override
+			protected void onSubmit() {
+				try {
+					ConnectionPropertiesPatcher.patch(getModelObject());
+					XmlWebApplicationContext ctx = (XmlWebApplicationContext)getWebApplicationContext(Application.get().getServletContext());
+					if (ctx == null) {
+						form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters("Web context is NULL").getObject());
+						log.error("Web context is NULL");
+						return;
+					}
+					LocalEntityManagerFactoryBean emb = ctx.getBeanFactory().getBean(LocalEntityManagerFactoryBean.class);
+					emb.afterPropertiesSet();
+					dbType = getModelObject().getDbType();
+				} catch (Exception e) {
+					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
+					log.error("error while patching", e);
 				}
-				LocalEntityManagerFactoryBean emb = ctx.getBeanFactory().getBean(LocalEntityManagerFactoryBean.class);
-				emb.afterPropertiesSet();
-				dbType = getModelObject().getDbType();
+			}
+		};
+
+		private ConnectionProperties getProps(DbType type) {
+			ConnectionProperties props = new ConnectionProperties();
+			try {
+				File conf = OmFileHelper.getPersistence(type);
+				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 			} catch (Exception e) {
-				form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
-				log.error("error while patching", e);
+				form.warn(getString("install.wizard.db.step.errorprops"));
+			}
+			return props;
+		}
+
+		private void initForm(boolean getProps, AjaxRequestTarget target) {
+			ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
+			form.setModelObject(props);
+			hostelem.setVisible(props.getDbType() != DbType.derby);
+			portelem.setVisible(props.getDbType() != DbType.derby);
+			try {
+				switch (props.getDbType()) {
+					case mssql: {
+						String url = props.getURL().substring("jdbc:sqlserver://".length());
+						String[] parts = url.split(";");
+						String[] hp = parts[0].split(":");
+						host.setModelObject(hp[0]);
+						port.setModelObject(Integer.parseInt(hp[1]));
+						dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
+						}
+						break;
+					case oracle: {
+						String[] parts = props.getURL().split(":");
+						host.setModelObject(parts[3].substring(1));
+						port.setModelObject(Integer.parseInt(parts[4]));
+						dbname.setModelObject(parts[5]);
+						}
+						break;
+					case derby: {
+						host.setModelObject("");
+						port.setModelObject(0);
+						String[] parts = props.getURL().split(";");
+						String[] hp = parts[0].split(":");
+						dbname.setModelObject(hp[2]);
+						}
+						break;
+					default:
+						URI uri = URI.create(props.getURL().substring(5));
+						host.setModelObject(uri.getHost());
+						port.setModelObject(uri.getPort());
+						dbname.setModelObject(uri.getPath().substring(1));
+						break;
+				}
+			} catch (Exception e) {
+				form.warn(getString("install.wizard.db.step.errorprops"));
+			}
+			if (target != null) {
+				target.add(form);
 			}
 		}
-	};
 
-	private ConnectionProperties getProps(DbType type) {
-		ConnectionProperties props = new ConnectionProperties();
-		try {
-			File conf = OmFileHelper.getPersistence(type);
-			props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
-		} catch (Exception e) {
-			form.warn(getString("install.wizard.db.step.errorprops"));
-		}
-		return props;
-	}
-
-	private void initForm(boolean getProps, AjaxRequestTarget target) {
-		ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
-		form.setModelObject(props);
-		hostelem.setVisible(props.getDbType() != DbType.derby);
-		portelem.setVisible(props.getDbType() != DbType.derby);
-		try {
-			switch (props.getDbType()) {
-				case mssql: {
-					String url = props.getURL().substring("jdbc:sqlserver://".length());
-					String[] parts = url.split(";");
-					String[] hp = parts[0].split(":");
-					host.setModelObject(hp[0]);
-					port.setModelObject(Integer.parseInt(hp[1]));
-					dbname.setModelObject(parts[1].substring(parts[1].indexOf('=') + 1));
-					}
-					break;
-				case oracle: {
-					String[] parts = props.getURL().split(":");
-					host.setModelObject(parts[3].substring(1));
-					port.setModelObject(Integer.parseInt(parts[4]));
-					dbname.setModelObject(parts[5]);
-					}
-					break;
-				case derby: {
-					host.setModelObject("");
-					port.setModelObject(0);
-					String[] parts = props.getURL().split(";");
-					String[] hp = parts[0].split(":");
-					dbname.setModelObject(hp[2]);
-					}
-					break;
-				default:
-					URI uri = URI.create(props.getURL().substring(5));
-					host.setModelObject(uri.getHost());
-					port.setModelObject(uri.getPort());
-					dbname.setModelObject(uri.getPath().substring(1));
-					break;
-			}
-		} catch (Exception e) {
-			form.warn(getString("install.wizard.db.step.errorprops"));
-		}
-		if (target != null) {
-			target.add(form);
-		}
-	}
-		
 		public DbStep() {
 			super(welcomeStep);
 			add(form.setOutputMarkupId(true));
@@ -391,7 +395,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
 					, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
 		}
-		
+
 		@Override
 		public boolean isLastStep() {
 			return false;
