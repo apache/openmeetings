@@ -80,13 +80,11 @@ public class OmFileHelper {
 	public static final String EXTENSION_FLV = "flv";
 	public static final String EXTENSION_MP4 = "mp4";
 	public static final String EXTENSION_AVI = "avi";
-	public static final String EXTENSION_OGG = "ogg";
 	public static final String EXTENSION_JPG = "jpg";
 	public static final String EXTENSION_SWF = "swf";
 	public static final String WML_EXTENSION = "." + EXTENSION_WML;
 	public static final String FLV_EXTENSION = "." + EXTENSION_FLV;
 	public static final String MP4_EXTENSION = "." + EXTENSION_MP4;
-	public static final String OGG_EXTENSION = "." + EXTENSION_OGG;
 	public static final String JPG_EXTENSION = "." + EXTENSION_JPG;
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
 	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
@@ -218,11 +216,7 @@ public class OmFileHelper {
 	public static File getMp4Recording(String name) {
 		return getRecording(name + MP4_EXTENSION);
 	}
-	
-	public static File getOggRecording(String name) {
-		return getRecording(name + OGG_EXTENSION);
-	}
-	
+
 	public static File getStreamsSubDir(Long id) {
 		return getDir(getStreamsDir(), id.toString());
 	}

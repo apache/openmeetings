@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.time.Duration;
@@ -288,9 +287,6 @@ public class RecordingDao {
 		}
 		if (r.exists(EXTENSION_MP4)) {
 			size += r.getFile(EXTENSION_MP4).length();
-		}
-		if (r.exists(EXTENSION_OGG)) {
-			size += r.getFile(EXTENSION_OGG).length();
 		}
 		for (Recording rec : getByParent(r.getId())) {
 			size += getSize(rec);

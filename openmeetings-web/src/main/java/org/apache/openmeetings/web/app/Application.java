@@ -65,7 +65,6 @@ import org.apache.openmeetings.web.user.record.AviRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.FlvRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
-import org.apache.openmeetings.web.user.record.OggRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
@@ -152,7 +151,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
-		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());

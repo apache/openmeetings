@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.data.record.listener.async.BaseStream
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
@@ -360,15 +359,5 @@ public abstract class BaseConverter {
 				mp4path
 				};
 		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
-		
-		argv = new String[] {
-				getPathToFFMPEG(), "-y",
-				"-i", mp4path,
-				"-vcodec", "libtheora",
-				"-acodec", "libvorbis",
-				path + OGG_EXTENSION
-				};
-
-		returnLog.add(ProcessHelper.executeScript("generate OGG", argv));
 	}
 }

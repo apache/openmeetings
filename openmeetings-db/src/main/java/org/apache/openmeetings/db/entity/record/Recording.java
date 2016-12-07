@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.entity.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
@@ -315,8 +314,6 @@ public class Recording extends FileItem {
 				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
 			} else if (EXTENSION_AVI.equals(ext)) {
 				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_AVI));
-			} else if (EXTENSION_OGG.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_OGG));
 			}
 		}
 		return f;
