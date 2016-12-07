@@ -64,7 +64,6 @@ public class OmFileHelper {
 	public static final String EXTENSION_FLV = "flv";
 	public static final String EXTENSION_MP4 = "mp4";
 	public static final String EXTENSION_AVI = "avi";
-	public static final String EXTENSION_OGG = "ogg";
 	public static final String EXTENSION_JPG = "jpg";
 	public static final String EXTENSION_SWF = "swf";
 	public static final String EXTENSION_PDF = "pdf";

@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -67,7 +68,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 				FFMPEG_MAP_PARAM = ".";
 			}
 
-			String finalNamePrefix = recordingFileName + id;
 			log.debug("recording " + r.getId());
 
 			List<ConverterProcessResult> logs = new ArrayList<>();
@@ -159,7 +159,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			File jpg = new File(getStreamsHibernateDir(), finalNamePrefix + ".jpg");
+			File jpg = r.getFile(EXTENSION_JPG);
 
 			String[] cmdJpg = new String[] { //
 					getPathToFFMPEG(), "-y",//
@@ -172,7 +172,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			logs.add(ProcessHelper.executeScript("previewFullFLV", cmdJpg));
 
-			File avi = new File(getStreamsHibernateDir(), finalNamePrefix + ".avi");
+			File avi = r.getFile(EXTENSION_AVI);
 
 			String[] cmdAvi = new String[] { getPathToFFMPEG(), "-y", "-i", flv.getCanonicalPath(), "-vcodec",
 					"copy", avi.getCanonicalPath() };

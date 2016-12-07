@@ -36,10 +36,8 @@ public class VideoPlayer extends Panel {
 	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //FIXME not used
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4res = new Mp4RecordingResourceReference();
-	private final OggRecordingResourceReference oggres = new OggRecordingResourceReference();
 	private final OmVideo player = new OmVideo("player", null);
 	private final Source mp4 = new Source("mp4", mp4res);
-	private final Source ogg = new Source("ogg", oggres);
 
 	public VideoPlayer(String id) {
 		this(id, null);
@@ -50,9 +48,7 @@ public class VideoPlayer extends Panel {
 		add(container.setOutputMarkupPlaceholderTag(true));
 		mp4.setDisplayType(true);
 		mp4.setType(MP4_MIME_TYPE);
-		ogg.setDisplayType(true);
-		ogg.setType("video/ogg");
-		player.add(mp4, ogg);
+		player.add(mp4);
 		container.add(wait.setVisible(false), player);
 		update(null, r);
 	}
@@ -62,7 +58,6 @@ public class VideoPlayer extends Panel {
 		if (videoExists) {
 			PageParameters pp = new PageParameters().add("id", r.getId());
 			mp4.setPageParameters(pp);
-			ogg.setPageParameters(pp);
 			player.recId = r.getId();
 		}
 		container.setVisible(videoExists);

@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -355,15 +354,5 @@ public abstract class BaseConverter {
 				mp4.getCanonicalPath()
 				};
 		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
-		
-		argv = new String[] {
-				getPathToFFMPEG(), "-y"
-				, "-i", mp4.getCanonicalPath()
-				, "-vcodec", "libtheora"
-				, "-acodec", "libvorbis"
-				, r.getFile(EXTENSION_OGG).getCanonicalPath()
-				};
-
-		returnLog.add(ProcessHelper.executeScript("generate OGG", argv));
 	}
 }

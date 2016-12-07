@@ -969,7 +969,7 @@
 									<pluginExecutionFilter>
 										<groupId>org.apache.maven.plugins</groupId>
 										<artifactId>maven-site-plugin</artifactId>
-										<versionRange>[3.4,)</versionRange>
+										<versionRange>[3.3,)</versionRange>
 										<goals>
 											<goal>site</goal>
 										</goals>

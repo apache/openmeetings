@@ -21,7 +21,6 @@ package org.apache.openmeetings.service.quartz.scheduler;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -113,7 +112,6 @@ public class CleanupJob extends AbstractJob {
 				rec.getFile(EXTENSION_MP4).delete();
 				rec.getFile(EXTENSION_FLV).delete();
 				rec.getFile(EXTENSION_AVI).delete();
-				rec.getFile(EXTENSION_OGG).delete();
 				recordingDao.delete(rec);
 			}
 		});
