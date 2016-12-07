@@ -28,7 +28,6 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_OGG;
 import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
@@ -560,7 +559,6 @@ public class BackupImport {
 					fileMap.put(String.format("%s.%s", name, EXTENSION_AVI), String.format("%s.%s", r.getHash(), EXTENSION_AVI));
 					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
 					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
-					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_OGG), String.format("%s.%s", r.getHash(), EXTENSION_OGG));
 				}
 				recordingDao.update(r);
 			}
