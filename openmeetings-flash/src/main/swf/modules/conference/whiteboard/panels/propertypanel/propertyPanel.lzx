@@ -176,7 +176,6 @@
 	</method>
 
 	<view name="_content" visible="${this.parent.isopen}" >
-		
 		<labelTextWidthTooltip name="_xvalueLabel" x="4" y="24"
 			labelid="545" labelLabelid="546"  /> 
 		<customEdittext name="_xvalue" x="24" y="24" regexpType="number" 
@@ -344,12 +343,8 @@
 		
 		<!-- 340 -->
 		<view name="_clickLayer" clickable="true" opacity="0.75" x="340"
-			  width="460" height="$once{ parent.height - this.y }" 
-			  y="20" showhandcursor="false" bgcolor="0xFFFFFF" />
-		
+				width="460" height="$once{ parent.height - this.y }" 
+				y="20" showhandcursor="false" bgcolor="0xFFFFFF" />
 	</view>
-
 </class>
-     
-    
 </library>

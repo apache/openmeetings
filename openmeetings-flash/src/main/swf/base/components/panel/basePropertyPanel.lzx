@@ -30,6 +30,7 @@
 	
 	<!--- if this Box should be closeable -->
 	<attribute name="closable" value="false" type="boolean" />
+	<attribute name="minimizable" value="true" type="boolean" />
 	
 	<!--- Title of this window -->
 	<attribute name="title" type="string" value="basePanel" />
@@ -73,12 +74,14 @@
 		  
 	<view name="_titleView" x="${ parent.titlePos }" y="1" width="${ this.parent.width - parent.titlePos }" height="20" >
 		<handler name="onclick">
-			this.parent.toggleopen();
+			if (parent.minimizable) {
+				this.parent.toggleopen();
+			}
 		</handler>
 		
 		<text fontsize="11" height="17" x="${ parent.parent.titlePos + 16 }" y="1" text="${ this.parent.parent.title }" 
 			fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" resize="true" fontstyle="bold" />
-		
+
 		<button visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-23 }" 
 			y="1" text="X" height="18" width="20" >
 			<handler name="onmouseup">
@@ -93,7 +96,7 @@
 			<labelTooltip name="_labelTooltip" labelid="857" />
 		</view>
 		
-		<view visible="${ this.parent.parent.isopen }" x="${ parent.parent.titlePos + 2 }" y="2" resource="conferenceBox_button_max_small_rsc">
+		<view visible="${ parent.parent.minimizable &amp;&amp; this.parent.parent.isopen }" x="${ parent.parent.titlePos + 2 }" y="2" resource="conferenceBox_button_max_small_rsc">
 			<handler name="onmouseup">
 				this.parent.parent.toggleopen();
 			</handler>
