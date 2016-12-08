@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
@@ -283,13 +282,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					jpg.getCanonicalPath() };
 
 			logs.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
-
-			File avi = r.getFile(EXTENSION_AVI);
-			deleteFileIfExists(avi);
-
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", flv.getCanonicalPath(), avi.getCanonicalPath() };
-
-			logs.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
 			updateDuration(r);
 			convertToMp4(r, logs);
