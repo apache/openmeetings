@@ -123,9 +123,9 @@
 							whiteboardId:whiteboardId
 						});
 		var tWhiteboardBtn = new lz.whiteboardMiniButton(this._bar,{
-									objRef:whiteboard,
+									objRef: whiteboard,
 									width: _bar.staticwidth,
-									isactive:true,
+									isactive: true,
 									btnName: wbName
 								});
 		this._bar.currentBtn = tWhiteboardBtn;
@@ -263,13 +263,13 @@
 	]]>
 	</method>
 
-	<view name="scrollLeft" y="21" x="0" width="20">
+	<view name="scrollLeft" y="21" x="20" width="20">
 		<handler name="onclick" args="refOb">
 			parent._barArea._scroll.step(-1);
 		</handler>
 		<view resource="wb_arrow_left_rsc" y="0" x="0" opacity="${ parent.parent._barArea._scroll.scrollable ? 1 : 0.1 }" />
 	</view>
-	<view name="_barArea" width="${ parent.width - 60 }" height="20" x="20" y="21" clip="true">
+	<view name="_barArea" width="${ parent.width - 60 }" height="20" x="40" y="21" clip="true">
 		<whiteboardBarMenu name="_bar" height="20" y="0" x="0">
 			<attribute name="whiteboardId" value="-1" type="number" />
 			
@@ -279,14 +279,14 @@
 		</whiteboardBarMenu>
 		<om_hscrollbar name="_scroll" height="0" stepsize="50"/>
 	</view>
-	<view name="scrollRight" y="21" x="${ parent.width - 40 }" width="20">
+	<view name="scrollRight" y="21" x="${ parent.width - 20 }" width="20">
 		<handler name="onclick" args="refOb">
 			parent._barArea._scroll.step(1);
 		</handler>
 		<view resource="wb_arrow_right_rsc" y="0" x="0" opacity="${ parent.parent._barArea._scroll.scrollable ? 1 : 0.1 }" />
 	</view>
 
-	<view name="addNewItemButton" y="24" x="${ parent.width - 20 }"
+	<view name="addNewItemButton" y="24" x="0"
 			visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
 		<attribute name="whiteboardId" value="-1" type="number" />
 		

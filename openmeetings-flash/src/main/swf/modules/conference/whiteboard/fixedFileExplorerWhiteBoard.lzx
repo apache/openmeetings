@@ -576,7 +576,7 @@
     </view>    
     
     <propertyPanel name="_propertyPanel" x="0" y="${ parent.parent.height-this.height-42 }" 
-                    visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+                    visible="${ canvas.ismoderator || canvas.isAllowedToDraw }">
         <handler name="onheight" args="h">
             this.height = h;
             if ($debug) Debug.write("onheight: ",h);
