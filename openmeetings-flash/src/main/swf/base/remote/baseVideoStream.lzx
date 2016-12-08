@@ -215,6 +215,7 @@
 	</method>
 
 	<method name="prepare" args="mode, streamName, camReference, micReference">
+	<![CDATA[
 		if (this._ns != null){
 			this._stop();
 		}
@@ -231,7 +232,7 @@
 			if ($debug) Debug.write("codecType=" + canvas.codecType);
 			if (canvas.codecType === "h264") {
 				videoStreamSettings = new H264VideoStreamSettings();
-				videoStreamSettings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
+				videoStreamSettings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_3_1);
 			} else {
 				videoStreamSettings = new VideoStreamSettings();
 			}
@@ -246,8 +247,8 @@
 			this._ns.attachAudio(micReference);
 			muteMicro(this.micMuted);
 		}
-		
 		this._ns.publish("" + streamName, (mode == "broadcast") ? "live" : mode);
+	]]>
 	</method>
 	<!---
 		BroadCasts a Stream

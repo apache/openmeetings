@@ -24,7 +24,6 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
@@ -556,7 +555,6 @@ public class BackupImport {
 					r.setHash(UUID.randomUUID().toString());
 					fileMap.put(String.format("%s.%s", name, EXTENSION_FLV), String.format("%s.%s", r.getHash(), EXTENSION_FLV));
 					fileMap.put(String.format("%s.%s.meta", name, EXTENSION_FLV), String.format("%s.%s.meta", r.getHash(), EXTENSION_FLV));
-					fileMap.put(String.format("%s.%s", name, EXTENSION_AVI), String.format("%s.%s", r.getHash(), EXTENSION_AVI));
 					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
 					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
 				}
