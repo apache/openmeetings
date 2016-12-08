@@ -36,7 +36,6 @@ public class RecordingDTO implements Serializable {
 	private Long id;
 	private String name;
 	private String flvName;
-	private String aviName;
 	private Long roomId;
 	private String status;
 	private boolean interview;
@@ -51,7 +50,6 @@ public class RecordingDTO implements Serializable {
 		this.id = r.getId();
 		this.name = r.getName();
 		this.flvName = r.getHash();
-		this.aviName = r.getAlternateDownload();
 		this.roomId = r.getRoomId();
 		this.status = r.getStatus().name();
 		this.interview = r.isInterview();
@@ -83,14 +81,6 @@ public class RecordingDTO implements Serializable {
 
 	public void setFlvName(String flvName) {
 		this.flvName = flvName;
-	}
-
-	public String getAviName() {
-		return aviName;
-	}
-
-	public void setAviName(String aviName) {
-		this.aviName = aviName;
 	}
 
 	public Long getRoomId() {

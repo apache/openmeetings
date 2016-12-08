@@ -286,16 +286,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = recordingFileName + recording.getId() + ".avi";
-			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
-			deleteFileIfExists(alternateDownloadFullName);
-
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, alternateDownloadFullName };
-
-			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
-
-			recording.setAlternateDownload(alternateDownloadName);
-
 			updateDuration(recording);
 			convertToMp4(recording, returnLog);
 			recording.setStatus(Recording.Status.PROCESSED);

@@ -61,7 +61,6 @@ import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
-import org.apache.openmeetings.web.user.record.AviRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.FlvRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
@@ -148,7 +147,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
 		mountPage("/hash", HashPage.class);
-		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer

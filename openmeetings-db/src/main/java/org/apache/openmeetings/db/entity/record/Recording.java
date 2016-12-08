@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_AVI;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
@@ -123,10 +122,6 @@ public class Recording extends FileItem {
 	@Column(name = "id")
 	@Element(data = true, name = "flvRecordingId")
 	private Long id;
-
-	@Column(name = "alternate_download")
-	@Element(data = true, required = false)
-	private String alternateDownload;
 
 	@Column(name = "comment")
 	@Element(data = true, required = false)
@@ -264,14 +259,6 @@ public class Recording extends FileItem {
 		this.height = height;
 	}
 
-	public String getAlternateDownload() {
-		return alternateDownload;
-	}
-
-	public void setAlternateDownload(String alternateDownload) {
-		this.alternateDownload = alternateDownload;
-	}
-
 	public List<RecordingLog> getLog() {
 		return log;
 	}
@@ -312,8 +299,6 @@ public class Recording extends FileItem {
 				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_MP4));
 			} else if (EXTENSION_FLV.equals(ext)) {
 				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
-			} else if (EXTENSION_AVI.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_AVI));
 			}
 		}
 		return f;

@@ -171,15 +171,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			returnLog.add(ProcessHelper.executeScript("previewFullFLV", argv_previewFLV));
 
-			File alternateDownload = new File(getStreamsHibernateDir(), finalNamePrefix + ".avi");
-
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv.getCanonicalPath(), "-vcodec",
-					"copy", alternateDownload.getCanonicalPath() };
-
-			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
-
-			recording.setAlternateDownload(alternateDownload.getName());
-
 			updateDuration(recording);
 			convertToMp4(recording, returnLog);
 			recording.setStatus(Recording.Status.PROCESSED);
