@@ -233,42 +233,26 @@
 			</handler>
 		</changeWidthSlider> 
 
-	    <propertyPanelLetterButton name="_italic" x="286" y="24" labelid="86"
-                                   itemResourceName="italic" />
-	    
-	    <propertyPanelLetterButton name="_bold" x="312" y="24" labelid="87"
-                                   itemResourceName="bold" />
-		
+		<propertyPanelLetterButton name="_italic" x="286" y="24" labelid="86" itemResourceName="italic" />
+
+		<propertyPanelLetterButton name="_bold" x="312" y="24" labelid="87" itemResourceName="bold" />
+
 		<view name="_delemiter" width="2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" 
-			  height="$once{ parent.height - this.y - 4 }" y="20" x="338"/>
-		
+				height="$once{ parent.height - this.y - 4 }" y="20" x="338"/>
+
 		<labelText labelid="721" y="26" x="344" />
-		
+
 		<resetCombobox name="currentDocument" width="300" height="24" fontsize="11"
-                           editable="false" shownitems="7" x="480" y="24">
-            <attribute name="sendSelection" value="true" type="boolean"/>
-            <handler name="onselect" args="sel">
-                if (this.sendSelection) {
-                    parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
-                }
-            </handler>
-        </resetCombobox>
-        <!--
-	    <labelCheckbox x="344" y="54" name="_fullFit" labelid="847" >
-            <handler name="onvalue" args="v">
-                if (parent.parent.ignoreUpdates) {
-                    return;
-                }
-                if ($debug) Debug.write("onvalue Full Fit ",v);
-                
-                parent.parent.parent._drawareaMask._drawarea.doFullFit(v);
-            </handler>
-            <labelTooltip labelid="1212" multiline="true" />
-	    </labelCheckbox> 
-	     -->       
-		
+				editable="false" shownitems="7" x="480" y="24">
+			<attribute name="sendSelection" value="true" type="boolean"/>
+			<handler name="onselect" args="sel">
+				if (this.sendSelection) {
+					parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
+				}
+			</handler>
+		</resetCombobox>
+
 		<view name="_documentsPanel" x="480" y="52" layout="axis:x;spacing:2">
-			
 			<handler name="oninit">
                 //if ($debug) Debug.write("oninit: ",this);
                 this._currentSlideNo.setAttribute('text',canvas.currentSlideNo);
