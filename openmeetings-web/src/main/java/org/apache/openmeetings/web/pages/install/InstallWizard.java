@@ -432,6 +432,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		@Override
+		public boolean isLastAvailable() {
+			return true;
+		}
+
+		@Override
 		public IDynamicWizardStep next() {
 			return paramsStep2;
 		}
