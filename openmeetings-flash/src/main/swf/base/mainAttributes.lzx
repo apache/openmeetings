@@ -236,7 +236,9 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="echoSuppression" value="true" type="string" />
 
 <!--- Reference to the current active drawarea -->
-<attribute name="_drawarea" value="null" /> 
+<attribute name="_drawarea" value="null" />
+<attribute name="_wb" value="null" />
+<attribute name="_wbBar" value="null" />
 
 <!--- Username of current user -->
 <attribute name="userId" value="0" type="number" />

@@ -27,7 +27,7 @@
 	<method name="removeObject" args="btn">
 		var whiteboardId = btn.objRef.whiteboardId;
 		this.removeObjectSynced(btn);
-		parent.sendRemoveWindow(whiteboardId);
+		canvas._wb.sendRemoveWindow(whiteboardId);
 	</method>
 
 	<method name="removeObjectSynced" args="btn">
@@ -50,17 +50,12 @@
 	<method name="sendActiveWindowSynced" args="btn">
 	<![CDATA[
 		if (this.currentBtn != null){
-			this.currentBtn.isactive=false;
-			if (this.currentBtn._minimizebtn_mo != null) this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
-			if (this.currentBtn._minimizebtn_dn != null) this.currentBtn._minimizebtn_dn.setAttribute('visibility','hidden');
+			this.currentBtn.setActive(false);
 		}
 		this.currentBtn = btn;
 		this.currentBtn.objRef.setAttribute("visibility","visible");
 		this.currentBtn.objRef.bringToFront();
-		//if ($debug) Debug.write("sendActiveWindow2: ",this.currentBtn);
-		this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
-		this.currentBtn._minimizebtn_dn.setAttribute('visibility','visible');
-		this.currentBtn.isactive=true;
+		this.currentBtn.setActive(true);
 	]]>
 	</method>
 </class>

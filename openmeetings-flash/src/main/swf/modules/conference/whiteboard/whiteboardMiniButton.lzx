@@ -52,6 +52,12 @@
 		this.isHidden = false;
 	</method>
 
+	<method name="setActive" args="val">
+		isactive = val;
+		if (!!_minimizebtn_mo) _minimizebtn_mo.setAttribute('visible', !val);
+		if (!!_minimizebtn_dn) _minimizebtn_dn.setAttribute('visible', val);
+	</method>
+
 	<method name="calcTextWidth">
 	<![CDATA[
 		if (this.isHidden) {
@@ -73,7 +79,9 @@
 		if (this.isHidden) {
 			return;
 		}
-		rename();
+		if (this.isactive) {
+			rename();
+		}
 		this._minimizebtn_mo.setAttribute('visibility','visible');
 		this._minimizebtn_dn.setAttribute('visibility','hidden');
 		if ($debug) Debug.write(" :: onclick :: ");
@@ -119,11 +127,11 @@
 	</handler>
 
 	<method name="sendActiveWindow" args="win">
-		this.parent.sendActiveWindow(this,win);
+		canvas._wbBar.sendActiveWindow(this,win);
 	</method>
 
 	<method name="activateSynced">
-		this.parent.sendActiveWindowSynced(this);
+		canvas._wbBar.sendActiveWindowSynced(this);
 	</method>
 
 	<view name="_minimizebtn_mo" width="${ parent.width-2 }" height="16"
@@ -140,7 +148,7 @@
 
 	<method name="rename">
 	<![CDATA[
-		if (this.isactive && canvas.ismoderator) {
+		if (canvas.ismoderator) {
 			var tWidth = this._text.width;
 			var _y = this._text.getAttributeRelative("y", canvas);
 			var _x = this._text.getAttributeRelative("x", canvas);
@@ -201,7 +209,7 @@
 		<method name="closeWhiteboardConfirmMethod" args="bool,sharedObjectData">
 			if ($debug) Debug.write("confirm closeWhiteboard:", bool);
 			if (bool) {
-				parent.parent.removeObject(parent);
+				canvas._wbBar.removeObject(parent);
 			}
 		</method>
 		<labelTooltip labelid="1364" />

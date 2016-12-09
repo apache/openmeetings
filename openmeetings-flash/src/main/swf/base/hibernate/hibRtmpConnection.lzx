@@ -292,13 +292,13 @@
 	
 	<!-- This Function is just for refreshing the Session -->
 	<netRemoteCallHib name="refreshSession" funcname="userservice.refreshSession" showLoading="false" >	
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<handler name="ondata" args="value">
 			//if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
 			lz.Timer.addTimer(parent.refreshDelegate, canvas.refreshSession);
 		</handler>
 	</netRemoteCallHib>
-	  
+
 	<netRemoteCallHib name="getsessiondata" funcname="xmlcrm.getsessiondata" >	  
 		<handler name="ondata" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
@@ -695,43 +695,43 @@
 		
 		<netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
 			<handler name="ondata" args="value">
-				<![CDATA[
-					if ($debug) Debug.write("############ getCurrentModeratorList: ", value);
-					
-					canvas.analyzeModerationList(value);
-					
-					canvas.currentModeratorList = value;
-					//Update Moderation Flag
-					canvas.updateModerationFlag();
-					
-					var messageAlreadyThrown = false;
-					
-					//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
-					
-					if (this.parent.modus == "conference") {
-						if ($debug) Debug.write("############## start broadcasting ");
-						parent.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-						parent.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.audioOnly;
-						parent.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-						parent.setBroadCastingFlag.doCall();
-					}
-					canvas._drawarea.onopenWhiteBoard.sendEvent();
-					
-					if ($debug) Debug.write("room ", canvas.currentRoomObj);
-					if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
-					
-					if (canvas.currentRoomObj.type != 'restricted') {
-						if (canvas.currentRoomObj.moderated) {
-							if (value.length == 0 && !messageAlreadyThrown){
-								new lz.labelerrorPopup(canvas,{errorlabelid:641});
-							}
-						} else {
-							if (value.length == 0 && !messageAlreadyThrown){
-								new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-							}
+			<![CDATA[
+				if ($debug) Debug.write("############ getCurrentModeratorList: ", value);
+
+				canvas.analyzeModerationList(value);
+
+				canvas.currentModeratorList = value;
+				//Update Moderation Flag
+				canvas.updateModerationFlag();
+
+				var messageAlreadyThrown = false;
+
+				//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
+
+				if (this.parent.modus == "conference") {
+					if ($debug) Debug.write("############## start broadcasting ");
+					parent.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+					parent.setBroadCastingFlag.canVideo = !canvas.currentRoomObj.audioOnly;
+					parent.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+					parent.setBroadCastingFlag.doCall();
+				}
+				canvas._drawarea.onopenWhiteBoard.sendEvent();
+
+				if ($debug) Debug.write("room ", canvas.currentRoomObj);
+				if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
+
+				if (canvas.currentRoomObj.type != 'restricted') {
+					if (canvas.currentRoomObj.moderated) {
+						if (value.length == 0 && !messageAlreadyThrown){
+							new lz.labelerrorPopup(canvas,{errorlabelid:641});
+						}
+					} else {
+						if (value.length == 0 && !messageAlreadyThrown){
+							new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
 						}
 					}
-				]]>
+				}
+			]]>
 			</handler>
 		</netRemoteCallHib>
 		
@@ -810,32 +810,32 @@
 			this.roomDisconnectUser(value, value.publicSID);
 		]]>
 		</method>
-		
+
 		<method name="stopRecordingMessage" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			canvas._mymod.recordingUser = null;
 			canvas._mymod.setMessage();
 		</method>
-		
+
 		<method name="stopPublishingMessage" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			canvas._mymod.publishingObj = null;
 			canvas._mymod.setMessage();
 		</method>
-		
+
 		<netRemoteCallHib name="setSyncFlag" funcname="setSyncFlag" >
 			<handler name="ondata" args="value">
 				if ($debug) Debug.write("setSyncFlag: ",value);
 			</handler>
 		</netRemoteCallHib>
-			 
+
 		<netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >
 			<handler name="ondata" args="value">
 				if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
 				parent.roomDisconnectUser(value, value.broadCastID);
 			</handler>
 		</netRemoteCallHib>
-  
+
 		<method name="setUserStatus" args="ctx,user,o">
 			<![CDATA[
 				if (!o || !user) return;
@@ -898,7 +898,7 @@
 			canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
 		]]>
 		</method>
-		
+
 		<!--
 			Adds this User to the List of current Moderators
 		 -->
@@ -1182,11 +1182,11 @@
 		<netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
 			<netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
 			<handler name="ondata" args="value">
-				<![CDATA[
+			<![CDATA[
 				//The onResult-Handler will be called be the rtmpconnection
 				//Debug.write("sendVarsModeratorGeneral : ",value);
 				
-				]]>
+			]]>
 			</handler>   
 		</netRemoteCallHib>  
 
@@ -1200,15 +1200,15 @@
 				this.doCall();
 			</method>
 			<handler name="ondata" args="value">
-				<![CDATA[
+			<![CDATA[
 					//The onResult-Handler will be called be the rtmpconnection
 					if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
-				]]>
+			]]>
 			</handler>
 		</netRemoteCallHib>
-		
+
 		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
-						  remotecontext="$once{ canvas.thishib }" >  
+				remotecontext="$once{ canvas.thishib }" >  
 			
 			<attribute name="messageObj" value="null" />
 			<method name="sendMessage" args="typeName,messageObject">
@@ -1236,7 +1236,7 @@
 		<method name="sendVarsToMessageWithClient" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("sendVarsToMessageWithClient : ", value,value.message, value.message[0]);
+			if ($debug) Debug.write("sendVarsToMessageWithClient : ", value, value.message, value.message[0]);
 			if (value[0] == 'kick' || value.message[0] == 'kick') {
 				if ($debug) Debug.write("!!!!!! THIS USER GOING TO BE KICKED");
 				this.showKickMessage = true;
