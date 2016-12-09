@@ -39,7 +39,7 @@
 	<!-- invoked by clicking on the confirmation dialog after
 		clicking on an image in the Library -->
 	<method name="addNewSyncImage" args="urlname,posx,posy,baseurl,fileName,moduleName,parentPath,room,domain">
-		if ($debug) Debug.write("urlname: ",urlname);
+		if ($debug) Debug.write("urlname: ", urlname);
 		var now = new Date();
 		//This invokes a Method which is in the remoteWhiteboard.lzx
 		this.startNewObjectSyncProcess.isStarting = true;
@@ -222,7 +222,7 @@
 		if ($debug) Debug.write(" :: -image- baseactionobjectList.push :: ", this.baseactionobjectList.length, this.baseactionobjectList);
 		if (doCallUpdate) this.onsharedMessage('draw',actionObject);	
 	</method>
-	
+
 	<!-- 
 		adds the Image to the Layers and throws a onsharedMessage,
 		this can only happen _after_ loading the Image cause you do not know its 

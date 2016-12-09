@@ -259,18 +259,18 @@
 			</handler>
 
 			<method name="addCurrentObject" args="itemObj">
-				//if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
 				var docName = itemObj.standardFileName;
+				//if ($debug) Debug.write("addCurrentObject ", docName, itemObj.fileName, itemObj.name);
 				if (docName.length == 0) {
 					docName = itemObj.fileName;
 				}
 
-				parent.currentDocument.addItem(docName,itemObj.name);
+				parent.currentDocument.addItem(docName, itemObj.name);
 				parent.currentDocument.sendSelection = false;
 				parent.currentDocument.selectItem(itemObj.name);
 				parent.currentDocument.sendSelection = true;
 
-				parent._clickLayer.setAttribute("visibility","hidden");
+				parent._clickLayer.setAttribute("visible", false);
 			</method>
 
 			<method name="removeDocument" args="refItemName">
