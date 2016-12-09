@@ -109,15 +109,6 @@
 					<td> 1.8.x </td>
 				</tr>
 				<tr>
-					<td> use.old.style.ffmpeg.map.option </td>
-					<td> 0 </td>
-					<td> If the system should "." (old ffmpeg) instead of ":"
-						(new ffmpeg) for the -map option in FFMPEG
-					</td>
-					<td> 1.9.x </td>
-
-				</tr>
-				<tr>
 					<td> smtp_server </td>
 					<td> localhost </td>
 					<td> this is the smtp server to send messages </td>

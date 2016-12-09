@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -50,42 +51,36 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingLogDao logDao;
 
-	private String FFMPEG_MAP_PARAM = ":";
-
 	@Override
 	public void startConversion(Long recordingId) {
-		Recording recording = recordingDao.get(recordingId);
-		if (recording == null) {
+		Recording r = recordingDao.get(recordingId);
+		if (r == null) {
 			log.warn("Conversion is NOT started. Recording with ID {} is not found", recordingId);
 			return;
 		}
 		try {
-			if (isUseOldStyleFfmpegMap()) {
-				FFMPEG_MAP_PARAM = ".";
-			}
-
 			String finalNamePrefix = recordingFileName + recordingId;
-			log.debug("recording " + recording.getId());
+			log.debug("recording " + r.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new ArrayList<String>();
-			File streamFolder = getStreamFolder(recording);
+			File streamFolder = getStreamFolder(r);
 			
-			RecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(recording.getId());
+			RecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(r.getId());
 
 			if (screenMetaData == null) {
-				throw new Exception("screenMetaData is Null recordingId " + recording.getId());
+				throw new Exception("screenMetaData is Null recordingId " + r.getId());
 			}
 
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
 				throw new Exception("Stream has not been started, error in recording");
 			}
-			recording.setStatus(Recording.Status.CONVERTING);
-			recording = recordingDao.update(recording);
+			r.setStatus(Recording.Status.CONVERTING);
+			r = recordingDao.update(r);
 
 			screenMetaData = waitForTheStream(screenMetaData.getId());
 
-			stripAudioFirstPass(recording, returnLog, listOfFullWaveFiles, streamFolder);
+			stripAudioFirstPass(r, returnLog, listOfFullWaveFiles, streamFolder);
 
 			// Merge Wave to Full Length
 			String hashFileFullName = screenMetaData.getStreamName() + "_FINAL_WAVE.wav";
@@ -102,7 +97,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 				String outputWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
 
 				// Calculate delta at beginning
-				double deltaPadding = diffSeconds(recording.getRecordEnd(), recording.getRecordStart());
+				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
 				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0", "" + deltaPadding };
 
@@ -122,8 +117,8 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17.flv
 			// final1.flv
 
-			int flvWidth = recording.getWidth();
-			int flvHeight = recording.getHeight();
+			int flvWidth = r.getWidth();
+			int flvHeight = r.getHeight();
 
 			log.debug("flvWidth -1- " + flvWidth);
 			log.debug("flvHeight -1- " + flvHeight);
@@ -134,50 +129,24 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			log.debug("flvWidth -2- " + flvWidth);
 			log.debug("flvHeight -2- " + flvHeight);
 
-			recording.setFlvWidth(flvWidth);
-			recording.setFlvHeight(flvHeight);
+			r.setFlvWidth(flvWidth);
+			r.setFlvHeight(flvHeight);
 
-			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y",//
-					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), recording.getRecordStart())),
-					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
-					"-acodec", "libmp3lame", //
-					"-ab", "32k", //
-					"-s", flvWidth + "x" + flvHeight, //
-					"-vcodec", "flashsv", //
-					"-map", "0" + FFMPEG_MAP_PARAM + "0", //
-					"-map", "1" + FFMPEG_MAP_PARAM + "0", //
-					outputFullFlv.getCanonicalPath() };
+			String mp4path = convertToMp4(r, Arrays.asList(
+					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), r.getRecordStart())),
+					"-i", inputScreenFullFlv, "-i", outputFullWav
+					), returnLog);
 
-			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
+			r.setHash(outputFullFlv.getName());
 
-			recording.setHash(outputFullFlv.getName());
+			convertToJpg(r, mp4path, returnLog);
 
-			// Extract first Image for preview purpose
-			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
-			// 320x240 movie.jpg
+			updateDuration(r);
+			r.setStatus(Recording.Status.PROCESSED);
 
-			File outPutJpeg = new File(getStreamsHibernateDir(), finalNamePrefix + ".jpg");
-
-			recording.setPreviewImage(outPutJpeg.getName());
-
-			String[] argv_previewFLV = new String[] { //
-					getPathToFFMPEG(), "-y",//
-					"-i", outputFullFlv.getCanonicalPath(), //
-					"-vcodec", "mjpeg", //
-					"-vframes", "1", "-an", //
-					"-f", "rawvideo", //
-					"-s", flvWidth + "x" + flvHeight, //
-					outPutJpeg.getCanonicalPath() };
-
-			returnLog.add(ProcessHelper.executeScript("previewFullFLV", argv_previewFLV));
-
-			updateDuration(recording);
-			convertToMp4(recording, returnLog);
-			recording.setStatus(Recording.Status.PROCESSED);
-
-			logDao.deleteByRecordingId(recording.getId());
+			logDao.deleteByRecordingId(r.getId());
 			for (ConverterProcessResult returnMap : returnLog) {
-				logDao.add("generateFFMPEG", recording, returnMap);
+				logDao.add("generateFFMPEG", r, returnMap);
 			}
 
 			// Delete Wave Files
@@ -190,8 +159,8 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
-			recording.setStatus(Recording.Status.ERROR);
+			r.setStatus(Recording.Status.ERROR);
 		}
-		recordingDao.update(recording);
+		recordingDao.update(r);
 	}
 }

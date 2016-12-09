@@ -19,10 +19,8 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.FLV_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -30,6 +28,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -79,10 +78,6 @@ public abstract class BaseConverter {
 		return getPath("imagemagick_path", "convert") + GenerateSWF.execExt;
 	}
 
-	protected boolean isUseOldStyleFfmpegMap() {
-		return "1".equals(configurationDao.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0"));
-	}
-	
 	protected File getStreamFolder(Recording recording) {
 		return getStreamsSubDir(recording.getRoomId());
 	}
@@ -336,28 +331,52 @@ public abstract class BaseConverter {
 			log.error("[stripAudioFirstPass]", err);
 		}
 	}
-	
-	public void convertToMp4(Recording r, List<ConverterProcessResult> returnLog) throws IOException {
-		//TODO add faststart, move filepaths to helpers
-		if (!r.exists(EXTENSION_FLV)) {
-			return;
-		}
-		File file = getRecording(r.getHash());
-		String path = file.getCanonicalPath();
-		String mp4path = path + MP4_EXTENSION;
-		String[] argv = new String[] {
-				getPathToFFMPEG(), "-y",
-				"-i", path,
+
+	protected String getDimensions(Recording r) {
+		return String.format("%sx%s", r.getFlvWidth(), r.getFlvHeight());
+	}
+
+	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) throws IOException {
+		argv.addAll(Arrays.asList(
 				"-c:v", "libx264",
 				"-crf", "24",
 				"-pix_fmt", "yuv420p",
 				"-preset", "medium",
 				"-profile:v", "baseline",
 				"-c:a", "libfaac",
-				"-c:a", "libfdk_aac", "-b:a", "32k", //FIXME add quality constants 
-				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
+				"-c:a", "libfdk_aac",
+				"-ar", "22050",
+				"-b:a", "32k", //FIXME add quality constants 
+				"-s", getDimensions(r), //
 				mp4path
-				};
-		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
+				));
+		return argv;
+	}
+
+	protected String convertToMp4(Recording r, List<String> _argv, List<ConverterProcessResult> returnLog) throws IOException {
+		//TODO add faststart, move filepaths to helpers
+		String mp4path = r.getFile().getCanonicalPath();
+		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
+		argv.addAll(_argv);
+		returnLog.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
+		return mp4path;
+	}
+
+	protected void convertToJpg(Recording r, String mp4path, List<ConverterProcessResult> returnLog) throws IOException {
+		// Extract first Image for preview purpose
+		// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
+		// 320x240 movie.jpg
+		File jpg = r.getFile(EXTENSION_JPG);
+		r.setPreviewImage(jpg.getName());
+		String[] argv = new String[] { //
+				getPathToFFMPEG(), "-y", //
+				"-i", mp4path, //
+				"-vcodec", "mjpeg", //
+				"-vframes", "100", "-an", //
+				"-f", "rawvideo", //
+				"-s", getDimensions(r), //
+				jpg.getCanonicalPath() };
+
+		returnLog.add(ProcessHelper.executeScript("generate preview JPG", argv));
 	}
 }

@@ -86,7 +86,6 @@ public class OmFileHelper {
 	public static final String MP4_EXTENSION = "." + EXTENSION_MP4;
 	public static final String JPG_EXTENSION = "." + EXTENSION_JPG;
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
-	public static final String FLV_MIME_TYPE = "video/" + EXTENSION_FLV;
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;
 	public static final String JPG_MIME_TYPE = "image/jpeg";
 	public static final String PNG_MIME_TYPE = "image/png";
@@ -229,7 +228,7 @@ public class OmFileHelper {
 	}
 
 	public static File getRecordingMetaData(Long roomId, String name) {
-		return new File(getStreamsSubDir(roomId), name + FLV_EXTENSION);
+		return new File(getStreamsSubDir(roomId), getName(name, EXTENSION_FLV));
 	}
 
 	public static File getLanguagesDir() {

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -109,7 +108,6 @@ public class CleanupJob extends AbstractJob {
 			if (days < 0) {
 				log.debug("cleanExpiredRecordings:: following recording will be deleted {}", rec);
 				rec.getFile(EXTENSION_MP4).delete();
-				rec.getFile(EXTENSION_FLV).delete();
 				recordingDao.delete(rec);
 			}
 		});

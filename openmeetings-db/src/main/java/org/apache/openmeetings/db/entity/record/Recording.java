@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
@@ -297,8 +298,8 @@ public class Recording extends FileItem {
 		if (getId() != null && !isDeleted()) {
 			if (ext == null || EXTENSION_MP4.equals(ext)) {
 				f = getRecording(String.format("%s%s.%s.%s", recordingFileName, id, EXTENSION_FLV, EXTENSION_MP4));
-			} else if (EXTENSION_FLV.equals(ext)) {
-				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_FLV));
+			} else if (EXTENSION_JPG.equals(ext)) {
+				f = getRecording(String.format("%s%s.%s", recordingFileName, id, EXTENSION_JPG));
 			}
 		}
 		return f;

@@ -99,24 +99,24 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	}
 
 	public void startConversion(Long recordingId, boolean reconversion, ReConverterParams rcv) {
-		Recording recording = null;
+		Recording r = null;
 		try {
-			recording = recordingDao.get(recordingId);
-			log.debug("recording " + recording.getId());
-			recording.setStatus(Recording.Status.CONVERTING);
-			recording = recordingDao.update(recording);
+			r = recordingDao.get(recordingId);
+			log.debug("recording " + r.getId());
+			r.setStatus(Recording.Status.CONVERTING);
+			r = recordingDao.update(r);
 
-			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
+			List<ConverterProcessResult> logs = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new LinkedList<String>();
-			File streamFolder = getStreamFolder(recording);
-			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(recording.getId());
+			File streamFolder = getStreamFolder(r);
+			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
 	
-			stripAudioFirstPass(recording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
+			stripAudioFirstPass(r, logs, listOfFullWaveFiles, streamFolder, metaDataList);
 		
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
 
-			String hashFileFullName = "INTERVIEW_" + recording.getId() + "_FINAL_WAVE.wav";
+			String hashFileFullName = "INTERVIEW_" + r.getId() + "_FINAL_WAVE.wav";
 			String outputFullWav = streamFolder.getAbsolutePath() + File.separatorChar + hashFileFullName;
 			deleteFileIfExists(outputFullWav);
 
@@ -130,18 +130,18 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav);
 				}
 
-				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
 				// create default Audio to merge it.
 				// strip to content length
 				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
-				double deltaPadding = diffSeconds(recording.getRecordEnd(), recording.getRecordStart());
+				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
 				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", "" + deltaPadding };
 
-				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
 			// Default Image for empty interview video pods
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
@@ -152,13 +152,12 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			final int flvWidth = 320;
 			final int flvHeight = 260;
-			final int frameRate = 25;
 			// Merge Audio with Video / Calculate resulting FLV
 
 			String[] pods = new String[2];
 			boolean found = false;
 			for (RecordingMetaData meta : metaDataList) {
-				File flv = getRecordingMetaData(recording.getRoomId(), meta.getStreamName());
+				File flv = getRecordingMetaData(r.getRoomId(), meta.getStreamName());
 
 				Integer pod = meta.getInteriewPodId();
 				if (flv.exists() && pod != null && pod > 0 && pod < 3) {
@@ -173,9 +172,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							, "-v", "error"
 							, "-f", "null"
 							, "file.null"};
-					ConverterProcessResult r = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
-					returnLog.add(r);
-					if ("0".equals(r.getExitValue())) {
+					ConverterProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
+					logs.add(res);
+					if ("0".equals(res.getExitValue())) {
 						//TODO need to remove smallest gap
 						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());
 						if (diff != 0L) {
@@ -190,7 +189,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-t", formatMillis(diff) //
 									, "-pix_fmt", "yuv420p" //
 									, podPB };
-							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
+							logs.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
 							
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
 							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + FLV_EXTENSION);
@@ -201,7 +200,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-filter_complex", String.format("[0:0]setsar=1/1[sarfix];[1:0]scale=%1$d:%2$d,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]", flvWidth, flvHeight) //
 									, "-map", "[v]" //
 									, podP };
-							returnLog.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
+							logs.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
 	
 							pods[pod - 1] = podP;
 						} else {
@@ -212,16 +211,14 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 			}
 			if (!found) {
-				ConverterProcessResult r = new ConverterProcessResult();
-				r.setProcess("CheckFlvFilesExists");
-				r.setError("No valid pods found");
-				returnLog.add(r);
+				ConverterProcessResult res = new ConverterProcessResult();
+				res.setProcess("CheckFlvFilesExists");
+				res.setError("No valid pods found");
+				logs.add(res);
 				return;
 			}
 			boolean shortest = false;
 			List<String> args = new ArrayList<String>();
-			args.add(getPathToFFMPEG());
-			args.add("-y"); 
 			for (int i = 0; i < 2; ++i) {
 				/*
 				 * INSERT BLANK INSTEAD OF BAD PAD:
@@ -239,8 +236,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 			}
 			args.add("-i"); args.add(outputFullWav);
-			args.add("-ar"); args.add("22050");
-			args.add("-ab"); args.add("32k");
 			args.add("-filter_complex");
 			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0%3$s"
 					, flvWidth, flvHeight, shortest ? ":shortest=1" : ""));
@@ -250,49 +245,25 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-map"); args.add("0:0");
 			args.add("-map"); args.add("1:0");
 			args.add("-map"); args.add("2:0");
-			args.add("-r"); args.add("" + frameRate);
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
-			args.add("-y");
-			String hashFileFullNameFlv = recordingFileName + recording.getId() + FLV_EXTENSION;
-			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
-			args.add(outputFullFlv);
+			String hashFileFullNameFlv = recordingFileName + r.getId() + FLV_EXTENSION;
 			// TODO additional flag to 'quiet' output should be added
-			returnLog.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
-			recording.setFlvWidth(2 * flvWidth);
-			recording.setFlvHeight(flvHeight);
+			r.setFlvWidth(2 * flvWidth);
+			r.setFlvHeight(flvHeight);
 
-			recording.setHash(hashFileFullNameFlv);
+			String mp4path = convertToMp4(r, args, logs);
+			r.setHash(hashFileFullNameFlv);
 
-			// Extract first Image for preview purpose
-			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
-			// 320x240 movie.jpg
+			convertToJpg(r, mp4path, logs);
 
-			String hashFileFullNameJPEG = recordingFileName + recording.getId() + ".jpg";
-			String outPutJpeg = new File(streamFolderGeneral, hashFileFullNameJPEG).getCanonicalPath();
-			deleteFileIfExists(outPutJpeg);
+			updateDuration(r);
+			r.setStatus(Recording.Status.PROCESSED);
 
-			recording.setPreviewImage(hashFileFullNameJPEG);
-
-			String[] argv_previewFLV = new String[] { //
-					getPathToFFMPEG(), "-y", //
-					"-i", outputFullFlv, //
-					"-vcodec", "mjpeg", //
-					"-vframes", "100", "-an", //
-					"-f", "rawvideo", //
-					"-s", (2 * flvWidth) + "x" + flvHeight, //
-					outPutJpeg };
-
-			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
-
-			updateDuration(recording);
-			convertToMp4(recording, returnLog);
-			recording.setStatus(Recording.Status.PROCESSED);
-
-			logDao.deleteByRecordingId(recording.getId());
-			for (ConverterProcessResult returnMap : returnLog) {
-				logDao.add("generateFFMPEG", recording, returnMap);
+			logDao.deleteByRecordingId(r.getId());
+			for (ConverterProcessResult returnMap : logs) {
+				logDao.add("generateFFMPEG", r, returnMap);
 			}
 
 			// Delete Wave Files
@@ -304,8 +275,8 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			}
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
-			recording.setStatus(Recording.Status.ERROR);
+			r.setStatus(Recording.Status.ERROR);
 		}
-		recordingDao.update(recording);
+		recordingDao.update(r);
 	}
 }

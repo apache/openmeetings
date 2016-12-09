@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -275,9 +274,6 @@ public class RecordingDao {
 	private long getSize(Recording r) {
 		long size = 0;
 
-		if (r.exists(EXTENSION_FLV)) {
-			size += r.getFile(EXTENSION_FLV).length();
-		}
 		if (r.exists(EXTENSION_JPG)) {
 			size += r.getFile(EXTENSION_JPG).length();
 		}
