@@ -553,8 +553,6 @@ public class BackupImport {
 				if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
 					String name = getFileName(r.getHash());
 					r.setHash(UUID.randomUUID().toString());
-					fileMap.put(String.format("%s.%s", name, EXTENSION_FLV), String.format("%s.%s", r.getHash(), EXTENSION_FLV));
-					fileMap.put(String.format("%s.%s.meta", name, EXTENSION_FLV), String.format("%s.%s.meta", r.getHash(), EXTENSION_FLV));
 					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
 					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
 				}

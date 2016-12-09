@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -182,24 +181,6 @@ public class VideoInfo extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				File f = rm.getObject().getFile(EXTENSION_MP4);
-				download.setFileName(f.getName());
-				download.setResourceStream(new FileResourceStream(f));
-				download.initiate(target);
-			}
-		});
-		//flv
-		list.add(new MenuItem(getString("883"), JQueryIcon.ARROWTHICKSTOP_1_S) {
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public boolean isEnabled() {
-				Recording r = VideoInfo.this.rm.getObject();
-				return r != null && r.exists(EXTENSION_FLV);
-			}
-			
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				File f = rm.getObject().getFile(EXTENSION_FLV);
 				download.setFileName(f.getName());
 				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
