@@ -112,7 +112,6 @@
 			</item>
 			<item name="Converters" href="#convert">
 				<item name="OpenOffice Converter" href="/OpenOfficeConverter.html" />
-				<item name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
 			</item>
 			<item name="Clustering" href="#cluster">
 				<item name="Clustering" href="/Clustering.html" />

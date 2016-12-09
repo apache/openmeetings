@@ -323,9 +323,6 @@ public class ImportInitvalues {
 		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
 				"Default number of participants conference room created via calendar");
 
-		cfgDao.add("use.old.style.ffmpeg.map.option", "0", null,
-				"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
-
 		// give exclusive audio key code
 		cfgDao.add("exclusive.audio.keycode", "123", null,
 				"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");

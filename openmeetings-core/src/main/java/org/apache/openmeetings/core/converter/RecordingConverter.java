@@ -19,12 +19,12 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,8 +53,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private FileItemLogDao logDao;
 
-	private String FFMPEG_MAP_PARAM = ":";
-
 	@Override
 	public void startConversion(Long id) {
 		Recording r = recordingDao.get(id);
@@ -63,10 +61,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			return;
 		}
 		try {
-			if (isUseOldStyleFfmpegMap()) {
-				FFMPEG_MAP_PARAM = ".";
-			}
-
 			log.debug("recording " + r.getId());
 
 			List<ConverterProcessResult> logs = new ArrayList<>();
@@ -119,8 +113,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			String inputScreenFullFlv = new File(streamFolder, OmFileHelper.getName(screenMetaData.getStreamName(), EXTENSION_FLV)).getCanonicalPath();
 
-			File flv = r.getFile(EXTENSION_FLV);
-
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17_FINAL_WAVE.wav
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17.flv
@@ -141,38 +133,14 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			r.setFlvWidth(flvWidth);
 			r.setFlvHeight(flvHeight);
 
-			String[] cmdFlv = new String[] { getPathToFFMPEG(), "-y",//
+			String mp4path = convertToMp4(r, Arrays.asList(
 					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), r.getRecordStart())),
-					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath(), "-ar", "22050", //
-					"-acodec", "libmp3lame", //
-					"-ab", "32k", //
-					"-s", flvWidth + "x" + flvHeight, //
-					"-vcodec", "flashsv", //
-					"-map", "0" + FFMPEG_MAP_PARAM + "0", //
-					"-map", "1" + FFMPEG_MAP_PARAM + "0", //
-					flv.getCanonicalPath() };
+					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
+					), logs);
 
-			logs.add(ProcessHelper.executeScript("generateFullFLV", cmdFlv));
-
-			// Extract first Image for preview purpose
-			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
-			// 320x240 movie.jpg
-
-			File jpg = r.getFile(EXTENSION_JPG);
-
-			String[] cmdJpg = new String[] { //
-					getPathToFFMPEG(), "-y",//
-					"-i", flv.getCanonicalPath(), //
-					"-vcodec", "mjpeg", //
-					"-vframes", "1", "-an", //
-					"-f", "rawvideo", //
-					"-s", flvWidth + "x" + flvHeight, //
-					jpg.getCanonicalPath() };
-
-			logs.add(ProcessHelper.executeScript("previewFullFLV", cmdJpg));
+			convertToJpg(r, mp4path, logs);
 
 			updateDuration(r);
-			convertToMp4(r, logs);
 			r.setStatus(Recording.Status.PROCESSED);
 
 			logDao.delete(r);

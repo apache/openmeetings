@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -154,7 +153,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			final int flvWidth = 320;
 			final int flvHeight = 260;
-			final int frameRate = 25;
 			// Merge Audio with Video / Calculate resulting FLV
 
 			String[] pods = new String[2];
@@ -223,8 +221,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			}
 			boolean shortest = false;
 			List<String> args = new ArrayList<String>();
-			args.add(getPathToFFMPEG());
-			args.add("-y"); 
 			for (int i = 0; i < 2; ++i) {
 				/*
 				 * INSERT BLANK INSTEAD OF BAD PAD:
@@ -242,8 +238,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 			}
 			args.add("-i"); args.add(wav.getCanonicalPath());
-			args.add("-ar"); args.add("22050");
-			args.add("-ab"); args.add("32k");
 			args.add("-filter_complex");
 			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0%3$s"
 					, flvWidth, flvHeight, shortest ? ":shortest=1" : ""));
@@ -253,38 +247,18 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-map"); args.add("0:0");
 			args.add("-map"); args.add("1:0");
 			args.add("-map"); args.add("2:0");
-			args.add("-r"); args.add("" + frameRate);
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
-			args.add("-y");
-			File flv = r.getFile(EXTENSION_FLV);
-			args.add(flv.getCanonicalPath());
 			// TODO additional flag to 'quiet' output should be added
-			logs.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
 			r.setFlvWidth(2 * flvWidth);
 			r.setFlvHeight(flvHeight);
 
-			// Extract first Image for preview purpose
-			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
-			// 320x240 movie.jpg
+			String mp4path = convertToMp4(r, args, logs);
 
-			File jpg = r.getFile(EXTENSION_JPG);
-			deleteFileIfExists(jpg);
-
-			String[] argv_previewFLV = new String[] { //
-					getPathToFFMPEG(), "-y", //
-					"-i", flv.getCanonicalPath(), //
-					"-vcodec", "mjpeg", //
-					"-vframes", "100", "-an", //
-					"-f", "rawvideo", //
-					"-s", (2 * flvWidth) + "x" + flvHeight, //
-					jpg.getCanonicalPath() };
-
-			logs.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
+			convertToJpg(r, mp4path, logs);
 
 			updateDuration(r);
-			convertToMp4(r, logs);
 			r.setStatus(Recording.Status.PROCESSED);
 
 			logDao.delete(r);
