@@ -23,9 +23,8 @@
 <class name="remoteWhiteboard" extends="baseDrawSave">
 	<attribute name="loadingObjectListId" value="0" type="number" />
 	<attribute name="loadingObjectList" value="null" />
-	
 	<attribute name="loadObjectDelegate" value="null" />
-	
+
 	<method name="loadObjectList" args="whiteBoardObject">
 	<![CDATA[
 		if ($debug) Debug.info("loadObjectList :1: ", whiteBoardObject);
@@ -72,7 +71,7 @@
 		}
 	]]>
 	</method>
-	
+
 	<method name="loadSavedObjectList" args="objList">
 	<![CDATA[
 		var tempArray = new Array();			
@@ -114,18 +113,14 @@
 		}
 	]]>
 	</method>
-	
+
 	<method name="prepareLoadWMLFile" args="itemObj">
 		if ($debug) Debug.write("loadWMLFile: ",itemObj);
-		
 		this.loadWMLFile.setAttribute('fileId', itemObj.fileId);
-				  
 		if ($debug) Debug.write("prepareLoadWMLFile 1: ",parent.parent.whiteboardId);
-		
 		this.loadWMLFile.doCall();
 	</method>
-	
-	
+
 	<netRemoteCallHib name="loadWMLFile" funcname="fileservice.loadWmlObject" remotecontext="$once{ canvas.thishib }" >
 		<attribute name="fileId" type="number" value="0"/>
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -137,14 +132,14 @@
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("loadWMLFile: ",value);
 		]]>
-		</handler>   
-	</netRemoteCallHib> 
-	
+		</handler>
+	</netRemoteCallHib>
+
 	<method name="loadWmlToWhiteboardById" args="roomItems">
 		this.clearRemote();
 		this.loadSavedObjectList(roomItems);
 	</method>
-	
+
 	<netRemoteCallHib name="startNewSyncprocess" funcname="whiteboardservice.startNewSyncprocess" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 		<![CDATA[
@@ -155,10 +150,10 @@
 				parent.startInitialLoadingProcess();
 			}
 		]]>
-		</handler>   
-	</netRemoteCallHib> 
-	
-	 <netRemoteCallHib name="startSavedSyncprocess" funcname="whiteboardservice.startNewSyncprocess" remotecontext="$once{ canvas.thishib }" >
+		</handler>
+	</netRemoteCallHib>
+
+	<netRemoteCallHib name="startSavedSyncprocess" funcname="whiteboardservice.startNewSyncprocess" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
@@ -166,25 +161,25 @@
 			if ($debug) Debug.write("currentLoadingItem IS mine");
 			parent.startInitialLoadingProcess();
 		]]>
-		</handler>   
-	</netRemoteCallHib> 
-	
+		</handler>
+	</netRemoteCallHib>
+
 	<netRemoteCallHib name="sendCompletedSyncEvent" funcname="whiteboardservice.sendCompletedSyncEvent" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("sendCompletedSyncEvent: ",value);
 		]]>
-		</handler>   
-	</netRemoteCallHib>	 	
-	
+		</handler>
+	</netRemoteCallHib>
+
 	<method name="startInitialLoadingProcess">
 		this.loadObjectDelegate = new LzDelegate(this, "loadRemoteObject");
 		if (this.loadingObjectList.length != 0){
 			lz.Timer.addTimer(this.loadObjectDelegate, 250);
 		}
 	</method>
-	
+
 	<method name="loadRemoteObject" args="ref">
 	<![CDATA[
 		this.sendRemoteWatchObject(this.loadingObjectList[this.loadingObjectListId]);
@@ -199,7 +194,7 @@
 		}
 	]]>
 	</method>
-	
+
 	<method name="sendRemoteWatchObject" args="actionObject">
 	<![CDATA[
 		if ($debug) Debug.write("[sendRemoteWatchObject]: ",actionObject);
@@ -236,10 +231,9 @@
 		if ($debug) Debug.write("[store actionObject] ",actionObject);
 		
 		this.baseactionobjectList.push(actionObject);
-			
 	]]>
 	</method>
-	
+
 	<!-- methods for syncing events -->
 	<netRemoteCallHib name="startNewObjectSyncProcess" funcname="whiteboardservice.startNewObjectSyncProcess" remotecontext="$once{ canvas.thishib }" >
 		<attribute name="isStarting" value="false" type="boolean" />
@@ -252,9 +246,9 @@
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("startNewImagesSyncprocess: ",value);
 		]]>
-		</handler>   
-	</netRemoteCallHib> 
-	
+		</handler>
+	</netRemoteCallHib>
+
 	<netRemoteCallHib name="sendCompletedObjectSyncEvent" funcname="whiteboardservice.sendCompletedObjectSyncEvent"
 		remotecontext="$once{ canvas.thishib }" >
 		<attribute name="uniqueObjectSyncName" value="" type="string" />
@@ -264,18 +258,13 @@
 			//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("sendCompletedImagesSyncEvent: ",value);
 		]]>
-		</handler>   
-	</netRemoteCallHib>   
-	
-	
+		</handler>
+	</netRemoteCallHib>
+
 	<method name="startStreaming" args="messageObj">
 		new lz.incomingScreenSharing(canvas,{messageObj:messageObj});
 	</method>
-	
 	<method name="stopStreaming" args="messageObj">
-		
 	</method>
-	
 </class>
-
 </library>

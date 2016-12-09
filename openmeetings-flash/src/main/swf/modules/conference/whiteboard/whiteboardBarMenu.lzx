@@ -32,30 +32,33 @@
 
 	<method name="removeObjectSynced" args="btn">
 	<![CDATA[
-		var removeCurrent = this.currentBtn == btn;
-		btn.objRef.destroy();
-		btn.destroy();
+		var _btn = this[btn.name];
+		var removeCurrent = this.currentBtn == _btn;
+		_btn.objRef.destroy();
+		_btn.destroy();
 		if (this.subviews.length != 0 && removeCurrent) {
-			this.sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
+			sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
+			canvas._drawarea = currentBtn.objRef._drawareaMask._drawarea;
 		}
 	]]>
 	</method>
 
 	<method name="sendActiveWindow" args="btn,win">
-		if ($debug) Debug.write("sendActiveWindow: ",btn,win);
+		//if ($debug) Debug.write("sendActiveWindow: ", btn, win);
 		this.sendActiveWindowSynced(btn);
 		this.currentBtn.objRef.sendActiveWindow();
 	</method>
 
 	<method name="sendActiveWindowSynced" args="btn">
 	<![CDATA[
-		if (this.currentBtn != null){
-			this.currentBtn.setActive(false);
+		if (!!currentBtn && !!currentBtn.objRef) {
+			currentBtn.setActive(false);
+			currentBtn.objRef.setAttribute("visible", false);
 		}
-		this.currentBtn = btn;
-		this.currentBtn.objRef.setAttribute("visibility","visible");
-		this.currentBtn.objRef.bringToFront();
-		this.currentBtn.setActive(true);
+		currentBtn = this[btn.name];
+		currentBtn.setActive(true);
+		currentBtn.objRef.setAttribute("visible", true);
+		currentBtn.objRef.bringToFront();
 	]]>
 	</method>
 </class>
