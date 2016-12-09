@@ -68,19 +68,18 @@
 			showLoading="false" remotecontext="$once{ canvas.thishib }" >
 		<netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>
 		<handler name="ondata" args="value">
-			<![CDATA[
+		<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("sendMessageToMembers :: ",value);
-			]]>
+			if ($debug) Debug.write("sendMessageToMembers :: ",value);
+		]]>
 		</handler>
 	</netRemoteCallHib> 
 </class>
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" allowToggle="false"
 		labelid="615" visible="${ !canvas.currentRoomObj.hideWhiteboard }">
-	<attribute name="_bar" value="null" />
-
 	<handler name="oninit">
 		canvas._drawarea = this;
+		canvas._wb = this;
 	</handler>
 
 	<handler name="onopenWhiteBoard" >
@@ -114,21 +113,21 @@
 	</netRemoteCallHib>
 
 	<method name="addNewItemSynced" args="whiteboardId, wbName">
-		for (var eg in this._bar.subviews) {
-			this._bar.subviews[eg].isactive = false;
-			this._bar.subviews[eg].onmouseout.sendEvent(null);
-			this._bar.subviews[eg].objRef.setAttribute("visibility","hidden");
+		for (var eg in canvas._wbBar.subviews) {
+			canvas._wbBar.subviews[eg].isactive = false;
+			canvas._wbBar.subviews[eg].onmouseout.sendEvent(null);
+			canvas._wbBar.subviews[eg].objRef.setAttribute("visibility","hidden");
 		}
 		var whiteboard = new lz.multiWhiteboardPanel(this,{
 							whiteboardId:whiteboardId
 						});
-		var tWhiteboardBtn = new lz.whiteboardMiniButton(this._bar,{
+		var tWhiteboardBtn = new lz.whiteboardMiniButton(canvas._wbBar,{
 									objRef: whiteboard,
-									width: _bar.staticwidth,
+									width: canvas._wbBar.staticwidth,
 									isactive: true,
 									btnName: wbName
 								});
-		this._bar.currentBtn = tWhiteboardBtn;
+		canvas._wbBar.currentBtn = tWhiteboardBtn;
 		tWhiteboardBtn.onmouseout.sendEvent(null);
 		canvas.whiteboardCount++;
 		return whiteboard;
@@ -171,9 +170,9 @@
 
 	<method name="removeWindow" args="obj">
 		if ($debug) Debug.write("removeWindow :: ",obj);
-		for (var eg in this._bar.subviews) {
-			if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
-				this._bar.removeObjectSynced(this._bar.subviews[eg]);
+		for (var eg in canvas._wbBar.subviews) {
+			if (canvas._wbBar.subviews[eg].objRef.whiteboardId == obj[1]) {
+				canvas._wbBar.removeObjectSynced(canvas._wbBar.subviews[eg]);
 				canvas.whiteboardCount--;
 				return;
 			}
@@ -182,11 +181,11 @@
 
 	<method name="renameWhiteboard" args="obj">
 		if ($debug) Debug.write("renameWhiteboard :: ", obj);
-		for (var eg in this._bar.subviews) {
-			var btn = this._bar.subviews[eg];
+		for (var eg in canvas._wbBar.subviews) {
+			var btn = canvas._wbBar.subviews[eg];
 			if (btn.objRef.whiteboardId == obj[1]) {
 				btn.setAttribute('btnName', obj[2]);
-				return;
+				break;
 			}
 		}
 	</method>
@@ -224,9 +223,9 @@
 	
 	<method name="activateWhiteboard" args="obj">
 		if ($debug) Debug.write("activateWhiteboard :: ",obj);
-		for (var eg in this._bar.subviews) {
-			if (this._bar.subviews[eg].objRef.whiteboardId == obj[1]) {
-				this._bar.subviews[eg].activateSynced();
+		for (var eg in canvas._wbBar.subviews) {
+			if (canvas._wbBar.subviews[eg].objRef.whiteboardId == obj[1]) {
+				canvas._wbBar.subviews[eg].activateSynced();
 				return;
 			}
 		}
@@ -274,7 +273,7 @@
 			<attribute name="whiteboardId" value="-1" type="number" />
 			
 			<handler name="oninit">
-				parent.parent._bar = this;
+				canvas._wbBar = this;
 			</handler>
 		</whiteboardBarMenu>
 		<om_hscrollbar name="_scroll" height="0" stepsize="50"/>

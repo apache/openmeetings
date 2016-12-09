@@ -1,42 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	you under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
-	language governing permissions and limitations under the License. -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
 <library>
 
-	<class name="baseDrawObject" extends="baseDrawPointer">
-		<!-- it uses some of the attribute's defined in baseDrawImage -->
-		<attribute name="newSlideNumber" value="1" type="number" />
-		<attribute name="fullFit" value="true" type="boolean" />
+<class name="baseDrawObject" extends="baseDrawPointer">
+	<!-- it uses some of the attribute's defined in baseDrawImage -->
+	<attribute name="newSlideNumber" value="1" type="number" />
+	<attribute name="fullFit" value="true" type="boolean" />
 
-		<!-- Invoked by the Library directly Loads a SWFPresenation to the whiteBoard -->
-		<method name="loadSWFPresentationSynced"
-			args="url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName">
-			var now = new Date();
-			//This invokes a Method which is in the remoteWhiteboard.lzx
-			this.startNewObjectSyncProcess.isStarting = true;
-			this.startNewObjectSyncProcess.uniqueObjectSyncName = fileName +
-			now.getTime();
-			this.startNewObjectSyncProcess.doCall();
-			//if ($debug)
-			Debug.write("loadSWFPresentationSynced",url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName);
-			this.addPresentationToLayer(this,url,'swfpresentationobject'+this.getCounter(),
+	<!-- 
+		Invoked by the Library directly
+		Loads a SWFPresenation to the whiteBoard
+	 -->
+	<method name="loadSWFPresentationSynced" args="url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName">
+		var now = new Date();
+		//This invokes a Method which is in the remoteWhiteboard.lzx
+		this.startNewObjectSyncProcess.isStarting = true;
+		this.startNewObjectSyncProcess.uniqueObjectSyncName = fileName + now.getTime();
+		this.startNewObjectSyncProcess.doCall();
+		//if ($debug) Debug.write("loadSWFPresentationSynced",url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName);
+		this.addPresentationToLayer(this,url,'swfpresentationobject'+this.getCounter(),
 			0,0,0,0,
 			true,
 			url,fileName,moduleName,parentPath,room,domain,slideNumber,
 			100,0,0,0,0,
 			this.startNewObjectSyncProcess.uniqueObjectSyncName,
 			standardFileName,this.fullFit);
-		</method>
+	</method>
 
-		<method name="setCurrentScaleByFullFit" args="scaleFactor">
+	<method name="setCurrentScaleByFullFit" args="scaleFactor">
 	<![CDATA[
 		var tScale = Math.round(scaleFactor*100);
 		
@@ -52,9 +61,9 @@
 		
 		parent.parent.zoombox.setCurrentScaleByFullFit(tScale);
 	]]>
-		</method>
+	</method>
 
-		<method name="doUpdateFullFit" args="fullFit,zoom">
+	<method name="doUpdateFullFit" args="fullFit,zoom">
 	<![CDATA[
 		if (canvas.ismoderator) {
 			if ($debug) Debug.write("doUpdateFullFit ",fullFit,zoom);
@@ -71,9 +80,9 @@
 			this.onsharedMessage('whiteboardObj',actionObject);
 		}	
 	]]>
-		</method>
+	</method>
 
-		<method name="doUpdateZoom" args="fullFit,zoom">
+	<method name="doUpdateZoom" args="fullFit,zoom">
 	<![CDATA[
 		if ($debug) Debug.write("doUpdateZoom ",this.fullFit,zoom);
 		
@@ -91,9 +100,9 @@
 			this.onsharedMessage('whiteboardObj',actionObject);	
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="doUpdateFullFitAndZoomRemote" args="actionObject">
+	<method name="doUpdateFullFitAndZoomRemote" args="actionObject">
 	<![CDATA[
 		parent.parent.zoombox.setWhiteboardValues(actionObject[1],actionObject[2]);
 		if ($debug) Debug.write("doUpdateFullFitAndZoomRemote ",actionObject[1],actionObject[2]);
@@ -106,9 +115,9 @@
 			this.onupdateScale.sendEvent(null);
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="doFullFit" args="v">
+	<method name="doFullFit" args="v">
 	<![CDATA[
 		if ($debug) Debug.write("Do Full Fit ? doFullFit: ", v, this.ObjectByName);
 	
@@ -122,10 +131,9 @@
 			}
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="checkSWFPresentation"
-			args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+	<method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
 	<![CDATA[
 		for (var i=0;i<this.baseactionobjectList.length;i++){
 			if (fileName==this.baseactionobjectList[i][3]){
@@ -140,12 +148,14 @@
 		} 
 		return false;
 	]]>
-		</method>
+	</method>
 
-		<!-- alterModus => this is added by the mod not remotely adds the SWF-Object 
-			to the Layer -->
-		<method name="addPresentationToLayer"
-			args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName,fullFit">
+	<!--
+		alterModus => this is added by the mod not remotely
+		
+		adds the SWF-Object to the Layer
+	 -->
+	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName,fullFit">
 	<![CDATA[
 		if ($debug) Debug.write("addPresentationToLayer", standardFileName);
 		
@@ -164,146 +174,152 @@
 			, swfUrl: downloadurl
 			});
 
-		this.addItemToDocumentToolBar();
+		this.getDocumentToolBar().addCurrentObject(this.currentlayer);
 		this.doUpdateDocumentToolBar();
 	]]>
-		</method>
+	</method>
 
-		<method name="addSWFToLayerHistory" args="actionObject,refObj,isWmlLoader">
-			this.isWmlLoaderImage = isWmlLoader;
-			this.baseactionobjectList.push(actionObject);
-			this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
+	<method name="addSWFToLayerHistory" args="actionObject,refObj,isWmlLoader">
+		this.isWmlLoaderImage = isWmlLoader;
+		this.baseactionobjectList.push(actionObject);
+		this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
 			actionObject[actionObject.length-5],actionObject[actionObject.length-4],actionObject[actionObject.length-3],
 			actionObject[actionObject.length-2],false,actionObject[2],actionObject[3],actionObject[4],actionObject[5],
 			actionObject[6],actionObject[7],
 			actionObject[8],actionObject[16],actionObject[11],actionObject[12],actionObject[9],actionObject[10],
 			actionObject[17],actionObject[18],actionObject[19]);
-		</method>
+	</method>
 
-		<!-- Invoked by the remote Host, see sendWatchObject in baseDraw.lzx -->
-		<method name="addSWFToLayerHistorySynced" args="actionObject,refObj">
-			this.baseactionobjectList.push(actionObject);
-			this.startNewObjectSyncProcess.isStarting = false;
-			this.startNewObjectSyncProcess.uniqueObjectSyncName =
-			actionObject[17];
-			this.startNewObjectSyncProcess.doCall();
-			this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
+	<!-- 
+		Invoked by the remote Host, see sendWatchObject in baseDraw.lzx
+	 -->
+	<method name="addSWFToLayerHistorySynced" args="actionObject,refObj">
+		this.baseactionobjectList.push(actionObject);
+		this.startNewObjectSyncProcess.isStarting = false;
+		this.startNewObjectSyncProcess.uniqueObjectSyncName = actionObject[17];
+		this.startNewObjectSyncProcess.doCall();
+		this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
 			actionObject[actionObject.length-5],actionObject[actionObject.length-4],
 			actionObject[actionObject.length-3],actionObject[actionObject.length-2],
 			false,
 			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
 			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
 			actionObject[9],actionObject[10],actionObject[17],actionObject[18],actionObject[19]);
-		</method>
+	</method>
 
-		<!--- invoke by the initial Loading process in remoteWhiteboard.lzx, does 
-			not invoke any Update Handler once this object is loaded, it will throw an 
-			Update event of kind addSWFToLayerHistoryToLocalLoaded -->
-		<method name="addSWFToLayerHistoryToLocal" args="actionObject,refObj">
-			this.baseactionobjectList.push(actionObject);
-			this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
+	<!--- 
+		invoke by the initial Loading process in remoteWhiteboard.lzx, 
+		does not invoke any Update Handler
+		once this object is loaded, it will throw an Update event of kind
+		addSWFToLayerHistoryToLocalLoaded
+	 -->
+	<method name="addSWFToLayerHistoryToLocal" args="actionObject,refObj">
+		this.baseactionobjectList.push(actionObject);
+		this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],
 			actionObject[actionObject.length-5],actionObject[actionObject.length-4],
 			actionObject[actionObject.length-3],actionObject[actionObject.length-2],
 			false,
 			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
 			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
 			actionObject[9],actionObject[10],actionObject[17],actionObject[18],actionObject[19]);
-		</method>
+	</method>
 
-		<method name="registerNewSWF"
-			args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName,fullFit,zIndex">
-			var actionObject = new Array();
-			actionObject.push('swf');//0
-			actionObject.push(urlname);//1
-			actionObject.push(baseurl);//2
-			actionObject.push(fileName);//3
-			actionObject.push(moduleName);//4
-			actionObject.push(parentPath);//5
-			actionObject.push(room);//6
-			actionObject.push(domain);//7
-			actionObject.push(slideNumber);//8
-			actionObject.push(innerx);//9
-			actionObject.push(innery);//10
-			actionObject.push(innerwidth);//11
-			actionObject.push(innerheight);//12
-			actionObject.push(zoomlevel);//13
-			actionObject.push(initwidth);//14
-			actionObject.push(initheight);//15
-			actionObject.push(currentzoom);//16
-			actionObject.push(uniquObjectSyncName);//17
-			actionObject.push(standardFileName);//18
-			actionObject.push(fullFit);//19
-			actionObject.push(zIndex);//-8
-			actionObject.push(null);//-7
-			actionObject.push(this.counter);//-6
-			actionObject.push(posx);//-5
-			actionObject.push(posy);//-4
-			actionObject.push(width);//-3
-			actionObject.push(height);//-2
-			actionObject.push(this.currentlayer.name);//-1
-			this.baseactionobjectList.push(actionObject);
-			this.checkStepLayers();
-			if (doUpdateMessage) this.onsharedMessage('draw',actionObject);
-		</method>
+	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName,fullFit,zIndex">
+		var actionObject = new Array();
+		actionObject.push('swf');//0
+		actionObject.push(urlname);//1
+		actionObject.push(baseurl);//2
+		actionObject.push(fileName);//3
+		actionObject.push(moduleName);//4
+		actionObject.push(parentPath);//5
+		actionObject.push(room);//6
+		actionObject.push(domain);//7
+		actionObject.push(slideNumber);//8
+		actionObject.push(innerx);//9
+		actionObject.push(innery);//10
+		actionObject.push(innerwidth);//11
+		actionObject.push(innerheight);//12
+		actionObject.push(zoomlevel);//13
+		actionObject.push(initwidth);//14
+		actionObject.push(initheight);//15
+		actionObject.push(currentzoom);//16
+		actionObject.push(uniquObjectSyncName);//17
+		actionObject.push(standardFileName);//18
+		actionObject.push(fullFit);//19
+		actionObject.push(zIndex);//-8
+		actionObject.push(null);//-7
+		actionObject.push(this.counter);//-6
+		actionObject.push(posx);//-5
+		actionObject.push(posy);//-4
+		actionObject.push(width);//-3
+		actionObject.push(height);//-2
+		actionObject.push(this.currentlayer.name);//-1
+		this.baseactionobjectList.push(actionObject);
+		this.checkStepLayers();
+		if (doUpdateMessage) this.onsharedMessage('draw',actionObject);
+	</method>
 
-		<!-- Invoked by the swfResource, if the alterModus = true, throws an Update-Event 
-			to all connected Clients -->
-		<method name="storeTempValsAndLoadSyncListSWF" args="objRef">
-			this.syncImageRefObj = objRef;
-			this.doRegisterNewSwf(true);
-			this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
-			this.sendCompletedObjectSyncEvent.doCall();
-		</method>
+	<!--
+		Invoked by the swfResource, if the alterModus = true,
+		throws an Update-Event to all connected Clients
+	 -->
+	<method name="storeTempValsAndLoadSyncListSWF" args="objRef">
+		this.syncImageRefObj = objRef;
+		this.doRegisterNewSwf(true);
+		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
+		this.sendCompletedObjectSyncEvent.doCall();
+	</method>
 
-		<!-- Invoked by the swfResource, if the alterModus = false, throws NO Update-Event 
-			to all connected Clients -->
-		<method name="sendLoadNotificationSWF" args="objRef">
-			this.syncImageRefObj = objRef;
-			this.doRegisterNewSwf(false);
-			this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
-			this.sendCompletedObjectSyncEvent.doCall();
-		</method>
+	<!--
+		Invoked by the swfResource, if the alterModus = false,
+		throws NO Update-Event to all connected Clients
+	 -->
+	<method name="sendLoadNotificationSWF" args="objRef" >
+		this.syncImageRefObj = objRef;
+		this.doRegisterNewSwf(false);
+		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
+		this.sendCompletedObjectSyncEvent.doCall();
+	</method>
 
-		<!-- TODO: Check Recording -->
-		<method name="storeTempValsAndLoadSyncListSWFRecording" args="objRef">
-			this.syncImageRefObj = objRef;
-			//This invokes a Method which is in the remoteWhiteboard.lzx
-			this.sendCompletedObjectSyncEvent.uniqueObjectSyncName =
-			this.syncImageRefObj.uniqueObjectSyncName;
-			this.sendCompletedObjectSyncEvent.doCall();
-		</method>
+	<!-- TODO: Check Recording -->
+	<method name="storeTempValsAndLoadSyncListSWFRecording" args="objRef">
+		this.syncImageRefObj = objRef;
+		//This invokes a Method which is in the remoteWhiteboard.lzx
+		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
+		this.sendCompletedObjectSyncEvent.doCall();
+	</method>
 
-		<method name="doRegisterNewSwf" args="doUpdateMessage">
-			//now send notifications to connected clients
-			this.setAttribute('drawmodus','hand');
+	<method name="doRegisterNewSwf" args="doUpdateMessage">
+		//now send notifications to connected clients
+		this.setAttribute('drawmodus','hand');
 
-			this.registerNewSWF(this.syncImageRefObj.baseurl,this.syncImageRefObj.x,
-			this.syncImageRefObj.y,this.syncImageRefObj._swfView.width,
-			this.syncImageRefObj._swfView.height,this.syncImageRefObj.baseurl,
-			this.syncImageRefObj.fileName,this.syncImageRefObj.moduleName,
-			this.syncImageRefObj.parentPath,this.syncImageRefObj.room,
-			this.syncImageRefObj.domain,this.syncImageRefObj.slideNumber,
-			this.syncImageRefObj._swfView.x,this.syncImageRefObj._swfView.y,
-			this.syncImageRefObj._swfView.width,this.syncImageRefObj._swfView.height,
-			this.syncImageRefObj.zoomlevel,this.syncImageRefObj.currentzoomFactor,
-			this.syncImageRefObj.initwidth,this.syncImageRefObj.initheight,
-			this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage,
-			this.syncImageRefObj.standardFileName,
-			this.syncImageRefObj.fullFit,
-			this.getZIndex());
+		this.registerNewSWF(this.syncImageRefObj.baseurl,this.syncImageRefObj.x,
+				this.syncImageRefObj.y,this.syncImageRefObj._swfView.width,
+				this.syncImageRefObj._swfView.height,this.syncImageRefObj.baseurl,
+				this.syncImageRefObj.fileName,this.syncImageRefObj.moduleName,
+				this.syncImageRefObj.parentPath,this.syncImageRefObj.room,
+				this.syncImageRefObj.domain,this.syncImageRefObj.slideNumber,
+				this.syncImageRefObj._swfView.x,this.syncImageRefObj._swfView.y,
+				this.syncImageRefObj._swfView.width,this.syncImageRefObj._swfView.height,
+				this.syncImageRefObj.zoomlevel,this.syncImageRefObj.currentzoomFactor,
+				this.syncImageRefObj.initwidth,this.syncImageRefObj.initheight,
+				this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage,
+				this.syncImageRefObj.standardFileName,
+				this.syncImageRefObj.fullFit,
+				this.getZIndex());
 
-			//set modus to hand so users can directly select that image
-			this.setModus('swf');
-		</method>
+		//set modus to hand so users can directly select that image
+		this.setModus('swf');
+	</method>
 
-		<method name="sendSyncNotificationSWF">
-			this.imageLoadingCompleteMessage = new Array();
-			this.imageLoadingCompleteMessage[0] = "whiteboard";
-			this.imageLoadingCompleteMessage[1] = "swfsynccomplete";
-			this.sendMessageWithClientSWF.doCall();
-		</method>
+	<method name="sendSyncNotificationSWF">
+		this.imageLoadingCompleteMessage = new Array();
+		this.imageLoadingCompleteMessage[0] = "whiteboard";
+		this.imageLoadingCompleteMessage[1] = "swfsynccomplete";
+		this.sendMessageWithClientSWF.doCall();
+	</method>
 
-		<method name="doDocumentAction" args="action">
+	<method name="doDocumentAction" args="action">
 	<![CDATA[
 		if ($debug) Debug.info("doDocumentAction :1: sendCurrentSWFObject ",action);
 		if (this.ObjectByName.typeOfObject=="swf") {
@@ -360,51 +376,46 @@
 			this.sendCurrentSWFObject(this.ObjectByName);
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="addItemToDocumentToolBar">
-			this.getDocumentToolBar().addCurrentObject(this.currentlayer);
-		</method>
-
-		<method name="setCurrentDocumentByToolBar" args="itemRefName">
-			if (this.boundingIsActive){
-			if (this.boundingref.objRef.name !=
-			itemRefName) {
-			this.boundingref._innerDrag.onmouseup.sendEvent();
+	<method name="setCurrentDocumentByToolBar" args="itemRefName">
+		if (this.boundingIsActive){
+			if (this.boundingref.objRef.name != itemRefName) {
+				this.boundingref._innerDrag.onmouseup.sendEvent();
 			}
-			}
-			this.setCurrentDocument(null);
-		</method>
+		}
+		this.setCurrentDocument(null);
+	</method>
 
-		<method name="setCurrentDocument" args="itemRefName">
-			var t = this.getObjectByName(itemRefName);
-			if (t==null) {
+	<method name="setCurrentDocument" args="itemRefName">
+		var t = this.getObjectByName(itemRefName);
+		if (t==null) {
 			return;
-			}
-			this.ObjectByName = t;
-			this.doUpdateDocumentToolBar();
+		}
+		this.ObjectByName = t;
+		this.doUpdateDocumentToolBar();
 
-			if ($debug) Debug.write("setCurrentDocument",itemRefName,this.ObjectByName);
-		</method>
+		if ($debug) Debug.write("setCurrentDocument",itemRefName,this.ObjectByName);
+	</method>
 
-		<method name="sendItemToFront" args="itemRefName">
-			var actionObject = new Array();
-			actionObject[0] = 'item';
-			actionObject[1] = itemRefName;
-			this.onsharedMessage('sendItemToFront',actionObject);
-		</method>
+	<method name="sendItemToFront" args="itemRefName">
+		var actionObject = new Array();
+		actionObject[0] = 'item';
+		actionObject[1] = itemRefName;
+		this.onsharedMessage('sendItemToFront',actionObject);
+	</method>
 
-		<method name="bringItemToFrontByName" args="itemRefName">
-			this.ObjectByName = this.getObjectByName(itemRefName);
-			this.ObjectByName.bringToFront();
-		</method>
+	<method name="bringItemToFrontByName" args="itemRefName">
+		this.ObjectByName = this.getObjectByName(itemRefName);
+		this.ObjectByName.bringToFront();
+	</method>
 
-		<method name="doUpdateDocumentToolBarByParticipant" args="itemObjName">
-			this.ObjectByName = this.getObjectByName(itemObjName);
-			this.doUpdateDocumentToolBar();
-		</method>
+	<method name="doUpdateDocumentToolBarByParticipant" args="itemObjName">
+		this.ObjectByName = this.getObjectByName(itemObjName);
+		this.doUpdateDocumentToolBar();
+	</method>
 
-		<method name="doUpdateDocumentToolBar">
+	<method name="doUpdateDocumentToolBar">
 	<![CDATA[
 		var docToolbar = this.getDocumentToolBar();
 		
@@ -412,7 +423,6 @@
 		docToolbar.parent.parent.ignoreUpdates = true;
 		
 		if (this["ObjectByName"] && this.ObjectByName != null && this.ObjectByName._swfView) {
-			
 			if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
 			
 			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
@@ -424,17 +434,17 @@
 		
 		docToolbar.parent.parent.ignoreUpdates = false;
 	]]>
-		</method>
+	</method>
 
-		<method name="doDeleteFromDocumentsBar" args="itemRefName">
-			this.getDocumentToolBar().removeDocument(itemRefName);
-		</method>
+	<method name="doDeleteFromDocumentsBar" args="itemRefName">
+		this.getDocumentToolBar().removeDocument(itemRefName);
+	</method>
 
-		<method name="clearDocumentsBar">
-			this.getDocumentToolBar().clearDocumentsBar();
-		</method>
+	<method name="clearDocumentsBar">
+		this.getDocumentToolBar().clearDocumentsBar();
+	</method>
 
-		<method name="sendCurrentSWFObject" args="objRef">
+	<method name="sendCurrentSWFObject" args="objRef">
 	<![CDATA[
 		if ($debug) Debug.write("sendCurrentSWFObject :: ",objRef,objRef.name);
 		var objName = objRef.name;
@@ -463,9 +473,9 @@
 			}
 		}	
 	]]>
-		</method>
+	</method>
 
-		<method name="remoteObjectUpdate" args="lastactionObject">
+	<method name="remoteObjectUpdate" args="lastactionObject">
 	<![CDATA[
 		var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
 		
@@ -500,9 +510,9 @@
 			this.updateObjectsToSlideNumber(lastactionObject);
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="remoteUpdateBaseObjectList" args="actionObject">
+	<method name="remoteUpdateBaseObjectList" args="actionObject">
 	<![CDATA[
 		////Debug.write("remoteUpdateBaseObjectList : ",actionObject);
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
@@ -512,9 +522,9 @@
 			}
 		}	
 	]]>
-		</method>
+	</method>
 
-		<method name="playVideoSynced" args="fileId,fileName,flv_width,flv_height">
+	<method name="playVideoSynced" args="fileId,fileName,flv_width,flv_height">
 	<![CDATA[
 		if ($debug) Debug.write("playVideoSynced : ", fileId,fileName,flv_width,flv_height);
 	
@@ -529,9 +539,9 @@
 									});
 		this.layers.push(this.currentlayer);  
 	]]>
-		</method>
+	</method>
 
-		<method name="sendNewVideoRemote" args="refObj">
+	<method name="sendNewVideoRemote" args="refObj">
 	<![CDATA[
 		if ($debug) Debug.write("sendNewVideoRemote : ",refObj.fileId,refObj.title);
 	
@@ -542,30 +552,29 @@
 											refObj.flv_height,
 											this.getZIndex());
 	]]>
-		</method>
+	</method>
 
-		<method name="flvregisterFinal"
-			args="newName,x,y,width,height,fileId,fileName,isPlaying,flv_width,flv_height,zIndex">
-			var actionObject = new Array();
-			actionObject[0] = 'flv';
-			actionObject[1] = fileId;
-			actionObject[2] = fileName;
-			actionObject[3] = isPlaying;
-			actionObject[4] = flv_width;
-			actionObject[5] = flv_height;
-			actionObject[6] = zIndex;//-8
-			actionObject[7] = null;//-7
-			actionObject[8] = this.counter;//-6
-			actionObject[9] = x;//-5
-			actionObject[10] = y;//-4
-			actionObject[11] = width;//-3
-			actionObject[12] = height;//-2
-			actionObject[13] = newName;//-1
-			this.baseactionobjectList.push(actionObject);
-			this.onsharedMessage('draw',actionObject);
-		</method>
+	<method name="flvregisterFinal" args="newName,x,y,width,height,fileId,fileName,isPlaying,flv_width,flv_height,zIndex">
+		var actionObject = new Array();
+		actionObject[0] = 'flv';
+		actionObject[1] = fileId;
+		actionObject[2] = fileName;
+		actionObject[3] = isPlaying;
+		actionObject[4] = flv_width;
+		actionObject[5] = flv_height;
+		actionObject[6] = zIndex;//-8
+		actionObject[7] = null;//-7
+		actionObject[8] = this.counter;//-6
+		actionObject[9] = x;//-5
+		actionObject[10] = y;//-4
+		actionObject[11] = width;//-3
+		actionObject[12] = height;//-2
+		actionObject[13] = newName;//-1
+		this.baseactionobjectList.push(actionObject);
+		this.onsharedMessage('draw',actionObject);
+	</method>
 
-		<method name="drawFlvToHistory" args="lastActionObject,parentView">
+	<method name="drawFlvToHistory" args="lastActionObject,parentView">
 	<![CDATA[
 		if ($debug) Debug.write("drawFlvToHistory PLAY :: ",lastActionObject[3]);
 	
@@ -582,9 +591,9 @@
 		}
 		this.layers.push(this.currentlayer);  
 	]]>
-		</method>
+	</method>
 
-		<method name="playFLV" args="refObj,play">
+	<method name="playFLV" args="refObj,play">
 	<![CDATA[
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
 			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==refObj.name) {
@@ -597,18 +606,18 @@
 			}
 		}
 	]]>
-		</method>
+	</method>
 
-		<method name="playFLVRemote" args="actionObject">
-			var tObj = this.getObjectByName(actionObject[actionObject.length-1]);
+	<method name="playFLVRemote" args="actionObject">
+		var tObj = this.getObjectByName(actionObject[actionObject.length-1]);
 
-			if (actionObject[3]) {
+		if (actionObject[3]) {
 			tObj.playRemote();
-			}
-			if (!actionObject[3]) {
+		}
+		if (!actionObject[3]) {
 			tObj.stopRemote();
-			}
-		</method>
-	</class>
+		}
+	</method>
+</class>
 
 </library>

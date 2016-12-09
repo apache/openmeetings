@@ -509,36 +509,36 @@
 		
 		<netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
 			<handler name="ondata" args="value">
-				<![CDATA[
-					if ($debug) Debug.write("############ getCurrentModeratorList: ", value);
-					
-					canvas.analyzeModerationList(value);
-					
-					canvas.currentModeratorList = value;
-					//Update Moderation Flag
-					canvas.updateModerationFlag();
-					
-					var messageAlreadyThrown = false;
-					
-					//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
-					
-					canvas._drawarea.onopenWhiteBoard.sendEvent();
-					
-					if ($debug) Debug.write("room ", canvas.currentRoomObj);
-					if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
-					
-					if (canvas.currentRoomObj.type != 'restricted') {
-						if (canvas.currentRoomObj.moderated) {
-							if (value.length == 0 && !messageAlreadyThrown){
-								new lz.labelerrorPopup(canvas,{errorlabelid:641});
-							}
-						} else {
-							if (value.length == 0 && !messageAlreadyThrown){
-								new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-							}
+			<![CDATA[
+				if ($debug) Debug.write("############ getCurrentModeratorList: ", value);
+
+				canvas.analyzeModerationList(value);
+
+				canvas.currentModeratorList = value;
+				//Update Moderation Flag
+				canvas.updateModerationFlag();
+
+				var messageAlreadyThrown = false;
+
+				//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
+
+				canvas._drawarea.onopenWhiteBoard.sendEvent();
+
+				if ($debug) Debug.write("room ", canvas.currentRoomObj);
+				if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
+
+				if (canvas.currentRoomObj.type != 'restricted') {
+					if (canvas.currentRoomObj.moderated) {
+						if (value.length == 0 && !messageAlreadyThrown){
+							new lz.labelerrorPopup(canvas,{errorlabelid:641});
+						}
+					} else {
+						if (value.length == 0 && !messageAlreadyThrown){
+							new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
 						}
 					}
-				]]>
+				}
+			]]>
 			</handler>
 		</netRemoteCallHib>
 		
@@ -610,19 +610,19 @@
 			this.roomDisconnectUser(value, value.publicSID);
 		]]>
 		</method>
-		
+
 		<method name="stopPublishingMessage" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			canvas._mymod.publishingObj = null;
 			canvas._mymod.setMessage();
 		</method>
-		
+
 		<netRemoteCallHib name="setSyncFlag" funcname="setSyncFlag" >
 			<handler name="ondata" args="value">
 				if ($debug) Debug.write("setSyncFlag: ",value);
 			</handler>
 		</netRemoteCallHib>
-			 
+
 		<method name="setUserStatus" args="ctx,user,o">
 			<![CDATA[
 				if (!o || !user) return;
@@ -685,7 +685,7 @@
 			canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
 		]]>
 		</method>
-		
+
 		<netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
 			<attribute name="publicSID" value="0" type="string" />
 			<netparam><method name="getValue">return parent.publicSID;</method></netparam>
@@ -910,7 +910,7 @@
 		</netRemoteCallHib>
 
 		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient"
-						  remotecontext="$once{ canvas.thishib }" >
+				remotecontext="$once{ canvas.thishib }" >
 			
 			<attribute name="messageObj" value="null" />
 			<method name="sendMessage" args="typeName,messageObject">
