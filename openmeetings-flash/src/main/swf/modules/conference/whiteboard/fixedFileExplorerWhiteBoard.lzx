@@ -256,9 +256,6 @@
 				parent.parent.onsharedMessage.sendEvent(tempSendArray);
 			</method>
 
-			<handler name="onopenWhiteBoard" >
-			</handler>
-
 			<!-- clientid  = streamid of the user -->
 			<method name="oninitUser" args="clientid,objectList">
 				this.parent.parent.sendObjectToClientID = clientid;
