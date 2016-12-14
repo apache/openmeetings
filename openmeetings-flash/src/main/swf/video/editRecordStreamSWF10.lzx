@@ -654,32 +654,32 @@
 			<attribute name="cam_width" value="320" type="number" />
 			<attribute name="cam_height" value="240" type="number" />
 			<handler name="ondata">
-				<![CDATA[
-					// if ($debug) Debug.write("ondata ", this);
-					var type = this.datapath.xpathQuery('@type');
-					this.cam_width = Number(this.datapath.xpathQuery('@width'));
-					this.cam_height = Number(this.datapath.xpathQuery('@height'));
-					this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
-					var isDefault = this.datapath.xpathQuery('@isDefault') == "true";
-					
-					var t:SharedObject = SharedObject.getLocal('userdata');
-					var g = t.data;
-					var width = g["width"];
-					var height = g["height"];
-					if (width!=null && width > 0 && height!=null && height>0) {
-						if (width == this.cam_width && height == this.cam_height) {
-							parent.selectItemAt(parent.counter);
-							parent.onselect.sendEvent(this);
-						}
-					} else {
-						if (isDefault) {
-							if ($debug) Debug.write("Found default one ",type);
-							parent.selectItemAt(parent.counter);
-							parent.onselect.sendEvent(this);
-						}
+			<![CDATA[
+				// if ($debug) Debug.write("ondata ", this);
+				var type = this.datapath.xpathQuery('@type');
+				this.cam_width = Number(this.datapath.xpathQuery('@width'));
+				this.cam_height = Number(this.datapath.xpathQuery('@height'));
+				this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
+				var isDefault = this.datapath.xpathQuery('@isDefault') == "true";
+				
+				var t:SharedObject = SharedObject.getLocal('userdata');
+				var g = t.data;
+				var width = g["width"];
+				var height = g["height"];
+				if (width!=null && width > 0 && height!=null && height>0) {
+					if (width == this.cam_width && height == this.cam_height) {
+						parent.selectItemAt(parent.counter);
+						parent.onselect.sendEvent(this);
 					}
-					parent.counter += 1;
-				]]>
+				} else {
+					if (isDefault) {
+						if ($debug) Debug.write("Found default one ",type);
+						parent.selectItemAt(parent.counter);
+						parent.onselect.sendEvent(this);
+					}
+				}
+				parent.counter += 1;
+			]]>
 			</handler>
 		</textlistitem>
 	</resetCombobox>

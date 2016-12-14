@@ -302,7 +302,7 @@
 			</handler>
 
 			<method name="getDocumentToolBar">
-				return _propPanel._content._documentsPanel;
+				return !_propPanel || !_propPanel._content ? null : _propPanel._content._documentsPanel;
 			</method>
 
 			<method name="getPaintToolBar">
