@@ -534,7 +534,8 @@
 		chosenSetting = availableSettings.getValue();
 	</method>
 
-	<simpleLabelButton fontsize="11" labelid="918" x="${ parent.width-280 }" y="${ parent.height-50 }" width="100">
+	<simpleLabelButton fontsize="11" labelid="918" x="${ parent.width-280 }" y="${ parent.height-50 }"
+			height="28" width="100">
 		<handler name="onclick">
 			parent.cleanVideos();
 			parent.close();
