@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.nextBroadCastId;
 import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 
 import java.util.ArrayList;
@@ -303,7 +304,7 @@ public class MobileService {
 		User u = userDao.get(userId);
 		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
 		 //TODO check if we need anything here
-		long broadcastId = scopeAdapter.getBroadCastId();
+		long broadcastId = nextBroadCastId();
 		c.setSipTransport(true);
 		c.setRoomId(Long.parseLong(c.getScope()));
 		c.setRoomEnter(new Date());
@@ -333,7 +334,7 @@ public class MobileService {
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
 		Map<String, Object> result = new Hashtable<String, Object>();
 		if (!"n".equals(avMode)) {
-			result.put("broadcastId", scopeAdapter.getBroadCastId());
+			result.put("broadcastId", nextBroadCastId());
 		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);

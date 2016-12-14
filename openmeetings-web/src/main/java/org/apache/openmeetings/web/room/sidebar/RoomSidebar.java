@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
+import org.apache.openmeetings.web.app.Client.Pod;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
@@ -77,11 +78,6 @@ public class RoomSidebar extends Panel {
 	private final ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
 	private Client kickedClient;
-	public enum Pod {
-		none
-		, right
-		, left
-	};
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
 
@@ -172,11 +168,22 @@ public class RoomSidebar extends Panel {
 				if (c == null) {
 					return;
 				}
+				if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
+					if (a == Activity.broadcastA || a == Activity.broadcastAV) {
+						c.getRights().add(Room.Right.audio);
+					}
+					if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
+						c.getRights().add(Room.Right.video);
+					}
+				}
 				if (activityAllowed(c, a, room.getRoom())) {
-					if (c.hasActivity(a)) {
-						c.getActivities().remove(a);
+					Pod pod = c.getPod();
+					c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
+					if (pod != Pod.none && pod != c.getPod()) {
+						//pod has changed, no need to toggle
+						c.set(a);
 					} else {
-						c.getActivities().add(a);
+						c.toggle(a);
 					}
 					room.broadcast(target, c);
 				}
@@ -190,7 +197,7 @@ public class RoomSidebar extends Panel {
 		super(id);
 		this.room = room;
 		updateShowFiles();
-		
+
 		userTab = new ITab() {
 			private static final long serialVersionUID = 1L;
 
@@ -300,17 +307,20 @@ public class RoomSidebar extends Panel {
 	}
 
 	public static boolean activityAllowed(Client c, Activity a, Room room) {
+		boolean r = false;
 		switch (a) {
-			case broadcastAudio:
-				return c.hasRight(Right.audio);
-			case broadcastVideo:
-				{
-					if (room.isAudioOnly()) {
-						return false;
-					}
-					return c.hasRight(Right.video);
-				}
+			case broadcastA:
+				r = c.hasRight(Right.audio);
+				break;
+			case broadcastV:
+				r = !room.isAudioOnly() && c.hasRight(Right.video);
+				break;
+			case broadcastAV:
+				r = !room.isAudioOnly() && c.hasRight(Right.audio) && c.hasRight(Right.video);
+				break;
+			default:
+				break;
 		}
-		return false;
+		return r;
 	}
 }

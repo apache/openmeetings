@@ -40,13 +40,17 @@ public class Client implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
-		broadcastAudio //sends Audio to the room
-		, broadcastVideo //sends Video to the room
+		broadcastA //sends Audio to the room
+		, broadcastV //sends Video to the room
+		, broadcastAV //sends Audio+Video to the room
 		, share
 		, record
 		, publish //sends A/V to external server
 		, muted
 		, exclusive
+	}
+	public enum Pod {
+		none, left, right;
 	}
 	private final String sessionId;
 	private int pageId;
@@ -56,6 +60,7 @@ public class Client implements IDataProviderEntity {
 	private final Set<Right> rights = new HashSet<>();
 	private final Set<Activity> activities = new HashSet<>();
 	private final Date connectedSince;
+	private Pod pod;
 
 	public Client(String sessionId, Long userId) {
 		this(sessionId, 0, userId);
@@ -113,8 +118,48 @@ public class Client implements IDataProviderEntity {
 		return activities;
 	}
 
-	public boolean hasActivity(Activity activity) {
-		return activities.contains(activity);
+	public boolean hasActivity(Activity a) {
+		return activities.contains(a);
+	}
+
+	public void toggle(Activity a) {
+		if (hasActivity(a)) {
+			remove(a);
+		} else {
+			set(a);
+		}
+	}
+
+	public void set(Activity a) {
+		activities.add(a);
+		switch (a) {
+			case broadcastV:
+			case broadcastA:
+				if (hasActivity(Activity.broadcastA) && hasActivity(Activity.broadcastV)) {
+					activities.add(Activity.broadcastAV);
+				}
+				break;
+			case broadcastAV:
+				activities.add(Activity.broadcastA);
+				activities.add(Activity.broadcastV);
+				break;
+			default:
+		}
+	}
+
+	public void remove(Activity a) {
+		activities.remove(a);
+		switch (a) {
+			case broadcastV:
+			case broadcastA:
+				activities.remove(Activity.broadcastAV);
+				break;
+			case broadcastAV:
+				activities.remove(Activity.broadcastA);
+				activities.remove(Activity.broadcastV);
+				break;
+			default:
+		}
 	}
 
 	public Date getConnectedSince() {
@@ -137,6 +182,18 @@ public class Client implements IDataProviderEntity {
 	public Client setRoomId(Long roomId) {
 		this.roomId = roomId;
 		return this;
+	}
+
+	public Pod getPod() {
+		return pod;
+	}
+
+	public void setPod(Integer i) {
+		if (i != null && i.intValue() > 0) {
+			this.pod = i.intValue() == 1 ? Pod.left : Pod.right;
+		} else {
+			this.pod = Pod.none;
+		}
 	}
 
 	@Override
@@ -172,6 +229,6 @@ public class Client implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", roomId=" + roomId
-				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
+				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + ", pod = " + pod + "]";
 	}
 }

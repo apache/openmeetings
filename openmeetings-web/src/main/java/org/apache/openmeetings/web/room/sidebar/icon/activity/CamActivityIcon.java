@@ -27,7 +27,7 @@ public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
 	public CamActivityIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Activity.broadcastVideo, room);
+		super(id, client, Activity.broadcastV, room);
 		mainCssClass = "activity cam ";
 	}
 
