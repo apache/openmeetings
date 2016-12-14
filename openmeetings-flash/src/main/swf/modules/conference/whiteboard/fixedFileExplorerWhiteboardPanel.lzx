@@ -168,17 +168,6 @@
 		</handler>
 	</netRemoteCallHib>
 
-	<method name="removeWindow" args="obj">
-		if ($debug) Debug.write("removeWindow :: ",obj);
-		for (var eg in canvas._wbBar.subviews) {
-			if (canvas._wbBar.subviews[eg].objRef.whiteboardId == obj[1]) {
-				canvas._wbBar.removeObjectSynced(canvas._wbBar.subviews[eg]);
-				canvas.whiteboardCount--;
-				return;
-			}
-		}
-	</method>
-
 	<method name="renameWhiteboard" args="obj">
 		if ($debug) Debug.write("renameWhiteboard :: ", obj);
 		for (var eg in canvas._wbBar.subviews) {

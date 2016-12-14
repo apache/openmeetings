@@ -437,11 +437,17 @@
 	</method>
 
 	<method name="doDeleteFromDocumentsBar" args="itemRefName">
-		this.getDocumentToolBar().removeDocument(itemRefName);
+		var docToolbar = this.getDocumentToolBar();
+		if (!!docToolbar) {
+			docToolbar.removeDocument(itemRefName);
+		}
 	</method>
 
 	<method name="clearDocumentsBar">
-		this.getDocumentToolBar().clearDocumentsBar();
+		var docToolbar = this.getDocumentToolBar();
+		if (!!docToolbar) {
+			docToolbar.clearDocumentsBar();
+		}
 	</method>
 
 	<method name="sendCurrentSWFObject" args="objRef">
