@@ -418,7 +418,7 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	public static void broadcast(final RoomMessage m) {
 		WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
