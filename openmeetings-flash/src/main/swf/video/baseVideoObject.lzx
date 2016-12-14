@@ -405,29 +405,13 @@
 		</view>
 
 		<view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">
-
 			<attribute name="isload" value="true" type="boolean" />
 
 			<miniIconsPresenter name="_resync" iconRessourceName="resyncuser_rsc">
 				<handler name="onclick">
 					parent.parent.resetValues();
-					if(!this.parent.parent.isremote) {
-						if ($debug) Debug.write("editRecordStream ################# baseVideObject isInterview"
-								,this.parent.parent.isInterview,this.parent.parent.interviewPodId);
-						if (this.parent.parent.isInterview) {
-							//TODO: fix it
-							new lz.editRecordStreamSWF10(canvas.inner,{
-								name:"editRecordStream",
-								doDefaultAnimation:false,
-								isInterview:true,
-								interviewPodId:this.parent.parent.interviewPodId,
-								isSyncUpdate:true});
-						} else {
-							new lz.editRecordStreamSWF10(canvas.inner,{
-								name:"editRecordStream",
-								isInterview:false,
-								isSyncUpdate:true});
-						}
+					if (!parent.parent.isremote) {
+						canvas.commonVideoViewContent.restartAvBroadcast.doCall()
 					}
 				</handler>
 				<labelTooltip name="_tip" labelid="540" />

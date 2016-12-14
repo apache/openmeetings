@@ -194,12 +194,9 @@
 			new lz.editRecordStreamSWF10(canvas.main_content,{
 				allowDragging: false,
 				dropShadow: false,
-				standalone: true,
 				name: "editRecordStream",
 				doDefaultAnimation: false,
-				isInterview: true,
-				interviewPodId: this.parent.parent.interviewPodId,
-				isSyncUpdate: true,
+				isInterview: false,
 				x: 0, y: 0, initY: 0
 				});
 			var rtmpCon = new lz.rtmpConnection(canvas, {

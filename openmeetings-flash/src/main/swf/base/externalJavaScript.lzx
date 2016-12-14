@@ -33,7 +33,7 @@
 	ExternalInterface.addCallback("getBrowserLangCallback", getBrowserLangCallback);
 	ExternalInterface.addCallback("showAvSettings", function(isInterview) {
 		if ($debug) Debug.write("showAvSettings ", isInterview);
-		canvas.commonVideoViewContent.createEditRecordStream(isInterview, true, false);
+		canvas.commonVideoViewContent.createEditRecordStream(isInterview);
 	});
 	
 	var redirectToUrlReturnObject = null;

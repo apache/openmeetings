@@ -758,7 +758,7 @@
 		</netRemoteCallHib>
 		
 		<netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
-					   remotecontext="$once{ canvas.thishib }">
+				remotecontext="$once{ canvas.thishib }">
 			<attribute name="publicSID" value="" type="string" />
 			<attribute name="canDraw" value="true" type="boolean" />
 			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -769,11 +769,11 @@
 					//The onResult-Handler will be called be the rtmpconnection
 					if ($debug) Debug.write("setCanDraw : ",value);
 				]]>
-			</handler>   
+			</handler>
 		</netRemoteCallHib>
 		
 		<netRemoteCallHib name="setCanShare" funcname="whiteboardservice.setCanShare"
-					   remotecontext="$once{ canvas.thishib }">
+				remotecontext="$once{ canvas.thishib }">
 			<attribute name="publicSID" value="" type="string" />
 			<attribute name="canShare" value="true" type="boolean" />
 			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -784,11 +784,11 @@
 					//The onResult-Handler will be called be the rtmpconnection
 					if ($debug) Debug.write("setCanShare : ",value);
 				]]>
-			</handler>   
+			</handler>
 		</netRemoteCallHib>
 		
 		<netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
-					   remotecontext="$once{ canvas.thishib }">
+				remotecontext="$once{ canvas.thishib }">
 			<attribute name="publicSID" value="" type="string" />
 			<attribute name="canRemote" value="true" type="boolean" />
 			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -799,7 +799,7 @@
 					//The onResult-Handler will be called be the rtmpconnection
 					if ($debug) Debug.write("setCanRemote : ",value);
 				]]>
-			</handler>   
+			</handler>
 		</netRemoteCallHib>
 		
 		<method name="setNewModeratorByList" args="value">
@@ -812,7 +812,7 @@
 			//Update Moderation Flag
 			canvas.updateModerationFlag();
 		]]>
-		</method> 
+		</method>
 		
 		<netRemoteCallHib name="sendMessage" funcname="sendMessage">
 			<netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
@@ -822,8 +822,8 @@
 				//Debug.write("getValue : ",value);
 				
 				]]>
-			</handler>   
-		</netRemoteCallHib> 
+			</handler>
+		</netRemoteCallHib>
 		
 		<netRemoteCallHib name="sendMessageAll" funcname="sendMessageAll">
 			<netparam name="vars"><method name="getValue">return canvas.objMessage;</method></netparam>
@@ -832,8 +832,8 @@
 				//The onResult-Handler will be called be the rtmpconnection
 				//Debug.write("getValue : ",value);
 				]]>
-			</handler>   
-		</netRemoteCallHib> 
+			</handler>
+		</netRemoteCallHib>
 		
 		<method name="clientUpdated" args="client">
 		<![CDATA[
@@ -851,11 +851,7 @@
 				canvas.setAttribute("canVideo", client.canVideo);
 				
 				if (client.isBroadcasting) {
-					if (canvas.thishib.modus == "interview") {
-						canvas._drawarea.newInterviewStarting(client);
-					} else {
-						canvas.commonVideoViewContent.createEditRecordStream(false, false, false);
-					}
+					canvas.commonVideoViewContent.startAvBroadcast();
 					canvas.setAttribute("lastBroadCastingUser", client);
 				} else {
 					canvas.commonVideoViewContent.removeVideoByUser(canvas.publicSID);
@@ -897,17 +893,6 @@
 			}
 		]]>
 		</method>
-		
-		<netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
-			<netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
-			<handler name="ondata" args="value">
-			<![CDATA[
-				//The onResult-Handler will be called be the rtmpconnection
-				//Debug.write("sendVarsModeratorGeneral : ",value);
-				
-			]]>
-			</handler>
-		</netRemoteCallHib>
 
 		<netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient"
 				remotecontext="$once{ canvas.thishib }" >

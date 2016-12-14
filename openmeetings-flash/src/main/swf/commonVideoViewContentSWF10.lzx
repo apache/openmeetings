@@ -25,6 +25,12 @@
 		<when property="$as3">
 			<passthrough>
 				import flash.external.ExternalInterface;
+				import flash.media.Camera;
+				import flash.media.Microphone;
+				import flash.media.MicrophoneEnhancedMode;
+				import flash.media.MicrophoneEnhancedOptions;
+				import flash.media.SoundCodec;
+				import flash.net.SharedObject;
 			</passthrough>
 		</when>
 	</switch>
@@ -40,14 +46,11 @@
 		canvas.currentClient.canVideo = value;
 	</method>
 	
-	<method name="createEditRecordStream" args="isInterview, standalone, isSyncUpdate">
-		if($debug) Debug.info("createEditRecordStream,", isInterview, standalone, canvas.currentClient);
+	<method name="createEditRecordStream" args="isInterview">
+		if($debug) Debug.info("createEditRecordStream,", isInterview);
 		new lz.editRecordStreamSWF10(canvas, {
 				isInterview: isInterview,
-				standalone: standalone,
-				isSyncUpdate: isSyncUpdate
 			});
-		return;
 	</method>
 
 	<method name="batchCreateVideo" args="selfStreamId, clients">
@@ -109,79 +112,79 @@
 		Creates the video-view AND starts to stream/play the video
 	 -->
 	<method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
-		<![CDATA[
-			if ($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
-			if ($debug) Debug.write(" createVideo ALL vars ",object);
-			var vidContainer = getVideoObjectByPublicSID(publicSID);
-			if(vidContainer == null) {
-				vidContainer = this.getNewVideoObjectByPos(publicSID);
-				vidContainer.clientVars = object;
-				setPartnerName(vidContainer, displayName);
-				if (avsettings=="n"){
-					vidContainer.setVideouserProfilePic(object);
-					vidContainer.setAttribute("visibility","hidden");
-				} else if (avsettings=="a"){
-					vidContainer.setVideouserProfilePic(object);
-					if ($debug) Debug.warn("start play");
-					vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
-					vidContainer.setAttribute("visible", false);
-				} else if (avsettings=="v" || avsettings=="av") {
-					//this means avsettings is either: "v" or "av"
-					vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
-					vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
-					vidContainer.setAttribute("visibility","visible");
-				} else {
-					//this means user did not select anything yet and streaming has not started
-					vidContainer.setAttribute("visibility","hidden");
-				}
-				vidContainer.setAttribute("interviewPodId", interviewPodId);
-				vidContainer.updateAVSettingsSymbol(object);
-				if (object.micMuted) {
-					vidContainer.setMicMuted(object.micMuted);
-				}
+	<![CDATA[
+		if ($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
+		if ($debug) Debug.write(" createVideo ALL vars ",object);
+		var vidContainer = getVideoObjectByPublicSID(publicSID);
+		if(vidContainer == null) {
+			vidContainer = this.getNewVideoObjectByPos(publicSID);
+			vidContainer.clientVars = object;
+			setPartnerName(vidContainer, displayName);
+			if (avsettings=="n"){
+				vidContainer.setVideouserProfilePic(object);
+				vidContainer.setAttribute("visibility","hidden");
+			} else if (avsettings=="a"){
+				vidContainer.setVideouserProfilePic(object);
+				if ($debug) Debug.warn("start play");
+				vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
+				vidContainer.setAttribute("visible", false);
+			} else if (avsettings=="v" || avsettings=="av") {
+				//this means avsettings is either: "v" or "av"
+				vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
+				vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
+				vidContainer.setAttribute("visibility","visible");
+			} else {
+				//this means user did not select anything yet and streaming has not started
+				vidContainer.setAttribute("visibility","hidden");
 			}
+			vidContainer.setAttribute("interviewPodId", interviewPodId);
+			vidContainer.updateAVSettingsSymbol(object);
+			if (object.micMuted) {
+				vidContainer.setMicMuted(object.micMuted);
+			}
+		}
 
-			if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
-			if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
-				if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
-				vidContainer.setAttribute("interviewPodId", interviewPodId);
-				vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-				vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
-				vidContainer.setAttribute("width",322);
-				vidContainer.setAttribute("height",281);
-			}
-			return;
-		]]>
+		if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
+		if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+			if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+			vidContainer.setAttribute("interviewPodId", interviewPodId);
+			vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+			vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+			vidContainer.setAttribute("width",322);
+			vidContainer.setAttribute("height",281);
+		}
+		return;
+	]]>
 	</method>
 	
 	<method name="getVideoObjectByPublicSID" args="publicSID">
-		<![CDATA[
-			//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ", publicSID);
-			for (var i = 0; i < this.subviews.length; ++i) {
-				//if ($debug) Debug.write("this.subviews[i].publicSID ", this.subviews[i].publicSID);
-				if (this.subviews[i].publicSID == publicSID) {
-					return this.subviews[i];
-				}
+	<![CDATA[
+		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ", publicSID);
+		for (var i = 0; i < this.subviews.length; ++i) {
+			//if ($debug) Debug.write("this.subviews[i].publicSID ", this.subviews[i].publicSID);
+			if (this.subviews[i].publicSID == publicSID) {
+				return this.subviews[i];
 			}
-			if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ", publicSID);
-			return null;
-		]]>
+		}
+		if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ", publicSID);
+		return null;
+	]]>
 	</method>
 
 	<method name="getNewVideoObjectByPos" args="publicSID">
-		<![CDATA[
-			//Get a Free VideoView Slot
-			var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
+	<![CDATA[
+		//Get a Free VideoView Slot
+		var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
 
-			return new lz.videoObjectPlayBroadcast(this,{
-					publicSID:publicSID,
-					width:videoWidth,
-					height:videoHeight,
-					x:freePos[0],
-					y:freePos[1],
-					isInterview:canvas.isInterview
-				});
-		]]>
+		return new lz.videoObjectPlayBroadcast(this,{
+				publicSID:publicSID,
+				width:videoWidth,
+				height:videoHeight,
+				x:freePos[0],
+				y:freePos[1],
+				isInterview:canvas.isInterview
+			});
+	]]>
 	</method>
 
 	<method name="getNewVideoObject" args="publicSID">
@@ -195,15 +198,15 @@
 	</method>
 
 	<method name="getVideoObjectByInterviewPodId" args="interviewPodId">
-		<![CDATA[
-			for (var i=0;i<this.subviews.length;i++){
-				if (this.subviews[i].interviewPodId==interviewPodId){
-					return this.subviews[i];
-				}
+	<![CDATA[
+		for (var i=0;i<this.subviews.length;i++){
+			if (this.subviews[i].interviewPodId==interviewPodId){
+				return this.subviews[i];
 			}
-			if ($debug) Debug.warn(" - getVideoObjectByInterviewPodId - DID NOT FIND THE USER BY ",interviewPodId);
-			return null;
-		]]>
+		}
+		if ($debug) Debug.warn(" - getVideoObjectByInterviewPodId - DID NOT FIND THE USER BY ",interviewPodId);
+		return null;
+	]]>
 	</method>
 
 	<method name="getVideoObjectCount">
@@ -219,51 +222,51 @@
 	</method>
 
 	<method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
-		<![CDATA[
-			var newx = 20;
-			if (canvas.currentRoomObj.hideWhiteboard) {
-				newx += SIDEPANEL_WIDTH;
-			}
-			var newy = 0;
-			var posFound = false;
-			if (offsetLength == undefined) {
-				offsetLength=10;
-			}
-			while (!posFound) {
-				posFound = true;
-				for (var i=0;i<this.subviews.length;i++){
-					var subview = this.subviews[i];
-					var left = subview.x;
-					var right = subview.x + subview.width;
-					var top = subview.y;
-					var bottom = subview.y + subview.height;
+	<![CDATA[
+		var newx = 20;
+		if (canvas.currentRoomObj.hideWhiteboard) {
+			newx += SIDEPANEL_WIDTH;
+		}
+		var newy = 0;
+		var posFound = false;
+		if (offsetLength == undefined) {
+			offsetLength=10;
+		}
+		while (!posFound) {
+			posFound = true;
+			for (var i=0;i<this.subviews.length;i++){
+				var subview = this.subviews[i];
+				var left = subview.x;
+				var right = subview.x + subview.width;
+				var top = subview.y;
+				var bottom = subview.y + subview.height;
 
-					if( !(newx > right
-						|| (newx + videoWidth) < left
-						|| newy > bottom
-						|| (newy + videoHeight) < top ))
-					{
-						newx = right + offsetLength;
-						posFound = false;
+				if( !(newx > right
+					|| (newx + videoWidth) < left
+					|| newy > bottom
+					|| (newy + videoHeight) < top ))
+				{
+					newx = right + offsetLength;
+					posFound = false;
+				}
+				if ((newx + videoWidth) >= canvas.width) {
+					newx = 20;
+					if (canvas.currentRoomObj.hideWhiteboard) {
+						newx += SIDEPANEL_WIDTH;
 					}
-					if ((newx + videoWidth) >= canvas.width) {
-						newx = 20;
-						if (canvas.currentRoomObj.hideWhiteboard) {
-							newx += SIDEPANEL_WIDTH;
-						}
-						newy += 10;
-						posFound = false;
-					}
+					newy += 10;
+					posFound = false;
 				}
 			}
+		}
 
-			if ((newy + videoHeight) >= canvas.height) {
-				newy = 0;
-			}
+		if ((newy + videoHeight) >= canvas.height) {
+			newy = 0;
+		}
 
-			var result = [newx, newy];
-			return result;
-		]]>
+		var result = [newx, newy];
+		return result;
+	]]>
 	</method>
 
 	<method name="disconnectclient" args="publicSID">
@@ -602,7 +605,7 @@
 		}
 	]]>
 	</method>
-   
+
 	<!---
 		Close a single screen sharing playback video
 	 --> 
@@ -616,7 +619,7 @@
 		}
 	]]>
 	</method>
-		
+
 	<!---
 	   Closes all screen sharing playback videos, whiteboard videos, user videos 
 	   and closes the rtmp connection
@@ -671,10 +674,158 @@
 		return testResult;
 	]]>
 	</method>
+
+	<method name="getMic" args="valMic">
+	<![CDATA[
+		if ($debug) Debug.write("Entering getMic ...", valMic);
+		if (valMic == null) {
+			valMic = 0; //select first one by default
+		}
+		var _micro = canvas.echoPath == 0 ? Microphone.getMicrophone(valMic) : Microphone.getEnhancedMicrophone(valMic);
+		
+		if (_micro != null) {
+			if (canvas.echoPath == 256) {
+				var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
+				options.mode = MicrophoneEnhancedMode.FULL_DUPLEX;
+				options.echoPath = 256;
+				options.nonLinearProcessing = true;
+				_micro.enhancedOptions = options;
+				if ($debug) Debug.write("echoPath set to 256");
+				if ($debug) Debug.write(_micro.enhancedOptions);
+			}
+			_micro.codec = SoundCodec.NELLYMOSER;
+			_micro.framesPerPacket = 1;
+			_micro.setSilenceLevel(0, 2000);
+			if ($debug) Debug.write("canvas.microphoneRateBest: ", canvas.microphoneRateBest);
+			_micro.rate = (canvas.microphoneRateBest == 'undefined') ? 22 : canvas.microphoneRateBest;
+			_micro.gain = 50;
+			// this has no effect if enhanced microphone is obtained
+			//Microphone setUseEchoSupression(bool)
+			var enableEchoSupression = !(canvas.echoSuppression === "false");
+			if ($debug) Debug.write("canvas.echoSuppression: ", canvas.echoSuppression);
+			_micro.setUseEchoSuppression(enableEchoSupression);
+		}
+		if ($debug) Debug.write("... getMic DONE", _micro);
+		return _micro;
+	]]>
+	</method>
 	
-	<!--
-		Container to hold all whiteboard videos
-	-->	
+	<method name="getCam" args="valCam, videoview">
+	<![CDATA[
+		if ($debug) Debug.write("Entering getCam ...", valCam);
+		if (valCam == null) {
+			valCam = 0; //select first one by default
+		}
+		var _camera = Camera.getCamera(valCam);
+		if (_camera != null) {
+			if ($debug) Debug.write("videoview: ", videoview);
+			
+			if ($debug) Debug.write("_camera.setQuality BEST: ", canvas.isInterview, (canvas.bandwidthNeededBest * 2), canvas.camQualityBest);
+			if (canvas.isInterview) {
+				//we need a fixed frame rate for the videos to merge them later on
+				_camera.setMode(videoview.width, videoview.height, 24, true);
+				if ($debug) Debug.warn("IS INTERVIEW ");
+				_camera.setQuality(0, 98);
+			} else {
+				if ($debug) Debug.write("_camera.setMode: ", videoview.width, videoview.height, canvas.framesPerSecond, true);
+				_camera.setMode(videoview.width, videoview.height, canvas.framesPerSecond, true);
+				if ($debug) Debug.warn("IS NO INTERVIEW ");
+				_camera.setQuality(canvas.bandwidthNeededBest, canvas.camQualityBest);
+			}
+		}
+		if ($debug) Debug.write("... getCam DONE", _camera);
+		return _camera;
+	]]>
+	</method>
+
+	<method name="loadAVsettings">
+	<![CDATA[
+		var t:SharedObject = SharedObject.getLocal('userdata');
+		var g = t.data;
+		if ($debug) Debug.write("loadAVsettings: ", g["cam"], g["mic"]);
+
+		if(g["width"] > 0 && g["height"] > 0) {
+			return g;
+		}
+		return null;
+	]]>
+	</method>
+
+	<method name="getAvSetting" args="prop, g=null, def=null">
+		//Initialize and get eventually stored property
+		if (!g) {
+			g = canvas.commonVideoViewContent.loadAVsettings();
+		}
+		var val = g != null ? g[prop] : null;
+		return val != null ? val : def;
+	</method>
+
+	<netRemoteCallHib name="restartAvBroadcast" funcname="getBroadCastId" remotecontext="$once{ canvas.thishib }">
+		<handler name="ondata" args="value">
+			canvas.currentClient.broadCastID = value;
+			parent.startAvBroadcast();
+		</handler>
+	</netRemoteCallHib>
+
+	<method name="startAvBroadcast">
+	<![CDATA[
+		var g = canvas.commonVideoViewContent.loadAVsettings();
+		var myvideocontainer = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
+		if ($debug) Debug.write("doStartConference::doninitalize");
+		var settings = getAvSetting('avstored', g, 'av');
+		if (!canvas.isInterview) {
+			myvideocontainer.setDefaultVideoSize(getAvSetting('width', g, 120), getAvSetting('height', g, 90));
+		}
+		
+		var videoview = myvideocontainer._chatvideoinner._videostream;
+		if ($debug) Debug.write("myvideocontainer: ", myvideocontainer);
+		myvideocontainer.setAttribute('isremote', false);
+		var _micro = getMic(getAvSetting('mic', g, 0));
+		var _camera = getCam(getAvSetting('cam', g, 0), videoview);
+		if ($debug) Debug.write(_camera , _micro, settings);
+		
+		if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
+		switch (settings){
+			case "av":
+				videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
+				myvideocontainer.setAttribute("visible", true);
+				if(!canvas.isInterview) {
+					if (myvideocontainer.minimized) {
+						myvideocontainer.reminimize();
+					}
+				}
+				break;
+			case "a":
+				videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
+				myvideocontainer.setAttribute("visible", true);
+				if(!canvas.isInterview) {
+					if (!myvideocontainer.minimized) {
+						myvideocontainer.minimize();
+					}
+				}
+				break;
+			case "v":
+				videoview.broadcast(canvas.currentClient.broadCastID, _camera, null);
+				myvideocontainer.setAttribute("visible", true);
+				if(!canvas.isInterview) {
+					if (myvideocontainer.minimized) {
+						myvideocontainer.reminimize();
+					}
+				}
+				break;
+			case "n":
+				if ($debug) Debug.write("Do not Publish A/V");
+				//Prevent from Hiding the Box in Event Modus
+				if (canvas.thishib.modus == "conference") {
+					myvideocontainer.setAttribute("visible", false);
+				}
+				break;
+			default:
+				if ($debug) Debug.warn("no valid device Setup chosen");
+				break;
+		}
+	]]>
+	</method>
 </class>
 
 </library>
