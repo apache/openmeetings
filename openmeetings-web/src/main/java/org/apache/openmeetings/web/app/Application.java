@@ -339,6 +339,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				clients.remove(c.getUid());
 				c.setRoomId(null);
 			}
+			c.getActivities().clear();
+			c.getRights().clear();
 		}
 		return c;
 	}
