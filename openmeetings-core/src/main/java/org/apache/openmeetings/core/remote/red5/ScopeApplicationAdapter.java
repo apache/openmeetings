@@ -1530,31 +1530,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return 1;
 	}
 
-	public int sendVarsModeratorGeneral(Object vars) {
-		log.debug("*..*sendVars: " + vars);
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-			log.debug("***** id: " + currentClient.getStreamid());
-
-			boolean ismod = currentClient.getIsMod();
-
-			if (ismod) {
-				log.debug("CurrentScope :" + current.getScope().getName());
-				// Send to all Clients of the same Scope
-				sendMessageToCurrentScope("sendVarsToModeratorGeneral", vars, false);
-				return 1;
-			} else {
-				// log.debug("*..*you are not allowed to send: "+ismod);
-				return -1;
-			}
-		} catch (Exception err) {
-			log.error("[sendVarsModeratorGeneral]", err);
-		}
-		return -1;
-	}
-
 	public int sendMessage(Object newMessage) {
 		sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 		return 1;
