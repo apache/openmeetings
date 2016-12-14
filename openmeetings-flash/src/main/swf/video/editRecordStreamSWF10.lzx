@@ -56,7 +56,6 @@
 	<attribute name="doDefaultAnimation" value="true" type="boolean" />
 	<attribute name="cam_default_width" value="320" type="number" />
 	<attribute name="cam_default_height" value="260" type="number" />
-	<attribute name="interviewPodId" value="0" type="number" />
 	<attribute name="lastRecorded" value="" type="string" />
 	<attribute name="isRunning" value="false" type="boolean" />
 	<attribute name="recordingsCounter" value="5" type="number" />
@@ -109,13 +108,6 @@
 		}
 		this.executeAttachCamera = true;
 		this.attachCamera();
-		
-		//TODO check this
-		if (canvas.isInterview) {
-			if ($debug) Debug.write("Is interview ", interviewPodId);
-			//this.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-			//this.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
-		}
 	]]>
 	</handler>
 

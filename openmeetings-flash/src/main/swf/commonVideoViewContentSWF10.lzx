@@ -53,16 +53,16 @@
 			});
 	</method>
 
-	<method name="batchCreateVideo" args="selfStreamId, clients">
+	<method name="batchCreateVideo" args="clients">
 	<![CDATA[
-		if ($debug) Debug.info("batchCreateVideo: ", selfStreamId, clients.length);
+		if ($debug) Debug.info("batchCreateVideo: ", clients.length);
 		for (var i = 0; i < clients.length; ++i) {
 			var c = clients[i];
-			if (c.streamid != selfStreamId) {
+			if (c.streamid != canvas.streamid) {
 				if (c.isBroadcasting) {
-					createVideo(c.publicSID, c.firstname + ' ' + c.lastname, c.broadCastID, c.avsettings, -1, c);
+					createVideo(c);
 				} else {
-					createVideoObject(c.publicSID, false, -1, c);
+					createVideoObject(c.publicSID, false, c.interviewPodId, c);
 				}
 			}
 		}
@@ -75,27 +75,37 @@
 		The method to "play" the stream is invoked later, when the user
 		really starts to stream and not only when he just enters the room.
 	 -->
-	<method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
+	<method name="createVideoObject" args="publicSID, isBroadcasting, interviewPodId, object">
 		if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting, "object", object);
 		var vidContainer = getVideoObjectByPublicSID(publicSID);
 		if(vidContainer == null) {
 			vidContainer = isBroadcasting ? this.getNewVideoObject(publicSID) : this.getNewVideoObjectByPos(publicSID);
 			vidContainer.publicSID = publicSID;
 		}
-		if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
-		if (canvas.isInterview) {
-			if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
-			if (interviewPodId != null) {
-				vidContainer.setAttribute("interviewPodId", interviewPodId);
-				vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-				vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
-			}
-			vidContainer.setAttribute("width",322);
-			vidContainer.setAttribute("height",281);
-		}
+		if ($debug) Debug.write("Is interview ? ", canvas.isInterview);
+		placeInterviewPod(vidContainer, interviewPodId);
 		vidContainer.clientVars = object;
 		vidContainer.setAttribute('visible', false);
 		return vidContainer;
+	</method>
+
+	<method name="placeInterviewPod" args="vidContainer, interviewPodId">
+	<![CDATA[
+		if ($debug) Debug.write("placeInterviewPod::Is interview ", canvas.isInterview, interviewPodId);
+		if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+			if (interviewPodId != null) {
+				vidContainer.setAttribute("interviewPodId", interviewPodId);
+				var cont = canvas._drawarea._videoviewcontent;
+				var box = cont['interviewVideoBox' + interviewPodId];
+				if (!!box) {
+					vidContainer.setAttribute("x", cont.x + box.x);
+					vidContainer.setAttribute("y", box.y);
+				}
+			}
+			vidContainer.setAttribute("width", 322);
+			vidContainer.setAttribute("height", 281);
+		}
+	]]>
 	</method>
 
 	<method name="setPartnerName" args="obj, first, last=null">
@@ -111,49 +121,44 @@
 		Method that creates the video views when user(self) initially entering a room.
 		Creates the video-view AND starts to stream/play the video
 	 -->
-	<method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
+	<method name="createVideo" args="cl">
 	<![CDATA[
-		if ($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
-		if ($debug) Debug.write(" createVideo ALL vars ",object);
-		var vidContainer = getVideoObjectByPublicSID(publicSID);
-		if(vidContainer == null) {
-			vidContainer = this.getNewVideoObjectByPos(publicSID);
-			vidContainer.clientVars = object;
-			setPartnerName(vidContainer, displayName);
-			if (avsettings=="n"){
-				vidContainer.setVideouserProfilePic(object);
-				vidContainer.setAttribute("visibility","hidden");
-			} else if (avsettings=="a"){
-				vidContainer.setVideouserProfilePic(object);
+		if ($debug) Debug.info("createVideo::: ", cl.publicSID, cl.broadCastID, cl.avsettings, cl.interviewPodId);
+		if ($debug) Debug.write(" createVideo ALL vars ", cl);
+		var vidContainer = getVideoObjectByPublicSID(cl.publicSID);
+		if (vidContainer == null) {
+			vidContainer = getNewVideoObjectByPos(cl.publicSID);
+		}
+		vidContainer.clientVars = cl;
+		setPartnerName(vidContainer, cl.firstname, cl.lastname);
+		switch (cl.avsettings) {
+			case 'a':
+				vidContainer.setVideouserProfilePic(cl);
 				if ($debug) Debug.warn("start play");
-				vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
+				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
 				vidContainer.setAttribute("visible", false);
-			} else if (avsettings=="v" || avsettings=="av") {
+				break;
+			case 'v':
+			case 'av':
 				//this means avsettings is either: "v" or "av"
-				vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
-				vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
-				vidContainer.setAttribute("visibility","visible");
-			} else {
-				//this means user did not select anything yet and streaming has not started
-				vidContainer.setAttribute("visibility","hidden");
-			}
-			vidContainer.setAttribute("interviewPodId", interviewPodId);
-			vidContainer.updateAVSettingsSymbol(object);
-			if (object.micMuted) {
-				vidContainer.setMicMuted(object.micMuted);
-			}
+				vidContainer.setDefaultVideoSize(cl.VWidth, cl.VHeight);
+				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
+				vidContainer.setAttribute("visible", true);
+				break;
+			case 'n':
+			default:
+				vidContainer.setVideouserProfilePic(cl);
+				vidContainer.setAttribute("visible", false);
+				break;
 		}
-
-		if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
-		if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
-			if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
-			vidContainer.setAttribute("interviewPodId", interviewPodId);
-			vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-			vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
-			vidContainer.setAttribute("width",322);
-			vidContainer.setAttribute("height",281);
+		vidContainer.updateAVSettingsSymbol(cl);
+		if (cl.micMuted) {
+			vidContainer.setMicMuted(cl.micMuted);
 		}
-		return;
+		if ($debug) Debug.write(" createVideo ALL vars ", vidContainer);
+		placeInterviewPod(vidContainer, cl.interviewPodId);
+		enableRecordingButton();
+		return vidContainer;
 	]]>
 	</method>
 	
@@ -197,19 +202,7 @@
 	]]>
 	</method>
 
-	<method name="getVideoObjectByInterviewPodId" args="interviewPodId">
-	<![CDATA[
-		for (var i=0;i<this.subviews.length;i++){
-			if (this.subviews[i].interviewPodId==interviewPodId){
-				return this.subviews[i];
-			}
-		}
-		if ($debug) Debug.warn(" - getVideoObjectByInterviewPodId - DID NOT FIND THE USER BY ",interviewPodId);
-		return null;
-	]]>
-	</method>
-
-	<method name="getVideoObjectCount">
+	<method name="enableRecordingButton">
 	<![CDATA[
 		var count = 0;
 		for (var i = 0; i < this.subviews.length; ++i) {
@@ -217,12 +210,21 @@
 				count++;
 			}
 		}
-		return count;
+		if (canvas.isInterview) {
+			if (count > 0 && !canvas._drawarea._interview._stop.enabled) {
+				canvas._drawarea._interview._start.setAttribute('enabled', true);
+			} else if (count == 0 && canvas._drawarea._interview._start.enabled) {
+				canvas._drawarea._interview._start.setAttribute('enabled', false);
+			}
+		}
 	]]>
 	</method>
 
 	<method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
 	<![CDATA[
+		if (canvas.isInterview) {
+			return [0, 0];
+		}
 		var newx = 20;
 		if (canvas.currentRoomObj.hideWhiteboard) {
 			newx += SIDEPANEL_WIDTH;
@@ -263,21 +265,7 @@
 		if ((newy + videoHeight) >= canvas.height) {
 			newy = 0;
 		}
-
-		var result = [newx, newy];
-		return result;
-	]]>
-	</method>
-
-	<method name="disconnectclient" args="publicSID">
-	<![CDATA[
-		if ($debug) Debug.write("disconnectclient: ", publicSID);
-		var obj = closeStreamclient(publicSID);
-		if (obj == null) {
-			if ($debug) Debug.warn("Could Not find this To disconnect",publicSID);
-		} else {
-			obj.destroy();
-		}
+		return [newx, newy];
 	]]>
 	</method>
 
@@ -314,11 +302,14 @@
 	</method>
 
 	<method name="removeVideoByUser" args="publicSID"><![CDATA[
-		var obj = this.closeStreamclient(publicSID);
-		if(obj != null) {
+		if ($debug) Debug.write("removeVideoByUser: ", publicSID);
+		var obj = closeStreamclient(publicSID);
+		if (obj == null) {
+			if ($debug) Debug.warn("Could Not find this To removeVideoByUser", publicSID);
+		} else {
 			obj.destroy();
+			enableRecordingButton();
 		}
-		return;
 	]]></method>
 
 	<method name="updateMuteStatusVideoView" args="roomClient">
@@ -373,25 +364,7 @@
 			obj = createVideoObject(value.publicSID, true, -1, value);
 			obj.setAttribute('visible', true);
 		} else {
-			obj = getVideoObjectByPublicSID(value.publicSID);
-		}
-		//if ($debug) Debug.write("startStream obj: ",obj);
-		if (obj != null ){
-			obj._chatvideoinner._videostream.playStream(value.broadCastID, -1);
-			obj.setDefaultVideoSize(value.VWidth, value.VHeight);
-			setPartnerName(obj, value.firstname, value.lastname);
-		}
-		//we have to do this again when the stream starts, the initial video 
-		//component does not know the interviewPodId as the user has not selected 
-		//which interview video pod he is going to use
-		var interviewPodId = value.interviewPodId;
-		if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
-			if ($debug) Debug.write("Is interview ", interviewPodId, "x", canvas["interviewPod" + interviewPodId + "_x"]);
-			obj.setAttribute("interviewPodId", interviewPodId);
-			obj.setAttribute("x",canvas["interviewPod" + interviewPodId + "_x"]);
-			obj.setAttribute("y",canvas["interviewPod" + interviewPodId + "_y"]);
-			obj.setAttribute("width", 322);
-			obj.setAttribute("height", 281);
+			createVideo(value);
 		}
 	]]>
 	</method>
@@ -760,10 +733,34 @@
 		return val != null ? val : def;
 	</method>
 
-	<netRemoteCallHib name="restartAvBroadcast" funcname="getBroadCastId" remotecontext="$once{ canvas.thishib }">
+	<method name="_startAvBroadcast" args="restart=false">
+		var g = canvas.commonVideoViewContent.loadAVsettings();
+		var settings = getAvSetting('avstored', g, 'av');
+		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
+		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
+		setUserAVSettings.avsetting = settings;
+		setUserAVSettings.vWidth = vWidth;
+		setUserAVSettings.vHeight = vHeight;
+		setUserAVSettings.vHeight = vHeight;
+		setUserAVSettings.updateBroadcastId = restart;
+		setUserAVSettings.doCall();
+	</method>
+
+	<netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" remotecontext="$once{ canvas.thishib }" >
+		<attribute name="avsetting" value="" type="string" />
+		<attribute name="vWidth" value="0" type="number" />
+		<attribute name="vHeight" value="0" type="number" />
+		<attribute name="updateBroadcastId" value="false" type="boolean" />
+		<netparam><method name="getValue">return parent.avsetting;</method></netparam>
+		<netparam><method name="getValue">return parent.vWidth;</method></netparam>
+		<netparam><method name="getValue">return parent.vHeight;</method></netparam>
+		<netparam><method name="getValue">return parent.updateBroadcastId;</method></netparam>
 		<handler name="ondata" args="value">
-			canvas.currentClient.broadCastID = value;
-			parent.startAvBroadcast();
+			if ($debug) Debug.write("setUserAVSettings:: done", value);
+			if (value > -1) {
+				canvas.currentClient.broadCastID = value;
+				parent.startAvBroadcast();
+			}
 		</handler>
 	</netRemoteCallHib>
 
@@ -773,10 +770,12 @@
 		var myvideocontainer = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
 		if ($debug) Debug.write("doStartConference::doninitalize");
 		var settings = getAvSetting('avstored', g, 'av');
+		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
+		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
 		if (!canvas.isInterview) {
-			myvideocontainer.setDefaultVideoSize(getAvSetting('width', g, 120), getAvSetting('height', g, 90));
+			myvideocontainer.setDefaultVideoSize(vWidth, vHeight);
 		}
-		
+
 		var videoview = myvideocontainer._chatvideoinner._videostream;
 		if ($debug) Debug.write("myvideocontainer: ", myvideocontainer);
 		myvideocontainer.setAttribute('isremote', false);
@@ -824,6 +823,7 @@
 				if ($debug) Debug.warn("no valid device Setup chosen");
 				break;
 		}
+		enableRecordingButton();
 	]]>
 	</method>
 </class>

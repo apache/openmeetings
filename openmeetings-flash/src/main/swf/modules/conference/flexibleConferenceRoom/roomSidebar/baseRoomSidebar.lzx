@@ -109,8 +109,8 @@
 	<method name="batchCreateVideo" args="clients">
 	<![CDATA[
 		if ($debug) Debug.write("interval 0 :: ", clients.length);
-		canvas.commonVideoViewContent.batchCreateVideo(canvas.streamid, clients);
-			
+		canvas.commonVideoViewContent.batchCreateVideo(clients);
+
 		//this content must be inited _after_ setting the default values
 		canvas.thishib.getCurrentModeratorList.doCall();
 		//FIXME Issue-1076
@@ -151,7 +151,7 @@
 		
 		//Do init only in case this stream is NOT the same as we are
 		if (streamid != canvas.streamid) {
-			canvas.commonVideoViewContent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
+			canvas.commonVideoViewContent.createVideo(object);
 		}
 	]]>
 	</method>
@@ -166,32 +166,12 @@
 	]]>
 	</method>
 		
-	<!--
-		invoked whenever a User starts to Stream Video in this Room, 
-		interviewPodId has only a meaning in the Room Type Interview
-	 -->		
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight">
-		canvas.commonVideoViewContent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
-	</method>
-
 	<method name="closeStreamClient" args="publicSID">
 		canvas.commonVideoViewContent.closeStreamClient(publicSID);
 	</method>
 
 	<method name="resetAllValues">
 		canvas.commonVideoViewContent.resetAllValues();
-	</method>
-	
-	<method name="removeVideoByUser" args="userObject">
-		canvas.commonVideoViewContent.removeVideoByUser(userObject.publicSID);
-	</method>
-	
-	<!--- 
-		stops the streaming but and destroys the view
-		@param int broadcastId broadcastId
-	 -->
-	<method name="disconnectclient" args="publicSID">
-		canvas.commonVideoViewContent.disconnectclient(publicSID);
 	</method>
 
 	<method name="updateMuteStatusVideoView" args="roomClient">

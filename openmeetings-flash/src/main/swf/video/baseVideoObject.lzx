@@ -411,7 +411,7 @@
 				<handler name="onclick">
 					parent.parent.resetValues();
 					if (!parent.parent.isremote) {
-						canvas.commonVideoViewContent.restartAvBroadcast.doCall()
+						canvas.commonVideoViewContent._startAvBroadcast(true)
 					}
 				</handler>
 				<labelTooltip name="_tip" labelid="540" />

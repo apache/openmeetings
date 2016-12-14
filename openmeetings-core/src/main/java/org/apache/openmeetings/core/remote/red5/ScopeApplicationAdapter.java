@@ -990,27 +990,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	/**
-	 * there will be set an attribute called "broadCastCounter" this is the name
-	 * this user will publish his stream
-	 * 
-	 * @return long broadCastId
-	 */
-	public long getBroadCastId() {
-		try {
-			log.debug("-----------  getBroadCastId");
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client client = sessionManager.getClientByStreamId(streamid, null);
-			client.setBroadCastID(nextBroadCastId());
-			sessionManager.updateClientByStreamId(streamid, client, false, null);
-			return client.getBroadCastID();
-		} catch (Exception err) {
-			log.error("[getBroadCastId]", err);
-		}
-		return -1;
-	}
-
-	/**
 	 * this must be set _after_ the Video/Audio-Settings have been chosen (see
 	 * editrecordstream.lzx) but _before_ anything else happens, it cannot be
 	 * applied _after_ the stream has started! 
@@ -1025,32 +1004,29 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param vWidth
 	 * @param vHeight
 	 * 
-	 * @return RoomClient being updated in case of no errors, null otherwise
+	 * @return BroadcastId in case of no errors, -1 otherwise
 	 */
-	public Client setUserAVSettings(String avsettings, Integer vWidth, Integer vHeight) {
+	public long setUserAVSettings(String avsettings, Integer vWidth, Integer vHeight, boolean updateBroadcastId) {
 		try {
 			String streamid = Red5.getConnectionLocal().getClient().getId();
-			log.debug("-----------  setUserAVSettings {} {} {}", new Object[] {streamid, avsettings});
+			log.debug("-----------  setUserAVSettings {} {}", streamid, avsettings);
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			if (currentClient == null) {
 				log.warn("Failed to find appropriate clients");
-				return null;
+				return -1;
 			}
 			currentClient.setAvsettings(avsettings);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
+			if (updateBroadcastId) {
+				currentClient.setBroadCastID(nextBroadCastId());
+			}
 			sessionManager.updateAVClientByStreamId(streamid, currentClient, null);
-
-			HashMap<String, Object> hsm = new HashMap<>();
-			hsm.put("client", currentClient);
-			hsm.put("message", new Object[]{"avsettings", 0, avsettings});
-
-			sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true);
-			return currentClient;
+			return currentClient.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[setUserAVSettings]", err);
 		}
-		return null;
+		return -1;
 	}
 
 	/*

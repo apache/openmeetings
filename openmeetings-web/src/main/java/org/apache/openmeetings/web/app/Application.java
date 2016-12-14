@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.app.Client.Activity;
+import org.apache.openmeetings.web.app.Client.Pod;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -231,16 +232,19 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 			rcl.setIsMod(client.hasRight(Right.moderator));
 			rcl.setIsBroadcasting(client.hasRight(Right.audio));
-			rcl.setCanVideo(client.hasRight(Right.video) && client.hasActivity(Activity.broadcastVideo));
+			rcl.setCanVideo(client.hasRight(Right.video) && client.hasActivity(Activity.broadcastV));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
-			if (client.hasActivity(Activity.broadcastAudio) || client.hasActivity(Activity.broadcastVideo)) {
+			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
+				if (client.getPod() != Pod.none) {
+					rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
+				}
 				rcl.setIsBroadcasting(true);
 				rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
 				StringBuilder sb = new StringBuilder();
-				if (client.hasActivity(Activity.broadcastAudio)) {
+				if (client.hasActivity(Activity.broadcastA)) {
 					sb.append('a');
 				}
-				if (client.hasActivity(Activity.broadcastVideo)) {
+				if (client.hasActivity(Activity.broadcastV)) {
 					sb.append('v');
 				}
 				rcl.setAvsettings(sb.toString());

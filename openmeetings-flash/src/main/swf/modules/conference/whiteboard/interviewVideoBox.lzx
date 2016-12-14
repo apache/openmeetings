@@ -21,14 +21,14 @@
 <library>
 
 <class name="interviewVideoChooseUser" extends="guiPresenter" resizeable="false"
-	width="220" height="100" closable="true" labelid="910" y="10" minimizable="false">
-	
+		width="220" height="100" closable="true" labelid="910" y="10" minimizable="false">
+
 	<attribute name="refObj" value="null" />
-	
+
 	<handler name="oninit">
 		this.getClientListScope.doCall();
 	</handler>
-	
+
 	<netRemoteCallHib name="getClientListScope" funcname="getClientListScope" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 		<![CDATA[
@@ -41,17 +41,17 @@
 		]]>
 		</handler>  
 	</netRemoteCallHib>
-	
+
 	<labelText labelid="911" x="2" y="22"/>
-	
+
 	<resetCombobox name="_users" x="2" y="42" width="$once{ parent.width-4 }"/>
-	
+
 	<simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
 		<handler name="onclick">
 			this.parent.close();
 		</handler>
 	</simpleLabelButton>
-	
+
 	<simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
 		<handler name="onclick">
 			var valueCombobox = parent._users.getValue();
@@ -60,7 +60,6 @@
 			}
 		</handler>
 	</simpleLabelButton>
-	
 </class>
 
 <class name="interviewVideoBox" extends="view" width="322" height="281" bgcolor="0x000000">
@@ -72,47 +71,36 @@
 		</when>
 	</switch>
 	<attribute name="interviewPodId" value="0" type="number" />
-	
-	<method name="startInterView">
-		if ($debug) Debug.write("startInterView :: ");
-		var tx = this.getAttributeRelative("x",canvas);
-		var ty = this.getAttributeRelative("y",canvas);
-		//TODO
-		canvas.commonVideoViewContent.createEditRecordStream(false, true, this.interviewPodId);
-	</method>
 
 	<method name="sendConfirmation" args="publicSID">
 		if ($debug) Debug.write("sendConfirmation :: ", publicSID);
-		
-		ExternalInterface.call("changeRight", canvas.currentRoomObj.audioOnly ? 'audio' : 'video', publicSID);
-		
+		ExternalInterface.call("toggleActivity", canvas.currentRoomObj.audioOnly ? 'broadcastA' : 'broadcastAV', publicSID, this.interviewPodId);
 		return true;
 	</method>
-	
+
 	<netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID"
-					  remotecontext="$once{ canvas.thishib }" >  
+			remotecontext="$once{ canvas.thishib }" >  
 		<attribute name="messageObject" value="null" />
 		<attribute name="publicSID" value="" type="string" />
 		<netparam><method name="getValue">return parent.messageObject;</method></netparam>
 		<netparam><method name="getValue">return parent.publicSID;</method></netparam>
 		<handler name="ondata" args="value">
-			<![CDATA[
-				if ($debug) Debug.write("+sendMessageWithClientByPublicSID : ",value);
-				
-			]]>
+		<![CDATA[
+			if ($debug) Debug.write("+sendMessageWithClientByPublicSID : ",value);
+		]]>
 		</handler>
 	</netRemoteCallHib>
-	
+
 	<simpleLabelButton labelid="910" height="30" valign="middle" align="center"
-			   visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+			visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
 		<handler name="onclick" args="refObj">
 			new lz.interviewVideoChooseUser(canvas,{
-							isInterview:true,
-							x:this.getAttributeRelative("x",canvas)-10,
-							y:this.getAttributeRelative("y",canvas)-20,
-							width:this.width+20,
-							refObj:parent
-						});
+					isInterview:true,
+					x:this.getAttributeRelative("x",canvas)-10,
+					y:this.getAttributeRelative("y",canvas)-20,
+					width:this.width+20,
+					refObj:parent
+				});
 		</handler>
 	</simpleLabelButton>
 </class>

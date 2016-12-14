@@ -20,11 +20,12 @@ package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_ACTIVITY;
 
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
+import org.apache.openmeetings.web.app.Client.Pod;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
-import org.apache.openmeetings.web.room.sidebar.RoomSidebar.Pod;
 import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 
 public abstract class RoomActivityIcon extends ClientIcon {
@@ -44,7 +45,8 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	}
 
 	protected boolean visible() {
-		return RoomSidebar.activityAllowed(client, activity, room.getRoom());
+		return Room.Type.interview != room.getRoom().getType()
+				&& RoomSidebar.activityAllowed(client, activity, room.getRoom());
 	}
 
 	@Override

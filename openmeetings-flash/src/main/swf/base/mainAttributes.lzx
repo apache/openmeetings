@@ -175,10 +175,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="ismoderator" value="false" type="boolean" />
 <attribute name="isInterview" value="false" type="boolean" />
 <!-- Those values are fixed values of the video positions of the videos from the interview room type -->
-<attribute name="interviewPod1_x" value="320" type="number" />
-<attribute name="interviewPod1_y" value="28" type="number" />
-<attribute name="interviewPod2_x" value="644" type="number" />
-<attribute name="interviewPod2_y" value="28" type="number" />
 
 <attribute name="loadingmessage" value="" type="string" />
 <!--- 
@@ -201,9 +197,6 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
     But theoretically there is no limit
  -->
 <attribute name="numberofallowedpartners" value="0" type="number" />
-
-<!--- Number of currently connected Users -->
-<attribute name="numberofpartners" value="0" type="number" />
 
 <!--- unique ID of this Stream -->
 <attribute name="streamid" value="0" type="string" />
