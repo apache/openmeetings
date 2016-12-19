@@ -43,7 +43,9 @@
 		var removeCurrent = this.currentBtn == _btn;
 		_btn.objRef.destroy();
 		_btn.destroy();
-		if (this.subviews.length != 0 && removeCurrent) {
+		if (this.subviews.length == 0) {
+			setWhiteboardId(-1);//no WB
+		} else if (removeCurrent) {
 			sendActiveWindowSynced(this.subviews[this.subviews.length - 1]);
 			canvas._drawarea = currentBtn.objRef._drawareaMask._drawarea;
 		}
@@ -70,6 +72,7 @@
 		currentBtn.setActive(true);
 		currentBtn.objRef.setAttribute("visible", true);
 		currentBtn.objRef.bringToFront();
+		setWhiteboardId(currentBtn.objRef.whiteboardId);
 	]]>
 	</method>
 </class>
