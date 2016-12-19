@@ -44,20 +44,29 @@ public class ProfileForm extends Form<User> {
 
 	public ProfileForm(String id) {
 		super(id, new CompoundPropertyModel<User>(getBean(UserDao.class).get(getUserId())));
-		
+
 		add(feedback.setOutputMarkupId(true));
 		add(new FormSaveRefreshPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
+			private void refreshUser() {
+				User u = getModelObject();
+				if (u.getId() != null) {
+					u = getBean(UserDao.class).get(u.getId());
+				} else {
+					u = new User();
+				}
+				setModelObject(u);
+			}
+
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-				User u = getModelObject();
 				try {
-					u = getBean(UserDao.class).update(u, userForm.getPasswordField().getConvertedInput(), getUserId());
+					getBean(UserDao.class).update(getModelObject(), userForm.getPasswordField().getConvertedInput(), getUserId());
 				} catch (Exception e) {
 					error(e.getMessage());
 				}
-				setModelObject(u);
+				refreshUser();
 				target.add(ProfileForm.this);
 			}
 
@@ -68,13 +77,7 @@ public class ProfileForm extends Form<User> {
 
 			@Override
 			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-				User user = getModelObject();
-				if (user.getId() != null) {
-					user = getBean(UserDao.class).get(user.getId());
-				} else {
-					user = new User();
-				}
-				setModelObject(user);
+				refreshUser();
 				target.add(ProfileForm.this);
 			}
 
@@ -91,7 +94,7 @@ public class ProfileForm extends Form<User> {
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
-	
+
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);
