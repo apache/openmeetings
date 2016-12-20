@@ -92,7 +92,7 @@
         <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" />
     </view>
     
-    <view name="_interview" align="center" visible="${ canvas.ismoderator }">
+    <view name="_interview" x="100" visible="${ canvas.ismoderator }">
         <!--
            public synchronized Boolean startInterviewRecording()
          -->
@@ -122,7 +122,7 @@
             </handler>
         </netRemoteCallHib>  
         
-        <simplelayout axis="x" spacing="2" />
+        <simplelayout axis="x" spacing="120" />
         
         <simpleLabelButton name="_start" labelid="913" height="30" width="200" enabled="false">
             <handler name="onclick">
