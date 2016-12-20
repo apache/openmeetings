@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.web.common.MainPanel.PARAM_USER_ID;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-import static org.apache.openmeetings.web.common.MainPanel.PARAM_USER_ID;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.MainPanel;
@@ -34,7 +34,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.util.time.Duration;
@@ -73,7 +72,7 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID)), "inviteUser")));
+				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
 			}
 		});
 	}

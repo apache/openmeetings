@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
@@ -33,8 +35,6 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +68,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -206,7 +205,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("showUserInfo", this, explicit(PARAM_USER_ID)), "showUserInfo")));
+				response.render(new PriorityHeaderItem(getNamedFunction("showUserInfo", this, explicit(PARAM_USER_ID))));
 			}
 		});
 		add(new AbstractDefaultAjaxBehavior() {
@@ -220,7 +219,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("addContact", this, explicit(PARAM_USER_ID)), "addContact")));
+				response.render(new PriorityHeaderItem(getNamedFunction("addContact", this, explicit(PARAM_USER_ID))));
 			}
 		});
 		add(new AbstractDefaultAjaxBehavior() {
@@ -234,7 +233,7 @@ public class MainPanel extends Panel {
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID)), "privateMessage")));
+				response.render(new PriorityHeaderItem(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID))));
 			}
 		});
 		add(pingTimer, new WebSocketBehavior() {

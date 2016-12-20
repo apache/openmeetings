@@ -150,7 +150,7 @@ public class ActivitiesPanel extends BasePanel {
 		@Override
 		public void renderHead(Component component, IHeaderResponse response) {
 			super.renderHead(component, response);
-			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_ID)), "activityAction")));
+			response.render(new PriorityHeaderItem(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_ID))));
 		}
 	};
 	private ListView<Activity> lv = new ListView<Activity>("activities", new ArrayList<Activity>()) {

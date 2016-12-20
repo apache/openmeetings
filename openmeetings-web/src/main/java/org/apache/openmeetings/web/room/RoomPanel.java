@@ -496,7 +496,7 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
-			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("setActiveWbId", activeWb, explicit(PARAM_WB_ID)), "setActiveWbId")));
+			response.render(new PriorityHeaderItem(getNamedFunction("setActiveWbId", activeWb, explicit(PARAM_WB_ID))));
 		}
 	}
 

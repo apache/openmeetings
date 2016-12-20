@@ -16,13 +16,16 @@
  */
 package org.apache.openmeetings.web.util;
 
+import java.util.UUID;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.util.string.StringValue;
 
 public class CallbackFunctionHelper {
-	public static StringBuilder getNamedFunction(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
+	private static StringBuilder getNamedFunctionStr(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("function ").append(name).append("(");
 		boolean first = true;
@@ -44,5 +47,10 @@ public class CallbackFunctionHelper {
 
 	public static StringValue getParam(Component cmp, String name) {
 		return cmp.getRequest().getRequestParameters().getParameterValue(name);
+	}
+
+	public static JavaScriptHeaderItem getNamedFunction(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
+		String uid = UUID.randomUUID().toString();
+		return JavaScriptHeaderItem.forScript(getNamedFunctionStr(name, b, extraParameters), String.format("%s-%s", name, uid));
 	}
 }
