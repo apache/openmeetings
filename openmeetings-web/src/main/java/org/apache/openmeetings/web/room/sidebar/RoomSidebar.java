@@ -41,7 +41,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -252,9 +251,9 @@ public class RoomSidebar extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID)), FUNC_TOGGLE_RIGHT)));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD)), FUNC_TOGGLE_ACTIVITY)));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction(FUNC_ACTION, roomAction, explicit(PARAM_ACTION), explicit(PARAM_UID)), FUNC_ACTION)));
+		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID))));
+		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD))));
+		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, roomAction, explicit(PARAM_ACTION), explicit(PARAM_UID))));
 	}
 	
 	private ListView<Client> updateUsers() {

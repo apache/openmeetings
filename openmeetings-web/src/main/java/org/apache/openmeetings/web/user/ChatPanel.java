@@ -240,7 +240,7 @@ public class ChatPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ChatPanel.class, "chat.js"))));
 		response.render(CssHeaderItem.forUrl("css/chat.css"));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID)), "acceptMessage")));
+		response.render(new PriorityHeaderItem(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 		if (!showDashboardChat) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(document).ready(function(){");
