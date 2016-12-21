@@ -22,9 +22,27 @@
 
 <class name="interviewWhiteboard" extends="view" clip="true">
 	<handler name="oninit">
+	<![CDATA[
 		if ($debug) Debug.write(":: interviewWhiteboard :: oninit :: ", canvas.commonVideoViewContent);
 		canvas._drawarea = this;
 		this.reloadStatus();
+		if (canvas.currentRoomObj.autoVideoSelect) {
+			var cl = canvas.currentClient;
+			if (!cl.interviewPodId && (cl.isMod || cl.isSuperModerator || cl.canDraw)) {
+				var vcount = canvas.commonVideoViewContent.subviews.length;
+				var pod = null;
+				if (vcount == 1) {
+					var busypod = canvas.commonVideoViewContent.subviews[0].interviewPodId;
+					pod = (busypod == 1 ? 2 : 1);
+				} else if (vcount == 0) {
+					pod = 1;
+				}
+				if (!!pod) {
+					_videoviewcontent["interviewVideoBox" + pod].sendConfirmation(canvas.publicSID);
+				}
+			}
+		}
+	]]>
 	</handler>
 
 	<handler name="onopenWhiteBoard" >
@@ -41,14 +59,14 @@
 	<netRemoteCallHib name="getInterviewRecordingStatus" funcname="getInterviewRecordingStatus"
 			remotecontext="$once{ canvas.thishib }" >  
 		<handler name="ondata" args="value">
-			<![CDATA[
-				if ($debug) Debug.write("getInterviewRecordingStatus: ",value);
-				if (value) {
-					parent._recStarted.setAttribute("visibility","visible");
-				} else {
-					parent._recStarted.setAttribute("visibility","hidden");
-				}
-			]]>
+		<![CDATA[
+			if ($debug) Debug.write("getInterviewRecordingStatus: ",value);
+			if (value) {
+				parent._recStarted.setAttribute("visibility","visible");
+			} else {
+				parent._recStarted.setAttribute("visibility","hidden");
+			}
+		]]>
 		</handler>
 	</netRemoteCallHib>
 

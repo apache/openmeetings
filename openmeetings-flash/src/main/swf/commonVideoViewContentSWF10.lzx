@@ -78,7 +78,7 @@
 	<method name="createVideoObject" args="publicSID, isBroadcasting, interviewPodId, object">
 		if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting, "object", object);
 		var vidContainer = getVideoObjectByPublicSID(publicSID);
-		if(vidContainer == null) {
+		if (vidContainer == null) {
 			vidContainer = isBroadcasting ? this.getNewVideoObject(publicSID) : this.getNewVideoObjectByPos(publicSID);
 			vidContainer.publicSID = publicSID;
 		}
