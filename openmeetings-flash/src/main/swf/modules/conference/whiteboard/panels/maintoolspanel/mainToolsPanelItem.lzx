@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -20,8 +20,7 @@
 -->
 <library>
  
-<class name="mainToolsPanelItem" extends="blueButton" 
-	   width="26" height="26">
+<class name="mainToolsPanelItem" extends="blueButton" width="26" height="26">
 	
 	<attribute name="modi" value="" type="string" />
 	<attribute name="labelid" value="0" type="number" />
@@ -34,8 +33,8 @@
 	</handler>
 	
 	<method name="setSelectionWithoutEvent">
-        parent.parent.parent.setSelectionWithoutEvent(this);
-    </method>
+		parent.parent.parent.setSelectionWithoutEvent(this);
+	</method>
 	
 	<handler name="onmouseup">
 		//if ($debug) Debug.write("parent.parent.parent",parent.parent.parent);
@@ -47,19 +46,18 @@
 <class name="redoUndoToolsPanelItem" extends="mainToolsPanelItem" setSelectionToItem="false">
 	<attribute name="doredo" value="true" type="boolean" />
 	<handler name="onclick">	  
-          if(this.doredo){
-            this.parent.parent.parent.parent._drawareaMask._drawarea.doredo();
-          } else {
-            this.parent.parent.parent.parent._drawareaMask._drawarea.undoredo();
-          }
-        </handler>
+		if(this.doredo){
+			this.parent.parent.parent.parent._drawareaMask._drawarea.doredo();
+		} else {
+			this.parent.parent.parent.parent._drawareaMask._drawarea.undoredo();
+		}
+	</handler>
 </class>
 
 <class name="mainToolsHPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
-	   width="26" height="1" ></class>
-	   
-<class name="mainToolsVPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
-	   width="1" height="26" ></class>
+		width="26" height="1" />
 
-    
+<class name="mainToolsVPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
+		width="1" height="26" />
+
 </library>

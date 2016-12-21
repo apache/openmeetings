@@ -22,8 +22,7 @@
 
 	<!--- Contains no microphone or camera Object, this view can only subscribe 
 		to a video or live-stream -->
-	<class name="videoObjectPlayBroadcast" extends="baseVideoObject"
-		isremote="true">
+	<class name="videoObjectPlayBroadcast" extends="baseVideoObject" isremote="true">
 		<attribute name="interviewPodId" value="-1" />
 		<attribute name="ratioW" value="1" />
 		<attribute name="ratioH" value="1" />
@@ -44,13 +43,12 @@
 		<!--- Change the video resolution by chaning pod size -->
 		<method name="setDefaultVideoSize" args="w,h">
 			this.initRatio = w / h;
-			this.setAttribute("width",w+this.videoInsetX);
+			this.setAttribute("width", w + this.videoInsetX);
 
 			if (canvas.currentRoomObj.showMicrophoneStatus) {
-				this.setAttribute("bottomBarHeight",this._innertop.height + 1);
+				this.setAttribute("bottomBarHeight", this._innertop.height + 1);
 			}
-
-			this.setAttribute("height",h+this.videoInsetY+this.bottomBarHeight);
+			this.setAttribute("height", (minimized ? 0 : h) + this.videoInsetY + this.bottomBarHeight);
 		</method>
 
 		<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" y="$once{ parent.videoInsetY-1 }"

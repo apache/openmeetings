@@ -306,7 +306,7 @@
 				if (this.subviews[eg].name != "_toolbar" 
 						&& this.subviews[eg].name != "_innertop"
 						&& this.subviews[eg].name != "_loudness") {
-					 this.subviews[eg].setAttribute("visibility","hidden");   
+					 this.subviews[eg].setAttribute("visibility","hidden");
 				}
 			}
 			
@@ -344,7 +344,7 @@
 							&& this.subviews[eg].name != "_innertop"
 							&& this.subviews[eg].name != "_loudness"
 							&& this.subviews[eg].name != "_innerbottom") {
-						 this.subviews[eg].setAttribute("visibility","visible");   
+						 this.subviews[eg].setAttribute("visibility","visible");
 					}
 				}
 				if (isMicrophonesRoom) {
@@ -404,15 +404,19 @@
 			</handler>
 		</view>
 
+		<method name="resync">
+			resetValues();
+			if (!isremote) {
+				canvas.commonVideoViewContent._startAvBroadcast(true);
+			}
+		</method>
+
 		<view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">
 			<attribute name="isload" value="true" type="boolean" />
 
 			<miniIconsPresenter name="_resync" iconRessourceName="resyncuser_rsc">
 				<handler name="onclick">
-					parent.parent.resetValues();
-					if (!parent.parent.isremote) {
-						canvas.commonVideoViewContent._startAvBroadcast(true)
-					}
+					parent.parent.resync();
 				</handler>
 				<labelTooltip name="_tip" labelid="540" />
 			</miniIconsPresenter>

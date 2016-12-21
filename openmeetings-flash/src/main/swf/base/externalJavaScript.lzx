@@ -35,41 +35,48 @@
 		if ($debug) Debug.write("showAvSettings ", isInterview);
 		canvas.commonVideoViewContent.createEditRecordStream(isInterview);
 	});
-	
+	ExternalInterface.addCallback("refreshAv", function(uid) {
+		if ($debug) Debug.write("refreshAv ", uid);
+		var vid = canvas.commonVideoViewContent.getVideoObjectByPublicSID(uid);
+		if (!!vid) {
+			vid.resync();
+		}
+	});
+
 	var redirectToUrlReturnObject = null;
 	var timeZoneOffsetReturnObject = null;
 	var browserInfoReturnObject = null;
 	var browserLangReturnObject = null;
-	
+
 	function redirectToUrl(url, returnObject) {
 		redirectToUrlReturnObject = returnObject;
 		ExternalInterface.call("redirectToUrl", url);
 	}
-	
+
 	function redirectToUrlCallback(returnValue) {
 		if ($debug) Debug.write("redirectToUrlCallback ",returnValue);
 		if (redirectToUrlReturnObject != null) {
 			redirectToUrlReturnObject.callback(returnValue);
 		}
 	}
-	
+
 	function getBrowserInfo(returnObject) {
 		browserInfoReturnObject = returnObject;
 		ExternalInterface.call("getBrowserInfo");
 	}
-	
+
 	function getBrowserInfoCallback(returnValue) {
 		if ($debug) Debug.write("getBrowserInfoCallback ",returnValue);
 		if (browserInfoReturnObject != null) {
 			browserInfoReturnObject.callback(returnValue);
 		}
 	}
-	
+
 	function getBrowserLang(returnObject) {
 		browserLangReturnObject = returnObject;
 		ExternalInterface.call("getBrowserLang");
 	}
-	
+
 	function getBrowserLangCallback(returnValue) {
 		if ($debug) Debug.write("getBrowserLangCallback ",returnValue);
 		if (browserLangReturnObject != null) {
@@ -78,5 +85,4 @@
 	}
 ]]>
 </script>
-
 </library>

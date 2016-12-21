@@ -91,22 +91,17 @@
 	<simplelayout axis="x" spacing="2" />
 	<mainToolsPanelItem name="plain" modi="plainConfirm" labelid="69" resourceItem="plain" setSelectionToItem="false" />
 	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
-	<!--
-	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
-     -->
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
 	
 	<mainToolsVPanelSeperator>
-        <attribute name="modi" value="" type="string"/>
-    </mainToolsVPanelSeperator>
+		<attribute name="modi" value="" type="string"/>
+	</mainToolsVPanelSeperator>
 	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resourceItem="revert" />
 	<mainToolsVPanelSeperator>
-        <attribute name="modi" value="" type="string"/>
-    </mainToolsVPanelSeperator>	
-	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
-						resourceItem="menupointer_rsc" />
-    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
-                        labelid="557" resourceItem="pointer_whiteboard_menu_rsc" />
+		<attribute name="modi" value="" type="string"/>
+	</mainToolsVPanelSeperator>	
+	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" resourceItem="menupointer_rsc" />
+	<mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" resourceItem="pointer_whiteboard_menu_rsc" />
 	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
 	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
 	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
@@ -115,36 +110,31 @@
 	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resourceItem="ellipse" />
 	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resourceItem="drawarrowicon_rsc" />
 	<mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
-        
-        <handler name="oninit">
-		if (this["_bgIcon"]) {
-			this._bgIcon.setAttribute("visible", false);
-		}
-            var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
-                                           + canvas._drawarea.currentClipArtRessourceName;
-            
-            this._rscIcon.setSource(imageurl);
-        </handler>
-        
-        <view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }" 
-              height="18" width="18" stretches="both" name="_bgIconIcon" />      
-        
-        <view resource="sub_menu_tools_panel_rsc"
-              x="$once{ parent.width - 10 }" y="$once{ parent.height - 10 }">
-            <handler name="onclick">
-                if ($debug) Debug.write("Show Sub Menu");
-                new lz.subMenuIconToolsToUpload(canvas,{
-                                x:500,
-                                y:82,
-                                refToolbar:parent
-                            });
-            </handler>
-            <labelTooltip labelid="1335" />
-        </view>
-        
-    </mainToolsPanelItem>
-</class>
+		<handler name="oninit">
+			if (!!this["_bgIcon"]) {
+				this._bgIcon.setAttribute("visible", false);
+			}
+			var imageurl = canvas.getUrl() + 'public/cliparts/thumb/' + canvas._drawarea.currentClipArtRessourceName;
+			//if ($debug) Debug.write("!!!!!! CLIPART:: ", imageurl);
+			_rscIcon.setAttribute("src", imageurl);
+		</handler>
 
+		<view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }"
+				height="18" width="18" stretches="both" name="_bgIconIcon" />
+
+		<view resource="sub_menu_tools_panel_rsc" x="$once{ parent.width - 10 }" y="$once{ parent.height - 10 }">
+			<handler name="onclick">
+				if ($debug) Debug.write("Show Sub Menu");
+				new lz.subMenuIconToolsToUpload(canvas,{
+						x:500,
+						y:82,
+						refToolbar:parent
+					});
+			</handler>
+			<labelTooltip labelid="1335" />
+		</view>
+	</mainToolsPanelItem>
+</class>
 
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
 	   width="420" height="33" title="" docking="true"

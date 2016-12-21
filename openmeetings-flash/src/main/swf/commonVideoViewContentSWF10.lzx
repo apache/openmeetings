@@ -733,12 +733,22 @@
 		return val != null ? val : def;
 	</method>
 
+	<method name="getAVmode" args="g">
+		var settings = canvas.currentClient.avsettings;
+		if (!settings) {
+			settings = getAvSetting('avstored', g, 'av'); //stored av settings are overriden by HTML5 (need to be merged)
+			if (!settings) {
+				settings = 'n';
+			}
+		}
+		return settings;
+	</method>
+
 	<method name="_startAvBroadcast" args="restart=false">
 		var g = canvas.commonVideoViewContent.loadAVsettings();
-		var settings = getAvSetting('avstored', g, 'av');
 		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
 		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
-		setUserAVSettings.avsetting = settings;
+		setUserAVSettings.avsetting = getAVmode(g);
 		setUserAVSettings.vWidth = vWidth;
 		setUserAVSettings.vHeight = vHeight;
 		setUserAVSettings.vHeight = vHeight;
@@ -768,8 +778,9 @@
 	<![CDATA[
 		var g = canvas.commonVideoViewContent.loadAVsettings();
 		var myvideocontainer = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
-		if ($debug) Debug.write("doStartConference::doninitalize");
-		var settings = getAvSetting('avstored', g, 'av');
+		if ($debug) Debug.write("startAvBroadcast::doninitalize");
+		var settings = getAVmode(g);
+		if ($debug) Debug.write("startAvBroadcast::mode, ", settings, canvas.currentClient.avsettings);
 		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
 		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
 		if (!canvas.isInterview) {
@@ -788,28 +799,22 @@
 			case "av":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
 				myvideocontainer.setAttribute("visible", true);
-				if(!canvas.isInterview) {
-					if (myvideocontainer.minimized) {
-						myvideocontainer.reminimize();
-					}
+				if(!canvas.isInterview && myvideocontainer.minimized) {
+					myvideocontainer.reminimize();
 				}
 				break;
 			case "a":
 				videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
 				myvideocontainer.setAttribute("visible", true);
-				if(!canvas.isInterview) {
-					if (!myvideocontainer.minimized) {
-						myvideocontainer.minimize();
-					}
+				if(!canvas.isInterview && !myvideocontainer.minimized) {
+					myvideocontainer.minimize();
 				}
 				break;
 			case "v":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, null);
 				myvideocontainer.setAttribute("visible", true);
-				if(!canvas.isInterview) {
-					if (myvideocontainer.minimized) {
-						myvideocontainer.reminimize();
-					}
+				if(!canvas.isInterview && myvideocontainer.minimized) {
+					myvideocontainer.reminimize();
 				}
 				break;
 			case "n":
