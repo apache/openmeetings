@@ -322,6 +322,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		private final String SIMPLE_CHART = Application.getString(1414);
 		private final String PIE_CHART = Application.getString(1415);
 		private final IModel<String> name = Model.of((String)null);
+		private final IModel<String> question = Model.of((String)null);
 		private final IModel<Integer> count = Model.of(0);
 		private final DropDownChoice<String> chartType = new DropDownChoice<String>("chartType", Model.of(SIMPLE_CHART), Arrays.asList(SIMPLE_CHART, PIE_CHART));
 
@@ -329,7 +330,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			super(id, Model.of((RoomPoll)null));
 			setOutputMarkupId(true);
 			add(new Label("name", name));
-			add(new Label("question"));
+			add(new Label("question", question));
 			add(new Label("count", count));
 			add(chartType.add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
@@ -345,6 +346,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		public void updateModel(RoomPoll poll, boolean redraw, IPartialPageRequestHandler handler) {
 			setModelObject(poll);
 			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreator()));
+			question.setObject(poll == null ? "" : poll.getQuestion());
 			count.setObject(poll == null ? 0 : poll.getAnswers().size());
 			handler.add(this);
 			close.setVisible(moderator && (poll != null && !poll.isArchived()), handler);
