@@ -36,9 +36,9 @@
 	<version position="none"/>
 
 	<body>
-		<head>
+		<head><![CDATA[
 			<link rel="stylesheet" href="$resourcePath/css/site.css"/>
-		</head>
+		]]></head>
 		<links>
 			<item name="Demo" href="http://openmeetings.apache.org/demo.html"/>
 			<item name="Download" href="http://openmeetings.apache.org/downloads.html"/>
