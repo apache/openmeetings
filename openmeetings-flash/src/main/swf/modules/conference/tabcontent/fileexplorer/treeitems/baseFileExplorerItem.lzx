@@ -46,7 +46,6 @@
 	<attribute name="mouseDownClickDelegate" value="null" />
 	<attribute name="isTrashCan" value="false" type="boolean" />
 	<attribute name="folderLoader" />
-	<attribute name="deleteLoader" />
 
 	<handler name="oninit">
 		this.singleClickDelegate = new LzDelegate(this, "doSingleClick");
@@ -140,58 +139,75 @@
 			this.deleteFileOrFolder();
 		}
 	</method>
-	
+
+	<method name="_delete" args="_fileId">
+	<![CDATA[
+		if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
+		var deleteLoader = new RestCall({
+				url: canvas.getUrl() + 'services/file/' + _fileId
+				, method: URLRequestMethod.POST
+				, hdrs: [new URLRequestHeader("X-HTTP-Method-Override", "DELETE")]
+				, errorCallback: deleteError
+				, successCallback: deleteComplete
+				});
+		deleteLoader.load('--dummy--');
+	]]>
+	</method>
+
 	<method name="deleteFileOrFolder">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
 			new lz.labelerrorPopup(canvas, {errorlabelid: 1462});
 			return;
 		}
-		
-		if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
-		if (!deleteLoader) {
-			deleteLoader = new RestCall({
-				url: canvas.getUrl() + 'services/file/' + this.fileId
-				, method: URLRequestMethod.POST
-				, hdrs: [new URLRequestHeader("X-HTTP-Method-Override", "DELETE")]
-				, errorCallback: deleteError
-				, successCallback: deleteComplete
-				});
+		var l = canvas.currentFileExplorer._selectedList;
+		if (l.length > 0) {
+			for (var i = 0; i < l.length; ++i) {
+				_delete(l[i].fileId);
+			}
+		} else {
+			_delete(this.fileId);
 		}
-		deleteLoader.load('--dummy--');
 	]]>
 	</method>
-	
+
 	<method name="deleteComplete" args="event">
 		var o = JSON.parse(event.target.data);
-		if ($debug) Debug.info("base::deleteComplete ", o);
+		if ($debug) Debug.info("base::deleteComplete ", o.serviceResult);
 		//TODO check return code
+		var item = canvas.currentFileExplorer.deselect(o.serviceResult.code);
+		if (!!item) {
+			item.parent.parent.doOpen();
+		}
 		this.parent.parent.doOpen();
 		canvas.currentFileExplorer._selected = null;
 	</method>
-	
+
 	<method name="deleteError" args="event">
 		if ($debug) Debug.error("base::deleteError ", event);
 	</method>
-	
+
 	<method name="doSingleClick" args="itemObj">
 		this.singleClickStarted = false;
 		//Cannot change name for Root Icons
 		if (this.isRoot) {
 			return;
 		}
+		if (lz.Keys.isKeyDown("control")) {
+			return;
+		}
 		this.addOrUpdateFolderName();
 	</method>
-	
+
 	<method name="doResetSingleClick" args="itmeObj">
 		this.singleClickStarted = false;
 	</method>
-	
+
 	<method name="addFile">
 		canvas.currentFileExplorer.selectItem(this);
 		canvas.currentFileExplorer.addFile();
 	</method>
-	
+
 	<method name="addFolder">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -218,11 +234,11 @@
 		}
 	]]>
 	</method>
-	
+
 	<method name="refresh">
 		this.doOpen();
 	</method>
-	
+
 	<method name="playVideo">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -232,7 +248,7 @@
 		canvas.currentFileExplorer.playVideo(this);
 	]]>
 	</method>
-	
+
 	<method name="editFolderName">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -242,7 +258,7 @@
 		this.addOrUpdateFolderName();
 	]]>
 	</method>
-	
+
 	<method name="loadDocument">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -252,7 +268,7 @@
 		canvas.currentFileExplorer.loadDocument(this);
 	]]>
 	</method>
-	
+
 	<method name="loadWmlFile">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -272,7 +288,7 @@
 		canvas.currentFileExplorer.loadChart(this);
 	]]>
 	</method>
-	
+
 	<method name="addOrUpdateFolderName">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -306,7 +322,7 @@
 			lz.Timer.addTimer(this.resetClickDelegate, 300);
 		}
 	</method>
-	
+
 	<method name="toggleOpen" args="setSelection">
 	<![CDATA[
 		if (this.mouseDownClickUsed) {
@@ -345,6 +361,7 @@
 					if (setSelection) {
 						doSetSelection()
 					} else {
+						canvas.currentFileExplorer.deselectAll();
 						this.doClose();
 					}
 				} else {
@@ -359,12 +376,12 @@
 		if (setSelection) canvas.currentFileExplorer.selectItem(this);
 	]]>
 	</method>
-	
+
 	<method name="selectItem" args="none">
 		this.selected = true;
-		this._fileName.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
+		this._fileName.setAttribute("bgcolor", canvas.getThemeColor('baseMousecolorizer'));
 	</method>
-	
+
 	<method name="deselectItem">
 		this.selected = false;
 		if (this["_fileName"]) {
@@ -373,15 +390,17 @@
 			if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
 		}
 	</method>
-	
+
 	<method name="clearContent">
 	<![CDATA[
-		while (this.content.subviews.length > 0) {
-			this.content.subviews[0].destroy();
+		if (!!this.content) {
+			while (this.content.subviews.length > 0) {
+				this.content.subviews[0].destroy();
+			}
 		}
 	]]>
 	</method>
-	
+
 	<method name="loadFiles">
 	<![CDATA[
 		if (!folderLoader) {
@@ -401,7 +420,7 @@
 		if ($debug) Debug.info("base::loadFilesComplete ", o);
 		setNodes(o.fileExplorerItemDTO);
 	</method>
-	
+
 	<method name="loadFilesError" args="event">
 		if ($debug) Debug.error("base::loadFilesError ", event);
 	</method>
@@ -546,6 +565,38 @@
 			}
 		}
 	]]>
+	</method>
+
+	<method name="getGlobalY">
+		return getAttributeRelative("y", canvas.currentFileExplorer._filearea._contentarea);
+	</method>
+
+	<method name="selectBetween" args="y1, y2">
+	<![CDATA[
+		var y = getGlobalY();
+		if (y > y2) {
+			return;
+		}
+		if (y >= y1) {
+			canvas.currentFileExplorer._selectedList.push(this);
+			this.selectItem(null);
+		}
+		if (type == 'Folder' && open) {
+			for (var eg in this.content.subviews) {
+				this.content.subviews[eg].selectBetween(y1, y2);
+			}
+		}
+	]]>
+	</method>
+
+	<method name="depth">
+		var d = 0;
+		var c = this;
+		while (!c.isRoot) {
+			c = c.parent.parent;
+			d++;
+		}
+		return d;
 	</method>
 </class>
 </library>

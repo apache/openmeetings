@@ -32,6 +32,7 @@
 		</when>
 	</switch>
 	<attribute name="_selected" value="null" />
+	<attribute name="_selectedList" value="$once{new Array()}" />
 	<attribute name="rootFileLoader" />
 	<attribute name="createFileLoader"/>
 	<attribute name="createFileRefObj"/>
@@ -53,12 +54,95 @@
 		}
 	</handler>
 
-	<method name="selectItem" args="itemRef">
-		if (this._selected != null) {
-			this._selected.deselectItem();
+	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
+	<![CDATA[
+		if (keyCode == 27) { //esc
+			deselectAll();
 		}
-		this._selected = itemRef;
-		this._selected.selectItem(null);
+	]]>
+	</handler>
+
+	<method name="deselectAll">
+	<![CDATA[
+		if (_selectedList.length > 0) {
+			for (var i = 0; i < _selectedList.length; ++i) {
+				_selectedList[i].deselectItem();
+			}
+			_selectedList.splice(0, _selectedList.length);
+			_selected.selectItem(null);
+		}
+		if (!!_selected) {
+			_selected.deselectItem();
+		}
+	]]>
+	</method>
+
+	<method name="deselect" args="_fileId">
+	<![CDATA[
+		for (var i = 0; i < _selectedList.length; ++i) {
+			var item = _selectedList[i];
+			if (item.fileId == _fileId) {
+				item.deselectItem();
+				_selectedList.removeAt(i);
+				return item;
+			}
+		}
+		return null;
+	]]>
+	</method>
+
+	<method name="selectItem" args="itemRef">
+	<![CDATA[
+		var singleSel = true;
+		if (lz.Keys.isKeyDown("control")) {
+			// deselect in case already selected
+			singleSel = !deselect(itemRef.fileId);
+			if (singleSel) {
+				if (_selectedList.length == 0 && !!_selected) {
+					_selectedList.push(_selected);
+				}
+				_selectedList.push(itemRef);
+			}
+		} else if (lz.Keys.isKeyDown("shift") && !!_selected && _selected.fileId != itemRef.fileId) {
+			deselectAll();
+			var _y1 = _selected.getGlobalY(), _y2 = itemRef.getGlobalY();
+			var from = _y1 < _y2 ? _selected : itemRef
+				, to = _y1 < _y2 ? itemRef : _selected;
+			var d1 = from.depth(), d2 = to.depth();
+			if (d1 == d2) {
+				var p = null;
+				if (d1 == 0) {
+					p = _filearea._contentarea.subviews;
+				} else if (from.parent.parent.fileId == to.parent.parent.fileId) {
+					p = from.parent.subviews;
+				}
+				if (!!p) {
+					var sel = false;
+					for (var eg in p) {
+						var node = p[eg];
+						if (node.fileId == from.fileId) {
+							sel = true;
+						}
+						if (sel) {
+							_selectedList.push(node);
+							node.selectItem(null);
+						}
+						if (node.fileId == to.fileId) {
+							break;
+						}
+					}
+					singleSel = false;
+				}
+			}
+		} else {
+			deselectAll();
+		}
+		if (singleSel) {
+			_selected = itemRef;
+			_selected.selectItem(null);
+		}
+		//if ($debug) Debug.write("fileExplorer::selectItem ", _selectedList);
+	]]>
 	</method>
 
 	<method name="addFile">
@@ -146,7 +230,7 @@
 
 	<method name="setSize" args="size, el">
 		var sizem = Math.round((size / 1024 / 1024) * 100) / 100;
-		el.setAttribute("text","" + sizem + " MBytes");
+		el.setAttribute("text", "" + sizem + " MBytes");
 	</method>
 
 	<method name="createRootItems" args="roomObject">
@@ -240,7 +324,6 @@
 	<!--
 		Borders
 	 -->
-
 	<view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }"
 			height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
 
@@ -253,7 +336,6 @@
 	<!--
 		File Tree Content Tabbar
 	 -->
-
 	<view name="_fileBar" layout="axis:x" x="0" y="${ 14 + parent._documentsTabs.height }">
 		<baseChooseIconView labelid="702" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
 				resourceN="file_explorer_add_file_rsc">
@@ -282,11 +364,10 @@
 	<!--
 		File Tree Content Trashbar
 	 -->
-
 	<view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }"
-		  y="${ 14 + parent._documentsTabs.height }">
+			y="${ 14 + parent._documentsTabs.height }">
 		<baseChooseIconView name="_trashIcon" labelid="705" height="20" width="19"
-						 resourceN="file_explorer_trash_rsc" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
+				resourceN="file_explorer_trash_rsc" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 			<attribute name="isTrashCan" value="true" type="boolean" />
 			<handler name="onclick">
 				if ($debug) Debug.write("Delete Folder and Files");
@@ -312,7 +393,6 @@
 	<!--
 		File Tree Content
 	 -->
-
 	<view name="_filearea" x="1" y="${ 34 + parent._documentsTabs.height }" clip="true"
 			height="${ parent.height - 35 - parent._documentsTabs.height - parent._userSpace.height }"
 			width="$once{ parent.width }">
