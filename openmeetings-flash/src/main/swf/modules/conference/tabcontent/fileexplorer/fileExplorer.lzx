@@ -8,18 +8,17 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
   
-	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <library>
-
 
 <!-- ###################
 	Class fileExplorer
@@ -36,14 +35,14 @@
 	<attribute name="rootFileLoader" />
 	<attribute name="createFileLoader"/>
 	<attribute name="createFileRefObj"/>
-	
+
 	<event name="onClose"/>
-	
+
 	<handler name="oninit">
 		canvas.currentFileExplorer = this;
 		lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
 	</handler>
-	
+
 	<handler name="onvisible">
 		if ($debug) Debug.write("fileExplorer::onvisible this._selected ", this._selected);
 		//This is thrown whenever an uploaded Document has completed
@@ -53,33 +52,32 @@
 			this._selected.refresh();
 		}
 	</handler>
-	
+
 	<method name="selectItem" args="itemRef">
 		if (this._selected != null) {
 			this._selected.deselectItem();
 		}
-		
 		this._selected = itemRef;
 		this._selected.selectItem(null);
 	</method>
-	
+
 	<method name="addFile">
 	<![CDATA[
 		if ($debug) Debug.write("addFile :: ", this._selected);
-		
+
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
 			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
 			return;
 		}
-		
+
 		new lz.uploadWindowExplorer(canvas.main_content._content.inner, {x:60});
 	]]>
 	</method>
-	
+
 	<method name="getSelectedItem">
 		return this._selected ? this._selected : this._filearea._contentarea.subviews[0];
 	</method>
-	
+
 	<method name="getSelectedFolder">
 		var selF = getSelectedItem();
 		if (selF.type != 'Folder') {
@@ -88,7 +86,7 @@
 		}
 		return selF;
 	</method>
-	
+
 	<method name="addFolder">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -98,14 +96,12 @@
 		getSelectedFolder().addFolder();
 	]]>
 	</method>
-	
+
 	<method name="loadWmlFile" args="itemObj">
 		this.selectItem(itemObj);
-		canvas._drawarea.prepareLoadWMLFile(itemObj); 
-		//canvas._drawarea.loadObjectList(itemObj); 
+		canvas._drawarea.prepareLoadWMLFile(itemObj);
 	</method>
 
-	
 	<method name="loadDocument" args="itemObj">
 		this.selectItem(itemObj);
 		this._documentsTabs.setAttribute("height",20);
@@ -115,18 +111,15 @@
 						documentObj:itemObj,
 						refObjList:this
 					});
-		//t.sendToBack();
-		//this._bg1.sendToBack();
-		//this._bg2.sendToBack();
 		this._documentsTabs.bringToFront();
 		return t;
 	</method>
-	
+
 	<method name="playVideo" args="itemObj">
 		this.selectItem(itemObj);
 		canvas._drawarea.playVideoSynced(itemObj.fileId,itemObj.fileName,itemObj.flvWidth,itemObj.flvHeight);
 	</method>
-	
+
 	<method name="loadFiles">
 	<![CDATA[
 		if (!rootFileLoader) {
@@ -140,30 +133,30 @@
 		rootFileLoader.load('');
 	]]>
 	</method>
-	
+
 	<method name="loadFilesComplete" args="event">
 		var o = JSON.parse(event.target.data);
 		if ($debug) Debug.info("loadFilesComplete ", o);
 		createRootItems(o.fileExplorerObject);
 	</method>
-	
+
 	<method name="httpRequestError" args="event">
 		if ($debug) Debug.error("httpRequestError ", event);
 	</method>
-	
+
 	<method name="setSize" args="size, el">
 		var sizem = Math.round((size / 1024 / 1024) * 100) / 100;
 		el.setAttribute("text","" + sizem + " MBytes");
 	</method>
-		
+
 	<method name="createRootItems" args="roomObject">
 	<![CDATA[
 		this.clearContent();
 		if ($debug) Debug.info("createRootItems ", roomObject);
-		
+
 		setSize(roomObject.userHomeSize, this._userSpace._userHomeSize);
 		setSize(roomObject.roomHomeSize, this._userSpace._roomHomeSize);
-		
+
 		var userHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
 				open:true
 				, fileId: -1
@@ -177,7 +170,7 @@
 		userHome.icon_folder_pre.setAttribute("frame", 2);
 		userHome._folderIcon.setAttribute("frame", 2);
 		userHome.setNodes(roomObject.userHome);
-		
+
 		var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
 				open: true
 				, fileId: -2
@@ -193,7 +186,7 @@
 		roomHome.setNodes(roomObject.roomHome);
 	]]>
 	</method>
-	
+
 	<method name="clearContent">
 	<![CDATA[
 		var area = this._filearea._contentarea;
@@ -203,7 +196,7 @@
 		}
 	]]>
 	</method>
-	
+
 	<method name="createFile" args="fileName, bytes, refObj, fileObj">
 	<![CDATA[
 		this.createFileRefObj = refObj;
@@ -243,42 +236,41 @@
 	<method name="createFileError" args="event">
 		this.createFileRefObj.createFileError(event);
 	</method>
-	
+
 	<!--
 		Borders
 	 -->
-			   
-	<view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }" 
-		  height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />	 
-	
+
+	<view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }"
+			height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
+
 	<!--
 		Documents - Tabbar
-	 --> 
+	 -->
 	<documentsTabBar name="_documentsTabs" y="14" width="$once{ parent.width }"
-					visibility="hidden" />
-		
-	
+			visibility="hidden" />
+
 	<!--
 		File Tree Content Tabbar
-	 --> 
-	 
+	 -->
+
 	<view name="_fileBar" layout="axis:x" x="0" y="${ 14 + parent._documentsTabs.height }">
 		<baseChooseIconView labelid="702" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
-							resourceN="file_explorer_add_file_rsc">
+				resourceN="file_explorer_add_file_rsc">
 			<handler name="onclick">
 				if ($debug) Debug.write("Upload File");
 				parent.parent.addFile();
 			</handler>
 		</baseChooseIconView>
 		<baseChooseIconView labelid="703" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
-							resourceN="file_explorer_add_folder_rsc" >
+				resourceN="file_explorer_add_folder_rsc" >
 			<handler name="onclick">
 				if ($debug) Debug.write("Add Folder");
 				parent.parent.addFolder();
 			</handler>
 		</baseChooseIconView>
 		<baseChooseIconView labelid="704" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
-							resourceN="file_explorer_reload_rsc" >
+				resourceN="file_explorer_reload_rsc" >
 			<handler name="onclick">
 				if ($debug) Debug.write("Refresh Folder");
 				parent.parent.loadFiles();
@@ -286,14 +278,14 @@
 		</baseChooseIconView>
 		<view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
 	</view>
-	
+
 	<!--
 		File Tree Content Trashbar
-	 --> 
-	 
-	<view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }" 
+	 -->
+
+	<view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }"
 		  y="${ 14 + parent._documentsTabs.height }">
-		<baseChooseIconView name="_trashIcon" labelid="705" height="20" width="19" 
+		<baseChooseIconView name="_trashIcon" labelid="705" height="20" width="19"
 						 resourceN="file_explorer_trash_rsc" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 			<attribute name="isTrashCan" value="true" type="boolean" />
 			<handler name="onclick">
@@ -312,43 +304,40 @@
 			<handler name="onmousetrackup">
 				if ($debug) Debug.write("onmousetrackup");
 				this.onmouseout.sendEvent();
-			</handler> 
+			</handler>
 		</baseChooseIconView>
 		<view bgcolor="0xE0E0E0" height="20" width="1" />
 	</view>
-	
+
 	<!--
 		File Tree Content
-	 --> 
-	
+	 -->
+
 	<view name="_filearea" x="1" y="${ 34 + parent._documentsTabs.height }" clip="true"
-		  height="${ parent.height - 35 - parent._documentsTabs.height - parent._userSpace.height }" 
-		  width="$once{ parent.width }">
-		
+			height="${ parent.height - 35 - parent._documentsTabs.height - parent._userSpace.height }"
+			width="$once{ parent.width }">
+
 		<attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
-		
 		<attribute name="currentDragItem" value="null" />
-		
+
 		<handler name="oninit">
 			canvas.currentImagesListdraw = this;
 		</handler>
-		
+
 		<view name="_contentarea" layout="axis:y;inset:1" />
-		
+
 		<om_vscrollbar name="_scrollbar" />
 		<om_hscrollbar name="_hscrollbar" />
 	</view>
-	
+
 	<view name="_userSpace" height="40" valign="bottom" width="$once{ parent.width }">
-		
 		<labelText name="_userHomeSizeLabel" labelid="923" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" />
-		
+
 		<labelText name="_userHomeSize" align="right" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" />
-		
+
 		<labelText name="_roomHomeSizeLabel" labelid="924" y="20" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" />
-		
+
 		<labelText name="_roomHomeSize" align="right" y="20" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" />
-		
 	</view>
 </class>
 </library>

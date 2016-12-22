@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -47,35 +47,35 @@
 	<attribute name="isTrashCan" value="false" type="boolean" />
 	<attribute name="folderLoader" />
 	<attribute name="deleteLoader" />
-		
+
 	<handler name="oninit">
 		this.singleClickDelegate = new LzDelegate(this, "doSingleClick");
 		this.resetClickDelegate = new LzDelegate(this, "doResetSingleClick");
 		this.mouseDownClickDelegate = new LzDelegate(this, "doMouseDownClick");
 		if (this.type == 'Folder') {
-		    lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
+			lz.Track.register(this._fileName, canvas.currentImagesListdraw.currentTrackGroupName);
 		}
 	</handler>
-	
+
 	<method name="doOpen">
 		this.open = true;
 		if (this.type == 'Folder') {
-    		this.icon_folder_pre.setAttribute("frame",2);
-    		this.content.setAttribute("visibility","visible");
+			this.icon_folder_pre.setAttribute("frame",2);
+			this.content.setAttribute("visibility","visible");
 			this._folderIcon.setAttribute("frame",2);
-		    this.loadFiles();
+			this.loadFiles();
 		}
 	</method>
-	
+
 	<method name="doClose">
 		this.open = false;
 		if (this.type == 'Folder') {
-            this.icon_folder_pre.setAttribute("frame",1);
-            this.content.setAttribute("visibility","hidden");
-            this._folderIcon.setAttribute("frame",1);
+			this.icon_folder_pre.setAttribute("frame",1);
+			this.content.setAttribute("visibility","hidden");
+			this._folderIcon.setAttribute("frame",1);
 		}
 	</method>
-	
+
 	<method name="doMouseDownClick" args="itemObj">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -92,55 +92,55 @@
 			});
 	]]>
 	</method>
-    
-    <!--
-    	Check if this is the Owner
-     -->
-    <method name="checkForIsOwner">
-    	if (this.isRoot) {
-    		return this.isOwner;
-    	} else {
-    		return parent.parent.checkForIsOwner();
-    	}
-    </method>
-    
-    <!--
-    	Check if the user tries to move a file in its own tree,
-    	see moveFile
-     -->
-    <method name="checkForIsChild" args="compFileId">
-    	if (this.isRoot) {
-    		return false;
-    	} else {
-    		if (this.fileId == compFileId) {
-    			return true;
-    		} else {
-    			return parent.parent.checkForIsChild(compFileId);
-    		}
-    	}
-    </method>
-    
-    <method name="deleteFile" args="labelid">
-    	<![CDATA[
-			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-	    		return;
-	    	}
-	    	new lz.confirmationSingle(canvas,{
-	                           refObj:this,
-	                           labelid:labelid,
-	                           labeliderror:713,
-	                           showCheckBox:false
-	                        });
-    	]]>
-    </method>
-    
-    <method name="sendConfirmation" args="bool,askAgain">
-        if (bool) {
-            this.deleteFileOrFolder();
-        }
-    </method>
-    
+
+	<!--
+		Check if this is the Owner
+	 -->
+	<method name="checkForIsOwner">
+		if (this.isRoot) {
+			return this.isOwner;
+		} else {
+			return parent.parent.checkForIsOwner();
+		}
+	</method>
+
+	<!--
+		Check if the user tries to move a file in its own tree,
+		see moveFile
+	 -->
+	<method name="checkForIsChild" args="compFileId">
+		if (this.isRoot) {
+			return false;
+		} else {
+			if (this.fileId == compFileId) {
+				return true;
+			} else {
+				return parent.parent.checkForIsChild(compFileId);
+			}
+		}
+	</method>
+	
+	<method name="deleteFile" args="labelid">
+	<![CDATA[
+		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
+		new lz.confirmationSingle(canvas,{
+					refObj:this,
+					labelid:labelid,
+					labeliderror:713,
+					showCheckBox:false
+				});
+	]]>
+	</method>
+	
+	<method name="sendConfirmation" args="bool,askAgain">
+		if (bool) {
+			this.deleteFileOrFolder();
+		}
+	</method>
+	
 	<method name="deleteFileOrFolder">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
@@ -161,7 +161,7 @@
 		deleteLoader.load('--dummy--');
 	]]>
 	</method>
-    
+	
 	<method name="deleteComplete" args="event">
 		var o = JSON.parse(event.target.data);
 		if ($debug) Debug.info("base::deleteComplete ", o);
@@ -169,7 +169,7 @@
 		this.parent.parent.doOpen();
 		canvas.currentFileExplorer._selected = null;
 	</method>
-    
+	
 	<method name="deleteError" args="event">
 		if ($debug) Debug.error("base::deleteError ", event);
 	</method>
@@ -178,8 +178,8 @@
 		this.singleClickStarted = false;
 		//Cannot change name for Root Icons
 		if (this.isRoot) {
-            return;
-        }
+			return;
+		}
 		this.addOrUpdateFolderName();
 	</method>
 	
@@ -226,9 +226,9 @@
 	<method name="playVideo">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-    		return;
-    	}
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		canvas.currentFileExplorer.playVideo(this);
 	]]>
 	</method>
@@ -236,9 +236,9 @@
 	<method name="editFolderName">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-    		return;
-    	}
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		this.addOrUpdateFolderName();
 	]]>
 	</method>
@@ -246,9 +246,9 @@
 	<method name="loadDocument">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-    		return;
-    	}
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		canvas.currentFileExplorer.loadDocument(this);
 	]]>
 	</method>
@@ -256,9 +256,9 @@
 	<method name="loadWmlFile">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-    		return;
-    	}
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		canvas.currentFileExplorer.loadWmlFile(this);
 	]]>
 	</method>
@@ -266,9 +266,9 @@
 	<method name="loadChart">
 	<![CDATA[
 		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
-    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
-    		return;
-    	}
+			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+			return;
+		}
 		canvas.currentFileExplorer.loadChart(this);
 	]]>
 	</method>
@@ -279,32 +279,23 @@
 			new lz.labelerrorPopup(canvas,{errorlabelid:1462});
 			return;
 		}
-		
 		if ($debug) Debug.write("addOrUpdateFolderName ", this.parentId);
 		var tWidth = this._fileName.width;
 		if (tWidth < 160) {
 			tWidth = 160;
 		}
-		var _y = this._fileName.getAttributeRelative("y", canvas);
-		var _x = this._fileName.getAttributeRelative("x", canvas);
-		if (this.fileId == 0) {
-			_y = 65;
-			_x += 10;
-		}
-		
-		var t = new lz.dynamicFileName(canvas, {
+		var t = new lz.dynamicFileName(this._fileName, {
 				text: this.fileName
 				, refObj: this
 				, width: tWidth + 10
-				, x: _x
-				, y: _y
+				, x: 0
+				, y: 0
 				});
-
-		lz.Focus.setFocus(t,true);
+		lz.Focus.setFocus(t, true);
 		lz.ModeManager.makeModal(t);
 	]]>
 	</method>
-	
+
 	<method name="doSetSelection">
 		this.singleClickStarted = true;
 		if (this.selected) {
@@ -377,11 +368,11 @@
 	<method name="deselectItem">
 		this.selected = false;
 		if (this["_fileName"]) {
-            this._fileName.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
-        } else {
-            if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
-        }
-    </method>
+			this._fileName.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
+		} else {
+			if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
+		}
+	</method>
 	
 	<method name="clearContent">
 	<![CDATA[
@@ -390,7 +381,7 @@
 		}
 	]]>
 	</method>
-    
+	
 	<method name="loadFiles">
 	<![CDATA[
 		if (!folderLoader) {
@@ -410,7 +401,7 @@
 		if ($debug) Debug.info("base::loadFilesComplete ", o);
 		setNodes(o.fileExplorerItemDTO);
 	</method>
-    
+	
 	<method name="loadFilesError" args="event">
 		if ($debug) Debug.error("base::loadFilesError ", event);
 	</method>
@@ -424,16 +415,16 @@
 	<view name="_folderIcon" resource="$once{ parent.fileIcon }" x="16" y="2" >
 		<handler name="onmousedown">
 			if (parent.isRoot) {
-                return;
-            }
-            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
-        </handler>
-        <handler name="onmouseup">
-        	if (parent.isRoot) {
-                return;
-            }
-            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
-        </handler>
+				return;
+			}
+			lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+		</handler>
+		<handler name="onmouseup">
+			if (parent.isRoot) {
+				return;
+			}
+			lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+		</handler>
 		<handler name="onclick">
 			parent.toggleOpen(false);
 		</handler>
