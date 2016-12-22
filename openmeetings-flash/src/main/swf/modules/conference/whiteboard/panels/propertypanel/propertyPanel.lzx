@@ -44,7 +44,7 @@
 	</method>
 
 	<method name="loadPanelByModus" args="drawArea">
-		if ($debug) Debug.write("loadPanelByModus drawmodus: ",drawArea.drawmodus);
+		if ($debug) Debug.write("loadPanelByModus drawmodus: ", drawArea.drawmodus);
 		this.ignoreUpdates = true;
 		if (drawArea.drawmodus == 'paint') {
 			this._content.lineColorChoose.setSelectedColor(drawArea.currentlayerstroke);

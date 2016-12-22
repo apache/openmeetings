@@ -34,9 +34,9 @@
     <handler name="onmouseover" reference="this.parent">
     	<![CDATA[
             this.doonmouseover();
-        ]]>        
+        ]]>
     </handler>
-        
+
     <method name="doonmouseover">
     	<![CDATA[
             this.setContent.sendEvent();
