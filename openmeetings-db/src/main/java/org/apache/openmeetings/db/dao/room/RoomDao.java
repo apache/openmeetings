@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, webAppRootKey);
 	public final static String[] searchFields = {"name"};
-	
+
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -103,7 +103,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 		}
 	}
-	
+
 	public List<Room> get(List<Long> ids) {
 		return em.createNamedQuery("getRoomsByIds", Room.class).setParameter("ids", ids).getResultList();
 	}

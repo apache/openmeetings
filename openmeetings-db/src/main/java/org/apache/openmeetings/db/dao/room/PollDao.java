@@ -47,7 +47,7 @@ public class PollDao {
 			p.setCreated(new Date());
 			em.persist(p);
 		} else {
-			p =	em.merge(p);
+			p = em.merge(p);
 		}
 		return p;
 	}
