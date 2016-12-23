@@ -162,7 +162,7 @@
 		<handler name="onmousetrackover">
 			if ($debug) Debug.write("onmousetrackover");
 			canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
-			this.setAttribute("bgcolor",0x93FE92);
+			this.setAttribute("bgcolor", 0x93FE92);
 		</handler>
 
 		<handler name="onmousetrackout">
@@ -416,16 +416,16 @@
 		</method>
 
 		<method name="setSelection" args="obj">
-			if ($debug) Debug.write("setSelection ",obj);
+			if ($debug) Debug.write("setSelection ", obj);
 			parent._drawareaMask._drawarea.removeObjectBounds();
-			if (obj.setSelectionToItem){
-				if (this.objectRef!=null){
+			if (obj.setSelectionToItem) {
+				if (this.objectRef != null) {
 					this.objectRef._isselected = false;
-					this.objectRef.setAttribute('enabled',true);
+					this.objectRef.setAttribute('enabled', true);
 				}
 				this.objectRef = obj;
 				this.objectRef._isselected = true;
-				this.objectRef.setAttribute('enabled',false);
+				this.objectRef.setAttribute('enabled', false);
 			}
 			if (obj.modi=="saveobj"){
 				parent._drawareaMask._drawarea.doAction(obj.modi);
@@ -435,14 +435,14 @@
 		</method>
 
 		<method name="setSelectionWithoutEvent" args="obj">
-			if (obj.setSelectionToItem){
-				if (this.objectRef!=null){
+			if (obj.setSelectionToItem) {
+				if (this.objectRef != null) {
 					this.objectRef._isselected = false;
-					this.objectRef.setAttribute('enabled',true);
+					this.objectRef.setAttribute('enabled', true);
 				}
 				this.objectRef = obj;
 				this.objectRef._isselected = true;
-				this.objectRef.setAttribute('enabled',false);
+				this.objectRef.setAttribute('enabled', false);
 			}
 		</method>
 
