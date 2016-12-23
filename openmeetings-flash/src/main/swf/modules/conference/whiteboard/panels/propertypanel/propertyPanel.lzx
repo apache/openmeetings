@@ -130,36 +130,36 @@
 			if (canvas._drawarea.drawmodus == 'paint'){
 				canvas._drawarea.currentlayerstroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentlayerlineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentlayerOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentlayerOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'line'){
 				canvas._drawarea.currentlinestroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentlinelineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentlineOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentlineOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'uline'){
 				canvas._drawarea.currentulinestroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentulinelineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentulineOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentulineOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'drawarrow'){
 				canvas._drawarea.currentdrawarrowlinestroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentdrawarrowlinestrokeDis = this._content.lineColorChoose.selectedColorDis;
 				canvas._drawarea.currentdrawarrowlinestrokeFill = this._content.fillColorChoose.selectedColor;
 				canvas._drawarea.currentdrawarrowlinestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
 				canvas._drawarea.currentdrawarrowlinelineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentdrawarrowOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentdrawarrowOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'rectangle'){
 				canvas._drawarea.currentrectanglestroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentrectanglestrokeDis = this._content.lineColorChoose.selectedColorDis;
 				canvas._drawarea.currentrectanglestrokeFill = this._content.fillColorChoose.selectedColor;
 				canvas._drawarea.currentrectanglestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
 				canvas._drawarea.currentrectangleineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentrectangleOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentrectangleOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'ellipse'){
 				canvas._drawarea.currentellipsestroke = this._content.lineColorChoose.selectedColor;
 				canvas._drawarea.currentellipsestrokeDis = this._content.lineColorChoose.selectedColorDis;
 				canvas._drawarea.currentellipsestrokeFill = this._content.fillColorChoose.selectedColor;
 				canvas._drawarea.currentellipsestrokeFillDis = this._content.fillColorChoose.selectedColorDis;
 				canvas._drawarea.currentellipselineWidth = this._content.changeWidthSlider.initialNumber;
-				canvas._drawarea.currentellipseOpacity = this._content.changeOpacitySlider.initialNumber/100;
+				canvas._drawarea.currentellipseOpacity = this._content.changeOpacitySlider.initialNumber / 100;
 			} else if (canvas._drawarea.drawmodus == 'letter'){
 				canvas._drawarea.setAttribute('currentlayerletter',this._content.lineColorChoose.selectedColor);
 				canvas._drawarea.setAttribute('currentlayersize',this._content.changeWidthSlider.initialNumber);

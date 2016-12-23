@@ -98,6 +98,5 @@ public class LdapsPanel extends AdminPanel {
 		form = new LdapForm("form", listContainer, new LdapConfig());
 		form.showNewRecord();
 		add(form);
-		
 	}
 }
