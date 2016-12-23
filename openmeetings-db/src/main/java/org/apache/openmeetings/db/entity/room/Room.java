@@ -66,8 +66,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.type = :type"),
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c where c.ownerId = :ownerId "
-					+ "AND c.type = :type AND c.deleted = false"),	
-										
+					+ "AND c.type = :type AND c.deleted = false"),
 	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
 			+ "where c.deleted = false AND c.name LIKE :search "),
 	@NamedQuery(name = "getRoomByExternalId", query = "select r from Room as r "
