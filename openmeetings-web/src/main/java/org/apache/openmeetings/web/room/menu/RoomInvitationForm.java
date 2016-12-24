@@ -21,25 +21,20 @@ package org.apache.openmeetings.web.room.menu;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -53,8 +48,6 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -67,48 +60,7 @@ public class RoomInvitationForm extends InvitationForm {
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 	final Select2MultiChoice<Group> groups = new Select2MultiChoice<Group>("groups"
 			, new CollectionModel<Group>(new ArrayList<Group>())
-			, new ChoiceProvider<Group>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void query(String term, int page, Response<Group> response) {
-					if (WebSession.getRights().contains(User.Right.Admin)) {
-						List<Group> groups = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
-						for (Group g : groups) {
-							if (Strings.isEmpty(term) || g.getName().toLowerCase().contains(term.toLowerCase())) {
-								response.add(g);
-							}
-						}
-					} else {
-						User u = getBean(UserDao.class).get(getUserId());
-						for (GroupUser ou : u.getGroupUsers()) {
-							if (Strings.isEmpty(term) || ou.getGroup().getName().toLowerCase().contains(term.toLowerCase())) {
-								response.add(ou.getGroup());
-							}
-						}
-					}
-				}
-
-				@Override
-				public Collection<Group> toChoices(Collection<String> ids) {
-					Collection<Group> c = new ArrayList<>();
-					for (String id : ids) {
-						c.add(getBean(GroupDao.class).get(Long.valueOf(id)));
-					}
-					return c;
-				}
-
-				@Override
-				public String getDisplayValue(Group choice) {
-					return choice.getName();
-				}
-
-				@Override
-				public String getIdValue(Group choice) {
-					Long id = choice.getId();
-					return id == null ? null : "" + id;
-				}
-			});
+			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 
 	enum InviteeType {
