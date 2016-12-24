@@ -51,7 +51,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
 		super(id, Application.getString(364));
 		this.langPanel = langPanel;
-		add(form.add(feedback, iso));
+		add(form.add(feedback, iso.setOutputMarkupId(true)));
 		iso.add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -91,8 +91,9 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		super.onOpen(handler);
 		iso.setModelObject("");
+		handler.add(iso);
+		super.onOpen(handler);
 	}
 	
 	@Override
