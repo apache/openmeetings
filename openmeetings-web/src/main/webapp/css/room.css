@@ -206,9 +206,6 @@
 .right.camera.ui-icon.granted {
 	background-image: url(images/webcam_delete.png);
 }
-.global-mute.ui-icon {
-	background-image: url(images/sound.png);
-}
 .exclsv-audio.ui-icon {
 	background-image: url(images/microphone_exclusive.png);
 }
