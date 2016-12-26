@@ -31,6 +31,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.remote.ConferenceLibrary;
@@ -481,7 +482,7 @@ public class RoomPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			getMainPanel().getChat().toggle(handler, true);
 		}
-		handler.appendJavaScript("$(window).off('resize.openmeetings');");
+		handler.appendJavaScript("roomUnload();");
 		RoomMenuPanel.roomExit(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
@@ -494,6 +495,12 @@ public class RoomPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
+		WebSession ws = WebSession.get();
+		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
+			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
+					String.format("function roomReload(event, ui) {window.location.href='%s';}", r.getRedirectURL())
+					, String.format("room-reload-%s", UUID.randomUUID()))));
+		}
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
 			response.render(new PriorityHeaderItem(getNamedFunction("setActiveWbId", activeWb, explicit(PARAM_WB_ID))));

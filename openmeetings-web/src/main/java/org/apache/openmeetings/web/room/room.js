@@ -30,6 +30,27 @@ function alignBlocks() {
 	$(".room.wb.area").width(w);
 	$(".room.wb.area .wb").width(w);
 }
+function roomReload(event, ui) {
+	window.location.reload();
+}
+function roomClosed(jqEvent, msg) {
+	roomUnload();
+	$(".room.container").remove();
+	var dlg = $('#disconnected-dlg');
+	dlg.dialog({
+		modal: true
+		, close: roomReload
+		, buttons: [
+			{
+				text: dlg.data('reload')
+				, icons: {primary: "ui-icon-refresh"}
+				, click: function() {
+					$(this).dialog("close");
+				}
+			}
+		]
+	});
+}
 function roomLoad() {
 	$(".room.sidebar.left").ready(function() {
 		alignBlocks();
@@ -45,6 +66,11 @@ function roomLoad() {
 			alignBlocks();
 		}
 	});
+	Wicket.Event.subscribe("/websocket/closed", roomClosed);
+}
+function roomUnload() {
+	$(window).off('resize.openmeetings');
+	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
 }
 function startPrivateChat(el) {
 	addChatTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
