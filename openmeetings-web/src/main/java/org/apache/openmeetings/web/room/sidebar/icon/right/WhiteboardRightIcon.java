@@ -29,7 +29,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 
 	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Right.whiteBoard, room);
-		mainCssClass = "right wb ";
+		mainCssClass = "right wb bumper ";
 	}
 
 	@Override

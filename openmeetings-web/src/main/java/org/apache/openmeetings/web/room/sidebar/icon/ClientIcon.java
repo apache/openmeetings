@@ -76,7 +76,6 @@ public abstract class ClientIcon extends WebMarkupContainer {
 		internalUpdate();
 		add(AttributeAppender.replace("title", getTitle()));
 		add(AttributeAppender.replace("class", cls.append(cssClass)));
-		
 		if (handler != null) {
 			handler.add(this);
 		}

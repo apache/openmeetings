@@ -28,7 +28,7 @@ public class MicActivityIcon extends RoomActivityIcon {
 
 	public MicActivityIcon(String id, Client client, RoomPanel room) {
 		super(id, client, Activity.broadcastA, room);
-		mainCssClass = "activity mic ";
+		mainCssClass = "activity mic bumper ";
 	}
 
 	@Override
