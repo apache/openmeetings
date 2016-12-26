@@ -231,6 +231,10 @@
 .activity.mic.enabled.ui-icon {
 	background-image: url(images/microphone_disable.png);
 }
+.room.sidebar.left .user.list .user .user.actions .ui-icon.bumper
+	, .room.sidebar.left .user.header .ui-icon.bumper {
+	padding-right: 5px;
+}
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }
