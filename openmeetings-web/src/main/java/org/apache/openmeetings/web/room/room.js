@@ -60,31 +60,57 @@ function setHeight() {
 	var h = $(window).height() - $('#menu').height();
 	$(".room.sidebar.left").height(h);
 	var p = $(".room.sidebar.left .tabs");
-	p.height(h - 5); //FIXME hacks
-	$(".user.list", p).height(h - $("ul", p).height() - 15); //FIXME hacks
+	p.height(h - 5);
+	$(".user.list", p).height(h - $("ul", p).height() - $(".user.header", p).height() - 10);
 	$(".room.wb.area").height(h);
 	$(".room.wb.area .wb").height(h);
 }
-
-$(document).ready(function() {
-	$(window).on('resize.openmeetings', function() {
-		roomWidth = $(window).width();
+function alignBlocks() {
+	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
+	$(".room.wb.area").width(w);
+	$(".room.wb.area .wb").width(w);
+}
+function roomReload(event, ui) {
+	window.location.reload();
+}
+function roomClosed(jqEvent, msg) {
+	roomUnload();
+	$(".room.container").remove();
+	var dlg = $('#disconnected-dlg');
+	dlg.dialog({
+		modal: true
+		, close: roomReload
+		, buttons: [
+			{
+				text: dlg.data('reload')
+				, icons: {primary: "ui-icon-refresh"}
+				, click: function() {
+					$(this).dialog("close");
+				}
+			}
+		]
+	});
+}
+function roomLoad() {
+	$(".room.sidebar.left").ready(function() {
+		alignBlocks();
 		setHeight();
 	});
-});
-
-var roomWidth = $(window).width();
-function roomLoad() {
+	$(window).on('resize.openmeetings', function() {
+		alignBlocks();
+		setHeight();
+	});
 	$(".room.sidebar.left").resizable({
 		handles: "e"
 		, stop: function(event, ui) {
-			//TODO not really works, need to be investigated
-			var w = roomWidth - $(this).width() - 5;
-			$(".room.wb.area").width(w);
-			$(".room.wb.area .wb").width(w);
+			alignBlocks();
 		}
 	});
-	setHeight();
+	Wicket.Event.subscribe("/websocket/closed", roomClosed);
+}
+function roomUnload() {
+	$(window).off('resize.openmeetings');
+	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
 }
 function startPrivateChat(el) {
 	addChatTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());

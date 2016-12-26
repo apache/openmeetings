@@ -19,28 +19,26 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<script type="text/javascript">
-		Wicket.Event.subscribe("/websocket/closed", function(jqEvent, msg) {
-			//FIXME add Error dialog should be displayed 
-		});
-	</script>
-</wicket:head>
 <wicket:panel>
-	<div wicket:id="roomContainer" style="height: 100%">
-		<div class="room menu" wicket:id="menu"></div>
-		<div class="room sidebar left" wicket:id="sidebar"></div>
-		<div wicket:id="wb-area" class="room wb area">
-			<div class="wb-drop-area"></div>
-			<div class="wb" wicket:id="whiteboard"></div>
+	<div class="room container">
+		<div wicket:id="roomContainer" style="height: 100%">
+			<div class="room menu" wicket:id="menu"></div>
+			<div class="room sidebar left" wicket:id="sidebar"></div>
+			<div wicket:id="wb-area" class="room wb area">
+				<div class="wb-drop-area"></div>
+				<div class="wb" wicket:id="whiteboard"></div>
+			</div>
+			<div wicket:id="activities"></div>
 		</div>
-		<div wicket:id="activities"></div>
+		<div wicket:id="event-details"></div>
+		<div wicket:id="access-denied"></div>
+		<div wicket:id="room-closed"></div>
+		<div wicket:id="wait-for-recording"></div>
+		<div wicket:id="nickname"></div>
+		<div wicket:id="client-kicked"></div>
 	</div>
-	<div wicket:id="event-details"></div>
-	<div wicket:id="access-denied"></div>
-	<div wicket:id="room-closed"></div>
-	<div wicket:id="wait-for-recording"></div>
-	<div wicket:id="nickname"></div>
-	<div wicket:id="client-kicked"></div>
+	<div id="disconnected-dlg" wicket:message="title:204, data-reload:753" style="display:none">
+		<wicket:message key="556"/>
+	</div>
 </wicket:panel>
 </html>
