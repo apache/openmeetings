@@ -386,7 +386,7 @@ public class RoomPanel extends BasePanel {
 							String uid = ((TextRoomMessage)m).getText();
 							if (getClient().getUid().equals(uid)) {
 								handler.add(room.setVisible(false));
-								//FIXME TODO chat still available for the client being kicked
+								getMainPanel().getChat().toggle(handler, false);
 								clientKicked.open(handler);
 							}
 						}
@@ -466,14 +466,24 @@ public class RoomPanel extends BasePanel {
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		getBasePage().getHeader().setVisible(false);
 		getMainPanel().getTopControls().setVisible(false);
-		if (r.isHidden(RoomElement.Chat)) {
+		if (r.isHidden(RoomElement.Chat) || !isVisible()) {
 			getMainPanel().getChat().toggle(handler, false);
 		}
 		if (handler != null) {
 			handler.add(getBasePage().getHeader(), getMainPanel().getTopControls());
-			handler.appendJavaScript("roomLoad();");
+			if (isVisible()) {
+				handler.appendJavaScript("roomLoad();");
+			}
 		}
 		return this;
+	}
+
+	public void show(IPartialPageRequestHandler handler) {
+		if (!r.isHidden(RoomElement.Chat)) {
+			getMainPanel().getChat().toggle(handler, true);
+		}
+		handler.add(this.setVisible(true));
+		handler.appendJavaScript("roomLoad();");
 	}
 
 	@Override
@@ -482,7 +492,7 @@ public class RoomPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			getMainPanel().getChat().toggle(handler, true);
 		}
-		handler.appendJavaScript("roomUnload();");
+		handler.appendJavaScript("if (typeof roomUnload == 'function') { roomUnload(); }");
 		RoomMenuPanel.roomExit(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
@@ -490,7 +500,7 @@ public class RoomPanel extends BasePanel {
 	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(RoomPanel.class, "room.js");
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

@@ -217,7 +217,7 @@ public class ChatPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
-		handler.appendJavaScript(String.format("removeChatTab('%1$s%2$d');", ID_ROOM_PREFIX, r.getId()));
+		handler.appendJavaScript(String.format("if (typeof removeChatTab == 'function') { removeChatTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
 		if (!showDashboardChat) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(function() {");
@@ -231,7 +231,9 @@ public class ChatPanel extends BasePanel {
 		setVisible(visible);
 		if (handler != null) {
 			handler.add(this);
-			handler.appendJavaScript("reinit();");
+			if (visible) {
+				handler.appendJavaScript("reinit();");
+			}
 		}
 	}
 

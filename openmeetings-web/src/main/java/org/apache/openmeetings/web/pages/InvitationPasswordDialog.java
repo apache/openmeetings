@@ -27,6 +27,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -63,6 +64,22 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 			}
 		});
 		add(form.add(password, feedback.setOutputMarkupId(true)));
+		AjaxButton ab = new AjaxButton("submit", form) { //FAKE button so "submit-on-enter" works as expected
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				InvitationPasswordDialog.this.onSubmit(target);
+				InvitationPasswordDialog.this.close(target, null);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				InvitationPasswordDialog.this.onError(target);
+			}
+		};
+		form.add(ab);
+		form.setDefaultButton(ab);
 	}
 
 	@Override
@@ -73,6 +90,11 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 		behavior.setOption("closeOnEscape", false);
 		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
+	}
+
+	@Override
+	public boolean isDefaultCloseEventEnabled() {
+		return false;
 	}
 
 	@Override
@@ -104,5 +126,4 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		comp.update(target);
 	}
-
 }
