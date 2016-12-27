@@ -64,6 +64,8 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private final VideoPlayer vp = new VideoPlayer("player", null);
 	private String errorKey = "invalid.hash";
 	private boolean error = true;
+	private MainPanel mp = null;
+	private RoomPanel rp = null;
 
 	public HashPage(PageParameters p) {
 		StringValue secure = p.get(HASH);
@@ -95,6 +97,10 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				Room r = i.getRoom();
 				if (r != null) {
 					createRoom(r.getId());
+					if (i.isPasswordProtected() && rp != null) {
+						mp.getChat().setVisible(false);
+						rp.setOutputMarkupPlaceholderTag(true).setVisible(false);
+					}
 				}
 			}
 		} else if (!secure.isEmpty()) {
@@ -117,7 +123,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			error = false;
 		}
 		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
-				vp.setOutputMarkupPlaceholderTag(true), new InvitationPasswordDialog("i-pass", this)));
+				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
 	}
 
 	private void createRoom(Long roomId) {
@@ -126,7 +132,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		// need to re-fetch Room object to initialize all collections
 		Room room = getBean(RoomDao.class).get(roomId);
 		if (room != null) {
-			replace(new MainPanel(PANEL_MAIN, new RoomPanel(CHILD_ID, room)));
+			rp = new RoomPanel(CHILD_ID, room);
+			mp = new MainPanel(PANEL_MAIN, rp);
+			replace(mp);
 		}
 	}
 
@@ -158,8 +166,12 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	@Override
 	public void update(AjaxRequestTarget target) {
 		Invitation i = WebSession.get().getInvitation();
-		target.add(vi.update(target, i.getRecording()).setVisible(true)
-				, vp.update(target, i.getRecording()).setVisible(true));
+		if (i.getRoom() != null && rp != null) {
+			rp.show(target);
+		} else if (i.getRecording() != null) {
+			target.add(vi.update(target, i.getRecording()).setVisible(true)
+					, vp.update(target, i.getRecording()).setVisible(true));
+		}
 	}
 
 	@Override
