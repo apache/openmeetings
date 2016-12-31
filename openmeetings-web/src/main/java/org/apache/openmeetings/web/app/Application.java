@@ -107,7 +107,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		STRINGS_WITH_APP.addAll(Arrays.asList("499", "500", "506", "511", "512", "513", "517", "532", "622", "804"
 				, "909", "952", "978", "981", "984", "989", "990", "999", "1151", "1155", "1157", "1158", "1194"));
 	}
-	
+	public static final String HASH_MAPPING = "/hash";
+
 	@Override
 	protected void init() {
 		wicketApplicationName = super.getName();
@@ -139,13 +140,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
-		//getRootRequestMapperAsCompound().add(new NoVersionMapper("/hash", HashPage.class));
+		//getRootRequestMapperAsCompound().add(new NoVersionMapper(HASH_MAPPING, HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("/recording/${hash}", HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
-		mountPage("/hash", HashPage.class);
+		mountPage(HASH_MAPPING, HashPage.class);
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
 		mountResource("/profile/${id}", new ProfileImageResourceReference());

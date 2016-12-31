@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.HASH_MAPPING;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
@@ -46,8 +47,16 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,6 +69,21 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
 	private final Long roomId;
+	private final AjaxClientInfoBehavior acib = new AjaxClientInfoBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void renderHead(Component component, IHeaderResponse response) {
+			super.renderHead(component, response);
+			response.render(JavaScriptHeaderItem.forScript("Wicket.BrowserInfo.collectExtraInfo = function(info) { var l = window.location; info.codebase = l.origin + l.pathname; };", "extended-client-info"));
+		}
+
+		@Override
+		protected WebClientInfo newWebClientInfo(RequestCycle requestCycle) {
+			return new WebClientInfo(requestCycle, extProps);
+		}
+	};
+	private final ExtendedClientProperties extProps = new ExtendedClientProperties();
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -82,7 +106,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	@Override
 	protected void onBind() {
 		super.onBind();
-		getComponent().add(download);
+		getComponent().add(download, acib);
 	}
 
 	@Override
@@ -92,7 +116,6 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
-			String baseUrl = cfgDao.getBaseUrl();
 			Room room = getBean(RoomDao.class).get(roomId);
 			String publicSid = getParam(getComponent(), PARAM_PUBLIC_SID).toString();
 			SessionManager sessionManager = getBean(SessionManager.class);
@@ -108,7 +131,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
 			}
 			Protocol protocol = Protocol.valueOf(url.getScheme());
-			app = addKeystore(rc, app, protocol).replace("$codebase", baseUrl + "screenshare")
+			app = addKeystore(rc, app, protocol).replace("$codebase", extProps.getCodebase())
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
@@ -192,5 +215,28 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 		return app.replace("$native", "" + rc.isNativeSsl())
 				.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
 				.replace("$password", CDATA_BEGIN + password + CDATA_END);
+	}
+
+	private static class ExtendedClientProperties extends ClientProperties {
+		private static final long serialVersionUID = 1L;
+		private String codebase;
+
+		public String getCodebase() {
+			return codebase;
+		}
+
+		@Override
+		public void read(IRequestParameters parameters) {
+			super.read(parameters);
+			String _url = parameters.getParameterValue("codebase").toString("N/A");
+			StringBuilder sb = new StringBuilder(_url);
+			if (_url.endsWith(HASH_MAPPING)) {
+				sb.setLength(_url.length() - HASH_MAPPING.length());
+			}
+			if (sb.charAt(sb.length() - 1) != '/') {
+				sb.append('/');
+			}
+			codebase = sb.append("screenshare").toString();
+		}
 	}
 }
