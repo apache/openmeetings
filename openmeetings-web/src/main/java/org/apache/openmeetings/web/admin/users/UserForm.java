@@ -107,7 +107,7 @@ public class UserForm extends AdminBaseForm<User> {
 		super.onModelChanged();
 		generalForm.updateModelObject(getModelObject(), true);
 	}
-	
+
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
