@@ -262,38 +262,17 @@ projects licensed under the Apache License 2.0:
 ======================================================================================================================
 
 red5-*.jar
-commons-daemon-1.0.15.jar
+commons-daemon-*.jar
 install-service.bat
 red5.bat
 red5.sh
-red5-highperf.sh
-red5-highperf.bat
 red5.service
 red5-debug.sh
 red5-debug.bat
 red5-shutdown.sh
 red5-shutdown.bat
 uninstall-service.bat
-conf/access.properties
-conf/catalina.policy
-conf/context.xml
-conf/ehcache.xml
-conf/jee-container.xml
-conf/keystore.jmx
-conf/logback.xml
-conf/no-jee-container.xml
-conf/password.properties
-conf/quartz.properties
-conf/realm.properties
-conf/red5-common.xml
-conf/red5-core.xml
-conf/red5.globals
-conf/red5.policy
-conf/red5.properties
-conf/red5.xml
-conf/tomcat-users.xml
-conf/truststore.jmx
-conf/web.xml
+conf/*
 webapps/red5-default.xml
 webapps/root/biglogo.png
 webapps/root/crossdomain.xml
@@ -307,13 +286,12 @@ webapps/root/WEB-INF/red5-web.properties
 webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
-webapps/openmeetings/WEB-INF/lib/api-all-1.0.0-RC1.jar
+webapps/openmeetings/WEB-INF/lib/api-all-*.jar
 webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
 webapps/openmeetings/WEB-INF/lib/bndlib-2.3.0.jar
 webapps/openmeetings/WEB-INF/lib/commons-*.jar
 webapps/openmeetings/WEB-INF/lib/cxf-*.jar
-webapps/openmeetings/WEB-INF/lib/derby-10.12.1.1.jar
-webapps/openmeetings/WEB-INF/lib/derbyclient-10.12.1.1.jar
+webapps/openmeetings/WEB-INF/lib/derby*.jar
 webapps/openmeetings/WEB-INF/lib/dom4j-1.6.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
@@ -324,25 +302,29 @@ webapps/openmeetings/WEB-INF/lib/httpclient-4.5.2.jar
 webapps/openmeetings/WEB-INF/lib/httpcore-4.4.4.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
 webapps/openmeetings/WEB-INF/lib/joda-time-2.9.4.jar
-webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.1.jar
-webapps/openmeetings/WEB-INF/lib/jqplot-7.4.0.jar
+webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
+webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
+webapps/openmeetings/WEB-INF/lib/jqplot-7.6.0.jar
+webapps/openmeetings/WEB-INF/lib/json-1.3.jar
+webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
+webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
 webapps/openmeetings/WEB-INF/lib/neethi-3.0.3.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-2.4.1.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
 webapps/openmeetings/WEB-INF/lib/org.osgi.core-4.3.1.jar
+webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
 webapps/openmeetings/WEB-INF/lib/smslib-3.5.4.jar
 webapps/openmeetings/WEB-INF/lib/stax-1.2.0.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-3.1.4.jar
-webapps/openmeetings/WEB-INF/lib/wicket-*.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-*.jar
+webapps/openmeetings/WEB-INF/lib/unoil-4.1.2.jar
+webapps/openmeetings/WEB-INF/lib/wicket*.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-4.4.1.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
 webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
-webapps/openmeetings/WEB-INF/lib/xercesImpl-2.11.0.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.1.jar
 
@@ -352,30 +334,28 @@ lib/apache-mime4j-core-0.7.2.jar
 lib/apache-mime4j-dom-0.7.2.jar
 lib/boilerpipe-1.1.0.jar
 lib/commons-*.jar
+lib/cors-filter-2.5.jar
 lib/ehcache-core-2.6.11.jar
 lib/geronimo-jpa_2.0_spec-1.1.jar
 lib/gson-2.2.4.jar
 lib/httpclient-4.5.2.jar
 lib/httpcore-4.4.4.jar
 lib/isoparser-1.1.17.jar
-lib/jackson-core-2.7.1.jar
+lib/jackson-core-2.8.1.jar
+lib/java-property-utils-1.9.1.jar
 lib/jempbox-1.8.12.jar
-lib/metadata-extractor-2.8.1.jar
+lib/metadata-extractor-2.9.1.jar
 lib/mina-*.jar
-lib/ognl-3.1.2.jar
+lib/ognl-3.1.11.jar
 lib/pdfbox-*.jar
-lib/quartz-2.2.2.jar
+lib/quartz-2.2.3.jar
 lib/red5-*.jar
 lib/rome-1.5.1.jar
 lib/rome-utils-1.5.1.jar
 lib/spring-*.jar
 lib/tagsoup-1.2.1.jar
 lib/tika-*.jar
-lib/xercesImpl-2.11.0.jar
-lib/xml-apis-1.4.01.jar
 
-plugins/java-property-utils-*.jar
-plugins/cors-filter-*.jar
 plugins/tomcat-*.jar
 plugins/tomcatplugin-*.jar
 plugins/websocket-*.jar
@@ -518,10 +498,10 @@ The GlassFish code released under the CDDL shall be governed by the laws of the 
 
 For SLF4J:
 
-lib/jcl-over-slf4j-1.7.21.jar
-lib/jul-to-slf4j-1.7.21.jar
-lib/log4j-over-slf4j-1.7.21.jar
-lib/slf4j-api-1.7.21.jar
+lib/jcl-over-slf4j-1.7.22.jar
+lib/jul-to-slf4j-1.7.22.jar
+lib/log4j-over-slf4j-1.7.22.jar
+lib/slf4j-api-1.7.22.jar
 
 Copyright (c) 2004-2008 QOS.ch
  All rights reserved.
@@ -1329,6 +1309,7 @@ For JDOM
 The following components are BSD Licensed 
 
 lib/xmpcore-5.1.2.jar
+lib/jmatio-1.2.jar
 
 ======================================================================================================================
 
@@ -1377,7 +1358,7 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 
-postgresql-9.4.1209.jre7.jar
+postgresql-9.4.1212.jre7.jar
 	Containing Project URL: http://jdbc.postgresql.org
 	
 	The PostgreSQL JDBC driver is distributed under the BSD license, same as the server. The simplest explanation of the licensing terms is that you can do whatever you want with the product and source code as long as you don't claim you wrote it or sue us. You should give it a read though, it's only half a page.
@@ -1447,7 +1428,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-2.0-beta1.jar
+webapps/openmeetings/WEB-INF/lib/ical4j-2.0.0.jar
  
 ======================================================================================================================
 
@@ -1487,10 +1468,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 For the components:
 
-lib/c3p0-0.9.1.1.jar
 lib/logback-classic-1.1.7.jar
 lib/logback-core-1.1.7.jar
-plugins/ecj-4.5.jar
+plugins/ecj-4.5.1.jar
 
 Eclipse Public License - v 1.0
 
@@ -1645,7 +1625,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ======================================================================================================================
 
-For ThreeTen library: threetenbp-1.3.2.jar
+For ThreeTen library: threetenbp-1.3.3.jar
 
  * Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos
  *
@@ -1676,29 +1656,6 @@ For ThreeTen library: threetenbp-1.3.2.jar
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-======================================================================================================================
-
-For Json library: json-20090211.jar
-
-Copyright (c) 2002 JSON.org
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- The Software shall be used for Good, not Evil.
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
 
 
 ======================================================================================================================
@@ -2226,7 +2183,7 @@ For lib/sysout-over-slf4j-1.0.2.jar
  
  For
  lib/juniversalchardet-1.0.3.jar
- lib/javassist-3.11.0.GA.jar
+ lib/javassist-3.20.0-GA.jar
  
                            MOZILLA PUBLIC LICENSE
                                 Version 1.1
