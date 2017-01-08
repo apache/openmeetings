@@ -3,6 +3,66 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 3.1.4
+================================================================================================================
+** Bug
+    * [OPENMEETINGS-827] - Video play/stop event acceptable one time in all tab
+    * [OPENMEETINGS-1451] - SOAP/REST API documentation need to be improved
+    * [OPENMEETINGS-1475] - Select area is not unattached from cursor
+    * [OPENMEETINGS-1476] - Deleted records are shown under trash
+    * [OPENMEETINGS-1478] - Admin->Connections displays outdated connections
+    * [OPENMEETINGS-1479] - Dashboard Chat not disabled when dashboard.show.chat value is 0
+    * [OPENMEETINGS-1482] - Om performance issues
+    * [OPENMEETINGS-1483] - Error while installing OM on MSSQL
+    * [OPENMEETINGS-1484] - Super moderator is not moderator
+    * [OPENMEETINGS-1485] - Scroll is broken in restricted room
+    * [OPENMEETINGS-1486] - Registration dialog is broken
+    * [OPENMEETINGS-1487] - Clear text passwords shouldn't be sent via email
+    * [OPENMEETINGS-1489] - Calendar in broken in French
+    * [OPENMEETINGS-1492] - OM 3.1.3 duplication records in database
+    * [OPENMEETINGS-1494] - Calendar & Events
+    * [OPENMEETINGS-1495] - Labels in admin forms are overlapping with inputs
+    * [OPENMEETINGS-1496] - Dates from backup files are being parsed with errors
+    * [OPENMEETINGS-1499] - Backup import is crached under OS Windows
+    * [OPENMEETINGS-1500] - Image drop is broken, in case "don't ask" is selected
+    * [OPENMEETINGS-1502] - NullPointerException while checking existing LDAP user
+    * [OPENMEETINGS-1503] - WML file (saved WB) cannot be loaded - file not found
+    * [OPENMEETINGS-1504] - User with no password is being created in Web installer
+    * [OPENMEETINGS-1508] - Italian translation
+    * [OPENMEETINGS-1510] - WB drawing should be more smooth
+    * [OPENMEETINGS-1511] - LDAP user profile picture
+    * [OPENMEETINGS-1513] - The Installer Converters page should be improved
+    * [OPENMEETINGS-1514] - No show whiteboard after send invitation-meeting from Calendar
+    * [OPENMEETINGS-1517] - Close private chat is broken
+    * [OPENMEETINGS-1518] - Recorgings should not be converted to ogg/avi format
+    * [OPENMEETINGS-1521] - 'null' is shown instead of usergroup when user update and save User details
+    * [OPENMEETINGS-1523] - Inplace folder rename is not working
+    * [OPENMEETINGS-1524] - Poll description is missed in the Poll results
+    * [OPENMEETINGS-1525] - Openmeetings 3.1.3 - Problem with script red5-highperf.sh 
+
+** Improvement
+    * [OPENMEETINGS-1366] - Recommendations
+    * [OPENMEETINGS-1462] - Implementation for a delete button for the chat content on the principal chat window 
+    * [OPENMEETINGS-1467] - 3.1.4 Library versions should be updated
+    * [OPENMEETINGS-1480] - Ukrainian translation need to be improved
+    * [OPENMEETINGS-1488] - Additional functionality for groups
+    * [OPENMEETINGS-1490] - Jodconverter should be added to openmeetings project
+    * [OPENMEETINGS-1507] - Remove "application.base.url" configuration key
+    * [OPENMEETINGS-1512] - Wrong LDAP value can cause error on My Profile Page
+    * [OPENMEETINGS-1526] - Multiselect using Shift/Ctrl need to be added to file tree
+
+** New Feature
+    * [OPENMEETINGS-1427] - Re-name Witheboards tabs
+    * [OPENMEETINGS-1477] - Default chat font is too small
+    * [OPENMEETINGS-1501] - Openmeetings - deleting emails
+
+** Task
+    * [OPENMEETINGS-1515] - Fluido skin for the site should be replaced with reflow
+
+** Test
+    * [OPENMEETINGS-1516] - Users are kicked off the rooms and participant list is incomplete
+
+
 Release Notes - Openmeetings - Version 3.1.3
 ================================================================================================================
 ** Bug
