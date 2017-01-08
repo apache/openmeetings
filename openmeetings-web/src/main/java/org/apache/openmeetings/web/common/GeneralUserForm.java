@@ -64,6 +64,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import com.googlecode.wicket.kendo.ui.KendoCultureHeaderItem;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
 
 public class GeneralUserForm extends Form<User> {
@@ -215,6 +216,6 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(KendoCultureHeaderItem.get());
+		response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
 	}
 }

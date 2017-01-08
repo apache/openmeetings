@@ -30,7 +30,7 @@
 	<name>Openmeetings DB</name>
 	<description>TODO</description>
 	<properties>
-		<openjpa.version>2.4.1</openjpa.version>
+		<openjpa.version>2.4.2</openjpa.version>
 		<asterisk-java.version>1.0.0-final</asterisk-java.version>
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
