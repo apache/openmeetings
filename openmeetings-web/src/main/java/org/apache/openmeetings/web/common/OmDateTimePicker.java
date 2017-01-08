@@ -28,6 +28,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.kendo.ui.KendoCultureHeaderItem;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
@@ -52,6 +53,6 @@ public class OmDateTimePicker extends DateTimePicker {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(KendoCultureHeaderItem.get());
+		response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
 	}
 }
