@@ -494,10 +494,10 @@
 			parent.cleanVideos();
 			parent.storeAVsettings();
 			parent.close();
-			//var vid = canvas.commonVideoViewContent.getVideoObjectByPublicSID(canvas.publicSID);
-			//if (!!vid) {
-				
-			//}
+			var vid = canvas.commonVideoViewContent.getVideoObjectByPublicSID(canvas.publicSID);
+			if (!!vid) {
+				vid.resync();
+			}
 		</handler>
 	</simpleLabelButton>
 </class>
