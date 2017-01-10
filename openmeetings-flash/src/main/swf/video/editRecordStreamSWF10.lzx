@@ -19,7 +19,7 @@
   
 -->
 <library>
-	
+
 <!-- #######################
 	Class editRecordStream
 	
@@ -46,9 +46,6 @@
 	</switch>
 
 	<attribute name="initY" value="40" type="number" />
-	<attribute name="chosenCam" value="null" />
-	<attribute name="chosenMic" value="null" />
-	<attribute name="chosenSetting" value="null" />
 
 	<!---
 		if true the user will see the dialog no matter if he has choosen "do not show again" or not
@@ -61,6 +58,7 @@
 	<attribute name="recordingsCounter" value="5" type="number" />
 	<attribute name="timerIsRunning" value="false" type="boolean" />
 	<attribute name="counterDelegate" value="null" />
+	<attribute name="executeAttachCamera" value="false" type="boolean" />
 	
 	<method name="startTimer">
 		this.timerIsRunning = true;
@@ -127,7 +125,6 @@
 		if (g==null) g = new Array();
 		g["cam"] = this.availableCams.getValue();
 		g["mic"] = this.availableMics.getValue();
-		g["avstored"] = this.availableSettings.getValue();
 		g["width"] = this.cam_default_width;
 		g["height"] = this.cam_default_height;
 		t.flush();
@@ -192,52 +189,7 @@
 
 	<animator name="_chooseDeviceAnimation" started="false" attribute="y" to="40" duration="750" />
 	
-	<labelText fontstyle="bold" labelid="758"
-			width="${ parent.width-2 }" height="30" multiline="true" y="20" />
-
-	<labelText labelid="447" fontsize="11" fontstyle="bold" x="10" y="80" width="$once{ parent.width-20 }" />
-
-	<resetCombobox fontsize="11" name="availableSettings" x="10" y="100" width="280" editable="false">
-		<handler name="onselect">
-		<![CDATA[
-			var camVisible = true;
-			var micVisible = true;
-			var textVisible = false;
-			switch (this.getValue()){
-				case "av":
-					break;
-				case "a":
-					camVisible = false;
-					break;
-				case "v":
-					micVisible = false;
-					break;
-				case "n":
-					camVisible = false;
-					micVisible = false;
-					textVisible = true;
-					break;
-				default:
-					if ($debug) Debug.warn("no valid device Setup chosen");
-					break;
-			}
-			this.parent.availableCamsLabel.setAttribute("visible", camVisible);
-			this.parent.availableCams.setAttribute("visible", camVisible);
-			this.parent._btnStartRecording.setAttribute("visible", camVisible || micVisible);
-			this.parent._video.setAttribute("visible", camVisible);
-			this.parent._play.setAttribute("visible", camVisible || micVisible);
-			this.parent._level_meter.setAttribute("visible", micVisible);
-			this.parent.availableMicsLabel.setAttribute("visible", micVisible);
-			this.parent.availableMics.setAttribute("visible", micVisible);
-			this.parent.infoTextNoAV.setAttribute("visible", textVisible);
-			this.parent.availibleResolutionsLabel.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
-			this.parent.availibleResolutionsWarning.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
-			this.parent.availibleResolutions.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
-		]]>
-		</handler>
-	</resetCombobox>
-	
-	<attribute name="executeAttachCamera" value="false" type="boolean" />
+	<labelText fontstyle="bold" labelid="758" width="${ parent.width-2 }" height="30" multiline="true" y="20" />
 
 	<method name="fillDeviceList" args="list,combo,prop">
 	<![CDATA[
@@ -246,6 +198,7 @@
 		
 		//Get all availible devices
 		var foundStoredDev = null;
+		combo.addItem(canvas.getLabelName(159), -1);
 		for (var eg = 0; eg < list.length; ++eg) {
 			combo.addItem(list[eg], eg);
 			var r = "" + eg;
@@ -257,13 +210,11 @@
 	]]>
 	</method>
 	
-	<method name="selectListItem" args="combo,selected,select">
+	<method name="selectListItem" args="combo, selected, select">
 		if (selected != null) {
 			combo.selectItem(selected);
-		} else {
-			if (select) {
-				combo.selectItemAt(0);
-			}
+		} else if (select) {
+			combo.selectItemAt(0);
 		}
 	</method>
 	
@@ -286,33 +237,6 @@
 		// settings
 		var addCams = !canvas.currentRoomObj.audioOnly && cameras.length > 0;
 		var addMics = mics.length > 0;
-		if (addCams && addMics) {
-			availableSettings.addItem(canvas.getLabelName(448), "av");
-		}
-		if (addMics) {
-			availableSettings.addItem(canvas.getLabelName(449), "a");
-		}
-		if (addCams) {
-			availableSettings.addItem(canvas.getLabelName(450), "v");
-		}
-		availableSettings.addItem(canvas.getLabelName(451), "n");
-		
-		var avstored = canvas.commonVideoViewContent.getAvSetting("avstored");
-		
-		if (availableSettings.getItem(avstored) != null) {
-			//get stored item
-			availableSettings.selectItem(avstored);
-		} else if (availableSettings.getItem(canvas.currentClient.avsettings) != null) {
-			availableSettings.selectItem(canvas.currentClient.avsettings);
-		} else {
-			availableSettings.selectItemAt(0);
-		}
-
-		//Initialize and set default resolutions combobox
-		//if ($debug) Debug.write("myConfigSet 1 ", canvas.myConfigSet);
-		//if ($debug) Debug.write("myConfigSet 2 ", canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution'));
-		//if ($debug) Debug.write("myConfigSet 3 ", canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/'));
-		//if ($debug) Debug.write("myConfigSet 4 ", canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/*'));
 	]]>
 	</method>
 	
@@ -331,11 +255,11 @@
 		_video.content._publisher.setAttribute("visible", true);
 		_video.content._viewer.setAttribute("visible", false);
 		var videoview = this._video.content._publisher._chatvideoinner._videostream;
+		//stop will not call clear as there is no NetStream
+		videoview._stop();
+		videoview.clear();
 		var _camera = canvas.commonVideoViewContent.getCam(availableCams.getValue(), videoview);
 		if (_camera != null) {
-			//stop will not call clear as there is no NetStream
-			videoview._stop();
-			videoview.clear();
 			videoview.attachCamera(_camera);
 		}
 	]]>
@@ -351,32 +275,63 @@
 		_video.content._viewer._chatvideoinner._videostream.clear();
 		if ($debug) Debug.write("Cleaned up videos and free resources");
 	</method>
-	
-	<labelText name="availableCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
-	<resetCombobox fontsize="11" name="availableCams" x="10" y="160" width="280" editable="false">
+
+	<method name="updateVisibility">
+	<![CDATA[
+		var camVisible = availableCams.getValue() > -1;
+		var micVisible = availableMics.getValue() > -1;
+		var textVisible = !camVisible && !micVisible;
+		this._btnStartRecording.setAttribute("visible", camVisible || micVisible);
+		this._video.setAttribute("visible", camVisible);
+		this._play.setAttribute("visible", camVisible || micVisible);
+		this._level_meter.setAttribute("visible", micVisible);
+		this.infoTextNoAV.setAttribute("visible", textVisible);
+		this.availibleResolutionsLabel.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
+		this.availibleResolutionsWarning.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
+		this.availibleResolutions.setAttribute("visible", ((canvas.isInterview) ? false : camVisible));
+	]]>
+	</method>
+
+	<labelText name="availableCamsLabel" labelid="52" fontsize="11" x="10" y="80" width="$once{ parent.width-20 }" />
+	<resetCombobox fontsize="11" name="availableCams" x="10" y="100" width="280" editable="false">
 		<handler name="onselect">
+			parent.updateVisibility();
 			parent.attachCamera();
 		</handler>
 	</resetCombobox>
 
-	<labelText name="availableMicsLabel" labelid="53" fontsize="11" x="10" y="180" width="$once{ parent.width-20 }" />
-	<resetCombobox fontsize="11" name="availableMics"  x="10" y="200" width="280" editable="false" />
+	<labelText name="availableMicsLabel" labelid="53" fontsize="11" x="10" y="120" width="$once{ parent.width-20 }" />
+	<resetCombobox fontsize="11" name="availableMics"  x="10" y="140" width="280" editable="false">
+		<handler name="onselect">
+			parent.updateVisibility();
+		</handler>
+	</resetCombobox>
 
 	<labelText name="infoTextNoAV" labelid="452" multiline="true" width="280"
-			fontsize="11" x="10" y="130" visibility="hidden" />
+			fontsize="11" x="10" y="164" visibility="hidden" />
 
 	<labelText name="availibleResolutionsLabel" labelid="1429" 
-			fontsize="11" x="10" y="224" width="$once{ parent.width-20 }" />
+			fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" />
 
-	<view name="availibleResolutionsWarning" x="272" y="224" 
+	<view name="availibleResolutionsWarning" x="272" y="164" 
 			resource="warning_icon_popup_devices_rsc" clickable="true">
 		<labelTooltip multiline="true" labelid="1430" />
 	</view>
 	
 	<resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
-			y="244" width="280" editable="false">
+			y="184" width="280" editable="false">
 		<!--- @keywords private -->
 		<attribute name="counter" value="0" />
+		<handler name="oninit">
+		<![CDATA[
+			var i = getItemAt(0);
+			if ($debug) Debug.write("oninit ", this.selected, this, i);
+			if (!this.selected && !!i) {
+				selectItemAt(0);
+				onselect.sendEvent(i);
+			}
+		]]>
+		</handler>
 		<handler name="onselect" args="item">
 		<![CDATA[
 			if (!canvas.isInterview) {
@@ -412,7 +367,7 @@
 			<attribute name="cam_height" value="240" type="number" />
 			<handler name="ondata">
 			<![CDATA[
-				// if ($debug) Debug.write("ondata ", this);
+				//if ($debug) Debug.write("ondata ", this);
 				var type = this.datapath.xpathQuery('@type');
 				this.cam_width = Number(this.datapath.xpathQuery('@width'));
 				this.cam_height = Number(this.datapath.xpathQuery('@height'));
@@ -421,25 +376,22 @@
 				
 				var width = canvas.commonVideoViewContent.getAvSetting("width");
 				var height = canvas.commonVideoViewContent.getAvSetting("height");
-				if (width != null && height != null) {
-					if (width == this.cam_width && height == this.cam_height) {
-						parent.selectItemAt(parent.counter);
-						parent.onselect.sendEvent(this);
-					}
-				} else {
-					if (isDefault) {
-						if ($debug) Debug.write("Found default one ",type);
-						parent.selectItemAt(parent.counter);
-						parent.onselect.sendEvent(this);
-					}
+				if (!!width && !!height && width == this.cam_width && height == this.cam_height) {
+					parent.selectItemAt(parent.counter);
+					parent.onselect.sendEvent(this);
+					parent.selected = this;
+				} else if (isDefault) {
+					if ($debug) Debug.write("Found default one ", type);
+					parent.selectItemAt(parent.counter);
+					parent.onselect.sendEvent(this);
 				}
-				parent.counter += 1;
+				parent.counter++;
 			]]>
 			</handler>
 		</textlistitem>
 	</resetCombobox>
 	
-	<simpleLabelButton name="_btnStartRecording" labelid="775" width="140" x="150" y="280" height="28">
+	<simpleLabelButton name="_btnStartRecording" labelid="775" width="140" x="150" y="220" height="28">
 		<handler name="onclick">
 			parent._level_meter.startLevel();
 			parent.doStartRecording();
@@ -510,11 +462,11 @@
 		</method>
 		
 		<method name="setNewLevel" args="no">
-			<![CDATA[
-				var newLevel = (238/100) * no;
-				this._over.setAttribute("width",238-newLevel);
-				this._over.setAttribute("x",1+(newLevel));
-			]]>
+		<![CDATA[
+			var newLevel = (238 / 100) * no;
+			this._over.setAttribute("width", 238 - newLevel);
+			this._over.setAttribute("x", 1 + newLevel);
+		]]>
 		</method>
 		
 		<view name="_bg" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
@@ -528,13 +480,7 @@
 	<labelText fontstyle="bold" labelid="765" x="39" y="${ parent.height-100 }"
 			width="${ parent.width-50 }" multiline="true" />
 
-	<method name="storeChosen">
-		chosenCam = availableCams.getValue();
-		chosenMic = availableMics.getValue();
-		chosenSetting = availableSettings.getValue();
-	</method>
-
-	<simpleLabelButton fontsize="11" labelid="918" x="${ parent.width-280 }" y="${ parent.height-50 }"
+	<simpleLabelButton fontsize="11" labelid="918" x="${ parent.width-220 }" y="${ parent.height-50 }"
 			height="28" width="100">
 		<handler name="onclick">
 			parent.cleanVideos();
@@ -542,13 +488,16 @@
 		</handler>
 	</simpleLabelButton>
 
-	<simpleLabelButton fontsize="11" labelid="144" width="160" x="${ parent.width-170 }" 
-			y="${ parent.height-50 }" height="28">
+	<simpleLabelButton fontsize="11" labelid="144" x="${ parent.width-110 }" y="${ parent.height-50 }"
+			height="28" width="100" >
 		<handler name="onclick">
 			parent.cleanVideos();
 			parent.storeAVsettings();
-			parent.storeChosen();
 			parent.close();
+			//var vid = canvas.commonVideoViewContent.getVideoObjectByPublicSID(canvas.publicSID);
+			//if (!!vid) {
+				
+			//}
 		</handler>
 	</simpleLabelButton>
 </class>

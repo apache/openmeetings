@@ -715,7 +715,7 @@
 	<![CDATA[
 		var t:SharedObject = SharedObject.getLocal('userdata');
 		var g = t.data;
-		if ($debug) Debug.write("loadAVsettings: ", g["cam"], g["mic"]);
+		//if ($debug) Debug.write("loadAVsettings: ", g["cam"], g["mic"]);
 
 		if(g["width"] > 0 && g["height"] > 0) {
 			return g;
