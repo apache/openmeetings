@@ -104,11 +104,5 @@
 			<artifactId>red5-client</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.thaiopensource</groupId>
-			<artifactId>trang</artifactId>
-			<version>20091111</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>
