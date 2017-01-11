@@ -809,6 +809,8 @@
 			case "av":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
 				myvideocontainer.setAttribute("visible", true);
+				myvideocontainer._toolbar._mute.setAttribute("visible", true);
+				myvideocontainer._toolbar._volume.setAttribute("visible", true);
 				if(!canvas.isInterview && myvideocontainer.minimized) {
 					myvideocontainer.reminimize();
 				}
@@ -816,6 +818,8 @@
 			case "a":
 				videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
 				myvideocontainer.setAttribute("visible", true);
+				myvideocontainer._toolbar._mute.setAttribute("visible", true);
+				myvideocontainer._toolbar._volume.setAttribute("visible", true);
 				if(!canvas.isInterview && !myvideocontainer.minimized) {
 					myvideocontainer.minimize();
 				}
@@ -823,6 +827,8 @@
 			case "v":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, null);
 				myvideocontainer.setAttribute("visible", true);
+				myvideocontainer._toolbar._mute.setAttribute("visible", false);
+				myvideocontainer._toolbar._volume.setAttribute("visible", false);
 				if(!canvas.isInterview && myvideocontainer.minimized) {
 					myvideocontainer.reminimize();
 				}

@@ -471,12 +471,19 @@
 			</view>
 		</view>
 
+		<method name="allowedExclusiveAudio">
+		<![CDATA[
+			return (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio)
+					&& this.clientVars.avsettings.indexOf('a') > -1;
+		]]>
+		</method>
+
 		<handler name="onmouseover">
 		<![CDATA[
 			if (this.isInterview || this.minimized) {
 				return;
 			}
-			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+			if (allowedExclusiveAudio()) {
 				this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseover();
 				this._giveExclusiveAudioView.setAttribute("visible", true);
 			}
@@ -488,18 +495,18 @@
 			if (this.isInterview || this.minimized) {
 				return;
 			}
-			this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
-			this._giveExclusiveAudioView.setAttribute("visible", false);
+			if (allowedExclusiveAudio()) {
+				this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
+				this._giveExclusiveAudioView.setAttribute("visible", false);
+			}
 		]]>
 		</handler>
 
 		<handler name="onclick">
 		<![CDATA[
-			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+			if (allowedExclusiveAudio()) {
 				this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
 				this.confirmExclusiveAudio();
-			} else {
-				new lz.labelerrorPopup(canvas,{errorlabelid:1478});
 			}
 		]]>
 		</handler>
