@@ -38,6 +38,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -50,6 +51,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -62,11 +64,13 @@ public class RoomSidebar extends Panel {
 	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
 	public static final String FUNC_TOGGLE_ACTIVITY = "toggleActivity";
 	public static final String FUNC_ACTION = "roomAction";
+	public static final String FUNC_SETTINGS = "avSettings";
 	public static final String PARAM_ACTION = "action";
 	public static final String PARAM_ACTIVITY = "activity";
 	public static final String PARAM_RIGHT = "right";
 	public static final String PARAM_UID = "uid";
 	public static final String PARAM_POD = "pod";
+	public static final String PARAM_SETTINGS = "s";
 	private final RoomPanel room;
 	private final TabbedPanel tabs;
 	private final ITab userTab;
@@ -91,12 +95,12 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString();
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
 				if (room.getClient().hasRight(Right.moderator)) {
-					Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString()); 
+					Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 					kickedClient = getOnlineClient(uid);
 					if (kickedClient == null) {
 						return;
@@ -121,11 +125,11 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString();
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString()); 
+				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString());
 				if (room.getClient().hasRight(Right.moderator)) {
 					Client client = getOnlineClient(uid);
 					if (client == null) {
@@ -158,11 +162,11 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString(); 
+				String uid = getRequest().getRequestParameters().getParameterValue(PARAM_UID).toString();
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString()); 
+				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				Client c = getOnlineClient(uid);
 				if (c == null) {
 					return;
@@ -176,6 +180,15 @@ public class RoomSidebar extends Panel {
 					}
 				}
 				if (activityAllowed(c, a, room.getRoom())) {
+					if (a == Activity.broadcastA && !c.isMicEnabled()) {
+						return;
+					}
+					if (a == Activity.broadcastV && !c.isCamEnabled()) {
+						return;
+					}
+					if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+						return;
+					}
 					Pod pod = c.getPod();
 					c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
 					if (pod != Pod.none && pod != c.getPod()) {
@@ -188,6 +201,23 @@ public class RoomSidebar extends Panel {
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
+			}
+		}
+	};
+	private final AbstractDefaultAjaxBehavior avSettings = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
+			if (!s.isEmpty()) {
+				JSONObject o = new JSONObject(s.toString());
+				room.getClient().setCam(o.getInt("cam"));
+				room.getClient().setMic(o.getInt("mic"));
+				boolean interview = Room.Type.interview == room.getRoom().getType();
+				room.getClient().setWidth(interview ? 320 : o.getInt("width"));
+				room.getClient().setHeight(interview ? 260 : o.getInt("height"));
+				room.broadcast(target, room.getClient());
 			}
 		}
 	};
@@ -204,12 +234,12 @@ public class RoomSidebar extends Panel {
 			public boolean isVisible() {
 				return true;
 			}
-			
+
 			@Override
 			public IModel<String> getTitle() {
 				return Model.of(getString("613"));
 			}
-			
+
 			@Override
 			public WebMarkupContainer getPanel(String containerId) {
 				return new UserFragment(containerId, "user-panel");
@@ -222,12 +252,12 @@ public class RoomSidebar extends Panel {
 			public boolean isVisible() {
 				return showFiles;
 			}
-			
+
 			@Override
 			public IModel<String> getTitle() {
 				return Model.of(getString("614"));
 			}
-			
+
 			@Override
 			public WebMarkupContainer getPanel(String containerId) {
 				return new FileFragment(containerId, "file-panel");
@@ -245,23 +275,24 @@ public class RoomSidebar extends Panel {
 				room.kickUser(target, kickedClient);
 			}
 		});
-		add(toggleRight, toggleActivity, roomAction);
+		add(toggleRight, toggleActivity, roomAction, avSettings);
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID))));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD))));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, roomAction, explicit(PARAM_ACTION), explicit(PARAM_UID))));
+		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_SETTINGS, avSettings, explicit(PARAM_SETTINGS))));
 	}
-	
+
 	private ListView<Client> updateUsers() {
 		//TODO do we need sort??
 		users.setList(getRoomClients(room.getRoom().getId()));
 		return users;
 	}
-	
+
 	public class UserFragment extends Fragment {
 		private static final long serialVersionUID = 1L;
 
@@ -271,7 +302,7 @@ public class RoomSidebar extends Panel {
 			add(updateUsers());
 		}
 	}
-	
+
 	public class FileFragment extends Fragment {
 		private static final long serialVersionUID = 1L;
 
@@ -300,7 +331,7 @@ public class RoomSidebar extends Panel {
 	public boolean isShowFiles() {
 		return showFiles;
 	}
-	
+
 	public void showUpload(IPartialPageRequestHandler handler) {
 		upload.open(handler);
 	}

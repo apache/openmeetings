@@ -72,6 +72,8 @@ public abstract class ClientIcon extends WebMarkupContainer {
 			//request/remove
 			cls.append(CLS_CLICKABLE);
 			add(AttributeAppender.replace("onclick", getScript()));
+		} else {
+			add(AttributeAppender.replace("onclick", ""));
 		}
 		internalUpdate();
 		add(AttributeAppender.replace("title", getTitle()));

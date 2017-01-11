@@ -37,7 +37,7 @@ public class MicActivityIcon extends RoomActivityIcon {
 	}
 
 	@Override
-	protected boolean isClickable() {
-		return true;
+	public boolean isEnabled() {
+		return client.isMicEnabled();
 	}
 }

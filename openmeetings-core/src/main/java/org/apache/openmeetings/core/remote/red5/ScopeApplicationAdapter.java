@@ -990,39 +990,26 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	/**
-	 * this must be set _after_ the Video/Audio-Settings have been chosen (see
-	 * editrecordstream.lzx) but _before_ anything else happens, it cannot be
-	 * applied _after_ the stream has started! 
-	 * avsettings can be: 
-	 * 		av - video and audio
-	 * 		a - audio only
-	 * 		v - video only
-	 * 		n - no a/v only static image
-	 * furthermore
+	 * This method is used to set/update broadCastID of current client
 	 * 
-	 * @param avsettings
-	 * @param vWidth
-	 * @param vHeight
+	 * @param updateBroadcastId boolean flag 
 	 * 
 	 * @return BroadcastId in case of no errors, -1 otherwise
 	 */
-	public long setUserAVSettings(String avsettings, Integer vWidth, Integer vHeight, boolean updateBroadcastId) {
+	public long setUserAVSettings(boolean updateBroadcastId) {
 		try {
 			String streamid = Red5.getConnectionLocal().getClient().getId();
-			log.debug("-----------  setUserAVSettings {} {}", streamid, avsettings);
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			if (currentClient == null) {
+			log.debug("-----------  setUserAVSettings {}", streamid);
+			Client rcl = sessionManager.getClientByStreamId(streamid, null);
+			if (rcl == null) {
 				log.warn("Failed to find appropriate clients");
 				return -1;
 			}
-			currentClient.setAvsettings(avsettings);
-			currentClient.setVWidth(vWidth);
-			currentClient.setVHeight(vHeight);
 			if (updateBroadcastId) {
-				currentClient.setBroadCastID(nextBroadCastId());
+				rcl.setBroadCastID(nextBroadCastId());
+				sessionManager.updateAVClientByStreamId(streamid, rcl, null);
 			}
-			sessionManager.updateAVClientByStreamId(streamid, currentClient, null);
-			return currentClient.getBroadCastID();
+			return rcl.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[setUserAVSettings]", err);
 		}

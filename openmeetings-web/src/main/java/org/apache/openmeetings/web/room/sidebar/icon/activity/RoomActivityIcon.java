@@ -31,6 +31,7 @@ import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 public abstract class RoomActivityIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 	private static final String CLS_ENABLED = "enabled ";
+	private static final String CLS_DISABLED = "disabled";
 	protected final Activity activity;
 	protected final Pod pod = Pod.none;
 
@@ -50,9 +51,16 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	}
 
 	@Override
+	protected boolean isClickable() {
+		return isEnabled();
+	}
+
+	@Override
 	protected void internalUpdate() {
 		setVisible(visible());
-		if (client.hasActivity(activity)) {
+		if (!isEnabled()) {
+			cssClass.append(CLS_DISABLED);
+		} else if (client.hasActivity(activity)) {
 			cssClass.append(CLS_ENABLED);
 		}
 	}
