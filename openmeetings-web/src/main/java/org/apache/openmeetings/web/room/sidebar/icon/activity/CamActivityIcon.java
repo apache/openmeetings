@@ -37,7 +37,7 @@ public class CamActivityIcon extends RoomActivityIcon {
 	}
 
 	@Override
-	protected boolean isClickable() {
-		return true;
+	public boolean isEnabled() {
+		return client.isCamEnabled();
 	}
 }

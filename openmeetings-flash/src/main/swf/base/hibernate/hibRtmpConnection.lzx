@@ -561,7 +561,7 @@
 			canvas.commonVideoViewContent.closeScreenSharing(value);
 		} else {
 			//free the VideoContainer
-			canvas.commonVideoViewContent.closeStreamclient(value.publicSID);
+			canvas.commonVideoViewContent.removeVideoByUser(value.publicSID);
 		}
 	</method>
 
@@ -854,6 +854,7 @@
 			} else {
 				canvas.commonVideoViewContent.removeVideoByUser(canvas.publicSID);
 			}
+		} else {
 		}
 	]]>
 	</method>

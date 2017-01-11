@@ -61,11 +61,15 @@ public class Client implements IDataProviderEntity {
 	private final Set<Activity> activities = new HashSet<>();
 	private final Date connectedSince;
 	private Pod pod;
+	private int cam = -1;
+	private int mic = -1;
+	private int width = 0;
+	private int height = 0;
 
 	public Client(String sessionId, Long userId) {
 		this(sessionId, 0, userId);
 	}
-	
+
 	public Client(String sessionId, int pageId, Long userId) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
@@ -194,6 +198,46 @@ public class Client implements IDataProviderEntity {
 		} else {
 			this.pod = Pod.none;
 		}
+	}
+
+	public boolean isCamEnabled() {
+		return cam > -1;
+	}
+
+	public int getCam() {
+		return cam;
+	}
+
+	public void setCam(int cam) {
+		this.cam = cam;
+	}
+
+	public boolean isMicEnabled() {
+		return mic > -1;
+	}
+
+	public int getMic() {
+		return mic;
+	}
+
+	public void setMic(int mic) {
+		this.mic = mic;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	@Override

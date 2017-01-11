@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <library>
 
@@ -40,12 +40,12 @@
 	<attribute name="videoHeight" type="number" value="132"/>
 	<attribute name="SIDEPANEL_WIDTH" type="number" value="270" />
 	<attribute name="baseVideoStream" value="null" />
-	
+
 	<method name="toggleVideo" args="value">
 		if($debug) Debug.info("toggleVideo ", canvas.currentClient, value);
 		canvas.currentClient.canVideo = value;
 	</method>
-	
+
 	<method name="createEditRecordStream" args="isInterview">
 		if($debug) Debug.info("createEditRecordStream,", isInterview);
 		new lz.editRecordStreamSWF10(canvas, {
@@ -68,9 +68,9 @@
 		}
 	]]>
 	</method>
-	
-	<!-- 
-		Method that creates the video views when another user enters a room and his 
+
+	<!--
+		Method that creates the video views when another user enters a room and his
 		item in the list of participants is created.
 		The method to "play" the stream is invoked later, when the user
 		really starts to stream and not only when he just enters the room.
@@ -116,8 +116,8 @@
 		obj.setAttribute('chatpartnername', dispName);
 	</method>
 
-	<!-- 
-		
+	<!--
+
 		Method that creates the video views when user(self) initially entering a room.
 		Creates the video-view AND starts to stream/play the video
 	 -->
@@ -161,7 +161,7 @@
 		return vidContainer;
 	]]>
 	</method>
-	
+
 	<method name="getVideoObjectByPublicSID" args="publicSID">
 	<![CDATA[
 		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ", publicSID);
@@ -288,9 +288,9 @@
 
 	<method name="closeStreamclient" args="publicSID">
 	<![CDATA[
-		if ($debug) Debug.write("closeStreamthis: ", publicSID);
+		if ($debug) Debug.write("closeStream this: ", publicSID);
 		var obj = this.getVideoObjectByPublicSID(publicSID);
-		if ($debug) Debug.write("closeStreamthis obj: ", obj);
+		if ($debug) Debug.write("closeStream this obj: ", obj);
 		if (obj != null) {
 			obj.resetValues();
 		}
@@ -357,7 +357,7 @@
 	<method name="startStream" args="value">
 	<![CDATA[
 		//value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight
-		
+
 		if ($debug) Debug.write("startStream: ", value);
 		var obj = null;
 		if (!!value.securityCode) {
@@ -387,7 +387,7 @@
 		return;
 	]]>
 	</method>
-	
+
 	<method name="setExclusiveAudioAllowStatus" args="canGiveAudio">
 		<![CDATA[
 			if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
@@ -468,8 +468,8 @@
 			width:width,
 			height:height
 		});
-	</method> 
-	
+	</method>
+
 	<!---
 		plays a recorded stream
 	 -->
@@ -486,10 +486,10 @@
 		this.baseVideoStream.setAttribute("visibility","visible");
 		this.baseVideoStream.playRecordingStream(streamName,delay);
 	</method>
-	
+
 	<!---
-		Updates the width/height property of the recording playback video 
-	 -->	
+		Updates the width/height property of the recording playback video
+	 -->
 	<method name="updateRecordingVideoPosition" args="width,height">
 		if (this.baseVideoStream == null) {
 			if ($debug) Debug.warn("baseVideoStream is NULL");
@@ -498,7 +498,7 @@
 		this.baseVideoStream.setAttribute("width",width);
 		this.baseVideoStream.setAttribute("height",height);
 	</method>
-	
+
 	<!---
 		stops and hides the recording playback video
 	 -->
@@ -512,8 +512,8 @@
 		this.baseVideoStream.stopRecording();
 		this.baseVideoStream.setAttribute("visibility","hidden");
 	</method>
-	
-	<!--- 
+
+	<!---
 		pauses the current video or continue at the same position
 	 -->
 	<method name="pauseRecordingPlayback" args="pauseBool">
@@ -524,7 +524,7 @@
 		}
 		this.baseVideoStream.pause(pauseBool);
 	</method>
-	
+
 	<method name="seekRecordingPlayback" args="flvTime">
 		if($debug) Debug.write("seekRecordingPlayback ",flvTime);
 		if (this.baseVideoStream == null) {
@@ -533,7 +533,7 @@
 		}
 		this.baseVideoStream.seekStream(flvTime);
 	</method>
-	
+
 	<method name="stopAndCloseRecordingConnection">
 		if($debug) Debug.write("stopAndCloseRecordingConnection ");
 		if (this.baseVideoStream == null) {
@@ -544,12 +544,12 @@
 		this.baseVideoStream.destroy();
 		this.baseVideoStream = null;
 	</method>
-	
+
 	<!---
 	   #################################
 	   Methods to handle screen sharing video playback and cursor
 	 -->
-	 
+
 	<!---
 		Adds a new screen sharing playback video
 	 -->
@@ -560,15 +560,15 @@
 				canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
 			}
 			if ($debug) Debug.warn("New Screen Sharing", value);
-			new lz.screenSharingDialog(canvas.screenSharingDialogContainer, {initObject: value}); 
+			new lz.screenSharingDialog(canvas.screenSharingDialogContainer, {initObject: value});
 		} else {
 			if ($debug) Debug.warn("Self Screen Sharing");
 		}
 	]]>
-	</method> 
-	
+	</method>
+
 	<!---
-		Add a list of screen sharing playback videos 
+		Add a list of screen sharing playback videos
 		(initially when entering the room invoked)
 	 -->
 	<method name="newScreenSharings" args="value">
@@ -581,7 +581,7 @@
 
 	<!---
 		Close a single screen sharing playback video
-	 --> 
+	 -->
 	<method name="closeScreenSharing" args="value">
 	<![CDATA[
 		if (canvas.screenSharingDialogContainer != null) {
@@ -594,7 +594,7 @@
 	</method>
 
 	<!---
-	   Closes all screen sharing playback videos, whiteboard videos, user videos 
+	   Closes all screen sharing playback videos, whiteboard videos, user videos
 	   and closes the rtmp connection
 	 -->
 	<method name="closeAllScreenSharings">
@@ -608,9 +608,9 @@
 		canvas.commonVideoViewContent.clearAll();
 	]]>
 	</method>
-	
+
 	<!---
-		change Screen Sharing frame height 
+		change Screen Sharing frame height
 	 -->
 	<method name="hideChatContent" args="hide">
  	<![CDATA[
@@ -620,7 +620,7 @@
 		}
  	]]>
 	</method>
-	
+
 	<!---
 		Update the position of the cursor from the sharing screen
 	 -->
@@ -635,9 +635,9 @@
 		}
 	]]>
 	</method>
-	
+
 	<!---
-		Make regExpTest 
+		Make regExpTest
 	 -->
 	<method name="regExpTest" args="fieldValue,regExStr">
 	<![CDATA[
@@ -655,7 +655,7 @@
 			valMic = 0; //select first one by default
 		}
 		var _micro = canvas.echoPath == 0 ? Microphone.getMicrophone(valMic) : Microphone.getEnhancedMicrophone(valMic);
-		
+
 		if (_micro != null) {
 			if (canvas.echoPath == 256) {
 				var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
@@ -682,7 +682,7 @@
 		return _micro;
 	]]>
 	</method>
-	
+
 	<method name="getCam" args="valCam, videoview">
 	<![CDATA[
 		if ($debug) Debug.write("Entering getCam ...", valCam);
@@ -692,7 +692,7 @@
 		var _camera = Camera.getCamera(valCam);
 		if (_camera != null) {
 			if ($debug) Debug.write("videoview: ", videoview);
-			
+
 			if ($debug) Debug.write("_camera.setQuality BEST: ", canvas.isInterview, (canvas.bandwidthNeededBest * 2), canvas.camQualityBest);
 			if (canvas.isInterview) {
 				//we need a fixed frame rate for the videos to merge them later on
@@ -711,6 +711,25 @@
 	]]>
 	</method>
 
+	<method name="syncAVsettings" args="g">
+		ExternalInterface.call("avSettings", JSON.stringify(g));
+	</method>
+
+	<method name="storeAVsettings" args="cam, mic, w, h">
+	<![CDATA[
+		//if ($debug) Debug.write("sharedobject store::  [width, height] : [" + w + ", " + h + "]");
+		var t:SharedObject = SharedObject.getLocal('userdata');
+		var g = t.data;
+		if (!g) g = new Array();
+		g["cam"] = cam;
+		g["mic"] = mic;
+		g["width"] = w;
+		g["height"] = h;
+		t.flush();
+		syncAVsettings(g);
+	]]>
+	</method>
+
 	<method name="loadAVsettings">
 	<![CDATA[
 		var t:SharedObject = SharedObject.getLocal('userdata');
@@ -724,6 +743,16 @@
 	]]>
 	</method>
 
+	<method name="ensureAVsettings" args="w, h">
+		if ($debug) Debug.write("ensureAVsettings::  [width, height] : [" + w + ", " + h + "]");
+		var g = loadAVsettings();
+		if (!g) {
+			storeAVsettings(Camera.names.length > 0 ? 0 : -1, Microphone.names.length > 0 ? 0 : -1, w, h);
+		} else {
+			syncAVsettings(g);
+		}
+	</method>
+
 	<method name="getAvSetting" args="prop, g=null, def=null">
 		//Initialize and get eventually stored property
 		if (!g) {
@@ -733,37 +762,18 @@
 		return val != null ? val : def;
 	</method>
 
-	<method name="getAVmode" args="g">
+	<method name="getAVmode">
 		var settings = canvas.currentClient.avsettings;
-		if (!settings) {
-			settings = getAvSetting('avstored', g, 'av'); //stored av settings are overriden by HTML5 (need to be merged)
-			if (!settings) {
-				settings = 'n';
-			}
-		}
-		return settings;
+		return !settings ? 'n' : settings;
 	</method>
 
 	<method name="_startAvBroadcast" args="restart=false">
-		var g = canvas.commonVideoViewContent.loadAVsettings();
-		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
-		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
-		setUserAVSettings.avsetting = getAVmode(g);
-		setUserAVSettings.vWidth = vWidth;
-		setUserAVSettings.vHeight = vHeight;
-		setUserAVSettings.vHeight = vHeight;
 		setUserAVSettings.updateBroadcastId = restart;
 		setUserAVSettings.doCall();
 	</method>
 
 	<netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" remotecontext="$once{ canvas.thishib }" >
-		<attribute name="avsetting" value="" type="string" />
-		<attribute name="vWidth" value="0" type="number" />
-		<attribute name="vHeight" value="0" type="number" />
 		<attribute name="updateBroadcastId" value="false" type="boolean" />
-		<netparam><method name="getValue">return parent.avsetting;</method></netparam>
-		<netparam><method name="getValue">return parent.vWidth;</method></netparam>
-		<netparam><method name="getValue">return parent.vHeight;</method></netparam>
 		<netparam><method name="getValue">return parent.updateBroadcastId;</method></netparam>
 		<handler name="ondata" args="value">
 			if ($debug) Debug.write("setUserAVSettings:: done", value);
@@ -779,10 +789,10 @@
 		var g = canvas.commonVideoViewContent.loadAVsettings();
 		var myvideocontainer = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
 		if ($debug) Debug.write("startAvBroadcast::doninitalize");
-		var settings = getAVmode(g);
+		var settings = getAVmode();
 		if ($debug) Debug.write("startAvBroadcast::mode, ", settings, canvas.currentClient.avsettings);
-		var vWidth = canvas.isInterview ? 320 : getAvSetting('width', g, 120);
-		var vHeight = canvas.isInterview ? 260 : getAvSetting('height', g, 90);
+		var vWidth = canvas.currentClient.VWidth;
+		var vHeight = canvas.currentClient.VHeight;
 		if (!canvas.isInterview) {
 			myvideocontainer.setDefaultVideoSize(vWidth, vHeight);
 		}
@@ -792,8 +802,8 @@
 		myvideocontainer.setAttribute('isremote', false);
 		var _micro = getMic(getAvSetting('mic', g, 0));
 		var _camera = getCam(getAvSetting('cam', g, 0), videoview);
-		if ($debug) Debug.write(_camera , _micro, settings);
-		
+		if ($debug) Debug.write("startAvBroadcast", _camera, _micro, settings, videoview);
+
 		if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
 		switch (settings){
 			case "av":

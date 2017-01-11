@@ -144,7 +144,6 @@
 	]]>
 	</method>
 
-
 	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
 	<![CDATA[
 		if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
@@ -164,18 +163,6 @@
 			canvas.commonVideoViewContent.createVideoObject(object.publicSID, false, -1, object);
 		}
 	]]>
-	</method>
-		
-	<method name="closeStreamClient" args="publicSID">
-		canvas.commonVideoViewContent.closeStreamClient(publicSID);
-	</method>
-
-	<method name="resetAllValues">
-		canvas.commonVideoViewContent.resetAllValues();
-	</method>
-
-	<method name="updateMuteStatusVideoView" args="roomClient">
-		canvas.commonVideoViewContent.updateMuteStatusVideoView(roomClient);
 	</method>
 </class>
 
