@@ -201,8 +201,49 @@
 		</method>
 
 		<method name="updateAVSettingsSymbol" args="rcl">
-			//FIXME: Set a Symbol wether this Client is Audio(only)/Video(only), both or Profile Picture
+		<![CDATA[
+			//FIXME: Set a Symbol whereve this Client is Audio(only)/Video(only), both or Profile Picture
 			if ($debug) Debug.warn("updateAVSettingsSymbol TODO ",rcl);
+			switch (rcl.avsettings) {
+				case "av":
+					this.setDefaultVideoSize(rcl.VWidth, rcl.VHeight);
+					this.setAttribute("visible", true);
+					this._toolbar._mute.setAttribute("visible", true);
+					this._toolbar._volume.setAttribute("visible", true);
+					if(!canvas.isInterview && this.minimized) {
+						this.reminimize();
+					}
+					break;
+				case "a":
+					this.setAttribute("visible", true);
+					this._toolbar._mute.setAttribute("visible", true);
+					this._toolbar._volume.setAttribute("visible", true);
+					if(!canvas.isInterview && this.minimized) {
+						this.reminimize();
+					}
+					this.setVideouserProfilePic(rcl);
+					break;
+				case "v":
+					this.setDefaultVideoSize(rcl.VWidth, rcl.VHeight);
+					this.setAttribute("visible", true);
+					this._toolbar._mute.setAttribute("visible", false);
+					this._toolbar._volume.setAttribute("visible", false);
+					if(!canvas.isInterview && this.minimized) {
+						this.reminimize();
+					}
+					break;
+				case "n":
+					if ($debug) Debug.write("Do not Publish A/V");
+					//Prevent from Hiding the Box in Event Modus
+					if (canvas.thishib.modus == "conference") {
+						this.setAttribute("visible", false);
+					}
+					break;
+				default:
+					if ($debug) Debug.warn("no valid device Setup chosen");
+					break;
+			}
+		]]>
 		</method>
 
 		<method name="doResize" args="bool">

@@ -133,22 +133,16 @@
 		setPartnerName(vidContainer, cl.firstname, cl.lastname);
 		switch (cl.avsettings) {
 			case 'a':
-				vidContainer.setVideouserProfilePic(cl);
 				if ($debug) Debug.warn("start play");
 				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
-				vidContainer.setAttribute("visible", false);
 				break;
 			case 'v':
 			case 'av':
 				//this means avsettings is either: "v" or "av"
-				vidContainer.setDefaultVideoSize(cl.VWidth, cl.VHeight);
 				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
-				vidContainer.setAttribute("visible", true);
 				break;
 			case 'n':
 			default:
-				vidContainer.setVideouserProfilePic(cl);
-				vidContainer.setAttribute("visible", false);
 				break;
 		}
 		vidContainer.updateAVSettingsSymbol(cl);
@@ -340,11 +334,6 @@
 		if ($debug) Debug.write("setAVSettingsToClient: ", obj, rcl.avsettings);
 		if (obj == null) {
 			obj = this.getNewVideoObjectByPos(rcl.publicSID);
-		}
-		if ("n" == rcl.avsettings || "a" == rcl.avsettings) {
-			obj.setVideouserProfilePic(rcl);
-		} else {
-			obj.deleteVideoConfProfilePic();
 		}
 		obj.thisVars = rcl;
 		obj.updateAVSettingsSymbol(rcl);
@@ -791,11 +780,6 @@
 		if ($debug) Debug.write("startAvBroadcast::doninitalize");
 		var settings = getAVmode();
 		if ($debug) Debug.write("startAvBroadcast::mode, ", settings, canvas.currentClient.avsettings);
-		var vWidth = canvas.currentClient.VWidth;
-		var vHeight = canvas.currentClient.VHeight;
-		if (!canvas.isInterview) {
-			myvideocontainer.setDefaultVideoSize(vWidth, vHeight);
-		}
 
 		var videoview = myvideocontainer._chatvideoinner._videostream;
 		if ($debug) Debug.write("myvideocontainer: ", myvideocontainer);
@@ -805,45 +789,21 @@
 		if ($debug) Debug.write("startAvBroadcast", _camera, _micro, settings, videoview);
 
 		if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
-		switch (settings){
+		switch (settings) {
 			case "av":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
-				myvideocontainer.setAttribute("visible", true);
-				myvideocontainer._toolbar._mute.setAttribute("visible", true);
-				myvideocontainer._toolbar._volume.setAttribute("visible", true);
-				if(!canvas.isInterview && myvideocontainer.minimized) {
-					myvideocontainer.reminimize();
-				}
 				break;
 			case "a":
 				videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
-				myvideocontainer.setAttribute("visible", true);
-				myvideocontainer._toolbar._mute.setAttribute("visible", true);
-				myvideocontainer._toolbar._volume.setAttribute("visible", true);
-				if(!canvas.isInterview && !myvideocontainer.minimized) {
-					myvideocontainer.minimize();
-				}
 				break;
 			case "v":
 				videoview.broadcast(canvas.currentClient.broadCastID, _camera, null);
-				myvideocontainer.setAttribute("visible", true);
-				myvideocontainer._toolbar._mute.setAttribute("visible", false);
-				myvideocontainer._toolbar._volume.setAttribute("visible", false);
-				if(!canvas.isInterview && myvideocontainer.minimized) {
-					myvideocontainer.reminimize();
-				}
 				break;
 			case "n":
-				if ($debug) Debug.write("Do not Publish A/V");
-				//Prevent from Hiding the Box in Event Modus
-				if (canvas.thishib.modus == "conference") {
-					myvideocontainer.setAttribute("visible", false);
-				}
-				break;
 			default:
-				if ($debug) Debug.warn("no valid device Setup chosen");
 				break;
 		}
+		myvideocontainer.updateAVSettingsSymbol(canvas.currentClient);
 		enableRecordingButton();
 	]]>
 	</method>
