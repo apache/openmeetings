@@ -21,7 +21,7 @@
 	</properties>
 	<body>
 		<section name="SIP-Transport Integration">
-			<p>You need Apache OpenMeetings <strong>version 3.0+</strong> to apply this guide!</p>
+			<p>You need Apache OpenMeetings <strong>version 3.1+</strong> to apply this guide!</p>
 			<p>You need Asterisk <strong>version 13+</strong> to apply this guide!</p>
 			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
 		</section>
@@ -220,7 +220,7 @@ write = all
 				</source>
 			</div><br />
 			<div>
-				Update Openmeetings with creadentials for Asterisk manager. 
+				Update OpenMeetings with credentials for Asterisk manager. 
 				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/openmeetings-applicationContext.xml</tt><br />
 				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao"&gt;</strong>
 				uncomment its parameters and set it to your custom values.
@@ -240,29 +240,25 @@ service asterisk restart
 		</section>
 
 		<section name="Setup red5sip transport">
-			<div>
-				Download red5sip from <tt>https://github.com/openmeetings/red5sip</tt>
-			</div>
-			<div>
-				<source>
+			<ul>
+				<li>Download red5sip from <tt>https://github.com/openmeetings/red5sip</tt>
+					<source>
 <![CDATA[
 git clone https://github.com/openmeetings/red5sip.git
 ]]>
-				</source>
-			</div>
-			<div>
-				Build with Apache Maven
-				<source>
+					</source>
+				</li>
+				<li>Build with Apache Maven
+					<source>
 <![CDATA[
+cd red5sip
 mvn clean package
 ]]>
-				</source>
-				All necessary files will be available in <tt>target</tt> folder, copy/move it to /opt/red5sip/
-			</div>
-			<div>
-				Insert proper values to the <tt>/opt/red5sip/settings.properties</tt>
-
-				<source>
+					</source>
+				</li>
+				<li>All necessary files will be available in <tt>target</tt> folder, copy/move it to /opt/red5sip/</li>
+				<li>Insert proper values to the <tt>/opt/red5sip/settings.properties</tt>
+					<source>
 <![CDATA[
 red5.host=127.0.0.1 # red5 server address
 om.context=openmeetings # Openmeetings context 
@@ -277,34 +273,32 @@ sip.proxy=127.0.0.1 # address of sip proxy
 rooms.forceStart=no # TBD
 rooms=1 # TBD (not in use)
 ]]>
-				</source>
-			</div>
-			<div>
-				Add red5sip to autostart:
-				<source>
+					</source>
+				</li>
+				<li>Add red5sip to autostart:
+					<source>
 <![CDATA[
 sudo cp /opt/red5sip/red5sip /etc/init.d/
 sudo chmod a+x /etc/init.d/red5sip
 sudo update-rc.d red5sip defaults
 ]]>
-				</source>
-			</div>
-			<div>
-				Start openmeetings
-				<source>
+					</source>
+				</li>
+				<li>Start openmeetings
+					<source>
 <![CDATA[
 service red5 start
 ]]>
-				</source>
-			</div>
-			<div>
-				Start red5sip
-				<source>
+					</source>
+				</li>
+				<li>Start red5sip
+					<source>
 <![CDATA[
 service red5sip start
 ]]>
-				</source>
-			</div>
+					</source>
+				</li>
+			</ul>
 		</section>
 	</body>
 </document>
