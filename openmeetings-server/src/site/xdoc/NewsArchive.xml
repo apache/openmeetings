@@ -22,6 +22,30 @@
 	<body>
 		<section name="News">
 			<div class="bs-callout bs-callout-info">
+				<b>Version 3.1.3 released!</b>
+				<div>Service release 3 for 3.1.0, provides security improvements:<br/>
+					Other fixes<br/>
+					<ul>
+						<li>Both native and tunneled RTMPS works as expected</li>
+						<li>Other fixes in localization, backup/restore, screen-sharing, invitations etc.</li>
+					</ul>
+					<br/>
+					<span class="bs-callout bs-callout-danger">
+						NOTE java8 is required starting from this version<br/>
+					</span>
+					<br/>
+					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
+				</div>
+				<br/>
+				<span>
+					21 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.1.3/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12337950">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2016-09-27)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.1.2 released!</b>
 				<div>Service release 2 for 3.1.0 contains following improvements and bug fixes:<br/>
 					<br/>
