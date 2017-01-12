@@ -105,6 +105,12 @@
 						are up to date and refer to the right version.
 					</li>
 					<li>
+						Update following files in OM documentation:<br/>
+						<tt>openmeetings-server/src/site/xdoc/index.xml</tt><br/>
+						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
+						<tt>openmeetings-server/src/site/xdoc/downloads.xml</tt><br/>
+					</li>
+					<li>
 						Create a TAG of the SVN tree that you would like to release<br/>
 						Example:
 				
@@ -178,7 +184,7 @@ mvn deploy -Pdeploy,rc
 					Send an email to the developer mailing list with the subject line:<br />
 					[VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
-					<a href="http://s.apache.org/vote-2.1.0RC1">example Vote email</a>
+					<a href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8jZ7EiXoeBbG4ynvg30FPx2nAOJMypE2Qp-v-c63ayO9A%40mail.gmail.com%3E">example Vote email</a>
 					<a href="http://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
 					<br />
 					Forward (Not CC) this Vote email to: private@openmeetings.apache.org<br />
@@ -187,7 +193,7 @@ mvn deploy -Pdeploy,rc
 					[RESULT][VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
 					<a
-						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA-ibo6fGCbnLjJX9H5H2kFGDVJRMfxPyMtzWzCWNi%2BpOg%40mail.gmail.com%3E">example Result email</a>
+						href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8gyvHuarzdVma%2BF6ap7RHBhhVciZp5Oi5JogQdLR6o0NA%40mail.gmail.com%3E">example Result email</a>
 					<br />
 					Forward (Not CC) this RESULT VOTE email to: private@openmeetings.apache.org<br />
 					<br />
@@ -214,7 +220,7 @@ mvn clean install -Prc,release
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.1.0-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 3.1.0-RELEASE"</li>
 					<li>Enter "Version" for ex. "3.1.0-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
