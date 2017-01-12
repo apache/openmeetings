@@ -212,11 +212,11 @@ public class RoomSidebar extends Panel {
 			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
 			if (!s.isEmpty()) {
 				JSONObject o = new JSONObject(s.toString());
-				room.getClient().setCam(o.getInt("cam"));
-				room.getClient().setMic(o.getInt("mic"));
+				room.getClient().setCam(o.optInt("cam", -1));
+				room.getClient().setMic(o.optInt("mic", -1));
 				boolean interview = Room.Type.interview == room.getRoom().getType();
-				room.getClient().setWidth(interview ? 320 : o.getInt("width"));
-				room.getClient().setHeight(interview ? 260 : o.getInt("height"));
+				room.getClient().setWidth(interview ? 320 : o.optInt("width"));
+				room.getClient().setHeight(interview ? 260 : o.optInt("height"));
 				room.broadcast(target, room.getClient());
 			}
 		}
