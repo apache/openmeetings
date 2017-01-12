@@ -175,6 +175,7 @@
 			var btn = canvas._wbBar.subviews[eg];
 			if (btn.objRef.whiteboardId == obj[1]) {
 				btn.setAttribute('btnName', obj[2]);
+				btn.calcTextWidth();
 				break;
 			}
 		}
