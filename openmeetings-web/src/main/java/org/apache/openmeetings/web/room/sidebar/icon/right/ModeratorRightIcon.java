@@ -36,7 +36,7 @@ public class ModeratorRightIcon extends RoomRightIcon {
 		if (client.hasRight(right)) {
 			title = self ? "688" : "675";
 		} else {
-			title = self ? "685" : "676";
+			title = self ? "81" : "676";
 		}
 		return getString(title);
 	}
