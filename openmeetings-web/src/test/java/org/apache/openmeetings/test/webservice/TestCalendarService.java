@@ -24,10 +24,12 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +37,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestCalendarService extends AbstractWebServiceTest {
 	public final static String CALENDAR_SERVICE_URL = BASE_SERVICES_URL + "/calendar";
 	@Autowired
+	private GroupDao groupDao;
+	@Autowired
 	private RoomDao roomDao;
 
 	private void actualTest(Room r) throws Exception {
 		String uuid = UUID.randomUUID().toString();
-		User u = createUser(uuid);
+		User u = getUser(uuid);
+		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
+		u = createUser(u);
 		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
 
 		Date start = new Date();

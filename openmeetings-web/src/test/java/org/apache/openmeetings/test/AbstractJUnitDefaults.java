@@ -27,12 +27,10 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -55,8 +53,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private GroupDao groupDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
@@ -153,7 +149,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.getAddress().setEmail(String.format("email%s@local", uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u.updatePassword(cfgDao, getRandomPass(uuid));
 		u.setLanguageId(1L);
 		return u;
@@ -164,7 +159,10 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public User createUser(String uuid) throws Exception {
-		User u = getUser(uuid);
+		return createUser(getUser(uuid));
+	}
+
+	public User createUser(User u) throws Exception {
 		u = userDao.update(u, null);
 		assertNotNull("Can't add user", u);
 		return u;
