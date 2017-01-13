@@ -27,10 +27,12 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -41,7 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
-	
+	public static final int ONE_HOUR = 60 * 60 * 1000;
+
 	protected static final String username = "admin";
 	protected static final String userpass = "12345";
 	private static final String orgname = "smoketest";
@@ -52,6 +55,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private GroupDao groupDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
@@ -72,14 +77,22 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		}
 	}
 
-	public Appointment createAppointment() {
-		Date appointmentstart = new Date();
-		Date appointmentend = new Date();
-		appointmentend.setTime(appointmentstart.getTime() + 3600);
-		return createAppointment(appointmentstart, appointmentend);
+	public Appointment getAppointment() {
+		Date start = new Date();
+		Date end = new Date();
+		end.setTime(start.getTime() + ONE_HOUR);
+		return getAppointment(start, end);
 	}
-	
+
 	public Appointment getAppointment(Date start, Date end) {
+		return getAppointment(userDao.get(1L), start, end);
+	}
+
+	public Appointment getAppointment(User owner, Date start, Date end) {
+		return getAppointment(owner, null, start, end);
+	}
+
+	public Appointment getAppointment(User owner, Room r, Date start, Date end) {
 		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
 
 		// add new appointment
@@ -99,42 +112,24 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		ap.setIsYearly(false);
 		ap.setPasswordProtected(false);
 
-		ap.setOwner(userDao.get(1L));
+		ap.setOwner(owner);
 		ap.setConnectedEvent(false);
 
 		if (ap.getReminder() == null) {
 			ap.setReminder(Appointment.Reminder.none);
 		}
 		
-		Room r = new Room();
-		r.setType(Room.Type.conference);
-		r.setAppointment(true);
+		if (r == null) {
+			r = new Room();
+			r.setType(Room.Type.conference);
+			r.setAppointment(true);
+		}
 		ap.setRoom(r);
 		return ap;
 	}
 
-	public Appointment createAppointment(Date start, Date end) {
-		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
-
+	public Appointment createAppointment(Appointment ap) {
 		// add new appointment
-		Appointment ap = new Appointment();
-
-		ap.setTitle("appointmentName");
-		ap.setLocation("appointmentLocation");
-
-		ap.setStart(start);
-		ap.setEnd(end);
-		ap.setDescription("appointmentDescription");
-		ap.setInserted(new Date());
-		ap.setDeleted(false);
-		ap.setIsDaily(false);
-		ap.setIsWeekly(false);
-		ap.setIsMonthly(false);
-		ap.setIsYearly(false);
-		ap.setPasswordProtected(false);
-
-		ap.setOwner(userDao.get(1L));
-		ap.setConnectedEvent(false);
 		ap = appointmentDao.update(ap, null, false);
 		assertNotNull("Cann't add appointment", ap.getId());
 		return ap;
@@ -157,6 +152,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setAddress(new Address());
 		u.getAddress().setEmail(String.format("email%s@local", uuid));
 		u.setRights(UserDao.getDefaultRights());
+		u.setTimeZoneId("Asia/Bangkok");
+		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u.updatePassword(cfgDao, getRandomPass(uuid));
 		u.setLanguageId(1L);
 		return u;
