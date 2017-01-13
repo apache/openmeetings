@@ -563,6 +563,12 @@ public class RoomPanel extends BasePanel {
 		for (Right right : rights) {
 			client.getRights().remove(right);
 		}
+		if (client.hasActivity(Client.Activity.broadcastA) && !client.hasRight(Right.audio)) {
+			client.remove(Client.Activity.broadcastA);
+		}
+		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
+			client.remove(Client.Activity.broadcastV);
+		}
 		broadcast(target, client);
 	}
 
