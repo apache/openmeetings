@@ -1291,12 +1291,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			Long roomId = client.getRoomId();
 			Room r = roomDao.get(roomId);
 			if (r != null) {
-				if (Room.Type.conference == r.getType()) {
-					client.setCanVideo(!r.isAudioOnly());
-					client.setIsBroadcasting(true);
-					sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
-					sendToScope(roomId, "clientUpdated", client);
-				}
 				return sessionManager.getCurrentModeratorByRoom(roomId);
 			}
 		} catch (Exception err) {
