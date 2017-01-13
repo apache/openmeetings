@@ -462,6 +462,11 @@
 				hib.userobject = user;
 				canvas.currentRoomObj = value[1];
 				parent.getCurrentRoomClient.doCall();
+
+				canvas.commonVideoViewContent.ensureAVsettings(
+						canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution[@isDefault="true"]/@width')
+						, canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution[@isDefault="true"]/@height')
+					);
 			} else {
 				new lz.labelerrorPopup(canvas, {errorlabelid: 1599});
 			}

@@ -80,6 +80,7 @@ public class RoomSidebar extends Panel {
 	private final SelfIconsPanel selfRights;
 	private final ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
+	private boolean avInited = false;
 	private Client kickedClient;
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
@@ -168,37 +169,7 @@ public class RoomSidebar extends Panel {
 				}
 				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				Client c = getOnlineClient(uid);
-				if (c == null) {
-					return;
-				}
-				if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
-					if (a == Activity.broadcastA || a == Activity.broadcastAV) {
-						c.getRights().add(Room.Right.audio);
-					}
-					if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
-						c.getRights().add(Room.Right.video);
-					}
-				}
-				if (activityAllowed(c, a, room.getRoom())) {
-					if (a == Activity.broadcastA && !c.isMicEnabled()) {
-						return;
-					}
-					if (a == Activity.broadcastV && !c.isCamEnabled()) {
-						return;
-					}
-					if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
-						return;
-					}
-					Pod pod = c.getPod();
-					c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
-					if (pod != Pod.none && pod != c.getPod()) {
-						//pod has changed, no need to toggle
-						c.set(a);
-					} else {
-						c.toggle(a);
-					}
-					room.broadcast(target, c);
-				}
+				toggleActivity(c, a, target);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
 			}
@@ -212,12 +183,19 @@ public class RoomSidebar extends Panel {
 			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
 			if (!s.isEmpty()) {
 				JSONObject o = new JSONObject(s.toString());
-				room.getClient().setCam(o.optInt("cam", -1));
-				room.getClient().setMic(o.optInt("mic", -1));
+				Client c = room.getClient();
+				c.setCam(o.optInt("cam", -1));
+				c.setMic(o.optInt("mic", -1));
 				boolean interview = Room.Type.interview == room.getRoom().getType();
-				room.getClient().setWidth(interview ? 320 : o.optInt("width"));
-				room.getClient().setHeight(interview ? 260 : o.optInt("height"));
-				room.broadcast(target, room.getClient());
+				c.setWidth(interview ? 320 : o.optInt("width"));
+				c.setHeight(interview ? 260 : o.optInt("height"));
+				if (!avInited) {
+					avInited = true;
+					if (Room.Type.conference == room.getRoom().getType()) {
+						toggleActivity(c, Activity.broadcastAV, target);
+					}
+				}
+				room.broadcast(target, c);
 			}
 		}
 	};
@@ -334,6 +312,40 @@ public class RoomSidebar extends Panel {
 
 	public void showUpload(IPartialPageRequestHandler handler) {
 		upload.open(handler);
+	}
+
+	public void toggleActivity(Client c, Activity a, AjaxRequestTarget target) {
+		if (c == null) {
+			return;
+		}
+		if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
+			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
+				c.getRights().add(Room.Right.audio);
+			}
+			if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
+				c.getRights().add(Room.Right.video);
+			}
+		}
+		if (activityAllowed(c, a, room.getRoom())) {
+			if (a == Activity.broadcastA && !c.isMicEnabled()) {
+				return;
+			}
+			if (a == Activity.broadcastV && !c.isCamEnabled()) {
+				return;
+			}
+			if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+				return;
+			}
+			Pod pod = c.getPod();
+			c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
+			if (pod != Pod.none && pod != c.getPod()) {
+				//pod has changed, no need to toggle
+				c.set(a);
+			} else {
+				c.toggle(a);
+			}
+			room.broadcast(target, c);
+		}
 	}
 
 	public static boolean activityAllowed(Client c, Activity a, Room room) {

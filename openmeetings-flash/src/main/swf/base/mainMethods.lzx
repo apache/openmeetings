@@ -125,11 +125,6 @@
 		this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));
 		this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
 
-		canvas.commonVideoViewContent.ensureAVsettings(
-				canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution[@isDefault="true"]/@width')
-				, canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution[@isDefault="true"]/@height')
-			);
-
 		//set user color
 		canvas.currentusercolor = canvas.getColorForUser();
 

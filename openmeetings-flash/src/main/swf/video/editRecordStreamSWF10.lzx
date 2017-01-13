@@ -207,8 +207,8 @@
 	<method name="selectListItem" args="combo, selected, select">
 		if (selected != null) {
 			combo.selectItem(selected);
-		} else if (select) {
-			combo.selectItemAt(0);
+		} else {
+			combo.selectItemAt(select ? 1 : 0);
 		}
 	</method>
 

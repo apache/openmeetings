@@ -706,7 +706,6 @@
 
 	<method name="storeAVsettings" args="cam, mic, w, h">
 	<![CDATA[
-		//if ($debug) Debug.write("sharedobject store::  [width, height] : [" + w + ", " + h + "]");
 		var t:SharedObject = SharedObject.getLocal('userdata');
 		var g = t.data;
 		if (!g) g = new Array();
@@ -715,6 +714,7 @@
 		g["width"] = w;
 		g["height"] = h;
 		t.flush();
+		//if ($debug) Debug.write("sharedobject store:: ", g);
 		syncAVsettings(g);
 	]]>
 	</method>
