@@ -292,12 +292,18 @@ html, body {
 .om-icon {
 	background-repeat: no-repeat !important;
 	background-position: 0 0 !important;
+	background-size: 16px;
 	width: 18px;
 	height: 18px;
 	border: none;
 	margin-left: 2px;
 	margin-top: 2px;
 	display: inline-block !important;
+}
+.om-icon.big {
+	background-size: 32px;
+	width: 34px;
+	height: 34px;
 }
 .trees a.om-icon {
 	width: auto;
@@ -323,16 +329,16 @@ html, body {
 	background: url(images/user.png);
 }
 .refresh.om-icon {
-	background: url(images/refresh.gif);
+	background-image: url(images/refresh.png);
 }
 .trash.om-icon {
-	background: url(images/bin_closed.png);
+	background-image: url(images/bin_closed.png);
 }
 .ui-state-hover.trash-toolbar-hover .trash.om-icon {
-	background: url(images/bin_empty.png);
+	background-image: url(images/bin_empty.png);
 } 
 .folder-create.om-icon {
-	background: url(images/folder_add.png);
+	background-image: url(images/folder_add.png);
 }
 .recording.om-icon {
 	background-image: url(images/film.png);
