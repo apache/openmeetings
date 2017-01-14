@@ -120,6 +120,9 @@ public class RoomPanel extends BasePanel {
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 				getMainPanel().getChat().roomEnter(r, target);
+				if (r.isFilesOpened()) {
+					sidebar.setFilesActive(target);
+				}
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
