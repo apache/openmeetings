@@ -396,11 +396,15 @@ html, body {
 	display: inline-block;
 	vertical-align: top;
 }
-.file.item .name {
+.file.item .name, .file.item .name span {
 	color: black;
 	display: block;
-	overflow: hidden;
 	width: 230px;
+	max-width: 230px;
+	/* Required for text-overflow to do anything */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .file.item .errors {
 	position: absolute;

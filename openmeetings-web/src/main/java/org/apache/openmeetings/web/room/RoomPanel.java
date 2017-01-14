@@ -132,6 +132,9 @@ public class RoomPanel extends BasePanel {
 						));
 				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 				getMainPanel().getChat().roomEnter(r, target);
+				if (r.isFilesOpened()) {
+					sidebar.setFilesActive(target);
+				}
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}

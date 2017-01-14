@@ -26,6 +26,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -57,6 +58,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
+import com.googlecode.wicket.kendo.ui.widget.tabs.TabListModel;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -81,6 +83,7 @@ public class RoomSidebar extends Panel {
 	private final ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
 	private boolean avInited = false;
+	private int selectedIdx = 0;
 	private Client kickedClient;
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
@@ -241,7 +244,19 @@ public class RoomSidebar extends Panel {
 				return new FileFragment(containerId, "file-panel");
 			}
 		};
-		add(tabs = new TabbedPanel("tabs", Arrays.asList(userTab, fileTab)).setActiveTab(room.getRoom().isFilesOpened() ? 1 : 0));
+		add(tabs = new TabbedPanel("tabs", newTabModel()) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				setActiveTab(selectedIdx);
+			}
+
+			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
+				selectedIdx = index;
+			}
+		});
 		roomFiles = new RoomFilePanel("tree", room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
 		add(upload = new UploadDialog("upload", room, roomFiles));
@@ -254,6 +269,17 @@ public class RoomSidebar extends Panel {
 			}
 		});
 		add(toggleRight, toggleActivity, roomAction, avSettings);
+	}
+
+	private TabListModel newTabModel() {
+		return new TabListModel() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<ITab> load() {
+				return Arrays.asList(userTab, fileTab);
+			}
+		};
 	}
 
 	@Override
@@ -364,5 +390,10 @@ public class RoomSidebar extends Panel {
 				break;
 		}
 		return r;
+	}
+
+	public void setFilesActive(IPartialPageRequestHandler handler) {
+		selectedIdx = 1;
+		tabs.reload(handler);
 	}
 }
