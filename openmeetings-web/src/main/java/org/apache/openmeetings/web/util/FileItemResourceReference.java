@@ -47,12 +47,12 @@ public abstract class FileItemResourceReference<T extends FileItem> extends File
 			private static final long serialVersionUID = 1L;
 			private File file;
 			private T r;
-			
+
 			@Override
 			protected String getMimeType() throws IOException {
 				return FileItemResourceReference.this.getMimeType(r);
 			}
-			
+
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
 				r = getFileItem(attributes);
@@ -70,7 +70,7 @@ public abstract class FileItemResourceReference<T extends FileItem> extends File
 			}
 		};
 	}
-	
+
 	protected abstract String getMimeType(T r);
 	protected abstract String getFileName(T r);
 	protected abstract File getFile(T r);

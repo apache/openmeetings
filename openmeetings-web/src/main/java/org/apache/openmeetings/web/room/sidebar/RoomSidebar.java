@@ -299,7 +299,7 @@ public class RoomSidebar extends Panel {
 		updateUsers();
 		selfRights.setVisible(room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator));
 		selfRights.update(handler);
-		handler.add(tabs);
+		tabs.reload(handler);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {
