@@ -875,46 +875,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return -1L;
 	}
 
-	public long giveExclusiveAudio(String publicSID) {
-		try {
-			log.debug("-----------  giveExclusiveAudio: " + publicSID);
-
-			IConnection current = Red5.getConnectionLocal();
-			// String streamid = current.getClient().getId();
-
-			final Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-
-			if (currentClient == null) {
-				return -1L;
-			}
-
-			// Put the mod-flag to true for this client
-			currentClient.setMicMuted(false);
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
-
-			// Notify all clients of the same scope (room)
-			new MessageSender(current, "receiveExclusiveAudioFlag", currentClient) {
-				@Override
-				public boolean filter(IConnection conn) {
-					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-					if (rcl == null) {
-					} else if (rcl.isScreenClient()) {
-					} else {
-						if (rcl != currentClient) {
-							rcl.setMicMuted(true);
-							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
-						}
-						return false;
-					}
-					return true;
-				}
-			}.start();
-		} catch (Exception err) {
-			log.error("[giveExclusiveAudio]", err);
-		}
-		return -1L;
-	}
-
 	public long switchMicMuted(String publicSID, boolean mute) {
 		try {
 			log.debug("-----------  switchMicMuted: " + publicSID);

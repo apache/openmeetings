@@ -573,11 +573,6 @@
 		]]>
 		</handler>
 
-		<method name="giveExclusiveAudio">
-			canvas.thishib.giveExclusiveAudio.publicSID = this.publicSID;
-			canvas.thishib.giveExclusiveAudio.doCall();
-		</method>
-
 		<method name="confirmExclusiveAudio">
 			var so:SharedObject = SharedObject.getLocal('userdata');
 			var userData = so.data;
@@ -586,7 +581,7 @@
 			exclusiveAudioListener.sendNoConfirmation = function(none) {};
 			exclusiveAudioListener.sendConfirmation = function(answer, remember) {
 					if (answer) {
-						giveExclusiveAudio();
+						canvas.thishib.giveExclusiveAudio(this.publicSID);
 						if (remember) {
 							userData["dontShowExclusiveAudioConfirmation"] = true;
 							so.flush();

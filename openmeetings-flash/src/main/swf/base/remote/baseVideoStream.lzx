@@ -245,7 +245,7 @@
 		if (micReference != null) {
 			this.setAttribute('micro', micReference);
 			this._ns.attachAudio(micReference);
-			muteMicro(this.micMuted);
+			//FIXME TODO muteMicro(this.micMuted);
 		}
 		this._ns.publish("" + streamName, (mode == "broadcast") ? "live" : mode);
 	]]>

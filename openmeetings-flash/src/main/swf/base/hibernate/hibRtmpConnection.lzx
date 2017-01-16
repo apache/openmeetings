@@ -689,19 +689,14 @@
 	]]>
 	</method>
 
-	<netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
-		<attribute name="publicSID" value="0" type="string" />
-		<netparam><method name="getValue">return parent.publicSID;</method></netparam>
-		<method name="setExclusiveAudio" args="tPublicSID">
-			this.publicSID = tPublicSID;
-			this.doCall();
-		</method>
-	</netRemoteCallHib>
+	<method name="giveExclusiveAudio" args="uid">
+		ExternalInterface.call("roomAction", "exclusive", uid);
+	</method>
 
 	<method name="receiveExclusiveAudioFlag" args="value">
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
-		canvas._videocontainer.receiveExclusiveAudioFlag(value.publicSID)
+		canvas.commonVideoViewContent.receiveExclusiveAudioFlag(value.publicSID)
 	]]>
 	</method>
 
@@ -854,12 +849,11 @@
 			canvas.setAttribute("canVideo", client.canVideo);
 
 			if (client.isBroadcasting) {
-				canvas.commonVideoViewContent._startAvBroadcast();
+				canvas.commonVideoViewContent.startAvBroadcast();
 				canvas.setAttribute("lastBroadCastingUser", client);
 			} else {
 				canvas.commonVideoViewContent.removeVideoByUser(canvas.publicSID);
 			}
-		} else {
 		}
 	]]>
 	</method>

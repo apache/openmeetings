@@ -117,7 +117,6 @@
 	</method>
 
 	<!--
-
 		Method that creates the video views when user(self) initially entering a room.
 		Creates the video-view AND starts to stream/play the video
 	 -->
@@ -126,31 +125,33 @@
 		if ($debug) Debug.info("createVideo::: ", cl.publicSID, cl.broadCastID, cl.avsettings, cl.interviewPodId);
 		if ($debug) Debug.write(" createVideo ALL vars ", cl);
 		var vidContainer = getVideoObjectByPublicSID(cl.publicSID);
-		if (vidContainer == null) {
-			vidContainer = getNewVideoObjectByPos(cl.publicSID);
+		if (cl.avsettings != 'n') {
+			if (vidContainer == null) {
+				vidContainer = getNewVideoObjectByPos(cl.publicSID);
+			}
+			vidContainer.clientVars = cl;
+			setPartnerName(vidContainer, cl.firstname, cl.lastname);
+			switch (cl.avsettings) {
+				case 'a':
+					if ($debug) Debug.warn("start play");
+					vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
+					break;
+				case 'v':
+				case 'av':
+					//this means avsettings is either: "v" or "av"
+					vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
+					break;
+				case 'n':
+				default:
+					break;
+			}
+			vidContainer.updateAVSettingsSymbol(cl);
+			if (cl.micMuted) {
+				vidContainer.setMicMuted(cl.micMuted);
+			}
+			if ($debug) Debug.write(" createVideo ALL vars ", vidContainer);
+			placeInterviewPod(vidContainer, cl.interviewPodId);
 		}
-		vidContainer.clientVars = cl;
-		setPartnerName(vidContainer, cl.firstname, cl.lastname);
-		switch (cl.avsettings) {
-			case 'a':
-				if ($debug) Debug.warn("start play");
-				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
-				break;
-			case 'v':
-			case 'av':
-				//this means avsettings is either: "v" or "av"
-				vidContainer._chatvideoinner._videostream.playStream(cl.broadCastID, -1);
-				break;
-			case 'n':
-			default:
-				break;
-		}
-		vidContainer.updateAVSettingsSymbol(cl);
-		if (cl.micMuted) {
-			vidContainer.setMicMuted(cl.micMuted);
-		}
-		if ($debug) Debug.write(" createVideo ALL vars ", vidContainer);
-		placeInterviewPod(vidContainer, cl.interviewPodId);
 		enableRecordingButton();
 		return vidContainer;
 	]]>
@@ -214,6 +215,15 @@
 	]]>
 	</method>
 
+	<method name="receiveExclusiveAudioFlag" args="publicSID">
+	<![CDATA[
+		for (var i = 0; i < this.subviews.length; ++i) {
+			var item = this.subviews[i];
+			muteSound(item.publicSID, !(publicSID == item.publicSID));
+		}
+	]]>
+	</method>
+
 	<method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
 	<![CDATA[
 		if (canvas.isInterview) {
@@ -264,13 +274,13 @@
 	</method>
 
 	<method name="muteSound" args="publicSID, bool">
-		<![CDATA[
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			if (obj != null) {
-				obj.silenceMicrophone(bool);
-			}
-			return;
-		]]>
+	<![CDATA[
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		if (obj != null) {
+			obj.silenceMicrophone(bool);
+		}
+		return;
+	]]>
 	</method>
 
 	<method name="resetAllValues">
@@ -378,11 +388,11 @@
 	</method>
 
 	<method name="setExclusiveAudioAllowStatus" args="canGiveAudio">
-		<![CDATA[
-			if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
-			canvas.setAttribute("isAllowedToGiveExclusiveAudio",canGiveAudio);
-			return;
-		]]>
+	<![CDATA[
+		if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
+		canvas.setAttribute("isAllowedToGiveExclusiveAudio",canGiveAudio);
+		return;
+	]]>
 	</method>
 
 	<method name="updateFirstLastName" args="publicSID, first, last">
@@ -773,37 +783,56 @@
 		</handler>
 	</netRemoteCallHib>
 
+	<method name="videoEnabled" args="settings">
+	<![CDATA[
+		return settings.indexOf('v') > -1;
+	]]>
+	</method>
+
 	<method name="startAvBroadcast">
 	<![CDATA[
 		var g = canvas.commonVideoViewContent.loadAVsettings();
-		var myvideocontainer = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
-		if ($debug) Debug.write("startAvBroadcast::doninitalize");
 		var settings = getAVmode();
-		if ($debug) Debug.write("startAvBroadcast::mode, ", settings, canvas.currentClient.avsettings);
+		if ($debug) Debug.write("startAvBroadcast::mode ", settings);
+		if ('n' != settings) {
+			var videoWindow = getVideoObjectByPublicSID(canvas.publicSID);
+			if (videoWindow != null && videoEnabled(settings) && videoEnabled(videoWindow.clientVars.avsettings)) {
+				var videoview = videoWindow._chatvideoinner._videostream;
+				if (settings == 'av' && videoWindow.clientVars.avsettings == 'v') {
+					videoview.muteMicro(false);
+				} else if (settings == 'v' && videoWindow.clientVars.avsettings == 'av') {
+					videoview.muteMicro(true);
+				}
+				videoWindow.clientVars = canvas.currentClient;
+			} else {
+				videoWindow = createVideoObject(canvas.publicSID, true, canvas.currentClient.interviewPodId, canvas.currentClient);
+				if ($debug) Debug.write("startAvBroadcast::doninitalize");
 
-		var videoview = myvideocontainer._chatvideoinner._videostream;
-		if ($debug) Debug.write("myvideocontainer: ", myvideocontainer);
-		myvideocontainer.setAttribute('isremote', false);
-		var _micro = getMic(getAvSetting('mic', g, 0));
-		var _camera = getCam(getAvSetting('cam', g, 0), videoview);
-		if ($debug) Debug.write("startAvBroadcast", _camera, _micro, settings, videoview);
+				var videoview = videoWindow._chatvideoinner._videostream;
+				if ($debug) Debug.write("videoWindow: ", videoWindow);
+				videoWindow.setAttribute('isremote', false);
+				var _micro = getMic(getAvSetting('mic', g, 0));
+				var _camera = getCam(getAvSetting('cam', g, 0), videoview);
+				if ($debug) Debug.write("startAvBroadcast", _camera, _micro, settings, videoview);
 
-		if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
-		switch (settings) {
-			case "av":
-				videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
-				break;
-			case "a":
-				videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
-				break;
-			case "v":
-				videoview.broadcast(canvas.currentClient.broadCastID, _camera, null);
-				break;
-			case "n":
-			default:
-				break;
+				if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
+				switch (settings) {
+					case "av":
+						videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
+						break;
+					case "a":
+						videoview.broadcast(canvas.currentClient.broadCastID, null, _micro);
+						break;
+					case "v":
+						videoview.broadcast(canvas.currentClient.broadCastID, _camera, _micro);
+						videoview.muteMicro(true);
+						break;
+					default:
+						break;
+				}
+			}
+			videoWindow.updateAVSettingsSymbol(canvas.currentClient);
 		}
-		myvideocontainer.updateAVSettingsSymbol(canvas.currentClient);
 		enableRecordingButton();
 	]]>
 	</method>

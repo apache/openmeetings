@@ -130,20 +130,6 @@
 	]]>
 	</method>
 
-	<method name="receiveExclusiveAudioFlag" args="publicSID">
-	<![CDATA[
-		var vList = this._participants._table.renderList;
-		for (var i = 0;i < vList.length; ++i) {
-			var item = vList[i];
-			var rcl = new Object();
-
-			rcl.publicSID = item.publicSID;
-			rcl.micMuted = !(publicSID == item.publicSID);
-			canvas.setMuteStatus(rcl);
-		}
-	]]>
-	</method>
-
 	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
 	<![CDATA[
 		if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);

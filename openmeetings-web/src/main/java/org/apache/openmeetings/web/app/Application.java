@@ -231,7 +231,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			}
 			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 			rcl.setIsMod(client.hasRight(Right.moderator));
-			rcl.setIsBroadcasting(client.hasRight(Right.audio));
 			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
@@ -240,14 +239,16 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				if (client.getPod() != Pod.none) {
 					rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
 				}
-				rcl.setIsBroadcasting(true);
-				rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
 				StringBuilder sb = new StringBuilder();
 				if (client.hasActivity(Activity.broadcastA)) {
 					sb.append('a');
 				}
 				if (client.hasActivity(Activity.broadcastV)) {
 					sb.append('v');
+				}
+				if (!rcl.getIsBroadcasting()) {
+					rcl.setIsBroadcasting(true);
+					rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
 				}
 				rcl.setAvsettings(sb.toString());
 			} else {

@@ -79,7 +79,7 @@
 		}
 		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
 			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-				canvas.thishib.giveExclusiveAudio.setExclusiveAudio(canvas.publicSID);
+				canvas.thishib.giveExclusiveAudio(canvas.publicSID);
 			} else {
 				new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
 			}

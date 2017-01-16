@@ -103,6 +103,7 @@ public class RoomPanel extends BasePanel {
 		kick
 		, settings
 		, refresh
+		, exclusive
 	}
 	private final Room r;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
