@@ -31,6 +31,7 @@ import java.util.List;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.app.Client.Pod;
@@ -103,20 +104,33 @@ public class RoomSidebar extends Panel {
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				if (room.getClient().hasRight(Right.moderator)) {
-					Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
-					kickedClient = getOnlineClient(uid);
-					if (kickedClient == null) {
-						return;
-					}
-					switch (a) {
-						case kick:
-							if (!kickedClient.hasRight(Right.superModerator) && !room.getClient().getUid().equals(kickedClient.getUid())) {
+				Client cl = room.getClient();
+				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
+				switch (a) {
+					case kick:
+						if (cl.hasRight(Right.moderator)) {
+							kickedClient = getOnlineClient(uid);
+							if (kickedClient == null) {
+								return;
+							}
+							if (!kickedClient.hasRight(Right.superModerator) && !cl.getUid().equals(kickedClient.getUid())) {
 								confirmKick.getDialog().open(target);
 							}
-							break;
-						default:
-					}
+						}
+						break;
+					case exclusive:
+						if (room.getClient().hasRight(Right.exclusive)) {
+							for (Client c : Application.getRoomClients(room.getRoom().getId())) {
+								if (cl.getUid().equals(c.getUid())) {
+									c.set(Activity.broadcastA);
+								} else {
+									c.remove(Activity.broadcastA);
+								}
+								room.broadcast(target, c);
+							}
+						}
+						break;
+					default:
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'action'", e);
@@ -253,6 +267,7 @@ public class RoomSidebar extends Panel {
 				setActiveTab(selectedIdx);
 			}
 
+			@Override
 			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
 				selectedIdx = index;
 			}

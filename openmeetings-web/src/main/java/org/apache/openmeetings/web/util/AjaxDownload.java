@@ -27,6 +27,7 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -84,7 +85,7 @@ public class AjaxDownload extends AbstractAjaxBehavior {
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(JavaScriptHeaderItem.forReference(newResourceReference()));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 		response.render(OnDomReadyHeaderItem.forScript(String.format("addDwnldIframe('%s', '%s');", component instanceof Page ? "" : component.getMarkupId(), iframeId)));
 	}
 
