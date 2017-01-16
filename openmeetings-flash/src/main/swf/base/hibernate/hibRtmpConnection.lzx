@@ -175,7 +175,6 @@
 		client.closeStream = this.closeStream;
 		//TODO FIXME method is absent :( client.stopStream = this.stopStream;
 		//TODO FIXME method is absent :( sendImagesSyncCompleteFlag
-		client.receiveExclusiveAudioFlag = this.receiveExclusiveAudioFlag;
 		client.setNewModeratorByList = this.setNewModeratorByList;
 		client.newScreenSharing = this.newScreenSharing;
 		client.stopScreenSharingMessage = this.stopScreenSharingMessage;
@@ -691,13 +690,6 @@
 
 	<method name="giveExclusiveAudio" args="uid">
 		ExternalInterface.call("roomAction", "exclusive", uid);
-	</method>
-
-	<method name="receiveExclusiveAudioFlag" args="value">
-	<![CDATA[
-		//The onResult-Handler will be called be the rtmpconnection
-		canvas.commonVideoViewContent.receiveExclusiveAudioFlag(value.publicSID)
-	]]>
 	</method>
 
 	<netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">

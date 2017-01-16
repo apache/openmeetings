@@ -215,15 +215,6 @@
 	]]>
 	</method>
 
-	<method name="receiveExclusiveAudioFlag" args="publicSID">
-	<![CDATA[
-		for (var i = 0; i < this.subviews.length; ++i) {
-			var item = this.subviews[i];
-			muteSound(item.publicSID, !(publicSID == item.publicSID));
-		}
-	]]>
-	</method>
-
 	<method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
 	<![CDATA[
 		if (canvas.isInterview) {
