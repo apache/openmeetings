@@ -60,12 +60,14 @@ public class WhiteboardManager {
 				// log.debug(actionObject);
 				// log.debug(actionObject.size()-1);
 				// log.debug(actionObject.get(actionObject.size()-1));
-				String objectType = actionObject.get(0).toString();
-				if (!objectType.equals("pointerWhiteBoard")) {
-					String objectOID = actionObject.get(actionObject.size() - 1).toString();
-					log.debug("objectOID: " + objectOID);
-					whiteboardObject.add(objectOID, actionObject);
-					wbListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, whiteboardObject, whiteBoardId);
+				if (actionObject != null && !actionObject.isEmpty()) {
+					String objectType = actionObject.get(0).toString();
+					if (!objectType.equals("pointerWhiteBoard")) {
+						String objectOID = actionObject.get(actionObject.size() - 1).toString();
+						log.debug("objectOID: " + objectOID);
+						whiteboardObject.add(objectOID, actionObject);
+						wbListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, whiteboardObject, whiteBoardId);
+					}
 				}
 			} else if (action.equals("clear")) {
 				WhiteboardObject whiteboardObject = wbListManagerById.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId, whiteBoardId);

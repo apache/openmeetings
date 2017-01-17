@@ -420,11 +420,11 @@ html, body {
 }
 .file.item .errors {
 	position: absolute;
-	top: 10px;
+	top: 0px;
 	right: 0px;
 	background-image: url(images/script_error.png);
-	width: 16px;
-	height: 16px;
+	width: 32px;
+	height: 32px;
 	background-repeat: no-repeat;
 }
 .dialog.errors {

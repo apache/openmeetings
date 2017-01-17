@@ -23,8 +23,7 @@
 	<form wicket:id="form">
 	<script type="text/javascript">
 		function treeRevert(dropped) {
-			$('#tree-anchor').get(0).scrollIntoView();
-			this.parent().parent().get(0).scrollIntoView();
+			$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
 			return !dropped || (!!dropped && !!dropped.context && $(dropped.context).hasClass('wb', 'room'));
 		}
 	</script>
