@@ -77,6 +77,14 @@ public abstract class FileTreePanel extends Panel {
 	final FileItemTree tree;
 	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>());
 	private final Form<Void> form = new Form<Void>("form");
+	private final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			createFolder(target, getModelObject());
+		}
+	};
 
 	public FileTreePanel(String id, Long roomId) {
 		super(id);
@@ -86,18 +94,10 @@ public abstract class FileTreePanel extends Panel {
 		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true).setDefaultModelObject(newDownloadMenuList()));
 		add(form.add(downloader));
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				createFolder(target, getModelObject());
-			}
-		};
 		form.add(addFolder);
 		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
@@ -108,7 +108,7 @@ public abstract class FileTreePanel extends Panel {
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover trash-toolbar-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
 			}
-			
+
 			@Override
 			public JQueryBehavior newWidgetBehavior(String selector) {
 				return new DroppableBehavior(selector, this) {
@@ -139,7 +139,7 @@ public abstract class FileTreePanel extends Panel {
 					}
 				};
 			}
-			
+
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
@@ -176,27 +176,27 @@ public abstract class FileTreePanel extends Panel {
 					super.onEvent(target);
 				}
 			}
-			
+
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				delete(selected.getObject(), target);
 			}
 		});
-		
+
 		form.add(trees.add(tree).setOutputMarkupId(true));
 		updateSizes();
 		form.add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
 		form.add(errorsDialog);
 	}
-	
+
 	protected String getContainment() {
 		return ".file.item.drop.area";
 	}
-	
+
 	protected Component getUpload(String id) {
 		return new WebMarkupContainer(id).setVisible(false);
 	}
-	
+
 	void delete(FileItem f, IPartialPageRequestHandler handler) {
 		long id = f.getId();
 		if (id > 0) {
@@ -208,15 +208,12 @@ public abstract class FileTreePanel extends Panel {
 		}
 		update(handler);
 	}
-	
+
 	protected abstract void update(AjaxRequestTarget target, FileItem f);
 
 	protected void createFolder(AjaxRequestTarget target, String name) {
 		FileItem p = selected.getObject();
 		boolean isRecording = p instanceof Recording;
-		if (Type.Folder != p.getType()) {
-			
-		}
 		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
 		f.setName(name);
 		f.setInsertedBy(getUserId());
@@ -236,7 +233,7 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	public abstract void updateSizes();
-	
+
 	public FileItem getSelected() {
 		return selected.getObject();
 	}
@@ -255,7 +252,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 		}
 	}
-	
+
 	public void setSelected(FileItem fi, AjaxRequestTarget target) {
 		FileItem _prev = selected.getObject();
 		updateNode(target, _prev);
@@ -265,7 +262,7 @@ public abstract class FileTreePanel extends Panel {
 		selected.setObject(fi);
 		updateNode(target, fi);
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		selected.detach();
@@ -273,20 +270,20 @@ public abstract class FileTreePanel extends Panel {
 		publicSize.detach();
 		super.onDetach();
 	}
-	
+
 	private List<IMenuItem> newDownloadMenuList() {
 		List<IMenuItem> list = new ArrayList<>();
 
 		//original
 		list.add(new MenuItem(getString("files.download.original"), JQueryIcon.ARROWTHICKSTOP_1_S) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public boolean isEnabled() {
 				File f = selected.getObject().getFile();
 				return f != null && f.exists();
 			}
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				File f = selected.getObject().getFile();
@@ -298,13 +295,13 @@ public abstract class FileTreePanel extends Panel {
 		//pdf
 		list.add(new MenuItem(getString("files.download.pdf"), JQueryIcon.ARROWTHICKSTOP_1_S) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public boolean isEnabled() {
 				File f = selected.getObject().getFile(EXTENSION_PDF);
 				return f != null && f.exists();
 			}
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				File f = selected.getObject().getFile(EXTENSION_PDF);
@@ -316,13 +313,13 @@ public abstract class FileTreePanel extends Panel {
 		//jpg
 		list.add(new MenuItem(getString("files.download.jpg"), JQueryIcon.ARROWTHICKSTOP_1_S) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public boolean isEnabled() {
 				File f = selected.getObject().getFile(EXTENSION_JPG);
 				return f != null && f.exists();
 			}
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				File f = selected.getObject().getFile(EXTENSION_JPG);

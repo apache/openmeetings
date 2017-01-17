@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 public class FileItemTree extends DefaultNestedTree<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private final FileTreePanel treePanel;
+	private final static String CSS_CLASS_FILE = "file ";
 
 	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<FileItem> tp) {
 		super(id, tp);
@@ -77,62 +78,62 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 				}
 			}
 			
-			private String getItemStyle(FileItem f, String def) {
-				String style;
+			private String getItemStyle(FileItem f, boolean open) {
+				StringBuilder style = new StringBuilder("big om-icon ");
 				if (f.getId() == null) {
-					style = f.getHash().indexOf("my") > -1 ? "my file om-icon" : "public file om-icon";
+					style.append(CSS_CLASS_FILE).append(f.getHash().indexOf("my") > -1 ? "my" : "public");
 				} else {
-					String _style, addStyle = f.exists() ? "" : "broken";
+					if (!f.exists()) {
+						style.append("broken ");
+					}
 					switch(f.getType()) {
 						case Folder:
-							_style = def;
+							style.append(CSS_CLASS_FILE).append(open ? "folder-open " : "folder ");
 							break;
 						case Image:
-							_style = "image file om-icon";
+							style.append(CSS_CLASS_FILE).append("image ");
 							break;
 						case PollChart:
-							_style = "chart file om-icon";
+							style.append(CSS_CLASS_FILE).append("chart ");
 							break;
 						case WmlFile:
-							_style = "wml file om-icon";
+							style.append(CSS_CLASS_FILE).append("wml ");
 							break;
 						case Video:
 						case Recording:
 						{
-							_style = "recording om-icon";
+							style.append("recording ");
 							if (f instanceof Recording) {
 								Status st = ((Recording)f).getStatus();
 								if (Status.RECORDING == st || Status.CONVERTING == st) {
-									addStyle = "processing";
+									style.append("processing");
 								}
 							}
 						}
 							break;
 						case Presentation:
-							_style = "doc file om-icon";
+							style.append(CSS_CLASS_FILE).append("doc ");
 							break;
 						default:
-							_style = "file om-icon";
 							break;
 					}
-					style = String.format("%s %s", addStyle, _style);
 				}
-				return style;
+				return style.toString();
 			}
 			
 			@Override
 			protected String getOtherStyleClass(FileItem r) {
-				return getItemStyle(r, super.getOtherStyleClass(r));
+				return getItemStyle(r, false);
 			}
 			
 			@Override
 			protected String getOpenStyleClass() {
-				return getItemStyle(getModelObject(), super.getOpenStyleClass());
+				return getItemStyle(getModelObject(), true);
 			}
 			
 			@Override
 			protected String getClosedStyleClass() {
-				return getItemStyle(getModelObject(), super.getClosedStyleClass());
+				return getItemStyle(getModelObject(), false);
 			}
 			
 			@Override
