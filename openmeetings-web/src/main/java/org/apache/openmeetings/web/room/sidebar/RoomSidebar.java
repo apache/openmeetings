@@ -35,6 +35,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.app.Client.Pod;
+import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
@@ -92,6 +93,14 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void populateItem(ListItem<Client> item) {
 			item.add(new RoomClientPanel("user", item, room));
+		}
+	};
+	private final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			roomFiles.createFolder(target, getModelObject());
 		}
 	};
 	private final AbstractDefaultAjaxBehavior roomAction = new AbstractDefaultAjaxBehavior() {
@@ -272,9 +281,9 @@ public class RoomSidebar extends Panel {
 				selectedIdx = index;
 			}
 		}).setOutputMarkupId(true));
-		roomFiles = new RoomFilePanel("tree", room);
+		roomFiles = new RoomFilePanel("tree", addFolder, room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
-		add(upload = new UploadDialog("upload", room, roomFiles));
+		add(addFolder, upload = new UploadDialog("upload", room, roomFiles));
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 	}
 

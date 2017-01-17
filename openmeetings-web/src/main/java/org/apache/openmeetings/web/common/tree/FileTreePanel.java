@@ -36,7 +36,6 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.AjaxDownload;
@@ -77,17 +76,11 @@ public abstract class FileTreePanel extends Panel {
 	final FileItemTree tree;
 	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>());
 	private final Form<Void> form = new Form<Void>("form");
-	private final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
-		private static final long serialVersionUID = 1L;
+	private final AddFolderDialog addFolder;
 
-		@Override
-		protected void onSubmit(AjaxRequestTarget target) {
-			createFolder(target, getModelObject());
-		}
-	};
-
-	public FileTreePanel(String id, Long roomId) {
+	public FileTreePanel(String id, AddFolderDialog addFolder, Long roomId) {
 		super(id);
+		this.addFolder = addFolder;
 		OmTreeProvider tp = new OmTreeProvider(roomId);
 		setSelected(tp.getRoot(), null);
 		form.add(tree = new FileItemTree("tree", this, tp));
@@ -98,7 +91,6 @@ public abstract class FileTreePanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		form.add(addFolder);
 		download.setDefaultModelObject(newDownloadMenuList());
 		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
@@ -212,7 +204,7 @@ public abstract class FileTreePanel extends Panel {
 
 	protected abstract void update(AjaxRequestTarget target, FileItem f);
 
-	protected void createFolder(AjaxRequestTarget target, String name) {
+	public void createFolder(AjaxRequestTarget target, String name) {
 		FileItem p = selected.getObject();
 		boolean isRecording = p instanceof Recording;
 		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
