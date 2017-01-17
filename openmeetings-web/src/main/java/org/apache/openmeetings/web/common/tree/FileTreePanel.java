@@ -91,7 +91,7 @@ public abstract class FileTreePanel extends Panel {
 		OmTreeProvider tp = new OmTreeProvider(roomId);
 		setSelected(tp.getRoot(), null);
 		form.add(tree = new FileItemTree("tree", this, tp));
-		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true).setDefaultModelObject(newDownloadMenuList()));
+		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		add(form.add(downloader));
 	}
 
@@ -99,6 +99,7 @@ public abstract class FileTreePanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 		form.add(addFolder);
+		download.setDefaultModelObject(newDownloadMenuList());
 		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
 

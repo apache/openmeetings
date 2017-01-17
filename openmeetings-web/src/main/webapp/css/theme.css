@@ -485,6 +485,7 @@ table.messages td.main {
 	padding-left: 25px;
 	background-repeat: no-repeat !important;
 	background-position: 5px 3px !important;
+	background-size: 16px 16px !important;
 	padding-top: 2px;
 	display: block;
 	text-align:left;
