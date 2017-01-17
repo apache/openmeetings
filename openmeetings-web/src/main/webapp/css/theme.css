@@ -350,7 +350,7 @@ html, body {
 	background-image: url(images/film_processing.png);
 }
 .file.om-icon, .recording.om-icon {
-	padding-left: 18px;
+	padding-left: 34px;
 }
 .my.file.om-icon {
 	background-image: url(images/house_link.png);
@@ -382,6 +382,15 @@ html, body {
 .broken.doc.file.om-icon {
 	background-image: url(images/page_error.png);
 }
+.folder.file.om-icon {
+	background-image: url(images/folder.png);
+}
+.folder-open.file.om-icon {
+	background-image: url(images/folder_open.png);
+}
+.chart.file.om-icon {
+	background-image: url(images/chart_pie.png);
+}
 .invite.om-icon {
 	background-image: url(images/connect.png);
 }
@@ -406,8 +415,12 @@ html, body {
 	white-space: nowrap;
 	overflow: hidden;
 }
+.file.item .name {
+	padding-top: 10px;
+}
 .file.item .errors {
 	position: absolute;
+	top: 10px;
 	right: 0px;
 	background-image: url(images/script_error.png);
 	width: 16px;
