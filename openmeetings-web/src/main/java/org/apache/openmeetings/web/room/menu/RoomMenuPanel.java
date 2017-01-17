@@ -200,11 +200,11 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		setVisible(!r.isHidden(RoomElement.TopBar));
 		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
-		add(askBtn);
-		add((roomName = new Label("roomName", r.getName())).setOutputMarkupId(true));
+		add(askBtn.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
-		add(shareBtn = new StartSharingButton("share", room.getClient()));
+		add((shareBtn = new StartSharingButton("share", room.getClient())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
 		add(invite = new InvitationDialog("invite", rif));
 		rif.setDialog(invite);

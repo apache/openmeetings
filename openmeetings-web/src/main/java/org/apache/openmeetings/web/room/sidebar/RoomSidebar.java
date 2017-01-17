@@ -81,7 +81,7 @@ public class RoomSidebar extends Panel {
 	private final UploadDialog upload;
 	private final RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
-	private final ConfirmableAjaxBorder confirmKick;
+	private ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
 	private boolean avInited = false;
 	private int selectedIdx = 0;
@@ -258,7 +258,7 @@ public class RoomSidebar extends Panel {
 				return new FileFragment(containerId, "file-panel");
 			}
 		};
-		add(tabs = new TabbedPanel("tabs", newTabModel()) {
+		add((tabs = new TabbedPanel("tabs", newTabModel()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -271,10 +271,16 @@ public class RoomSidebar extends Panel {
 			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
 				selectedIdx = index;
 			}
-		});
+		}).setOutputMarkupId(true));
 		roomFiles = new RoomFilePanel("tree", room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
 		add(upload = new UploadDialog("upload", room, roomFiles));
+		add(toggleRight, toggleActivity, roomAction, avSettings);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
 
@@ -283,7 +289,6 @@ public class RoomSidebar extends Panel {
 				room.kickUser(target, kickedClient);
 			}
 		});
-		add(toggleRight, toggleActivity, roomAction, avSettings);
 	}
 
 	private TabListModel newTabModel() {
