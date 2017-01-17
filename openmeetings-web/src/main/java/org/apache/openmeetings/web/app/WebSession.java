@@ -296,7 +296,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		userId = u.getId();
 		if (rights == null || rights.isEmpty()) {
 			Set<Right> r = new HashSet<>(u.getRights());
-			if (!AuthLevelUtil.hasAdminLevel(r)) {
+			if (u.getGroupUsers() != null && !AuthLevelUtil.hasAdminLevel(r)) {
 				for (GroupUser gu : u.getGroupUsers()) {
 					if (gu.isModerator()) {
 						r.add(Right.GroupAdmin);
