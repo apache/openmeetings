@@ -26,6 +26,8 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,10 +36,19 @@ public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
-	
+	private final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			fileTree.createFolder(target, getModelObject());
+		}
+	};
+	private final FileTreePanel fileTree;
+
 	public RecordingsPanel(String id) {
 		super(id);
-		add(new FileTreePanel("tree", null) {
+		add(fileTree = new FileTreePanel("tree", addFolder, null) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -55,6 +66,6 @@ public class RecordingsPanel extends UserPanel {
 				info.update(target, (Recording)f);
 			}
 		});
-		add(video, info);
+		add(video, info, addFolder);
 	}
 }
