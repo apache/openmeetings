@@ -40,6 +40,9 @@ import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 public class FileItemTree extends DefaultNestedTree<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private final static String CSS_CLASS_FILE = "file ";
+	private final static String PARAM_MOD = "mod";
+	private final static String PARAM_SHIFT = "s";
+	private final static String PARAM_CTRL = "c";
 	final FileTreePanel treePanel;
 
 	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<FileItem> tp) {
@@ -49,12 +52,12 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 	}
 
 	private void onClick(AjaxRequestTarget target, FileItem f) {
-		String mod = getRequest().getRequestParameters().getParameterValue("modifiers").toOptionalString();
+		String mod = getRequest().getRequestParameters().getParameterValue(PARAM_MOD).toOptionalString();
 		boolean shift = false, ctrl = false;
 		if (!Strings.isEmpty(mod)) {
 			JSONObject o = new JSONObject(mod);
-			shift = o.optBoolean("shift");
-			ctrl = o.optBoolean("ctrl");
+			shift = o.optBoolean(PARAM_SHIFT);
+			ctrl = o.optBoolean(PARAM_CTRL);
 		}
 		treePanel.setSelected(f, target, shift, ctrl);
 		if (Type.Folder == f.getType() && getState(f) == State.COLLAPSED) {
@@ -114,7 +117,9 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 					@Override
 					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 						super.updateAjaxAttributes(attributes);
-						attributes.getDynamicExtraParameters().add("return {modifiers: JSON.stringify({shift: attrs.event.shiftKey, ctrl: attrs.event.ctrlKey})};");
+						attributes.getDynamicExtraParameters().add(
+								String.format("return {%s: JSON.stringify({%s: attrs.event.shiftKey, %s: attrs.event.ctrlKey})};"
+										, PARAM_MOD, PARAM_SHIFT, PARAM_CTRL));
 					}
 				};
 			}
