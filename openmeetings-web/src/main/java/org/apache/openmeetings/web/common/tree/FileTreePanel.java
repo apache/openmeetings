@@ -82,7 +82,7 @@ public abstract class FileTreePanel extends Panel {
 		super(id);
 		this.addFolder = addFolder;
 		OmTreeProvider tp = new OmTreeProvider(roomId);
-		setSelected(tp.getRoot(), null);
+		setSelected(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
 		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		add(form.add(downloader));
@@ -246,7 +246,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
-	public void setSelected(FileItem fi, AjaxRequestTarget target) {
+	public void setSelected(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
 		FileItem _prev = selected.getObject();
 		updateNode(target, _prev);
 		if (target != null) {
