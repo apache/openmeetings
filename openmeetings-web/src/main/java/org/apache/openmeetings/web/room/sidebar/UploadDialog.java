@@ -102,7 +102,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		form.add(feedback.setOutputMarkupId(true), toWb.setOutputMarkupId(true)
 				, cleanBlock.add(cleanWb.setOutputMarkupId(true)).setVisible(false).setOutputMarkupPlaceholderTag(true))
 			.setOutputMarkupId(true);
-	
+
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
@@ -113,11 +113,11 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			@Override
 			public void detach() {
 			}
-			
+
 			@Override
 			public void setObject(List<FileUpload> object) {
 			}
-			
+
 			@Override
 			public List<FileUpload> getObject() {
 				return null;
@@ -147,12 +147,12 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			super.onClick(target, button);
 		}
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(upload, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return upload;
@@ -171,7 +171,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		handler.add(form, fileName);
 		handler.appendJavaScript(String.format("bindUpload('%s', '%s');", form.getMarkupId(), fileName.getMarkupId()));
 	}
-	
+
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		target.add(feedback);
@@ -184,7 +184,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			FileExplorerItem f = new FileExplorerItem();
 			f.setSize(fu.getSize());
 			f.setName(fu.getClientFileName());
-			FileItem parent = roomFiles.getSelected();
+			FileItem parent = roomFiles.getLastSelected();
 			if (parent == null || !(parent instanceof FileExplorerItem)) {
 				f.setOwnerId(getUserId());
 			} else {
@@ -195,7 +195,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				}
 			}
 			f.setInsertedBy(getUserId());
-			
+
 			try {
 				ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
 				for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {

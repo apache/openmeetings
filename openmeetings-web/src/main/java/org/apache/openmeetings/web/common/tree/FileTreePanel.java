@@ -24,10 +24,12 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -48,28 +50,25 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.resource.FileResourceStream;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.ajax.IJQueryAjaxAware;
 import com.googlecode.wicket.jquery.core.ajax.JQueryAjaxBehavior;
-import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxSplitButton;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.DroppableBehavior;
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
-import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
-	private final IModel<FileItem> selected = new CompoundPropertyModel<FileItem>((FileItem)null);
-	private final AjaxDownload downloader = new AjaxDownload();
+	private FileItem lastSelected = null;
+	private Map<String, FileItem> selected = new HashMap<>();
+	final AjaxDownload downloader = new AjaxDownload();
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
@@ -82,7 +81,7 @@ public abstract class FileTreePanel extends Panel {
 		super(id);
 		this.addFolder = addFolder;
 		OmTreeProvider tp = new OmTreeProvider(roomId);
-		setSelected(tp.getRoot(), null, false, false);
+		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
 		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		add(form.add(downloader));
@@ -164,15 +163,16 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				FileItem f = selected.getObject();
-				if (f != null && f.getId() != null) {
+				if (!selected.isEmpty()) {
 					super.onEvent(target);
 				}
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				delete(selected.getObject(), target);
+				for (Entry<String, FileItem> e : selected.entrySet()) {
+					delete(e.getValue(), target);
+				}
 			}
 		});
 
@@ -191,8 +191,8 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	void delete(FileItem f, IPartialPageRequestHandler handler) {
-		long id = f.getId();
-		if (id > 0) {
+		Long id = f.getId();
+		if (id != null) {
 			if (f instanceof Recording) {
 				getBean(RecordingDao.class).delete((Recording)f);
 			} else {
@@ -205,7 +205,7 @@ public abstract class FileTreePanel extends Panel {
 	protected abstract void update(AjaxRequestTarget target, FileItem f);
 
 	public void createFolder(AjaxRequestTarget target, String name) {
-		FileItem p = selected.getObject();
+		FileItem p = lastSelected;
 		boolean isRecording = p instanceof Recording;
 		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
 		f.setName(name);
@@ -213,6 +213,7 @@ public abstract class FileTreePanel extends Panel {
 		f.setInserted(new Date());
 		f.setType(Type.Folder);
 		f.setOwnerId(p.getOwnerId());
+		//TODO lastSelected.parent??
 		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
 		if (isRecording) {
 			Recording r = (Recording)f;
@@ -227,8 +228,12 @@ public abstract class FileTreePanel extends Panel {
 
 	public abstract void updateSizes();
 
-	public FileItem getSelected() {
-		return selected.getObject();
+	public boolean isSelected(FileItem f) {
+		return selected.containsKey(f.getHash());
+	}
+
+	public FileItem getLastSelected() {
+		return lastSelected;
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
@@ -246,19 +251,29 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
-	public void setSelected(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
-		FileItem _prev = selected.getObject();
-		updateNode(target, _prev);
-		if (target != null) {
-			target.add(download.setVisible(fi.getType() == Type.Presentation || fi.getType() == Type.Image));
+	public void select(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
+		updateNode(target, lastSelected);
+		if (ctrl) {
+			if (isSelected(fi)) {
+				selected.remove(fi.getId());
+			} else {
+				selected.put(fi.getHash(), fi);
+			}
+		} else if (shift) {
+			//search
+		} else {
+			selected.clear();
+			selected.put(fi.getHash(), fi);
 		}
-		selected.setObject(fi);
-		updateNode(target, fi);
+		lastSelected = fi;
+		updateNode(target, lastSelected);
+		if (target != null) {
+			target.add(download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
+		}
 	}
 
 	@Override
 	protected void onDetach() {
-		selected.detach();
 		homeSize.detach();
 		publicSize.detach();
 		super.onDetach();
@@ -268,59 +283,11 @@ public abstract class FileTreePanel extends Panel {
 		List<IMenuItem> list = new ArrayList<>();
 
 		//original
-		list.add(new MenuItem(getString("files.download.original"), JQueryIcon.ARROWTHICKSTOP_1_S) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isEnabled() {
-				File f = selected.getObject().getFile();
-				return f != null && f.exists();
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				File f = selected.getObject().getFile();
-				downloader.setFileName(f.getName());
-				downloader.setResourceStream(new FileResourceStream(f));
-				downloader.initiate(target);
-			}
-		});
+		list.add(new DownloadMenuItem(getString("files.download.original"), this, null));
 		//pdf
-		list.add(new MenuItem(getString("files.download.pdf"), JQueryIcon.ARROWTHICKSTOP_1_S) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isEnabled() {
-				File f = selected.getObject().getFile(EXTENSION_PDF);
-				return f != null && f.exists();
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				File f = selected.getObject().getFile(EXTENSION_PDF);
-				downloader.setFileName(f.getName());
-				downloader.setResourceStream(new FileResourceStream(f));
-				downloader.initiate(target);
-			}
-		});
+		list.add(new DownloadMenuItem(getString("files.download.pdf"), this, EXTENSION_PDF));
 		//jpg
-		list.add(new MenuItem(getString("files.download.jpg"), JQueryIcon.ARROWTHICKSTOP_1_S) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isEnabled() {
-				File f = selected.getObject().getFile(EXTENSION_JPG);
-				return f != null && f.exists();
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				File f = selected.getObject().getFile(EXTENSION_JPG);
-				downloader.setFileName(f.getName());
-				downloader.setResourceStream(new FileResourceStream(f));
-				downloader.initiate(target);
-			}
-		});
+		list.add(new DownloadMenuItem(getString("files.download.jpg"), this, EXTENSION_JPG));
 		return list;
 	}
 }

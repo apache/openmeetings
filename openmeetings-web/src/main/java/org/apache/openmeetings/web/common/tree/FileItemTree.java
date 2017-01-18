@@ -58,7 +58,7 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			shift = o.optBoolean(PARAM_SHIFT);
 			ctrl = o.optBoolean(PARAM_CTRL);
 		}
-		treePanel.setSelected(f, target, shift, ctrl);
+		treePanel.select(f, target, shift, ctrl);
 		if (Type.Folder == f.getType() && getState(f) == State.COLLAPSED) {
 			this.expand(f);
 		} else {
@@ -78,13 +78,14 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			@Override
 			protected Component newLabelComponent(String id, final IModel<FileItem> lm) {
 				FileItem r = lm.getObject();
-				return Type.Folder == r.getType() || r.getId() == null ? new FolderPanel(id, lm, treePanel) : new FileItemPanel(id, lm, treePanel);
+				return Type.Folder == r.getType() || r.getId() == null
+						? new FolderPanel(id, lm, treePanel)
+						: new FileItemPanel(id, lm, treePanel);
 			}
 
 			@Override
 			protected boolean isSelected() {
-				FileItem f = getModelObject(), s = treePanel.getSelected();
-				return s.getHash().equals(f.getHash());
+				return treePanel.isSelected(getModelObject());
 			}
 
 			@Override
