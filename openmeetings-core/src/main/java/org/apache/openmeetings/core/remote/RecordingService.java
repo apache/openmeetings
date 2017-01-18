@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.converter.BaseConverter;
@@ -41,8 +42,8 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -102,7 +103,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 			Recording recording = new Recording();
 
-			recording.setHash("");
+			recording.setHash(UUID.randomUUID().toString());
 			recording.setName(roomRecordingName);
 			Long ownerId = client.getUserId();
 			if (ownerId != null && ownerId < 0) {
@@ -201,7 +202,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 	/**
 	 * Start recording the published stream for the specified broadcast-Id
-	 * 
+	 *
 	 * @param conn
 	 * @param broadcastid
 	 * @param streamName
@@ -243,7 +244,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 	/**
 	 * Stops recording the publishing stream for the specified IConnection.
-	 * 
+	 *
 	 * @param conn
 	 */
 	public void stopRecordingShow(IConnection conn, String broadcastId, Long metaId) {

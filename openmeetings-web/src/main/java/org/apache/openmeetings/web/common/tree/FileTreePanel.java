@@ -209,6 +209,7 @@ public abstract class FileTreePanel extends Panel {
 		boolean isRecording = p instanceof Recording;
 		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
 		f.setName(name);
+		f.setHash(UUID.randomUUID().toString());
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
 		f.setType(Type.Folder);
@@ -232,6 +233,10 @@ public abstract class FileTreePanel extends Panel {
 		return selected.containsKey(f.getHash());
 	}
 
+	public int selectedCount() {
+		return selected.size();
+	}
+
 	public FileItem getLastSelected() {
 		return lastSelected;
 	}
@@ -239,6 +244,12 @@ public abstract class FileTreePanel extends Panel {
 	public void update(IPartialPageRequestHandler handler) {
 		updateSizes();
 		handler.add(sizes, trees);
+	}
+
+	private void updateSelected(AjaxRequestTarget target) {
+		for (Entry<String, FileItem> e : selected.entrySet()) {
+			updateNode(target, e.getValue());
+		}
 	}
 
 	void updateNode(AjaxRequestTarget target, FileItem fi) {
@@ -251,22 +262,61 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
+	private boolean sameParent(FileItem f1, FileItem f2) {
+		if (f1 instanceof Recording && f2 instanceof FileExplorerItem) {
+			return false;
+		}
+		if (f1.getParentId() != null && f1.getParentId().equals(f2.getParentId())) {
+			return true;
+		}
+		if (f1.getParentId() == null && f2.getParentId() == null) {
+			if (f1.getOwnerId() != null && f1.getOwnerId().equals(f2.getOwnerId())) {
+				return true;
+			}
+			if (f1.getRoomId() != null && f1.getRoomId().equals(f2.getRoomId())) {
+				return true;
+			}
+			if (f1.getRoomId() == null && f2.getRoomId() == null && f1.getOwnerId() == null && f2.getOwnerId() == null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void select(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
-		updateNode(target, lastSelected);
+		updateSelected(target);
 		if (ctrl) {
 			if (isSelected(fi)) {
-				selected.remove(fi.getId());
+				selected.remove(fi.getHash());
 			} else {
 				selected.put(fi.getHash(), fi);
 			}
-		} else if (shift) {
-			//search
+			lastSelected = fi;
+		} else if (shift && lastSelected != null && !lastSelected.getHash().equals(fi.getHash()) && sameParent(fi, lastSelected)) {
+			selected.clear();
+			String lastHash = null;
+			for (FileItem f : ((OmTreeProvider)tree.getProvider()).getByParent(fi, fi.getParentId())) {
+				if (lastHash == null) {
+					if (f.getHash().equals(lastSelected.getHash())) {
+						lastHash = fi.getHash();
+					}
+					if (f.getHash().equals(fi.getHash())) {
+						lastHash = lastSelected.getHash();
+					}
+				}
+				if (lastHash != null) {
+					selected.put(f.getHash(), f);
+					if (f.getHash().equals(lastHash)) {
+						break;
+					}
+				}
+			}
 		} else {
 			selected.clear();
 			selected.put(fi.getHash(), fi);
+			lastSelected = fi;
 		}
-		lastSelected = fi;
-		updateNode(target, lastSelected);
+		updateSelected(target);
 		if (target != null) {
 			target.add(download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
 		}
