@@ -67,13 +67,13 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		}
 		for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
 			Group g = gu.getGroup();
-			
+
 			Recording r = createRecRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()));
 			r.setGroupId(g.getId());
 			roots.add(r);
 		}
 	}
-	
+
 	static Recording createRecRoot(String name, String hash) {
 		Recording r = new Recording();
 		r.setType(Type.Folder);
@@ -81,7 +81,7 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		r.setHash(hash);
 		return r;
 	}
-	
+
 	static FileExplorerItem createFileRoot(Long roomId) {
 		FileExplorerItem f = new FileExplorerItem();
 		f.setRoomId(roomId);
@@ -96,52 +96,52 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		}
 		return f;
 	}
-	
+
 	public FileItem getRoot() {
 		return roots.get(0);
 	}
-	
+
 	@Override
 	public Iterator<FileItem> getRoots() {
 		return roots.iterator();
 	}
 
-	@Override
-	public Iterator<FileItem> getChildren(FileItem node) {
+	public List<FileItem> getByParent(FileItem node, Long id) {
 		List<FileItem> list = new ArrayList<>();
 		if (node instanceof Recording) {
 			Recording rec = (Recording)node;
 			RecordingDao dao = getBean(RecordingDao.class);
 			List<Recording> _list;
-			if (node.getId() == null) {
+			if (id == null) {
 				if (node.getOwnerId() == null) {
 					_list = dao.getRootByPublic(rec.getGroupId());
 				} else {
 					_list = dao.getRootByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(node.getId());
+				_list = dao.getByParent(id);
 			}
-			for (Recording r : _list) {
-				list.add(r);
-			}
+			list.addAll(_list);
 		} else {
 			FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
 			List<FileExplorerItem> _list;
-			if (node.getId() == null) {
+			if (id == null) {
 				if (roomId == null) {
 					_list = dao.getByRoom(roomId);
 				} else {
 					_list = dao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(node.getId());
+				_list = dao.getByParent(id);
 			}
-			for (FileExplorerItem r : _list) {
-				list.add(r);
-			}
+			list.addAll(_list);
 		}
-		return list.iterator();
+		return list;
+	}
+
+	@Override
+	public Iterator<FileItem> getChildren(FileItem node) {
+		return getByParent(node, node.getId()).iterator();
 	}
 
 	@Override
