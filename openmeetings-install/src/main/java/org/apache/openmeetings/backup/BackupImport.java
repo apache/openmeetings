@@ -212,7 +212,7 @@ public class BackupImport {
 	private static File unzip(InputStream is) throws IOException  {
 		File f = OmFileHelper.getNewDir(OmFileHelper.getUploadImportDir(), "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
 		log.debug("##### EXTRACTING BACKUP TO: " + f);
-		
+
 		try (ZipInputStream zis = new ZipInputStream(is)) {
 			ZipEntry zipentry = null;
 			while ((zipentry = zis.getNextEntry()) != null) {
@@ -263,7 +263,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			registry.bind(Date.class, DateConverter.class);
 			registry.bind(User.class, new UserConverter(userDao, userMap));
-			
+
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
 				if (c.getKey() == null || c.isDeleted()) {
@@ -350,7 +350,7 @@ public class BackupImport {
 				}
 				//FIXME: OPENMEETINGS-750
 				//Convert old Backups with OmTimeZone to new schema
-				
+
 				String tz = u.getTimeZoneId();
 				if (tz == null) {
 					u.setTimeZoneId(jNameTimeZone);
@@ -358,7 +358,7 @@ public class BackupImport {
 				} else {
 					u.setForceTimeZoneCheck(false);
 				}
-				
+
 				Long userId = u.getId();
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
@@ -412,10 +412,10 @@ public class BackupImport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-			
+
 			List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
 			for (RoomGroup ro : list) {
 				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
@@ -434,11 +434,11 @@ public class BackupImport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
-			
+
 			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
 			for (ChatMessage m : list) {
 				m.setId(null);
@@ -475,13 +475,13 @@ public class BackupImport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
 			registry.bind(OmCalendar.class, new OmCalendarConverter(calendarDao, calendarMap));
-			
+
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
 			for (Appointment a : list) {
 				Long appId = a.getId();
@@ -507,7 +507,7 @@ public class BackupImport {
 		log.info("Appointement import complete, starting meeting members import");
 		/*
 		 * ##################### Import MeetingMembers
-		 * 
+		 *
 		 * Reminder Invitations will be NOT send!
 		 */
 		{
@@ -556,6 +556,9 @@ public class BackupImport {
 					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_JPG));
 					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
 				}
+				if (Strings.isEmpty(r.getHash())) {
+					r.setHash(UUID.randomUUID().toString());
+				}
 				recordingDao.update(r);
 			}
 		}
@@ -586,9 +589,9 @@ public class BackupImport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(User.class, new UserConverter(userDao, userMap));
-			
+
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
 				Long ucId = uc.getId();
@@ -613,11 +616,11 @@ public class BackupImport {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
-	
+
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(Date.class, DateConverter.class);
-			
+
 			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
 			boolean oldBackup = true;
 			for (PrivateMessage p : list) {
@@ -625,7 +628,6 @@ public class BackupImport {
 					oldBackup = false;
 					break;
 				}
-				
 			}
 			for (PrivateMessage p : list) {
 				p.setId(null);
@@ -643,8 +645,8 @@ public class BackupImport {
 				if (p.getOwner() != null && p.getOwner().getId() == null) {
 					p.setOwner(null);
 				}
-				if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null 
-						&& p.getFrom() != null && p.getFrom().getId() != null 
+				if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null
+						&& p.getFrom() != null && p.getFrom().getId() != null
 						&& p.getOwner().getId() == p.getFrom().getId())
 				{
 					p.setFolderId(SENT_FOLDER_ID);
@@ -670,6 +672,9 @@ public class BackupImport {
 				if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
 					file.setParentId(null);
 				}
+				if (Strings.isEmpty(file.getHash())) {
+					file.setHash(UUID.randomUUID().toString());
+				}
 				fileExplorerItemDao.update(file);
 			}
 		}
@@ -683,13 +688,13 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
 			Serializer serializer = new Persister(strategy, matcher);
-	
+
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
 			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
 			registry.bind(Date.class, DateConverter.class);
-			
+
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
 				rp.setId(null);
@@ -708,7 +713,7 @@ public class BackupImport {
 				pollDao.update(rp);
 			}
 		}
-		
+
 		log.info("Poll import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
@@ -777,7 +782,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(Date.class, DateConverter.class);
-			
+
 			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
 				InputNode root = NodeBuilder.read(rootIs1);
 				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
@@ -788,7 +793,7 @@ public class BackupImport {
 					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
 					while (item != null) {
 						FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
-						
+
 						//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 						do {
 							String name = item1.getName();
@@ -816,12 +821,12 @@ public class BackupImport {
 							if ("isStoredWmlFile".equals(name) && "true".equals(val)) {
 								f.setType(FileItem.Type.WmlFile);
 							}
-							if ("isFolder".equals(name) && "true".equals(val)) {
+							if (("folder".equals(name) || "isFolder".equals(name)) && "true".equals(val)) {
 								f.setType(FileItem.Type.Folder);
 							}
 							item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 						} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
-						
+
 						//Some hashes were stored with file extension
 						int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
 						if (idx > -1) {
@@ -849,12 +854,12 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
 			Serializer ser = new Persister(strategy, matcher);
-	
+
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(Date.class, DateConverter.class);
 			registry.bind(Recording.Status.class, RecordingStatusConverter.class);
-			
+
 			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
 				InputNode root = NodeBuilder.read(rootIs1);
 				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old isFolder
@@ -865,18 +870,18 @@ public class BackupImport {
 					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
 					while (item != null) {
 						Recording r = ser.read(Recording.class, item, false);
-						
+
 						boolean isFolder = false;
 						//HACK to handle old isFolder
 						do {
 							String name = item1.getName();
 							String val = item1.getValue();
-							if ("isFolder".equals(name) && "true".equals(val)) {
+							if (("folder".equals(name) || "isFolder".equals(name)) && "true".equals(val)) {
 								isFolder = true;
 							}
 							item1 = listNode1.getNext(); //HACK to handle Address inside user
 						} while (item1 != null && !"flvrecording".equals(item1.getName()));
-						
+
 						if (r.getType() == null) {
 							r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
 						}
@@ -898,7 +903,7 @@ public class BackupImport {
 		if (!xml.exists()) {
 			throw new Exception(fileName + " missing");
 		}
-		
+
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
 	}
 
@@ -910,15 +915,15 @@ public class BackupImport {
 
 		registry.bind(User.class, new UserConverter(userDao, userMap));
 		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentMap));
-		
+
 		File xml = new File(baseDir, filename);
 		if (!xml.exists()) {
 			throw new Exception(filename + " missing");
 		}
-		
+
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(new InputSource(xml.toURI().toASCIIString()));
-		
+
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
 		xformer.transform(new DOMSource(doc), new StreamResult(sw));
@@ -1019,7 +1024,7 @@ public class BackupImport {
 				}
 			}
 		}
-		
+
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
 		xformer.transform(new DOMSource(doc), new StreamResult(sw));
@@ -1037,7 +1042,7 @@ public class BackupImport {
 			InputNode item2 = listNode2.getNext(); //HACK to handle old om_time_zone, level_id, status
 			while (item != null) {
 				User u = ser.read(User.class, item, false);
-				
+
 				boolean needToSkip1 = true;
 				//HACK to handle Address inside user
 				if (u.getAddress() == null) {
@@ -1127,7 +1132,7 @@ public class BackupImport {
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(userDao, userMap));
 			registry.bind(Room.Type.class, RoomTypeConverter.class);
-			
+
 			try (InputStream rootIs1 = new FileInputStream(xml); InputStream rootIs2 = new FileInputStream(xml);) {
 				InputNode root = NodeBuilder.read(rootIs1);
 				InputNode root1 = NodeBuilder.read(rootIs2); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
@@ -1138,7 +1143,7 @@ public class BackupImport {
 					InputNode item1 = listNode1.getNext(); //HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
 					while (item != null) {
 						Room r = ser.read(Room.class, item, false);
-						
+
 						Boolean showMicrophoneStatus = null;
 						//HACK to handle old hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard, showMicrophoneStatus
 						do {
@@ -1170,7 +1175,7 @@ public class BackupImport {
 							}
 							item1 = listNode1.getNext(); //HACK to handle Address inside user
 						} while (item1 != null && !"room".equals(item1.getName()));
-						
+
 						if (Boolean.FALSE.equals(showMicrophoneStatus)) {
 							r.hide(RoomElement.MicrophoneStatus);
 						}
@@ -1310,7 +1315,7 @@ public class BackupImport {
 		}
 		return newId;
 	}
-	
+
 	private static String getCountry(String countryId) {
 		if (countries.isEmpty()) {
 			try (InputStream is = BackupImport.class.getResourceAsStream("countries.properties")) {
