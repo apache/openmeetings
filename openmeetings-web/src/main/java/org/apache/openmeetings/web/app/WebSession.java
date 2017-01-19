@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
-import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FORMAT_STRING;
+import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -321,11 +321,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
-		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING, tz);
+		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
 		setLocale(getLocale(u));
 		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}
-	
+
 	public boolean signIn(String login, String password, Type type, Long domainId) {
 		try {
 			User u = null;
@@ -354,7 +354,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return false;
 	}
-	
+
 	public boolean signIn(User u) {
 		if (u == null) {
 			return false;
@@ -362,20 +362,20 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		setUser(u, null);
 		return true;
 	}
-	
+
 	public Long getLoginError() {
 		return loginError;
 	}
-	
+
 	public static WebSession get() {
 		return (WebSession)AbstractAuthenticatedWebSession.get();
 	}
-	
+
 	@Override
 	public void setLanguage(long languageId) {
 		this.languageId = languageId;
 	}
-	
+
 	public static long getLanguage() {
 		checkIsInvalid();
 		WebSession session = get();
@@ -388,7 +388,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return session.languageId;
 	}
-	
+
 	public String getValidatedSid() {
 		SessiondataDao sessionDao = getBean(SessiondataDao.class);
 		Sessiondata sd = sessionDao.check(SID);
@@ -401,7 +401,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return SID;
 	}
-	
+
 	public static String getSid() {
 		return get().getValidatedSid();
 	}
@@ -446,20 +446,20 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public static FastDateFormat getIsoDateFormat() {
 		return get().ISO8601FORMAT;
 	}
-	
+
 	public static FastDateFormat getDateFormat() {
 		return get().sdf;
 	}
-	
+
 	public static Set<Right> getRights() {
 		checkIsInvalid();
 		return get().rights;
 	}
-	
+
 	public static void setKickedByAdmin(boolean kicked) {
 		get().kickedByAdmin = kicked;
 	}
-	
+
 	public boolean isKickedByAdmin() {
 		return kickedByAdmin;
 	}
@@ -472,7 +472,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		this.area = area;
 	}
 
-	
+
 	public static Dashboard getDashboard() {
 		Dashboard d = get().dashboard;
 		if (d == null) {
@@ -481,7 +481,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return d;
 	}
-	
+
 	public Locale getBrowserLocale(){
 		return browserLocale;
 	}
@@ -514,12 +514,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		return _zone == null ? null : _zone.getID();
 	}
-	
+
 	public static TimeZone getClientTimeZone() {
 		String tzCode = get().getClientTZCode();
 		return tzCode == null ? null : TimeZone.getTimeZone(tzCode);
 	}
-	
+
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
@@ -597,12 +597,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public long getOmLanguage() {
 		return getLanguage();
 	}
-	
+
 	private static void checkIsInvalid() {
 		if (isInvaldSession(get().getId())) {
 			setKickedByAdmin(true);
 			removeInvalidSession(get().getId());
-			org.apache.wicket.Session session = (org.apache.wicket.Session)get();
+			org.apache.wicket.Session session = get();
 			session.invalidate();
 			Application.get().restartResponseAtSignInPage();
 		}
