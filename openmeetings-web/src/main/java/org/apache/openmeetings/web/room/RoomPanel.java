@@ -150,11 +150,11 @@ public class RoomPanel extends BasePanel {
 	private String recordingUser = null;
 	private String publishingUser = null; //TODO add
 	private long activeWbId = -1;
-	
+
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		//TODO check here and set 
+		//TODO check here and set
 		//private String recordingUser = null;
 		//private String sharingUser = null;
 		//private String publishingUser = null;
@@ -175,8 +175,9 @@ public class RoomPanel extends BasePanel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
-			
+
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
@@ -255,14 +256,14 @@ public class RoomPanel extends BasePanel {
 		if (r.isWaitForRecording()) {
 			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				public void onConfigure(JQueryBehavior behavior) {
 					super.onConfigure(behavior);
 					behavior.setOption("autoOpen", true);
 					behavior.setOption("resizable", false);
 				}
-				
+
 				@Override
 				public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				}
@@ -284,7 +285,7 @@ public class RoomPanel extends BasePanel {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onEvent(IEvent<?> event) {
 		if (event.getPayload() instanceof WebSocketPushPayload) {
@@ -444,11 +445,11 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 	}
-	
+
 	public static boolean isModerator(long userId, long roomId) {
 		return hasRight(userId, roomId, Right.moderator);
 	}
-	
+
 	public static boolean hasRight(long userId, long roomId, Right r) {
 		for (Client c : getRoomClients(roomId)) {
 			if (c.getUserId().equals(userId) && c.hasRight(r)) {
@@ -457,7 +458,7 @@ public class RoomPanel extends BasePanel {
 		}
 		return false;
 	}
-	
+
 	public static void sendRoom(long roomId, String msg) {
 		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 		for (Client c : getRoomClients(roomId)) {
@@ -557,7 +558,7 @@ public class RoomPanel extends BasePanel {
 			RoomPanel.broadcast(new TextRoomMessage(getRoom().getId(), getUserId(), reqType, getClient().getUid()));
 		}
 	}
-	
+
 	public void allowRight(AjaxRequestTarget target, Client client, Right... rights) {
 		for (Right right : rights) {
 			client.getRights().add(right);
@@ -581,16 +582,16 @@ public class RoomPanel extends BasePanel {
 	public void kickUser(AjaxRequestTarget target, Client client) {
 		RoomPanel.broadcast(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
 	}
-	
+
 	public void broadcast(AjaxRequestTarget target, Client client) {
 		broadcast(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);
 	}
-	
+
 	public Room getRoom() {
 		return r;
 	}
-	
+
 	public Client getClient() {
 		return getMainPanel().getClient();
 	}
@@ -600,7 +601,7 @@ public class RoomPanel extends BasePanel {
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share) && getSharingUser() == null;
 	}
-	
+
 	public RoomSidebar getSidebar() {
 		return sidebar;
 	}
@@ -608,7 +609,7 @@ public class RoomPanel extends BasePanel {
 	public ActivitiesPanel getActivities() {
 		return activities;
 	}
-	
+
 	public String getSharingUser() {
 		return sharingUser;
 	}

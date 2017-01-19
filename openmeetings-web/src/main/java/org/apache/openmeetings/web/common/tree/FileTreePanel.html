@@ -22,6 +22,15 @@
 <wicket:panel>
 	<form wicket:id="form">
 	<script type="text/javascript">
+		function dragHelper() {
+			var s = $(this);
+			if (s.parents('a').hasClass('ui-state-active')) {
+				s = $('.ui-state-active .ui-draggable.ui-draggable-handle');
+			}
+			var c = $('<div/>').attr('id', 'draggingContainer');
+			c.append(s.clone());
+			return c;
+		}
 		function treeRevert(dropped) {
 			$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
 			return !dropped || (!!dropped && !!dropped.context && $(dropped.context).hasClass('wb', 'room'));
