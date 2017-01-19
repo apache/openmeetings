@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.wicket.ajax.json.JSONObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -34,7 +35,7 @@ public class MeetingMemberDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private UserDTO user;
-	
+
 	public MeetingMemberDTO() {}
 
 	public MeetingMemberDTO(MeetingMember mm) {
@@ -48,7 +49,7 @@ public class MeetingMemberDTO implements Serializable {
 		mm.setUser(user.get(userDao));
 		return mm;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -63,5 +64,17 @@ public class MeetingMemberDTO implements Serializable {
 
 	public void setUser(UserDTO user) {
 		this.user = user;
+	}
+
+	public static MeetingMemberDTO get(JSONObject o) {
+		MeetingMemberDTO m = new MeetingMemberDTO();
+		m.id = o.optLong("id");
+		m.user = UserDTO.get(o.optJSONObject("user"));
+		return m;
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 }

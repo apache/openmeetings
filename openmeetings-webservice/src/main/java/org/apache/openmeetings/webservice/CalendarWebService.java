@@ -26,9 +26,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -44,6 +46,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -53,9 +56,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * CalendarService contains methods to create, edit delete calendar meetings
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -73,14 +76,14 @@ public class CalendarWebService {
 
 	/**
 	 * Load appointments by a start / end range for the current SID
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param start
 	 *            start time
 	 * @param end
 	 *            end time
-	 *            
+	 *
 	 * @return - list of appointments in range
 	 * @throws {@link ServiceException} in case of any error
 	 */
@@ -109,7 +112,7 @@ public class CalendarWebService {
 
 	/**
 	 * Load appointments by a start / end range for the userId
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param userid
@@ -118,7 +121,7 @@ public class CalendarWebService {
 	 *            start time
 	 * @param end
 	 *            end time
-	 *            
+	 *
 	 * @return - list of appointments in range
 	 * @throws {@link ServiceException} in case of any error
 	 */
@@ -149,7 +152,7 @@ public class CalendarWebService {
 
 	/**
 	 * Get the next Calendar event for the current user of the SID
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return - next Calendar event
@@ -176,12 +179,12 @@ public class CalendarWebService {
 
 	/**
 	 * Get the next Calendar event for userId
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param userid
 	 *            the userId the calendar events should be loaded
-	 *            
+	 *
 	 * @return - next Calendar event
 	 * @throws {@link ServiceException} in case of any error
 	 */
@@ -205,9 +208,9 @@ public class CalendarWebService {
 	}
 
 	/**
-	 * 
+	 *
 	 * Load a calendar event by its room id
-	 * 
+	 *
 	 * @param sid
 	 * @param roomid
 	 * @return - calendar event by its room id
@@ -237,12 +240,12 @@ public class CalendarWebService {
 
 	/**
 	 * Search a calendar event for the current SID
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param title
 	 *            the search string
-	 *            
+	 *
 	 * @return - calendar event list
 	 * @throws {@link ServiceException} in case of any error
 	 */
@@ -266,28 +269,39 @@ public class CalendarWebService {
 
 	/**
 	 * Save an appointment
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param appointment
-	 *            calendar event 
-	 *            
+	 *            calendar event
+	 *
 	 * @return - appointment saved
 	 * @throws {@link ServiceException} in case of any error
 	 */
+	@WebMethod
 	@POST
 	@Path("/") //TODO FIXME update is also here for now
-	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) throws ServiceException {
+	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) throws ServiceException {
 		//Seems to be create
 		log.debug("save SID:" + sid);
 
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			log.debug("save userId:" + sd);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
+			User u = userDao.get(sd.getUserId());
+			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights())
+					&& (appointment.getOwner() != null || appointment.getRoom().isPublic() || !appointment.getRoom().isAppointment()))
+			{
+				//TODO maybe additional checks are required
+				log.error("USER/Room modification as SOAP");
+				throw new ServiceException("Insufficient permissions"); //TODO code -26
+			}
+			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
 				Appointment a = appointment.get(userDao, appointmentDao);
-				return new AppointmentDTO(appointmentDao.update(a, sd.getUserId()));
+				if (a.getOwner() == null) {
+					a.setOwner(u);
+				}
+				return new AppointmentDTO(appointmentDao.update(a, u.getId()));
 			} else {
 				log.error("save : wrong user level");
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -299,16 +313,16 @@ public class CalendarWebService {
 			throw new ServiceException(err.getMessage());
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * delete a calendar event
-	 * 
+	 *
 	 * If the given SID is from an Administrator or Web-Service user, the user
 	 * can delete any appointment.<br/>
 	 * If the SID is assigned to a simple user, he can only delete appointments
 	 * where he is also the owner/creator of the appointment
-	 * 
+	 *
 	 * @param sid
 	 *            an authenticated SID
 	 * @param id

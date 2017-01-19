@@ -35,13 +35,15 @@ import org.slf4j.Logger;
 public class CalendarPatterns {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, webAppRootKey);
 
-	public static FastDateFormat dateFormat__ddMMyyyyHHmmss = FastDateFormat.getInstance("dd.MM.yyyy HH:mm:ss");
-	public static FastDateFormat dateFormat__ddMMyyyy = FastDateFormat.getInstance("dd.MM.yyyy");
-	public static FastDateFormat dateFormat__ddMMyyyyBySeparator = FastDateFormat.getInstance("dd-MM-yyyy");
-	public static FastDateFormat dateFormat__yyyyMMddHHmmss = FastDateFormat.getInstance("yyyy.MM.dd HH:mm:ss");
-	public static FastDateFormat STREAM_DATE_FORMAT = FastDateFormat.getInstance("yyyy_MM_dd_HH_mm_ss");
-	public static String FULL_DF_PATTERN = "dd.MM.yyyy HH:mm:ss z (Z)";
-	public static FastDateFormat FULL_DATE_FORMAT = FastDateFormat.getInstance(FULL_DF_PATTERN);
+	public static final FastDateFormat dateFormat__ddMMyyyyHHmmss = FastDateFormat.getInstance("dd.MM.yyyy HH:mm:ss");
+	public static final FastDateFormat dateFormat__ddMMyyyy = FastDateFormat.getInstance("dd.MM.yyyy");
+	public static final FastDateFormat dateFormat__ddMMyyyyBySeparator = FastDateFormat.getInstance("dd-MM-yyyy");
+	public static final FastDateFormat dateFormat__yyyyMMddHHmmss = FastDateFormat.getInstance("yyyy.MM.dd HH:mm:ss");
+	public static final FastDateFormat STREAM_DATE_FORMAT = FastDateFormat.getInstance("yyyy_MM_dd_HH_mm_ss");
+	public static final String FULL_DF_PATTERN = "dd.MM.yyyy HH:mm:ss z (Z)";
+	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final FastDateFormat FULL_DATE_FORMAT = FastDateFormat.getInstance(FULL_DF_PATTERN);
+	public static final FastDateFormat ISO8601_FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING);
 
 	public static String getDateByMiliSeconds(Date t) {
 		return dateFormat__yyyyMMddHHmmss.format(t);

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
+import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -91,7 +92,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = getLogger(WebSession.class, webAppRootKey);
 	public static final int MILLIS_IN_MINUTE = 60000;
-	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
 	public static final String WICKET_ROOM_ID = "wicketroomid";
