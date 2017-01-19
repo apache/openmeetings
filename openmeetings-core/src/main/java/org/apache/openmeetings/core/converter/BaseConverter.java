@@ -19,8 +19,8 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -66,7 +66,7 @@ public abstract class BaseConverter {
 		path += app;
 		return path;
 	}
-	
+
 	public String getPathToFFMPEG() {
 		return getPath("ffmpeg_path", "ffmpeg");
 	}
@@ -82,7 +82,7 @@ public abstract class BaseConverter {
 	protected boolean isUseOldStyleFfmpegMap() {
 		return "1".equals(configurationDao.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
-	
+
 	protected File getStreamFolder(Recording recording) {
 		return getStreamsSubDir(recording.getRoomId());
 	}
@@ -94,11 +94,11 @@ public abstract class BaseConverter {
 	protected double diffSeconds(Date from, Date to) {
 		return diffSeconds(diff(from, to));
 	}
-	
+
 	protected double diffSeconds(long val) {
 		return ((double)val) / 1000;
 	}
-	
+
 	protected String formatMillis(long millis) {
 		long hours = TimeUnit.MILLISECONDS.toHours(millis);
 		millis -= TimeUnit.HOURS.toMillis(hours);
@@ -112,33 +112,33 @@ public abstract class BaseConverter {
 	protected void updateDuration(Recording r) {
 		r.setDuration(formatMillis(diff(r.getRecordEnd(), r.getRecordStart())));
 	}
-	
+
 	protected void deleteFileIfExists(File f) {
 		if (f.exists()) {
 			f.delete();
 		}
 	}
-	
+
 	protected String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
 		List<String> argv = new ArrayList<String>();
-		
+
 		argv.add(getPathToSoX());
 		argv.add("-m");
 		for (File arg : waveFiles) {
 			argv.add(arg.getCanonicalPath());
 		}
 		argv.add(wav.getCanonicalPath());
-		
+
 		return argv.toArray(new String[0]);
 	}
-	
+
 	protected void stripAudioFirstPass(Recording recording, List<ConverterProcessResult> returnLog,
 			List<File> waveFiles, File streamFolder)
 	{
 		stripAudioFirstPass(recording, returnLog, waveFiles, streamFolder
 				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
 	}
-	
+
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
 		//FIXME need to check this
 		if (length < 0 || position < 0) {
@@ -153,12 +153,12 @@ public abstract class BaseConverter {
 		returnLog.add(ProcessHelper.executeScript(job, argv));
 		return argv;
 	}
-	
+
 	private static File getMetaFlvSer(RecordingMetaData metaData) {
 		File metaDir = getStreamsSubDir(metaData.getRecording().getRoomId());
 		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
 	}
-	
+
 	public static void printMetaInfo(RecordingMetaData metaData, String prefix) {
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getRecording().getId()
@@ -169,7 +169,7 @@ public abstract class BaseConverter {
 			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
 		}
 	}
-	
+
 	protected RecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
 		RecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
@@ -178,9 +178,9 @@ public abstract class BaseConverter {
 			long maxTimestamp = 0;
 			while(true) {
 				log.trace("### Stream not yet written Thread Sleep - " + metaId);
-				
+
 				metaData = metaDataDao.get(metaId);
-				
+
 				if (metaData.getStreamStatus() == Status.STOPPED) {
 					printMetaInfo(metaData, "Stream now written");
 					log.debug("### Thread continue ... " );
@@ -217,13 +217,13 @@ public abstract class BaseConverter {
 				if (++counter % 1000 == 0) {
 					printMetaInfo(metaData, "Still waiting");
 				}
-				
+
 				Thread.sleep(100L);
 			}
 		}
 		return metaData;
 	}
-	
+
 	protected void stripAudioFirstPass(Recording recording,
 			List<ConverterProcessResult> returnLog,
 			List<File> waveFiles, File streamFolder,
@@ -232,7 +232,7 @@ public abstract class BaseConverter {
 			// Init variables
 			log.debug("### meta Data Number - " + metaDataList.size());
 			log.debug("###################################################");
-	
+
 			for (RecordingMetaData metaData : metaDataList) {
 				long metaId = metaData.getId();
 				log.debug("### processing metadata: " + metaId);
@@ -240,49 +240,48 @@ public abstract class BaseConverter {
 					log.debug("Stream has not been started, error in recording " + metaId);
 					continue;
 				}
-				
+
 				metaData = waitForTheStream(metaId);
-	
+
 				File inputFlvFile = new File(streamFolder, OmFileHelper.getName(metaData.getStreamName(), EXTENSION_FLV));
-	
+
 				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
-	
+
 				metaData.setWavAudioData(outputWav.getName());
-	
-				
+
 				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
-	
+
 				if (inputFlvFile.exists()) {
 					String[] argv = new String[] {
 							getPathToFFMPEG(), "-y"
 							, "-i", inputFlvFile.getCanonicalPath()
 							, "-af", "aresample=32k:min_comp=0.001:min_hard_comp=0.100000"
 							, outputWav.getCanonicalPath()};
-	
+
 					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
 				}
-	
+
 				if (outputWav.exists() && outputWav.length() != 0) {
 					metaData.setAudioValid(true);
 					// Strip Wave to Full Length
 					File outputGapFullWav = outputWav;
-	
+
 					// Fix Start/End in Audio
 					List<RecordingMetaDelta> metaDeltas = metaDeltaDao.getByMetaId(metaId);
-	
+
 					int counter = 0;
-	
+
 					for (RecordingMetaDelta metaDelta : metaDeltas) {
 						File inputFile = outputGapFullWav;
-	
+
 						// Strip Wave to Full Length
 						String hashFileGapsFullName = metaData.getStreamName() + "_GAP_FULL_WAVE_" + counter + ".wav";
 						outputGapFullWav = new File(streamFolder, hashFileGapsFullName);
-	
+
 						metaDelta.setWaveOutPutName(hashFileGapsFullName);
-	
+
 						String[] argv_sox = null;
-	
+
 						if (metaDelta.getDeltaTime() != null) {
 							double gapSeconds = diffSeconds(metaDelta.getDeltaTime());
 							if (metaDelta.isStartPadding()) {
@@ -291,43 +290,43 @@ public abstract class BaseConverter {
 								argv_sox = addSoxPad(returnLog, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
 							}
 						}
-	
+
 						if (argv_sox != null) {
 							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getId());
-	
+
 							metaDeltaDao.update(metaDelta);
 							counter++;
 						} else {
 							outputGapFullWav = inputFile;
 						}
 					}
-	
+
 					// Strip Wave to Full Length
 					String hashFileFullName = metaData.getStreamName() + "_FULL_WAVE.wav";
 					File outputFullWav = new File(streamFolder, hashFileFullName);
-	
+
 					// Calculate delta at beginning
 					double startPad = diffSeconds(metaData.getRecordStart(), recording.getRecordStart());
-	
+
 					// Calculate delta at ending
 					double endPad = diffSeconds(recording.getRecordEnd(), metaData.getRecordEnd());
-	
+
 					addSoxPad(returnLog, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
-	
+
 					// Fix for Audio Length - Invalid Audio Length in Recorded Files
 					// Audio must match 100% the Video
 					log.debug("############################################");
 					log.debug("Trim Audio to Full Length -- Start");
-	
+
 					if (!outputFullWav.exists()) {
 						throw new Exception("Audio File does not exist , could not extract the Audio correctly");
 					}
 					metaData.setFullWavAudioData(hashFileFullName);
-	
+
 					// Finally add it to the row!
 					waveFiles.add(outputFullWav);
 				}
-	
+
 				metaDataDao.update(metaData);
 			}
 		} catch (Exception err) {
@@ -341,7 +340,7 @@ public abstract class BaseConverter {
 
 	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) throws IOException {
 		argv.addAll(Arrays.asList(
-				"-c:v", "libx264",
+				"-c:v", "h264", //
 				"-crf", "24",
 				"-pix_fmt", "yuv420p",
 				"-preset", "medium",
@@ -349,7 +348,7 @@ public abstract class BaseConverter {
 				"-c:a", "libfaac",
 				"-c:a", "libfdk_aac",
 				"-ar", "22050",
-				"-b:a", "32k", //FIXME add quality constants 
+				"-b:a", "32k", //FIXME add quality constants
 				"-s", getDimensions(r), //
 				mp4path
 				));

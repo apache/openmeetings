@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.common.AddFolderDialog;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
@@ -37,11 +38,11 @@ public class RoomFilePanel extends FileTreePanel {
 	private static final long serialVersionUID = 1L;
 	private final RoomPanel room;
 
-	public RoomFilePanel(String id, AddFolderDialog addFolder, RoomPanel room) {
-		super(id, addFolder, room.getRoom().getId());
+	public RoomFilePanel(String id, RoomPanel room, AddFolderDialog addFolder, ConfirmableBorderDialog trashConfirm) {
+		super(id, room.getRoom().getId(), addFolder, trashConfirm);
 		this.room = room;
 	}
-	
+
 	@Override
 	public void updateSizes() {
 		FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
@@ -55,16 +56,16 @@ public class RoomFilePanel extends FileTreePanel {
 		homeSize.setObject(getHumanSize(userSize));
 		publicSize.setObject(getHumanSize(roomSize));
 	}
-	
+
 	@Override
 	protected void update(AjaxRequestTarget target, FileItem f) {
 	}
-	
+
 	@Override
 	protected String getContainment() {
 		return "";
 	}
-	
+
 	@Override
 	protected Component getUpload(String id) {
 		Component u = super.getUpload(id);

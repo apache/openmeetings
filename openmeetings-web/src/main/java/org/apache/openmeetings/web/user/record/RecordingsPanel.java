@@ -48,7 +48,7 @@ public class RecordingsPanel extends UserPanel {
 
 	public RecordingsPanel(String id) {
 		super(id);
-		add(fileTree = new FileTreePanel("tree", addFolder, null) {
+		add(fileTree = new FileTreePanel("tree", null, addFolder, null) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -59,7 +59,7 @@ public class RecordingsPanel extends UserPanel {
 					publicSize.setObject(getHumanSize(sizeData.getPublicFileSize()));
 				}
 			}
-			
+
 			@Override
 			protected void update(AjaxRequestTarget target, FileItem f) {
 				video.update(target, (Recording)f);

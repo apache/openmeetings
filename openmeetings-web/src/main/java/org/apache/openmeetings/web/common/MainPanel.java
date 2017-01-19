@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
@@ -33,8 +35,6 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
