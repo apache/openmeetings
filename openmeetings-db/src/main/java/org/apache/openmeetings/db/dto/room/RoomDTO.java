@@ -63,7 +63,7 @@ public class RoomDTO implements Serializable {
 	private boolean whiteboardHidden;
 
 	public RoomDTO() {}
-	
+
 	public RoomDTO(Room r) {
 		id = r.getId();
 		name = r.getName();
@@ -122,7 +122,7 @@ public class RoomDTO implements Serializable {
 		r.setHideWhiteboard(whiteboardHidden);
 		return r;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -340,9 +340,12 @@ public class RoomDTO implements Serializable {
 		}
 		return rList;
 	}
-	
+
 	public static RoomDTO fromString(String s) {
-		JSONObject o = new JSONObject(s);
+		return get(new JSONObject(s));
+	}
+
+	public static RoomDTO get(JSONObject o) {
 		RoomDTO r = new RoomDTO();
 		r.id = optLong(o, "id");
 		r.name = o.optString("name");
@@ -372,7 +375,7 @@ public class RoomDTO implements Serializable {
 		r.whiteboardHidden = o.optBoolean("whiteboardHidden", false);
 		return r;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new JSONObject(this).toString();
