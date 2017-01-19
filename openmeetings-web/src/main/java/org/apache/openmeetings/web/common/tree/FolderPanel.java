@@ -58,8 +58,9 @@ public class FolderPanel extends Panel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
 				behavior.setOption("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"));
+				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
-			
+
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
@@ -98,19 +99,19 @@ public class FolderPanel extends Panel {
 					super.onConfigure(behavior);
 					behavior.setOption("revert", "treeRevert");
 					behavior.setOption("cursor", Options.asString("move"));
-					behavior.setOption("helper", "'clone'");
+					behavior.setOption("helper", "dragHelper");
 				}
 			}.setContainment(treePanel.getContainment());
 			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 		}
 		drag.add(r.getId() == null ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected String getLabelAjaxEvent() {
 				return "dblClick";
 			}
-			
+
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
@@ -122,7 +123,7 @@ public class FolderPanel extends Panel {
 					getBean(FileExplorerItemDao.class).update((FileExplorerItem)fi);
 				}
 			}
-			
+
 			@Override
 			public void onEdit(AjaxRequestTarget target) {
 				super.onEdit(target);

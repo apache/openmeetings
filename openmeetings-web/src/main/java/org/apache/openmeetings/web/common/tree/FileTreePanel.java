@@ -99,6 +99,7 @@ public abstract class FileTreePanel extends Panel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover trash-toolbar-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
 
 			@Override
@@ -262,7 +263,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
-	private boolean sameParent(FileItem f1, FileItem f2) {
+	private static boolean sameParent(FileItem f1, FileItem f2) {
 		if (f1 instanceof Recording && f2 instanceof FileExplorerItem) {
 			return false;
 		}
