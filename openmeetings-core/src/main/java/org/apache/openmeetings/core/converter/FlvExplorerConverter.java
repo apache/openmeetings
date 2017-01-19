@@ -44,7 +44,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	// Spring loaded Beans
 	@Autowired
 	private FileExplorerItemDao fileDao;
-	
+
 	private static class FlvDimension {
 		public FlvDimension(int width, int height) {
 			this.width = width;
@@ -66,8 +66,13 @@ public class FlvExplorerConverter extends BaseConverter {
 				res = ProcessHelper.executeScript("Info ID :: " + f.getId(), args);
 				res.setExitCode(0); //normal code is 1, ffmpeg requires output file
 			} else {
-				String[] args = new String[] { getPathToFFMPEG(), "-y", "-i", f.getFile(ext).getCanonicalPath(),
-						"-c:a", "aac", "-c:v", "h264", "-pix_fmt", "yuv420p", mp4.getCanonicalPath() };
+				String[] args = new String[] { getPathToFFMPEG(), "-y"
+						, "-i", f.getFile(ext).getCanonicalPath() //
+						, "-c:v", "h264" //
+						, "-c:a", "libfaac" //
+						, "-c:a", "libfdk_aac" //
+						, "-pix_fmt", "yuv420p" //
+						, mp4.getCanonicalPath() };
 				res = ProcessHelper.executeScript("uploadFLV ID :: " + f.getId(), args);
 
 			}
@@ -93,16 +98,16 @@ public class FlvExplorerConverter extends BaseConverter {
 
 		return logs;
 	}
-	
+
 	private static FlvDimension getFlvDimension(String txt) throws Exception {
 		Matcher matcher = p.matcher(txt);
-		
+
 		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
 			String[] resultions = foundResolution.split("x");
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
 		}
-		
+
 		return new FlvDimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 }

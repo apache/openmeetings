@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.web.common;
 
+import java.io.Serializable;
+import java.util.function.BiConsumer;
+
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -33,25 +37,40 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageFormDialog;
 
 public abstract class ConfirmableAjaxBorder extends Border {
 	private static final long serialVersionUID = 1L;
+	private static final String DIALOG_ID = "dialog";
 	private final Form<?> form = new Form<>("form");
-	private final Form<?> userForm;
-	private final AbstractFormDialog<?> dialog;
+	private final ConfirmableBorderDialog dialog;
 
 	public ConfirmableAjaxBorder(String id, String title, String message) {
-		this(id, title, message, null);
+		this(id, title, message, null, null);
 	}
-	
+
 	public ConfirmableAjaxBorder(String id, String title, String message, Form<?> form) {
+		this(id, title, message, form, null);
+	}
+
+	public ConfirmableAjaxBorder(String id, String title, String message, ConfirmableBorderDialog dialog) {
+		this(id, title, message, null, dialog);
+	}
+
+	public ConfirmableAjaxBorder(String id, String title, String message, Form<?> userForm, ConfirmableBorderDialog dialog) {
 		super(id, Model.of(message));
-		dialog = newFormDialog("dialog", title, message);
-		this.userForm = form;
+		if (dialog == null) {
+			this.dialog = new ConfirmableBorderDialog(DIALOG_ID, title, message, userForm == null ? form : userForm);
+			form.add(this.dialog);
+		} else {
+			this.dialog = dialog;
+			form.add(new EmptyPanel(DIALOG_ID));
+		}
+		this.dialog.setSubmitHandler((BiConsumer<AjaxRequestTarget,Form<?>> & Serializable)(t, f)->onSubmit(t, f));
+		this.dialog.setErrorHandler((BiConsumer<AjaxRequestTarget,Form<?>> & Serializable)(t, f)->onError(t, f));
 		setOutputMarkupId(true);
 	}
 
 	public AbstractFormDialog<?> getDialog() {
 		return dialog;
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -63,27 +82,33 @@ public abstract class ConfirmableAjaxBorder extends Border {
 				super.updateAjaxAttributes(attributes);
 				ConfirmableAjaxBorder.this.updateAjaxAttributes(attributes);
 			}
-			
+
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				dialog.open(target);
+				if (isClickable()) {
+					dialog.open(target);
+				}
 			}
 		});
-		addToBorder(form.add(dialog));
+		addToBorder(form);
+	}
+
+	protected boolean isClickable() {
+		return true;
 	}
 
 	/**
 	 * Gives a chance to the specializations to modify the attributes.
-	 * 
+	 *
 	 * @param attributes attributes
 	 */
 	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 	}
-	
+
 	protected void onEvent(AjaxRequestTarget target) {
 		dialog.open(target);
 	}
-	
+
 	/**
 	 * Triggered when the form is submitted, but the validation failed
 	 *
@@ -101,39 +126,52 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	 */
 	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
 
-	/**
-	 * Create the dialog instance<br/>
-	 * <b>Warning:</b> to be overridden with care!
-	 *
-	 * @param id the markupId
-	 * @param title the title of the dialog
-	 * @param message the message to be displayed
-	 * @return the dialog instance
-	 */
-	protected AbstractFormDialog<?> newFormDialog(String id, String title, String message) {
-		return new MessageFormDialog(id, title, message, DialogButtons.OK_CANCEL, DialogIcon.WARN) {
-			private static final long serialVersionUID = 1L;
+	public static class ConfirmableBorderDialog extends MessageFormDialog {
+		private static final long serialVersionUID = 1L;
+		private Form<?> form;
+		private BiConsumer<AjaxRequestTarget,Form<?>> submitHandler = null;
+		private BiConsumer<AjaxRequestTarget,Form<?>> errorHandler = null;
 
-			@Override
-			public DialogButton getSubmitButton() {
-				return this.findButton(OK);
-			}
+		public ConfirmableBorderDialog(String id, String title, String message) {
+			this(id, title, message, null);
+		}
 
-			@Override
-			public Form<?> getForm() {
-				return userForm == null ? form : userForm;
-			}
+		public ConfirmableBorderDialog(String id, String title, String message, Form<?> form) {
+			super(id, title, message, DialogButtons.OK_CANCEL, DialogIcon.WARN);
+			this.form = form;
+		}
 
-			@Override
-			protected void onError(AjaxRequestTarget target) {
-				super.close(target, null); // closes the dialog on error.
-				ConfirmableAjaxBorder.this.onError(target, this.getForm());
-			}
+		public void setSubmitHandler(BiConsumer<AjaxRequestTarget, Form<?>> submitHandler) {
+			this.submitHandler = submitHandler;
+		}
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				ConfirmableAjaxBorder.this.onSubmit(target, this.getForm());
+		public void setErrorHandler(BiConsumer<AjaxRequestTarget, Form<?>> errorHandler) {
+			this.errorHandler = errorHandler;
+		}
+
+		@Override
+		public DialogButton getSubmitButton() {
+			return this.findButton(OK);
+		}
+
+		@Override
+		public Form<?> getForm() {
+			return this.form;
+		}
+
+		@Override
+		protected void onError(AjaxRequestTarget target) {
+			super.close(target, null); // closes the dialog on error.
+			if (errorHandler != null) {
+				errorHandler.accept(target, this.getForm());
 			}
-		};
+		}
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			if (submitHandler != null) {
+				submitHandler.accept(target, this.getForm());
+			}
+		}
 	}
 }

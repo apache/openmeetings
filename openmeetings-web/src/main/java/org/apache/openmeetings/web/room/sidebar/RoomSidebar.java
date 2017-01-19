@@ -37,6 +37,7 @@ import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.app.Client.Pod;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -79,8 +80,8 @@ public class RoomSidebar extends Panel {
 	private final TabbedPanel tabs;
 	private final ITab userTab;
 	private final ITab fileTab;
-	private final UploadDialog upload;
-	private final RoomFilePanel roomFiles;
+	private UploadDialog upload;
+	private RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
 	private ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
@@ -281,9 +282,8 @@ public class RoomSidebar extends Panel {
 				selectedIdx = index;
 			}
 		}).setOutputMarkupId(true));
-		roomFiles = new RoomFilePanel("tree", addFolder, room);
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
-		add(addFolder, upload = new UploadDialog("upload", room, roomFiles));
+		add(addFolder);
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 	}
 
@@ -298,6 +298,10 @@ public class RoomSidebar extends Panel {
 				room.kickUser(target, kickedClient);
 			}
 		});
+		final Form<?> form = new Form<>("form");
+		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
+		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
+		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 	}
 
 	private TabListModel newTabModel() {

@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -76,10 +77,13 @@ public abstract class FileTreePanel extends Panel {
 	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>());
 	private final Form<Void> form = new Form<Void>("form");
 	private final AddFolderDialog addFolder;
+	private final ConfirmableBorderDialog trashConfirm;
+	private ConfirmableAjaxBorder trashBorder;
 
-	public FileTreePanel(String id, AddFolderDialog addFolder, Long roomId) {
+	public FileTreePanel(String id, Long roomId, AddFolderDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id);
 		this.addFolder = addFolder;
+		this.trashConfirm = trashConfirm;
 		OmTreeProvider tp = new OmTreeProvider(roomId);
 		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
@@ -159,14 +163,17 @@ public abstract class FileTreePanel extends Panel {
 				update(target);
 			}
 		}));
-		trashToolbar.add(new ConfirmableAjaxBorder("trash", getString("80"), getString("713")) {
+		trashToolbar.add(trashBorder = new ConfirmableAjaxBorder("trash", getString("80"), getString("713"), trashConfirm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			protected boolean isClickable() {
+				return !selected.isEmpty();
+			}
+
+			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				if (!selected.isEmpty()) {
-					super.onEvent(target);
-				}
+				super.onEvent(target);
 			}
 
 			@Override
@@ -319,7 +326,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 		updateSelected(target);
 		if (target != null) {
-			target.add(download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
+			target.add(trashBorder, download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
 		}
 	}
 
