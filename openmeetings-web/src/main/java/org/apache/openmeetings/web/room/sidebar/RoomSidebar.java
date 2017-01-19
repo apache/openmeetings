@@ -365,6 +365,10 @@ public class RoomSidebar extends Panel {
 		roomFiles.update(handler);
 	}
 
+	public RoomFilePanel getFilesPanel() {
+		return roomFiles;
+	}
+
 	public boolean isShowFiles() {
 		return showFiles;
 	}

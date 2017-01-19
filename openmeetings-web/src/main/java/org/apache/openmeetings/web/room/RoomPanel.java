@@ -31,6 +31,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
@@ -174,14 +175,20 @@ public class RoomPanel extends BasePanel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
-				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
 
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
 				if (activeWbId > -1 && o instanceof FileItem) {
-					sendFileToWb((FileItem)o, false);
+					FileItem f = (FileItem)o;
+					if (sidebar.getFilesPanel().isSelected(f)) {
+						for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
+							sendFileToWb(e.getValue(), false);
+						}
+					} else {
+						sendFileToWb(f, false);
+					}
 				}
 			}
 		};
