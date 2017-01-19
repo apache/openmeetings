@@ -18,10 +18,7 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
-import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FORMAT;
-
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,7 +36,6 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONObject;
 
 @XmlRootElement
@@ -284,53 +280,8 @@ public class AppointmentDTO implements Serializable {
 		this.password = password;
 	}
 
-	private static Date optDate(JSONObject o, String prop) throws ParseException {
-		return ISO8601_FORMAT.parse(o.optString(prop));
-	}
-
-	private static Calendar optCal(AppointmentDTO a, JSONObject o, String prop) throws ParseException {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone(a.owner.getTimeZoneId()));
-		c.setTime(ISO8601_FORMAT.parse(o.optString(prop)));
-		return c;
-	}
-
-	public static AppointmentDTO fromString(String s) throws ParseException {
-		JSONObject o = new JSONObject(s);
-		AppointmentDTO a = new AppointmentDTO();
-		a.id = o.optLong("id");
-		a.title = o.optString("title");
-		a.location = o.optString("location");
-		a.owner = UserDTO.get(o.optJSONObject("owner"));
-		a.start = optCal(a, o, "start");
-		a.end = optCal(a, o, "end");
-		a.description = o.optString("description");
-		a.inserted = optDate(o, "inserted");
-		a.updated = optDate(o, "updated");
-		a.deleted = o.optBoolean("inserted");
-		a.reminder = Reminder.valueOf(o.optString("reminder"));
-		a.room = RoomDTO.get(o.optJSONObject("room"));
-		a.icalId = o.optString("icalId");
-		JSONArray mm = o.optJSONArray("meetingMembers");
-		if (mm != null) {
-			for (int i = 0; i < mm.length(); ++i) {
-				a.meetingMembers.add(MeetingMemberDTO.get(mm.getJSONObject(i)));
-			}
-		}
-		a.languageId = o.optLong("languageId");
-		a.password = o.optString("password");
-		a.passwordProtected = o.optBoolean("passwordProtected");
-		a.connectedEvent = o.optBoolean("connectedEvent");
-		a.reminderEmailSend = o.optBoolean("reminderEmailSend");
-		return a;
-	}
-
 	@Override
 	public String toString() {
-		return new JSONObject(this)
-			.put("start", ISO8601_FORMAT.format(start))
-			.put("end", ISO8601_FORMAT.format(end))
-			.put("inserted", ISO8601_FORMAT.format(inserted))
-			.put("updated", ISO8601_FORMAT.format(updated))
-			.toString();
+		return new JSONObject(this).toString();
 	}
 }
