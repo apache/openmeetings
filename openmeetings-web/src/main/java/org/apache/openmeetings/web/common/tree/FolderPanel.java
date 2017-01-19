@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 
+import java.util.Map.Entry;
+
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -58,7 +60,6 @@ public class FolderPanel extends Panel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
 				behavior.setOption("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"));
-				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
 
 			@Override
@@ -67,23 +68,12 @@ public class FolderPanel extends Panel {
 				if (o instanceof FileItem) {
 					FileItem p = (FileItem)drop.getDefaultModelObject();
 					FileItem f = (FileItem)o;
-					Long pid = p.getId();
-					//FIXME parent should not be moved to child !!!!!!!
-					if (pid != null && pid.equals(f.getId())) {
-						return;
-					}
-					f.setParentId(pid);
-					f.setOwnerId(p.getOwnerId());
-					f.setRoomId(p.getRoomId());
-					if (f instanceof Recording) {
-						Recording r = (Recording)f;
-						r.setGroupId(((Recording)p).getGroupId());
-						getBean(RecordingDao.class).update(r);
+					if (treePanel.isSelected(f)) {
+						moveAll(treePanel, target, p);
 					} else {
-						getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
+						move(treePanel, target, p, f);
 					}
 					treePanel.updateNode(target, p);
-					treePanel.updateNode(target, f);
 				}
 				target.add(treePanel.trees);
 			}
@@ -130,5 +120,30 @@ public class FolderPanel extends Panel {
 			}
 		});
 		add(drop.add(drag).setOutputMarkupId(true));
+	}
+
+	private void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p) {
+		for (Entry<String, FileItem> e : treePanel.getSelected().entrySet()) {
+			move(treePanel, target, p, e.getValue());
+		}
+	}
+
+	private void move(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p, FileItem f) {
+		Long pid = p.getId();
+		//FIXME parent should not be moved to child !!!!!!!
+		if (pid != null && pid.equals(f.getId())) {
+			return;
+		}
+		f.setParentId(pid);
+		f.setOwnerId(p.getOwnerId());
+		f.setRoomId(p.getRoomId());
+		if (f instanceof Recording) {
+			Recording r = (Recording)f;
+			r.setGroupId(((Recording)p).getGroupId());
+			getBean(RecordingDao.class).update(r);
+		} else {
+			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
+		}
+		treePanel.updateNode(target, f);
 	}
 }

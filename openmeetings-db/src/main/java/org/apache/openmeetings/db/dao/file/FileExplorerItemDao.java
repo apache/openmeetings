@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author sebastianwagner
- * 
+ *
  */
 @Transactional
 public class FileExplorerItemDao {
@@ -95,10 +95,7 @@ public class FileExplorerItemDao {
 
 	public List<FileExplorerItem> getByRoom(Long roomId) {
 		log.debug("getFileExplorerItemsByRoom roomId :: " + roomId);
-		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
-		query.setParameter("roomId", roomId);
-
-		return query.getResultList();
+		return em.createNamedQuery("getFilesByRoom", FileExplorerItem.class).setParameter("roomId", roomId).getResultList();
 	}
 
 	public List<FileExplorerItem> getByOwner(Long ownerId) {
@@ -272,7 +269,7 @@ public class FileExplorerItemDao {
 		}
 		return size;
 	}
-	
+
 	public long getSize(FileExplorerItem f) {
 		long size = 0;
 		try {

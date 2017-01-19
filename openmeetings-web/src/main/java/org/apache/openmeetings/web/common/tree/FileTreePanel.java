@@ -79,9 +79,11 @@ public abstract class FileTreePanel extends Panel {
 	private final AddFolderDialog addFolder;
 	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;
+	private final Long roomId;
 
 	public FileTreePanel(String id, Long roomId, AddFolderDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id);
+		this.roomId = roomId;
 		this.addFolder = addFolder;
 		this.trashConfirm = trashConfirm;
 		OmTreeProvider tp = new OmTreeProvider(roomId);
@@ -103,7 +105,6 @@ public abstract class FileTreePanel extends Panel {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover trash-toolbar-hover"));
 				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
-				behavior.setOption("drop", "function(event, ui) {$(this).append(ui.helper.children());}");
 			}
 
 			@Override
@@ -141,7 +142,12 @@ public abstract class FileTreePanel extends Panel {
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
 				if (o instanceof FileItem) {
-					delete((FileItem)o, target);
+					FileItem f = (FileItem)o;
+					if (isSelected(f)) {
+						deleteAll(target);
+					} else {
+						delete(f, target);
+					}
 				}
 			}
 		};
@@ -178,9 +184,7 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				for (Entry<String, FileItem> e : selected.entrySet()) {
-					delete(e.getValue(), target);
-				}
+				deleteAll(target);
 			}
 		});
 
@@ -196,6 +200,13 @@ public abstract class FileTreePanel extends Panel {
 
 	protected Component getUpload(String id) {
 		return new WebMarkupContainer(id).setVisible(false);
+	}
+
+	private void deleteAll(AjaxRequestTarget target) {
+		for (Entry<String, FileItem> e : selected.entrySet()) {
+			delete(e.getValue(), target);
+		}
+		selected.clear();
 	}
 
 	void delete(FileItem f, IPartialPageRequestHandler handler) {
@@ -241,8 +252,8 @@ public abstract class FileTreePanel extends Panel {
 		return selected.containsKey(f.getHash());
 	}
 
-	public int selectedCount() {
-		return selected.size();
+	public Map<String, FileItem> getSelected() {
+		return selected;
 	}
 
 	public FileItem getLastSelected() {
@@ -270,7 +281,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
-	private static boolean sameParent(FileItem f1, FileItem f2) {
+	private static boolean sameParent(Long roomId, FileItem f1, FileItem f2) {
 		if (f1 instanceof Recording && f2 instanceof FileExplorerItem) {
 			return false;
 		}
@@ -284,7 +295,7 @@ public abstract class FileTreePanel extends Panel {
 			if (f1.getRoomId() != null && f1.getRoomId().equals(f2.getRoomId())) {
 				return true;
 			}
-			if (f1.getRoomId() == null && f2.getRoomId() == null && f1.getOwnerId() == null && f2.getOwnerId() == null) {
+			if (f2 instanceof FileExplorerItem && roomId != null && f1.getRoomId() == null && f2.getRoomId() == null && f1.getOwnerId() == null && f2.getOwnerId() == null) {
 				return true;
 			}
 		}
@@ -300,7 +311,7 @@ public abstract class FileTreePanel extends Panel {
 				selected.put(fi.getHash(), fi);
 			}
 			lastSelected = fi;
-		} else if (shift && lastSelected != null && !lastSelected.getHash().equals(fi.getHash()) && sameParent(fi, lastSelected)) {
+		} else if (shift && lastSelected != null && !lastSelected.getHash().equals(fi.getHash()) && sameParent(roomId, fi, lastSelected)) {
 			selected.clear();
 			String lastHash = null;
 			for (FileItem f : ((OmTreeProvider)tree.getProvider()).getByParent(fi, fi.getParentId())) {

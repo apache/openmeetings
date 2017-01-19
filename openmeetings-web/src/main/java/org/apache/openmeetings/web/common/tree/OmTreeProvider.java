@@ -126,10 +126,10 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 			FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
 			List<FileExplorerItem> _list;
 			if (id == null) {
-				if (roomId == null) {
-					_list = dao.getByRoom(roomId);
-				} else {
+				if (node.getRoomId() == null) {
 					_list = dao.getByOwner(node.getOwnerId());
+				} else {
+					_list = dao.getByRoom(node.getRoomId());
 				}
 			} else {
 				_list = dao.getByParent(id);

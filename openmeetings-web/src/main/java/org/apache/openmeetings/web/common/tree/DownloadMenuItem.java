@@ -40,7 +40,7 @@ public class DownloadMenuItem extends MenuItem {
 	@Override
 	public boolean isEnabled() {
 		File f = null;
-		if (tree.selectedCount() == 1) {
+		if (tree.getSelected().size() == 1) {
 			f = tree.getLastSelected().getFile(ext);
 		}
 		return f != null && f.exists();
