@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dto.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,8 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONObject;
 
 @XmlRootElement
 public class UserDTO implements Serializable {
@@ -39,9 +42,9 @@ public class UserDTO implements Serializable {
 	private String password;
 	private String firstname;
 	private String lastname;
-	private Set<Right> rights;
+	private Set<Right> rights = new HashSet<>();
 	private Long languageId;
-	private Address address;
+	private Address address = new Address();
 	private String timeZoneId;
 	private String externalId;
 	private String externalType;
@@ -62,7 +65,7 @@ public class UserDTO implements Serializable {
 		externalId = u.getExternalId();
 		externalType = u.getExternalType();
 	}
-	
+
 	public User get(UserDao userDao) {
 		User u = id == null ? new User() : userDao.get(id);
 		u.setFirstname(firstname);
@@ -76,7 +79,7 @@ public class UserDTO implements Serializable {
 		u.setType(type);
 		return u;
 	}
-	
+
 	public static List<UserDTO> list(List<User> l) {
 		List<UserDTO> uList = new ArrayList<>();
 		if (l != null) {
@@ -86,7 +89,7 @@ public class UserDTO implements Serializable {
 		}
 		return uList;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -181,5 +184,32 @@ public class UserDTO implements Serializable {
 
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
+	}
+
+	public static UserDTO get(JSONObject o) {
+		UserDTO u = new UserDTO();
+		u.id = o.optLong("id");
+		u.login = o.optString("login");
+		u.password = o.optString("password");
+		u.firstname = o.optString("firstname");
+		u.lastname = o.optString("lastname");
+		JSONArray rr = o.optJSONArray("rights");
+		if (rr !=  null) {
+			for (int i = 0; i < rr.length(); ++i) {
+				u.rights.add(Right.valueOf(rr.getString(i)));
+			}
+		}
+		u.languageId = o.optLong("languageId");
+		JSONObject a = o.optJSONObject("address");
+		if (a != null) {
+			u.address.setId(a.optLong("id"));
+			u.address.setCountry(a.optString("country"));
+			u.address.setEmail(a.optString("email"));
+		}
+		u.timeZoneId = o.optString("timeZoneId");
+		u.externalId = o.optString("externalId");
+		u.externalType = o.optString("externalType");
+		u.type = Type.valueOf(o.optString("type"));
+		return u;
 	}
 }
