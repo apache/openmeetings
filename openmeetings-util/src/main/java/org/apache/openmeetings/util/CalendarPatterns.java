@@ -41,9 +41,13 @@ public class CalendarPatterns {
 	public static final FastDateFormat dateFormat__yyyyMMddHHmmss = FastDateFormat.getInstance("yyyy.MM.dd HH:mm:ss");
 	public static final FastDateFormat STREAM_DATE_FORMAT = FastDateFormat.getInstance("yyyy_MM_dd_HH_mm_ss");
 	public static final String FULL_DF_PATTERN = "dd.MM.yyyy HH:mm:ss z (Z)";
-	public static final String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String ISO8601_FULL_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String ISO8601_DATETIME_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ss";
+	public static final String ISO8601_DATE_FORMAT_STRING = "yyyy-MM-dd";
 	public static final FastDateFormat FULL_DATE_FORMAT = FastDateFormat.getInstance(FULL_DF_PATTERN);
-	public static final FastDateFormat ISO8601_FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING);
+	public static final FastDateFormat ISO8601_FULL_FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING);
+	public static final FastDateFormat ISO8601_DATETIME_FORMAT = FastDateFormat.getInstance(ISO8601_DATETIME_FORMAT_STRING);
+	public static final FastDateFormat ISO8601_DATE_FORMAT = FastDateFormat.getInstance(ISO8601_DATE_FORMAT_STRING);
 
 	public static String getDateByMiliSeconds(Date t) {
 		return dateFormat__yyyyMMddHHmmss.format(t);

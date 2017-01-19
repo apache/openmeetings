@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
-import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FORMAT_STRING;
+import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -311,7 +311,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
-		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FORMAT_STRING, tz);
+		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
 		setLocale(getLocale(u));
 		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}

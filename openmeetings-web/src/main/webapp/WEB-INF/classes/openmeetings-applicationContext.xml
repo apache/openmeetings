@@ -283,6 +283,9 @@
 			<ref bean="userWebService"/>
 			<ref bean="netTestWebService"/> <!-- JaxRs only -->
 		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean id="omParamProvider" class="org.apache.openmeetings.webservice.util.OmParamConverterProvider"/>
+		</jaxrs:providers>
 	</jaxrs:server>
 	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService" implementor="#calendarWebService"/>
 	<jaxws:endpoint id="errorServiceWS" address="/ErrorService" implementor="#errorWebService" />
