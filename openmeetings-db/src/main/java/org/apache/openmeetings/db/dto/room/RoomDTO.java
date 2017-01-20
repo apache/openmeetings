@@ -19,7 +19,6 @@
 package org.apache.openmeetings.db.dto.room;
 
 import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optInt;
-import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optLong;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -346,8 +345,12 @@ public class RoomDTO implements Serializable {
 	}
 
 	public static RoomDTO get(JSONObject o) {
+		if (o == null) {
+			return null;
+		}
 		RoomDTO r = new RoomDTO();
-		r.id = optLong(o, "id");
+		long id = o.optLong("id");
+		r.id = id == 0 ? null : id;
 		r.name = o.optString("name");
 		r.comment = o.optString("comment");
 		r.type = Room.Type.valueOf(o.getString("type"));
