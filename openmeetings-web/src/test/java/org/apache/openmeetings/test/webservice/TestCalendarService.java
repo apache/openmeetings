@@ -18,11 +18,8 @@
  */
 package org.apache.openmeetings.test.webservice;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,7 +31,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.webservice.util.DateParamConverter;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,13 +64,5 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	@Test
 	public void testGetByPublicRoom() throws Exception {
 		actualTest(roomDao.get(5L)); //default public restricted room
-	}
-
-	@Test
-	public void testDateConverter() throws Exception {
-		assertEquals("Null date should be parsed", null, DateParamConverter.get(null));
-		assertEquals("Date should be parsed"
-				, Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
-				, DateParamConverter.get("2017-01-15"));
 	}
 }
