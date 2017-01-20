@@ -68,7 +68,8 @@ public class MeetingMemberDTO implements Serializable {
 
 	public static MeetingMemberDTO get(JSONObject o) {
 		MeetingMemberDTO m = new MeetingMemberDTO();
-		m.id = o.optLong("id");
+		long id = o.optLong("id");
+		m.id = id == 0 ? null : id;
 		m.user = UserDTO.get(o.optJSONObject("user"));
 		return m;
 	}

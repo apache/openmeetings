@@ -28,11 +28,15 @@ import java.util.Date;
 import javax.ws.rs.ext.ParamConverter;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.wicket.util.string.Strings;
 
 public class DateParamConverter implements ParamConverter<Date> {
 	private final static FastDateFormat[] formats = new FastDateFormat[] { ISO8601_FULL_FORMAT, ISO8601_DATETIME_FORMAT, ISO8601_DATE_FORMAT };
 
-	static Date get(String val) {
+	public static Date get(String val) {
+		if (Strings.isEmpty(val)) {
+			return null;
+		}
 		for (FastDateFormat df : formats) {
 			try {
 				return df.parse(val);
@@ -40,7 +44,7 @@ public class DateParamConverter implements ParamConverter<Date> {
 				// no-op
 			}
 		}
-		throw new IllegalArgumentException("Unparsable format");
+		throw new IllegalArgumentException("Unparsable format: " + val);
 	}
 
 	@Override
