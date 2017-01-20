@@ -41,6 +41,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
@@ -73,6 +74,8 @@ public class CalendarWebService {
 	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RoomDao roomDao;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -289,8 +292,7 @@ public class CalendarWebService {
 			Sessiondata sd = sessionDao.check(sid);
 			log.debug("save userId:" + sd);
 			User u = userDao.get(sd.getUserId());
-			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights())
-					&& (appointment.getOwner() != null || appointment.getRoom().isPublic() || !appointment.getRoom().isAppointment()))
+			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights()) && appointment.getOwner() != null)
 			{
 				//TODO maybe additional checks are required
 				log.error("USER/Room modification as SOAP");
@@ -300,6 +302,13 @@ public class CalendarWebService {
 				Appointment a = appointment.get(userDao, appointmentDao);
 				if (a.getOwner() == null) {
 					a.setOwner(u);
+				}
+				if (a.getRoom().getId() != null) {
+					if (a.getRoom().isAppointment()) {
+						a.getRoom().setIspublic(false);
+					} else {
+						a.setRoom(roomDao.get(a.getRoom().getId()));
+					}
 				}
 				return new AppointmentDTO(appointmentDao.update(a, u.getId()));
 			} else {
