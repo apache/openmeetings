@@ -77,7 +77,7 @@ public abstract class FileItem implements IDataProviderEntity {
 	private Long insertedBy;
 
 	@Column(name = "inserted")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Date inserted;
 
 	@Column(name = "updated")
