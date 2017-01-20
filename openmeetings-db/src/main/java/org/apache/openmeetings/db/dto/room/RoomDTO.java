@@ -379,6 +379,10 @@ public class RoomDTO implements Serializable {
 		return r;
 	}
 
+	public static JSONObject json(RoomDTO r) {
+		return new JSONObject(r).put("type", r.getType().name());
+	}
+
 	@Override
 	public String toString() {
 		return new JSONObject(this).toString();

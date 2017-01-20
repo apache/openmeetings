@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.test.webservice;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
@@ -28,9 +30,22 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.After;
 import org.junit.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
+	protected WicketTester tester;
+
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		tester = getWicketTester();
+		assertNotNull("Web session should not be null", WebSession.get());
+	}
+
 	@Test
 	public void loginTest() {
 		ServiceResult r = login();
@@ -58,5 +73,17 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
 		ServiceResult r1 = resp.readEntity(ServiceResult.class);
 		assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
+
+		WebSession ws = WebSession.get();
+		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
+		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
+	}
+
+	@After
+	public void tearDown() {
+		if (tester != null) {
+			//can be null in case exception on initialization
+			tester.destroy();
+		}
 	}
 }

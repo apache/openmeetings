@@ -28,9 +28,8 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
-
 	protected WicketTester tester;
-	 	
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
@@ -46,11 +45,11 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		}
 		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), WebSession.get().isSignedIn());
 	}
-	
+
 	@After
 	public void tearDown() {
 		if (tester != null) {
-			//can be null in case exception on initialization 
+			//can be null in case exception on initialization
 			tester.destroy();
 		}
 	}

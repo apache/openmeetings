@@ -293,7 +293,9 @@ public class CalendarWebService {
 			Long userId = sessionDao.check(sid);
 			log.debug("save userId:" + userId);
 			User u = userDao.get(userId);
-			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights()) && appointment.getOwner() != null)
+			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights())
+					&& appointment.getOwner() != null
+					&& !appointment.getOwner().getId().equals(u.getId()))
 			{
 				//TODO maybe additional checks are required
 				log.error("USER/Room modification as SOAP");
