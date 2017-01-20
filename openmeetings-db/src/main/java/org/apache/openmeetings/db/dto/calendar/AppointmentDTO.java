@@ -100,7 +100,7 @@ public class AppointmentDTO implements Serializable {
 		a.setStart(start.getTime());
 		a.setEnd(end.getTime());
 		a.setDescription(description);
-		a.setOwner(owner == null ? null : owner.get(userDao));
+		a.setOwner(owner == null ? null : userDao.get(owner.getId()));
 		a.setInserted(inserted);
 		a.setUpdated(updated);
 		a.setDeleted(deleted);
