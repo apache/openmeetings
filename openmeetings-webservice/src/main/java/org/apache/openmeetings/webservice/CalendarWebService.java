@@ -44,6 +44,8 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
@@ -335,11 +337,13 @@ public class CalendarWebService {
 	 *            an authenticated SID
 	 * @param id
 	 *            the id to delete
+	 * @return {@link ServiceResult} of type SUCCESS
+	 *
 	 * @throws {@link ServiceException} in case of any error
 	 */
 	@DELETE
 	@Path("/{id}")
-	public void delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
 		try {
 			Long userId = sessionDao.check(sid);
 			Set<Right> rights = userDao.getRights(userId);
@@ -356,6 +360,8 @@ public class CalendarWebService {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
 			appointmentDao.delete(a, userId);
+
+			return new ServiceResult(id, "Deleted", Type.SUCCESS);
 		} catch (ServiceException err) {
 			throw err;
 		} catch (Exception err) {
