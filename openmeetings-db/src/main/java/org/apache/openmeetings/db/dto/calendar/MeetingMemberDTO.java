@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.ajax.json.JSONObject;
 
 @XmlRootElement
@@ -46,7 +47,13 @@ public class MeetingMemberDTO implements Serializable {
 	public MeetingMember get(UserDao userDao) {
 		MeetingMember mm = new MeetingMember();
 		mm.setId(id);
-		mm.setUser(user.get(userDao));
+		if (user.getId() != null) {
+			mm.setUser(userDao.get(user.getId()));
+		} else {
+			mm.setUser(user.get(userDao));
+			mm.getUser().setType(User.Type.contact);
+			mm.getUser().getRights().clear();
+		}
 		return mm;
 	}
 
