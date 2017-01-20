@@ -25,15 +25,20 @@ import java.util.TimeZone;
 
 import javax.ws.rs.ext.ParamConverter;
 
+import org.apache.wicket.util.string.Strings;
+
 public class CalendarParamConverter implements ParamConverter<Calendar> {
 	public static Calendar get(String val, String tzId) {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone(tzId));
+		Calendar c = Strings.isEmpty(tzId) ? Calendar.getInstance() : Calendar.getInstance(TimeZone.getTimeZone(tzId));
 		c.setTime(DateParamConverter.get(val));
 		return c;
 	}
 
 	@Override
 	public Calendar fromString(String val) {
+		if (Strings.isEmpty(val)) {
+			return null;
+		}
 		Calendar c = Calendar.getInstance();
 		c.setTime(DateParamConverter.get(val));
 		return c;

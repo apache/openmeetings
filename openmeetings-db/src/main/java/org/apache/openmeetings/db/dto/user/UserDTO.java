@@ -187,8 +187,12 @@ public class UserDTO implements Serializable {
 	}
 
 	public static UserDTO get(JSONObject o) {
+		if (o == null) {
+			return null;
+		}
 		UserDTO u = new UserDTO();
-		u.id = o.optLong("id");
+		long id = o.optLong("id");
+		u.id = id == 0 ? null : id;
 		u.login = o.optString("login");
 		u.password = o.optString("password");
 		u.firstname = o.optString("firstname");

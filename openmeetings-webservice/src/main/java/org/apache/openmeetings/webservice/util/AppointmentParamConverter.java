@@ -35,15 +35,17 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 	public AppointmentDTO fromString(String val) {
 		JSONObject o = new JSONObject(val);
 		AppointmentDTO a = new AppointmentDTO();
-		a.setId(o.optLong("id"));
+		long id = o.optLong("id");
+		a.setId(id == 0 ? null : id);
 		a.setTitle(o.optString("title"));
 		a.setLocation(o.optString("location"));
 		a.setOwner(UserDTO.get(o.optJSONObject("owner")));
-		a.setStart(CalendarParamConverter.get(o.optString("start"), a.getOwner().getTimeZoneId()));
-		a.setEnd(CalendarParamConverter.get(o.optString("end"), a.getOwner().getTimeZoneId()));
+		String tzId = a.getOwner() == null ? null : a.getOwner().getTimeZoneId();
+		a.setStart(CalendarParamConverter.get(o.optString("start"), tzId));
+		a.setEnd(CalendarParamConverter.get(o.optString("end"), tzId));
 		a.setDescription(o.optString("description"));
 		a.setInserted(DateParamConverter.get(o.optString("inserted")));
-		a.setInserted(DateParamConverter.get(o.optString("updated")));
+		a.setUpdated(DateParamConverter.get(o.optString("updated")));
 		a.setDeleted(o.optBoolean("inserted"));
 		a.setReminder(Reminder.valueOf(o.optString("reminder")));
 		a.setRoom(RoomDTO.get(o.optJSONObject("room")));

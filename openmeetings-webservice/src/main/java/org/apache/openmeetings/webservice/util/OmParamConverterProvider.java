@@ -38,7 +38,7 @@ public class OmParamConverterProvider implements ParamConverterProvider {
 		} else if (Date.class.isAssignableFrom(rawType)) {
 			return (ParamConverter<T>)new DateParamConverter();
 		} else if (AppointmentDTO.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new DateParamConverter();
+			return (ParamConverter<T>)new AppointmentParamConverter();
 		}
 		return null;
 	}
