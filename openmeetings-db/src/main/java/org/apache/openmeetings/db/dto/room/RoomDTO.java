@@ -19,7 +19,6 @@
 package org.apache.openmeetings.db.dto.room;
 
 import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optInt;
-import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optLong;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class RoomDTO implements Serializable {
 	private boolean allowRecording;
 	private boolean waitForRecording;
 	private boolean audioOnly;
-	private Set<RoomElement> hiddenElements;
+	private Set<RoomElement> hiddenElements = new HashSet<>();
 
 	public RoomDTO() {}
 
@@ -316,6 +315,15 @@ public class RoomDTO implements Serializable {
 			}
 		}
 		return r;
+	}
+
+	public static JSONObject json(RoomDTO r) {
+		JSONArray rr = new JSONArray();
+		for (RoomElement h : r.getHiddenElements()) {
+			rr.put(h.name());
+		}
+		return new JSONObject(r).put("hiddenElements", rr)
+				.put("type", r.getType().name());
 	}
 
 	@Override

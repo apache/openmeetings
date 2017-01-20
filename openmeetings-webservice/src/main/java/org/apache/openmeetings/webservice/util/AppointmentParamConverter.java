@@ -20,6 +20,8 @@ package org.apache.openmeetings.webservice.util;
 
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT;
 
+import java.util.Date;
+
 import javax.ws.rs.ext.ParamConverter;
 
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
@@ -47,7 +49,8 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		a.setInserted(DateParamConverter.get(o.optString("inserted")));
 		a.setUpdated(DateParamConverter.get(o.optString("updated")));
 		a.setDeleted(o.optBoolean("inserted"));
-		a.setReminder(Reminder.valueOf(o.optString("reminder")));
+		String r = o.optString("reminder", null);
+		a.setReminder(r == null ? null : Reminder.valueOf(r));
 		a.setRoom(RoomDTO.get(o.optJSONObject("room")));
 		a.setIcalId(o.optString("icalId"));
 		JSONArray mm = o.optJSONArray("meetingMembers");
@@ -64,13 +67,20 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		return a;
 	}
 
-	@Override
-	public String toString(AppointmentDTO val) {
-		return new JSONObject(this)
+	public static JSONObject json(AppointmentDTO val) {
+		Date i = val.getInserted(), u = val.getUpdated();
+		return new JSONObject(val)
+				.put("owner", UserDTO.json(val.getOwner()))
+				.put("room", RoomDTO.json(val.getRoom()))
+				.put("reminder", val.getReminder() == null ? null : val.getReminder().name())
 				.put("start", ISO8601_FULL_FORMAT.format(val.getStart()))
 				.put("end", ISO8601_FULL_FORMAT.format(val.getEnd()))
-				.put("inserted", ISO8601_FULL_FORMAT.format(val.getInserted()))
-				.put("updated", ISO8601_FULL_FORMAT.format(val.getUpdated()))
-				.toString();
+				.put("inserted", i == null ? null : ISO8601_FULL_FORMAT.format(i))
+				.put("updated", u == null ? null : ISO8601_FULL_FORMAT.format(u));
+	}
+
+	@Override
+	public String toString(AppointmentDTO val) {
+		return json(val).toString();
 	}
 }

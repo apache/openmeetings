@@ -213,7 +213,18 @@ public class UserDTO implements Serializable {
 		u.timeZoneId = o.optString("timeZoneId");
 		u.externalId = o.optString("externalId");
 		u.externalType = o.optString("externalType");
-		u.type = Type.valueOf(o.optString("type"));
+		String t = o.optString("type", null);
+		u.type = t == null ? null : Type.valueOf(t);
 		return u;
+	}
+
+	public static JSONObject json(UserDTO u) {
+		JSONObject o = new JSONObject(u)
+				.put("type", u.getType().name());
+		JSONArray rr = new JSONArray();
+		for (Right r : u.getRights()) {
+			rr.put(r.name());
+		}
+		return o.put("rights", rr);
 	}
 }
