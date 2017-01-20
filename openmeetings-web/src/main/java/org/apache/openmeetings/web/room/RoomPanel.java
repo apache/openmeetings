@@ -630,7 +630,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void sendFileToWb(FileItem fi, boolean clean) {
-		if (activeWbId > -1) {
+		if (activeWbId > -1 && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
 			if (fi.getType() == FileItem.Type.WmlFile) {
 				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
 			} else {
