@@ -27,10 +27,11 @@ public class ResetPasswordTemplate extends AbstractTemplatePanel {
 
 	public ResetPasswordTemplate(String link) {
 		super(getOmSession().getLocale());
+		add(new Label("reset-header", getString("513", locale)));
 		add(new ExternalLink("reset_link1", link));
 		add(new Label("reset_link2", link));
 	}
-	
+
 	public static String getEmail(String link) {
 		return ComponentRenderer.renderComponent(new ResetPasswordTemplate(link)).toString();
 	}
