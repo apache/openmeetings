@@ -34,12 +34,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Category(SeleniumTests.class)
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
-	
 	@Autowired
 	private LabelDao labelDao;
 
 	public WebDriver driver = null;
-	
+
 	private String BASE_URL = "http://localhost:5080/openmeetings";
 	private String username = "swagner";
 	private String userpass = "qweqwe";
@@ -67,11 +66,11 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public Long getLanguageId() {
 		return 1L;
 	}
-	
+
 	public String getLocale() {
 		return locale;
 	}
@@ -80,14 +79,14 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	// Eclipse, the browser will not shut down after the test so you can start
 	// to diagnose the test issue
 	public boolean doTearDownAfterTest = false;
-	
+
 	public String getString(long id) {
 		return labelDao.getString(id, getLanguageId());
 	}
 
 	/**
 	 * Make method overwrite possible to have custom behavior in tests
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean getDoTearDownAfterTest() {
@@ -104,7 +103,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	/**
 	 * This test is a basic test to verify the default loader mechanism works
 	 * it is not intend to be a part of any sub test
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	//@Test
@@ -131,9 +130,9 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	}
 
 	/**
-	 * Throws exception in case that test fails, so it is important to not catch 
+	 * Throws exception in case that test fails, so it is important to not catch
 	 * that exception but really let the test fail!
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	protected void testIsInstalledAndDoInstallation() throws Exception {
