@@ -50,9 +50,19 @@ public class MeetingMemberDTO implements Serializable {
 		if (user.getId() != null) {
 			mm.setUser(userDao.get(user.getId()));
 		} else {
-			mm.setUser(user.get(userDao));
-			mm.getUser().setType(User.Type.contact);
-			mm.getUser().getRights().clear();
+			User u = null;
+			if (User.Type.external == user.getType()) {
+				// try to get ext. user
+				u = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
+			}
+			if (u == null) {
+				u = user.get(userDao);
+				u.setType(User.Type.contact);
+				u.getRights().clear();
+				u.setExternalId(null);
+				u.setExternalType(null);
+			}
+			mm.setUser(u);
 		}
 		return mm;
 	}
