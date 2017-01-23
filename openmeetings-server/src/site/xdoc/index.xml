@@ -69,37 +69,26 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.1.4 released!</b>
-				<div>Service release 4 for 3.1.0, provides following improvements:<br/>
-					Room<br/>
+				<b>Version 3.1.5 released!</b>
+				<div>Service release 5 for 3.1.0, provides following improvements:<br/>
+					REST/SOAP<br/>
 					<ul>
-						<li>Performance improvements</li>
-						<li>WB drawing is more smooth</li>
-						<li>WB tabs are now can be renamed</li>
-						<li>Multiple files can be selected in File tree, some issues are fixed</li>
-						<li>Poll results contains poll description</li>
-						<li>User list is fixed in restricted room</li>
+						<li>Room security hash is fixed</li>
+						<li>Calendar web service is fixed</li>
 					</ul>
 					<br/>
-					Admin<br/>
-					<ul>
-						<li>Backup/Restore is fixed</li>
-						<li>Admin->Connections and Admin->Labels are fixed</li>
-					</ul>
-					<br/>
-					Other fixes in LDAP, groups, recordings, screen-sharing, calendar and installer<br/>
-					Italian and Ukrainian translations are improved
+					Other fixes in Import/Export and email templates
 					<br/>
 					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
 				</div>
 				<br/>
 				<span>
-					47 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.1.4/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338183">Detailed list</a>
+					8 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.1.5/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12338819">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-01-11)</span>
+				<span class="date">(2017-01-28)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
