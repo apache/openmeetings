@@ -19,35 +19,29 @@
 		<title>Theme and color</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
-		<section name="Available with Apache OpenMeetings 2.0">
-
+		<section name="Available since Apache OpenMeetings 2.0">
 			<p>
 				Themes are only available starting with Openmeetings 2.x.
 				<br />
 				There are also more general client side configuration like port
 				configuration. Those configs are stored in the public/config.xml
 			</p>
-
 		</section>
-
 		<section name="Editing the theme">
-
-			<p>To modify default theme used by OM please open following file in the SVN: </p>
+			<p>To modify default theme used by OM</p>
+			<ul>
+				<li>please open following file in the SVN:<br/>
+					<a
+						href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css"
+						target="_blank" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css
+					</a><br/>
+					Or if you already installed OpenMeetings on your machine at:<br />
+					<tt>/webapps/openmeetings/css/theme_om/jquery-ui.css</tt>
+				</li>
+				<li>follow the link next to "To view and modify this theme, visit" text in css comments</li>
+			</ul>
 			<p>
-				<a
-					href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css"
-					target="_blank" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css
-				</a>
-			</p>
-			<p>and follow to link following "To view and modify this theme, visit" text in css comments</p>
-			<p>
-				Or if you already installed OpenMeetings on your machine at:
-				<br />
-				<tt>/webapps/openmeetings/css/theme_om/jquery-ui.css</tt>
-				<br />
 				The file contains border, background and font color definitions as
 				well as paths to icons that are loaded at runtime.
 				<br />
@@ -56,9 +50,12 @@
 				modification in your theme.
 			</p>
 			<p>All other elements might be styled by modifying CSS files in <tt>/webapps/openmeetings/css</tt> folder</p>
-
 		</section>
-
+		<section name="Creating custom CSS file">
+			<ol>
+				<li>create <tt>webapps/openmeetings/css/custom.css</tt> file</li>
+				<li>open <tt>webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/web/pages/BasePage.html</tt> add link to your new CSS file (as last link)</li>
+			</ol>
+		</section>
 	</body>
-
 </document>
