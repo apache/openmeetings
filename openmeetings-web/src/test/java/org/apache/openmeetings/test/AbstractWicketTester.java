@@ -22,10 +22,17 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	protected WicketTester tester;
@@ -52,5 +59,19 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 			//can be null in case exception on initialization
 			tester.destroy();
 		}
+	}
+
+	public <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(String path, String name) {
+		Args.notNull(path, "path");
+		Args.notNull(name, "name");
+		@SuppressWarnings("unchecked")
+		AbstractDialog<T> dialog = (AbstractDialog<T>)tester.getComponentFromLastRenderedPage(path);
+		List<ButtonAjaxBehavior> bl = dialog.getBehaviors(ButtonAjaxBehavior.class);
+		for (ButtonAjaxBehavior bb : bl) {
+			if (name.equals(bb.getButton().getName())) {
+				return bb;
+			}
+		}
+		return null;
 	}
 }
