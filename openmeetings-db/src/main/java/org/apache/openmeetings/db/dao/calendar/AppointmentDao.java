@@ -69,9 +69,7 @@ public class AppointmentDao {
 	/*
 	 * insert, update, delete, select
 	 */
-
 	// -----------------------------------------------------------------------------------------------
-
 	public Appointment get(Long id) {
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentById", Appointment.class);
 		query.setParameter("id", id);
@@ -94,7 +92,6 @@ public class AppointmentDao {
 		} catch (NoResultException ex) {
 			//no-op
 		}
-
 		return a;
 	}
 
@@ -153,7 +150,7 @@ public class AppointmentDao {
 			em.persist(a);
 		} else {
 			a.setUpdated(new Date());
-			a =	em.merge(a);
+			a = em.merge(a);
 		}
 		return a;
 	}

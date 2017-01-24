@@ -19,6 +19,9 @@
 package org.apache.openmeetings.db.dto.room;
 
 import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optInt;
+import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
+import static org.apache.openmeetings.db.util.DtoHelper.optEnumList;
+import static org.apache.openmeetings.db.util.DtoHelper.optLong;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -287,11 +290,10 @@ public class RoomDTO implements Serializable {
 			return null;
 		}
 		RoomDTO r = new RoomDTO();
-		long id = o.optLong("id");
-		r.id = id == 0 ? null : id;
+		r.id = optLong(o, "id");
 		r.name = o.optString("name");
 		r.comment = o.optString("comment");
-		r.type = Room.Type.valueOf(o.getString("type"));
+		r.type = optEnum(Room.Type.class, o, "type");
 		r.numberOfPartizipants = o.optLong("numberOfPartizipants", 4);
 		r.appointment = o.optBoolean("appointment", false);
 		r.confno = o.optString("confno");
@@ -307,13 +309,7 @@ public class RoomDTO implements Serializable {
 		r.allowRecording = o.optBoolean("allowRecording", false);
 		r.waitForRecording = o.optBoolean("waitForRecording", false);
 		r.audioOnly = o.optBoolean("audioOnly", false);
-		r.setHiddenElements(new HashSet<RoomElement>());
-		JSONArray hidden = o.optJSONArray("hiddenElements");
-		if (hidden != null) {
-			for (int i = 0; i < hidden.length(); ++i) {
-				r.getHiddenElements().add(RoomElement.valueOf(hidden.getString(i)));
-			}
-		}
+		r.getHiddenElements().addAll(optEnumList(RoomElement.class, o.optJSONArray("hiddenElements")));
 		return r;
 	}
 

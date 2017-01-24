@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.ajax.json.JSONObject;
 
 @XmlRootElement
@@ -92,7 +93,7 @@ public class AppointmentDTO implements Serializable {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
-	public Appointment get(UserDao userDao, AppointmentDao appointmentDao) {
+	public Appointment get(UserDao userDao, AppointmentDao appointmentDao, User u) {
 		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
 		a.setId(id);
 		a.setTitle(title);
@@ -100,7 +101,7 @@ public class AppointmentDTO implements Serializable {
 		a.setStart(start.getTime());
 		a.setEnd(end.getTime());
 		a.setDescription(description);
-		a.setOwner(owner == null ? null : userDao.get(owner.getId()));
+		a.setOwner(owner == null ? u : userDao.get(owner.getId()));
 		a.setInserted(inserted);
 		a.setUpdated(updated);
 		a.setDeleted(deleted);
@@ -109,7 +110,7 @@ public class AppointmentDTO implements Serializable {
 		a.setIcalId(icalId);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for(MeetingMemberDTO mm : meetingMembers) {
-			MeetingMember m = mm.get(userDao);
+			MeetingMember m = mm.get(userDao, u);
 			m.setAppointment(a);
 			a.getMeetingMembers().add(m);
 		}

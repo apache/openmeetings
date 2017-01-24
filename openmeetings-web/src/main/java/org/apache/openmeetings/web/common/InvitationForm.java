@@ -87,7 +87,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(subject, message);
 		recipients.setLabel(Model.of(Application.getString(216))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				url.setModelObject(null);
@@ -154,11 +154,11 @@ public abstract class InvitationForm extends Form<Invitation> {
 		i.setId(null);
 		i.setUpdated(null);
 		i.setUsed(false);
-		
+
 		i.setPassword(CryptProvider.get().hash(i.getPassword()));
 		i.setValidFrom(getDate(from.getModelObject().minusMinutes(5), timeZoneId.getModelObject()));
 		i.setValidTo(getDate(to.getModelObject(), timeZoneId.getModelObject()));
-		
+
 		i.setInvitee(u);
 		i.setHash(UUID.randomUUID().toString());
 		if (Type.contact == u.getType()) {

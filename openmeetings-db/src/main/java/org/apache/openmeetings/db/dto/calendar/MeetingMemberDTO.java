@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import static org.apache.openmeetings.db.util.DtoHelper.optLong;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -44,7 +46,7 @@ public class MeetingMemberDTO implements Serializable {
 		this.user = new UserDTO(mm.getUser());
 	}
 
-	public MeetingMember get(UserDao userDao) {
+	public MeetingMember get(UserDao userDao, User owner) {
 		MeetingMember mm = new MeetingMember();
 		mm.setId(id);
 		if (user.getId() != null) {
@@ -54,6 +56,14 @@ public class MeetingMemberDTO implements Serializable {
 			if (User.Type.external == user.getType()) {
 				// try to get ext. user
 				u = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
+			}
+			if (u == null && user.getAddress() != null) {
+				u = userDao.getContact(user.getAddress().getEmail()
+						, user.getFirstname()
+						, user.getLastname()
+						, user.getLanguageId()
+						, user.getTimeZoneId()
+						, owner);
 			}
 			if (u == null) {
 				u = user.get(userDao);
@@ -85,8 +95,7 @@ public class MeetingMemberDTO implements Serializable {
 
 	public static MeetingMemberDTO get(JSONObject o) {
 		MeetingMemberDTO m = new MeetingMemberDTO();
-		long id = o.optLong("id");
-		m.id = id == 0 ? null : id;
+		m.id = optLong(o, "id");
 		m.user = UserDTO.get(o.optJSONObject("user"));
 		return m;
 	}

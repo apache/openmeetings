@@ -19,14 +19,28 @@
 package org.apache.openmeetings.test.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.test.AbstractWicketTester;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.util.string.StringValue;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -39,11 +53,17 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private UserDao userDao;
+
+	private void setTime(Appointment a) {
+		a.setStart(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+		a.setEnd(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant()));
+	}
 
 	@Test
 	public void saveAppointment() throws Exception {
-		log.debug("- 1 MeetingReminderJob.execute");
-		log.warn("- 2 MeetingReminderJob.execute");
+		log.debug("- saveAppointment");
 
 		Calendar start = Calendar.getInstance();
 		start.setTimeInMillis(start.getTimeInMillis() + 600000);
@@ -74,14 +94,45 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 				isMonthly, isYearly, remind, mmClient,
 				roomType, languageId, false, "", -1, userId);
 		a = appointmentDao.update(a, userId);
-		
+
 		Thread.sleep(3000);
-		
+
 		appointmentLogic.doScheduledMeetingReminder();
-		
+
 		Thread.sleep(3000);
-		
-		assertTrue("Saved appointment should have valid id: " + a.getId(), a.getId() != null && a.getId() > 0);
+
+		assertNotNull("Saved appointment should have valid id: " + a.getId(), a.getId());
+	}
+
+	@Test
+	public void testCreate() {
+		Appointment a = new Appointment();
+		a.setTitle("Test title");
+		setTime(a);
+		a.setReminder(Reminder.ical);
+		a.setMeetingMembers(new ArrayList<>());
+		User owner = userDao.get(1L);
+		a.setOwner(owner);
+		a.setRoom(new Room());
+		a.getRoom().setAppointment(true);
+		a.getRoom().setType(Room.Type.conference);
+		for (int i = 0; i < 3; ++i) {
+			MeetingMember mm = new MeetingMember();
+			mm.setUser(getContact(UUID.randomUUID().toString(), owner.getId()));
+			a.getMeetingMembers().add(mm);
+		}
+		a = appointmentDao.update(a, owner.getId());
+		assertNotNull("Saved appointment should have valid id: " + a.getId(), a.getId());
+		assertEquals("Saved appointment should have corect count of guests: ", 3, a.getMeetingMembers().size());
+		for (MeetingMember mm : a.getMeetingMembers()) {
+			assertNotNull("Saved guest should have valid id: ", mm.getId());
+			assertNotNull("Saved guest should have valid invitation: ", mm.getInvitation());
+		}
+
+		WebSession ws = WebSession.get();
+		Appointment a1 = appointmentDao.get(a.getId());
+		ws.checkHashes(StringValue.valueOf(""), StringValue.valueOf(a1.getMeetingMembers().get(0).getInvitation().getHash()));
+		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
 	}
 
 	private static String createClientObj(String firstname, String lastname, String email, String jNameTimeZone) {
@@ -94,5 +145,4 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 			.append(jNameTimeZone);
 		return sb.toString();
 	}
-
 }
