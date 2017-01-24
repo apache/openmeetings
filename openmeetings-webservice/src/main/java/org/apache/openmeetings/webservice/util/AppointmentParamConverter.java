@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.webservice.util;
 
+import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
+import static org.apache.openmeetings.db.util.DtoHelper.optLong;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT;
 
 import java.util.Date;
@@ -37,8 +39,7 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 	public AppointmentDTO fromString(String val) {
 		JSONObject o = new JSONObject(val);
 		AppointmentDTO a = new AppointmentDTO();
-		long id = o.optLong("id");
-		a.setId(id == 0 ? null : id);
+		a.setId(optLong(o, "id"));
 		a.setTitle(o.optString("title"));
 		a.setLocation(o.optString("location"));
 		a.setOwner(UserDTO.get(o.optJSONObject("owner")));
@@ -49,8 +50,7 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		a.setInserted(DateParamConverter.get(o.optString("inserted")));
 		a.setUpdated(DateParamConverter.get(o.optString("updated")));
 		a.setDeleted(o.optBoolean("inserted"));
-		String r = o.optString("reminder", null);
-		a.setReminder(r == null ? null : Reminder.valueOf(r));
+		a.setReminder(optEnum(Reminder.class, o, "reminder"));
 		a.setRoom(RoomDTO.get(o.optJSONObject("room")));
 		a.setIcalId(o.optString("icalId"));
 		JSONArray mm = o.optJSONArray("meetingMembers");

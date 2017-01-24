@@ -36,56 +36,55 @@ import org.simpleframework.xml.Root;
 @Table(name = "address")
 @Root(name="address")
 public class Address implements IDataProviderEntity {
-
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "additionalname")
 	@Element(data=true, required=false)
 	private String additionalname;
-	
+
 	@Lob
 	@Column(name = "comment", length=2048)
 	@Element(data=true, required=false)
 	private String comment;
-	
+
 	@Column(name = "fax")
 	@Element(data=true, required=false)
 	private String fax;
-	
+
 	@Column(name = "inserted")
 	@Element(name = "starttime",data=true, required=false)
 	private Date inserted;
-	
+
 	@Column(name = "country")
 	@Element(name="country", data=true, required=false)
 	private String country;
-	
+
 	@Column(name = "street")
 	@Element(data=true, required=false)
 	private String street;
-	
+
 	@Column(name = "town")
 	@Element(data=true, required=false)
 	private String town;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "zip")
 	@Element(data=true, required=false)
 	private String zip;
-	
+
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "email")
 	@Element(name="mail", data=true, required=false)
 	private String email;
-	
+
 	@Column(name = "phone")
 	@Element(data=true, required=false)
 	private String phone;

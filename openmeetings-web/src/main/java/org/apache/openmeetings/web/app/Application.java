@@ -96,7 +96,7 @@ import org.wicketstuff.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>(); 
+	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>();
 	private static ConcurrentHashMap<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
 	private static ConcurrentHashMap<Long, Set<String>> ROOMS = new ConcurrentHashMap<>();
 	//additional maps for faster searching should be created
@@ -114,14 +114,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
-		
-		//Add custom resource loader at the beginning, so it will be checked first in the 
-		//chain of Resource Loaders, if not found it will search in Wicket's internal 
+
+		//Add custom resource loader at the beginning, so it will be checked first in the
+		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		
+
 		super.init();
-		
+
 		// register some widgets
 		dashboardContext = new DashboardContext();
 		dashboardContext.setDashboardPersister(new UserDashboardPersister());
@@ -136,7 +136,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		DashboardSettings dashboardSettings = DashboardSettings.get();
 		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
-		
+
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", HashPage.class));
@@ -157,7 +157,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		public NoVersionMapper(final Class<? extends IRequestablePage> pageClass) {
 			this("/", pageClass);
 		}
-		
+
 		public NoVersionMapper(String mountPath, final Class<? extends IRequestablePage> pageClass) {
 			super(mountPath, pageClass, new PageParametersEncoder());
 		}
@@ -166,7 +166,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
 			//Does nothing
 		}
-		
+
 		@Override
 		public Url mapHandler(IRequestHandler requestHandler) {
 			if (requestHandler instanceof ListenerInterfaceRequestHandler || requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
@@ -180,7 +180,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {
 		return (OmAuthenticationStrategy)get().getSecuritySettings().getAuthenticationStrategy();
 	}
-	
+
 	@Override
 	public Class<? extends Page> getHomePage() {
 		return MainPage.class;
@@ -195,31 +195,31 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public Class<? extends WebPage> getSignInPageClass() {
 		return SignInPage.class;
 	}
-	
+
 	public static Application get() {
 		return (Application) WebApplication.get();
 	}
-	
+
 	public static DashboardContext getDashboardContext() {
 		return get().dashboardContext;
 	}
-	
+
 	public static void addOnlineUser(Client c) {
 		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoomId());
 		ONLINE_USERS.put(c.getUid(), c);
 	}
-	
+
 	public static void removeOnlineUser(Client c) {
 		if (c != null) {
 			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
 			ONLINE_USERS.remove(c.getUid());
 		}
 	}
-	
+
 	public static Client getOnlineClient(String uid) {
 		return uid == null ? null : ONLINE_USERS.get(uid);
 	}
-	
+
 	public static boolean isUserOnline(Long userId) {
 		boolean isUserOnline = false;
 		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
@@ -227,7 +227,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				isUserOnline = true;
 				break;
 			}
-		} 
+		}
 		return isUserOnline;
 	}
 
@@ -245,11 +245,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return result;
 	}
-	
+
 	public static int getClientsSize() {
 		return ONLINE_USERS.size();
 	}
-	
+
 	public static Client getClientByKeys(Long userId, String sessionId) {
 		Client client = null;
 		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
@@ -258,10 +258,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				client = c;
 				break;
 			}
-		} 
+		}
 		return client;
 	}
-	
+
 	@Override
 	public void invalidateClient(Long userId, String sessionId) {
 		Client client = getClientByKeys(userId, sessionId);
@@ -272,24 +272,24 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			}
 		}
 	}
-	
+
 	public static boolean isInvaldSession(String sessionId) {
 		return sessionId == null ? false : INVALID_SESSIONS.containsKey(sessionId);
 	}
-	
+
 	public static void removeInvalidSession(String sessionId) {
 		if (sessionId != null){
 			INVALID_SESSIONS.remove(sessionId);
 		}
 	}
-	
+
 	public static Client addUserToRoom(Client c) {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<String>());
 		ROOMS.get(c.getRoomId()).add(c.getUid());
 		return c;
 	}
-	
+
 	public static Client removeUserFromRoom(Client c) {
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
 		if (c.getRoomId() != null) {
@@ -301,7 +301,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return c;
 	}
-	
+
 	public static List<Client> getRoomClients(Long roomId) {
 		List<Client> clients = new ArrayList<>();
 		if (roomId != null) {
@@ -317,7 +317,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return clients;
 	}
-	
+
 	public static Set<Long> getUserRooms(Long userId) {
 		Set<Long> result = new HashSet<>();
 		for (Entry<Long, Set<String>> me : ROOMS.entrySet()) {
@@ -330,7 +330,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return result;
 	}
-	
+
 	public static boolean isUserInRoom(long roomId, long userId) {
 		Set<String> clients = ROOMS.get(roomId);
 		if (clients != null) {
@@ -342,7 +342,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return false;
 	}
-	
+
 	//TODO need more safe way FIXME
 	public <T> T _getBean(Class<T> clazz) {
 		WebApplicationContext wac = getWebApplicationContext(getServletContext());
@@ -364,15 +364,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return loc;
 	}
-	
+
 	public static String getString(String key, final long languageId) {
 		return getString(key, getLocale(languageId));
 	}
-	
+
 	public static String getString(long id, final long languageId) {
 		return getString(id, getLocale(languageId));
 	}
-	
+
 	public static String getString(long id, final Locale loc) {
 		return getString("" + id, loc);
 	}
@@ -406,7 +406,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return result;
 	}
-	
+
 	public static <T> T getBean(Class<T> clazz) {
 		if (InitializationContainer.initComplete) {
 			if (!isInstalled()) {
@@ -417,7 +417,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			throw new RestartResponseException(NotInitedPage.class);
 		}
 	}
-	
+
 	@Override
 	public <T> T getOmBean(Class<T> clazz) { //FIXME hack for email templates support (should be in separate module for now
 		return Application.getBean(clazz);
@@ -437,19 +437,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Room r = i.getRoom();
 		User u = i.getInvitee();
 		if (r != null) {
-			boolean allowed = u.getType() != Type.contact;
-			if (allowed) {
-				allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
-			}
-			if (!allowed) {
-				PageParameters pp = new PageParameters();
-				pp.add(INVITATION_HASH, i.getHash());
-				if (u.getLanguageId() > 0) {
-					pp.add("language", u.getLanguageId());
-				}
-				link = urlForPage(HashPage.class, pp);
-			} else {
+			if (r.isAppointment() && i.getInvitedBy().getId().equals(u.getId())) {
 				link = getRoomUrlFragment(r.getId()).getLink();
+			} else {
+				boolean allowed = u.getType() != Type.contact;
+				if (allowed) {
+					allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
+				}
+				if (allowed) {
+					link = getRoomUrlFragment(r.getId()).getLink();
+				} else {
+					PageParameters pp = new PageParameters();
+					pp.add(INVITATION_HASH, i.getHash());
+					if (u.getLanguageId() > 0) {
+						pp.add("language", u.getLanguageId());
+					}
+					link = urlForPage(HashPage.class, pp);
+				}
 			}
 		}
 		Recording rec = i.getRecording();
@@ -458,12 +462,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		return link;
 	}
-	
+
 	@Override
 	public String getOmInvitationLink(Invitation i) { //FIXME hack for email templates support (should be in separate module for now
 		return getInvitationLink(i);
 	}
-	
+
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp) {
 		RequestCycle rc = RequestCycle.get();
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(getBean(ConfigurationDao.class).getBaseUrl() + rc.urlFor(clazz, pp)));
@@ -478,7 +482,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public String getOmString(long id) {
 		return getString(id);
 	}
-	
+
 	@Override
 	public String getOmString(long id, long languageId) {
 		return getString(id, languageId);

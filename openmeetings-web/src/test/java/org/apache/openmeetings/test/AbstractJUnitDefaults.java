@@ -48,7 +48,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
 	private static final String useremail = "junit@openmeetings.apache.org";
-	
+
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
@@ -114,7 +114,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		if (ap.getReminder() == null) {
 			ap.setReminder(Appointment.Reminder.none);
 		}
-		
+
 		if (r == null) {
 			r = new Room();
 			r.setType(Room.Type.conference);
@@ -178,12 +178,15 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		importInitvalues.loadAll(cfg, false);
 	}
 
-	public User createUserContact(Long ownerId) {
-		return createUserContact(UUID.randomUUID().toString(), ownerId);
+	public User getContact(String uuid, Long ownerId) {
+		return userDao.getContact("email" + uuid, "firstname" + uuid, "lastname" + uuid, ownerId);
 	}
 
-	public User createUserContact(String uuid, Long ownerId) {
-		User user = userDao.getContact("email" + uuid, "firstname" + uuid, "lastname" + uuid, ownerId);
+	public User createUserContact(Long ownerId) {
+		return createUserContact(getContact(UUID.randomUUID().toString(), ownerId), ownerId);
+	}
+
+	public User createUserContact(User user, Long ownerId) {
 		user = userDao.update(user, ownerId);
 		assertNotNull("Cann't add user", user);
 		return user;

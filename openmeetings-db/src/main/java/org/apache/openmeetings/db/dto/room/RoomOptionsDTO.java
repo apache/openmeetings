@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static org.apache.openmeetings.db.util.DtoHelper.optLong;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -99,11 +101,7 @@ public class RoomOptionsDTO implements Serializable {
 	public static Integer optInt(JSONObject o, String key) {
 		return o.has(key) && !o.isNull(key) ? o.getInt(key) : null;
 	}
-	
-	public static Long optLong(JSONObject o, String key) {
-		return o.has(key) && !o.isNull(key) ? o.getLong(key) : null;
-	}
-	
+
 	public static RoomOptionsDTO fromString(String s) {
 		JSONObject o = new JSONObject(s);
 		RoomOptionsDTO ro = new RoomOptionsDTO();
@@ -116,7 +114,7 @@ public class RoomOptionsDTO implements Serializable {
 		ro.showNickNameDialog = o.optBoolean("showNickNameDialog", false);
 		return ro;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new JSONObject(this).toString();

@@ -69,31 +69,30 @@ public class AppointmentDao {
 	/*
 	 * insert, update, delete, select
 	 */
-
 	// -----------------------------------------------------------------------------------------------
-
 	public Appointment get(Long id) {
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentById", Appointment.class);
 		query.setParameter("id", id);
 
-		Appointment appoint = null;
+		Appointment a = null;
 		try {
-			appoint = query.getSingleResult();
+			a = query.getSingleResult();
 		} catch (NoResultException ex) {
+			//no-op
 		}
-		return appoint;
+		return a;
 	}
 
 	public Appointment getAny(Long id) {
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", id);
 
-		Appointment appoint = null;
+		Appointment a = null;
 		try {
-			appoint = query.getSingleResult();
+			a = query.getSingleResult();
 		} catch (NoResultException ex) {
+			//no-op
 		}
-
-		return appoint;
+		return a;
 	}
 
 	public List<Appointment> get() {
@@ -103,7 +102,7 @@ public class AppointmentDao {
 	public Appointment update(Appointment a, Long userId) {
 		return update(a, userId, true);
 	}
-	
+
 	public Appointment update(Appointment a, Long userId, boolean sendmails) {
 		Room r = a.getRoom();
 		if (r.getId() == null) {
@@ -151,11 +150,11 @@ public class AppointmentDao {
 			em.persist(a);
 		} else {
 			a.setUpdated(new Date());
-			a =	em.merge(a);
+			a = em.merge(a);
 		}
 		return a;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------
 
 	public void delete(Appointment a, Long userId) {
@@ -167,7 +166,7 @@ public class AppointmentDao {
 		}
 		update(a, userId);
 	}
-	
+
 	public List<Appointment> getInRange(Long userId, Date start, Date end) {
 		log.debug("Start " + start + " End " + end);
 
@@ -175,8 +174,8 @@ public class AppointmentDao {
 		query.setParameter("start", start);
 		query.setParameter("end", end);
 		query.setParameter("userId", userId);
-		
-		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
+
+		List<Appointment> listAppoints = new ArrayList<>(query.getResultList());
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
 		q1.setParameter("start", start);
 		q1.setParameter("end", end);
@@ -196,7 +195,7 @@ public class AppointmentDao {
 		q.setParameter("end", end.getTime());
 		return q.getResultList();
 	}
-	
+
 	// next appointment to select date
 	public Appointment getNext(Long userId, Date start) {
 		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)

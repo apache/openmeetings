@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
+import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
+import static org.apache.openmeetings.db.util.DtoHelper.optEnumList;
+import static org.apache.openmeetings.db.util.DtoHelper.optLong;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -191,30 +195,23 @@ public class UserDTO implements Serializable {
 			return null;
 		}
 		UserDTO u = new UserDTO();
-		long id = o.optLong("id");
-		u.id = id == 0 ? null : id;
+		u.id = optLong(o, "id");
 		u.login = o.optString("login");
 		u.password = o.optString("password");
 		u.firstname = o.optString("firstname");
 		u.lastname = o.optString("lastname");
-		JSONArray rr = o.optJSONArray("rights");
-		if (rr !=  null) {
-			for (int i = 0; i < rr.length(); ++i) {
-				u.rights.add(Right.valueOf(rr.getString(i)));
-			}
-		}
+		u.rights.addAll(optEnumList(Right.class, o.optJSONArray("rights")));
 		u.languageId = o.optLong("languageId");
 		JSONObject a = o.optJSONObject("address");
 		if (a != null) {
-			u.address.setId(a.optLong("id"));
+			u.address.setId(optLong(a, "id"));
 			u.address.setCountry(a.optString("country"));
 			u.address.setEmail(a.optString("email"));
 		}
 		u.timeZoneId = o.optString("timeZoneId");
 		u.externalId = o.optString("externalId");
 		u.externalType = o.optString("externalType");
-		String t = o.optString("type", null);
-		u.type = t == null ? null : Type.valueOf(t);
+		u.type = optEnum(Type.class, o, "type");
 		return u;
 	}
 
