@@ -448,6 +448,7 @@
 		<method name="resync">
 			resetValues();
 			if (!isremote) {
+				canvas.commonVideoViewContent.removeVideoByUser(this.publicSID);
 				canvas.commonVideoViewContent._startAvBroadcast(true);
 			}
 		</method>
