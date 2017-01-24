@@ -303,10 +303,7 @@ public class CalendarWebService {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
 			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
-				Appointment a = appointment.get(userDao, appointmentDao);
-				if (a.getOwner() == null) {
-					a.setOwner(u);
-				}
+				Appointment a = appointment.get(userDao, appointmentDao, u);
 				if (a.getRoom().getId() != null) {
 					if (a.getRoom().isAppointment()) {
 						a.getRoom().setIspublic(false);

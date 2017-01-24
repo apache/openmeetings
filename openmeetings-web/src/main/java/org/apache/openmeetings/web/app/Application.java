@@ -486,19 +486,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Room r = i.getRoom();
 		User u = i.getInvitee();
 		if (r != null) {
-			boolean allowed = u.getType() != Type.contact;
-			if (allowed) {
-				allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
-			}
-			if (!allowed) {
-				PageParameters pp = new PageParameters();
-				pp.add(INVITATION_HASH, i.getHash());
-				if (u.getLanguageId() > 0) {
-					pp.add("language", u.getLanguageId());
-				}
-				link = urlForPage(HashPage.class, pp);
-			} else {
+			if (r.isAppointment() && i.getInvitedBy().getId().equals(u.getId())) {
 				link = getRoomUrlFragment(r.getId()).getLink();
+			} else {
+				boolean allowed = u.getType() != Type.contact;
+				if (allowed) {
+					allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
+				}
+				if (allowed) {
+					link = getRoomUrlFragment(r.getId()).getLink();
+				} else {
+					PageParameters pp = new PageParameters();
+					pp.add(INVITATION_HASH, i.getHash());
+					if (u.getLanguageId() > 0) {
+						pp.add("language", u.getLanguageId());
+					}
+					link = urlForPage(HashPage.class, pp);
+				}
 			}
 		}
 		Recording rec = i.getRecording();

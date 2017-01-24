@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
+import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -174,14 +175,14 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		JSONObject o = createAppointment()
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
-								.put("firstname", "Jhon 1")
+								.put("firstname", "John 1")
 								.put("lastname", "Doe")
-								.put("Address", new JSONObject().put("email", "jhon1@doe.email"))
+								.put("address", new JSONObject().put("email", "jhon1@doe.email"))
 								))
 						.put(new JSONObject().put("user", new JSONObject()
-								.put("firstname", "Jhon 2")
+								.put("firstname", "John 2")
 								.put("lastname", "Doe")
-								.put("Address", new JSONObject().put("email", "jhon2@doe.email"))
+								.put("address", new JSONObject().put("email", "jhon2@doe.email"))
 								))
 						);
 
@@ -202,6 +203,9 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertNotNull("Valid DTO should be returned", dto);
 		assertNotNull("DTO id should be valid", dto.getId());
 		assertEquals("DTO should have 2 attendees", 2, dto.getMeetingMembers().size());
+		for (MeetingMemberDTO mm : dto.getMeetingMembers()) {
+			assertNotNull("Email should be valid", mm.getUser().getAddress().getEmail());
+		}
 
 		//try to change MM list
 		JSONObject o1 = AppointmentParamConverter.json(dto)
