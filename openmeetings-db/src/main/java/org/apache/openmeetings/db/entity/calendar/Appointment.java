@@ -239,7 +239,7 @@ public class Appointment implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String icalId;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "appointment_id")
 	private List<MeetingMember> meetingMembers;
 
