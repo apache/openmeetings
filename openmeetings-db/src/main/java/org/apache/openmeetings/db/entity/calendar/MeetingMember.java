@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
@@ -84,8 +85,8 @@ public class MeetingMember implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean deleted;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "invitation", nullable = true, insertable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "invitation_id", nullable = true)
 	@ForeignKey(enabled = true)
 	private Invitation invitation;
 

@@ -127,6 +127,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		for (MeetingMember mm : a.getMeetingMembers()) {
 			assertNotNull("Saved guest should have valid id: ", mm.getId());
 			assertNotNull("Saved guest should have valid invitation: ", mm.getInvitation());
+			assertNotNull("Saved guest should have invitation with ID: ", mm.getInvitation().getId());
 		}
 
 		WebSession ws = WebSession.get();
