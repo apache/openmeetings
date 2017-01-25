@@ -6,6 +6,8 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 Release Notes - Openmeetings - Version 3.1.5
 ================================================================================================================
 ** Bug
+    * [OPENMEETINGS-863] - Video Problem
+    * [OPENMEETINGS-1401] - Email Reminders for Calendared Events Not Issued
     * [OPENMEETINGS-1530] - Secure Hash is broken
     * [OPENMEETINGS-1532] - Recording folders not always imported as expected
     * [OPENMEETINGS-1533] - Impossible to create Appointment using calendar WebService
@@ -13,6 +15,7 @@ Release Notes - Openmeetings - Version 3.1.5
     * [OPENMEETINGS-1537] - external soap users unable to login to the conference room created
     * [OPENMEETINGS-1539] - Calendar web service: delete method returns nothing on success
     * [OPENMEETINGS-1540] - Placeholder in reset template email is not being replaced
+    * [OPENMEETINGS-1541] - Appointment invitations are not always accessible
 
 ** Improvement
     * [OPENMEETINGS-1531] - 3.1.5 - Library versions should be updated
