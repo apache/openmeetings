@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.ajax.json.JSONObject;
+import org.apache.wicket.util.string.Strings;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -71,6 +72,9 @@ public class MeetingMemberDTO implements Serializable {
 				u.getRights().clear();
 				u.setExternalId(null);
 				u.setExternalType(null);
+			}
+			if (Strings.isEmpty(u.getTimeZoneId())) {
+				u.setTimeZoneId(owner.getTimeZoneId());
 			}
 			mm.setUser(u);
 		}
