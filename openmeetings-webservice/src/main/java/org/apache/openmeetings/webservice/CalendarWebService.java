@@ -302,6 +302,7 @@ public class CalendarWebService {
 				log.error("USER/Room modification as SOAP");
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
+			//TODO check if objects passed with IDs are correct
 			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
 				Appointment a = appointment.get(userDao, appointmentDao, u);
 				if (a.getRoom().getId() != null) {

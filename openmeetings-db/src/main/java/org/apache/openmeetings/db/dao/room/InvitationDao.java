@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,6 +32,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.util.CalendarHelper;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,9 +86,18 @@ public class InvitationDao {
 					}
 					break;
 				case Period:
-					LocalDateTime now = ZonedDateTime.now(getZoneId(i.getInvitee().getTimeZoneId())).toLocalDateTime();
-					LocalDateTime from = CalendarHelper.getDateTime(i.getValidFrom(), i.getInvitee().getTimeZoneId());
-					LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), i.getInvitee().getTimeZoneId());
+					String tzId = i.getInvitee().getTimeZoneId();
+					if (Strings.isEmpty(tzId) && i.getAppointment() != null) {
+						log.warn("User with NO timezone found: {}", i.getInvitee().getId());
+						tzId = i.getAppointment().getOwner().getTimeZoneId();
+					}
+					if (Strings.isEmpty(tzId)) {
+						log.warn("Unable to obtain valid timezone, setting SYSTEM TZ");
+						tzId = TimeZone.getDefault().getID();
+					}
+					LocalDateTime now = ZonedDateTime.now(getZoneId(tzId)).toLocalDateTime();
+					LocalDateTime from = CalendarHelper.getDateTime(i.getValidFrom(), tzId);
+					LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), tzId);
 					i.setAllowEntry(now.isAfter(from) && now.isBefore(to));
 					break;
 				case Endless:
