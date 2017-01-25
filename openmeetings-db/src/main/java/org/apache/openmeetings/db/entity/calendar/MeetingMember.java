@@ -59,7 +59,7 @@ public class MeetingMember implements IDataProviderEntity {
 	@Element(name = "meetingMemberId", data = true)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "userid", data = true, required = false)

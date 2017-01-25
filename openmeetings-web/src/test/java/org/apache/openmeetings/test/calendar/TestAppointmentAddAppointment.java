@@ -56,7 +56,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	@Autowired
 	private UserDao userDao;
 
-	private void setTime(Appointment a) {
+	private static void setTime(Appointment a) {
 		a.setStart(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 		a.setEnd(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant()));
 	}

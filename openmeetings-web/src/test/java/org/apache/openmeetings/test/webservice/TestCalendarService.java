@@ -19,21 +19,29 @@
 package org.apache.openmeetings.test.webservice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -49,6 +57,12 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
+	@Autowired
+	private MeetingMemberDao mmDao;
+	@Autowired
+	private InvitationDao invitationDao;
+	@Autowired
+	private UserDao userDao;
 
 	private void actualTest(Room r) throws Exception {
 		String uuid = UUID.randomUUID().toString();
@@ -78,10 +92,10 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private static JSONObject createAppointment() {
 		return new JSONObject()
 			.put("title", "test")
-			.put("start", "2017-01-20T20:30:03+0300")
-			.put("end", "2017-01-20T21:30:03+0300")
+			.put("start", "2025-01-20T20:30:03+0300")
+			.put("end", "2025-01-20T21:30:03+0300")
 			.put("description", "Русский Тест")
-			.put("reminder", "none")
+			.put("reminder", "email")
 			.put("room", new JSONObject()
 					.put("name", "test24")
 					.put("comment", "appointment test room")
@@ -112,19 +126,24 @@ public class TestCalendarService extends AbstractWebServiceTest {
 			.put("reminderEmailSend", false);
 	}
 
-	@Test
-	public void testCreate() throws Exception {
-		JSONObject o = createAppointment();
-
+	private String loginNewUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = createUser(u);
 		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
+		return sr.getMessage();
+	}
+
+	@Test
+	public void testCreate() throws Exception {
+		JSONObject o = createAppointment();
+
+		String sid = loginNewUser();
 
 		Response resp = getClient(CALENDAR_SERVICE_URL)
 				.path("/")
-				.query("sid", sr.getMessage())
+				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
 
 		assertNotNull("Valid AppointmentDTO should be returned", resp);
@@ -170,31 +189,24 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertNotNull("DTO id should be valid", dto.getId());
 	}
 
-	@Test
-	public void testCreateWithMm() throws Exception {
+	private static AppointmentDTO createEventWithGuests(String sid) throws Exception {
 		JSONObject o = createAppointment()
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("firstname", "John 1")
 								.put("lastname", "Doe")
-								.put("address", new JSONObject().put("email", "jhon1@doe.email"))
+								.put("address", new JSONObject().put("email", "john1@doe.email"))
 								))
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("firstname", "John 2")
 								.put("lastname", "Doe")
-								.put("address", new JSONObject().put("email", "jhon2@doe.email"))
+								.put("address", new JSONObject().put("email", "john2@doe.email"))
 								))
 						);
 
-		String uuid = UUID.randomUUID().toString();
-		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
-		u = createUser(u);
-		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
-
 		Response resp = getClient(CALENDAR_SERVICE_URL)
 				.path("/")
-				.query("sid", sr.getMessage())
+				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
 
 		assertNotNull("Valid AppointmentDTO should be returned", resp);
@@ -207,15 +219,23 @@ public class TestCalendarService extends AbstractWebServiceTest {
 			assertNotNull("Email should be valid", mm.getUser().getAddress().getEmail());
 		}
 
+		return dto;
+	}
+
+	@Test
+	public void testCreateWithGuests() throws Exception {
+		String sid = loginNewUser();
+		AppointmentDTO dto = createEventWithGuests(sid);
+
 		//try to change MM list
 		JSONObject o1 = AppointmentParamConverter.json(dto)
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("id", 1))));
 
-		resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(CALENDAR_SERVICE_URL)
 				.path("/")
-				.query("sid", sr.getMessage())
+				.query("sid", sid)
 				.form(new Form().param("appointment", o1.toString()));
 
 		assertNotNull("Valid AppointmentDTO should be returned", resp);
@@ -224,5 +244,36 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertNotNull("Valid DTO should be returned", dto);
 		assertNotNull("DTO id should be valid", dto.getId());
 		assertEquals("DTO should have 1 attendees", 1, dto.getMeetingMembers().size());
+	}
+
+	@Test
+	public void testCreateWithGuestsCleanOne() throws Exception {
+		String sid = loginNewUser();
+		AppointmentDTO dto = createEventWithGuests(sid);
+		List<MeetingMemberDTO> initialList = new ArrayList<>(dto.getMeetingMembers());
+		MeetingMember mm = mmDao.get(initialList.get(initialList.size() - 1).getId());
+		Long mmId = mm.getId(), mmUserId = mm.getUser().getId();
+		String hash = mm.getInvitation().getHash();
+		dto.getMeetingMembers().remove(initialList.size() - 1);
+
+		//try to change MM list
+		JSONObject o = AppointmentParamConverter.json(dto);
+		Response resp = getClient(CALENDAR_SERVICE_URL)
+				.path("/")
+				.query("sid", sid)
+				.form(new Form().param("appointment", o.toString()));
+
+		assertNotNull("Valid AppointmentDTO should be returned", resp);
+		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		dto = resp.readEntity(AppointmentDTO.class);
+		assertNotNull("Valid DTO should be returned", dto);
+		assertNotNull("DTO id should be valid", dto.getId());
+		assertEquals("DTO should have 1 attendees", 1, dto.getMeetingMembers().size());
+
+		assertNull("Meeting member should deleted", mmDao.get(mmId));
+		assertNull("Invitation should deleted", invitationDao.getByHash(hash, true, false));
+		User uc = userDao.get(mmUserId);
+		assertNotNull("Meeting member user should not be deleted", uc);
+		assertFalse("Meeting member user should not be deleted", uc.isDeleted());
 	}
 }
