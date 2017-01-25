@@ -57,17 +57,17 @@ public class Invitation implements IDataProviderEntity {
 		, Update
 		, Cancel
 	}
-	
+
 	public enum Valid {
 		OneTime
 		, Period
 		, Endless;
-		
+
 		public static Valid fromInt(int valid) {
 			return valid == 1 ? Endless : (valid == 2 ? Period : OneTime);
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -77,13 +77,13 @@ public class Invitation implements IDataProviderEntity {
 	@JoinColumn(name = "invited_by", nullable = true)
 	@ForeignKey(enabled = true)
 	private User invitedBy;
-	
+
 	@Column(name = "inserted")
 	private Date inserted;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
@@ -101,7 +101,7 @@ public class Invitation implements IDataProviderEntity {
 	@Column(name = "hash")
 	private String hash;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "invitee_id", nullable = true)
 	@ForeignKey(enabled = true)
 	private User invitee;
@@ -117,16 +117,16 @@ public class Invitation implements IDataProviderEntity {
 	@Column(name = "valid")
 	@Enumerated(EnumType.STRING)
 	private Valid valid = Valid.Period;
-	
+
 	@Column(name = "valid_from")
 	private Date validFrom;
-	
+
 	@Column(name = "valid_to")
 	private Date validTo;
-	
+
 	@Column(name = "was_used", nullable = false)
 	private boolean used;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "appointment_id", nullable = true)
 	@ForeignKey(enabled = true)
@@ -135,9 +135,9 @@ public class Invitation implements IDataProviderEntity {
 	//variable used in Flash
 	@Transient
 	private boolean allowEntry = true;
-	
+
 	public Invitation() {}
-	
+
 	public Invitation(Invitation i) {
 		id = i.id;
 		invitedBy = i.invitedBy;
@@ -156,7 +156,7 @@ public class Invitation implements IDataProviderEntity {
 		used = i.used;
 		appointment = i.appointment;
 	}
-	
+
 	@Override
 	public Long getId() {
 		return id;
@@ -286,7 +286,7 @@ public class Invitation implements IDataProviderEntity {
 	public void setValid(Valid valid) {
 		this.valid = valid;
 	}
-	
+
 	public boolean isAllowEntry() {
 		return allowEntry;
 	}
