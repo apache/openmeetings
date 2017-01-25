@@ -34,7 +34,7 @@
 #topLinks span:last-child {
 	border-left: none;
 }
-#busy_indicator {
+#busy-indicator {
 	right: initial !important;
 	left: 0 !important;
 }

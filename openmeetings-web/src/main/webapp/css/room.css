@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+.room.sidebar #busy-indicator {
+	margin: 8px;
+}
 .room.container {
 	width: 100%;
 }

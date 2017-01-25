@@ -47,29 +47,18 @@ html, body {
 #topLinks span:last-child {
 	border-right: none;
 }
-#busy_indicator {
+#busy-indicator {
 	display: none;
 	z-index: 1000;
-	width: 200px;
-	font-weight: bold;
-	text-align: center;
-	font-size: 1em;
-	color: #FF0000;
+	width: 30px;
 	height: 30px;
 	border: 0;
 	position: absolute;
 	right: 0;
 	margin: 2px;
-}
-#busy_indicator span {
-	vertical-align: sub;
-	padding-left: 25px;
-	line-height: 22px;
 	background-image: url(../images/ajax-loader.gif);
 	background-repeat: no-repeat;
-	background-size: 20px 20px;
-	height: 20px;
-	display: inline-block;
+	background-size: 28px 28px;
 }
 .clickable {
 	cursor: pointer;
