@@ -69,7 +69,7 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 
 	public static JSONObject json(AppointmentDTO val) {
 		Date i = val.getInserted(), u = val.getUpdated();
-		return new JSONObject(val)
+		JSONObject o = new JSONObject(val)
 				.put("owner", UserDTO.json(val.getOwner()))
 				.put("room", RoomDTO.json(val.getRoom()))
 				.put("reminder", val.getReminder() == null ? null : val.getReminder().name())
@@ -77,6 +77,14 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 				.put("end", ISO8601_FULL_FORMAT.format(val.getEnd()))
 				.put("inserted", i == null ? null : ISO8601_FULL_FORMAT.format(i))
 				.put("updated", u == null ? null : ISO8601_FULL_FORMAT.format(u));
+		if (val.getMeetingMembers() != null) {
+			JSONArray rr = new JSONArray();
+			for(MeetingMemberDTO mm : val.getMeetingMembers()) {
+				rr.put(MeetingMemberDTO.json(mm));
+			}
+			o.put("meetingMembers", rr);
+		}
+		return o;
 	}
 
 	@Override

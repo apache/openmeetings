@@ -100,8 +100,15 @@ public class MeetingMemberDTO implements Serializable {
 		return m;
 	}
 
+	public static JSONObject json(MeetingMemberDTO mm) {
+		JSONObject m = new JSONObject();
+		m.put("id", mm.getId());
+		m.put("user", UserDTO.json(mm.getUser()));
+		return m;
+	}
+
 	@Override
 	public String toString() {
-		return new JSONObject(this).toString();
+		return json(this).toString();
 	}
 }

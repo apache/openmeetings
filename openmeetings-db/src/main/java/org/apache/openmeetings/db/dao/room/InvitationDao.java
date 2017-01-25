@@ -40,10 +40,10 @@ import org.threeten.bp.ZonedDateTime;
 @Transactional
 public class InvitationDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDao.class, webAppRootKey);
-	
+
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public Invitation update(Invitation invitation) {
 		if (invitation.getId() == null) {
 			invitation.setInserted(new Date());
@@ -54,24 +54,21 @@ public class InvitationDao {
 		}
 		return invitation;
 	}
-	
+
 	public Invitation get(Long invId) {
 		try {
-			
 			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
 			query.setParameter("id", invId);
-			
 			try {
 				return query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
-
 		} catch (Exception e) {
 			log.error("get : ", e);
 		}
 		return null;
 	}
-	
+
 	public Invitation getByHash(String hash, boolean hidePass, boolean markUsed) {
 		List<Invitation> list = em.createNamedQuery("getInvitationByHashCode", Invitation.class)
 				.setParameter("hashCode", hash).getResultList();
