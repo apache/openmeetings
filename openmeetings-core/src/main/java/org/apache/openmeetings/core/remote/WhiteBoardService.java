@@ -58,9 +58,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author sebastianwagner
- * 
+ *
  */
 public class WhiteBoardService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, webAppRootKey);
@@ -178,7 +178,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * change the draw status of a user, allow disallow him to draw anybody
 	 * besides the Moderator to draw on the whiteboard, only a Moderator is
 	 * allowed to trigger this function
-	 * 
+	 *
 	 * @param SID
 	 * @param publicSID
 	 * @param canDraw
@@ -324,7 +324,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			syncListRoom.put(currentClient.getPublicSID(), wSyncLockObject);
 			wbListManager.setWhiteBoardSyncListByRoomid(roomId, syncListRoom);
-			
+
 			//Sync to clients
 			scopeAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
 
