@@ -22,8 +22,6 @@ import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -35,17 +33,19 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
-	
+
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
 	}
-	
+
 	public String getInitFunction() {
 		return getInitFunction(new PageParameters());
 	}

@@ -47,6 +47,7 @@ import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -67,9 +68,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CRUD operations for {@link User}
- * 
+ *
  * @author swagner, solomax, vasya
- * 
+ *
  */
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
@@ -97,7 +98,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * Get a new instance of the {@link User} entity, with all default values
 	 * set
-	 * 
+	 *
 	 * @param currentUser - the user to copy time zone from
 	 * @return new User instance
 	 */
@@ -126,11 +127,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
 	private static String getAdditionalJoin(boolean filterContacts) {
 		return filterContacts ? "LEFT JOIN u.groupUsers ou" : null;
 	}
-	
+
 	private static String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
 		if (excludeContacts) {
 			params.put("contact", Type.contact);
@@ -138,7 +139,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return null;
 	}
-	
+
 	private static String getAdditionalWhere(boolean filterContacts, Long ownerId, Map<String, Object> params) {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
@@ -148,7 +149,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return null;
 	}
-	
+
 	private static void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
 		for (Map.Entry<String, Object> me: params.entrySet()) {
 			q.setParameter(me.getKey(), me.getValue());
@@ -240,7 +241,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return u;
 	}
-	
+
 	//this method is required to be able to drop reset hash
 	public User resetPassword(User u, String password) throws NoSuchAlgorithmException {
 		if (u != null) {
@@ -249,7 +250,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return u;
 	}
-	
+
 	// TODO: Why the password field is not set via the Model is because its
 	// FetchType is Lazy, this extra hook here might be not needed with a
 	// different mechanism to protect the password from being read
@@ -264,17 +265,17 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return u;
 	}
-	
+
 	@Override
 	public User get(Long id) {
 		return get(id, false);
 	}
-	
+
 	@Override
 	public User get(long id) {
 		return get(Long.valueOf(id), false);
 	}
-	
+
 	private User get(Long id, boolean force) {
 		User u = null;
 		if (id != null && id.longValue() > 0) {
@@ -344,7 +345,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	/**
 	 * check for duplicates
-	 * 
+	 *
 	 * @param login
 	 * @param type
 	 * @param domainId
@@ -363,7 +364,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	/**
 	 * Checks if a mail is already taken by someone else
-	 * 
+	 *
 	 * @param email
 	 * @param type
 	 * @param domainId
@@ -384,7 +385,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public boolean validLogin(String login) {
 		return !Strings.isEmpty(login) && login.length() >= UserHelper.getMinLoginLength(cfgDao);
 	}
-	
+
 	public User getByLogin(String login, Type type, Long domainId) {
 		User u = null;
 		try {
@@ -457,7 +458,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	/**
 	 * Returns true if the password is correct
-	 * 
+	 *
 	 * @param userId
 	 * @param password
 	 * @return
@@ -474,19 +475,19 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public User getContact(String email, Long ownerId) {
 		return getContact(email, "", "", ownerId);
 	}
-	
+
 	public User getContact(String email, User owner) {
 		return getContact(email, "", "", null, null, owner);
 	}
-	
+
 	public User getContact(String email, String firstName, String lastName, Long ownerId) {
 		return getContact(email, firstName, lastName, null, null, get(ownerId));
 	}
-	
+
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, Long ownerId) {
 		return getContact(email, firstName, lastName, langId, tzId, get(ownerId));
 	}
-	
+
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
 		User to = null;
 		try {
@@ -502,11 +503,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
-			to.setLanguageId(null == langId ? owner.getLanguageId() : langId.longValue());
+			to.setLanguageId(null == langId || null == LabelDao.languages.get(langId) ? owner.getLanguageId() : langId.longValue());
 			to.setOwnerId(owner.getId());
 			to.setAddress(new Address());
 			to.getAddress().setEmail(email);
-			to.setTimeZoneId(null == tzId ? owner.getTimeZoneId() : tzId);
+			to.setTimeZoneId(Strings.isEmpty(tzId) ? owner.getTimeZoneId() : tzId);
 		}
 		return to;
 	}
@@ -532,7 +533,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		Map<String, Object> params = new HashMap<String, Object>();
 		boolean filterContacts = true;
 		boolean count = clazz.isAssignableFrom(Long.class);
-		
+
 		StringBuilder sb = new StringBuilder("SELECT ");
 		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
 			.append("FROM User u ").append(getAdditionalJoin(filterContacts)).append(" WHERE u.deleted = false AND ")
@@ -560,11 +561,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		setAdditionalParams(query, params);
 		return query;
 	}
-	
+
 	private static String getStringParam(String param) {
 		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
 	}
-	
+
 	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
 		return getUserProfileQuery(User.class, userId, text, offers, search, orderBy, asc).setFirstResult(start).setMaxResults(max).getResultList();
 	}
@@ -589,7 +590,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public List<User> get(String search, int start, int count, String order) {
 		return get(search, start, count, order, false, Long.valueOf(-1));
 	}
-	
+
 	public Set<Right> getRights(Long id) {
 		Set<Right> rights = new HashSet<Right>();
 
@@ -608,14 +609,14 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 		return rights;
 	}
-	
+
 	/**
 	 * login logic
-	 * 
+	 *
 	 * @param userOrEmail: login or email of the user being tested
 	 * @param userpass: password of the user being tested
 	 * @return User object in case of successful login
-	 * @throws OmException in case of any issue 
+	 * @throws OmException in case of any issue
 	 */
 	public User login(String userOrEmail, String userpass) throws OmException {
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
@@ -645,11 +646,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			log.debug("No Group assigned: {}", u);
 			throw new OmException("No Group assigned to user");
 		}
-		
+
 		u.setLastlogin(new Date());
 		return update(u, u.getId());
 	}
-	
+
 	public Address getAddress(String street, String zip, String town, String country, String additionalname, String fax, String phone, String email) {
 		Address a =  new Address();
 		a.setStreet(street);
@@ -663,12 +664,12 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		a.setEmail(email);
 		return a;
 	}
-	
+
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			boolean forceTimeZoneCheck, String userOffers, String userSearchs, boolean showContactData,
 			boolean showContactDataToContacts, String externalId, String externalType, List<Long> groupIds, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		
+
 		User u = new User();
 		u.setFirstname(firstname);
 		u.setLogin(login);
@@ -706,7 +707,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
 			}
 		}
-		
+
 		return update(u, null);
 	}
 }

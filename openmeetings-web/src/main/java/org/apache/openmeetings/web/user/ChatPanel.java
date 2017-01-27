@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -25,13 +26,12 @@ import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -56,9 +56,6 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -75,6 +72,8 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -99,7 +98,7 @@ public class ChatPanel extends BasePanel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong(); 
+				long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				ChatDao dao = getBean(ChatDao.class);
 				ChatMessage m = dao.get(msgId);
@@ -133,11 +132,11 @@ public class ChatPanel extends BasePanel {
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
 
-	public JSONObject getMessage(List<ChatMessage> list) throws JSONException {
+	public JSONObject getMessage(List<ChatMessage> list) {
 		return getMessage(getUserId(), list);
 	}
 
-	private JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
+	private JSONObject getMessage(long curUserId, List<ChatMessage> list) {
 		JSONArray arr = new JSONArray();
 		for (ChatMessage m : list) {
 			String smsg = m.getMessage();
@@ -170,21 +169,17 @@ public class ChatPanel extends BasePanel {
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				ChatDao dao = getBean(ChatDao.class);
-				try {				
-					//FIXME limited count should be loaded with "earlier" link
-					List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
-					for(Long roomId : getUserRooms(getUserId())) {
-						Room r = getBean(RoomDao.class).get(roomId);
-						list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
-					}
-					list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
-					if (list.size() > 0) {
-						StringBuilder sb = new StringBuilder();
-						sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
-						response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
-					}
-				} catch (JSONException e) {
-					
+				//FIXME limited count should be loaded with "earlier" link
+				List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
+				for(Long roomId : getUserRooms(getUserId())) {
+					Room r = getBean(RoomDao.class).get(roomId);
+					list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
+				}
+				list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
+				if (list.size() > 0) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
+					response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 				}
 				super.renderHead(component, response);
 			}
@@ -274,7 +269,7 @@ public class ChatPanel extends BasePanel {
 		private final ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
 		private final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", Model.of(""), toolbar);
 		private final HiddenField<String> activeTab = new HiddenField<String>("activeTab", Model.of(""));
-		
+
 		ChatForm(String id) {
 			super(id);
 			add(toolbar
@@ -282,7 +277,7 @@ public class ChatPanel extends BasePanel {
 				, chatMessage.setOutputMarkupId(true)
 				, new AjaxButton("send") {
 					private static final long serialVersionUID = 1L;
-					
+
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ChatDao dao = getBean(ChatDao.class);
@@ -354,7 +349,7 @@ public class ChatPanel extends BasePanel {
 					};
 				});
 		}
-		
+
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();

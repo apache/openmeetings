@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -95,7 +95,7 @@ public class ExternalUserDTO implements Serializable {
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
-	
+
 	public static ExternalUserDTO fromString(String s) {
 		JSONObject o = new JSONObject(s);
 		ExternalUserDTO u = new ExternalUserDTO();
@@ -108,7 +108,7 @@ public class ExternalUserDTO implements Serializable {
 		u.profilePictureUrl = o.optString("profilePictureUrl", null);
 		return u;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new JSONObject(this).toString();

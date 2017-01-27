@@ -281,6 +281,8 @@
 			<ref bean="netTestWebService"/> <!-- JaxRs only -->
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
+			<bean id="appDtoMessageBodyWriter" class="org.apache.openmeetings.webservice.util.AppointmentMessageBodyWriter" />
+			<bean id="appDtoListMessageBodyWriter" class="org.apache.openmeetings.webservice.util.AppointmentListMessageBodyWriter" />
 			<bean id="omParamProvider" class="org.apache.openmeetings.webservice.util.OmParamConverterProvider"/>
 		</jaxrs:providers>
 	</jaxrs:server>
