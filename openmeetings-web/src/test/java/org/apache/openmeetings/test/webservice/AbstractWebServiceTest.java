@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.catalina.LifecycleState;
@@ -31,6 +32,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -41,7 +43,8 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
 
 	public static WebClient getClient(String url) {
-		return WebClient.create(url).accept("application/json").type("application/json");
+		return WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
+				.accept("application/json").type("application/json");
 	}
 
 	public static ServiceResult login() {
