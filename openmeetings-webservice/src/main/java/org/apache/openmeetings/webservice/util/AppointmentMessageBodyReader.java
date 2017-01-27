@@ -18,45 +18,42 @@
  */
 package org.apache.openmeetings.webservice.util;
 
-import static org.apache.openmeetings.webservice.util.AppointmentParamConverter.ROOT;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
-import org.json.JSONObject;
 
 @Provider
-@Produces({MediaType.APPLICATION_JSON})
-public class AppointmentMessageBodyWriter implements MessageBodyWriter<AppointmentDTO> {
+@Consumes({MediaType.APPLICATION_JSON})
+public class AppointmentMessageBodyReader implements MessageBodyReader<AppointmentDTO> {
 	@Override
-	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
-		return AppointmentDTO.class.equals(type);
+	public boolean isReadable(Class<?> clazz, Type type, Annotation[] annotations, MediaType mediaType) {
+		return type.equals(AppointmentDTO.class);
 	}
 
 	@Override
-	public long getSize(AppointmentDTO t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return 0;
-	}
-
-	@Override
-	public void writeTo(AppointmentDTO t, Class<?> type, Type genericType, Annotation[] annotations,
-			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream out)
+	public AppointmentDTO readFrom(Class<AppointmentDTO> clazz, Type type, Annotation[] annotations,
+			MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
 			throws IOException, WebApplicationException
 	{
-		Writer writer = new PrintWriter(out);
-		writer.write(new JSONObject().put(ROOT, AppointmentParamConverter.json(t)).toString());
-		writer.flush();
+		BufferedReader br = new BufferedReader(new InputStreamReader(entityStream));
+		String line = null;
+		StringBuilder sb = new StringBuilder();
+		while ((line = br.readLine()) != null) {
+			sb.append(line).append(System.lineSeparator());
+		}
+		return new AppointmentParamConverter().fromString(sb.toString());
 	}
+
 }

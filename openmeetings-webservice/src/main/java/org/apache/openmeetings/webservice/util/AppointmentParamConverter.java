@@ -40,6 +40,9 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 	@Override
 	public AppointmentDTO fromString(String val) {
 		JSONObject o = new JSONObject(val);
+		if (o.has(ROOT)) {
+			o = o.getJSONObject(ROOT);
+		}
 		AppointmentDTO a = new AppointmentDTO();
 		a.setId(optLong(o, "id"));
 		a.setTitle(o.optString("title"));
