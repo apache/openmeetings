@@ -29,7 +29,7 @@ import java.util.Date;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.webservice.util.CalendarParamConverter;
 import org.apache.openmeetings.webservice.util.DateParamConverter;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
 import org.junit.Test;
 
 public class TestWebConverters {

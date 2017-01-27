@@ -112,6 +112,11 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tdunning</groupId>
+			<artifactId>json</artifactId>
+			<version>1.8</version> <!-- FIXME need to be removed with update to wicket-8.x -->
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

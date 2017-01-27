@@ -35,8 +35,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
 
 @XmlRootElement
 public class UserDTO implements Serializable {
@@ -213,15 +212,5 @@ public class UserDTO implements Serializable {
 		u.externalType = o.optString("externalType");
 		u.type = optEnum(Type.class, o, "type");
 		return u;
-	}
-
-	public static JSONObject json(UserDTO u) {
-		JSONObject o = new JSONObject(u)
-				.put("type", u.getType().name());
-		JSONArray rr = new JSONArray();
-		for (Right r : u.getRights()) {
-			rr.put(r.name());
-		}
-		return o.put("rights", rr);
 	}
 }

@@ -43,9 +43,6 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -57,6 +54,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.threeten.bp.LocalDateTime;
@@ -169,20 +168,16 @@ public class CalendarPanel extends UserPanel {
 		JSONArray shortMonthes = new JSONArray();
 		JSONArray days = new JSONArray();
 		JSONArray shortDays = new JSONArray();
-		try {
-			// first week day must be Sunday
-			days.put(0, Application.getString(466));
-			shortDays.put(0, Application.getString(459));
-			for (int i = 0; i < 12; i++) {
-				monthes.put(i, Application.getString(469 + i));
-				shortMonthes.put(i, Application.getString(1556 + i));
-				if (i + 1 < 7) {
-					days.put(i + 1, Application.getString(460 + i));
-					shortDays.put(i + 1, Application.getString(453 + i));
-				}
+		// first week day must be Sunday
+		days.put(0, Application.getString(466));
+		shortDays.put(0, Application.getString(459));
+		for (int i = 0; i < 12; i++) {
+			monthes.put(i, Application.getString(469 + i));
+			shortMonthes.put(i, Application.getString(1556 + i));
+			if (i + 1 < 7) {
+				days.put(i + 1, Application.getString(460 + i));
+				shortDays.put(i + 1, Application.getString(453 + i));
 			}
-		} catch (JSONException e) {
-			log.error("Unexpected error while creating label lists", e);
 		}
 		options.set("monthNames", monthes.toString());
 		options.set("monthNamesShort", shortMonthes.toString());

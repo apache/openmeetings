@@ -31,10 +31,12 @@ import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class AppointmentParamConverter implements ParamConverter<AppointmentDTO> {
+	public static final String ROOT = "appointmentDTO";
+
 	@Override
 	public AppointmentDTO fromString(String val) {
 		JSONObject o = new JSONObject(val);
@@ -49,7 +51,7 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 		a.setDescription(o.optString("description"));
 		a.setInserted(DateParamConverter.get(o.optString("inserted")));
 		a.setUpdated(DateParamConverter.get(o.optString("updated")));
-		a.setDeleted(o.optBoolean("inserted"));
+		a.setDeleted(o.optBoolean("deleted"));
 		a.setReminder(optEnum(Reminder.class, o, "reminder"));
 		a.setRoom(RoomDTO.get(o.optJSONObject("room")));
 		a.setIcalId(o.optString("icalId"));
@@ -69,22 +71,11 @@ public class AppointmentParamConverter implements ParamConverter<AppointmentDTO>
 
 	public static JSONObject json(AppointmentDTO val) {
 		Date i = val.getInserted(), u = val.getUpdated();
-		JSONObject o = new JSONObject(val)
-				.put("owner", UserDTO.json(val.getOwner()))
-				.put("room", RoomDTO.json(val.getRoom()))
-				.put("reminder", val.getReminder() == null ? null : val.getReminder().name())
+		return new JSONObject(val)
 				.put("start", ISO8601_FULL_FORMAT.format(val.getStart()))
 				.put("end", ISO8601_FULL_FORMAT.format(val.getEnd()))
 				.put("inserted", i == null ? null : ISO8601_FULL_FORMAT.format(i))
 				.put("updated", u == null ? null : ISO8601_FULL_FORMAT.format(u));
-		if (val.getMeetingMembers() != null) {
-			JSONArray rr = new JSONArray();
-			for(MeetingMemberDTO mm : val.getMeetingMembers()) {
-				rr.put(MeetingMemberDTO.json(mm));
-			}
-			o.put("meetingMembers", rr);
-		}
-		return o;
 	}
 
 	@Override

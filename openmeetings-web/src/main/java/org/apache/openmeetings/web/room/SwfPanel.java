@@ -39,8 +39,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -53,6 +51,8 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -65,15 +65,15 @@ public class SwfPanel extends BasePanel {
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
 	private Long roomId = null;
-	
+
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
 	}
-	
+
 	public SwfPanel(String id, Long roomId, String uid) {
 		this(id, addServer(roomId, true).add("uid", uid));
 	}
-	
+
 	public SwfPanel(String id, PageParameters pp) {
 		super(id);
 		//OK let's find the room
@@ -103,7 +103,7 @@ public class SwfPanel extends BasePanel {
 	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
@@ -167,7 +167,7 @@ public class SwfPanel extends BasePanel {
 	private static PageParameters addServer(PageParameters pp, Server s) {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
 	}
-	
+
 	public static PageParameters addServer(Long roomId, boolean addBasic) {
 		PageParameters pp = new PageParameters();
 		if (addBasic) {

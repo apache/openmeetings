@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import static org.apache.openmeetings.db.dto.room.RoomOptionsDTO.optInt;
 import static org.apache.openmeetings.db.util.DtoHelper.optEnum;
 import static org.apache.openmeetings.db.util.DtoHelper.optEnumList;
+import static org.apache.openmeetings.db.util.DtoHelper.optInt;
 import static org.apache.openmeetings.db.util.DtoHelper.optLong;
 
 import java.io.Serializable;
@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoomDTO implements Serializable {
@@ -311,15 +311,6 @@ public class RoomDTO implements Serializable {
 		r.audioOnly = o.optBoolean("audioOnly", false);
 		r.getHiddenElements().addAll(optEnumList(RoomElement.class, o.optJSONArray("hiddenElements")));
 		return r;
-	}
-
-	public static JSONObject json(RoomDTO r) {
-		JSONArray rr = new JSONArray();
-		for (RoomElement h : r.getHiddenElements()) {
-			rr.put(h.name());
-		}
-		return new JSONObject(r).put("hiddenElements", rr)
-				.put("type", r.getType().name());
 	}
 
 	@Override

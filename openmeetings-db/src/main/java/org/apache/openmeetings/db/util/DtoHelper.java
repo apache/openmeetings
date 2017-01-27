@@ -21,10 +21,14 @@ package org.apache.openmeetings.db.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class DtoHelper {
+	public static Integer optInt(JSONObject o, String key) {
+		return o.has(key) && !o.isNull(key) ? o.getInt(key) : null;
+	}
+
 	public static Long optLong(JSONObject o, String key) {
 		return o.has(key) && !o.isNull(key) ? o.getLong(key) : null;
 	}

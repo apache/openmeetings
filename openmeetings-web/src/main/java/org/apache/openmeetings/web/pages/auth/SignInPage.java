@@ -59,14 +59,13 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -75,15 +74,15 @@ public class SignInPage extends BaseInitedPage {
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, webAppRootKey);
 	private SignInDialog d;
 	private KickMessageDialog m;
-	
+
 	static boolean allowRegister() {
 		return "1".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"));
 	}
-	
+
 	static boolean allowOAuthLogin() {
 		return getBean(OAuth2Dao.class).getActive().size() > 0;
 	}
-	
+
 	public SignInPage(PageParameters p) {
 		super();
 		StringValue oauthid = p.get("oauthid");
@@ -96,7 +95,7 @@ public class SignInPage extends BaseInitedPage {
 					log.warn("OAuth server id=" + serverId + " not found");
 					return;
 				}
-				
+
 				if (p.get("code").toString() != null) { // got code
 					String code = p.get("code").toString();
 					log.debug("OAuth response code=" + code);
@@ -108,7 +107,7 @@ public class SignInPage extends BaseInitedPage {
 						loginViaOAuth2(authParams, serverId);
 					}
 				} else { // redirect to get code
-					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
+					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(),
 							null, null, getRedirectUri(server, this), null);
 					log.debug("redirectUrl=" + redirectUrl);
 					throw new RedirectToUrlException(redirectUrl);
@@ -129,7 +128,7 @@ public class SignInPage extends BaseInitedPage {
 				log.error("Failed to login using POST parameters passed");
 			}
 		}
-		
+
 		RegisterDialog r = new RegisterDialog("register");
 		ForgetPasswordDialog f = new ForgetPasswordDialog("forget");
 		d = new SignInDialog("signin");
@@ -138,27 +137,27 @@ public class SignInPage extends BaseInitedPage {
 		r.setSignInDialog(d);
 		f.setSignInDialog(d);
 		m = new KickMessageDialog("kick");
-		add(d.setVisible(!WebSession.get().isKickedByAdmin()), 
+		add(d.setVisible(!WebSession.get().isKickedByAdmin()),
 				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
 	}
-	
+
 	public SignInPage() {
 		this(new PageParameters());
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 	}
-	
+
 	@Override
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget arg1) {
 		WebSession.get().setArea(getUrlFragment(params));
 	}
-	
+
 	// ============= OAuth2 methods =============
 
-	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret, 
+	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
 			String clientToken, String redirectUri, String code) throws UnsupportedEncodingException {
 		String result = urlTemplate;
 		if (clientId != null) {
@@ -192,7 +191,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		return result;
 	}
-		
+
 	private static void prepareConnection(URLConnection connection) {
 		if (!(connection instanceof HttpsURLConnection)) {
 			return;
@@ -212,7 +211,7 @@ public class SignInPage extends BaseInitedPage {
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
-				
+
 		}};
 		try {
 			SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -220,12 +219,12 @@ public class SignInPage extends BaseInitedPage {
 			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
 			((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
-				
+
 				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
-			
+
 			});
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
@@ -236,7 +235,7 @@ public class SignInPage extends BaseInitedPage {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
-		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), server.getClientSecret(), 
+		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), server.getClientSecret(),
 				null, getRedirectUri(server, this), code);
 		// request auth token
 		HttpURLConnection urlConnection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
@@ -254,29 +253,18 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
-		try {
-			JSONObject jsonResult = new JSONObject(sourceResponse.toString());
-			if (jsonResult.has("access_token")) {
-				result.accessToken = jsonResult.getString("access_token");
-			}
-			if (jsonResult.has("refresh_token")) {
-				result.refreshToken = jsonResult.getString("refresh_token");
-			}
-			if (jsonResult.has("token_type")) {
-				result.tokenType = jsonResult.getString("token_type");
-			}
-			if (jsonResult.has("expires_in")) {
-				result.expiresIn = jsonResult.getLong("expires_in");
-			}
-		} catch (JSONException e) {
-			// try to parse as canonical
-			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse.toString());
-			result.accessToken = parsedMap.get("access_token");
-			result.refreshToken = parsedMap.get("refresh_token");
-			result.tokenType = parsedMap.get("token_type");
-			try {
-				result.expiresIn = Long.valueOf(parsedMap.get("expires_in"));
-			} catch (NumberFormatException nfe) {}
+		JSONObject jsonResult = new JSONObject(sourceResponse.toString());
+		if (jsonResult.has("access_token")) {
+			result.accessToken = jsonResult.getString("access_token");
+		}
+		if (jsonResult.has("refresh_token")) {
+			result.refreshToken = jsonResult.getString("refresh_token");
+		}
+		if (jsonResult.has("token_type")) {
+			result.tokenType = jsonResult.getString("token_type");
+		}
+		if (jsonResult.has("expires_in")) {
+			result.expiresIn = jsonResult.getLong("expires_in");
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
@@ -285,19 +273,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		return result;
 	}
-	
-	private static Map<String, String> parseCanonicalResponse(String response) {
-		String[] parts = response.split("&");
-		Map<String, String> result = new HashMap<String, String>();
-		for (String part: parts) {
-			String pair[] = part.split("=");
-			if (pair.length > 1) {
-				result.put(pair[0], pair[1]);
-			}
-		}
-		return result;
-	}
-	
+
 	private Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// get attributes names
 		String loginAttributeName = server.getLoginParamName();
@@ -306,7 +282,7 @@ public class SignInPage extends BaseInitedPage {
 		String lastname = server.getLastnameParamName();
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
-		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), server.getClientSecret(), 
+		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), server.getClientSecret(),
 				token, getRedirectUri(server, this), code);
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
@@ -314,27 +290,14 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
 		Map<String, String> result = new HashMap<>();
-		try {
-			JSONObject parsedJson = new JSONObject(sourceResponse);
-			result.put("login", parsedJson.getString(loginAttributeName));
-			result.put("email", parsedJson.getString(emailAttributeName));
-			if (parsedJson.has(firstname)) {
-				result.put("firstname", parsedJson.getString(firstname));
-			}
-			if (parsedJson.has(lastname)) {
-				result.put("lastname", parsedJson.getString(lastname));
-			}
-		} catch (JSONException e) {
-			// try to parse response as canonical
-			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse);
-			result.put("login", parsedMap.get(loginAttributeName));
-			result.put("email", parsedMap.get(emailAttributeName));
-			if (parsedMap.containsKey(firstname)) {
-				result.put("firstname", parsedMap.get(firstname));
-			}
-			if (parsedMap.containsKey(lastname)) {
-				result.put("lastname", parsedMap.get(lastname));
-			}
+		JSONObject parsedJson = new JSONObject(sourceResponse);
+		result.put("login", parsedJson.getString(loginAttributeName));
+		result.put("email", parsedJson.getString(emailAttributeName));
+		if (parsedJson.has(firstname)) {
+			result.put("firstname", parsedJson.getString(firstname));
+		}
+		if (parsedJson.has(lastname)) {
+			result.put("lastname", parsedJson.getString(lastname));
 		}
 		return result;
 	}

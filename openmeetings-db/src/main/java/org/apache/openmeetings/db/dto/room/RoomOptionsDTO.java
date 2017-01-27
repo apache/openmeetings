@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -87,10 +87,6 @@ public class RoomOptionsDTO implements Serializable {
 
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
-	}
-
-	public static Integer optInt(JSONObject o, String key) {
-		return o.has(key) && !o.isNull(key) ? o.getInt(key) : null;
 	}
 
 	public static RoomOptionsDTO fromString(String s) {

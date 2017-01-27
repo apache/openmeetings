@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -108,12 +108,27 @@ public class AppointmentDTO implements Serializable {
 		a.setReminder(reminder);
 		a.setRoom(room.get());
 		a.setIcalId(icalId);
-		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		List<MeetingMember> mml = new ArrayList<>();
 		for(MeetingMemberDTO mm : meetingMembers) {
-			MeetingMember m = mm.get(userDao, u);
-			m.setAppointment(a);
-			a.getMeetingMembers().add(m);
+			MeetingMember m = null;
+			if (mm.getId() != null) {
+				//if ID is NOT null it should already be in the list
+				for (MeetingMember m1 : a.getMeetingMembers()) {
+					if (m1.getId().equals(mm.getId())) {
+						m = m1;
+						break;
+					}
+				}
+				if (m == null) {
+					throw new RuntimeException("Weird guest from different appointment is passed");
+				}
+			} else {
+				m = mm.get(userDao, u);
+				m.setAppointment(a);
+			}
+			mml.add(m);
 		}
+		a.setMeetingMembers(mml);
 		a.setLanguageId(languageId);
 		a.setPasswordProtected(passwordProtected);
 		a.setConnectedEvent(connectedEvent);
