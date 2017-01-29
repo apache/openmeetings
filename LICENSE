@@ -305,7 +305,7 @@ webapps/openmeetings/WEB-INF/lib/joda-time-2.9.4.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
 webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
 webapps/openmeetings/WEB-INF/lib/jqplot-7.6.0.jar
-webapps/openmeetings/WEB-INF/lib/json-1.3.jar
+webapps/openmeetings/WEB-INF/lib/json-1.8.jar
 webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
