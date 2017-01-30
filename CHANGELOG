@@ -105,6 +105,7 @@ Release Notes - Openmeetings - Version 3.2.0
     * [OPENMEETINGS-1541] - Appointment invitations are not always accessible
     * [OPENMEETINGS-1542] - Ajax busy status is not displayed in the room
     * [OPENMEETINGS-1543] - Webservice Calendar/range
+    * [OPENMEETINGS-1545] - Screen-sharing is broken
 
 ** Improvement
     * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.

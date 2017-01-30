@@ -86,12 +86,12 @@
 				</div>
 				<br/>
 				<span>
-					124 issues are fixed please check <br/>
+					125 issues are fixed please check <br/>
 					<a href="https://www.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-02-02)</span>
+				<span class="date">(2017-02-03)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
