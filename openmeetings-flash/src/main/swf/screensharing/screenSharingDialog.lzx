@@ -87,8 +87,8 @@
 		this._initText.setAttribute("visibility","hidden");
 
 		this._showScreenSharing._y.setAttribute("to",0);
-		this._showScreenSharing._height.setAttribute("to", canvas.height);
-		this._showScreenSharing._width.setAttribute("to", canvas.width-260);
+		this._showScreenSharing._height.setAttribute("to", canvas.height - 20);
+		this._showScreenSharing._width.setAttribute("to", canvas.width - 260);
 		this._showScreenSharing._x.setAttribute("to",260);
 
 		this._showScreenSharing.setAttribute('started', true);
@@ -304,17 +304,16 @@
 				public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj)
 				 -->
 				<netRemoteCallHib name="sendRemoteCursorEvent"  showLoading="false"
-								  remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
-						<attribute name="tObject" value="null" />
-						<netparam><method name="getValue">return parent.parent.parent.parent.parent.initObject.streamid;</method></netparam>
-						<netparam><method name="getValue">return parent.tObject;</method></netparam>
-						<handler name="ondata" args="value">
+							remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
+					<attribute name="tObject" value="null" />
+					<netparam><method name="getValue">return parent.parent.parent.parent.parent.initObject.streamid;</method></netparam>
+					<netparam><method name="getValue">return parent.tObject;</method></netparam>
+					<handler name="ondata" args="value">
 						//The onResult-Handler will be called be the rtmpconnection
 						//if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);
 						//parent.close();
 					</handler>
 				</netRemoteCallHib>
-
 			</videoObjectPlayScreenShare>
 		</view>
 
@@ -336,7 +335,7 @@
 					</when>
 				</switch>
 				<handler name="oninit">
-					<![CDATA[
+				<![CDATA[
 					this.bringToFront();
 					var t:SharedObject = SharedObject.getLocal('userdata');
 					var g = t.data;
@@ -348,7 +347,7 @@
 							this.close();
 						}
 					}
-					]]>
+				]]>
 				</handler>
 
 				<view x="4" resource="warning_icon_rsc" y="26" />
@@ -364,7 +363,7 @@
 				</view>
 
 				<labelCheckbox x="4" y="$once{ parent.height-42 }" fontsize="11"
-									name="_doNotShowAgain" labelid="1123" >
+						name="_doNotShowAgain" labelid="1123" >
 					<attribute name="checkboxIsinited" value="false" type="boolean"/>
 					<switch>
 						<when property="$as3">
@@ -374,18 +373,18 @@
 						</when>
 					</switch>
 					<handler name="oninit">
-						<![CDATA[
-							var t:SharedObject = SharedObject.getLocal('userdata');
-							var g = t.data;
-							if (g["image"]!=null) {
-								if ($debug) Debug.write("g[image]",g["image"]);
-								if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
-									if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
-									this.setValue(true);
-								}
+					<![CDATA[
+						var t:SharedObject = SharedObject.getLocal('userdata');
+						var g = t.data;
+						if (g["image"]!=null) {
+							if ($debug) Debug.write("g[image]",g["image"]);
+							if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+								if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
+								this.setValue(true);
 							}
-							this.checkboxIsinited = true;
-						]]>
+						}
+						this.checkboxIsinited = true;
+					]]>
 					</handler>
 					<handler name="onvalue" args="v">
 						if (!this.checkboxIsinited) {
@@ -416,12 +415,9 @@
 				var newZoom = Math.round(( (parent._subcontent.width-16) /parent.initObject.VWidth)*100);
 
 				if ($debug) Debug.write("newZoom ",newZoom);
-
 				this._zoom.setSliderValue(newZoom);
-
 				this._zoom.oninitialNumber.sendEvent(newZoom);
 			}
-
 			this.setDefaultHeight();
 		</method>
 
@@ -430,9 +426,7 @@
 				var newZoom = Math.round(( (parent._subcontent.height-16) /parent.initObject.VHeight)*100);
 
 				if ($debug) Debug.write("newZoom ",newZoom);
-
 				this._zoom.setSliderValue(newZoom);
-
 				this._zoom.oninitialNumber.sendEvent(newZoom);
 			}
 		</method>
@@ -442,16 +436,14 @@
 		<labelText labelid="852" resize="true" y="4" />
 
 		<changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
-			  boxPosition="up" initialNumber="100" maximum="200">
+				boxPosition="up" initialNumber="100" maximum="200">
 			<handler name="oninitialNumber" args="i">
 				if (parent.parent.isStarted) {
-
 					var newWidth = parent.parent.initObject.VWidth * (i/100);
 					var newHeight = parent.parent.initObject.VHeight * (i/100);
 
 					parent.parent._subcontent._content._video.setAttribute("width",newWidth);
 					parent.parent._subcontent._content._video.setAttribute("height",newHeight);
-
 				}
 			</handler>
 		</changeWidthSlider>

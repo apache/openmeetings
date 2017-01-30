@@ -574,7 +574,7 @@
 	 -->
 	<method name="stopScreenSharingMessage" args="value">
 		//The onResult-Handler will be called be the rtmpconnection
-		if ($debug) Debug.write("**** closeStream: ",value);
+		if ($debug) Debug.write("**** stopScreenSharingMessage: ",value);
 		if ($debug) Debug.write(" onResult stopScreenSharingMessage : ",value.streamPublishName);
 		canvas.commonVideoViewContent.closeScreenSharing(value);
 	</method>
@@ -606,7 +606,11 @@
 	<![CDATA[
 		//The onResult-Handler will be called be the rtmpconnection
 		if ($debug) Debug.write("roomDisconnect: ", value);
-		if (value == null || value.screenClient) {
+		if (value == null) {
+			return;
+		}
+		if (value.screenClient) {
+			canvas.commonVideoViewContent.closeScreenSharing(value);
 			return;
 		}
 		this.roomDisconnectUser(value, value.publicSID);
