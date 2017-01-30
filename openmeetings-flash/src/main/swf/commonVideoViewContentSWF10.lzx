@@ -600,18 +600,6 @@
 	</method>
 
 	<!---
-		change Screen Sharing frame height
-	 -->
-	<method name="hideChatContent" args="hide">
- 	<![CDATA[
-		if (canvas.screenSharingDialogContainer != null) {
-			if ($debug) Debug.write("hideChatContent::hide " + hide);
-			canvas.screenSharingDialogContainer.hideChatContent(hide);
-		}
- 	]]>
-	</method>
-
-	<!---
 		Update the position of the cursor from the sharing screen
 	 -->
 	<method name="updateCursorScreenSharing" args="value">
