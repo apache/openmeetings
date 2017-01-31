@@ -58,7 +58,8 @@ public class SOAPLoginDao {
 			soapLogin.setLandingZone(landingZone);
 			soapLogin.setAllowRecording(allowRecording);
 
-			soapLogin = em.merge(soapLogin);
+			em.persist(soapLogin);
+			em.flush();
 			Long soapLoginId = soapLogin.getId();
 
 			if (soapLoginId != null) {
