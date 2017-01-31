@@ -141,6 +141,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		remove(urlParametersReceivingBehavior);
 		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK,
 				DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
