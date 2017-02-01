@@ -668,25 +668,32 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-siteresources</id>
+						<id>copy-siteresources-build</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/src/site</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${site.basedir}/src/site/resources</directory>
-									<includes>
-										<include>*.xml</include>
-									</includes>
-								</resource>
-							</resources>
-							<skip>${skip.site.copy}</skip>
-						</configuration>
+					</execution>
+					<execution>
+						<id>copy-siteresources-ste</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
+					<resources>
+						<resource>
+							<directory>${site.basedir}/src/site/resources</directory>
+							<includes>
+								<include>*.xml</include>
+							</includes>
+						</resource>
+					</resources>
+					<skip>${skip.site.copy}</skip>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -801,9 +808,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>${maven-site.version}</version>
-					<configuration>
-						<generatedSiteDirectory>${project.build.directory}/generated-site</generatedSiteDirectory>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

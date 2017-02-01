@@ -171,32 +171,39 @@
 				<artifactId>xml-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>generate-errors-doc</id>
+						<id>generate-errors-doc-site</id>
 						<phase>pre-site</phase>
 						<goals>
 							<goal>transform</goal>
 						</goals>
-						<configuration>
-							<transformationSets>
-								<transformationSet>
-									<dir>${webapp.languages.dir}</dir>
-									<includes>
-										<include>errorvalues.xml</include>
-									</includes>
-									<stylesheet>src/site/stylesheets/errortable.xsl</stylesheet>
-									<outputDir>${project.build.directory}/generated-site/xdoc</outputDir>
-									<parameters>
-										<parameter>
-											<name>languagesDir</name>
-											<value>${project.baseUri}/${languages.dir}</value>
-										</parameter>
-									</parameters>
-								</transformationSet>
-							</transformationSets>
-							<skip>${om.quick.build}</skip>
-						</configuration>
+					</execution>
+					<execution>
+						<id>generate-errors-doc-build</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>${webapp.languages.dir}</dir>
+							<includes>
+								<include>errorvalues.xml</include>
+							</includes>
+							<stylesheet>src/site/stylesheets/errortable.xsl</stylesheet>
+							<outputDir>${project.build.directory}/generated-site/xdoc</outputDir>
+							<parameters>
+								<parameter>
+									<name>languagesDir</name>
+									<value>${project.baseUri}/${languages.dir}</value>
+								</parameter>
+							</parameters>
+						</transformationSet>
+					</transformationSets>
+					<skip>${om.quick.build}</skip>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
