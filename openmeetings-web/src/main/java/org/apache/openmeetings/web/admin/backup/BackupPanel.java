@@ -57,9 +57,9 @@ import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 /**
  * Panel component to manage Backup Import/Export
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class BackupPanel extends AdminPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, webAppRootKey);
@@ -70,9 +70,9 @@ public class BackupPanel extends AdminPanel {
 
 	/**
 	 * Form to handle upload files
-	 * 
+	 *
 	 * @author swagner
-	 * 
+	 *
 	 */
 	private class BackupForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
@@ -113,7 +113,7 @@ public class BackupPanel extends AdminPanel {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				protected void onSubmit(AjaxRequestTarget target) {
 					File workingDir = OmFileHelper.getUploadBackupDir();
 					String dateString = "backup_" + CalendarPatterns.getTimeForStreamId(new Date());
 					File backupDir = new File(workingDir, dateString);
@@ -131,7 +131,7 @@ public class BackupPanel extends AdminPanel {
 				}
 
 				@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
+				protected void onError(AjaxRequestTarget target) {
 					// repaint the feedback panel so errors are shown
 					target.add(feedback);
 				}
@@ -165,7 +165,7 @@ public class BackupPanel extends AdminPanel {
 				protected void onComplete(AjaxRequestTarget target) {
 					timer.stop(target);
 					target.add(progressBar.setVisible(false));
-					
+
 					download.setFileName(backupFile.getName());
 					download.setResourceStream(new FileResourceStream(backupFile));
 					download.initiate(target);
@@ -206,13 +206,13 @@ public class BackupPanel extends AdminPanel {
 			includeFilesInBackup.detach();
 			super.onDetach();
 		}
-		
+
 		private class BackupProcess implements Runnable {
 			private BackupExport backup;
 			private File backupDir;
 			private boolean includeFiles;
 			private ProgressHolder progressHolder;
-			
+
 			public BackupProcess(BackupExport backup, File backupDir, boolean includeFiles, ProgressHolder progressHolder) {
 				this.backup = backup;
 				this.backupDir = backupDir;
@@ -220,7 +220,7 @@ public class BackupPanel extends AdminPanel {
 				this.progressHolder = progressHolder;
 				th = null;
 			}
-			
+
 			@Override
 			public void run() {
 				try {

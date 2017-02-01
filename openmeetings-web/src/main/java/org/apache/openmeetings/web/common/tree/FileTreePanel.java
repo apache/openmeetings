@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -274,9 +275,9 @@ public abstract class FileTreePanel extends Panel {
 	void updateNode(AjaxRequestTarget target, FileItem fi) {
 		if (fi != null && target != null) {
 			if (Type.Folder == fi.getType()) {
-				tree.updateBranch(fi, target);
+				tree.updateBranch(fi, Optional.of(target));
 			} else {
-				tree.updateNode(fi, target);
+				tree.updateNode(fi, Optional.of(target));
 			}
 		}
 	}

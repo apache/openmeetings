@@ -26,6 +26,7 @@ import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +60,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.threeten.bp.LocalDate;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -102,7 +102,7 @@ public class GeneralUserForm extends Form<User> {
 				}));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
-		
+
 		add(new DropDownChoice<String>("timeZoneId", AVAILABLE_TIMEZONES));
 
 		add(new LanguageDropDown("languageId"));
@@ -190,7 +190,7 @@ public class GeneralUserForm extends Form<User> {
 		}
 		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
-	
+
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
@@ -199,11 +199,11 @@ public class GeneralUserForm extends Form<User> {
 		}
 		super.onValidate();
 	}
-	
+
 	public PasswordTextField getPasswordField() {
 		return passwordField;
 	}
-	
+
 	public String getEmail() {
 		return email.getValue();
 	}

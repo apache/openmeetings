@@ -26,6 +26,9 @@ import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,9 +66,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.temporal.ChronoUnit;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
@@ -85,19 +85,19 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
 	private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
-	private boolean isPrivate = false; 
+	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 
 	@Override
 	public int getWidth() {
 		return 650;
 	}
-	
+
 	public void open(IPartialPageRequestHandler handler, Long userId) {
 		getModelObject().setTo(getBean(UserDao.class).get(userId));
 		open(handler);
 	}
-	
+
 	public MessageDialog reset(boolean isPrivate) {
 		//TODO should be 'in sync' with appointment
 		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
@@ -119,7 +119,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		this.isPrivate = isPrivate;
 		return this;
 	}
-	
+
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		if (getModel().getObject().getTo() != null) {
@@ -128,11 +128,11 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		handler.add(form);
 		super.onOpen(handler);
 	}
-	
+
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, Application.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
-		
+
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
 		form.add(new TextField<String>("subject"));
@@ -143,7 +143,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		final CheckBox bookedRoom = new CheckBox("bookedRoom");
 		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				PrivateMessage p = MessageDialog.this.getModelObject();
@@ -163,7 +163,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(send, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return send;
@@ -183,7 +183,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		PrivateMessage m = getModelObject();
 		m.setInserted(new Date());
-		UserDao userDao = getBean(UserDao.class); 
+		UserDao userDao = getBean(UserDao.class);
 		User owner = userDao.get(getUserId());
 		if (m.isBookedRoom()) {
 			Room r = m.getRoom();
@@ -240,7 +240,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 							false, null, Valid.Period, owner, to.getLanguageId()
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
-					
+
 					invitation_link = getInvitationLink(i);
 
 					if (invitation_link == null) {
@@ -253,7 +253,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 								+ Application.getString(504, to.getLanguageId()) + "</a><br/>";
 					}
 				}
-				
+
 				String subj = p.getSubject() == null ? "" : p.getSubject();
 				getBean(MailHandler.class).send(to.getAddress().getEmail(),
 						Application.getString(1301, to.getLanguageId()) + subj,
@@ -261,7 +261,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		modelTo.detach();

@@ -122,13 +122,13 @@ public class FolderPanel extends Panel {
 		add(drop.add(drag).setOutputMarkupId(true));
 	}
 
-	private void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p) {
+	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p) {
 		for (Entry<String, FileItem> e : treePanel.getSelected().entrySet()) {
 			move(treePanel, target, p, e.getValue());
 		}
 	}
 
-	private void move(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p, FileItem f) {
+	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p, FileItem f) {
 		Long pid = p.getId();
 		//FIXME parent should not be moved to child !!!!!!!
 		if (pid != null && pid.equals(f.getId())) {

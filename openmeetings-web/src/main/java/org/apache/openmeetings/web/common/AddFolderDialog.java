@@ -45,7 +45,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	public AddFolderDialog(String id) {
 		this(id, null);
 	}
-	
+
 	public AddFolderDialog(String id, String name) {
 		super(id, Application.getString(1260), Model.of(name));
 		this.name = name;
@@ -59,12 +59,12 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						AddFolderDialog.this.onSubmit(target);
 					}
-					
+
 					@Override
-					protected void onError(AjaxRequestTarget target, Form<?> form) {
+					protected void onError(AjaxRequestTarget target) {
 						AddFolderDialog.this.onError(target);
 					}
 				});
@@ -84,12 +84,12 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		close(target, getSubmitButton());
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(add, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return add;
