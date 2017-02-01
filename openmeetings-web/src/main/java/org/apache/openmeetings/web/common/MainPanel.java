@@ -145,6 +145,7 @@ public class MainPanel extends Panel {
 	public MainPanel(String id, BasePanel _panel) {
 		super(id);
 		this.panel = _panel;
+		setOutputMarkupId(true);
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
@@ -200,7 +201,7 @@ public class MainPanel extends Panel {
 			protected void respond(AjaxRequestTarget target) {
 				userInfo.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
@@ -235,7 +236,7 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		add(pingTimer, new WebSocketBehavior() {
+		add(new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -251,6 +252,7 @@ public class MainPanel extends Panel {
 				if ("socketConnected".equals(msg.getText())) {
 					if (panel != null) {
 						updateContents(panel, handler);
+						handler.add(MainPanel.this.add(pingTimer));
 					}
 				}
 			}

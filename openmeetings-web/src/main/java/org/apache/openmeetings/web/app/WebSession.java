@@ -180,7 +180,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (!isSignedIn() || soap == null || !soap.getHash().equals(secure.toString())) {
 					// otherwise already logged-in with the same hash
 					if (isSignedIn()) {
-						invalidate();
+						invalidateNow();
 					}
 					signIn(secure.toString(), true);
 				}
@@ -189,7 +189,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (!isSignedIn() || i == null || !i.getHash().equals(invitation.toString())) {
 					// otherwise already logged-in with the same hash
 					if (isSignedIn()) {
-						invalidate();
+						invalidateNow();
 					}
 					i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
 					if (i != null && i.isAllowEntry()) {
@@ -603,7 +603,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			setKickedByAdmin(true);
 			removeInvalidSession(get().getId());
 			org.apache.wicket.Session session = get();
-			session.invalidate();
+			session.invalidateNow();
 			Application.get().restartResponseAtSignInPage();
 		}
 	}

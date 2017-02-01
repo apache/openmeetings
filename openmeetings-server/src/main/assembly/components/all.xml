@@ -33,6 +33,7 @@
 				<exclude>webapps/root/index.html</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>*.sh</exclude>
+				<exclude>conf/jee-container.xml</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -51,6 +52,10 @@
 		<fileSet>
 			<directory>src/main/assembly/root</directory>
 			<outputDirectory>${root.webapp}</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/assembly/conf</directory>
+			<outputDirectory>conf</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-screenshare/target/jnlp</directory>
