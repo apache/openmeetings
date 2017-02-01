@@ -62,7 +62,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -102,7 +102,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public void setForgetPasswordDialog(ForgetPasswordDialog f) {
 		this.f = f;
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
@@ -111,17 +111,17 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
 	}
-	
+
 	@Override
 	public boolean isDefaultCloseEventEnabled() {
 		return false;
 	}
-	
+
 	@Override
 	public int getWidth() {
 		return allowOAuthLogin()? 550: 450;
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (registerBtn.equals(button)) {
@@ -129,7 +129,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			r.open(handler);
 		}
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		List<DialogButton> list = new ArrayList<DialogButton>();
@@ -139,7 +139,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		list.add(loginBtn);
 		return list;
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return loginBtn;
@@ -149,18 +149,18 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public Form<String> getForm() {
 		return form;
 	}
-	
+
 	private void shake(AjaxRequestTarget target) {
 		target.appendJavaScript(JQueryEffectBehavior.toString("#" + getMarkupId(), "shake"));
 	}
-	
+
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
 		if (registerBtn.equals(button) || WebSession.get().isSignedIn()) {
 			super.onClick(target, button);
 		}
 	}
-	
+
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		shake(target);
@@ -193,7 +193,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			shake(target);
 		}
 	}
-	
+
 	class SignInForm extends StatelessForm<String> {
 		private static final long serialVersionUID = 1L;
 		private PasswordTextField passField;
@@ -201,7 +201,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 		public SignInForm(String id) {
 			super(id);
-			
+
 			if (WebSession.get().isSignedIn()) {
 				alreadyLoggedIn();
 			}
@@ -221,12 +221,12 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				protected void onSubmit(AjaxRequestTarget target) {
 					SignInDialog.this.onSubmit(target);
 				}
-				
+
 				@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
+				protected void onError(AjaxRequestTarget target) {
 					SignInDialog.this.onError(target);
 				}
 			};
@@ -258,20 +258,20 @@ public class SignInDialog extends AbstractFormDialog<String> {
 						Button btn = new Button("oauthBtn");
 						Image icon = new Image("icon", new Model<String>());
 						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
-						icon.add(new AttributeModifier("src", new AbstractReadOnlyModel<String>() {
+						icon.add(new AttributeModifier("src", new IModel<String>() {
 							private static final long serialVersionUID = 1L;
 
 							@Override
 							public String getObject() {
 								return item.getModelObject().getIconUrl();
 							}
-							
+
 						}));
 						btn.add(icon);
 						btn.add(new Label("label", item.getModelObject().getName()))
 							.add(new AjaxEventBehavior("click") {
 								private static final long serialVersionUID = 1L;
-								
+
 								@Override
 								protected void onEvent(AjaxRequestTarget target) {
 									PageParameters parameters = new PageParameters();

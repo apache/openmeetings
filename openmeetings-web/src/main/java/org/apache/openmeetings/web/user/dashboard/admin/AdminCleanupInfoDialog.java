@@ -83,14 +83,14 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						cleanup(target);
 					}
 
 					@Override
-					protected void onError(AjaxRequestTarget target, Form<?> form) {
+					protected void onError(AjaxRequestTarget target) {
 						target.add(feedback);
-					}			
+					}
 				});
 			}
 		});
@@ -101,11 +101,11 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		super.onInitialize();
 		setTitle(Model.of(getString("dashboard.widget.admin.cleanup.title")));
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 	}
-	
+
 	private void update(AjaxRequestTarget target) {
 		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
 		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
@@ -116,7 +116,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		fin.setDefaultModelObject(getRecUnit(getBean(RecordingDao.class)));
 		target.add(container);
 	}
-	
+
 	public void show(AjaxRequestTarget target) {
 		update(target);
 		open(target);

@@ -21,6 +21,8 @@ package org.apache.openmeetings.db.dao.room;
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -36,8 +38,6 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZonedDateTime;
 
 @Transactional
 public class InvitationDao {

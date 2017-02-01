@@ -65,9 +65,9 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 /**
  * Language Editor, add/insert/update Label and add/delete language contains several Forms and one list
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  */
 public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
@@ -78,7 +78,7 @@ public class LangPanel extends AdminPanel {
 
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	Map.Entry<Long, Locale> language;
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
@@ -106,12 +106,12 @@ public class LangPanel extends AdminPanel {
 					protected LabelDao getDao() {
 						return (LabelDao)super.getDao();
 					}
-					
+
 					@Override
 					public long size() {
 						return getDao().count(language.getValue(), search);
 					}
-					
+
 					@Override
 					public Iterator<? extends StringLabel> iterator(long first, long count) {
 						return getDao().get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
@@ -189,13 +189,13 @@ public class LangPanel extends AdminPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				final String name = LabelDao.getLabelFileName(language.getValue());
 				download.setFileName(name);
 				download.setResourceStream(new AbstractResourceStream() {
 					private static final long serialVersionUID = 1L;
 					private transient InputStream is;
-					
+
 					@Override
 					public InputStream getInputStream() throws ResourceStreamNotFoundException {
 						try {
@@ -205,7 +205,7 @@ public class LangPanel extends AdminPanel {
 							throw new ResourceStreamNotFoundException(e);
 						}
 					}
-					
+
 					@Override
 					public void close() throws IOException {
 						if (is != null) {
@@ -219,15 +219,15 @@ public class LangPanel extends AdminPanel {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 			}
-			
+
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 			}
-			
+
 		});
-		
+
 		add(langForm);
 		final AddLanguageDialog addLang = new AddLanguageDialog("addLang", this);
 		add(addLang, new AjaxLink<Void>("addLangBtn") {
@@ -257,7 +257,7 @@ public class LangPanel extends AdminPanel {
 			}
 		});
 	}
-	
+
 	public LangForm getLangForm() {
 		return langForm;
 	}

@@ -31,15 +31,15 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private final Label newRecord;
 	private final Form<T> form;
-	
+
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
 		this.form = form;
-		
+
 		newRecord = new Label("newRecord", Model.of(Application.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -47,7 +47,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				newRecord.setVisible(true);
@@ -56,7 +56,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			}
 
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				onNewError(target, form);

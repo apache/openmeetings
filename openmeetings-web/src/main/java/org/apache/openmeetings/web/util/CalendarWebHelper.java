@@ -20,26 +20,26 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserTimeZone;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.apache.openmeetings.util.CalendarHelper;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZoneId;
 
 public class CalendarWebHelper extends CalendarHelper {
 	public static ZoneId getZoneId() {
 		return getZoneId(getUserTimeZone().getID());
 	}
-	
+
 	public static Date getDate(LocalDateTime d) {
 		return getDate(d, getUserTimeZone().getID());
 	}
-	
+
 	public static Date getDate(LocalDate d) {
 		return getDate(d, getUserTimeZone().getID());
 	}
-	
+
 	public static LocalDateTime getDateTime(Date d) {
 		return getDateTime(d, getUserTimeZone().getID());
 	}

@@ -68,13 +68,13 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				InvitationPasswordDialog.this.onSubmit(target);
 				InvitationPasswordDialog.this.close(target, null);
 			}
 
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				InvitationPasswordDialog.this.onError(target);
 			}
 		};

@@ -53,19 +53,19 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				SipDialerDialog.this.onSubmit(target);
 			}
-			
+
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				SipDialerDialog.this.onError(target);
 			}
 		};
 		form.setDefaultButton(ab);
 		add(feedback.setOutputMarkupId(true), form.add(number, ab));
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -76,12 +76,12 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 	public int getWidth() {
 		return 300;
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(call, close);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return call;

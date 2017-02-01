@@ -25,9 +25,13 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -58,9 +62,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.temporal.ChronoUnit;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
@@ -128,10 +129,10 @@ public class CalendarPanel extends UserPanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 
-		AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
-		if (target != null) {
-			target.appendJavaScript(javaScriptMarkup);
-			target.appendJavaScript(javaScriptAddDatepicker);
+		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+		if (target.isPresent()) {
+			target.get().appendJavaScript(javaScriptMarkup);
+			target.get().appendJavaScript(javaScriptAddDatepicker);
 		} else {
 			response.render(JavaScriptHeaderItem.forScript(javaScriptMarkup, this.getId()));
 		}

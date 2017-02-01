@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import java.util.Optional;
+
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -94,8 +96,8 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			}
 
 			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				FileItemTree.this.onClick(target, getModelObject());
+			protected void onClick(Optional<AjaxRequestTarget> targetOptional) {
+				FileItemTree.this.onClick(targetOptional.get(), getModelObject());
 			}
 
 			@Override

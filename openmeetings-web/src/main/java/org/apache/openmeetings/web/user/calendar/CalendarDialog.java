@@ -42,8 +42,8 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.UrlTextField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.UrlValidator;
@@ -532,7 +532,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for
 			//Google Calendar and to URL for a normal CalDAV calendar
-			url.add(new AttributeModifier("type", new AbstractReadOnlyModel<String>() {
+			url.add(new AttributeModifier("type", new IModel<String>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override

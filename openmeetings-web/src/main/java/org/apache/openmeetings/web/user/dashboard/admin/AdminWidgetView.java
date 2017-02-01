@@ -37,14 +37,14 @@ public class AdminWidgetView extends WidgetView {
 		form.add(cleanupDialog = new AdminCleanupInfoDialog("cleanup-dialog"));
 		form.add(new IndicatingAjaxButton("show-cleanup-dialog") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected boolean isDisabledOnClick() {
 				return true;
 			}
-			
+
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				cleanupDialog.show(target);
 			}
 		});

@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,7 +73,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.threeten.bp.LocalDateTime;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -91,7 +91,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
-	
+
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton("save", Application.getString(813));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString(1130));
@@ -102,18 +102,18 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	final MessageDialog confirmDelete;
 	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
-	
+
 	@Override
 	public int getWidth() {
 		return 650;
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("dialogClass", Options.asString("appointment"));
 	}
-	
+
 	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {
 		form.setModelObject(a);
 		form.start.setModelObject(getDateTime(a.getStart()));
@@ -133,7 +133,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		save.setVisible(isOwner(a), target);
 		super.setModelObject(a);
 	}
-	
+
 	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, title, model, true);
 		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
@@ -167,7 +167,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(enterRoom, save, delete, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return save;
@@ -182,7 +182,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		handler.add(form.add(new JQueryUIBehavior("#tabs", "tabs")));
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (delete.equals(button)) {
@@ -191,7 +191,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			RoomEnterBehavior.roomEnter((MainPage)getPage(), handler, getModelObject().getRoom().getId());
 		}
 	}
-	
+
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		target.add(feedback);
@@ -208,7 +208,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				currentIds.add(u.getId());
 			}
 		}
-		
+
 		//remove users
 		for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
 			MeetingMember m = i.next();
@@ -243,17 +243,17 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		target.add(feedback);
 		calendarPanel.refresh(target);
 	}
-	
+
 	public static boolean isOwner(Appointment object) {
 		return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		attendeesModel.detach();
 		super.onDetach();
 	}
-	
+
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
@@ -318,7 +318,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				start.setTime(a.getStart());
 				java.util.Calendar end = WebSession.getCalendar();
 				end.setTime(a.getEnd());
-				
+
 				if (start.equals(end)) {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
 					a.setEnd(end.getTime());
@@ -342,7 +342,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
-			
+
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
@@ -354,7 +354,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
-			
+
 			//room
 			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
 				private static final long serialVersionUID = 1L;
@@ -369,7 +369,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(groom.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);
-			
+
 			//Advanced
 			add(new DropDownChoice<Reminder>(
 					"reminder"
@@ -412,7 +412,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(pwd);
 			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
 		}
-		
+
 		private List<Room> getRoomList() {
 			//FIXME need to be reviewed
 			List<Room> result = new ArrayList<Room>();
@@ -430,7 +430,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private List<OmCalendar> getCalendarList(){
 			return getBean(AppointmentManager.class).getCalendars(getUserId());
 		}
-		
+
 		@Override
 		protected void onValidate() {
 			if (end.getConvertedInput().isBefore(start.getConvertedInput())) {

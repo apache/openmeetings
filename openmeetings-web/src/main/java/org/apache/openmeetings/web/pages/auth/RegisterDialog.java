@@ -126,7 +126,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	public void setClientTimeZone() {
 		tzModel.setObject(WebSession.get().getClientTZCode());
 	}
-	
+
 	@Override
 	public int getWidth() {
 		return 400;
@@ -214,7 +214,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		tzModel.detach();
 		super.onDetach();
 	}
-	
+
 	class RegisterForm extends StatelessForm<Void> {
 		private static final long serialVersionUID = 1L;
 		private PasswordTextField confirmPassword;
@@ -259,12 +259,12 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				protected void onSubmit(AjaxRequestTarget target) {
 					RegisterDialog.this.onSubmit(target);
 				}
 
 				@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
+				protected void onError(AjaxRequestTarget target) {
 					RegisterDialog.this.onError(target);
 				}
 			});

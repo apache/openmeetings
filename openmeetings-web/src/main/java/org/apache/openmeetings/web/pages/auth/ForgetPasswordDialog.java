@@ -69,19 +69,19 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private String name;
 	private Type type = Type.email;
 	final MessageDialog confirmDialog;
-	
+
 	enum Type {
 		email
 		, login
 	}
-	
+
 	public ForgetPasswordDialog(String id) {
 		super(id, Application.getString(312));
 		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
 			private IModel<String> lblModel = Model.of(Application.getString(315));
 			private Label label = new Label("label", lblModel);
-			
+
 			{
 				add(feedback.setOutputMarkupId(true));
 				add(label.setOutputMarkupId(true));
@@ -105,17 +105,17 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						ForgetPasswordDialog.this.onSubmit(target);
 					}
-					
+
 					@Override
-					protected void onError(AjaxRequestTarget target, Form<?> form) {
+					protected void onError(AjaxRequestTarget target) {
 						ForgetPasswordDialog.this.onError(target);
 					}
 				});
 			}
-			
+
 			@Override
 			protected void onValidate() {
 				UserDao dao = getBean(UserDao.class);
@@ -129,7 +129,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					}
 				}
 			}
-			
+
 			@Override
 			protected void onDetach() {
 				lblModel.detach();
@@ -142,10 +142,10 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			@Override
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
-		        behavior.setOption("dialogClass", Options.asString("no-close"));
+				behavior.setOption("dialogClass", Options.asString("no-close"));
 				behavior.setOption("closeOnEscape", false);
 			}
-			
+
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				s.open(handler);
@@ -158,7 +158,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	public boolean isDefaultCloseEventEnabled()	{
 		return true;
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (send.equals(button)){
@@ -171,12 +171,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	public void setSignInDialog(SignInDialog s) {
 		this.s = s;
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(send, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return send;
@@ -201,7 +201,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	/**
 	 * reset a username by a given mail oder login by sending a mail to the
 	 * registered EMail-Address
-	 * 
+	 *
 	 * @param email
 	 * @param username
 	 * @param appLink

@@ -28,7 +28,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	protected final KendoFeedbackPanel feedback;
-	
+
 	public FormSaveRefreshPanel(String id, Form<T> form) {
 		super(id);
 		setOutputMarkupId(true);
@@ -41,14 +41,14 @@ public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				onSaveSubmit(target, form);
 			}
 
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				onSaveError(target, form);
@@ -60,7 +60,7 @@ public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				hideNewRecord();
@@ -68,7 +68,7 @@ public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 			}
 
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				hideNewRecord();
@@ -83,7 +83,7 @@ public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 	public void hideNewRecord() {
 		// for admin only, will be implemented in admin
 	}
-	
+
 	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
 	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
 

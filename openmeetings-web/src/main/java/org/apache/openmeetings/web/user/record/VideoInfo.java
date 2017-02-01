@@ -64,9 +64,9 @@ public class VideoInfo extends Panel {
 		protected String getIcon() {
 			return JQueryIcon.REFRESH;
 		};
-		
+
 		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+		protected void onSubmit(AjaxRequestTarget target) {
 			final IRecordingConverter converter = isInterview ? getBean(InterviewConverter.class) : getBean(RecordingConverter.class);
 			new Thread() {
 				@Override
@@ -86,7 +86,7 @@ public class VideoInfo extends Panel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+		protected void onSubmit(AjaxRequestTarget target) {
 			rif.setRecording(rm.getObject());
 			invite.updateModel(target);
 			invite.open(target);
@@ -96,12 +96,12 @@ public class VideoInfo extends Panel {
 	public VideoInfo(String id) {
 		this(id, null);
 	}
-	
+
 	public VideoInfo(String id, Recording r) {
 		super(id);
 		add(form.setOutputMarkupId(true));
 		setDefaultModel(rm);
-		
+
 		form.add(new Label("name"), new Label("duration"), new Label("recordEnd"), new Label("roomName", roomName),
 				downloadBtn.setEnabled(false), reConvert.setEnabled(false), share.setEnabled(false));
 		add(download);
@@ -110,7 +110,7 @@ public class VideoInfo extends Panel {
 
 		update(null, r);
 	}
-	
+
 	public VideoInfo update(AjaxRequestTarget target, Recording _r) {
 		Recording r = _r == null ? new Recording() : _r;
 		rm.setObject(r);
@@ -127,7 +127,7 @@ public class VideoInfo extends Panel {
 		} catch (Exception e) {
 			//no-op
 		}
-		
+
 		boolean reConvEnabled = false;
 		if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
 			List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
@@ -148,10 +148,10 @@ public class VideoInfo extends Panel {
 		if (target != null) {
 			target.add(form);
 		}
-		
+
 		return this;
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		rm.detach();
@@ -164,20 +164,20 @@ public class VideoInfo extends Panel {
 		super.onInitialize();
 		downloadBtn.setDefaultModelObject(newDownloadMenuList());
 	}
-	
+
 	private List<IMenuItem> newDownloadMenuList() {
 		List<IMenuItem> list = new ArrayList<>();
 
 		//mp4
 		list.add(new MenuItem(EXTENSION_MP4, JQueryIcon.ARROWTHICKSTOP_1_S) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public boolean isEnabled() {
 				Recording r = rm.getObject();
 				return r != null && r.exists(EXTENSION_MP4);
 			}
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				File f = rm.getObject().getFile(EXTENSION_MP4);

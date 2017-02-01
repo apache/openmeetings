@@ -18,19 +18,18 @@
  */
 package org.apache.openmeetings.util;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
-
-import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
 
 public class CalendarHelper {
 	public static ZoneId getZoneId(String tzId) {
 		return ZoneId.of(tzId, ZoneId.SHORT_IDS);
 	}
-	
+
 	public static Date getDate(LocalDate d, String tzId) {
 		return getDate(d.atStartOfDay(), tzId);
 	}
@@ -45,14 +44,14 @@ public class CalendarHelper {
 		}
 		return Instant.ofEpochMilli(d.getTime()).atZone(getZoneId(tzId));
 	}
-	
+
 	public static LocalDate getDate(Date d, String tzId) {
 		if (d == null) {
 			d = new Date();
 		}
 		return getZoneDateTime(d, tzId).toLocalDate();
 	}
-	
+
 	public static LocalDateTime getDateTime(Date d, String tzId) {
 		if (d == null) {
 			d = new Date();

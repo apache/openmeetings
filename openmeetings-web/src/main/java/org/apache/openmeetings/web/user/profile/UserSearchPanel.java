@@ -67,10 +67,10 @@ public class UserSearchPanel extends UserPanel {
 	private void refresh(IPartialPageRequestHandler handler) {
 		handler.add(container.add(fixedHeader));
 	}
-	
+
 	public UserSearchPanel(String id) {
 		super(id);
-		
+
 		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
 			{
@@ -81,7 +81,7 @@ public class UserSearchPanel extends UserPanel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						searched = true;
 						refresh(target);
 					}
@@ -110,7 +110,7 @@ public class UserSearchPanel extends UserPanel {
 			public IModel<User> model(User object) {
 				return new CompoundPropertyModel<User>(object);
 			}
-			
+
 		};
 		final DataView<User> dw = new DataView<User>("users", dp) {
 			private static final long serialVersionUID = 1L;
@@ -130,7 +130,7 @@ public class UserSearchPanel extends UserPanel {
 						.add(AttributeAppender.append("onclick", String.format("addContact(%s);", userId))));
 				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))));
 				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("inviteUser(%s);", userId))));
-				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
+				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME
 			}
 		};
 
@@ -143,11 +143,11 @@ public class UserSearchPanel extends UserPanel {
 			}
 		}).setOutputMarkupId(true));
 	}
-	
+
 	private static String getName(User u) {
 		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]"; //FIXME salutation
 	}
-	
+
 	@Override
 	public void onNewMessageClose(IPartialPageRequestHandler handler) {
 		refresh(handler);

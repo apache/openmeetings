@@ -279,7 +279,7 @@ public class ChatPanel extends BasePanel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
 						m.setMessage(chatMessage.getDefaultModelObjectAsString());

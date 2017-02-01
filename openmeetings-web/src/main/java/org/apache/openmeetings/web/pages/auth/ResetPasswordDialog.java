@@ -80,12 +80,12 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						ResetPasswordDialog.this.onSubmit(target);
 					}
 
 					@Override
-					protected void onError(AjaxRequestTarget target, Form<?> form) {
+					protected void onError(AjaxRequestTarget target) {
 						ResetPasswordDialog.this.onError(target);
 					}
 				});
@@ -101,7 +101,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			}
 
 		});
-		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332), 
+		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332),
 				DialogButtons.OK, DialogIcon.INFO) {
 			private static final long serialVersionUID = 1L;
 

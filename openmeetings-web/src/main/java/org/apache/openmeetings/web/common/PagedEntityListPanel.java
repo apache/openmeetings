@@ -34,7 +34,7 @@ import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 public abstract class PagedEntityListPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
-	
+
 	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
 		super(id);
 
@@ -46,7 +46,7 @@ public abstract class PagedEntityListPanel extends BasePanel {
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		};
-		
+
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");
 		add(searchForm.setOutputMarkupId(true));
@@ -55,7 +55,7 @@ public abstract class PagedEntityListPanel extends BasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				target.add(navPanel);
 				PagedEntityListPanel.this.onEvent(target);
 			}
