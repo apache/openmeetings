@@ -172,7 +172,7 @@
 				<executions>
 					<execution>
 						<id>generate-errors-doc</id>
-						<phase>generate-sources</phase>
+						<phase>pre-site</phase>
 						<goals>
 							<goal>transform</goal>
 						</goals>
@@ -184,7 +184,7 @@
 										<include>errorvalues.xml</include>
 									</includes>
 									<stylesheet>src/site/stylesheets/errortable.xsl</stylesheet>
-									<outputDir>${basedir}/src/site/xdoc</outputDir>
+									<outputDir>${project.build.directory}/generated-site/xdoc</outputDir>
 									<parameters>
 										<parameter>
 											<name>languagesDir</name>
