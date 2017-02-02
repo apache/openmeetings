@@ -46,11 +46,9 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	public static String RECORDINGS_GROUP = "recordings-group-%s";
 	public static String FILES_MY = "files-my";
 	public static String FILES_ROOM = "files-room";
-	private Long roomId = null;
 	private final List<FileItem> roots = new ArrayList<>();
 
 	public OmTreeProvider(Long roomId) {
-		this.roomId = roomId;
 		if (roomId != null) {
 			roots.add(createFileRoot(null));
 			roots.add(createFileRoot(roomId));
