@@ -28,7 +28,7 @@
 	<artifactId>openmeetings-server</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Server</name>
-	<description>TODO</description>
+	<description>Module for OpenMeetings server assembly</description>
 	<properties>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
 		<webapp.languages.dir>../openmeetings-web/src/main/webapp/languages</webapp.languages.dir>

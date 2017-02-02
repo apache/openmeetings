@@ -27,13 +27,12 @@
 	<artifactId>openmeetings-flash</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Flash</name>
-	<description>TODO</description>
+	<description>Module for OpenMeetings OpenLaszlo/Flex client</description>
 	<properties>
 		<openlaszlo>${project.build.directory}</openlaszlo>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<profiles>
 		<profile>

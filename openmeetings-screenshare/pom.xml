@@ -28,7 +28,7 @@
 	<artifactId>openmeetings-screenshare</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Screen Sharing applet</name>
-	<description>A File to grab a screen and send it to a Server</description>
+	<description>Module to build OpenMeetings web application to grab a screen and send it to a Server</description>
 	<properties>
 		<keystore.location>${project.build.directory}/screensharing_sign.keystore</keystore.location>
 		<key.password>secret</key.password>
@@ -36,7 +36,6 @@
 		<keystore.type>jks</keystore.type>
 		<key.alias>screen</key.alias>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<skip.site.copy>false</skip.site.copy>
 		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
 	</properties>
 	<dependencies>

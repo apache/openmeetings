@@ -29,7 +29,7 @@
 	<version>3.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings</name>
-	<description>OpenMeetings Maven Parent</description>
+	<description>Parent project for all OpenMeetings Maven modules. Required to hold general settings</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
@@ -55,7 +55,6 @@
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.3.8</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
-		<skip.site.copy>true</skip.site.copy>
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.13.1.1</derby.version>
 	</properties>
@@ -663,49 +662,6 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-siteresources-build</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${site.basedir}/src/site/resources</directory>
-									<includes>
-										<include>*.xml</include>
-									</includes>
-								</resource>
-							</resources>
-							<skip>${skip.site.copy}</skip>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-siteresources-ste</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${site.basedir}/src/site/resources</directory>
-									<includes>
-										<include>*.xml</include>
-									</includes>
-								</resource>
-							</resources>
-							<skip>${skip.site.copy}</skip>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

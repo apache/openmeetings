@@ -28,10 +28,9 @@
 	<artifactId>openmeetings-webservice</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Webservices</name>
-	<description>TODO</description>
+	<description>Module for OpenMeetings CXF based web services.</description>
 	<properties>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<build>
 		<plugins>
