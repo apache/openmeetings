@@ -78,8 +78,8 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
-import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -175,7 +175,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 		@Override
 		public Url mapHandler(IRequestHandler requestHandler) {
-			if (requestHandler instanceof ListenerInterfaceRequestHandler || requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
+			if (requestHandler instanceof ListenerRequestHandler || requestHandler instanceof BookmarkableListenerRequestHandler) {
 				return null;
 			} else {
 				return super.mapHandler(requestHandler);
