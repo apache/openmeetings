@@ -30,11 +30,11 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.FormatHelper;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONWriter;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
+import org.json.JSONException;
+import org.json.JSONStringer;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
@@ -42,7 +42,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private final static int PAGE_SIZE = 10;
 	private Map<String, User> newContacts = new Hashtable<String, User>();
-	
+
 	public static User getUser(String value) {
 		User u = null;
 		if (!Strings.isEmpty(value)) {
@@ -55,7 +55,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 				int idx1 = value.indexOf('>', idx);
 				if (idx1 > -1) {
 					email = value.substring(idx + 1, idx1);
-					
+
 					String name = value.substring(0, idx).replace("\"", "");
 					int idx2 = name.indexOf(' ');
 					if (idx2 > -1) {
@@ -65,7 +65,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 						fName = "";
 						lName = name;
 					}
-					 
+
 				}
 			} else {
 				email = value;
@@ -120,9 +120,9 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 	}
 
 	@Override
-	public void toJson(User choice, JSONWriter writer) throws JSONException {
-		super.toJson(choice, writer);
-		writer.key("contact").value(choice.getType() == Type.contact);
+	public void toJson(User choice, JSONStringer stringer) throws JSONException {
+		super.toJson(choice, stringer);
+		stringer.key("contact").value(choice.getType() == Type.contact);
 	}
 
 	@Override
