@@ -27,7 +27,7 @@
 	<artifactId>openmeetings-flash</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Flash</name>
-	<description>TODO</description>
+	<description>Module for OpenMeetings OpenLaszlo/Flex client</description>
 	<properties>
 		<openlaszlo>${project.build.directory}</openlaszlo>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>

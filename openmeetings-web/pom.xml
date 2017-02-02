@@ -28,12 +28,11 @@
 	<artifactId>openmeetings-web</artifactId>
 	<packaging>war</packaging>
 	<name>Openmeetings Web</name>
-	<description>TODO</description>
+	<description>Module for all Wicket based UI OpenMeetings components</description>
 	<properties>
 		<mysql.version>5.1.39</mysql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<profiles>
 		<profile>
