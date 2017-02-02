@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.util;
+package org.apache.openmeetings.web.util.upload;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;

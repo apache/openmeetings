@@ -34,7 +34,7 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.AjaxDownload;
-import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
+import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;

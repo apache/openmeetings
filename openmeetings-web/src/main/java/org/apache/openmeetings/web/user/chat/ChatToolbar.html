@@ -32,28 +32,28 @@
 		}
 	</style>
 	<script type="text/javascript">
-	    function emtClick(emoticon) {
-	        var editor = $('#chatMessage .wysiwyg-editor');
-	        editor.html(editor.html() + ' ' + emoticon + ' ');
-	    }
+		function emtClick(emoticon) {
+			var editor = $('#chatMessage .wysiwyg-editor');
+			editor.html(editor.html() + ' ' + emoticon + ' ');
+		}
 		$(function() {
-			 var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
-			 	, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
-			 	, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
-			 	, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
-			 	, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
-			 var emotMenuList = $('#emotMenuList');
-			 var rowSize = 15;
-			 var row = $('<tr></tr>');
-			 for (var i = 0; i < emots.length; ++i) {
-			 	row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
-			 		+ emots[i] + '</div></td>');
-			 	if (i != 0 && i % rowSize == 0) {
-			 		emotMenuList.append(row);
-			 		row = $('<tr></tr>');
-			 	}
-			 }
-			 $('.emt').emoticonize();
+			var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
+				, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
+				, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
+				, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
+				, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
+			var emotMenuList = $('#emotMenuList');
+			var rowSize = 15;
+			var row = $('<tr></tr>');
+			for (var i = 0; i < emots.length; ++i) {
+				row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
+					+ emots[i] + '</div></td>');
+				if (i != 0 && i % rowSize == 0) {
+					emotMenuList.append(row);
+					row = $('<tr></tr>');
+				}
+			}
+			//$('.emt').emoticonize();
 		});
 	</script>
 </wicket:head>
@@ -75,11 +75,10 @@
 				<li><a data-edit="fontSize 3"><font size="2">Normal</font></a></li>
 				<li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
 			</ul>
-			<a id="bold" class="chat btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B
-			</a> <a id="italic" class="chat btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I
-			</a> <a id="strikethrough" class="chat btn" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S
-			</a> <a id="underline" class="chat btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U
-			</a>
+			<a id="bold" class="chat btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B </a> <a
+			id="italic" class="chat btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a> <a
+			id="strikethrough" class="chat btn" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a> <a
+			id="underline" class="chat btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a>
 		</div>
 	</div>
 </wicket:panel>

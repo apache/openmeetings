@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user;
+package org.apache.openmeetings.web.user.chat;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
@@ -29,6 +29,8 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.openmeetings.web.user.chat.EmotionsResources.EMOTIONS_CSS_REFERENCE;
+import static org.apache.openmeetings.web.user.chat.EmotionsResources.EMOTIONS_JS_REFERENCE;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -78,7 +80,6 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 @AuthorizeInstantiation({"Dashboard", "Room"})
@@ -184,7 +185,6 @@ public class ChatPanel extends BasePanel {
 				super.renderHead(component, response);
 			}
 		});
-		add(new EmoticonsBehavior(".messageArea"));
 		add(new ChatForm("sendForm"));
 	}
 
@@ -235,7 +235,9 @@ public class ChatPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(EMOTIONS_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ChatPanel.class, "chat.js"))));
+		response.render(CssHeaderItem.forReference(EMOTIONS_CSS_REFERENCE));
 		response.render(CssHeaderItem.forUrl("css/chat.css"));
 		response.render(new PriorityHeaderItem(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 		if (!showDashboardChat) {

@@ -26,6 +26,7 @@ var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 	, clearBlock = "<div class='clear'></div>"
 	, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 	, closedHeight = "20px", openedHeight = "345px";
+var emoticon = new CSSEmoticon();
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		try {
@@ -117,7 +118,7 @@ function addChatMessage(m) {
 					.replace(/#\{imgSrc\}/g, cm.from.img)
 					.replace(/#\{from\}/g, cm.from.name)
 					.replace(/#\{sent\}/g, cm.sent)
-					.replace(/#\{msg\}/g, cm.message));
+					.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
 			var date = msg.children('.date');
 			date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
 			if ("full" == cm.actions) {
@@ -140,6 +141,5 @@ function addChatMessage(m) {
 		if (msg[0]) {
 			msg[0].scrollIntoView();
 		}
-		$('.messageArea').emoticonize();
 	}
 }
