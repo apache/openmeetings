@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user;
+package org.apache.openmeetings.web.user.chat;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;

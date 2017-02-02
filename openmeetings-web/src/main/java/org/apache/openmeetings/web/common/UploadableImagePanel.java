@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
+import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;

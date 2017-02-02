@@ -913,6 +913,7 @@
 								<patterns>
 									<pattern>Licensed MIT</pattern>
 									<pattern>MIT/GPL2 Licensed</pattern>
+									<pattern>licensed under the MIT and GPL</pattern>
 								</patterns>
 							</license>
 						</licenses>
