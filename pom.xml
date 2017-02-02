@@ -673,6 +673,18 @@
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${site.basedir}/src/site/resources</directory>
+									<includes>
+										<include>*.xml</include>
+									</includes>
+								</resource>
+							</resources>
+							<skip>${skip.site.copy}</skip>
+						</configuration>
 					</execution>
 					<execution>
 						<id>copy-siteresources-ste</id>
@@ -680,20 +692,20 @@
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${site.basedir}/src/site/resources</directory>
+									<includes>
+										<include>*.xml</include>
+									</includes>
+								</resource>
+							</resources>
+							<skip>${skip.site.copy}</skip>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<outputDirectory>${project.build.directory}/generated-site</outputDirectory>
-					<resources>
-						<resource>
-							<directory>${site.basedir}/src/site/resources</directory>
-							<includes>
-								<include>*.xml</include>
-							</includes>
-						</resource>
-					</resources>
-					<skip>${skip.site.copy}</skip>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
