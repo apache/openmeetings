@@ -26,7 +26,6 @@
 			<item name="Dependencies" href="/dependencies.html" />
 			<item name="Dependency Convergence" href="/dependency-convergence.html" />
 			<item name="RAT Report" href="/rat-report.html" />
-			<item name="JavaDoc" href="/apidocs/index.html" target="_blank" />
 		</menu>
 	</body>
 	<custom>

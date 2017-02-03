@@ -106,6 +106,8 @@ Release Notes - Openmeetings - Version 3.2.0
     * [OPENMEETINGS-1542] - Ajax busy status is not displayed in the room
     * [OPENMEETINGS-1543] - Webservice Calendar/range
     * [OPENMEETINGS-1545] - Screen-sharing is broken
+    * [OPENMEETINGS-1546] - Secure hash is not working every other time
+    * [OPENMEETINGS-1548] - EmoticonsBehavior should be removed to speed up OM in FF
 
 ** Improvement
     * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.
