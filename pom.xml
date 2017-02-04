@@ -422,10 +422,6 @@
 			<url>https://repository.apache.org/content/groups/snapshots</url>
 		</repository>
 		<repository>
-			<id>smslib</id>
-			<url>http://smslib.org/maven2/v3</url>
-		</repository>
-		<repository>
 			<id>openmeetings-bintray</id>
 			<url>https://dl.bintray.com/openmeetings/maven</url>
 		</repository>
