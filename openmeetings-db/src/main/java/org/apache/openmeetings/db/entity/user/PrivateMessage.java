@@ -113,7 +113,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	private Long parentMessage;
 
 	@Column(name = "private_message_folder_id")
-	@Element(data = true, name = "privateMessageFolderId")
+	@Element(data = true, name = "privateMessageFolderId", required = false)
 	private Long folderId;
 
 	@Column(name = "is_contact_request", nullable = false)
@@ -126,7 +126,7 @@ public class PrivateMessage implements IDataProviderEntity {
 
 	public PrivateMessage() {
 	}
-	
+
 	public PrivateMessage(PrivateMessage copy) {
 		subject = copy.subject;
 		message = copy.message;
