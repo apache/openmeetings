@@ -108,6 +108,7 @@ Release Notes - Openmeetings - Version 3.2.0
     * [OPENMEETINGS-1545] - Screen-sharing is broken
     * [OPENMEETINGS-1546] - Secure hash is not working every other time
     * [OPENMEETINGS-1548] - EmoticonsBehavior should be removed to speed up OM in FF
+    * [OPENMEETINGS-1549] - Command line admin fails to install
 
 ** Improvement
     * [OPENMEETINGS-652] - video playback is not very clear and there isn't a pause button.
