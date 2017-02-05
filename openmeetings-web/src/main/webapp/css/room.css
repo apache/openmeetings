@@ -271,3 +271,14 @@
 	padding: .1em .7em;
 	font-weight: bolder;
 }
+.room.sidebar.left .tab.om-icon.big {
+	padding: 0em 1em 0 2.5em;
+	line-height: 30px;
+}
+.room.sidebar.left .tab.om-icon.big.user {
+	background-image: url(images/group.png);
+}
+.room.sidebar.left .tab.om-icon.big.file {
+	background-image: url(images/folder_explore.png);
+}
+

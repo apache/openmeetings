@@ -75,7 +75,7 @@ public class OmUrlFragment implements Serializable {
 	public static final OmUrlFragment PROFILE_MESSAGES = new OmUrlFragment(AreaKeys.profile, TYPE_MESSAGES);
 	public static final OmUrlFragment CALENDAR = new OmUrlFragment(AreaKeys.user, TYPE_CALENDAR);
 	public static final OmUrlFragment ROOMS_PUBLIC = new OmUrlFragment(AreaKeys.rooms, TYPE_PUBLIC);
-	
+
 	public enum AreaKeys {
 		user
 		, admin
@@ -83,7 +83,7 @@ public class OmUrlFragment implements Serializable {
 		, room
 		, rooms
 	}
-	
+
 	public enum MenuActions {
 		dashboardModuleStartScreen
 		, dashboardModuleCalendar
@@ -104,13 +104,13 @@ public class OmUrlFragment implements Serializable {
 		, adminModuleOAuth
 		, adminModuleEmail
 	}
-	
+
 	public enum MenuParams {
 		publicTabButton
 		, privateTabButton
 		, myTabButton
 	}
-	
+
 	public static OmUrlFragment get() {
 		String[] arr = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANDING_ZONE, String.class, "").split("/");
 		if (arr != null && arr.length == 2) {
@@ -122,16 +122,16 @@ public class OmUrlFragment implements Serializable {
 		}
 		return DASHBOARD;
 	}
-	
+
 	public OmUrlFragment(AreaKeys area, String type) {
 		this.setArea(area);
 		this.setType(type);
 	}
-	
+
 	public OmUrlFragment(MenuActions action) {
 		this(action, MenuParams.myTabButton);
 	}
-	
+
 	public OmUrlFragment(MenuActions action, MenuParams params) {
 		switch(action) {
 			case dashboardModuleStartScreen:
@@ -228,7 +228,7 @@ public class OmUrlFragment implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public static BasePanel getPanel(AreaKeys area, String type) {
 		BasePanel basePanel = null;
 		switch(area) {
@@ -301,7 +301,7 @@ public class OmUrlFragment implements Serializable {
 		}
 		return basePanel;
 	}
-	
+
 	public String getLink() {
 		return getBean(ConfigurationDao.class).getBaseUrl() + "#" + getArea().name() + "/" + getType();
 	}

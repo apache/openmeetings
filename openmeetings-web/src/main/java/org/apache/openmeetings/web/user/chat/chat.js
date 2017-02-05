@@ -42,9 +42,10 @@ $(function() {
 			//no-op
 		}
 	});
-	reinit();
+	chatReinit();
 });
-function reinit() {
+function chatReinit() {
+	initChatToolbar();
 	chatTabs = $("#chatTabs").tabs({
 		activate: function(event, ui) {
 			$('#activeChatTab').val(ui.newPanel[0].id);
@@ -84,9 +85,12 @@ function toggleChat() {
 function activateTab(id) {
 	chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
 }
+function chatInited() {
+	return !!$("#chatTabs").data("ui-tabs");
+}
 function addChatTab(id, label) {
-	if (!$("#chatTabs").data("ui-tabs")) {
-		reinit();
+	if (!chatInited()) {
+		chatReinit();
 	}
 	if ($('#chat').length < 1 || $('#' + id).length) {
 		return;
@@ -103,7 +107,9 @@ function addChatTab(id, label) {
 function removeChatTab(id) {
 	$('li[aria-controls="' + id + '"]').remove();
 	$('#' + id).remove();
-	chatTabs.tabs("refresh");
+	if (chatInited()) {
+		chatTabs.tabs("refresh");
+	}
 }
 function addChatMessage(m) {
 	if ($('#chat').length > 0 && m && m.type == "chat") {
