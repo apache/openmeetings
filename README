@@ -105,8 +105,8 @@ Building and running
 To build from source code:
 
   - Requirements:
-    Sources compilation require Sun Java SE 6.
-    The project is built with Apache ANT 1.8.6 or later.
+    Sources compilation require Sun Java SE 8.
+    The project is built with Apache Maven 3.3.9 or later.
   
   - To build the OpenMeetings project run ant in the root directory:
      ant
