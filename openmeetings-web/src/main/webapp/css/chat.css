@@ -27,47 +27,47 @@
 #chatPanel #chat {
 	height: 20px;
 }
-#chatPanel #chat .btn-toolbar {
+##chat .btn-toolbar {
 	margin-top: 2px;
 	margin-bottom: 0;
 	margin-left: 5px;
 }
-#chatPanel #chat #chatTabs.ui-tabs {
+#chat #chatTabs.ui-tabs {
 	padding: 0;
 }
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav {
+#chat #chatTabs.ui-tabs .ui-tabs-nav {
 	padding: 0;
 }
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav li {
+#chat #chatTabs.ui-tabs .ui-tabs-nav li {
 	margin: 0;
 }
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
+#chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
 	float: left;
 }
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+#chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 	padding: 2px .5em;
 	float: left;
 }
-#chatPanel #chat .control.block .ui-icon {
+#chat .control.block .ui-icon {
 	text-align: center;
 }
-#chatPanel #chat .control.block .label {
+#chat .control.block .label {
 	display: inline-block;
 	padding-left: 20px;
 }
-#chatPanel #chat .messageArea .date {
-    margin-right: 5px;
-    font-style: italic;
-    font-size: smaller;
+#chat .messageArea .date {
+	margin-right: 5px;
+	font-style: italic;
+	font-size: smaller;
 }
-#chatPanel #chat .messageArea img.profile {
+#chat .messageArea img.profile {
 	vertical-align: middle;
-    max-height: 38px;
-    max-width: 38px;
+	max-height: 38px;
+	max-width: 38px;
 }
-#chatPanel #chat .messageArea .from {
+#chat .messageArea .from {
 	margin-left: 5px;
-    margin-right: 5px;
+	margin-right: 5px;
 	font-weight: bold;
 }
 .ui-tabs .ui-tabs-panel.messageArea {

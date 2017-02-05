@@ -40,6 +40,7 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -47,6 +48,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -78,8 +80,7 @@ public class RoomSidebar extends Panel {
 	public static final String PARAM_SETTINGS = "s";
 	private final RoomPanel room;
 	private final TabbedPanel tabs;
-	private final ITab userTab;
-	private final ITab fileTab;
+	private final ITab userTab, fileTab;
 	private UploadDialog upload;
 	private RoomFilePanel roomFiles;
 	private final SelfIconsPanel selfRights;
@@ -232,12 +233,17 @@ public class RoomSidebar extends Panel {
 		this.room = room;
 		updateShowFiles();
 
-		userTab = new ITab() {
+		userTab = new OmTab() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isVisible() {
 				return true;
+			}
+
+			@Override
+			public String getCssClass() {
+				return "om-icon big tab user";
 			}
 
 			@Override
@@ -250,12 +256,17 @@ public class RoomSidebar extends Panel {
 				return new UserFragment(containerId, "user-panel");
 			}
 		};
-		fileTab = new ITab() {
+		fileTab = new OmTab() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isVisible() {
 				return showFiles;
+			}
+
+			@Override
+			public String getCssClass() {
+				return "om-icon big tab file";
 			}
 
 			@Override
@@ -280,6 +291,17 @@ public class RoomSidebar extends Panel {
 			@Override
 			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
 				selectedIdx = index;
+			}
+
+			@Override
+			protected WebMarkupContainer newTabContainer(String id, String tabId, ITab tab, int index) {
+				WebMarkupContainer t = super.newTabContainer(id, tabId, tab, index);
+				Label link = newTitleLabel("link", tab.getTitle());
+				link.add(AttributeModifier.replace("href", "#" + tabId));
+				link.add(AttributeModifier.append("class", ((OmTab)tab).getCssClass()));
+				link.add(AttributeModifier.append("title", tab.getTitle()));
+				t.replace(link);
+				return t;
 			}
 		}).setOutputMarkupId(true));
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
@@ -433,4 +455,11 @@ public class RoomSidebar extends Panel {
 		selectedIdx = 1;
 		tabs.reload(handler);
 	}
+
+	private static abstract class OmTab implements ITab {
+		private static final long serialVersionUID = 1L;
+
+		public abstract String getCssClass();
+	}
 }
+

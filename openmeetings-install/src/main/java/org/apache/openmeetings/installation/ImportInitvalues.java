@@ -111,13 +111,13 @@ public class ImportInitvalues {
 	private RoomDao roomDao;
 	@Autowired
 	private LabelDao labelDao;
-	
+
 	private int progress = 0;
 
 	public int getProgress() {
 		return progress;
 	}
-	
+
 	public void loadMainMenu() {
 		/*
 		 * ######################## Dashboard Menu Points
@@ -157,7 +157,7 @@ public class ImportInitvalues {
 		navimanagement.addMainStructure("adminModuleEmail", null, 24, "main.menu.admin.email", LEVEL_ADMIN, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
 		log.debug("MainMenu ADDED");
 	}
-	
+
 	public void loadErrorMappingsFromXML() throws Exception {
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
@@ -222,10 +222,10 @@ public class ImportInitvalues {
 		cfgDao.add("email_userpass", cfg.mailAuthPass, null, "System auth email password");
 
 		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
-		
+
 		cfgDao.add("mail.smtp.connection.timeout", "30000", null,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
-		
+
 		cfgDao.add("mail.smtp.timeout", "30000", null,
 				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
@@ -268,7 +268,7 @@ public class ImportInitvalues {
 					+ "The Font has to exist on the Server which runs Red5");
 
 		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
-		
+
 		// ***************************************
 		// ***************************************
 		// red5SIP Integration Coniguration Values
@@ -329,7 +329,7 @@ public class ImportInitvalues {
 		// mute/unmute audio key code
 		cfgDao.add("mute.keycode", "118", null,
 				"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
-		
+
 		// system-wide ldap params
 		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null, "Ldap domain selected by default in the login screen");
 
@@ -341,9 +341,9 @@ public class ImportInitvalues {
 				, "Area to be shown to the user after login. Possible values are: "
 					+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection"
 					+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2");
-		
+
 		// oauth2 params
-		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "no", null, 
+		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "no", null,
 				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
 		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
@@ -382,7 +382,7 @@ public class ImportInitvalues {
 
 		r.setWaitForRecording(false);
 		r.setAllowRecording(true);
-		
+
 		if (groupId != null) {
 			RoomGroup ro = new RoomGroup();
 			ro.setRoom(r);
@@ -393,7 +393,7 @@ public class ImportInitvalues {
 		r = roomDao.update(r, null);
 		return r;
 	}
-	
+
 	public void loadDefaultRooms(boolean createRooms, long langId) {
 		if (createRooms) {
 			createRoom(labelDao.getString("install.room.public.interview", langId), Type.interview, 16L, true, null);
@@ -461,7 +461,7 @@ public class ImportInitvalues {
 		yandexServer.setFirstnameParamName("first_name");
 		yandexServer.setLastnameParamName("last_name");
 		oauthDao.update(yandexServer, null);
-		
+
 		// Google
 		OAuthServer googleServer = new OAuthServer();
 		googleServer.setName("Google");
@@ -480,7 +480,7 @@ public class ImportInitvalues {
 		googleServer.setFirstnameParamName("given_name");
 		googleServer.setLastnameParamName("family_name");
 		oauthDao.update(googleServer, null);
-		
+
 		// Facebook
 		OAuthServer facebookServer = new OAuthServer();
 		facebookServer.setName("Facebook");
@@ -499,7 +499,7 @@ public class ImportInitvalues {
 		facebookServer.setLastnameParamName("last_name");
 		oauthDao.update(facebookServer, null);
 	}
-	
+
 	// ------------------------------------------------------------------------------
 
 	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {

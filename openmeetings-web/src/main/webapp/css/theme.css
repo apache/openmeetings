@@ -322,7 +322,7 @@ html, body {
 	background-image: url(images/email_add.png);
 }
 .user.om-icon {
-	background: url(images/user.png);
+	background-image: url(images/user.png);
 }
 .refresh.om-icon {
 	background-image: url(images/refresh.png);
@@ -686,3 +686,4 @@ form .input {
 	width: 75%;
 	vertical-align: middle;
 }
+

@@ -20,10 +20,26 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div id="chat" class="ui-state-default">
-		<div onclick="toggleChat();" class="control block clickable ui-widget-header ui-state-active"><div class="ui-icon ui-icon-caret-1-n sort-icon"></div><div class="label"><wicket:message key="244"/></div></div>
-		<div wicket:id="chat"></div>
+	<div id="chatTabs">
+		<ul>
+			<li><a href="#chatTab-all"><wicket:message key="1494"/></a></li>
+		</ul>
+		<div id="chatTab-all" class="messageArea"></div>
 	</div>
+	<form wicket:id="sendForm">
+		<div style="display: inline-block;" wicket:id="toolbarContainer"></div>
+		<div style="display: inline-block; float: right; margin-right: 10px;">
+			<div class="formCancelButton" wicket:id="ajax-cancel-button" wicket:message="title:442"></div>
+		</div>
+		<table style="width: 100%">
+			<tr>
+				<td><div id="chatMessage" wicket:id="chatMessage"></div></td>
+				<td style="width: 50px">
+					<div wicket:id="send"><wicket:message key="220"/></div>
+					<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
+				</td>
+			</tr>
+		</table>
+	</form>
 </wicket:panel>
 </html>
-

@@ -75,9 +75,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * CRUD operations in form for {@link User}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;

@@ -36,31 +36,36 @@
 			var editor = $('#chatMessage .wysiwyg-editor');
 			editor.html(editor.html() + ' ' + emoticon + ' ');
 		}
-		$(function() {
-			var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
-				, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
-				, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
-				, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
-				, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
+		function initChatToolbar() {
+			var emtBtn = $('#emoticons');
+			emtBtn.html('');
+			emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
+			var emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
+			for (var ei in emoticon.specialEmoticons) {
+				emots.push(ei);
+			}
 			var emotMenuList = $('#emotMenuList');
-			var rowSize = 15;
+			emotMenuList.html('');
+			var rowSize = 20;
 			var row = $('<tr></tr>');
 			for (var i = 0; i < emots.length; ++i) {
 				row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
-					+ emots[i] + '</div></td>');
+					+ emoticon.emoticonize(emots[i]) + '</div></td>');
 				if (i != 0 && i % rowSize == 0) {
 					emotMenuList.append(row);
 					row = $('<tr></tr>');
 				}
 			}
-			//$('.emt').emoticonize();
+		}
+		$(function() {
+			initChatToolbar();
 		});
 	</script>
 </wicket:head>
 <wicket:panel>
 	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">
 		<div class="btn-group">
-			<a id="emoticons" class="chat btn emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"> :) <b class="caret"></b></a>
+			<a id="emoticons" class="chat btn emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"></a>
 			<ul class="chat dropdown-menu" >
 				<li>
 					<table id="emotMenuList">
@@ -83,3 +88,4 @@
 	</div>
 </wicket:panel>
 </html>
+

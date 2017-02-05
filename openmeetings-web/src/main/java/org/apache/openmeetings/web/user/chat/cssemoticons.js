@@ -16,10 +16,11 @@ var CSSEmoticon = function() {
 		":-)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b", ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ";*(", ":-*", ":-\\",
 		"?-)" // <== This is my own invention, it's a smiling pirate (with an eye-patch)!
 	];
-
+	this.threeCharEmoticons = this.threeCharacterEmoticons.slice();
 	this.twoCharacterEmoticons = [ // separate these out so that we can add a letter-spacing between the characters for better proportions
 		":)", ":]", "=]", "=)", "8)", ":}", ":D", ":(", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p", "=P", "=p", ":b", ":Þ", ":O", ":/", "=/", ":S", ":#", ":X", "B)", ":|", ":\\", "=\\", ":*", ":&gt;", ":&lt;"
 	];
+	this.twoCharEmoticons = this.twoCharacterEmoticons.slice();
 
 	this.specialEmoticons = { // emoticons to be treated with a special class, hash specifies the additional class to add, along with standard css-emoticon class
 		"&gt;:)": {cssClass: "red-emoticon small-emoticon spaced-emoticon"},

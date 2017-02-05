@@ -92,7 +92,7 @@ public class Room implements IDataProviderEntity {
 	public static final int CONFERENCE_TYPE_ID = 1;
 	public static final int RESTRICTED_TYPE_ID = 3;
 	public static final int INTERVIEW_TYPE_ID = 4;
-	
+
 	public enum Right {
 		superModerator
 		, moderator
@@ -104,7 +104,7 @@ public class Room implements IDataProviderEntity {
 		, mute
 		, exclusive
 	}
-	
+
 	@XmlType(namespace="org.apache.openmeetings.room.element")
 	public enum RoomElement {
 		TopBar
@@ -116,7 +116,7 @@ public class Room implements IDataProviderEntity {
 		, Whiteboard
 		, MicrophoneStatus
 	}
-	
+
 	public enum Type {
 		conference(CONFERENCE_TYPE_ID)
 		//, audience(2)
@@ -124,24 +124,24 @@ public class Room implements IDataProviderEntity {
 		, interview(INTERVIEW_TYPE_ID);
 		//, custom(5)
 		private int id;
-		
+
 		Type() {} //default;
 		Type(int id) {
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
-		
+
 		public static Type get(Long type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Type get(Integer type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Type get(int type) {
 			Type rt = Type.conference;
 			switch (type) {
@@ -157,7 +157,7 @@ public class Room implements IDataProviderEntity {
 			return rt;
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -230,7 +230,7 @@ public class Room implements IDataProviderEntity {
 	@Column(name = "is_audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true, required = false)
 	private boolean audioOnly;
-	
+
 	@Column(name = "is_closed", nullable = false)
 	@Element(data = true, required = false)
 	private boolean closed;
@@ -287,15 +287,15 @@ public class Room implements IDataProviderEntity {
 	@Column(name = "sip_enabled", nullable = false)
 	@Element(data = true, required = false)
 	private boolean sipEnabled;
-	
+
 	@Column(name = "confno")
 	@Element(data = true, required = false)
 	private String confno;
-	
+
 	@Column(name = "pin")
 	@Element(data = true, required = false)
 	private String pin;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
@@ -520,7 +520,7 @@ public class Room implements IDataProviderEntity {
 	public boolean isHidden(RoomElement e) {
 		return hiddenElements != null && hiddenElements.contains(e);
 	}
-	
+
 	public boolean hide(RoomElement e) {
 		if (hiddenElements == null) {
 			hiddenElements = new HashSet<>();
