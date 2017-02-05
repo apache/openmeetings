@@ -55,15 +55,15 @@ public class ApplicationHelper {
 	public static WicketTester getWicketTester() {
 		return getWicketTester(-1);
 	}
-	
+
 	public static WicketTester getWicketTester(long langId) {
 		WebApplication app = (WebApplication)ensureApplication(langId);
-		
+
 		WicketTester tester = new WicketTester(app, app.getServletContext());
 		InitializationContainer.initComplete = true;
 		return tester;
 	}
-	
+
 	public static void destroy(WicketTester tester) {
 		if (tester != null) {
 			ServletContext sc = tester.getServletContext();
@@ -75,11 +75,11 @@ public class ApplicationHelper {
 			tester.destroy();
 		}
 	}
-	
+
 	public static IApplication ensureApplication() {
 		return ensureApplication(-1L);
 	}
-	
+
 	public static IApplication ensureApplication(Long langId) {
 		IApplication a = null;
 		if (Application.exists()) {
@@ -114,7 +114,7 @@ public class ApplicationHelper {
 		}
 		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
-			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
+			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get());
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
 		}
 		if (ThreadContext.getSession() == null) {
@@ -125,9 +125,11 @@ public class ApplicationHelper {
 		}
 		return a;
 	}
-	
+
 	public static void destroyApplication() {
-		WebApplicationContext ctx = getWebApplicationContext(((WebApplication)ensureApplication()).getServletContext());
+		WebApplication app = (WebApplication)Application.get(wicketApplicationName);
+		app.internalDestroy(); //need to be called to
+		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
 		((XmlWebApplicationContext)ctx).destroy();
 		ThreadContext.setApplication(null);
 		ThreadContext.setRequestCycle(null);
