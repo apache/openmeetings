@@ -138,9 +138,9 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>net.ju-n.maven.plugins</groupId>
+						<groupId>net.nicoulaj.maven.plugins</groupId>
 						<artifactId>checksum-maven-plugin</artifactId>
-						<version>1.3</version>
+						<version>1.5</version>
 						<executions>
 							<execution>
 								<goals>
