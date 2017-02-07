@@ -213,7 +213,7 @@ public class RoomMenuPanel extends Panel {
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
 		add(sipDialer = new SipDialerDialog("sipDialer", room));
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -229,7 +229,7 @@ public class RoomMenuPanel extends Panel {
 				protected void onTimer(int remain) {
 					getComponent().add(AttributeAppender.replace("title", getText("639", remain)));
 				}
-				
+
 				@Override
 				protected void onFinish(AjaxRequestTarget target) {
 					exit(target);
@@ -237,13 +237,12 @@ public class RoomMenuPanel extends Panel {
 			});
 		}
 	}
-	
+
 	private List<IMenuItem> getMenu() {
 		List<IMenuItem> menu = new ArrayList<>();
 		exitMenuItem.setEnabled(false);
-		exitMenuItem.setTop(true);
-		menu.add(exitMenuItem);
-		
+		menu.add(exitMenuItem.setTop(true));
+
 		filesMenu.getItems().add(new RoomMenuItem(Application.getString(15), Application.getString(1479)) {
 			private static final long serialVersionUID = 1L;
 
@@ -252,9 +251,8 @@ public class RoomMenuPanel extends Panel {
 				room.getSidebar().showUpload(target);
 			}
 		});
-		filesMenu.setTop(true);
-		menu.add(filesMenu);
-		
+		menu.add(filesMenu.setTop(true));
+
 		actionsMenu.setTop(true);
 		actionsMenu.getItems().add(inviteMenuItem);
 		actionsMenu.getItems().add(shareMenuItem); //FIXME enable/disable
@@ -269,7 +267,7 @@ public class RoomMenuPanel extends Panel {
 		menu.add(actionsMenu);
 		return menu;
 	}
-	
+
 	public void update(IPartialPageRequestHandler handler) {
 		if (!isVisible()) {
 			return;
@@ -352,7 +350,7 @@ public class RoomMenuPanel extends Panel {
 	public static void roomExit(Client c) {
 		roomExit(c, true);
 	}
-	
+
 	public static void roomExit(Client c, boolean broadcast) {
 		Long roomId = c.getRoomId();
 		removeUserFromRoom(c);
@@ -361,3 +359,4 @@ public class RoomMenuPanel extends Panel {
 		}
 	}
 }
+
