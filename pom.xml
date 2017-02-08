@@ -41,7 +41,7 @@
 		<maven.surefire.version>2.19.1</maven.surefire.version>
 		<maven-site.version>3.3</maven-site.version>
 		<wicket.version>8.0.0-M4</wicket.version>
-		<wicketju.version>8.0.0-SNAPSHOT</wicketju.version>
+		<wicketju.version>8.0.0-M4</wicketju.version>
 		<wickets.version>8.0.0-SNAPSHOT</wickets.version>
 		<red5-server.version>1.0.8-RELEASE</red5-server.version>
 		<red5-client.version>1.0.8-RELEASE</red5-client.version>
