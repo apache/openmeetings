@@ -252,8 +252,9 @@ public class MainPanel extends Panel {
 				if ("socketConnected".equals(msg.getText())) {
 					if (panel != null) {
 						updateContents(panel, handler);
-						handler.add(MainPanel.this.add(pingTimer));
 					}
+					log.debug("WebSocketBehavior:: pingTimer is attached");
+					handler.add(MainPanel.this.add(pingTimer));
 				}
 			}
 
