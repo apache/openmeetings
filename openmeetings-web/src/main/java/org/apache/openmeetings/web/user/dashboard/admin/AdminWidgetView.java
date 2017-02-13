@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.dashboard.admin;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.dashboard.Widget;
@@ -26,6 +27,7 @@ import org.wicketstuff.dashboard.web.WidgetView;
 
 import com.googlecode.wicket.jquery.ui.form.button.IndicatingAjaxButton;
 
+@AuthorizeInstantiation("Admin")
 public class AdminWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
 	private final AdminCleanupInfoDialog cleanupDialog;
