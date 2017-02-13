@@ -26,8 +26,6 @@ import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -35,7 +33,6 @@ import java.util.UUID;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -112,7 +109,7 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			target.appendJavaScript("setHeight();");
+			target.appendJavaScript("setRoomSizes();");
 			//TODO SID etc
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			try {
@@ -132,13 +129,13 @@ public class RoomPanel extends BasePanel {
 								, "1429", "1430", "775", "452", "767", "764", "765", "918", "54", "761", "762"))
 						.toString()
 						));
-				broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
-				getMainPanel().getChat().roomEnter(r, target);
-				if (r.isFilesOpened()) {
-					sidebar.setFilesActive(target);
-				}
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
+			}
+			broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
+			getMainPanel().getChat().roomEnter(r, target);
+			if (r.isFilesOpened()) {
+				sidebar.setFilesActive(target);
 			}
 		}
 	};

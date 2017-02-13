@@ -56,7 +56,11 @@ function initVideo(_options) {
 	r.dialog({dialogClass: "video"});
 }
 
-function setHeight() {
+function setRoomSizes() {
+	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
+	$(".room.wb.area").width(w);
+	$(".room.wb.area .wb").width(w);
+
 	var h = $(window).height() - $('#menu').height();
 	$(".room.sidebar.left").height(h);
 	var p = $(".room.sidebar.left .tabs");
@@ -64,11 +68,6 @@ function setHeight() {
 	$(".user.list", p).height(h - $("ul", p).height() - $(".user.header", p).height() - 10);
 	$(".room.wb.area").height(h);
 	$(".room.wb.area .wb").height(h);
-}
-function alignBlocks() {
-	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
-	$(".room.wb.area").width(w);
-	$(".room.wb.area .wb").width(w);
 }
 function roomReload(event, ui) {
 	window.location.reload();
@@ -94,12 +93,10 @@ function roomClosed(jqEvent, msg) {
 }
 function roomLoad() {
 	$(".room.sidebar.left").ready(function() {
-		alignBlocks();
-		setHeight();
+		setRoomSizes();
 	});
 	$(window).on('resize.openmeetings', function() {
-		alignBlocks();
-		setHeight();
+		setRoomSizes();
 	});
 	$(".room.sidebar.left").resizable({
 		handles: "e"

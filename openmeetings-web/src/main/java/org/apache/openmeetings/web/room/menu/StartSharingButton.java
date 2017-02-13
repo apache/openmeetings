@@ -24,7 +24,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.HASH_MAPPING;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
@@ -47,16 +46,9 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.util.AjaxDownload;
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxClientInfoBehavior;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -69,7 +61,7 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
 	private final org.apache.openmeetings.web.app.Client c;
-	private final ExtendedClientProperties extProps = new ExtendedClientProperties();
+	private final ExtendedClientProperties extProps;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -77,9 +69,10 @@ public class StartSharingButton extends OmButton {
 		, rtmpt
 	}
 
-	public StartSharingButton(String id, org.apache.openmeetings.web.app.Client c) {
+	public StartSharingButton(String id, org.apache.openmeetings.web.app.Client c, final ExtendedClientProperties extProps) {
 		super(id);
 		this.c = c;
+		this.extProps = extProps;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
 		add(new AttributeAppender("title", Application.getString(1480)));
@@ -89,20 +82,6 @@ public class StartSharingButton extends OmButton {
 			@Override
 			protected String getFileName() {
 				return String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId());
-			}
-		});
-		add(new AjaxClientInfoBehavior() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
-				response.render(JavaScriptHeaderItem.forScript("Wicket.BrowserInfo.collectExtraInfo = function(info) { var l = window.location; info.codebase = l.origin + l.pathname; };", "extended-client-info"));
-			}
-
-			@Override
-			protected WebClientInfo newWebClientInfo(RequestCycle requestCycle) {
-				return new WebClientInfo(requestCycle, extProps);
 			}
 		});
 	}
@@ -183,18 +162,18 @@ public class StartSharingButton extends OmButton {
 				try (FileInputStream fis = new FileInputStream(keyStore); FileInputStream ris = new FileInputStream(new File(conf, "red5.properties"))) {
 					Properties red5Props = new Properties();
 					red5Props.load(ris);
-					
+
 					byte keyBytes[] = new byte[(int)keyStore.length()];
 					fis.read(keyBytes);
-					
+
 					keystore = Hex.encodeHexString(keyBytes);
 					password = red5Props.getProperty("rtmps.screen.keystorepass");
-					
+
 					/*
 					KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
 					ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
 					ByteArrayInputStream bin = new ByteArrayInputStream()
-					
+
 					byte fileContent[] = new byte[(int)file.length()];
 					sb = addArgument(sb, Object arg)
 					ctx.put("$KEYSTORE", users_id);
@@ -214,28 +193,5 @@ public class StartSharingButton extends OmButton {
 		return app.replace("$native", "" + rc.isNativeSsl())
 				.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
 				.replace("$password", CDATA_BEGIN + password + CDATA_END);
-	}
-
-	private static class ExtendedClientProperties extends ClientProperties {
-		private static final long serialVersionUID = 1L;
-		private String codebase;
-
-		public String getCodebase() {
-			return codebase;
-		}
-
-		@Override
-		public void read(IRequestParameters parameters) {
-			super.read(parameters);
-			String _url = parameters.getParameterValue("codebase").toString("N/A");
-			StringBuilder sb = new StringBuilder(_url);
-			if (_url.endsWith(HASH_MAPPING)) {
-				sb.setLength(_url.length() - HASH_MAPPING.length());
-			}
-			if (sb.charAt(sb.length() - 1) != '/') {
-				sb.append('/');
-			}
-			codebase = sb.append("screenshare").toString();
-		}
 	}
 }

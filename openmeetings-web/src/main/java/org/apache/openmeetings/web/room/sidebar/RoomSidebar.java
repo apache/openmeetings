@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFu
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room;
@@ -253,7 +252,9 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public WebMarkupContainer getPanel(String containerId) {
-				return new UserFragment(containerId, "user-panel");
+				WebMarkupContainer p = new Fragment(containerId, "user-panel", RoomSidebar.this);
+				p.add(selfRights, updateUsers());
+				return p;
 			}
 		};
 		fileTab = new OmTab() {
@@ -276,7 +277,9 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public WebMarkupContainer getPanel(String containerId) {
-				return new FileFragment(containerId, "file-panel");
+				WebMarkupContainer p = new Fragment(containerId, "file-panel", RoomSidebar.this);
+				p.add(roomFiles);
+				return p;
 			}
 		};
 		add((tabs = new TabbedPanel("tabs", newTabModel()) {
@@ -332,7 +335,10 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			protected List<ITab> load() {
-				return Arrays.asList(userTab, fileTab);
+				List<ITab> l = new ArrayList<>();
+				l.add(userTab);
+				l.add(fileTab);
+				return l;
 			}
 		};
 	}
@@ -350,25 +356,6 @@ public class RoomSidebar extends Panel {
 		//TODO do we need sort??
 		users.setList(getRoomClients(room.getRoom().getId()));
 		return users;
-	}
-
-	public class UserFragment extends Fragment {
-		private static final long serialVersionUID = 1L;
-
-		public UserFragment(String id, String markupId) {
-			super(id, markupId, RoomSidebar.this);
-			add(selfRights);
-			add(updateUsers());
-		}
-	}
-
-	public class FileFragment extends Fragment {
-		private static final long serialVersionUID = 1L;
-
-		public FileFragment(String id, String markupId) {
-			super(id, markupId, RoomSidebar.this);
-			add(roomFiles);
-		}
 	}
 
 	private void updateShowFiles() {

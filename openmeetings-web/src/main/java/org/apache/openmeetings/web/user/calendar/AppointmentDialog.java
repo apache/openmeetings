@@ -346,8 +346,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
-			add(start);
-			add(end);
+			add(start.setRequired(true), end.setRequired(true));
 			add(ownerPanel.add(owner));
 			add(new UserMultiChoice("attendees", attendeesModel));
 			add(new TextField<String>("location"));
@@ -433,7 +432,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		@Override
 		protected void onValidate() {
-			if (end.getConvertedInput().isBefore(start.getConvertedInput())) {
+			if (null != end.getConvertedInput() && null != end.getConvertedInput() && end.getConvertedInput().isBefore(start.getConvertedInput())) {
 				error(Application.getString(1592));
 			}
 		}
