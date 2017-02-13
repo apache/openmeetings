@@ -18,18 +18,22 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.WebSession.getDashboard;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.RssWidget;
+import org.apache.openmeetings.web.user.dashboard.admin.AdminWidget;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.basic.Label;
@@ -59,7 +63,7 @@ public class WidgetsPanel extends Panel {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
 		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
-		List<WidgetDescriptor> widgets = getDashboardContext().getWidgetRegistry().getWidgetDescriptors();
+		List<WidgetDescriptor> widgets = new ArrayList<>(getDashboardContext().getWidgetRegistry().getWidgetDescriptors());
 		for (Iterator<WidgetDescriptor> i = widgets.iterator(); i.hasNext();) {
 			WidgetDescriptor wd = i.next();
 			if (!confShowMyRooms && MyRoomsWidget.class.getCanonicalName().equals(wd.getWidgetClassName())) {
@@ -67,6 +71,10 @@ public class WidgetsPanel extends Panel {
 				continue;
 			}
 			if (!confShowRss && RssWidget.class.getCanonicalName().equals(wd.getWidgetClassName())) {
+				i.remove();
+				continue;
+			}
+			if (!hasAdminLevel(getRights()) && AdminWidget.class.getCanonicalName().equals(wd.getWidgetClassName())) {
 				i.remove();
 				continue;
 			}
@@ -101,3 +109,4 @@ public class WidgetsPanel extends Panel {
 		});
 	}
 }
+
