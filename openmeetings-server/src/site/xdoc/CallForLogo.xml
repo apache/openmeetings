@@ -114,6 +114,18 @@
 						</tr>
 					</table>
 				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-big" src="images/logos/logo_om_big6.png" alt="Apache OpenMeetings"/></td>
+							<td><span class="btn btn-primary" onclick="applyLogoBig($(this));">Apply</span></td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Daniel Baker</td>
+						</tr>
+					</table>
+				</li>
 			</ol>
 			<h3>Square version</h3>
 			<ol>
@@ -210,6 +222,18 @@
 						<tr>
 							<td>Author</td>
 							<td>Alexander J. Tanchoco</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-square" src="images/logos/logo_om_small9.png" alt="Square version" width="50"/></td>
+							<td><span class="btn btn-primary" onclick="applyLogoSmall($(this));">Apply</span></td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Daniel Baker</td>
 						</tr>
 					</table>
 				</li>
