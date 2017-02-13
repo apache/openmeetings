@@ -417,21 +417,18 @@
 
 	<method name="doUpdateDocumentToolBar">
 	<![CDATA[
-		var docToolbar = this.getDocumentToolBar();
-		
-		if ($debug) Debug.write("doUpdateDocumentToolBar ",docToolbar.parent.parent.ignoreUpdates);
-		docToolbar.parent.parent.ignoreUpdates = true;
-		
+		var p = 0, t = 0;
 		if (this["ObjectByName"] && this.ObjectByName != null && this.ObjectByName._swfView) {
-			if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
-			
-			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
-			docToolbar._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
-		} else {
-			docToolbar._currentSlideNo.setAttribute('text',"0");
-			docToolbar._totalSlideNo.setAttribute('text',"0");
+			if ($debug) Debug.warn("doUpdateDocumentToolBar ", this.ObjectByName.fullFit);
+			p = this.ObjectByName._swfView.frame;
+			t = this.ObjectByName._swfView.totalframes;
 		}
-		
+
+		var docToolbar = this.getDocumentToolBar();
+		//if ($debug) Debug.write("doUpdateDocumentToolBar ", docToolbar);
+		docToolbar.parent.parent.ignoreUpdates = true;
+		docToolbar._currentSlideNo.setAttribute('text', p);
+		docToolbar._totalSlideNo.setAttribute('text', t);
 		docToolbar.parent.parent.ignoreUpdates = false;
 	]]>
 	</method>

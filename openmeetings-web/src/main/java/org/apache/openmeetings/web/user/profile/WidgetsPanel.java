@@ -55,7 +55,7 @@ public class WidgetsPanel extends Panel {
 	}
 	public WidgetsPanel(String id) {
 		super(id);
-		
+
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
 		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");

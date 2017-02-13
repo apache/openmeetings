@@ -58,22 +58,26 @@ import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.UserInfoDialog;
 import org.apache.openmeetings.web.user.chat.ChatPanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
@@ -86,6 +90,8 @@ import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -137,6 +143,7 @@ public class MainPanel extends Panel {
 			}
 		}
 	};
+	private final ExtendedClientProperties extProps = new ExtendedClientProperties();
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -280,6 +287,20 @@ public class MainPanel extends Panel {
 				client = null;
 			}
 		});
+		add(new AjaxClientInfoBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(MainPanel.class, "main.js")));
+			}
+
+			@Override
+			protected WebClientInfo newWebClientInfo(RequestCycle requestCycle) {
+				return new WebClientInfo(requestCycle, extProps);
+			}
+		});
 	}
 
 	@Override
@@ -376,5 +397,9 @@ public class MainPanel extends Panel {
 
 	public Client getClient() {
 		return client;
+	}
+
+	public ExtendedClientProperties getExtendedProperties() {
+		return extProps;
 	}
 }
