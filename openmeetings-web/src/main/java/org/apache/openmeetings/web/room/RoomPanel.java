@@ -26,6 +26,8 @@ import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -111,9 +113,8 @@ public class RoomPanel extends BasePanel {
 		protected void respond(AjaxRequestTarget target) {
 			target.appendJavaScript("setRoomSizes();");
 			//TODO SID etc
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			try {
-				URL url = new URL(cfgDao.getBaseUrl());
+				URL url = new URL(getMainPanel().getExtendedProperties().getCodebase());
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
