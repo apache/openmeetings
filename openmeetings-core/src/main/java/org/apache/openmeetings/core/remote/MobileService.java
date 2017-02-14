@@ -18,19 +18,20 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.nextBroadCastId;
+import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.nextBroadCastId;
-import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class MobileService {
 	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
 	}
-	
+
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new Hashtable<>();
 		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
@@ -91,7 +92,7 @@ public class MobileService {
 		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
 		return result;
 	}
-	
+
 	public Map<String, String> getStates() {
 		Map<String, String> result = new Hashtable<>();
 		for (String code : Locale.getISOCountries()) {
@@ -99,11 +100,11 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public String[] getTimezones() {
 		return TimeZone.getAvailableIDs();
 	}
-	
+
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
@@ -116,7 +117,7 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
@@ -135,7 +136,7 @@ public class MobileService {
 				String tzId = umap.get("tzId");
 				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
-				
+
 				//FIXME TODO unify with Register dialog
 				String hash = UUID.randomUUID().toString();
 
@@ -168,7 +169,7 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> loginUser(String login, String password) {
 		Map<String, Object> result = getResult();
 		try {
@@ -181,13 +182,13 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	private static Map<String, Object> getResult() {
 		Map<String, Object> result = new Hashtable<>();
 		result.put("status", -1);
 		return result;
 	}
-	
+
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
@@ -222,7 +223,7 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public List<Map<String, Object>> getVideoStreams() {
 		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
 		// Notify all clients of the same scope (room)
@@ -266,7 +267,7 @@ public class MobileService {
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
 	}
-	
+
 	public List<Map<String, Object>> getRooms() {
 		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
 		// FIXME duplicated code
@@ -281,7 +282,7 @@ public class MobileService {
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);
 		}
-		
+
 		//private rooms
 		for (GroupUser ou : u.getGroupUsers()) {
 			Group org = ou.getGroup();
@@ -291,14 +292,14 @@ public class MobileService {
 				first = false;
 			}
 		}
-		
+
 		//public rooms
 		for (Room r : roomDao.getPublicRooms()) {
 			addRoom("public", null, false, result, r);
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> roomConnect(String SID, Long userId) {
 		Map<String, Object> result = new Hashtable<String, Object>();
 		User u = userDao.get(userId);
@@ -340,4 +341,56 @@ public class MobileService {
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
 		return result;
 	}
+/*
+	public void sendChatMessage(String message) {
+		IConnection current = Red5.getConnectionLocal();
+		Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		List<String> msg = new ArrayList<String>();
+		msg.add("chat"); //'privatechat'
+		msg.add(""); //date-time
+		msg.add("newtextmessage");
+		msg.add(client.getUsername());
+		msg.add(message);
+		msg.add(client.getUsercolor());
+		msg.add(client.getPublicSID()); //om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
+		msg.add("false");// canvas.isrtl;
+		msg.add("" + client.getUserId());
+		Room room = roomDao.get(client.getRoomId());
+		msg.add("" + (room.isChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
+		sendMessageWithClient(msg);
+
+		"sendVarsToMessageWithClient"
+	}
+
+	public List<ChatMessageDTO> getRoomChatHistory() {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Long roomId = currentClient.getRoomId();
+
+			log.debug("GET CHATROOM: " + roomId);
+
+			List<Map<String,Object>> myChatList = myChats.get(roomId);
+			if (myChatList==null) myChatList = new LinkedList<Map<String,Object>>();
+
+			if (!currentClient.getIsMod() && !currentClient.getIsSuperModerator()) {
+				//current user is not moderator, chat history need to be filtered
+				List<Map<String,Object>> tmpChatList = new LinkedList<Map<String,Object>>(myChatList);
+				for (int i = tmpChatList.size() - 1; i > -1; --i) {
+					@SuppressWarnings("rawtypes")
+					List msgList = (List)tmpChatList.get(i).get("message");
+					if (Boolean.valueOf("" + msgList.get(9))) { //needModeration
+						tmpChatList.remove(i);
+					}
+				}
+				myChatList = tmpChatList;
+			}
+
+			return myChatList;
+		} catch (Exception err) {
+			log.error("[getRoomChatHistory] ",err);
+			return null;
+		}
+	}
+*/
 }
