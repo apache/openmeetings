@@ -99,7 +99,7 @@ public class FolderPanel extends Panel {
 
 			@Override
 			protected String getLabelAjaxEvent() {
-				return "dblClick";
+				return "dblclick";
 			}
 
 			@Override

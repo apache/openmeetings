@@ -274,6 +274,11 @@
 .room.sidebar.left .tab.om-icon.big {
 	padding: 0em 1em 0 2.5em;
 	line-height: 30px;
+	width: auto;
+	max-width: 80px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 .room.sidebar.left .tab.om-icon.big.user {
 	background-image: url(images/group.png);
@@ -281,4 +286,3 @@
 .room.sidebar.left .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
 }
-
