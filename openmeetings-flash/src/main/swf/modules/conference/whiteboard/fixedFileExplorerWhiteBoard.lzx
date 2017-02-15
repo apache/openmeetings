@@ -468,7 +468,7 @@
 		]]>
 		</method>
 
-		<mainToolsTopPanel x="100" y="0" name="_mainToolsPanel"
+		<mainToolsLeftPanel x="0" y="20" name="_mainToolsPanel"
 				visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
 
 		<mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer"
