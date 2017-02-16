@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.chat;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -41,6 +40,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -49,7 +49,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -64,10 +63,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
-import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
-import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -202,19 +197,8 @@ public class Chat extends Panel {
 	}
 
 	private static void sendRoom(ChatMessage m, String msg) {
-		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
-		for (Client c : getRoomClients(m.getToRoom().getId())) {
-			try {
-				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))) {
-					IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
-					if (con != null) {
-						con.sendMessage(msg);
-					}
-				}
-			} catch (Exception e) {
-				log.error("Error while sending message to room", e);
-			}
-		}
+		WebSocketHelper.sendRoom(m.getToRoom().getId(), msg
+				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator)));
 	}
 
 	private class ChatForm extends Form<Void> {
@@ -265,37 +249,11 @@ public class Chat extends Panel {
 						if (m.getToRoom() != null) {
 							sendRoom(m, msg);
 						} else if (m.getToUser() != null) {
-							IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
-							for (Client c : Application.getClients(getUserId())) {
-								try {
-									IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
-									if (con != null) {
-										con.sendMessage(msg);
-									}
-								} catch (Exception e) {
-									log.error("Error while sending message to room", e);
-								}
-							}
+							WebSocketHelper.sendUser(getUserId(), msg);
 							msg = getMessage(m.getToUser().getId(), Arrays.asList(m)).toString();
-							for (Client c : Application.getClients(m.getToUser().getId())) {
-								try {
-									IWebSocketConnection con = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
-									if (con != null) {
-										con.sendMessage(msg);
-									}
-								} catch (Exception e) {
-									log.error("Error while sending message to room", e);
-								}
-							}
+							WebSocketHelper.sendUser(m.getToUser().getId(), msg);
 						} else {
-							IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
-							for (IWebSocketConnection c : reg.getConnections(getApplication())) {
-								try {
-									c.sendMessage(msg);
-								} catch(Exception e) {
-									log.error("Error while sending message", e);
-								}
-							}
+							WebSocketHelper.sendAll(msg);
 						}
 						chatMessage.setDefaultModelObject("");
 						target.add(chatMessage);

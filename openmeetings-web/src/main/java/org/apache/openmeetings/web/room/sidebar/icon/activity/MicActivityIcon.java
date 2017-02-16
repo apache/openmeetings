@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
+import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.app.Client;
-import org.apache.openmeetings.web.app.Client.Activity;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class MicActivityIcon extends RoomActivityIcon {

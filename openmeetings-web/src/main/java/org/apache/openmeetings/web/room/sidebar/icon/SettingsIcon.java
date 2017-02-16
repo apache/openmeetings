@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class SettingsIcon extends ClientIcon {

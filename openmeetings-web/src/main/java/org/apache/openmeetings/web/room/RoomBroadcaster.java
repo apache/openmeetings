@@ -50,7 +50,7 @@ public class RoomBroadcaster {
 		sa.sendToScope(roomId, method, obj);
 	}
 
-	public static void sendUpdatedClient(org.apache.openmeetings.web.app.Client client) {
+	public static void sendUpdatedClient(org.apache.openmeetings.db.entity.basic.Client client) {
 		org.apache.openmeetings.db.entity.room.Client rcl = Application.get().updateClient(getClient(client.getUid()));
 		log.debug("-----------  sendUpdatedClient ");
 

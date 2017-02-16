@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class WhiteboardRightIcon extends RoomRightIcon {

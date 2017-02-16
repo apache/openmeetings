@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
@@ -40,9 +41,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
+import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -50,8 +55,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
-import org.apache.openmeetings.web.app.Client.Activity;
-import org.apache.openmeetings.web.app.Client.Pod;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -215,8 +219,26 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		ONLINE_USERS.put(c.getUid(), c);
 	}
 
-	public static void removeOnlineUser(Client c) {
+	public static void exitRoom(Client c) {
+		Long roomId = c.getRoomId();
+		removeUserFromRoom(c);
+		if (roomId != null) {
+			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
+		}
+	}
+
+	@Override
+	public void exit(String uid) {
+		if (uid != null) {
+			exit(ONLINE_USERS.get(uid));
+		}
+	}
+
+	public static void exit(Client c) {
 		if (c != null) {
+			if (c.getRoomId() != null) {
+				exitRoom(c);
+			}
 			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
 			ONLINE_USERS.remove(c.getUid());
 		}
@@ -227,10 +249,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (rcl == null) {
 			return null;
 		}
-		if (!rcl.isScreenClient()) {
+		if (!rcl.isScreenClient() && (!rcl.isMobile() || (rcl.isMobile() && rcl.getUserId() != null))) {
 			Client client = getOnlineClient(rcl.getPublicSID());
 			if (client == null) {
-				return null;
+				if (rcl.isMobile()) {
+					//Mobile client enters the room
+					client = new Client(rcl, getBean(UserDao.class));
+					addOnlineUser(client);
+					if (rcl.getRoomId() != null) {
+						addUserToRoom(client);
+						//FIXME TODO unify this
+						WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
+					}
+					//FIXME TODO rights
+				} else {
+					return null;
+				}
 			}
 			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 			rcl.setIsMod(client.hasRight(Right.moderator));
@@ -315,7 +349,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (client != null) {
 			if (!INVALID_SESSIONS.containsKey(client.getSessionId())) {
 				INVALID_SESSIONS.put(client.getSessionId(), client);
-				removeOnlineUser(client);
+				exit(client);
 			}
 		}
 	}
@@ -349,6 +383,16 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			c.getRights().clear();
 		}
 		return c;
+	}
+
+	@Override
+	public List<Client> getOmRoomClients(Long roomId) {
+		return getRoomClients(roomId);
+	}
+
+	@Override
+	public List<Client> getOmClients(Long userId) {
+		return getClients(userId);
 	}
 
 	public static List<Client> getRoomClients(Long roomId) {

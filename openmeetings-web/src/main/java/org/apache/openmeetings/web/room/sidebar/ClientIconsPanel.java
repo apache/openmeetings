@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import org.apache.openmeetings.web.app.Client;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;

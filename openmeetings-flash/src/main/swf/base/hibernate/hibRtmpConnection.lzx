@@ -61,7 +61,6 @@
 	<!-- reconnect after each conferenceView -->
 	<attribute name="reconnectedRoomInstance" value="null" />
 
-	<attribute name="reconnectionAction" value="false" type="boolean" />
 	<attribute name="reconnectObjRef" value="null" />
 
 	 <attribute name="userobject" value="null" />
@@ -139,12 +138,7 @@
 	  -->
 	 <handler name="onconnect">
 		if($debug) Debug.write("hibRtmpConnection/onconnect");
-		if (this.reconnectionAction){
-			if (!!canvas.wicketsid) {
-				canvas.sessionId = canvas.wicketsid;
-				getDefaultLanguage.doCall();
-			}
-		} else if (!!canvas.wicketsid) {
+		if (!!canvas.wicketsid) {
 			canvas.sessionId = canvas.wicketsid;
 			if (canvas.thishib.loaderVar != null) {
 				canvas.thishib.loaderVar.setProgress();
@@ -190,17 +184,10 @@
 		connected = false;
 	</handler>
 
-	<method name="reconnectComplete">
-		if (this.reconnectionAction){
-			this.reconnectionAction = false;
-		}
-		canvas.currentContentView.sendInit.sendEvent(this);
-	</method>
-
 	<handler name="onerror" >
 	<![CDATA[
 		canvas.remoteLogWrite("error status='" + this.status + "'; src='" + this.src + "'; lastCalled='" + this.lastCalled
-			+ "'; showKickMessage='" + this.showKickMessage + "'; reconnectionAction='" + this.reconnectionAction + "'");
+			+ "'; showKickMessage='" + this.showKickMessage + "'; ");
 		if (this.showKickMessage) {
 			new lz.labelerrorPopup(canvas,{
 				errorlabelid:606
@@ -210,9 +197,6 @@
 			});
 			canvas._loadingAll.hideContentOnly();
 			return;
-		} else if (this.reconnectionAction){
-			if ($debug) Debug.write("this.reconnectionAction: ", this.lastCalled);
-			this.connect();
 		} else {
 			this.useRTMPT = true
 			var src = getUrl();
@@ -282,20 +266,6 @@
 			}
 		]]>
 	</method>
-
-	<netRemoteCallHib name="setUsernameReconnect" funcname="setUsernameReconnect" remotecontext="$once{ canvas.thishib }" >
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam><method name="getValue">return canvas.userId;</method></netparam>
-		<netparam><method name="getValue">return canvas.currentuser;</method></netparam>
-		<netparam><method name="getValue">return canvas.firstName;</method></netparam>
-		<netparam><method name="getValue">return canvas.lastName;</method></netparam>
-		<netparam><method name="getValue">return canvas.picture_uri;</method></netparam>
-		<handler name="ondata" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("setUsernameReconnect: ",canvas.userId,value);
-			parent.reconnectComplete();
-		</handler>
-	</netRemoteCallHib>
 
 	<netRemoteCallHib name="getDefaultLanguage" funcname="languageservice.getDefaultLanguage" >
 		<handler name="ondata" args="value">

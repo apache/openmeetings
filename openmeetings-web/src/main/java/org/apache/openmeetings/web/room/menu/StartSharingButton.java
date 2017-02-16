@@ -60,7 +60,7 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
-	private final org.apache.openmeetings.web.app.Client c;
+	private final org.apache.openmeetings.db.entity.basic.Client c;
 	private final ExtendedClientProperties extProps;
 	private enum Protocol {
 		rtmp
@@ -69,7 +69,7 @@ public class StartSharingButton extends OmButton {
 		, rtmpt
 	}
 
-	public StartSharingButton(String id, org.apache.openmeetings.web.app.Client c, final ExtendedClientProperties extProps) {
+	public StartSharingButton(String id, org.apache.openmeetings.db.entity.basic.Client c, final ExtendedClientProperties extProps) {
 		super(id);
 		this.c = c;
 		this.extProps = extProps;

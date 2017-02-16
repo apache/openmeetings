@@ -30,6 +30,7 @@ import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
@@ -142,7 +143,7 @@ public class RecordingService implements IPendingServiceCallback {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
 						// Send every user a notification that the recording did start
-						scopeApplicationAdapter.broadcastRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
+						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
 
 						// If its the recording client we need another type of Meta Data
 						if (rcl.isScreenClient()) {
@@ -310,7 +311,7 @@ public class RecordingService implements IPendingServiceCallback {
 	public Long stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
 		try {
 			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
-			scopeApplicationAdapter.broadcastRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
 
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {

@@ -24,13 +24,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.exit;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
-import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Arrays;
@@ -121,7 +121,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public void invalidate() {
-		removeOnlineUser(getClientByKeys(userId, getId()));
+		exit(getClientByKeys(userId, getId()));
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());

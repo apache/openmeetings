@@ -42,25 +42,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Handle {@link Client} objects.
- * 
+ *
  * Use a kind of decorator pattern to inject the {@link Server} into every call.
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 public class SessionManager implements ISessionManager {
 	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, webAppRootKey);
-	
+
 	@Autowired
 	private ServerUtil serverUtil;
-	
+
 	/**
 	 * Injected via Spring, needs a getter/setter because it can be configured
 	 * Autowired will not suit here as there are multiple implementations of the
 	 * {@link IClientPersistenceStore}
 	 */
 	private IClientPersistenceStore cache;
-	
+
 	public IClientPersistenceStore getCache() {
 		return cache;
 	}
@@ -73,9 +73,12 @@ public class SessionManager implements ISessionManager {
 	public void clearCache() {
 		cache.clear();
 	}
-	
+
 	@Override
 	public Client add(Client c, Server server) {
+		if (c == null) {
+			return null;
+		}
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
@@ -94,7 +97,7 @@ public class SessionManager implements ISessionManager {
 		cache.put(c.getStreamid(), c);
 		return c;
 	}
-	
+
 	@Override
 	public Client addClientListItem(String streamId, String scopeName,
 			int remotePort, String remoteAddress, String swfUrl, Server server) {
@@ -134,7 +137,7 @@ public class SessionManager implements ISessionManager {
 	public Collection<Client> getClients() {
 		return cache.getClients();
 	}
-	
+
 	@Override
 	public Collection<Client> getClientsWithServer() {
 		return cache.getClientsWithServer();
@@ -192,7 +195,7 @@ public class SessionManager implements ISessionManager {
 				if (rcl.isScreenClient()) {
 					continue;
 				}
-				
+
 				return rcl;
 			}
 		} catch (Exception err) {
@@ -239,7 +242,7 @@ public class SessionManager implements ISessionManager {
 		}
 		try {
 			Client rclSaved = cache.get(server, streamId);
-			
+
 			if (rclSaved != null) {
 				cache.put(streamId, rcm);
 				return true;

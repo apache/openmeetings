@@ -39,7 +39,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -54,8 +54,8 @@ import org.apache.openmeetings.db.dto.room.RoomCountBean;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.message.RoomMessage;
@@ -66,9 +66,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * RoomService contains methods to manipulate rooms and create invitation hash
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -91,8 +91,6 @@ public class RoomWebService {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private ScopeApplicationAdapter appAdapter;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -100,7 +98,7 @@ public class RoomWebService {
 	 * about that Room. The List of current-users in the room is Null if you get
 	 * them via SOAP. The Roomtype can be 1 for conference rooms or 2 for
 	 * audience rooms.
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param type
@@ -128,7 +126,7 @@ public class RoomWebService {
 
 	/**
 	 * returns a conference room object
-	 * 
+	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param id - the room id
 	 * @return - room with the id given
@@ -150,7 +148,7 @@ public class RoomWebService {
 	 * Checks if a room with this exteralRoomId + externalRoomType does exist,
 	 * if yes it returns the room id if not, it will create the room and then
 	 * return the room id of the newly created room
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param type
@@ -162,7 +160,7 @@ public class RoomWebService {
 	 *            your external room id may set here
 	 * @param room
 	 *            details of the room to be created if not found
-	 *            
+	 *
 	 * @return - id of the room or error code
 	 * @throws ServiceException
 	 */
@@ -196,15 +194,15 @@ public class RoomWebService {
 			throw new ServiceException(err.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Adds a new Room like through the Frontend
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param room
 	 *            room object
-	 *            
+	 *
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
@@ -229,15 +227,15 @@ public class RoomWebService {
 			throw new ServiceException(e.getMessage());
 		}
 	}
-	
+
 	/**//*
 	 * Adds a new Room like through the Frontend
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param room
 	 *            room object
-	 *            
+	 *
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 *//*
@@ -265,13 +263,13 @@ public class RoomWebService {
 			throw new ServiceException(err.getMessage());
 		}
 	}*/
-	
+
 	/**
 	 * Delete a room by its room id
-	 * 
+	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param id - The id of the room
-	 * 
+	 *
 	 * @return - id of the room deleted
 	 */
 	@WebMethod
@@ -297,14 +295,14 @@ public class RoomWebService {
 	 * Method to remotely close rooms. If a room is closed all users
 	 * inside the room and all users that try to enter it will be redirected to
 	 * the redirectURL that is defined in the Room-Object.
-	 * 
+	 *
 	 * Returns positive value if authentication was successful.
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param id
 	 *            the room id
-	 *            
+	 *
 	 * @return - 1 in case of success, -2 otherwise
 	 * @throws ServiceException
 	 */
@@ -323,7 +321,7 @@ public class RoomWebService {
 
 				roomDao.update(room, userId);
 
-				appAdapter.broadcastRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
+				WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
 
 				return new ServiceResult(1L, "Closed", Type.SUCCESS);
 			} else {
@@ -342,14 +340,14 @@ public class RoomWebService {
 	 * Method to remotely open rooms. If a room is closed all users
 	 * inside the room and all users that try to enter it will be redirected to
 	 * the redirectURL that is defined in the Room-Object.
-	 * 
+	 *
 	 * Returns positive value if authentication was successful.
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param id
 	 *            the room id
-	 *            
+	 *
 	 * @return - 1 in case of success, -2 otherwise
 	 * @throws ServiceException
 	 */
@@ -366,7 +364,7 @@ public class RoomWebService {
 				Room room = roomDao.get(id);
 				room.setClosed(false);
 				roomDao.update(room, userId);
-				
+
 				return new ServiceResult(1L, "Opened", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -382,13 +380,13 @@ public class RoomWebService {
 
 	/**
 	 * kick all uses of a certain room
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 *            _Admin
 	 * @param id
 	 *            the room id
-	 *            
+	 *
 	 * @return - true if user was kicked, false otherwise
 	 */
 	@WebMethod
@@ -410,10 +408,10 @@ public class RoomWebService {
 			throw new ServiceException(err.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Returns current users for rooms ids
-	 * 
+	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param ids - id of the room you need counters for
 	 * @return - current users for rooms ids
@@ -452,7 +450,7 @@ public class RoomWebService {
 
 	/**
 	 * Method to get invitation hash with given parameters
-	 * 
+	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param invite - parameters of the invitation
 	 * @param sendmail - flag to determine if email should be sent or not
@@ -473,7 +471,7 @@ public class RoomWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Invitation i = invite.get(userId, userDao, roomDao);
 				i = invitationDao.update(i);
-				
+
 				if (i != null) {
 					if (sendmail) {
 						invitationManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);

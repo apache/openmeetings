@@ -127,12 +127,12 @@ public class ConnectionsPanel extends AdminPanel {
 		};
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		
-		SearchableDataProvider<org.apache.openmeetings.web.app.Client> sdpWeb = new SearchableDataProvider<org.apache.openmeetings.web.app.Client>(null) {
+		SearchableDataProvider<org.apache.openmeetings.db.entity.basic.Client> sdpWeb = new SearchableDataProvider<org.apache.openmeetings.db.entity.basic.Client>(null) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Iterator<? extends org.apache.openmeetings.web.app.Client> iterator(long first, long count) {
-				List<org.apache.openmeetings.web.app.Client> l = new ArrayList<org.apache.openmeetings.web.app.Client>(Application.getClients());
+			public Iterator<? extends org.apache.openmeetings.db.entity.basic.Client> iterator(long first, long count) {
+				List<org.apache.openmeetings.db.entity.basic.Client> l = new ArrayList<org.apache.openmeetings.db.entity.basic.Client>(Application.getClients());
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 			
@@ -143,12 +143,12 @@ public class ConnectionsPanel extends AdminPanel {
 		};
 		
 		final WebMarkupContainer containerWeb = new WebMarkupContainer("containerWeb");
-		SearchableDataView<org.apache.openmeetings.web.app.Client> dataViewWeb = new SearchableDataView<org.apache.openmeetings.web.app.Client>("clientListWeb", sdpWeb) {
+		SearchableDataView<org.apache.openmeetings.db.entity.basic.Client> dataViewWeb = new SearchableDataView<org.apache.openmeetings.db.entity.basic.Client>("clientListWeb", sdpWeb) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<org.apache.openmeetings.web.app.Client> item) {
-				org.apache.openmeetings.web.app.Client c = item.getModelObject();
+			protected void populateItem(final Item<org.apache.openmeetings.db.entity.basic.Client> item) {
+				org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
 				item.add(new Label("id", ""));
 				item.add(new Label("login", c.getUser().getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
@@ -158,7 +158,7 @@ public class ConnectionsPanel extends AdminPanel {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-						org.apache.openmeetings.web.app.Client c = item.getModelObject();
+						org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
 						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId(), c.getSessionId());
 						target.add(containerWeb, details.setVisible(false));
 					}
@@ -168,9 +168,9 @@ public class ConnectionsPanel extends AdminPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						Field[] ff = org.apache.openmeetings.web.app.Client.class.getDeclaredFields();
+						Field[] ff = org.apache.openmeetings.db.entity.basic.Client.class.getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						org.apache.openmeetings.web.app.Client c = item.getModelObject();
+						org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
 						for (Field f : ff) {
 							int mod = f.getModifiers();
 							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {

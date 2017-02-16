@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.poll;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -31,7 +32,6 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -70,12 +70,12 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		form.setModelObject(p);
 		target.add(form);
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(create, cancel);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return create;
@@ -96,12 +96,12 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		PollDao dao = getBean(PollDao.class);
 		dao.close(roomId);
 		dao.update(form.getModelObject());
-		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
+		sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
 
 	private class PollForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
-		
+
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
 			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));

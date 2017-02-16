@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.room.activities;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.RoomPanel.broadcast;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
@@ -33,12 +33,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
@@ -82,7 +82,7 @@ public class ActivitiesPanel extends BasePanel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString(); 
+				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				assert(room.getRoom().getId().equals(roomId));
 				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
@@ -94,7 +94,7 @@ public class ActivitiesPanel extends BasePanel {
 							break;
 						case decline:
 							if (room.getClient().hasRight(Right.moderator)) {
-								broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+								sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 							}
 							break;
 						case accept:
@@ -102,35 +102,35 @@ public class ActivitiesPanel extends BasePanel {
 							if (room.getClient().hasRight(Right.moderator) && client != null && roomId == client.getRoomId()) {
 								switch (a.getType()) {
 									case reqRightModerator:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.moderator);
 										break;
 									case reqRightAv:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.audio, Right.video);
 										break;
 									case reqRightWb:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.whiteBoard);
 										break;
 									case reqRightShare:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.share);
 										break;
 									case reqRightRemote:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.remoteControl);
 										break;
 									case reqRightA:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.audio);
 										break;
 									case reqRightMute:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.mute);
 										break;
 									case reqRightExclusive:
-										broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(target, client, Right.exclusive);
 										break;
 									default:
@@ -146,7 +146,7 @@ public class ActivitiesPanel extends BasePanel {
 				log.error("Unexpected exception while processing activity action", e);
 			}
 		}
-		
+
 		@Override
 		public void renderHead(Component component, IHeaderResponse response) {
 			super.renderHead(component, response);
@@ -222,7 +222,7 @@ public class ActivitiesPanel extends BasePanel {
 			item.add(accept, decline, new Label("text", text));
 			item.add(AttributeAppender.append("class", getClass(a)));
 		}
-		
+
 		private String getClass(Activity a) {
 			String cls = "ui-state-default";
 			switch (a.getType()) {
@@ -262,7 +262,7 @@ public class ActivitiesPanel extends BasePanel {
 			handler.add(container);
 		}
 	}
-	
+
 	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);
 		this.room = room;
@@ -272,7 +272,7 @@ public class ActivitiesPanel extends BasePanel {
 		add(container.add(lv).setOutputMarkupPlaceholderTag(true));
 		add(action);
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

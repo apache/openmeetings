@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -25,10 +27,10 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -62,7 +64,7 @@ public class RoomsPanel extends UserPanel {
 				roomId = r.getId();
 				updateRoomDetails(target);
 			}
-			
+
 			@Override
 			public void onRefreshClick(AjaxRequestTarget target, Room r) {
 				super.onRefreshClick(target, r);
@@ -70,7 +72,7 @@ public class RoomsPanel extends UserPanel {
 				updateRoomDetails(target);
 			}
 		});
-		
+
 		// Users in this Room
 		add(details.setOutputMarkupId(true).setVisible(rooms.size() > 0));
 		details.add(new Label("roomId", roomID));
@@ -92,12 +94,12 @@ public class RoomsPanel extends UserPanel {
 						rr.disableCaching();
 						return rr;
 					}
-					
+
 					@Override
 					protected byte[] getData(Attributes attributes) {
 						String uri = null;
 						if (userId != null) {
-							uri = Application.getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
+							uri = getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
 						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
 						try (InputStream is = new FileInputStream(img)) {
@@ -118,13 +120,13 @@ public class RoomsPanel extends UserPanel {
 	void updateRoomDetails(AjaxRequestTarget target) {
 		final List<Client> clientsInRoom = Application.getRoomClients(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
-		Room room = Application.getBean(RoomDao.class).get(roomId);
+		Room room = getBean(RoomDao.class).get(roomId);
 		roomID.setObject(room.getId());
 		roomName.setObject(room.getName());
 		roomComment.setObject(room.getComment());
 		target.add(clientsContainer, details);
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		roomID.detach();
