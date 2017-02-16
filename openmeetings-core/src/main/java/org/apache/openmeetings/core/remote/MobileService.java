@@ -30,7 +30,6 @@ import static org.apache.openmeetings.util.Version.getVersion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -96,7 +95,7 @@ public class MobileService {
 	}
 
 	public Map<String, Object> checkServer() {
-		Map<String, Object> result = new Hashtable<>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
 		result.put("allowSoapRegister",  "1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0")));
 		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
@@ -104,7 +103,7 @@ public class MobileService {
 	}
 
 	public Map<String, String> getStates() {
-		Map<String, String> result = new Hashtable<>();
+		Map<String, String> result = new HashMap<>();
 		for (String code : Locale.getISOCountries()) {
 			result.put(code, getCountryName(code));
 		}
@@ -194,7 +193,7 @@ public class MobileService {
 	}
 
 	private static Map<String, Object> getResult() {
-		Map<String, Object> result = new Hashtable<>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("status", -1);
 		return result;
 	}
@@ -242,7 +241,7 @@ public class MobileService {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
-					Map<String, Object> map = new Hashtable<String, Object>();
+					Map<String, Object> map = new HashMap<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
 					add(map, "userId", c.getUserId());
@@ -263,7 +262,7 @@ public class MobileService {
 	}
 
 	private void addRoom(String type, String org, boolean first, List<Map<String, Object>> result, Room r) {
-		Map<String, Object> room = new Hashtable<>();
+		Map<String, Object> room = new HashMap<>();
 		room.put("id", r.getId());
 		room.put("name", r.getName());
 		room.put("type", type);
@@ -312,7 +311,7 @@ public class MobileService {
 
 	//designed to do nothing remain for compatibility
 	public Map<String, Object> roomConnect(String SID, Long userId) {
-		return new Hashtable<>();
+		return new HashMap<>();
 	}
 
 	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
@@ -328,7 +327,7 @@ public class MobileService {
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
-		Map<String, Object> result = new Hashtable<>();
+		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
 			result.put("broadcastId", nextBroadCastId());
 		}

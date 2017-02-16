@@ -118,7 +118,8 @@
 			canvas._wbBar.subviews[eg].objRef.setAttribute("visibility","hidden");
 		}
 		var whiteboard = new lz.multiWhiteboardPanel(this,{
-							whiteboardId:whiteboardId
+							whiteboardId: whiteboardId
+							, wbName: wbName
 						});
 		var tWhiteboardBtn = new lz.whiteboardMiniButton(canvas._wbBar,{
 									name: "bar" + whiteboardId,
