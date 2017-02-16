@@ -76,6 +76,12 @@ public class GroupUsersPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
+					protected void onInitialize() {
+						super.onInitialize();
+						form.setMultiPart(true);//need to be multipart due to parent form is multipart
+					}
+
+					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						if (grpUser.getId() == null) {
 							users2add.remove(grpUser);
