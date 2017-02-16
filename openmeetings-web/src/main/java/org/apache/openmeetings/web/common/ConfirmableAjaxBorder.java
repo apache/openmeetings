@@ -38,7 +38,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageFormDialog;
 public abstract class ConfirmableAjaxBorder extends Border {
 	private static final long serialVersionUID = 1L;
 	private static final String DIALOG_ID = "dialog";
-	private final Form<?> form = new Form<>("form");
+	protected final Form<?> form = new Form<>("form");
 	private final ConfirmableBorderDialog dialog;
 
 	public ConfirmableAjaxBorder(String id, String title, String message) {
