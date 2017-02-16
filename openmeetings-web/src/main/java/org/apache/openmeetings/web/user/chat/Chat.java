@@ -50,10 +50,8 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -152,27 +150,7 @@ public class Chat extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 
-		add(acceptMessage, new Behavior() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				ChatDao dao = getBean(ChatDao.class);
-				//FIXME limited count should be loaded with "earlier" link
-				List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
-				for(Long roomId : getUserRooms(getUserId())) {
-					Room r = getBean(RoomDao.class).get(roomId);
-					list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
-				}
-				list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
-				if (list.size() > 0) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
-					response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
-				}
-				super.renderHead(component, response);
-			}
-		});
+		add(acceptMessage);
 		add(new ChatForm("sendForm"));
 	}
 
@@ -194,6 +172,20 @@ public class Chat extends Panel {
 		response.render(CssHeaderItem.forReference(EMOTIONS_CSS_REFERENCE));
 		response.render(CssHeaderItem.forUrl("css/chat.css"));
 		response.render(new PriorityHeaderItem(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
+
+		ChatDao dao = getBean(ChatDao.class);
+		//FIXME limited count should be loaded with "earlier" link
+		List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
+		for(Long roomId : getUserRooms(getUserId())) {
+			Room r = getBean(RoomDao.class).get(roomId);
+			list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
+		}
+		list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
+		if (list.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("chatReinit(); addChatMessage(").append(getMessage(list).toString()).append(");");
+			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
+		}
 	}
 
 	private static void sendRoom(ChatMessage m, String msg) {
