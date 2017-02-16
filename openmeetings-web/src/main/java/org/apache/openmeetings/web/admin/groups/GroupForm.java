@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 
 import java.io.File;
@@ -188,13 +188,13 @@ public class GroupForm extends AdminBaseForm<Group> {
 	private long getGroupId() {
 		return getModelObject().getId() != null ? getModelObject().getId() : 0;
 	}
-	
+
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
 		setModelObject(new Group());
 		updateView(target);
 	}
-	
+
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Group org = getModelObject();
@@ -206,14 +206,14 @@ public class GroupForm extends AdminBaseForm<Group> {
 		setModelObject(org);
 		updateView(target);
 	}
-	
+
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(GroupDao.class).delete(getModelObject(), getUserId());
 		setModelObject(new Group());
 		updateView(target);
 	}
-	
+
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Group o = getModelObject();

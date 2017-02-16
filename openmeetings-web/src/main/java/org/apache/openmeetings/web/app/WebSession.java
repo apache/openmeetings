@@ -49,7 +49,6 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -64,6 +63,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
@@ -208,7 +208,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				}
 			}
 		} catch (Exception e) {
-			//no-op, will continue to sign-in page
+			log.error("Unexpected exception while checking hashes", e);
 		}
 	}
 
@@ -265,22 +265,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return false;
 	}
 
-	@Override
-	public Locale getLocale(User u) {
-		Long langId = u.getLanguageId();
-		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.languages.get(langId);
-		try {
-			Locale.Builder builder = new Locale.Builder().setLanguage(locale.getLanguage());
-			if (u.getAddress() != null && u.getAddress().getCountry() != null) {
-				builder.setRegion(u.getAddress().getCountry());
-			}
-			locale = builder.build();
-		} catch (Exception e) {
-			log.error("Unexpected Error whilw constructing locale for the user", e.getMessage());
-		}
-		return locale;
-	}
-
 	private void setUser(User u, Set<Right> rights) {
 		String _sid = SID;
 		Long _recordingId = recordingId;
@@ -322,7 +306,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
-		setLocale(getLocale(u));
+		setLocale(LocaleHelper.getLocale(u));
 		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}
 

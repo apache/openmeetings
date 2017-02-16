@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import java.io.Serializable;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -62,8 +62,8 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			this.dialog = dialog;
 			form.add(new EmptyPanel(DIALOG_ID));
 		}
-		this.dialog.setSubmitHandler((BiConsumer<AjaxRequestTarget,Form<?>> & Serializable)(t, f)->onSubmit(t, f));
-		this.dialog.setErrorHandler((BiConsumer<AjaxRequestTarget,Form<?>> & Serializable)(t, f)->onError(t, f));
+		this.dialog.setSubmitHandler((Consumer<AjaxRequestTarget> & Serializable)(t)->onSubmit(t));
+		this.dialog.setErrorHandler((Consumer<AjaxRequestTarget> & Serializable)(t)->onError(t));
 		setOutputMarkupId(true);
 	}
 
@@ -115,7 +115,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	 * @param target the {@link AjaxRequestTarget}
 	 * @param form the {@link Form}
 	 */
-	protected void onError(AjaxRequestTarget target, Form<?> form) {
+	protected void onError(AjaxRequestTarget target) {
 	}
 
 	/**
@@ -124,13 +124,13 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	 * @param target the {@link AjaxRequestTarget}
 	 * @param form the {@link Form}
 	 */
-	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onSubmit(AjaxRequestTarget target);
 
 	public static class ConfirmableBorderDialog extends MessageFormDialog {
 		private static final long serialVersionUID = 1L;
 		private Form<?> form;
-		private BiConsumer<AjaxRequestTarget,Form<?>> submitHandler = null;
-		private BiConsumer<AjaxRequestTarget,Form<?>> errorHandler = null;
+		private Consumer<AjaxRequestTarget> submitHandler = null;
+		private Consumer<AjaxRequestTarget> errorHandler = null;
 
 		public ConfirmableBorderDialog(String id, String title, String message) {
 			this(id, title, message, null);
@@ -141,11 +141,11 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			this.form = form;
 		}
 
-		public void setSubmitHandler(BiConsumer<AjaxRequestTarget, Form<?>> submitHandler) {
+		public void setSubmitHandler(Consumer<AjaxRequestTarget> submitHandler) {
 			this.submitHandler = submitHandler;
 		}
 
-		public void setErrorHandler(BiConsumer<AjaxRequestTarget, Form<?>> errorHandler) {
+		public void setErrorHandler(Consumer<AjaxRequestTarget> errorHandler) {
 			this.errorHandler = errorHandler;
 		}
 
@@ -163,14 +163,14 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		protected void onError(AjaxRequestTarget target) {
 			super.close(target, null); // closes the dialog on error.
 			if (errorHandler != null) {
-				errorHandler.accept(target, this.getForm());
+				errorHandler.accept(target);
 			}
 		}
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			if (submitHandler != null) {
-				submitHandler.accept(target, this.getForm());
+				submitHandler.accept(target);
 			}
 		}
 	}

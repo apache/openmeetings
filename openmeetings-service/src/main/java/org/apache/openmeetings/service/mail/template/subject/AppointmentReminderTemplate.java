@@ -25,6 +25,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
@@ -54,7 +55,7 @@ public class AppointmentReminderTemplate extends AbstractAppointmentTemplate {
 
 	public static AbstractSubjectEmailTemplate get(User u, Appointment a, TimeZone tz) {
 		ensureApplication(u.getLanguageId());
-		return new AppointmentReminderTemplate(getOmSession().getLocale(u), a, tz).create();
+		return new AppointmentReminderTemplate(LocaleHelper.getLocale(u), a, tz).create();
 	}
 
 	@Override

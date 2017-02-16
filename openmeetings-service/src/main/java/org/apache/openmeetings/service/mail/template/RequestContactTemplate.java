@@ -21,6 +21,7 @@ package org.apache.openmeetings.service.mail.template;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -29,7 +30,7 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactTemplate(User userToAdd, User user) {
-		super(getOmSession().getLocale(userToAdd));
+		super(LocaleHelper.getLocale(userToAdd));
 		add(new Label("hi", getString("1192", locale)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));

@@ -70,7 +70,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -121,12 +120,12 @@ public class MessagesContactsPanel extends UserPanel {
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
 		, new ChoiceRenderer<Integer>() {
 			private static final long serialVersionUID = 1L;
-	
+
 			@Override
 			public Object getDisplayValue(Integer object) {
 				return Application.getString(object);
 			}
-			
+
 			@Override
 			public String getIdValue(Integer object, int index) {
 				return "" + object;
@@ -149,24 +148,24 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		});
 	private WebMarkupContainer selectedFolder;
-	
+
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
 		sent.add(AttributeAppender.replace("class", "email sent clickable"));
 		trash.add(AttributeAppender.replace("class", "email trash clickable"));
 	}
-	
+
 	private static void selectFolder(WebMarkupContainer folder) {
 		folder.add(AttributeAppender.append("class", "ui-widget-header ui-corner-all"));
 	}
-	
+
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
 		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}
 	}
-	
+
 	private void updateControls(AjaxRequestTarget target) {
 		deleteBtn.setEnabled(!selectedMessages.isEmpty());
 		Long selFldr = selectedFolderModel.getObject();
@@ -175,11 +174,11 @@ public class MessagesContactsPanel extends UserPanel {
 		toInboxBtn.setVisible(!INBOX_FOLDER_ID.equals(selFldr) && !SENT_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
 		target.add(buttons);
 	}
-	
+
 	private static String getEmail(User u) {
 		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
 	}
-	
+
 	private void selectMessage(long id, AjaxRequestTarget target) {
 		PrivateMessage msg = getBean(PrivateMessageDao.class).get(id);
 		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
@@ -202,14 +201,14 @@ public class MessagesContactsPanel extends UserPanel {
 			updateControls(target);
 		}
 	}
-	
+
 	void updateTable(AjaxRequestTarget target) {
 		container.add(fixedTable);
 		if (target != null) {
 			target.add(container);
 		}
 	}
-	
+
 	private void selectFolder(WebMarkupContainer folder, Long id, AjaxRequestTarget target) {
 		selectedFolder = folder;
 		selectedFolderModel.setObject(id);
@@ -228,7 +227,7 @@ public class MessagesContactsPanel extends UserPanel {
 			target.add(dataContainer.getLinks());
 		}
 	}
-	
+
 	private void emptySelection(AjaxRequestTarget target) {
 		selectedMessages.clear();
 		selectMessage(-1, target);
@@ -237,21 +236,21 @@ public class MessagesContactsPanel extends UserPanel {
 			target.add(unread);
 		}
 	}
-	
+
 	private static String getDisplayName(User u) {
 		return new StringBuilder().append(u.getFirstname()).append(" ")
 				.append(u.getLastname()).append(" ")
 				.append("<").append(getEmail(u)).append(">")
 				.toString();
 	}
-	
+
 	private void updateMoveModel() {
 		List<PrivateMessageFolder> list = new ArrayList<PrivateMessageFolder>();
 		list.add(NOT_MOVE_FOLDER);
 		list.addAll(foldersModel.getObject());
 		moveDropDown.setChoices(list);
 	}
-	
+
 	private void updateContacts(AjaxRequestTarget target) {
 		pendingContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
 		allContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactsByUserAndStatus(getUserId(), false).size());
@@ -259,14 +258,14 @@ public class MessagesContactsPanel extends UserPanel {
 			target.add(contacts);
 		}
 	}
-	
+
 	public MessagesContactsPanel(String id) {
 		super(id);
 		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
 		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
 		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
-		
+
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
 			private static final long serialVersionUID = 1L;
 
@@ -322,14 +321,14 @@ public class MessagesContactsPanel extends UserPanel {
 				item.add(new Label("name", item.getModelObject().getFolderName()));
 				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
-					
+
 					@Override
 					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
 					}
-					
+
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 						fDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
@@ -348,7 +347,7 @@ public class MessagesContactsPanel extends UserPanel {
 				setFolderClass(item);
 			}
 		}).setOutputMarkupId(true));
-		
+
 		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessageDao.class) {
 			private static final long serialVersionUID = 1L;
 
@@ -356,7 +355,7 @@ public class MessagesContactsPanel extends UserPanel {
 			protected PrivateMessageDao getDao() {
 				return (PrivateMessageDao)super.getDao();
 			}
-			
+
 			@Override
 			public Iterator<? extends PrivateMessage> iterator(long first, long count) {
 				allMessages.clear();
@@ -366,7 +365,7 @@ public class MessagesContactsPanel extends UserPanel {
 				boolean isAsc = getSort() == null ? true : getSort().isAscending();
 				return getDao().get(getUserId(), selectedFolderModel.getObject(), search, sort, isAsc, (int)first, (int)count).iterator();
 			}
-			
+
 			@Override
 			public long size() {
 				return getDao().count(getUserId(), selectedFolderModel.getObject(), search);
@@ -431,13 +430,13 @@ public class MessagesContactsPanel extends UserPanel {
 			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
 		add(dataContainer.getLinks());
 		add(navigator);
-		
+
 		add(unread.setOutputMarkupId(true));
-		
+
 		add(buttons.setOutputMarkupId(true));
 		buttons.add(toInboxBtn.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				getBean(PrivateMessageDao.class).moveMailsToFolder(selectedMessages, INBOX_FOLDER_ID);
@@ -446,7 +445,7 @@ public class MessagesContactsPanel extends UserPanel {
 		}));
 		buttons.add(deleteBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
-	
+
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
 					if (TRASH_FOLDER_ID.equals(selectedFolderModel.getObject())) {
@@ -460,7 +459,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}));
 		buttons.add(readBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
 					getBean(PrivateMessageDao.class).updateReadStatus(selectedMessages, true);
@@ -470,7 +469,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}));
 		buttons.add(unreadBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
 					getBean(PrivateMessageDao.class).updateReadStatus(selectedMessages, false);
@@ -517,12 +516,12 @@ public class MessagesContactsPanel extends UserPanel {
 				selectFolder(selectedFolder, selectedFolderModel.getObject(), target);
 			}
 		}));
-		
+
 		selectMessage(-1, null);
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(selectedMessage.add(roomContainer.setVisible(false)).setOutputMarkupId(true));
-		
+
 		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {
 			private static final long serialVersionUID = 1L;
 
@@ -551,7 +550,7 @@ public class MessagesContactsPanel extends UserPanel {
 			private String getName(UserContact uc) {
 				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname(); //FIXME salutation
 			}
-			
+
 			@Override
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
@@ -560,7 +559,7 @@ public class MessagesContactsPanel extends UserPanel {
 				if (uc.isPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
-				item.add(new Label("name", getName(uc)));	
+				item.add(new Label("name", getName(uc)));
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
@@ -583,14 +582,14 @@ public class MessagesContactsPanel extends UserPanel {
 				item.add(new WebMarkupContainer("message").add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
 				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
-					
+
 					@Override
 					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 						attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
 					}
-					
+
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						getBean(UserContactDao.class).delete(contactId);
 						updateContacts(target);
 					}
@@ -599,7 +598,7 @@ public class MessagesContactsPanel extends UserPanel {
 		};
 		updateContacts(null);
 		add(contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));//TODO update
-		
+
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -609,7 +608,7 @@ public class MessagesContactsPanel extends UserPanel {
 				selectFolder(inbox, INBOX_FOLDER_ID, target);
 				selectMessage(-1, target);
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
@@ -622,7 +621,7 @@ public class MessagesContactsPanel extends UserPanel {
 	public void onNewMessageClose(IPartialPageRequestHandler handler) {
 		handler.add(container);
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		foldersModel.detach();

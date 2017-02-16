@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.LocaleHelper.getCountries;
-import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
+import static org.apache.openmeetings.db.util.LocaleHelper.getCountries;
+import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 
 import java.util.List;
 

@@ -67,7 +67,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				hideNewRecord();
@@ -75,7 +75,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			}
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
 				hideNewRecord();

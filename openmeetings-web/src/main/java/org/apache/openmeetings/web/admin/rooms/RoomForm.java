@@ -94,18 +94,18 @@ public class RoomForm extends AdminBaseForm<Room> {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						Client c = item.getModelObject();
 						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
 								, c.getServer() == null ? 0 : c.getServer().getId());
-						
+
 						updateClients(target);
 					}
 				});
 		}
 	};
 	private IModel<User> moderator2add = Model.of((User)null);
-	
+
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
 		this.roomList = roomList;
@@ -231,11 +231,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 		}));
 		add(new CheckBox("chatOpened"));
 		add(new CheckBox("filesOpened"));
-		add(new CheckBox("autoVideoSelect"));	
-		
-		// Users in this Room 
+		add(new CheckBox("autoVideoSelect"));
+
+		// Users in this Room
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
-		
+
 		// Moderators
 		final Select2Choice<User> moderatorChoice = new Select2Choice<User>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
 			private static final long serialVersionUID = 1L;
@@ -299,7 +299,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 						private static final long serialVersionUID = 1L;
 
 						@Override
-						protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+						protected void onSubmit(AjaxRequestTarget target) {
 							RoomForm.this.getModelObject().getModerators().remove(item.getIndex());
 							target.add(moderatorContainer);
 						}
@@ -321,19 +321,19 @@ public class RoomForm extends AdminBaseForm<Room> {
 				updateView(target);
 			}
 		}.setOutputMarkupId(true));
-		
+
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 
 	void updateClients(AjaxRequestTarget target) {
-		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);  
+		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);
 		final List<Client> clientsInRoom = getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}
-	
+
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Room r = getModelObject();
@@ -403,7 +403,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		updateClients(target);
 		target.appendJavaScript("omRoomPanelInit();");
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		moderator2add.detach();

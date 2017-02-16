@@ -184,7 +184,7 @@ public abstract class FileTreePanel extends Panel {
 			}
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				deleteAll(target);
 			}
 		});
