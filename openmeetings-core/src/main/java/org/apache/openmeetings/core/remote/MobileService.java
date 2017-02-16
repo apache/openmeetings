@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.nextBroadCastId;
-import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
+import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
@@ -37,8 +37,10 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -46,12 +48,14 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -77,6 +81,8 @@ public class MobileService {
 	private RoomDao roomDao;
 	@Autowired
 	private LabelDao labelDao;
+	@Autowired
+	private ChatDao chatDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
@@ -210,6 +216,7 @@ public class MobileService {
 				c.setUserId(u.getId());
 				c.setFirstname(u.getFirstname());
 				c.setLastname(u.getLastname());
+				//TODO rights
 				sessionManager.updateClientByStreamId(streamId, c, false, null);
 
 				add(result, "sid", sd.getSessionId());
@@ -220,7 +227,7 @@ public class MobileService {
 				add(result, "lastname", u.getLastname());
 				add(result, "login", u.getLogin());
 				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
-				add(result, "language", u.getLanguageId()); //TODO rights
+				add(result, "language", u.getLanguageId());
 				add(result, "version", getVersion());
 			}
 		}
@@ -303,26 +310,9 @@ public class MobileService {
 		return result;
 	}
 
+	//designed to do nothing remain for compatibility
 	public Map<String, Object> roomConnect(String SID, Long userId) {
-		Map<String, Object> result = new Hashtable<>();
-		/** FIXME TODO
-		User u = userDao.get(userId);
-		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
-		 //TODO check if we need anything here
-		long broadcastId = nextBroadCastId();
-		c.setSipTransport(true);
-		c.setRoomId(Long.parseLong(c.getScope()));
-		c.setRoomEnter(new Date());
-		c.setBroadCastID(broadcastId);
-		c.setMobile(true);
-		c.setIsBroadcasting(true);
-		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
-		result.put("broadcastId", broadcastId);
-		result.put("publicSid", c.getPublicSID());
-
-		scopeAdapter.sendMessageToCurrentScope("addNewUser", c, false, false);
-		*/
-		return result;
+		return new Hashtable<>();
 	}
 
 	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
@@ -346,7 +336,7 @@ public class MobileService {
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
 		return result;
 	}
-/*
+
 	public void sendChatMessage(String message) {
 		IConnection current = Red5.getConnectionLocal();
 		Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -362,40 +352,42 @@ public class MobileService {
 		msg.add("" + client.getUserId());
 		Room room = roomDao.get(client.getRoomId());
 		msg.add("" + (room.isChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
-		sendMessageWithClient(msg);
+		//sendMessageWithClient(msg);
 
-		"sendVarsToMessageWithClient"
+		//"sendVarsToMessageWithClient"
+	}
+
+	private static boolean isModerator(Client c) {
+		return c.getIsMod() || c.getIsSuperModerator();
 	}
 
 	public List<Map<String, Object>> getRoomChatHistory() {
+		List<Map<String,Object>> myChatList = new ArrayList<>();
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long roomId = currentClient.getRoomId();
+			Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Long roomId = c.getRoomId();
 
 			log.debug("GET CHATROOM: " + roomId);
 
-			List<Map<String,Object>> myChatList = myChats.get(roomId);
-			if (myChatList==null) myChatList = new ArrayList<Map<String,Object>>();
-
-			if (!currentClient.getIsMod() && !currentClient.getIsSuperModerator()) {
-				//current user is not moderator, chat history need to be filtered
-				List<Map<String,Object>> tmpChatList = new LinkedList<Map<String,Object>>(myChatList);
-				for (int i = tmpChatList.size() - 1; i > -1; --i) {
-					@SuppressWarnings("rawtypes")
-					List msgList = (List)tmpChatList.get(i).get("message");
-					if (Boolean.valueOf("" + msgList.get(9))) { //needModeration
-						tmpChatList.remove(i);
-					}
-				}
-				myChatList = tmpChatList;
+			Room r = roomDao.get(roomId);
+			User u = userDao.get(c.getUserId());
+			FastDateFormat format = FastDateFormat.getDateTimeInstance(
+					FastDateFormat.SHORT
+					, FastDateFormat.SHORT
+					, TimeZone.getTimeZone(u.getTimeZoneId())
+					, LocaleHelper.getLocale(u));
+			for (ChatMessage m : chatDao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(c))) {
+				Map<String, Object> mm = new HashMap<>();
+				mm.put("from", String.format("%s %s", m.getFromUser().getFirstname(), m.getFromUser().getLastname()));
+				mm.put("time", format.format(m.getSent()));
+				mm.put("msg", m.getMessage());
+				myChatList.add(mm);
 			}
 
-			return myChatList;
 		} catch (Exception err) {
 			log.error("[getRoomChatHistory] ",err);
-			return null;
 		}
+		return myChatList;
 	}
-*/
 }

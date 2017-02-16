@@ -37,7 +37,6 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 
@@ -45,12 +44,12 @@ public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private long groupId;
 	private List<GroupUser> users2add = new ArrayList<GroupUser>();
-	
+
 	public GroupUsersPanel(String id, long groupId) {
 		super(id);
 		this.groupId = groupId;
 		setOutputMarkupId(true);
-		
+
 		SearchableDataView<GroupUser> dataView = new SearchableDataView<GroupUser>("userList", new GroupUserDataProvider()) {
 			private static final long serialVersionUID = 1L;
 
@@ -77,7 +76,7 @@ public class GroupUsersPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					protected void onSubmit(AjaxRequestTarget target) {
 						if (grpUser.getId() == null) {
 							users2add.remove(grpUser);
 						} else {
@@ -101,7 +100,7 @@ public class GroupUsersPanel extends Panel {
 			}
 		});
 	}
-	
+
 	public static void update(GroupUser grpUser) {
 		UserDao uDao = getBean(UserDao.class);
 		User u = uDao.get(grpUser.getUser().getId());
@@ -113,33 +112,33 @@ public class GroupUsersPanel extends Panel {
 		}
 		uDao.update(u, WebSession.getUserId());
 	}
-	
+
 	void update(long groupId) {
 		this.groupId = groupId;
 		users2add.clear();
 	}
-	
+
 	List<GroupUser> getUsers2add() {
 		return users2add;
 	}
-	
+
 	private class GroupUserDataProvider extends SearchableDataProvider<GroupUser> {
 		private static final long serialVersionUID = 1L;
 
 		GroupUserDataProvider() {
 			super(GroupUserDao.class);
 		}
-		
+
 		@Override
 		protected GroupUserDao getDao() {
 			return (GroupUserDao)super.getDao();
 		}
-		
+
 		@Override
 		public long size() {
 			return users2add.size() + (search == null ? getDao().count(groupId) : getDao().count(groupId, search));
 		}
-		
+
 		@Override
 		public java.util.Iterator<? extends GroupUser> iterator(long first, long count) {
 			List<GroupUser> list = new ArrayList<GroupUser>();
@@ -147,7 +146,7 @@ public class GroupUsersPanel extends Panel {
 			list.addAll(search == null && getSort() == null
 					? getDao().get(groupId, (int)first, (int)count)
 					: getDao().get(groupId, search, (int)first, (int)count, getSortStr()));
-			
+
 			return list.iterator();
 		}
 	}

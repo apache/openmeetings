@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util;
+package org.apache.openmeetings.db.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -53,5 +55,20 @@ public class LocaleHelper {
 			code = newCountry;
 		}
 		return code;
+	}
+
+	public static Locale getLocale(User u) {
+		Long langId = u.getLanguageId();
+		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.languages.get(langId);
+		try {
+			Locale.Builder builder = new Locale.Builder().setLanguage(locale.getLanguage());
+			if (u.getAddress() != null && u.getAddress().getCountry() != null) {
+				builder.setRegion(u.getAddress().getCountry());
+			}
+			locale = builder.build();
+		} catch (Exception e) {
+			log.error("Unexpected Error whilw constructing locale for the user", e.getMessage());
+		}
+		return locale;
 	}
 }

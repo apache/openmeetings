@@ -25,6 +25,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -36,7 +37,7 @@ public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
 	private final User u;
 
 	private RecordingExpiringTemplate(User u, final Recording rec, long remainingDays) {
-		super(getOmSession().getLocale(u));
+		super(LocaleHelper.getLocale(u));
 		this.u = u;
 		this.rec = rec;
 		this.remainingDays = remainingDays;

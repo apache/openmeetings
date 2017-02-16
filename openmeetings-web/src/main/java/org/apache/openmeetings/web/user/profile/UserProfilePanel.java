@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
+import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 

@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplicatio
 import java.util.Locale;
 
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.wicket.core.util.string.ComponentRenderer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -39,7 +40,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		add(new Label("user", invitorName));
 		add(new Label("messageLbl", getString("502", locale)));
 		add(new Label("message", message).setEscapeModelStrings(false));
-		
+
 		add(new WebMarkupContainer("links")
 			.add(new Label("comment_for_link1", getString("503", locale)))
 			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", getString("504", locale))))
@@ -51,6 +52,6 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 
 	public static String getEmail(User invitee, String invitorName, String message, String link) {
 		ensureApplication(invitee.getLanguageId());
-		return ComponentRenderer.renderComponent(new InvitationTemplate(getOmSession().getLocale(invitee), invitorName, message, link)).toString();
+		return ComponentRenderer.renderComponent(new InvitationTemplate(LocaleHelper.getLocale(invitee), invitorName, message, link)).toString();
 	}
 }

@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util;
+package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.LocaleHelper.getCountries;
-import static org.apache.openmeetings.util.LocaleHelper.validateCountry;
+import static org.apache.openmeetings.db.util.LocaleHelper.getCountries;
+import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;

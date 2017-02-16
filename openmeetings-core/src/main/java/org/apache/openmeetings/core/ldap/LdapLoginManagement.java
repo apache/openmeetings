@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.ldap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.LocaleHelper.validateCountry;
+import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
