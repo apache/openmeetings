@@ -72,9 +72,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 @Transactional
 public class UserManager implements IUserManager {
@@ -261,7 +261,7 @@ public class UserManager implements IUserManager {
 	 * default user_level(1) new users will be automatically added to the
 	 * Group with the id specified in the configuration value
 	 * default_group_id
-	 * 
+	 *
 	 * @param login
 	 * @param Userpass
 	 * @param lastname
@@ -366,13 +366,9 @@ public class UserManager implements IUserManager {
 			boolean checkName = userDao.checkLogin(login, User.Type.user, null, null);
 			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.user, null, null);
 			if (checkName && checkEmail) {
-
-				String link = cfgDao.getBaseUrl();
 				String hash = Strings.isEmpty(activatedHash) ? UUID.randomUUID().toString() : activatedHash;
-				link += "activate?u=" + hash;
-
 				if (sendWelcomeMessage && email.length() != 0) {
-					String sendMail = emailManagement.sendMail(login, email, link, sendConfirmation, languageId);
+					String sendMail = emailManagement.sendMail(login, email, hash, sendConfirmation, languageId);
 					if (!sendMail.equals("success")) {
 						return -19L;
 					}
@@ -478,7 +474,7 @@ public class UserManager implements IUserManager {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public Long getLanguage(Locale loc) {
 		if (loc != null) {
@@ -547,7 +543,7 @@ public class UserManager implements IUserManager {
 		//TODO FIXME should we update fields on login ????
 		u.setLastlogin(new Date());
 		u = userDao.update(u, pass, Long.valueOf(-1));
-		
+
 		return u;
 	}
 }

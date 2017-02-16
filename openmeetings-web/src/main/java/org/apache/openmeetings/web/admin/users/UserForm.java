@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -113,11 +114,13 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		try {
 			boolean isNew = (u.getId() == null);
-			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
 			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
 			if (isNew && sendEmailAtRegister) {
-				String link = getBean(ConfigurationDao.class).getBaseUrl();
-				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), generalForm.getEmail(), link, false, null);
+				u.setActivatehash(UUID.randomUUID().toString());
+			}
+			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
+			if (isNew && sendEmailAtRegister) {
+				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), generalForm.getEmail(), u.getActivatehash(), false, null);
 				if (!sendMail.equals("success")) {
 					throw new Exception("Mail for new user is not sent");
 				}
