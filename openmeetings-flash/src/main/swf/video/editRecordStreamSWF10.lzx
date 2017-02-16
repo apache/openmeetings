@@ -252,7 +252,7 @@
 		//stop will not call clear as there is no NetStream
 		videoview._stop();
 		videoview.clear();
-		var _camera = canvas.commonVideoViewContent.getCam(availableCams.getValue(), videoview);
+		var _camera = canvas.commonVideoViewContent.getCam(availableCams.getValue(), cam_default_width, cam_default_height);
 		if (_camera != null) {
 			videoview.attachCamera(_camera);
 		}

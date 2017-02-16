@@ -661,7 +661,7 @@
 	]]>
 	</method>
 
-	<method name="getCam" args="valCam, videoview">
+	<method name="getCam" args="valCam, width, height">
 	<![CDATA[
 		if ($debug) Debug.write("Entering getCam ...", valCam);
 		if (valCam == null) {
@@ -669,17 +669,17 @@
 		}
 		var _camera = Camera.getCamera(valCam);
 		if (_camera != null) {
-			if ($debug) Debug.write("videoview: ", videoview);
+			if ($debug) Debug.write("size: ", width, height);
 
 			if ($debug) Debug.write("_camera.setQuality BEST: ", canvas.isInterview, (canvas.bandwidthNeededBest * 2), canvas.camQualityBest);
 			if (canvas.isInterview) {
 				//we need a fixed frame rate for the videos to merge them later on
-				_camera.setMode(videoview.width, videoview.height, 24, true);
+				_camera.setMode(320, 260, 24, true); //FIXME TODO hardcoded in different places
 				if ($debug) Debug.warn("IS INTERVIEW ");
 				_camera.setQuality(0, 98);
 			} else {
-				if ($debug) Debug.write("_camera.setMode: ", videoview.width, videoview.height, canvas.framesPerSecond, true);
-				_camera.setMode(videoview.width, videoview.height, canvas.framesPerSecond, true);
+				if ($debug) Debug.write("_camera.setMode: ", width, height, canvas.framesPerSecond, true);
+				_camera.setMode(width, height, canvas.framesPerSecond, true);
 				if ($debug) Debug.warn("IS NO INTERVIEW ");
 				_camera.setQuality(canvas.bandwidthNeededBest, canvas.camQualityBest);
 			}
@@ -791,7 +791,7 @@
 				if ($debug) Debug.write("videoWindow: ", videoWindow);
 				videoWindow.setAttribute('isremote', false);
 				var _micro = getMic(getAvSetting('mic', g, 0));
-				var _camera = getCam(getAvSetting('cam', g, 0), videoview);
+				var _camera = getCam(getAvSetting('cam', g, 0), canvas.currentClient.VWidth, canvas.currentClient.VHeight);
 				if ($debug) Debug.write("startAvBroadcast", _camera, _micro, settings, videoview);
 
 				if ($debug) Debug.write("BroadcastId: ", canvas.currentClient.broadCastID);
