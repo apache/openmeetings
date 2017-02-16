@@ -60,7 +60,7 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		this.type = type;
 		this.uid = UUID.randomUUID().toString();
 	}
-	
+
 	public Date getTimestamp() {
 		return timestamp;
 	}

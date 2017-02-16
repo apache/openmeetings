@@ -35,8 +35,9 @@ import java.util.UUID;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -52,7 +53,6 @@ import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.RoomMessage.Type;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
@@ -62,7 +62,6 @@ import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.event.IEvent;
@@ -71,15 +70,11 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
-import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
-import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
-import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.whiteboard.WhiteboardBehavior;
@@ -133,7 +128,7 @@ public class RoomPanel extends BasePanel {
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
-			broadcast(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
+			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			getMainPanel().getChat().roomEnter(r, target);
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
@@ -235,7 +230,7 @@ public class RoomPanel extends BasePanel {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
 				log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 				if (!allowed) {
-					User u = getBean(UserDao.class).get(getUserId());
+					User u = getClient().getUser();
 					for (RoomGroup ro : r.getRoomGroups()) {
 						for (GroupUser ou : u.getGroupUsers()) {
 							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
@@ -286,7 +281,7 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				menu.exit(handler, true);
+				menu.exit(handler);
 			}
 		});
 	}
@@ -421,32 +416,11 @@ public class RoomPanel extends BasePanel {
 			if (soap != null && soap.isModerator()) {
 				c.getRights().add(Right.superModerator);
 			} else {
-				User u = getBean(UserDao.class).get(getUserId());
-				Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+				//FIXME TODO !!! c.getUser != getUserId
+				Right rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
 				if (rr != null) {
 					c.getRights().add(rr);
 				}
-			}
-		}
-	}
-
-	public static void broadcast(final RoomMessage m) {
-		WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor();
-		for (Client c : getRoomClients(m.getRoomId())) {
-			try {
-				final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
-				if (wsConnection != null) {
-					executor.run(new Runnable() {
-						@Override
-						public void run() {
-							wsConnection.sendMessage(m);
-						}
-					});
-				}
-			} catch (Exception e) {
-				log.error("Error while broadcasting message to room", e);
 			}
 		}
 	}
@@ -462,17 +436,6 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 		return false;
-	}
-
-	public static void sendRoom(long roomId, String msg) {
-		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
-		for (Client c : getRoomClients(roomId)) {
-			try {
-				reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
-			} catch (Exception e) {
-				log.error("Error while sending message to room", e);
-			}
-		}
 	}
 
 	@Override
@@ -506,7 +469,7 @@ public class RoomPanel extends BasePanel {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("if (typeof roomUnload == 'function') { roomUnload(); }");
-		RoomMenuPanel.roomExit(getClient());
+		Application.exitRoom(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
 
@@ -560,7 +523,7 @@ public class RoomPanel extends BasePanel {
 				break;
 		}
 		if (reqType != null) {
-			RoomPanel.broadcast(new TextRoomMessage(getRoom().getId(), getUserId(), reqType, getClient().getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), reqType, getClient().getUid()));
 		}
 	}
 
@@ -585,11 +548,11 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void kickUser(AjaxRequestTarget target, Client client) {
-		RoomPanel.broadcast(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
 	}
 
 	public void broadcast(AjaxRequestTarget target, Client client) {
-		broadcast(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+		WebSocketHelper.sendRoom(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);
 	}
 

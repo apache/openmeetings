@@ -25,8 +25,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
+import static org.apache.openmeetings.web.app.Application.exit;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
@@ -36,23 +36,23 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
-import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.UserInfoDialog;
@@ -78,8 +78,6 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
@@ -87,9 +85,6 @@ import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
-import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
-import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
-import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.time.Duration;
@@ -119,28 +114,7 @@ public class MainPanel extends Panel {
 
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
-			if (client != null) {
-				WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
-				IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-				Executor executor = settings.getWebSocketPushMessageExecutor();
-				try {
-					final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), client.getSessionId(), new PageIdKey(client.getPageId()));
-					if (wsConnection != null) {
-						executor.run(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									wsConnection.sendMessage(new byte[1], 0, 1);
-								} catch (IOException e) {
-									log.error("Error while sending ping message to room", e);
-								}
-							}
-						});
-					}
-				} catch (Exception e) {
-					log.error("Error preparing executor", e);
-				}
-			}
+			WebSocketHelper.sendClient(client, new byte[1]);
 		}
 	};
 	private final ExtendedClientProperties extProps = new ExtendedClientProperties();
@@ -249,7 +223,7 @@ public class MainPanel extends Panel {
 			@Override
 			protected void onConnect(ConnectedMessage msg) {
 				super.onConnect(msg);
-				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId());
+				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
 				addOnlineUser(client);
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
@@ -279,11 +253,8 @@ public class MainPanel extends Panel {
 
 			private void closeHandler(AbstractClientMessage msg) {
 				//no chance to stop pingTimer here :(
-				if (client != null && client.getRoomId() != null) {
-					RoomMenuPanel.roomExit(client);
-				}
 				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
-				removeOnlineUser(client);
+				exit(client);
 				client = null;
 			}
 		});

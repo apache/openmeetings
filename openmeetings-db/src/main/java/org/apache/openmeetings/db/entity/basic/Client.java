@@ -16,9 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.app;
-
-import static org.apache.openmeetings.web.app.Application.getBean;
+package org.apache.openmeetings.db.entity.basic;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -66,16 +64,25 @@ public class Client implements IDataProviderEntity {
 	private int width = 0;
 	private int height = 0;
 
-	public Client(String sessionId, Long userId) {
-		this(sessionId, 0, userId);
+	public Client(String sessionId, Long userId, UserDao dao) {
+		this(sessionId, 0, userId, dao);
 	}
 
-	public Client(String sessionId, int pageId, Long userId) {
+	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
-		this.user = getBean(UserDao.class).get(userId);
+		this.user = dao.get(userId);
 		this.connectedSince = new Date();
 		uid = UUID.randomUUID().toString();
+	}
+
+	public Client(org.apache.openmeetings.db.entity.room.Client rcl, UserDao dao) {
+		this.sessionId = UUID.randomUUID().toString();
+		this.pageId = 0;
+		this.user = dao.get(rcl.getUserId());
+		this.connectedSince = new Date();
+		uid = rcl.getPublicSID();
+		this.roomId = rcl.getRoomId();
 	}
 
 	public String getSessionId() {

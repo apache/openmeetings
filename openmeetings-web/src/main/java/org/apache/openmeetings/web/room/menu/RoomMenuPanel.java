@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.removeUserFromRoom;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
@@ -33,7 +33,6 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -42,7 +41,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.InvitationDialog;
@@ -128,7 +126,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightWb, room.getClient().getUid()));
+			sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightWb, room.getClient().getUid()));
 		}
 	};
 	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false) {
@@ -136,7 +134,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			RoomPanel.broadcast(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightAv, room.getClient().getUid()));
+			sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightAv, room.getClient().getUid()));
 		}
 	};
 	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString(24), Application.getString(1483), false) {
@@ -276,7 +274,7 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		PollDao pollDao = getBean(PollDao.class);
 		boolean pollExists = pollDao.hasPoll(r.getId());
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
 		filesMenu.setEnabled(room.getSidebar().isShowFiles());
@@ -332,12 +330,8 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
-		exit(handler, true);
-	}
-
-	public void exit(IPartialPageRequestHandler handler, boolean broadcast) {
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
-			roomExit(room.getClient(), broadcast);
+			Application.exitRoom(room.getClient());
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
@@ -345,18 +339,6 @@ public class RoomMenuPanel extends Panel {
 				url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
 			}
 			throw new RedirectToUrlException(url);
-		}
-	}
-
-	public static void roomExit(Client c) {
-		roomExit(c, true);
-	}
-
-	public static void roomExit(Client c, boolean broadcast) {
-		Long roomId = c.getRoomId();
-		removeUserFromRoom(c);
-		if (broadcast && roomId != null) {
-			RoomPanel.broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
 		}
 	}
 }

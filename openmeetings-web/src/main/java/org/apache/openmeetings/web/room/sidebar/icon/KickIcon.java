@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 
