@@ -113,6 +113,7 @@ public class MainPanel extends Panel {
 
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
+			log.debug("Sending WebSocket PING");
 			WebSocketHelper.sendClient(client, new byte[1]);
 		}
 	};
