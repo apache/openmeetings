@@ -28,14 +28,14 @@ import org.apache.openmeetings.db.entity.server.Server;
 
 /**
  * Methods to add/get/remove {@link Client}s to the session
- * 
- * 
+ *
+ *
  * @author sebawagner
  *
  */
 public interface ISessionManager {
 	void clearCache();
-	
+
 	/**
 	 * Notified on server start, when the session manager should be started and
 	 * eventually caches cleared/setup
@@ -45,7 +45,7 @@ public interface ISessionManager {
 	Client add(Client c, Server server);
 	/**
 	 * add a new client item
-	 * 
+	 *
 	 * @param streamId
 	 * @param scopeName
 	 * @param remotePort
@@ -57,17 +57,17 @@ public interface ISessionManager {
 	Client addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
 
 	Collection<Client> getClients();
-	
+
 	/**
 	 * loads the server into the client (only if database cache is used)
-	 * 
+	 *
 	 * @return
 	 */
 	Collection<Client> getClientsWithServer();
 
 	/**
 	 * Get a client by its streamId
-	 * 
+	 *
 	 * @param streamId
 	 * @param server
 	 * @return
@@ -75,42 +75,43 @@ public interface ISessionManager {
 	Client getClientByStreamId(String streamId, Server server);
 
 	/**
-	 * get a client by its publicSID and the server, 
-	 * 
+	 * get a client by its publicSID and the server,
+	 *
 	 * @param publicSID
 	 * @param server
 	 * @return
 	 */
 	Client getClientByPublicSID(String publicSID, Server server);
-	
+
 	/**
-	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores 
+	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores
 	 * if the server part, so it will deliver any client just by its publicSID.<br/>
 	 * <br/>
 	 * <b>Note:</b>
-	 * This method requires more time to find the user, so under normal circumstances 
+	 * This method requires more time to find the user, so under normal circumstances
 	 * you should use {@link #getClientByPublicSID(String, boolean, Server)}!
-	 * 
+	 *
 	 * @param publicSID
 	 * @return
 	 */
 	ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
 
 	/**
-	 * 
+	 *
 	 * @param userId
 	 * @return
-	 * 
+	 *
 	 * @deprecated There could be multiple users logged in with the same userid,
 	 *             then this call would return a list not a single user
 	 */
+	@Deprecated
 	Client getClientByUserId(Long userId);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
 	 * swap the values to the session object of the user that holds the full
 	 * session object
-	 * 
+	 *
 	 * @param streamId
 	 * @param rcm
 	 * @return
@@ -119,11 +120,11 @@ public interface ISessionManager {
 
 	/**
 	 * Update the session object
-	 * 
+	 *
 	 * updateRoomCount is only <i>one</i> time true, in
 	 * ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, String)
 	 * .
-	 * 
+	 *
 	 * @param streamId
 	 * @param rcm
 	 * @param updateRoomCount
@@ -134,7 +135,7 @@ public interface ISessionManager {
 
 	/**
 	 * Remove a client from the session store
-	 * 
+	 *
 	 * @param streamId
 	 * @return
 	 */
@@ -145,16 +146,16 @@ public interface ISessionManager {
 	 * needed cause it is invoked internally AFTER the current user has been
 	 * already removed from the ClientList to see if the Room is empty again and
 	 * the PollList can be removed
-	 * @param roomId 
+	 * @param roomId
 	 * @return
 	 */
 	List<Client> getClientListByRoom(Long roomId);
-	
+
 	Collection<Client> getClientListByRoomAll(Long roomId);
 
 	/**
 	 * get the current Moderator in this room
-	 * 
+	 *
 	 * @param roomname
 	 * @return
 	 */
@@ -162,7 +163,7 @@ public interface ISessionManager {
 
 	/**
 	 * Get list of current client sessions
-	 * 
+	 *
 	 * @param start
 	 * @param max
 	 * @param orderby
@@ -173,7 +174,7 @@ public interface ISessionManager {
 
 	/**
 	 * returns number of current users recording
-	 * 
+	 *
 	 * @param roomId
 	 * @return
 	 */
@@ -181,16 +182,16 @@ public interface ISessionManager {
 
 	/**
 	 * returns a number of current users publishing screensharing
-	 * 
+	 *
 	 * @param roomId
 	 * @return
 	 */
 	long getPublishingCount(long roomId);
-	
+
 	/**
-	 * Get a list of all servers of all rooms on that server, serverId = null 
+	 * Get a list of all servers of all rooms on that server, serverId = null
 	 * means it is a local session on the master.
-	 * 
+	 *
 	 * @param server
 	 * @return a set, a roomId can be only one time in this list
 	 */
@@ -198,7 +199,7 @@ public interface ISessionManager {
 
 	/**
 	 * Get some statistics about the current sessions
-	 * 
+	 *
 	 * @return
 	 */
 	String getSessionStatistics();

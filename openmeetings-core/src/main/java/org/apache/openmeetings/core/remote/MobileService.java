@@ -29,6 +29,7 @@ import static org.apache.openmeetings.util.Version.getVersion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +38,10 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.core.remote.LanguageService.Language;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -92,6 +95,21 @@ public class MobileService {
 	public String refreshSession(String sid) {
 		sessionDao.check(sid);
 		return "ok";
+	}
+
+	/**
+	 * @return - List of all available Languages
+	 */
+	public List<Language> getLanguages() {
+		List<Language> result = new ArrayList<Language>();
+		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+			result.add(new Language(e.getKey(), e.getValue().toLanguageTag(), e.getValue().getDisplayName(Locale.ENGLISH)));
+		}
+		return result;
+	}
+
+	public long switchMicMuted(String publicSID, boolean mute) {
+		return scopeAdapter.switchMicMuted(publicSID, mute);
 	}
 
 	public Map<String, Object> checkServer() {
@@ -336,28 +354,42 @@ public class MobileService {
 		return result;
 	}
 
-	public void sendChatMessage(String message) {
+	public void sendChatMessage(String msg) {
 		IConnection current = Red5.getConnectionLocal();
-		Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		List<String> msg = new ArrayList<String>();
-		msg.add("chat"); //'privatechat'
-		msg.add(""); //date-time
-		msg.add("newtextmessage");
-		msg.add(client.getUsername());
-		msg.add(message);
-		msg.add(client.getUsercolor());
-		msg.add(client.getPublicSID()); //om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
-		msg.add("false");// canvas.isrtl;
-		msg.add("" + client.getUserId());
-		Room room = roomDao.get(client.getRoomId());
-		msg.add("" + (room.isChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
-		//sendMessageWithClient(msg);
+		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-		//"sendVarsToMessageWithClient"
+		ChatMessage m = new ChatMessage();
+		m.setMessage(msg);
+		m.setSent(new Date());
+		User u = userDao.get(c.getUserId());
+		m.setFromUser(u);
+		Room r = roomDao.get(c.getRoomId());
+		m.setToRoom(r);
+		m.setNeedModeration(r.isChatModerated() && !isModerator(c));
+		chatDao.update(m);
+		FastDateFormat fmt = getFmt(u);
+		scopeAdapter.sendMessageWithClient(Arrays.asList("chat", encodeChatMessage(m, fmt)));
+		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u.getId(), Arrays.asList(m), fmt, null));
 	}
 
 	private static boolean isModerator(Client c) {
 		return c.getIsMod() || c.getIsSuperModerator();
+	}
+
+	private static FastDateFormat getFmt(User u) {
+		return FastDateFormat.getDateTimeInstance(
+				FastDateFormat.SHORT
+				, FastDateFormat.SHORT
+				, TimeZone.getTimeZone(u.getTimeZoneId())
+				, LocaleHelper.getLocale(u));
+	}
+
+	private static Map<String, Object> encodeChatMessage(ChatMessage m, FastDateFormat fmt) {
+		Map<String, Object> mm = new HashMap<>();
+		mm.put("from", String.format("%s %s", m.getFromUser().getFirstname(), m.getFromUser().getLastname()));
+		mm.put("time", fmt.format(m.getSent()));
+		mm.put("msg", m.getMessage());
+		return mm;
 	}
 
 	public List<Map<String, Object>> getRoomChatHistory() {
@@ -371,17 +403,9 @@ public class MobileService {
 
 			Room r = roomDao.get(roomId);
 			User u = userDao.get(c.getUserId());
-			FastDateFormat format = FastDateFormat.getDateTimeInstance(
-					FastDateFormat.SHORT
-					, FastDateFormat.SHORT
-					, TimeZone.getTimeZone(u.getTimeZoneId())
-					, LocaleHelper.getLocale(u));
+			FastDateFormat fmt = getFmt(u);
 			for (ChatMessage m : chatDao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(c))) {
-				Map<String, Object> mm = new HashMap<>();
-				mm.put("from", String.format("%s %s", m.getFromUser().getFirstname(), m.getFromUser().getLastname()));
-				mm.put("time", format.format(m.getSent()));
-				mm.put("msg", m.getMessage());
-				myChatList.add(mm);
+				myChatList.add(encodeChatMessage(m, fmt));
 			}
 
 		} catch (Exception err) {
