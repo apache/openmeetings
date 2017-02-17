@@ -27,6 +27,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -38,7 +39,6 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.remote.LanguageService.Language;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -412,5 +412,20 @@ public class MobileService {
 			log.error("[getRoomChatHistory] ",err);
 		}
 		return myChatList;
+	}
+
+	public static class Language implements Serializable {
+		private static final long serialVersionUID = 1L;
+		public long language_id;
+		public String code;
+		public String name;
+
+		public Language() {}
+
+		public Language(long language_id, String code, String name) {
+			this.language_id = language_id;
+			this.code = code;
+			this.name = name;
+		}
 	}
 }
