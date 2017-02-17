@@ -18,8 +18,18 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import java.io.File;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.util.resource.FileResourceStream;
 
@@ -48,9 +58,39 @@ public class DownloadMenuItem extends MenuItem {
 
 	@Override
 	public void onClick(AjaxRequestTarget target) {
-		File f = tree.getLastSelected().getFile(ext);
-		tree.downloader.setFileName(f.getName());
-		tree.downloader.setResourceStream(new FileResourceStream(f));
-		tree.downloader.initiate(target);
+		FileItem fi = tree.getLastSelected();
+		File f = fi.getFile(ext);
+		if (f != null && f.exists()) {
+			if (ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())) {
+				File[] ff = f.getParentFile().listFiles(new OriginalFilter(fi, ext));
+				if (ff.length > 0) {
+					f = ff[0];
+				}
+			}
+			tree.downloader.setFileName(f.getName());
+			tree.downloader.setResourceStream(new FileResourceStream(f));
+			tree.downloader.initiate(target);
+		}
+	}
+
+	private static class OriginalFilter implements FileFilter {
+		final FileItem fi;
+		Set<String> exclusions = new HashSet<>();
+
+		OriginalFilter(FileItem fi, String ext) {
+			this.fi = fi;
+			exclusions.add(EXTENSION_JPG);
+			if (Type.Presentation == fi.getType()) {
+				exclusions.add(EXTENSION_PDF);
+				exclusions.add(EXTENSION_SWF);
+			}
+		}
+
+		@Override
+		public boolean accept(File f) {
+			String n = f.getName();
+			String ext = OmFileHelper.getFileExt(n);
+			return n.startsWith(fi.getHash()) && !exclusions.contains(ext);
+		}
 	}
 }
