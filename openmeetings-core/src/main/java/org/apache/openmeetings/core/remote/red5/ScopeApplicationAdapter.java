@@ -171,7 +171,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 		IServiceCapableConnection service = (IServiceCapableConnection) conn;
 		String streamId = conn.getClient().getId();
-		
+
 		log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope " + conn.getScope().getName());
 
 		// Set StreamId in Client
@@ -705,7 +705,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
-			new MessageSender(current, "newStream", clientObjectSendToSync) {
+			new MessageSender(current, "newStream", clientObjectSendToSync, this) {
 				@Override
 				public boolean filter(IConnection conn) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
@@ -1198,7 +1198,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			IScope scope = getRoomScope(roomId.toString());
 
-			new MessageSender(scope, "newMessageByRoomAndDomain", message) {
+			new MessageSender(scope, "newMessageByRoomAndDomain", message, this) {
 				@Override
 				public boolean filter(IConnection conn) {
 					IClient client = conn.getClient();
@@ -1489,7 +1489,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToScope(final Long roomId, String method, Object obj) {
-		new MessageSender(getRoomScope("" + roomId), method, obj) {
+		new MessageSender(getRoomScope("" + roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
@@ -1529,7 +1529,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param sendScreen send to the current client as well
 	 */
 	public void sendMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
-		new MessageSender(remoteMethodName, newMessage) {
+		new MessageSender(remoteMethodName, newMessage, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
@@ -1539,29 +1539,31 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}.start();
 	}
 
-	public abstract class MessageSender extends Thread {
+	public static abstract class MessageSender extends Thread {
 		final IScope scope;
 		final IConnection current;
 		final String remoteMethodName;
 		final Object newMessage;
+		final IPendingServiceCallback callback;
 
-		public MessageSender(final String remoteMethodName, final Object newMessage) {
-			this((IScope)null, remoteMethodName, newMessage);
+		public MessageSender(final String remoteMethodName, final Object newMessage, IPendingServiceCallback callback) {
+			this((IScope)null, remoteMethodName, newMessage, callback);
 		}
 
-		public MessageSender(IScope _scope, String remoteMethodName, Object newMessage) {
-			this(Red5.getConnectionLocal(), _scope, remoteMethodName, newMessage);
+		public MessageSender(IScope _scope, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
+			this(Red5.getConnectionLocal(), _scope, remoteMethodName, newMessage, callback);
 		}
 
-		public MessageSender(IConnection current, String remoteMethodName, Object newMessage) {
-			this(current, null, remoteMethodName, newMessage);
+		public MessageSender(IConnection current, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
+			this(current, null, remoteMethodName, newMessage, callback);
 		}
 
-		public MessageSender(IConnection current, IScope _scope, String remoteMethodName, Object newMessage) {
+		public MessageSender(IConnection current, IScope _scope, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
 			this.current = current;
 			scope = _scope == null ? current.getScope() : _scope;
 			this.remoteMethodName = remoteMethodName;
 			this.newMessage = newMessage;
+			this.callback = callback;
 		}
 
 		public abstract boolean filter(IConnection conn);
@@ -1582,7 +1584,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 							if (filter(conn)) {
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, callback);
 							count++;
 						}
 					}
@@ -1817,7 +1819,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	@SuppressWarnings({ "rawtypes" })
 	public boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
-		new MessageSender("sendRemoteCursorEvent", messageObj) {
+		new MessageSender("sendRemoteCursorEvent", messageObj, this) {
 
 			@Override
 			public boolean filter(IConnection conn) {
