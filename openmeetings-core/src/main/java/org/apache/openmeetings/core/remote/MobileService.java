@@ -40,6 +40,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.LanguageService.Language;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.MessageSender;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
@@ -368,8 +369,29 @@ public class MobileService {
 		m.setNeedModeration(r.isChatModerated() && !isModerator(c));
 		chatDao.update(m);
 		FastDateFormat fmt = getFmt(u);
-		scopeAdapter.sendMessageWithClient(Arrays.asList("chat", encodeChatMessage(m, fmt)));
+		sendChatMessage(c, m, fmt);
 		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u.getId(), Arrays.asList(m), fmt, null));
+	}
+
+	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
+		sendChatMessage(sessionManager.getClientByPublicSID(uid, null), m, fmt);
+	}
+
+	public void sendChatMessage(Client c, ChatMessage m, FastDateFormat fmt) {
+		HashMap<String, Object> hsm = new HashMap<String, Object>();
+		hsm.put("client", c);
+		hsm.put("message", Arrays.asList("chat", encodeChatMessage(m, fmt)));
+
+		final Long roomId = c.getRoomId();
+		//Sync to all users of current scope
+		new MessageSender(scopeAdapter.getRoomScope("" + roomId), "sendVarsToMessageWithClient", hsm, scopeAdapter) {
+			@Override
+			public boolean filter(IConnection conn) {
+				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				return rcl.isScreenClient()
+						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
+			}
+		}.start();
 	}
 
 	private static boolean isModerator(Client c) {

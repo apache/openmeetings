@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -52,6 +53,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -119,7 +121,7 @@ public class Chat extends Panel {
 	public static CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("chatReinit(");
 		sb.append('\'').append(ID_ALL).append('\'')
-		.append(',').append('\'').append(ID_ROOM_PREFIX).append('\'');
+				.append(',').append('\'').append(ID_ROOM_PREFIX).append('\'');
 		return sb.append("); ");
 	}
 
@@ -203,6 +205,8 @@ public class Chat extends Panel {
 						dao.update(m);
 						JSONObject msg = getMessage(Arrays.asList(m));
 						if (m.getToRoom() != null) {
+							String uid = findParent(MainPanel.class).getClient().getUid(); //TODO HACK
+							getBean(MobileService.class).sendChatMessage(uid, m, getDateFormat()); //let's send to mobile users
 							WebSocketHelper.sendRoom(m, msg);
 						} else if (m.getToUser() != null) {
 							WebSocketHelper.sendUser(getUserId(), msg.toString());
