@@ -75,7 +75,14 @@ public abstract class FileTreePanel extends Panel {
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
 	final FileItemTree tree;
-	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>());
+	final AjaxSplitButton download = new AjaxSplitButton("download", new ArrayList<IMenuItem>()) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target, IMenuItem item) {
+			item.onClick(target);
+		}
+	};
 	private final Form<Void> form = new Form<Void>("form");
 	private final AddFolderDialog addFolder;
 	private final ConfirmableBorderDialog trashConfirm;
