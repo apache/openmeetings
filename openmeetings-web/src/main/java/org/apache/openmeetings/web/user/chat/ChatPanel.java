@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.user.chat.Chat.getReinit;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -65,7 +67,7 @@ public class ChatPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
-		handler.appendJavaScript(String.format("if (typeof removeChatTab == 'function') { removeChatTab('%1$s%2$d'); }", Chat.ID_ROOM_PREFIX, r.getId()));
+		handler.appendJavaScript(String.format("if (typeof removeChatTab == 'function') { removeChatTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
 		if (!showDashboardChat) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(function() {");
@@ -80,7 +82,7 @@ public class ChatPanel extends BasePanel {
 		if (handler != null) {
 			handler.add(this);
 			if (visible) {
-				handler.appendJavaScript("chatReinit();");
+				handler.appendJavaScript(getReinit());
 			}
 		}
 	}

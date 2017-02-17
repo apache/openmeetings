@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
+import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
+import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -46,7 +49,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -62,7 +64,6 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -73,10 +74,6 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(Chat.class, webAppRootKey);
-	private static final String ID_TAB_PREFIX = "chatTab-";
-	private static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
-	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
-	private static final String ID_ALL = ID_TAB_PREFIX + "all";
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
@@ -92,7 +89,7 @@ public class Chat extends Panel {
 				if (m.isNeedModeration() && isModerator(getUserId(), roomId)) {
 					m.setNeedModeration(false);
 					dao.update(m);
-					sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept").toString());
+					WebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
 				} else {
 					log.error("It seems like we are being hacked!!!!");
 				}
@@ -102,47 +99,12 @@ public class Chat extends Panel {
 		}
 	};
 
-	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
-		String scope, scopeName;
-		if (m.getToUser() != null) {
-			User u = curUserId == m.getToUser().getId() ? m.getFromUser() : m.getToUser();
-			scope = ID_USER_PREFIX + u.getId();
-			scopeName = String.format("%s %s", u.getFirstname(), u.getLastname());
-		} else if (m.getToRoom() != null) {
-			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
-			scopeName = String.format("%s %s", Application.getString(406), m.getToRoom().getId());
-			o.put("needModeration", m.isNeedModeration());
-		} else {
-			scope = ID_ALL;
-			scopeName = Application.getString(1494);
-		}
-		return o.put("scope", scope).put("scopeName", scopeName);
-	}
-
 	public JSONObject getMessage(List<ChatMessage> list) {
 		return getMessage(getUserId(), list);
 	}
 
-	private JSONObject getMessage(long curUserId, List<ChatMessage> list) {
-		JSONArray arr = new JSONArray();
-		for (ChatMessage m : list) {
-			String smsg = m.getMessage();
-			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
-			arr.put(setScope(new JSONObject(), m, curUserId)
-				.put("id", m.getId())
-				.put("message", smsg)
-				.put("from", new JSONObject()
-						.put("id", m.getFromUser().getId())
-						.put("name", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
-						.put("img", getUrl(getRequestCycle(), m.getFromUser().getId()))
-
-					)
-				.put("actions", curUserId == m.getFromUser().getId() ? "short" : "full")
-				.put("sent", getDateFormat().format(m.getSent())));
-		}
-		return new JSONObject()
-			.put("type", "chat")
-			.put("msg", arr);
+	public JSONObject getMessage(Long userId, List<ChatMessage> list) {
+		return WebSocketHelper.getMessage(getUserId(), list, getDateFormat(), (o, u) -> o.put("img", getUrl(getRequestCycle(), u)));
 	}
 
 	public Chat(String id) {
@@ -152,6 +114,13 @@ public class Chat extends Panel {
 
 		add(acceptMessage);
 		add(new ChatForm("sendForm"));
+	}
+
+	public static CharSequence getReinit() {
+		StringBuilder sb = new StringBuilder("chatReinit(");
+		sb.append('\'').append(ID_ALL).append('\'')
+		.append(',').append('\'').append(ID_ROOM_PREFIX).append('\'');
+		return sb.append("); ");
 	}
 
 	public CharSequence addRoom(Room r) {
@@ -181,16 +150,11 @@ public class Chat extends Panel {
 			list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
 		}
 		list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
+		StringBuilder sb = new StringBuilder(getReinit());
 		if (list.size() > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("chatReinit(); addChatMessage(").append(getMessage(list).toString()).append(");");
-			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
+			sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
 		}
-	}
-
-	private static void sendRoom(ChatMessage m, String msg) {
-		WebSocketHelper.sendRoom(m.getToRoom().getId(), msg
-				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator)));
+		response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 	}
 
 	private class ChatForm extends Form<Void> {
@@ -237,15 +201,15 @@ public class Chat extends Panel {
 							//no-op
 						}
 						dao.update(m);
-						String msg = getMessage(Arrays.asList(m)).toString();
+						JSONObject msg = getMessage(Arrays.asList(m));
 						if (m.getToRoom() != null) {
-							sendRoom(m, msg);
+							WebSocketHelper.sendRoom(m, msg);
 						} else if (m.getToUser() != null) {
-							WebSocketHelper.sendUser(getUserId(), msg);
-							msg = getMessage(m.getToUser().getId(), Arrays.asList(m)).toString();
-							WebSocketHelper.sendUser(m.getToUser().getId(), msg);
+							WebSocketHelper.sendUser(getUserId(), msg.toString());
+							msg = getMessage(m.getToUser().getId(), Arrays.asList(m));
+							WebSocketHelper.sendUser(m.getToUser().getId(), msg.toString());
 						} else {
-							WebSocketHelper.sendAll(msg);
+							WebSocketHelper.sendAll(msg.toString());
 						}
 						chatMessage.setDefaultModelObject("");
 						target.add(chatMessage);

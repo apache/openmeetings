@@ -27,6 +27,7 @@ var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 	, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 	, closedHeight = "20px", openedHeight = "345px";
 var emoticon = new CSSEmoticon();
+var allPrefix = "All", roomPrefix = "Room ";
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		try {
@@ -42,9 +43,10 @@ $(function() {
 			//no-op
 		}
 	});
-	chatReinit();
 });
-function chatReinit() {
+function chatReinit(_allPrefix, _roomPrefix) {
+	allPrefix = _allPrefix;
+	roomPrefix = _roomPrefix;
 	initChatToolbar();
 	chatTabs = $("#chatTabs").tabs({
 		activate: function(event, ui) {
@@ -94,6 +96,9 @@ function addChatTab(id, label) {
 	}
 	if ($('#chat').length < 1 || $('#' + id).length) {
 		return;
+	}
+	if (!label) {
+		label = id == "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 	}
 	var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 	if (id.indexOf("chatTab-r") != 0) {

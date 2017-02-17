@@ -23,12 +23,17 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -38,11 +43,17 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class WebSocketHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(WebSocketHelper.class, webAppRootKey);
+	public static final String ID_TAB_PREFIX = "chatTab-";
+	public static final String ID_ALL = ID_TAB_PREFIX + "all";
+	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
+	public static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
 
 	public static void sendClient(final Client c, byte[] b) {
 		if (c != null) {
@@ -63,6 +74,49 @@ public class WebSocketHelper {
 
 	public static void sendRoom(final Long roomId, final String m) {
 		sendRoom(roomId, m, null);
+	}
+
+	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
+		String scope, scopeName = null;
+		if (m.getToUser() != null) {
+			User u = curUserId == m.getToUser().getId() ? m.getFromUser() : m.getToUser();
+			scope = ID_USER_PREFIX + u.getId();
+			scopeName = String.format("%s %s", u.getFirstname(), u.getLastname());
+		} else if (m.getToRoom() != null) {
+			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
+			o.put("needModeration", m.isNeedModeration());
+		} else {
+			scope = ID_ALL;
+		}
+		return o.put("scope", scope).put("scopeName", scopeName);
+	}
+
+	public static JSONObject getMessage(long curUserId, List<ChatMessage> list, FastDateFormat fmt, BiConsumer<JSONObject, User> uFmt) {
+		JSONArray arr = new JSONArray();
+		for (ChatMessage m : list) {
+			String smsg = m.getMessage();
+			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
+			JSONObject from = new JSONObject()
+					.put("id", m.getFromUser().getId())
+					.put("name", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname());
+			if (uFmt != null) {
+				uFmt.accept(from, m.getFromUser());
+			}
+			arr.put(setScope(new JSONObject(), m, curUserId)
+				.put("id", m.getId())
+				.put("message", smsg)
+				.put("from", from)
+				.put("actions", curUserId == m.getFromUser().getId() ? "short" : "full")
+				.put("sent", fmt.format(m.getSent())));
+		}
+		return new JSONObject()
+			.put("type", "chat")
+			.put("msg", arr);
+	}
+
+	public static void sendRoom(ChatMessage m, JSONObject msg) {
+		sendRoom(m.getToRoom().getId(), msg.toString()
+				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator)));
 	}
 
 	public static void sendRoom(final Long roomId, final String m, Predicate<Client> check) {

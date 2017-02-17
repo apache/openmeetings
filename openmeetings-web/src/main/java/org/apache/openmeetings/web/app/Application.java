@@ -207,7 +207,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Application get() {
-		return (Application) WebApplication.get();
+		return (Application) WebApplication.get(wicketApplicationName);
 	}
 
 	public static DashboardContext getDashboardContext() {
