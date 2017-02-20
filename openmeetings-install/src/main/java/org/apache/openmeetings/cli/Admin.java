@@ -75,7 +75,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
-	
+
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
 	private Options opts = null;
@@ -86,7 +86,7 @@ public class Admin {
 		cfg = new InstallationConfig();
 		opts = buildOptions();
 	}
-	
+
 	private Options buildOptions() {
 		Options options = new Options();
 		OptionGroup group = new OptionGroup()
@@ -96,7 +96,7 @@ public class Admin {
 			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
 			.addOption(new OmOption("l", 3, "l", "LDAP", false, "Import LDAP users into DB"))
 			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
-		group.setRequired(true); 
+		group.setRequired(true);
 		options.addOptionGroup(group);
 		//general
 		options.addOption(new OmOption(null, "v", "verbose", false, "verbose error messages"));
@@ -134,7 +134,7 @@ public class Admin {
 		options.addOption(new OmOption("l", null, "print-only", false, "Print users found instead of importing", true));
 		return options;
 	}
-	
+
 	private enum Command {
 		install
 		, backup
@@ -143,7 +143,7 @@ public class Admin {
 		, ldap
 		, usage
 	}
-	
+
 	private void usage() {
 		OmHelpFormatter formatter = new OmHelpFormatter();
 		formatter.setWidth(100);
@@ -152,11 +152,11 @@ public class Admin {
 				"\t./admin.sh -i -v -file backup_31_07_2012_12_07_51.zip --drop\n" +
 				"\t./admin.sh -i -v -user admin -email someemail@gmail.com -tz \"Asia/Tehran\" -group \"yourgroup\" --db-type mysql --db-host localhost");
 	}
-	
+
 	private void handleError(String msg, Exception e) {
 		handleError(msg, e, false);
 	}
-	
+
 	private void handleError(String msg, Exception e, boolean printUsage) {
 		if (printUsage) {
 			usage();
@@ -168,7 +168,7 @@ public class Admin {
 		}
 		System.exit(1);
 	}
-	
+
 	private WebApplicationContext getApplicationContext() {
 		if (ctx == null) {
 			Long lngId = StringValue.valueOf(cfg.defaultLangId).toLong(1L);
@@ -182,13 +182,13 @@ public class Admin {
 		}
 		return ctx;
 	}
-	
+
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
 		OpenmeetingsVariables.wicketApplicationName = ctxName;
 		File home = new File(System.getenv("RED5_HOME"));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
-		
+
 		CommandLineParser parser = new DefaultParser();
 		try {
 			cmdl = parser.parse(opts, args);
@@ -266,18 +266,18 @@ public class Admin {
 					if (cmdl.hasOption("file")) {
 						File backup = checkRestoreFile(file);
 						dropDB(connectionProperties);
-						
+
 						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
-						importInit.loadSystem(cfg, force); 
+						importInit.loadSystem(cfg, force);
 						restoreOm(backup);
 					} else {
 						checkAdminDetails();
 						dropDB(connectionProperties);
-						
+
 						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
 						importInit.loadAll(cfg, force);
-					}					
-					
+					}
+
 					InstallationDocumentHandler.createDocument(3);
 				} catch(Exception e) {
 					handleError("Install failed", e);
@@ -296,7 +296,7 @@ public class Admin {
 					boolean includeFiles = !cmdl.hasOption("exclude-files");
 					File backup_dir = new File(OmFileHelper.getUploadBackupDir(), "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
-					
+
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
 					export.performExport(f, backup_dir, includeFiles, new ProgressHolder());
 					FileUtils.deleteDirectory(backup_dir);
@@ -316,7 +316,7 @@ public class Admin {
 				try {
 					boolean cleanup = cmdl.hasOption("cleanup");
 					if (cleanup) {
-						System.out.println("WARNING: all intermadiate files will be clean up!");
+						System.out.println("WARNING: all intermediate files will be clean up!");
 					}
 					StringBuilder report = new StringBuilder();
 					{ //UPLOAD
@@ -397,11 +397,11 @@ public class Admin {
 				usage();
 				break;
 		}
-		
+
 		System.out.println("... Done");
 		System.exit(0);
 	}
-	
+
 	private void checkAdminDetails() throws Exception {
 		cfg.username = cmdl.getOptionValue("user");
 		cfg.email = cmdl.getOptionValue("email");
@@ -410,7 +410,7 @@ public class Admin {
 			System.out.println("User login was not provided, or too short, should be at least " + USER_LOGIN_MINIMUM_LENGTH + " character long.");
 			System.exit(1);
 		}
-		
+
 		try {
 			if (cfg.email == null || !MailUtil.matches(cfg.email)) {
 				throw new AddressException("Invalid address");
@@ -442,26 +442,26 @@ public class Admin {
 		}
 		if (cfg.ical_timeZone == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
-			
+
 			for (Map.Entry<String,String> me : tzMap.entrySet()) {
 				System.out.println(String.format("%1$-25s%2$s", "\"" + me.getKey() + "\"", me.getValue()));
 			}
 			System.exit(1);
 		}
 	}
-	
+
 	public void dropDB() throws Exception {
 		File conf = OmFileHelper.getPersistence();
 		ConnectionProperties connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 		immediateDropDB(connectionProperties);
 	}
-	
+
 	private void dropDB(ConnectionProperties props) throws Exception {
 		if(cmdl.hasOption("drop")) {
 			immediateDropDB(props);
 		}
 	}
-	
+
 	private static LogImpl getLogImpl(JDBCConfiguration conf) {
 		return (LogImpl)conf.getLog(JDBCConfiguration.LOG_SCHEMA);
 	}
@@ -477,7 +477,7 @@ public class Admin {
 		}
 		st.run();
 	}
-	
+
 	private void immediateDropDB(ConnectionProperties props) throws Exception {
 		if (ctx != null) {
 			destroyApplication();
@@ -506,10 +506,10 @@ public class Admin {
 			usage();
 			System.exit(1);
 		}
-		
+
 		return backup;
 	}
-	
+
 	private void restoreOm(File backup) {
 		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
@@ -518,7 +518,7 @@ public class Admin {
 			handleError("Restore failed", e);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		new Admin().process(args);
 	}
