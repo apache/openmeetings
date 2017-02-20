@@ -60,14 +60,14 @@ public class FileProcessor {
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(Long userId, FileExplorerItem f, InputStream is) throws Exception {
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
-		
+
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
 		String hash = UUID.randomUUID().toString();
 
 		String ext = getFileExt(f.getName());
 		log.debug("file extension: " + ext);
-		StoredFile storedFile = new StoredFile(hash, ext); 
+		StoredFile storedFile = new StoredFile(hash, ext);
 
 		// Check variable to see if this file is a presentation
 		// check if this is a a file that can be converted by
@@ -109,7 +109,7 @@ public class FileProcessor {
 		}
 		FileUtils.copyInputStreamToFile(is, file);
 
-		
+
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted || isPdf) {
 			// convert to pdf, thumbs, swf and xml-description
@@ -125,18 +125,18 @@ public class FileProcessor {
 			returnError.addItem("processThumb", processThumb);
 		} else if (isVideo) {
 			List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
-			
+
 			int i = 0;
 			for (ConverterProcessResult returnMap : returnList) {
-				returnError.addItem("processFLV " + i, returnMap);
+				returnError.addItem("processVideo " + i++, returnMap);
 			}
 		}
-		
+
 		// has to happen at the end, otherwise it will be overwritten
 		//cause the variable is new initialized
 		returnError.setCompleteName(file.getName());
 		returnError.setFileItemId(f.getId());
-		
+
 		return returnError;
 	}
 }

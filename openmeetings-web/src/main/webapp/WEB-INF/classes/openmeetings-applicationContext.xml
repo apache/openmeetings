@@ -24,6 +24,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -89,91 +90,58 @@
 	<bean id="openmeetings.RecordingConverter" class="org.apache.openmeetings.core.converter.RecordingConverter" />
 	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.webservice.cluster.SlaveHTTPConnectionManager" />
 
-	<bean id="cleanupJob" class="org.apache.openmeetings.service.quartz.scheduler.CleanupJob">
-		<property name="sessionTimeout" value="1800000"/><!-- 30 minutes -->
-		<property name="testSetupTimeout" value="3600000"/><!-- 1 hour -->
-	</bean>
-	<bean id="cleanSessionsJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="cleanupJob" />
-		<property name="targetMethod" value="cleanSessions" />
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerCleanSessions" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="cleanSessionsJobDetails" />
-		<property name="startDelay" value="5000"/><!-- 5 seconds -->
-		<property name="repeatInterval" value="300000" /><!-- repeat every 300 seconds == 5 minutes -->
-	</bean>
-	<bean id="cleanTestSetupJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="cleanupJob" />
-		<property name="targetMethod" value="cleanTestSetup"/>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerCleanTestSetup" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="cleanTestSetupJobDetail" />
-		<property name="startDelay" value="1800000"/><!-- 30 minutes --> 
-		<property name="repeatInterval" value="1800000"/> <!-- 30 minutes -->
-	</bean>
-	<bean id="cleanExpiredRecJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="cleanupJob" />
-		<property name="targetMethod" value="cleanExpiredRecordings" />
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerCleanExpiredRec" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="cleanExpiredRecJobDetails" />
-		<property name="startDelay" value="5000"/><!-- 5 seconds -->
-		<property name="repeatInterval" value="3600000" /><!-- 1 hour -->
-	</bean>
+	 <!--	1800000 == 30 min
+	 		3600000 == 1 hour
+	 		5000	== 5 sec
+	 		300000	== 5 min
+	 		900000	== 15 min
+	 -->
+	<bean id="cleanupJob" class="org.apache.openmeetings.service.quartz.scheduler.CleanupJob"
+			p:sessionTimeout="1800000" p:testSetupTimeout="3600000" p:roomFilesTtl="3600000" />
+	<bean id="cleanSessionsJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="cleanupJob" p:targetMethod="cleanSessions" p:concurrent="false" />
+	<bean id="triggerCleanSessions" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="cleanSessionsJobDetails" p:startDelay="5000" p:repeatInterval="300000" />
+	<bean id="cleanTestSetupJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="cleanupJob" p:targetMethod="cleanTestSetup" p:concurrent="false" />
+	<bean id="triggerCleanTestSetup" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="cleanTestSetupJobDetail" p:startDelay="1800000" p:repeatInterval="1800000" />
+	<bean id="cleanRoomFilesJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="cleanupJob" p:targetMethod="cleanRoomFiles" p:concurrent="false" />
+	<bean id="triggerCleanRoomFiles" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="cleanRoomFilesJobDetail" p:startDelay="10000" p:repeatInterval="1800000" /> <!-- p:startDelay="1800000" -->
+	<bean id="cleanExpiredRecJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="cleanupJob" p:targetMethod="cleanExpiredRecordings" p:concurrent="false" />
+	<bean id="triggerCleanExpiredRec" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="cleanExpiredRecJobDetails" p:startDelay="5000" p:repeatInterval="3600000" />
 
 	<bean id="reminderJob" class="org.apache.openmeetings.service.quartz.scheduler.ReminderJob"/>
-	<bean id="meetingReminderJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="reminderJob" />
-		<property name="targetMethod" value="remindMeetings"/>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerMeetingReminder" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="meetingReminderJobDetail" />
-		<property name="startDelay" value="5000"/><!-- 5 seconds -->
-		<property name="repeatInterval" value="100000"/><!-- repeat every 100 seconds -->
-	</bean>
-	<bean id="expiringRecordingJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="reminderJob" />
-		<property name="targetMethod" value="remindExpiringRecordings"/>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerExpiringRecording" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="expiringRecordingJobDetail" />
-		<property name="startDelay" value="5000"/><!-- 5 seconds -->
-		<property name="repeatInterval" value="3600000"/><!-- repeat every 1 hour -->
-	</bean>
+	<bean id="meetingReminderJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="reminderJob" p:targetMethod="remindMeetings" p:concurrent="false" />
+	<bean id="triggerMeetingReminder" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="meetingReminderJobDetail" p:startDelay="5000" p:repeatInterval="100000"/>
+	<bean id="expiringRecordingJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="reminderJob" p:targetMethod="remindExpiringRecordings" p:concurrent="false" />
+	<bean id="triggerExpiringRecording" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="expiringRecordingJobDetail" p:startDelay="5000" p:repeatInterval="3600000"/>
 
 	<!-- Mail related jobs -->
 	<bean id="mailHandler" class="org.apache.openmeetings.core.mail.MailHandler" />
-	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="mailHandler" />
-		<property name="targetMethod" value="resetSendingStatus"/>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerResetSendingMailStatus" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="resetSendingMailStatus" />
-		<property name="startDelay" value="60000"/> <!-- 1 minute -->
-		<property name="repeatInterval" value="900000"/> <!-- 15 minutes -->
-	</bean>
-	<bean id="sendMails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="mailHandler" />
-		<property name="targetMethod" value="sendMails"/>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-		<property name="jobDetail" ref="sendMails" />
-		<property name="startDelay" value="60000"/> <!-- 1 minute -->
-		<property name="repeatInterval" value="60000"/> <!-- 1 minute -->
-	</bean>
+	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="mailHandler" p:targetMethod="resetSendingStatus" p:concurrent="false" />
+	<bean id="triggerResetSendingMailStatus" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="resetSendingMailStatus" p:startDelay="60000" p:repeatInterval="900000" />
+	<bean id="sendMails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+			p:targetObject-ref="mailHandler" p:targetMethod="sendMails" p:concurrent="false" />
+	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+			p:jobDetail-ref="sendMails" p:startDelay="60000" p:repeatInterval="60000" />
 	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="triggerCleanSessions" />
 				<ref bean="triggerCleanTestSetup" />
+				<ref bean="triggerCleanRoomFiles" />
 				<ref bean="triggerCleanExpiredRec" />
 				<ref bean="triggerMeetingReminder" />
 				<ref bean="triggerExpiringRecording" />
