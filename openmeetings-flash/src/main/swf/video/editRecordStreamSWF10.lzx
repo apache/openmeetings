@@ -136,7 +136,7 @@
 
 		var videoview = this._video.content._publisher._chatvideoinner._videostream;
 		var _micro = canvas.commonVideoViewContent.getMic(this.availableMics.getValue());
-		var _camera = canvas.commonVideoViewContent.getCam(this.availableCams.getValue(), videoview);
+		var _camera = canvas.commonVideoViewContent.getCam(this.availableCams.getValue(), cam_default_width, cam_default_height);
 		if ($debug) Debug.write(_camera, _micro);
 
 		if ($debug && _camera != null) Debug.warn("_camera.muted ", _camera.muted);
