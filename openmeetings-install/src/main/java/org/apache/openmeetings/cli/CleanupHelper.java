@@ -18,8 +18,7 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -41,7 +40,7 @@ import org.slf4j.Logger;
 public class CleanupHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(CleanupHelper.class);
 	private static File hibernateDir = OmFileHelper.getStreamsHibernateDir();
-	
+
 	public static CleanupEntityUnit getProfileUnit(final UserDao udao) {
 		File parent = OmFileHelper.getUploadProfilesDir();
 		List<File> invalid = new ArrayList<>();
@@ -102,29 +101,29 @@ public class CleanupHelper {
 		for (File f : list(hibernateDir, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.startsWith(recordingFileName) && name.endsWith(EXTENSION_FLV);
+				return name.endsWith(EXTENSION_MP4);
 			}
 		})) {
 			if (!f.isFile()) {
 				log.warn("Recording found is not a file: " + f);
 				continue;
 			}
-			Long id = Long.valueOf(f.getName().substring(recordingFileName.length(), f.getName().length() - EXTENSION_FLV.length() - 1));
-			Recording item = recordDao.get(id);
+			String hash = f.getName().substring(0, f.getName().length() - EXTENSION_MP4.length() - 1);
+			Recording item = recordDao.getByHash(hash);
 			if (item == null) {
-				add(invalid, id);
+				add(invalid, hash);
 			} else if (item.isDeleted()) {
-				add(deleted, id);
+				add(deleted, hash);
 			}
 		}
 		for (Recording item : recordDao.get()) {
-			if (!item.isDeleted() && item.getHash() != null && list(item.getId()).length == 0) {
+			if (!item.isDeleted() && item.getHash() != null && list(item.getHash()).length == 0) {
 				missing++;
 			}
 		}
 		return new CleanupEntityUnit(parent, invalid, deleted, missing) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void cleanup() throws IOException {
 				String hiberPath = hibernateDir.getCanonicalPath();
@@ -142,18 +141,18 @@ public class CleanupHelper {
 		File[] l = ff == null ? f.listFiles() : f.listFiles(ff);
 		return l == null ? new File[0] : l;
 	}
-	
-	private static File[] list(final Long id) {
+
+	private static File[] list(final String hash) {
 		return list(hibernateDir, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.startsWith(recordingFileName + id);
+				return name.startsWith(hash);
 			}
 		});
 	}
-	
-	private static void add(List<File> list, final Long id) {
-		for (File f : list(id)) {
+
+	private static void add(List<File> list, final String hash) {
+		for (File f : list(hash)) {
 			list.add(f);
 		}
 	}
