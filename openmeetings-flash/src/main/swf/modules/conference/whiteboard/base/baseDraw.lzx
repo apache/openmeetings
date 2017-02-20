@@ -206,34 +206,33 @@
 	</method>
 
 	<method name="clearRemote">
-		<![CDATA[
+	<![CDATA[
+		if (this.boundingref!=null) this.boundingref.removeIt();
+		while (this.subviews.length > 1) {
+			this.subviews[1].prepareForDelete.sendEvent();
+			this.subviews[1].destroy();
+		}
+		while (this.basdrawredoView.subviews.length > 0) {
+			this.basdrawredoView.subviews[0].destroy();
+		}
 
-			if (this.boundingref!=null) this.boundingref.removeIt();
-			while (this.subviews.length > 1) {
-				this.subviews[1].prepareForDelete.sendEvent();
-				this.subviews[1].destroy();
-			}
-			while (this.basdrawredoView.subviews.length > 0) {
-				this.basdrawredoView.subviews[0].destroy();
-			}
+		this.setAttribute("x", 0);
+		this.setAttribute("y", 0);
 
-			this.setAttribute("x", 0);
-			this.setAttribute("y", 0);
+		this.getDisplayObject().scaleX = 1;
+		this.getDisplayObject().scaleY = 1;
 
-			this.getDisplayObject().scaleX = 1;
-			this.getDisplayObject().scaleY = 1;
+		this.onupdateScale.sendEvent(null);
 
-			this.onupdateScale.sendEvent(null);
+		parent.parent.zoombox.setWhiteboardValues(true,100);
 
-			parent.parent.zoombox.setWhiteboardValues(true,100);
-
-			this.layers = new Array();
-			this.redolayers = new Array();
-			this.baseactionobjectList = new Array();
-			this.baseredoactionobjectList = new Array();
-			this.checkStepLayers();
-			this.clearDocumentsBar();
-		]]>
+		this.layers = new Array();
+		this.redolayers = new Array();
+		this.baseactionobjectList = new Array();
+		this.baseredoactionobjectList = new Array();
+		this.checkStepLayers();
+		this.clearDocumentsBar();
+	]]>
 	</method>
 
 	<method name="doAction" args="modi">
@@ -488,14 +487,14 @@
 		undo/redo
 	 -->
 	<method name="undoredo">
-		<![CDATA[
+	<![CDATA[
 		if (this.baseactionobjectList.length>0){
 			if (this.boundingref!=null) this.boundingref.removeIt();
 			var lastActionObject = this.baseactionobjectList.pop();
 			this.deleteItemByNameSync(lastActionObject[lastActionObject.length-1]);
 			this.onsharedMessage('undo',lastActionObject);
 		}
-		]]>
+	]]>
 	</method>
 
 	<method name="checkStepLayers">
@@ -925,8 +924,12 @@
 	 -->
 	<method name="sendWatchObject" args="action,actionObject,isWmlLoader">
 	<![CDATA[
-		if ($debug) Debug.write("sendWatchObject: ",action,actionObject);
 		if (action=='draw' || action=='redo'){
+			if ($debug) Debug.write("sendWatchObject: ", action, actionObject);
+			if (!!actionObject && getBaseObjectByName(actionObject[actionObject.length - 1]) != null) {
+				if ($debug) Debug.write("Double adding new Object, RETURN ");
+				return;
+			}
 			var lastactionObject = actionObject;
 
 			//Redraw the View on the paintarea
@@ -1051,10 +1054,10 @@
 				obj.setAttribute('height',lastactionObject[lastactionObject.length-2]);
 
 				this.updateBaseObjectByName(lastactionObject[lastactionObject.length-1],
-										 lastactionObject[lastactionObject.length-5],
-										 lastactionObject[lastactionObject.length-4],
-										 lastactionObject[lastactionObject.length-3],
-										 lastactionObject[lastactionObject.length-2]);
+						lastactionObject[lastactionObject.length-5],
+						lastactionObject[lastactionObject.length-4],
+						lastactionObject[lastactionObject.length-3],
+						lastactionObject[lastactionObject.length-2]);
 
 				//if ($debug) Debug.write("BaseObject List ?? ",this.baseactionobjectList);
 
