@@ -56,9 +56,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ConferenceLibrary implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, webAppRootKey);
@@ -102,9 +102,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	}
 
 	/**
-	 * 
+	 *
 	 * Save an Object to the library and returns the file-explorer Id
-	 * 
+	 *
 	 * @param sid
 	 * @param roomId
 	 * @param fileName
@@ -140,7 +140,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	/**
 	 * Loads a Object from the library into the whiteboard of all participant of
 	 * the current room
-	 * 
+	 *
 	 * @param uid - uid of the client performing operation
 	 * @param wbId - id of whiteboard
 	 * @param fi - FileItem of the Wml being loaded
@@ -185,9 +185,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	}
 
 	/**
-	 * 
+	 *
 	 * Loads a chart object
-	 * 
+	 *
 	 * @param sid
 	 * @param room_id
 	 * @param fileName
@@ -229,7 +229,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 					File target = new File(targetFolder, mp4.getName());
 					if (mp4.exists() && !target.exists()) {
-						FileUtils.copyFile(mp4, target);
+						FileUtils.copyFile(mp4, target, false);
 					}
 					return 1L;
 				}

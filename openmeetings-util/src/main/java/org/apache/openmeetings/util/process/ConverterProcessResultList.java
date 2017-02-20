@@ -28,11 +28,11 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 
 /**
- * 
+ *
  * Collects all results of conversion jobs
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 public class ConverterProcessResultList {
 	private static final Logger log = getLogger(ConverterProcessResultList.class, webAppRootKey);
@@ -60,7 +60,7 @@ public class ConverterProcessResultList {
 
 	public ConverterProcessResult addItem(String name, ConverterProcessResult processResult) {
 		if (jobs.containsKey(name)) {
-			log.error("Duplicate key in jobslist");
+			log.error("Duplicate key in jobslist:: " + name);
 			return null;
 		}
 		return jobs.put(name, processResult);
@@ -68,7 +68,7 @@ public class ConverterProcessResultList {
 
 	/**
 	 * returns true if there was an job with exitValue "-1"
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean hasError() {
@@ -82,7 +82,7 @@ public class ConverterProcessResultList {
 
 	/**
 	 * converts all job results into a human readable format
-	 * 
+	 *
 	 * @return
 	 */
 	public String getLogMessage() {

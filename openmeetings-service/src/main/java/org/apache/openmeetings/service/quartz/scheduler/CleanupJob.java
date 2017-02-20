@@ -19,14 +19,22 @@
 package org.apache.openmeetings.service.quartz.scheduler;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
+import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dto.room.WhiteboardObject;
+import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 import org.apache.openmeetings.util.InitializationContainer;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +43,14 @@ public class CleanupJob extends AbstractJob {
 	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, webAppRootKey);
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
+	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
 
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
+	@Autowired
+	private SessionManager sessionManager;
+	@Autowired
+	private WhiteBoardObjectListManagerById wbManager;
 
 	public long getSessionTimeout() {
 		return sessionTimeout;
@@ -55,29 +68,77 @@ public class CleanupJob extends AbstractJob {
 		this.testSetupTimeout = testSetupTimeout;
 	}
 
+	public long getRoomFilesTtl() {
+		return roomFilesTtl;
+	}
+
+	public void setRoomFilesTtl(long roomFilesTtl) {
+		this.roomFilesTtl = roomFilesTtl;
+	}
+
 	public void cleanTestSetup() {
-		log.debug("CleanupJob.execute");
+		log.debug("CleanupJob.cleanTestSetup");
 		if (!InitializationContainer.initComplete) {
 			return;
 		}
 		try {
 			//FIXME need to move all these staff to helper
-			File[] folders = OmFileHelper.getStreamsDir().listFiles();
+			File[] folders = getStreamsDir().listFiles();
 			if (folders != null) {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
 						File[] files = folder.listFiles(new FileFilter() {
 							@Override
 							public boolean accept(File file) {
-								return file.getName().startsWith("TEST_SETUP_");
+								return file.getName().startsWith(TEST_SETUP_PREFIX);
 							}
 						});
-						//TODO need to rework this and remove hardcodings
 						if (files != null) {
 							for (File file : files) {
 								if (file.isFile() && file.lastModified() + testSetupTimeout < System.currentTimeMillis()) {
 									log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
 									file.delete();
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error("Unexpected exception while processing tests setup videous.", e);
+		}
+	}
+
+	public void cleanRoomFiles() {
+		log.debug("CleanupJob.cleanRoomFiles");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
+		try {
+			//FIXME need to move all these staff to helper
+			File[] folders = getStreamsDir().listFiles();
+			if (folders != null) {
+				for (File folder : folders) {
+					Long roomId = null;
+					if (NumberUtils.isCreatable(folder.getName())) {
+						roomId = Long.valueOf(folder.getName());
+						WhiteboardObjectList wbList = wbManager.getWhiteBoardObjectListByRoomId(roomId);
+						for (Map.Entry<Long, WhiteboardObject> e : wbList.getWhiteboardObjects().entrySet()) {
+							if (!e.getValue().getRoomItems().isEmpty()) {
+								roomId = null;
+								break;
+							}
+						}
+					}
+					if (folder.isDirectory() && roomId != null && sessionManager.getClientListByRoom(roomId).isEmpty()) {
+						File[] files = folder.listFiles();
+						//TODO need to rework this and remove hardcodings
+						if (files != null) {
+							for (File file : files) {
+								if (file.isFile() && file.lastModified() + roomFilesTtl < System.currentTimeMillis()) {
+									log.debug("Room files are too old and no users in the room: " + roomId);
+									FileUtils.deleteDirectory(folder);
+									break;
 								}
 							}
 						}
@@ -96,7 +157,7 @@ public class CleanupJob extends AbstractJob {
 		}
 		try {
 			// TODO Generate report
-			sessiondataDao.clearSessionTable(sessionTimeout);
+			sessionDao.clearSessionTable(sessionTimeout);
 		} catch (Exception err){
 			log.error("execute",err);
 		}

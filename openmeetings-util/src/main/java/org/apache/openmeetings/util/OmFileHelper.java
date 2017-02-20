@@ -59,6 +59,7 @@ public class OmFileHelper {
 	public static final String recordingFileName = "flvRecording_";
 	public static final String profileImagePrefix = "_profile_";
 	public static final String thumbImagePrefix = "_thumb_";
+	public static final String TEST_SETUP_PREFIX = "TEST_SETUP_";
 	public static final String dashboardFile = "dashboard.xml";
 	public static final String EXTENSION_WML = "wml";
 	public static final String EXTENSION_FLV = "flv";
@@ -175,7 +176,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsSubDir(Long id) {
-		return getDir(getStreamsDir(), id.toString());
+		return getStreamsSubDir("" + id);
 	}
 
 	public static File getStreamsSubDir(String name) {
