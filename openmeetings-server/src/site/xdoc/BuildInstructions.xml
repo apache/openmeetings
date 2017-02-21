@@ -61,6 +61,9 @@
 			<source>mvn versions:display-plugin-updates</source>
 			<source>mvn versions:display-property-updates</source>
 		</section>
+		<section name="Check dependencies">
+			<source>mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.0:analyze-only</source>
+		</section>
 		<section name="Tips and Gotchas">
 			<p>To compile only client you can run following command: </p>
 			<source>
