@@ -46,29 +46,40 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	public static String RECORDINGS_GROUP = "recordings-group-%s";
 	public static String FILES_MY = "files-my";
 	public static String FILES_ROOM = "files-room";
+	private final Long roomId;
 	private final List<FileItem> roots = new ArrayList<>();
 
 	public OmTreeProvider(Long roomId) {
+		this.roomId = roomId;
+		refreshRoots(true);
+	}
+
+	public void refreshRoots(boolean all) {
+		roots.clear();
 		if (roomId != null) {
-			roots.add(createFileRoot(null));
 			roots.add(createFileRoot(roomId));
 		}
-		final String PUBLIC = Application.getString(861);
-		{
-			Recording r = createRecRoot(Application.getString(860), RECORDINGS_MY);
-			r.setOwnerId(getUserId());
-			roots.add(r);
-		}
-		{
-			Recording r = createRecRoot(PUBLIC, RECORDINGS_PUBLIC);
-			roots.add(r);
-		}
-		for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
-			Group g = gu.getGroup();
+		if (all) {
+			if (roomId != null) {
+				roots.add(createFileRoot(null));
+			}
+			final String PUBLIC = Application.getString(861);
+			{
+				Recording r = createRecRoot(Application.getString(860), RECORDINGS_MY);
+				r.setOwnerId(getUserId());
+				roots.add(r);
+			}
+			{
+				Recording r = createRecRoot(PUBLIC, RECORDINGS_PUBLIC);
+				roots.add(r);
+			}
+			for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+				Group g = gu.getGroup();
 
-			Recording r = createRecRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()));
-			r.setGroupId(g.getId());
-			roots.add(r);
+				Recording r = createRecRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()));
+				r.setGroupId(g.getId());
+				roots.add(r);
+			}
 		}
 	}
 

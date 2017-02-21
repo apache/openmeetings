@@ -230,7 +230,6 @@ public class RoomSidebar extends Panel {
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
-		updateShowFiles();
 
 		userTab = new OmTab() {
 			private static final long serialVersionUID = 1L;
@@ -262,7 +261,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public boolean isVisible() {
-				return showFiles;
+				return true;
 			}
 
 			@Override
@@ -308,13 +307,13 @@ public class RoomSidebar extends Panel {
 			}
 		}).setOutputMarkupId(true));
 		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
-		add(addFolder);
-		add(toggleRight, toggleActivity, roomAction, avSettings);
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		add(addFolder);
+		add(toggleRight, toggleActivity, roomAction, avSettings);
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
 
@@ -327,6 +326,7 @@ public class RoomSidebar extends Panel {
 		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
 		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
+		updateShowFiles(null);
 	}
 
 	private TabListModel newTabModel() {
@@ -358,12 +358,13 @@ public class RoomSidebar extends Panel {
 		return users;
 	}
 
-	private void updateShowFiles() {
+	private void updateShowFiles(IPartialPageRequestHandler handler) {
 		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.whiteBoard);
+		roomFiles.setReadOnly(!showFiles, handler);
 	}
 
 	public void updateUsers(IPartialPageRequestHandler handler) {
-		updateShowFiles();
+		updateShowFiles(handler);
 		updateUsers();
 		selfRights.setVisible(room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator));
 		selfRights.update(handler);
