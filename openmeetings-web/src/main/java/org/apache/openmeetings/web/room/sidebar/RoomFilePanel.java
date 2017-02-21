@@ -67,17 +67,16 @@ public class RoomFilePanel extends FileTreePanel {
 	}
 
 	@Override
-	protected Component getUpload(String id) {
-		Component u = super.getUpload(id);
-		u.setVisible(true);
-		u.add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
+	protected Component getUpload() {
+		return super.getUpload()
+				.setVisible(true)
+				.add(new AjaxEventBehavior("click") {
+					private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				room.getSidebar().showUpload(target);
-			}
-		});
-		return u;
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						room.getSidebar().showUpload(target);
+					}
+				});
 	}
 }

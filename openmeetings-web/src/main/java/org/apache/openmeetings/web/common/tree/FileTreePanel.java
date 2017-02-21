@@ -43,6 +43,7 @@ import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -66,6 +67,13 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private final static String ALIGN_LEFT_CLASS = " align-left";
+	private final static String ALIGN_RIGHT_CLASS = " align-right";
+	private final static String BASE_CLASS = " om-icon big clickable";
+	private final static String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT_CLASS;
+	private final static String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT_CLASS;
+	private final static String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT_CLASS;
+	private final static String DISABLED_CLASS = " disabled";
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private FileItem lastSelected = null;
@@ -88,13 +96,24 @@ public abstract class FileTreePanel extends Panel {
 	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;
 	private final Long roomId;
+	private final OmTreeProvider tp;
+	private boolean readOnly = true;
+	private final Component createDir = new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onEvent(AjaxRequestTarget target) {
+			addFolder.open(target);
+		}
+	});
+	private final Component upload = new WebMarkupContainer("upload");
 
 	public FileTreePanel(String id, Long roomId, AddFolderDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id);
 		this.roomId = roomId;
 		this.addFolder = addFolder;
 		this.trashConfirm = trashConfirm;
-		OmTreeProvider tp = new OmTreeProvider(roomId);
+		tp = new OmTreeProvider(roomId);
 		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
 		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
@@ -160,15 +179,8 @@ public abstract class FileTreePanel extends Panel {
 			}
 		};
 		form.add(trashToolbar);
-		trashToolbar.add(getUpload("upload"));
-		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				addFolder.open(target);
-			}
-		}));
+		trashToolbar.add(getUpload());
+		trashToolbar.add(createDir);
 		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
@@ -182,7 +194,7 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			protected boolean isClickable() {
-				return !selected.isEmpty();
+				return !readOnly && !selected.isEmpty();
 			}
 
 			@Override
@@ -200,14 +212,15 @@ public abstract class FileTreePanel extends Panel {
 		updateSizes();
 		form.add(sizes.add(new Label("homeSize", homeSize), new Label("publicSize", publicSize)).setOutputMarkupId(true));
 		form.add(errorsDialog);
+		setReadOnly(false, null);
 	}
 
 	protected String getContainment() {
 		return ".file.item.drop.area";
 	}
 
-	protected Component getUpload(String id) {
-		return new WebMarkupContainer(id).setVisible(false);
+	protected Component getUpload() {
+		return upload.setVisible(false);
 	}
 
 	private void deleteAll(AjaxRequestTarget target) {
@@ -227,6 +240,24 @@ public abstract class FileTreePanel extends Panel {
 			}
 		}
 		update(handler);
+	}
+
+	public void setReadOnly(boolean readOnly, IPartialPageRequestHandler handler) {
+		if (this.readOnly != readOnly) {
+			this.readOnly = readOnly;
+			tp.refreshRoots(!readOnly);
+			createDir.setEnabled(!readOnly);
+			createDir.add(AttributeModifier.replace("class", new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			upload.add(AttributeModifier.replace("class", new StringBuilder(UPLOAD_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			trashBorder.add(AttributeModifier.replace("class", new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			if (handler != null) {
+				handler.add(createDir, upload, trashBorder);
+			}
+		}
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
 	}
 
 	protected abstract void update(AjaxRequestTarget target, FileItem f);
