@@ -120,8 +120,8 @@ public class Chat extends Panel {
 
 	public static CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("chatReinit(");
-		sb.append('\'').append(ID_ALL).append('\'')
-				.append(',').append('\'').append(ID_ROOM_PREFIX).append('\'');
+		sb.append('\'').append(Application.getString(1494)).append('\'')
+				.append(',').append('\'').append(Application.getString(406)).append('\'');
 		return sb.append("); ");
 	}
 

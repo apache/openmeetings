@@ -59,6 +59,17 @@ function chatReinit(_allPrefix, _roomPrefix) {
 		$("#" + panelId).remove();
 		chatTabs.tabs("refresh");
 	});
+	$('#chatPanel').resizable({
+		handles: "n, w"
+		, disabled: chatClosed()
+		, alsoResize: "#chat, #chat .ui-tabs .ui-tabs-panel.messageArea"
+		, minHeight: 195
+		, minWidth: 260
+		, stop: function(event, ui) {
+			$('#chatPanel').css({'top': '', 'left': ''});
+			openedHeight = ui.size.height + "px";
+		}
+	});
 }
 function chatClosed() {
 	return $('#chatPanel').height() < 24;
@@ -68,6 +79,7 @@ function openChat() {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 		$('#chat .control.block').removeClass('ui-state-highlight');
 		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
+		$('#chatPanel').resizable("option", "disabled", false);
 	}
 }
 function closeChat() {
@@ -75,6 +87,7 @@ function closeChat() {
 		$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
 		$('#chatPanel').animate({height: closedHeight}, 1000);
 		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
+		$('#chatPanel').resizable("option", "disabled", true);
 	}
 }
 function toggleChat() {
