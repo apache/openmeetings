@@ -23,6 +23,9 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -58,37 +61,44 @@ public class FlvExplorerConverter extends BaseConverter {
 		List<ConverterProcessResult> logs = new ArrayList<ConverterProcessResult>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);
-
 			f.setType(Type.Video);
-			ConverterProcessResult res;
-			if (EXTENSION_MP4.equals(ext)) {
-				String[] args = new String[] { getPathToFFMPEG(), "-i", f.getFile(ext).getCanonicalPath() };
-				res = ProcessHelper.executeScript("Info ID :: " + f.getId(), args);
-				res.setExitCode(0); //normal code is 1, ffmpeg requires output file
-			} else {
-				String[] args = new String[] { getPathToFFMPEG(), "-y"
-						, "-i", f.getFile(ext).getCanonicalPath() //
-						, "-c:v", "h264" //
-						, "-c:a", "libfaac" //
-						, "-c:a", "libfdk_aac" //
-						, "-pix_fmt", "yuv420p" //
-						, mp4.getCanonicalPath() };
-				res = ProcessHelper.executeScript("uploadFLV ID :: " + f.getId(), args);
-
+			String input = f.getFile(ext).getCanonicalPath();
+			boolean sameExt = EXTENSION_MP4.equals(ext);
+			Path tmp = null;
+			if (sameExt) {
+				//we should do in-place conversion
+				tmp = Files.createTempFile("video", "mp4");
+				input = Files.move(mp4.toPath(), tmp, StandardCopyOption.ATOMIC_MOVE).toFile().getCanonicalPath();
 			}
+			String[] args = new String[] { getPathToFFMPEG(), "-y"
+					, "-i", input //
+					, "-c:v", "h264" //
+					, "-c:a", "libfaac" //
+					, "-c:a", "libfdk_aac" //
+					, "-pix_fmt", "yuv420p" //
+					, mp4.getCanonicalPath() };
+			ConverterProcessResult res = ProcessHelper.executeScript("uploadVideo ID :: " + f.getId(), args);
 			logs.add(res);
+			if (sameExt && tmp != null) {
+				if (res.isOk()) {
+					Files.delete(tmp);
+				} else {
+					//conversion fails, need to move temp file back
+					Files.move(tmp, mp4.toPath(), StandardCopyOption.ATOMIC_MOVE);
+				}
+			}
 			//Parse the width height from the FFMPEG output
 			FlvDimension dim = getFlvDimension(res.getError());
 			f.setFlvWidth(dim.width);
 			f.setFlvHeight(dim.height);
 			File jpeg = f.getFile(EXTENSION_JPG);
 
-			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-y", "-i",
+			args = new String[] { getPathToFFMPEG(), "-y", "-i",
 					mp4.getCanonicalPath(), "-codec:v", "mjpeg", "-vframes", "1", "-an",
 					"-f", "rawvideo", "-s", dim.width + "x" + dim.height,
 					jpeg.getCanonicalPath() };
 
-			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), argv_previewFLV));
+			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), args));
 
 			fileDao.update(f);
 		} catch (Exception err) {
