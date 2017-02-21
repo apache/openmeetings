@@ -18,18 +18,17 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.LocaleHelper.getCountryName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -82,27 +81,27 @@ public class MobileService {
 	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
 	}
-	
+
 	public Map<String, Object> checkServer() {
-		Map<String, Object> result = new Hashtable<>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
 		result.put("allowSoapRegister",  "1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0")));
 		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
 		return result;
 	}
-	
+
 	public Map<String, String> getStates() {
-		Map<String, String> result = new Hashtable<>();
+		Map<String, String> result = new HashMap<>();
 		for (String code : Locale.getISOCountries()) {
 			result.put(code, getCountryName(code));
 		}
 		return result;
 	}
-	
+
 	public String[] getTimezones() {
 		return TimeZone.getAvailableIDs();
 	}
-	
+
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
@@ -115,7 +114,7 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
@@ -134,7 +133,7 @@ public class MobileService {
 				String tzId = umap.get("tzId");
 				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
-				
+
 				//FIXME TODO unify with Register dialog
 				String hash = UUID.randomUUID().toString();
 
@@ -167,7 +166,7 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> loginUser(String login, String password) {
 		Map<String, Object> result = getResult();
 		try {
@@ -180,13 +179,13 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	private static Map<String, Object> getResult() {
-		Map<String, Object> result = new Hashtable<>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("status", -1);
 		return result;
 	}
-	
+
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
 			Sessiondata sd = sessionDao.create();
@@ -212,7 +211,7 @@ public class MobileService {
 					c.setLastname(u.getLastname());
 					c.setMobile(true);
 					sessionManager.updateClientByStreamId(streamId, c, false, null);
-	
+
 					add(result, "sid", sd.getSessionId());
 					add(result, "publicSid", c.getPublicSID());
 					add(result, "status", 0);
@@ -227,16 +226,16 @@ public class MobileService {
 		}
 		return result;
 	}
-	
+
 	public List<Map<String, Object>> getVideoStreams() {
-		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		// Notify all clients of the same scope (room)
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
-					Map<String, Object> map = new Hashtable<String, Object>();
+					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
 					add(map, "userId", c.getUserId());
@@ -257,7 +256,7 @@ public class MobileService {
 	}
 
 	private void addRoom(String type, String org, boolean first, List<Map<String, Object>> result, Room r) {
-		Map<String, Object> room = new Hashtable<String, Object>();
+		Map<String, Object> room = new HashMap<>();
 		room.put("id", r.getId());
 		room.put("name", r.getName());
 		room.put("type", type);
@@ -271,22 +270,22 @@ public class MobileService {
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
 	}
-	
+
 	public List<Map<String, Object>> getRooms() {
-		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		// FIXME duplicated code
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		User u = userDao.get(c.getUserId());
 		//my rooms
-		List<Room> myl = new ArrayList<Room>();
+		List<Room> myl = new ArrayList<>();
 		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, labelDao.getString(1306L, u.getLanguageId())));
 		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, labelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);
 		}
-		
+
 		//private rooms
 		for (GroupUser ou : u.getGroupUsers()) {
 			Group org = ou.getGroup();
@@ -296,16 +295,16 @@ public class MobileService {
 				first = false;
 			}
 		}
-		
+
 		//public rooms
 		for (Room r : roomDao.getPublicRooms()) {
 			addRoom("public", null, false, result, r);
 		}
 		return result;
 	}
-	
+
 	public Map<String, Object> roomConnect(String SID, Long userId) {
-		Map<String, Object> result = new Hashtable<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		User u = userDao.get(userId);
 		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
 		 //TODO check if we need anything here
@@ -328,16 +327,16 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
-		c.setVWidth(Integer.parseInt(width));
-		c.setVHeight(Integer.parseInt(height));
+		c.setVWidth(Double.valueOf(width).intValue());
+		c.setVHeight(Double.valueOf(height).intValue());
 		if (interviewPodId > 0) {
 			c.setInterviewPodId(interviewPodId);
 		}
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
-		HashMap<String, Object> hsm = new HashMap<String, Object>();
+		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
-		Map<String, Object> result = new Hashtable<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
 			result.put("broadcastId", scopeAdapter.getBroadCastId());
 		}
