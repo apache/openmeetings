@@ -298,8 +298,8 @@ webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/groovy-all-2.3.2.jar
 webapps/openmeetings/WEB-INF/lib/gson-2.2.4.jar
 webapps/openmeetings/WEB-INF/lib/guava-18.0.jar
-webapps/openmeetings/WEB-INF/lib/httpclient-4.5.2.jar
-webapps/openmeetings/WEB-INF/lib/httpcore-4.4.4.jar
+webapps/openmeetings/WEB-INF/lib/httpclient-*.jar
+webapps/openmeetings/WEB-INF/lib/httpcore-*.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
 webapps/openmeetings/WEB-INF/lib/joda-time-2.9.4.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
