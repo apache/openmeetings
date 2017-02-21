@@ -102,7 +102,7 @@ public class MobileService {
 	 * @return - List of all available Languages
 	 */
 	public List<Language> getLanguages() {
-		List<Language> result = new ArrayList<Language>();
+		List<Language> result = new ArrayList<>();
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
 			result.add(new Language(e.getKey(), e.getValue().toLanguageTag(), e.getValue().getDisplayName(Locale.ENGLISH)));
 		}
@@ -253,14 +253,14 @@ public class MobileService {
 	}
 
 	public List<Map<String, Object>> getVideoStreams() {
-		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		// Notify all clients of the same scope (room)
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
-					Map<String, Object> map = new HashMap<String, Object>();
+					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
 					add(map, "userId", c.getUserId());

@@ -35,8 +35,6 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getAllFiles", query = "SELECT c FROM FileExplorerItem c ORDER BY c.id")
 	, @NamedQuery(name = "getFileById", query = "SELECT c FROM FileExplorerItem c WHERE c.id = :id")
 	, @NamedQuery(name = "getFileByHash", query = "SELECT c FROM FileExplorerItem c WHERE c.hash = :hash")
-	, @NamedQuery(name = "getFilesByRoomAndOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
-			+ " AND c.roomId = :roomId AND c.ownerId = :ownerId ORDER BY c.type ASC, c.name ")
 	, @NamedQuery(name = "getFilesByRoom", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.roomId = :roomId " +
 			"AND c.ownerId IS NULL AND c.parentId IS NULL ORDER BY c.type ASC, c.name ")
 	, @NamedQuery(name = "getFilesByOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.ownerId = :ownerId "
