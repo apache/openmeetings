@@ -32,6 +32,7 @@
 				<exclude>webapps/root/demos/**</exclude>
 				<exclude>webapps/root/index.html</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
+				<exclude>plugins/websocket*.jar</exclude>
 				<exclude>*.sh</exclude>
 				<exclude>conf/jee-container.xml</exclude>
 			</excludes>
@@ -107,6 +108,7 @@
 				<exclude>WEB-INF/lib/commons-codec*</exclude>
 				<exclude>WEB-INF/lib/commons-collections-*</exclude>
 				<exclude>WEB-INF/lib/commons-lang3*</exclude>
+				<exclude>WEB-INF/lib/jcl-over-slf4j*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
