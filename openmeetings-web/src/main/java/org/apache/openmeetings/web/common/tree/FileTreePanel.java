@@ -248,6 +248,7 @@ public abstract class FileTreePanel extends Panel {
 			tp.refreshRoots(!readOnly);
 			createDir.setEnabled(!readOnly);
 			createDir.add(AttributeModifier.replace("class", new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			upload.setEnabled(!readOnly);
 			upload.add(AttributeModifier.replace("class", new StringBuilder(UPLOAD_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			trashBorder.add(AttributeModifier.replace("class", new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			if (handler != null) {
