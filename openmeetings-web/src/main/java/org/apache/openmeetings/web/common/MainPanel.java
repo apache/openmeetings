@@ -217,7 +217,8 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		add(new WebSocketBehavior() {
+		pingTimer.stop(null);
+		add(pingTimer, new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -235,7 +236,7 @@ public class MainPanel extends Panel {
 						updateContents(panel, handler);
 					}
 					log.debug("WebSocketBehavior:: pingTimer is attached");
-					handler.add(MainPanel.this.add(pingTimer));
+					pingTimer.restart(handler);
 				}
 			}
 
