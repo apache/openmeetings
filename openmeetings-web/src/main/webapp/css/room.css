@@ -19,8 +19,11 @@
 .room.sidebar #busy-indicator {
 	margin: 8px;
 }
-.room.container {
+.room.holder {
 	width: 100%;
+}
+.room.container {
+	height: 100%;
 }
 .ui-icon.room.menu.exit {
 	background-image: url(images/exit_button.png);

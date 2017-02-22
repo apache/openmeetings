@@ -20,7 +20,7 @@ var Chat = function() {
 	var chatTabs
 		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 		, msgTemplate = "<div id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
-		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);acceptMessage(e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
+		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
 		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
 		, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);addContact(e.data(\"userId\"));'></div>"
 		, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);privateMessage(e.data(\"userId\"));'></div>"
@@ -31,8 +31,15 @@ var Chat = function() {
 		, openedHeight = "345px"
 		, allPrefix = "All"
 		, roomPrefix = "Room "
-		, emoticon = new CSSEmoticon();
-	
+		, emoticon = new CSSEmoticon()
+		, typingTimer
+		, doneTypingInterval = 5000 //time in ms, 5 second for example
+		;
+
+	function doneTyping () {
+		typingTimer = null;
+		chatActivity('typing_stop', $('.room.container').data('room-id'));
+	}
 	function emtClick(emoticon) {
 		var editor = $('#chatMessage .wysiwyg-editor');
 		editor.html(editor.html() + ' ' + emoticon + ' ');
@@ -92,6 +99,17 @@ var Chat = function() {
 				, stop: function(event, ui) {
 					$('#chatPanel').css({'top': '', 'left': ''});
 					openedHeight = ui.size.height + "px";
+				}
+			});
+			$('#chatMessage').off().on('input propertychange paste', function () {
+				var room = $('.room.container');
+				if (room.length) {
+					if (!!typingTimer) {
+						clearTimeout(typingTimer);
+					} else {
+						chatActivity('typing_start', room.data('room-id'));
+					}
+					typingTimer = setTimeout(doneTyping, doneTypingInterval);
 				}
 			});
 		}
@@ -193,6 +211,11 @@ $(function() {
 				switch(m.type) {
 					case "chat":
 						Chat.addMessage(m);
+						break;
+					case "typing":
+						if (typeof typingActivity == "function") {
+							typingActivity(m.uid, m.active);
+						}
 						break;
 				}
 			}

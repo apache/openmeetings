@@ -30,7 +30,6 @@ import java.util.Set;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
 
 public class StoredFile {
@@ -67,7 +66,7 @@ public class StoredFile {
 		ext.addAll(pdfExtensions);
 		ext.addAll(chartExtensions);
 		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,.");
-		sb.append(StringUtils.join(ext, ",.")); // TODO java8 String.join("|.", ext);
+		sb.append(String.join("|.", ext));
 		return sb.toString();
 	}
 

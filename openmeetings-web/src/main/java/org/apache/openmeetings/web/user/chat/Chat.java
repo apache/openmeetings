@@ -78,28 +78,42 @@ public class Chat extends Panel {
 	private static final Logger log = Red5LoggerFactory.getLogger(Chat.class, webAppRootKey);
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
-	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
+	private static final String PARAM_TYPE = "type";
+	private final AbstractDefaultAjaxBehavior chatActivity = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
-				long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong();
+				String type = getRequest().getRequestParameters().getParameterValue(PARAM_TYPE).toString(null);
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
-				ChatDao dao = getBean(ChatDao.class);
-				ChatMessage m = dao.get(msgId);
-				if (m.isNeedModeration() && isModerator(getUserId(), roomId)) {
-					m.setNeedModeration(false);
-					dao.update(m);
-					WebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
-				} else {
-					log.error("It seems like we are being hacked!!!!");
+				if ("accept".equals(type)) {
+					long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong();
+					ChatDao dao = getBean(ChatDao.class);
+					ChatMessage m = dao.get(msgId);
+					if (m.isNeedModeration() && isModerator(getUserId(), roomId)) {
+						m.setNeedModeration(false);
+						dao.update(m);
+						WebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
+					} else {
+						log.error("It seems like we are being hacked!!!!");
+					}
+				} else if (type != null && type.indexOf("typing") > -1) {
+					WebSocketHelper.sendRoom(roomId
+							, new JSONObject().put("type", "typing")
+									.put("active", type.indexOf("start") > -1)
+									.put("uid", getUid())
+									.toString());
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while accepting chat message", e);
 			}
 		}
 	};
+
+	private String getUid() {
+		return findParent(MainPanel.class).getClient().getUid(); //TODO HACK
+	}
 
 	public JSONObject getMessage(List<ChatMessage> list) {
 		return getMessage(getUserId(), list);
@@ -114,7 +128,7 @@ public class Chat extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 
-		add(acceptMessage);
+		add(chatActivity);
 		add(new ChatForm("sendForm"));
 	}
 
@@ -142,7 +156,7 @@ public class Chat extends Panel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(Chat.class, "chat.js"))));
 		response.render(CssHeaderItem.forReference(EMOTIONS_CSS_REFERENCE));
 		response.render(CssHeaderItem.forUrl("css/chat.css"));
-		response.render(new PriorityHeaderItem(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
+		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
 		ChatDao dao = getBean(ChatDao.class);
 		//FIXME limited count should be loaded with "earlier" link
@@ -205,8 +219,7 @@ public class Chat extends Panel {
 						dao.update(m);
 						JSONObject msg = getMessage(Arrays.asList(m));
 						if (m.getToRoom() != null) {
-							String uid = findParent(MainPanel.class).getClient().getUid(); //TODO HACK
-							getBean(MobileService.class).sendChatMessage(uid, m, getDateFormat()); //let's send to mobile users
+							getBean(MobileService.class).sendChatMessage(getUid(), m, getDateFormat()); //let's send to mobile users
 							WebSocketHelper.sendRoom(m, msg);
 						} else if (m.getToUser() != null) {
 							WebSocketHelper.sendUser(getUserId(), msg.toString());
