@@ -31,36 +31,6 @@
 			left: -50px;
 		}
 	</style>
-	<script type="text/javascript">
-		function emtClick(emoticon) {
-			var editor = $('#chatMessage .wysiwyg-editor');
-			editor.html(editor.html() + ' ' + emoticon + ' ');
-		}
-		function initChatToolbar() {
-			var emtBtn = $('#emoticons');
-			emtBtn.html('');
-			emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
-			var emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
-			for (var ei in emoticon.specialEmoticons) {
-				emots.push(ei);
-			}
-			var emotMenuList = $('#emotMenuList');
-			emotMenuList.html('');
-			var rowSize = 20;
-			var row = $('<tr></tr>');
-			for (var i = 0; i < emots.length; ++i) {
-				row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
-					+ emoticon.emoticonize(emots[i]) + '</div></td>');
-				if (i != 0 && i % rowSize == 0) {
-					emotMenuList.append(row);
-					row = $('<tr></tr>');
-				}
-			}
-		}
-		$(function() {
-			initChatToolbar();
-		});
-	</script>
 </wicket:head>
 <wicket:panel>
 	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">

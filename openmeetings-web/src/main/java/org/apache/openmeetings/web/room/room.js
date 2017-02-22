@@ -71,8 +71,8 @@ function roomUnload() {
 	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
 }
 function startPrivateChat(el) {
-	addChatTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
-	openChat();
+	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
+	Chat.open();
 	$('#chatMessage .wysiwyg-editor').click();
 }
 /***** functions required by SIP   ******/
