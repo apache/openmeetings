@@ -247,7 +247,7 @@ public class ActivitiesPanel extends BasePanel {
 		activities.put(a.getId(), a);
 		update(handler);
 		if (isVisible()) {
-			handler.appendJavaScript("hightlightActivities();");
+			handler.appendJavaScript("Activities.hightlight();");
 		}
 	}
 

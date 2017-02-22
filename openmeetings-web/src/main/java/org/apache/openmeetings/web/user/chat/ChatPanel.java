@@ -58,7 +58,7 @@ public class ChatPanel extends BasePanel {
 			sb.append("$('#chat').show();");
 		}
 		sb.append(chat.addRoom(r));
-		sb.append(r.isChatOpened() ? "openChat();" : "closeChat();");
+		sb.append(r.isChatOpened() ? "Chat.open();" : "Chat.close();");
 		sb.append("});");
 		target.appendJavaScript(sb);
 	}
@@ -67,7 +67,7 @@ public class ChatPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
-		handler.appendJavaScript(String.format("if (typeof removeChatTab == 'function') { removeChatTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
+		handler.appendJavaScript(String.format("if (typeof Chat == 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
 		if (!showDashboardChat) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(function() {");
