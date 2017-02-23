@@ -187,12 +187,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (parentSid == null) {
 			parentSid = (String)connParams.get("parentSid");
 		}
+		Client rcm = new Client();
 		if (!Strings.isEmpty(securityCode)) {
 			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
 			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
 			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
 				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
+			} else {
+				rcm.setUserId(parent.getUserId());
+				rcm.setPublicSID(UUID.randomUUID().toString());
 			}
 		}
 		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
@@ -203,15 +207,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return true;
 		}
 
-		Client rcm = new Client();
 		if (map.containsKey("screenClient")) {
-			Client parentClient = sessionManager.getClientByPublicSID(parentSid, null);
-			if (parentClient == null) {
+			Client parent = sessionManager.getClientByPublicSID(parentSid, null);
+			if (parent == null) {
 				log.warn("Bad parent for screen-sharing client, client is rejected");
 				return rejectClient();
 			}
 			SessionVariablesUtil.setIsScreenClient(conn.getClient());
-			rcm.setUserId(parentClient.getUserId());
+			rcm.setUserId(parent.getUserId());
 			rcm.setScreenClient(true);
 			rcm.setPublicSID(UUID.randomUUID().toString());
 			rcm.setStreamPublishName(parentSid);
@@ -695,6 +698,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			if (!Strings.isEmpty(currentClient.getSecurityCode())) {
 				currentClient.setBroadCastID(Long.parseLong(stream.getPublishedName()));
+				currentClient.setAvsettings("av");
 				currentClient.setIsBroadcasting(true);
 				currentClient.setVWidth(320);
 				currentClient.setVHeight(240);
@@ -717,7 +721,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 					log.debug("check send to "+rcl);
 
-					if (rcl.getPublicSID() == "") {
+					if (Strings.isEmpty(rcl.getPublicSID())) {
 						log.debug("publicSID IS NULL newStream SEND");
 						return true;
 					}

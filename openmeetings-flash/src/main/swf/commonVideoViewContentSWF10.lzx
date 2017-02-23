@@ -349,13 +349,7 @@
 		//value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight
 
 		if ($debug) Debug.write("startStream: ", value);
-		var obj = null;
-		if (!!value.securityCode) {
-			obj = createVideoObject(value.publicSID, true, -1, value);
-			obj.setAttribute('visible', true);
-		} else {
-			createVideo(value);
-		}
+		createVideo(value);
 	]]>
 	</method>
 
