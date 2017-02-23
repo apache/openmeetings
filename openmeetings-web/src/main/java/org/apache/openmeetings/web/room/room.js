@@ -74,7 +74,7 @@ function roomReload(event, ui) {
 }
 function roomClosed(jqEvent, msg) {
 	roomUnload();
-	$(".room.container").remove();
+	$(".room.holder").remove();
 	$("#chatPanel").remove();
 	var dlg = $('#disconnected-dlg');
 	dlg.dialog({

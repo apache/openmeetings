@@ -38,7 +38,7 @@ var Chat = function() {
 
 	function doneTyping () {
 		typingTimer = null;
-		chatActivity('typing_stop', $('.room.container').data('room-id'));
+		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
 	function emtClick(emoticon) {
 		var editor = $('#chatMessage .wysiwyg-editor');
@@ -102,7 +102,7 @@ var Chat = function() {
 				}
 			});
 			$('#chatMessage').off().on('input propertychange paste', function () {
-				var room = $('.room.container');
+				var room = $('.room.box');
 				if (room.length) {
 					if (!!typingTimer) {
 						clearTimeout(typingTimer);

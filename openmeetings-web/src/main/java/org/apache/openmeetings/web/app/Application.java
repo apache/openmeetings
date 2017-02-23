@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -252,7 +253,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (!rcl.isScreenClient() && (!rcl.isMobile() || (rcl.isMobile() && rcl.getUserId() != null))) {
 			Client client = getOnlineClient(rcl.getPublicSID());
 			if (client == null) {
-				if (rcl.isMobile()) {
+				if (!Strings.isEmpty(rcl.getSecurityCode())) {
+					client = getOnlineClient(rcl.getSecurityCode());
+				} else if (rcl.isMobile()) {
 					//Mobile client enters the room
 					client = new Client(rcl, getBean(UserDao.class));
 					addOnlineUser(client);
