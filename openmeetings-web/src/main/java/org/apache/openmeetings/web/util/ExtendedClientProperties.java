@@ -39,7 +39,7 @@ public class ExtendedClientProperties extends ClientProperties {
 
 	public JSONObject getSettings() {
 		try {
-			return new JSONObject(settings.toString());
+			return settings == null ? new JSONObject() : new JSONObject(settings.toString());
 		} catch (Exception e) {
 			//can throw, no op
 		}
