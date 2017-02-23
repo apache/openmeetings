@@ -468,11 +468,11 @@
 		]]>
 		</method>
 
-		<mainToolsLeftPanel x="0" y="20" name="_mainToolsPanel"
-				visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
+		<mainToolsLeftPanel x="$once{ canvas.width - 33 }" y="40" name="_mainToolsPanel"
+				visible="${ canvas.ismoderator || canvas.isAllowedToDraw }"/>
 
-		<mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer"
-				visible="${ (parent.parent.restricted) ? false : (((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true ))) }"/>
+		<mainToolsLeftPanelPointer x="$once{ canvas.width - 33 }" y="40" name="_mainToolsLeftPanelPointer"
+				visible="${ !parent.parent.restricted &amp;&amp; !canvas.ismoderator &amp;&amp; !canvas.isAllowedToDraw }"/>
 	</view>
 
 	<view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2">
