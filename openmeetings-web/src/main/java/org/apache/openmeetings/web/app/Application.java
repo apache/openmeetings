@@ -255,6 +255,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			if (client == null) {
 				if (!Strings.isEmpty(rcl.getSecurityCode())) {
 					client = getOnlineClient(rcl.getSecurityCode());
+					if (client != null && !client.hasRight(Right.audio) && !client.hasRight(Right.video)) {
+						client = null;
+						log.warn("Parent client has no AV rights, going reject client");
+					}
 				} else if (rcl.isMobile()) {
 					//Mobile client enters the room
 					client = new Client(rcl, getBean(UserDao.class));
