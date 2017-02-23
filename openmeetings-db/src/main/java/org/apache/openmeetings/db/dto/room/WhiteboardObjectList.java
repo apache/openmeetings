@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WhiteboardObjectList {
 	private Long roomId;
-	private Map<Long, WhiteboardObject> whiteboardObjects = new ConcurrentHashMap<Long, WhiteboardObject>();
+	private Map<Long, WhiteboardObject> whiteboardObjects = new ConcurrentHashMap<>();
 
 	public WhiteboardObjectList() {}
 

@@ -33,6 +33,10 @@ public class ExtendedClientProperties extends ClientProperties {
 		return codebase;
 	}
 
+	public void setSettings(JSONObject s) {
+		settings = s.toString();
+	}
+
 	public JSONObject getSettings() {
 		try {
 			return new JSONObject(settings.toString());
