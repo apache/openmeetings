@@ -65,7 +65,7 @@ public class StoredFile {
 		ext.addAll(convertExtensions);
 		ext.addAll(pdfExtensions);
 		ext.addAll(chartExtensions);
-		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*");
+		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,.");
 		sb.append(String.join(",.", ext));
 		return sb.toString();
 	}
