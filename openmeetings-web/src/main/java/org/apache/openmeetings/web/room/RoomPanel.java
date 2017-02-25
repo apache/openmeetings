@@ -110,7 +110,7 @@ public class RoomPanel extends BasePanel {
 			target.appendJavaScript("setRoomSizes();");
 			//TODO SID etc
 			try {
-				URL url = new URL(getMainPanel().getExtendedProperties().getCodebase());
+				URL url = new URL(WebSession.get().getExtendedProperties().getCodebase());
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
