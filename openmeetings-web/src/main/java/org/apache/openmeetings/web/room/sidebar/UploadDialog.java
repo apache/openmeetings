@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -82,7 +83,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		this.roomFiles = roomFiles;
 		this.room = room;
 		add(form = new Form<>("form"));
-		upload = new DialogButton("upload", Application.getString(593), false) {
+		upload = new DialogButton("upload", escapeEcmaScript(Application.getString(593)), false) { //FIXME TODO check this in 8.0-M5
 			private static final long serialVersionUID = 1L;
 
 			@Override
