@@ -40,10 +40,10 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -92,7 +92,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public SignInDialog(String id) {
 		super(id, Application.getString(108));
 		add(form = new SignInForm("signin"));
-		add(new AjaxClientInfoBehavior());
+		add(new OmAjaxClientInfoBehavior());
 	}
 
 	public void setRegisterDialog(RegisterDialog r) {
