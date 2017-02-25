@@ -74,11 +74,13 @@ import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidget;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.UserDashboard;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.core.request.ClientInfo;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -113,6 +115,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long loginError = null;
 	private String externalType;
 	private boolean kickedByAdmin = false;
+	private ExtendedClientProperties extProps = new ExtendedClientProperties();
 
 	public WebSession(Request request) {
 		super(request);
@@ -137,6 +140,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		browserTz = null;
 		loginError = null;
 		browserLocale = null;
+		extProps = new ExtendedClientProperties();
 	}
 
 	@Override
@@ -271,6 +275,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		Long _roomId = roomId;
 		Invitation _i = i;
 		SOAPLogin _soap = soap;
+		ClientInfo _info = clientInfo;
+		ExtendedClientProperties _extProps = extProps;
 		replaceSession(); // required to prevent session fixation
 		if (_sid != null) {
 			SID = _sid;
@@ -286,6 +292,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		if (_soap != null) {
 			soap = _soap;
+		}
+		if (_info != null) {
+			clientInfo = _info;
+		}
+		if (_extProps != null) {
+			extProps = _extProps;
 		}
 		userId = u.getId();
 		if (rights == null || rights.isEmpty()) {
@@ -590,5 +602,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			session.invalidateNow();
 			Application.get().restartResponseAtSignInPage();
 		}
+	}
+
+	public ExtendedClientProperties getExtendedProperties() {
+		return extProps;
 	}
 }
