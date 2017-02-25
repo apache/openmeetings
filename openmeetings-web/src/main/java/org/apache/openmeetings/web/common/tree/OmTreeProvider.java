@@ -56,12 +56,10 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 
 	public void refreshRoots(boolean all) {
 		roots.clear();
-		if (roomId != null) {
-			roots.add(createFileRoot(roomId));
-		}
 		if (all) {
 			if (roomId != null) {
 				roots.add(createFileRoot(null));
+				roots.add(createFileRoot(roomId));
 			}
 			final String PUBLIC = Application.getString(861);
 			{
@@ -79,6 +77,10 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 				Recording r = createRecRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()));
 				r.setGroupId(g.getId());
 				roots.add(r);
+			}
+		} else {
+			if (roomId != null) {
+				roots.add(createFileRoot(roomId));
 			}
 		}
 	}
