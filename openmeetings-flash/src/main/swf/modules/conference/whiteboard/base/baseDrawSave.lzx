@@ -176,7 +176,6 @@
 				if ($debug) Debug.write("  saveAsImage: ",value);   
 			    if (value>0){
 					parent.savefileDataWinRef.close();
-					canvas.currentFileExplorer.loadFiles();
 				} else {
 					new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:value});
 				}
