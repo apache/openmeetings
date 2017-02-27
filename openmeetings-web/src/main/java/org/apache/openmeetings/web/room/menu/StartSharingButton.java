@@ -95,7 +95,7 @@ public class StartSharingButton extends OmButton {
 			app = IOUtils.toString(jnlp, UTF_8);
 			String publicSid = c.getUid();
 			Client rc = getClient(publicSid);
-			if (rc == null) {
+			if (rc == null || rc.getUserId() == null) {
 				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
 			}
 			String _url = rc.getTcUrl();
@@ -128,13 +128,14 @@ public class StartSharingButton extends OmButton {
 					.replace("$allowRecording", "" + (rc.getUserId() > 0 && room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;
+
+			StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
+			srs.setCharset(UTF_8);
+			download.setResourceStream(srs);
+			download.initiate(target);
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);
 		}
-		StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
-		srs.setCharset(UTF_8);
-		download.setResourceStream(srs);
-		download.initiate(target);
 	}
 
 	private static String getLabels(int ... ids) {
