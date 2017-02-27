@@ -92,6 +92,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SECURITY_CODE_PARAM = "securityCode";
+	private static final String WIDTH_PARAM = "width";
+	private static final String HEIGHT_PARAM = "height";
 	private static final String NATIVE_SSL_PARAM = "nativeSsl";
 
 	@Autowired
@@ -187,16 +189,42 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (parentSid == null) {
 			parentSid = (String)connParams.get("parentSid");
 		}
+		StringValue scn = StringValue.valueOf(conn.getScope().getName());
+		long roomId = scn.toLong(Long.MIN_VALUE);
 		Client rcm = new Client();
+		IApplication iapp = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
 		if (!Strings.isEmpty(securityCode)) {
-			//FIXME TODO add better mechanism, this is for external applications like ffmpeg
-			Client parent = sessionManager.getClientByPublicSID(securityCode, null);
-			if (parent == null || !parent.getScope().equals(conn.getScope().getName())) {
+			//this is for external applications like ffmpeg [OPENMEETINGS-1574]
+			if (roomId < 0) {
+				log.warn("Trying to enter invalid scope using security code, client is rejected:: " + roomId);
+				return rejectClient();
+			}
+			String _uid = null;
+			for (org.apache.openmeetings.db.entity.basic.Client wcl : iapp.getOmRoomClients(roomId)) {
+				if (wcl.getSid().equals(securityCode)) {
+					_uid = wcl.getUid();
+					break;
+				}
+			}
+			if (_uid == null) {
+				log.warn("Client is not found by security id, client is rejected");
+				return rejectClient();
+			}
+			Client parent = sessionManager.getClientByPublicSID(_uid, null);
+			if (parent == null || !parent.getScope().equals(scn.toString())) {
 				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
-			} else {
-				rcm.setUserId(parent.getUserId());
-				rcm.setPublicSID(UUID.randomUUID().toString());
+			}
+			rcm.setFirstname(parent.getFirstname());
+			rcm.setLastname(parent.getLastname());
+			rcm.setUserId(parent.getUserId());
+			rcm.setPublicSID(UUID.randomUUID().toString());
+			rcm.setSecurityCode(_uid);
+			Number width = (Number)connParams.get(WIDTH_PARAM);
+			Number height = (Number)connParams.get(HEIGHT_PARAM);
+			if (width != null && height != null) {
+				rcm.setVWidth(width.intValue());
+				rcm.setVHeight(height.intValue());
 			}
 		}
 		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
@@ -220,9 +248,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setStreamPublishName(parentSid);
 		}
 		rcm.setStreamid(conn.getClient().getId());
-		StringValue scn = StringValue.valueOf(conn.getScope().getName());
 		rcm.setScope(scn.toString());
-		long roomId = scn.toLong(Long.MIN_VALUE);
 		boolean notHibernate = !"hibernate".equals(scn.toString());
 		if (Long.MIN_VALUE != roomId) {
 			rcm.setRoomId(roomId);
@@ -259,8 +285,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (!Strings.isEmpty(uid)) {
 			rcm.setPublicSID(uid);
 		}
-		rcm.setSecurityCode(securityCode);
-		rcm = sessionManager.add(((IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName)).updateClient(rcm), null);
+		rcm = sessionManager.add(iapp.updateClient(rcm), null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
 			return false;
@@ -692,30 +717,32 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("-----------  streamPublishStart");
 			IConnection current = Red5.getConnectionLocal();
 			final String streamid = current.getClient().getId();
-			final Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			final Client c = sessionManager.getClientByStreamId(streamid, null);
 
 			//We make a second object the has the reference to the object
 			//that we will use to send to all participents
-			Client clientObjectSendToSync = currentClient;
+			Client clientObjectSendToSync = c;
 
 			// Notify all the clients that the stream had been started
 			log.debug("start streamPublishStart broadcast start: " + stream.getPublishedName() + " CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
-			if (currentClient.isScreenClient()) {
-				currentClient.setScreenPublishStarted(true);
-				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			if (c.isScreenClient()) {
+				c.setScreenPublishStarted(true);
+				sessionManager.updateClientByStreamId(streamid, c, false, null);
 			}
-			if (!Strings.isEmpty(currentClient.getSecurityCode())) {
-				currentClient.setBroadCastID(Long.parseLong(stream.getPublishedName()));
-				currentClient.setAvsettings("av");
-				currentClient.setIsBroadcasting(true);
-				currentClient.setVWidth(320);
-				currentClient.setVHeight(240);
-				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			if (!Strings.isEmpty(c.getSecurityCode())) {
+				c.setBroadCastID(Long.parseLong(stream.getPublishedName()));
+				c.setAvsettings("av");
+				c.setIsBroadcasting(true);
+				if (c.getVWidth() == 0 || c.getVHeight() == 0) {
+					c.setVWidth(320);
+					c.setVHeight(240);
+				}
+				sessionManager.updateClientByStreamId(streamid, c, false, null);
 			}
 
-			log.debug("newStream SEND: " + currentClient);
+			log.debug("newStream SEND: " + c);
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
@@ -737,14 +764,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					}
 					if (rcl.getIsRecording()) {
 						log.debug("RCL getIsRecording newStream SEND");
-						recordingService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRecordingId());
+						recordingService.addRecordingByStreamId(current, streamid, c, rcl.getRecordingId());
 					}
 					if (rcl.isScreenClient()) {
 						log.debug("RCL getIsScreenClient newStream SEND");
 						return true;
 					}
 
-					if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+					if (rcl.getPublicSID().equals(c.getPublicSID())) {
 						log.debug("RCL publicSID is equal newStream SEND");
 						return true;
 					}

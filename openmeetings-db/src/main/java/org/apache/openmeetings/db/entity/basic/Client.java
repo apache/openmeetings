@@ -55,6 +55,7 @@ public class Client implements IDataProviderEntity {
 	private final User user;
 	private Long roomId;
 	private final String uid;
+	private final String sid;
 	private final Set<Right> rights = new HashSet<>();
 	private final Set<Activity> activities = new HashSet<>();
 	private final Date connectedSince;
@@ -74,6 +75,7 @@ public class Client implements IDataProviderEntity {
 		this.user = dao.get(userId);
 		this.connectedSince = new Date();
 		uid = UUID.randomUUID().toString();
+		sid = UUID.randomUUID().toString();
 	}
 
 	public Client(org.apache.openmeetings.db.entity.room.Client rcl, UserDao dao) {
@@ -82,6 +84,7 @@ public class Client implements IDataProviderEntity {
 		this.user = dao.get(rcl.getUserId());
 		this.connectedSince = new Date();
 		uid = rcl.getPublicSID();
+		sid = UUID.randomUUID().toString();
 		this.roomId = rcl.getRoomId();
 	}
 
@@ -112,6 +115,10 @@ public class Client implements IDataProviderEntity {
 
 	public String getUid() {
 		return uid;
+	}
+
+	public String getSid() {
+		return sid;
 	}
 
 	public Set<Right> getRights() {
