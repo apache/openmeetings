@@ -238,6 +238,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			rcm.setMobile(true);
 			rcm.setUserId(sd.getUserId());
+			if (rcm.getUserId() != null) {
+				User u = userDao.get(rcm.getUserId());
+				if (u == null) {
+					log.error("Attempt of unauthorized room enter: USER not found, client is rejected");
+					return rejectClient();
+				}
+				rcm.setFirstname(u.getFirstname());
+				rcm.setLastname(u.getLastname());
+				rcm.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
+			}
 			rcm.setSecurityCode(sd.getSessionId());
 			rcm.setPublicSID(UUID.randomUUID().toString());
 		}
