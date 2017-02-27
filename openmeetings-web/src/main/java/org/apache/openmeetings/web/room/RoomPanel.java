@@ -557,8 +557,10 @@ public class RoomPanel extends BasePanel {
 
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
+		org.apache.openmeetings.db.entity.room.Client rcl = RoomBroadcaster.getClient(getMainPanel().getClient().getUid());
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
-				&& r.isAllowRecording() && getClient().hasRight(Right.share) && getSharingUser() == null;
+				&& r.isAllowRecording() && getClient().hasRight(Right.share)
+				&& getSharingUser() == null && rcl != null && rcl.getUserId() != null;
 	}
 
 	public RoomSidebar getSidebar() {
