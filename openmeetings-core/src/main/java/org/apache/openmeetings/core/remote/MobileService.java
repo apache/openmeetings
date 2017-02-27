@@ -337,6 +337,10 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
+		if (!"n".equals(avMode)) {
+			c.setBroadCastID(nextBroadCastId());
+			c.setIsBroadcasting(true);
+		}
 		c.setVWidth(Double.valueOf(width).intValue());
 		c.setVHeight(Double.valueOf(height).intValue());
 		if (interviewPodId > 0) {
@@ -348,7 +352,7 @@ public class MobileService {
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
 		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
-			result.put("broadcastId", nextBroadCastId());
+			result.put("broadcastId", c.getBroadCastID());
 		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
