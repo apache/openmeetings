@@ -253,13 +253,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (!rcl.isScreenClient() && (!rcl.isMobile() || (rcl.isMobile() && rcl.getUserId() != null))) {
 			Client client = getOnlineClient(rcl.getPublicSID());
 			if (client == null) {
-				if (!Strings.isEmpty(rcl.getSecurityCode())) {
-					client = getOnlineClient(rcl.getSecurityCode());
-					if (client != null && !client.hasRight(Right.audio) && !client.hasRight(Right.video)) {
-						client = null;
-						log.warn("Parent client has no AV rights, going reject client");
-					}
-				} else if (rcl.isMobile()) {
+				if (rcl.isMobile()) {
 					//Mobile client enters the room
 					client = new Client(rcl, getBean(UserDao.class));
 					addOnlineUser(client);
@@ -269,6 +263,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 						WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 					}
 					//FIXME TODO rights
+				} else if (!Strings.isEmpty(rcl.getSecurityCode())) {
+					client = getOnlineClient(rcl.getSecurityCode());
+					if (client != null && !client.hasRight(Right.audio) && !client.hasRight(Right.video)) {
+						log.warn("Parent client has no AV rights, going reject client");
+						return null;
+					}
 				} else {
 					return null;
 				}
