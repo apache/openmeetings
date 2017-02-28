@@ -158,6 +158,9 @@
 .room.sidebar.left .user.list .user .ui-icon {
 	background-size: 16px;
 }
+.room.sidebar.left .user.list .user .ui-icon.big {
+	background-size: 32px;
+}
 .audio-activity.ui-icon {
 	opacity: 0.2;
 	background-image: url(images/speaking.png);
