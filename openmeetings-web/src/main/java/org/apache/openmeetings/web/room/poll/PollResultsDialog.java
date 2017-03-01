@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.web.room.poll;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -78,6 +81,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private boolean moderator = false;
 	private final MessageDialog closeConfirm;
 	private final MessageDialog deleteConfirm;
+	private boolean opened = false;
 
 	public PollResultsDialog(String id, Long _roomId) {
 		super(id, Application.getString(37));
@@ -112,7 +116,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(handler);
 					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
-					//TODO result dialogs of other users should also be updated
+					sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollUpdated));
 				}
 			}
 		});
@@ -128,7 +132,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		return Arrays.asList(delete, close, cancel);
 	}
 
-	public void updateModel(AjaxRequestTarget target, boolean moderator) {
+	public void updateModel(IPartialPageRequestHandler target, boolean moderator) {
 		selForm.updateModel(target);
 		this.moderator = moderator;
 		RoomPoll p = selForm.select.getModelObject();
@@ -191,7 +195,18 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	}
 
 	@Override
+	protected void onOpen(IPartialPageRequestHandler handler) {
+		super.onOpen(handler);
+		opened = true;
+	}
+
+	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		opened = false;
+	}
+
+	public boolean isOpened() {
+		return opened;
 	}
 
 	private static String[] getTicks(RoomPoll p) {

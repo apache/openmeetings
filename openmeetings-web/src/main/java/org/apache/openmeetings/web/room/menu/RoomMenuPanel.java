@@ -320,13 +320,18 @@ public class RoomMenuPanel extends Panel {
 		handler.add(shareBtn.setVisible(shareVisible));
 	}
 
-	public void pollCreated(IPartialPageRequestHandler handler) {
+	public void updatePoll(IPartialPageRequestHandler handler, Long createdBy) {
 		RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
 		if (rp != null) {
 			vote.updateModel(handler, rp);
-			vote.open(handler);
-			update(handler);
 		}
+		if (createdBy != null && !getUserId().equals(createdBy)) {
+			vote.open(handler);
+		}
+		if (pollResults.isOpened()) {
+			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.moderator));
+		}
+		update(handler);
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {

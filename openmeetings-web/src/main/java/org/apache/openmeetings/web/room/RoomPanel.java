@@ -285,9 +285,10 @@ public class RoomPanel extends BasePanel {
 				IPartialPageRequestHandler handler = wsEvent.getHandler();
 				switch (m.getType()) {
 					case pollCreated:
-						if (getUserId() != m.getUserId()) {
-							menu.pollCreated(handler);
-						}
+						menu.updatePoll(handler, m.getUserId());
+						break;
+					case pollUpdated:
+						menu.updatePoll(handler, null);
 						break;
 					case recordingStoped:
 						{
